@@ -1460,13 +1460,17 @@ function _api_format_user($user, $add_password = false)
 /**
  * Finds all the information about a user.
  * If no parameter is passed you find all the information about the current user.
- * @param int $user_id
+ * @param int  $user_id
+ * @param bool $checkIfUserOnline
+ * @param bool $showPassword
+ * @param bool $loadExtraData
+ *
  * @return array $user_info user_id, lastname, firstname, username, email, etc
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Julio Montoya
  * @version 21 September 2004
  */
-function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false) {
+function api_get_user_info($user_id = '', $checkIfUserOnline = false, $showPassword = false, $loadExtraData = false) {
     if ($user_id == '') {
         if (isset($GLOBALS['_user'])) {
             return _api_format_user($GLOBALS['_user']);
@@ -1480,7 +1484,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
-        if ($check_if_user_is_online) {
+        if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
 
             $result_array['user_is_online'] = $use_status_in_platform;
@@ -1493,8 +1497,18 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
                 }
             }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
+            $loadExtraData = true;
+            if ($loadExtraData) {
+                $extraFieldValues = new ExtraFieldValue('user');
+                $values = $extraFieldValues->getAllValuesByItem($user_id);
+                if (!empty($values)) {
+                    foreach ($values as $value) {
+                        $result_array['extra'][$value['variable']] = $value['value'];
+                    }
+                }
+            }
         }
-        $user = _api_format_user($result_array, $show_password);
+        $user = _api_format_user($result_array, $showPassword);
 
         return $user;
     }
@@ -5936,26 +5950,25 @@ function api_get_tools_lists($my_tool = null) {
  */
 function api_check_term_condition($user_id) {
     if (api_get_setting('allow_terms_conditions') == 'true') {
-        $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
         //check if exists terms and conditions
         if (LegalManager::count() == 0) {
             return true;
         }
 
-        // Check the last user version_id passed
-        $sql = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id
-                WHERE field_value <> '' AND field_variable = 'legal_accept' AND user_id = ".intval($user_id);
+        $extraFieldValue = new ExtraFieldValue('user');
+        $data = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $user_id,
+            'legal_accept'
+        );
 
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $rowv = Database::fetch_row($res);
-            $rowv = $rowv[0];
+        if (!empty($data) && isset($data[0])) {
+            $rowv = $data[0];
             $user_conditions = explode(':', $rowv);
             $version = $user_conditions[0];
             $lang_id = $user_conditions[1];
             $real_version = LegalManager::get_last_version($lang_id);
+
             return $version >= $real_version;
         }
         return false;

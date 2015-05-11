@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt*/
 
+use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+
 /**
  * Class CourseManager
  *
@@ -142,7 +144,7 @@ class CourseManager
                     $params['course_code'] = $course_info['code'];
 
                     $courseFieldValue = new ExtraFieldValue('course');
-                    $courseFieldValue->save_field_values($params);
+                    $courseFieldValue->saveFieldValues($params);
 
                     return $course_info;
                 }
@@ -662,23 +664,34 @@ class CourseManager
      * Get the course id based on the original id and field name in the
      * extra fields. Returns 0 if course was not found
      *
-     * @param string Original course id
-     * @param string Original field name
+     * @param string $original_course_id_value
+     * @param string $original_course_id_name
      * @return int Course id
+     *
      * @assert ('', '') === false
      */
     public static function get_course_code_from_original_id($original_course_id_value, $original_course_id_name)
     {
-        $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $sql = "SELECT course_code
+        $t_cfv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $table_field = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
+
+        $original_course_id_value = Database::escape_string($original_course_id_value);
+        $original_course_id_name = Database::escape_string($original_course_id_name);
+
+        $sql = "SELECT item_id
                 FROM $table_field cf
-                INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
-                WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+                INNER JOIN $t_cfv cfv
+                ON cfv.field_id=cf.id
+                WHERE
+                    variable = '$original_course_id_name' AND
+                    value = '$original_course_id_value' AND
+                    cf.extra_field_type = $extraFieldType
+                ";
         $res = Database::query($sql);
         $row = Database::fetch_object($res);
         if ($row) {
-            return $row->course_code;
+            return $row->item_id;
         } else {
             return 0;
         }
@@ -1372,7 +1385,8 @@ class CourseManager
 
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
-            $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER) . ' au ON (au.user_id = user.user_id) ';
+            $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER) . ' au
+                      ON (au.user_id = user.user_id) ';
         }
 
         $extraFieldWasAdded = false;
@@ -1380,10 +1394,10 @@ class CourseManager
             foreach ($extra_field as $extraField) {
                 $extraFieldInfo = UserManager::get_extra_field_information_by_name($extraField);
                 if (!empty($extraFieldInfo)) {
-                    $fieldValuesTable = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+                    $fieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
                     $sql .= ' LEFT JOIN '.$fieldValuesTable.' as ufv
                             ON (
-                                user.user_id = ufv.user_id AND
+                                user.user_id = ufv.item_id AND
                                 (field_id = '.$extraFieldInfo['id'].' OR field_id IS NULL)
                             )';
                     $extraFieldWasAdded = true;
@@ -1399,7 +1413,7 @@ class CourseManager
         }
 
         if ($return_count && $resumed_report && $extraFieldWasAdded) {
-            $sql .= ' AND field_id IS NOT NULL GROUP BY field_value ';
+            $sql .= ' AND field_id IS NOT NULL GROUP BY value ';
         }
 
         if (!empty($courseCodeList)) {
@@ -1435,7 +1449,8 @@ class CourseManager
             return $count_rows;
         }
 
-        $table_user_field_value = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+        $table_user_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tableExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
                 if ($return_count) {
@@ -1495,10 +1510,13 @@ class CourseManager
                         $registered_users_with_extra_field = 0;
 
                         if (!empty($name) && $name != '-') {
+                            $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
                             $name = Database::escape_string($name);
-                            $sql = "SELECT count(user_id) as count
-                                    FROM $table_user_field_value
-                                    WHERE field_value = '$name'";
+                            $sql = "SELECT count(v.item_id) as count
+                                    FROM $table_user_field_value v INNER JOIN
+                                    $tableExtraField f
+                                    ON (f.id = v.field_id)
+                                    WHERE value = '$name' AND extra_field_type = $extraFieldType";
                             $result_count = Database::query($sql);
                             if (Database::num_rows($result_count)) {
                                 $row_count = Database::fetch_array($result_count);
@@ -2247,40 +2265,8 @@ class CourseManager
             Database::query($sql);
 
             // delete extra course fields
-            $t_cf = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-            $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-
-            $sql = "SELECT distinct field_id FROM $t_cfv WHERE course_code = '$codeFiltered'";
-            $res_field_ids = Database::query($sql);
-            $field_ids = array();
-            while ($row_field_id = Database::fetch_row($res_field_ids)) {
-                $field_ids[] = $row_field_id[0];
-            }
-
-            // Delete from table_course_field_value from a given course_code
-            $sql_course_field_value = "DELETE FROM $t_cfv WHERE course_code = '$codeFiltered'";
-            Database::query($sql_course_field_value);
-
-            $sql = "SELECT distinct field_id FROM $t_cfv";
-            $res_field_all_ids = Database::query($sql);
-            $field_all_ids = array();
-            while ($row_field_all_id = Database::fetch_row($res_field_all_ids)) {
-                $field_all_ids[] = $row_field_all_id[0];
-            }
-
-            if (is_array($field_ids) && count($field_ids) > 0) {
-                foreach ($field_ids as $field_id) {
-                    // check if field id is used into table field value
-                    if (is_array($field_all_ids)) {
-                        if (in_array($field_id, $field_all_ids)) {
-                            continue;
-                        } else {
-                            $sql_course_field = "DELETE FROM $t_cf WHERE id = '$field_id'";
-                            Database::query($sql_course_field);
-                        }
-                    }
-                }
-            }
+            $extraFieldValues = new ExtraFieldValue('course');
+            $extraFieldValues->deleteValuesByItem($courseId);
 
             // Add event to system log
             $user_id = api_get_user_id();
@@ -2534,8 +2520,8 @@ class CourseManager
     public static function get_special_course_list()
     {
         $courseTable = Database:: get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_field = Database:: get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $tbl_course_field_value = Database:: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $tbl_course_field = Database:: get_main_table(TABLE_EXTRA_FIELD);
+        $tbl_course_field_value = Database:: get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
         //we filter the courses from the URL
         $join_access_url = $where_access_url = '';
@@ -2543,10 +2529,13 @@ class CourseManager
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $tbl_url_course = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.c_id = tcfv.c_id ";
+                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course
+                                    ON url_rel_course.c_id = tcfv.c_id ";
                 $where_access_url = " AND access_url_id = $access_url_id ";
             }
         }
+
+        $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
 
         // get course list auto-register
         $sql = "SELECT DISTINCT(c.code)
@@ -2554,17 +2543,18 @@ class CourseManager
                 INNER JOIN $tbl_course_field tcf
                 ON tcfv.field_id =  tcf.id $join_access_url
                 INNER JOIN $courseTable c
-                ON (c.id = tcfv.c_id)
+                ON (c.id = tcfv.item_id)
                 WHERE
-                    tcf.field_variable = 'special_course' AND
-                    tcfv.field_value = 1  $where_access_url";
+                    tcf.extra_field_type = $extraFieldType AND
+                    tcf.variable = 'special_course' AND
+                    tcfv.value = 1  $where_access_url";
 
         $result = Database::query($sql);
         $courseList = array();
 
         if (Database::num_rows($result) > 0) {
             while ($result_row = Database::fetch_array($result)) {
-                $courseList[] = $result_row['course_code'];
+                $courseList[] = $result_row['code'];
             }
         }
 
@@ -2767,58 +2757,35 @@ class CourseManager
      * @param    string    Field's language var name
      * @return int     new extra field id
      */
-    public static function create_course_extra_field($fieldvarname, $fieldtype, $fieldtitle)
+    public static function create_course_extra_field($variable, $fieldType, $displayText, $default)
     {
-        // database table definition
-        $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $t_cf = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $fieldvarname = Database::escape_string($fieldvarname);
-        $fieldtitle = Database::escape_string($fieldtitle);
-        $fieldtype = (int)$fieldtype;
-        $time = time();
-        $sql_field = "SELECT id FROM $t_cf WHERE field_variable = '$fieldvarname'";
-        $res_field = Database::query($sql_field);
+        $extraField = new ExtraField('course');
+        $params = [
+            'variable' => $variable,
+            'field_type' => $fieldType,
+            'display_text' => $displayText,
+            'default_value' => $default
+        ];
 
-        $r_field = Database::fetch_row($res_field);
-
-        if (Database::num_rows($res_field) > 0) {
-            return $r_field[0];
-        }
-
-        // save new fieldlabel into course_field table
-        $sql = "SELECT MAX(field_order) FROM $t_cf";
-        $res = Database::query($sql);
-
-        $order = 0;
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_row($res);
-            $order = $row[0] + 1;
-        }
-
-        $sql = "INSERT INTO $t_cf SET
-                field_type = '$fieldtype',
-                field_variable = '$fieldvarname',
-                field_display_text = '$fieldtitle',
-                field_order = '$order',
-                tms = FROM_UNIXTIME($time)";
-        Database::query($sql);
-
-        return Database::insert_id();
+        return $extraField->save($params);
     }
 
     /**
-     * Updates course attribute. Note that you need to check that your attribute is valid before you use this function
+     * Updates course attribute. Note that you need to check that your
+     * attribute is valid before you use this function
      *
      * @param int Course id
      * @param string Attribute name
      * @param string Attribute value
-     * @return bool True if attribute was successfully updated, false if course was not found or attribute name is invalid
+     * @return bool True if attribute was successfully updated,
+     * false if course was not found or attribute name is invalid
      */
     public static function update_attribute($id, $name, $value)
     {
         $id = (int)$id;
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "UPDATE $table SET $name = '" . Database::escape_string($value) . "' WHERE id = '$id';";
+        $sql = "UPDATE $table SET $name = '" . Database::escape_string($value) . "'
+                WHERE id = '$id';";
         return Database::query($sql);
     }
 
@@ -2856,95 +2823,24 @@ class CourseManager
      * @param    string    Field value
      * @return    boolean    true if field updated, false otherwise
      */
-    public static function update_course_extra_field_value($course_code, $fname, $fvalue = '')
+    public static function update_course_extra_field_value($course_code, $variable, $value = '')
     {
-        $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $t_cf = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $fname = Database::escape_string($fname);
-        $course_code = Database::escape_string($course_code);
-        $courseId = api_get_course_int_id($course_code);
-        $fvalues = '';
-        if (is_array($fvalue)) {
-            foreach ($fvalue as $val) {
-                $fvalues .= Database::escape_string($val) . ';';
-            }
-            if (!empty($fvalues)) {
-                $fvalues = substr($fvalues, 0, -1);
-            }
-        } else {
-            $fvalues = Database::escape_string($fvalue);
-        }
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
 
-        $sqlcf = "SELECT * FROM $t_cf WHERE field_variable='$fname'";
-        $rescf = Database::query($sqlcf);
-        if (Database::num_rows($rescf) == 1) {
-            // Ok, the field exists
-            // Check if enumerated field, if the option is available
-            $rowcf = Database::fetch_array($rescf);
-
-            $tms = time();
-            $sqlcfv = "SELECT * FROM $t_cfv
-                       WHERE c_id = $courseId AND field_id = '" . $rowcf['id'] . "'
-                       ORDER BY id";
-            $rescfv = Database::query($sqlcfv);
-            $n = Database::num_rows($rescfv);
-            if ($n > 1) {
-                //problem, we already have to values for this field and user combination - keep last one
-                while ($rowcfv = Database::fetch_array($rescfv)) { // See the TODO note below.
-                    if ($n > 1) {
-                        $sqld = "DELETE FROM $t_cfv WHERE id = " . $rowcfv['id'];
-                        $resd = Database::query($sqld);
-                        $n--;
-                    }
-                    $rowcfv = Database::fetch_array($rescfv);
-                    if ($rowcfv['field_value'] != $fvalues) {
-                        $sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms)
-                                 WHERE id = " . $rowcfv['id'];
-                        $resu = Database::query($sqlu);
-                        return ($resu ? true : false);
-                    }
-                    return true;
-                    /* TODO: Sure exit from the function occures in this "while" cycle.
-                    Logic should checked. Maybe "if" instead of "while"? It is not clear... */
-                }
-            } elseif ($n == 1) {
-                //we need to update the current record
-                $rowcfv = Database::fetch_array($rescfv);
-                if ($rowcfv['field_value'] != $fvalues) {
-                    $sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = " . $rowcfv['id'];
-                    $resu = Database::query($sqlu);
-                    return ($resu ? true : false);
-                }
-                return true;
-            } else {
-                $sqli = "INSERT INTO $t_cfv (c_id, course_code,field_id,field_value,tms) " .
-                    "VALUES ($courseId, '$course_code'," . $rowcf['id'] . ",'$fvalues',FROM_UNIXTIME($tms))";
-                $resi = Database::query($sqli);
-                return ($resi ? true : false);
-            }
-        } else {
-            return false; //field not found
-        }
+        $extraFieldValues = new ExtraFieldValue('course');
+        $params = [
+            'item_id' => $courseId,
+            'variable' => $variable,
+            'value' => $value
+        ];
+        $extraFieldValues->save($params);
     }
 
     /**
-     * Get the course id of an course by the database name
-     * @deprecated
-     * @param string The database name
-     * @return string The course id
+     * @param int $session_id
+     * @return mixed
      */
-    public static function get_course_id_by_database_name($db_name)
-    {
-        return Database::result(
-            Database::query(
-                'SELECT code FROM ' . Database::get_main_table(TABLE_MAIN_COURSE) .
-                ' WHERE db_name="' . Database::escape_string($db_name) . '"'
-            ),
-            0,
-            'code'
-        );
-    }
-
     public static function get_session_category_id_by_session_id($session_id)
     {
         return Database::result(
@@ -2958,77 +2854,25 @@ class CourseManager
     }
 
     /**
-     * Get the course id of an course by the database name
-     * @param string The database name
-     * @return string The course id
-     */
-    public static function get_course_extra_field_list($code)
-    {
-        $tbl_course_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $tbl_course_field_value = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $sql_field = "SELECT id, field_type, field_variable, field_display_text, field_default_value
-            FROM $tbl_course_field  WHERE field_visible = '1' ";
-        $res_field = Database::query($sql_field);
-        $extra_fields = array();
-        while ($rowcf = Database::fetch_array($res_field)) {
-            $extra_field_id = $rowcf['id'];
-            $sql = "SELECT field_value FROM $tbl_course_field_value
-                    WHERE course_code = '$code' AND field_id = '$extra_field_id'";
-            $res_field_value = Database::query($sql);
-            if (Database::num_rows($res_field_value) > 0) {
-                $r_field_value = Database::fetch_row($res_field_value);
-                $rowcf['extra_field_value'] = $r_field_value[0];
-            }
-            $extra_fields[] = $rowcf;
-        }
-        return $extra_fields;
-    }
-
-    /**
      * Gets the value of a course extra field. Returns null if it was not found
      *
      * @param string Name of the extra field
      * @param string Course code
+     *
      * @return string Value
      */
-    public static function get_course_extra_field_value($field_name, $code)
+    public static function get_course_extra_field_value($variable, $code)
     {
-        $tbl_course_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $tbl_course_field_value = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $sql = "SELECT id FROM $tbl_course_field WHERE field_visible = '1' AND field_variable = '$field_name';";
-        $res = Database::query($sql);
-        $row = Database::fetch_object($res);
-        if (!$row) {
-            return null;
-        } else {
-            $sql = "SELECT field_value FROM $tbl_course_field_value
-                    WHERE course_code = '$code' AND field_id = '{$row->id}';";
-            $res_field_value = Database::query($sql);
-            $row_field_value = Database::fetch_object($res_field_value);
-            if (!$row_field_value) {
-                return null;
-            } else {
-                return $row_field_value['field_value'];
-            }
-        }
-    }
+        $courseInfo = api_get_course_info($code);
+        $courseId = $courseInfo['real_id'];
 
-    /**
-     * Get the database name of a course by the code
-     * @deprecated
-     * @param string The course code
-     * @return string The database name
-     */
-    public static function get_name_database_course($course_code)
-    {
-        return Database::result(
-            Database::query(
-                'SELECT db_name FROM ' . Database::get_main_table(TABLE_MAIN_COURSE) .
-                ' WHERE code="' . Database::escape_string($course_code) . '"'
-            ),
-            0,
-            'db_name'
-        );
+        $extraFieldValues = new ExtraFieldValue('course');
+        $result = $extraFieldValues->get_values_by_handler_and_field_variable($variable, $courseId);
+        if (!empty($result['value'])) {
+            return $result['value'];
+        }
+
+        return null;
     }
 
     /**
@@ -3312,31 +3156,24 @@ class CourseManager
 
     /**
      * check if a course is special (autoregister)
-     * @param string $course_code
+     * @param int $courseId
      * @return bool
      */
-    public static function is_special_course($course_code)
+    public static function isSpecialCourse($courseId)
     {
-        $tbl_course_field_value = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $tbl_course_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+        $extraFieldValue = new ExtraFieldValue('course');
+        $result = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $courseId,
+            'special_course'
+        );
 
-        $is_special = false;
-        $course_code = Database::escape_string($course_code);
-        $courseId = api_get_course_int_id($course_code);
-        $sql = "SELECT course_code
-                FROM $tbl_course_field_value tcfv
-                INNER JOIN $tbl_course_field tcf ON tcfv.field_id =  tcf.id
-                WHERE
-                    tcf.field_variable = 'special_course' AND
-                    tcfv.field_value = 1 AND
-                    c_id = $courseId";
-        $result = Database::query($sql);
-        $num_rows = Database::num_rows($result);
-        if ($num_rows > 0) {
-            $is_special = true;
+        if (!empty($result)) {
+            if ($result['value'] == 1) {
+                return true;
+            }
         }
 
-        return $is_special;
+        return false;
     }
 
     /**
@@ -3963,28 +3800,24 @@ class CourseManager
      * Get the course id based on the original id and field name in the extra fields.
      * Returns 0 if course was not found
      *
-     * @param string $original_course_id_value Original course code
-     * @param string $original_course_id_name Original field name
+     * @param string $value Original course code
+     * @param string $variable Original field name
      * @return int Course id
      */
-    public static function get_course_id_from_original_id($original_course_id_value, $original_course_id_name)
+    public static function getCourseInfoFromOriginalId($value, $variable)
     {
-        $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $original_course_id_name = Database::escape_string($original_course_id_name);
-        $original_course_id_name = Database::escape_string($original_course_id_name);
-        $sql = "SELECT course_code FROM $table_field cf
-                INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
-                WHERE
-                    field_variable='$original_course_id_name' AND
-                    field_value='$original_course_id_value'";
-        $res = Database::query($sql);
-        $row = Database::fetch_object($res);
-        if ($row != false) {
-            return $row->course_code;
-        } else {
-            return 0;
+        $extraFieldValue = new ExtraFieldValue('course');
+        $result = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $variable,
+            $value
+        );
+
+        if (!empty($result)) {
+            $courseInfo = api_get_course_info_by_id($result['item_id']);
+            return $courseInfo;
         }
+
+        return 0;
     }
 
     /**
@@ -3999,7 +3832,8 @@ class CourseManager
      * @param   array       Course details
      * @param   integer     Session ID
      * @param   string      CSS class to apply to course entry
-     * @param   boolean     Whether the session is supposedly accessible now (not in the case it has passed and is in invisible/unaccessible mode)
+     * @param   boolean     Whether the session is supposedly accessible now
+     * (not in the case it has passed and is in invisible/unaccessible mode)
      * @param bool      Whether to show the document quick-loader or not
      * @return  string      The HTML to be printed for the course entry
      *
@@ -4007,7 +3841,9 @@ class CourseManager
      * @todo refactor into different functions for database calls | logic | display
      * @todo replace single-character $my_course['d'] indices
      * @todo move code for what's new icons to a separate function to clear things up
-     * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
+     * @todo add a parameter user_id so that it is possible to show the
+     * courselist of other users (=generalisation).
+     * This will prevent having to write a new function for this.
      */
     public static function get_logged_user_course_html(
         $course,
@@ -4029,7 +3865,12 @@ class CourseManager
         }
         if (empty($date_start) or empty($date_end)) {
             $sess = SessionManager::get_sessions_list(
-                array('s.id' => array('operator' => '=', 'value' => $course_info['id_session']))
+                array(
+                    's.id' => array(
+                        'operator' => '=',
+                        'value' => $course_info['id_session'],
+                    ),
+                )
             );
             $date_start = $sess[$course_info['id_session']]['date_start'];
             $date_end = $sess[$course_info['id_session']]['date_end'];

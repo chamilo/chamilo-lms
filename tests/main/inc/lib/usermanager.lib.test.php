@@ -155,12 +155,6 @@ class TestUserManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 	}
 
-	function testGetExtraFieldOptions() {
-		$res=UserManager::get_extra_field_options('field name');
-		//var_dump($res);
-		$this->assertTrue(!(bool)$res);
-	}
-
 	function testGetEextraFields() {
 		$res=UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 		$this->assertTrue($res);
@@ -182,11 +176,6 @@ class TestUserManager extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 	}
 
-	function testGetNumberOfExtraFields() {
-		$res=UserManager::get_number_of_extra_fields($all_visibility=true);
-		$this->assertFalse(!(bool)$res);
-
-	}
 
 	function testGetNumberOfUsers() {
 		$res=UserManager::get_number_of_users();
@@ -213,15 +202,6 @@ class TestUserManager extends UnitTestCase {
 	function testGetUserInfo() {
 		$res=UserManager::get_user_info('arthur2');
 		$this->assertTrue(!(bool)$res);
-	}
-
-	function testGetUserInfoById() {
-		$res=UserManager::get_user_info_by_id(2);
-		if(isset($user_id) && ($user_fields = false)){
-			$this->assertTrue(is_array($res));
-		}	 else {
-				$this->assertTrue($res);
-		}
 	}
 
 	function testGetUserList() {
@@ -286,17 +266,6 @@ class TestUserManager extends UnitTestCase {
 	 	$this->assertNull($res);
 	}
 
-	function testSaveExtraFieldChanges() {
-		$fieldid='1';
-		$fieldvarname='name';
-		$fieldtype='1';
-		$fieldtitle='title';
-		$fielddefault='5';
-		$res=UserManager::save_extra_field_changes($fieldid, $fieldvarname, $fieldtype, $fieldtitle, $fielddefault, null);
-	 	$this->assertFalse(is_a($res,UserManager));
-	 	$this->assertNotNull($res,'');
-	 	$this->assertTrue($res);
-	}
 
 	function testSendMessageInOutbox() {
 		$email_administrator='arthur@dokeos.com';
@@ -328,13 +297,6 @@ class TestUserManager extends UnitTestCase {
 	 	$this->assertNull(null,$res);
 	}
 
-	function testUpdateExtraField() {
-		$fid=5;
-		$columns=array();
-		$res=UserManager::update_extra_field($fid,$columns);
-	 	$this->assertTrue(is_bool($res));
-	}
-
 	function testUpdateExtraFieldValue() {
 		$user_id='121';
 		$fname='name';
@@ -349,4 +311,3 @@ class TestUserManager extends UnitTestCase {
 	 	$this->assertTrue(is_bool($res));
 	}
 }
-?>

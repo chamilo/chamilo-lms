@@ -218,7 +218,7 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 
 <?php
 $sessionField = new ExtraField('session');
-$extraFieldData = $sessionField->getDataAndFormatedValues($sessionId);
+$extraFieldData = $sessionField->getDataAndFormattedValues($sessionId);
 
 foreach ($extraFieldData as $displayExtraField) {
 ?>

@@ -220,8 +220,12 @@ if ($user_already_registered_show_terms == false) {
         }
     }
     // EXTRA FIELDS
-    $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-    UserManager::set_extra_fields_in_form($form, $extra_data, 'registration');
+    /*$extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
+    UserManager::set_extra_fields_in_form($form, $extra_data);*/
+
+    // EXTRA FIELDS
+    $extraField = new ExtraField('user');
+    $returnParams = $extraField->addElements($form);
 }
 
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
@@ -244,10 +248,6 @@ if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid']
     $defaults['openid'] = Security::remove_XSS($_GET['openid']);
 }
 $defaults['status'] = STUDENT;
-
-if (is_array($extra_data)) {
-    $defaults = array_merge($defaults, $extra_data);
-}
 
 $form->setDefaults($defaults);
 
@@ -282,13 +282,13 @@ if (!CustomPages::enabled()) {
         }
     }
 
-    $tool_name = get_lang('Registration', null, (!empty($_POST['language'])?$_POST['language']:$_user['language']));
+    $tool_name = get_lang('Registration', null, (!empty($_POST['language'])?$_POST['language']: $_user['language']));
 
     if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {
         $tool_name = get_lang('TermsAndConditions');
     }
 
-    $home = api_get_path(SYS_PATH).'home/';
+    $home = api_get_path(SYS_APP_PATH).'home/';
     if (api_is_multiple_url_enabled()) {
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
@@ -297,8 +297,8 @@ if (!CustomPages::enabled()) {
             $clean_url = api_replace_dangerous_char($url);
             $clean_url = str_replace('/', '-', $clean_url);
             $clean_url .= '/';
-            $home_old  = api_get_path(SYS_PATH).'home/';
-            $home = api_get_path(SYS_PATH).'home/'.$clean_url;
+            $home_old  = api_get_path(SYS_APP_PATH).'home/';
+            $home = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
         }
     }
 

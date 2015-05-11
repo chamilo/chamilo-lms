@@ -12,38 +12,39 @@ require __DIR__ . '/../../main/inc/global.inc.php';
 // relationship.
 $referenceFields = array('razon_social', 'ruc');
 
-$tUserField = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-$tUserFieldValue = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+$tUserField = Database::get_main_table(TABLE_EXTRA_FIELD);
+$tUserFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
 $tUser = Database::get_main_table(TABLE_MAIN_USER);
 $tGroup = Database::get_main_table(TABLE_MAIN_GROUP);
 $tGroupUser = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 
 // First get the IDs of the selected fields
-$sql = "SELECT id, field_type, field_variable FROM $tUserField";
+$sql = "SELECT id, field_type, variable FROM $tUserField";
 $result = Database::query($sql);
 $foundFields = array();
 $fieldsNames = array();
 while ($row = Database::fetch_assoc($result)) {
-    if ($row['field_type'] == 1 && in_array($row['field_variable'], $referenceFields)) {
-        $foundFields[$row['field_variable']] = array('id' => $row['id']);
-        $fieldsNames[$row['id']] = $row['field_variable'];
+    if ($row['field_type'] == 1 && in_array($row['variable'], $referenceFields)) {
+        $foundFields[$row['variable']] = array('id' => $row['id']);
+        $fieldsNames[$row['id']] = $row['variable'];
     }
 }
 
 // Second get all the possible values of this field (in user data)
 $usersData = array();
 foreach ($foundFields as $key => $value) {
-    $sql = "SELECT user_id, field_value FROM $tUserFieldValue WHERE field_id = " . $value['id'];
+    $sql = "SELECT item_id as user_id, value  FROM $tUserFieldValue WHERE field_id = " . $value['id'];
     $result = Database::query($sql);
     while ($row = Database::fetch_assoc($result)) {
-        $foundFields[$key]['options'][$row['field_value']][] = $row['user_id'];
+        $foundFields[$key]['options'][$row['value']][] = $row['user_id'];
         if (empty($usersData[$row['user_id']])) {
             $usersData[$row['user_id']] = '';
         }
         if ($referenceFields[0] == $key) {
-            $usersData[$row['user_id']] = $row['field_value'] . ' - ' . $usersData[$row['user_id']];
+            $usersData[$row['user_id']] = $row['value'] . ' - ' . $usersData[$row['user_id']];
         } else {
-            $usersData[$row['user_id']] .= $row['field_value'] . ' - ';
+            $usersData[$row['user_id']] .= $row['value'] . ' - ';
         }
     }
 }

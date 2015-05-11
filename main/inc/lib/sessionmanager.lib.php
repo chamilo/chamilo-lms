@@ -115,7 +115,8 @@ class SessionManager
         if (is_int($coach_username)) {
             $id_coach = $coach_username;
         } else {
-            $sql = 'SELECT user_id FROM ' . $tbl_user . ' WHERE username="' . Database::escape_string($coach_username) . '"';
+            $sql = 'SELECT user_id FROM ' . $tbl_user . '
+                    WHERE username="' . Database::escape_string($coach_username) . '"';
             $rs = Database::query($sql);
             $id_coach = Database::result($rs, 0, 'user_id');
         }
@@ -213,7 +214,7 @@ class SessionManager
                     $extraFields['session_id'] = $session_id;
 
                     $sessionFieldValue = new ExtraFieldValue('session');
-                    $sessionFieldValue->save_field_values($extraFields);
+                    $sessionFieldValue->saveFieldValues($extraFields);
 
                     /*
                       Sends a message to the user_id = 1
@@ -254,6 +255,7 @@ class SessionManager
         $sql = "SELECT COUNT(*) as count FROM " . Database::get_main_table(TABLE_MAIN_SESSION) . "
                 WHERE name = '$name'";
         $result = Database::fetch_array(Database::query($sql));
+
         return $result['count'] > 0;
     }
 
@@ -285,7 +287,7 @@ class SessionManager
                       ";
 
             $extraJoin = " INNER JOIN $tbl_session_rel_user sru
-                            ON sru.session_id = s.id ";
+                           ON sru.session_id = s.id ";
         }
 
         $today = api_get_utc_datetime();
@@ -397,9 +399,8 @@ class SessionManager
                             s.session_admin_id = $user_id  OR
                             sru.user_id = '$user_id' AND
                             sru.relation_type = '" . SESSION_RELATION_TYPE_RRHH . "'
-                            )
+                        )
                       ";
-
             $extraJoin = " INNER JOIN $tbl_session_rel_user sru
                             ON sru.session_id = s.id ";
         }
@@ -488,11 +489,12 @@ class SessionManager
             if ($access_url_id != -1) {
                 $query = " $select
                            FROM $tbl_session s
-                               LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-                               LEFT JOIN $tbl_user u ON s.id_coach = u.user_id
-                               INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id AND ar.access_url_id = $access_url_id
-                               $courseCondition
-                               $extraJoin
+                           LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+                           LEFT JOIN $tbl_user u ON s.id_coach = u.user_id
+                           INNER JOIN $table_access_url_rel_session ar
+                           ON ar.session_id = s.id AND ar.access_url_id = $access_url_id
+                           $courseCondition
+                           $extraJoin
 				 $where $order $limit";
             }
         }
@@ -508,7 +510,7 @@ class SessionManager
                 $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=" . $session['user_id']);
 
                 if ($session['date_start'] == '0000-00-00' && $session['date_end'] == '0000-00-00') {
-                    //    $session['session_active'] = 1;
+                    // $session['session_active'] = 1;
                 }
 
                 if ($session['session_active'] == 1) {
@@ -538,6 +540,7 @@ class SessionManager
                 $formatted_sessions[] = $session;
             }
         }
+
         return $formatted_sessions;
     }
 
@@ -736,12 +739,6 @@ class SessionManager
             $order = " ORDER BY " . $options['order'];
         }
 
-        /* $where_survey = '';
-          if (!empty($date_to) && !empty($date_from)) {
-          $where_survey = sprintf(" AND s.avail_from >= '%s'
-          AND s.avail_till <= '%s'", $date_from, $date_to);
-          } */
-
         $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.c_id
                 FROM $session_course_user s
                 INNER JOIN $user u ON u.user_id = s.user_id
@@ -837,17 +834,6 @@ class SessionManager
         $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $course = api_get_course_info_by_id($courseId);
-
-        //getting all the students of the course
-        //we are not using this because it only returns user ids
-        /* if (empty($sessionId)
-          {
-          // Registered students in a course outside session.
-          $users = CourseManager :: get_student_list_from_course_code($course_code);
-          } else {
-          // Registered students in session.
-          $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
-          } */
         $where = " WHERE c_id = '%s' AND s.status <> 2 ";
 
         $limit = null;
@@ -870,8 +856,8 @@ class SessionManager
             $where .= ' AND session_id = %s';
             $queryVariables[] = $sessionId;
             $sql = "SELECT
-                      u.user_id, u.lastname, u.firstname, u.username,
-                      u.email, s.c_id, s.session_id
+                        u.user_id, u.lastname, u.firstname, u.username,
+                        u.email, s.c_id, s.session_id
                     FROM $session_course_user s
                     INNER JOIN $user u
                     ON u.user_id = s.user_id
@@ -1005,7 +991,12 @@ class SessionManager
 
             //Lessons
             //TODO: Lessons done and left is calculated by progress per item in lesson, maybe we should calculate it only per completed lesson?
-            $lessons_progress = Tracking::get_avg_student_progress($user['user_id'], $course['code'], array(), $user['id_session']);
+            $lessons_progress = Tracking::get_avg_student_progress(
+                $user['user_id'],
+                $course['code'],
+                array(),
+                $user['id_session']
+            );
             $lessons_done = ($lessons_progress * $lessons_total) / 100;
             $lessons_left = $lessons_total - $lessons_done;
 
@@ -1026,8 +1017,8 @@ class SessionManager
             //Wiki
             //total revisions per user
             $sql = "SELECT count(*) as count
-            FROM $wiki
-            where c_id = %s and session_id = %s and user_id = %s";
+                    FROM $wiki
+                    WHERE c_id = %s and session_id = %s and user_id = %s";
             $sql_query = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
             $result = Database::query($sql_query);
             $row = Database::fetch_array($result);
@@ -1136,10 +1127,14 @@ class SessionManager
         return $table;
     }
 
+    /**
+     * @return int
+     */
     public static function get_number_of_tracking_access_overview()
     {
         // database table definition
         $track_e_course_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
         return Database::count_rows($track_e_course_access);
     }
 
@@ -1230,7 +1225,6 @@ class SessionManager
                     u.lastname,
                     u.firstname,
                 ") . "
-
                 a.logout_course_date,
                 a.counter,
                 c.title,
@@ -1271,7 +1265,8 @@ class SessionManager
                 'clicks' => $info['counter'], //+ $clicks[$info['user_id']],
                 'ip' => '',
                 'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
-                'session' => $session['name']);
+                'session' => $session['name']
+            );
         }
 
         foreach ($return as $key => $info) {
@@ -1459,7 +1454,7 @@ class SessionManager
                 $extraFields['session_id'] = $id;
 
                 $sessionFieldValue = new ExtraFieldValue('session');
-                $sessionFieldValue->save_field_values($extraFields);
+                $sessionFieldValue->saveFieldValues($extraFields);
 
                 return $id;
             }
@@ -1480,7 +1475,6 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 
         $userId = api_get_user_id();
 
@@ -1505,8 +1499,8 @@ class SessionManager
         Database::query("DELETE FROM $tbl_url_session WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session WHERE id IN ($id_checked)");
 
-        $sql_delete_sfv = "DELETE FROM $t_sfv WHERE session_id = '$id_checked'";
-        Database::query($sql_delete_sfv);
+        $extraFieldValue = new ExtraFieldValue('session');
+        $extraFieldValue->deleteValuesByItem($id_checked);
 
         // Add event to system log
         Event::addEvent(
@@ -2160,48 +2154,21 @@ class SessionManager
 
     /**
      * Creates a new extra field for a given session
-     * @param	string	Field's internal variable name
-     * @param	int		Field's type
-     * @param	string	Field's language var name
+     * @param	string	$variable Field's internal variable name
+     * @param	int		$fieldType Field's type
+     * @param	string	$displayText Field's language var name
      * @return int     new extra field id
      */
-    public static function create_session_extra_field($fieldvarname, $fieldtype, $fieldtitle)
+    public static function create_session_extra_field($variable, $fieldType, $displayText)
     {
-        // database table definition
-        $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-        $fieldvarname = Database::escape_string($fieldvarname);
-        $fieldtitle = Database::escape_string($fieldtitle);
-        $fieldtype = (int) $fieldtype;
-        $time = time();
-        $sql_field = "SELECT id FROM $t_sf WHERE field_variable = '$fieldvarname'";
-        $res_field = Database::query($sql_field);
+        $extraField = new ExtraField('session');
+        $params = [
+            'variable' => $variable,
+            'field_type' => $fieldType,
+            'display_text' => $displayText,
+        ];
 
-        $r_field = Database::fetch_row($res_field);
-
-        if (Database::num_rows($res_field) > 0) {
-            $field_id = $r_field[0];
-        } else {
-            // save new fieldlabel into course_field table
-            $sql = "SELECT MAX(field_order) FROM $t_sf";
-            $res = Database::query($sql);
-
-            $order = 0;
-            if (Database::num_rows($res) > 0) {
-                $row = Database::fetch_row($res);
-                $order = $row[0] + 1;
-            }
-
-            $sql = "INSERT INTO $t_sf SET
-                    field_type = '$fieldtype',
-                    field_variable = '$fieldvarname',
-                    field_display_text = '$fieldtitle',
-                    field_order = '$order',
-                    tms = FROM_UNIXTIME($time)";
-            Database::query($sql);
-
-            $field_id = Database::insert_id();
-        }
-        return $field_id;
+        return $extraField->save($params);
     }
 
     /**
@@ -2211,73 +2178,15 @@ class SessionManager
      * @param	string	Field value
      * @return	boolean	true if field updated, false otherwise
      */
-    public static function update_session_extra_field_value($session_id, $fname, $fvalue = '')
+    public static function update_session_extra_field_value($sessionId, $variable, $value = '')
     {
-        $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-        $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        $fname = Database::escape_string($fname);
-        $session_id = (int) $session_id;
-        $fvalues = '';
-        if (is_array($fvalue)) {
-            foreach ($fvalue as $val) {
-                $fvalues .= Database::escape_string($val) . ';';
-            }
-            if (!empty($fvalues)) {
-                $fvalues = substr($fvalues, 0, -1);
-            }
-        } else {
-            $fvalues = Database::escape_string($fvalue);
-        }
-
-        $sqlsf = "SELECT * FROM $t_sf WHERE field_variable='$fname'";
-        $ressf = Database::query($sqlsf);
-        if (Database::num_rows($ressf) == 1) {
-            //ok, the field exists
-            //	Check if enumerated field, if the option is available
-            $rowsf = Database::fetch_array($ressf);
-
-            $tms = time();
-            $sqlsfv = "SELECT * FROM $t_sfv
-                        WHERE session_id = '$session_id' AND field_id = '" . $rowsf['id'] . "' ORDER BY id";
-            $ressfv = Database::query($sqlsfv);
-            $n = Database::num_rows($ressfv);
-            if ($n > 1) {
-                //problem, we already have to values for this field and user combination - keep last one
-                while ($rowsfv = Database::fetch_array($ressfv)) {
-                    if ($n > 1) {
-                        $sqld = "DELETE FROM $t_sfv WHERE id = " . $rowsfv['id'];
-                        $resd = Database::query($sqld);
-                        $n--;
-                    }
-                    $rowsfv = Database::fetch_array($ressfv);
-                    if ($rowsfv['field_value'] != $fvalues) {
-                        $sqlu = "UPDATE $t_sfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms)
-                                WHERE id = " . $rowsfv['id'];
-                        $resu = Database::query($sqlu);
-                        return($resu ? true : false);
-                    }
-                    return true;
-                }
-            } else if ($n == 1) {
-                //we need to update the current record
-                $rowsfv = Database::fetch_array($ressfv);
-                if ($rowsfv['field_value'] != $fvalues) {
-                    $sqlu = "UPDATE $t_sfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms)
-                             WHERE id = " . $rowsfv['id'];
-                    //error_log('UM::update_extra_field_value: '.$sqlu);
-                    $resu = Database::query($sqlu);
-                    return($resu ? true : false);
-                }
-                return true;
-            } else {
-                $sqli = "INSERT INTO $t_sfv (session_id,field_id,field_value,tms) " .
-                        "VALUES ('$session_id'," . $rowsf['id'] . ",'$fvalues',FROM_UNIXTIME($tms))";
-                $resi = Database::query($sqli);
-                return $resi ? true : false;
-            }
-        } else {
-            return false; //field not found
-        }
+        $extraFieldValue = new ExtraFieldValue('session');
+        $params = [
+            'item_id' => $sessionId,
+            'variable' => $variable,
+            'value' => $value
+        ];
+        $extraFieldValue->save($params);
     }
 
     /**
@@ -3261,29 +3170,23 @@ class SessionManager
      * Get the session id based on the original id and field name in the extra fields.
      * Returns 0 if session was not found
      *
-     * @param string $original_session_id_value Original session id
-     * @param string $original_session_id_name Original field name
+     * @param string $value Original session id
+     * @param string $variable Original field name
      * @return int Session id
      */
-    public static function get_session_id_from_original_id($original_session_id_value, $original_session_id_name)
+    public static function getSessionIdFromOriginalId($value, $variable)
     {
-        $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        $table_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-        $original_session_id_value = Database::escape_string($original_session_id_value);
-        $original_session_id_name = Database::escape_string($original_session_id_name);
+        $extraFieldValue = new ExtraFieldValue('session');
+        $result = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $variable,
+            $value
+        );
 
-        $sql = "SELECT session_id
-                FROM $table_field sf INNER JOIN $t_sfv sfv ON sfv.field_id=sf.id
-                WHERE
-                    field_variable='$original_session_id_name' AND
-                    field_value='$original_session_id_value'";
-        $res_session = Database::query($sql);
-        $row = Database::fetch_object($res_session);
-        if ($row) {
-            return $row->session_id;
-        } else {
-            return 0;
+        if (!empty($result)) {
+            return $result['item_id'];
         }
+
+        return 0;
     }
 
     /**
@@ -3954,7 +3857,7 @@ class SessionManager
                 } else {
                     $sessionId = null;
                     if (isset($extraFields) && !empty($extraFields) && !empty($enreg['extra_'.$extraFieldId])) {
-                        $sessionId = self::get_session_id_from_original_id($enreg['extra_'.$extraFieldId], $extraFieldId);
+                        $sessionId = self::getSessionIdFromOriginalId($enreg['extra_'.$extraFieldId], $extraFieldId);
                         if (empty($sessionId)) {
                             $my_session_result = false;
                         } else {
@@ -5666,7 +5569,8 @@ class SessionManager
      * @param array $extraFields A list of fields to be scanned and returned
      * @return mixed
      */
-    public static function getShortSessionListAndExtraByCategory($categoryId, $target, $extraFields = null) {
+    public static function getShortSessionListAndExtraByCategory($categoryId, $target, $extraFields = null)
+    {
         // Init variables
         $categoryId = (int) $categoryId;
         $sessionList = array();
@@ -5674,14 +5578,15 @@ class SessionManager
         if ($categoryId > 0) {
             $target = Database::escape_string($target);
             $sTable = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sfTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-            $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+            $sfTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+            $sfvTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
             // Join session field and session field values tables
             $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
             $fieldsArray = array();
             foreach ($extraFields as $field) {
                 $fieldsArray[] = Database::escape_string($field);
             }
+            $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
             // Get the session list from session category and target
             $sessionList = Database::select(
                 'id, name, date_start, date_end',
@@ -5689,10 +5594,12 @@ class SessionManager
                 array(
                     'where' => array(
                         "session_category_id = ? AND id IN (
-                            SELECT sfv.session_id FROM $joinTable WHERE
-                            sfv.session_id = session.id
-                            AND sf.field_variable = 'target'
-                            AND sfv.field_value = ?
+                            SELECT sfv.session_id FROM $joinTable
+                            WHERE
+                                sf.extra_field_type = $extraFieldType AND
+                                sfv.item_id = session.id AND
+                                sf.variable = 'target' AND
+                                sfv.value = ?
                         )" => array($categoryId, $target)
                     )
                 )
@@ -5707,18 +5614,18 @@ class SessionManager
                 for ($i = 1; $i < count($fieldsArray); $i++) {
                     $whereParams .= ', ?';
                 }
-                $whereFieldVariables = 'field_variable IN ( ' . $whereParams .' )';
+                $whereFieldVariables = ' variable IN ( ' . $whereParams .' )';
                 $whereFieldIds = 'field_id IN ( ' . $whereParams .  ' )';
             }
             // Get session fields
             $extraField = new ExtraField('session');
             $questionMarks = substr(str_repeat('?, ', count($fieldsArray)), 0, -2);
             $fieldsList = $extraField->get_all(array(
-                'field_variable IN ( ' . $questionMarks . ' )' => $fieldsArray
+                ' variable IN ( ' . $questionMarks . ' )' => $fieldsArray
             ));
             // Index session fields
             foreach ($fieldsList as $field) {
-                $fields[$field['id']] = $field['field_variable'];
+                $fields[$field['id']] = $field['variable'];
             }
             // Get session field values
             $extra = new ExtraFieldValue('session');
@@ -5733,7 +5640,7 @@ class SessionManager
                             // Avoid overwriting the session's ID field
                             if ($fields[$sessionFieldValue['field_id']] != 'id') {
                                 $var = $fields[$sessionFieldValue['field_id']];
-                                $val = $sessionFieldValue['field_value'];
+                                $val = $sessionFieldValue['value'];
                                 // Assign session field value to session
                                 $session[$var] = $val;
                             }
@@ -5802,14 +5709,20 @@ class SessionManager
     public static function getSessionListAndExtraByCategoryId($sessionCategoryId)
     {
         // Start error result
-        $errorResult = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));
+        $errorResult = array(
+            'error' => true,
+            'errorMessage' => get_lang('ThereWasAnError'),
+        );
+
         $sessionCategoryId = intval($sessionCategoryId);
         // Check if sesssion category id is valid
         if ($sessionCategoryId > 0) {
             // Get table names
             $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sessionFieldTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-            $sessionFieldValueTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+
+            $sessionFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+            $sessionFieldValueTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
             $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $userTable = Database::get_main_table(TABLE_MAIN_USER);
             $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -5824,24 +5737,37 @@ class SessionManager
                     )
                 )
             );
+
+            $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
+
             // Check if session list query had result
             if (!empty($sessionList)) {
                 // implode all session id
                 $sessionIdsString = '(' . implode(', ', array_keys($sessionList)) . ')';
                 // Get all field variables
-                $sessionFieldList = Database::select('id, field_variable', $sessionFieldTable);
-                // Get all field values
-                $sessionFieldValueList = Database::select(
-                    'session_id, field_id, field_value',
-                    $sessionFieldValueTable,
-                    array('where' => array('session_id IN ?' => $sessionIdsString))
+                $sessionFieldList = Database::select(
+                    'id, variable',
+                    $sessionFieldTable,
+                    array('extra_field_type = ? ' => array($extraFieldType))
                 );
+
+                // Get all field values
+                $sql = "SELECT item_id, field_id, value FROM
+                        $sessionFieldValueTable v INNER JOIN $sessionFieldTable f
+                        ON (f.id = v.field_id)
+                        WHERE
+                            item_id IN $sessionIdsString AND
+                            extra_field_type = $extraFieldType
+                ";
+                $result = Database::result($sql);
+                $sessionFieldValueList = Database::store_result($result, 'ASSOC');
+
                 // Check if session field values had result
                 if (!empty($sessionFieldValueList)) {
                     $sessionFieldValueListBySession = array();
                     foreach ($sessionFieldValueList as $key => $sessionFieldValue) {
                         // Create an array to index ids to session id
-                        $sessionFieldValueListBySession[$sessionFieldValue['session_id']][] = $key;
+                        $sessionFieldValueListBySession[$sessionFieldValue['item_id']][] = $key;
                     }
                 }
                 // Query used to find course-coaches from sessions
@@ -5877,8 +5803,8 @@ class SessionManager
                             // If have an index array for session extra fields, use it to join arrays
                             foreach ($sessionFieldValueListBySession[$id] as $key) {
                                 $row['extra'][$key] = array(
-                                    'field_name' => $sessionFieldList[$sessionFieldValueList[$key]['field_id']]['field_variable'],
-                                    'field_value' => $sessionFieldValueList[$key]['field_value'],
+                                    'field_name' => $sessionFieldList[$sessionFieldValueList[$key]['field_id']]['variable'],
+                                    'value' => $sessionFieldValueList[$key]['value'],
                                 );
                             }
                         }
@@ -5953,19 +5879,21 @@ class SessionManager
     public static function searchSession($term, $extraFieldsToInclude = array())
     {
         $sTable = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $sfvTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
         $term = Database::escape_string($term);
-
+        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
         if (is_array($extraFieldsToInclude) && count($extraFieldsToInclude) > 0) {
             $resultData = Database::select('*', $sTable, array(
                 'where' => array(
                     "name LIKE %?% " => $term,
-                    "OR description LIKE %?% " => $term,
-                    "OR id IN (
-                    SELECT session_id
-                    FROM $sfvTable
-                    WHERE field_value LIKE %?%
+                    " OR description LIKE %?% " => $term,
+                    " OR id IN (
+                    SELECT item_id
+                    FROM $sfvTable v INNER JOIN $extraFieldTable e
+                    ON (v.field_id = e.id)
+                    WHERE value LIKE %?% AND extra_field_type = $extraFieldType
                 ) " => $term
                 )
             ));
@@ -5987,6 +5915,11 @@ class SessionManager
         return $resultData;
     }
 
+    /**
+     * @param $sessionId
+     * @param array $extraFieldsToInclude
+     * @return array
+     */
     public static function getFilteredExtraFields($sessionId, $extraFieldsToInclude = array())
     {
         $extraData = array();
@@ -6001,14 +5934,14 @@ class SessionManager
 
         $sessionExtraField = new ExtraField('session');
         $fieldList = $sessionExtraField->get_all(array(
-            "field_variable IN ( " . implode(", ", $variablePlaceHolders) . " ) " => $variables
+            "variable IN ( " . implode(", ", $variablePlaceHolders) . " ) " => $variables
         ));
 
         $fields = array();
 
         // Index session fields
         foreach ($fieldList as $field) {
-            $fields[$field['id']] = $field['field_variable'];
+            $fields[$field['id']] = $field['variable'];
         }
 
         // Get session field values
@@ -6021,7 +5954,7 @@ class SessionManager
 
         foreach ($sessionFieldValueList as $sessionFieldValue) {
             // Match session field values to session
-            if ($sessionFieldValue['session_id'] != $sessionId) {
+            if ($sessionFieldValue['item_id'] != $sessionId) {
                 continue;
             }
 
@@ -6031,7 +5964,7 @@ class SessionManager
             }
 
             $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
-            $extrafieldValue = $sessionFieldValue['field_value'];
+            $extrafieldValue = $sessionFieldValue['value'];
 
             $extraData[] = array(
                 'variable' => $extrafieldVariable,

@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+
 /**
  * @package chamilo.webservices
  */
@@ -12,7 +15,6 @@ define('WS_ERROR_SECRET_KEY', 1);
 define('WS_ERROR_NOT_FOUND_RESULT', 2);
 define('WS_ERROR_INVALID_INPUT', 3);
 define('WS_ERROR_SETTING', 4);
-
 
 function return_error($code) {
     $fault = null;
@@ -181,7 +183,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'original_user_id_value' => array(
+            'name' => 'original_user_id_value',
+            'type' => 'xsd:string',
+        ),
         'result' => array('name' => 'result', 'type' => 'xsd:string')
     )
 );
@@ -245,23 +250,33 @@ function WSCreateUsers($params) {
         $original_user_id_value = $user_param['original_user_id_value'];
         $orig_user_id_value[] = $user_param['original_user_id_value'];
         $extra_list = $user_param['extra'];
-        if (!empty($user_param['language'])) { $language = $user_param['language'];}
-        if (!empty($user_param['phone'])) { $phone = $user_param['phone'];}
-        if (!empty($user_param['expiration_date'])) { $expiration_date = $user_param['expiration_date'];}
+        if (!empty($user_param['language'])) {
+            $language = $user_param['language'];
+        }
+        if (!empty($user_param['phone'])) {
+            $phone = $user_param['phone'];
+        }
+        if (!empty($user_param['expiration_date'])) {
+            $expiration_date = $user_param['expiration_date'];
+        }
 
         // Check if exits x_user_id into user_field_values table.
-        $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+        $user_id = UserManager::get_user_id_from_original_id(
+            $original_user_id_value,
+            $original_user_id_name
+        );
         if ($user_id > 0) {
             // Check if user is not active.
-            $sql = "SELECT user_id FROM $table_user WHERE user_id ='".$user_id."' AND active= '0'";
+            $sql = "SELECT user_id FROM $table_user
+                    WHERE user_id ='".$user_id."' AND active= '0'";
             $resu = Database::query($sql);
             $r_check_user = Database::fetch_row($resu);
             $count_user_id = Database::num_rows($resu);
             if ($count_user_id > 0) {
                 $sql = "UPDATE $table_user SET
-                lastname='".Database::escape_string($lastName)."',
-                firstname='".Database::escape_string($firstName)."',
-                username='".Database::escape_string($loginName)."',";
+                        lastname='".Database::escape_string($lastName)."',
+                        firstname='".Database::escape_string($firstName)."',
+                        username='".Database::escape_string($loginName)."',";
                 if (!is_null($password)) {
                     $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
                     $sql .= " password='".Database::escape_string($password)."',";
@@ -277,7 +292,7 @@ function WSCreateUsers($params) {
                         expiration_date='".Database::escape_string($expiration_date)."',
                         active='1',
                         hr_dept_id=".intval($hr_dept_id);
-                $sql .=    " WHERE user_id='".$r_check_user[0]."'";
+                $sql .= " WHERE user_id='".$r_check_user[0]."'";
                 Database::query($sql);
                 $results[] = $r_check_user[0];
                 continue;
@@ -310,23 +325,23 @@ function WSCreateUsers($params) {
         }
 
         $password = ($_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password);
-        $sql = "INSERT INTO $table_user
-                                    SET lastname = '".Database::escape_string(trim($lastName))."',
-                                    firstname = '".Database::escape_string(trim($firstName))."',
-                                    username = '".Database::escape_string(trim($loginName))."',
-                                    status = '".Database::escape_string($status)."',
-                                    password = '".Database::escape_string($password)."',
-                                    email = '".Database::escape_string($email)."',
-                                    official_code    = '".Database::escape_string($official_code)."',
-                                    picture_uri     = '".Database::escape_string($picture_uri)."',
-                                    creator_id      = '".Database::escape_string($creator_id)."',
-                                    auth_source = '".Database::escape_string($auth_source)."',
-                                    phone = '".Database::escape_string($phone)."',
-                                    language = '".Database::escape_string($language)."',
-                                    registration_date = now(),
-                                    expiration_date = '".Database::escape_string($expiration_date)."',
-                                    hr_dept_id = '".Database::escape_string($hr_dept_id)."',
-                                    active = '".Database::escape_string($active)."'";
+        $sql = "INSERT INTO $table_user SET
+                    lastname = '".Database::escape_string(trim($lastName))."',
+                    firstname = '".Database::escape_string(trim($firstName))."',
+                    username = '".Database::escape_string(trim($loginName))."',
+                    status = '".Database::escape_string($status)."',
+                    password = '".Database::escape_string($password)."',
+                    email = '".Database::escape_string($email)."',
+                    official_code = '".Database::escape_string($official_code)."',
+                    picture_uri = '".Database::escape_string($picture_uri)."',
+                    creator_id = '".Database::escape_string($creator_id)."',
+                    auth_source = '".Database::escape_string($auth_source)."',
+                    phone = '".Database::escape_string($phone)."',
+                    language = '".Database::escape_string($language)."',
+                    registration_date = now(),
+                    expiration_date = '".Database::escape_string($expiration_date)."',
+                    hr_dept_id = '".Database::escape_string($hr_dept_id)."',
+                    active = '".Database::escape_string($active)."'";
         $result = Database::query($sql);
         if ($result) {
             //echo "id returned";
@@ -343,18 +358,36 @@ function WSCreateUsers($params) {
             }
 
             // Save new fieldlabel into user_field table.
-            $field_id = UserManager::create_extra_field($original_user_id_name, 1, $original_user_id_name, '');
+            $field_id = UserManager::create_extra_field(
+                $original_user_id_name,
+                1,
+                $original_user_id_name,
+                ''
+            );
             // Save the external system's id into user_field_value table.
-            $res = UserManager::update_extra_field_value($return, $original_user_id_name, $original_user_id_value);
+            $res = UserManager::update_extra_field_value(
+                $return,
+                $original_user_id_name,
+                $original_user_id_value
+            );
 
             if (is_array($extra_list) && count($extra_list) > 0) {
                 foreach ($extra_list as $extra) {
                     $extra_field_name = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save new fieldlabel into user_field table.
-                    $field_id = UserManager::create_extra_field($extra_field_name, 1, $extra_field_name, '');
+                    $field_id = UserManager::create_extra_field(
+                        $extra_field_name,
+                        1,
+                        $extra_field_name,
+                        ''
+                    );
                     // Save the external system's id into user_field_value table.
-                    $res = UserManager::update_extra_field_value($return, $extra_field_name, $extra_field_value);
+                    $res = UserManager::update_extra_field_value(
+                        $return,
+                        $extra_field_name,
+                        $extra_field_value
+                    );
                 }
             }
         } else {
@@ -369,7 +402,10 @@ function WSCreateUsers($params) {
     $count_results = count($results);
     $output = array();
     for ($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_user_id_value' => $orig_user_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_user_id_value' => $orig_user_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -446,26 +482,34 @@ function WSCreateUser($params) {
     $original_user_id_name = $params['original_user_id_name'];
     $original_user_id_value = $params['original_user_id_value'];
     $extra_list = $params['extra'];
-    if (!empty($params['language'])) { $language = $params['language'];}
-    if (!empty($params['phone'])) { $phone = $params['phone'];}
+    if (!empty($params['language'])) {
+        $language = $params['language'];
+    }
+    if (!empty($params['phone'])) {
+        $phone = $params['phone'];
+    }
     if (!empty($params['expiration_date'])) {
         $expiration_date = $params['expiration_date'];
-        $expirationDateStatement = " expiration_date = '" . Database::escape_string($expiration_date) . "', ";
+        $expirationDateStatement = " expiration_date = '".Database::escape_string($expiration_date)."', ";
     }
 
     // check if exits x_user_id into user_field_values table
-    $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
     if ($user_id > 0) {
         // Check whether user is not active.
-        $sql = "SELECT user_id FROM $table_user WHERE id ='".$user_id."' AND active= '0'";
+        $sql = "SELECT user_id FROM $table_user
+                WHERE id ='".$user_id."' AND active= '0'";
         $resu = Database::query($sql);
         $r_check_user = Database::fetch_row($resu);
         $count_user_id = Database::num_rows($resu);
         if ($count_user_id > 0) {
             $sql = "UPDATE $table_user SET
-            lastname='".Database::escape_string($lastName)."',
-            firstname='".Database::escape_string($firstName)."',
-            username='".Database::escape_string($loginName)."',";
+                    lastname='".Database::escape_string($lastName)."',
+                    firstname='".Database::escape_string($firstName)."',
+                    username='".Database::escape_string($loginName)."',";
             if (!is_null($password)) {
                 $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
                 $sql .= " password='".Database::escape_string($password)."',";
@@ -481,7 +525,7 @@ function WSCreateUser($params) {
                     $expirationDateStatement
                     active=1,
                     hr_dept_id=".intval($hr_dept_id);
-            $sql .=    " WHERE id=".$r_check_user[0];
+            $sql .=  " WHERE id=".$r_check_user[0];
             Database::query($sql);
 
             return  $r_check_user[0];
@@ -507,30 +551,26 @@ function WSCreateUser($params) {
     if (!UserManager::is_username_available($loginName)) {
         if ($debug) error_log("Username $loginName is not available");
         return 0;
-        /*
-        if (api_set_failure('login-pass already taken')) {
-            return 0;
-        }*/
     }
 
     $password = ($_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password);
     $sql = "INSERT INTO $table_user SET
-                    lastname = '".Database::escape_string(trim($lastName))."',
-                    firstname = '".Database::escape_string(trim($firstName))."',
-                    username = '".Database::escape_string(trim($loginName))."',
-                    status = '".Database::escape_string($status)."',
-                    password = '".Database::escape_string($password)."',
-                    email = '".Database::escape_string($email)."',
-                    official_code    = '".Database::escape_string($official_code)."',
-                    picture_uri     = '".Database::escape_string($picture_uri)."',
-                    creator_id      = '".Database::escape_string($creator_id)."',
-                    auth_source = '".Database::escape_string($auth_source)."',
-                    phone = '".Database::escape_string($phone)."',
-                    language = '".Database::escape_string($language)."',
-                    registration_date = now(),
-                    $expirationDateStatement
-                    hr_dept_id = '".Database::escape_string($hr_dept_id)."',
-                    active = '".Database::escape_string($active)."'";
+                lastname = '".Database::escape_string(trim($lastName))."',
+                firstname = '".Database::escape_string(trim($firstName))."',
+                username = '".Database::escape_string(trim($loginName))."',
+                status = '".Database::escape_string($status)."',
+                password = '".Database::escape_string($password)."',
+                email = '".Database::escape_string($email)."',
+                official_code    = '".Database::escape_string($official_code)."',
+                picture_uri     = '".Database::escape_string($picture_uri)."',
+                creator_id      = '".Database::escape_string($creator_id)."',
+                auth_source = '".Database::escape_string($auth_source)."',
+                phone = '".Database::escape_string($phone)."',
+                language = '".Database::escape_string($language)."',
+                registration_date = now(),
+                $expirationDateStatement
+                hr_dept_id = '".Database::escape_string($hr_dept_id)."',
+                active = '".Database::escape_string($active)."'";
     $result = Database::query($sql);
 
     if ($result) {
@@ -548,18 +588,36 @@ function WSCreateUser($params) {
         }
 
         // Save new fieldlabel into user_field table.
-        $field_id = UserManager::create_extra_field($original_user_id_name, 1, $original_user_id_name, '');
+        $field_id = UserManager::create_extra_field(
+            $original_user_id_name,
+            1,
+            $original_user_id_name,
+            ''
+        );
         // Save the external system's id into user_field_value table.
-        $res = UserManager::update_extra_field_value($return, $original_user_id_name, $original_user_id_value);
+        $res = UserManager::update_extra_field_value(
+            $return,
+            $original_user_id_name,
+            $original_user_id_value
+        );
 
         if (is_array($extra_list) && count($extra_list) > 0) {
             foreach ($extra_list as $extra) {
                 $extra_field_name = $extra['field_name'];
                 $extra_field_value = $extra['field_value'];
                 // Save new fieldlabel into user_field table.
-                $field_id = UserManager::create_extra_field($extra_field_name, 1, $extra_field_name, '');
+                $field_id = UserManager::create_extra_field(
+                    $extra_field_name,
+                    1,
+                    $extra_field_name,
+                    ''
+                );
                 // Save the external system's id into user_field_value table.
-                $res = UserManager::update_extra_field_value($return, $extra_field_name, $extra_field_value);
+                $res = UserManager::update_extra_field_value(
+                    $return,
+                    $extra_field_name,
+                    $extra_field_value
+                );
             }
         }
     } else {
@@ -661,7 +719,8 @@ $server->register('WSCreateUsersPasswordCrypted',                            // 
 );
 
 // Define the method WSCreateUsersPasswordCrypted
-function WSCreateUsersPasswordCrypted($params) {
+function WSCreateUsersPasswordCrypted($params)
+{
     global $_user, $_configuration;
 
     if (!WSHelperVerifyKey($params)) {
@@ -670,8 +729,8 @@ function WSCreateUsersPasswordCrypted($params) {
 
     // database table definition
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+    $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
+    $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
     $users_params = $params['users'];
     $results = array();
@@ -681,15 +740,12 @@ function WSCreateUsersPasswordCrypted($params) {
 
         $password = $user_param['password'];
         $encrypt_method = $user_param['encrypt_method'];
-
         $firstName = $user_param['firstname'];
         $lastName = $user_param['lastname'];
         $status = $user_param['status'];
         $email = $user_param['email'];
         $loginName = $user_param['loginname'];
-
         $official_code = $user_param['official_code'];
-
         $language = '';
         $phone = '';
         $picture_uri = '';
@@ -735,12 +791,26 @@ function WSCreateUsersPasswordCrypted($params) {
             }
         }
 
-        if (!empty($user_param['language'])) { $language = $user_param['language']; }
-        if (!empty($user_param['phone'])) { $phone = $user_param['phone']; }
-        if (!empty($user_param['expiration_date'])) { $expiration_date = $user_param['expiration_date']; }
+        if (!empty($user_param['language'])) {
+            $language = $user_param['language'];
+        }
+        if (!empty($user_param['phone'])) {
+            $phone = $user_param['phone'];
+        }
+        if (!empty($user_param['expiration_date'])) {
+            $expiration_date = $user_param['expiration_date'];
+        }
+
+        $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
 
         // Check whether x_user_id exists into user_field_values table.
-        $sql = "SELECT field_value,user_id    FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
+        $sql = "SELECT value as field_value,item_id as user_id
+                FROM $t_uf uf, $t_ufv ufv
+                WHERE
+                    uf.extra_field_type = $extraFieldType
+                    ufv.field_id=uf.id AND
+                    variable='$original_user_id_name' AND
+                    value ='$original_user_id_value'";
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         $count_row = Database::num_rows($res);
@@ -752,14 +822,14 @@ function WSCreateUsersPasswordCrypted($params) {
             $count_check_user = Database::num_rows($resu);
             if ($count_check_user > 0) {
                 $sql = "UPDATE $table_user SET
-                lastname='".Database::escape_string($lastName)."',
-                firstname='".Database::escape_string($firstName)."',
-                username='".Database::escape_string($loginName)."',";
+                        lastname='".Database::escape_string($lastName)."',
+                        firstname='".Database::escape_string($firstName)."',
+                        username='".Database::escape_string($loginName)."',";
 
                 if (!is_null($auth_source)) {
-                    $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+                    $sql .= " auth_source='".Database::escape_string($auth_source)."',";
                 }
-                $sql .=    "
+                $sql .= "
                         password='".Database::escape_string($password)."',
                         email='".Database::escape_string($email)."',
                         status='".Database::escape_string($status)."',
@@ -768,7 +838,7 @@ function WSCreateUsersPasswordCrypted($params) {
                         expiration_date='".Database::escape_string($expiration_date)."',
                         active='1',
                         hr_dept_id=".intval($hr_dept_id);
-                $sql .=    " WHERE user_id='".$r_check_user[0]."'";
+                $sql .=  " WHERE user_id='".$r_check_user[0]."'";
                 Database::query($sql);
 
                 if (is_array($extra_list) && count($extra_list) > 0) {
@@ -776,7 +846,11 @@ function WSCreateUsersPasswordCrypted($params) {
                         $extra_field_name = $extra['field_name'];
                         $extra_field_value = $extra['field_value'];
                         // Save the external system's id into user_field_value table.
-                        $res = UserManager::update_extra_field_value($r_check_user[0], $extra_field_name, $extra_field_value);
+                        $res = UserManager::update_extra_field_value(
+                            $r_check_user[0],
+                            $extra_field_name,
+                            $extra_field_value
+                        );
                     }
                 }
 
@@ -806,23 +880,23 @@ function WSCreateUsersPasswordCrypted($params) {
             }
         }
 
-        $sql = "INSERT INTO $table_user
-                SET lastname = '".Database::escape_string(trim($lastName))."',
-                firstname = '".Database::escape_string(trim($firstName))."',
-                username = '".Database::escape_string(trim($loginName))."',
-                status = '".Database::escape_string($status)."',
-                password = '".Database::escape_string($password)."',
-                email = '".Database::escape_string($email)."',
-                official_code    = '".Database::escape_string($official_code)."',
-                picture_uri     = '".Database::escape_string($picture_uri)."',
-                creator_id      = '".Database::escape_string($creator_id)."',
-                auth_source = '".Database::escape_string($auth_source)."',
-                phone = '".Database::escape_string($phone)."',
-                language = '".Database::escape_string($language)."',
-                registration_date = now(),
-                expiration_date = '".Database::escape_string($expiration_date)."',
-                hr_dept_id = '".Database::escape_string($hr_dept_id)."',
-                active = '".Database::escape_string($active)."'";
+        $sql = "INSERT INTO $table_user SET
+                    lastname = '".Database::escape_string(trim($lastName))."',
+                    firstname = '".Database::escape_string(trim($firstName))."',
+                    username = '".Database::escape_string(trim($loginName))."',
+                    status = '".Database::escape_string($status)."',
+                    password = '".Database::escape_string($password)."',
+                    email = '".Database::escape_string($email)."',
+                    official_code    = '".Database::escape_string($official_code)."',
+                    picture_uri     = '".Database::escape_string($picture_uri)."',
+                    creator_id      = '".Database::escape_string($creator_id)."',
+                    auth_source = '".Database::escape_string($auth_source)."',
+                    phone = '".Database::escape_string($phone)."',
+                    language = '".Database::escape_string($language)."',
+                    registration_date = now(),
+                    expiration_date = '".Database::escape_string($expiration_date)."',
+                    hr_dept_id = '".Database::escape_string($hr_dept_id)."',
+                    active = '".Database::escape_string($active)."'";
         $result = Database::query($sql);
         if ($result) {
             //echo "id returned";
@@ -838,18 +912,36 @@ function WSCreateUsersPasswordCrypted($params) {
                 UrlManager::add_user_to_url($return, 1);
             }
             // Save new fieldlabel into user_field table.
-            $field_id = UserManager::create_extra_field($original_user_id_name, 1, $original_user_id_name, '');
+            $field_id = UserManager::create_extra_field(
+                $original_user_id_name,
+                1,
+                $original_user_id_name,
+                ''
+            );
             // Save the remote system's id into user_field_value table.
-            $res = UserManager::update_extra_field_value($return, $original_user_id_name, $original_user_id_value);
+            $res = UserManager::update_extra_field_value(
+                $return,
+                $original_user_id_name,
+                $original_user_id_value
+            );
 
             if (is_array($extra_list) && count($extra_list) > 0) {
                 foreach ($extra_list as $extra) {
                     $extra_field_name = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save new fieldlabel into user_field table.
-                    $field_id = UserManager::create_extra_field($extra_field_name, 1, $extra_field_name, '');
+                    $field_id = UserManager::create_extra_field(
+                        $extra_field_name,
+                        1,
+                        $extra_field_name,
+                        ''
+                    );
                     // Save the external system's id into user_field_value table.
-                    $res = UserManager::update_extra_field_value($return, $extra_field_name, $extra_field_value);
+                    $res = UserManager::update_extra_field_value(
+                        $return,
+                        $extra_field_name,
+                        $extra_field_value
+                    );
                 }
             }
         } else {
@@ -863,7 +955,10 @@ function WSCreateUsersPasswordCrypted($params) {
     $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_user_id_value' => $orig_user_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_user_id_value' => $orig_user_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -968,9 +1063,15 @@ function WSCreateUserPasswordCrypted($params) {
         return $msg;
     }
 
-    if (!empty($params['language'])) { $language = $params['language'];}
-    if (!empty($params['phone'])) { $phone = $params['phone'];}
-    if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}
+    if (!empty($params['language'])) {
+        $language = $params['language'];
+    }
+    if (!empty($params['phone'])) {
+        $phone = $params['phone'];
+    }
+    if (!empty($params['expiration_date'])) {
+        $expiration_date = $params['expiration_date'];
+    }
 
     // Check whether x_user_id exists into user_field_values table.
     $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
@@ -982,7 +1083,8 @@ function WSCreateUserPasswordCrypted($params) {
 
         // Check whether user is not active
         //@todo why this condition exists??
-        $sql = "SELECT user_id FROM $table_user WHERE user_id ='".$user_id."' AND active= '0' ";
+        $sql = "SELECT user_id FROM $table_user
+                WHERE user_id ='".$user_id."' AND active= '0' ";
         $resu = Database::query($sql);
         $r_check_user = Database::fetch_row($resu);
         $count_check_user = Database::num_rows($resu);
@@ -1046,22 +1148,22 @@ function WSCreateUserPasswordCrypted($params) {
     }
 
     $sql = "INSERT INTO $table_user SET
-                lastname            = '".Database::escape_string(trim($lastName))."',
-                firstname           = '".Database::escape_string(trim($firstName))."',
-                username            = '".Database::escape_string(trim($loginName))."',
-                status              = '".Database::escape_string($status)."',
-                password            = '".Database::escape_string($password)."',
-                email               = '".Database::escape_string($email)."',
-                official_code        = '".Database::escape_string($official_code)."',
-                picture_uri         = '".Database::escape_string($picture_uri)."',
-                creator_id          = '".Database::escape_string($creator_id)."',
-                auth_source         = '".Database::escape_string($auth_source)."',
-                phone               = '".Database::escape_string($phone)."',
-                language            = '".Database::escape_string($language)."',
-                registration_date   = '".api_get_utc_datetime()."',
-                expiration_date     = '".Database::escape_string($expiration_date)."',
-                hr_dept_id          = '".Database::escape_string($hr_dept_id)."',
-                active              = '".Database::escape_string($active)."'";
+            lastname            = '".Database::escape_string(trim($lastName))."',
+            firstname           = '".Database::escape_string(trim($firstName))."',
+            username            = '".Database::escape_string(trim($loginName))."',
+            status              = '".Database::escape_string($status)."',
+            password            = '".Database::escape_string($password)."',
+            email               = '".Database::escape_string($email)."',
+            official_code        = '".Database::escape_string($official_code)."',
+            picture_uri         = '".Database::escape_string($picture_uri)."',
+            creator_id          = '".Database::escape_string($creator_id)."',
+            auth_source         = '".Database::escape_string($auth_source)."',
+            phone               = '".Database::escape_string($phone)."',
+            language            = '".Database::escape_string($language)."',
+            registration_date   = '".api_get_utc_datetime()."',
+            expiration_date     = '".Database::escape_string($expiration_date)."',
+            hr_dept_id          = '".Database::escape_string($hr_dept_id)."',
+            active              = '".Database::escape_string($active)."'";
     if ($debug) error_log($sql);
 
     $result = Database::query($sql);
@@ -1074,18 +1176,36 @@ function WSCreateUserPasswordCrypted($params) {
         if ($debug) error_log("Adding user_id = $return to URL id $url_id ");
 
         // Save new fieldlabel into user_field table.
-        $field_id = UserManager::create_extra_field($original_user_id_name, 1, $original_user_id_name, '');
+        $field_id = UserManager::create_extra_field(
+            $original_user_id_name,
+            1,
+            $original_user_id_name,
+            ''
+        );
         // Save the remote system's id into user_field_value table.
-        $res = UserManager::update_extra_field_value($return, $original_user_id_name, $original_user_id_value);
+        $res = UserManager::update_extra_field_value(
+            $return,
+            $original_user_id_name,
+            $original_user_id_value
+        );
 
         if (is_array($extra_list) && count($extra_list) > 0) {
             foreach ($extra_list as $extra) {
                 $extra_field_name   = $extra['field_name'];
                 $extra_field_value  = $extra['field_value'];
                 // save new fieldlabel into user_field table
-                $field_id = UserManager::create_extra_field($extra_field_name, 1, $extra_field_name, '');
+                $field_id = UserManager::create_extra_field(
+                    $extra_field_name,
+                    1,
+                    $extra_field_name,
+                    ''
+                );
                 // save the external system's id into user_field_value table'
-                $res = UserManager::update_extra_field_value($return, $extra_field_name, $extra_field_value);
+                $res = UserManager::update_extra_field_value(
+                    $return,
+                    $extra_field_name,
+                    $extra_field_value
+                );
             }
         }
     } else {
@@ -1170,7 +1290,8 @@ $server->register('WSEditUserCredentials',                      // method name
 );
 
 // Define the method WSEditUser
-function WSEditUserCredentials($params) {
+function WSEditUserCredentials($params)
+{
     global $_configuration;
 
     if (!WSHelperVerifyKey($params)) {
@@ -1184,15 +1305,21 @@ function WSEditUserCredentials($params) {
     $username = $params['username'];
     $password = null;
 
-    if (!empty($params['password'])) { $password = $params['password']; }
+    if (!empty($params['password'])) {
+        $password = $params['password'];
+    }
 
     // Get user id from the other system ID
-    $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
 
     if ($user_id == 0) {
         return 0;
     } else {
-        $sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+        $sql = "SELECT user_id FROM $table_user
+                WHERE user_id ='$user_id' AND active= '0'";
         $resu = Database::query($sql);
         $r_check_user = Database::fetch_row($resu);
         if (!empty($r_check_user[0])) {
@@ -1201,7 +1328,8 @@ function WSEditUserCredentials($params) {
     }
 
     // Check whether username already exits.
-    $sql = "SELECT username FROM $table_user WHERE username = '$username' AND user_id <> '$user_id'";
+    $sql = "SELECT username FROM $table_user
+            WHERE username = '$username' AND user_id <> '$user_id'";
     $res_un = Database::query($sql);
     $r_username = Database::fetch_row($res_un);
 
@@ -1217,7 +1345,7 @@ function WSEditUserCredentials($params) {
         $sql .= ", password='".Database::escape_string($password)."' ";
     }
 
-    $sql .=     " WHERE user_id='$user_id'";
+    $sql .= " WHERE user_id='$user_id'";
     $return = @Database::query($sql);
     return  $return;
 }
@@ -1258,7 +1386,8 @@ $server->register('WSEditUsers',                // method name
 );
 
 // Define the method WSEditUsers
-function WSEditUsers($params) {
+function WSEditUsers($params)
+{
     global $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
@@ -1266,14 +1395,12 @@ function WSEditUsers($params) {
     }
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
     $users_params = $params['users'];
     $results = array();
     $orig_user_id_value = array();
 
-    foreach($users_params as $user_param) {
+    foreach ($users_params as $user_param) {
 
         $original_user_id_value = $user_param['original_user_id_value'];
         $original_user_id_name = $user_param['original_user_id_name'];
@@ -1295,17 +1422,23 @@ function WSEditUsers($params) {
         $extra = null;
         $extra_list = $user_param['extra'];
 
-        if (!empty($user_param['password'])) { $password = $user_param['password']; }
+        if (!empty($user_param['password'])) {
+            $password = $user_param['password'];
+        }
 
         // Get user id from id wiener
 
-        $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+        $user_id = UserManager::get_user_id_from_original_id(
+            $original_user_id_value,
+            $original_user_id_name
+        );
 
         if ($user_id == 0) {
             $results[] = 0; // Original_user_id_value doesn't exist.
             continue;
         } else {
-            $sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+            $sql = "SELECT user_id FROM $table_user
+                    WHERE user_id ='$user_id' AND active= '0'";
             $resu = Database::query($sql);
             $r_check_user = Database::fetch_row($resu);
             if (!empty($r_check_user[0])) {
@@ -1315,7 +1448,8 @@ function WSEditUsers($params) {
         }
 
         // Check whether username already exits.
-        $sql = "SELECT username FROM $table_user WHERE username = '$username' AND user_id <> '$user_id'";
+        $sql = "SELECT username FROM $table_user
+                WHERE username = '$username' AND user_id <> '$user_id'";
         $res_un = Database::query($sql);
         $r_username = Database::fetch_row($res_un);
 
@@ -1375,7 +1509,11 @@ function WSEditUsers($params) {
                 $extra_field_name = $extra['field_name'];
                 $extra_field_value = $extra['field_value'];
                 // Save the external system's id into user_field_value table.
-                $res = UserManager::update_extra_field_value($user_id, $extra_field_name, $extra_field_value);
+                $res = UserManager::update_extra_field_value(
+                    $user_id,
+                    $extra_field_name,
+                    $extra_field_value
+                );
             }
         }
 
@@ -1386,7 +1524,10 @@ function WSEditUsers($params) {
     $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_user_id_value' => $orig_user_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_user_id_value' => $orig_user_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -1436,8 +1577,6 @@ function WSEditUser($params) {
     }
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name'];
@@ -1458,16 +1597,22 @@ function WSEditUser($params) {
     $extra = null;
     $extra_list = $params['extra'];
 
-    if (!empty($params['password'])) { $password = $params['password']; }
+    if (!empty($params['password'])) {
+        $password = $params['password'];
+    }
 
     // Get user id from id wiener
 
-    $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
 
     if ($user_id == 0) {
         return 0;
     } else {
-        $sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+        $sql = "SELECT user_id FROM $table_user
+                WHERE user_id ='$user_id' AND active= '0'";
         $resu = Database::query($sql);
         $r_check_user = Database::fetch_row($resu);
         if (!empty($r_check_user[0])) {
@@ -1476,7 +1621,8 @@ function WSEditUser($params) {
     }
 
     // Check whether username already exits.
-    $sql = "SELECT username FROM $table_user WHERE username = '$username' AND user_id <> '$user_id'";
+    $sql = "SELECT username FROM $table_user
+            WHERE username = '$username' AND user_id <> '$user_id'";
     $res_un = Database::query($sql);
     $r_username = Database::fetch_row($res_un);
 
@@ -1535,7 +1681,11 @@ function WSEditUser($params) {
             $extra_field_name = $extra['field_name'];
             $extra_field_value = $extra['field_value'];
             // Save the external system's id into user_field_value table.
-            $res = UserManager::update_extra_field_value($user_id, $extra_field_name, $extra_field_value);
+            $res = UserManager::update_extra_field_value(
+                $user_id,
+                $extra_field_name,
+                $extra_field_value
+            );
         }
     }
 
@@ -1587,8 +1737,6 @@ function WSEditUserWithPicture($params) {
     }
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name'];
@@ -1616,12 +1764,15 @@ function WSEditUserWithPicture($params) {
         $expirationDateStatement = " expiration_date = '" . Database::escape_string($expiration_date) . "', ";
     }
 
-    if (!empty($params['password'])) { $password = $params['password']; }
+    if (!empty($params['password'])) {
+        $password = $params['password'];
+    }
 
-
-    // Get user id from id wiener
-
-    $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+    // Get user id from external id
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
 
     // Get picture and generate uri.
     $filename = basename($picture_url);
@@ -1704,7 +1855,11 @@ function WSEditUserWithPicture($params) {
             $extra_field_name = $extra['field_name'];
             $extra_field_value = $extra['field_value'];
             // Save the external system's id into user_field_value table.
-            $res = UserManager::update_extra_field_value($user_id, $extra_field_name, $extra_field_value);
+            $res = UserManager::update_extra_field_value(
+                $user_id,
+                $extra_field_name,
+                $extra_field_value
+            );
         }
     }
 
@@ -1803,9 +1958,6 @@ function WSEditUsersPasswordCrypted($params) {
 
     // get user id from id of remote system
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
 
     $users_params = $params['users'];
     $results = array();
@@ -1862,13 +2014,17 @@ function WSEditUsersPasswordCrypted($params) {
             continue;
         }
 
-        $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+        $user_id = UserManager::get_user_id_from_original_id(
+            $original_user_id_value,
+            $original_user_id_name
+        );
 
         if ($user_id == 0) {
             $results[] = 0; // Original_user_id_value doesn't exist.
             continue;
         } else {
-            $sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+            $sql = "SELECT user_id FROM $table_user
+                    WHERE user_id ='$user_id' AND active= '0'";
             $resu = Database::query($sql);
             $r_check_user = Database::fetch_row($resu);
             if (!empty($r_check_user[0])) {
@@ -1878,7 +2034,8 @@ function WSEditUsersPasswordCrypted($params) {
         }
 
         // Check if username already exits.
-        $sql = "SELECT username FROM $table_user WHERE username ='$username' AND user_id <> '$user_id'";
+        $sql = "SELECT username FROM $table_user
+                WHERE username ='$username' AND user_id <> '$user_id'";
         $res_un = Database::query($sql);
         $r_username = Database::fetch_row($res_un);
 
@@ -1899,7 +2056,7 @@ function WSEditUsersPasswordCrypted($params) {
             $sql .= " password='".Database::escape_string($password)."',";
         }
         if (!is_null($auth_source)) {
-            $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+            $sql .= " auth_source='".Database::escape_string($auth_source)."',";
         }
 
         // Exception for admins in case no status is provided in WS call...
@@ -1916,7 +2073,7 @@ function WSEditUsersPasswordCrypted($params) {
             $status = 1;
         }
 
-        $sql .=    "
+        $sql .= "
                 email='".Database::escape_string($email)."',
                 status='".Database::escape_string($status)."',
                 official_code='".Database::escape_string($official_code)."',
@@ -1929,7 +2086,7 @@ function WSEditUsersPasswordCrypted($params) {
         if (!is_null($creator_id)) {
             $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
         }
-        $sql .=    " WHERE user_id='$user_id'";
+        $sql .= " WHERE user_id='$user_id'";
         $return = @Database::query($sql);
 
         if (is_array($extra_list) && count($extra_list) > 0) {
@@ -1937,7 +2094,11 @@ function WSEditUsersPasswordCrypted($params) {
                 $extra_field_name = $extra['field_name'];
                 $extra_field_value = $extra['field_value'];
                 // Save the external system's id into user_field_value table.
-                $res = UserManager::update_extra_field_value($user_id, $extra_field_name, $extra_field_value);
+                $res = UserManager::update_extra_field_value(
+                    $user_id,
+                    $extra_field_name,
+                    $extra_field_value
+                );
             }
         }
 
@@ -1947,8 +2108,11 @@ function WSEditUsersPasswordCrypted($params) {
 
     $count_results = count($results);
     $output = array();
-    for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_user_id_value' => $orig_user_id_value[$i], 'result' => $results[$i]);
+    for ($i = 0; $i < $count_results; $i++) {
+        $output[] = array(
+            'original_user_id_value' => $orig_user_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -1991,16 +2155,15 @@ $server->register('WSEditUserPasswordCrypted',                         // method
 );
 
 // Define the method WSEditUserPasswordCrypted
-function WSEditUserPasswordCrypted($params) {
+function WSEditUserPasswordCrypted($params)
+{
     global $_configuration;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
     $original_user_id_value = $params['original_user_id_value'];
     $original_user_id_name = $params['original_user_id_name'];
@@ -2045,12 +2208,16 @@ function WSEditUserPasswordCrypted($params) {
         return $msg;
     }
 
-    $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
 
     if ($user_id == 0) {
         return 0;
     } else {
-        $sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+        $sql = "SELECT user_id FROM $table_user
+                WHERE user_id ='$user_id' AND active= '0'";
         $resu = Database::query($sql);
         $r_check_user = Database::fetch_row($resu);
         if (!empty($r_check_user[0])) {
@@ -2059,7 +2226,8 @@ function WSEditUserPasswordCrypted($params) {
     }
 
     // Check whether username already exits.
-    $sql = "SELECT username FROM $table_user WHERE username ='$username' AND user_id <> '$user_id'";
+    $sql = "SELECT username FROM $table_user
+            WHERE username ='$username' AND user_id <> '$user_id'";
     $res_un = Database::query($sql);
     $r_username = Database::fetch_row($res_un);
 
@@ -2079,7 +2247,7 @@ function WSEditUserPasswordCrypted($params) {
         $sql .= " password='".Database::escape_string($password)."',";
     }
     if (!is_null($auth_source)) {
-        $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+        $sql .= " auth_source='".Database::escape_string($auth_source)."',";
     }
 
     // Exception for admins in case no status is provided in WS call...
@@ -2096,20 +2264,20 @@ function WSEditUserPasswordCrypted($params) {
         $status = 1;
     }
 
-    $sql .=    "
-                email='".Database::escape_string($email)."',
-                status='".Database::escape_string($status)."',
-                official_code='".Database::escape_string($official_code)."',
-                phone='".Database::escape_string($phone)."',
-                picture_uri='".Database::escape_string($picture_uri)."',
-                expiration_date='".Database::escape_string($expiration_date)."',
-                active='".Database::escape_string($active)."',
-                hr_dept_id=".intval($hr_dept_id);
+    $sql .= "
+            email='".Database::escape_string($email)."',
+            status='".Database::escape_string($status)."',
+            official_code='".Database::escape_string($official_code)."',
+            phone='".Database::escape_string($phone)."',
+            picture_uri='".Database::escape_string($picture_uri)."',
+            expiration_date='".Database::escape_string($expiration_date)."',
+            active='".Database::escape_string($active)."',
+            hr_dept_id=".intval($hr_dept_id);
 
     if (!is_null($creator_id)) {
         $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
     }
-    $sql .=    " WHERE user_id='$user_id'";
+    $sql .= " WHERE user_id='$user_id'";
     $return = @Database::query($sql);
 
     if (is_array($extra_list) && count($extra_list) > 0) {
@@ -2117,7 +2285,11 @@ function WSEditUserPasswordCrypted($params) {
             $extra_field_name = $extra['field_name'];
             $extra_field_value = $extra['field_value'];
             // save the external system's id into user_field_value table'
-            $res = UserManager::update_extra_field_value($user_id, $extra_field_name, $extra_field_value);
+            $res = UserManager::update_extra_field_value(
+                $user_id,
+                $extra_field_name,
+                $extra_field_value
+            );
         }
     }
 
@@ -2166,7 +2338,10 @@ function WSHelperActionOnUsers($params, $type) {
 
     $original_user_ids = $params['ids'];
     foreach($original_user_ids as $original_user_id) {
-        $user_id = UserManager::get_user_id_from_original_id($original_user_id['original_user_id_value'], $original_user_id['original_user_id_name']);
+        $user_id = UserManager::get_user_id_from_original_id(
+            $original_user_id['original_user_id_value'],
+            $original_user_id['original_user_id_name']
+        );
         if($user_id > 0) {
             if($type == "delete") {
                 UserManager::delete_user($user_id);
@@ -2328,46 +2503,53 @@ function WSCreateCourse($params)
     $orig_course_id_value = array();
 
     foreach ($courses_params as $course_param) {
+        $title = $course_param['title'];
+        $category_code = $course_param['category_code'];
+        $wanted_code = $course_param['wanted_code'];
+        $tutor_name = $course_param['tutor_name'];
+        $course_language = 'english'; // TODO: A hard-coded value.
+        $original_course_id_name = $course_param['original_course_id_name'];
+        $original_course_id_value = $course_param['original_course_id_value'];
+        $orig_course_id_value[] = $course_param['original_course_id_value'];
+        $visibility = null;
 
-        $title                      = $course_param['title'];
-        $category_code              = $course_param['category_code'];
-        $wanted_code                = $course_param['wanted_code'];
-        $tutor_name                 = $course_param['tutor_name'];
-        $course_language            = 'english'; // TODO: A hard-coded value.
-        $original_course_id_name    = $course_param['original_course_id_name'];
-        $original_course_id_value   = $course_param['original_course_id_value'];
-        $orig_course_id_value[]     = $course_param['original_course_id_value'];
-        $visibility                 = null;
-
-        if ($course_param['visibility'] && $course_param['visibility'] >= 0 && $course_param['visibility'] <= 3) {
+        if ($course_param['visibility'] &&
+            $course_param['visibility'] >= 0 &&
+            $course_param['visibility'] <= 3
+        ) {
             $visibility = $course_param['visibility'];
         }
         $extra_list = $course_param['extra'];
 
         // Check whether exits $x_course_code into user_field_values table.
-        $course_id = CourseManager::get_course_id_from_original_id($course_param['original_course_id_value'], $course_param['original_course_id_name']);
-        if($course_id > 0) {
-            // Check whether course is not active.
-            $sql = "SELECT code FROM $table_course WHERE id ='$course_id' AND visibility= '0'";
-            $resu = Database::query($sql);
-            $r_check_course = Database::fetch_row($resu);
-            if (!empty($r_check_course[0])) {
-                $sql = "UPDATE $table_course SET course_language='".Database::escape_string($course_language)."',
-                                    title='".Database::escape_string($title)."',
-                                    category_code='".Database::escape_string($category_code)."',
-                                    tutor_name='".Database::escape_string($tutor_name)."',
-                                    visual_code='".Database::escape_string($wanted_code)."'";
+        $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+            $course_param['original_course_id_value'],
+            $course_param['original_course_id_name']
+        );
+
+        if (!empty($courseInfo)) {
+            if ($courseInfo['visibility'] != 0) {
+                $sql = "UPDATE $table_course SET
+                            course_language='".Database::escape_string($course_language)."',
+                            title='".Database::escape_string($title)."',
+                            category_code='".Database::escape_string($category_code)."',
+                            tutor_name='".Database::escape_string($tutor_name)."',
+                            visual_code='".Database::escape_string($wanted_code)."'";
                 if($visibility !== null) {
                     $sql .= ", visibility = '$visibility' ";
                 }
-                $sql .= " WHERE code='".Database::escape_string($r_check_course[0])."'";
+                $sql .= " WHERE id='".$courseInfo['real_id']."'";
                 Database::query($sql);
                 if (is_array($extra_list) && count($extra_list) > 0) {
                     foreach ($extra_list as $extra) {
                         $extra_field_name = $extra['field_name'];
                         $extra_field_value = $extra['field_value'];
                         // Save the external system's id into course_field_value table.
-                        $res = CourseManager::update_course_extra_field_value($r_check_course[0], $extra_field_name, $extra_field_value);
+                        $res = CourseManager::update_course_extra_field_value(
+                            $r_check_course[0],
+                            $extra_field_name,
+                            $extra_field_value
+                        );
                     }
                 }
                 $results[] = $r_check_course[0];
@@ -2392,13 +2574,13 @@ function WSCreateCourse($params)
         $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
 
         $params = array();
-        $params['title']            = $title;
-        $params['wanted_code']      = $wanted_code;
-        $params['category_code']    = $category_code;
-        $params['tutor_name']       = $tutor_name;
-        $params['course_language']  = $course_language;
-        $params['user_id']          = api_get_user_id();
-        $params['visibility']       = $visibility;
+        $params['title'] = $title;
+        $params['wanted_code'] = $wanted_code;
+        $params['category_code'] = $category_code;
+        $params['tutor_name'] = $tutor_name;
+        $params['course_language'] = $course_language;
+        $params['user_id'] = api_get_user_id();
+        $params['visibility'] = $visibility;
 
         $course_info = CourseManager::create_course($params);
 
@@ -2406,19 +2588,35 @@ function WSCreateCourse($params)
             $course_code = $course_info['code'];
 
             // Save new fieldlabel into course_field table
-            $field_id = CourseManager::create_course_extra_field($original_course_id_name, 1, $original_course_id_name);
+            $field_id = CourseManager::create_course_extra_field(
+                $original_course_id_name,
+                1,
+                $original_course_id_name
+            );
 
             // Save the external system's id into user_field_value table.
-            $res = CourseManager::update_course_extra_field_value($course_code, $original_course_id_name, $original_course_id_value);
+            $res = CourseManager::update_course_extra_field_value(
+                $course_code,
+                $original_course_id_name,
+                $original_course_id_value
+            );
 
             if (is_array($extra_list) && count($extra_list) > 0) {
                 foreach ($extra_list as $extra) {
                     $extra_field_name  = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save new fieldlabel into course_field table.
-                    $field_id = CourseManager::create_course_extra_field($extra_field_name, 1, $extra_field_name);
+                    $field_id = CourseManager::create_course_extra_field(
+                        $extra_field_name,
+                        1,
+                        $extra_field_name
+                    );
                     // Save the external system's id into course_field_value table.
-                    $res = CourseManager::update_course_extra_field_value($course_code, $extra_field_name, $extra_field_value);
+                    $res = CourseManager::update_course_extra_field_value(
+                        $course_code,
+                        $extra_field_name,
+                        $extra_field_value
+                    );
                 }
             }
             $results[] = $course_code;
@@ -2430,7 +2628,10 @@ function WSCreateCourse($params)
     $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_course_id_value' => $orig_course_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -2514,17 +2715,15 @@ $server->register('WSCreateCourseByTitle',                     // method name
 );
 
 // Define the method WSCreateCourseByTitle
-function WSCreateCourseByTitle($params) {
-
+function WSCreateCourseByTitle($params)
+{
     global $firstExpirationDelay, $_configuration;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $t_cfv                     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-    $table_course             = Database::get_main_table(TABLE_MAIN_COURSE);
+    $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $courses_params = $params['courses'];
     $results = array();
@@ -2557,24 +2756,21 @@ function WSCreateCourseByTitle($params) {
             $wanted_code = CourseManager::generate_course_code(substr($title, 0, $maxlength));
         }
 
-        // Check if exits $x_course_code into user_field_values table.
-        $sql = "SELECT field_value,course_code FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
+        $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+            $original_course_id_value,
+            $original_course_id_name
+        );
 
-        if (!empty($row[0])) {
-            // Check whether user is not active.
-            $sql = "SELECT code FROM $table_course WHERE code ='".$row[1]."' AND visibility= '0'";
-            $resu = Database::query($sql);
-            $r_check_course = Database::fetch_row($resu);
-            if (!empty($r_check_course[0])) {
-                $sql = "UPDATE $table_course SET course_language='".Database::escape_string($course_language)."',
-                                    title='".Database::escape_string($title)."',
-                                    category_code='".Database::escape_string($category_code)."',
-                                    tutor_name='".Database::escape_string($tutor_name)."',
-                                    visual_code='".Database::escape_string($wanted_code)."',
-                                    visibility = '3'
-                        WHERE code='".Database::escape_string($r_check_course[0])."'";
+        if (!empty($courseInfo)) {
+            if ($courseInfo['visibility'] != 0) {
+                $sql = "UPDATE $table_course SET
+                            course_language='".Database::escape_string($course_language)."',
+                            title='".Database::escape_string($title)."',
+                            category_code='".Database::escape_string($category_code)."',
+                            tutor_name='".Database::escape_string($tutor_name)."',
+                            visual_code='".Database::escape_string($wanted_code)."',
+                            visibility = '3'
+                        WHERE id ='".$courseInfo['real_id']."'";
                 Database::query($sql);
                 $results[] = $r_check_course[0];
                 continue;
@@ -2600,14 +2796,13 @@ function WSCreateCourseByTitle($params) {
         if (Database::num_rows($result_check) < 1) {
 
             $params = array();
-
-            $params['title']            = $title;
-            $params['wanted_code']      = $wanted_code;
-            $params['category_code']    = $category_code;
-            $params['tutor_name']       = $tutor_name;
-            $params['course_language']  = $course_language;
-            $params['user_id']          = api_get_user_id();
-            $params['visibility']       = $visibility;
+            $params['title'] = $title;
+            $params['wanted_code'] = $wanted_code;
+            $params['category_code'] = $category_code;
+            $params['tutor_name'] = $tutor_name;
+            $params['course_language'] = $course_language;
+            $params['user_id'] = api_get_user_id();
+            $params['visibility'] = $visibility;
 
             $course_info = create_course($params);
 
@@ -2615,19 +2810,35 @@ function WSCreateCourseByTitle($params) {
                 $course_code = $course_info['code'];
 
                 // Save new fieldlabel into course_field table.
-                $field_id = CourseManager::create_course_extra_field($original_course_id_name, 1, $original_course_id_name);
+                $field_id = CourseManager::create_course_extra_field(
+                    $original_course_id_name,
+                    1,
+                    $original_course_id_name
+                );
 
                 // Save the external system's id into user_field_value table.
-                $res = CourseManager::update_course_extra_field_value($course_code, $original_course_id_name, $original_course_id_value);
+                $res = CourseManager::update_course_extra_field_value(
+                    $course_code,
+                    $original_course_id_name,
+                    $original_course_id_value
+                );
 
                 if (is_array($extra_list) && count($extra_list) > 0) {
                     foreach ($extra_list as $extra) {
                         $extra_field_name = $extra['field_name'];
                         $extra_field_value = $extra['field_value'];
                         // Save new fieldlabel into course_field table.
-                        $field_id = CourseManager::create_course_extra_field($extra_field_name, 1, $extra_field_name);
+                        $field_id = CourseManager::create_course_extra_field(
+                            $extra_field_name,
+                            1,
+                            $extra_field_name
+                        );
                         // Save the external system's id into course_field_value table.
-                        $res = CourseManager::update_course_extra_field_value($course_code, $extra_field_name, $extra_field_value);
+                        $res = CourseManager::update_course_extra_field_value(
+                            $course_code,
+                            $extra_field_name,
+                            $extra_field_value
+                        );
                     }
                 }
             }
@@ -2644,7 +2855,10 @@ function WSCreateCourseByTitle($params) {
     $count_results = count($results);
     $output = array();
     for ($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_course_id_value' => $orig_course_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -2743,8 +2957,6 @@ function WSEditCourse($params){
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
     $courses_params = $params['courses'];
     $results = array();
@@ -2768,20 +2980,22 @@ function WSEditCourse($params){
         $orig_course_id_value[] = $original_course_id_value;
         $extra_list = $course_param['extra'];
 
-        // Get course code from id from remote system.
-        $sql = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
+        $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+            $original_course_id_value,
+            $original_course_id_name
+        );
 
-        $course_code = $row[0];
-
-        if (empty($course_code)) {
+        if (empty($courseInfo)) {
             $results[] = 0; // Original_course_id_value doesn't exist.
             continue;
         }
 
+        $course_code = $courseInfo['code'];
+
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT concat(lastname,'',firstname) as tutor_name FROM $table_user WHERE status='1' AND user_id = '$tutor_id' ORDER BY lastname,firstname";
+        $sql = "SELECT concat(lastname,'',firstname) as tutor_name
+                FROM $table_user WHERE status='1' AND user_id = '$tutor_id'
+                ORDER BY lastname,firstname";
         $res = Database::query($sql);
         $tutor_name = Database::fetch_row($res);
 
@@ -2794,18 +3008,19 @@ function WSEditCourse($params){
 
         $disk_quota = '50000'; // TODO: A hard-coded value.
         $tutor_name = $tutor_name[0];
-        $sql = "UPDATE $course_table SET course_language='".Database::escape_string($course_language)."',
-                                    title='".Database::escape_string($title)."',
-                                    category_code='".Database::escape_string($category_code)."',
-                                    tutor_name='".Database::escape_string($tutor_name)."',
-                                    visual_code='".Database::escape_string($visual_code)."',
-                                    department_name='".Database::escape_string($department_name)."',
-                                    department_url='".Database::escape_string($department_url)."',
-                                    disk_quota='".Database::escape_string($disk_quota)."',
-                                    visibility = '".Database::escape_string($visibility)."',
-                                    subscribe = '".Database::escape_string($subscribe)."',
-                                    unsubscribe='".Database::escape_string($unsubscribe)."'
-                                WHERE code='".Database::escape_string($course_code)."'";
+        $sql = "UPDATE $course_table SET
+                    course_language='".Database::escape_string($course_language)."',
+                    title='".Database::escape_string($title)."',
+                    category_code='".Database::escape_string($category_code)."',
+                    tutor_name='".Database::escape_string($tutor_name)."',
+                    visual_code='".Database::escape_string($visual_code)."',
+                    department_name='".Database::escape_string($department_name)."',
+                    department_url='".Database::escape_string($department_url)."',
+                    disk_quota='".Database::escape_string($disk_quota)."',
+                    visibility = '".Database::escape_string($visibility)."',
+                    subscribe = '".Database::escape_string($subscribe)."',
+                    unsubscribe='".Database::escape_string($unsubscribe)."'
+                WHERE id ='".Database::escape_string($courseId)."'";
         $res = Database::query($sql);
 
         if (is_array($extra_list) && count($extra_list) > 0) {
@@ -2813,7 +3028,11 @@ function WSEditCourse($params){
                 $extra_field_name = $extra['field_name'];
                 $extra_field_value = $extra['field_value'];
                 // Save the external system's id into course_field_value table.
-                $res = CourseManager::update_course_extra_field_value($course_code, $extra_field_name, $extra_field_value);
+                $res = CourseManager::update_course_extra_field_value(
+                    $course_code,
+                    $extra_field_name,
+                    $extra_field_value
+                );
             }
         }
 
@@ -2830,7 +3049,10 @@ function WSEditCourse($params){
     $count_results = count($results);
     $output = array();
     for ($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_course_id_value' => $orig_course_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -2891,17 +3113,14 @@ $server->register('WSCourseDescription',                    // method name
 );
 
 // Define the method WSCourseDescription
-function WSCourseDescription($params) {
-
+function WSCourseDescription($params)
+{
     global $_course;
-
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
     $array_course_desc_id = array();
     $array_course__desc_default_title = array();
@@ -2911,29 +3130,17 @@ function WSCourseDescription($params) {
     $original_course_id_name = $params['original_course_id_name'];
     $original_course_id_value = $params['original_course_id_value'];
 
-    // Get course code from id from remote system.
-    $sql = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-    $res = Database::query($sql);
-    $row = Database::fetch_row($res);
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+        $original_course_id_value,
+        $original_course_id_name
+    );
 
-    $course_code=$row[0];
-
-    if (Database::num_rows($res) < 1) {
+    if (empty($courseInfo) || (isset($courseInfo) && $courseInfo['visibility'] == 0)) {
         return 0; // Original_course_id_value doesn't exist.
-        //continue;
-    } else {
-        $sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
-        $resu = Database::query($sql);
-        $r_check_code = Database::fetch_row($resu);
-        if (Database::num_rows($resu) > 0) {
-            return  0; // This code is not active.
-            //continue;
-        }
     }
 
-    $course_ifo = api_get_course_info($course_code);
     $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-    $sql = "SELECT * FROM $t_course_desc WHERE c_id = {$course_ifo['real_id']} ";
+    $sql = "SELECT * FROM $t_course_desc WHERE c_id = {$courseInfo['real_id']} ";
     $result = Database::query($sql);
 
     $default_titles = array(
@@ -2944,7 +3151,8 @@ function WSCourseDescription($params) {
         get_lang('CourseMaterial'),
         get_lang('HumanAndTechnicalResources'),
         get_lang('Assessment'),
-        get_lang('AddCategory'));
+        get_lang('AddCategory')
+    );
 
     // TODO: Hard-coded Spanish texts.
     //$default_titles = array('Descripcion general', 'Objetivos', 'Contenidos', 'Metodologia', 'Materiales', 'Recursos humanos y tecnicos', 'Evaluacion', 'Apartado');
@@ -3059,13 +3267,11 @@ function WSEditCourseDescription($params) {
 
     global $_course;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return -1;
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
     $courses_params = $params['course_desc'];
     $results = array();
@@ -3080,27 +3286,16 @@ function WSEditCourseDescription($params) {
         $course_desc_content = $course_param['course_desc_content'];
         $orig_course_id_value[] = $original_course_id_value;
 
-        // Get course code from id from the remote system.
-        $sql = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
+        $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+            $original_course_id_value,
+            $original_course_id_name
+        );
 
-        $course_code = $row[0];
-
-        if (Database::num_rows($res) < 1) {
+        if (empty($courseInfo) || (isset($courseInfo) && $courseInfo['visibility'] == 0)) {
             $results[] = 0;
             continue; // Original_course_id_value doesn't exist.
-        } else {
-            $sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
-            $resu = Database::query($sql);
-            $r_check_code = Database::fetch_row($resu);
-            if (Database::num_rows($resu) > 0) {
-                $results[] = 0;
-                continue;
-            }
         }
 
-        $course_info = api_get_course_info($course_code);
         $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 
         $course_desc_id = Database::escape_string($course_desc_id);
@@ -3114,15 +3309,24 @@ function WSEditCourseDescription($params) {
         }
 
         // Check whether data already exits into course_description table.
-        $sql_check_id = "SELECT * FROM $t_course_desc WHERE c_id = {$course_info['real_id']} AND id ='$course_desc_id'";
+        $sql_check_id = "SELECT * FROM $t_course_desc
+                        WHERE c_id = {$courseInfo['real_id']} AND id ='$course_desc_id'";
         $res_check_id = Database::query($sql_check_id);
 
         if (Database::num_rows($res_check_id) > 0) {
-            $sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content'
-                    WHERE c_id = {$course_info['real_id']} AND id = '".$course_desc_id."'";
+            $sql = "UPDATE $t_course_desc SET
+                    title = '$course_desc_title',
+                    content = '$course_desc_content'
+                    WHERE
+                        c_id = {$courseInfo['real_id']} AND
+                        id = '".$course_desc_id."'";
             Database::query($sql);
         } else {
-            $sql = "INSERT IGNORE INTO $t_course_desc SET c_id = {$course_info['real_id']} , id = '".$course_desc_id."', title = '$course_desc_title', content = '$course_desc_content'";
+            $sql = "INSERT IGNORE INTO $t_course_desc SET
+                    c_id = {$courseInfo['real_id']},
+                    id = '".$course_desc_id."',
+                    title = '$course_desc_title',
+                    content = '$course_desc_content'";
             Database::query($sql);
         }
 
@@ -3133,7 +3337,10 @@ function WSEditCourseDescription($params) {
     $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_course_id_value' => $orig_course_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -3213,16 +3420,13 @@ $server->register('WSDeleteCourse',                // method name
 
 
 // Define the method WSDeleteCourse
-function WSDeleteCourse($params) {
-
-    if(!WSHelperVerifyKey($params)) {
+function WSDeleteCourse($params)
+{
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-
     $courses_params = $params['courses'];
     $results = array();
     $orig_course_id_value = array();
@@ -3232,27 +3436,19 @@ function WSDeleteCourse($params) {
         $original_course_id_value = $course_param['original_course_id_value'];
         $original_course_id_name = $course_param['original_course_id_name'];
         $orig_course_id_value[] = $original_course_id_value;
-        // Get course code from id from the remote system.
-        $sql_course = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res_course = Database::query($sql_course);
-        $row_course = Database::fetch_row($res_course);
 
-        $code = $row_course[0];
+        $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+            $original_course_id_value,
+            $original_course_id_name
+        );
 
-        if (empty($code)) {
-            $results[] = 0; // Original_course_id_value doesn't exist.
-            continue;
-        } else {
-            $sql = "SELECT code FROM $table_course WHERE code ='$code' AND visibility = '0'";
-            $resu = Database::query($sql);
-            $r_check_code = Database::fetch_row($resu);
-            if (!empty($r_check_code[0])) {
-                $results[] = 0; // This code is not active.
-                continue;
-            }
+        if (empty($courseInfo) || (isset($courseInfo) && $courseInfo['visibility'] == 0)) {
+            $results[] = 0;
+            continue; // Original_course_id_value doesn't exist.
         }
 
-        $sql = "UPDATE $table_course SET visibility = '0' WHERE code = '$code'";
+        $courseId = $courseInfo['real_id'];
+        $sql = "UPDATE $table_course SET visibility = '0' WHERE id = '$courseId'";
         $return = Database::query($sql);
         $results[] = $return;
     }
@@ -3260,7 +3456,10 @@ function WSDeleteCourse($params) {
     $count_results = count($results);
     $output = array();
     for ($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_course_id_value' => $orig_course_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -3353,18 +3552,16 @@ $server->register('WSCreateSession',                // method name
 
 
 // define the method WSCreateSession
-function WSCreateSession($params) {
-
+function WSCreateSession($params)
+{
     global $_user;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $tbl_user        = Database::get_main_table(TABLE_MAIN_USER);
-    $tbl_session    = Database::get_main_table(TABLE_MAIN_SESSION);
-    $t_sf             = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv             = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
     $sessions_params = $params['sessions'];
     $results = array();
@@ -3387,24 +3584,26 @@ function WSCreateSession($params) {
         $original_session_id_value = $session_param['original_session_id_value'];
         $orig_session_id_value[] = $session_param['original_session_id_value'];
         $extra_list = $session_param['extra'];
-        // Check if exits remote system's session id into session_field_values table.
-        $sql = "SELECT field_value    FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
-        if (Database::num_rows($res) > 0) {
+
+        $sessionId = SessionManager::getSessionIdFromOriginalId(
+            $original_session_id_value,
+            $original_session_id_name
+        );
+
+        if (empty($sessionId)) {
             $results[] = 0;
             continue;
         }
 
         if (empty($nolimit)){
-            $date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-            $date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
+            $date_start = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
+            $date_end = "$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
         } else {
-            $date_start="000-00-00";
-            $date_end="000-00-00";
+            $date_start = "000-00-00";
+            $date_end = "000-00-00";
         }
 
-        if(empty($name)) {
+        if (empty($name)) {
             $results[] = 0;
             continue;
         } elseif (empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
@@ -3422,23 +3621,40 @@ function WSCreateSession($params) {
                 $results[] = 0;
                 continue;
             } else {
-                Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
+                Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end)
+                                 VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
                 $id_session = Database::insert_id();
 
                 // Save new fieldlabel into course_field table.
-                $field_id = SessionManager::create_session_extra_field($original_session_id_name, 1, $original_session_id_name);
+                $field_id = SessionManager::create_session_extra_field(
+                    $original_session_id_name,
+                    1,
+                    $original_session_id_name
+                );
 
                 // Save the external system's id into user_field_value table.
-                $res = SessionManager::update_session_extra_field_value($id_session, $original_session_id_name, $original_session_id_value);
+                $res = SessionManager::update_session_extra_field_value(
+                    $id_session,
+                    $original_session_id_name,
+                    $original_session_id_value
+                );
 
                 if (is_array($extra_list) && count($extra_list) > 0) {
                     foreach ($extra_list as $extra) {
                         $extra_field_name = $extra['field_name'];
                         $extra_field_value = $extra['field_value'];
                         // Save new fieldlabel into course_field table.
-                        $field_id = SessionManager::create_session_extra_field($extra_field_name, 1, $extra_field_name);
+                        $field_id = SessionManager::create_session_extra_field(
+                            $extra_field_name,
+                            1,
+                            $extra_field_name
+                        );
                         // Save the external system's id into course_field_value table.
-                        $res = SessionManager::update_session_extra_field_value($id_session, $extra_field_name, $extra_field_value);
+                        $res = SessionManager::update_session_extra_field_value(
+                            $id_session,
+                            $extra_field_name,
+                            $extra_field_value
+                        );
                     }
                 }
                 $results[] = $id_session;
@@ -3450,7 +3666,10 @@ function WSCreateSession($params) {
     $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_session_id_value' => $orig_session_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -3542,18 +3761,16 @@ $server->register('WSEditSession',                // method name
 );
 
 // define the method WSEditSession
-function WSEditSession($params) {
-
+function WSEditSession($params)
+{
     global $_user;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $tbl_user        = Database::get_main_table(TABLE_MAIN_USER);
-    $tbl_session    = Database::get_main_table(TABLE_MAIN_SESSION);
-    $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
     $sessions_params = $params['sessions'];
     $results = array();
@@ -3577,14 +3794,13 @@ function WSEditSession($params) {
         $nolimit = $session_param['nolimit'];
         $id_coach = $session_param['user_id'];
         $extra_list = $session_param['extra'];
-        // Get session id from original session id
-        $sql = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
 
-        $id = intval($row[0]);
+        $id SessionManager::getSessionIdFromOriginalId(
+            $original_session_id_value,
+            $original_session_id_name
+        );
 
-        if (Database::num_rows($res) < 1) {
+        if (empty($id)) {
             $results[] = 0;
             continue;
         }
@@ -3619,14 +3835,17 @@ function WSEditSession($params) {
                 "nb_days_access_after_end='".        $nb_days_acess_after."'" .
                 " WHERE id='".$id."'";
             Database::query($sql);
-            $id_session = Database::insert_id();
 
             if (is_array($extra_list) && count($extra_list) > 0) {
                 foreach ($extra_list as $extra) {
                     $extra_field_name = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save the external system's id into session_field_value table.
-                    $res = SessionManager::update_session_extra_field_value($id, $extra_field_name, $extra_field_value);
+                    $res = SessionManager::update_session_extra_field_value(
+                        $id,
+                        $extra_field_name,
+                        $extra_field_value
+                    );
                 }
             }
 
@@ -3638,8 +3857,11 @@ function WSEditSession($params) {
 
     $count_results = count($results);
     $output = array();
-    for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
+    for ($i = 0; $i < $count_results; $i++) {
+        $output[] = array(
+            'original_session_id_value' => $orig_session_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -3745,14 +3967,12 @@ $server->register('WSDeleteSession',                // method name
 );
 
 // define the method WSDeleteSession
-function WSDeleteSession($params) {
-
-    if(!WSHelperVerifyKey($params)) {
+function WSDeleteSession($params)
+{
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -3768,12 +3988,12 @@ function WSDeleteSession($params) {
         $original_session_id_value = $session_param['original_session_id_value'];
         $original_session_id_name = $session_param['original_session_id_name'];
         $orig_session_id_value[] = $original_session_id_name;
-        // get session id from original session id
-        $sql = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
-        $res = @Database::query($sql);
-        $row = Database::fetch_row($res);
 
-        $idChecked = intval($row[0]);
+        $idChecked = SessionManager::getSessionIdFromOriginalId(
+            $original_session_id_value,
+            $original_session_id_name
+        );
+
         if (empty($idChecked)) {
             $results[] = 0;
             continue;
@@ -3781,56 +4001,33 @@ function WSDeleteSession($params) {
 
         $session_ids[] = $idChecked;
 
-        $sql_session = "DELETE FROM $tbl_session WHERE id = '$idChecked'";
-        @Database::query($sql_session);
-        $sql_session_rel_course = "DELETE FROM $tbl_session_rel_course WHERE session_id = '$idChecked'";
-        @Database::query($sql_session_rel_course);
-        $sql_session_rel_course_rel_user = "DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = '$idChecked'";
-        @Database::query($sql_session_rel_course_rel_user);
-        $sql_session_rel_course = "DELETE FROM $tbl_session_rel_user WHERE session_id = '$idChecked'";
-        @Database::query($sql_session_rel_course);
+        $sql = "DELETE FROM $tbl_session WHERE id = '$idChecked'";
+        Database::query($sql);
+        $sql = "DELETE FROM $tbl_session_rel_course WHERE session_id = '$idChecked'";
+        Database::query($sql);
+        $sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = '$idChecked'";
+        Database::query($sql);
+        $sql = "DELETE FROM $tbl_session_rel_user WHERE session_id = '$idChecked'";
+        Database::query($sql);
         $results[] = 1;
         continue;
     }
 
-    // Get fields id from all extra fields about a given session id
-    $cad_session_ids = implode(',', $session_ids);
-
-    $sql = "SELECT distinct field_id FROM $t_sfv  WHERE session_id IN ($cad_session_ids)";
-    $res_field_ids = @Database::query($sql);
-
-    while($row_field_id = Database::fetch_row($res_field_ids)){
-        $field_ids[] = $row_field_id[0];
-    }
+    $extraFieldValue = new ExtraFieldValue('session');
 
     //delete from table_session_field_value from a given session_id
     foreach ($session_ids as $session_id) {
-        $sql_session_field_value = "DELETE FROM $t_sfv WHERE session_id = '$session_id'";
-        @Database::query($sql_session_field_value);
-    }
-
-    $sql = "SELECT distinct field_id FROM $t_sfv";
-    $res_field_all_ids = @Database::query($sql);
-
-    while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
-        $field_all_ids[] = $row_field_all_id[0];
-    }
-
-    foreach ($field_ids as $field_id) {
-        // Check whether field id is used into table field value.
-        if (in_array($field_id,$field_all_ids)) {
-            continue;
-        } else {
-            $sql_session_field = "DELETE FROM $t_sf WHERE id = '$field_id'";
-            Database::query($sql_session_field);
-        }
+        $extraFieldValue->deleteValuesByItem($session_id);
     }
 
     // Preparing output.
     $count_results = count($results);
     $output = array();
-    for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
+    for ($i = 0; $i < $count_results; $i++) {
+        $output[] = array(
+            'original_session_id_value' => $orig_session_id_value[$i],
+            'result' => $results[$i],
+        );
     }
 
     return $output;
@@ -3928,7 +4125,10 @@ function WSSubscribeUserToCourse($params) {
             'result' => 1);
 
         // Get user id
-        $user_id = UserManager::get_user_id_from_original_id($original_user_id['original_user_id_value'], $original_user_id['original_user_id_name']);
+        $user_id = UserManager::get_user_id_from_original_id(
+            $original_user_id['original_user_id_value'],
+            $original_user_id['original_user_id_name']
+        );
         if ($debug) error_log('WSSubscribeUserToCourse user_id: '.$user_id);
 
         if ($user_id == 0) {
@@ -3936,14 +4136,17 @@ function WSSubscribeUserToCourse($params) {
             $result['result'] = 0;
         } else {
             // User was found
-            $course_id = CourseManager::get_course_id_from_original_id($original_course_id['original_course_id_value'], $original_course_id['original_course_id_name']);
-            if ($debug) error_log('WSSubscribeUserToCourse course_id: '.$course_id);
-            if ($course_id == 0) {
+            $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+                $original_course_id['original_course_id_value'],
+                $original_course_id['original_course_id_name']
+            );
+
+            if (empty($courseInfo)) {
                 // Course was not found
                 $result['result'] = 0;
             } else {
-                $course_code = CourseManager::get_course_code_from_course_id($course_id);
                 if ($debug) error_log('WSSubscribeUserToCourse course_code: '.$course_code);
+                $course_code = $courseInfo['code'];
                 if (!CourseManager::add_user_to_course($user_id, $course_code, $status)) {
                     $result['result'] = 0;
                 }
@@ -4008,7 +4211,7 @@ function WSSubscribeUserToCourseSimple($params) {
     $status       = STUDENT;
 
     // Get user id
-    $user_data = UserManager::get_user_info_by_id($user_id);
+    $user_data = api_get_user_info($user_id);
 
     if (empty($user_data)) {
         // If user was not found, there was a problem
@@ -4090,8 +4293,11 @@ function WSGetUser($params) {
     $result = array();
 
     // Get user id
-    $user_id   = UserManager::get_user_id_from_original_id($params['original_user_id_value'], $params['original_user_id_name']);
-    $user_data = UserManager::get_user_info_by_id($user_id);
+    $user_id = UserManager::get_user_id_from_original_id(
+        $params['original_user_id_value'],
+        $params['original_user_id_name']
+    );
+    $user_data = api_get_user_info($user_id);
 
     if (empty($user_data)) {
         // If user was not found, there was a problem
@@ -4232,18 +4438,15 @@ $server->register('WSUnsubscribeUserFromCourse',                         // meth
 );
 
 // define the method WSUnsubscribeUserFromCourse
-function WSUnsubscribeUserFromCourse($params) {
-    if(!WSHelperVerifyKey($params)) {
+function WSUnsubscribeUserFromCourse($params)
+{
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
     $table_course     = Database :: get_main_table(TABLE_MAIN_COURSE);
     $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
     $userscourses_params = $params['userscourses'];
     $results = array();
@@ -4276,31 +4479,19 @@ function WSUnsubscribeUserFromCourse($params) {
 
         $orig_user_id_value[] = implode(',',$usersList);
 
-        // Get course code from original course id
+        $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+            $original_course_id_value,
+            $original_course_id_name
+        );
 
-        $sql_course     = "SELECT course_code    FROM $table_field cf,$t_cfv cfv
-                           WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res_course = Database::query($sql_course);
-        $row_course = Database::fetch_row($res_course);
-
-        $course_code = $row_course[0];
-
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
-
-        if (empty($course_code)) {
+        if (empty($courseInfo) ||
+            (isset($courseInfo) && $courseInfo['visibility'] == 0)
+        ) {
             $results[] = 0;
-            continue;
-        } else {
-            $sql = "SELECT code FROM $table_course
-                    WHERE code ='$course_code' AND visibility = '0'";
-            $resul = Database::query($sql);
-            $r_check_code = Database::fetch_row($resul);
-            if (!empty($r_check_code[0])) {
-                $results[] = 0;
-                continue;
-            }
+            continue; // Original_course_id_value doesn't exist.
         }
+
+        $courseId = $courseInfo['real_id'];
 
         if (count($usersList) == 0) {
             $results[] = 0;
@@ -4308,7 +4499,8 @@ function WSUnsubscribeUserFromCourse($params) {
         }
 
         foreach ($usersList as $user_id) {
-            $sql = "DELETE FROM $table_course_user WHERE user_id = '$user_id' AND c_id = '".$courseId."'";
+            $sql = "DELETE FROM $table_course_user
+                    WHERE user_id = '$user_id' AND c_id = '".$courseId."'";
             $result = Database::query($sql);
             $return = Database::affected_rows($result);
         }
@@ -4405,52 +4597,51 @@ $server->register('WSSuscribeUsersToSession',                          // method
 );
 
 // define the method WSSuscribeUsersToSession
-function WSSuscribeUsersToSession($params){
-
-    if(!WSHelperVerifyKey($params)) {
+function WSSuscribeUsersToSession($params)
+{
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-    $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-    $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_session_rel_user                 = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
     $userssessions_params = $params['userssessions'];
     $results = array();
     $orig_user_id_value = array();
     $orig_session_id_value = array();
-    foreach($userssessions_params as $usersession_params) {
+    foreach ($userssessions_params as $usersession_params) {
 
         $original_session_id_value = $usersession_params['original_session_id_value'];
         $original_session_id_name = $usersession_params['original_session_id_name'];
         $original_user_id_name = $usersession_params['original_user_id_name'];
         $original_user_id_values = $usersession_params['original_user_id_values'];
         $orig_session_id_value[] = $original_session_id_value;
-        // get session id from original session id
-        $sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
-        $res_session = Database::query($sql_session);
-        $row_session = Database::fetch_row($res_session);
 
-        $id_session = $row_session[0];
+        $sessionId = SessionManager::getSessionIdFromOriginalId(
+            $original_session_id_value,
+            $original_session_id_name
+        );
 
-        if (Database::num_rows($res_session) < 1) {
+        if (empty($sessionId)) {
             $results[] = 0;
             continue;
         }
 
         $usersList = array();
         foreach ($original_user_id_values as $key => $row_original_user_list) {
-            $user_id = UserManager::get_user_id_from_original_id($original_user_id_values[$key], $original_user_id_name[$key]);
+            $user_id = UserManager::get_user_id_from_original_id(
+                $original_user_id_values[$key],
+                $original_user_id_name[$key]
+            );
             if ($user_id == 0) {
                 continue; // user_id doesn't exist.
             } else {
-                $sql = "SELECT user_id FROM $user_table WHERE user_id ='".$user_id."' AND active= '0'";
+                $sql = "SELECT user_id FROM $user_table
+                        WHERE user_id ='".$user_id."' AND active= '0'";
                 $resu = Database::query($sql);
                 $r_check_user = Database::fetch_row($resu);
                 if (!empty($r_check_user[0])) {
@@ -4482,7 +4673,8 @@ function WSSuscribeUsersToSession($params){
         $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id='$id_session'";
         $result=Database::query($sql);
         $CourseList = array();
-        while($row = Database::fetch_array($result)) {
+
+        while ($row = Database::fetch_array($result)) {
             $CourseList[] = $row['c_id'];
         }
 
@@ -4493,11 +4685,11 @@ function WSSuscribeUsersToSession($params){
 
             // insert new users into session_rel_course_rel_user and ignore if they already exist
             foreach ($usersList as $enreg_user) {
-                if(!in_array($enreg_user, $existingUsers)) {
+                if (!in_array($enreg_user, $existingUsers)) {
                     $enreg_user = Database::escape_string($enreg_user);
-                    $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
-                                  VALUES('$id_session', '$enreg_course', '$enreg_user')";
-                    $result = Database::query($insert_sql);
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
+                            VALUES('$id_session', '$enreg_course', '$enreg_user')";
+                    $result = Database::query($sql);
                     if (Database::affected_rows($result)) {
                         $nbr_users++;
                     }
@@ -4520,13 +4712,15 @@ function WSSuscribeUsersToSession($params){
         foreach ($usersList as $enreg_user) {
             $enreg_user = Database::escape_string($enreg_user);
             $nbr_users++;
-            $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id) VALUES('$id_session','$enreg_user')";
-            Database::query($insert_sql);
+            $sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id)
+                    VALUES ('$id_session','$enreg_user')";
+            Database::query($sql);
         }
+
         // update number of users in the session
         $nbr_users = count($usersList);
-        $update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
-        $result = Database::query($update_sql);
+        $sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
+        $result = Database::query($sql);
         $return = Database::affected_rows($result);
         $results[] = 1;
         continue;
@@ -4546,9 +4740,8 @@ function WSSuscribeUsersToSession($params){
     return $output;
 }
 
-// --------------------------------------------------------------------
 // WSSubscribeUserToSessionSimple
-// --------------------------------------------------------------------
+
 $server->wsdl->addComplexType(
     'subscribeUserToSessionSimple_arg',
     'complexType',
@@ -4587,23 +4780,33 @@ function WSSubscribeUserToSessionSimple($params) {
     $user_id    = intval($params['user_id']);  // Chamilo user id
 
     // Get user id
-    $user_data = UserManager::get_user_info_by_id($user_id);
+    $user_data = api_get_user_info($user_id);
 
     // Prepare answer
     $result = 0;
 
     if (empty($user_data)) {
         $result = "User {$user_id} does not exist";
-        if ($debug) { error_log($result); }
+        if ($debug) {
+            error_log($result);
+        }
         return $result;
     }
     if (!empty($session_id) && is_numeric($session_id)) {
         $session_data = api_get_session_info($session_id);
         if (empty($session_data)) {
             $result = "Session {$session_id} does not exist.";
-            if ($debug) { error_log($result); }
+            if ($debug) {
+                error_log($result);
+            }
         } else {
-            SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+            SessionManager::suscribe_users_to_session(
+                $session_id,
+                array($user_id),
+                SESSION_VISIBLE_READ_ONLY,
+                false,
+                false
+            );
             if ($debug) error_log('User registered to the course: '.$session_id);
             $result = 1;
         }
@@ -4694,14 +4897,10 @@ function WSUnsuscribeUsersFromSession($params) {
     }
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-    $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-    $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_session_rel_user                 = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
     $userssessions_params = $params['userssessions'];
     $results = array();
@@ -4715,25 +4914,28 @@ function WSUnsuscribeUsersFromSession($params) {
         $original_user_id_name = $usersession_params['original_user_id_name'];
         $original_user_id_values = $usersession_params['original_user_id_values'];
         $orig_session_id_value[] = $original_session_id_value;
-        // get session id from original session id
-        $sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
-        $res_session = Database::query($sql_session);
-        $row_session = Database::fetch_row($res_session);
 
-        $id_session = $row_session[0];
+        $id_session = SessionManager::getSessionIdFromOriginalId(
+            $original_session_id_value,
+            $original_session_id_name
+        );
 
-        if (Database::num_rows($res_session) < 1) {
+        if (empty($id_session)) {
             $results[] = 0;
             continue;
         }
 
         $usersList = array();
         foreach ($original_user_id_values as $key => $row_original_user_list) {
-            $user_id = UserManager::get_user_id_from_original_id($original_user_id_values[$key], $original_user_id_name[$key]);
+            $user_id = UserManager::get_user_id_from_original_id(
+                $original_user_id_values[$key],
+                $original_user_id_name[$key]
+            );
             if ($user_id == 0) {
                 continue; // user_id doesn't exist.
             } else {
-                $sql = "SELECT user_id FROM $user_table WHERE user_id ='".$user_id."' AND active= '0'";
+                $sql = "SELECT user_id FROM $user_table
+                        WHERE user_id ='".$user_id."' AND active= '0'";
                 $resu = Database::query($sql);
                 $r_check_user = Database::fetch_row($resu);
                 if (!empty($r_check_user[0])) {
@@ -4973,15 +5175,11 @@ function WSSuscribeCoursesToSession($params) {
     if ($debug) error_log('WSSuscribeCoursesToSession: '.print_r($params, 1));
 
     // initialisation
-    $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_rel_user                = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_course                            = Database::get_main_table(TABLE_MAIN_COURSE);
-    $t_sf                               = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv                              = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-    $t_cfv                              = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $t_cf                               = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+    $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $coursessessions_params = $params['coursessessions'];
     $results = array();
@@ -4995,18 +5193,10 @@ function WSSuscribeCoursesToSession($params) {
         $original_course_id_values = $coursesession_param['original_course_id_values'];
         $orig_session_id_value[] = $original_session_id_value;
 
-        // get session id from original session id
-        $sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv
-                        WHERE
-                            sfv.field_id=sf.id AND
-                            field_variable='$original_session_id_name' AND
-                            field_value='$original_session_id_value'";
-        if ($debug) error_log($sql_session);
-
-        $res_session = Database::query($sql_session);
-        $row_session = Database::fetch_row($res_session);
-
-        $id_session = $row_session[0];
+        $id_session = SessionManager::getSessionIdFromOriginalId(
+            $original_session_id_value,
+            $original_session_id_name
+        );
 
         if (empty($id_session)) {
             $results[] = 0;
@@ -5019,26 +5209,23 @@ function WSSuscribeCoursesToSession($params) {
         foreach ($original_course_id_values as $row_original_course_list) {
 
             $course_code = Database::escape_string($row_original_course_list['course_code']);
+            $courseInfo = api_get_course_info($course_code);
+            $courseId = $courseInfo['real_id'];
 
-            $sql_course = "SELECT course_code FROM $t_cf cf, $t_cfv cfv
-                           WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$course_code'";
-            $res_course = Database::query($sql_course);
-            $row_course = Database::fetch_row($res_course);
-            $courseId = null;
-            if (empty($row_course[0])) {
-                continue; // course_code doesn't exist.
-            } else {
-                $sql = "SELECT id FROM $tbl_course WHERE code ='".$row_course[0]."' AND visibility = '0'";
-                $resu = Database::query($sql);
-                $r_check_course = Database::fetch_row($resu);
-                if (!empty($r_check_course[0])) {
-                    continue; // user_id is not active.
-                }
-                $courseInfo = api_get_course_info($row_course[0]);
-                $courseId = $courseInfo['real_id'];
+            $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+                $original_course_id_value,
+                $original_course_id_name
+            );
+
+            if (empty($courseInfo) ||
+                (isset($courseInfo) && $courseInfo['visibility'] == 0)
+            ) {
+                $results[] = 0;
+                continue; // Original_course_id_value doesn't exist.
             }
-            $courseCodeList[] = $row_course[0];
-            $course_list[] = $courseId;
+
+            $courseCodeList[] = $courseInfo['code'];
+            $course_list[] = $courseInfo['real_id'];
         }
 
         if (empty($course_list)) {
@@ -5082,11 +5269,12 @@ function WSSuscribeCoursesToSession($params) {
 
             if (!$exists) {
                 // if the course isn't subscribed yet
-
-                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id) VALUES ('$id_session','$enreg_course')";
+                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id)
+                        VALUES ('$id_session','$enreg_course')";
                 Database::query($sql);
 
-                // We add the current course in the existing courses array, to avoid adding another time the current course
+                // We add the current course in the existing courses array,
+                // to avoid adding another time the current course
                 $existingCourses[] = array('c_id' => $enreg_course);
                 $nbr_courses++;
 
@@ -5102,8 +5290,10 @@ function WSSuscribeCoursesToSession($params) {
                         $nbr_users++;
                     }
                 }
-                Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE session_id='$id_session' AND c_id='$enreg_course'");
-
+                $sql = "UPDATE $tbl_session_rel_course SET
+                            nbr_users = $nbr_users
+                        WHERE session_id='$id_session' AND c_id='$enreg_course'";
+                Database::query($sql);
                 $sql_directory = "SELECT directory FROM $tbl_course WHERE id = '$enreg_course'";
                 $res_directory = Database::query($sql_directory);
                 $row_directory = Database::fetch_row($res_directory);
@@ -5207,22 +5397,17 @@ $server->register('WSUnsuscribeCoursesFromSession',                             
 );
 
 // define the method WSUnsuscribeCoursesFromSession
-function WSUnsuscribeCoursesFromSession($params) {
-
-    if(!WSHelperVerifyKey($params)) {
+function WSUnsuscribeCoursesFromSession($params)
+{
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
     // Initialisation
-    $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_course                            = Database::get_main_table(TABLE_MAIN_COURSE);
-    $t_sf                               = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv                              = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-    $t_cfv                              = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $t_cf                               = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-
+    $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $coursessessions_params = $params['coursessessions'];
     $results = array();
     $orig_course_id_value = array();
@@ -5235,12 +5420,11 @@ function WSUnsuscribeCoursesFromSession($params) {
         $original_course_id_name = $coursesession_param['original_course_id_name'];
         $original_course_id_values = $coursesession_param['original_course_id_values'];
         $orig_session_id_value[] = $original_session_id_value;
-        // Get session id from original session id
-        $sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
-        $res_session = Database::query($sql_session);
-        $row_session = Database::fetch_row($res_session);
 
-        $id_session = $row_session[0];
+        $id_session = SessionManager::getSessionIdFromOriginalId(
+            $original_session_id_value,
+            $original_session_id_name
+        );
 
         if (empty($id_session)) {
             $results[] = 0;
@@ -5251,26 +5435,23 @@ function WSUnsuscribeCoursesFromSession($params) {
         $course_list = array();
         $courseIdList = [];
         foreach ($original_course_id_values as $row_original_course_list) {
+
             $course_code = Database::escape_string($row_original_course_list['course_code']);
 
-            $sql_course = "SELECT course_code FROM $t_cf cf,$t_cfv cfv
-                           WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$course_code'";
-            $res_course = Database::query($sql_course);
-            $row_course = Database::fetch_row($res_course);
-            $courseId = null;
-            if (empty($row_course[0])) {
+            // Check whether exits $x_course_code into user_field_values table.
+            $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+                $row_original_course_list['course_code'],
+                $original_course_id_name
+            );
+
+            if (empty($courseInfo) || isset($courseInfo) &&
+                $courseInfo['visibility'] == 0
+            ) {
                 continue; // Course_code doesn't exist'
-            } else {
-                $sql = "SELECT code FROM $tbl_course WHERE code ='".$row_course[0]."' AND visibility = '0'";
-                $resu = Database::query($sql);
-                $r_check_course = Database::fetch_row($resu);
-                if (!empty($r_check_course[0])) {
-                    continue; // user_id is not active.
-                }
-                $courseId = $row_course[0];
             }
-            $course_list[] = $row_course[0];
-            $courseIdList[] = $courseId;
+
+            $course_list[] = $courseInfo['code'];
+            $courseIdList[] = $courseInfo['real_id'];
         }
 
         if (empty($course_list)) {
@@ -5282,7 +5463,8 @@ function WSUnsuscribeCoursesFromSession($params) {
 
         foreach ($courseIdList as $courseId) {
             $courseId = intval($courseId);
-            Database::query("DELETE FROM $tbl_session_rel_course WHERE c_id ='$courseId' AND session_id='$id_session'");
+            Database::query("DELETE FROM $tbl_session_rel_course
+                            WHERE c_id ='$courseId' AND session_id='$id_session'");
             $result = Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE c_id='$courseId' AND session_id = '$id_session'");
             $return = Database::affected_rows($result);
         }
@@ -5307,8 +5489,13 @@ function WSUnsuscribeCoursesFromSession($params) {
     $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_course_id_values' => $orig_course_id_value[$i], 'original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_course_id_values' => $orig_course_id_value[$i],
+            'original_session_id_value' => $orig_session_id_value[$i],
+            'result' => $results[$i],
+        );
     }
+
     return $output;
 }
 

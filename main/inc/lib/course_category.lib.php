@@ -531,30 +531,16 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
 {
     global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-    $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
-    $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
     $categoryCode = Database::escape_string($category_code);
     $searchTerm = Database::escape_string($searchTerm);
     $categoryFilter = '';
     $searchFilter = '';
 
-    // get course list auto-register
-    $sql = "SELECT course_code
-            FROM $TABLE_COURSE_FIELD_VALUE tcfv
-            INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id
-            WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-
-    $special_course_result = Database::query($sql);
-    if (Database::num_rows($special_course_result) > 0) {
-        $special_course_list = array();
-        while ($result_row = Database::fetch_array($special_course_result)) {
-            $special_course_list[] = '"' . $result_row['course_code'] . '"';
-        }
-    }
+    $specialCourseList = CourseManager::get_special_course_list();
 
     $without_special_courses = '';
-    if (!empty($special_course_list)) {
-        $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
+    if (!empty($specialCourseList)) {
+        $without_special_courses = ' AND course.code NOT IN (' . implode(',', $specialCourseList) . ')';
     }
 
     $visibilityCondition = null;
@@ -624,26 +610,12 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
 {
     global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-    $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-    $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
-    // Get course list auto-register
-    $sql = "SELECT course_code
-            FROM $TABLE_COURSE_FIELD_VALUE tcfv
-            INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id
-            WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-
-    $special_course_result = Database::query($sql);
-    if (Database::num_rows($special_course_result) > 0) {
-        $special_course_list = array();
-        while ($result_row = Database::fetch_array($special_course_result)) {
-            $special_course_list[] = '"' . $result_row['course_code'] . '"';
-        }
-    }
+    $specialCourseList = CourseManager::get_special_course_list();
 
     $without_special_courses = '';
-    if (!empty($special_course_list)) {
-        $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
+    if (!empty($specialCourseList)) {
+        $without_special_courses = ' AND course.code NOT IN (' . implode(',', $specialCourseList) . ')';
     }
     $visibilityCondition = null;
     if (isset($_configuration['course_catalog_hide_private'])) {
@@ -703,14 +675,20 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
         $category_code = Database::escape_string($category_code);
         if (empty($category_code) || $category_code == "ALL") {
             $sql = "SELECT * FROM $tbl_course
-                    WHERE 1=1 $without_special_courses $visibilityCondition
+                    WHERE
+                        1=1
+                        $without_special_courses
+                        $visibilityCondition
                     ORDER BY title $limitFilter ";
         } else {
             if ($category_code == 'NONE') {
                 $category_code = '';
             }
             $sql = "SELECT * FROM $tbl_course
-                    WHERE category_code='$category_code' $without_special_courses $visibilityCondition
+                    WHERE
+                        category_code='$category_code'
+                        $without_special_courses
+                        $visibilityCondition
                     ORDER BY title $limitFilter ";
         }
 
@@ -720,18 +698,24 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
             $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             if ($category_code != "ALL") {
                 $sql = "SELECT * FROM $tbl_course as course
-                    INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.c_id = course.id)
-                    WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses $visibilityCondition
-                    ORDER BY title $limitFilter";
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE
+                            access_url_id = $url_access_id AND
+                            category_code='$category_code'
+                            $without_special_courses
+                            $visibilityCondition
+                        ORDER BY title $limitFilter";
             } else {
                 $sql = "SELECT * FROM $tbl_course as course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
-                        WHERE access_url_id = $url_access_id $without_special_courses $visibilityCondition
+                        WHERE
+                            access_url_id = $url_access_id
+                            $without_special_courses
+                            $visibilityCondition
                         ORDER BY title $limitFilter";
             }
-
         }
     }
 

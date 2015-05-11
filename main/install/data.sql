@@ -755,17 +755,17 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, v
 
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) VALUES (2, 1, 'special_course', 'Special course', 1 , 1, '');
 
-INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (8, '1', 'AtOnce',1);
-INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (8, '8', 'Daily',2);
-INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (8, '0', 'No',3);
+INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '1', 'AtOnce',1);
+INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '8', 'Daily',2);
+INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '0', 'No',3);
 
-INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (9, '1', 'AtOnce',1);
-INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (9, '8', 'Daily',2);
-INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (9, '0', 'No',3);
+INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (9, '1', 'AtOnce',1);
+INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (9, '8', 'Daily',2);
+INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (9, '0', 'No',3);
 
-INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (10, '1', 'AtOnce',1);
-INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (10, '8', 'Daily',2);
-INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (10, '0', 'No',3);
+INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (10, '1', 'AtOnce',1);
+INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (10, '8', 'Daily',2);
+INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (10, '0', 'No',3);
 
 INSERT INTO access_url(url, description, active, created_by) VALUES ('http://localhost/',' ',1,1);
 

@@ -65,8 +65,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 // Getting extra fields that have the filter option "on"
 $extraField = new ExtraField('user');
-$extraFields = $extraField->get_all(array('field_filter' => 1));
-
+$extraFields = $extraField->get_all(array('filter = ?' => 1));
 $user_image_pdf_size = 80;
 
 if (api_is_allowed_to_edit(null, true)) {
@@ -206,7 +205,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 // users subscribed to the course through a session.
                 if (api_get_session_id()) {
                     $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-                    $sql_query = "SELECT DISTINCT
+                    $sql = "SELECT DISTINCT
                                     user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
                                     user.username,
                                     $select_email_condition
@@ -216,20 +215,20 @@ if (api_is_allowed_to_edit(null, true)) {
                                     $legal
                                   FROM $table_session_course_user as session_course_user, $table_users as user ";
                     if (api_is_multiple_url_enabled()) {
-                        $sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
+                        $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
-                    $sql_query .=" WHERE c_id = '$courseId' AND session_course_user.user_id = user.user_id ";
-                    $sql_query .= ' AND session_id = '.$sessionId;
+                    $sql .=" WHERE c_id = '$courseId' AND session_course_user.user_id = user.user_id ";
+                    $sql .= ' AND session_id = '.$sessionId;
 
                     if (api_is_multiple_url_enabled()) {
-                        $sql_query .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
+                        $sql .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
                     }
 
                     //only users no coaches/teachers
-                    $sql_query .= " AND session_course_user.status = 0 ";
-                    $sql_query .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
+                    $sql .= " AND session_course_user.status = 0 ";
+                    $sql .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
 
-                    $rs = Database::query($sql_query);
+                    $rs = Database::query($sql);
                     $counter = 1;
 
                     while ($user = Database:: fetch_array($rs, 'ASSOC')) {
@@ -288,32 +287,32 @@ if (api_is_allowed_to_edit(null, true)) {
 
                     // users directly subscribed to the course
                     $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-                    $sql_query = "SELECT DISTINCT
+                    $sql = "SELECT DISTINCT
 					            user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
 					            user.username,
 					            $select_email_condition
 					            phone,
 					            user.official_code,
 					            active $legal
-								FROM $table_course_user as course_user, $table_users as user ";
+                            FROM $table_course_user as course_user, $table_users as user ";
                     if (api_is_multiple_url_enabled()) {
-                        $sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
+                        $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
-                    $sql_query .= " WHERE
+                    $sql .= " WHERE
                             c_id = '$courseId' AND
                             course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
                             course_user.user_id = user.user_id ";
 
                     if (api_is_multiple_url_enabled()) {
-                        $sql_query .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
+                        $sql .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
                     }
 
                     //only users no teachers/coaches
-                    $sql_query .= " AND course_user.status = 5 ";
+                    $sql .= " AND course_user.status = 5 ";
 
-                    $sql_query .= ($sort_by_first_name ? " ORDER BY user.firstname, user.lastname" : " ORDER BY user.lastname, user.firstname");
+                    $sql .= ($sort_by_first_name ? " ORDER BY user.firstname, user.lastname" : " ORDER BY user.lastname, user.firstname");
 
-                    $rs = Database::query($sql_query);
+                    $rs = Database::query($sql);
                     $counter = 1;
                     while ($user = Database::fetch_array($rs, 'ASSOC')) {
                         if (isset($user['legal_agreement'])) {
@@ -735,7 +734,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                             $user_id,
                             $extraField['id']
                         );
-                        $temp[] = $data['field_value'];
+                        $temp[] = $data['value'];
                     }
                 }
 
@@ -783,21 +782,25 @@ function get_user_data($from, $number_of_items, $column, $direction)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param int $active the current state of the account
  * @param int $user_id The user id
- * @param string $url_params
+ * @param string $urlParams
+ *
  * @return string Some HTML-code with the lock/unlock button
  */
-function active_filter($active, $url_params, $row)
+function active_filter($active, $urlParams, $row)
 {
     $userId = api_get_user_id();
-    if ($active=='1') {
-        $action='AccountActive';
-        $image='accept';
+    $action = '';
+    $image = '';
+    if ($active == '1') {
+        $action = 'AccountActive';
+        $image = 'accept';
     }
-    if ($active=='0') {
-        $action='AccountInactive';
-        $image='error';
+    if ($active == '0') {
+        $action = 'AccountInactive';
+        $image = 'error';
     }
     $result = '';
+
     /* you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is
         locked out and nobody can change it anymore.*/
     if ($row[count($row)-1] <> $userId) {
@@ -935,7 +938,7 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 
     foreach ($extraFields as $extraField) {
-        $table->set_header($header_nr++, $extraField['field_display_text'], false);
+        $table->set_header($header_nr++, $extraField['display_text'], false);
     }
 
     // Actions column

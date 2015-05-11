@@ -254,7 +254,10 @@ class ssoDrupal
         }
 
         $userExtraFieldValue = new ExtraFieldValue('user');
-        $drupalUserIdData = $userExtraFieldValue->get_values_by_handler_and_field_variable($userId, 'drupal_user_id');
+        $drupalUserIdData = $userExtraFieldValue->get_values_by_handler_and_field_variable(
+            $userId,
+            'drupal_user_id'
+        );
 
         // If this is an administrator, allow him to make some changes in
         // the Chamilo profile
@@ -267,7 +270,7 @@ class ssoDrupal
             return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
         }
         // In all other cases, generate a link to the Drupal profile edition
-        $drupalUserId = $drupalUserIdData['field_value'];
+        $drupalUserId = $drupalUserIdData['value'];
         $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
         return $url;
     }

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -15,7 +16,7 @@ use Chamilo\UserBundle\Entity\User;
  */
 class UserManager
 {
-    // Constants for user extra field types.
+    // This contants are deprecated use the constants located in ExtraField
     const USER_FIELD_TYPE_TEXT = 1;
     const USER_FIELD_TYPE_TEXTAREA = 2;
     const USER_FIELD_TYPE_RADIO = 3;
@@ -253,6 +254,7 @@ class UserManager
                         'mobilePhoneNumber' => $phoneNumber,
                         'password' => $original_password
                     );
+
                     api_mail_html(
                         $recipient_name,
                         $email,
@@ -441,9 +443,8 @@ class UserManager
         $sql = 'DELETE FROM '.$gradebook_results_table.' WHERE user_id = '.$user_id;
         Database::query($sql);
 
-        $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
-        Database::query($sqlv);
+        $extraFieldValue = new ExtraFieldValue('user');
+        $extraFieldValue->deleteValuesByItem($user_id);
 
         if (api_get_multiple_access_url()) {
             $url_id = api_get_current_access_url_id();
@@ -741,7 +742,11 @@ class UserManager
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
             foreach ($extra as $fname => $fvalue) {
-                $res = $res && self::update_extra_field_value($user_id, $fname, $fvalue);
+                $res = $res && self::update_extra_field_value(
+                    $user_id,
+                    $fname,
+                    $fvalue
+                );
             }
         }
 
@@ -850,15 +855,18 @@ class UserManager
      */
     public static function get_user_id_from_original_id($original_user_id_value, $original_user_id_name)
     {
-        $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $sql = "SELECT user_id
+        $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
+        $sql = "SELECT item_id as user_id
                 FROM $t_uf uf
                 INNER JOIN $t_ufv ufv
                 ON ufv.field_id=uf.id
                 WHERE
-                    field_variable='$original_user_id_name' AND
-                    field_value='$original_user_id_value';";
+                    variable='$original_user_id_name' AND
+                    value='$original_user_id_value' AND
+                    extra_field_type = $extraFieldType
+                ";
         $res = Database::query($sql);
         $row = Database::fetch_object($res);
         if ($row) {
@@ -1157,6 +1165,7 @@ class UserManager
     /**
      * Get user information
      * @param     string     The username
+     * @deprecated use api_get_user_info
      * @return array All user information as an associative array
      */
     public static function get_user_info($username)
@@ -1167,45 +1176,6 @@ class UserManager
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             return Database::fetch_array($res);
-        }
-        return false;
-    }
-
-    /**
-     * Get user information
-     * @param    string    The id
-     * @param    boolean    Whether to return the user's extra fields (defaults to false)
-     * @return    array     All user information as an associative array
-     * @deprecated Use api_get_user_info() instead
-     */
-    public static function get_user_info_by_id($user_id, $user_fields = false)
-    {
-        $user_id = intval($user_id);
-        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT * FROM $user_table WHERE user_id=".$user_id;
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $user = Database::fetch_array($res);
-            $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-            $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-            $sqlf = "SELECT * FROM $t_uf ORDER BY field_order";
-            $resf = Database::query($sqlf);
-            if (Database::num_rows($resf) > 0) {
-                while ($rowf = Database::fetch_array($resf)) {
-                    $sqlv = "SELECT * FROM $t_ufv
-                             WHERE field_id = ".$rowf['id']." AND user_id = ".$user['user_id']."
-                             ORDER BY id DESC";
-                    $resv = Database::query($sqlv);
-                    if (Database::num_rows($resv) > 0) {
-                        //There should be only one value for a field and a user
-                        $rowv = Database::fetch_array($resv);
-                        $user['extra'][$rowf['field_variable']] = $rowv['field_value'];
-                    } else {
-                        $user['extra'][$rowf['field_variable']] = '';
-                    }
-                }
-            }
-            return $user;
         }
         return false;
     }
@@ -1647,205 +1617,22 @@ class UserManager
     }
 
     /**
-     * Update an extra field. This function is called when a user changes his/her profile
-     * and by consequence fills or edits his/her extra fields.
-     *
-     * @param    integer    Field ID
-     * @param    array    Database columns and their new value
-     * @return    boolean    true if field updated, false otherwise
-     */
-    public static function update_extra_field($fid, $columns)
-    {
-        //TODO check that values added are values proposed for enumerated field types
-        $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $fid = Database::escape_string($fid);
-        $sqluf = "UPDATE $t_uf SET ";
-        $known_fields = array(
-            'id',
-            'field_variable',
-            'field_type',
-            'field_display_text',
-            'field_default_value',
-            'field_order',
-            'field_visible',
-            'field_changeable',
-            'field_filter'
-        );
-        $safecolumns = array();
-        foreach ($columns as $index => $newval) {
-            if (in_array($index, $known_fields)) {
-                $safecolumns[$index] = Database::escape_string($newval);
-                $sqluf .= $index." = '".$safecolumns[$index]."', ";
-            }
-        }
-        $time = time();
-        $sqluf .= " tms = FROM_UNIXTIME($time) WHERE id='$fid'";
-        $resuf = Database::query($sqluf);
-
-        return $resuf;
-    }
-
-    /**
      * Update an extra field value for a given user
-     * @param    integer   $user_id User ID
-     * @param    string    $fname Field variable name
-     * @param    string    $fvalue Field value
+     * @param    integer   $userId User ID
+     * @param    string    $variable Field variable name
+     * @param    string    $value Field value
      *
      * @return    boolean    true if field updated, false otherwise
      */
-    public static function update_extra_field_value($user_id, $fname, $fvalue = '')
+    public static function update_extra_field_value($userId, $variable, $value = '')
     {
-        //TODO check that values added are values proposed for enumerated field types
-        $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $t_ufo = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-        $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $fname = Database::escape_string($fname);
-
-        if ($user_id != strval(intval($user_id))) {
-            return false;
-        }
-
-        if ($user_id === false) {
-            return false;
-        }
-
-        $fvalues = '';
-        if (is_array($fvalue)) {
-            foreach ($fvalue as $val) {
-                $fvalues .= $val.';';
-            }
-            if (!empty($fvalues)) {
-                $fvalues = substr($fvalues, 0, -1);
-            }
-        } else {
-            $fvalues = $fvalue;
-        }
-
-        $sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
-        $resuf = Database::query($sqluf);
-        $is_extra_file = false;
-        if (Database::num_rows($resuf) == 1) {
-            //ok, the field exists
-            // Check if enumerated field, if the option is available
-            $rowuf = Database::fetch_array($resuf);
-
-            switch ($rowuf['field_type']) {
-                case self::USER_FIELD_TYPE_TAG :
-                    //4. Tags are process here comes from main/auth/profile.php
-                    UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
-                    return true;
-                    break;
-                /*case self::USER_FIELD_TYPE_SELECT_MULTIPLE :
-                    // check code from UserManager::update_user_picture() to use something similar here
-                    break;*/
-                case self::USER_FIELD_TYPE_RADIO:
-                case self::USER_FIELD_TYPE_SELECT:
-                case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
-                    $sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
-                    $resuo = Database::query($sqluo);
-                    $values = explode(';', $fvalues);
-                    if (Database::num_rows($resuo) > 0) {
-                        $check = false;
-                        while ($rowuo = Database::fetch_array($resuo)) {
-                            if (in_array($rowuo['option_value'], $values)) {
-                                $check = true;
-                                break;
-                            }
-                        }
-                        if (!$check) {
-                            return false; //option value not found
-                        }
-                    } else {
-                        return false; //enumerated type but no option found
-                    }
-                    break;
-                case self::USER_FIELD_TYPE_FILE:
-                    $is_extra_file = true;
-                    if (isset($fvalue['tmp_name'])) {
-                        // Filter against dangerous filenames
-                        $fvalue['name'] = Security::filter_filename($fvalue['name']);
-                        $fvalue['tmp_name'] = Security::filter_filename($fvalue['tmp_name']);
-                        // Update and recover the filename
-                        $fvalues = UserManager::update_user_extra_file(
-                            $user_id,
-                            $rowuf['field_variable'],
-                            $fvalue['name'],
-                            $fvalue['tmp_name']
-                        );
-                    } else {
-                        // Set empty string to $fvalues to delete it
-                        $fvalues = '';
-                    }
-                    break;
-                case 1:
-                case 2:
-                default:
-                    break;
-            }
-            $tms = time();
-            $sqlufv = "SELECT * FROM $t_ufv
-                       WHERE user_id = $user_id AND field_id = ".$rowuf['id']."
-                       ORDER BY id";
-            $resufv = Database::query($sqlufv);
-            $n = Database::num_rows($resufv);
-            if ($n > 1) {
-                //problem, we already have two values for this field and user combination - keep last one
-                while ($rowufv = Database::fetch_array($resufv)) {
-                    if ($n > 1) {
-                        $sqld = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'];
-                        Database::query($sqld);
-                        $n--;
-                    }
-                    $rowufv = Database::fetch_array($resufv);
-                    if ($rowufv['field_value'] != $fvalues) {
-                        $sqlu = "UPDATE $t_ufv SET
-                                    field_value = '".Database::escape_string($fvalues)."',
-                                    tms = FROM_UNIXTIME($tms)
-                                WHERE id = ".$rowufv['id'];
-                        $resu = Database::query($sqlu);
-                        return ($resu ? true : false);
-                    }
-                    return true;
-                }
-            } elseif ($n == 1) {
-                //we need to update the current record
-                $rowufv = Database::fetch_array($resufv);
-                if ($rowufv['field_value'] != $fvalues) {
-                    if ($is_extra_file) {
-                        // To remove from user folder
-                        self::remove_user_extra_file(
-                            $user_id,
-                            $fname,
-                            $rowufv['field_value']
-                        );
-                    }
-                    // If the new field is empty, delete it
-                    if ($fvalues == '') {
-                        $sql_query = "DELETE FROM $t_ufv
-                                      WHERE id = ".$rowufv['id'].";";
-                    } else {
-                        // Otherwise update it
-                        $sql_query = "UPDATE $t_ufv SET
-                                        field_value = '".Database::escape_string($fvalues)."',
-                                        tms = FROM_UNIXTIME($tms)
-                                      WHERE id = ".$rowufv['id'];
-                    }
-
-                    $resu = Database::query($sql_query);
-                    return ($resu ? true : false);
-                }
-
-                return true;
-            } else {
-                $sql = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms)
-                        VALUES ( $user_id, ".$rowuf['id'].", '".Database::escape_string($fvalues)."', FROM_UNIXTIME($tms))";
-                $res = Database::query($sql);
-                return $res ? true : false;
-            }
-        } else {
-            // Field not found
-            return false;
-        }
+        $extraFieldValue = new ExtraFieldValue('user');
+        $params = [
+            'item_id' => $userId,
+            'variable' => $variable,
+            'value' => $value
+        ];
+        $extraFieldValue->save($params);
     }
 
     /**
@@ -1867,67 +1654,62 @@ class UserManager
         $field_filter = null
     ) {
         $fields = array();
-        $t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
-        $t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+        $t_uf = Database :: get_main_table(TABLE_EXTRA_FIELD);
+        $t_ufo = Database :: get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         $columns = array(
             'id',
-            'field_variable',
+            'variable',
             'field_type',
-            'field_display_text',
-            'field_default_value',
+            'display_text',
+            'default_value',
             'field_order',
-            'field_filter',
-            'tms'
+            'filter'
         );
         $column = intval($column);
         $sort_direction = '';
         if (in_array(strtoupper($direction), array('ASC', 'DESC'))) {
             $sort_direction = strtoupper($direction);
         }
-        $sqlf = "SELECT * FROM $t_uf WHERE 1 = 1  ";
+        $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
+        $sqlf = "SELECT * FROM $t_uf WHERE extra_field_type = $extraFieldType ";
         if (!$all_visibility) {
-            $sqlf .= " AND field_visible = 1 ";
+            $sqlf .= " AND visible = 1 ";
         }
         if (!is_null($field_filter)) {
             $field_filter = intval($field_filter);
-            $sqlf .= " AND field_filter = $field_filter ";
+            $sqlf .= " AND filter = $field_filter ";
         }
         $sqlf .= " ORDER BY ".$columns[$column]." $sort_direction ";
         if ($number_of_items != 0) {
             $sqlf .= " LIMIT ".intval($from).','.intval($number_of_items);
         }
-
         $resf = Database::query($sqlf);
         if (Database::num_rows($resf) > 0) {
             while ($rowf = Database::fetch_array($resf)) {
                 $fields[$rowf['id']] = array(
                     0 => $rowf['id'],
-                    1 => $rowf['field_variable'],
+                    1 => $rowf['variable'],
                     2 => $rowf['field_type'],
-                    //3 => (empty($rowf['field_display_text']) ? '' : get_lang($rowf['field_display_text'], '')),
-                    // Temporarily removed auto-translation. Need update to get_lang() to know if translation exists (todo)
-                    // Ivan, 15-SEP-2009: get_lang() has been modified accordingly in order this issue to be solved.
-                    3 => (empty($rowf['field_display_text']) ? '' : $rowf['field_display_text']),
-                    4 => $rowf['field_default_value'],
+                    3 => (empty($rowf['display_text']) ? '' : $rowf['display_text']),
+                    4 => $rowf['default_value'],
                     5 => $rowf['field_order'],
-                    6 => $rowf['field_visible'],
-                    7 => $rowf['field_changeable'],
-                    8 => $rowf['field_filter'],
+                    6 => $rowf['visible'],
+                    7 => $rowf['changeable'],
+                    8 => $rowf['filter'],
                     9 => array(),
                     10 => '<a name="'.$rowf['id'].'"></a>',
                 );
 
                 $sqlo = "SELECT * FROM $t_ufo
-                        WHERE field_id = ".$rowf['id']."
-                        ORDER BY option_order ASC";
+                         WHERE field_id = ".$rowf['id']."
+                         ORDER BY option_order ASC";
                 $reso = Database::query($sqlo);
                 if (Database::num_rows($reso) > 0) {
                     while ($rowo = Database::fetch_array($reso)) {
                         $fields[$rowf['id']][9][$rowo['id']] = array(
                             0 => $rowo['id'],
                             1 => $rowo['option_value'],
-                            //2 => (empty($rowo['option_display_text']) ? '' : get_lang($rowo['option_display_text'], '')),
-                            2 => (empty($rowo['option_display_text']) ? '' : $rowo['option_display_text']),
+                            2 => (empty($rowo['display_text']) ? '' : $rowo['display_text']),
                             3 => $rowo['option_order']
                         );
                     }
@@ -2037,259 +1819,36 @@ class UserManager
     }
 
     /**
-     * Get the list of options attached to an extra field
-     * @param string $fieldname the name of the field
-     * @return array the list of options
-     */
-    public static function get_extra_field_options($field_name)
-    {
-        $t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
-        $t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-
-        $sql = 'SELECT options.*
-                FROM '.$t_ufo.' options
-                    INNER JOIN '.$t_uf.' fields
-                        ON fields.id = options.field_id
-                            AND fields.field_variable="'.Database::escape_string($field_name).'"';
-        $rs = Database::query($sql);
-        return Database::store_result($rs);
-    }
-
-    /**
-     * Get the number of extra fields currently recorded
-     * @param    boolean    Optional switch. true (default) returns all fields, false returns only visible fields
-     * @return    integer    Number of fields
-     */
-    public static function get_number_of_extra_fields($all_visibility = true)
-    {
-        $t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
-        $sqlf = "SELECT * FROM $t_uf ";
-        if (!$all_visibility) {
-            $sqlf .= " WHERE field_visible = 1 ";
-        }
-        $sqlf .= " ORDER BY field_order";
-        $resf = Database::query($sqlf);
-        return Database::num_rows($resf);
-    }
-
-    /**
      * Creates a new extra field
-     * @param    string    Field's internal variable name
-     * @param    int        Field's type
-     * @param    string    Field's language var name
-     * @param    string    Field's default value
-     * @param    string    Optional comma-separated list of options to provide for select and radio
-     * @return int     new user id - if the new user creation succeeds, false otherwise
+     * @param    string    $variable Field's internal variable name
+     * @param    int       $fieldType  Field's type
+     * @param    string    $displayText Field's language var name
+     * @param    string    $default Field's default value
+     * @return int
      */
-    public static function create_extra_field($fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions = '')
+    public static function create_extra_field($variable, $fieldType, $displayText, $default)
     {
-        // database table definition
-        $table_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $table_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+        $extraField = new ExtraField('user');
+        $params = [
+            'variable' => $variable,
+            'field_type' => $fieldType,
+            'display_text' => $displayText,
+            'default_value' => $default
+        ];
 
-        // First check wether the login already exists
-        if (self::is_extra_field_available($fieldvarname)) {
-            return api_set_failure('login-pass already taken');
-        }
-        $sql = "SELECT MAX(field_order) FROM $table_field";
-        $res = Database::query($sql);
-        $order = 0;
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            $order = $row[0] + 1;
-        }
-        $time = time();
-        $sql = "INSERT INTO $table_field
-                SET field_type = '".Database::escape_string($fieldtype)."',
-                field_variable = '".Database::escape_string($fieldvarname)."',
-                field_display_text = '".Database::escape_string($fieldtitle)."',
-                field_default_value = '".Database::escape_string($fielddefault)."',
-                field_order = '$order',
-                tms = FROM_UNIXTIME($time)";
-        $result = Database::query($sql);
-        if ($result) {
-            //echo "id returned";
-            $return = Database::insert_id();
-            Event::addEvent(
-                LOG_USER_FIELD_CREATE,
-                LOG_USER_FIELD_VARIABLE,
-                $fieldvarname
-            );
-        } else {
-            //echo "false - failed" ;
-            return false;
-        }
-
-        if (!empty($fieldoptions) && in_array($fieldtype, array(self::USER_FIELD_TYPE_RADIO, self::USER_FIELD_TYPE_SELECT, self::USER_FIELD_TYPE_SELECT_MULTIPLE, self::USER_FIELD_TYPE_DOUBLE_SELECT))) {
-            if ($fieldtype == self::USER_FIELD_TYPE_DOUBLE_SELECT) {
-                $twolist = explode('|', $fieldoptions);
-                $counter = 0;
-                foreach ($twolist as $individual_list) {
-                    $splitted_individual_list = explode(';', $individual_list);
-                    foreach ($splitted_individual_list as $individual_list_option) {
-                        //echo 'counter:'.$counter;
-                        if ($counter == 0) {
-                            $list[] = $individual_list_option;
-                        } else {
-                            $list[] = str_repeat('*', $counter).$individual_list_option;
-                        }
-                    }
-                    $counter++;
-                }
-            } else {
-                $list = explode(';', $fieldoptions);
-            }
-            foreach ($list as $option) {
-                $option = Database::escape_string($option);
-                $sql = "SELECT * FROM $table_field_options WHERE field_id = $return AND option_value = '".$option."'";
-                $res = Database::query($sql);
-                if (Database::num_rows($res) > 0) {
-                    //the option already exists, do nothing
-                } else {
-                    $sql = "SELECT MAX(option_order) FROM $table_field_options WHERE field_id = $return";
-                    $res = Database::query($sql);
-                    $max = 1;
-                    if (Database::num_rows($res) > 0) {
-                        $row = Database::fetch_array($res);
-                        $max = $row[0] + 1;
-                    }
-                    $time = time();
-                    $sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms)
-                            VALUES ($return,'$option','$option',$max,FROM_UNIXTIME($time))";
-                    $res = Database::query($sql);
-                    if ($res === false) {
-                        $return = false;
-                    }
-                }
-            }
-        }
-        return $return;
-    }
-
-    /**
-     * Save the changes in the definition of the extra user profile field
-     * The function is called after you (as admin) decide to store the changes you have made to one of the fields you defined
-     *
-     * There is quite some logic in this field
-     * 1.  store the changes to the field (tupe, name, label, default text)
-     * 2.  remove the options and the choices of the users from the database that no longer occur in the form field 'possible values'. We should only remove
-     *     the options (and choices) that do no longer have to appear. We cannot remove all options and choices because if you remove them all
-     *     and simply re-add them all then all the user who have already filled this form will loose their selected value.
-     * 3.    we add the options that are newly added
-     *
-     * <code> current options are a;b;c and the user changes this to a;b;x (removing c and adding x)
-     *             we first remove c (and also the entry in the option_value table for the users who have chosen this)
-     *             we then add x
-     *             a and b are neither removed nor added
-     * </code>
-     * @param     integer $fieldid        the id of the field we are editing
-     * @param    string    $fieldvarname    the internal variable name of the field
-     * @param    int        $fieldtype        the type of the field
-     * @param    string    $fieldtitle        the title of the field
-     * @param    string    $fielddefault    the default value of the field
-     * @param    string    $fieldoptions    Optional comma-separated list of options to provide for select and radio
-     * @return boolean true
-     *
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-     * @version July 2008
-     * @since v1.8.6
-     */
-    public static function save_extra_field_changes($fieldid, $fieldvarname, $fieldtype, $fieldtitle, $fielddefault, $fieldoptions = '')
-    {
-        // database table definition
-        $table_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $table_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-        $table_field_options_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
-        // we first update the field definition with the new values
-        $time = time();
-        $sql = "UPDATE $table_field
-                SET field_type = '".Database::escape_string($fieldtype)."',
-                field_variable = '".Database::escape_string($fieldvarname)."',
-                field_display_text = '".Database::escape_string($fieldtitle)."',
-                field_default_value = '".Database::escape_string($fielddefault)."',
-                tms = FROM_UNIXTIME($time)
-            WHERE id = '".intval($fieldid)."'";
-        $result = Database::query($sql);
-
-        // we create an array with all the options (will be used later in the script)
-        if ($fieldtype == self::USER_FIELD_TYPE_DOUBLE_SELECT) {
-            $twolist = explode('|', $fieldoptions);
-            $counter = 0;
-            foreach ($twolist as $individual_list) {
-                $splitted_individual_list = explode(';', $individual_list);
-                foreach ($splitted_individual_list as $individual_list_option) {
-                    //echo 'counter:'.$counter;
-                    if ($counter == 0) {
-                        $list[] = trim($individual_list_option);
-                    } else {
-                        $list[] = str_repeat('*', $counter).trim($individual_list_option);
-                    }
-                }
-                $counter++;
-            }
-        } else {
-            $templist = explode(';', $fieldoptions);
-            $list = array_map('trim', $templist);
-        }
-
-        // Remove all the field options (and also the choices of the user) that are NOT in the new list of options
-        $sql = "SELECT * FROM $table_field_options WHERE option_value NOT IN ('".implode("','", $list)."') AND field_id = '".intval($fieldid)."'";
-        $result = Database::query($sql);
-        $return['deleted_options'] = 0;
-        while ($row = Database::fetch_array($result)) {
-            // deleting the option
-            $sql_delete_option = "DELETE FROM $table_field_options WHERE id='".intval($row['id'])."'";
-            Database::query($sql_delete_option);
-            $return['deleted_options']++;
-
-            // deleting the answer of the user who has chosen this option
-            $sql_delete_option_value = "DELETE FROM $table_field_options_values
-            WHERE field_id = '".intval($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
-            $result = Database::query($sql_delete_option_value);
-            $return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows($result);
-        }
-
-        // we now try to find the field options that are newly added
-        $sql = "SELECT * FROM $table_field_options WHERE field_id = '".intval($fieldid)."'";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            // we remove every option that is already in the database from the $list
-            if (in_array(trim($row['option_display_text']), $list)) {
-                $key = array_search(trim($row['option_display_text']), $list);
-                unset($list[$key]);
-            }
-        }
-
-        // we store the new field options in the database
-        foreach ($list as $key => $option) {
-            $sql = "SELECT MAX(option_order) FROM $table_field_options WHERE field_id = '".intval($fieldid)."'";
-            $res = Database::query($sql);
-            $max = 1;
-            if (Database::num_rows($res) > 0) {
-                $row = Database::fetch_array($res);
-                $max = $row[0] + 1;
-            }
-            $time = time();
-            $sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms)
-                    VALUES ('".intval($fieldid)."','".Database::escape_string($option)."','".Database::escape_string($option)."',$max,FROM_UNIXTIME($time))";
-            $result = Database::query($sql);
-        }
-        return true;
+        return $extraField->save($params);
     }
 
     /**
      * Check if a field is available
-     * @param    string    the wanted fieldname
-     * @return    boolean    true if the wanted username is available
+     * @param    string    th$variable
+     * @return    boolean
      */
-    public static function is_extra_field_available($fieldname)
+    public static function is_extra_field_available($variable)
     {
-        $t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
-        $sql = "SELECT * FROM $t_uf WHERE field_variable = '".Database::escape_string($fieldname)."'";
-        $res = Database::query($sql);
-        return Database::num_rows($res) > 0;
+        $extraField = new ExtraField('user');
+        $data = $extraField->get_handler_field_info_by_field_variable($variable);
+        return empty($data) ? true : false;
     }
 
     /**
@@ -2300,8 +1859,13 @@ class UserManager
      * @param    boolean    Whether to split multiple-selection fields or not
      * @return    array    Array of fields => value for the given user
      */
-    public static function get_extra_user_data($user_id, $prefix = false, $all_visibility = true, $splitmultiple = false, $field_filter = null)
-    {
+    public static function get_extra_user_data(
+        $user_id,
+        $prefix = false,
+        $all_visibility = true,
+        $splitmultiple = false,
+        $field_filter = null
+    ) {
         // A sanity check.
         if (empty($user_id)) {
             $user_id = 0;
@@ -2310,24 +1874,29 @@ class UserManager
                 return array();
         }
         $extra_data = array();
-        $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+        $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $user_id = intval($user_id);
-        $sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
+        $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type
+                FROM $t_uf f
+                WHERE
+                    extra_field_type = ".EntityExtraField::USER_FIELD_TYPE."
+                ";
         $filter_cond = '';
 
         if (!$all_visibility) {
             if (isset($field_filter)) {
                 $field_filter = intval($field_filter);
-                $filter_cond .= " AND field_filter = $field_filter ";
+                $filter_cond .= " AND filter = $field_filter ";
             }
-            $sql .= " WHERE f.field_visible = 1 $filter_cond ";
+            $sql .= " AND f.visible = 1 $filter_cond ";
         } else {
             if (isset($field_filter)) {
                 $field_filter = intval($field_filter);
-                $sql .= " WHERE field_filter = $field_filter ";
+                $sql .= " AND filter = $field_filter ";
             }
         }
+
         $sql .= " ORDER BY f.field_order";
 
         $res = Database::query($sql);
@@ -2337,13 +1906,13 @@ class UserManager
                     $tags = self::get_user_tags_to_string($user_id, $row['id'], false);
                     $extra_data['extra_'.$row['fvar']] = $tags;
                 } else {
-                    $sqlu = "SELECT field_value as fval FROM $t_ufv WHERE field_id=".$row['id']." AND user_id = ".$user_id;
+                    $sqlu = "SELECT value as fval
+                            FROM $t_ufv
+                            WHERE field_id=".$row['id']." AND item_id = ".$user_id;
                     $resu = Database::query($sqlu);
-                    $fval = '';
                     // get default value
-                    $sql_df = "SELECT field_default_value as fval_df ".
-                        " FROM $t_uf ".
-                        " WHERE id=".$row['id'];
+                    $sql_df = "SELECT default_value as fval_df FROM $t_uf
+                               WHERE id=".$row['id'];
                     $res_df = Database::query($sql_df);
 
                     if (Database::num_rows($resu) > 0) {
@@ -2356,7 +1925,8 @@ class UserManager
                         $row_df = Database::fetch_array($res_df);
                         $fval = $row_df['fval_df'];
                     }
-                    // We get here (and fill the $extra_data array) even if there is no user with data (we fill it with default values)
+                    // We get here (and fill the $extra_data array) even if there
+                    // is no user with data (we fill it with default values)
                     if ($prefix) {
                         if ($row['type'] == self::USER_FIELD_TYPE_RADIO) {
                             $extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
@@ -2381,8 +1951,13 @@ class UserManager
      * @param string the internal variable name of the field
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-    public static function get_extra_user_data_by_field($user_id, $field_variable, $prefix = false, $all_visibility = true, $splitmultiple = false)
-    {
+    public static function get_extra_user_data_by_field(
+        $user_id,
+        $field_variable,
+        $prefix = false,
+        $all_visibility = true,
+        $splitmultiple = false
+    ) {
         // A sanity check.
         if (empty($user_id)) {
             $user_id = 0;
@@ -2391,26 +1966,30 @@ class UserManager
                 return array();
         }
         $extra_data = array();
-        $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+        $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $user_id = intval($user_id);
 
-        $sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
-        $sql .= " WHERE f.field_variable = '$field_variable' ";
+        $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type FROM $t_uf f
+                WHERE f.variable = '$field_variable' ";
 
         if (!$all_visibility) {
-            $sql .= " AND f.field_visible = 1 ";
+            $sql .= " AND f.visible = 1 ";
         }
+
+        $sql .= " AND extra_field_type = ".EntityExtraField::USER_FIELD_TYPE;
 
         $sql .= " ORDER BY f.field_order";
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
-                $sqlu = "SELECT field_value as fval ".
-                    " FROM $t_ufv ".
-                    " WHERE field_id=".$row['id']."".
-                    " AND user_id=".$user_id;
+                $sqlu = "SELECT value as fval FROM $t_ufv v INNER JOIN $t_uf f
+                         ON (v.field_id = f.id)
+                         WHERE
+                            extra_field_type = ".EntityExtraField::USER_FIELD_TYPE." AND
+                            field_id = ".$row['id']." AND
+                            item_id = ".$user_id;
                 $resu = Database::query($sqlu);
                 $fval = '';
                 if (Database::num_rows($resu) > 0) {
@@ -2433,46 +2012,30 @@ class UserManager
 
     /**
      * Get the extra field information for a certain field (the options as well)
-     * @param  int     The name of the field we want to know everything about
+     * @param  int     $variable The name of the field we want to know everything about
      * @return array   Array containing all the information about the extra profile field
      * (first level of array contains field details, then 'options' sub-array contains options details,
      * as returned by the database)
      * @author Julio Montoya
      * @since v1.8.6
      */
-    public static function get_extra_field_information_by_name($field_variable, $fuzzy = false)
+    public static function get_extra_field_information_by_name($variable)
     {
-        // database table definition
-        $table_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $table_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+        $extraField = new ExtraField('user');
 
-        // all the information of the field
-        $sql = "SELECT * FROM $table_field WHERE field_variable='".Database::escape_string($field_variable)."'";
-        $result = Database::query($sql);
-        $return = Database::fetch_array($result);
-
-        // all the options of the field
-        $sql = "SELECT * FROM $table_field_options WHERE field_id='".intval($return['id'])."' ORDER BY option_order ASC";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $return['options'][$row['id']] = $row;
-        }
-        return $return;
+        return $extraField->get_handler_field_info_by_field_variable($variable);
     }
 
-    public static function get_all_extra_field_by_type($field_type)
+    /**
+     * @param string $type
+     *
+     * @return array
+     */
+    public static function get_all_extra_field_by_type($type)
     {
-        // database table definition
-        $table_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+        $extraField = new ExtraField('user');
 
-        // all the information of the field
-        $sql = "SELECT * FROM $table_field WHERE field_type='".Database::escape_string($field_type)."'";
-        $result = Database::query($sql);
-        $return = array();
-        while ($row = Database::fetch_array($result)) {
-            $return[] = $row['id'];
-        }
-        return $return;
+        return $extraField->get_all_extra_field_by_type($type);
     }
 
     /**
@@ -2481,26 +2044,14 @@ class UserManager
      * @param int $field_name the name of the field we want to know everything of
      * @return array $return containing all th information about the extra profile field
      * @author Julio Montoya
+     * @deprecated
      * @since v1.8.6
      */
-    public static function get_extra_field_information($field_id)
+    public static function get_extra_field_information($fieldId)
     {
-        // database table definition
-        $table_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $table_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+        $extraField = new ExtraField('user');
 
-        // all the information of the field
-        $sql = "SELECT * FROM $table_field WHERE id='".intval($field_id)."'";
-        $result = Database::query($sql);
-        $return = Database::fetch_array($result);
-
-        // all the options of the field
-        $sql = "SELECT * FROM $table_field_options WHERE field_id='".intval($field_id)."' ORDER BY option_order ASC";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $return['options'][$row['id']] = $row;
-        }
-        return $return;
+        return $extraField->getFieldInfoByFieldId($fieldId);
     }
 
     /** Get extra user data by value
@@ -2510,43 +2061,24 @@ class UserManager
      */
     public static function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true)
     {
-        $extra_data = array();
-        $table_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $table_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $table_user_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-        $where = '';
-        /*
-          if (is_array($field_variable_array) && is_array($field_value_array)) {
-          if (count($field_variable_array) == count($field_value_array)) {
-          $field_var_count = count($field_variable_array);
-          for ($i = 0; $i < $field_var_count; $i++) {
-          if ($i != 0 && $i != $field_var_count) {
-          $where.= ' AND ';
-          }
-          $where.= "field_variable='".Database::escape_string($field_variable_array[$i])."' AND user_field_options.id='".Database::escape_string($field_value_array[$i])."'";
-          }
-          }
+        $extraField = new ExtraFieldValue('user');
 
-          } */
-        $where = "field_variable='".Database::escape_string($field_variable)."' AND field_value='".Database::escape_string($field_value)."'";
+        $data = $extraField->get_values_by_handler_and_field_variable(
+            $field_variable,
+            $field_value,
+            null,
+            true,
+            intval($all_visibility)
+        );
 
-        $sql = "SELECT user_id FROM $table_user_field user_field INNER JOIN $table_user_field_values user_field_values
-                    ON (user_field.id = user_field_values.field_id)
-                WHERE $where";
-
-        if ($all_visibility) {
-            $sql .= " AND user_field.field_visible = 1 ";
-        } else {
-            $sql .= " AND user_field.field_visible = 0 ";
-        }
-        $res = Database::query($sql);
-        $result_data = array();
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res)) {
-                $result_data[] = $row['user_id'];
+        $result = [];
+        if (!empty($data)) {
+            foreach ($data as $data) {
+                $result[] = $data['item_id'];
             }
         }
-        return $result_data;
+
+        return $result;
     }
 
     /**
@@ -2556,18 +2088,19 @@ class UserManager
      */
     public static function get_extra_user_data_by_field_variable($field_variable)
     {
-        $tbl_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         $extra_information_by_variable = self::get_extra_field_information_by_name($field_variable);
         $field_id = intval($extra_information_by_variable['id']);
-        $data = array();
-        $sql = "SELECT * FROM $tbl_user_field_values WHERE field_id='$field_id'";
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs)) {
-                $user_id = $row['user_id'];
+
+        $extraField = new ExtraFieldValue('user');
+        $data = $extraField->getValuesByFieldId($field_id);
+
+        if (!empty($data) > 0) {
+            foreach ($data as $row) {
+                $user_id = $row['item_id'];
                 $data[$user_id] = $row;
             }
         }
+
         return $data;
     }
 
@@ -3442,8 +2975,13 @@ class UserManager
         $field_id = intval($field_id);
         $limit = intval($limit);
         // all the information of the field
-        $sql = "SELECT count(*) count, tag FROM $table_user_tag_values  uv INNER JOIN $table_user_tag ut ON(ut.id = uv.tag_id)
-                WHERE field_id = $field_id GROUP BY tag_id ORDER BY count DESC LIMIT $limit";
+        $sql = "SELECT count(*) count, tag FROM $table_user_tag_values  uv
+                INNER JOIN $table_user_tag ut
+                ON(ut.id = uv.tag_id)
+                WHERE field_id = $field_id
+                GROUP BY tag_id
+                ORDER BY count DESC
+                LIMIT $limit";
         $result = Database::query($sql);
         $return = array();
         if (Database::num_rows($result) > 0) {
@@ -3469,8 +3007,12 @@ class UserManager
         $user_id = intval($user_id);
 
         // all the information of the field
-        $sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
-                WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
+        $sql = "SELECT ut.id, tag, count
+                FROM $table_user_tag ut
+                INNER JOIN $table_user_tag_values uv
+                ON (uv.tag_id=ut.ID)
+                WHERE field_id = $field_id AND user_id = $user_id
+                ORDER BY tag";
         $result = Database::query($sql);
         $return = array();
         if (Database::num_rows($result) > 0) {
@@ -3478,6 +3020,7 @@ class UserManager
                 $return[$row['id']] = array('tag' => $row['tag'], 'count' => $row['count']);
             }
         }
+
         return $return;
     }
 
@@ -3497,8 +3040,11 @@ class UserManager
         $user_id = intval($user_id);
 
         // all the information of the field
-        $sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
-                WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
+        $sql = "SELECT ut.id, tag,count FROM $table_user_tag ut
+                INNER JOIN $table_user_tag_values uv
+                ON (uv.tag_id = ut.id)
+                WHERE field_id = $field_id AND user_id = $user_id
+                ORDER BY tag";
 
         $result = Database::query($sql);
         $return = array();
@@ -3536,7 +3082,8 @@ class UserManager
         $tag = Database::escape_string($tag);
         $field_id = intval($field_id);
         //with COLLATE latin1_bin to select query in a case sensitive mode
-        $sql = "SELECT id FROM $table_user_tag WHERE tag LIKE '$tag' AND field_id = $field_id";
+        $sql = "SELECT id FROM $table_user_tag
+                WHERE tag LIKE '$tag' AND field_id = $field_id";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -3557,7 +3104,8 @@ class UserManager
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $tag_id = intval($tag_id);
         $field_id = intval($field_id);
-        $sql = "SELECT id FROM $table_user_tag WHERE id = '$tag_id' AND field_id = $field_id";
+        $sql = "SELECT id FROM $table_user_tag
+                WHERE id = '$tag_id' AND field_id = $field_id";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -3620,8 +3168,9 @@ class UserManager
 
         if (!empty($last_insert_id) && ($last_insert_id != 0)) {
             //we insert the relationship user-tag
-            $sql_select = "SELECT tag_id FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $last_insert_id ";
-            $result = Database::query($sql_select);
+            $sql = "SELECT tag_id FROM $table_user_tag_values
+                    WHERE user_id = $user_id AND tag_id = $last_insert_id ";
+            $result = Database::query($sql);
             //if the relationship does not exist we create it
             if (Database::num_rows($result) == 0) {
                 $sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
@@ -3648,7 +3197,8 @@ class UserManager
                     $sql = "UPDATE $table_user_tag SET count = count - 1  WHERE id = $key ";
                     Database::query($sql);
                 }
-                $sql = "DELETE FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $key";
+                $sql = "DELETE FROM $table_user_tag_values
+                        WHERE user_id = $user_id AND tag_id = $key";
                 Database::query($sql);
             }
         }
@@ -3663,7 +3213,7 @@ class UserManager
      */
     public static function process_tags($tags, $user_id, $field_id)
     {
-        //We loop the tags and add it to the DB
+        // We loop the tags and add it to the DB
         if (is_array($tags)) {
             foreach ($tags as $tag) {
                 UserManager::add_tag($tag, $user_id, $field_id);
@@ -3671,6 +3221,7 @@ class UserManager
         } else {
             UserManager::add_tag($tags, $user_id, $field_id);
         }
+
         return true;
     }
 
@@ -3979,66 +3530,6 @@ class UserManager
     }
 
     /**
-     * Gives a list of course auto-register (field special_course)
-     * @return array  list of course
-     * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>
-     * @deprecated this function is never use in chamilo, use CourseManager::get_special_course_list
-     * @since v1.8.6.2
-     */
-    public static function get_special_course_list()
-    {
-        // Database Table Definitions
-        $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_field = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $tbl_course_field_value = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $tbl_user_course_category = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
-
-        //we filter the courses from the URL
-        $join_access_url = $where_access_url = '';
-
-        if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-
-            $tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-            $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.c_id = course.id";
-            $where_access_url = " AND access_url_id = $access_url_id ";
-        }
-
-        // Filter special courses
-        $sql_special_course = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON ".
-            " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-        $special_course_result = Database::query($sql_special_course);
-        $code_special_courses = '';
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"'.$result_row['course_code'].'"';
-            }
-            $code_special_courses = ' course.code IN ('.join($special_course_list, ',').') ';
-        }
-
-        $course_list = array();
-        if (!empty($code_special_courses)) {
-            $sql = "SELECT course.code k, course.directory d, course.visual_code c, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                    FROM ".$tbl_course_user." course_rel_user
-                    LEFT JOIN ".$tbl_course." course
-                    ON course.id = course_rel_user.c_id
-                    LEFT JOIN ".$tbl_user_course_category." user_course_category
-                    ON course_rel_user.user_course_cat = user_course_category.id
-                    $join_access_url
-                    WHERE  $code_special_courses $where_access_url
-                    GROUP BY course.code
-                    ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
-            $course_list_sql_result = Database::query($sql);
-            while ($result_row = Database::fetch_array($course_list_sql_result)) {
-                $course_list[] = $result_row;
-            }
-        }
-        return $course_list;
-    }
-
-    /**
      * Allow to register contact to social network
      * @param int $friend_id user friend id
      * @param int $my_user_id user id
@@ -4052,29 +3543,42 @@ class UserManager
         $my_user_id = intval($my_user_id);
         $relation_type = intval($relation_type);
 
-        $sql = 'SELECT COUNT(*) as count FROM '.$tbl_my_friend.' WHERE friend_user_id='.$friend_id.' AND user_id='.$my_user_id.' AND relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
+        $sql = 'SELECT COUNT(*) as count FROM '.$tbl_my_friend.'
+                WHERE
+                    friend_user_id='.$friend_id.' AND
+                    user_id='.$my_user_id.' AND
+                    relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
         $result = Database::query($sql);
         $row = Database :: fetch_array($result, 'ASSOC');
         $current_date = date('Y-m-d H:i:s');
 
         if ($row['count'] == 0) {
-            $sql_i = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)values('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
-            Database::query($sql_i);
+            $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
+                    VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
+            Database::query($sql);
             return true;
         } else {
-            $sql = 'SELECT COUNT(*) as count, relation_type  FROM '.$tbl_my_friend.' WHERE friend_user_id='.$friend_id.' AND user_id='.$my_user_id.' AND relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
+            $sql = 'SELECT COUNT(*) as count, relation_type  FROM '.$tbl_my_friend.'
+                    WHERE
+                        friend_user_id='.$friend_id.' AND
+                        user_id='.$my_user_id.' AND
+                        relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
             $result = Database::query($sql);
             $row = Database :: fetch_array($result, 'ASSOC');
             if ($row['count'] == 1) {
                 //only for the case of a RRHH
                 if ($row['relation_type'] != $relation_type && $relation_type == USER_RELATION_TYPE_RRHH) {
-                    $sql_i = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)values('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
+                    $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
+                            VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
                 } else {
-                    $sql_i = 'UPDATE '.$tbl_my_friend.' SET relation_type='.$relation_type.' WHERE friend_user_id='.$friend_id.' AND user_id='.$my_user_id;
+                    $sql = 'UPDATE '.$tbl_my_friend.' SET relation_type='.$relation_type.'
+                            WHERE friend_user_id='.$friend_id.' AND user_id='.$my_user_id;
                 }
-                Database::query($sql_i);
+                Database::query($sql);
+
                 return true;
             } else {
+
                 return false;
             }
         }
@@ -4094,23 +3598,20 @@ class UserManager
         $friend_id = intval($friend_id);
 
         if ($real_removed) {
-            //Delete user friend
-            /*
-              $sql_delete_relationship1 = 'UPDATE ' . $tbl_my_friend .'  SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE friend_user_id='.$friend_id;
-              $sql_delete_relationship2 = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE user_id=' . $friend_id;
-              Database::query($sql_delete_relationship1);
-              Database::query($sql_delete_relationship2); */
             $extra_condition = '';
             if ($with_status_condition != '') {
                 $extra_condition = ' AND relation_type = '.intval($with_status_condition);
             }
-            $sql_delete_relationship1 = 'DELETE FROM '.$tbl_my_friend.'  WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND friend_user_id='.$friend_id.' '.$extra_condition;
-            $sql_delete_relationship2 = 'DELETE FROM '.$tbl_my_friend.' WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND user_id='.$friend_id.' '.$extra_condition;
-            Database::query($sql_delete_relationship1);
-            Database::query($sql_delete_relationship2);
+            $sql = 'DELETE FROM '.$tbl_my_friend.'
+                    WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND friend_user_id='.$friend_id.' '.$extra_condition;
+            Database::query($sql);
+            $sql= 'DELETE FROM '.$tbl_my_friend.'
+                   WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND user_id='.$friend_id.' '.$extra_condition;
+            Database::query($sql);
         } else {
             $user_id = api_get_user_id();
-            $sql = 'SELECT COUNT(*) as count FROM '.$tbl_my_friend.' WHERE user_id='.$user_id.' AND relation_type NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND friend_user_id='.$friend_id;
+            $sql = 'SELECT COUNT(*) as count FROM '.$tbl_my_friend.'
+                    WHERE user_id='.$user_id.' AND relation_type NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND friend_user_id='.$friend_id;
             $result = Database::query($sql);
             $row = Database :: fetch_array($result, 'ASSOC');
             if ($row['count'] == 1) {
@@ -4771,16 +4272,20 @@ class UserManager
      * @param $form_name
      * @param bool $admin_permissions
      * @param null $user_id
+     * @deprecated
      * @return array
      */
-    static function set_extra_fields_in_form($form, $extra_data, $form_name, $admin_permissions = false, $user_id = null)
-    {
+    static function set_extra_fields_in_form(
+        $form,
+        $extra_data,
+        $admin_permissions = false,
+        $user_id = null
+    ) {
         $user_id = intval($user_id);
 
         // EXTRA FIELDS
         $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
         $jquery_ready_content = null;
-
         foreach ($extra as $field_details) {
 
             if (!$admin_permissions) {
@@ -4790,7 +4295,7 @@ class UserManager
             }
 
             switch ($field_details[2]) {
-                case self::USER_FIELD_TYPE_TEXT:
+                case ExtraField::FIELD_TYPE_TEXT:
                     $form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
                     $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
@@ -4802,7 +4307,7 @@ class UserManager
                         }
                     }
                     break;
-                case self::USER_FIELD_TYPE_TEXTAREA:
+                case ExtraField::FIELD_TYPE_TEXTAREA:
                     $form->addHtmlEditor(
                         'extra_'.$field_details[1],
                         $field_details[3],
@@ -4810,7 +4315,6 @@ class UserManager
                         false,
                         array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130')
                     );
-                    //$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
                     $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
                     if (!$admin_permissions) {
@@ -4818,7 +4322,7 @@ class UserManager
                             $form->freeze('extra_'.$field_details[1]);
                     }
                     break;
-                case self::USER_FIELD_TYPE_RADIO:
+                case ExtraField::FIELD_TYPE_RADIO:
                     $group = array();
                     foreach ($field_details[9] as $option_id => $option_details) {
                         $options[$option_details[1]] = $option_details[2];
@@ -4836,20 +4340,28 @@ class UserManager
                             $form->freeze('extra_'.$field_details[1]);
                     }
                     break;
-                case self::USER_FIELD_TYPE_SELECT:
+                case ExtraField::FIELD_TYPE_SELECT:
                     $get_lang_variables = false;
-                    if (in_array($field_details[1], array('mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message'))) {
+                    if (in_array(
+                        $field_details[1],
+                        array(
+                            'mail_notify_message',
+                            'mail_notify_invitation',
+                            'mail_notify_group_message',
+                        )
+                    )) {
                         $get_lang_variables = true;
                     }
                     $options = array();
+
                     foreach ($field_details[9] as $option_id => $option_details) {
-                        //$options[$option_details[1]] = $option_details[2];
                         if ($get_lang_variables) {
                             $options[$option_details[1]] = get_lang($option_details[2]);
                         } else {
                             $options[$option_details[1]] = $option_details[2];
                         }
                     }
+
                     if ($get_lang_variables) {
                         $field_details[3] = get_lang($field_details[3]);
                     }
@@ -4867,20 +4379,25 @@ class UserManager
                             $form->freeze('extra_'.$field_details[1]);
                     }
                     break;
-                case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
+                case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     $options = array();
                     foreach ($field_details[9] as $option_id => $option_details) {
                         $options[$option_details[1]] = $option_details[2];
                     }
-                    $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
+                    $form->addElement(
+                        'select',
+                        'extra_'.$field_details[1],
+                        $field_details[3],
+                        $options,
+                        array('multiple' => 'multiple')
+                    );
                     if (!$admin_permissions) {
                         if ($field_details[7] == 0)
                             $form->freeze('extra_'.$field_details[1]);
                     }
                     break;
-                case self::USER_FIELD_TYPE_DATE:
-                    $form->addElement('date_picker', 'extra_'.$field_details[1], $field_details[3]);
-                    //$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                case ExtraField::FIELD_TYPE_DATE:
+                    $form->addDatePicker('extra_'.$field_details[1], $field_details[3]);
                     $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
                     $form->setDefaults($defaults);
                     if (!$admin_permissions) {
@@ -4889,9 +4406,8 @@ class UserManager
                     }
                     $form->applyFilter('theme', 'trim');
                     break;
-                case self::USER_FIELD_TYPE_DATETIME:
-                    $form->addElement('date_time_picker', 'extra_'.$field_details[1], $field_details[3]);
-                    //$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                case ExtraField::FIELD_TYPE_DATETIME:
+                    $form->addDateTimePicker('extra_'.$field_details[1], $field_details[3]);
                     $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
                     $form->setDefaults($defaults);
                     if (!$admin_permissions) {
@@ -4900,7 +4416,7 @@ class UserManager
                     }
                     $form->applyFilter('theme', 'trim');
                     break;
-                case self::USER_FIELD_TYPE_DOUBLE_SELECT:
+                case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                     foreach ($field_details[9] as $key => $element) {
                         if ($element[2][0] == '*') {
                             $values['*'][$element[0]] = str_replace('*', '', $element[2]);
@@ -4910,8 +4426,8 @@ class UserManager
                     }
 
                     $group = '';
-                    $group[] = & HTML_QuickForm::createElement('select', 'extra_'.$field_details[1], '', $values[0], '');
-                    $group[] = & HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*', '', $values['*'], '');
+                    $group[] = $form->createElement('select', 'extra_'.$field_details[1], '', $values[0], '');
+                    $group[] = $form->createElement('select', 'extra_'.$field_details[1].'*', '', $values['*'], '');
                     $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
 
                     if (!$admin_permissions) {
@@ -4937,13 +4453,12 @@ class UserManager
                         }
                     }
                     break;
-                case self::USER_FIELD_TYPE_DIVIDER:
+                case ExtraField::FIELD_TYPE_DIVIDER:
                     $form->addElement('static', $field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
                     break;
-                case self::USER_FIELD_TYPE_TAG:
+                case ExtraField::FIELD_TYPE_TAG:
                     //the magic should be here
                     $user_tags = UserManager::get_user_tags($user_id, $field_details[0]);
-
 
                     $tag_list = '';
                     if (is_array($user_tags) && count($user_tags) > 0) {
@@ -4975,12 +4490,12 @@ class UserManager
                     });
 EOF;
                     break;
-                case self::USER_FIELD_TYPE_TIMEZONE:
+                case ExtraField::FIELD_TYPE_TIMEZONE:
                     $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], api_get_timezones(), '');
                     if ($field_details[7] == 0)
                         $form->freeze('extra_'.$field_details[1]);
                     break;
-                case self::USER_FIELD_TYPE_SOCIAL_PROFILE:
+                case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
                     // get the social network's favicon
                     $icon_path = UserManager::get_favicon_from_url($extra_data['extra_'.$field_details[1]], $field_details[4]);
                     // special hack for hi5
@@ -5006,7 +4521,7 @@ EOF;
                     if ($field_details[7] == 0)
                         $form->freeze('extra_'.$field_details[1]);
                     break;
-                case self::USER_FIELD_TYPE_FILE:
+                case ExtraField::FIELD_TYPE_FILE:
                     $extra_field = 'extra_'.$field_details[1];
                     $form->addElement('file', $extra_field, $field_details[3], null, '');
                     if ($extra_file_list = UserManager::build_user_extra_file_list($user_id, $field_details[1], '', true)) {
@@ -5016,8 +4531,7 @@ EOF;
                         $form->freeze($extra_field);
                     }
                     break;
-
-                case self::USER_FIELD_TYPE_MOBILE_PHONE_NUMBER:
+                case ExtraField::FIELD_TYPE_MOBILE_PHONE_NUMBER:
                     $form->addElement(
                         'text',
                         'extra_'.$field_details[1],

@@ -72,7 +72,7 @@ foreach ($queueList as $queueItem) {
             $queueItem['session_id'],
             'recommended_number_of_participants'
     );
-    $sessionRecommendedNumber[$queueItem['session_id']] = $row['field_value'];
+    $sessionRecommendedNumber[$queueItem['session_id']] = $row['value'];
 }
 // Group student by superior and session
 $queueBySuperior = array();

@@ -10,8 +10,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -204,18 +202,19 @@ $form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
-$list_course_extra_field = CourseManager::get_course_extra_field_list($course_code);
-
 $specialCourseField = new CourseField();
 $specialCourseFieldInfo = $specialCourseField->get_handler_field_info_by_field_variable('special_course');
 
 if (!empty($specialCourseFieldInfo)) {
     $specialCourseValue = new ExtraFieldValue('course');
-    $specialCourseValueInfo = $specialCourseValue->get_values_by_handler_and_field_variable($course_code, 'special_course');
+    $specialCourseValueInfo = $specialCourseValue->get_values_by_handler_and_field_variable(
+        $course_code,
+        'special_course'
+    );
 
     $specialCourseAttributes = array();
 
-    if (!empty($specialCourseValueInfo) && $specialCourseValueInfo['field_value'] == 1) {
+    if (!empty($specialCourseValueInfo) && $specialCourseValueInfo['value'] == 1) {
         $specialCourseAttributes['checked'] = '';
     }
 
@@ -233,7 +232,7 @@ if (!empty($specialCourseFieldInfo)) {
 
 //Extra fields
 $extra_field = new CourseField();
-$extra = $extra_field->addElements($form, $course_code);
+$extra = $extra_field->addElements($form, $courseId);
 
 $htmlHeadXtra[] = '
 <script>
@@ -330,7 +329,7 @@ if ($form->validate()) {
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
-    $courseFieldValue->save_field_values($course);
+    $courseFieldValue->saveFieldValues($course);
     $addTeacherToSessionCourses = isset($course['add_teachers_to_sessions_courses']) && !empty($course['add_teachers_to_sessions_courses']) ? 1 : 0;
 
     // Updating teachers

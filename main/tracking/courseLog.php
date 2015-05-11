@@ -437,8 +437,8 @@ if (count($a_students) > 0) {
         $table->set_header(13, get_lang('LatestLogin'), false);
         $headers['latest_login'] = get_lang('LatestLogin');
         if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
-            $table->set_header(14, $extra_info['field_display_text'], false);
-            $headers['field_display_text'] = $extra_info['field_display_text'];
+            $table->set_header(14, $extra_info['display_text'], false);
+            $headers['display_text'] = $extra_info['display_text'];
             $table->set_header(15, get_lang('Details'), false);
             $headers['details'] = get_lang('Details');
         } else {
@@ -452,8 +452,8 @@ if (count($a_students) > 0) {
         $headers['latest_login'] = get_lang('LatestLogin');
 
         if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
-            $table->set_header(13, $extra_info['field_display_text'], false);
-            $headers['field_display_text'] = $extra_info['field_display_text'];
+            $table->set_header(13, $extra_info['display_text'], false);
+            $headers['display_text'] = $extra_info['display_text'];
             $table->set_header(14, get_lang('Details'), false);
             $headers['Details'] = get_lang('Details');
         } else {
@@ -512,7 +512,7 @@ if ($export_csv) {
     $csv_headers[] = get_lang('LatestLogin', '');
 
     if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-        $csv_headers[] = $extra_info['field_display_text'];
+        $csv_headers[] = $extra_info['display_text'];
     }
     ob_end_clean();
     array_unshift($csv_content, $csv_headers); // Adding headers before the content.

@@ -105,8 +105,8 @@ class WSCMForum extends WSCM
                     $field_table = "insert_user_id";
                     break;
                 case 'sender_name' :
-                    $user_id = $thread_info[insert_user_id];
-                    $user_info = UserManager::get_user_info_by_id($user_id);
+                    $user_id = $thread_info['insert_user_id'];
+                    $user_info = api_get_user_info($user_id);
                     return $user_info['firstname'];
                     break;
                 default :

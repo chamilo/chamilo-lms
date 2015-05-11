@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 * This file displays the user's profile,
 * optionally it allows users to modify their profile as well.
@@ -8,6 +9,7 @@
 *
 * @package chamilo.auth
 */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -24,9 +26,6 @@ $_SESSION['this_section'] = $this_section;
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
     api_not_allowed(true);
 }
-
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $htmlHeadXtra[] = '<script>
 function confirmation(name) {
@@ -65,12 +64,6 @@ function show_icon_edit(element_html) {
     $(ident).show();
 }
 </script>';
-
-//$interbreadcrumb[] = array('url' => '../auth/profile.php', 'name' => get_lang('ModifyProfile'));
-if (!empty ($_GET['coursePath'])) {
-    $course_url = api_get_path(WEB_COURSE_PATH).htmlentities(strip_tags($_GET['coursePath'])).'/index.php';
-    $interbreadcrumb[] = array('url' => $course_url, 'name' => Security::remove_XSS($_GET['courseCode']));
-}
 
 $warning_msg = '';
 if (!empty($_GET['fe'])) {
@@ -139,7 +132,16 @@ $form->addRule('lastname' , get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
 //    USERNAME
-$form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'size' => USERNAME_MAX_LENGTH));
+$form->addElement(
+    'text',
+    'username',
+    get_lang('UserName'),
+    array(
+        'id' => 'username',
+        'maxlength' => USERNAME_MAX_LENGTH,
+        'size' => USERNAME_MAX_LENGTH,
+    )
+);
 if (api_get_setting('profile', 'login') !== 'true' || api_get_setting('login_is_email') == 'true') {
     $form->freeze('username');
 }
@@ -196,20 +198,28 @@ if (api_get_setting('profile', 'phone') !== 'true') {
 $form->applyFilter('phone', 'stripslashes');
 $form->applyFilter('phone', 'trim');
 $form->applyFilter('phone', 'html_filter');
-/*if (api_get_setting('registration', 'phone') == 'true') {
-    $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
-}
-$form->addRule('phone', get_lang('EmailWrong'), 'email');*/
 
-//    PICTURE
+//  PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
-    $form->addElement('file', 'picture', ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')), array('class' => 'picture-form'));
+    $form->addElement(
+        'file',
+        'picture',
+        ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang(
+            'AddImage'
+        )),
+        array('class' => 'picture-form')
+    );
     $form->add_progress_bar();
     if (!empty($user_data['picture_uri'])) {
         $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
     }
     $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-    $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+    $form->addRule(
+        'picture',
+        get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+        'filetype',
+        $allowed_picture_types
+    );
 }
 
 //    LANGUAGE
@@ -230,14 +240,42 @@ if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
 //    EXTENDED PROFILE  this make the page very slow!
 if (api_get_setting('extended_profile') == 'true') {
     $width_extended_profile = 500;
-    //$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
-    //$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
     //    MY COMPETENCES
-    $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    $form->addHtmlEditor(
+        'competences',
+        get_lang('MyCompetences'),
+        false,
+        false,
+        array(
+            'ToolbarSet' => 'Profile',
+            'Width' => $width_extended_profile,
+            'Height' => '130',
+        )
+    );
     //    MY DIPLOMAS
-    $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
-    //    WHAT I AM ABLE TO TEACH
-    $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    $form->addHtmlEditor(
+        'diplomas',
+        get_lang('MyDiplomas'),
+        false,
+        false,
+        array(
+            'ToolbarSet' => 'Profile',
+            'Width' => $width_extended_profile,
+            'Height' => '130',
+        )
+    );
+    // WHAT I AM ABLE TO TEACH
+    $form->addHtmlEditor(
+        'teach',
+        get_lang('MyTeach'),
+        false,
+        false,
+        array(
+            'ToolbarSet' => 'Profile',
+            'Width' => $width_extended_profile,
+            'Height' => '130',
+        )
+    );
 
     //    MY PRODUCTIONS
     $form->addElement('file', 'production', get_lang('MyProductions'));
@@ -245,13 +283,27 @@ if (api_get_setting('extended_profile') == 'true') {
         $form->addElement('static', 'productions_list', null, $production_list);
     }
     //    MY PERSONAL OPEN AREA
-    $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '350'));
+    $form->addHtmlEditor(
+        'openarea',
+        get_lang('MyPersonalOpenArea'),
+        false,
+        false,
+        array(
+            'ToolbarSet' => 'Profile',
+            'Width' => $width_extended_profile,
+            'Height' => '350',
+        )
+    );
+    // openarea is untrimmed for maximum openness
     $form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
-    $form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
+    $form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim');
 }
 
 //    PASSWORD, if auth_source is platform
-if (is_platform_authentication() && is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
+if (is_platform_authentication() &&
+    is_profile_editable() &&
+    api_get_setting('profile', 'password') == 'true'
+) {
     $form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));
     $form->addElement('password', 'password1', get_lang('NewPass'), array('id'=> 'password1', 'size' => 40));
 
@@ -267,11 +319,21 @@ if (is_platform_authentication() && is_profile_editable() && api_get_setting('pr
 }
 
 // EXTRA FIELDS
-$extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, false, api_get_user_id());
-$jquery_ready_content = $return_params['jquery_ready_content'];
+//$extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
+/*$return_params = UserManager::set_extra_fields_in_form(
+    $form,
+    $extra_data,
+    false,
+    api_get_user_id()
+);*/
 
-// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+$extraField = new ExtraField('user');
+$return = $extraField->addElements($form, api_get_user_id());
+
+$jquery_ready_content = $return['jquery_ready_content'];
+
+// the $jquery_ready_content variable collects all functions that
+// will be load in the $(document).ready javascript function
 $htmlHeadXtra[] ='<script>
 $(document).ready(function(){
     '.$jquery_ready_content.'
@@ -280,9 +342,22 @@ $(document).ready(function(){
 
 if (api_get_setting('profile', 'apikeys') == 'true') {
     $form->addElement('html', '<div id="div_api_key">');
-    $form->addElement('text', 'api_key_generate', get_lang('MyApiKey'), array('size' => 40, 'id' => 'id_api_key_generate'));
+    $form->addElement(
+        'text',
+        'api_key_generate',
+        get_lang('MyApiKey'),
+        array('size' => 40, 'id' => 'id_api_key_generate')
+    );
     $form->addElement('html', '</div>');
-    $form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'), array('id' => 'id_generate_api_key', 'onclick' => 'generate_open_id_form(); return false;')); //generate_open_id_form()
+    $form->addElement(
+        'button',
+        'generate_api_key',
+        get_lang('GenerateApiKey'),
+        array(
+            'id' => 'id_generate_api_key',
+            'onclick' => 'generate_open_id_form(); return false;',
+        )
+    ); //generate_open_id_form()
 }
 //    SUBMIT
 if (is_profile_editable()) {
@@ -290,7 +365,6 @@ if (is_profile_editable()) {
 } else {
     $form->freeze();
 }
-$user_data = array_merge($user_data, $extra_data);
 $form->setDefaults($user_data);
 
 /**
@@ -472,14 +546,17 @@ if ($form->validate()) {
             UserManager::remove_user_production(api_get_user_id(), urldecode($production));
         }
         if ($production_list = UserManager::build_production_list(api_get_user_id(), true, true)) {
-            $form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions_list');
+            $form->insertElementBefore(
+                $form->createElement('static', null, null, $production_list),
+                'productions_list'
+            );
         }
         $form->removeElement('productions_list');
         $file_deleted = true;
     }
 
     // upload production if a new one is provided
-    if ($_FILES['production']['size']) {
+    if (isset($_FILES['production']) && $_FILES['production']['size']) {
         $res = upload_user_production(api_get_user_id());
         if (!$res) {
             //it's a bit excessive to assume the extension is the reason why
@@ -535,32 +612,22 @@ if ($form->validate()) {
     }
 
     //Fixing missing variables
-    $available_values_to_modify = array_merge($available_values_to_modify, array('competences', 'diplomas', 'openarea', 'teach', 'openid'));
+    $available_values_to_modify = array_merge(
+        $available_values_to_modify,
+        array('competences', 'diplomas', 'openarea', 'teach', 'openid')
+    );
 
     // build SQL query
     $sql = "UPDATE $table_user SET";
     unset($user_data['api_key_generate']);
+
     foreach ($user_data as $key => $value) {
         if (substr($key, 0, 6) == 'extra_') { //an extra field
-            $new_key = substr($key, 6);
-            // format array date to 'Y-m-d' or date time  to 'Y-m-d H:i:s'
-            if (is_array($value) && isset($value['Y']) && isset($value['F']) && isset($value['d'])) {
-                if (isset($value['H']) && isset($value['i'])) {
-                    // extra field date time
-                    $time = mktime($value['H'],$value['i'],0,$value['F'],$value['d'],$value['Y']);
-                    $extras[$new_key] = date('Y-m-d H:i:s',$time);
-                } else {
-                    // extra field date
-                    $time = mktime(0,0,0,$value['F'],$value['d'],$value['Y']);
-                    $extras[$new_key] = date('Y-m-d',$time);
-                }
-            } else {
-                $extras[$new_key] = $value;
-            }
+           continue;
         } elseif (strpos($key, 'remove_extra_') !== false) {
-            $extra_value = Security::filter_filename(urldecode(key($value)));
+            /*$extra_value = Security::filter_filename(urldecode(key($value)));
             // To remove from user_field_value and folder
-            UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);
+            UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);*/
         } else {
             if (in_array($key, $available_values_to_modify)) {
                 $sql .= " $key = '".Database::escape_string($value)."',";
@@ -604,11 +671,14 @@ if ($form->validate()) {
     $sql .= " WHERE user_id  = '".api_get_user_id()."'";
     Database::query($sql);
 
+    $extraField = new ExtraFieldValue('user');
+    $extraField->saveFieldValues($user_data);
+
     // User tag process
     //1. Deleting all user tags
-    $list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(UserManager::USER_FIELD_TYPE_TAG);
+    //$list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(UserManager::USER_FIELD_TYPE_TAG);
 
-    if (is_array($list_extra_field_type_tag) && count($list_extra_field_type_tag)>0) {
+    /*if (is_array($list_extra_field_type_tag) && count($list_extra_field_type_tag)>0) {
         foreach ($list_extra_field_type_tag as $id) {
             UserManager::delete_user_tags(api_get_user_id(), $id);
         }
@@ -636,7 +706,7 @@ if ($form->validate()) {
                 UserManager::update_extra_field_value($user_id, $key, $value);
             }
         }
-    }
+    }*/
 
     // re-init the system to take new settings into account
     $_SESSION['_user']['uidReset'] = true;

@@ -1852,7 +1852,8 @@ function installSettings(
     $allowRegistration = $allowRegistration ? 'true' : 'false';
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
 
-    $settings = [
+    // Use PHP 5.3 to avoid issue with weird peripherical auto-installers like travis-ci
+    $settings = array(
         'Institution' => $organizationName,
         'InstitutionUrl' => $organizationUrl,
         'siteName' => $siteName,
@@ -1862,7 +1863,7 @@ function installSettings(
         'platformLanguage' => $language,
         'allow_registration' => $allowRegistration,
         'allow_registration_as_teacher' => $allowTeacherSelfRegistration,
-    ];
+    );
 
     foreach ($settings as $variable => $value) {
         $sql = "UPDATE settings_current

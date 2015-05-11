@@ -117,22 +117,43 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             $phone = trim(api_utf8_decode($node_user->Phone));
                             $status = trim(api_utf8_decode($node_user->Status));
                             switch ($status) {
-                                case 'student' : $status = 5; break;
-                                case 'teacher' : $status = 1; break;
-                                default : $status = 5; $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+                                case 'student':
+                                    $status = 5;
+                                    break;
+                                case 'teacher':
+                                    $status = 1;
+                                    break;
+                                default:
+                                    $status = 5;
+                                    $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
                             }
 
-                            $sql = "UPDATE $tbl_user SET
-                                    lastname = '".Database::escape_string($lastname)."',
-                                    firstname = '".Database::escape_string($firstname)."',
-                                    ".(empty($password) ? "" : "password = '".(api_get_encrypted_password($password))."',")."
-                                    email = '".Database::escape_string($email)."',
-                                    official_code = '".Database::escape_string($official_code)."',
-                                    phone = '".Database::escape_string($phone)."',
-                                    status = '".intval($status)."'
-                                WHERE username = '".Database::escape_string($username)."'";
+                            $userId = UserManager::get_user_id_from_username($username);
 
-                            Database::query($sql);
+                            if (!empty($userId)) {
+                                UserManager::update_user(
+                                    $userId,
+                                    $firstname,
+                                    $lastname,
+                                    $username,
+                                    $password,
+                                    null,
+                                    $email,
+                                    $status,
+                                    $official_code,
+                                    $phone,
+                                    null, //$picture_uri,
+                                    null, //$expiration_date,
+                                    null, //$active,
+                                    null, //$creator_id = null,
+                                    0,
+                                    null, //$extra = null,
+                                    null, //$language = 'english',
+                                    null, //$encrypt_method = '',
+                                    false,
+                                    0 //$reset_password = 0
+                                );
+                            }
                         }
                     }
                 }

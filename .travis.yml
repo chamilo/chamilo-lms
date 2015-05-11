@@ -6,8 +6,8 @@ php:
   - 5.6
 
 before_install:
-  - sudo apt-get install python-software-properties
-  - sudo add-apt-repository ppa:ondrej/php5 -y
+  #- sudo apt-get install python-software-properties
+  #- sudo add-apt-repository ppa:ondrej/php5 -y
   - sudo apt-get update -qq
   - sudo apt-get install -qq mysql-server
   - sudo apt-get install -qq apache2 libapache2-mod-fastcgi

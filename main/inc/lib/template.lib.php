@@ -494,6 +494,7 @@ class Template
         }
 
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css';
 
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
@@ -590,7 +591,10 @@ class Template
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
-            if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
+            if ($this->show_learnpath == false &&
+                $this->show_footer == true &&
+                $this->hide_global_chat == false
+            ) {
                 $js_files[] = 'chat/js/chat.js';
             }
         }
@@ -602,6 +606,8 @@ class Template
         if (api_get_setting('include_asciimathml_script') == 'true') {
             $js_files[] = 'asciimath/ASCIIMathML.js';
         }
+
+        $js_files[] = 'tag/jquery.fcbkcomplete.js';
 
         $js_file_to_string = null;
         $isoCode = api_get_language_isocode();
@@ -770,7 +776,7 @@ class Template
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
                 $homep           = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_PATH).'home/'.$clean_url;
+                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
 
                 //we create the new dir for the new sites
                 if (is_file($icon_real_homep.'favicon.ico')) {

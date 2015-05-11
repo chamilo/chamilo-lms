@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V110;
 
-use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 

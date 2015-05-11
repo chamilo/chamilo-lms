@@ -53,6 +53,7 @@
         "symfony/validator": "2.6.4",
         "symfony/filesystem": "~2.6",
         "symfony/security": "~2.6",
+        "ircmaxell/password-compat": "~1.0.4",
         "sylius/attribute": "0.13.0",
         "sylius/translation": "0.13.0",
         "gedmo/doctrine-extensions": "~2.3",

@@ -6,13 +6,14 @@ php:
   - 5.6
 
 before_install:
+  - sudo apt-get install python-software-properties
+  - sudo add-apt-repository ppa:ondrej/php5 -y
   - sudo apt-get update -qq
   - sudo apt-get install -qq mysql-server
   - sudo apt-get install -qq apache2 libapache2-mod-fastcgi
-  #- sudo apt-get install -qq php5-imagick php5-curl php5-intl php5-json php5-fpm php5-mysql
+  - sudo apt-get install -qq php5-imagick php5-curl php5-intl php5-json php5-fpm php5-mysql
 
 before_script:
-  - sudo dpkg -l
   - php5 -v
   - composer self-update
   - composer global require "fxp/composer-asset-plugin:1.0.0"

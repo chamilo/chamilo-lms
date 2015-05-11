@@ -25,14 +25,14 @@ if (!empty($_GET['edit']) && $_GET['edit'] == 'true' && api_is_platform_admin())
     $form = new FormValidator('set_faq', 'post', 'faq.php?edit=true');
     $form->addHtmlEditor('faq_content', null, false, false, array('ToolbarSet' => 'FAQ', 'Width' => '100%', 'Height' => '300'));
     $form->addButtonSave(get_lang('Ok'), 'faq_submit');
-    $faq_content = @(string)file_get_contents(api_get_path(SYS_PATH).'home/faq.html');
+    $faq_content = @(string)file_get_contents(api_get_path(SYS_APP_PATH).'home/faq.html');
     $faq_content = api_to_system_encoding($faq_content, api_detect_encoding(strip_tags($faq_content)));
     $form->setDefaults(array('faq_content' => $faq_content));
     if ($form->validate()) {
         $content = $form->getSubmitValue('faq_content');
-        $fpath = api_get_path(SYS_PATH).'home/'.$faq_file;
+        $fpath = api_get_path(SYS_APP_PATH).'home/'.$faq_file;
         if (is_file($fpath) && is_writeable($fpath)) {
-            $fp = fopen(api_get_path(SYS_PATH).'home/'.$faq_file, 'w');
+            $fp = fopen(api_get_path(SYS_APP_PATH).'home/'.$faq_file, 'w');
             fwrite($fp, $content);
             fclose($fp);
         } else {
@@ -43,7 +43,7 @@ if (!empty($_GET['edit']) && $_GET['edit'] == 'true' && api_is_platform_admin())
         $form->display();
     }
 } else {
-	$faq_content = @(string)file_get_contents(api_get_path(SYS_PATH).'home/'.$faq_file);
+	$faq_content = @(string)file_get_contents(api_get_path(SYS_APP_PATH).'home/'.$faq_file);
 	$faq_content = api_to_system_encoding($faq_content, api_detect_encoding(strip_tags($faq_content)));
 	echo $faq_content;
 }

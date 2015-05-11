@@ -8,7 +8,7 @@
     display: block;
 }
 .chatboxheadmain {	
-	padding:7px 7px 7px 0px;
+	padding: 5px;
 	color: #333333;		
 	background-color: #EBEEF4;		
     border-top: 1px solid rgba(29, 49, 91, 0.3);
@@ -45,20 +45,23 @@
 	width:16px;
 	display:inline;
 	float:left;
-	padding: 0px 4px 0px 4px;	
 }
 
 .chatboxtitle {
 	font-weight: bold;
 	float: left;
 	font-size: 13px;
-	width: 160px;
+	width: 130px;
 	cursor:pointer;
+        overflow: hidden;
+        padding-left: 2px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
 }
 
 .chatboxhead {
 	/* background-color: #222; */
-	padding:7px 7px 7px 0px;
+	padding: 5px;
 	color: #ffffff;
 	border-right:1px solid #222;
 	border-left:1px solid #222;
@@ -99,7 +102,7 @@
 	font-size: 13px;
 	color: #333333;
 	height:200px;
-	width:209px;
+	width:225px;
 	overflow-y:auto;
 	overflow-x:auto;
 	padding:7px;

@@ -109,7 +109,8 @@ if ($user_already_registered_show_terms == false) {
     // PASSWORD
     $form->addElement('password', 'pass1', get_lang('Pass'), array('id' => 'pass1', 'size' => 20, 'autocomplete' => 'off'));
 
-    if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
+    $checkPass = api_get_setting('allow_strength_pass_checker');
+    if ($checkPass == 'true') {
         $form->addElement('label', null, '<div id="password_progress"></div>');
     }
 
@@ -150,7 +151,8 @@ if ($user_already_registered_show_terms == false) {
         $form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
     }
 
-    $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
+    $captcha = api_get_setting('allow_captcha');
+    $allowCaptcha = $captcha == 'true';
 
     if ($allowCaptcha) {
         $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';

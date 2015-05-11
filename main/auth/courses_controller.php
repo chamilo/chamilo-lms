@@ -491,7 +491,7 @@ class CoursesController
      * @param boolean   Session autosubscription set. False by default.
      * @return string   The button
      */
-    public function getRegisterInSessionButton($sessionData, $catalogSessionAutoSubscriptionAllowed = false)
+    public function getRegisteredInSessionButton($sessionData, $catalogSessionAutoSubscriptionAllowed = false)
     {
         $url = $catalogSessionAutoSubscriptionAllowed ?
             api_get_path(WEB_CODE_PATH)."auth/courses.php?action=subscribe_to_session&session_id=".
@@ -522,7 +522,7 @@ class CoursesController
      * Generate a label if the user has been  registered in session
      * @return string The label
      */
-    public function getAlreadyRegisterInSessionLabel()
+    public function getAlreadyRegisteredInSessionLabel()
     {
         $icon = Display::return_icon('students.gif', get_lang('Student'));
 
@@ -586,7 +586,7 @@ class CoursesController
                 'is_subscribed' => $session['is_subscribed'],
                 'icon' => $this->getSessionIcon($session['name']),
                 'date' => SessionManager::getSessionFormattedDate($session),
-                'subscribe_button' => $this->getRegisterInSessionButton(
+                'subscribe_button' => $this->getRegisteredInSessionButton(
                     $session[$key],
                     $catalogSessionAutoSubscriptionAllowed
                 ),
@@ -600,6 +600,7 @@ class CoursesController
         $tpl->assign('action', $action);
         $tpl->assign('showCourses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('showSessions', CoursesAndSessionsCatalog::showSessions());
+        $tpl->assign('showTutor', (api_get_setting('show_session_coach')==='true' ? true : false));
         $tpl->assign('api_get_self', api_get_self());
         $tpl->assign('sessionUrl', $sessionUrl);
         $tpl->assign('courseUrl', $courseUrl);
@@ -614,7 +615,7 @@ class CoursesController
         $tpl->assign('searchDate', $date);
         $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');
         $tpl->assign('sessions_blocks', $sessionsBlocks);
-        $tpl->assign('already_subscribed_label', $this->getAlreadyRegisterInSessionLabel());
+        $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
 
         $contentTemplate = $tpl->get_template('auth/sessions_catalog.tpl');
 

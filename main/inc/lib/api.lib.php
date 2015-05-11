@@ -994,15 +994,11 @@ function api_is_facebook_auth_activated() {
  * Return the $_configuration of displaying group forum in the general forum tool of a course or not
  * is true by default
  * @return bool
- * @todo : in 1.10 replace this with a platform parameter in the database
  */
 function apiGetDisplayGroupsForumInGeneralTool() {
-    global $_configuration;
 
-    if (isset($_configuration['display_groups_forum_in_general_tool'])) {
-        return $_configuration['display_groups_forum_in_general_tool'];
-    }
-    return true;
+    $a = api_get_setting('display_groups_forum_in_general_tool');
+    return $a == 'true';
 }
 
 /**
@@ -7144,7 +7140,8 @@ function api_get_user_info_from_official_code($official_code = '')
 function api_get_password_checker_js($usernameInputId, $passwordInputid)
 {
     global $_configuration;
-    $useStrengthPassChecker = isset($_configuration['allow_strength_pass_checker']) ? $_configuration['allow_strength_pass_checker'] : false;
+    $checkPass = api_get_setting('allow_strength_pass_checker');
+    $useStrengthPassChecker = $checkPass == 'true';
 
     if ($useStrengthPassChecker == false) {
         return null;
@@ -7208,7 +7205,7 @@ function api_block_account_captcha($username)
         return false;
     }
     global $_configuration;
-    $minutesToBlock = isset($_configuration['captcha_time_to_block']) ? $_configuration['captcha_time_to_block'] : 10;
+    $minutesToBlock = api_get_setting('captcha_time_to_block');
     $time = time() + $minutesToBlock*60;
     UserManager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', api_get_utc_datetime($time));
 }
@@ -7283,11 +7280,8 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
  */
 function api_drh_can_access_all_session_content()
 {
-    global $_configuration;
-    if (isset($_configuration['drh_can_access_all_session_content'])) {
-        return $_configuration['drh_can_access_all_session_content'];
-    }
-    return false;
+    $a = api_get_setting('drh_can_access_all_session_content');
+    return $a == 'true';
 }
 
 /**

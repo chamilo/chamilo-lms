@@ -506,9 +506,8 @@ if (api_is_allowed_to_edit(null, true)) {
         $actions .= ' <a class="btn btn-default" href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
     }
 
-    if (api_is_allowed_to_edit() &&
-        isset($_configuration['allow_tutors_to_assign_students_to_session']) &&
-        $_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
+    $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
+    if (api_is_allowed_to_edit() && $allowTutors == 'true') {
         $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.get_lang('Sessions').'</a>';
     }
 

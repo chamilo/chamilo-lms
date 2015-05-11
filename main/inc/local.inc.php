@@ -250,7 +250,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         $result = Database::query($sql);
 
         $captchaValidated = true;
-        $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
+        $captcha = api_get_setting('allow_captcha');
+        $allowCaptcha = $captcha == 'true';
 
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result, 'ASSOC');
@@ -448,7 +449,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             $_SESSION['loginFailedCount'] = 1;
                         }
 
-                        $numberMistakesToBlockAccount = isset($_configuration['captcha_number_mistakes_to_block_account']) ? $_configuration['captcha_number_mistakes_to_block_account'] : 10;
+                        $numberMistakesToBlockAccount = api_get_setting('captcha_number_mistakes_to_block_account');
 
                         if (isset($_SESSION['loginFailedCount'])) {
                             if ($_SESSION['loginFailedCount'] >= $numberMistakesToBlockAccount) {

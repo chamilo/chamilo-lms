@@ -352,20 +352,99 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online) {
 
 	user_is_online = return_online_user(user_id, online);
 
-	$("<div />" ).attr("id","chatbox_"+user_id)
-	.addClass("chatbox")
-	.html('<div class="chatboxhead">\n\
-			'+user_is_online+'	\n\
-			<div class="chatboxtitle">'+chatboxtitle+'</div>\n\
-			<div class="chatboxoptions">\n\
-				<a class="togglelink" rel="'+user_id+'" href="javascript:void(0)" > _ </a>&nbsp;\n\
-				<a class="closelink" rel="'+user_id+'" href="javascript:void(0)">X</a></div>\n\
-				<br clear="all"/></div>\n\
-			<div class="chatboxcontent"></div>\n\
-			<div class="chatboxinput"><textarea class="chatboxtextarea" onkeydown="javascript:return checkChatBoxInputKey(event,this,\''+user_id+'\');"></textarea></div>')
-	.appendTo($( "body" ));
+        var chatbox = $('<div>')
+            .attr({
+                id: 'chatbox_' + user_id
+            })
+            .addClass('chatbox')
+            .css('bottom', 0);
 
-	$("#chatbox_"+user_id).css('bottom', '0px');
+        var chatboxHead = $('<div>')
+            .addClass('chatboxhead')
+            .append(user_is_online);
+
+        $('<div>')
+            .addClass('chatboxtitle')
+            .append(chatboxtitle)
+            .appendTo(chatboxHead);
+
+        var chatboxoptions = $('<div>')
+            .addClass('chatboxoptions')
+            .appendTo(chatboxHead);
+
+        if (!!Modernizr.prefixed('RTCPeerConnection', window)) {
+            $('<a>')
+                .addClass('btn btn-xs')
+                .attr({
+                    href: '#'
+                })
+                .html('<i class="fa fa-video-camera"></i>')
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    var createForm = $.get(
+                        ajax_url,
+                        {
+                            action: 'start_video',
+                            to: user_id
+                        }
+                    );
+
+                    $.when(createForm).done(function(response) {
+                        $('#global-modal')
+                            .find('.modal-dialog')
+                            .removeClass('modal-lg');
+
+                        $('#global-modal')
+                            .find('.modal-body')
+                            .html(response);
+
+                        $('#global-modal').modal('show');
+                    });
+                })
+                .appendTo(chatboxoptions);
+        }
+
+        $('<a>')
+            .addClass('btn btn-xs togglelink')
+            .attr({
+                href: 'javascript:void(0)',
+                rel: user_id
+            })
+            .html('<i class="fa fa-toggle-down"></i>')
+            .appendTo(chatboxoptions);
+
+        $('<a>')
+            .addClass('btn btn-xs closelink')
+            .attr({
+                href: 'javascript:void(0)',
+                rel: user_id
+            })
+            .html('<i class="fa fa-close"></i>')
+            .appendTo(chatboxoptions);
+
+        $('<br>')
+            .attr('clear', 'all')
+            .appendTo(chatboxHead);
+
+        var chatboxContent = $('<div>')
+            .addClass('chatboxcontent');
+
+        var chatboxInput = $('<div>')
+            .addClass('chatboxinput');
+
+        $('<textarea>')
+            .addClass('chatboxtextarea')
+            .on('keydown', function(e) {
+                return checkChatBoxInputKey(e.originalEvent, this, user_id);
+            })
+            .appendTo(chatboxInput);
+
+        chatbox
+            .append(chatboxHead)
+            .append(chatboxContent)
+            .append(chatboxInput)
+            .appendTo('body');
 
 	chatBoxeslength = 0;
 
@@ -398,6 +477,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online) {
 		}
 
 		if (minimize == 1) {
+                        $('.togglelink').html('<i class="fa fa-toggle-up"></i>');
 			$('#chatbox_'+user_id+' .chatboxcontent').css('display','none');
 			$('#chatbox_'+user_id+' .chatboxinput').css('display','none');
 		}
@@ -481,6 +561,8 @@ function toggleChatBoxGrowth(user_id) {
 		$('#chatbox_'+user_id+' .chatboxcontent').css('display','block');
 		$('#chatbox_'+user_id+' .chatboxinput').css('display','block');
 		$("#chatbox_"+user_id+" .chatboxcontent").scrollTop($("#chatbox_"+user_id+" .chatboxcontent")[0].scrollHeight);
+
+                $('.togglelink').html('<i class="fa fa-toggle-down"></i>');
 	} else {
 		var newCookie = user_id;
 		if ($.cookie('chatbox_minimized')) {
@@ -489,6 +571,8 @@ function toggleChatBoxGrowth(user_id) {
 		$.cookie('chatbox_minimized',newCookie);
 		$('#chatbox_'+user_id+' .chatboxcontent').css('display','none');
 		$('#chatbox_'+user_id+' .chatboxinput').css('display','none');
+
+                $('.togglelink').html('<i class="fa fa-toggle-up"></i>');
 	}
 }
 

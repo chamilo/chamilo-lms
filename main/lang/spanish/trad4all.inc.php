@@ -7273,5 +7273,6 @@ $ForumThreadPeerScoringStudentComment = "Para obtener su resultado en este tema 
 $Readable = "Accesible en lectura";
 $NotReadable = "No accesible en lectura";
 $DefaultInstallAdminFirstname = "Juan";
-$DefaultInstallAdminLastname = "Perez";
+$DefaultInstallAdminLastname = "Pérez";
+$AttendanceUpdated = "Asistencias actualizadas";
 ?>

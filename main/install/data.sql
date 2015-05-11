@@ -1626,4 +1626,38 @@ INSERT INTO sequence_type_entity VALUES
 (2,'Quiz', 'Quiz and Tests','c_quiz'),
 (3,'LpItem', 'Items of a Learning Path','c_lp_item');
 
-UPDATE settings_current SET selected_value = '1.10.0.37' WHERE variable = 'chamilo_database_version';
+-- Version 1.10.0.39
+
+INSERT INTO settings_current
+(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
+VALUES
+('hide_home_top_when_connected', '', 'radio', 'Platform', 'false', 'HideHomeTopContentWhenLoggedInText', 'HideHomeTopContentWhenLoggedInComment', NULL, '', true),
+('hide_global_announcements_when_not_connected','','radio','Platform','false', 'HideGlobalAnnouncementsWhenNotLoggedInText','HideGlobalAnnouncementsWhenNotLoggedInComment',NULL,'', true),
+('course_creation_use_template','','textfield','Course','','CourseCreationUsesTemplateText','CourseCreationUsesTemplateComment',NULL,'',true),
+('allow_strength_pass_checker','','radio','Security','true','EnablePasswordStrengthCheckerText','EnablePasswordStrengthCheckerComment',NULL,'',true),
+('allow_captcha','','radio','Security','false','EnableCaptchaText','EnableCaptchaComment',NULL,'',true),
+('captcha_number_mistakes_to_block_account','','textfield','Security',5,'CaptchaNumberOfMistakesBeforeBlockingAccountText','CaptchaNumberOfMistakesBeforeBlockingAccountComment',NULL,'',true),
+('captcha_time_to_block','','textfield','Security',5,'CaptchaTimeAccountIsLockedText','CaptchaTimeAccountIsLockedComment',NULL,'',true),
+('drh_can_access_all_session_content','','radio','Session','true','DRHAccessToAllSessionContentText','DRHAccessToAllSessionContentComment',NULL,'',true),
+('display_groups_forum_in_general_tool','','radio','Tools','true','ShowGroupForaInGeneralToolText','ShowGroupForaInGeneralToolComment',NULL,'',true),
+('allow_tutors_to_assign_students_to_session','','radio','Session','false','TutorsCanAssignStudentsToSessionsText','TutorsCanAssignStudentsToSessionsComment',NULL,'',true);
+
+INSERT INTO settings_options (variable, value, display_text)
+VALUES
+('hide_home_top_when_connected','true','Yes'),
+('hide_home_top_when_connected','false','No'),
+('hide_global_announcements_when_not_connected','true','Yes'),
+('hide_global_announcements_when_not_connected','false','No'),
+('allow_strength_pass_checker','true','Yes'),
+('allow_strength_pass_checker','false','No'),
+('allow_captcha','true','Yes'),
+('allow_captcha','false','No'),
+('drh_can_access_all_session_content','true','Yes'),
+('drh_can_access_all_session_content','false','No'),
+('display_groups_forum_in_general_tool','true','Yes'),
+('display_groups_forum_in_general_tool','false','No'),
+('allow_tutors_to_assign_students_to_session','true','Yes'),
+('allow_tutors_to_assign_students_to_session','false','No');
+
+
+UPDATE settings_current SET selected_value = '1.10.0.39' WHERE variable = 'chamilo_database_version';

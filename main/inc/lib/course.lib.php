@@ -126,13 +126,14 @@ class CourseManager
                     }
                     // If parameter defined, copy the contents from a specific
                     // template course into this new course
-                    if (!empty($_configuration['course_creation_use_template'])) {
+                    $template = api_get_setting('course_creation_use_template');
+                    if (!empty($template)) {
                         // Include the necessary libraries to generate a course copy
                         require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseBuilder.class.php';
                         require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseRestorer.class.php';
                         require_once api_get_path(SYS_CODE_PATH) . 'coursecopy/classes/CourseSelectForm.class.php';
                         // Call the course copy object
-                        $originCourse = api_get_course_info_by_id($_configuration['course_creation_use_template']);
+                        $originCourse = api_get_course_info_by_id($template);
                         $originCourse['official_code'] = $originCourse['code'];
                         $cb = new CourseBuilder(null, $originCourse);
                         $course = $cb->build(null, $originCourse['code']);
@@ -790,7 +791,6 @@ class CourseManager
             'sort' => $max_sort + 1,
             'user_course_cat' => $userCourseCategoryId
         ];
-        error_log(print_r($params, 1));
         $insertId = Database::insert($course_user_table, $params);
 
         return $insertId;

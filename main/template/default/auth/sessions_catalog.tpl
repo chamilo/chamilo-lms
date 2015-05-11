@@ -121,9 +121,11 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-9">
+                            {% if showTutor %}
                             <div class="tutor">
                                 <img src="{{ 'teacher.png' | icon(22) }}" width="16"> {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}
                             </div>
+                            {% endif %}
                             <a id="list-course" class="btn btn-default" data-toggle="collapse" href="#session-{{ session.id }}-courses">
                                 {{ 'CourseList' | get_lang }}
                             </a>

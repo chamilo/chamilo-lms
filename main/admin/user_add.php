@@ -20,9 +20,8 @@ $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $message = null;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 
-if (isset($_configuration['allow_strength_pass_checker']) &&
-    $_configuration['allow_strength_pass_checker']
-) {
+$checkPass = api_get_setting('allow_strength_pass_checker');
+if ($checkPass == 'true') {
     $htmlHeadXtra[] = '
     <script>
     $(document).ready(function() {
@@ -183,7 +182,7 @@ $group[] = $form->createElement('password', 'password', null, array('id'=> 'pass
 
 $form->addGroup($group, 'password', get_lang('Password'), '');
 
-if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
+if ($checkPass) {
     $form->addElement('label', null, '<div id="password_progress" style="display:none"></div>');
 }
 

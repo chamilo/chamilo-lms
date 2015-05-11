@@ -13,7 +13,6 @@
 use Doctrine\ORM\EntityManager;
 
 /*      CONSTANTS */
-//define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 
 /**

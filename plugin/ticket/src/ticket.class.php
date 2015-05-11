@@ -171,7 +171,7 @@ class TicketManager
             if (self::insert_message($ticket_id, $subject, $content, $file_attachments, $request_user)) {
                 global $data_files;
                 if ($other_area) {
-                    $user = UserManager::get_user_info_by_id($request_user);
+                    $user = api_get_user_info($request_user);
                     $helpDeskMessage = '<table>
                                             <tr>
                                                 <td width="100px"><b>' . get_lang('User') . '</b></td>
@@ -195,9 +195,14 @@ class TicketManager
                                             </tr>
                                         </table>';
                     api_mail_html(
-                            $plugin->get_lang('VirtualSupport'), $email, $plugin->get_lang('IncidentResentToVirtualSupport'),
-                            $helpDeskMessage, $user['firstname'] . ' ' . $user['lastname'], $personalEmail,
-                            array(), $data_files
+                        $plugin->get_lang('VirtualSupport'),
+                        $email,
+                        $plugin->get_lang('IncidentResentToVirtualSupport'),
+                        $helpDeskMessage,
+                        $user['firstname'].' '.$user['lastname'],
+                        $personalEmail,
+                        array(),
+                        $data_files
                     );
                     $studentMessage = sprintf($plugin->get_lang('YourQuestionWasSentToTheResponableAreaX'), $email, $email);
                     $studentMessage .= sprintf($plugin->get_lang('YourAnswerToTheQuestionWillBeSentToX'), $personalEmail);
@@ -663,7 +668,7 @@ class TicketManager
             }
             $result_unread = Database::query($sql_unread);
             $unread = Database::fetch_object($result_unread)->unread;
-            $userInfo = UserManager::get_user_info_by_id($row['user_id']);
+            $userInfo = api_get_user_info($row['user_id']);
             $hrefUser = $webPath . 'main/admin/user_information.php?user_id=' . $row['user_id'];
             $name = "<a href='$hrefUser'> {$userInfo['username']} </a>";
             $actions = "";

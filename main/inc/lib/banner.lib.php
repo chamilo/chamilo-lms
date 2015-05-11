@@ -200,9 +200,13 @@ function return_logo($theme) {
 
 function return_notification_menu()
 {
-    $_course    = api_get_course_info();
-    $course_id  = $_course['code'];
-    $user_id    = api_get_user_id();
+    $_course = api_get_course_info();
+    $course_id = 0;
+    if (!empty($_course)) {
+        $course_id  = $_course['code'];
+    }
+
+    $user_id = api_get_user_id();
 
     $html = '';
 
@@ -407,14 +411,14 @@ function return_menu()
             $clean_url = api_replace_dangerous_char($url);
             $clean_url = str_replace('/', '-', $clean_url);
             $clean_url .= '/';
-            $homep     = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path
+            $homep     = api_get_path(SYS_APP_PATH).'home/'.$clean_url; //homep for Home Path
             //we create the new dir for the new sites
             if (!is_dir($homep)) {
                 mkdir($homep, api_get_permissions_for_new_directories());
             }
         }
     } else {
-        $homep = api_get_path(SYS_PATH).'home/';
+        $homep = api_get_path(SYS_APP_PATH).'home/';
     }
 
     $ext = '.html';
@@ -497,7 +501,10 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     $session_name = api_get_session_name($session_id);
     $_course = api_get_course_info();
     $user_id = api_get_user_id();
-    $course_id = $_course['real_id'];
+    $course_id = 0;
+    if (!empty($_course)) {
+        $course_id = $_course['real_id'];
+    }
 
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);

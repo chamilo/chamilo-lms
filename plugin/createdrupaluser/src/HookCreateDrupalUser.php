@@ -35,7 +35,7 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
             $return = $data['return'];
             $originalPassword = $data['originalPassword'];
 
-            $userInfo = UserManager::get_user_info_by_id($return);
+            $userInfo = api_get_user_info($return);
             $fields = array(
                 'name' => $userInfo['username'],
                 'pass' => $originalPassword,

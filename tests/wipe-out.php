@@ -47,7 +47,7 @@ require $root.'main/inc/global.inc.php';
 
 $global_db = Database::get_main_database();
 $webpath = api_get_path(WEB_PATH);
-$homepath = api_get_path(SYS_PATH).'home';
+$homepath = api_get_path(SYS_APP_PATH).'home';
 
 $clean_dirs = array(
     api_get_path(SYS_COURSE_PATH),              //courses

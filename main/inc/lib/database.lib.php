@@ -117,7 +117,7 @@ class Database
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function connect($params = [], $sysPath = '', $entityRootPath = '')
+    public function connect($params = array(), $sysPath = '', $entityRootPath = '')
     {
         $config = self::getDoctrineConfig($entityRootPath);
 

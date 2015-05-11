@@ -10,9 +10,9 @@ before_install:
   - sudo apt-get install -qq mysql-server
   - sudo apt-get install -qq apache2 libapache2-mod-fastcgi
   #- sudo apt-get install -qq php5-imagick php5-curl php5-intl php5-json php5-fpm php5-mysql
-  - dpkg -l |grep php
 
 before_script:
+  - sudo dpkg -l |grep php
   - php5 -v
   - composer self-update
   - composer global require "fxp/composer-asset-plugin:1.0.0"

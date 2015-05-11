@@ -6,8 +6,8 @@ php:
   - 5.6
 
 before_install:
-  #- sudo apt-get install python-software-properties
-  #- sudo add-apt-repository ppa:ondrej/php5 -y
+  - sudo apt-get install python-software-properties
+  - sudo add-apt-repository ppa:ondrej/php5 -y
   - sudo apt-get update -qq
   - sudo apt-get install -qq mysql-server
   - sudo apt-get install -qq apache2 libapache2-mod-fastcgi
@@ -52,7 +52,7 @@ before_script:
   #- cd ../..
   # install Chamilo with Chash - see reference https://github.com/sonnym/travis-ci-drupal-module-example/blob/master/.travis.yml
   - cd /home/travis/build/chamilo/chamilo-lms
-  - sudo chash chash:chamilo_install --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.x
+  - sudo chash chash:chamilo_install --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="mysqlnd" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.x
 
 script:
   # - phpunit -c tests/phpunit

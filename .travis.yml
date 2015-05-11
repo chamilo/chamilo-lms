@@ -15,6 +15,7 @@ before_install:
 
 before_script:
   - php5 -v
+  - php5 -m
   - composer self-update
   - composer global require "fxp/composer-asset-plugin:1.0.0"
   - composer install -n

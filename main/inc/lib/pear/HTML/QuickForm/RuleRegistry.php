@@ -150,7 +150,8 @@ class HTML_QuickForm_RuleRegistry
             'username_available' => 'HTML_QuickForm_Rule_UsernameAvailable',
             'compare_fields' => 'HTML_QuickForm_Compare_Fields',
             'html' => 'HTML_QuickForm_Rule_HTML',
-            'CAPTCHA' => 'HTML_QuickForm_Rule_CAPTCHA'
+            'CAPTCHA' => 'HTML_QuickForm_Rule_CAPTCHA',
+            'date' => 'HTML_QuickForm_Rule_Date'
         );
 
         $class = $rules[$ruleName];

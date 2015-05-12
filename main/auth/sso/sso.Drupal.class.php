@@ -103,7 +103,7 @@ class ssoDrupal
 
         //lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status
+        $sql = "SELECT id, username, password, auth_source, active, expiration_date, status
                 FROM $user_table
                 WHERE username = '".trim(Database::escape_string($sso['username']))."'";
         $result = Database::query($sql);
@@ -127,19 +127,19 @@ class ssoDrupal
                                 $current_access_url_id = api_get_current_access_url_id();
                                 // my user is subscribed in these
                                 //sites: $my_url_list
-                                $my_url_list = api_get_access_url_from_user($uData['user_id']);
+                                $my_url_list = api_get_access_url_from_user($uData['id']);
                             } else {
                                 $current_access_url_id = 1;
                                 $my_url_list = array(1);
                             }
 
-                            $my_user_is_admin = UserManager::is_admin($uData['user_id']);
+                            $my_user_is_admin = UserManager::is_admin($uData['id']);
 
                             if ($my_user_is_admin === false) {
                                 if (is_array($my_url_list) && count($my_url_list) > 0) {
                                     if (in_array($current_access_url_id, $my_url_list)) {
                                         // the user has permission to enter at this site
-                                        $_user['user_id'] = $uData['user_id'];
+                                        $_user['user_id'] = $uData['id'];
                                         $_user = api_get_user_info($_user['user_id']);
                                         Session::write('_user', $_user);
                                         Event::event_login($_user['user_id']);
@@ -168,7 +168,7 @@ class ssoDrupal
                                 if (in_array(1, $my_url_list)) {
                                     //Check if this admin is admin on the
                                     // principal portal
-                                    $_user['user_id'] = $uData['user_id'];
+                                    $_user['user_id'] = $uData['id'];
                                     $_user = api_get_user_info($_user['user_id']);
                                     $is_platformAdmin = $uData['status'] == COURSEMANAGER;
                                     Session::write('is_platformAdmin', $is_platformAdmin);

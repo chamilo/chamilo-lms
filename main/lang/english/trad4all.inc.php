@@ -7251,7 +7251,7 @@ $HideHomeTopContentWhenLoggedInComment = "On the platform homepage, this option 
 $HideGlobalAnnouncementsWhenNotLoggedInText = "Hide global announcements for anonymous";
 $HideGlobalAnnouncementsWhenNotLoggedInComment = "Hide platform announcements from anonymous users, and only show them to authenticated users.";
 $CourseCreationUsesTemplateText = "Use template course for new courses";
-$CourseCreationUsesTemplateComment = "Set this to use the same template course (identified by its course numeric ID in the database) for all new courses that will be created on the platform. Please note that, if not properly planned, this setting might have a massive impact on space usage. The template course will be used as if the teacher did a copy of the course with the course backup tools, so no user content is copied, only teacher material. All other course-backup rules apply.";
+$CourseCreationUsesTemplateComment = "Set this to use the same template course (identified by its course numeric ID in the database) for all new courses that will be created on the platform. Please note that, if not properly planned, this setting might have a massive impact on space usage. The template course will be used as if the teacher did a copy of the course with the course backup tools, so no user content is copied, only teacher material. All other course-backup rules apply. Leave empty (or set to 0) to disable.";
 $EnablePasswordStrengthCheckerText = "Password strength checker";
 $EnablePasswordStrengthCheckerComment = "Enable this option to add a visual indicator of password strength, when the user changes his/her password. This will NOT prevent bad passwords to be added, it only acts as a visual helper.";
 $EnableCaptchaText = "CAPTCHA";
@@ -7266,4 +7266,5 @@ $ShowGroupForaInGeneralToolText = "Display group forums in general forum";
 $ShowGroupForaInGeneralToolComment = "Display group forums in the forum tool at the course level. This option is enabled by default (in this case, group forum individual visibilities still act as an additional criteria). If disabled, group forums will only be visible through the group tool, be them public or not.";
 $TutorsCanAssignStudentsToSessionsText = "Tutors can assign students to sessions";
 $TutorsCanAssignStudentsToSessionsComment = "When enabled, course coaches/tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators.";
+$UniqueAnswerImagePreferredSize200x150 = "Images will be resized (up or down) to 200x150 pixels. For a better rendering of the question, we recommend you upload only images of this size.";
 ?>

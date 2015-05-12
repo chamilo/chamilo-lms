@@ -4,13 +4,13 @@
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class CourseRepository
  * The functions inside this class must return an instance of QueryBuilder
+ *
  * @package Chamilo\CoreBundle\Entity\Repository
  */
 class CourseRepository extends EntityRepository

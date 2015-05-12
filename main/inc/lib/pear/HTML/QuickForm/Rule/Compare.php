@@ -51,7 +51,6 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
         '!='  => '!=='
     );
 
-
    /**
     * Returns the operator to use for comparing the values
     *
@@ -59,7 +58,8 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
     * @param  string     operator name
     * @return string     operator to use for validation
     */
-    function _findOperator($name) {
+    function _findOperator($name)
+    {
         $name = trim($name);
         if (empty($name)) {
             return '===';
@@ -76,6 +76,7 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
     function validate($values, $operator = null)
     {
         $operator = $this->_findOperator($operator);
+
         if ('===' != $operator && '!==' != $operator) {
             $compareFn = create_function('$a, $b', 'return floatval($a) ' . $operator . ' floatval($b);');
         } else {
@@ -97,4 +98,3 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
         return array('', "'' != {jsVar}[0] && {$check}");
     }
 }
-?>

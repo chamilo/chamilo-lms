@@ -323,19 +323,56 @@ class IndexManager
 
     function return_skills_links() {
         $html = '';
+        $content = '';
+        $content .= '<ul class="nav nav-pills nav-stacked">';
+        /**
+         * Generate the block for show a panel with links to My Certificates and Certificates Search pages
+         * @return string The HTML code for the panel
+         */
+        $certificatesItem = null;
+
+        if (!api_is_anonymous()) {
+            $certificatesItem = Display::tag(
+                'li',
+                Display::url(Display::return_icon('graduation.png',get_lang('MyCertificates'),null,ICON_SIZE_SMALL).
+                    get_lang('MyCertificates'),
+                    api_get_path(WEB_CODE_PATH) . "gradebook/my_certificates.php"
+                )
+            );
+        }
+
+        $searchItem = null;
+
+        if (api_get_setting('allow_public_certificates') == 'true') {
+            $searchItem = Display::tag(
+                'li',
+                Display::url(Display::return_icon('search_graduation.png',get_lang('Search'),null,ICON_SIZE_SMALL).
+                    get_lang('Search'),
+                    api_get_path(WEB_CODE_PATH) . "gradebook/search.php"
+                )
+            );
+        }
+
+        if (empty($certificatesItem) && empty($searchItem)) {
+            return null;
+        }else{
+            $content.= $certificatesItem;
+            $content.= $searchItem;
+        }
+
         if (api_get_setting('allow_skills_tool') == 'true') {
-            $content = '<ul class="nav nav-pills nav-stacked">';
 
             $content .= Display::tag('li', Display::url(Display::return_icon('skill-badges.png',get_lang('MySkills'),null,ICON_SIZE_SMALL).get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'));
-
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
-
             if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
-                $content .= Display::tag('li', Display::url(Display::return_icon('edit-skill.png',get_lang('MySkills'),null,ICON_SIZE_SMALL).get_lang('ManageSkills'), api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'));
+                $content .= Display::tag('li',
+                    Display::url(Display::return_icon('edit-skill.png', get_lang('MySkills'), null,
+                            ICON_SIZE_SMALL) . get_lang('ManageSkills'),
+                        api_get_path(WEB_CODE_PATH) . 'admin/skills_wheel.php'));
             }
-            $content .= '</ul>';
-            $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block');
         }
+        $content .= '</ul>';
+        $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block');
         return $html;
     }
 
@@ -1421,51 +1458,6 @@ class IndexManager
     public function return_hot_courses()
     {
         return CourseManager::return_hot_courses();
-    }
-
-    /**
-     * Generate the block for show a panel with links to My Certificates and Certificates Search pages
-     * @return string The HTML code for the panel
-     */
-    public function returnCertificatesSearchBlock()
-    {
-
-        $certificatesItem = null;
-
-        if (!api_is_anonymous()) {
-            $certificatesItem = Display::tag(
-                'li',
-                Display::url(
-                    get_lang('MyCertificates'),
-                    api_get_path(WEB_CODE_PATH) . "gradebook/my_certificates.php"
-                )
-            );
-        }
-
-        $searchItem = null;
-
-        if (api_get_setting('allow_public_certificates') == 'true') {
-            $searchItem = Display::tag(
-                'li',
-                Display::url(
-                    get_lang('Search'),
-                    api_get_path(WEB_CODE_PATH) . "gradebook/search.php"
-                )
-            );
-        }
-
-        if (empty($certificatesItem) && empty($searchItem)) {
-            return null;
-        }
-
-        return Display::panel(
-            Display::tag(
-                'ul',
-                implode(' ', [$certificatesItem, $searchItem]),
-                ['class' => 'nav nav-pills nav-stacked']
-            ),
-            get_lang('Certificates')
-        );
     }
 
 }

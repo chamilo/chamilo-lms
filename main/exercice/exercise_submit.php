@@ -1085,7 +1085,7 @@ if (!empty($error)) {
 
         // Showing the question
 
-        echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
+        echo '<div id="question_div_'.$questionId.'" class="main-question '.$remind_highlight.'" >';
 
         // Shows the question and its answers
         ExerciseLib::showQuestion($questionId, false, $origin, $i, true, false, $user_choice, false);

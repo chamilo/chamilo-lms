@@ -69,6 +69,13 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     /**
      * @var string
      *
+     * * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false, unique=true)
+     */
+    protected $usernameCanonical;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
      */
     protected $email;
@@ -90,7 +97,7 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=50, nullable=false, unique=false)
+     * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
     protected $password;
 

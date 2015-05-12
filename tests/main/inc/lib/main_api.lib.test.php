@@ -749,13 +749,6 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue(isset($res));
 	}
 
-	function testApiGetEncryptedPassword(){
-		$pass= array ('password'=> '2222');
-		$res=api_get_encrypted_password($pass['password'],null);
-		$this->assertTrue($res);
-		$this->assertPattern('/\d/',$res);
-	}
-
 	function testApiIsValidSecretKey(){
 		global $_configuration;
 		$key = array(

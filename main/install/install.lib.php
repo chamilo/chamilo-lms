@@ -1567,6 +1567,9 @@ function display_configuration_settings_form(
       <td>
           <div class="control-group">
               <label class="radio inline">
+                  <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" <?php echo ($encryptPassForm == 'bcrypt') ? 'checked="checked" ': ''; ?>/><?php echo 'bcrypt'; ?>
+              </label>
+              <label class="radio inline">
                   <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/><?php echo 'sha1'; ?>
               </label>
 
@@ -1997,30 +2000,62 @@ function finishInstallation(
     $result->execute();
     $result->closeCursor();
 
-    // Create users
-    switch ($encryptPassForm) {
-        case 'md5' :
-            $passToStore = md5($passForm);
-            break;
-        case 'sha1' :
-            $passToStore = sha1($passForm);
-            break;
-        case 'none' :
-        default:
-            $passToStore = $passForm;
-            break;
-    }
+    UserManager::setPasswordEncryption($encryptPassForm);
 
+    UserManager::create_user(
+        $adminFirstName,
+        $adminLastName,
+        1,
+        $emailForm,
+        $loginForm,
+        $passForm,
+        'ADMIN', //$official_code = '',
+        $languageForm,
+        $adminPhoneForm,
+        '', //$picture_uri = '',
+        PLATFORM_AUTH_SOURCE,
+        '',//$expirationDate,
+        1,
+        0,
+        null,
+        '',
+        false,  //$send_mail = false,
+        true //$isAdmin = false
+    );
+
+    UserManager::create_user(
+        'Joe',
+        'Anonymous',
+        6,
+        'anonymous@localhost',
+        'anon',
+        'anon',
+        'anonymous', //$official_code = '',
+        $languageForm,
+        '',
+        '', //$picture_uri = '',
+        PLATFORM_AUTH_SOURCE,
+        '',
+        1,
+        0,
+        null,
+        '',
+        false,  //$send_mail = false,
+        false //$isAdmin = false
+    );
+
+/*
     // Insert admin and Anonymous users.
-
-    $sql = "INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES
-		(1, '$adminLastName','$adminFirstName','$loginForm','$passToStore','".PLATFORM_AUTH_SOURCE."','$emailForm',1,'ADMIN','$adminPhoneForm',1,NOW(),NULL,'1',NULL,'$languageForm'),
-		(2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', NULL, 1, NOW(), NULL, 1,NULL,'$languageForm')";
-    Database::query($sql);
+    $uniqueAdmin = sha1(uniqid(null, true));
+    $uniqueAnon = sha1(uniqid(null, true));
+    $sql = "INSERT INTO user (user_id, lastname, firstname, username, username_canonical, salt, password, auth_source, email, status, official_code, phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES
+		(1, '$adminLastName','$adminFirstName','$loginForm','$loginForm', '$uniqueAdmin', '$encryptPassword','".PLATFORM_AUTH_SOURCE."','$emailForm',1,'ADMIN','$adminPhoneForm',1,NOW(),NULL,'1',NULL,'$languageForm'),
+		(2, 'Anonymous', 'Joe', 'anon', 'anon', '$uniqueAnon', '', 'platform', 'anonymous@localhost', 6, 'anonymous', NULL, 1, NOW(), NULL, 1,NULL,'$languageForm')";
+    //Database::query($sql);*/
 
     // Insert user as admin
-    $sql = "INSERT INTO admin VALUES(1, 1)";
-    Database::query($sql);
+    //$sql = "INSERT INTO admin VALUES(1, 1)";
+    //Database::query($sql);
 
     // Set default language
     $sql = "UPDATE language SET available=1 WHERE dokeos_folder = '$languageForm'";

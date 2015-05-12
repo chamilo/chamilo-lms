@@ -1468,8 +1468,9 @@ function _api_format_user($user, $add_password = false)
  */
 function api_get_user_info($user_id = '', $checkIfUserOnline = false, $showPassword = false, $loadExtraData = false) {
     if ($user_id == '') {
-        if (isset($GLOBALS['_user'])) {
-            return _api_format_user($GLOBALS['_user']);
+        $userFromSession = Session::read('_user');
+        if (isset($userFromSession)) {
+            return _api_format_user($userFromSession);
         }
         // @todo trigger an exception here
         return false;
@@ -5777,25 +5778,6 @@ function api_is_in_group($group_id = null, $course_code = null) {
     return false;
 }
 
-/**
- * This function gets the hash in md5 or sha1 (it depends in the platform config) of a given password
- * @param  string password
- * @return string password with the applied hash
- */
-function api_get_encrypted_password($password, $salt = '') {
-    global $_configuration;
-    $password_encryption = isset($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1';
-
-    switch ($password_encryption) {
-        case 'sha1':
-            return empty($salt) ? sha1($password) : sha1($password.$salt);
-        case 'none':
-            return $password;
-        case 'md5':
-        default:
-            return empty($salt) ? md5($password)  : md5($password.$salt);
-    }
-}
 
 /**
  * Checks whether a secret key is valid
@@ -6966,7 +6948,6 @@ function api_get_js_simple($file) {
 
 function api_set_settings_and_plugins() {
     global $_configuration;
-    //error_log('Loading settings from DB');
     $_setting = array();
     $_plugins = array();
 

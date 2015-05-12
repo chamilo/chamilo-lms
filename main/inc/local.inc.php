@@ -242,7 +242,10 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             $password = $_POST['password'];
         }
 
-        //Lookup the user in the main database
+        $userManager = UserManager::getManager();
+        $userRepository = UserManager::getRepository();
+
+        // Lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status
                 FROM $user_table
@@ -255,9 +258,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result, 'ASSOC');
-
             if ($allowCaptcha) {
-
                 // Checking captcha
                 if (isset($_POST['captcha'])) {
                     // Check captcha
@@ -309,12 +310,20 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE ||
                 $uData['auth_source'] == CAS_AUTH_SOURCE
             ) {
-                //The authentification of this user is managed by Chamilo itself
-                $password = api_get_encrypted_password(trim(stripslashes($password)));
+                $user = $userManager->findUserByUsername($login);
+                $validPassword = UserManager::isPasswordValid($password, $user);
+
+                // The authentication of this user is managed by Chamilo itself
+                //$password = api_get_encrypted_password(trim(stripslashes($password)));
 
                 // Check the user's password
-                if (($password == $uData['password'] || $cas_login) && (trim($login) == $uData['username'])) {
-                    $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
+                if (($validPassword || $cas_login) &&
+                    (trim($login) == $uData['username'])
+                ) {
+                    $update_type = UserManager::get_extra_user_data_by_field(
+                        $uData['user_id'],
+                        'update_type'
+                    );
 
                     $update_type = $update_type['update_type'];
                     if (!empty($extAuthSource[$update_type]['updateUser'])
@@ -354,7 +363,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         ConditionalLogin::check_conditions($uData);
 
                                         $_user['user_id'] = $uData['user_id'];
-                                        $_user['status']  = $uData['status'];
+                                        $_user['status'] = $uData['status'];
                                         Session::write('_user', $_user);
                                         Event::event_login($_user['user_id']);
                                         $logging_in = true;

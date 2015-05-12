@@ -4,24 +4,24 @@
 namespace Chamilo\UserBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NoResultException;
+
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Chamilo\UserBundle\Entity\User as User;
 
 /**
  * Class UserRepository
+ *
+ * All functions that query the database (selects)
+ * Functions should return query builders.
+ *
  * @package Chamilo\UserBundle\Repository
  */
 class UserRepository extends EntityRepository
 {
-    public function getGroupsByUser($userId)
-    {
-        $user = $this->find($userId);
-    }
 
     /**
     * @param string $keyword
+     *
     * @return mixed
     */
     public function searchUserByKeyword($keyword)

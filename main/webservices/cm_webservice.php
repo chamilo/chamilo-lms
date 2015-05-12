@@ -171,12 +171,13 @@ class WSCM {
 
         /**
          * Return the encrypted pass
+		 * @deprecated
          * @param <String> $pass
          * @return <String> $pass encrypted
          */
-        public function encryptPass($pass){
+        /*public function encryptPass($pass){
             return api_get_encrypted_password($pass);
-        }
+        }*/
 
         /**
 	 * Gets the real user id based on the user id field name and value. Note that if the user id field name is "chamilo_user_id", it will use the user id

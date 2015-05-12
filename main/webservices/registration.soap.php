@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * @package chamilo.webservices
@@ -216,20 +217,20 @@ $server->register('WSCreateUsers',                 // method name
 // Define the method WSCreateUsers
 function WSCreateUsers($params) {
 
-    global $_user, $_configuration;
+    global $_user;
 
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    // database table definition
-    $table_user = Database::get_main_table(TABLE_MAIN_USER);
-
     $users_params = $params['users'];
     $results = array();
     $orig_user_id_value = array();
 
-    foreach($users_params as $user_param) {
+    $userManager = UserManager::getManager();
+    $userRepository = UserManager::getRepository();
+
+    foreach ($users_params as $user_param) {
 
         $firstName = $user_param['firstname'];
         $lastName = $user_param['lastname'];
@@ -242,7 +243,7 @@ function WSCreateUsers($params) {
         $phone = '';
         $picture_uri = '';
         $auth_source = PLATFORM_AUTH_SOURCE;
-        $expiration_date = '0000-00-00 00:00:00';
+        $expiration_date = '';
         $active = 1;
         $hr_dept_id = 0;
         $extra = null;
@@ -266,35 +267,33 @@ function WSCreateUsers($params) {
             $original_user_id_name
         );
         if ($user_id > 0) {
-            // Check if user is not active.
-            $sql = "SELECT user_id FROM $table_user
-                    WHERE user_id ='".$user_id."' AND active= '0'";
-            $resu = Database::query($sql);
-            $r_check_user = Database::fetch_row($resu);
-            $count_user_id = Database::num_rows($resu);
-            if ($count_user_id > 0) {
-                $sql = "UPDATE $table_user SET
-                        lastname='".Database::escape_string($lastName)."',
-                        firstname='".Database::escape_string($firstName)."',
-                        username='".Database::escape_string($loginName)."',";
+            /** @var User $user */
+            $user = $userRepository->find($user_id);
+
+            if ($user && $user->isActive() == false) {
                 if (!is_null($password)) {
-                    $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
-                    $sql .= " password='".Database::escape_string($password)."',";
+                    $user->setPlainPassword($password);
                 }
                 if (!is_null($auth_source)) {
-                    $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+                    $user->setAuthSource($auth_source);
                 }
-                $sql .=    "
-                        email='".Database::escape_string($email)."',
-                        status='".Database::escape_string($status)."',
-                        official_code='".Database::escape_string($official_code)."',
-                        phone='".Database::escape_string($phone)."',
-                        expiration_date='".Database::escape_string($expiration_date)."',
-                        active='1',
-                        hr_dept_id=".intval($hr_dept_id);
-                $sql .= " WHERE user_id='".$r_check_user[0]."'";
-                Database::query($sql);
-                $results[] = $r_check_user[0];
+
+                if (!empty($user_param['expiration_date'])) {
+                    $expiration_date = new DateTime($user_param['expiration_date']);
+                }
+
+                $user->setLastname($lastName)
+                    ->setFirstname($firstName)
+                    ->setUsername($loginName)
+                    ->setEmail($email)
+                    ->setStatus($status)
+                    ->setOfficialCode($official_code)
+                    ->setPhone($phone)
+                    ->setExpirationDate($expiration_date)
+                    ->setHrDeptId($hr_dept_id)
+                    ->setActive(true);
+                $userManager->updateUser($user, true);
+                $results[] = $user_id;
                 continue;
                 //return $r_check_user[0];
             } else {
@@ -324,49 +323,45 @@ function WSCreateUsers($params) {
             }
         }
 
-        $password = ($_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password);
-        $sql = "INSERT INTO $table_user SET
-                    lastname = '".Database::escape_string(trim($lastName))."',
-                    firstname = '".Database::escape_string(trim($firstName))."',
-                    username = '".Database::escape_string(trim($loginName))."',
-                    status = '".Database::escape_string($status)."',
-                    password = '".Database::escape_string($password)."',
-                    email = '".Database::escape_string($email)."',
-                    official_code = '".Database::escape_string($official_code)."',
-                    picture_uri = '".Database::escape_string($picture_uri)."',
-                    creator_id = '".Database::escape_string($creator_id)."',
-                    auth_source = '".Database::escape_string($auth_source)."',
-                    phone = '".Database::escape_string($phone)."',
-                    language = '".Database::escape_string($language)."',
-                    registration_date = now(),
-                    expiration_date = '".Database::escape_string($expiration_date)."',
-                    hr_dept_id = '".Database::escape_string($hr_dept_id)."',
-                    active = '".Database::escape_string($active)."'";
-        $result = Database::query($sql);
-        if ($result) {
-            //echo "id returned";
-            $return = Database::insert_id();
+        $userId = UserManager::create_user(
+            $firstName,
+            $lastName,
+            $status,
+            $email,
+            $loginName,
+            $password,
+            $official_code,
+            $language,
+            $phone,
+            $picture_uri,
+            $auth_source,
+            $expiration_date,
+            $active,
+            $hr_dept_id
+        );
+
+        if ($userId) {
             if (api_is_multiple_url_enabled()) {
                 if (api_get_current_access_url_id() != -1) {
-                    UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+                    UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
                 } else {
-                    UrlManager::add_user_to_url($return, 1);
+                    UrlManager::add_user_to_url($userId, 1);
                 }
             } else {
                 // We add by default the access_url_user table with access_url_id = 1
-                UrlManager::add_user_to_url($return, 1);
+                UrlManager::add_user_to_url($userId, 1);
             }
 
-            // Save new fieldlabel into user_field table.
-            $field_id = UserManager::create_extra_field(
+            // Save new field label into user_field table.
+            UserManager::create_extra_field(
                 $original_user_id_name,
                 1,
                 $original_user_id_name,
                 ''
             );
             // Save the external system's id into user_field_value table.
-            $res = UserManager::update_extra_field_value(
-                $return,
+            UserManager::update_extra_field_value(
+                $userId,
                 $original_user_id_name,
                 $original_user_id_value
             );
@@ -375,16 +370,16 @@ function WSCreateUsers($params) {
                 foreach ($extra_list as $extra) {
                     $extra_field_name = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
-                    // Save new fieldlabel into user_field table.
-                    $field_id = UserManager::create_extra_field(
+                    // Save new field label into user_field table.
+                    UserManager::create_extra_field(
                         $extra_field_name,
                         1,
                         $extra_field_name,
                         ''
                     );
                     // Save the external system's id into user_field_value table.
-                    $res = UserManager::update_extra_field_value(
-                        $return,
+                    UserManager::update_extra_field_value(
+                        $userId,
                         $extra_field_name,
                         $extra_field_value
                     );
@@ -395,7 +390,7 @@ function WSCreateUsers($params) {
             continue;
         }
 
-        $results[] =  $return;
+        $results[] =  $userId;
 
     } // end principal foreach
 
@@ -490,7 +485,7 @@ function WSCreateUser($params) {
     }
     if (!empty($params['expiration_date'])) {
         $expiration_date = $params['expiration_date'];
-        $expirationDateStatement = " expiration_date = '".Database::escape_string($expiration_date)."', ";
+        //$expirationDateStatement = " expiration_date = '".Database::escape_string($expiration_date)."', ";
     }
 
     // check if exits x_user_id into user_field_values table
@@ -498,41 +493,42 @@ function WSCreateUser($params) {
         $original_user_id_value,
         $original_user_id_name
     );
+
+    $userManager = UserManager::getManager();
+    $userRepository = UserManager::getRepository();
+
     if ($user_id > 0) {
-        // Check whether user is not active.
-        $sql = "SELECT user_id FROM $table_user
-                WHERE id ='".$user_id."' AND active= '0'";
-        $resu = Database::query($sql);
-        $r_check_user = Database::fetch_row($resu);
-        $count_user_id = Database::num_rows($resu);
-        if ($count_user_id > 0) {
-            $sql = "UPDATE $table_user SET
-                    lastname='".Database::escape_string($lastName)."',
-                    firstname='".Database::escape_string($firstName)."',
-                    username='".Database::escape_string($loginName)."',";
+
+        /** @var User $user */
+        $user = $userRepository->find($user_id);
+
+        if ($user && $user->isActive() == false) {
             if (!is_null($password)) {
-                $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
-                $sql .= " password='".Database::escape_string($password)."',";
+                $user->setPlainPassword($password);
             }
             if (!is_null($auth_source)) {
-                $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+                $user->setAuthSource($auth_source);
             }
-            $sql .=    "
-                    email='".Database::escape_string($email)."',
-                    status='".Database::escape_string($status)."',
-                    official_code='".Database::escape_string($official_code)."',
-                    phone='".Database::escape_string($phone)."',
-                    $expirationDateStatement
-                    active=1,
-                    hr_dept_id=".intval($hr_dept_id);
-            $sql .=  " WHERE id=".$r_check_user[0];
-            Database::query($sql);
 
-            return  $r_check_user[0];
+            if (!empty($params['expiration_date'])) {
+                $expiration_date = new DateTime($params['expiration_date']);
+            }
 
+            $user->setLastname($lastName)
+                ->setFirstname($firstName)
+                ->setUsername($loginName)
+                ->setEmail($email)
+                ->setStatus($status)
+                ->setOfficialCode($official_code)
+                ->setPhone($phone)
+                ->setExpirationDate($expiration_date)
+                ->setHrDeptId($hr_dept_id)
+                ->setActive(true);
+            $userManager->updateUser($user, true);
+
+            return $user_id;
         } else {
             return 0;
-            //return 0;    // user id already exits
         }
     }
 
@@ -553,7 +549,7 @@ function WSCreateUser($params) {
         return 0;
     }
 
-    $password = ($_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password);
+    /*$password = ($_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password);
     $sql = "INSERT INTO $table_user SET
                 lastname = '".Database::escape_string(trim($lastName))."',
                 firstname = '".Database::escape_string(trim($firstName))."',
@@ -571,32 +567,48 @@ function WSCreateUser($params) {
                 $expirationDateStatement
                 hr_dept_id = '".Database::escape_string($hr_dept_id)."',
                 active = '".Database::escape_string($active)."'";
-    $result = Database::query($sql);
+    $result = Database::query($sql);-*/
 
-    if ($result) {
-        //echo "id returned";
-        $return = Database::insert_id();
+    /** @var User $user */
+    $userId = UserManager::create_user(
+        $firstName,
+        $lastName,
+        $status,
+        $email,
+        $loginName,
+        $password,
+        $official_code,
+        $language,
+        $phone,
+        $picture_uri,
+        $auth_source,
+        $expiration_date,
+        $active,
+        $hr_dept_id
+    );
+
+    if ($userId) {
         if (api_is_multiple_url_enabled()) {
             if (api_get_current_access_url_id() != -1) {
-                UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+                UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
             } else {
-                UrlManager::add_user_to_url($return, 1);
+                UrlManager::add_user_to_url($userId, 1);
             }
         } else {
             // We add by default the access_url_user table with access_url_id = 1
-            UrlManager::add_user_to_url($return, 1);
+            UrlManager::add_user_to_url($userId, 1);
         }
 
         // Save new fieldlabel into user_field table.
-        $field_id = UserManager::create_extra_field(
+        UserManager::create_extra_field(
             $original_user_id_name,
             1,
             $original_user_id_name,
             ''
         );
         // Save the external system's id into user_field_value table.
-        $res = UserManager::update_extra_field_value(
-            $return,
+        UserManager::update_extra_field_value(
+            $userId,
             $original_user_id_name,
             $original_user_id_value
         );
@@ -605,16 +617,16 @@ function WSCreateUser($params) {
             foreach ($extra_list as $extra) {
                 $extra_field_name = $extra['field_name'];
                 $extra_field_value = $extra['field_value'];
-                // Save new fieldlabel into user_field table.
-                $field_id = UserManager::create_extra_field(
+                // Save new field label into user_field table.
+                UserManager::create_extra_field(
                     $extra_field_name,
                     1,
                     $extra_field_name,
                     ''
                 );
                 // Save the external system's id into user_field_value table.
-                $res = UserManager::update_extra_field_value(
-                    $return,
+                UserManager::update_extra_field_value(
+                    $userId,
                     $extra_field_name,
                     $extra_field_value
                 );
@@ -624,7 +636,7 @@ function WSCreateUser($params) {
         return 0;
     }
 
-    return  $return;
+    return  $userId;
 }
 
 /* Register WSCreateUsersPasswordCrypted function */
@@ -1298,6 +1310,10 @@ function WSEditUserCredentials($params)
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
+    $userManager = UserManager::getManager();
+    $userRepository = UserManager::getRepository();
+
+
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
     $original_user_id_value = $params['original_user_id_value'];
@@ -1337,17 +1353,22 @@ function WSEditUserCredentials($params)
         return 0;
     }
 
-    $sql = "UPDATE $table_user SET
-            username='".Database::escape_string($username)."'";
+    /** @var User $user */
+    $user = $userRepository->find($user_id);
+    if ($user) {
 
-    if (!is_null($password)) {
-        $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
-        $sql .= ", password='".Database::escape_string($password)."' ";
+        $user->setUsername($username);
+
+        if (!is_null($password)) {
+            $user->setPlainPassword($password);
+        }
+
+        $userManager->updateUser($user, true);
+
+        return true;
     }
 
-    $sql .= " WHERE user_id='$user_id'";
-    $return = @Database::query($sql);
-    return  $return;
+    return false;
 }
 
 // Prepare output params, in this case will return an array
@@ -1390,9 +1411,13 @@ function WSEditUsers($params)
 {
     global $_configuration;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
+
+    $userManager = UserManager::getManager();
+    $userRepository = UserManager::getRepository();
+
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
@@ -1458,20 +1483,27 @@ function WSEditUsers($params)
             continue;
         }
         // Edit lastname and firstname only if not empty
-        $sql = "UPDATE $table_user SET ";
+
+        /** @var User $user */
+        $user = $userRepository->find($user_id);
+
         if (!empty($lastname)) {
-            $sql .= " lastname='".Database::escape_string($lastname)."', ";
+            $user->setLastname($lastname);
+            //$sql .= " lastname='".Database::escape_string($lastname)."', ";
         }
         if (!empty($firstname)) {
-            $sql .= " firstname='".Database::escape_string($firstname)."', ";
+            $user->setFirstname($firstname);
+            //$sql .= " firstname='".Database::escape_string($firstname)."', ";
         }
-        $sql .= " username='".Database::escape_string($username)."',";
+        $user->setUsername($username);
+        //$sql .= " username='".Database::escape_string($username)."',";
         if (!is_null($password)) {
-            $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
-            $sql .= " password='".Database::escape_string($password)."',";
+            //$password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
+            //$sql .= " password='".Database::escape_string($password)."',";
+            $user->setPlainPassword($password);
         }
         if (!is_null($auth_source)) {
-            $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+            $user->setAuthSource($auth_source);
         }
 
         // Exception for admins in case no status is provided in WS call...
@@ -1488,28 +1520,32 @@ function WSEditUsers($params)
             $status = 1;
         }
 
-        $sql .=    "
-                email='".Database::escape_string($email)."',
-                status='".Database::escape_string($status)."',
-                official_code='".Database::escape_string($official_code)."',
-                phone='".Database::escape_string($phone)."',
-                picture_uri='".Database::escape_string($picture_uri)."',
-                expiration_date='".Database::escape_string($expiration_date)."',
-                active='".Database::escape_string($active)."',
-                hr_dept_id=".intval($hr_dept_id);
+        if (!empty($expiration_date)) {
+            $expiration_date = new DateTime($expiration_date);
+        }
+
+        $user
+            ->setEmail($email)
+            ->setStatus($status)
+            ->setOfficialCode($official_code)
+            ->setPhone($phone)
+            ->setExpirationDate($expiration_date)
+            ->setHrDeptId($hr_dept_id)
+            ->setActive(true);
 
         if (!is_null($creator_id)) {
-            $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
+            $user->setCreatorId($creator_id);
+            //$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
         }
-        $sql .=    " WHERE user_id='$user_id'";
-        $return = @Database::query($sql);
+
+        $userManager->updateUser($user, true);
 
         if (is_array($extra_list) && count($extra_list) > 0) {
             foreach ($extra_list as $extra) {
                 $extra_field_name = $extra['field_name'];
                 $extra_field_value = $extra['field_value'];
                 // Save the external system's id into user_field_value table.
-                $res = UserManager::update_extra_field_value(
+                UserManager::update_extra_field_value(
                     $user_id,
                     $extra_field_name,
                     $extra_field_value
@@ -1517,13 +1553,13 @@ function WSEditUsers($params)
             }
         }
 
-        $results[] = $return;
+        $results[] = $user->getId();
         continue;
     }
 
     $count_results = count($results);
     $output = array();
-    for($i = 0; $i < $count_results; $i++) {
+    for ($i = 0; $i < $count_results; $i++) {
         $output[] = array(
             'original_user_id_value' => $orig_user_id_value[$i],
             'result' => $results[$i],
@@ -1569,12 +1605,15 @@ $server->register('WSEditUser',              // method name
 );
 
 // Define the method WSEditUser
-function WSEditUser($params) {
-    global $_configuration;
+function WSEditUser($params)
+{
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
+
+    $userManager = UserManager::getManager();
+    $userRepository = UserManager::getRepository();
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
@@ -1629,21 +1668,30 @@ function WSEditUser($params) {
     if (!empty($r_username[0])) {
         return 0;
     }
-    // Edit lastname an firstname only if not empty
-    $sql = "UPDATE $table_user SET ";
+
+
+
+
+    /** @var User $user */
+    $user = $userRepository->find($user_id);
+
     if (!empty($lastname)) {
-        $sql .= " lastname='".Database::escape_string($lastname)."', ";
+        $user->setLastname($lastname);
+        //$sql .= " lastname='".Database::escape_string($lastname)."', ";
     }
     if (!empty($firstname)) {
-        $sql .= " firstname='".Database::escape_string($firstname)."', ";
+        $user->setFirstname($firstname);
+        //$sql .= " firstname='".Database::escape_string($firstname)."', ";
     }
-    $sql .= " username='".Database::escape_string($username)."',";
+    $user->setUsername($username);
+    //$sql .= " username='".Database::escape_string($username)."',";
     if (!is_null($password)) {
-        $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
-        $sql .= " password='".Database::escape_string($password)."',";
+        //$password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
+        //$sql .= " password='".Database::escape_string($password)."',";
+        $user->setPlainPassword($password);
     }
     if (!is_null($auth_source)) {
-        $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+        $user->setAuthSource($auth_source);
     }
 
     // Exception for admins in case no status is provided in WS call...
@@ -1660,28 +1708,33 @@ function WSEditUser($params) {
         $status = 1;
     }
 
-    $sql .=    "
-            email='".Database::escape_string($email)."',
-            status='".Database::escape_string($status)."',
-            official_code='".Database::escape_string($official_code)."',
-            phone='".Database::escape_string($phone)."',
-            picture_uri='".Database::escape_string($picture_uri)."',
-            expiration_date='".Database::escape_string($expiration_date)."',
-            active='".Database::escape_string($active)."',
-            hr_dept_id=".intval($hr_dept_id);
+    if (!empty($expiration_date)) {
+        $expiration_date = new DateTime($expiration_date);
+    }
+
+    $user
+        ->setEmail($email)
+        ->setStatus($status)
+        ->setOfficialCode($official_code)
+        ->setPhone($phone)
+        ->setPictureUri($picture_uri)
+        ->setExpirationDate($expiration_date)
+        ->setHrDeptId($hr_dept_id)
+        ->setActive(true);
 
     if (!is_null($creator_id)) {
-        $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
+        $user->setCreatorId($creator_id);
+        //$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
     }
-    $sql .=    " WHERE user_id='$user_id'";
-    $return = @Database::query($sql);
+
+    $userManager->updateUser($user, true);
 
     if (is_array($extra_list) && count($extra_list) > 0) {
         foreach ($extra_list as $extra) {
             $extra_field_name = $extra['field_name'];
             $extra_field_value = $extra['field_value'];
             // Save the external system's id into user_field_value table.
-            $res = UserManager::update_extra_field_value(
+            UserManager::update_extra_field_value(
                 $user_id,
                 $extra_field_name,
                 $extra_field_value
@@ -1689,7 +1742,7 @@ function WSEditUser($params) {
         }
     }
 
-    return  $return;
+    return  $user_id;
 }
 
 /* Register WSEditUserWithPicture function */
@@ -1729,12 +1782,16 @@ $server->register('WSEditUserWithPicture',              // method name
 );
 
 // Define the method WSEditUserWithPicture
-function WSEditUserWithPicture($params) {
+function WSEditUserWithPicture($params)
+{
     global $_configuration;
 
-    if(!WSHelperVerifyKey($params)) {
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
+
+    $userManager = UserManager::getManager();
+    $userRepository = UserManager::getRepository();
 
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
@@ -1761,7 +1818,6 @@ function WSEditUserWithPicture($params) {
     $extra_list = $params['extra'];
     if (!empty($params['expiration_date'])) {
         $expiration_date = $params['expiration_date'];
-        $expirationDateStatement = " expiration_date = '" . Database::escape_string($expiration_date) . "', ";
     }
 
     if (!empty($params['password'])) {
@@ -1803,26 +1859,33 @@ function WSEditUserWithPicture($params) {
     if (!empty($r_username[0])) {
         return 0;
     }
-    // Edit lastname an firstname only if not empty
-    $sql = "UPDATE $table_user SET ";
+
+
+    /** @var User $user */
+    $user = $userRepository->find($user_id);
+
     if (!empty($lastname)) {
-        $sql .= " lastname='".Database::escape_string($lastname)."', ";
+        $user->setLastname($lastname);
+        //$sql .= " lastname='".Database::escape_string($lastname)."', ";
     }
     if (!empty($firstname)) {
-        $sql .= " firstname='".Database::escape_string($firstname)."', ";
+        $user->setFirstname($firstname);
+        //$sql .= " firstname='".Database::escape_string($firstname)."', ";
     }
-    $sql .= " username='".Database::escape_string($username)."',";
+    $user->setUsername($username);
+    //$sql .= " username='".Database::escape_string($username)."',";
     if (!is_null($password)) {
-        $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
-        $sql .= " password='".Database::escape_string($password)."',";
+        //$password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
+        //$sql .= " password='".Database::escape_string($password)."',";
+        $user->setPlainPassword($password);
     }
     if (!is_null($auth_source)) {
-        $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+        $user->setAuthSource($auth_source);
     }
 
     // Exception for admins in case no status is provided in WS call...
     $t_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-    $sqladmin = "SELECT id FROM $t_admin WHERE id = ".intval($user_id);
+    $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
     $resadmin = Database::query($sqladmin);
     $is_admin = Database::num_rows($resadmin);
 
@@ -1834,28 +1897,32 @@ function WSEditUserWithPicture($params) {
         $status = 1;
     }
 
-    $sql .=    "
-            email='".Database::escape_string($email)."',
-            status='".Database::escape_string($status)."',
-            official_code='".Database::escape_string($official_code)."',
-            phone='".Database::escape_string($phone)."',
-            picture_uri='".Database::escape_string($picture_uri)."',
-            $expirationDateStatement
-            active= ".intval($active).",
-            hr_dept_id=".intval($hr_dept_id);
+    if (!empty($expiration_date)) {
+        $expiration_date = new DateTime($expiration_date);
+    }
+
+    $user
+        ->setEmail($email)
+        ->setStatus($status)
+        ->setOfficialCode($official_code)
+        ->setPhone($phone)
+        ->setExpirationDate($expiration_date)
+        ->setHrDeptId($hr_dept_id)
+        ->setActive(true);
 
     if (!is_null($creator_id)) {
-        $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
+        $user->setCreatorId($creator_id);
+        //$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
     }
-    $sql .=    " WHERE id=$user_id";
-    $return = @Database::query($sql);
+
+    $userManager->updateUser($user, true);
 
     if (is_array($extra_list) && count($extra_list) > 0) {
         foreach ($extra_list as $extra) {
             $extra_field_name = $extra['field_name'];
             $extra_field_value = $extra['field_value'];
             // Save the external system's id into user_field_value table.
-            $res = UserManager::update_extra_field_value(
+            UserManager::update_extra_field_value(
                 $user_id,
                 $extra_field_name,
                 $extra_field_value
@@ -1863,7 +1930,7 @@ function WSEditUserWithPicture($params) {
         }
     }
 
-    return  $return;
+    return $user_id;
 }
 
 /* Register WSEditUsersPasswordCrypted function */
@@ -2545,14 +2612,14 @@ function WSCreateCourse($params)
                         $extra_field_name = $extra['field_name'];
                         $extra_field_value = $extra['field_value'];
                         // Save the external system's id into course_field_value table.
-                        $res = CourseManager::update_course_extra_field_value(
-                            $r_check_course[0],
+                        CourseManager::update_course_extra_field_value(
+                            $courseInfo['code'],
                             $extra_field_name,
                             $extra_field_value
                         );
                     }
                 }
-                $results[] = $r_check_course[0];
+                $results[] = $courseInfo['code'];
                 continue;
             } else {
                 $results[] = 0;
@@ -2587,15 +2654,15 @@ function WSCreateCourse($params)
         if (!empty($course_info)) {
             $course_code = $course_info['code'];
 
-            // Save new fieldlabel into course_field table
-            $field_id = CourseManager::create_course_extra_field(
+            // Save new field label into course_field table
+            CourseManager::create_course_extra_field(
                 $original_course_id_name,
                 1,
                 $original_course_id_name
             );
 
             // Save the external system's id into user_field_value table.
-            $res = CourseManager::update_course_extra_field_value(
+            CourseManager::update_course_extra_field_value(
                 $course_code,
                 $original_course_id_name,
                 $original_course_id_value
@@ -2606,13 +2673,13 @@ function WSCreateCourse($params)
                     $extra_field_name  = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save new fieldlabel into course_field table.
-                    $field_id = CourseManager::create_course_extra_field(
+                    CourseManager::create_course_extra_field(
                         $extra_field_name,
                         1,
                         $extra_field_name
                     );
                     // Save the external system's id into course_field_value table.
-                    $res = CourseManager::update_course_extra_field_value(
+                    CourseManager::update_course_extra_field_value(
                         $course_code,
                         $extra_field_name,
                         $extra_field_value
@@ -2627,7 +2694,7 @@ function WSCreateCourse($params)
 
     $count_results = count($results);
     $output = array();
-    for($i = 0; $i < $count_results; $i++) {
+    for ($i = 0; $i < $count_results; $i++) {
         $output[] = array(
             'original_course_id_value' => $orig_course_id_value[$i],
             'result' => $results[$i],
@@ -2772,7 +2839,7 @@ function WSCreateCourseByTitle($params)
                             visibility = '3'
                         WHERE id ='".$courseInfo['real_id']."'";
                 Database::query($sql);
-                $results[] = $r_check_course[0];
+                $results[] = $courseInfo['real_id'];
                 continue;
             } else {
                 $results[] = 0;
@@ -2802,22 +2869,22 @@ function WSCreateCourseByTitle($params)
             $params['tutor_name'] = $tutor_name;
             $params['course_language'] = $course_language;
             $params['user_id'] = api_get_user_id();
-            $params['visibility'] = $visibility;
+            //$params['visibility'] = $visibility;
 
-            $course_info = create_course($params);
+            $course_info = CourseManager::create_course($params);
 
             if (!empty($course_info)) {
                 $course_code = $course_info['code'];
 
                 // Save new fieldlabel into course_field table.
-                $field_id = CourseManager::create_course_extra_field(
+                CourseManager::create_course_extra_field(
                     $original_course_id_name,
                     1,
                     $original_course_id_name
                 );
 
                 // Save the external system's id into user_field_value table.
-                $res = CourseManager::update_course_extra_field_value(
+                CourseManager::update_course_extra_field_value(
                     $course_code,
                     $original_course_id_name,
                     $original_course_id_value
@@ -2828,13 +2895,13 @@ function WSCreateCourseByTitle($params)
                         $extra_field_name = $extra['field_name'];
                         $extra_field_value = $extra['field_value'];
                         // Save new fieldlabel into course_field table.
-                        $field_id = CourseManager::create_course_extra_field(
+                        CourseManager::create_course_extra_field(
                             $extra_field_name,
                             1,
                             $extra_field_name
                         );
                         // Save the external system's id into course_field_value table.
-                        $res = CourseManager::update_course_extra_field_value(
+                        CourseManager::update_course_extra_field_value(
                             $course_code,
                             $extra_field_name,
                             $extra_field_value
@@ -2991,6 +3058,7 @@ function WSEditCourse($params){
         }
 
         $course_code = $courseInfo['code'];
+        $courseId = $courseInfo['real_id'];
 
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT concat(lastname,'',firstname) as tutor_name
@@ -3795,7 +3863,7 @@ function WSEditSession($params)
         $id_coach = $session_param['user_id'];
         $extra_list = $session_param['extra'];
 
-        $id SessionManager::getSessionIdFromOriginalId(
+        $id = SessionManager::getSessionIdFromOriginalId(
             $original_session_id_value,
             $original_session_id_name
         );
@@ -4145,8 +4213,9 @@ function WSSubscribeUserToCourse($params) {
                 // Course was not found
                 $result['result'] = 0;
             } else {
-                if ($debug) error_log('WSSubscribeUserToCourse course_code: '.$course_code);
                 $course_code = $courseInfo['code'];
+
+                if ($debug) error_log('WSSubscribeUserToCourse course_code: '.$course_code);
                 if (!CourseManager::add_user_to_course($user_id, $course_code, $status)) {
                     $result['result'] = 0;
                 }
@@ -4658,19 +4727,19 @@ function WSSuscribeUsersToSession($params)
 
         $orig_user_id_value[] = implode(',', $usersList);
 
-        if ($id_session!= strval(intval($id_session))) {
+        if ($sessionId != strval(intval($sessionId))) {
             $results[] = 0;
             continue;
         }
 
         $sql = "SELECT user_id FROM $tbl_session_rel_user
-                WHERE session_id='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+                WHERE session_id='$sessionId' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
         $result = Database::query($sql);
         $existingUsers = array();
         while($row = Database::fetch_array($result)){
             $existingUsers[] = $row['user_id'];
         }
-        $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id='$id_session'";
+        $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id='$sessionId'";
         $result=Database::query($sql);
         $CourseList = array();
 
@@ -4688,7 +4757,7 @@ function WSSuscribeUsersToSession($params)
                 if (!in_array($enreg_user, $existingUsers)) {
                     $enreg_user = Database::escape_string($enreg_user);
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
-                            VALUES('$id_session', '$enreg_course', '$enreg_user')";
+                            VALUES('$sessionId', '$enreg_course', '$enreg_user')";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result)) {
                         $nbr_users++;
@@ -4698,7 +4767,7 @@ function WSSuscribeUsersToSession($params)
             // count users in this session-course relation
             $sql = "SELECT COUNT(user_id) as nbUsers
                     FROM $tbl_session_rel_course_rel_user
-                    WHERE session_id = '$id_session' AND c_id='$enreg_course'";
+                    WHERE session_id = '$sessionId' AND c_id='$enreg_course'";
             $rs = Database::query($sql);
             list($nbr_users) = Database::fetch_array($rs);
             // update the session-course relation to add the users total
@@ -4713,15 +4782,15 @@ function WSSuscribeUsersToSession($params)
             $enreg_user = Database::escape_string($enreg_user);
             $nbr_users++;
             $sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id)
-                    VALUES ('$id_session','$enreg_user')";
+                    VALUES ('$sessionId','$enreg_user')";
             Database::query($sql);
         }
 
         // update number of users in the session
         $nbr_users = count($usersList);
-        $sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
+        $sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$sessionId' ";
         $result = Database::query($sql);
-        $return = Database::affected_rows($result);
+        Database::affected_rows($result);
         $results[] = 1;
         continue;
 

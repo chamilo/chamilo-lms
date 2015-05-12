@@ -178,7 +178,15 @@ class Login
     {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $id = intval($id);
-        $sql = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, username AS loginName, password, email FROM " . $tbl_user . " WHERE user_id=$id";
+        $sql = "SELECT
+                    user_id AS uid,
+                    lastname AS lastName,
+                    firstname AS firstName,
+                    username AS loginName,
+                    password,
+                    email
+                FROM " . $tbl_user . "
+                WHERE user_id = $id";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
 
@@ -191,9 +199,9 @@ class Login
         if (self::get_secret_word($user['email']) == $secret) {
             // OK, secret word is good. Now change password and mail it.
             $user['password'] = api_generate_password();
-            $crypted = api_get_encrypted_password($user['password']);
-            $sql = "UPDATE " . $tbl_user . " SET password='$crypted' WHERE user_id = $id";
-            Database::query($sql);
+
+            UserManager::updatePassword($id, $user['password']);
+
             return self::send_password_to_user($user, $by_username);
         } else {
             return get_lang('NotAllowed');

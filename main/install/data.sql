@@ -1659,5 +1659,6 @@ VALUES
 ('allow_tutors_to_assign_students_to_session','true','Yes'),
 ('allow_tutors_to_assign_students_to_session','false','No');
 
+UPDATE user SET username_canonical = username;
 
 UPDATE settings_current SET selected_value = '1.10.0.39' WHERE variable = 'chamilo_database_version';

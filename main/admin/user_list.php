@@ -393,8 +393,8 @@ function get_number_of_users() {
 function get_user_data($from, $number_of_items, $column, $direction) {
     $sql = prepare_user_sql_query(false);
 
+    /* @todo will not work because now we use the salt field
     $checkPassStrength = isset($_GET['check_easy_passwords']) && $_GET['check_easy_passwords'] == 1 ? true : false;
-
     if ($checkPassStrength) {
         $easyPasswordList = api_get_easy_password_list();
         $easyPasswordList = array_map('api_get_encrypted_password', $easyPasswordList);
@@ -402,7 +402,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
         $easyPassword = implode("' OR password LIKE '", $easyPasswordList);
 
         $sql .= "AND password LIKE '$easyPassword' ";
-    }
+    }*/
 
     if (!in_array($direction, array('ASC','DESC'))) {
     	$direction = 'ASC';

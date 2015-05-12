@@ -10,6 +10,9 @@
 * @package chamilo.auth
 */
 
+use Chamilo\UserBundle\Entity\User;
+use ChamiloSession as Session;
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -19,7 +22,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $this_section = SECTION_MYPROFILE;
 }
 
-$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
+//$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 
 $_SESSION['this_section'] = $this_section;
 
@@ -185,9 +188,6 @@ if (is_profile_editable() && api_get_setting('openid_authentication') == 'true')
         $form->freeze('openid');
     }
     $form->applyFilter('openid', 'trim');
-    //if (api_get_setting('registration', 'openid') == 'true') {
-    //    $form->addRule('openid', get_lang('ThisFieldIsRequired'), 'required');
-    //}
 }
 
 //    PHONE
@@ -319,15 +319,6 @@ if (is_platform_authentication() &&
     }
 }
 
-// EXTRA FIELDS
-//$extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-/*$return_params = UserManager::set_extra_fields_in_form(
-    $form,
-    $extra_data,
-    false,
-    api_get_user_id()
-);*/
-
 $extraField = new ExtraField('user');
 $return = $extraField->addElements($form, api_get_user_id());
 
@@ -417,22 +408,6 @@ function upload_user_production($user_id)
 
 /**
  * Check current user's current password
- * @param    char    password
- * @return    bool true o false
- * @uses Gets user ID from global variable
- */
-function check_user_password($password) {
-    $user_id = api_get_user_id();
-    if ($user_id != strval(intval($user_id)) || empty($password)) { return false; }
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $password = api_get_encrypted_password($password);
-    $password = Database::escape_string($password);
-    $sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND password='".$password."'";
-    $result = Database::query($sql_password);
-    return Database::num_rows($result) != 0;
-}
-/**
- * Check current user's current password
  * @param    char    email
  * @return    bool true o false
  * @uses Gets user ID from global variable
@@ -450,55 +425,44 @@ function check_user_email($email) {
     return Database::num_rows($result) != 0;
 }
 
-/*        MAIN CODE */
 $filtered_extension = false;
-$update_success = false;
-$upload_picture_success = false;
-$upload_production_success = false;
-$msg_fail_changue_email = false;
-$msg_is_not_password = false;
-
-if (is_platform_authentication()) {
-    if (!empty($_SESSION['change_email'])) {
-        $msg_fail_changue_email= ($_SESSION['change_email'] == 'success');
-        unset($_SESSION['change_email']);
-    } elseif (!empty($_SESSION['is_not_password'])) {
-        $msg_is_not_password = ($_SESSION['is_not_password'] == 'success');
-        unset($_SESSION['is_not_password']);
-    } elseif (!empty($_SESSION['profile_update'])) {
-        $update_success = ($_SESSION['profile_update'] == 'success');
-        unset($_SESSION['profile_update']);
-    } elseif (!empty($_SESSION['image_uploaded'])) {
-        $upload_picture_success = ($_SESSION['image_uploaded'] == 'success');
-        unset($_SESSION['image_uploaded']);
-    } elseif (!empty($_SESSION['production_uploaded'])) {
-        $upload_production_success = ($_SESSION['production_uploaded'] == 'success');
-        unset($_SESSION['production_uploaded']);
-    }
-}
 
 if ($form->validate()) {
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
 
+    $user = Usermanager::getRepository()->find(api_get_user_id());
+
     // set password if a new one was provided
-    if (!empty($user_data['password0'])) {
-        if (check_user_password($user_data['password0'])) {
-            if (!empty($user_data['password1'])) {
-                $password = $user_data['password1'];
-            }
+    $validPassword = false;
+    $passwordWasChecked = false;
+    if ($user &&
+        !empty($user_data['password0']) &&
+        !empty($user_data['password1'])
+    ) {
+        $passwordWasChecked = true;
+        $validPassword = UserManager::isPasswordValid(
+            $user_data['password0'],
+            $user
+        );
+
+        if ($validPassword) {
+            $password = $user_data['password1'];
         } else {
-            $wrong_current_password = true;
-            $_SESSION['is_not_password'] = 'success';
+            Display::addFlash(
+                Display:: return_message(
+                    get_lang('CurrentPasswordEmptyOrIncorrect'),
+                    'warning',
+                    false
+                )
+            );
         }
-    }
-    if (empty($user_data['password0']) && !empty($user_data['password1'])) {
-        $wrong_current_password = true;
-        $_SESSION['is_not_password'] = 'success';
     }
 
     $allow_users_to_change_email_with_no_password = true;
-    if (is_platform_authentication() && api_get_setting('allow_users_to_change_email_with_no_password') == 'false') {
+    if (is_platform_authentication() &&
+        api_get_setting('allow_users_to_change_email_with_no_password') == 'false'
+    ) {
         $allow_users_to_change_email_with_no_password = false;
     }
 
@@ -507,16 +471,23 @@ if ($form->validate()) {
         if ($allow_users_to_change_email_with_no_password) {
             if (!check_user_email($user_data['email'])) {
                 $changeemail = $user_data['email'];
-                //$_SESSION['change_email'] = 'success';
             }
         } else {
-            //Normal behaviour
-            if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && !$wrong_current_password) {
+            // Normal behaviour
+            if (!check_user_email($user_data['email']) && $validPassword) {
                 $changeemail = $user_data['email'];
             }
 
-            if (!check_user_email($user_data['email']) && empty($user_data['password0'])){
-                $_SESSION['change_email'] = 'success';
+            if (!check_user_email($user_data['email']) &&
+                empty($user_data['password0'])
+            ){
+                Display::addFlash(
+                    Display:: return_message(
+                        get_lang('ToChangeYourEmailMustTypeYourPassword'),
+                        'error',
+                        false
+                    )
+                );
             }
         }
     }
@@ -531,7 +502,14 @@ if ($form->validate()) {
 
         if ($new_picture) {
             $user_data['picture_uri'] = $new_picture;
-            $_SESSION['image_uploaded'] = 'success';
+
+            Display::addFlash(
+                Display:: return_message(
+                    get_lang('PictureUploaded'),
+                    'normal',
+                    false
+                )
+            );
         }
     } elseif (!empty($user_data['remove_picture'])) {
         // remove existing picture if asked
@@ -553,7 +531,9 @@ if ($form->validate()) {
             );
         }
         $form->removeElement('productions_list');
-        $file_deleted = true;
+        Display::addFlash(
+            Display:: return_message(get_lang('FileDeleted'), 'normal', false)
+        );
     }
 
     // upload production if a new one is provided
@@ -564,13 +544,26 @@ if ($form->validate()) {
             // upload_user_production() returned false, but it's true in most cases
             $filtered_extension = true;
         } else {
-            $_SESSION['production_uploaded'] = 'success';
+            Display::addFlash(
+                Display:: return_message(
+                    get_lang('ProductionUploaded'),
+                    'normal',
+                    false
+                )
+            );
         }
     }
 
     // remove values that shouldn't go in the database
-    unset($user_data['password0'],$user_data['password1'], $user_data['password2'], $user_data['MAX_FILE_SIZE'],
-    $user_data['remove_picture'], $user_data['apply_change'], $user_data['email'] );
+    unset(
+        $user_data['password0'],
+        $user_data['password1'],
+        $user_data['password2'],
+        $user_data['MAX_FILE_SIZE'],
+        $user_data['remove_picture'],
+        $user_data['apply_change'],
+        $user_data['email']
+    );
 
     // Following RFC2396 (http://www.faqs.org/rfcs/rfc2396.html), a URI uses ':' as a reserved character
     // we can thus ensure the URL doesn't contain any scheme name by searching for ':' in the string
@@ -592,7 +585,7 @@ if ($form->validate()) {
     //Adding missing variables
 
     $available_values_to_modify = array();
-    foreach($profile_list as $key => $status) {
+    foreach ($profile_list as $key => $status) {
         if ($status == 'true') {
             switch($key) {
                 case 'login':
@@ -626,9 +619,6 @@ if ($form->validate()) {
         if (substr($key, 0, 6) == 'extra_') { //an extra field
            continue;
         } elseif (strpos($key, 'remove_extra_') !== false) {
-            /*$extra_value = Security::filter_filename(urldecode(key($value)));
-            // To remove from user_field_value and folder
-            UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);*/
         } else {
             if (in_array($key, $available_values_to_modify)) {
                 $sql .= " $key = '".Database::escape_string($value)."',";
@@ -636,17 +626,19 @@ if ($form->validate()) {
         }
     }
 
-    //change email
+    $changePassword = false;
+    // Change email
     if ($allow_users_to_change_email_with_no_password) {
         if (isset($changeemail) && in_array('email', $available_values_to_modify)) {
-            $sql .= " email = '".Database::escape_string($changeemail)."',";
+            $sql .= " email = '".Database::escape_string($changeemail)."' ";
         }
         if (isset($password) && in_array('password', $available_values_to_modify)) {
-            $password = api_get_encrypted_password($password);
-            $sql .= " password = '".Database::escape_string($password)."'";
+            $changePassword = true;
+            /*$password = api_get_encrypted_password($password);
+            $sql .= " password = '".Database::escape_string($password)."'";*/
         } else {
             // remove trailing , from the query we have so far
-            $sql = rtrim($sql, ',');
+            //$sql = rtrim($sql, ',');
         }
     } else {
         if (isset($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
@@ -654,66 +646,55 @@ if ($form->validate()) {
         } else {
             if (isset($password) && in_array('password', $available_values_to_modify)) {
                 if (isset($changeemail) && in_array('email', $available_values_to_modify)) {
-                    $sql .= " email = '".Database::escape_string($changeemail)."',";
+                    $sql .= " email = '".Database::escape_string($changeemail)."' ";
                 }
-                $password = api_get_encrypted_password($password);
-                $sql .= " password = '".Database::escape_string($password)."'";
+                $changePassword = true;
+                /*$password = api_get_encrypted_password($password);
+                $sql .= " password = '".Database::escape_string($password)."'";*/
             } else {
                 // remove trailing , from the query we have so far
-                $sql = rtrim($sql, ',');
+                //$sql = rtrim($sql, ',');
             }
         }
     }
 
-    if (api_get_setting('profile', 'officialcode') == 'true' && isset($user_data['official_code'])) {
+    $sql = rtrim($sql, ',');
+
+    if ($changePassword && !empty($password)) {
+        UserManager::updatePassword(api_get_user_id(), $password);
+    }
+
+    if (api_get_setting('profile', 'officialcode') == 'true' &&
+        isset($user_data['official_code'])
+    ) {
         $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
     }
 
     $sql .= " WHERE user_id  = '".api_get_user_id()."'";
     Database::query($sql);
 
-    $extraField = new ExtraFieldValue('user');
-    $extraField->saveFieldValues($user_data);
-
-    // User tag process
-    //1. Deleting all user tags
-    //$list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(UserManager::USER_FIELD_TYPE_TAG);
-
-    /*if (is_array($list_extra_field_type_tag) && count($list_extra_field_type_tag)>0) {
-        foreach ($list_extra_field_type_tag as $id) {
-            UserManager::delete_user_tags(api_get_user_id(), $id);
+    if ($passwordWasChecked == false) {
+        Display::addFlash(
+            Display:: return_message(get_lang('ProfileReg'), 'normal', false)
+        );
+    } else {
+        if ($validPassword) {
+            Display::addFlash(
+                Display:: return_message(get_lang('ProfileReg'), 'normal', false)
+            );
         }
     }
 
-    //2. Update the extra fields and user tags if available
-    if (is_array($extras) && count($extras)> 0) {
-        foreach ($extras as $key => $value) {
-            //3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
-            // For array $value -> if exists key 'tmp_name' then must not be empty
-            // This avoid delete from user field value table when doesn't upload a file
-            if (is_array($value)) {
-                if (array_key_exists('tmp_name', $value) && empty($value['tmp_name'])) {
-                    //Nothing to do
-                } else {
-                    if (array_key_exists('tmp_name', $value)) {
-                        $value['tmp_name'] = Security::filter_filename($value['tmp_name']);
-                    }
-                    if (array_key_exists('name', $value)) {
-                        $value['name'] = Security::filter_filename($value['name']);
-                    }
-                    UserManager::update_extra_field_value($user_id, $key, $value);
-                }
-            } else {
-                UserManager::update_extra_field_value($user_id, $key, $value);
-            }
-        }
-    }*/
+    $extraField = new ExtraFieldValue('user');
+    $extraField->saveFieldValues($user_data);
+
+    $userInfo = api_get_user_info();
+    Session::write('_user', $userInfo);
 
     // re-init the system to take new settings into account
-    $_SESSION['_user']['uidReset'] = true;
-    $_SESSION['noredirection'] = true;
-    $_SESSION['profile_update'] = 'success';
-    $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');
+    //$_SESSION['_user']['uidReset'] = true;
+    //$_SESSION['noredirection'] = true;
+    $url = api_get_self();
     header("Location: ".$url);
     exit;
 }
@@ -725,46 +706,27 @@ if (api_get_setting('allow_social_tool') != 'true') {
     if (api_get_setting('extended_profile') == 'true') {
         $actions .= '<div class="actions">';
 
-        if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-            $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
+        if (api_get_setting('allow_social_tool') == 'true' &&
+            api_get_setting('allow_message_tool') == 'true'
+        ) {
+            $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
+                Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
         }
         if (api_get_setting('allow_message_tool') == 'true') {
-            $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
+            $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+                Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
         }
         $show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
 
         if (isset($_GET['type']) && $_GET['type'] == 'extended') {
-            $actions .= '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.png', get_lang('EditNormalProfile'),'',16).'</a>';
+            $actions .= '<a href="profile.php?type=reduced'.$show.'">'.
+                Display::return_icon('edit.png', get_lang('EditNormalProfile'),'',16).'</a>';
         } else {
-            $actions .= '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.png', get_lang('EditExtendProfile'),'',16).'</a>';
+            $actions .= '<a href="profile.php?type=extended'.$show.'">'.
+                Display::return_icon('edit.png', get_lang('EditExtendProfile'),'',16).'</a>';
         }
         $actions .= '</div>';
     }
-}
-
-if (!empty($file_deleted)) {
-    Display::addFlash(Display :: return_message(get_lang('FileDeleted'), 'normal', false));
-} elseif (!empty($update_success)) {
-    $message = get_lang('ProfileReg');
-
-    if ($upload_picture_success) {
-        $message .= '<br /> '.get_lang('PictureUploaded');
-    }
-
-    if ($upload_production_success) {
-        $message.='<br />'.get_lang('ProductionUploaded');
-    }
-    Display::addFlash(Display :: return_message($message, 'normal', false));
-}
-
-if (!empty($msg_fail_changue_email)){
-    $errormail=get_lang('ToChangeYourEmailMustTypeYourPassword');
-    Display::addFlash(Display :: return_message($errormail, 'error', false));
-}
-
-if (!empty($msg_is_not_password)){
-    $warning_msg = get_lang('CurrentPasswordEmptyOrIncorrect');
-    Display::addFlash(Display :: return_message($warning_msg, 'warning', false));
 }
 
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;

@@ -3,6 +3,10 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
 
 /**
  *
@@ -32,6 +36,8 @@ class UserManager
     const USER_FIELD_TYPE_FILE = 13;
     const USER_FIELD_TYPE_MOBILE_PHONE_NUMBER  = 14;
 
+    private static $encryptionMethod;
+
     /**
      * The default constructor only instanciates an empty user object
      * @assert () === null
@@ -39,6 +45,149 @@ class UserManager
     public function __construct()
     {
 
+    }
+
+    /**
+     * Repository is use to query the DB, selects, etc
+     * @return Chamilo\UserBundle\Entity\Repository\UserRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloUserBundle:User');
+    }
+
+    /**
+     * Create/update/delete methods are available in the UserManager
+     * (based in the Sonata\UserBundle\Entity\UserManager)
+     *
+     * @return Chamilo\UserBundle\Entity\Manager\UserManager
+     */
+    public static function getManager()
+    {
+        $encoderFactory = self::getEncoderFactory();
+
+        $userManager = new Chamilo\UserBundle\Entity\Manager\UserManager(
+            $encoderFactory,
+            new \FOS\UserBundle\Util\Canonicalizer(),
+            new \FOS\UserBundle\Util\Canonicalizer(),
+            Database::getManager(),
+            'Chamilo\\UserBundle\\Entity\\User'
+        );
+
+        return $userManager;
+    }
+
+    /**
+     * @param string $encryptionMethod
+     */
+    public static function setPasswordEncryption($encryptionMethod)
+    {
+        self::$encryptionMethod = $encryptionMethod;
+    }
+
+    /**
+     * @return bool|mixed
+     */
+    public static function getPasswordEncryption()
+    {
+        $encryptionMethod = self::$encryptionMethod;
+        if (empty($encryptionMethod)) {
+            $encryptionMethod = api_get_configuration_value('password_encryption');
+        }
+
+        return $encryptionMethod;
+    }
+
+    /**
+     * @return EncoderFactory
+     */
+    private static function getEncoderFactory()
+    {
+        $encryption = self::getPasswordEncryption();
+        switch ($encryption) {
+            case 'none':
+                $defaultEncoder = new PlaintextPasswordEncoder();
+                break;
+            case 'sha1':
+            case 'md5':
+                $defaultEncoder = new MessageDigestPasswordEncoder($encryption, false, 1);
+                break;
+            case 'bcrypt':
+                $defaultEncoder = new BCryptPasswordEncoder(4);
+        }
+
+        $encoders = array(
+            'Chamilo\\UserBundle\\Entity\\User' => $defaultEncoder
+        );
+
+        $encoderFactory = new EncoderFactory($encoders);
+
+        return $encoderFactory;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return \Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface
+     */
+    private static function getEncoder(User $user)
+    {
+        $encoderFactory = self::getEncoderFactory();
+
+        return $encoderFactory->getEncoder($user);
+    }
+
+    /**
+     * Validates the password
+     * @param string $password
+     * @param User   $user
+     *
+     * @return bool
+     */
+    public static function isPasswordValid($password, User $user)
+    {
+        $encoder = self::getEncoder($user);
+
+        $validPassword = $encoder->isPasswordValid(
+            $user->getPassword(),
+            $password,
+            $user->getSalt()
+        );
+
+        return $validPassword;
+    }
+
+    /**
+     * @param string $raw
+     * @param User   $user
+     *
+     * @return bool
+     */
+    public static function encryptPassword($raw, User $user)
+    {
+        $encoder = self::getEncoder($user);
+
+        $encodedPassword = $encoder->encodePassword(
+            $raw,
+            $user->getSalt()
+        );
+
+        return $encodedPassword;
+    }
+
+    /**
+     * @param int $userId
+     * @param string $password
+     *
+     */
+    public static function updatePassword($userId, $password)
+    {
+        $repository = self::getRepository();
+        /** @var User $user */
+        $user = $repository->find($userId);
+        $userManager = self::getManager();
+        $user->setPlainPassword($password);
+        $userManager->updateUser($user, true);
     }
 
     /**
@@ -152,20 +301,6 @@ class UserManager
             return api_set_failure('login-pass already taken');
         }
 
-        if (empty($encrypt_method)) {
-            $password = api_get_encrypted_password($password);
-        } else {
-            if ($_configuration['password_encryption'] === $encrypt_method) {
-                if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
-                    return api_set_failure('encrypt_method invalid');
-                } else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
-                    return api_set_failure('encrypt_method invalid');
-                }
-            } else {
-                return api_set_failure('encrypt_method invalid');
-            }
-        }
-
         $currentDate = api_get_utc_datetime();
         $now = new DateTime($currentDate);
 
@@ -173,8 +308,8 @@ class UserManager
             // Default expiration date
             // if there is a default duration of a valid account then
             // we have to change the expiration_date accordingly
-            $expirationDate = new DateTime($currentDate);
             if (api_get_setting('account_valid_duration') != '') {
+                $expirationDate = new DateTime($currentDate);
                 $days = intval(api_get_setting('account_valid_duration'));
                 $expirationDate->modify('+'.$days.' day');
             }
@@ -183,12 +318,16 @@ class UserManager
             $expirationDate = new \DateTime($expirationDate);
         }
 
-        $user = new User();
-        $user->setLastname($lastName)
+        $userManager = self::getManager();
+
+        /** @var User $user */
+        $user = $userManager->createUser();
+        $user
+            ->setLastname($lastName)
             ->setFirstname($firstName)
             ->setUsername($loginName)
             ->setStatus($status)
-            ->setPassword($password)
+            ->setPlainPassword($password)
             ->setEmail($email)
             ->setOfficialCode($official_code)
             ->setPictureUri($picture_uri)
@@ -197,13 +336,14 @@ class UserManager
             ->setPhone($phone)
             ->setLanguage($language)
             ->setRegistrationDate($now)
-            ->setExpirationDate($expirationDate)
             ->setHrDeptId($hr_dept_id)
             ->setActive($active);
 
-        $manager = Database::getManager();
-        $manager->persist($user);
-        $manager->flush();
+        if (!empty($expirationDate)) {
+            $user->setExpirationDate($expirationDate);
+        }
+
+        $userManager->updateUser($user, true);
         $userId = $user->getId();
 
         if (!empty($userId)) {
@@ -648,7 +788,9 @@ class UserManager
         global $_configuration;
         $original_password = $password;
 
-        if (empty($user_id)) { return false; }
+        if (empty($user_id)) {
+            return false;
+        }
         $user_info = api_get_user_info($user_id, false, true);
 
         if ($reset_password == 0) {
@@ -665,25 +807,29 @@ class UserManager
             $auth_source = $auth_source;
         }
 
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return false;
-        if ($user_id === false)
+        }
+
+        if ($user_id === false) {
             return false;
+        }
 
         //Checking the user language
         $languages = api_get_languages();
         if (!in_array($language, $languages['folder'])) {
             $language = api_get_setting('platformLanguage');
         }
+
         $change_active = 0;
         if ($user_info['active'] != $active) {
             $change_active = 1;
         }
 
-        $em = Database::getManager();
-        /** @var Chamilo\UserBundle\Entity\User $user */
+        $userManager = self::getManager();
 
-        $user = $em->getRepository('ChamiloUserBundle:User')->find($user_id);
+        /** @var Chamilo\UserBundle\Entity\User $user */
+        $user = self::getRepository()->find($user_id);
 
         if (empty($user)) {
             return false;
@@ -693,6 +839,7 @@ class UserManager
             $expiration_date = api_get_utc_datetime($expiration_date);
             $expiration_date = new \DateTime($expiration_date);
         }
+
         $user
             ->setLastname($lastname)
             ->setFirstname($firstname)
@@ -710,25 +857,10 @@ class UserManager
         ;
 
         if (!is_null($password)) {
-            if ($encrypt_method == '') {
-                $password = api_get_encrypted_password($password);
-            } else {
-                if ($_configuration['password_encryption'] === $encrypt_method) {
-                    if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
-                        return api_set_failure('encrypt_method invalid');
-                    } else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
-                        return api_set_failure('encrypt_method invalid');
-                    }
-                } else {
-                    return api_set_failure('encrypt_method invalid');
-                }
-            }
-            //$sql .= " password='".Database::escape_string($password)."',";
-            $user->setPassword($password);
+            $user->setPlainPassword($password);
         }
 
-        $em->persist($user);
-        $em->flush();
+        $userManager->updateUser($user, true);
 
         if ($change_active == 1) {
             if ($active == 1) {

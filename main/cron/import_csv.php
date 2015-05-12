@@ -463,14 +463,18 @@ class ImportCsv
     {
         $data = Import::csvToArray($file);
 
+        $userRepository = UserManager::getRepository();
+
         /*
          * Another users import.
         Unique identifier: official code and username . ok
         Password should never get updated. ok
-        If an update should need to occur (because it changed in the .csv), we’ll want that logged. We will handle this manually in that case.
+        If an update should need to occur (because it changed in the .csv),
+        we’ll want that logged. We will handle this manually in that case.
         All other fields should be updateable, though passwords should of course not get updated. ok
         If a user gets deleted (not there anymore),
-        He should be set inactive one year after the current date. So I presume you’ll just update the expiration date. We want to grant access to courses up to a year after deletion.
+        He should be set inactive one year after the current date.
+        So I presume you’ll just update the expiration date. We want to grant access to courses up to a year after deletion.
          */
 
         if (!empty($data)) {
@@ -526,7 +530,6 @@ class ImportCsv
                         $this->logger->addError("Students - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
                 } else {
-
                     if (empty($userInfo)) {
                         $this->logger->addError("Students - Can't update user :".$row['username']);
                         continue;
@@ -557,19 +560,27 @@ class ImportCsv
                             }
 
                             // 2. Condition
-                            if (!in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                            if (!in_array($userInfo['email'], $avoidUsersWithEmail) &&
+                                !in_array($row['email'], $avoidUsersWithEmail)
+                            ) {
                                 $email = $userInfo['email'];
                             }
 
                             // 3. Condition
-                            if (in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                            if (in_array($userInfo['email'], $avoidUsersWithEmail) &&
+                                !in_array($row['email'], $avoidUsersWithEmail)
+                            ) {
                                 $email = $row['email'];
                             }
 
                             // Blocking password update
                             $avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
 
-                            if ($userInfo['password'] != api_get_encrypted_password($row['password']) && in_array($row['password'], $avoidUsersWithPassword)) {
+                            $user = $userRepository->find($userInfo['user_id']);
+
+                            if ($userInfo['password'] != UserManager::encryptPassword($row['password'], $user) &&
+                                in_array($row['password'], $avoidUsersWithPassword)
+                            ) {
                                 $this->logger->addInfo("Students - User password is not updated: ".$row['username']." because the avoid conditions (password).");
                                 $password = null;
                                 $resetPassword = 0; // disallow password change

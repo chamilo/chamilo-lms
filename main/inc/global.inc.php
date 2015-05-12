@@ -58,8 +58,13 @@ if (!isset($GLOBALS['_configuration'])) {
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/api.lib.php';
+$passwordEncryption = api_get_configuration_value('password_encryption');
 
-//Check the PHP version
+if ($passwordEncryption == 'bcrypt') {
+    require_once __DIR__.'/../../vendor/ircmaxell/password-compat/lib/password.php';
+}
+
+// Check the PHP version
 api_check_php_version($includePath.'/');
 
 // Specification for usernames:

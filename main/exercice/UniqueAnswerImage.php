@@ -26,7 +26,7 @@ class UniqueAnswerImage extends UniqueAnswer
         $objExercise = $_SESSION['objExercise'];
 
         $editorConfig = array(
-            'ToolbarSet' => 'UniqueAnswerImage',
+            'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
             'Height' => '125'
         );
@@ -278,8 +278,8 @@ class UniqueAnswerImage extends UniqueAnswer
         $numberAnswers = $form->getSubmitValue('nb_answers');
 
         for ($i = 1; $i <= $numberAnswers; $i++) {
-            $answer = trim($form->getSubmitValue('answer[' . $i . ']'));
-            $comment = trim($form->getSubmitValue('comment[' . $i . ']'));
+            $answer = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('answer[' . $i . ']')));
+            $comment = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('comment[' . $i . ']')));
             $weighting = trim($form->getSubmitValue('weighting[' . $i . ']'));
 
             $scenario = $form->getSubmitValue('scenario');

@@ -309,7 +309,7 @@ HTML;
                             }
                         } else {
                             $s .= '<div id="answer' . $questionId . $numAnswer . '" '
-                                . 'class="exercise-unique-answer-image col-xs-6 col-md-4" style="text-align: center">';
+                                . 'class="exercise-unique-answer-image col-xs-6 col-md-3" style="text-align: center">';
                         }
                     }
 

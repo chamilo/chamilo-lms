@@ -302,7 +302,7 @@ HTML;
                         if ($show_comment) {
                             if (empty($comment)) {
                                 $s .= '<div id="answer' . $questionId . $numAnswer . '" '
-                                    . 'class="exercise-unique-answer-image col-xs-6" style="text-align: center">';
+                                    . 'class="exercise-unique-answer-image" style="text-align: center">';
                             } else {
                                 $s .= '<div id="answer' . $questionId . $numAnswer . '" '
                                     . 'class="exercise-unique-answer-image col-xs-6 col-sm-12" style="text-align: center">';

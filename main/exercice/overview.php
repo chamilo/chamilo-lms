@@ -76,7 +76,7 @@ if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
         api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id
     );
 }
-$iconExercise=Display::return_icon('test-quiz.png',null,array(),ICON_SIZE_MEDIUM);
+$iconExercise = Display::return_icon('test-quiz.png', null, array(), ICON_SIZE_MEDIUM);
 // Exercise name.
 $html .= Display::page_header($iconExercise.$objExercise->name.' '.$edit_link);
 

@@ -112,7 +112,11 @@ if ($_POST AND empty($_REQUEST['lp_name'])) {
     Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
 }
 
-$form = new FormValidator('lp_add', 'post', 'lp_controller.php');
+$form = new FormValidator(
+    'lp_add',
+    'post',
+    api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq()
+);
 
 // Form title
 $form->addElement('header', null, get_lang('AddLpToStart'));

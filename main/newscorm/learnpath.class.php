@@ -3570,6 +3570,9 @@ class learnpath
                     }
                     // Formatting AICC HACP append URL.
                     $aicc_append = '?aicc_sid=' . urlencode(session_id()) . '&aicc_url=' . urlencode(api_get_path(WEB_CODE_PATH) . 'newscorm/aicc_hacp.php') . '&';
+                    if (!empty($lp_item_params)) {
+                        $aicc_append .= $lp_item_params . '&';
+                    }
                     if ($lp_item_type != 'dir') {
                         // Quite complex here:
                         // We want to make sure 'http://' (and similar) links can

@@ -294,12 +294,12 @@ class aicc extends learnpath
             $parent = 0; // TODO: Deal with the parent.
             $previous = 0;
             $prereq = $oAu->prereq_string;
-            $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order) " .
+            $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,parameters) " .
                     "VALUES " .
                     "($course_id, $lp_id, 'au','".$oAu->identifier."','".$title."'," .
                     "'$path',0,100, $value_add" .
                     "$parent, $previous, 0, " .
-                    "'$prereq', 0" .
+                    "'$prereq', 0,'".(!empty($oAu->parameters)?Database::escape_string($oAu->parameters):'')."'" .
                     ")";
             Database::query($sql_item);
             if ($this->debug > 1) { error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : ', 0); }

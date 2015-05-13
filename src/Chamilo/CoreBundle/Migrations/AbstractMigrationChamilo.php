@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 
 /**
  * Class AbstractMigrationChamilo
+ *
  * @package Chamilo\CoreBundle\Migrations
  */
 abstract class AbstractMigrationChamilo extends AbstractMigration

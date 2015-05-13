@@ -1885,27 +1885,15 @@ function installSettings(
  * @param string $dbUsernameForm
  * @param string $dbPassForm
  * @param string $dbHostForm
- * @param $manager
+ * @param EntityManager $manager
  * @throws \Doctrine\DBAL\DBALException
  */
-function migrate($chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager)
+function migrate($chamiloVersion, EntityManager $manager)
 {
     $debug = true;
+    $connection = $manager->getConnection();
 
-    // Config doctrine migrations
-    $db = \Doctrine\DBAL\DriverManager::getConnection(array(
-        'dbname' => $dbNameForm,
-        'user' => $dbUsernameForm,
-        'password' => $dbPassForm,
-        'host' => $dbHostForm,
-        'driver' => 'pdo_mysql',
-        'charset' => 'utf8',
-        'driverOptions' => array(
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
-        )
-    ));
-
-    $config = new \Doctrine\DBAL\Migrations\Configuration\Configuration($db);
+    $config = new \Doctrine\DBAL\Migrations\Configuration\Configuration($connection);
 
     // Table name that will store migrations log (will be created automatically,
     // default name is: doctrine_migration_versions)
@@ -1918,11 +1906,11 @@ function migrate($chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $db
     $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
 
     $migration = new \Doctrine\DBAL\Migrations\Migration($config);
-    $migrations = $config->getMigrations();
+    $versions = $config->getMigrations();
 
-    /** @var Doctrine\DBAL\Migrations\Version $migration */
-    foreach ($migrations as $migrationItem) {
-        $migrationItem->getMigration()->setEntityManager($manager);
+    /** @var Doctrine\DBAL\Migrations\Version $migrationItem */
+    foreach ($versions as $version) {
+        $version->getMigration()->setEntityManager($manager);
     }
 
     $to = null;

@@ -118,6 +118,12 @@ if (!empty($_POST['old_version'])) {
 
 require_once __DIR__.'/version.php';
 
+// Try to delete old symfony folder (generates conflicts with composer)
+$oldSymfonyFolder = '../inc/lib/symfony';
+if (is_dir($oldSymfonyFolder)) {
+    @rmdir($oldSymfonyFolder);
+}
+
 // A protection measure for already installed systems.
 
 if (isAlreadyInstalledSystem()) {
@@ -663,10 +669,6 @@ if (@$_POST['step2']) {
                 // src/Chamilo/CoreBundle/Migrations/Schema/V110
                 migrate(
                     110,
-                    $dbNameForm,
-                    $dbUsernameForm,
-                    $dbPassForm,
-                    $dbHostForm,
                     $manager
                 );
 

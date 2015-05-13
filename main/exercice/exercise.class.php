@@ -2487,6 +2487,7 @@ class Exercise
                     // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
                     // means that is a normal fill blank question
                     // first we explode the "::"
+
                     $pre_array = explode('::', $answer);
                     // is switchable fill blank or not
                     $last = count($pre_array) - 1;

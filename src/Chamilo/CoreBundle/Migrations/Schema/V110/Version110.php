@@ -190,7 +190,7 @@ class Version110 extends AbstractMigrationChamilo
             'c_thematic_advance',
             'c_thematic_plan',
             'c_tool',
-            'c_tool_intro',
+            //'c_tool_intro',
             'c_userinfo_content',
             'c_userinfo_def',
             'c_wiki',
@@ -314,6 +314,13 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_online_connected DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE c_online_connected ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
+        // For some reason c_tool_intro.id is a varchar in 1.9.x
+        $this->addSql("ALTER TABLE c_tool_intro MODIFY COLUMN id VARCHAR(50) NOT NULL");
+        $this->addSql("ALTER TABLE c_tool_intro MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_tool_intro MODIFY COLUMN session_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_tool_intro DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_tool_intro ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN c_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_answer DROP PRIMARY KEY");
@@ -332,7 +339,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session_rel_user CHANGE id_session session_id int unsigned");
         $this->addSql("ALTER TABLE session_rel_user CHANGE id_user user_id int unsigned");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
-
 
         $this->addSql("ALTER TABLE c_item_property CHANGE id_session session_id int");
         $this->addSql("ALTER TABLE course_rel_user CHANGE tutor_id is_tutor int");

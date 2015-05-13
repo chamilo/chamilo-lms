@@ -555,18 +555,19 @@ require_once __DIR__.'/internationalization.lib.php';
  * Notes about the current behaviour model:
  * 1. Windows back-slashes are converted to slashes in the result.
  * 2. A semi-absolute web-path is detected by its leading slash. On Linux systems, absolute system paths start with
- * a slash too, so an additional check about presense of leading system server base is implemented. For example, the function is
+ * a slash too, so an additional check about presence of leading system server base is implemented. For example, the function is
  * able to distinguish type difference between /var/www/chamilo/courses/ (SYS) and /chamilo/courses/ (REL).
  * 3. The function api_get_path() returns only these three types of paths, which in some sense are absolute. The function has
  * no a mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
  * It has not been identified as needed yet.
- * 4. Also, resolving the meta-symbols "." and ".." withiin paths has not been implemented, it is to be identified as needed.
+ * 4. Also, resolving the meta-symbols "." and ".." within paths has not been implemented, it is to be identified as needed.
  *
  * Example:
- * Assume that your server root is /var/www/ , Chamilo is installed in a subfolder chamilo/ and the URL of your campus is http://www.mychamilo.org
- * The other configuration paramaters have not been changed.
+ * Assume that your server root is /var/www/ ,
+ * Chamilo is installed in a sub folder chamilo/ and the URL of your campus is http://www.mychamilo.org
+ * The other configuration parameters have not been changed.
  *
- * This is how we can retireve mosth used paths, for common purpose:
+ * This is how we can get most used paths, for common purpose:
 
  * api_get_path(REL_PATH)                       /chamilo/
  * api_get_path(REL_COURSE_PATH)                /chamilo/courses/
@@ -602,9 +603,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(WEB_UPLOAD_PATH)                http://www.mychamilo.org/chamilo/app/upload/
  * api_get_path(WEB_PUBLIC_PATH)                http://www.mychamilo.org/chamilo/web/
  *
- *
- *
- * This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
+ * This is how we retrieve paths of "registered" resource files (scripts, players, etc.):
  * api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)     http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
  * api_get_path(TO_WEB, FLASH_PLAYER_VIDEO)     http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
  * api_get_path(TO_SYS, SCRIPT_SWFOBJECT)       /var/www/chamilo/main/inc/lib/swfobject/swfobject.js

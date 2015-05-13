@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   id="svg8030"
+   version="1.1"
+   inkscape:version="0.91 r"
+   sodipodi:docname="search_graduation.svg">
+  <defs
+     id="defs8032">
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient12278"
+       id="linearGradient11339"
+       gradientUnits="userSpaceOnUse"
+       x1="-127.06706"
+       y1="420.66183"
+       x2="-121.2757"
+       y2="420.66183"
+       gradientTransform="matrix(0.52682361,-0.51935165,0.51393868,0.53210552,384.63568,206.11248)" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient12278">
+      <stop
+         style="stop-color:#241c1c;stop-opacity:1;"
+         offset="0"
+         id="stop12280" />
+      <stop
+         style="stop-color:#803300;stop-opacity:1"
+         offset="1"
+         id="stop12282" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient11368"
+       id="linearGradient11374"
+       x1="520.02179"
+       y1="488.14825"
+       x2="541.09741"
+       y2="488.45523"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0417013,0,0,1.0417013,-21.720254,-20.871757)" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient11368">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop11370" />
+      <stop
+         style="stop-color:#afdde9;stop-opacity:1"
+         offset="1"
+         id="stop11372" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient10714"
+       id="linearGradient10890"
+       x1="614.15558"
+       y1="679.23553"
+       x2="608.3526"
+       y2="669.37897"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient10714">
+      <stop
+         id="stop10716"
+         offset="0"
+         style="stop-color:#ff6600;stop-opacity:1;" />
+      <stop
+         id="stop10718"
+         offset="1"
+         style="stop-color:#ffcc00;stop-opacity:1" />
+    </linearGradient>
+    <filter
+       inkscape:collect="always"
+       id="filter14456">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.35991578"
+         id="feGaussianBlur14458" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient14440"
+       id="linearGradient10322"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1060776,0,0,1.1060776,-17.332073,184.60948)"
+       x1="481.19531"
+       y1="215.96338"
+       x2="495.85181"
+       y2="224.939" />
+    <linearGradient
+       id="linearGradient14440">
+      <stop
+         id="stop14442"
+         style="stop-color:#ffcc00;stop-opacity:1"
+         offset="0" />
+      <stop
+         offset="0.37668341"
+         style="stop-color:#ffcc00;stop-opacity:1"
+         id="stop14444" />
+      <stop
+         id="stop14446"
+         style="stop-color:#ff6600;stop-opacity:1"
+         offset="1" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.70546875"
+     inkscape:cx="18.499446"
+     inkscape:cy="236.50055"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1366"
+     inkscape:window-height="712"
+     inkscape:window-x="1920"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata8035">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.3622)">
+    <g
+       id="g11377"
+       transform="matrix(5.8181818,0,0,5.8181818,-3024.2482,-1860.9883)"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/16/search_graduation.png"
+       inkscape:export-xdpi="65.454544"
+       inkscape:export-ydpi="65.454544">
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/search_graduation.png"
+         y="478.73212"
+         x="519.79266"
+         height="22"
+         width="22"
+         id="rect10263"
+         style="opacity:0;fill:#ececec;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/search_graduation.png"
+         sodipodi:nodetypes="sssssssss"
+         inkscape:connector-curvature="0"
+         id="rect11333"
+         d="m 533.70401,494.69336 1.20032,-1.26843 c 0.57681,-0.60959 0.87088,-1.15941 1.48515,-0.58759 l 4.52537,4.21258 c 0.61426,0.57181 0.57125,1.5639 -0.0263,2.15305 l -0.89348,0.88082 c -0.59764,0.58917 -1.51689,0.54569 -2.13115,-0.0262 l -4.52537,-4.21259 c -0.61427,-0.5718 -0.21129,-0.54219 0.36554,-1.15173 z"
+         style="opacity:0.95999995;fill:url(#linearGradient11339);fill-opacity:1;stroke:none" />
+      <path
+         inkscape:connector-curvature="0"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/search_graduation.png"
+         id="circle11335"
+         d="m 529.56962,479.16317 a 8.7164178,8.8060145 0 0 0 -8.7161,8.80562 8.7164178,8.8060145 0 0 0 8.7161,8.80564 8.7164178,8.8060145 0 0 0 8.71814,-8.80564 8.7164178,8.8060145 0 0 0 -8.71814,-8.80562 z m 0,1.52593 a 7.2053313,7.2793955 0 0 1 7.20646,7.27969 7.2053313,7.2793955 0 0 1 -7.20646,7.2797 7.2053313,7.2793955 0 0 1 -7.20442,-7.2797 7.2053313,7.2793955 0 0 1 7.20442,-7.27969 z"
+         style="fill:#b3b3b3;fill-opacity:1;stroke:none" />
+      <circle
+         r="7.299984"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/search_graduation.png"
+         cy="487.95267"
+         cx="529.52545"
+         id="path11366"
+         style="opacity:1;fill:url(#linearGradient11374);fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/search_graduation.png"
+         style="opacity:1;fill:#aa0000;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         d="m 527.47684,489.68557 2.7821,0.73841 -2.53702,6.59408 -0.91221,-1.67809 -1.86959,0.93889 z"
+         id="path10749"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccc" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/search_graduation.png"
+         sodipodi:nodetypes="cccccc"
+         inkscape:connector-curvature="0"
+         id="rect10621"
+         d="m 528.14897,490.24098 2.78982,-0.89701 3.17455,6.43016 -2.04466,-0.81479 -0.74553,1.71105 z"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/search_graduation.png"
+         transform="matrix(1.3326199,0.00519607,-0.0051329,1.3490205,-282.3276,-427.99479)"
+         d="m 614.57366,679.52495 -1.44436,-0.11928 -1.28757,1.08542 -1.0984,-0.94547 -1.67966,0.12132 -0.33289,-1.41053 -1.43018,-0.88913 0.55977,-1.33682 -0.63442,-1.55996 1.23862,-0.75247 0.40366,-1.63494 1.44437,0.11928 1.28756,-1.08543 1.09841,0.94547 1.67966,-0.12132 0.33289,1.41053 1.43018,0.88914 -0.55978,1.33681 0.63443,1.55996 -1.23863,0.75248 z"
+         inkscape:randomized="0"
+         inkscape:rounded="3.22517e-09"
+         inkscape:flatsided="false"
+         sodipodi:arg2="1.1980476"
+         sodipodi:arg1="0.9167136"
+         sodipodi:r2="3.8672132"
+         sodipodi:r1="4.6886344"
+         sodipodi:cy="675.80402"
+         sodipodi:cx="611.72095"
+         sodipodi:sides="10"
+         id="path10624"
+         style="opacity:1;fill:url(#linearGradient10890);fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="star" />
+      <ellipse
+         ry="4.516274"
+         rx="4.4613695"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/search_graduation.png"
+         transform="matrix(0.9999924,0.00389911,-0.00380488,0.99999276,0,0)"
+         cy="484.78928"
+         cx="531.24377"
+         id="path10626"
+         style="opacity:1;fill:#ffff00;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <g
+         style="opacity:1"
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/search_graduation.png"
+         id="g10316"
+         transform="matrix(0.38032844,0,0,0.38500908,330.22803,321.99277)">
+        <path
+           transform="matrix(1.1264964,0,0,1.1344032,-27.229312,178.80157)"
+           inkscape:transform-center-y="-0.83514744"
+           inkscape:transform-center-x="-0.095698614"
+           d="m 494.05368,227.42154 -4.95765,-2.37763 -5.10006,2.05447 0.72926,-5.44973 -3.52992,-4.21558 5.40836,-0.9905 2.91845,-4.65984 2.61329,4.83758 5.33362,1.33564 -3.79325,3.98028 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="false"
+           sodipodi:arg2="1.6029157"
+           sodipodi:arg1="0.97459719"
+           sodipodi:r2="4.7080097"
+           sodipodi:r1="8.5600176"
+           sodipodi:cy="220.33833"
+           sodipodi:cx="489.24722"
+           sodipodi:sides="5"
+           id="path10318"
+           style="opacity:0.82824426;fill:#999999;fill-opacity:1;stroke:none;filter:url(#filter14456)"
+           sodipodi:type="star" />
+        <path
+           sodipodi:type="star"
+           style="fill:url(#linearGradient10322);fill-opacity:1;stroke:#f4a800;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path10320"
+           sodipodi:sides="5"
+           sodipodi:cx="523.81329"
+           sodipodi:cy="428.32077"
+           sodipodi:r1="9.4680433"
+           sodipodi:r2="5.2074242"
+           sodipodi:arg1="0.97459719"
+           sodipodi:arg2="1.6029157"
+           inkscape:flatsided="false"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 529.12961,436.15535 -5.48355,-2.62984 -5.64106,2.2724 0.80662,-6.02783 -3.90437,-4.66276 5.98207,-1.09557 3.22803,-5.15414 2.8905,5.35073 5.8994,1.47733 -4.19563,4.4025 z"
+           inkscape:transform-center-x="-0.093971212"
+           inkscape:transform-center-y="-0.81428571" />
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -110,6 +111,7 @@ class SettingsCurrent
      * Set variable
      *
      * @param string $variable
+     *
      * @return SettingsCurrent
      */
     public function setVariable($variable)
@@ -133,6 +135,7 @@ class SettingsCurrent
      * Set subkey
      *
      * @param string $subkey
+     *
      * @return SettingsCurrent
      */
     public function setSubkey($subkey)
@@ -156,6 +159,7 @@ class SettingsCurrent
      * Set type
      *
      * @param string $type
+     *
      * @return SettingsCurrent
      */
     public function setType($type)
@@ -179,6 +183,7 @@ class SettingsCurrent
      * Set category
      *
      * @param string $category
+     *
      * @return SettingsCurrent
      */
     public function setCategory($category)
@@ -202,6 +207,7 @@ class SettingsCurrent
      * Set selectedValue
      *
      * @param string $selectedValue
+     *
      * @return SettingsCurrent
      */
     public function setSelectedValue($selectedValue)
@@ -225,6 +231,7 @@ class SettingsCurrent
      * Set title
      *
      * @param string $title
+     *
      * @return SettingsCurrent
      */
     public function setTitle($title)
@@ -248,6 +255,7 @@ class SettingsCurrent
      * Set comment
      *
      * @param string $comment
+     *
      * @return SettingsCurrent
      */
     public function setComment($comment)
@@ -271,6 +279,7 @@ class SettingsCurrent
      * Set scope
      *
      * @param string $scope
+     *
      * @return SettingsCurrent
      */
     public function setScope($scope)
@@ -294,6 +303,7 @@ class SettingsCurrent
      * Set subkeytext
      *
      * @param string $subkeytext
+     *
      * @return SettingsCurrent
      */
     public function setSubkeytext($subkeytext)
@@ -317,6 +327,7 @@ class SettingsCurrent
      * Set accessUrl
      *
      * @param integer $accessUrl
+     *
      * @return SettingsCurrent
      */
     public function setAccessUrl($accessUrl)
@@ -340,6 +351,7 @@ class SettingsCurrent
      * Set accessUrlChangeable
      *
      * @param integer $accessUrlChangeable
+     *
      * @return SettingsCurrent
      */
     public function setAccessUrlChangeable($accessUrlChangeable)
@@ -363,6 +375,7 @@ class SettingsCurrent
      * Set accessUrlLocked
      *
      * @param integer $accessUrlLocked
+     *
      * @return SettingsCurrent
      */
     public function setAccessUrlLocked($accessUrlLocked)

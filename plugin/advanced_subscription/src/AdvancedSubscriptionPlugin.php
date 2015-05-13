@@ -78,17 +78,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     private function addAreaField()
     {
-        $result = Database::select(
-            'variable',
-            'user_field',
-            array(
-                'where'=> array(
-                    'variable = ? ' => array('area')
-                )
-            )
-        );
+        $extraField = new ExtraField('user');
+        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable('area');
 
-        if (empty($result)) {
+        $areaExists = $extraFieldHandler !== false;
+
+        if (!$areaExists) {
             $extraField = new ExtraField('user');
             $extraField->save(array(
                 'field_type' => 1,

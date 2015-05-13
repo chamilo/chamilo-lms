@@ -2615,13 +2615,27 @@ div.admin_section h4 {
     margin-left: -25px;
 }
 
-.question_options input {
-    /* margin-right:10px; */
-}
-
 .question_options input[type="text"] {
-    padding:0px;
+    padding: 6px 12px;
     margin:2px 2px 2px 0px;
+    vertical-align: middle;
+    display: inline-block;
+    height: 34px;
+    line-height: 1.42857;
+    border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  color: #555555;
+  font-weight: bold;
+  background-color: #FCF8D6;
+
+}
+.question_options input[type="text"]:focus{
+   border-color:#66AFE9;
+  background-color: #ffffff;
+   outline: 0px none;
+   box-shadow:0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(102, 175, 233, 0.6) ;
 }
 
 .exercise_description {
@@ -5842,7 +5856,15 @@ ul.holder li.bit-box{
   width: 190px !important;
   max-width: 100%;
 }
-
+.question_options .fill_blanks{
+  padding: 20px 30px;
+  box-sizing: border-box;
+}
+.question_options .fill_blanks img{
+  max-width: 100%;
+  display: block;
+  height: auto !important;
+}
 
 /***    Draggable answer    ***/
 .question_options ul.exercise-draggable-answer{
@@ -5877,11 +5899,98 @@ ul.exercise-draggable-answer li {
   min-height: 4em;
   width: 100%;
 }
+.drag_question .indent{
+  text-indent: -15px;
+  padding-left: 30px;
+  padding-right: 15px;
+}
+.drag_question .separate{
+  background-color: #ffffff;
+  text-align: center;
+  vertical-align: middle;
+  border-top: #dddddd;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  border-bottom: none !important;
+}
+.drag_question .text-right{
+  text-align: left;
+}
+.drag_question .select-matching {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  height: 28px;
+  width: 60px;
+  text-align: center;
+  border: 1px solid;
+  border-color: white #f7f7f7 #f5f5f5;
+  border-radius: 3px;
+  background: #444;
+  border-color: #111 #0a0a0a black;
+  background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
+  background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
+  background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
+  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.drag_question .select-matching:before, .drag_question .select-matching:after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  top: 9px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 4px dashed;
+  border-color: #888 transparent;
+  pointer-events: none;
+}
+.drag_question .select-matching:before {
+  border-bottom-style: solid;
+  border-top: none;
+  border-bottom-color: #aaa;
+}
+.drag_question .select-matching:after {
+  margin-top: 7px;
+  border-top-style: solid;
+  border-bottom: none;
+  border-top-color: #aaa;
+}
+.drag_question .select-matching select{
+  position: relative;
+  width: 130%;
+  margin: 0;
+  padding: 6px 8px 6px 10px;
+  height: 28px;
+  line-height: 14px;
+  font-size: 14px;
+  color: #ffffff;
+  text-shadow: 0 1px white;
+  /* Fallback for IE 8 */
+  background: #f2f2f2;
+  /* "transparent" doesn't work with Opera */
+  background: rgba(0, 0, 0, 0) !important;
+  border: 0;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+.drag_question .select-matching select > option{
+  margin: 3px;
+  padding: 6px 8px;
+  text-shadow: none;
+  background: #444;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #ffffff;
+}
 .drag_question .window{
   box-shadow: 2px 2px 19px #AAA;
   cursor: pointer;
   min-height: 65px;
   padding-top: 25px;
+
 }
 .window_left_question {
   padding: 10px 25px 10px 10px;

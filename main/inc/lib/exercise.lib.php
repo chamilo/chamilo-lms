@@ -654,6 +654,7 @@ HTML;
 
                     if (!empty($correct_answer_list) && !empty($student_answer_list)) {
                         $answer = "";
+
                         $i = 0;
                         foreach ($student_answer_list as $student_item) {
                             // remove surronding brackets
@@ -709,7 +710,8 @@ HTML;
                                 $attributes
                             ), $answer);*/
                     }
-                    $s .= $answer;
+                    $html = '<div class="fill_blanks col-md-12">'.$answer.'</div>';
+                    $s .= $html ;
 
                 } elseif ($answerType == CALCULATED_ANSWER) {
                     /*
@@ -862,11 +864,11 @@ HTML;
                         $s .= '<tr><td width="45%" valign="top">';
                         $parsed_answer = $answer;
                         //left part questions
-                        $s .= ' <span style="float:left; width:8%;"><b>' . $lines_count . '</b>.&nbsp;</span>
-                                <span style="float:left; width:92%;">' . $parsed_answer . '</span></td>';
+                        $s .= '<p class="indent">' . $lines_count . '.&nbsp;' . $parsed_answer . '</p></td>';
                         //middle part (matches selects)
 
-                        $s .= '<td width="10%" valign="top" align="center">&nbsp;&nbsp;
+                        $s .= '<td width="10%" valign="top" align="center" >
+                                <div class="select-matching">
                                 <select name="choice[' . $questionId . '][' . $numAnswer . ']">';
 
                         // fills the list-box
@@ -890,11 +892,10 @@ HTML;
 
                         }  // end foreach()
 
-                        $s .= '</select></td>';
-                        $s .= '<td width="45%" valign="top" >';
+                        $s .= '</select></div></td><td width="5%" class="separate">&nbsp;</td>';
+                        $s .= '<td width="40%" valign="top" >';
                         if (isset($select_items[$lines_count])) {
-                            $s .= '<span style="float:left; width:5%;"><b>' . $select_items[$lines_count]['letter'] . '.</b></span>' .
-                                '<span style="float:left; width:95%;">' . $select_items[$lines_count]['answer'] . '</span>';
+                            $s .= '<div class="text-right"><p class="indent">' . $select_items[$lines_count]['letter'].'.&nbsp; '. $select_items[$lines_count]['answer'].'</p></div>';
                         } else {
                             $s .= '&nbsp;';
                         }

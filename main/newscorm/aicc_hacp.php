@@ -156,7 +156,7 @@ if (!empty($_REQUEST['command'])) {
             foreach ($msg_array as $key => $dummy) {
                 switch (strtolower($key)) {
                     case 'core':
-                        foreach ($msg_array[$key] as $subkey => $value){
+                        foreach ($msg_array[$key] as $subkey => $value) {
                             switch (strtolower($subkey)) {
                                 case 'lesson_location':
                                     //error_log('Setting lesson_location to '.$value, 0);
@@ -164,6 +164,27 @@ if (!empty($_REQUEST['command'])) {
                                     break;
                                 case 'lesson_status':
                                     //error_log('Setting lesson_status to '.$value, 0);
+                                    // Sometimes values are sent abbreviated
+                                    switch ($value) {
+                                        case 'C':
+                                            $value = 'completed';
+                                            break;
+                                        case 'I':
+                                            $value = 'incomplete';
+                                            break;
+                                        case 'N':
+                                        case 'NA':
+                                            $value = 'not attempted';
+                                            break;
+                                        case 'P':
+                                            $value = 'passed';
+                                            break;
+                                        case 'B':
+                                            $value = 'browsed';
+                                            break;
+                                        default:
+                                            break;
+                                    }
                                     $oItem->set_status($value);
                                     break;
                                 case 'score':
@@ -172,7 +193,11 @@ if (!empty($_REQUEST['command'])) {
                                     break;
                                 case 'time':
                                     //error_log('Setting lesson_time to '.$value, 0);
-                                    $oItem->set_time($value);
+                                    if (strpos($value, ':') !== false) {
+                                        $oItem->set_time($value, 'scorm');
+                                    } else {
+                                        $oItem->set_time($value);
+                                    }
                                     break;
                             }
                         }
@@ -234,6 +259,7 @@ if (!empty($_REQUEST['command'])) {
     }
 }
 $_SESSION['lpobject'] = serialize($oLP);
+session_write_close();
 // Content type must be text/plain.
 header('Content-type: text/plain');
 echo $result;

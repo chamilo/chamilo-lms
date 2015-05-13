@@ -793,6 +793,10 @@ class aicc extends learnpath
         for ($i = 0; $i < @count($f); $i++) {
             $newsec = 0;
             $w = @trim($f[$i]);
+            if (substr($w, 0, 1) == ';') {
+                // Ignore comment lines
+                continue;
+            }
             if ($w) {
                 if ((!$r) or ($sec)) {
                     if ((@substr($w, 0, 1) == '[') and (@substr($w, -1, 1)) == ']') {
@@ -840,6 +844,10 @@ class aicc extends learnpath
         for ($i = 0; $i < @count($f); $i++) {
             $newsec = 0;
             $w = @trim($f[$i]);
+            if (substr($w, 0, 1) == ';') {
+                // Ignore comment lines
+                continue;
+            }
             if ($w) {
                 if ((!$r) or ($sec)) {
                     if ((@substr($w, 0, 1) == '[') and (@substr($w, -1, 1)) == ']') {

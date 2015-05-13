@@ -3418,7 +3418,7 @@ class learnpathItem
         if (self::debug > 0) {
             error_log('learnpathItem::set_time(' . $scorm_time . ')', 0);
         }
-        if ($scorm_time == 0
+        if ($scorm_time == '0'
                 and ($this->type != 'sco')
                 and $this->current_start_time != 0)
         {
@@ -3990,8 +3990,9 @@ class learnpathItem
                                     $total_time = " total_time = total_time +" . $this->get_total_time() . ", ";
                                     $my_status = " status = '" . $this->get_status(false) . "' ,";
                                 } else {
-                                    // Is lp chamilo
-                                    if ($my_type_lp == 1 && $this->type != 'chapter') {
+                                    if (($my_type_lp == 3 && $this->type == 'au') ||
+                                        ($my_type_lp == 1 && $this->type != 'chapter')) {
+                                        // Is AICC or Chamilo LP
                                         $total_time = " total_time = total_time + " . $this->get_total_time() . ", ";
                                         $my_status = " status = '" . $this->get_status(false) . "' ,";
                                     }

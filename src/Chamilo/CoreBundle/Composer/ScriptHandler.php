@@ -27,7 +27,8 @@ class ScriptHandler
     public static function deleteOldFilesFrom19x()
     {
         $path = __DIR__.'/../../../../main/inc/lib/symfony/';
-        $fs = new Filesystem();
-        $fs->remove($path);
+        if (is_dir($path) && is_writable($path)) {
+            rmdir($path);
+        }
     }
 }

@@ -177,7 +177,7 @@ class Version110 extends AbstractMigrationChamilo
             //'c_role_user',
             'c_student_publication',
             'c_student_publication_assignment',
-            'c_student_publication_comment',
+            //'c_student_publication_comment',
             'c_student_publication_rel_document',
             'c_student_publication_rel_user',
             //'c_survey',
@@ -205,6 +205,15 @@ class Version110 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE $table DROP PRIMARY KEY");
             $this->addSql("ALTER TABLE $table ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
         }
+
+        $this->addSql("ALTER TABLE c_attendance_calendar_rel_group MODIFY COLUMN id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_attendance_calendar_rel_group DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_attendance_calendar_rel_group ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_student_publication_comment MODIFY COLUMN id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_student_publication_comment DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_student_publication_comment ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
 
         $this->addSql("ALTER TABLE c_attendance_sheet MODIFY COLUMN c_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_attendance_sheet DROP PRIMARY KEY");

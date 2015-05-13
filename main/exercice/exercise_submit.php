@@ -201,7 +201,7 @@ if ($objExercise->selectAttempts() > 0) {
 
                             $question_info = Question::read($question_id);
                             $attempt_html .= Display::div($question_info->question, array('class'=>'question_title'));
-                            $attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
+                            $attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_question_titlescore'));
                         }
                     }
 					$score =  ExerciseLib::show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);

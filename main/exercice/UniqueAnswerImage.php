@@ -26,7 +26,7 @@ class UniqueAnswerImage extends UniqueAnswer
         $objExercise = $_SESSION['objExercise'];
 
         $editorConfig = array(
-            'ToolbarSet' => 'UniqueAnswerImage',
+            'ToolbarSet' => 'TestFreeAnswer',
             'Width' => '100%',
             'Height' => '125'
         );
@@ -46,7 +46,8 @@ class UniqueAnswerImage extends UniqueAnswer
             $commentTitle = '<th >' . get_lang('Comment') . '</th>';
         }
 
-        $html = '<table class="table table-striped table-hover">
+        $html = '<div class="alert alert-success" role="alert">'.get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
+        $html .= '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
                     <th width="10">' . get_lang('Number') . '</th>
@@ -278,8 +279,8 @@ class UniqueAnswerImage extends UniqueAnswer
         $numberAnswers = $form->getSubmitValue('nb_answers');
 
         for ($i = 1; $i <= $numberAnswers; $i++) {
-            $answer = trim($form->getSubmitValue('answer[' . $i . ']'));
-            $comment = trim($form->getSubmitValue('comment[' . $i . ']'));
+            $answer = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('answer[' . $i . ']')));
+            $comment = trim(str_replace(['<p>', '</p>'], '', $form->getSubmitValue('comment[' . $i . ']')));
             $weighting = trim($form->getSubmitValue('weighting[' . $i . ']'));
 
             $scenario = $form->getSubmitValue('scenario');

@@ -132,7 +132,7 @@ class MultipleAnswer extends Question
 
             $form->addHtmlEditor("comment[$i]", null, null, true, $editorConfig);
 
-            $form->addElement('text', 'weighting[' . $i . ']', null, array('class' => "span1", 'value' => '0'));
+            $form->addElement('text', 'weighting[' . $i . ']', null, array('class' => "col-md-1", 'value' => '0'));
             $form->addHtml('</tr>');
         }
 
@@ -178,8 +178,8 @@ class MultipleAnswer extends Question
 		$nb_answers = $form->getSubmitValue('nb_answers');
 
 		for($i=1 ; $i <= $nb_answers ; $i++) {
-        	$answer = trim($form -> getSubmitValue('answer['.$i.']'));
-            $comment = trim($form -> getSubmitValue('comment['.$i.']'));
+        	$answer = trim(str_replace(['<p>', '</p>'], '', $form -> getSubmitValue('answer['.$i.']')));
+            $comment = trim(str_replace(['<p>', '</p>'], '', $form -> getSubmitValue('comment['.$i.']')));
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
 

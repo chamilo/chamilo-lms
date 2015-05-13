@@ -30,7 +30,7 @@ $linkId = intval($_GET['link_id']);
 $linkInfo = Link::get_link_info($linkId);
 $linkUrl = html_entity_decode(Security::remove_XSS($linkInfo['url']));
 // Launch event
-Event::event_link($linkId);
+event_link($linkId);
 
 header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
 header("Cache-Control: post-check=0, pre-check=0", false);

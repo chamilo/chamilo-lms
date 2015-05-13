@@ -154,11 +154,6 @@ switch ($action) {
             $content = $form->returnForm();
         }
         break;
-    case 'importcsv':
-        if ($_POST['submitImport']) {
-            Link::import_csvfile();
-        }
-        break;
     case 'deletelink':
         // Here we delete a link
         Link::deletelinkcategory($id, 'link');

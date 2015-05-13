@@ -104,7 +104,9 @@ function get_lang($variable, $reserved = null, $language = null) {
     // add language_measure_frequency to your main/inc/conf/configuration.php in order to generate language
     // variables frequency measurements (you can then see them trhough main/cron/lang/langstats.php)
     // The $langstats object is instanciated at the end of main/inc/global.inc.php
-    if (isset($_configuration['language_measure_frequency']) && $_configuration['language_measure_frequency'] == 1) {
+    if (isset($_configuration['language_measure_frequency']) &&
+        $_configuration['language_measure_frequency'] == 1
+    ) {
       require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
       global $langstats;
       $langstats->add_use($variable,'');
@@ -231,6 +233,7 @@ function get_lang($variable, $reserved = null, $language = null) {
     //return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
     $ret = $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
     $used_lang_vars[$variable.$lang_postfix] = $ret;
+
     return $ret;
 }
 
@@ -304,7 +307,8 @@ function api_purify_language_id($language) {
  *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
  * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
  */
-function api_get_language_isocode($language = null, $default_code = 'en') {
+function api_get_language_isocode($language = null, $default_code = 'en')
+{
     static $iso_code = array();
     if (empty($language)) {
         $language = api_get_interface_language(false, true);
@@ -334,7 +338,8 @@ function api_get_language_isocode($language = null, $default_code = 'en') {
  * @return array    An array with the current isocodes
  *
  * */
-function api_get_platform_isocodes() {
+function api_get_platform_isocodes()
+{
     $iso_code = array();
     $sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." ORDER BY isocode ");
     if (Database::num_rows($sql_result)) {
@@ -347,11 +352,14 @@ function api_get_platform_isocodes() {
 
 /**
  * Gets text direction according to the given language.
- * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g 'arabic', 'english', ...).
- * ISO-codes are acceptable too ('ar', 'en', ...). If $language is omitted, interface language is assumed then.
+ * @param string $language	This is the name of the
+ * folder containing translations for the corresponding language (e.g 'arabic', 'english', ...).
+ * ISO-codes are acceptable too ('ar', 'en', ...).
+ * If $language is omitted, interface language is assumed then.
  * @return string			The correspondent to the language text direction ('ltr' or 'rtl').
  */
-function api_get_text_direction($language = null) {
+function api_get_text_direction($language = null)
+{
     static $text_direction = array();
 
     if (empty($language)) {
@@ -377,6 +385,7 @@ function api_get_text_direction($language = null) {
             )
         ) ? 'rtl' : 'ltr';
     }
+
     return $text_direction[$language];
 }
 
@@ -435,11 +444,13 @@ function _api_get_timezone()
 }
 
 /**
- * Returns the given date as a DATETIME in UTC timezone. This function should be used before entering any date in the DB.
+ * Returns the given date as a DATETIME in UTC timezone.
+ * This function should be used before entering any date in the DB.
  *
  * @param mixed The date to be converted (can be a string supported by date() or a timestamp)
  * @param bool if the date is not correct return null instead of the current date
- * @return string The DATETIME in UTC to be inserted in the DB, or null if the format of the argument is not supported
+ * @return string The DATETIME in UTC to be inserted in the DB,
+ * or null if the format of the argument is not supported
  *
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -517,7 +528,8 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
  * Converts a string into a timestamp safely (handling timezones), using strtotime
  *
  * @param string String to be converted
- * @param string Timezone (if null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform)
+ * @param string Timezone (if null, the timezone will be determined based
+ * on user preference, or timezone chosen by the admin for the platform)
  * @return int Timestamp
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -533,8 +545,9 @@ function api_strtotime($time, $timezone = null) {
 }
 
 /**
- * Returns formated date/time, correspondent to a given language.
- * The given date should be in the timezone chosen by the administrator and/or user. Use api_get_local_time to get it.
+ * Returns formatted date/time, correspondent to a given language.
+ * The given date should be in the timezone chosen by the administrator
+ * and/or user. Use api_get_local_time to get it.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Christophe Gesche<gesche@ipm.ucl.ac.be>
@@ -549,8 +562,8 @@ function api_strtotime($time, $timezone = null) {
  *
  * @link http://php.net/manual/en/function.strftime.php
  */
-function api_format_date($time, $format = null, $language = null) {
-
+function api_format_date($time, $format = null, $language = null)
+{
     $system_timezone = date_default_timezone_get();
     date_default_timezone_set(_api_get_timezone());
 
@@ -692,8 +705,8 @@ function api_format_date($time, $format = null, $language = null) {
  * @author Julio Montoya
  */
 
-function date_to_str_ago($date) {
-
+function date_to_str_ago($date)
+{
     static $initialized = false;
     static $today, $yesterday;
     static $min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute;
@@ -958,6 +971,7 @@ function api_get_person_name(
         api_strtoupper($username),
     );
     $person_name = str_replace($keywords, $values, $format);
+
     return _api_clean_person_name($person_name);
 }
 
@@ -969,7 +983,8 @@ function api_get_person_name(
  * Note: You may use this function for determing the order of the fields or columns "First name" and "Last name" in forms, tables and reports.
  * @author Ivan Tcholakov
  */
-function api_is_western_name_order($format = null, $language = null) {
+function api_is_western_name_order($format = null, $language = null)
+{
     static $order = array();
     if (empty($format)) {
         $format = PERSON_NAME_COMMON_CONVENTION;
@@ -1010,27 +1025,6 @@ function api_sort_by_first_name($language = null) {
     }
 
     return $sort_by_first_name[$language];
-}
-
-/**
- * A safe way to calculate binary lenght of a string (as number of bytes)
- */
-
-/**
- * Calculates binary lenght of a string, as number of bytes, regardless the php-setting mbstring.func_overload.
- * This function should work for all multi-byte related changes of PHP5 configuration.
- * @param string $string	The input string.
- * @return int				Returns the length of the input string (or binary data) as number of bytes.
- */
-function api_byte_count(& $string) {
-    static $use_mb_strlen;
-    if (!isset($use_mb_strlen)) {
-        $use_mb_strlen = MBSTRING_INSTALLED && ((int) ini_get('mbstring.func_overload') & 2);
-    }
-    if ($use_mb_strlen) {
-        return mb_strlen($string, '8bit');
-    }
-    return strlen($string);
 }
 
 /**
@@ -1151,7 +1145,8 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
  * @param string $from_encoding (optional)	The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
  * @return string							Returns the converted string.
  */
-function api_xml_http_response_encode($string, $from_encoding = 'UTF8') {
+function api_xml_http_response_encode($string, $from_encoding = 'UTF8')
+{
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         if (empty($from_encoding)) {
             $from_encoding = _api_mb_internal_encoding();
@@ -1184,10 +1179,6 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null)
 {
     return URLify::transliterate($string);
 }
-
-/**
- * Common multibyte string functions
- */
 
 /**
  * Takes the first character in a string and returns its Unicode codepoint.
@@ -2008,17 +1999,10 @@ function _api_get_character_map_name($encoding) {
  * @param string $string2		The second string.
  * @return int					Returns 0 if $string1 = $string2; >0 if $string1 < $string2; <0 if $string1 > $string2.
  */
-function _api_strnatrcmp($string1, $string2) {
+function _api_strnatrcmp($string1, $string2)
+{
     return strnatcmp($string2, $string1);
 }
-
-/**
- * ICU locales (accessible through intl extension).
- */
-
-/**
- * Appendix to "Encoding management functions"
- */
 
 /**
  * Sets/Gets internal character encoding of the common string functions within the PHP mbstring extension.

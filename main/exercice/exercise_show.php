@@ -14,7 +14,7 @@
 
 // name of the language file that needs to be included
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $debug = false;
@@ -83,7 +83,7 @@ $learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];
 $lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
 $current_user_id    = api_get_user_id();
 
-if (apiIsExcludedUserType(true, $student_id)) {
+if (api_is_excluded_user_type(true, $student_id)) {
     api_not_allowed(true);
 }
 

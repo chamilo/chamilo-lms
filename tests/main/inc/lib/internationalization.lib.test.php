@@ -108,22 +108,6 @@ class TestInternationalization extends UnitTestCase {
         $this->UnitTestCase('Internationalization library - main/inc/lib/internationalization.lib.test.php');
 	}
 
-
-/**
- * ----------------------------------------------------------------------------
- * A safe way to calculate binary lenght of a string (as number of bytes)
- * ----------------------------------------------------------------------------
- */
-
-	public function test_api_byte_count() {
-		$string = 'xxxáéíóú?'; // UTF-8
-		$res = api_byte_count($string);
-		$this->assertTrue($res == 14);
-		$this->assertTrue(is_numeric($res));
-		//var_dump($res);
-	}
-
-
 /**
  * ----------------------------------------------------------------------------
  * Multibyte string conversion functions

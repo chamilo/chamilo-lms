@@ -149,7 +149,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 $postAction = isset($_POST['action']) ? $_POST['action'] : null;
 
-if (apiIsExcludedUserType()) {
+if (api_is_excluded_user_type()) {
     api_not_allowed(true);
 }
 

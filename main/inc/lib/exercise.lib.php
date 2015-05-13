@@ -1134,7 +1134,7 @@ HTML;
                 $s .= "</ul></div>";
 
                 $counterAnswer = 1;
-                
+
                 $s .= '<div class="col-xs-12"><div class="row">';
 
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -3813,7 +3813,7 @@ HTML;
             }
 
             // Send notification ..
-            if (!api_is_allowed_to_edit(null, true) && !apiIsExcludedUserType()
+            if (!api_is_allowed_to_edit(null, true) && !api_is_excluded_user_type()
             ) {
                 if (api_get_course_setting(
                         'email_alert_manager_on_new_quiz'

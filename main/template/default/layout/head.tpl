@@ -93,23 +93,6 @@ var showTemplates = function (ckeditorName) {
 {{ extra_headers }}
 <script>
 
-// This is a patch for the "__flash__removeCallback" bug, see FS#4378.
-/*
-@deprecated seems not to be use.
-if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf('opera') == -1 )) {
-    window.attachEvent( 'onunload', function() {
-        window['__flash__removeCallback'] = function ( instance, name ) {
-            try {
-                if ( instance ) {
-                    instance[name] = null ;
-                }
-            } catch ( flashEx ) {
-            }
-        } ;
-    });
-}
-*/
-
 function setCheckbox(value, table_id) {
     checkboxes = $("#"+table_id+" input:checkbox");
     $.each(checkboxes, function(index, checkbox) {

@@ -383,24 +383,6 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue(empty($res));
 	}
 */
-	function testApiDisplayArray(){
-		global $info_array;
-		ob_start();
-		api_display_array($info_array);
-		$res = ob_get_contents();
-		$this->assertNotEqual($res,'');
-		ob_end_clean();
-	}
-
-	function testApiDisplayDebugInfo(){
-		$message = "mensaje de error"; // siempre que puedas, te conviene probar con valores creados al azar
-		ob_start();
-		api_display_debug_info($message);
-		$res = ob_get_contents();
-		$this->assertNotEqual($res,'');
-		ob_end_clean();
-	}
-
 
 	function testApiIsAllowedToEdit(){
 	 	$is_courseAdmin=false;
@@ -558,18 +540,6 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	/* This function is behaving differently on automated test server
-	function testApiChmod_R(){
-		// We know, it does not work for Windows.
-		if (IS_WINDOWS_OS) { return true; }
-		$dirname = api_get_path(SYS_LANG_PATH);
-		$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
-		$this->assertEqual($perm_dir,'0777');
-		$new_filemode = '0775';
-		$res = api_chmod_R($dirname, $new_filemode);
-		$this->assertTrue($res);
-	}
-    */
 	function testApiGetVersion(){
 		global $_configuration;
 		$res = api_get_version();

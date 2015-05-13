@@ -1690,9 +1690,6 @@ function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_
         // We only need the directory and the filename /path/to/file_html_files/missing_file.gif -> file_html_files/missing_file.gif
         $exploded_file_path = explode('/', $new_img_path[$i]);
         $replace_by = $exploded_file_path[count($exploded_file_path) - 2].'/'.$exploded_file_path[count($exploded_file_path) - 1];
-        //$message .= "Element [$i] <b>" . $replace_what . "</b> replaced by <b>" . $replace_by . "</b><br />"; //debug
-        //api_display_debug_info($message);
-
         $buffer = str_replace($replace_what, $replace_by, $buffer);
     }
 

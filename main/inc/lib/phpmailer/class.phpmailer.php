@@ -1587,16 +1587,15 @@ class PHPMailer {
    * @param string $str multi-byte text to wrap encode
    * @return bool
    */
-  public function HasMultiBytes($str) {
-  	// Modified by Ivan Tcholakov, 24-JAN-2010.
-    // (function_exists('mb_strlen')) {
-    //  return (strlen($str) > mb_strlen($str, $this->CharSet));
-    //} else { // Assume no multibytes (we can't handle without mbstring functions anyway)
-    //  return false;
-    //}
-    return (api_byte_count($str) > api_strlen($str, $this->CharSet));
-    //
-  }
+    public function HasMultiBytes($str)
+    {
+        if (function_exists('mb_strlen')) {
+            return (strlen($str) > mb_strlen($str, $this->CharSet));
+        } else { // Assume no multibytes (we can't handle without mbstring functions anyway)
+            return false;
+        }
+
+    }
 
   /**
    * Correctly encodes and wraps long multibyte strings for mail headers

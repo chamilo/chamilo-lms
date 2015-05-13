@@ -46,11 +46,6 @@
     vertical-align: middle;
     text-align: center;
 }
-#modalMail{
-    width: 770px;
-    margin-top: -180px !important;
-    margin-left:  -385px !important;
-}
 
 #modalMail .modal-body {
     height: 360px;

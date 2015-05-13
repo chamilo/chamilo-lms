@@ -78,17 +78,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     private function addAreaField()
     {
-        $result = Database::select(
-            'variable',
-            'user_field',
-            array(
-                'where'=> array(
-                    'variable = ? ' => array('area')
-                )
-            )
-        );
+        $extraField = new ExtraField('user');
+        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable('area');
 
-        if (empty($result)) {
+        $areaExists = $extraFieldHandler !== false;
+
+        if (!$areaExists) {
             $extraField = new ExtraField('user');
             $extraField->save(array(
                 'field_type' => 1,
@@ -1102,10 +1097,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $userJoinTable = $queueTable . ' q INNER JOIN ' . $userTable . ' u ON q.user_id = u.user_id';
         $where = array(
             'where' => array(
-                'q.session_id = ? AND q.status <> ? AND q.status <> ?' => array(
-                    $sessionId,
-                    ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED,
-                    ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED,
+                'q.session_id = ?' => array(
+                    $sessionId
                 )
             ),
             'order' => 'q.status DESC, u.lastname ASC'

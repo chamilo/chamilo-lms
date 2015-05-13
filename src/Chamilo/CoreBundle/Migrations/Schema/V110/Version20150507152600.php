@@ -38,11 +38,12 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'HideHomeTopContentWhenLoggedInComment',
             null,
             '',
-            null,
+            1,
             true,
-            null,
+            false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
+
         // Hide the global announcements for non-connected users
         //$_configuration['hide_global_announcements_when_not_connected'] = true;
         $value = api_get_configuration_value('hide_global_announcements_when_not_connected');
@@ -56,11 +57,12 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'HideGlobalAnnouncementsWhenNotLoggedInComment',
             null,
             '',
-            null,
+            1,
             true,
-            null,
+            false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
+
         // Use this course as template for all new courses (define course real ID as value)
         //$_configuration['course_creation_use_template'] = 14;
         $value = api_get_configuration_value('course_creation_use_template');
@@ -74,11 +76,12 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'CourseCreationUsesTemplateComment',
             null,
             '',
-            null,
+            1,
             true,
-            null,
+            false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
+
         // Add password strength checker
         //$_configuration['allow_strength_pass_checker'] = true;
         $value = api_get_configuration_value('allow_strength_pass_checker');
@@ -92,13 +95,14 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'EnablePasswordStrengthCheckerComment',
             null,
             '',
-            null,
+            1,
             true,
-            null,
+            false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
+
         // Enable captcha
-        //$_configuration['allow_captcha'] = true;
+        // $_configuration['allow_captcha'] = true;
         $value = api_get_configuration_value('allow_captcha');
         $this->addSettingCurrent(
             'allow_captcha',
@@ -110,9 +114,9 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'EnableCaptchaComment',
             null,
             '',
-            null,
+            1,
             true,
-            null,
+            false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
         // Prevent account from logging in for a certain amount of time
@@ -129,9 +133,9 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'CaptchaNumberOfMistakesBeforeBlockingAccountComment',
             null,
             '',
-            null,
+            1,
             true,
-            null
+            false
         );
         // Prevent account from logging in for the specified number of minutes
         //$_configuration['captcha_time_to_block'] = 5;//minutes
@@ -146,10 +150,11 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'CaptchaTimeAccountIsLockedComment',
             null,
             '',
-            null,
+            1,
             true,
-            null
+            false
         );
+
         // Allow DRH role to access all content and users from the sessions he follows
         //$_configuration['drh_can_access_all_session_content'] = true;
         $value = api_get_configuration_value('drh_can_access_all_session_content');
@@ -163,11 +168,12 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'DRHAccessToAllSessionContentComment',
             null,
             '',
-            null,
+            1,
             true,
-            null,
+            false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
+
         // Display group's forum in general forum tool
         //$_configuration['display_groups_forum_in_general_tool'] = true;
         $value = api_get_configuration_value('display_groups_forum_in_general_tool');
@@ -181,11 +187,12 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'ShowGroupForaInGeneralToolComment',
             null,
             '',
-            null,
+            1,
             true,
-            null,
+            false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
+
         // Allow course tutors in sessions to add existing students to their session
         //$_configuration['allow_tutors_to_assign_students_to_session'] = 'false';
         $value = api_get_configuration_value('allow_tutors_to_assign_students_to_session');
@@ -199,11 +206,12 @@ class Version20150507152600 extends AbstractMigrationChamilo
             'TutorsCanAssignStudentsToSessionsComment',
             null,
             '',
-            null,
+            1,
             true,
-            null,
+            false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
+
         $this->addSql("
             UPDATE settings_current SET selected_value = '1.10.0.39' WHERE variable = 'chamilo_database_version'
         ");

@@ -43,6 +43,9 @@ $use_anonymous = true;
 if (!empty($_REQUEST['aicc_sid'])) {
     session_id($_REQUEST['aicc_sid']);
     if ($debug > 1) { error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['aicc_sid'], 0); }
+} elseif (!empty($_REQUEST['session_id'])) {
+    session_id($_REQUEST['session_id']);
+    if ($debug > 1) { error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['session_id'], 0); }
 }
 //Load common libraries using a compatibility script to bridge between 1.6 and 1.8.
 require_once 'back_compat.inc.php';

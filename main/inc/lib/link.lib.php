@@ -456,6 +456,27 @@ function delete_link_from_search_engine($course_id, $link_id)
         require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
         delete_all_values_for_item($course_id, TOOL_DOCUMENT, $link_id);
     }
+    
+    /**
+    *
+    * Get link info
+    * @param int link id
+    * @return array link info
+    *
+    **/
+    public static function get_link_info($id)
+    {
+        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $course_id = api_get_course_int_id();
+        $sql = "SELECT * FROM " . $tbl_link . "
+                WHERE c_id = $course_id AND id='" . intval($id) . "' ";
+        $result = Database::query($sql);
+        $data = array();
+        if (Database::num_rows($result)) {
+            $data = Database::fetch_array($result);
+        }
+        return $data;
+    }
 }
 
 /**

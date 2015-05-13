@@ -62,7 +62,7 @@ class Version20150505132304 extends AbstractMigrationChamilo
             //continue;
             $sql = "SELECT * FROM $table ";
             $result = $connection->query($sql);
-            $fields = $result->fetchAll($result);
+            $fields = $result->fetchAll();
 
             foreach ($fields as $field) {
                 $originalId = $field['id'];
@@ -116,7 +116,7 @@ class Version20150505132304 extends AbstractMigrationChamilo
 
                     $sql = "SELECT * FROM $optionTable WHERE field_id = $originalId ";
                     $result = $connection->query($sql);
-                    $options = $result->fetchAll($result);
+                    $options = $result->fetchAll();
 
                     foreach ($options as $option) {
                         $extraFieldOption = new ExtraFieldOptions();
@@ -131,7 +131,7 @@ class Version20150505132304 extends AbstractMigrationChamilo
 
                     $sql = "SELECT * FROM $valueTable WHERE field_id = $originalId ";
                     $result = $connection->query($sql);
-                    $values = $result->fetchAll($result);
+                    $values = $result->fetchAll();
                 }
 
                 if (!empty($values)) {

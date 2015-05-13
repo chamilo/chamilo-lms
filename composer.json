@@ -86,8 +86,14 @@
         "behat/mink-selenium2-driver": "*"
     },
     "scripts": {
+        "pre-update-cmd": [
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
+        ],
         "post-update-cmd": [
-            "Chamilo\\CoreBundle\\Component\\Theme\\DumpTheme::dumpCssFiles"
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
+        ],
+        "pre-install-cmd": [
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "post-install-cmd": [
             "Chamilo\\CoreBundle\\Component\\Theme\\DumpTheme::dumpCssFiles"

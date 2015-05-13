@@ -109,7 +109,7 @@ class Version110 extends AbstractMigrationChamilo
             'c_announcement_attachment',
             'c_attendance',
             'c_attendance_calendar',
-            'c_attendance_calendar_rel_group',
+            //'c_attendance_calendar_rel_group',
             'c_attendance_result',
             //'c_attendance_sheet',
             'c_attendance_sheet_log',

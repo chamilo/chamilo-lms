@@ -186,7 +186,7 @@ $shortDescription = new ExtraField('session');
 $shortDescription->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'short_description',
-    'display_text' => get_lang('ShortSescription'),
+    'display_text' => get_lang('ShortDescription'),
     'visible' => 1,
     'changeable' => 1
 ));

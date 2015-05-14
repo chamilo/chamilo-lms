@@ -5,9 +5,6 @@
 *   @package chamilo.session
 *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
 */
-/**
- * Code
- */
 
 use \ChamiloSession as Session;
 
@@ -517,7 +514,7 @@ $(function() {
 		window.location.href=ui.tab;
     });
 <?php
-     //Displays js code to use a jqgrid
+     // Displays js code to use a jqgrid
      echo Display::grid_js('courses',       '',             $columns_courses, $column_model_courses, $extra_params_courses, $new_course_list);
      echo Display::grid_js('list_default',  $url,           $columns,         $column_model,$extra_params,array(), '');
      echo Display::grid_js('list_course',   $url_by_course, $columns,         $column_model,$extra_params_course,array(),'');
@@ -526,23 +523,35 @@ $(function() {
 ?>
     // Generate tabs with jquery-ui
     $('#tabs').tabs();
-    $( "#sub_tab" ).tabs();
+    $('#sub_tab').tabs();
 });
 </script>
 
 <?php
 
 $courseCode = isset($_GET['course']) ? $_GET['course'] : null;
-$my_reporting = Tracking::show_user_progress(api_get_user_id(), $session_id, '#tabs-4', false, false);
-if (!empty($my_reporting))  {
-    $my_reporting  .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $courseCode, $session_id);
+$reportingTab = Tracking::show_user_progress(
+    api_get_user_id(),
+    $session_id,
+    '#tabs-4',
+    false,
+    false
+);
+
+if (!empty($reportingTab))  {
+    $reportingTab .= '<br />'.Tracking::show_course_detail(
+            api_get_user_id(),
+            $courseCode,
+            $session_id
+        );
 }
-if (empty($my_reporting)) {
-    $my_reporting  = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+if (empty($reportingTab)) {
+    $reportingTab = Display::return_message(get_lang('NoDataAvailable'), 'warning');
 }
 
 // Main headers
 $headers = array(
+    Display::return_icon('moderator_star.png'),
     get_lang('Courses'),
     get_lang('LearningPaths'),
     get_lang('MyQCM'),
@@ -557,24 +566,28 @@ $sub_header = array(
 );
 
 // Sub headers data
-$lp_tabs = Display::tabs(
+$lpTab = Display::tabs(
     $sub_header,
     array(
-        Display::grid_html('list_default'),
+        //Display::grid_html('list_default'),
         Display::grid_html('list_week'),
-        Display::grid_html('list_course')
+        //Display::grid_html('list_course')
     ),
     'sub_tab'
 );
-$courses_tab =  Display::grid_html('courses');
+$coursesTab = Display::grid_html('courses');
+
+$starTab = Display::grid_html('list_default');
+
 // Main headers data
 echo Display::tabs(
     $headers,
     array(
-        $courses_tab,
-        $lp_tabs,
+        $starTab,
+        $coursesTab,
+        Display::grid_html('list_course'),
         Display::grid_html('exercises'),
-        $my_reporting
+        $reportingTab
     )
 );
 

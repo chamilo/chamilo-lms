@@ -3885,11 +3885,17 @@ class Tracking
      * @param int $session_id
      * @param string $extra_params
      * @param bool $show_courses
+     * @param bool $showAllSessions
      *
      * @return string
      */
-    public static function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true, $showAllSessions = true)
-    {
+    public static function show_user_progress(
+        $user_id,
+        $session_id = 0,
+        $extra_params = '',
+        $show_courses = true,
+        $showAllSessions = true
+    ) {
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -3898,6 +3904,8 @@ class Tracking
         $tbl_access_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
         $user_id = intval($user_id);
+        $session_id = intval($session_id);
+
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT cu.course_code as code, title
                     FROM $tbl_course_user cu INNER JOIN $tbl_access_rel_course a
@@ -3930,7 +3938,13 @@ class Tracking
         if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
             $orderBy = " ORDER BY s.id, position ";
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src ON (cu.course_code = src.course_code AND src.id_session = $session_id) ";
+            $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
+                                ON (cu.course_code = src.course_code AND src.id_session = $session_id) ";
+        }
+
+        $sessionCondition = '';
+        if (!empty($session_id)) {
+            $sessionCondition = " AND s.id = $session_id";
         }
 
         // Get the list of sessions where the user is subscribed as student
@@ -3944,6 +3958,7 @@ class Tracking
                     WHERE
                         id_user = $user_id AND
                         access_url_id = ".api_get_current_access_url_id()."
+                        $sessionCondition
                     $orderBy ";
         } else {
             $sql = "SELECT DISTINCT cu.course_code, s.id as session_id, name
@@ -3951,6 +3966,7 @@ class Tracking
                     INNER JOIN $tbl_session s ON (s.id = cu.id_session)
                     $extraInnerJoin
                     WHERE id_user = $user_id
+                    $sessionCondition
                     $orderBy ";
         }
 
@@ -3990,7 +4006,12 @@ class Tracking
         if ($show_courses) {
             if (!empty($courses)) {
                 $html .= Display::page_subheader(
-                    Display::return_icon('course.png', get_lang('MyCourses'), array(), ICON_SIZE_SMALL).' '.get_lang('MyCourses')
+                    Display::return_icon(
+                        'course.png',
+                        get_lang('MyCourses'),
+                        array(),
+                        ICON_SIZE_SMALL
+                    ).' '.get_lang('MyCourses')
                 );
                 $html .= '<table class="data_table" width="100%">';
                 $html .= '<tr>
@@ -4095,13 +4116,16 @@ class Tracking
                         false,
                         1
                     );
+
                     foreach ($exercise_list as $exercise_data) {
                         $exercise_obj = new Exercise($course_data['id']);
                         $exercise_obj->read($exercise_data['id']);
                         //Exercise is not necessary to be visible to show results check the result_disable configuration instead
                         //$visible_return = $exercise_obj->is_visible();
 
-                        if ($exercise_data['results_disabled'] == 0 || $exercise_data['results_disabled'] == 2) {
+                        if ($exercise_data['results_disabled'] == 0 ||
+                            $exercise_data['results_disabled'] == 2
+                        ) {
 
                             $best_average = intval(
                                 get_best_average_score_by_exercise(
@@ -4111,8 +4135,9 @@ class Tracking
                                     $user_count
                                 )
                             );
-                            $exercise_graph_list[] 		= $best_average;
-                            $all_exercise_graph_list[] 	= $best_average;
+
+                            $exercise_graph_list[] = $best_average;
+                            $all_exercise_graph_list[] = $best_average;
 
                             $user_result_data = get_best_attempt_by_user(
                                 api_get_user_id(),
@@ -4122,7 +4147,9 @@ class Tracking
                             );
 
                             $score = 0;
-                            if (!empty($user_result_data['exe_weighting']) && intval($user_result_data['exe_weighting']) != 0) {
+                            if (!empty($user_result_data['exe_weighting']) &&
+                                intval($user_result_data['exe_weighting']) != 0
+                            ) {
                                 $score = intval($user_result_data['exe_result']/$user_result_data['exe_weighting'] * 100);
                             }
                             $time = api_strtotime($exercise_data['start_time']) ? api_strtotime($exercise_data['start_time'], 'UTC') : 0;
@@ -4133,7 +4160,8 @@ class Tracking
                                 $exercise_graph_name_list[]= $title;
                                 $all_exercise_graph_name_list[] = $title;
                             } else {
-                                // if there are more than 10 results, space becomes difficult to find, so only show the title of the exercise, not the tool
+                                // if there are more than 10 results, space becomes
+                                // difficult to find, so only show the title of the exercise, not the tool
                                 $title = cut($exercise_data['title'], 30);
                                 $exercise_graph_name_list[]= $title;
                                 $all_exercise_graph_name_list[]= $title;
@@ -4168,7 +4196,14 @@ class Tracking
                 );
             }
 
-            $html .= Display::page_subheader(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL).' '.get_lang('Sessions'));
+            $html .= Display::page_subheader(
+                Display::return_icon(
+                    'session.png',
+                    get_lang('Sessions'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ).' '.get_lang('Sessions')
+            );
 
             $html .= '<table class="data_table" width="100%">';
             $html .= '<tr>
@@ -4197,12 +4232,12 @@ class Tracking
 
                 $stats_array = array();
 
-                foreach($course_list as $course_data) {
+                foreach ($course_list as $course_data) {
                     //All exercises in the course @todo change for a real count
-                    $exercises          = get_all_exercises($course_data, $my_session_id);
+                    $exercises = get_all_exercises($course_data, $my_session_id);
                     $count_exercises = 0;
                     if (is_array($exercises) && !empty($exercises)) {
-                        $count_exercises 	= count($exercises);
+                        $count_exercises = count($exercises);
                     }
 
                     //Count of user results
@@ -4212,7 +4247,12 @@ class Tracking
                     $answered_exercises = 0;
                     if (!empty($exercises)) {
                         foreach($exercises as $exercise_item) {
-                            $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $course_data['code'], $my_session_id);
+                            $attempts = count_exercise_attempts_by_user(
+                                api_get_user_id(),
+                                $exercise_item['id'],
+                                $course_data['code'],
+                                $my_session_id
+                            );
                             if ($attempts > 1)  {
                                 $answered_exercises++;
                             }
@@ -4221,16 +4261,13 @@ class Tracking
 
                     // Average
                     $average = get_average_score_by_course($course_data['code'], $my_session_id);
-
                     $all_exercises += $count_exercises;
-
                     $all_unanswered_exercises_by_user += $count_exercises - $answered_exercises;
                     //$all_done_exercise += $done_exercises;
-                    $all_average       += $average;
-                    //$stats_array[$course_data['code']] = array('exercises'=>$count_exercises, 'unanswered_exercises_by_user'=>$answered_exercises,'done_exercises'=>$done_exercises, 'average'=>$average);
+                    $all_average += $average;
                 }
 
-                $all_average = $all_average /  count($course_list);
+                $all_average = $all_average / count($course_list);
 
                 if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
                     $html .= '<tr style="background-color:#FBF09D">';
@@ -4255,18 +4292,23 @@ class Tracking
                 $html .= '</tr>';
             }
             $html .= '</table><br />';
-            $html .= Display::div($main_session_graph, array('id'=>'session_graph','class'=>'chart-session', 'style'=>'position:relative; text-align: center;') );
+            $html .= Display::div(
+                $main_session_graph,
+                array(
+                    'id' => 'session_graph',
+                    'class' => 'chart-session',
+                    'style' => 'position:relative; text-align: center;',
+                )
+            );
 
             // Checking selected session.
 
             if (isset($_GET['session_id'])) {
                 $session_id_from_get = intval($_GET['session_id']);
-
                 $session_data 	= $course_in_session[$session_id_from_get];
                 $course_list 	= $session_data['course_list'];
 
                 $html .= Display::tag('h3',$session_data['name'].' - '.get_lang('CourseList'));
-
                 $html .= '<table class="data_table" width="100%">';
                 //'.Display::tag('th', get_lang('DoneExercises'),         array('class'=>'head')).'
                 $html .= '
@@ -4288,7 +4330,7 @@ class Tracking
                     $course_title 	= $course_data['title'];
 
                     //All exercises in the course @todo change for a real count
-                    $exercises          = get_all_exercises($course_data, $session_id_from_get);
+                    $exercises = get_all_exercises($course_data, $session_id_from_get);
                     $count_exercises = 0;
                     if (!empty($exercises)) {
                         $count_exercises 	= count($exercises);
@@ -4299,8 +4341,13 @@ class Tracking
                     //From course exercises NOT from LP exercises!!!
                     //$done_exercises     = get_count_exercises_attempted_by_course($course_code, $session_id_from_get);
                     $answered_exercises = 0;
-                    foreach($exercises as $exercise_item) {
-                        $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $course_code, $session_id_from_get);
+                    foreach ($exercises as $exercise_item) {
+                        $attempts = count_exercise_attempts_by_user(
+                            api_get_user_id(),
+                            $exercise_item['id'],
+                            $course_code,
+                            $session_id_from_get
+                        );
                         if ($attempts > 1)  {
                             $answered_exercises++;
                         }
@@ -4309,15 +4356,23 @@ class Tracking
                     $unanswered_exercises = $count_exercises - $answered_exercises;
 
                     // Average
-                    $average = get_average_score_by_course($course_code, $session_id_from_get);
-                    $my_average	= get_average_score_by_course_by_user(api_get_user_id(), $course_code, $session_id_from_get);
+                    $average = get_average_score_by_course(
+                        $course_code,
+                        $session_id_from_get
+                    );
+
+                    $my_average = get_average_score_by_course_by_user(
+                        api_get_user_id(),
+                        $course_code,
+                        $session_id_from_get
+                    );
 
                     $stats_array[$course_code] = array(
-                        'exercises'						=> $count_exercises,
-                        'unanswered_exercises_by_user'	=> $unanswered_exercises,
-                        'done_exercises'				=> $done_exercises,
-                        'average'						=> $average,
-                        'my_average'					=> $my_average
+                        'exercises' => $count_exercises,
+                        'unanswered_exercises_by_user' => $unanswered_exercises,
+                        'done_exercises' => $done_exercises,
+                        'average' => $average,
+                        'my_average' => $my_average,
                     );
 
                     $weighting = 0;
@@ -4374,10 +4429,6 @@ class Tracking
                     $html .= '</tr>';
                 }
                 $html .= '</table>';
-
-                if (!empty($session_graph[$session_id_from_get])) {
-                    //$html .= Display::div($session_graph[$session_id_from_get], array('id'=>'session_graph','class'=>'chart-session', 'style'=>'position:relative; text-align: center;') );
-                }
             }
         }
         return $html;

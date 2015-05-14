@@ -244,6 +244,7 @@ function save_item(
                 }
                 $statusIsSet = true;
             }
+
             /**
              *  2) If there is no mastery score in the manifest
              *    (adlcp:masteryscore), the LMS cannot override SCO
@@ -259,7 +260,7 @@ function save_item(
 
             /**
              * 3) If the student is taking the SCO for no-credit, there is no
-             *    change to the lesson_status, with one exception.  If the
+             *    change to the lesson_status, with one exception. If the
              *    lesson_mode is "browse", the lesson_status may change to
              *    "browsed" even if the cmi.core.credit is set to no-credit.
              */
@@ -274,14 +275,14 @@ function save_item(
 
             /**
              * If a SCO sets the cmi.core.lesson_status then there is no problem.
-             *   However, the SCORM does not force the SCO to set the
-             *   cmi.core.lesson_status.  There is some additional requirements
-             *   that must be adhered to successfully handle these cases:
+             * However, the SCORM does not force the SCO to set the
+             * cmi.core.lesson_status.  There is some additional requirements
+             * that must be adhered to successfully handle these cases:
              */
             if (!$statusIsSet && empty($status) && !$statusSignalReceived) {
                 /**
                  * Upon initial launch the LMS should set the
-                 *   cmi.core.lesson_status to "not attempted".
+                 * cmi.core.lesson_status to "not attempted".
                  */
                 // this case should be handled by LMSInitialize() and xajax_switch_item()
                 /**
@@ -289,7 +290,7 @@ function save_item(
                  * away, the LMS should set the cmi.core.lesson_status for the
                  * SCO to "completed".
                  */
-                if ($lmsFinish or $userNavigatesAway) {
+                if ($lmsFinish || $userNavigatesAway) {
                     $myStatus = 'completed';
                     /**
                      * After setting the cmi.core.lesson_status to "completed",
@@ -484,22 +485,22 @@ if (isset($_REQUEST['interact'])) {
 }
 
 echo save_item(
-    (!empty($_REQUEST['lid'])?$_REQUEST['lid']:null),
-    (!empty($_REQUEST['uid'])?$_REQUEST['uid']:null),
-    (!empty($_REQUEST['vid'])?$_REQUEST['vid']:null),
-    (!empty($_REQUEST['iid'])?$_REQUEST['iid']:null),
-    (!empty($_REQUEST['s'])?$_REQUEST['s']:null),
-    (!empty($_REQUEST['max'])?$_REQUEST['max']:null),
-    (!empty($_REQUEST['min'])?$_REQUEST['min']:null),
-    (!empty($_REQUEST['status'])?$_REQUEST['status']:null),
-    (!empty($_REQUEST['t'])?$_REQUEST['t']:null),
-    (!empty($_REQUEST['suspend'])?$_REQUEST['suspend']:null),
-    (!empty($_REQUEST['loc'])?$_REQUEST['loc']:null),
+    (!empty($_REQUEST['lid']) ? $_REQUEST['lid'] : null),
+    (!empty($_REQUEST['uid']) ? $_REQUEST['uid'] : null),
+    (!empty($_REQUEST['vid']) ? $_REQUEST['vid'] : null),
+    (!empty($_REQUEST['iid']) ? $_REQUEST['iid'] : null),
+    (!empty($_REQUEST['s']) ? $_REQUEST['s'] : null),
+    (!empty($_REQUEST['max']) ? $_REQUEST['max'] : null),
+    (!empty($_REQUEST['min']) ? $_REQUEST['min'] : null),
+    (!empty($_REQUEST['status']) ? $_REQUEST['status'] : null),
+    (!empty($_REQUEST['t']) ? $_REQUEST['t'] : null),
+    (!empty($_REQUEST['suspend']) ? $_REQUEST['suspend'] : null),
+    (!empty($_REQUEST['loc']) ? $_REQUEST['loc'] : null),
     $interactions,
-    (!empty($_REQUEST['core_exit'])?$_REQUEST['core_exit']:''),
-    (!empty($_REQUEST['session_id'])?$_REQUEST['session_id']:''),
-    (!empty($_REQUEST['course_id'])?$_REQUEST['course_id']:''),
-    (empty($_REQUEST['finish'])?0:1),
-    (empty($_REQUEST['userNavigatesAway'])?0:1),
-    (empty($_REQUEST['statusSignalReceived'])?0:1)
+    (!empty($_REQUEST['core_exit']) ? $_REQUEST['core_exit'] : ''),
+    (!empty($_REQUEST['session_id']) ? $_REQUEST['session_id'] : ''),
+    (!empty($_REQUEST['course_id']) ? $_REQUEST['course_id'] : ''),
+    (empty($_REQUEST['finish']) ? 0 : 1),
+    (empty($_REQUEST['userNavigatesAway']) ? 0 : 1),
+    (empty($_REQUEST['statusSignalReceived']) ? 0 : 1)
 );

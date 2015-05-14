@@ -1751,7 +1751,7 @@ function xajax_save_item_scorm(
 
     if (typeof(statusSignalReceived) == 'undefined') {
         statusSignalReceived = 0;
-        // olms.statusSignalReceived = 0;
+        olms.statusSignalReceived = 0;
     }
 
     var is_interactions='false';
@@ -1832,7 +1832,7 @@ function xajax_save_item_scorm(
     });
     params = '';
     my_scorm_values = null;
-    // olms.statusSignalReceived = 0;
+    olms.statusSignalReceived = 0;
 }
 
 /**

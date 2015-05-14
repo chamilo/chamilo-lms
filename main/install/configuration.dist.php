@@ -286,3 +286,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['dropbox_hide_course_coach'] = false;
 // If SSO is used, the redirection to the master server is forced.
 //$_configuration['force_sso_redirect'] = false;
+// Session course ordering in the the session view.
+// false = alphabetic order (default)
+// true = based in the session course list
+//$_configuration['session_course_ordering'] = false;

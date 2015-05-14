@@ -211,7 +211,7 @@ class SessionManager
                 }
 
                 if (!empty($session_id)) {
-                    $extraFields['session_id'] = $session_id;
+                    $extraFields['item_id'] = $session_id;
 
                     $sessionFieldValue = new ExtraFieldValue('session');
                     $sessionFieldValue->saveFieldValues($extraFields);
@@ -1451,7 +1451,7 @@ class SessionManager
                     'id = ?' => $id
                 ));
 
-                $extraFields['session_id'] = $id;
+                $extraFields['item_id'] = $id;
 
                 $sessionFieldValue = new ExtraFieldValue('session');
                 $sessionFieldValue->saveFieldValues($extraFields);

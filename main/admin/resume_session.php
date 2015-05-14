@@ -290,9 +290,7 @@ if ($session['nbr_courses'] == 0) {
 } else {
 	// select the courses
 
-    //$orderBy = "ORDER BY position";
-    $orderBy = '';
-
+    $orderBy = "ORDER BY position";
 	$sql = "SELECT c.id, code, title, visual_code, nbr_users
 			FROM $tbl_course c INNER JOIN $tbl_session_rel_course sc
 			ON (c.id = sc.c_id)

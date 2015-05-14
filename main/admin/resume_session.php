@@ -25,6 +25,8 @@ $tool_name = get_lang('SessionOverview');
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
+$orig_param = '&origin=resume_session';
+
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_class = Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
@@ -372,7 +374,6 @@ if ($session['nbr_courses'] == 0) {
             $downUrl
         );
 
-		$orig_param = '&origin=resume_session';
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 		echo '
 		<tr>

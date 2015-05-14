@@ -746,11 +746,11 @@ class Display
         $show_text = true,
         $return_only_path = false
     ) {
-        $code_path = api_get_path(SYS_CODE_PATH);
-        $w_code_path = api_get_path(WEB_CODE_PATH);
+        $code_path = api_get_path(SYS_CSS_PATH);
+        $w_code_path = api_get_path(WEB_CSS_PATH);
 
         $image = trim($image);
-        $theme = 'css/' . api_get_visual_theme() . '/icons/';
+        $theme = 'themes/' . api_get_visual_theme() . '/icons/';
         $icon = '';
         $size_extra = '';
 

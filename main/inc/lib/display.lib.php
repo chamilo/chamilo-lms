@@ -746,8 +746,10 @@ class Display
         $show_text = true,
         $return_only_path = false
     ) {
-        $code_path = api_get_path(SYS_CSS_PATH);
-        $w_code_path = api_get_path(WEB_CSS_PATH);
+        $code_path = api_get_path(SYS_CODE_PATH);
+        $w_code_path = api_get_path(WEB_CODE_PATH);
+        $alternateCssPath = api_get_path(SYS_CSS_PATH);
+        $alternateWebCssPath = api_get_path(WEB_CSS_PATH);
 
         $image = trim($image);
         $theme = 'themes/' . api_get_visual_theme() . '/icons/';
@@ -762,8 +764,8 @@ class Display
         }
 
         //Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
-        if (is_file($code_path.$theme.$size_extra.$image)) {
-            $icon = $w_code_path.$theme.$size_extra.$image;
+        if (is_file($alternateCssPath.$theme.$size_extra.$image)) {
+            $icon = $alternateWebCssPath.$theme.$size_extra.$image;
         } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {
             //Checking the main/img/icons/XXX/ folder
             $icon = $w_code_path.'img/icons/'.$size_extra.$image;

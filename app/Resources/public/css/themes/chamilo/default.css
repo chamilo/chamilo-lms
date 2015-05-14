@@ -219,3 +219,15 @@ footer a{
 .navbar-default .navbar-brand {
   color:white;
 }
+.navbar-default .navbar-collapse, .navbar-default .navbar-form{
+  border-color: #00677C;
+}
+.navbar-default .navbar-toggle{
+  border-color: #00677C;
+}
+.navbar-default .navbar-toggle .icon-bar{
+  background-color: #ffffff;
+}
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
+  background-color: #00677C;
+}

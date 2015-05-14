@@ -106,7 +106,7 @@ class ExerciseLib
 
             if (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
                 if ($answerType == DRAGGABLE) {
-                    $s .= '<div class="ui-widget ui-helper-clearfix">
+                    $s .= '<div class="col-md-12 ui-widget ui-helper-clearfix">
                         <div class="clearfix">
                         <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix">';
                 } else {
@@ -923,7 +923,7 @@ HTML;
                         $parsed_answer = $answer;
                         $windowId = $questionId . '_' . $lines_count;
 
-                        $s .= '<li class="thumbnail" id="' . $windowId . '">';
+                        $s .= '<li class="touch-items" id="' . $windowId . '">';
                         $s .= Display::div(
                             $parsed_answer,
                             [
@@ -1136,7 +1136,7 @@ HTML;
 
                 $counterAnswer = 1;
 
-                $s .= '<div class="col-xs-12"><div class="row">';
+                $s .= '<div class="col-md-12"><div class="row">';
 
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
@@ -1147,7 +1147,7 @@ HTML;
                             $counterAnswer,
                             [
                                 'id' => "drop_$windowId",
-                                'class' => 'droppable col-sm-4 well'
+                                'class' => 'droppable col-md-2'
                             ]
                         );
 

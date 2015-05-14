@@ -5593,7 +5593,7 @@ class SessionManager
                 array(
                     'where' => array(
                         "session_category_id = ? AND id IN (
-                            SELECT sfv.session_id FROM $joinTable
+                            SELECT sfv.item_id FROM $joinTable
                             WHERE
                                 sf.extra_field_type = $extraFieldType AND
                                 sfv.item_id = session.id AND

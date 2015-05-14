@@ -9,6 +9,8 @@
  */
 class CreateDrupalUser extends Plugin implements HookPluginInterface
 {
+    const EXTRAFIELD_VARIABLE_NAME = 'drupal_user_id';
+
     /**
      * Class constructor
      */
@@ -38,6 +40,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
      */
     public function install()
     {
+        $this->createExtraField();
         $this->installHook();
     }
 
@@ -48,6 +51,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     public function uninstall()
     {
         $this->uninstallHook();
+        $this->deleteExtraField();
     }
 
     /**
@@ -71,6 +75,58 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
 
         if ($event) {
             $event->detach($observer);
+        }
+    }
+
+    /**
+     * Get the drupal_user_id extra field information
+     * @return array The info
+     */
+    private function getExtraFieldInfo()
+    {
+        $extraField = new ExtraField('user');
+        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_VARIABLE_NAME
+        );
+
+        return $extraFieldHandler;
+    }
+
+    /**
+     * Create the drupal_user_id when it not exists
+     */
+    private function createExtraField()
+    {
+        $extraFieldExists = $this->getExtraFieldInfo() !== false;
+
+        if (!$extraFieldExists) {
+            $extraField = new ExtraField('user');
+            $extraField->save(
+                [
+                    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
+                    'variable' => self::EXTRAFIELD_VARIABLE_NAME,
+                    'display_text' => get_plugin_lang('DrupalUserId', 'CreateDrupalUser'),
+                    'default_value' => null,
+                    'field_order' => null,
+                    'visible' => false,
+                    'changeable' => false,
+                    'filter' => null
+                ]
+            );
+        }
+    }
+
+    /**
+     * Delete the drupal_user_id and values
+     */
+    private function deleteExtraField()
+    {
+        $extraFieldInfo = $this->getExtraFieldInfo();
+        $extraFieldExists = $extraFieldInfo !== false;
+
+        if ($extraFieldExists) {
+            $extraField = new ExtraField('user');
+            $extraField->delete($extraFieldInfo['id']);
         }
     }
 

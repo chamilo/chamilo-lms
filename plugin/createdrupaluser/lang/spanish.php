@@ -10,3 +10,5 @@ $strings['plugin_comment'] = 'Este plugin permite crear usuarios en un sitio web
 
 $strings['drupal_domain'] = 'URL del sitio web Drupal';
 $strings['drupal_domain_help'] = 'La dirección del servidor debe escribirse con el protocolo al comienzo y con la barra al final, por ejemplo http://www.example.com/';
+
+$strings['DrupalUserId'] = 'ID de usuario Drupal';

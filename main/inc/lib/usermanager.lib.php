@@ -1129,18 +1129,22 @@ class UserManager
      * @param int User id
      * @return bool True if user id was found, false otherwise
      */
-    public static function is_user_id_valid($user_id)
+    public static function is_user_id_valid($userId)
     {
-        $user_id = (int) $user_id;
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id FROM $table_user WHERE user_id = '".$user_id."'";
-        $res = Database::query($sql);
-        $num_rows = Database::num_rows($res);
-        if ($num_rows == 0) {
+        $resultData = Database::select(
+            'COUNT(1) AS count',
+            Database::get_main_table(TABLE_MAIN_USER),
+            [
+                'where' => ['id = ?' => intval($userId)]
+            ],
+            'first'
+        );
+
+        if ($resultData === false) {
             return false;
-        } else {
-            return true;
         }
+
+        return $resultData['count'] > 0;
     }
 
     /**

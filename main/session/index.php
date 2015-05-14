@@ -6,7 +6,7 @@
 *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
 */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 $cidReset = true;
 
@@ -573,22 +573,30 @@ $(function() {
 <?php
 
 $courseCode = isset($_GET['course']) ? $_GET['course'] : null;
-
-$my_reporting = '';
-
+$reportingTab = '';
 if (!api_is_anonymous()) {
-    $my_reporting = Tracking::show_user_progress(api_get_user_id(), $session_id, '#tabs-4', false, false);
-
-    if (!empty($my_reporting))  {
-        $my_reporting  .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $courseCode, $session_id);
+    $reportingTab = Tracking::show_user_progress(
+        api_get_user_id(),
+        $session_id,
+        '#tabs-4',
+        false,
+        false
+    );
+    if (!empty($reportingTab))  {
+        $reportingTab .= '<br />'.Tracking::show_course_detail(
+                api_get_user_id(),
+                $courseCode,
+                $session_id
+            );
     }
-    if (empty($my_reporting)) {
-        $my_reporting  = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+    if (empty($reportingTab)) {
+        $reportingTab  = Display::return_message(get_lang('NoDataAvailable'), 'warning');
     }
 }
 
 // Main headers
 $headers = array(
+    Display::return_icon('moderator_star.png'),
     get_lang('Courses'),
     get_lang('LearningPaths')
 );
@@ -599,31 +607,35 @@ if (!api_is_anonymous()) {
 }
 
 // Sub headers
-$sub_header = array(
+/*$sub_header = array(
     get_lang('AllLearningPaths'),
     get_lang('PerWeek'),
     get_lang('ByCourse')
 );
 
 // Sub headers data
-$lp_tabs = Display::tabs(
+$lpTab = Display::tabs(
     $sub_header,
     array(
-        Display::grid_html('list_default'),
+        //Display::grid_html('list_default'),
         Display::grid_html('list_week'),
-        Display::grid_html('list_course')
+        //Display::grid_html('list_course')
     ),
     'sub_tab'
-);
-$courses_tab =  Display::grid_html('courses');
+);*/
+
+$coursesTab = Display::grid_html('courses');
+
+$starTab = Display::grid_html('list_default');
 // Main headers data
 echo Display::tabs(
     $headers,
     array(
-        $courses_tab,
-        $lp_tabs,
+        $starTab,
+        $coursesTab,
+        Display::grid_html('list_course'),
         Display::grid_html('exercises'),
-        $my_reporting
+        $reportingTab
     )
 );
 

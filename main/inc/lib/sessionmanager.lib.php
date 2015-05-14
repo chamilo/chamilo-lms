@@ -5130,7 +5130,6 @@ class SessionManager
 
         $position = array();
         $count = 0;
-
         foreach ($courseList as $course) {
             if ($course['position'] == '') {
                 $course['position'] = $count;

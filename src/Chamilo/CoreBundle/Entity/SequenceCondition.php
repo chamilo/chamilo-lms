@@ -66,4 +66,101 @@ class SequenceCondition
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return SequenceCondition
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMathOperation()
+    {
+        return $this->mathOperation;
+    }
+
+    /**
+     * @param string $mathOperation
+     * @return SequenceCondition
+     */
+    public function setMathOperation($mathOperation)
+    {
+        $this->mathOperation = $mathOperation;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParam()
+    {
+        return $this->param;
+    }
+
+    /**
+     * @param string $param
+     * @return SequenceCondition
+     */
+    public function setParam($param)
+    {
+        $this->param = $param;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActTrue()
+    {
+        return $this->actTrue;
+    }
+
+    /**
+     * @param string $actTrue
+     * @return SequenceCondition
+     */
+    public function setActTrue($actTrue)
+    {
+        $this->actTrue = $actTrue;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActFalse()
+    {
+        return $this->actFalse;
+    }
+
+    /**
+     * @param string $actFalse
+     * @return SequenceCondition
+     */
+    public function setActFalse($actFalse)
+    {
+        $this->actFalse = $actFalse;
+
+        return $this;
+    }
+
+
 }

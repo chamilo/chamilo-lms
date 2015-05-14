@@ -3969,11 +3969,17 @@ class Tracking
      * @param int $session_id
      * @param string $extra_params
      * @param bool $show_courses
+     * @param bool $showAllSessions
      *
      * @return string
      */
-    public static function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true, $showAllSessions = true)
-    {
+    public static function show_user_progress(
+        $user_id,
+        $session_id = 0,
+        $extra_params = '',
+        $show_courses = true,
+        $showAllSessions = true
+    ) {
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -3982,6 +3988,8 @@ class Tracking
         $tbl_access_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
         $user_id = intval($user_id);
+        $session_id = intval($session_id);
+
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT c.code, title
                     FROM $tbl_course_user cu
@@ -4013,11 +4021,16 @@ class Tracking
         $orderBy = " ORDER BY name ";
         $extraInnerJoin = null;
 
-        if (!empty($session_id)) {
+        if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
             $orderBy = " ORDER BY s.id, position ";
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
                                 ON (cu.c_id = src.c_id AND src.session_id = $session_id) ";
+        }
+
+        $sessionCondition = '';
+        if (!empty($session_id)) {
+            $sessionCondition = " AND s.id = $session_id";
         }
 
         // Get the list of sessions where the user is subscribed as student
@@ -4034,6 +4047,7 @@ class Tracking
                     WHERE
                         cu.user_id = $user_id AND
                         access_url_id = ".api_get_current_access_url_id()."
+                        $sessionCondition
                     $orderBy ";
         } else {
             $sql = "SELECT DISTINCT c.code, s.id as session_id, name
@@ -4043,7 +4057,9 @@ class Tracking
                     INNER JOIN $tbl_course c
                     ON (c.id = cu.c_id)
                     $extraInnerJoin
-                    WHERE cu.user_id = $user_id
+                    WHERE
+                        cu.user_id = $user_id
+                        $sessionCondition
                     $orderBy ";
         }
 

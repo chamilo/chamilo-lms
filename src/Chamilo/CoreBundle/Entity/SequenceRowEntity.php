@@ -65,4 +65,99 @@ class SequenceRowEntity
     {
         return $this->id;
     }
+
+    /**
+     * @return int
+     */
+    public function getCId()
+    {
+        return $this->cId;
+    }
+
+    /**
+     * @param int $cId
+     * @return SequenceRowEntity
+     */
+    public function setCId($cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
+    /**
+     * @param int $sessionId
+     * @return SequenceRowEntity
+     */
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRowId()
+    {
+        return $this->rowId;
+    }
+
+    /**
+     * @param int $rowId
+     * @return SequenceRowEntity
+     */
+    public function setRowId($rowId)
+    {
+        $this->rowId = $rowId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return SequenceRowEntity
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param mixed $type
+     * @return SequenceRowEntity
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
 }

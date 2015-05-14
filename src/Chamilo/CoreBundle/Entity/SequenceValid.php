@@ -44,4 +44,45 @@ class SequenceValid
     {
         return $this->id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getVariable()
+    {
+        return $this->variable;
+    }
+
+    /**
+     * @param mixed $variable
+     *
+     * @return SequenceValid
+     */
+    public function setVariable($variable)
+    {
+        $this->variable = $variable;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCondition()
+    {
+        return $this->condition;
+    }
+
+    /**
+     * @param mixed $condition
+     *
+     * @return SequenceValid
+     */
+    public function setCondition($condition)
+    {
+        $this->condition = $condition;
+
+        return $this;
+    }
+
 }

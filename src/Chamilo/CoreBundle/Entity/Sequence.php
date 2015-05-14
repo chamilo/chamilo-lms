@@ -50,4 +50,61 @@ class Sequence
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getPart()
+    {
+        return $this->part;
+    }
+
+    /**
+     * @param string $part
+     * @return Sequence
+     */
+    public function setPart($part)
+    {
+        $this->part = $part;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRowEntity()
+    {
+        return $this->rowEntity;
+    }
+
+    /**
+     * @param mixed $rowEntity
+     * @return Sequence
+     */
+    public function setRowEntity($rowEntity)
+    {
+        $this->rowEntity = $rowEntity;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRowEntityNext()
+    {
+        return $this->rowEntityNext;
+    }
+
+    /**
+     * @param mixed $rowEntityNext
+     * @return Sequence
+     */
+    public function setRowEntityNext($rowEntityNext)
+    {
+        $this->rowEntityNext = $rowEntityNext;
+
+        return $this;
+    }
 }

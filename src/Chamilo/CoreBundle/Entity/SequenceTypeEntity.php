@@ -52,4 +52,65 @@ class SequenceTypeEntity
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return SequenceTypeEntity
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return SequenceTypeEntity
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityTable()
+    {
+        return $this->entityTable;
+    }
+
+    /**
+     * @param string $entityTable
+     *
+     * @return SequenceTypeEntity
+     */
+    public function setEntityTable($entityTable)
+    {
+        $this->entityTable = $entityTable;
+
+        return $this;
+    }
+
 }

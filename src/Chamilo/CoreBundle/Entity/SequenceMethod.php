@@ -66,4 +66,101 @@ class SequenceMethod
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return SequenceMethod
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormula()
+    {
+        return $this->formula;
+    }
+
+    /**
+     * @param string $formula
+     * @return SequenceMethod
+     */
+    public function setFormula($formula)
+    {
+        $this->formula = $formula;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAssign()
+    {
+        return $this->assign;
+    }
+
+    /**
+     * @param string $assign
+     * @return SequenceMethod
+     */
+    public function setAssign($assign)
+    {
+        $this->assign = $assign;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetType()
+    {
+        return $this->metType;
+    }
+
+    /**
+     * @param string $metType
+     * @return SequenceMethod
+     */
+    public function setMetType($metType)
+    {
+        $this->metType = $metType;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActFalse()
+    {
+        return $this->actFalse;
+    }
+
+    /**
+     * @param string $actFalse
+     * @return SequenceMethod
+     */
+    public function setActFalse($actFalse)
+    {
+        $this->actFalse = $actFalse;
+
+        return $this;
+    }
+
+
 }

@@ -43,4 +43,44 @@ class SequenceRuleCondition
     {
         return $this->id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRule()
+    {
+        return $this->rule;
+    }
+
+    /**
+     * @param mixed $rule
+     * @return SequenceRuleCondition
+     */
+    public function setRule($rule)
+    {
+        $this->rule = $rule;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCondition()
+    {
+        return $this->condition;
+    }
+
+    /**
+     * @param mixed $condition
+     * @return SequenceRuleCondition
+     */
+    public function setCondition($condition)
+    {
+        $this->condition = $condition;
+
+        return $this;
+    }
+
+
 }

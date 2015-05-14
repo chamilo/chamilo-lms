@@ -37,7 +37,7 @@ Clone the repository
 ```
 sudo mkdir chamilo-1.10
 sudo chown -R `whoami` chamilo-1.10
-git clone https://github.com/chamilo/chamilo-lms.git chamilo-1.10
+git clone -b 1.10.x --single-branch https://github.com/chamilo/chamilo-lms.git chamilo-1.10
 ```
 
 Checkout branch 1.10.x
@@ -53,6 +53,7 @@ git config --global push.default current
 From the Chamilo folder (in which you should be now if you followed the previous steps), launch:
 
 ```
+composer global require "fxp/composer-asset-plugin:1.0.0"
 composer update
 ```
 
@@ -78,7 +79,7 @@ The upgrade procedure is relatively straightforward. If you have a 1.9.x initial
 git fetch --all
 git checkout origin 1.10.x
 ```
-Then load the Chamilo URL in your browser, adding "main/install/index.php" and follow the upgrade instructions. Select the "Upgrade from 1.8.x" button to proceed.
+Then load the Chamilo URL in your browser, adding "main/install/index.php" and follow the upgrade instructions. Select the "Upgrade from 1.9.x" button to proceed.
 
 # Documentation
 For more information on Chamilo, visit https://stable.chamilo.org/documentation

@@ -843,10 +843,10 @@ function SetValue(param, val) {
  * Saves the current data from JS memory to the LMS database
  */
 function savedata(item_id) {
-    //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
+    // Origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
     logit_lms('function savedata(' + item_id + ')', 3);
 
-    //Status is NOT modified here see the lp_ajax_save_item.php file
+    // Status is NOT modified here see the lp_ajax_save_item.php file
 
     if (olms.lesson_status != '') {
         olms.updatable_vars_list['cmi.core.lesson_status'] = true;
@@ -857,18 +857,18 @@ function savedata(item_id) {
     var item_to_save = olms.lms_item_id;
     logit_lms('item_to_save (original value): ' + item_to_save, 3);
 
-    //If saving session_time value, we assume that all the new info is about
+    // If saving session_time value, we assume that all the new info is about
     // the old item, not the current one
-    //if (olms.session_time != '' && olms.session_time != '0') {
+    // if (olms.session_time != '' && olms.session_time != '0') {
     if (olms.switch_finished == 0) {
         logit_lms('item_to_save (changed to): ' + old_item_id, 3);
         item_to_save = old_item_id;
     }
 
     //Original behaviour
-    //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
+    // xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
 
-    //Modified version
+    // Modified version
     xajax_save_item_scorm(
         olms.lms_lp_id,
         olms.lms_user_id,
@@ -892,7 +892,7 @@ function savedata(item_id) {
         );
     }
     olms.execute_stats = false;
-    //clean array
+    // Clean array
     olms.variable_to_send = new Array();
 }
 
@@ -1751,6 +1751,7 @@ function xajax_save_item_scorm(
 
     if (typeof(statusSignalReceived) == 'undefined') {
         statusSignalReceived = 0;
+        // olms.statusSignalReceived = 0;
     }
 
     var is_interactions='false';
@@ -1820,7 +1821,7 @@ function xajax_save_item_scorm(
         is_interactions='false';
     }
 
-    logit_lms('xajax_save_item_scorm with params:' + params,3);
+    logit_lms('xajax_save_item_scorm with params:' + params, 3);
 
     $.ajax({
         type:"POST",
@@ -1831,6 +1832,7 @@ function xajax_save_item_scorm(
     });
     params = '';
     my_scorm_values = null;
+    // olms.statusSignalReceived = 0;
 }
 
 /**

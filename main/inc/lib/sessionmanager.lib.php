@@ -5758,7 +5758,7 @@ class SessionManager
                             item_id IN $sessionIdsString AND
                             extra_field_type = $extraFieldType
                 ";
-                $result = Database::result($sql);
+                $result = Database::query($sql);
                 $sessionFieldValueList = Database::store_result($result, 'ASSOC');
 
                 // Check if session field values had result

@@ -4256,11 +4256,12 @@ class Exercise
         if (!empty($ip)) {
             $array[] = array('title' => get_lang('IP'), 'content' => $ip);
         }
-
-        $html  = Display::page_header(
-            Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result')
+        $html  = '<div class="question-result">';
+        $html .= Display::page_header(
+            Display::return_icon('test-quiz.png', get_lang('Result'),null, ICON_SIZE_MEDIUM).' '.$this->exercise.' : '.get_lang('Result')
         );
         $html .= Display::description($array);
+        $html .="</div>";
         return $html;
     }
 

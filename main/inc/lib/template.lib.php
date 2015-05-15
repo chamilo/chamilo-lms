@@ -429,7 +429,7 @@ class Template
     private function set_system_parameters()
     {
         global $_configuration;
-
+        $this->theme = api_get_visual_theme();
         //Setting app paths/URLs
         $_p = array(
             'web' => api_get_path(WEB_PATH),

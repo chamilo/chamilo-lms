@@ -713,9 +713,9 @@ if ($form->validate()) {
     } else {
         Display :: display_header($tool_name);
         echo Display::page_header($tool_name);
-
         echo $content;
         echo $text_after_registration;
+        Display :: display_footer();
     }
 } else {
     // Custom pages
@@ -726,6 +726,6 @@ if ($form->validate()) {
         echo Display::page_header($tool_name);
         echo $content;
         $form->display();
+        Display :: display_footer();
     }
 }
-Display :: display_footer();

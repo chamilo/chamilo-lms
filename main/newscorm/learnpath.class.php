@@ -214,7 +214,7 @@ class learnpath
             Database::query($sql);
             $this->lp_view_id = Database::insert_id();
             if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql_ins, 0);
+                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql, 0);
             }
         }
 

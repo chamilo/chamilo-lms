@@ -151,6 +151,12 @@ switch ($action) {
 
             foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
+
+                $lp = new learnpath($item['code'], $lp_id, api_get_user_id());
+                if ($lp->progress_db == 100) {
+                    continue;
+                }
+
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
 
                 $last_date = Tracking::get_last_connection_date_on_the_course(

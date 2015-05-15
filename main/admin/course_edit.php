@@ -232,7 +232,7 @@ if (!empty($specialCourseFieldInfo)) {
 
 //Extra fields
 $extra_field = new ExtraField('course');
-$extra = $extra_field->addElements($form, $courseId);
+$extra = $extra_field->addElements($form, $courseId, ['special_course']);
 
 $htmlHeadXtra[] = '
 <script>

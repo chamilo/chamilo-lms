@@ -302,11 +302,11 @@ class ExtraField extends Model
      * Add elements to a form
      *
      * @param FormValidator $form
-     * @param int           $itemId
-     *
+     * @param int $itemId
+     * @param array $exclude variables of extra field to exclude
      * @return array|bool
      */
-    public function addElements($form, $itemId = 0)
+    public function addElements($form, $itemId = 0, $exclude = [])
     {
         if (empty($form)) {
             return false;
@@ -329,7 +329,8 @@ class ExtraField extends Model
             $extraData,
             false,
             $extraFields,
-            $itemId
+            $itemId,
+            $exclude
         );
 
         return $extra;
@@ -629,7 +630,7 @@ class ExtraField extends Model
      * @param int $user_id
      * @param array $extra
      * @param int $itemId
-     *
+     * @param array $exclude variables of extra field to exclude
      * @return array
      */
     public function set_extra_fields_in_form(
@@ -637,7 +638,8 @@ class ExtraField extends Model
         $extraData,
         $admin_permissions = false,
         $extra = array(),
-        $itemId = null
+        $itemId = null,
+        $exclude = []
     ) {
         $type = $this->type;
 
@@ -667,6 +669,10 @@ class ExtraField extends Model
 
                 if (!$admin_permissions) {
                     if ($field_details['visible'] == 0) {
+                        continue;
+                    }
+
+                    if (in_array($field_details['variable'], $exclude)) {
                         continue;
                     }
                 }

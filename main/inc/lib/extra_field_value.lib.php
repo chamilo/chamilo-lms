@@ -165,12 +165,15 @@ class ExtraFieldValue extends Model
                             switch ($this->type) {
                                 case 'course':
                                     $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
+                                    $fileDirStored = "courses/";
                                     break;
                                 case 'session':
                                     $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
+                                    $fileDirStored = "sessions/";
                                     break;
                                 case 'user':
                                     $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
+                                    $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
                                     break;
                             }
 
@@ -183,11 +186,10 @@ class ExtraFieldValue extends Model
                             if ($value['error'] == 0) {
                                 $imageExtraField = new Image($value['tmp_name']);
                                 $imageExtraField->send_image($fileDir . $fileName, -1, 'png');
-
                                 $newParams = array(
                                     'item_id' => $params['item_id'],
                                     'field_id' => $extraFieldInfo['id'],
-                                    'value' => $fileDir . $fileName,
+                                    'value' => $fileDirStored . $fileName,
                                     'comment' => $comment
                                 );
 
@@ -200,18 +202,20 @@ class ExtraFieldValue extends Model
                             switch ($this->type) {
                                 case 'course':
                                     $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
+                                    $fileDirStored = "courses/";
                                     break;
                                 case 'session':
                                     $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
+                                    $fileDirStored = "sessions/";
                                     break;
                                 case 'user':
                                     $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
+                                    $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
                                     break;
                             }
 
                             $cleanedName = api_replace_dangerous_char($value['name']);
                             $fileName = ExtraField::FIELD_TYPE_FILE . "_{$params['item_id']}_$cleanedName";
-
                             if (!file_exists($fileDir)) {
                                 mkdir($fileDir, $dirPermissions, true);
                             }
@@ -222,7 +226,7 @@ class ExtraFieldValue extends Model
                                 $new_params = array(
                                     'item_id' => $params['item_id'],
                                     'field_id' => $extraFieldInfo['id'],
-                                    'value' => $fileDir . $fileName
+                                    'value' => $fileDirStored . $fileName
                                 );
 
                                 if ($this->type !== 'session' && $this->type !== 'course') {

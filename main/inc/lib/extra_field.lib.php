@@ -2042,16 +2042,16 @@ EOF;
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
                     if ($valueData !== false && !empty($valueData['value'])) {
-                        if (file_exists(api_get_path(SYS_CODE_PATH) . $valueData['value'])) {
+                        if (file_exists(api_get_path(SYS_UPLOAD_PATH) . $valueData['value'])) {
                             $image = Display::img(
-                                api_get_path(WEB_CODE_PATH) . $valueData['value'],
+                                api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
                                 $field['display_text'],
                                 array('width' => '300')
                             );
 
                             $displayedValue = Display::url(
                                 $image,
-                                api_get_path(WEB_CODE_PATH) . $valueData['value'],
+                                api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
                                 array('target' => '_blank')
                             );
                         }
@@ -2059,10 +2059,10 @@ EOF;
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
                     if ($valueData !== false && !empty($valueData['value'])) {
-                        if (file_exists(api_get_path(SYS_CODE_PATH) . $valueData['value'])) {
+                        if (file_exists(api_get_path(SYS_UPLOAD_PATH) . $valueData['value'])) {
                             $displayedValue = Display::url(
                                 get_lang('Download'),
-                                api_get_path(WEB_CODE_PATH) . $valueData['value'],
+                                api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
                                 array(
                                 'title' => $field['display_text'],
                                 'target' => '_blank'

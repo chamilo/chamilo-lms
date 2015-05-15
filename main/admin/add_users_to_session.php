@@ -109,14 +109,14 @@ function search_users($needle, $type)
                 }
             }
             if (count($user_ids) > 0) {
-                $cond_user_id = ' AND user.user_id NOT IN('.implode(",",$user_ids).')';
+                $cond_user_id = ' AND user.id NOT IN('.implode(",",$user_ids).')';
             }
         }
 
         switch ($type) {
             case 'single':
                 // search users where username or firstname or lastname begins likes $needle
-                $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
+                $sql = 'SELECT user.id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
                         WHERE
                             (
@@ -130,7 +130,7 @@ function search_users($needle, $type)
                         LIMIT 11';
                 break;
             case 'multiple':
-                $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
+                $sql = 'SELECT user.id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
                         WHERE
                             '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND
@@ -139,9 +139,9 @@ function search_users($needle, $type)
                         $order_clause;
                 break;
             case 'any_session':
-                $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname, official_code
+                $sql = 'SELECT DISTINCT user.id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
-                        LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.user_id = user.user_id)
+                        LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.user_id = user.id)
                         WHERE
                             s.user_id IS NULL AND
                             user.status<>'.DRH.' AND
@@ -156,10 +156,10 @@ function search_users($needle, $type)
             if ($access_url_id != -1) {
                 switch ($type) {
                     case 'single':
-                        $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
+                        $sql = 'SELECT user.id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
                         INNER JOIN '.$tbl_user_rel_access_url.' url_user
-                        ON (url_user.user_id = user.user_id)
+                        ON (url_user.user_id = user.id)
                         WHERE
                             access_url_id = '.$access_url_id.' AND
                             (
@@ -172,9 +172,9 @@ function search_users($needle, $type)
                         ' LIMIT 11';
                         break;
                     case 'multiple':
-                        $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
+                        $sql = 'SELECT user.id, username, lastname, firstname, official_code
                                 FROM '.$tbl_user.' user
-                                INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                                INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.id)
                                 WHERE
                                     access_url_id = '.$access_url_id.' AND
                                     '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND
@@ -183,17 +183,17 @@ function search_users($needle, $type)
                                 $order_clause;
                         break;
                     case 'any_session' :
-                        $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname, official_code
+                        $sql = 'SELECT DISTINCT user.id, username, lastname, firstname, official_code
                             FROM '.$tbl_user.' user
                             LEFT OUTER JOIN '.$tbl_session_rel_user.' s
-                            ON (s.user_id = user.user_id)
+                            ON (s.user_id = user.id)
                             INNER JOIN '.$tbl_user_rel_access_url.' url_user
-                            ON (url_user.user_id=user.user_id)
+                            ON (url_user.user_id = user.id)
                             WHERE
                                 access_url_id = '.$access_url_id.' AND
                                 s.user_id IS null AND
-                                user.status<>'.DRH.' AND
-                                user.status<>6 '.$cond_user_id.
+                                user.status <> '.DRH.' AND
+                                user.status <> 6 '.$cond_user_id.
                             $order_clause;
                         break;
                 }
@@ -212,7 +212,7 @@ function search_users($needle, $type)
                         $person_name = $officialCode.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
                     }
 
-                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['user_id'].'\',\''.$person_name.' '.'\')">'.$person_name.' </a><br />';
+                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['id'].'\',\''.$person_name.' '.'\')">'.$person_name.' </a><br />';
                 } else {
                     $return .= '...<br />';
                 }
@@ -228,7 +228,7 @@ function search_users($needle, $type)
                     $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
                     $person_name = $officialCode.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
                 }
-	            $return .= '<option value="'.$user['user_id'].'">'.$person_name.' </option>';
+	            $return .= '<option value="'.$user['id'].'">'.$person_name.' </option>';
 			}
 			$return .= '</select>';
 			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
@@ -330,10 +330,10 @@ if (isset($_configuration['order_user_list_by_official_code']) &&
 }
 
 if ($ajax_search) {
-    $sql = "SELECT u.user_id, lastname, firstname, username, session_id, official_code
+    $sql = "SELECT u.id, lastname, firstname, username, session_id, official_code
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
-                ON $tbl_session_rel_user.user_id = u.user_id AND
+                ON $tbl_session_rel_user.user_id = u.id AND
                 $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 AND $tbl_session_rel_user.session_id = ".intval($id_session)."
             WHERE u.status<>".DRH." AND u.status<>6
@@ -343,13 +343,13 @@ if ($ajax_search) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
-            $sql="SELECT u.user_id, lastname, firstname, username, session_id, official_code
+            $sql="SELECT u.id, lastname, firstname, username, session_id, official_code
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
-                ON $tbl_session_rel_user.user_id = u.user_id AND
+                ON $tbl_session_rel_user.user_id = u.id AND
                 $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 AND $tbl_session_rel_user.session_id = ".intval($id_session)."
-            INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+            INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.id)
             WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
             $order_clause";
         }
@@ -357,7 +357,7 @@ if ($ajax_search) {
     $result = Database::query($sql);
     $users = Database::store_result($result);
     foreach ($users as $user) {
-        $sessionUsersList[$user['user_id']] = $user ;
+        $sessionUsersList[$user['id']] = $user ;
     }
 
     $sessionUserInfo = SessionManager::getTotalUserCoursesInSession($id_session);
@@ -369,12 +369,12 @@ if ($ajax_search) {
             continue;
         }
 
-        if (!array_key_exists($sessionUser['user_id'], $sessionUsersList)) {
+        if (!array_key_exists($sessionUser['id'], $sessionUsersList)) {
             continue;
         }
 
         /*if ($sessionUser['count'] != $countSessionCoursesList) {
-            unset($sessionUsersList[$sessionUser['user_id']]);
+            unset($sessionUsersList[$sessionUser['id']]);
         }*/
     }
 
@@ -411,17 +411,17 @@ if ($ajax_search) {
 
         if (api_is_multiple_url_enabled()) {
             if (is_array($final_result) && count($final_result)>0) {
-                $where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
+                $where_filter = " AND u.id IN  ('".implode("','",$final_result)."') ";
             } else {
                 //no results
-                $where_filter = " AND u.user_id  = -1";
+                $where_filter = " AND u.id  = -1";
             }
         } else {
             if (is_array($final_result) && count($final_result)>0) {
-                $where_filter = " WHERE u.user_id IN  ('".implode("','", $final_result)."') ";
+                $where_filter = " WHERE u.id IN  ('".implode("','", $final_result)."') ";
             } else {
                 //no results
-                $where_filter = " WHERE u.user_id  = -1";
+                $where_filter = " WHERE u.id  = -1";
             }
         }
     }
@@ -429,20 +429,20 @@ if ($ajax_search) {
         $order_clause = " AND u.creator_id = " . api_get_user_id() . $order_clause;
     }
     if ($use_extra_fields) {
-        $sql = "SELECT  user_id, lastname, firstname, username, session_id, official_code
+        $sql = "SELECT  u.id, lastname, firstname, username, session_id, official_code
                FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.user_id = u.user_id AND
-                    $tbl_session_rel_user.session_id = '$id_session' AND
+                    ON $tbl_session_rel_user.user_id = u.id AND
+                    $tbl_session_rel_user.session_id = $id_session AND
                     $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 $where_filter AND u.status<>".DRH." AND u.status<>6
                 $order_clause";
     } else {
-        $sql = "SELECT  user_id, lastname, firstname, username, session_id, official_code
+        $sql = "SELECT  u.id, lastname, firstname, username, session_id, official_code
                 FROM $tbl_user u
                 LEFT JOIN $tbl_session_rel_user
-                ON $tbl_session_rel_user.user_id = u.user_id AND
-                $tbl_session_rel_user.session_id = '$id_session' AND
+                ON $tbl_session_rel_user.user_id = u.id AND
+                $tbl_session_rel_user.session_id = $id_session AND
                 $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 WHERE u.status<>".DRH." AND u.status<>6
                 $order_clause";
@@ -451,14 +451,14 @@ if ($ajax_search) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
-            $sql = "SELECT  u.user_id, lastname, firstname, username, session_id, official_code
+            $sql = "SELECT  u.id, lastname, firstname, username, session_id, official_code
                     FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
-                        ON $tbl_session_rel_user.user_id = u.user_id AND
-                        $tbl_session_rel_user.session_id = '$id_session' AND
+                        ON $tbl_session_rel_user.user_id = u.id AND
+                        $tbl_session_rel_user.session_id = $id_session AND
                         $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                     INNER JOIN $tbl_user_rel_access_url url_user
-                    ON (url_user.user_id = u.user_id)
+                    ON (url_user.user_id = u.id)
                     WHERE access_url_id = $access_url_id $where_filter AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
         }
@@ -468,7 +468,7 @@ if ($ajax_search) {
     $users = Database::store_result($result,'ASSOC');
     foreach ($users as $uid => $user) {
         if ($user['id_session'] != $id_session) {
-            $nosessionUsersList[$user['user_id']] = array(
+            $nosessionUsersList[$user['id']] = array(
                 'fn' => $user['firstname'],
                 'ln' => $user['lastname'],
                 'un' => $user['username'],
@@ -480,11 +480,11 @@ if ($ajax_search) {
     unset($users); //clean to free memory
 
     //filling the correct users in list
-    $sql="SELECT  user_id, lastname, firstname, username, session_id, official_code
+    $sql="SELECT  u.id, lastname, firstname, username, session_id, official_code
           FROM $tbl_user u
           LEFT JOIN $tbl_session_rel_user
-          ON $tbl_session_rel_user.user_id = u.user_id AND
-            $tbl_session_rel_user.session_id = '$id_session' AND
+          ON $tbl_session_rel_user.user_id = u.id AND
+            $tbl_session_rel_user.session_id = $id_session AND
             $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
           WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
 
@@ -492,13 +492,13 @@ if ($ajax_search) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
-            $sql = "SELECT  u.user_id, lastname, firstname, username, session_id, official_code
+            $sql = "SELECT  u.id, lastname, firstname, username, session_id, official_code
                     FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
-                        ON $tbl_session_rel_user.user_id = u.user_id AND
-                        $tbl_session_rel_user.session_id = '$id_session' AND
+                        ON $tbl_session_rel_user.user_id = u.id AND
+                        $tbl_session_rel_user.session_id = $id_session AND
                         $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                    INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+                    INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id = u.id)
                     WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
         }
@@ -508,9 +508,9 @@ if ($ajax_search) {
     $users = Database::store_result($result,'ASSOC');
     foreach ($users as $uid => $user) {
         if ($user['id_session'] == $id_session) {
-            $sessionUsersList[$user['user_id']] = $user;
-            if (array_key_exists($user['user_id'],$nosessionUsersList)) {
-                unset($nosessionUsersList[$user['user_id']]);
+            $sessionUsersList[$user['id']] = $user;
+            if (array_key_exists($user['id'],$nosessionUsersList)) {
+                unset($nosessionUsersList[$user['id']]);
             }
         }
         unset($users[$uid]);
@@ -672,7 +672,7 @@ if (!empty($errorMsg)) {
         <?php
         foreach ($sessionUsersList as $enreg) {
         ?>
-            <option value="<?php echo $enreg['user_id']; ?>">
+            <option value="<?php echo $enreg['id']; ?>">
             <?php
                 $personName = api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].') '.$enreg['official_code'];
                 if ($showOfficialCode) {

@@ -95,6 +95,9 @@ class ExtraField extends Model
             case 'lp':
                 $this->extraFieldType = EntityExtraField::LP_FIELD_TYPE;
                 break;
+            case 'lp_item':
+                $this->extraFieldType = EntityExtraField::LP_ITEM_FIELD_TYPE;
+                break;
         }
 
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
@@ -121,7 +124,8 @@ class ExtraField extends Model
             'session',
             'question',
             'lp',
-            'calendar_event'
+            'calendar_event',
+            'lp_item'
         );
     }
 
@@ -2049,44 +2053,34 @@ EOF;
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
-                    if ($valueData === false || empty($valueData['value'])) {
-                        break;
-                    }
+                    if ($valueData !== false && !empty($valueData['value'])) {
+                        if (file_exists(api_get_path(SYS_UPLOAD_PATH) . $valueData['value'])) {
+                            $image = Display::img(
+                                api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
+                                $field['display_text'],
+                                array('width' => '300')
+                            );
 
-                    $cleanImagePath = str_replace(api_get_path(SYS_PATH), '', $valueData['value']);
-                    $webImagePath = api_get_path(WEB_PATH) . $cleanImagePath;
-
-                    if (file_exists(api_get_path(SYS_PATH) . $cleanImagePath)) {
-                        $image = Display::img(
-                            $webImagePath,
-                            $field['display_text'],
-                            ['width' => '300']
-                        );
-
-                        $displayedValue = Display::url(
-                            $image,
-                            $webImagePath,
-                            ['target' => '_blank']
-                        );
+                            $displayedValue = Display::url(
+                                $image,
+                                api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
+                                array('target' => '_blank')
+                            );
+                        }
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
-                    if ($valueData === false || empty($valueData['value'])) {
-                        break;
-                    }
-
-                    $cleanFilePath = str_replace(api_get_path(SYS_PATH), '', $valueData['value']);
-                    $webFilePath = api_get_path(WEB_PATH) . $cleanFilePath;
-
-                    if (file_exists(api_get_path(SYS_PATH) . $cleanFilePath)) {
-                        $displayedValue = Display::url(
-                            get_lang('Download'),
-                            $webFilePath,
-                            array(
-                                'title' => $field['display_text'],
-                                'target' => '_blank'
-                            )
-                        );
+                    if ($valueData !== false && !empty($valueData['value'])) {
+                        if (file_exists(api_get_path(SYS_UPLOAD_PATH) . $valueData['value'])) {
+                            $displayedValue = Display::url(
+                                get_lang('Download'),
+                                api_get_path(WEB_UPLOAD_PATH) . $valueData['value'],
+                                array(
+                                    'title' => $field['display_text'],
+                                    'target' => '_blank'
+                                )
+                            );
+                        }
                     }
                     break;
                 default:

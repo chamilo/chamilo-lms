@@ -23,6 +23,7 @@ class ExtraField extends BaseAttribute
     const QUESTION_FIELD_TYPE = 4;
     const CALENDAR_FIELD_TYPE = 5;
     const LP_FIELD_TYPE = 6;
+    const LP_ITEM_FIELD_TYPE = 7;
 
     /**
      * @var integer

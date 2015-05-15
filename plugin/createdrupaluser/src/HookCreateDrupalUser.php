@@ -54,7 +54,16 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
             );
 
             $client = new SoapClient(null, $options);
-            $drupalUserId = $client->addUser($fields, $extraFields);
+            
+            if (isset($_SESSION['ws_drupal_user_id'])) {
+                $drupalUserId = $_SESSION['ws_drupal_user_id'];
+                return true;
+            }
+
+            if ($drupalUserId === false) {
+                $drupalUserId = $client->addUser($fields, $extraFields);
+            }
+
             if ($drupalUserId !== false) {
                 UserManager::update_extra_field_value($return, 'drupal_user_id', $drupalUserId);
             }

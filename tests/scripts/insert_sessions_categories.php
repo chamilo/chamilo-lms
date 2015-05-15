@@ -5,6 +5,9 @@
  */
 require_once '../../main/inc/global.inc.php';
 api_protect_admin_script();
+
+$accessUrlId = api_get_current_access_url_id();
+
 $categories = array(
     'capacitaciones',
     'programas',
@@ -13,5 +16,11 @@ $categories = array(
 );
 $tableSessionCategory = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 foreach ($categories as $category) {
-    Database::query("INSERT INTO $tableSessionCategory (name) VALUES ('$category')");
+    Database::insert(
+        $tableSessionCategory,
+        [
+            'name' => $category,
+            'access_url_id' => $accessUrlId
+        ]
+    );
 }

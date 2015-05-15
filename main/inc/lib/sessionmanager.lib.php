@@ -211,7 +211,7 @@ class SessionManager
                 }
 
                 if (!empty($session_id)) {
-                    $extraFields['session_id'] = $session_id;
+                    $extraFields['item_id'] = $session_id;
 
                     $sessionFieldValue = new ExtraFieldValue('session');
                     $sessionFieldValue->saveFieldValues($extraFields);
@@ -1451,7 +1451,7 @@ class SessionManager
                     'id = ?' => $id
                 ));
 
-                $extraFields['session_id'] = $id;
+                $extraFields['item_id'] = $id;
 
                 $sessionFieldValue = new ExtraFieldValue('session');
                 $sessionFieldValue->saveFieldValues($extraFields);
@@ -5593,7 +5593,7 @@ class SessionManager
                 array(
                     'where' => array(
                         "session_category_id = ? AND id IN (
-                            SELECT sfv.session_id FROM $joinTable
+                            SELECT sfv.item_id FROM $joinTable
                             WHERE
                                 sf.extra_field_type = $extraFieldType AND
                                 sfv.item_id = session.id AND
@@ -5758,7 +5758,7 @@ class SessionManager
                             item_id IN $sessionIdsString AND
                             extra_field_type = $extraFieldType
                 ";
-                $result = Database::result($sql);
+                $result = Database::query($sql);
                 $sessionFieldValueList = Database::store_result($result, 'ASSOC');
 
                 // Check if session field values had result

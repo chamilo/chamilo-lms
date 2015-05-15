@@ -114,7 +114,7 @@ $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
 
 //Extra fields
-$extra_field = new CourseField();
+$extra_field = new ExtraField('course');
 $extra = $extra_field->addElements($form);
 
 $htmlHeadXtra[] ='

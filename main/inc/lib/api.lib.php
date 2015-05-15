@@ -1437,6 +1437,10 @@ function _api_format_user($user, $add_password = false)
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
+    if (isset($user['extra'])) {
+        $result['extra'] = $user['extra'];
+    }
+
     return $result;
 }
 
@@ -1491,13 +1495,15 @@ function api_get_user_info(
                 }
             }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
-            if ($loadExtraData) {
-                $extraFieldValues = new ExtraFieldValue('user');
-                $values = $extraFieldValues->getAllValuesByItem($user_id);
-                if (!empty($values)) {
-                    foreach ($values as $value) {
-                        $result_array['extra'][$value['variable']] = $value['value'];
-                    }
+        }
+
+        if ($loadExtraData) {
+            $extraFieldValues = new ExtraFieldValue('user');
+            $values = $extraFieldValues->getAllValuesByItem($user_id);
+
+            if (!empty($values)) {
+                foreach ($values as $value) {
+                    $result_array['extra'][$value['variable']] = $value['value'];
                 }
             }
         }

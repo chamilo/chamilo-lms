@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see license.txt */
 
+use CpChart\Classes\pCache as pCache;
+use CpChart\Classes\pData as pData;
+use CpChart\Classes\pImage as pImage;
+
 /**
  * GradebookTable Class
  * Table to display categories, evaluations and links
@@ -13,7 +17,8 @@ class GradebookTable extends SortableTable
     private $currentcat;
     private $datagen;
     private $evals_links;
-    public  $cats;
+    public $cats;
+    private $dataForGraph;
 
     /**
      * Constructor
@@ -205,6 +210,8 @@ class GradebookTable extends SortableTable
             // Type.
             $row[] = $this->build_type_column($item);
 
+            $this->dataForGraph['categories'][] = $item->get_name();
+
             // Name.
             if (get_class($item) == 'Category') {
                 $row[] = $invisibility_span_open.'<h3>'.$item->get_name().'</h3>'.$invisibility_span_close;
@@ -290,6 +297,9 @@ class GradebookTable extends SortableTable
                         $totalAverage[0] + $data['average_score'][0],
                         $totalAverage[1] + $data['average_score'][1],
                     ];
+
+                    $this->dataForGraph['my_result'][] = (float) $scoredisplay->display_score($totalResult, SCORE_AVERAGE);
+                    $this->dataForGraph['average'][] = (float) $scoredisplay->display_score($totalAverage, SCORE_AVERAGE);
 
                     // Student result
                     $row[] = $value_data;
@@ -610,6 +620,101 @@ class GradebookTable extends SortableTable
         }
 
         return $sortable_data;
+    }
+
+
+    /**
+     * @return array
+     */
+    private function getDataForGraph()
+    {
+        return $this->dataForGraph;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGraph()
+    {
+        $data = $this->getDataForGraph();
+        if (!empty($data) && isset($data['my_result'])) {
+            $dataSet = new pData();
+            $dataSet->addPoints($data['my_result'], get_lang('Me'));
+            // In order to generate random values
+            // $data['average'] = array(rand(0,50), rand(0,50));
+            $dataSet->addPoints($data['average'], get_lang('Average'));
+
+            $dataSet->addPoints($data['categories'], 'categories');
+
+            $dataSet->setAbscissa("categories");
+            $xSize = 600;
+            $ySize = 400;
+            $pChart = new pImage($xSize, $ySize, $dataSet);
+            /* Turn of Antialiasing */
+            $pChart->Antialias = FALSE;
+
+            /* Add a border to the picture */
+            $pChart->drawRectangle(0,0,$xSize-10,$ySize-10,array("R"=>0,"G"=>0,"B"=>0));
+
+            $pChart->drawText(10,16,get_lang('Results'),array("FontSize"=>11,"Align"=>TEXT_ALIGN_BOTTOMLEFT));
+
+            $pChart->setGraphArea(50, 30, $xSize-50, $ySize-50);
+
+            $pChart->setFontProperties(
+                array(
+                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    'FontSize' => 10
+                )
+            );
+
+            /* Draw the scale */
+            $scaleSettings = array(
+                "XMargin" => 10,
+                "YMargin" => 10,
+                "Floating" => true,
+                "GridR" => 200,
+                "GridG" => 200,
+                "GridB" => 200,
+                "DrawSubTicks" => true,
+                "CycleBackground" => true,
+            );
+            $pChart->drawScale($scaleSettings);
+
+            /* Draw the line chart */
+            $pChart->drawLineChart();
+            $pChart->drawPlotChart(array("DisplayValues"=>TRUE,"PlotBorder"=>TRUE,"BorderSize"=>2,"Surrounding"=>-60,"BorderAlpha"=>80));
+
+            /* Write the chart legend */
+            $pChart->drawLegend(
+                $xSize-180,
+                9,
+                array(
+                    "Style" => LEGEND_NOBORDER,
+                    "Mode" => LEGEND_HORIZONTAL,
+                    "FontR" => 0,
+                    "FontG" => 0,
+                    "FontB" => 0,
+                )
+            );
+
+            $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+            $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+            $chartHash = $myCache->getHash($dataSet);
+
+            $myCache->writeToCache($chartHash, $pChart);
+            $imgSysPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $myCache->saveFromCache($chartHash, $imgSysPath);
+            $imgWebPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+
+            if (file_exists($imgSysPath)) {
+                $result = '<div id="contentArea" style="text-align: center;" >';
+                $result .= '<img src="' . $imgWebPath.'" >';
+                $result .= '</div>';
+                return $result;
+            }
+        }
+
+        return '';
     }
 
     /**

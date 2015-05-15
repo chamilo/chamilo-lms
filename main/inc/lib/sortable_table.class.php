@@ -950,6 +950,8 @@ class SortableTable extends HTML_Table
         }
         return array();
     }
+
+
 }
 
 /**

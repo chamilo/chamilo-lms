@@ -106,7 +106,7 @@ class ExerciseLib
 
             if (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
                 if ($answerType == DRAGGABLE) {
-                    $s .= '<div class="ui-widget ui-helper-clearfix">
+                    $s .= '<div class="col-md-12 ui-widget ui-helper-clearfix">
                         <div class="clearfix">
                         <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix">';
                 } else {
@@ -923,7 +923,7 @@ HTML;
                         $parsed_answer = $answer;
                         $windowId = $questionId . '_' . $lines_count;
 
-                        $s .= '<li class="thumbnail" id="' . $windowId . '">';
+                        $s .= '<li class="touch-items" id="' . $windowId . '">';
                         $s .= Display::div(
                             $parsed_answer,
                             [
@@ -1136,7 +1136,7 @@ HTML;
 
                 $counterAnswer = 1;
 
-                $s .= '<div class="col-xs-12"><div class="row">';
+                $s .= '<div class="col-md-12"><div class="row">';
 
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
@@ -1147,7 +1147,7 @@ HTML;
                             $counterAnswer,
                             [
                                 'id' => "drop_$windowId",
-                                'class' => 'droppable col-sm-4 well'
+                                'class' => 'droppable col-md-2'
                             ]
                         );
 
@@ -3718,7 +3718,7 @@ HTML;
                 }
 
                 $contents = ob_get_clean();
-                $question_content = '<div class="question_row">';
+                $question_content = '<div class="question_row_answer">';
 
                 if ($show_results) {
                     $show_media = false;
@@ -3747,7 +3747,7 @@ HTML;
 
         if ($origin != 'learnpath') {
             if ($show_results || $show_only_score) {
-                $total_score_text .= '<div class="question_row">';
+                $total_score_text .= '<div class="question_row_score">';
                 $total_score_text .= self::get_question_ribbon(
                     $objExercise,
                     $total_score,
@@ -3853,7 +3853,7 @@ HTML;
         $weight,
         $check_pass_percentage = false
     ) {
-        $ribbon = '<div class="ribbon">';
+        $ribbon = '<div class="title-score">';
         if ($check_pass_percentage) {
             $is_success = self::is_success_exercise_result(
                 $score,
@@ -3871,9 +3871,9 @@ HTML;
                     $ribbon_total_success_or_error = ' ribbon-total-error';
                 }
             }
-            $ribbon .= '<div class="rib rib-total ' . $ribbon_total_success_or_error . '">';
+            $ribbon .= '<div class="total ' . $ribbon_total_success_or_error . '">';
         } else {
-            $ribbon .= '<div class="rib rib-total">';
+            $ribbon .= '<div class="total">';
         }
         $ribbon .= '<h3>' . get_lang('YourTotalScore') . ":&nbsp;";
         $ribbon .= self::show_score($score, $weight, false, true);

@@ -5541,11 +5541,11 @@ class SessionManager
     {
         $tableUser = Database::get_main_table(TABLE_MAIN_USER);
         $tableSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sql = "SELECT COUNT(1) as count, u.user_id, scu.status status_in_session, u.status user_status
+        $sql = "SELECT COUNT(1) as count, u.id, scu.status status_in_session, u.status user_status
               FROM $tableSessionRelCourseRelUser scu
-              INNER JOIN $tableUser u ON scu.user_id = u.user_id
+              INNER JOIN $tableUser u ON scu.user_id = u.id
               WHERE scu.session_id = " . intval($sessionId) ."
-              GROUP BY u.user_id";
+              GROUP BY u.id";
 
         $result = Database::query($sql);
 

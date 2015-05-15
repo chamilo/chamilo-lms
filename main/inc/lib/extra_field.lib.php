@@ -95,6 +95,9 @@ class ExtraField extends Model
             case 'lp':
                 $this->extraFieldType = EntityExtraField::LP_FIELD_TYPE;
                 break;
+            case 'lp_item':
+                $this->extraFieldType = EntityExtraField::LP_ITEM_FIELD_TYPE;
+                break;
         }
 
         $this->pageUrl  = 'extra_fields.php?type='.$this->type;
@@ -121,7 +124,8 @@ class ExtraField extends Model
             'session',
             'question',
             'lp',
-            'calendar_event'
+            'calendar_event',
+            'lp_item'
         );
     }
 

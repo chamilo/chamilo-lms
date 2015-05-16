@@ -579,6 +579,7 @@ if ($form->validate()) {
     if (!in_array($user_data['language'], $languages['folder'])) {
         $user_data['language'] = api_get_setting('platformLanguage');
     }
+    $_SESSION['_user']['language'] = $user_data['language'];
 
     //Only update values that are request by the "profile" setting
     $profile_list = api_get_setting('profile');

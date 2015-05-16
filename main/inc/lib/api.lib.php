@@ -4271,7 +4271,7 @@ function api_get_visual_theme() {
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
 function api_get_themes() {
-    $cssdir = api_get_path(SYS_CSS_PATH);
+    $cssdir = api_get_path(SYS_CSS_PATH) . 'themes/';
     $list_dir = array();
     $list_name = array();
 

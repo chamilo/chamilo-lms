@@ -404,7 +404,7 @@ if (is_array($forumCategories)) {
                         $form_count++;
                         $mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']]) ?
                                                 $whatsnew_post_info[$forum['forum_id']] : null;
-                        $html  = '<div class="forum panel panel-default">';
+                        $html  = '<div class="panel panel-default forum">';
                         $html .= '<div class="panel-body">';
 
 

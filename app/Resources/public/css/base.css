@@ -6121,6 +6121,9 @@ div#chat-remote-video video {
   width: 100%;
 }
 /* CSS Forum */
+.forum {
+  border-color: #dddddd !important;
+}
 .forum .number-post{
   background-color: #F7F7F9;
   border: 1px solid #E1E1E1 ;

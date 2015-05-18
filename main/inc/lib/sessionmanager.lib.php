@@ -6039,4 +6039,43 @@ class SessionManager
 
         return $sessionList;
     }
+
+    /**
+     * Get the filtered session list by extra fields
+     * @param array $extrafields The extra fields for filter
+     * @return array The session list. Otherwise return false
+     */
+    public static function getSessionsByExtraFields(array $extrafields)
+    {
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+        $placeholders = [];
+
+        for ($i = 0; $i < count($extrafields); $i++) {
+            $placeholders[] = '?';
+        }
+
+        $fakeFrom = <<<SQL
+            $sessionTable s
+            INNER JOIN $extraFieldValuesTable efv ON s.id = efv.item_id
+            INNER JOIN $extraFieldTable ef ON efv.field_id = ef.id
+SQL;
+
+        $resultData = Database::select(
+            'DISTINCT s.*',
+            $fakeFrom,
+            [
+                'where' => [
+                    "efv.value != ? AND " => '',
+                    "ef.extra_field_type = 3 AND " => Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE,
+                    "ef.variable IN (" . implode(', ', $placeholders) . ")" => $extrafields
+                ]
+            ]
+        );
+
+        return $resultData;
+    }
+
 }

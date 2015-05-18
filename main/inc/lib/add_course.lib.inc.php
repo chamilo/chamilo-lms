@@ -1508,4 +1508,30 @@ class AddCourse
         rmdir($tmp_dir_name);
         return $course_properties;
     }
+
+    /**
+     * Generate a new id for c_tool table 
+     * @param int $courseId The course id
+     * @return int the new id
+     */
+    public static function generateToolId($courseId)
+    {
+        $newIdResultData = Database::select(
+            'id + 1 AS new_id',
+            Database::get_course_table(TABLE_TOOL_LIST),
+            [
+                'where' => ['c_id = ?' => intval($courseId)],
+                'order' => 'id',
+                'limit' => 1
+            ],
+            'first'
+        );
+
+        if ($newIdResultData === false) {
+            return 1;
+        }
+
+        return $newIdResultData['new_id'] > 0 ? $newIdResultData['new_id'] : 1;
+    }
+
 }

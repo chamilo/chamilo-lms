@@ -439,9 +439,26 @@ class Plugin
         if (!Database::num_rows($result)) {
             $tool_link = "$plugin_name/start.php";
             $visibility = AddCourse::string2binary(api_get_setting('course_create_active_tools', $plugin_name));
-            $sql = "INSERT INTO $t_tool VALUES
-            ($courseId, NULL, '$plugin_name', '$tool_link', '$plugin_name.png',' ".$visibility."','0', 'squaregrey.gif','NO','_self','plugin','0')";
-            Database::query($sql);
+
+            $cToolId = AddCourse::generateToolId($courseId);
+
+            Database::insert(
+                $t_tool,
+                [
+                    'id' => $cToolId,
+                    'c_id' => $courseId,
+                    'name' => $plugin_name,
+                    'link' => $tool_link,
+                    'image' => "$plugin_name.png",
+                    'visibility' => $visibility,
+                    'admin' => 0,
+                    'address' => 'squaregrey.gif',
+                    'added_tool' => 'NO',
+                    'target' => '_self',
+                    'category' => 'plugin',
+                    'session_id' => 0
+                ]
+            );
         }
     }
 

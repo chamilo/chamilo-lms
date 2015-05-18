@@ -960,10 +960,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $sessionArray['description'] = SessionManager::getDescriptionFromSessionId($sessionId);
 
             if (isset($sessionArray['brochure'])) {
-                $sessionArray['brochure'] = api_get_path(WEB_CODE_PATH) . $sessionArray['brochure'];
+                $sessionArray['brochure'] = api_get_path(WEB_UPLOAD_PATH) . $sessionArray['brochure'];
             }
             if (isset($sessionArray['banner'])) {
-                $sessionArray['banner'] = api_get_path(WEB_CODE_PATH) . $sessionArray['banner'];
+                $sessionArray['banner'] = api_get_path(WEB_UPLOAD_PATH) . $sessionArray['banner'];
             }
 
             return $sessionArray;
@@ -1312,7 +1312,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             INNER JOIN $tSessionField AS sf ON sfv.field_id = sf.id
             INNER JOIN $tSessionUser AS su ON s.id = su.session_id
             WHERE
-                sf.extra_field_type = $extraFieldType
+                sf.extra_field_type = $extraFieldType AND
                 sf.variable = 'is_induction_session' AND
                 su.relation_type = 0 AND
                 su.user_id = " . intval($userId);

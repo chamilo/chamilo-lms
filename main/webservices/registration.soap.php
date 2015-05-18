@@ -569,6 +569,10 @@ function WSCreateUser($params) {
                 active = '".Database::escape_string($active)."'";
     $result = Database::query($sql);-*/
 
+    if (isset($original_user_id_name) && isset($original_user_id_value)) {
+        $_SESSION['ws_' . $original_user_id_name] = $original_user_id_value;
+    }
+    
     /** @var User $user */
     $userId = UserManager::create_user(
         $firstName,
@@ -612,6 +616,10 @@ function WSCreateUser($params) {
             $original_user_id_name,
             $original_user_id_value
         );
+
+        if (isset($original_user_id_name) && isset($original_user_id_value)) {
+            unset($_SESSION['ws_' . $original_user_id_name]);
+        }
 
         if (is_array($extra_list) && count($extra_list) > 0) {
             foreach ($extra_list as $extra) {

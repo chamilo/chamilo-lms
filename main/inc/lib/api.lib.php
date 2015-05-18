@@ -282,6 +282,7 @@ define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
 define('SYS_COURSE_PATH', 'SYS_COURSE_PATH');
 define('REL_COURSE_PATH', 'REL_COURSE_PATH');
 define('REL_CODE_PATH', 'REL_CODE_PATH');
+define('REL_UPLOAD_PATH', 'REL_UPLOAD_PATH');
 define('WEB_CODE_PATH', 'WEB_CODE_PATH');
 define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
@@ -572,6 +573,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(REL_PATH)                       /chamilo/
  * api_get_path(REL_COURSE_PATH)                /chamilo/courses/
  * api_get_path(REL_CODE_PATH)                  /chamilo/main/
+ * api_get_path(REL_UPLOAD_PATH)                /chamilo/app/upload/
  * api_get_path(SYS_SERVER_ROOT_PATH)           /var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
  * api_get_path(SYS_PATH)                       /var/www/chamilo/
  * api_get_path(SYS_APP_PATH)                   /var/www/chamilo/app/
@@ -642,6 +644,7 @@ function api_get_path($path_type, $path = null)
         WEB_ARCHIVE_PATH        => 'app/cache/',
         SYS_APP_PATH            => 'app/',
         SYS_UPLOAD_PATH         => 'app/upload/',
+        REL_UPLOAD_PATH         => 'app/upload/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
         CONFIGURATION_PATH      => 'app/config/',
@@ -753,6 +756,7 @@ function api_get_path($path_type, $path = null)
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
+        $paths[REL_UPLOAD_PATH]         = $root_rel.$paths[SYS_UPLOAD_PATH];
 
         $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_CODE_PATH].'default_course_document/';
         $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_PATH].'main/default_course_document/';
@@ -1433,6 +1437,10 @@ function _api_format_user($user, $add_password = false)
 
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
+    if (isset($user['extra'])) {
+        $result['extra'] = $user['extra'];
+    }
+
     return $result;
 }
 
@@ -1487,13 +1495,15 @@ function api_get_user_info(
                 }
             }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
-            if ($loadExtraData) {
-                $extraFieldValues = new ExtraFieldValue('user');
-                $values = $extraFieldValues->getAllValuesByItem($user_id);
-                if (!empty($values)) {
-                    foreach ($values as $value) {
-                        $result_array['extra'][$value['variable']] = $value['value'];
-                    }
+        }
+
+        if ($loadExtraData) {
+            $extraFieldValues = new ExtraFieldValue('user');
+            $values = $extraFieldValues->getAllValuesByItem($user_id);
+
+            if (!empty($values)) {
+                foreach ($values as $value) {
+                    $result_array['extra'][$value['variable']] = $value['value'];
                 }
             }
         }
@@ -4261,7 +4271,7 @@ function api_get_visual_theme() {
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
 function api_get_themes() {
-    $cssdir = api_get_path(SYS_CSS_PATH);
+    $cssdir = api_get_path(SYS_CSS_PATH) . 'themes/';
     $list_dir = array();
     $list_name = array();
 

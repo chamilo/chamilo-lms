@@ -1129,18 +1129,22 @@ class UserManager
      * @param int User id
      * @return bool True if user id was found, false otherwise
      */
-    public static function is_user_id_valid($user_id)
+    public static function is_user_id_valid($userId)
     {
-        $user_id = (int) $user_id;
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id FROM $table_user WHERE user_id = '".$user_id."'";
-        $res = Database::query($sql);
-        $num_rows = Database::num_rows($res);
-        if ($num_rows == 0) {
+        $resultData = Database::select(
+            'COUNT(1) AS count',
+            Database::get_main_table(TABLE_MAIN_USER),
+            [
+                'where' => ['id = ?' => intval($userId)]
+            ],
+            'first'
+        );
+
+        if ($resultData === false) {
             return false;
-        } else {
-            return true;
         }
+
+        return $resultData['count'] > 0;
     }
 
     /**
@@ -1379,7 +1383,7 @@ class UserManager
      * Get user path from user ID (returns an array).
      * The return format is a complete path to a folder ending with "/"
      * @param   integer $id User ID
-     * @param   string  $type Type of path to return (can be 'system', 'web')
+     * @param   string  $type Type of path to return (can be 'system', 'web', 'rel', 'last')
      * @return  string  User folder path (i.e. /var/www/chamilo/app/upload/users/1/1/)
      */
     public static function getUserPathById($id, $type)
@@ -1399,6 +1403,12 @@ class UserManager
                 break;
             case 'web': // Base: absolute web path.
                 $userPath = api_get_path(WEB_UPLOAD_PATH).$userPath;
+                break;
+            case 'rel': // Relative to the document root (e.g. app/upload/users/1/13/)
+                $userPath = api_get_path(REL_UPLOAD_PATH).$userPath;
+                break;
+            case 'last': // Only the last part starting with users/
+                $userPath = $userPath;
                 break;
         }
 

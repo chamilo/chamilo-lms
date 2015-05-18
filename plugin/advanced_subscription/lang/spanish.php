@@ -19,6 +19,8 @@ $strings['course_session_credit_year_start_date'] = 'Fecha de inicio';
 $strings['course_session_credit_year_start_date_help'] = "Fecha de inicio del año (día/mes)";
 $strings['min_profile_percentage'] = 'Porcentage de perfil completado mínimo requerido';
 $strings['min_profile_percentage_help'] = 'Número porcentage ( > 0.00 y < 100.00)';
+$strings['secret_key'] = 'LLave secreta';
+$strings['terms_and_conditions'] = 'Términos y condiciones';
 
 /* String for error message about requirements */
 $strings['AdvancedSubscriptionNotConnected'] = "Usted no está conectado en la plataforma. Por favor ingrese su usuario / constraseña para poder inscribirse";

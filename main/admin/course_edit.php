@@ -202,7 +202,7 @@ $form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
-$specialCourseField = new CourseField();
+$specialCourseField = new ExtraField('course');
 $specialCourseFieldInfo = $specialCourseField->get_handler_field_info_by_field_variable('special_course');
 
 if (!empty($specialCourseFieldInfo)) {
@@ -231,8 +231,8 @@ if (!empty($specialCourseFieldInfo)) {
 }
 
 //Extra fields
-$extra_field = new CourseField();
-$extra = $extra_field->addElements($form, $courseId);
+$extra_field = new ExtraField('course');
+$extra = $extra_field->addElements($form, $courseId, ['special_course']);
 
 $htmlHeadXtra[] = '
 <script>

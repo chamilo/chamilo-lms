@@ -429,7 +429,7 @@ class Template
     private function set_system_parameters()
     {
         global $_configuration;
-
+        $this->theme = api_get_visual_theme();
         //Setting app paths/URLs
         $_p = array(
             'web' => api_get_path(WEB_PATH),
@@ -437,6 +437,7 @@ class Template
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
             'web_css' => api_get_path(WEB_CSS_PATH),
+            'web_css_theme' => api_get_path(WEB_CSS_PATH) . 'themes/' . $this->theme . '/',
             'web_ajax' => api_get_path(WEB_AJAX_PATH),
             'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),

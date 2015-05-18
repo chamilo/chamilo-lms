@@ -10,3 +10,5 @@ $strings['plugin_comment'] = 'This plugin creates users in an associated Drupal 
 
 $strings['drupal_domain'] = 'Drupal website URL';
 $strings['drupal_domain_help'] = 'The server domain name should be written with a trailing slash and with the protocol, e.g. http://www.example.com/';
+
+$strings['DruaplUserId'] = 'Drupal user ID';

@@ -1294,7 +1294,14 @@ function class_visible_invisible($current_visibility_status)
         return 'class="invisible"';
     }
 }
-
+function status_visible_invisible($current_visibility_status)
+{
+    $current_visibility_status = intval($current_visibility_status);
+    if ($current_visibility_status == 0) {
+        $status='invisible';
+        return $status;
+    }
+}
 /**
  * Retrieve all the information off the forum categories (or one specific) for the current course.
  * The categories are sorted according to their sorting order (cat_order

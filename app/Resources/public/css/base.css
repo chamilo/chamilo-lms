@@ -6120,7 +6120,25 @@ div#chat-remote-video video {
   height: auto;
   width: 100%;
 }
-
+/* CSS Forum */
+.forum .number-post{
+  background-color: #F7F7F9;
+  border: 1px solid #E1E1E1 ;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+}
+.forum .title{
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+}
+.forum .description{
+  font-size: 14px;
+  color: #666666;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

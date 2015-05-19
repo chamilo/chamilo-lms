@@ -5,6 +5,8 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 
+api_protect_global_admin_script();
+
 $tpl = new Template(get_lang('ResourceSequencing'));
 $layout = $tpl->get_template('admin/resource_sequence.tpl');
 $form = new FormValidator('');

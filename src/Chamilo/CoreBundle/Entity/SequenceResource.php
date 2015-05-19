@@ -66,6 +66,7 @@ class SequenceResource
 
     /**
      * @param string $type
+     *
      * @return SequenceResource
      */
     public function setType($type)
@@ -85,6 +86,7 @@ class SequenceResource
 
     /**
      * @param string $graph
+     *
      * @return SequenceResource
      */
     public function setGraph($graph)
@@ -108,7 +110,8 @@ class SequenceResource
     public function setResourceId($resourceId)
     {
         $this->resourceId = $resourceId;
-    }
 
+        return $this;
+    }
 
 }

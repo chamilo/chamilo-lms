@@ -404,6 +404,7 @@ if (is_array($forumCategories)) {
                         $form_count++;
                         $mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']]) ?
                             $whatsnew_post_info[$forum['forum_id']] : null;
+                       
                         $html = '<div class="panel panel-default forum">';
                         $html .= '<div class="panel-body">';
 
@@ -447,48 +448,6 @@ if (is_array($forumCategories)) {
                                 );
                             }
                         }
-
-
-                            /*
-                            if ($forum['forum_of_group'] !== '0') {
-                                if (is_array(
-                                        $mywhatsnew_post_info
-                                    ) && !empty($mywhatsnew_post_info)
-                                ) {
-                                    $forum_image = Display::return_icon(
-                                        'forumgroupnew.gif'
-                                    );
-                                } else {
-                                    $forum_image = Display::return_icon(
-                                        'forum_group.png',
-                                        get_lang('GroupForum'),
-                                        null,
-                                        ICON_SIZE_LARGE
-                                    );
-                                }
-                            } else {
-                                if (is_array(
-                                        $mywhatsnew_post_info
-                                    ) && !empty($mywhatsnew_post_info)
-                                ) {
-                                    $forum_image = Display::return_icon(
-                                        'forum.png',
-                                        get_lang('Forum'),
-                                        null,
-                                        ICON_SIZE_LARGE
-                                    );
-                                } else {
-                                    $forum_image = Display::return_icon(
-                                        'forumx.png',
-                                        get_lang('Forum'),
-                                        null,
-                                        ICON_SIZE_LARGE);
-                                }
-                            }
-                             */
-
-
-
 
                         // Validation when belongs to a session
                         $session_img = api_get_session_image(

@@ -2569,8 +2569,8 @@ class MySpace
         $new_users = array();
         foreach ($users as $index => $user) {
             $userid = $user['id'];
-            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id)
-                           VALUES ('$id_session','$userid')";
+            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id, registered_at)
+                           VALUES ('$id_session','$userid', '" . api_get_utc_datetime() . "')";
             Database::query($sql_insert);
             $user['added_at_session'] = 1;
             $new_users[] = $user;

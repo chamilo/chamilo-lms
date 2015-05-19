@@ -178,7 +178,14 @@ function handle_plugins()
             }
 
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
-                echo Display::url("<i class='fa fa-file-text-o'></i> readme.txt", api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt", array('class' => 'btn btn-default', '_target' => '_blank'));
+                echo Display::url(
+                    "<i class='fa fa-file-text-o'></i> readme.txt",
+                    api_get_path(WEB_PLUGIN_PATH) . $plugin . "/readme.txt",
+                    [
+                        'class' => 'btn btn-default ajax',
+                        '_target' => '_blank'
+                    ]
+                );
             }
             echo '</div>';
             echo '</td></tr>';

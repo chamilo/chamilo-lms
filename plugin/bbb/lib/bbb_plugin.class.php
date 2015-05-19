@@ -52,7 +52,8 @@ class BBBPlugin extends Plugin
                 welcome_msg VARCHAR(255) NOT NULL DEFAULT '',
                 session_id INT unsigned DEFAULT 0,
                 remote_id CHAR(30),
-                visibility TINYINT NOT NULL DEFAULT 1
+                visibility TINYINT NOT NULL DEFAULT 1,
+                voice_bridge INT NOT NULL DEFAULT 1
                 )";
         Database::query($sql);
 

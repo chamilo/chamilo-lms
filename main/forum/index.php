@@ -543,7 +543,7 @@ if (is_array($forumCategories)) {
                                         get_lang('Forum'),
                                         null,
                                         ICON_SIZE_SMALL
-                                    );
+                                );
                             } else {
                                 $newPost = $iconEmpty;
                             }
@@ -554,7 +554,7 @@ if (is_array($forumCategories)) {
                                         get_lang('Forum'),
                                         null,
                                         ICON_SIZE_SMALL
-                                    );
+                                );
                             } else {
                                 $newPost = $iconEmpty;
                             }

@@ -1704,8 +1704,8 @@ class SessionManager
         foreach ($user_list as $enreg_user) {
             $enreg_user = Database::escape_string($enreg_user);
             $nbr_users++;
-            $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id)
-                    VALUES (0, $id_session, $enreg_user)";
+            $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
+                    VALUES (0, $id_session, $enreg_user, '" . api_get_utc_datetime() . "')";
             Database::query($sql);
         }
 
@@ -1929,8 +1929,8 @@ class SessionManager
 
             if (empty($count)) {
                 // If user is not registered to a session then add it.
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id)
-                        VALUES ($session_id, $enreg_user)";
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, registered_at)
+                        VALUES ($session_id, $enreg_user, '" . api_get_utc_datetime() . "')";
                 Database::query($sql);
 
                 $sql = "UPDATE $tbl_session SET nbr_users = nbr_users + 1
@@ -2719,8 +2719,13 @@ class SessionManager
 
             foreach ($sessions_list as $session_id) {
                 $session_id = intval($session_id);
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type)
-				        VALUES ($session_id, $userId, '" . SESSION_RELATION_TYPE_RRHH . "')";
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type, registered_at)
+                        VALUES (
+                            $session_id,
+                            $userId,
+                            '" . SESSION_RELATION_TYPE_RRHH . "',
+                            '" . api_get_utc_datetime() . "'
+                        )";
                 Database::query($sql);
                 $affected_rows++;
             }
@@ -4118,7 +4123,8 @@ class SessionManager
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                     user_id = '$user_id',
-                                    session_id = '$session_id'";
+                                    session_id = '$session_id',
+                                    registered_at = '" . api_get_utc_datetime() . "'";
                             Database::query($sql);
                             if ($debug) {
                                 $logger->addInfo("Sessions - Adding User #$user_id ($user) to session #$session_id");

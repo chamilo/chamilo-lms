@@ -321,7 +321,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             if ($user_id !== false) {
                                 $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                         user_id ='$user_id',
-                                        session_id = '$session_id'";
+                                        session_id = '$session_id',
+                                        registered_at = '" . api_get_utc_datetime() . "'";
                                 $rs_user = Database::query($sql);
                                 $user_counter++;
                             }
@@ -373,7 +374,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         // Adding to session_rel_user table.
                                         $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                                 user_id ='$user_id',
-                                                session_id = '$session_id'";
+                                                session_id = '$session_id',
+                                                registered_at = '" . api_get_utc_datetime() . "'";
                                         $rs_user = Database::query($sql);
                                         $user_counter++;
                                         // Adding to session_rel_user_rel_course table.

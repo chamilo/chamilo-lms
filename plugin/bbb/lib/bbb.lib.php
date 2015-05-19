@@ -133,6 +133,9 @@ class bbb
         // Generate a pseudo-global-unique-id to avoid clash of conferences on
         // the same BBB server with several Chamilo portals
         $params['remote_id'] = uniqid(true, true);
+        // Each simultaneous conference room needs to have a different
+        // voice_bridge composed of a 5 digits number, so generating a random one
+        $params['voice_bridge'] = rand(10000,99999);
 
         if ($this->debug) {
             error_log("enter create_meeting ".print_r($params, 1));
@@ -161,7 +164,7 @@ class bbb
                 'moderatorPw' => $moderatorPassword, 					// Match this value in getJoinMeetingURL() to join as moderator.
                 'welcomeMsg' => $welcomeMessage, 					// ''= use default. Change to customize.
                 'dialNumber' => '', 					// The main number to call into. Optional.
-                'voiceBridge' => '12345', 					// PIN to join voice. Required.
+                'voiceBridge' => $params['voice_bridge'], 					// PIN to join voice. Required.
                 'webVoice' => '', 						// Alphanumeric to join voice. Optional.
                 'logoutUrl' =>  $this->logout_url,
                 'maxParticipants' => $max, 				// Optional. -1 = unlimitted. Not supported in BBB. [number]

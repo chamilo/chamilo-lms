@@ -345,7 +345,9 @@ if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_TEST_PATH) . 'datafiller/')) {
         $items[] = array('url' => 'filler.php', 'label' => get_lang('DataFiller'));
     }
+
     $items[] = array('url' => 'archive_cleanup.php', 'label' => get_lang('ArchiveDirCleanup'));
+    $items[] = array('url' => 'resource_sequence.php', 'label' => get_lang('ResourceSequencing'));
 
     if (isset($_configuration['db_manager_enabled']) &&
         $_configuration['db_manager_enabled'] == true &&

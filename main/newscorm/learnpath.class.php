@@ -3436,7 +3436,7 @@ class learnpath
                                 // If the current site is HTTPS and the link is
                                 // HTTP, browsers will refuse opening the link
                                 $urlId = api_get_current_access_url_id();
-                                $url = api_get_access_url($urlId);
+                                $url = api_get_access_url($urlId, false);
                                 $protocol = substr($url['url'], 0, 5);
                                 if ($protocol === 'https') {
                                     $linkProtocol = substr($file, 0, 5);

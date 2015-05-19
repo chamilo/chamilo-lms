@@ -5078,11 +5078,12 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
 /**
  * Gets the access url info in an array
  * @param int $id Id of the access url
+ * @param bool $returnDefault Set to false if you want the real URL if URL 1 is still 'http://localhost/'
  * @return array All the info (url, description, active, created_by, tms)
  * from the access_url table
  * @author Julio Montoya
  */
-function api_get_access_url($id)
+function api_get_access_url($id, $returnDefault = true)
 {
     global $_configuration;
     $id = intval($id);
@@ -5090,11 +5091,29 @@ function api_get_access_url($id)
     //$table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $table = 'access_url';
     $database = $_configuration['main_database'];
-    $table_access_url =  "".$database.".".$table."";
+    $table_access_url = "" . $database . "." . $table . "";
     $sql = "SELECT url, description, active, created_by, tms
             FROM $table_access_url WHERE id = '$id' ";
     $res = Database::query($sql);
     $result = @Database::fetch_array($res);
+    // If the result url is 'http://localhost/' (the default) and the root_web
+    // (=current url) is different, and the $id is = 1 (which might mean
+    // api_get_current_access_url_id() returned 1 by default), then return the
+    // root_web setting instead of the current URL
+    // This is provided as an option to avoid breaking the storage of URL-specific
+    // homepages in home/localhost/
+    if ($id === 1 && $returnDefault === false) {
+        $currentUrl = api_get_current_access_url_id();
+        // only do this if we are on the main URL (=1), otherwise we could get
+        // information on another URL instead of the one asked as parameter
+        if ($currentUrl === 1) {
+            $rootWeb = api_get_path(WEB_PATH);
+            $default = 'http://localhost/';
+            if ($result['url'] === $default && $rootWeb != $default) {
+                $result['url'] = $rootWeb;
+            }
+        }
+    }
     return $result;
 }
 

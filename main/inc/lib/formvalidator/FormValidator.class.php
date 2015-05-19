@@ -406,24 +406,28 @@ EOT;
     /**
      * Returns a button with the default (grey?) color and a magnifier icon
      * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     *
      * @return HTML_QuickForm_button
      */
-    public function addButtonSearch($label = null)
+    public function addButtonSearch($label = null, $name = 'submit')
     {
         if (empty($label)) {
             $label = get_lang('Search');
         }
-        return $this->addButton('submit', $label, 'search', 'default');
+        return $this->addButton($name, $label, 'search', 'default');
     }
 
     /**
      * Returns a button with the primary color and a right-pointing arrow icon
      * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     *
      * @return HTML_QuickForm_button
      */
-    public function addButtonNext($label)
+    public function addButtonNext($label, $name = 'submit')
     {
-        return $this->addButton('submit', $label, 'arrow-right', 'primary');
+        return $this->addButton($name, $label, 'arrow-right', 'primary');
     }
 
     /**

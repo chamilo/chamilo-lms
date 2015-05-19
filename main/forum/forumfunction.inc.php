@@ -950,25 +950,37 @@ function check_if_last_post_of_thread($thread_id)
  */
 function display_visible_invisible_icon($content, $id, $current_visibility_status, $additional_url_parameters = '')
 {
+    echo return_visible_invisible_icon($content, $id, $current_visibility_status, $additional_url_parameters);
+}
+/**
+ * @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
+ * @param $id the id of the content we want to make invisible
+ * @param $current_visibility_status what is the current status of the visibility (0 = invisible, 1 = visible)
+ * @return string HTML
+ */
+function return_visible_invisible_icon($content, $id, $current_visibility_status, $additional_url_parameters = '')
+{
+    $html = '';
     $id = Security::remove_XSS($id);
     if ($current_visibility_status == '1') {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
+        $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                echo $key.'='.$value.'&amp;';
+                $html .= $key . '=' . $value . '&amp;';
             }
         }
-        echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), ICON_SIZE_SMALL).'</a>';
+       $html.='action=invisible&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_visibility_status == '0') {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;';
+        $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                echo $key.'='.$value.'&amp;';
+                $html .= $key . '=' . $value . '&amp;';
             }
         }
-        echo 'action=visible&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), ICON_SIZE_SMALL).'</a>';
+       $html .= 'action=visible&amp;content=' . $content . '&amp;id=' . $id . '">' . Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), ICON_SIZE_SMALL) . '</a>';
     }
+    return $html;
 }
 
 /**
@@ -984,33 +996,39 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
  */
 function display_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters = '')
 {
+    echo return_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters);
+}
+function return_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters = '')
+{
+    $html = '';
     $id = intval($id);
     //check if the forum is blocked due
     if ($content == 'thread') {
         if (api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD)) {
-            echo Display::return_icon('lock_na.png', get_lang('ResourceLockedByGradebook'), array(), ICON_SIZE_SMALL);
+            $html .= Display::return_icon('lock_na.png', get_lang('ResourceLockedByGradebook'), array(), ICON_SIZE_SMALL);
 
-            return;
+            return $html;
         }
     }
     if ($current_lock_status == '1') {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;';
+        $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                echo $key.'='.$value.'&amp;';
+                $html .= $key . '=' . $value . '&';
             }
         }
-        echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('lock.png', get_lang('Unlock'), array(), ICON_SIZE_SMALL).'</a>';
+        $html.= 'action=unlock&content='.$content.'&id='.$id.'">'.Display::return_icon('lock.png', get_lang('Unlock'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_lock_status == '0') {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;';
+        $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                echo $key.'='.$value.'&amp;';
+                $html .= $key . '=' . $value . '&';
             }
         }
-        echo 'action=lock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('unlock.png', get_lang('Lock'), array(), ICON_SIZE_SMALL).'</a>';
+        $html .= 'action=lock&content=' . $content . '&id=' . $id . '">' . Display::return_icon('unlock.png', get_lang('Lock'), array(), ICON_SIZE_SMALL) . '</a>';
     }
+    return $html;
 }
 
 /**
@@ -1027,6 +1045,10 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
  * @version february 2006, dokeos 1.8
  */
 function display_up_down_icon($content, $id, $list)
+{
+    echo return_up_down_icon($content, $id, $list);
+}
+function return_up_down_icon($content, $id, $list)
 {
     $id = strval(intval($id));
     $total_items = count($list);
@@ -1056,7 +1078,7 @@ function display_up_down_icon($content, $id, $list)
     } else {
         $return_value .= Display::return_icon('down_na.png', '-', array(), ICON_SIZE_SMALL);
     }
-    echo $return_value;
+    return $return_value;
 }
 
 /**
@@ -1272,7 +1294,14 @@ function class_visible_invisible($current_visibility_status)
         return 'class="invisible"';
     }
 }
-
+function return_visible_invisible($current_visibility_status)
+{
+    $current_visibility_status = intval($current_visibility_status);
+    if ($current_visibility_status == 0) {
+        $status='invisible';
+        return $status;
+    }
+}
 /**
  * Retrieve all the information off the forum categories (or one specific) for the current course.
  * The categories are sorted according to their sorting order (cat_order

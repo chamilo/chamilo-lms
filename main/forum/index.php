@@ -403,51 +403,67 @@ if (is_array($forumCategories)) {
                     if ($show_forum) {
                         $form_count++;
                         $mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']]) ?
-                                                $whatsnew_post_info[$forum['forum_id']] : null;
-                        $html  = '<div class="panel panel-default forum">';
+                            $whatsnew_post_info[$forum['forum_id']] : null;
+                        $html = '<div class="panel panel-default forum">';
                         $html .= '<div class="panel-body">';
 
 
-                        /* $forum_image = '';
+                        $forum_image = '';
+                        $imgForum = '';
                         // Showing the image
                         if (!empty($forum['forum_image'])) {
 
                             $image_path = api_get_path(
                                     WEB_COURSE_PATH
-                                ).api_get_course_path(
-                                ).'/upload/forum/images/'.$forum['forum_image'];
+                                ) . api_get_course_path() . '/upload/forum/images/' . $forum['forum_image'];
                             $image_size = api_getimagesize($image_path);
-
                             $img_attributes = '';
                             if (!empty($image_size)) {
-                                if ($image_size['width'] > 100 || $image_size['height'] > 100) {
-                                    //limit display width and height to 100px
-                                    $img_attributes = ' style="width:100px" width="100px" height="100px"';
-                                    $td_width = 100;
-                                } else {
-                                    $td_width = $image_size['width'];
-                                }
-                                $forum_image = "<img src=\"$image_path\" $img_attributes>";
+                                //limit display width and height to 100px
+                                $img_attributes = ' style="width:80px" width="100px" height="80px"';
+                                $imgForum = "<img src=\"$image_path\" $img_attributes>";
                             } else {
-                                $forum_image = '';
-                                $td_width = 20;
+                                $imgForum = '';
+
                             }
-                            echo '<td width="'.$td_width.'px">';
-                            echo $forum_image;
+
+                            $forum_image = $imgForum;
                         } else {
-                            echo '<td width="20px">';
+
+                            if ($forum['forum_of_group'] == '0') {
+                                $forum_image = Display::return_icon(
+                                    'forum_group.png',
+                                    get_lang('GroupForum'),
+                                    null,
+                                    ICON_SIZE_LARGE
+                                );
+
+                            } else {
+                                $forum_image = Display::return_icon(
+                                    'forum.png',
+                                    get_lang('Forum'),
+                                    null,
+                                    ICON_SIZE_LARGE
+                                );
+                            }
+                        }
+
+
+                            /*
                             if ($forum['forum_of_group'] !== '0') {
                                 if (is_array(
                                         $mywhatsnew_post_info
                                     ) && !empty($mywhatsnew_post_info)
                                 ) {
-                                    echo Display::return_icon(
+                                    $forum_image = Display::return_icon(
                                         'forumgroupnew.gif'
                                     );
                                 } else {
-                                    echo Display::return_icon(
-                                        'forumgroup.gif',
-                                        get_lang('GroupForum')
+                                    $forum_image = Display::return_icon(
+                                        'forum_group.png',
+                                        get_lang('GroupForum'),
+                                        null,
+                                        ICON_SIZE_LARGE
                                     );
                                 }
                             } else {
@@ -455,18 +471,25 @@ if (is_array($forumCategories)) {
                                         $mywhatsnew_post_info
                                     ) && !empty($mywhatsnew_post_info)
                                 ) {
-                                    echo Display::return_icon(
-                                        'forum.gif',
-                                        get_lang('Forum')
+                                    $forum_image = Display::return_icon(
+                                        'forum.png',
+                                        get_lang('Forum'),
+                                        null,
+                                        ICON_SIZE_LARGE
                                     );
                                 } else {
-                                    echo Display::return_icon('forum.gif');
+                                    $forum_image = Display::return_icon(
+                                        'forumx.png',
+                                        get_lang('Forum'),
+                                        null,
+                                        ICON_SIZE_LARGE);
                                 }
                             }
-                        }
+                             */
 
-                        echo '</td>';
-                        */
+
+
+
                         // Validation when belongs to a session
                         $session_img = api_get_session_image(
                             $forum['session_id'],
@@ -504,13 +527,13 @@ if (is_array($forumCategories)) {
                         $html .= '<div class="row">';
                         $html .= '<div class="col-md-6">';
                         $html .= '<div class="col-md-3">';
-                        $html .= '<div class="number-post">' . $number_posts . '<p>' . get_lang('Posts') . '</p></div>';
+                        $html .= '<div class="number-post">'.$forum_image .'<p>' . $number_posts . ' ' . get_lang('Posts') . '</p></div>';
                         $html .= '</div>';
 
                         $html .= '<div class="col-md-9">';
                         $iconForum = Display::return_icon('forum_yellow.png',
                             get_lang($forumCategory['cat_title']),
-                            array('class'=>''),
+                            null,
                             ICON_SIZE_MEDIUM
                         );
                         $linkForum = '';
@@ -520,7 +543,7 @@ if (is_array($forumCategories)) {
                             array ('href'=>'viewforum.php?' . api_get_cidreq(
                             ).'&gidReq=' . intval($groupid).'&forum=' . intval(
                                 $forum['forum_id']
-                            ),'class' => class_visible_invisible( strval( intval($forum['visibility']) ) ) )
+                            ),'class' => status_visible_invisible( strval( intval($forum['visibility']) ) ) )
                         );
 
                         $html .= '<h3 class="title">' . $iconForum . $linkForum . '</h3>';
@@ -539,6 +562,37 @@ if (is_array($forumCategories)) {
                         $html .= '</div>';
 
                         // The number of topics and posts.
+                        if ($forum['forum_of_group'] !== '0') {
+                            $iconEmpty='';
+                            $newPost='';
+                            if (is_array(
+                                    $mywhatsnew_post_info
+                                ) && !empty($mywhatsnew_post_info)
+                            ) {
+                                $newPost .= ' '.Display::return_icon(
+                                        'alert.png',
+                                        get_lang('Forum'),
+                                        null,
+                                        ICON_SIZE_SMALL
+                                    );
+                            } else {
+                                $newPost .= $iconEmpty;
+                            }
+                        } else {
+                            if (is_array(
+                                    $mywhatsnew_post_info
+                                ) && !empty($mywhatsnew_post_info)
+                            ) {
+                                $newPost .= ' '.Display::return_icon(
+                                        'alert.png',
+                                        get_lang('Forum'),
+                                        null,
+                                        ICON_SIZE_SMALL
+                                    );
+                            } else {
+                                $newPost .= $iconEmpty;
+                            }
+                        }
 
                         $html .= '<div class="col-md-6">';
                         $html .= '<div class="row">';
@@ -547,7 +601,7 @@ if (is_array($forumCategories)) {
                                 null,
                                 null,
                                 ICON_SIZE_SMALL
-                                ) . ' ' . $number_threads . '</div>';
+                                ) . ' ' . $number_threads . '<br>'.$newPost.'</div>';
                         $html .= '<div class="col-md-6">';
 
                         // The last post in the forum.
@@ -658,6 +712,7 @@ if (is_array($forumCategories)) {
                                     ICON_SIZE_SMALL
                                 ) . '</a>';
                         }
+
 
                         $html .= '</div>';
                         $html .= '</div>';

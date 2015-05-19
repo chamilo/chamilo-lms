@@ -6133,6 +6133,10 @@ div#chat-remote-video video {
   padding: 10px;
   text-align: center;
 }
+.forum .number-post p{
+  padding: 0;
+  margin: 0;
+}
 .forum .title{
   margin: 0;
   padding: 0;

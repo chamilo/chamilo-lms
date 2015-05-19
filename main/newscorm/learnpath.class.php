@@ -3428,11 +3428,23 @@ class learnpath
                         if ($lp_item_type == 'link') {
                             if (Link::is_youtube_link($file)) {
                                 $src  = Link::get_youtube_video_id($file);
-                                $file = 'embed.php?type=youtube&src='.$src;
-                            }
-                            if (Link::isVimeoLink($file)) {
+                                $file = 'embed.php?type=youtube&source='.$src;
+                            } elseif (Link::isVimeoLink($file)) {
                                 $src  = Link::getVimeoLinkId($file);
-                                $file = 'embed.php?type=vimeo&src='.$src;
+                                $file = 'embed.php?type=vimeo&source='.$src;
+                            } else {
+                                // If the current site is HTTPS and the link is
+                                // HTTP, browsers will refuse opening the link
+                                $urlId = api_get_current_access_url_id();
+                                $url = api_get_access_url($urlId);
+                                $protocol = substr($url['url'], 0, 5);
+                                if ($protocol === 'https') {
+                                    $linkProtocol = substr($file, 0, 5);
+                                    if ($linkProtocol === 'http:') {
+                                        //this is the special intervention case
+                                        $file = 'embed.php?type=nonhttps&source=' . $file;
+                                    }
+                                }
                             }
                         } else {
                             // Check how much attempts of a exercise exits in lp

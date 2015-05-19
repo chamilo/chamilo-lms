@@ -4,7 +4,7 @@
 require_once '../inc/global.inc.php';
 
 $type = $_REQUEST['type'];
-$src  = Security::remove_XSS($_REQUEST['src']);
+$src  = Security::remove_XSS($_REQUEST['source']);
 if (empty($type) || empty($src)) {
     api_not_allowed();
 }
@@ -17,6 +17,9 @@ switch ($type) {
     case 'vimeo':
         $src = 'http://player.vimeo.com/video/'.$src;
         $iframe = '<iframe src="'.$src.'" width="640" height="385" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+        break;
+    case 'nonhttps':
+        $iframe = '<a href="' . $src . '" target="_blank">' . $src . '</a>';
         break;
 }
 ?>

@@ -688,7 +688,7 @@ if (is_array($forumCategories)) {
                                 $forumsInCategory
                             );
                         }
-                        $iconnotify = 'notification_mail.png';
+                        $iconnotify = 'notification_mail_na.png';
                         $session_forum_notification = isset($_SESSION['forum_notification']['forum']) ?
                                                       $_SESSION['forum_notification']['forum'] : false;
                         if (is_array($session_forum_notification)) {
@@ -696,7 +696,7 @@ if (is_array($forumCategories)) {
                                 $forum['forum_id'],
                                 $session_forum_notification
                             )) {
-                                $iconnotify = 'notification_mail_ok.png';
+                                $iconnotify = 'notification_mail.png';
                             }
                         }
 

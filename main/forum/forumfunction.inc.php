@@ -1294,7 +1294,7 @@ function class_visible_invisible($current_visibility_status)
         return 'class="invisible"';
     }
 }
-function status_visible_invisible($current_visibility_status)
+function return_visible_invisible($current_visibility_status)
 {
     $current_visibility_status = intval($current_visibility_status);
     if ($current_visibility_status == 0) {

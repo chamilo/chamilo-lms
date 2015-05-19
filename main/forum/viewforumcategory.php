@@ -203,13 +203,15 @@ if ($action_forums != 'add') {
     }
 
     $html .= Display::tag(
-            'h3',$icoCategory.
-            Display::tag('a',
-                    $forumTitle,
-                    array(
-                        'href'=>$linkForumCategory,
-                        'class'=>status_visible_invisible(strval(intval($forum_category['visibility'])))
-                    )
+            'h3',
+            $icoCategory.
+            Display::tag(
+                'a',
+                $forumTitle,
+                array(
+                    'href'=>$linkForumCategory,
+                    'class'=>return_visible_invisible(strval(intval($forum_category['visibility'])))
+                )
             ).$session_displayed.$session_img,
             null
     );
@@ -344,7 +346,8 @@ if ($action_forums != 'add') {
                 $html .= '</div>';
 
                 $html .= '<div class="col-md-9">';
-                $iconForum = Display::return_icon('forum_yellow.png',
+                $iconForum = Display::return_icon(
+                    'forum_yellow.png',
                     get_lang($forumCategory['cat_title']),
                     null,
                     ICON_SIZE_MEDIUM
@@ -355,7 +358,7 @@ if ($action_forums != 'add') {
                     $forum['forum_title'].$session_displayed,
                     array(
                         'href' => 'viewforum.php?'.api_get_cidreq().'&amp;gidReq='.$forum['forum_of_group'].'&amp;forum='.$forum['forum_id'].'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
-                        'class' => status_visible_invisible($forum['visibility'])
+                        'class' => return_visible_invisible($forum['visibility'])
                     )
                 );
                 $html .= Display::tag(

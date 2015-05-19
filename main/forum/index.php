@@ -269,14 +269,20 @@ if (is_array($forumCategories)) {
             $idCategory = $forumCategory['cat_id'];
             $urlCategory = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.intval($idCategory);
             $titleCategory = Display::tag(
-                     'a', $forumCategory['cat_title'],
-                    array('href' => $urlCategory,'class' => status_visible_invisible($forumCategory['visibility']))
+                     'a',
+                     $forumCategory['cat_title'],
+                    array(
+                        'href' => $urlCategory,
+                        'class' => return_visible_invisible(
+                            $forumCategory['visibility']
+                        )
+                    )
             );
 
             $descriptionCategory = $forumCategory['cat_comment'];
 
-            if(!empty($idCategory)){
-                if(api_is_allowed_to_edit(false,true) && !($forumCategory['session_id'] == 0 && intval($sessionId) != 0)){
+            if (!empty($idCategory)){
+                if (api_is_allowed_to_edit(false, true) && !($forumCategory['session_id'] == 0 && intval($sessionId) != 0)){
                     $iconsEdit.= '
                             <a href="'.api_get_self().'?'.api_get_cidreq(
                             ).'&action=edit&content=forumcategory&id='.intval(
@@ -301,7 +307,7 @@ if (is_array($forumCategories)) {
                         array(),
                         ICON_SIZE_SMALL
                     ).'</a>';
-                    $iconsEdit.=  return_visible_invisible_icon(
+                    $iconsEdit .=  return_visible_invisible_icon(
                         'forumcategory',
                         strval(intval($idCategory)),
                         strval(intval($forumCategory['visibility']))
@@ -320,15 +326,24 @@ if (is_array($forumCategories)) {
             }
 
             $html .= '<div class="category-forum">';
-            $html .= Display::tag('div',$iconsEdit,array('class'=>'pull-right'));
-            $icoCategory = Display::return_icon('forum_blue.png',
-                    get_lang($forumCategory['cat_title']),
-                    array('class'=>''),
+            $html .= Display::tag(
+                    'div',
+                    $iconsEdit,
+                    array(
+                        'class' => 'pull-right'
+                    )
+                );
+            $icoCategory = Display::return_icon(
+                    'forum_blue.png',
+                    get_lang(
+                        $forumCategory['cat_title']
+                    ),
+                    array(),
                     ICON_SIZE_MEDIUM
             );
             $html .= '<h3>' . $icoCategory . $titleCategory . '</h3>';
 
-            if ($descriptionCategory != '' && trim($descriptionCategory)!= '&nbsp;')
+            if ($descriptionCategory != '' && trim($descriptionCategory) != '&nbsp;')
             {
                 $html .= '<div class="forum-description">'.$descriptionCategory.'</div>';
             }
@@ -404,7 +419,7 @@ if (is_array($forumCategories)) {
                         $form_count++;
                         $mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']]) ?
                             $whatsnew_post_info[$forum['forum_id']] : null;
-                       
+
                         $html = '<div class="panel panel-default forum">';
                         $html .= '<div class="panel-body">';
 
@@ -421,7 +436,7 @@ if (is_array($forumCategories)) {
                             $img_attributes = '';
                             if (!empty($image_size)) {
                                 //limit display width and height to 100px
-                                $img_attributes = ' style="width:80px" width="100px" height="80px"';
+                                $img_attributes = ' style="width:80px" height="80px"';
                                 $imgForum = "<img src=\"$image_path\" $img_attributes>";
                             } else {
                                 $imgForum = '';
@@ -490,32 +505,30 @@ if (is_array($forumCategories)) {
                         $html .= '</div>';
 
                         $html .= '<div class="col-md-9">';
-                        $iconForum = Display::return_icon('forum_yellow.png',
+                        $iconForum = Display::return_icon(
+                            'forum_yellow.png',
                             get_lang($forumCategory['cat_title']),
                             null,
                             ICON_SIZE_MEDIUM
                         );
-                        $linkForum = '';
+                        $linkForum  = '';
                         $linkForum .= Display::tag(
                             'a',
                             $forum['forum_title'],
-                            array ('href'=>'viewforum.php?' . api_get_cidreq(
-                            ).'&gidReq=' . intval($groupid).'&forum=' . intval(
-                                $forum['forum_id']
-                            ),'class' => status_visible_invisible( strval( intval($forum['visibility']) ) ) )
+                            array (
+                                'href'=>'viewforum.php?' . api_get_cidreq().'&gidReq=' . intval($groupid).'&forum=' . intval(
+                                $forum['forum_id']),
+                                'class' => return_visible_invisible( strval( intval($forum['visibility']) ) ) )
                         );
 
                         $html .= '<h3 class="title">' . $iconForum . $linkForum . '</h3>';
 
-                        // Forum title
-                        /* echo prepare4display(
-                                $forum['forum_title']
-                            ).$session_displayed.'</a><h3>'.$forum_title_group_addition; */
-
-                        $html.= Display::tag(
-                                            'p',
-                                            strip_tags($forum['forum_comment']),
-                                            array('class'=>'description')
+                        $html .= Display::tag(
+                            'p',
+                            strip_tags($forum['forum_comment']),
+                            array(
+                                'class'=>'description'
+                            )
                         );
                         $html .= '</div>';
                         $html .= '</div>';
@@ -524,10 +537,7 @@ if (is_array($forumCategories)) {
                         if ($forum['forum_of_group'] !== '0') {
                             $iconEmpty='';
                             $newPost='';
-                            if (is_array(
-                                    $mywhatsnew_post_info
-                                ) && !empty($mywhatsnew_post_info)
-                            ) {
+                            if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
                                 $newPost = ' '.Display::return_icon(
                                         'alert.png',
                                         get_lang('Forum'),
@@ -538,10 +548,7 @@ if (is_array($forumCategories)) {
                                 $newPost = $iconEmpty;
                             }
                         } else {
-                            if (is_array(
-                                    $mywhatsnew_post_info
-                                ) && !empty($mywhatsnew_post_info)
-                            ) {
+                            if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
                                 $newPost = ' '.Display::return_icon(
                                         'alert.png',
                                         get_lang('Forum'),
@@ -555,12 +562,14 @@ if (is_array($forumCategories)) {
 
                         $html .= '<div class="col-md-6">';
                         $html .= '<div class="row">';
-                        $html .= '<div class="col-md-2">'.Display::return_icon(
+                        $html .= '<div class="col-md-2">';
+                        $html .= Display::return_icon(
                                 'post-forum.png',
-                                null,
+                                get_lang('Forum'),
                                 null,
                                 ICON_SIZE_SMALL
-                                ) . ' ' . $number_threads . '<br>'.$newPost.'</div>';
+                            );
+                        $html .= ' ' . $number_threads . '<br>'.$newPost.'</div>';
                         $html .= '<div class="col-md-6">';
 
                         // The last post in the forum.

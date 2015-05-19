@@ -268,7 +268,7 @@ if (is_array($forumCategories)) {
             $iconsEdit = '';
             $idCategory = $forumCategory['cat_id'];
             $urlCategory = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.intval($idCategory);
-            $titleCategory .= Display::tag(
+            $titleCategory = Display::tag(
                      'a', $forumCategory['cat_title'],
                     array('href' => $urlCategory,'class' => status_visible_invisible($forumCategory['visibility']))
             );
@@ -569,28 +569,28 @@ if (is_array($forumCategories)) {
                                     $mywhatsnew_post_info
                                 ) && !empty($mywhatsnew_post_info)
                             ) {
-                                $newPost .= ' '.Display::return_icon(
+                                $newPost = ' '.Display::return_icon(
                                         'alert.png',
                                         get_lang('Forum'),
                                         null,
                                         ICON_SIZE_SMALL
                                     );
                             } else {
-                                $newPost .= $iconEmpty;
+                                $newPost = $iconEmpty;
                             }
                         } else {
                             if (is_array(
                                     $mywhatsnew_post_info
                                 ) && !empty($mywhatsnew_post_info)
                             ) {
-                                $newPost .= ' '.Display::return_icon(
+                                $newPost = ' '.Display::return_icon(
                                         'alert.png',
                                         get_lang('Forum'),
                                         null,
                                         ICON_SIZE_SMALL
                                     );
                             } else {
-                                $newPost .= $iconEmpty;
+                                $newPost = $iconEmpty;
                             }
                         }
 
@@ -728,7 +728,7 @@ if (is_array($forumCategories)) {
                 }
             }
         } else {
-            echo '<div>'.get_lang(
+            echo '<div class="alert alert-warning">'.get_lang(
                     'NoForumInThisCategory'
                 ).'</div>'.(api_is_allowed_to_edit(
                     false,

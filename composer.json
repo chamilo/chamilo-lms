@@ -76,7 +76,10 @@
         "bower-asset/modernizr": "2.8.*",
         "bower-asset/jqueryui-timepicker-addon": "@stable",
         "bower-asset/imageMap-resizer": "0.5.3",
-        "bower-asset/simplewebrtc": "@stable"
+        "bower-asset/simplewebrtc": "@stable",
+        "clue/graph": "~0.9.0",
+        "graphp/graphviz": "~0.2.0",
+        "graphp/algorithms": "~0.8.0"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",

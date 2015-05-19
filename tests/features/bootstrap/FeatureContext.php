@@ -125,4 +125,27 @@ class FeatureContext extends MinkContext
             new Given('I press "submitAuth"')
         );
     }
+    /**
+     * @Given /^course TEMP exists$/
+     */
+    public function courseTempExists()
+    {
+        return array(
+            new Given('I am a platform administrator'),
+            new Given('I am on "/main/admin/course_add.php"'),
+            new Given('I press "/main/admin/course_list.php?delete_course=TEMP"'),
+            new Given('I press "OK"')
+        );
+    }
+    /**
+     * @Given /^course TEMP is deleted$/
+     */
+    public function courseTempIsDeleted()
+    {
+        return array(
+            new Given('I am a platform administrator'),
+            new Given('I am on "http://my.chamilo110.net/main/admin/course_list.php?keyword=TEMP"'),
+            new Given('I follow "Delete"')
+        );
+    }
 }

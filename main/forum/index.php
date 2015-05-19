@@ -269,44 +269,40 @@ if (is_array($forumCategories)) {
             $idCategory = $forumCategory['cat_id'];
             $urlCategory = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.intval($idCategory);
             $titleCategory = Display::tag(
-                     'a',
-                     $forumCategory['cat_title'],
-                    array(
-                        'href' => $urlCategory,
-                        'class' => return_visible_invisible(
-                            $forumCategory['visibility']
-                        )
-                    )
+                'a',
+                $forumCategory['cat_title'],
+                array(
+                    'href' => $urlCategory,
+                    'class' => return_visible_invisible($forumCategory['visibility'])
+                )
             );
 
             $descriptionCategory = $forumCategory['cat_comment'];
 
             if (!empty($idCategory)){
                 if (api_is_allowed_to_edit(false, true) && !($forumCategory['session_id'] == 0 && intval($sessionId) != 0)){
-                    $iconsEdit.= '
-                            <a href="'.api_get_self().'?'.api_get_cidreq(
-                            ).'&action=edit&content=forumcategory&id='.intval(
-                                $idCategory
-                            ).'">'.Display::return_icon(
-                                'edit.png',
-                                get_lang('Edit'),
-                                array(),
-                                ICON_SIZE_SMALL
-                            ).'</a>';
-                $iconsEdit.='<a href="'.api_get_self().'?'.api_get_cidreq(
-                    ).'&action=delete&content=forumcategory&id='.intval(
-                        $idCategory
-                    )."\" onclick=\"javascript:if(!confirm('".addslashes(
-                        api_htmlentities(
+                    $iconsEdit.= '<a href="'.api_get_self().'?'.api_get_cidreq()
+                        .'&action=edit&content=forumcategory&id='.intval($idCategory).
+                        '">'.Display::return_icon(
+                            'edit.png',
+                            get_lang('Edit'),
+                            array(),
+                            ICON_SIZE_SMALL
+                        ).'</a>';
+                $iconsEdit.='<a href="'.api_get_self().'?'.api_get_cidreq().
+                    '&action=delete&content=forumcategory&id='. intval($idCategory).
+                    "\" onclick=\"javascript:if(!confirm('". addslashes(api_htmlentities(
                             get_lang('DeleteForumCategory'),
                             ENT_QUOTES
-                        )
-                    )."')) return false;\">".Display::return_icon(
+                        )).
+                    "')) return false;\">".
+                    Display::return_icon(
                         'delete.png',
                         get_lang('Delete'),
                         array(),
                         ICON_SIZE_SMALL
-                    ).'</a>';
+                    ).
+                    '</a>';
                     $iconsEdit .=  return_visible_invisible_icon(
                         'forumcategory',
                         strval(intval($idCategory)),
@@ -327,31 +323,28 @@ if (is_array($forumCategories)) {
 
             $html .= '<div class="category-forum">';
             $html .= Display::tag(
-                    'div',
-                    $iconsEdit,
-                    array(
-                        'class' => 'pull-right'
-                    )
-                );
+                'div',
+                $iconsEdit,
+                array(
+                    'class' => 'pull-right'
+                )
+            );
             $icoCategory = Display::return_icon(
-                    'forum_blue.png',
-                    get_lang(
-                        $forumCategory['cat_title']
-                    ),
-                    array(),
-                    ICON_SIZE_MEDIUM
+                'forum_blue.png',
+                get_lang(
+                    $forumCategory['cat_title']
+                ),
+                array(),
+                ICON_SIZE_MEDIUM
             );
             $html .= '<h3>' . $icoCategory . $titleCategory . '</h3>';
 
-            if ($descriptionCategory != '' && trim($descriptionCategory) != '&nbsp;')
-            {
+            if ($descriptionCategory != '' && trim($descriptionCategory) != '&nbsp;') {
                 $html .= '<div class="forum-description">'.$descriptionCategory.'</div>';
             }
 
-            $html .= '</div>';
-            echo $html;
-
-
+        $html .= '</div>';
+        echo $html;
 
         echo '<div class="forum_display">';
         if (!empty($forumsInCategory)) {
@@ -538,23 +531,25 @@ if (is_array($forumCategories)) {
                             $iconEmpty='';
                             $newPost='';
                             if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
-                                $newPost = ' '.Display::return_icon(
+                                $newPost = ' '.
+                                    Display::return_icon(
                                         'alert.png',
                                         get_lang('Forum'),
                                         null,
                                         ICON_SIZE_SMALL
-                                );
+                                    );
                             } else {
                                 $newPost = $iconEmpty;
                             }
                         } else {
                             if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
-                                $newPost = ' '.Display::return_icon(
+                                $newPost = ' '.
+                                    Display::return_icon(
                                         'alert.png',
                                         get_lang('Forum'),
                                         null,
                                         ICON_SIZE_SMALL
-                                );
+                                    );
                             } else {
                                 $newPost = $iconEmpty;
                             }
@@ -564,11 +559,11 @@ if (is_array($forumCategories)) {
                         $html .= '<div class="row">';
                         $html .= '<div class="col-md-2">';
                         $html .= Display::return_icon(
-                                'post-forum.png',
-                                get_lang('Forum'),
-                                null,
-                                ICON_SIZE_SMALL
-                            );
+                            'post-forum.png',
+                            get_lang('Forum'),
+                            null,
+                            ICON_SIZE_SMALL
+                        );
                         $html .= ' ' . $number_threads . '<br>'.$newPost.'</div>';
                         $html .= '<div class="col-md-6">';
 
@@ -597,12 +592,10 @@ if (is_array($forumCategories)) {
                                     null,
                                     null,
                                     ICON_SIZE_TINY
-                                ) . ' ' .
-                            api_convert_and_format_date(
-                                    $forum['last_post_date']
-                                ) . '<br /> ' . get_lang(
-                                    'By'
-                                ) . ' ' . display_user_link(
+                                ).' '.
+                                api_convert_and_format_date($forum['last_post_date']).
+                                '<br /> ' . get_lang('By').' '.
+                                display_user_link(
                                     $poster_id,
                                     $name,
                                     '',

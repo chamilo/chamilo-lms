@@ -203,19 +203,18 @@ if ($action_forums != 'add') {
     }
 
     $html .= Display::tag(
-            'h3',
-            $icoCategory.
-            Display::tag(
-                'a',
-                $forumTitle,
-                array(
-                    'href'=>$linkForumCategory,
-                    'class'=>return_visible_invisible(strval(intval($forum_category['visibility'])))
-                )
-            ).$session_displayed.$session_img,
-            null
+        'h3',
+        $icoCategory.
+        Display::tag(
+            'a',
+            $forumTitle,
+            array(
+                'href'=>$linkForumCategory,
+                'class'=>return_visible_invisible(strval(intval($forum_category['visibility'])))
+            )
+        ).$session_displayed.$session_img,
+        null
     );
-
 
 
     if ($descriptionCategory != '' && trim($descriptionCategory)!= '&nbsp;')
@@ -383,11 +382,9 @@ if ($action_forums != 'add') {
                 if ($forum['forum_of_group'] !== '0') {
                     $iconEmpty='';
                     $newPost='';
-                    if (is_array(
-                            $my_whatsnew_post_info
-                        ) && !empty($my_whatsnew_post_info)
-                    ) {
-                        $newPost = ' '.Display::return_icon(
+                    if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
+                        $newPost = ' '.
+                            Display::return_icon(
                                 'alert.png',
                                 get_lang('Forum'),
                                 null,
@@ -397,11 +394,9 @@ if ($action_forums != 'add') {
                         $newPost = $iconEmpty;
                     }
                 } else {
-                    if (is_array(
-                            $my_whatsnew_post_info
-                        ) && !empty($my_whatsnew_post_info)
-                    ) {
-                        $newPost = ' '.Display::return_icon(
+                    if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
+                        $newPost = ' '.
+                            Display::return_icon(
                                 'alert.png',
                                 get_lang('Forum'),
                                 null,
@@ -413,12 +408,14 @@ if ($action_forums != 'add') {
                 }
 
                 $html .= '<div class="row">';
-                $html .= '<div class="col-md-2">'.Display::return_icon(
+                $html .= '<div class="col-md-2">';
+                $html .= Display::return_icon(
                         'post-forum.png',
                         null,
                         null,
                         ICON_SIZE_SMALL
-                    ) . ' ' . $my_number_threads . '<br>'.$newPost.'</div>';
+                    );
+                $html .= ' ' . $my_number_threads . '<br>'.$newPost.'</div>';
 
                 // the last post in the forum
                 if ($forum['last_poster_name'] != '') {

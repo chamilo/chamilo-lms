@@ -262,9 +262,11 @@ class Wiki
         $tbl_wiki = $this->tbl_wiki;
         $tbl_wiki_conf = $this->tbl_wiki_conf;
         $_course = $this->courseInfo;
-        $dtime = api_get_utc_datetime();
+        $time = api_get_utc_datetime();
         $session_id = api_get_session_id();
         $groupId = api_get_group_id();
+        $userId = api_get_user_id();
+        $course_id = api_get_course_int_id();
 
         $_clean = array(
             'task' => null,
@@ -282,7 +284,8 @@ class Wiki
 
         $pageId = intval($values['page_id']);
 
-        // NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
+        // NOTE: visibility, visibility_disc and ratinglock_disc changes
+        // are not made here, but through the interce buttons
 
         // cleaning the variables
         if (api_get_setting('htmlpurifier_wiki') == 'true'){
@@ -327,10 +330,8 @@ class Wiki
             $_clean['max_version']=Database::escape_string($values['max_version']);
         }
 
-        $course_id = api_get_course_int_id();
-
         $params = [
-            'c_id' => $course_id ,
+            'c_id' => $course_id,
             'addlock' => 1,
             'visibility' => 1,
             'visibility_disc' => 1,
@@ -340,16 +341,16 @@ class Wiki
             'reflink' => trim($values['reflink']),
             'title' => trim($values['title']),
             'content' => $values['content'],
-            'user_id' => api_get_user_id(),
+            'user_id' => $userId,
             'group_id' => $groupId,
-            'dtime' => $dtime,
+            'dtime' => $time,
             'assignment' => $values['assignment'],
             'comment' => $values['comment'],
             'progress' => $values['progress'],
             'version' => $version,
             'linksto' => $linkTo,
             'user_ip' => $_SERVER['REMOTE_ADDR'],
-            'session_id' => $session_id,
+            'session_id' => $session_id
         ];
 
         $id = Database::insert($tbl_wiki, $params);
@@ -360,11 +361,11 @@ class Wiki
 
             // insert into item_property
             api_item_property_update(
-                api_get_course_info(),
+                $_course,
                 TOOL_WIKI,
                 $id,
                 'WikiAdded',
-                api_get_user_id(),
+                $userId,
                 $groupId
             );
         }
@@ -383,9 +384,10 @@ class Wiki
             Database::query($sql);
 
             $confId = Database::insert_id();
-
-            $sql = "UPDATE $tbl_wiki_conf SET page_id = $confId WHERE iid = $confId";
-            Database::query($sql);
+            if ($confId) {
+                $sql = "UPDATE $tbl_wiki_conf SET page_id = $confId WHERE iid = $confId";
+                Database::query($sql);
+            }
         } else {
             $sql = 'UPDATE '.$tbl_wiki_conf.' SET
                         task="'.$_clean['task'].'",
@@ -406,16 +408,15 @@ class Wiki
             Database::query($sql);
         }
 
-
         api_item_property_update(
             $_course,
             'wiki',
             $id,
             'WikiAdded',
-            api_get_user_id(),
+            $userId,
             $groupId
         );
-        self::check_emailcue($_clean['reflink'], 'P', $dtime, api_get_user_id());
+        self::check_emailcue($_clean['reflink'], 'P', $time, $userId);
         $this->setWikiData($id);
 
         return get_lang('Saved');

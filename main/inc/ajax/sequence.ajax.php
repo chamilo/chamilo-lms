@@ -12,6 +12,7 @@ use Graphp\GraphViz\GraphViz;
 
 require_once '../global.inc.php';
 
+api_block_anonymous_users();
 api_protect_admin_script();
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
@@ -28,20 +29,18 @@ switch ($action) {
                 $image = Display::return_icon('window_list.png');
                 $sessionInfo = api_get_session_info($id);
                 if (!empty($sessionInfo)) {
+                    $linkDelete = '';
+                    if ($showDelete) {
+                        $linkDelete = Display::url(
+                            get_lang('Delete'),
+                            '#',
+                            ['class' => 'delete_vertex', 'data-id' => $id]
+                        );
+                    }
 
-
-                $linkDelete = '';
-                if ($showDelete) {
-                    $linkDelete = Display::url(
-                        get_lang('Delete'),
-                        '#',
-                        ['class' => 'delete_vertex', 'data-id' => $id]
-                    );
-                }
-
-                $link = '<div class="parent" data-id="'.$id.'">'.
-                    $image.' '.$sessionInfo['name'].$linkDelete.
-                    '</div>';
+                    $link = '<div class="parent" data-id="'.$id.'">'.
+                        $image.' '.$sessionInfo['name'].$linkDelete.
+                        '</div>';
                 }
                 break;
         }
@@ -120,6 +119,9 @@ switch ($action) {
         break;
     case 'save_resource':
         $parents = isset($_REQUEST['parents']) ? $_REQUEST['parents'] : null;
+        if (empty($parents)) {
+            exit;
+        }
         $parents = str_replace($id, '', $parents);
         $parents = explode(',', $parents);
         $parents = array_filter($parents);
@@ -182,7 +184,5 @@ switch ($action) {
                 $manager->flush();
                 break;
         }
-
-
         break;
 }

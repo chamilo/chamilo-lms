@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
 /**
  * Class CourseDriver
+ *
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  *
  */
@@ -111,7 +112,7 @@ class CourseDriver extends Driver implements DriverInterface
     {
         $url = null;
         if ($this->allow()) {
-            $directory = $this->connector->course['directory'];
+            $directory = $this->getCourseDirectory();
             $coursePath = $this->connector->paths['sys_course_path'];
             $url = $coursePath.$directory.'/document/';
         }
@@ -126,7 +127,7 @@ class CourseDriver extends Driver implements DriverInterface
     {
         $url = null;
         if ($this->allow()) {
-            $directory = $this->connector->course['directory'];
+            $directory = $this->getCourseDirectory();
             $url = api_get_path(REL_COURSE_PATH).$directory.'/document/';
         }
 
@@ -141,11 +142,20 @@ class CourseDriver extends Driver implements DriverInterface
     {
         $url = null;
         if ($this->allow()) {
-            $directory = $this->connector->course->getDirectory();
+            $directory = $this->getCourseDirectory();
             $url = api_get_path(WEB_COURSE_PATH).$directory.'/document/';
         }
 
         return $url;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getCourseDirectory()
+    {
+        return $this->connector->course['directory'];
     }
 
     /**

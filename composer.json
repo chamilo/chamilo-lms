@@ -32,7 +32,6 @@
     },
     "require": {
         "php": ">=5.4",
-        "php-ffmpeg/php-ffmpeg": "~0.6",
         "sabre/vobject": "~3.1",
         "toin0u/digitalocean": "~1.4",
         "twig/twig": "1.*",
@@ -79,7 +78,10 @@
         "bower-asset/simplewebrtc": "@stable",
         "clue/graph": "~0.9.0",
         "graphp/graphviz": "~0.2.0",
-        "graphp/algorithms": "~0.8.0"
+        "graphp/algorithms": "~0.8.0",
+        "sunra/php-simple-html-dom-parser": "~1.5.0",
+        "media-alchemyst/media-alchemyst": "0.4.8",
+        "php-ffmpeg/php-ffmpeg": "0.5.1"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",

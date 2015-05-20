@@ -4,6 +4,10 @@
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Filesystem\Data;
 use ChamiloSession as Session;
+use MediaAlchemyst\Alchemyst;
+use MediaAlchemyst\DriversContainer;
+use Neutron\TemporaryFilesystem\Manager;
+use Neutron\TemporaryFilesystem\TemporaryFilesystem;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -276,23 +280,17 @@ class Wiki
             'assignment' => null
         );
 
+        $pageId = intval($values['page_id']);
+
         // NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
 
         // cleaning the variables
-        $_clean['page_id'] = intval($values['page_id']);
-        $_clean['reflink'] = Database::escape_string(trim($values['reflink']));
-        $_clean['title'] = Database::escape_string(trim($values['title']));
-        $_clean['content'] = Database::escape_string($values['content']);
         if (api_get_setting('htmlpurifier_wiki') == 'true'){
             //$purifier = new HTMLPurifier();
-            $_clean['content'] = Security::remove_XSS($_clean['content']);
+            $values['content'] = Security::remove_XSS($values['content']);
         }
-        $_clean['user_id'] = api_get_user_id();
-        $_clean['assignment']= Database::escape_string($values['assignment']);
-        $_clean['comment'] = Database::escape_string($values['comment']);
-        $_clean['progress']	= Database::escape_string($values['progress']);
-        $_clean['version'] = intval($values['version']) + 1 ;
-        $_clean['linksto'] = self::links_to($_clean['content']); //and check links content
+        $version = intval($values['version']) + 1 ;
+        $linkTo = self::links_to($_clean['content']); //and check links content
 
         //cleaning config variables
         if (!empty($values['task'])) {
@@ -338,18 +336,18 @@ class Wiki
             'visibility_disc' => 1,
             'addlock_disc' => 1,
             'ratinglock_disc' => 1,
-            'page_id' => $_clean['page_id'],
-            'reflink' => $_clean['reflink'],
-            'title' => $_clean['title'],
-            'content' => $_clean['content'],
-            'user_id' => $_clean['user_id'],
+            'page_id' => $pageId,
+            'reflink' => trim($values['reflink']),
+            'title' => trim($values['title']),
+            'content' => $values['content'],
+            'user_id' => api_get_user_id(),
             'group_id' => $groupId,
             'dtime' => $dtime,
-            'assignment' => $_clean['assignment'],
-            'comment' => $_clean['comment'],
-            'progress' => $_clean['progress'],
-            'version' => $_clean['version'],
-            'linksto' => $_clean['linksto'],
+            'assignment' => $values['assignment'],
+            'comment' => $values['comment'],
+            'progress' => $values['progress'],
+            'version' => $version,
+            'linksto' => $linkTo,
             'user_ip' => $_SERVER['REMOTE_ADDR'],
             'session_id' => $session_id,
         ];
@@ -371,7 +369,7 @@ class Wiki
             );
         }
 
-        if ($_clean['page_id']	== 0) {
+        if ($pageId	== 0) {
             $sql = 'UPDATE '.$tbl_wiki.' SET
                     page_id="'.$id.'"
                     WHERE c_id = '.$course_id.' AND id="'.$id.'"';
@@ -403,7 +401,7 @@ class Wiki
                         enddate_assig="'.$_clean['enddate_assig'].'",
                         delayedsubmit="'.$_clean['delayedsubmit'].'"
                     WHERE
-                        page_id = "'.$_clean['page_id'].'" AND
+                        page_id = "'.$pageId.'" AND
                         c_id = '.$course_id;
             Database::query($sql);
         }
@@ -417,7 +415,7 @@ class Wiki
             api_get_user_id(),
             $groupId
         );
-        self::check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
+        self::check_emailcue($_clean['reflink'], 'P', $dtime, api_get_user_id());
         $this->setWikiData($id);
 
         return get_lang('Saved');
@@ -960,9 +958,10 @@ class Wiki
                     echo '</span>';
                 }
 
-                if (api_is_unoconv_installed()) {
+                $unoconv = api_get_configuration_value('unoconv.binaries');
+                if ($unoconv) {
                     echo '<span style="float:right;">';
-                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?action=export_to_doc_file&id='.$row['id'].'">'.
+                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?action=export_to_doc_file&id='.$row['id'].'&'.api_get_cidreq().'">'.
                         Display::return_icon('export_doc.png', get_lang('ExportToDoc'), array(), ICON_SIZE_SMALL).'</a>';
                     echo '</span>';
                 }
@@ -5240,17 +5239,33 @@ class Wiki
      */
     public function exportTo($id, $format = 'doc')
     {
+        $unoconv = api_get_configuration_value('unoconv.binaries');
+        if (empty($unoconv)) {
+            return false;
+        }
         $data = self::get_wiki_data($id);
         if (!empty($data['content'])) {
             $fs = new Filesystem();
-            $paths = ['root_sys' => api_get_path(SYS_PATH)];
+            $paths = [
+                'root_sys' => api_get_path(SYS_PATH),
+                'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
+            ];
             $connector = new Connector();
 
-            $data = new Data($paths, $fs, $connector);
-            $content = $data->convertRelativeToAbsoluteUrl($data['content']);
-            $filePath = $data->putContentInTempFile($content, $data['reflink'], 'html');
-            $convertedFile = $data->transcode($filePath, $format);
+            $drivers = new DriversContainer();
+            $drivers['configuration'] = array(
+                'unoconv.binaries' => $unoconv,
+                'unoconv.timeout' => 60,
+            );
 
+            $tempFilesystem = TemporaryFilesystem::create();
+            $manager = new Manager($tempFilesystem, $fs);
+            $alchemyst = new Alchemyst($drivers, $manager);
+
+            $dataFileSystem = new Data($paths, $fs, $connector, $alchemyst);
+            $content = $dataFileSystem->convertRelativeToAbsoluteUrl($data['content']);
+            $filePath = $dataFileSystem->putContentInTempFile($content, $data['reflink'], 'html');
+            $convertedFile = $dataFileSystem->transcode($filePath, $format);
             DocumentManager::file_send_for_download($convertedFile);
         }
         return false;

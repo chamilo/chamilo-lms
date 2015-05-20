@@ -7416,15 +7416,6 @@ function convert_double_quote_to_single($in_text) {
 }
 
 /**
- * Is unoconv installed
- * @return bool
- */
-function api_is_unoconv_installed()
-{
-    return false;
-}
-
-/**
  * Get origin
  *
  * @param string

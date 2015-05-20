@@ -290,11 +290,13 @@ $search_form = ' <form method="GET" class="form-inline" action="session_list.php
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;
 $items = array();
-$items[] = array('url' => 'session_list.php', 'label' => get_lang('ListSession'));
-$items[] = array('url' => 'session_add.php', 'label' => get_lang('AddSession'));
+$sessionPath = api_get_path(WEB_CODE_PATH).'session/';
+
+$items[] = array('url' => $sessionPath.'session_list.php', 'label' => get_lang('ListSession'));
+$items[] = array('url' => $sessionPath.'session_add.php', 'label' => get_lang('AddSession'));
 $items[] = array('url' => 'session_category_list.php', 'label' => get_lang('ListSessionCategory'));
-$items[] = array('url' => 'session_import.php', 'label' => get_lang('ImportSessionListXMLCSV'));
-$items[] = array('url' => 'session_import_drh.php', 'label' => get_lang('ImportSessionDrhList'));
+$items[] = array('url' => $sessionPath.'session_import.php', 'label' => get_lang('ImportSessionListXMLCSV'));
+$items[] = array('url' => $sessionPath.'session_import_drh.php', 'label' => get_lang('ImportSessionDrhList'));
 if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
     $items[] = array(
         'url' => 'ldap_import_students_to_session.php',

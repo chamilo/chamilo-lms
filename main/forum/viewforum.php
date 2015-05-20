@@ -326,6 +326,12 @@ echo '</div>';
 
 
 /* Display */
+$titleForum = $current_forum['forum_title'];
+$descriptionForum = $current_forum['forum_comment'];
+$html = '';
+$html .= '<div class="topic-forum">';
+
+$html .= '</div>';
 
 echo '<table class="forum_table" >';
 

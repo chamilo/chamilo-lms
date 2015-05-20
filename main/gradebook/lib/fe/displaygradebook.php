@@ -396,6 +396,7 @@ class DisplayGradebook
         $objcat = new Category();
         $course_id = Database::get_course_by_category($selectcat);
         $message_resource = $objcat->show_message_resource_delete($course_id);
+
         $grade_model_id = $catobj->get_grade_model_id();
         $header = null;
 

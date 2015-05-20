@@ -1786,4 +1786,8 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
+
+$AutoWeight = "Auto weight";
+$AutoWeightExplanation = "Sets an average weight for all elements.";
+$EditWeight = "Edit weight";
 ?>

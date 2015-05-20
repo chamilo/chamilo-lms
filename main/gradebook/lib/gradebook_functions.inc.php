@@ -981,3 +981,75 @@ function score_badges($list_values)
     }
     return Display::badge_group($badges);
 }
+
+
+
+/**
+ * @param int $linkId
+ * @param float $weight
+ */
+function updateLinkWeight($linkId, $name, $weight)
+{
+    $linkId = intval($linkId);
+    $weight = floatval($weight);
+    $course_id = api_get_course_int_id();
+
+    AbstractLink::add_link_log($linkId, $name);
+    $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+
+    $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+    $tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
+    $tbl_work = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $tbl_attendance = Database:: get_course_table(TABLE_ATTENDANCE);
+
+    $sql = 'UPDATE '.$table_link.' SET weight = '."'".Database::escape_string($weight)."'".'
+            WHERE id = '.$linkId;
+
+    Database::query($sql);
+
+    // Update weight for attendance
+    $sql = 'SELECT ref_id FROM '.$table_link.'
+            WHERE id = '.$linkId.' AND type='.LINK_ATTENDANCE;
+
+    $rs_attendance  = Database::query($sql);
+    if (Database::num_rows($rs_attendance) > 0) {
+        $row_attendance = Database::fetch_array($rs_attendance);
+        $sql = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.$weight.'
+                WHERE c_id = '.$course_id.' AND  id = '.intval($row_attendance['ref_id']);
+        Database::query($sql);
+    }
+    // Update weight into forum thread
+    $sql = 'UPDATE '.$tbl_forum_thread.' SET thread_weight='.$weight.'
+            WHERE
+                c_id = '.$course_id.' AND
+                thread_id = (
+                    SELECT ref_id FROM '.$table_link.'
+                    WHERE id='.$linkId.' AND type='.LINK_FORUM_THREAD.'
+                )
+            ';
+    Database::query($sql);
+    //Update weight into student publication(work)
+    $sql = 'UPDATE '.$tbl_work.' SET weight='.$weight.'
+            WHERE
+                c_id = '.$course_id.' AND id = (
+                SELECT ref_id FROM '.$table_link.'
+                WHERE id='.$linkId.' AND type = '.LINK_STUDENTPUBLICATION.'
+            ) ';
+    Database::query($sql);
+}
+
+/**
+ * @param int $id
+ * @param float $weight
+ */
+function updateEvaluationWeight($id, $weight)
+{
+    $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+    $id = intval($id);
+    $evaluation = new Evaluation();
+    $evaluation->add_evaluation_log($id);
+    $sql = 'UPDATE '.$table_evaluation.'
+           SET weight = '."'".Database::escape_string($weight)."'".'
+           WHERE id = '.$id;
+    Database::query($sql);
+}

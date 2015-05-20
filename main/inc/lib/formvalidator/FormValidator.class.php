@@ -280,6 +280,25 @@ EOT;
     }
 
     /**
+     * @param string $label
+     * @param string $text
+     *
+     * @return HTML_QuickForm_label
+     */
+    public function addLabel($label, $text)
+    {
+        return $this->addElement('label', $label, $text);
+    }
+
+    /**
+     * @param string $text
+     */
+    public function addHeader($text)
+    {
+        $this->addElement('header', $text);
+    }
+
+    /**
      * @param string $name
      * @param string $value
      */

@@ -5,6 +5,7 @@
  * Gradebook controller
  * @package chamilo.gradebook
  */
+
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
 //$cidReset = false;
@@ -387,7 +388,10 @@ if (isset($_GET['deletelink'])) {
         $link= LinkFactory :: load($get_delete_link);
         if ($link[0] != null) {
             // Clean forum qualify
-            $sql = 'UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify=""
+            $sql = 'UPDATE '.$tbl_forum_thread.' SET
+                        thread_qualify_max=0,
+                        thread_weight=0,
+                        thread_title_qualify=""
 					WHERE c_id = '.$course_id.' AND thread_id = (
 					    SELECT ref_id FROM '.$tbl_grade_links.'
 					    WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.'
@@ -626,8 +630,14 @@ if (isset($_GET['studentoverview'])) {
     $alleval= $cats[0]->get_evaluations($stud_id, true);
     $alllink= $cats[0]->get_links($stud_id, true);
     if (isset ($_GET['exportpdf'])) {
-        $datagen = new GradebookDataGenerator ($allcat,$alleval, $alllink);
-        $header_names = array(get_lang('Name'),get_lang('Description'),get_lang('Weight'),get_lang('Date'),get_lang('Results'));
+        $datagen = new GradebookDataGenerator($allcat,$alleval, $alllink);
+        $header_names = array(
+            get_lang('Name'),
+            get_lang('Description'),
+            get_lang('Weight'),
+            get_lang('Date'),
+            get_lang('Results'),
+        );
         $data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME,0,null,true);
         $newarray = array();
         foreach ($data_array as $data) {
@@ -641,7 +651,18 @@ if (isset($_GET['studentoverview'])) {
         $pdf->line(50,790,550,790);
         $pdf->line(50,40,550,40);
         $pdf->ezSetY(750);
-        $pdf->ezTable($newarray,$header_names,'',array('showHeadings'=>1,'shaded'=>1,'showLines'=>1,'rowGap'=>3,'width'=> 500));
+        $pdf->ezTable(
+            $newarray,
+            $header_names,
+            '',
+            array(
+                'showHeadings' => 1,
+                'shaded' => 1,
+                'showLines' => 1,
+                'rowGap' => 3,
+                'width' => 500,
+            )
+        );
         $pdf->ezStream();
         exit;
     }
@@ -819,14 +840,14 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                             $gradebook =  new Gradebook();
                             $params = array();
 
-                            $params['name']             = $component['acronym'];
-                            $params['description']      = $component['title'];
-                            $params['user_id']          = api_get_user_id();
-                            $params['parent_id']        = $cats[0]->get_id();
-                            $params['weight']           = $component['percentage'];
-                            $params['session_id']       = api_get_session_id();
-                            $params['course_code']      = api_get_course_id();
-                            $params['grade_model_id']   = api_get_session_id();
+                            $params['name'] = $component['acronym'];
+                            $params['description'] = $component['title'];
+                            $params['user_id'] = api_get_user_id();
+                            $params['parent_id'] = $cats[0]->get_id();
+                            $params['weight'] = $component['percentage'];
+                            $params['session_id'] = api_get_session_id();
+                            $params['course_code'] = api_get_course_id();
+                            $params['grade_model_id'] = api_get_session_id();
 
                             $gradebook->save($params);
                         }

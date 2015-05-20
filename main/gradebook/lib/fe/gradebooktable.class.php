@@ -637,13 +637,16 @@ class GradebookTable extends SortableTable
     public function getGraph()
     {
         $data = $this->getDataForGraph();
-        if (!empty($data) && isset($data['my_result'])) {
+        if (!empty($data) &&
+            isset($data['categories']) &&
+            isset($data['my_result']) &&
+            isset($data['average'])
+        ) {
             $dataSet = new pData();
             $dataSet->addPoints($data['my_result'], get_lang('Me'));
             // In order to generate random values
             // $data['average'] = array(rand(0,50), rand(0,50));
             $dataSet->addPoints($data['average'], get_lang('Average'));
-
             $dataSet->addPoints($data['categories'], 'categories');
 
             $dataSet->setAbscissa("categories");
@@ -686,7 +689,7 @@ class GradebookTable extends SortableTable
 
             /* Write the chart legend */
             $pChart->drawLegend(
-                $xSize-180,
+                $xSize - 180,
                 9,
                 array(
                     "Style" => LEGEND_NOBORDER,

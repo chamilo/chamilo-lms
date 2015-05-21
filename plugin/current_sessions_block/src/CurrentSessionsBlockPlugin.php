@@ -201,9 +201,20 @@ SQL;
      */
     private function getProgress($sessionId)
     {
-        $sessionId = intval($sessionId);
+        $progress = Tracking::get_avg_student_progress(
+            api_get_user_id(),
+            'TEST',
+            [],
+            $sessionId,
+            false,
+            true
+        );
 
-        return 65.25;
+        if ($progress === false) {
+            return 0;
+        }
+
+        return $progress;
     }
 
     /**

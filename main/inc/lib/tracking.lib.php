@@ -2033,53 +2033,53 @@ class Tracking
 
     /**
      * Returns the average student progress in the learning paths of the given course
-     * @param int|array $student_id The student ID or an array of student IDs
-     * @param string $course_code Optional. The course code
-     * @param array $lp_ids Optional. Limit average to listed lp ids
-     * @param int $session_id Optional. The session ID.
+     * @param int|array $studentId The student ID or an array of student IDs
+     * @param string $courseCode Optional. The course code
+     * @param array $lPIds Optional. Limit average to listed lp ids
+     * @param int $sessionId Optional. The session ID.
      * If parameter $session_id is null(default) it'll return results including
      * sessions, 0 = session is not filtered
-     * @param boolean $return_array Optional. Will return an array of the type:
+     * @param boolean $returnArray Optional. Will return an array of the type:
      * [sum_of_progresses, number] if it is set to true
      * @param boolean $onlySeriousGame Optional. Limit average to lp on seriousgame mode
      * @return double Average progress of the user in this course. Otherwise return 0
      */
     public static function get_avg_student_progress(
-        $student_id,
-        $course_code = null,
-        $lp_ids = array(),
-        $session_id = null,
-        $return_array = false,
+        $studentId,
+        $courseCode = null,
+        $lPIds = array(),
+        $sessionId = null,
+        $returnArray = false,
         $onlySeriousGame = false
     ) {
         // If there is at least one learning path and one student.
-        if (empty($student_id)) {
+        if (empty($studentId)) {
             return false;
         }
 
-        $session_id = intval($session_id);
-        $courseInfo = api_get_course_info($course_code);
+        $sessionId = intval($sessionId);
+        $courseInfo = api_get_course_info($courseCode);
 
         if (empty($courseInfo)) {
             return false;
         }
 
-        $lPTable = Database :: get_course_table(TABLE_LP_MAIN);
-        $tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW);
+        $lPTable = Database::get_course_table(TABLE_LP_MAIN);
+        $lPViewTable = Database::get_course_table(TABLE_LP_VIEW);
 
         $lPConditions = [
             'c_id = ? ' => $courseInfo['real_id'],
-            'AND session_id = ? ' => $session_id
+            'AND session_id = ? ' => $sessionId
         ];
 
-        if (is_array($lp_ids) && count($lp_ids) > 0) {
+        if (is_array($lPIds) && count($lPIds) > 0) {
             $placeHolders = [];
 
-            for ($i = 0; $i < count($lp_ids); $i++) {
+            for ($i = 0; $i < count($lPIds); $i++) {
                 $placeHolders[] = '?';
             }
 
-            $lPConditions['AND id IN(' . implode(', ', $placeHolders) . ') '] = $lp_ids;
+            $lPConditions['AND id IN(' . implode(', ', $placeHolders) . ') '] = $lPIds;
         }
 
         if ($onlySeriousGame) {
@@ -2096,43 +2096,45 @@ class Tracking
 
         $conditions = [
             " c_id = {$courseInfo['real_id']} ",
-            " lp_view.lp_id IN(".implode(',', $filteredLP).") "
+            " lp_view.lp_id IN(" . implode(', ', $filteredLP) . ") "
         ];
 
-            if (is_array($student_id)) {
-                $student_id = array_map('intval', $student_id);
-                $conditions[] = " lp_view.user_id IN (".implode(',', $student_id).")  ";
-            } else {
-                $student_id = intval($student_id);
-                $conditions[] = " lp_view.user_id = '$student_id' ";
-            }
-            if (!empty($session_id)) {
-                $conditions[] = " session_id = $session_id ";
-            }
-            $conditionToString = implode('AND', $conditions);
+        if (is_array($studentId)) {
+            $studentId = array_map('intval', $studentId);
+            $conditions[] = " lp_view.user_id IN (" . implode(',', $studentId) . ")  ";
+        } else {
+            $studentId = intval($studentId);
+            $conditions[] = " lp_view.user_id = '$studentId' ";
+        }
 
-            // Get last view for each student (in case of multi-attempt)
-            // Also filter on LPs of this session
-            $sql = " SELECT
-                        MAX(view_count),
-                        AVG(progress) average,
-                        SUM(progress) sum_progress,
-                        count(progress) count_progress
-                    FROM $tbl_course_lp_view lp_view
-                    WHERE
-                      $conditionToString
-                    GROUP BY lp_id";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
+        if (!empty($sessionId)) {
+            $conditions[] = " session_id = $sessionId ";
+        }
 
-            if ($return_array) {
-                return [
-                    $row['sum_progress'],
-                    $row['count_progress']
-                ];
-            }
+        $conditionToString = implode('AND', $conditions);
 
-            return round($row['average'], 1);
+        // Get last view for each student (in case of multi-attempt)
+        // Also filter on LPs of this session
+        $sql = " SELECT
+                    MAX(view_count),
+                    AVG(progress) average,
+                    SUM(progress) sum_progress,
+                    count(progress) count_progress
+                FROM $lPViewTable lp_view
+                WHERE
+                  $conditionToString
+                GROUP BY lp_id";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        if ($returnArray) {
+            return [
+                $row['sum_progress'],
+                $row['count_progress']
+            ];
+        }
+
+        return round($row['average'], 1);
     }
 
     /**

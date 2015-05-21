@@ -188,7 +188,7 @@ SQL;
             }
 
             $session['stars'] = $this->getNumberOfStars($session['id']);
-            $session['progress'] = $this->getProgress($session['id']);
+            $session['progress'] = $this->getSessionProgress($session['id']);
         }
 
         return $sessions;
@@ -199,22 +199,33 @@ SQL;
      * @param int $sessionId The session id
      * @return int The progress
      */
-    private function getProgress($sessionId)
+    private function getSessionProgress($sessionId)
     {
-        $progress = Tracking::get_avg_student_progress(
-            api_get_user_id(),
-            'TEST',
-            [],
-            $sessionId,
-            false,
-            true
-        );
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+        $progress = 0;
 
-        if ($progress === false) {
+        if (empty($courses)) {
             return 0;
         }
 
-        return $progress;
+        foreach ($courses as $course) {
+            $courseProgress = Tracking::get_avg_student_progress(
+                api_get_user_id(),
+                $course['code'],
+                [],
+                $sessionId,
+                false,
+                true
+            );
+
+            if ($courseProgress === false) {
+                continue;
+            }
+
+            $progress += $courseProgress;
+        }
+
+        return $progress / count($courses);
     }
 
     /**

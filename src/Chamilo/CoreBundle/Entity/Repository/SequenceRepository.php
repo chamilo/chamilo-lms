@@ -32,6 +32,41 @@ class SequenceRepository extends EntityRepository
     }
 
     /**
+     * @todo implement for all types only work for sessions
+     *
+     * @param int $resourceId
+     * @param int $type
+     *
+     * @return array
+     */
+    public function getRequirementAndDependencies($resourceId, $type)
+    {
+        $sequence = $this->findRequirementForResource($resourceId, $type);
+        $result = ['requirements' => '', 'dependencies' => ''];
+        if ($sequence && $sequence->hasGraph()) {
+            $graph = $sequence->getUnserializeGraph();
+            $vertex = $graph->getVertex($resourceId);
+            $from = $vertex->getVerticesEdgeFrom();
+
+            foreach ($from as $subVertex) {
+                $vertexId = $subVertex->getId();
+                $sessionInfo = api_get_session_info($vertexId);
+                $result['requirements'][] = $sessionInfo;
+            }
+
+            $to = $vertex->getVerticesEdgeTo();
+            foreach ($to as $subVertex) {
+                $vertexId = $subVertex->getId();
+                $sessionInfo = api_get_session_info($vertexId);
+                $result['dependencies'][] = $sessionInfo;
+            }
+        }
+
+        return $result;
+    }
+
+
+    /**
      * Deletes a node and check in all the dependencies if the node exists in
      * order to deleted.
      *

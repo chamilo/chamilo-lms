@@ -352,7 +352,7 @@ if (api_is_platform_admin()) {
     }
 
     $items[] = array('url' => 'archive_cleanup.php', 'label' => get_lang('ArchiveDirCleanup'));
-    $items[] = array('url' => 'resource_sequence.php', 'label' => get_lang('ResourceSequencing'));
+    $items[] = array('url' => 'resource_sequence.php', 'label' => get_lang('ResourcesSequencing'));
 
     if (isset($_configuration['db_manager_enabled']) &&
         $_configuration['db_manager_enabled'] == true &&

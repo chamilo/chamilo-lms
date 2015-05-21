@@ -494,40 +494,18 @@ if (!empty($userList)) {
     $table->display();
 }
 
-// @todo put this in a function
 /** @var SequenceRepository $repo */
 $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
-$sequence = $repo->findRequirementForResource($sessionId, SequenceResource::SESSION_TYPE);
+$requirementAndDependencies = $repo->getRequirementAndDependencies($sessionId, SequenceResource::SESSION_TYPE);
 
-if ($sequence->hasGraph()) {
-    $graph = $sequence->getUnserializeGraph();
-    $vertex = $graph->getVertex($sessionId);
-    $from = $vertex->getVerticesEdgeFrom();
+if (!empty($requirementAndDependencies['requirements'])) {
+    echo Display::page_subheader(get_lang('Requirements'));
+    echo implode(',', array_column($requirementAndDependencies['requirements'], 'name'));
+}
 
-    $sessionNameList = [];
-    foreach ($from as $subVertex) {
-        $vertexId = $subVertex->getId();
-        $sessionInfo = api_get_session_info($vertexId);
-        $sessionNameList[] = $sessionInfo['name'];
-    }
-
-    if (!empty($sessionNameList)) {
-        echo Display::page_subheader(get_lang('Requirements'));
-        echo implode(',', $sessionNameList);
-    }
-
-    $to = $vertex->getVerticesEdgeTo();
-    $sessionNameList = [];
-    foreach ($to as $subVertex) {
-        $vertexId = $subVertex->getId();
-        $sessionInfo = api_get_session_info($vertexId);
-        $sessionNameList[] = $sessionInfo['name'];
-    }
-
-    if (!empty($sessionNameList)) {
-        echo Display::page_subheader(get_lang('Dependencies'));
-        echo implode(',', $sessionNameList);
-    }
+if (!empty($requirementAndDependencies['dependencies'])) {
+    echo Display::page_subheader(get_lang('Dependencies'));
+    echo implode(',', array_column($requirementAndDependencies['dependencies'], 'name'));
 }
 
 Display :: display_footer();

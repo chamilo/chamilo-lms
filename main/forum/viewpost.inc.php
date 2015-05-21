@@ -119,8 +119,10 @@ $result = get_statistical_information(
     api_get_course_int_id()
 );
 
+/*
 if ($userInfo['status']!='1') {
     echo '<div class="forum-qualification-input-box">';
     require_once 'forumbody.inc.php';
     echo '</div>';
 }
+*/

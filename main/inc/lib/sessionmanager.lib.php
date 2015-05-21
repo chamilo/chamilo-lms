@@ -1480,7 +1480,9 @@ class SessionManager
         $userId = api_get_user_id();
 
         if (is_array($id_checked)) {
-            $id_checked = Database::escape_string(implode(',', $id_checked));
+            foreach ($id_checked as $sessionId) {
+                self::delete($sessionId);
+            }
         } else {
             $id_checked = intval($id_checked);
         }
@@ -1502,6 +1504,13 @@ class SessionManager
 
         $extraFieldValue = new ExtraFieldValue('session');
         $extraFieldValue->deleteValuesByItem($id_checked);
+
+        /** @var \Chamilo\CoreBundle\Entity\Repository\SequenceRepository $repo */
+        $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
+        $repo->deleteResource(
+            $id_checked,
+            \Chamilo\CoreBundle\Entity\SequenceResource::SESSION_TYPE
+        );
 
         // Add event to system log
         Event::addEvent(

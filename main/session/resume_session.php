@@ -6,6 +6,9 @@
 *	@package chamilo.admin
 */
 
+use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Entity\SequenceResource;
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -489,6 +492,42 @@ if (!empty($userList)) {
         $row++;
     }
     $table->display();
+}
+
+// @todo put this in a function
+/** @var SequenceRepository $repo */
+$repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
+$sequence = $repo->findRequirementForResource($sessionId, SequenceResource::SESSION_TYPE);
+
+if ($sequence->hasGraph()) {
+    $graph = $sequence->getUnserializeGraph();
+    $vertex = $graph->getVertex($sessionId);
+    $from = $vertex->getVerticesEdgeFrom();
+
+    $sessionNameList = [];
+    foreach ($from as $subVertex) {
+        $vertexId = $subVertex->getId();
+        $sessionInfo = api_get_session_info($vertexId);
+        $sessionNameList[] = $sessionInfo['name'];
+    }
+
+    if (!empty($sessionNameList)) {
+        echo Display::page_subheader(get_lang('Requirements'));
+        echo implode(',', $sessionNameList);
+    }
+
+    $to = $vertex->getVerticesEdgeTo();
+    $sessionNameList = [];
+    foreach ($to as $subVertex) {
+        $vertexId = $subVertex->getId();
+        $sessionInfo = api_get_session_info($vertexId);
+        $sessionNameList[] = $sessionInfo['name'];
+    }
+
+    if (!empty($sessionNameList)) {
+        echo Display::page_subheader(get_lang('Dependencies'));
+        echo implode(',', $sessionNameList);
+    }
 }
 
 Display :: display_footer();

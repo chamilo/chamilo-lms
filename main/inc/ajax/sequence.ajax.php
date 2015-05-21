@@ -55,16 +55,13 @@ switch ($action) {
             exit;
         }
 
-        $graph = $resource->getGraph();
-
-        if (!empty($graph)) {
-            /** @var Graph $graph */
-            $graph = unserialize($graph);
+        if ($resource->hasGraph()) {
+            $graph = $resource->getUnserializeGraph();
             if ($graph->hasVertex($vertexId)) {
                 $vertex = $graph->getVertex($vertexId);
                 $vertex->destroy();
 
-                $resource->setGraph(serialize($graph));
+                $resource->setGraphAndSerialize($graph);
 
                 $manager->persist($resource);
                 $manager->flush();
@@ -82,32 +79,32 @@ switch ($action) {
             exit;
         }
 
-        $graph = $resource->getGraph();
-
-        if (!empty($graph)) {
-            /** @var Graph $graph */
-            $graph = unserialize($graph);
-
+        if ($resource->hasGraph()) {
+            $graph = $resource->getUnserializeGraph();
             $graphviz = new GraphViz();
             //echo $graphviz->createImageHtml($graph);
 
             /** @var Vertex $mainVertice */
             if ($graph->hasVertex($id)) {
-                $mainVertice = $graph->getVertex($id);
+                $mainVertex = $graph->getVertex($id);
 
-                if (!empty($mainVertice)) {
-                    $list = [];
+                if (!empty($mainVertex)) {
+                    $vertexList = null;
                     switch ($loadResourceType) {
                         case 'parent':
-                            $verticeList = $mainVertice->getVerticesEdgeFrom();
+                            $vertexList = $mainVertex->getVerticesEdgeFrom();
 
                             break;
                         case 'children':
-                            $verticeList = $mainVertice->getVerticesEdgeTo();
+                            $vertexList = $mainVertex->getVerticesEdgeTo();
                             break;
                     }
-                    foreach ($verticeList as $vertice) {
-                        $list[] = $vertice->getId();
+
+                    $list = [];
+                    if (!empty($vertexList)) {
+                        foreach ($vertexList as $vertex) {
+                            $list[] = $vertex->getId();
+                        }
                     }
 
                     if (!empty($list)) {
@@ -141,16 +138,14 @@ switch ($action) {
                     /** @var SequenceResource $resource */
                     $resource = $repository->findOneByResourceId($parentId);
                     if ($resource) {
-                        $parentGraph = $resource->getGraph();
-
-                        if (!empty($parentGraph)) {
+                        if ($resource->hasGraph()) {
                             /** @var Graph $parentGraph */
-                            $parentGraph = unserialize($parentGraph);
+                            $parentGraph = $resource->getUnserializeGraph();
                             try {
                                 $vertex = $parentGraph->getVertex($parentId);
                                 $parentMain = $parentGraph->createVertex($id);
                                 $vertex->createEdgeTo($parentMain);
-                                $resource->setGraph(serialize($parentGraph));
+                                $resource->setGraphAndSerialize($parentGraph);
 
                                 $manager->persist($resource);
                                 $manager->flush();
@@ -174,11 +169,11 @@ switch ($action) {
                 if (empty($sequence)) {
                     $sequence = new SequenceResource();
                     $sequence
-                        ->setGraph(serialize($graph))
+                        ->setGraphAndSerialize($graph)
                         ->setType(SequenceResource::SESSION_TYPE)
                         ->setResourceId($id);
                 } else {
-                    $sequence->setGraph(serialize($graph));
+                    $sequence->setGraphAndSerialize($graph);
                 }
                 $manager->persist($sequence);
                 $manager->flush();

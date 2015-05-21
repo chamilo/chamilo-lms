@@ -12,15 +12,12 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
-api_protect_admin_script(true);
-
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Setting the name of the tool
-$tool_name = get_lang('SubscribeStudentsToSession');
+$tool_name = get_lang('EnrollTrainersFromExistingSessions');
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
@@ -29,18 +26,19 @@ $form_sent  = 0;
 $errorMsg   = '';
 $users = $sessions = array();
 
-$id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$id = intval($_GET['id']);
+
+SessionManager::protectSession($id);
+
 $htmlResult = null;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     if ($form_sent == 1) {
-        $sessionSourceList = $_POST['sessions'];
-        $sessionDestinationList = $_POST['sessions_destination'];
-        $result = SessionManager::copyStudentsFromSession($sessionSourceList, $sessionDestinationList);
-        foreach ($result as $message) {
-            $htmlResult .= $message;
-        }
+        $sessions = $_POST['sessions'];
+        $courses = $_POST['courses'];
+
+        $htmlResult = SessionManager::copyCoachesFromSessionToCourse($sessions, $courses);
     }
 }
 
@@ -48,6 +46,12 @@ $session_list = SessionManager::get_sessions_list(array(), array('name'));
 $sessionList = array();
 foreach ($session_list as $session) {
     $sessionList[$session['id']] = $session['name'];
+}
+
+$courseList = CourseManager::get_courses_list(0, 0, 'title');
+$courseOptions = array();
+foreach ($courseList as $course) {
+    $courseOptions[$course['id']] = $course['title'];
 }
 Display::display_header($tool_name);
 ?>
@@ -64,7 +68,7 @@ echo Display::input('hidden', 'form_sent', '1');
             </td>
             <td></td>
             <td align="center">
-                <b><?php echo get_lang('Sessions') ?> :</b>
+                <b><?php echo get_lang('Courses') ?> :</b>
             </td>
         </tr>
         <tr>
@@ -74,7 +78,7 @@ echo Display::input('hidden', 'form_sent', '1');
                      'sessions[]',
                      $sessionList,
                      '',
-                     array('style'=>'width:100%', 'multiple'=>'multiple', 'id'=>'sessions', 'size'=>'15px'),
+                     array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'sessions', 'size'=>'15px'),
                      false
                  );
                 ?>
@@ -84,10 +88,10 @@ echo Display::input('hidden', 'form_sent', '1');
             <td align="center">
                 <?php
                 echo Display::select(
-                    'sessions_destination[]',
-                    $sessionList,
+                    'courses[]',
+                    $courseOptions,
                     '',
-                    array('style'=>'width:100%', 'id'=>'courses', 'size'=>'15px'),
+                    array('style'=>'width:360px', 'id'=>'courses', 'size'=>'15px'),
                     false
                 );
                 ?>
@@ -97,8 +101,8 @@ echo Display::input('hidden', 'form_sent', '1');
             <td colspan="3" align="center">
                 <br />
                 <?php
-                echo '<button class="save" type="submit"" >'.
-                    get_lang('SubscribeStudentsToSession').'</button>';
+                echo '<button class="btn btn-success" type="submit"" >'.
+                    get_lang('SubscribeTeachersToSession').'</button>';
                 ?>
             </td>
         </tr>
@@ -165,7 +169,6 @@ echo Display::input('hidden', 'form_sent', '1');
         xhr_object.onreadystatechange = function() {
             if(xhr_object.readyState == 4) {
                 document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
-                //alert(xhr_object.responseText);
             }
         }
     }

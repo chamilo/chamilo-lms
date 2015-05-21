@@ -34,7 +34,8 @@ $tool_name = get_lang('ExportSessionListXMLCSV');
 
 global $_configuration;
 
-$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 set_time_limit(0);
 
@@ -277,7 +278,7 @@ $result = Database::query($sql);
 $Sessions = Database::store_result($result);
 
 echo '<div class="actions">';
-echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="../session/session_list.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($errorMsg)) {

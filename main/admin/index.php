@@ -290,18 +290,23 @@ $search_form = ' <form method="GET" class="form-inline" action="session_list.php
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;
 $items = array();
-$items[] = array('url' => 'session_list.php', 'label' => get_lang('ListSession'));
-$items[] = array('url' => 'session_add.php', 'label' => get_lang('AddSession'));
-$items[] = array('url' => 'session_category_list.php', 'label' => get_lang('ListSessionCategory'));
-$items[] = array('url' => 'session_import.php', 'label' => get_lang('ImportSessionListXMLCSV'));
-$items[] = array('url' => 'session_import_drh.php', 'label' => get_lang('ImportSessionDrhList'));
+$sessionPath = api_get_path(WEB_CODE_PATH).'session/';
+
+$items[] = array('url' => $sessionPath.'session_list.php', 'label' => get_lang('ListSession'));
+$items[] = array('url' => $sessionPath.'session_add.php', 'label' => get_lang('AddSession'));
+$items[] = array('url' => $sessionPath.'session_category_list.php', 'label' => get_lang('ListSessionCategory'));
+$items[] = array('url' => $sessionPath.'session_import.php', 'label' => get_lang('ImportSessionListXMLCSV'));
+$items[] = array('url' => $sessionPath.'session_import_drh.php', 'label' => get_lang('ImportSessionDrhList'));
 if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
     $items[] = array(
         'url' => 'ldap_import_students_to_session.php',
         'label' => get_lang('ImportLDAPUsersIntoSession')
     );
 }
-$items[] = array('url' => 'session_export.php', 'label' => get_lang('ExportSessionListXMLCSV'));
+$items[] = array(
+    'url' => $sessionPath.'session_export.php',
+    'label' => get_lang('ExportSessionListXMLCSV'),
+);
 $items[] = array(
     'url' => '../coursecopy/copy_course_session.php',
     'label' => get_lang('CopyFromCourseInSessionToAnotherSession')
@@ -347,7 +352,7 @@ if (api_is_platform_admin()) {
     }
 
     $items[] = array('url' => 'archive_cleanup.php', 'label' => get_lang('ArchiveDirCleanup'));
-    $items[] = array('url' => 'resource_sequence.php', 'label' => get_lang('ResourceSequencing'));
+    $items[] = array('url' => 'resource_sequence.php', 'label' => get_lang('ResourcesSequencing'));
 
     if (isset($_configuration['db_manager_enabled']) &&
         $_configuration['db_manager_enabled'] == true &&
@@ -365,7 +370,6 @@ if (api_is_platform_admin()) {
 
     $blocks['settings']['items'] = $items;
     $blocks['settings']['extra'] = null;
-
     $blocks['settings']['search_form'] = null;
 
     // Skills
@@ -425,7 +429,7 @@ if (api_is_platform_admin()) {
     $blocks['chamilo']['extra'] = null;
     $blocks['chamilo']['search_form'] = null;
 
-    //Version check
+    // Version check
     $blocks['version_check']['icon'] = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
     $blocks['version_check']['label'] = get_lang('VersionCheck');
     $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';

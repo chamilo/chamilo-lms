@@ -6,12 +6,10 @@ $cidReset = true;
 // including the global Chamilo file
 require_once '../inc/global.inc.php';
 
-api_protect_admin_script(true);
-
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 
-SessionManager::protect_session_edit($sessionId);
+SessionManager::protectSession($sessionId);
 
 $sessionInfo = api_get_session_info($sessionId);
 if (empty($sessionInfo)) {
@@ -27,7 +25,7 @@ if (empty($sessionId) || empty($userId)) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$sessionId, "name" => get_lang('SessionOverview'));
 

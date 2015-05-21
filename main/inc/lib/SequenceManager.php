@@ -493,7 +493,7 @@ class SequenceManager
         }
         $user_id = intval($user_id);
         $session_id = intval($session_id);
-        $row_entity_id = intval($row_entity_id));
+        $row_entity_id = intval($row_entity_id);
         $seq_table = Database::get_main_table(TABLE_MAIN_SEQUENCE);
         $val_table = Database::get_main_table(TABLE_SEQUENCE_VALUE);
         $sql = "SELECT DISTINCT seq.sequence_row_entity_id, val.user_id
@@ -589,7 +589,7 @@ class SequenceManager
         }
         $row_id = intval($row_id);
         $entity_id = intval($entity_id);
-        $c_id = intval($c_id));
+        $c_id = intval($c_id);
 
         $row_entity_id_prev = self::get_row_entity_id_by_row_id($entity_id, $row_id, $c_id);
 
@@ -948,7 +948,7 @@ class SequenceManager
         if (self::_debug) {
             error_log('Entering '.__FUNCTION__.' in '.__FILE__);
         }
-        $user_id = intval($user_id));
+        $user_id = intval($user_id);
         $session_id = intval($session_id);
         $total_items = intval($total_items);
         $available = intval($available);
@@ -1251,7 +1251,7 @@ class SequenceManager
         }
         $row_entity_id = intval($row_entity_id);
         $user_id = intval($user_id);
-        $session_id = intval($session_id));
+        $session_id = intval($session_id);
 
         $val_table = Database::get_main_table(TABLE_SEQUENCE_VALUE);
 

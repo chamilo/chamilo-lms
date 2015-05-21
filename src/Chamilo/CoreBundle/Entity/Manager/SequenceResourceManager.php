@@ -6,12 +6,12 @@ namespace Chamilo\CoreBundle\Entity\Manager;
 use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
- * Class SequenceManager
+ * Class SequenceResourceManager
  * CRUD for the course
  *
  * @package Chamilo\CoreBundle\Entity\Repository
  */
-class SequenceManager extends BaseEntityManager
+class SequenceResourceManager extends BaseEntityManager
 {
 
 }

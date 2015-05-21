@@ -4,12 +4,13 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Fhaculty\Graph\Graph;
 
 /**
  * Class SequenceResource
+ *
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SequenceRepository")
  * @ORM\Table(name="sequence_resource")
- * @ORM\Entity
  */
 class SequenceResource
 {
@@ -85,6 +86,22 @@ class SequenceResource
     }
 
     /**
+     * @return Graph
+     */
+    public function getUnserializeGraph()
+    {
+        return unserialize($this->graph);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasGraph()
+    {
+        return !empty($this->graph) ? true : false;
+    }
+
+    /**
      * @param string $graph
      *
      * @return SequenceResource
@@ -92,6 +109,18 @@ class SequenceResource
     public function setGraph($graph)
     {
         $this->graph = $graph;
+
+        return $this;
+    }
+
+    /**
+     * @param string $graph
+     *
+     * @return SequenceResource
+     */
+    public function setGraphAndSerialize($graph)
+    {
+        $this->setGraph(serialize($graph));
 
         return $this;
     }
@@ -106,6 +135,8 @@ class SequenceResource
 
     /**
      * @param int $resourceId
+     *
+     * @return $this
      */
     public function setResourceId($resourceId)
     {
@@ -113,5 +144,4 @@ class SequenceResource
 
         return $this;
     }
-
 }

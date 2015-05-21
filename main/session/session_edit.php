@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Sessions edition script
  * @package chamilo.admin
  */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -13,25 +15,24 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $formSent = 0;
 
 // Database Table Definitions
-$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 $id = intval($_GET['id']);
 
-SessionManager::protect_session_edit($id);
+SessionManager::protectSession($id);
+
 $infos = SessionManager::fetch($id);
 
 $id_coach = $infos['id_coach'];
 $tool_name = get_lang('EditSession');
 
-$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
 list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
 list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
-
-$end_year_disabled = $end_month_disabled = $end_day_disabled = '';
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent = 1;
@@ -40,7 +41,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 $order_clause = 'ORDER BY ';
 $order_clause .= api_sort_by_first_name() ? 'firstname, lastname, username' : 'lastname, firstname, username';
 
-$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
+$sql = "SELECT user_id,lastname,firstname,username
+        FROM $tbl_user
+        WHERE status='1'".$order_clause;
 
 if (api_is_multiple_url_enabled()) {
 	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -53,30 +56,9 @@ if (api_is_multiple_url_enabled()) {
 	}
 }
 
-$result     = Database::query($sql);
-$coaches    = Database::store_result($result);
-$thisYear   = date('Y');
-
-$daysOption = array();
-
-for ($i = 1; $i <= 31; $i++) {
-    $day = sprintf("%02d", $i);
-    $daysOption[$day] = $day;
-}
-
-$monthsOption = array();
-
-for ($i = 1; $i <= 12; $i++) {
-    $month = sprintf("%02d", $i);
-
-    $monthsOption[$month] = $month;
-}
-
-$yearsOption = array();
-
-for ($i = $thisYear - 5; $i <= ($thisYear + 5); $i++) {
-    $yearsOption[$i] = $i;
-}
+$result = Database::query($sql);
+$coaches = Database::store_result($result);
+$thisYear = date('Y');
 
 $coachesOption = array(
     '' => '----- ' . get_lang('None') . ' -----'
@@ -84,7 +66,6 @@ $coachesOption = array(
 
 foreach ($coaches as $coach) {
     $personName = api_get_person_name($coach['firstname'], $coach['lastname']);
-
     $coachesOption[$coach['user_id']] = "$personName ({$coach['username']})";
 }
 
@@ -113,10 +94,16 @@ $form->addElement('header', $tool_name);
 $form->addElement('text', 'name', get_lang('SessionName'), array(
     'class' => 'span4',
     'maxlength' => 50,
-    'value' => $formSent ? api_htmlentities($name,ENT_QUOTES,$charset) : ''
+    'value' => $formSent ? api_htmlentities($name,ENT_QUOTES, $charset) : ''
 ));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
+
+if (!api_is_platform_admin() && api_is_teacher()) {
+    $userInfo = api_get_user_info();
+    $coachesOption = [api_get_user_id() => $userInfo['complete_name']];
+}
+
 
 $form->addElement('select', 'id_coach', get_lang('CoachName'), $coachesOption, array(
     'id' => 'coach_username',
@@ -127,7 +114,7 @@ $form->addElement('select', 'id_coach', get_lang('CoachName'), $coachesOption, a
 $form->addRule('id_coach', get_lang('ThisFieldIsRequired'), 'required');
 
 $form->addButtonAdvancedSettings('advanced_params');
-$form->addElement('html','<div id="advanced_params_options" style="display:none">');
+$form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
 
 $form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOption, array(
@@ -153,12 +140,9 @@ if (!empty($infos['show_description'])) {
 }
 
 $form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'), $chkDescriptionAttributes);
-
-
 $form->addElement('text', 'nb_days_access_before', array('', '', get_lang('DaysBefore')), array(
     'input-size' => '2',
 ));
-
 $form->addElement('text', 'nb_days_access_after', array('', '', get_lang('DaysAfter')), array(
     'input-size' => '2',
 ));
@@ -204,13 +188,19 @@ if ($year_end != "0000") {
 $form->addElement('date_picker', 'date_end');
 
 $visibilityGroup = array();
-$visibilityGroup[] = $form->createElement('select', 'session_visibility', null, array(
-    SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
-    SESSION_VISIBLE => get_lang('SessionAccessible'),
-    SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible'))
-), array(
-    'style' => 'width:250px;'
-));
+$visibilityGroup[] = $form->createElement(
+    'select',
+    'session_visibility',
+    null,
+    array(
+        SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
+        SESSION_VISIBLE => get_lang('SessionAccessible'),
+        SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible')),
+    ),
+    array(
+        'style' => 'width:250px;',
+    )
+);
 
 $form->addGroup($visibilityGroup, 'visibility_group', get_lang('SessionVisibility'), null, false);
 
@@ -256,14 +246,14 @@ $formDefaults = array(
 );
 
 if ($formSent) {
-    $formDefaults['name'] = api_htmlentities($name,ENT_QUOTES,$charset);
-    $formDefaults['nb_days_access_before'] = api_htmlentities($nb_days_access_before,ENT_QUOTES,$charset);
-    $formDefaults['nb_days_access_after'] = api_htmlentities($nb_days_access_after,ENT_QUOTES,$charset);
+    $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);
+    $formDefaults['nb_days_access_before'] = api_htmlentities($nb_days_access_before, ENT_QUOTES,$charset);
+    $formDefaults['nb_days_access_after'] = api_htmlentities($nb_days_access_after, ENT_QUOTES,$charset);
     $formDefaults['duration'] = Security::remove_XSS($duration);
 } else {
     $formDefaults['name'] = Security::remove_XSS($infos['name']);
-    $formDefaults['nb_days_access_before'] = api_htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset);
-    $formDefaults['nb_days_access_after'] = api_htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset);
+    $formDefaults['nb_days_access_before'] = api_htmlentities($infos['nb_days_access_before_beginning'], ENT_QUOTES, $charset);
+    $formDefaults['nb_days_access_after'] = api_htmlentities($infos['nb_days_access_after_end'], ENT_QUOTES, $charset);
     $formDefaults['duration'] = $duration;
 }
 

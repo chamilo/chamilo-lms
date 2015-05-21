@@ -308,7 +308,8 @@ VALUES
 ('meta_title', NULL, 'textfield', 'Tracking', '', 'MetaTitleTitle', 'MetaTitleComment', NULL, NULL, 1),
 ('meta_description', NULL, 'textfield', 'Tracking', '', 'MetaDescriptionTitle', 'MetaDescriptionComment', NULL, NULL, 1),
 ('meta_image_path', NULL, 'textfield', 'Tracking', '', 'MetaImagePathTitle', 'MetaImagePathComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '0', 'DatabaseVersion','', NULL, NULL, 0);
+('allow_teachers_to_create_sessions', NULL, 'radio', 'Session', 'false', 'AllowTeachersToCreateSessionsTitle', 'AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
+('chamilo_database_version', NULL, 'textfield', NULL, '0', 'DatabaseVersion', '', NULL, NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -619,7 +620,7 @@ VALUES
 ('platform_unsubscribe_allowed', 'false', 'No'),
 ('activate_email_template', 'true', 'Yes'),
 ('activate_email_template', 'false', 'No'),
- ('enable_iframe_inclusion', 'true', 'Yes'),
+('enable_iframe_inclusion', 'true', 'Yes'),
 ('enable_iframe_inclusion', 'false', 'No'),
 ('show_hot_courses', 'true', 'Yes'),
 ('show_hot_courses', 'false', 'No'),
@@ -630,8 +631,9 @@ VALUES
 ('documents_default_visibility_defined_in_course', 'true', 'Yes'),
 ('documents_default_visibility_defined_in_course', 'false', 'No'),
 ('enabled_mathjax','true','Yes'),
-('enabled_mathjax','false','No');
-
+('enabled_mathjax','false','No'),
+('allow_teachers_to_create_sessions', 'true', 'Yes'),
+('allow_teachers_to_create_sessions', 'false', 'No');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),

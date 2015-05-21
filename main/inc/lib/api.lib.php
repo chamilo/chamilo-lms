@@ -1223,8 +1223,8 @@ function api_protect_teacher_script($allow_sessions_admins = false)
  */
 function api_block_anonymous_users($printHeaders = true)
 {
-    $_user = api_get_user_info();
-    if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
+    $user = api_get_user_info();
+    if (!(isset($user['user_id']) && $user['user_id']) || api_is_anonymous($user['user_id'], true)) {
         api_not_allowed($printHeaders);
         return false;
     }
@@ -2161,7 +2161,8 @@ function api_get_session_name($session_id) {
  * @param int       Session ID
  * @return array    information of the session
  */
-function api_get_session_info($session_id) {
+function api_get_session_info($session_id)
+{
     $data = array();
     if (!empty($session_id)) {
         $session_id = intval($session_id);
@@ -2173,6 +2174,7 @@ function api_get_session_info($session_id) {
             $data = Database::fetch_array($result, 'ASSOC');
         }
     }
+
     return $data;
 }
 
@@ -2824,35 +2826,38 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
  * @return boolean True if current user is a course administrator
  */
 function api_is_session_admin() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == SESSIONADMIN;
+    $user = api_get_user_info();
+    return isset($user['status']) && $user['status'] == SESSIONADMIN;
 }
 
 /**
  * Checks whether the current user is a human resources manager
  * @return boolean True if current user is a human resources manager
  */
-function api_is_drh() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == DRH;
+function api_is_drh()
+{
+    $user = api_get_user_info();
+    return isset($user['status']) && $user['status'] == DRH;
 }
 
 /**
  * Checks whether the current user is a student
  * @return boolean True if current user is a human resources manager
  */
-function api_is_student() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == STUDENT;
+function api_is_student()
+{
+    $user = api_get_user_info();
+    return isset($user['status']) && $user['status'] == STUDENT;
 
 }
 /**
- * Checks whether the current user is a teacher
+ * Checks whether the current user has the status 'teacher'
  * @return boolean True if current user is a human resources manager
  */
-function api_is_teacher() {
-    $_user = api_get_user_info();
-    return isset($_user['status']) && $_user['status'] == COURSEMANAGER;
+function api_is_teacher()
+{
+    $user = api_get_user_info();
+    return isset($user['status']) && $user['status'] == COURSEMANAGER;
 }
 
 /**
@@ -2860,9 +2865,9 @@ function api_is_teacher() {
  * @return boolean
  */
 function api_is_invitee() {
-    $_user = api_get_user_info();
+    $user = api_get_user_info();
 
-    return isset($_user['status']) && $_user['status'] == INVITEE;
+    return isset($user['status']) && $user['status'] == INVITEE;
 }
 
 /**

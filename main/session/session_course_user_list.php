@@ -16,7 +16,7 @@ $tbl_session_rel_user               = Database::get_main_table(TABLE_MAIN_SESSIO
 $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $id_session = intval($_GET['id_session']);
-SessionManager::protect_session_edit($id_session);
+SessionManager::protectSession($id_session);
 
 if (empty($id_session )) {
     api_not_allowed();
@@ -106,7 +106,7 @@ $nbr_results = sizeof($users);
 
 $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
 
-$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array("url" => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 

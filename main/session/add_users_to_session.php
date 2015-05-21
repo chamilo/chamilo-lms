@@ -20,10 +20,10 @@ $id_session = intval($_GET['id_session']);
 
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
-SessionManager::protect_session_edit($id_session);
+SessionManager::protectSession($id_session);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 
@@ -37,7 +37,7 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tool_name = get_lang('SubscribeUsersToSession');
 $add_type = 'unique';
 
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -88,7 +88,9 @@ function search_users($needle, $type)
             $order_clause = ' ORDER BY official_code, firstname, lastname, username';
         }
 
-        if (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users') === 'true') {
+        if (api_is_session_admin() &&
+            api_get_setting('prevent_session_admins_to_manage_all_users') === 'true'
+        ) {
             $order_clause = " AND user.creator_id = " . api_get_user_id() . $order_clause;
         }
 
@@ -305,7 +307,12 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         // Added a parameter to send emails when registering a user
-        SessionManager::suscribe_users_to_session($id_session, $UserList, null, true);
+        SessionManager::suscribe_users_to_session(
+            $id_session,
+            $UserList,
+            null,
+            true
+        );
         header('Location: resume_session.php?id_session='.$id_session);
         exit;
     }
@@ -390,7 +397,10 @@ if ($ajax_search) {
                 if (UserManager::is_extra_field_available($new_field['variable'])) {
                     if (isset($_POST[$varname]) && $_POST[$varname]!='0') {
                         $use_extra_fields = true;
-                        $extra_field_result[]= UserManager::get_extra_user_data_by_value($new_field['variable'], $_POST[$varname]);
+                        $extra_field_result[] = UserManager::get_extra_user_data_by_value(
+                            $new_field['variable'],
+                            $_POST[$varname]
+                        );
                     }
                 }
             }
@@ -466,8 +476,9 @@ if ($ajax_search) {
 
     $result = Database::query($sql);
     $users = Database::store_result($result,'ASSOC');
+
     foreach ($users as $uid => $user) {
-        if ($user['id_session'] != $id_session) {
+        if ($user['session_id'] != $id_session) {
             $nosessionUsersList[$user['id']] = array(
                 'fn' => $user['firstname'],
                 'ln' => $user['lastname'],
@@ -480,7 +491,7 @@ if ($ajax_search) {
     unset($users); //clean to free memory
 
     //filling the correct users in list
-    $sql="SELECT  u.id, lastname, firstname, username, session_id, official_code
+    $sql = "SELECT  u.id, lastname, firstname, username, session_id, official_code
           FROM $tbl_user u
           LEFT JOIN $tbl_session_rel_user
           ON $tbl_session_rel_user.user_id = u.id AND
@@ -507,7 +518,7 @@ if ($ajax_search) {
     $result = Database::query($sql);
     $users = Database::store_result($result,'ASSOC');
     foreach ($users as $uid => $user) {
-        if ($user['id_session'] == $id_session) {
+        if ($user['session_id'] == $id_session) {
             $sessionUsersList[$user['id']] = $user;
             if (array_key_exists($user['id'],$nosessionUsersList)) {
                 unset($nosessionUsersList[$user['id']]);
@@ -519,16 +530,24 @@ if ($ajax_search) {
 }
 
 if ($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$addProcess.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$addProcess.'&add_type=unique">'.
+        Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple'), '');
 } else {
 	$link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('SessionAddTypeUnique'), '');
 	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
-$link_add_group = '<a href="usergroups.php">'.Display::return_icon('multiple.gif',get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
+$link_add_group = Display::url(
+    Display::return_icon('multiple.gif',get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups'),
+    api_get_path(WEB_CODE_PATH).'admin/usergroups.php'
+);
 
-$newLinks = Display::url(get_lang('EnrollTrainersFromExistingSessions'), api_get_path(WEB_CODE_PATH).'admin/add_teachers_to_session.php');
-$newLinks .= Display::url(get_lang('EnrollStudentsFromExistingSessions'), api_get_path(WEB_CODE_PATH).'admin/add_students_to_session.php');
+$newLinks = Display::url(
+    get_lang('EnrollTrainersFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$id_session
+);
+$newLinks .= Display::url(
+    get_lang('EnrollStudentsFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$id_session
+);
 ?>
 <div class="actions">
 	<?php

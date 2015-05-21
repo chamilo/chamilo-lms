@@ -11,7 +11,7 @@ require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 $id_session = intval($_GET['id_session']);
-SessionManager::protect_session_edit($id_session);
+SessionManager::protectSession($id_session);
 
 // Database Table Definitions
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
@@ -64,9 +64,9 @@ $result=Database::query($sql);
 $Courses=Database::store_result($result);
 $tool_name = api_htmlentities($session_name,ENT_QUOTES,$charset).' : '.get_lang('CourseListInSession');
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
-$interbreadcrumb[]=array('url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
+//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
 
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);

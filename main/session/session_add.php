@@ -23,17 +23,17 @@ api_protect_limit_for_session_admin();
 $formSent=0;
 $errorMsg='';
 
-$interbreadcrumb[] = array(
+/*$interbreadcrumb[] = array(
     'url' => 'index.php',
     'name' => get_lang('PlatformAdmin'),
-);
+);*/
 $interbreadcrumb[] = array(
     'url' => 'session_list.php',
     'name' => get_lang('SessionList'),
 );
 
 // Database Table Definitions
-$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 function search_coachs($needle) {
 	global $tbl_user;
@@ -152,28 +152,6 @@ $nb_days_acess_after = $defaultAfterDays;
 $thisYear = date('Y');
 $thisMonth = date('m');
 $thisDay = date('d');
-
-$dayList = array();
-
-for ($i = 1; $i <= 31; $i++) {
-    $day = sprintf("%02d", $i);
-    $dayList[$day] = $day;
-}
-
-$monthList = array();
-
-for ($i = 1; $i <= 12; $i++) {
-    $month = sprintf("%02d", $i);
-
-    $monthList[$month] = $month;
-}
-
-$yearList = array();
-
-for ($i = $thisYear - 5; $i <= ($thisYear + 5); $i++) {
-    $yearList[$i] = $i;
-}
-
 $tool_name = get_lang('AddSession');
 
 $urlAction = api_get_self();
@@ -257,12 +235,9 @@ if (!api_is_platform_admin() && api_is_teacher()) {
         $coachesList = Database::store_result($result);
 
         $coachesOptions = array();
-
         foreach ($coachesList as $coachItem) {
-            $coachesOptions[$coachItem['username']] = api_get_person_name(
-                    $coachItem['firstname'],
-                    $coachItem['lastname']
-                ).' ('.$coachItem['username'].')';
+            $coachesOptions[$coachItem['user_id']] =
+                api_get_person_name($coachItem['firstname'], $coachItem['lastname']).' ('.$coachItem['username'].')';
         }
 
         $form->addElement(

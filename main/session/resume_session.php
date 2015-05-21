@@ -22,7 +22,7 @@ SessionManager::protectSession($sessionId);
 
 $tool_name = get_lang('SessionOverview');
 
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 $orig_param = '&origin=resume_session';

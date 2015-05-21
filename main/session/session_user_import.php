@@ -25,7 +25,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
 
 $tool_name = get_lang('ImportUsers');
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang('SessionList'));
 $interbreadcrumb[] = array(
     'url' => "resume_session.php?id_session=".$session_id,

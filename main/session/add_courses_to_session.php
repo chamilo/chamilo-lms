@@ -22,7 +22,7 @@ $xajax->registerFunction(array('search_courses', 'AddCourseToSession', 'search_c
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$sessionId, "name" => get_lang('SessionOverview'));
 
@@ -118,23 +118,24 @@ if ($ajax_search) {
     $sql="SELECT course.id, code, title, visual_code, session_id
 			FROM $tbl_course course
 			INNER JOIN $tbl_session_rel_course session_rel_course
-				ON
-				    course.id = session_rel_course.c_id AND
-				    session_rel_course.session_id = ".intval($sessionId)."
-			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+            ON
+                course.id = session_rel_course.c_id AND
+                session_rel_course.session_id = ".intval($sessionId)."
+			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',', $courses).")) DESC,":"")." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1){
-            $sql="SELECT course.id, code, title, visual_code, session_id
-			FROM $tbl_course course
-			INNER JOIN $tbl_session_rel_course session_rel_course
-				ON course.id = session_rel_course.c_id
-				AND session_rel_course.session_id = ".intval($sessionId)."
-				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.c_id = course.id)
-            WHERE access_url_id = $access_url_id
-			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+            $sql = "SELECT course.id, code, title, visual_code, session_id
+                    FROM $tbl_course course
+                    INNER JOIN $tbl_session_rel_course session_rel_course
+                        ON course.id = session_rel_course.c_id
+                        AND session_rel_course.session_id = ".intval($sessionId)."
+                        INNER JOIN $tbl_course_rel_access_url url_course
+                        ON (url_course.c_id = course.id)
+                    WHERE access_url_id = $access_url_id
+                    ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
         }
     }
 
@@ -157,16 +158,16 @@ if ($ajax_search) {
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1){
-            $sql="SELECT course.id, code, title, visual_code, session_id
-				FROM $tbl_course course
-				LEFT JOIN $tbl_session_rel_course session_rel_course
-                ON
-                    course.id = session_rel_course.c_id AND
-                    session_rel_course.session_id = ".intval($sessionId)."
-				INNER JOIN $tbl_course_rel_access_url url_course
-				ON (url_course.c_id = course.id)
-				WHERE access_url_id = $access_url_id
-				ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
+            $sql = "SELECT course.id, code, title, visual_code, session_id
+                    FROM $tbl_course course
+                    LEFT JOIN $tbl_session_rel_course session_rel_course
+                    ON
+                        course.id = session_rel_course.c_id AND
+                        session_rel_course.session_id = ".intval($sessionId)."
+                    INNER JOIN $tbl_course_rel_access_url url_course
+                    ON (url_course.c_id = course.id)
+                    WHERE access_url_id = $access_url_id
+                    ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
         }
     }
     $result = Database::query($sql);
@@ -176,6 +177,21 @@ if ($ajax_search) {
             $sessionCourses[$course['id']] = $course ;
         } else {
             $nosessionCourses[$course['id']] = $course ;
+        }
+    }
+}
+
+if (!api_is_platform_admin() && api_is_teacher()) {
+    $coursesFromTeacher = CourseManager::getCoursesFollowedByUser(
+        api_get_user_id(),
+        COURSEMANAGER
+    );
+
+    foreach ($nosessionCourses as &$course) {
+        if (in_array($course['code'], array_keys($coursesFromTeacher))) {
+            continue;
+        } else {
+            unset($nosessionCourses[$course['id']]);
         }
     }
 }

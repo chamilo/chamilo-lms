@@ -27,7 +27,7 @@ $infos = SessionManager::fetch($id);
 $id_coach = $infos['id_coach'];
 $tool_name = get_lang('EditSession');
 
-$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 

@@ -44,7 +44,8 @@ if ($action == 'delete_on_session' || $action == 'delete_off_session') {
     exit();
 }
 
-$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $interbreadcrumb[] = array("url" => 'session_category_list.php', "name" => get_lang('ListSessionCategory'));
@@ -79,8 +80,12 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
 
     $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $query = "SELECT sc.*, (
-                SELECT count(id) FROM $tbl_session s INNER JOIN $table_access_url_rel_session us ON (s.id = us.session_id)
-                WHERE s.session_category_id = sc.id and access_url_id = ".api_get_current_access_url_id()."
+                SELECT count(id) FROM $tbl_session s
+                INNER JOIN $table_access_url_rel_session us
+                ON (s.id = us.session_id)
+                WHERE
+                    s.session_category_id = sc.id AND
+                    access_url_id = ".api_get_current_access_url_id()."
                 ) as nbr_session
 	 			FROM $tbl_session_category sc
 	 			$where

@@ -34,7 +34,8 @@ $tool_name = get_lang('ExportSessionListXMLCSV');
 
 global $_configuration;
 
-$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 set_time_limit(0);
 

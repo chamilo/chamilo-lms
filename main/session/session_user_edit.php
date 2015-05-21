@@ -25,7 +25,7 @@ if (empty($sessionId) || empty($userId)) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$sessionId, "name" => get_lang('SessionOverview'));
 

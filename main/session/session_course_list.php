@@ -64,9 +64,9 @@ $result=Database::query($sql);
 $Courses=Database::store_result($result);
 $tool_name = api_htmlentities($session_name,ENT_QUOTES,$charset).' : '.get_lang('CourseListInSession');
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
-$interbreadcrumb[]=array('url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
+//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
 
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);

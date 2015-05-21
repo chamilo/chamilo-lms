@@ -16,7 +16,7 @@ $xajax->registerFunction('search_courses');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Database Table Definitions

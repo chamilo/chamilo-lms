@@ -20,8 +20,9 @@ api_protect_admin_script(true);
 
 $formSent=0;
 $errorMsg='';
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_category_list.php","name" => get_lang('ListSessionCategory'));
+//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array('url' => "session_category_list.php","name" => get_lang('ListSessionCategory'));
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);

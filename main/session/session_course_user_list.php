@@ -106,7 +106,7 @@ $nbr_results = sizeof($users);
 
 $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
 
-$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array("url" => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 

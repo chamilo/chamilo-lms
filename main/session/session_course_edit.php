@@ -41,7 +41,7 @@ if (!list($session_name,$course_title) = Database::fetch_row($result)) {
 	exit();
 }
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
 $interbreadcrumb[]=array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 $interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>api_htmlentities($session_name,ENT_QUOTES,$charset));

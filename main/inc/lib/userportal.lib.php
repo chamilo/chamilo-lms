@@ -992,18 +992,23 @@ class IndexManager
         return $html;
     }
 
-    function return_course_block() {
+    /**
+     * @return null|string
+     */
+    public function return_course_block()
+    {
         $html = '';
 
         $show_create_link = false;
         $show_course_link = false;
 
-        if ((api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) || api_is_student()) {
+        if ((api_get_setting('allow_users_to_create_courses') == 'false' &&
+            !api_is_platform_admin()) || api_is_student()
+        ) {
             $display_add_course_link = false;
         } else {
             $display_add_course_link = true;
         }
-        //$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
 
         if ($display_add_course_link) {
             $show_create_link = true;
@@ -1030,6 +1035,13 @@ class IndexManager
                 $my_account_content .= get_lang('CourseCreate');
             }
             $my_account_content .= '</a></li>';
+
+            if (SessionManager::allowToManageSessions()) {
+                $my_account_content .= '<li class="add-course"><a href="main/session/session_add.php">';
+                $my_account_content .= Display::return_icon('session.png',get_lang('AddSession'),null,ICON_SIZE_SMALL);
+                $my_account_content .= get_lang('AddSession');
+                $my_account_content .= '</a></li>';
+            }
         }
 
         //Sort courses

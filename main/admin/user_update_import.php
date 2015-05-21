@@ -160,7 +160,7 @@ function updateUsers($users)
             $status = isset($user['Status']) ? $user['Status'] : $userInfo['status'];
             $officialCode = isset($user['OfficialCode']) ? $user['OfficialCode'] : $userInfo['official_code'];
             $phone = isset($user['PhoneNumber']) ? $user['PhoneNumber'] : $userInfo['phone'];
-            $pictureUrl = isset($user['PictureUri']) ? $user['PictureUri'] : $userInfo['picture_url'];
+            $pictureUrl = isset($user['PictureUri']) ? $user['PictureUri'] : $userInfo['picture_uri'];
             $expirationDate = isset($user['ExpiryDate']) ? $user['ExpiryDate'] : $userInfo['expiration_date'];
             $active = isset($user['Active']) ? $user['Active'] : $userInfo['active'];
             $creatorId = $userInfo['creator_id'];

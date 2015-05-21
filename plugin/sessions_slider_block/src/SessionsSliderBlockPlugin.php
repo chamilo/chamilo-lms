@@ -92,12 +92,13 @@ class SessionsSliderBlockPlugin extends Plugin
 
     /**
      * Get the extra field information by its variable
+     * @param sstring $fieldVariable The field variable
      * @return array The info
      */
-    private function getExtraFieldInfo()
+    private function getExtraFieldInfo($fieldVariable)
     {
         $extraField = new ExtraField('session');
-        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable(self::FIELD_VARIABLE_SHOW_IN_SLIDER);
+        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable($fieldVariable);
 
         return $extraFieldHandler;
     }
@@ -130,13 +131,15 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     public function getSessionList()
     {
-        $sessions = SessionManager::getSessionsByExtraFields([
-            self::FIELD_VARIABLE_SHOW_IN_SLIDER,
-            self::FIELD_VARIABLE_VIDEO
-        ]);
+        $showInSliderFieldInfo = $this->getExtraFieldInfo(self::FIELD_VARIABLE_SHOW_IN_SLIDER);
 
-        if ($sessions === false) {
-            return [];
+        $fieldValueInfo = new ExtraFieldValue('session');
+        $values = $fieldValueInfo->getValuesByFieldId($showInSliderFieldInfo['id']);
+
+        $sessions = [];
+
+        foreach ($values as $valueInfo) {
+            $sessions[] = api_get_session_info($valueInfo['item_id']);
         }
 
         return $sessions;

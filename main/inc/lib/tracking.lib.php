@@ -2094,6 +2094,10 @@ class Tracking
 
         $filteredLP = array_keys($resultLP);
 
+        if (empty($filteredLP)) {
+            return false;
+        }
+
         $conditions = [
             " c_id = {$courseInfo['real_id']} ",
             " lp_view.lp_id IN(" . implode(', ', $filteredLP) . ") "

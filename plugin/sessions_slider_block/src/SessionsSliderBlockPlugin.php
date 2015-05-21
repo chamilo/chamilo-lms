@@ -10,7 +10,8 @@ class SessionsSliderBlockPlugin extends Plugin
 {
     const CONFIG_SHOW_SLIDER = 'show_slider';
     const FIELD_VARIABLE_SHOW_IN_SLIDER = 'show_in_slider';
-    const FIELD_VARIABLE_VIDEO = 'video_url_in_slider';
+    const FIELD_VARIABLE_URL = 'url_in_slider';
+    const FIELD_VARIABLE_IMAGE = 'image_in_slider';
 
     /**
      * Class constructor
@@ -57,8 +58,9 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     private function createExtraFields()
     {
-        $showInSliderField = new ExtraField('session');
-        $showInSliderField->save([
+        $extraField = new ExtraField('session');
+
+        $extraField->save([
             'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             'variable' => self::FIELD_VARIABLE_SHOW_IN_SLIDER,
             'display_text' => $this->get_lang('ShowInSliderBlock'),
@@ -69,11 +71,21 @@ class SessionsSliderBlockPlugin extends Plugin
             'filter' => null
         ]);
 
-        $videoUrlInSliderField = new ExtraField('session');
-        $videoUrlInSliderField->save([
+        $extraField->save([
             'field_type' => ExtraField::FIELD_TYPE_TEXT,
-            'variable' => self::FIELD_VARIABLE_VIDEO,
-            'display_text' => $this->get_lang('VideoUrlForSliderBlock'),
+            'variable' => self::FIELD_VARIABLE_URL,
+            'display_text' => $this->get_lang('UrlForSliderBlock'),
+            'default_value' => null,
+            'field_order' => null,
+            'visible' => true,
+            'changeable' => true,
+            'filter' => null
+        ]);
+
+        $extraField->save([
+            'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
+            'variable' => self::FIELD_VARIABLE_IMAGE,
+            'display_text' => $this->get_lang('ImageForSliderBlock'),
             'default_value' => null,
             'field_order' => null,
             'visible' => true,
@@ -104,24 +116,34 @@ class SessionsSliderBlockPlugin extends Plugin
     }
 
     /**
+     * Get the created extrafields variables for this plugin
+     * @return array The variables
+     */
+    public function getExtraFields(){
+        return [
+            self::FIELD_VARIABLE_SHOW_IN_SLIDER,
+            self::FIELD_VARIABLE_IMAGE,
+            self::FIELD_VARIABLE_URL
+        ];
+    }
+
+    /**
      * Delete extra field and their values
      */
     private function deleteExtraFields()
     {
-        $extraFieldInfo = $this->getExtraFieldInfo(self::FIELD_VARIABLE_SHOW_IN_SLIDER);
-        $extraFieldExists = $extraFieldInfo !== false;
+        $variables = $this->getExtraFields();
 
-        if ($extraFieldExists) {
+        foreach ($variables as $variable) {
+            $fieldInfo = $this->getExtraFieldInfo($variable);
+            $fieldExists = $fieldInfo !== false;
+
+            if (!$fieldExists) {
+                continue;
+            }
+
             $extraField = new ExtraField('session');
-            $extraField->delete($extraFieldInfo['id']);
-        }
-
-        $extraFieldInfo = $this->getExtraFieldInfo(self::FIELD_VARIABLE_VIDEO);
-        $extraFieldExists = $extraFieldInfo !== false;
-
-        if ($extraFieldExists) {
-            $extraField = new ExtraField('session');
-            $extraField->delete($extraFieldInfo['id']);
+            $extraField->delete($fieldInfo['id']);
         }
     }
 
@@ -135,6 +157,10 @@ class SessionsSliderBlockPlugin extends Plugin
 
         $fieldValueInfo = new ExtraFieldValue('session');
         $values = $fieldValueInfo->getValuesByFieldId($showInSliderFieldInfo['id']);
+
+        if (!is_array($values)) {
+            return [];
+        }
 
         $sessions = [];
 

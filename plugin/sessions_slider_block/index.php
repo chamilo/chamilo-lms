@@ -8,7 +8,6 @@
 require_once __DIR__ . '/../../main/inc/global.inc.php';
 
 $plugin = SessionsSliderBlockPlugin::create();
-$widget = new SessionsSliderBlockWidget();
 
 $showSlider = $plugin->get(SessionsSliderBlockPlugin::CONFIG_SHOW_SLIDER) === 'true';
 
@@ -18,12 +17,16 @@ if ($showSlider) {
 
         foreach ($sessions as &$session) {
             $extraFieldValue = new ExtraFieldValue('session');
-            $videoUrl = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $urlInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
                 $session['id'],
-                SessionsSliderBlockPlugin::FIELD_VARIABLE_VIDEO
+                SessionsSliderBlockPlugin::FIELD_VARIABLE_URL
             );
-
-            $session['youtube_thumbnail'] = $widget->getVideoThumbnail($videoUrl['value']);
+            $imageInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $session['id'],
+                SessionsSliderBlockPlugin::FIELD_VARIABLE_IMAGE
+            );
+            $session['url_in_slider'] = $urlInfo['value'];
+            $session['image_in_slider'] = $imageInfo['value'];
         }
 
         $_template['sessions'] = $sessions;

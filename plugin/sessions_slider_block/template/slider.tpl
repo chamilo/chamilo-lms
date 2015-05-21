@@ -9,10 +9,12 @@
             {% for session in sessions_slider_block.sessions %}
             <div class="item">
                 <div class="thumbnail">
-                    <img src="{{ session.youtube_thumbnail }}" alt="{{ session.name }}">
+                    <a href="{{ session.url_in_slider }}" target="_blank">
+                        <img src="{{ _p.web_upload ~ session.image_in_slider }}" alt="{{ session.name }}">
+                    </a>
                     <div class="caption">
                         <h3>
-                            <a href="{{ _p.web_main }}session/index.php?session_id={{ session.id }}">{{ session.name }}</a>
+                            <a href="{{ session.url_in_slider }}" target="_blank">{{ session.name }}</a>
                         </h3>
                     </div>
                 </div>

@@ -290,3 +290,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // false = alphabetic order (default)
 // true = based in the session course list
 //$_configuration['session_course_ordering'] = false;
+// Unoconv binary file
+//$_configuration['unoconv.binaries'] = '/usr/bin/unoconv';

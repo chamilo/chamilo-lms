@@ -739,7 +739,6 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
             'point_info' => $point_info,
             'code' => $row['code'],
             'directory' => $row['directory'],
-            'db' => $row['db_name'],
             'visual_code' => $row['visual_code'],
             'title' => $row['title'],
             'tutor' => $row['tutor_name'],

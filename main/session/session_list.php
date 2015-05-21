@@ -9,7 +9,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script(true);
+SessionManager::protectSession(null, false);
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -42,7 +42,6 @@ if (!empty($error_message)) {
     Display::display_normal_message($error_message, false);
 }
 
-$sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course';
 $courseList = array();
 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
@@ -52,7 +51,15 @@ if (!empty($courseId)) {
     $courseList[] = array('id' => $courseInfo['code'], 'text' => $parents.$courseInfo['title']);
 }
 
-$sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList));
+$sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
+$sessionFilter->addElement(
+    'select_ajax',
+    'course_name',
+    get_lang('SearchCourse'),
+    null,
+    array('url' => $url, 'defaults' => $courseList)
+);
+
 $url = api_get_self();
 $actions = '
 <script>
@@ -213,15 +220,19 @@ $(function() {
 
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
     Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
-    Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
-    Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
+if (api_is_platform_admin()) {
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
+        Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
+        Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
+}
 
 echo $actions;
-echo '<div class="pull-right">';
-echo $sessionFilter->return_form();
-echo '</div>';
+if (api_is_platform_admin()) {
+    echo '<div class="pull-right">';
+    echo $sessionFilter->returnForm();
+    echo '</div>';
+}
 echo '</div>';
 echo Display::grid_html('sessions');
 Display::display_footer();

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls
  */
@@ -106,19 +107,13 @@ switch ($action) {
         }
         break;
     case 'get_description':
-        $sessionId = intval($_GET['session']);
-
-        $sessionInfo = api_get_session_info($sessionId);
-        ?>
-        <h2><?php echo $sessionInfo['name'] ?></h2><br>
-        <div class="home-course-intro">
-            <div class="page-course">
-                <div class="page-course-intro">
-                    <p><?php echo $sessionInfo['show_description'] == 1 ? $sessionInfo['description'] : get_lang('None') ?></p>
-                </div>
-            </div>
-        </div>
-        <?php
+        if (isset($_GET['session'])) {
+            $sessionInfo = api_get_session_info($_GET['session']);
+            echo '<h2>'.$sessionInfo['name'].'</h2>';
+            echo '<div class="home-course-intro"><div class="page-course"><div class="page-course-intro">';
+            echo $sessionInfo['show_description'] == 1 ? $sessionInfo['description'] : get_lang('None');
+            echo '</div></div></div>';
+        }
     default:
         echo '';
 }

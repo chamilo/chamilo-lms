@@ -12,9 +12,6 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
-api_protect_admin_script(true);
-
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
@@ -30,6 +27,9 @@ $errorMsg   = '';
 $users = $sessions = array();
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
+
+SessionManager::protectSession($id);
+
 $htmlResult = null;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {

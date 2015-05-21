@@ -18,7 +18,7 @@ if (empty($sessionId)) {
     api_not_allowed(true);
 }
 
-SessionManager::protect_session_edit($sessionId);
+SessionManager::protectSession($sessionId);
 
 $tool_name = get_lang('SessionOverview');
 
@@ -428,7 +428,7 @@ if (!empty($userList)) {
 
         $reportingLink = Display::url(
             Display::return_icon('statistics.gif', get_lang('Reporting')),
-            api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param
+            api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'&id_session='.$sessionId
         );
 
         $courseUserLink = Display::url(

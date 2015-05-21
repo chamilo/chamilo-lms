@@ -6,12 +6,10 @@ $cidReset = true;
 // including the global Chamilo file
 require_once '../inc/global.inc.php';
 
-api_protect_admin_script(true);
-
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 
-SessionManager::protect_session_edit($sessionId);
+SessionManager::protectSession($sessionId);
 
 $sessionInfo = api_get_session_info($sessionId);
 if (empty($sessionInfo)) {

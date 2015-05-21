@@ -192,6 +192,7 @@ class SessionManager
                 if (!empty($id_session_category)) {
                     $values['session_category_id'] = $id_session_category;
                 }
+
                 $session_id = Database::insert($tbl_session, $values);
 
                 $duration = intval($duration);
@@ -1484,7 +1485,7 @@ class SessionManager
             $id_checked = intval($id_checked);
         }
 
-        if (!api_is_platform_admin() && !$from_ws) {
+        if (SessionManager::allowed($id_checked) && !$from_ws) {
             $sql = 'SELECT session_admin_id FROM ' . $tbl_session. '
                     WHERE id IN (' . $id_checked.')';
             $rs = Database::query($sql);
@@ -3570,22 +3571,106 @@ class SessionManager
     /**
      * Protect a session to be edited.
      * @param int $id
+     * @param bool $checkSession
      */
-    public static function protect_session_edit($id)
+    public static function protectSession($id, $checkSession = true)
     {
-        api_protect_admin_script(true);
-        $session_info = self::fetch($id);
+        // api_protect_admin_script(true);
+        if (self::allowToManageSessions()) {
 
-        if (empty($session_info)) {
+            if (api_is_platform_admin()) {
+                return true;
+            }
+
+            if ($checkSession) {
+                if (self::allowed($id)) {
+                    return true;
+                } else {
+                    api_not_allowed(true);
+                }
+            }
+        } else {
             api_not_allowed(true);
         }
-        if (!api_is_platform_admin() &&
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    private static function allowed($id)
+    {
+        $sessionInfo = self::fetch($id);
+
+        if (empty($sessionInfo)) {
+            return false;
+        }
+
+        $userId = api_get_user_id();
+
+        if (api_is_session_admin() &&
             api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true'
         ) {
-            if ($session_info['session_admin_id'] != api_get_user_id()) {
-                api_not_allowed(true);
+            if ($sessionInfo['session_admin_id'] != $userId) {
+                return false;
             }
         }
+
+        if (api_is_teacher() &&
+            api_get_setting('allow_teachers_to_create_sessions') == 'true'
+        ) {
+            if ($sessionInfo['id_coach'] != $userId) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function allowToManageSessions()
+    {
+        if (self::allowManageAllSessions()) {
+            return true;
+        }
+
+        $setting = api_get_setting('allow_teachers_to_create_sessions');
+
+        if (api_is_teacher() && $setting == 'true') {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function allowOnlyMySessions()
+    {
+        if (self::allowToManageSessions() &&
+            !api_is_platform_admin() &&
+            api_is_teacher()
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function allowManageAllSessions()
+    {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

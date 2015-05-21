@@ -1,20 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@package chamilo.admin
 * 	@todo use formvalidator for the form
 */
 
-$cidReset=true;
+$cidReset = true;
 
-// including the global Dokeos file
 require_once '../inc/global.inc.php';
 
 $xajax = new xajax();
-$xajax -> registerFunction ('search_coachs');
+$xajax->registerFunction('search_coachs');
 
 // setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
+
 api_protect_admin_script(true);
 
 $formSent=0;
@@ -23,27 +24,35 @@ $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'
 $interbreadcrumb[]=array('url' => "session_category_list.php","name" => get_lang('ListSessionCategory'));
 
 // Database Table Definitions
-$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-	$formSent=1;
-	$name= $_POST['name'];
-	$year_start= $_POST['year_start'];
-	$month_start=$_POST['month_start'];
-	$day_start=$_POST['day_start'];
-	$year_end=$_POST['year_end'];
-	$month_end=$_POST['month_end'];
-	$day_end=$_POST['day_end'];
-	$return = SessionManager::create_category_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end);
+	$formSent = 1;
+	$name = $_POST['name'];
+	$year_start = $_POST['year_start'];
+	$month_start = $_POST['month_start'];
+	$day_start = $_POST['day_start'];
+	$year_end = $_POST['year_end'];
+	$month_end = $_POST['month_end'];
+	$day_end = $_POST['day_end'];
+	$return = SessionManager::create_category_session(
+		$name,
+		$year_start,
+		$month_start,
+		$day_start,
+		$year_end,
+		$month_end,
+		$day_end
+	);
 	if ($return == strval(intval($return))) {
 		header('Location: session_category_list.php?action=show_message&message='.urlencode(get_lang('SessionCategoryAdded')));
 		exit();
 	}
 }
-$thisYear=date('Y');
-$thisMonth=date('m');
-$thisDay=date('d');
+$thisYear = date('Y');
+$thisMonth = date('m');
+$thisDay = date('d');
 $tool_name = get_lang('AddACategory');
 
 //display the header

@@ -5,27 +5,32 @@
 *	@package chamilo.admin
 */
 
-$cidReset=true;
+$cidReset = true;
 
 // including the global Chamilo file
 require_once '../inc/global.inc.php';
 
 $xajax = new xajax();
-//$xajax->debugOn();
-$xajax -> registerFunction ('search_coachs');
+$xajax->registerFunction('search_coachs');
 
 // setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script(true);
+SessionManager::protectSession(null, false);
 
 api_protect_limit_for_session_admin();
 
 $formSent=0;
 $errorMsg='';
 
-$interbreadcrumb[]=array('url' => 'index.php',       'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('SessionList'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    'name' => get_lang('PlatformAdmin'),
+);
+$interbreadcrumb[] = array(
+    'url' => 'session_list.php',
+    'name' => get_lang('SessionList'),
+);
 
 // Database Table Definitions
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
@@ -40,7 +45,8 @@ function search_coachs($needle) {
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
 		// search users where username or firstname or lastname begins likes $needle
-		$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
+		$sql = 'SELECT username, lastname, firstname
+		        FROM '.$tbl_user.' user
 				WHERE (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
 				OR lastname LIKE "'.$needle.'%")
@@ -53,15 +59,19 @@ function search_coachs($needle) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
 				$sql = 'SELECT username, lastname, firstname
-				    FROM '.$tbl_user.' user
-				    INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-				    WHERE
-				        access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
-				        OR firstname LIKE "'.$needle.'%"
-				        OR lastname LIKE "'.$needle.'%")
-				        AND status=1'.
-				        $order_clause.
-				    ' LIMIT 10';
+                        FROM '.$tbl_user.' user
+                        INNER JOIN '.$tbl_user_rel_access_url.' url_user
+                        ON (url_user.user_id=user.user_id)
+                        WHERE
+                            access_url_id = '.$access_url_id.'  AND
+                            (
+                                username LIKE "'.$needle.'%" OR
+                                firstname LIKE "'.$needle.'%" OR
+                                lastname LIKE "'.$needle.'%"
+                            )
+                            AND status=1'.
+                        $order_clause.'
+                        LIMIT 10';
 			}
 		}
 
@@ -76,7 +86,6 @@ function search_coachs($needle) {
 $xajax -> processRequests();
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-
 $htmlHeadXtra[] = "
 <script type=\"text/javascript\">
 function fill_coach_field (username) {
@@ -140,9 +149,9 @@ $defaultAfterDays = isset($_configuration['session_days_after_coach_access'])
 $nb_days_acess_before = $defaultBeforeDays;
 $nb_days_acess_after = $defaultAfterDays;
 
-$thisYear=date('Y');
-$thisMonth=date('m');
-$thisDay=date('d');
+$thisYear = date('Y');
+$thisMonth = date('m');
+$thisDay = date('d');
 
 $dayList = array();
 
@@ -193,58 +202,92 @@ $form->addElement('header', $tool_name);
 
 $form->addElement('text', 'name', get_lang('SessionName'), array(
     'maxlength' => 50,
-    'value' => $formSent ? api_htmlentities($name,ENT_QUOTES,$charset) : ''
+    'value' => $formSent ? api_htmlentities($name, ENT_QUOTES, $charset) : '',
 ));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
+$userInfo = api_get_user_info();
 
-$sql = "SELECT COUNT(1) FROM $tbl_user WHERE status = 1";
-$rs = Database::query($sql);
-$countUsers = Database::result($rs, 0, 0);
-
-if (intval($countUsers) < 50) {
-    $orderClause = "ORDER BY ";
-    $orderClause .= api_sort_by_first_name() ? "firstname, lastname, username"  : "lastname, firstname, username";
-
-    $sql="SELECT user_id, lastname, firstname, username FROM $tbl_user "
-        . "WHERE status = '1' "
-        . $orderClause;
-
-    if (api_is_multiple_url_enabled()) {
-        $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $accessUrlId = api_get_current_access_url_id();
-
-        if ($accessUrlId != -1) {
-            $sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user "
-                . "INNER JOIN $userRelAccessUrlTable url_user ON (url_user.user_id = user.user_id) "
-                . "WHERE access_url_id = $accessUrlId AND status = 1 "
-                . $orderClause;
-        }
-    }
-
-    $result = Database::query($sql);
-	$coachesList = Database::store_result($result);
-
-    $coachesOptions = array();
-
-    foreach($coachesList as $coachItem){
-        $coachesOptions[$coachItem['username']] = api_get_person_name(
-            $coachItem['firstname'],
-            $coachItem['lastname']
-        ).' ('.$coachItem['username'].')';
-    }
-
-    $form->addElement('select', 'coach_username', get_lang('CoachName'), $coachesOptions, array(
-        'id' => 'coach_username',
-        'class' => 'chzn-select',
-        'style' => 'width:370px;'
-    ));
+if (!api_is_platform_admin() && api_is_teacher()) {
+    $form->addElement(
+        'select',
+        'coach_username',
+        get_lang('CoachName'),
+        [api_get_user_id() => $userInfo['complete_name']],
+        array(
+            'id' => 'coach_username',
+            'class' => 'chzn-select',
+            'style' => 'width:370px;'
+        )
+    );
 } else {
-    $form->addElement('text', 'coach_username', get_lang('CoachName'), array(
-        'maxlength' => 50,
-        'onkeyup' => "xajax_search_coachs(document.getElementById('coach_username').value)",
-        'id' => 'coach_username'
-    ));
+
+    $sql = "SELECT COUNT(1) FROM $tbl_user WHERE status = 1";
+    $rs = Database::query($sql);
+    $countUsers = Database::result($rs, 0, 0);
+
+    if (intval($countUsers) < 50) {
+        $orderClause = "ORDER BY ";
+        $orderClause .= api_sort_by_first_name() ? "firstname, lastname, username" : "lastname, firstname, username";
+
+        $sql = "SELECT user_id, lastname, firstname, username
+                FROM $tbl_user
+                WHERE status = '1' ".
+            $orderClause;
+
+        if (api_is_multiple_url_enabled()) {
+            $userRelAccessUrlTable = Database::get_main_table(
+                TABLE_MAIN_ACCESS_URL_REL_USER
+            );
+            $accessUrlId = api_get_current_access_url_id();
+
+            if ($accessUrlId != -1) {
+                $sql = "SELECT user.user_id, username, lastname, firstname
+                        FROM $tbl_user user
+                        INNER JOIN $userRelAccessUrlTable url_user
+                        ON (url_user.user_id = user.user_id)
+                        WHERE
+                            access_url_id = $accessUrlId AND
+                            status = 1 "
+                    .$orderClause;
+            }
+        }
+
+        $result = Database::query($sql);
+        $coachesList = Database::store_result($result);
+
+        $coachesOptions = array();
+
+        foreach ($coachesList as $coachItem) {
+            $coachesOptions[$coachItem['username']] = api_get_person_name(
+                    $coachItem['firstname'],
+                    $coachItem['lastname']
+                ).' ('.$coachItem['username'].')';
+        }
+
+        $form->addElement(
+            'select',
+            'coach_username',
+            get_lang('CoachName'),
+            $coachesOptions,
+            array(
+                'id' => 'coach_username',
+                'class' => 'chzn-select',
+                'style' => 'width:370px;'
+            )
+        );
+    } else {
+        $form->addElement(
+            'text',
+            'coach_username',
+            get_lang('CoachName'),
+            array(
+                'maxlength' => 50,
+                'onkeyup' => "xajax_search_coachs(document.getElementById('coach_username').value)",
+                'id' => 'coach_username'
+            )
+        );
+    }
 }
 
 $form->addRule('coach_username', get_lang('ThisFieldIsRequired'), 'required');
@@ -287,9 +330,7 @@ $form->addElement('checkbox', 'start_limit', '', get_lang('DateStartSession'), a
 ));
 
 $form->addElement('html','<div id="start_date" style="display:none">');
-
 $form->addElement('date_picker', 'date_start');
-
 $form->addElement('html','</div>');
 
 $form->addElement('checkbox', 'end_limit', '', get_lang('DateEndSession'), array(
@@ -346,10 +387,9 @@ $formDefaults = array(
 
 if (!$formSent) {
     $formDefaults['date_start'] = "$thisYear-$thisMonth-$thisDay";
-
     $formDefaults['date_end'] = date('Y-m-d', strtotime("$thisYear-$thisMonth-$thisDay +1 year"));
 } else {
-    $formDefaults['name'] = api_htmlentities($name,ENT_QUOTES,$charset);
+    $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);
 }
 
 $form->setDefaults($formDefaults);
@@ -362,7 +402,7 @@ if ($form->validate()) {
     $endDate = $params['date_end'];
     $nb_days_acess_before = $params['nb_days_acess_before'];
     $nb_days_acess_after = $params['nb_days_acess_after'];
-    $coach_username = $params['coach_username'];
+    $coach_username = intval($params['coach_username']);
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $end_limit = isset($params['end_limit']);

@@ -45,7 +45,8 @@ if (!in_array(
         'get_usergroups_teacher',
         'get_user_course_report_resumed',
         'get_user_course_report',
-        'get_sessions_tracking'
+        'get_sessions_tracking',
+        'get_sessions'
     )
 ) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);
@@ -877,6 +878,7 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
+
         $columns = array(
             'name',
             'nbr_courses',
@@ -889,16 +891,27 @@ switch ($action) {
             'visibility'
         );
 
-        // Rename Category_name
-        $whereCondition = str_replace('category_name', 'sc.name', $whereCondition);
+        if (SessionManager::allowToManageSessions()) {
+            if (SessionManager::allowOnlyMySessions()) {
+                $whereCondition .= ' AND s.id_coach = '.api_get_user_id();
+            }
 
-        $result = SessionManager::get_sessions_admin(
-            array(
-                'where' => $whereCondition,
-                'order' => "$sidx $sord",
-                'limit'=> "$start , $limit"
-            )
-        );
+            // Rename Category_name
+            $whereCondition = str_replace(
+                'category_name',
+                'sc.name',
+                $whereCondition
+            );
+
+            $result = SessionManager::get_sessions_admin(
+                array(
+                    'where' => $whereCondition,
+                    'order' => "$sidx $sord",
+                    'limit' => "$start , $limit"
+                )
+            );
+        }
+
         break;
     case 'get_exercise_progress':
         $sessionId  = intval($_GET['session_id']);

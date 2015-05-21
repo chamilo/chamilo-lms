@@ -11,7 +11,7 @@ require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 $id_session = intval($_GET['id_session']);
-SessionManager::protect_session_edit($id_session);
+SessionManager::protectSession($id_session);
 
 // Database Table Definitions
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);

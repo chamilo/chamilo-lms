@@ -15,9 +15,6 @@ $xajax->registerFunction('search_courses');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
-api_protect_admin_script(true);
-
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
@@ -33,6 +30,8 @@ $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 // setting the name of the tool
 $tool_name = get_lang('SubscribeSessionsToCategory');
 $id_session = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
+
+SessionManager::protectSession($id_session);
 
 $add_type = 'multiple';
 if (isset($_GET['add_type']) && $_GET['add_type'] != '') {

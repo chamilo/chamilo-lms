@@ -27,11 +27,12 @@ $interbreadcrumb[] = array(
 );
 
 $sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY name";
-$result=Database::query($sql);
-if (!$infos=Database::fetch_array($result)) {
+$result = Database::query($sql);
+if (!$infos = Database::fetch_array($result)) {
 	header('Location: session_list.php');
 	exit();
 }
+
 list($year_start,$month_start,$day_start)=explode('-',$infos['date_start']);
 list($year_end,$month_end,$day_end)=explode('-',$infos['date_end']);
 

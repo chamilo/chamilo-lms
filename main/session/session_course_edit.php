@@ -11,7 +11,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 $id_session = intval($_GET['id_session']);
-SessionManager::protect_session_edit($id_session);
+SessionManager::protectSession($id_session);
 $course_code = $_GET['course_code'];
 
 $formSent = 0;
@@ -69,7 +69,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 		foreach ($id_coachs as $id_coach) {
 			$id_coach = intval($id_coach);
-			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $courseId);
+            $rs1 = SessionManager::set_coach_to_course_session(
+                $id_coach,
+                $id_session,
+                $courseId
+            );
 		}
 
 		// set status to 0 other tutors from multiple list
@@ -88,8 +92,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 		exit();
 	}
 } else {
-	$sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
-	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2 ";
+	$sql = "SELECT user_id
+	        FROM $tbl_session_rel_course_rel_user
+	        WHERE
+                session_id = '$id_session' AND
+                c_id = '".$courseId."' AND
+                status = 2 ";
 	$rs = Database::query($sql);
 
 	if (Database::num_rows($rs) > 0) {
@@ -104,21 +112,36 @@ $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, usern
 if (api_is_multiple_url_enabled()) {
     $tbl_access_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
-    $sql="SELECT u.user_id,lastname,firstname,username
-        FROM $tbl_user u LEFT JOIN $tbl_access_rel_user  a ON(u.user_id= a.user_id)
-        WHERE status='1' AND active = 1 AND access_url_id = $access_url_id ".$order_clause;
+    $sql = "SELECT u.user_id,lastname,firstname,username
+            FROM $tbl_user u
+            LEFT JOIN $tbl_access_rel_user  a
+            ON(u.user_id= a.user_id)
+            WHERE
+                status='1' AND
+                active = 1 AND
+                access_url_id = $access_url_id ".
+            $order_clause;
 } else {
-    $sql="SELECT user_id,lastname,firstname,username
-    FROM $tbl_user
-    WHERE status='1' AND active = 1 ".$order_clause;
+    $sql = "SELECT user_id,lastname,firstname,username
+            FROM $tbl_user
+            WHERE
+                status = '1' AND
+                active = 1 ".
+            $order_clause;
 }
 
 $result = Database::query($sql);
 $coaches = Database::store_result($result);
-Display::display_header($tool_name);
 
+if (!api_is_platform_admin() && api_is_teacher()) {
+    $userInfo = api_get_user_info();
+    $coaches = [$userInfo];
+}
+
+Display::display_header($tool_name);
 $tool_name = get_lang('ModifySessionCourse');
 api_display_tool_title($tool_name);
+
 ?>
 <div class="session-course-edit">
 
@@ -147,7 +170,7 @@ api_display_tool_title($tool_name);
                 <?php echo get_lang('None') ?>
             </option>
             <?php
-            foreach($coaches as $enreg) {
+            foreach ($coaches as $enreg) {
                 ?>
                 <option value="<?php echo $enreg['user_id']; ?>" <?php if(((is_array($arr_infos) && in_array($enreg['user_id'], $arr_infos)))) echo 'selected="selected"'; ?>>
                     <?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?>

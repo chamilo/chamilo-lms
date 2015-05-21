@@ -527,8 +527,12 @@ if ($add_type == 'multiple') {
 }
 $link_add_group = '<a href="usergroups.php">'.Display::return_icon('multiple.gif',get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
 
-$newLinks = Display::url(get_lang('EnrollTrainersFromExistingSessions'), api_get_path(WEB_CODE_PATH).'admin/add_teachers_to_session.php');
-$newLinks .= Display::url(get_lang('EnrollStudentsFromExistingSessions'), api_get_path(WEB_CODE_PATH).'admin/add_students_to_session.php');
+$newLinks = Display::url(
+    get_lang('EnrollTrainersFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php'
+);
+$newLinks .= Display::url(
+    get_lang('EnrollStudentsFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php'
+);
 ?>
 <div class="actions">
 	<?php

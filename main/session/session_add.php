@@ -418,7 +418,8 @@ if (!empty($return)) {
 }
 
 echo '<div class="actions">';
-echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="../session/session_list.php">'.
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $form->display();

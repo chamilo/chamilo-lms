@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 $cidReset = true;
 
@@ -7,16 +7,16 @@ require_once '../inc/global.inc.php';
 
 api_protect_global_admin_script();
 
-$tpl = new Template(get_lang('ResourceSequencing'));
+$tpl = new Template(get_lang('ResourcesSequencing'));
 $layout = $tpl->get_template('admin/resource_sequence.tpl');
-$form = new FormValidator('');
-$sessionList = SessionManager::get_sessions_list();
 
+$sessionList = SessionManager::get_sessions_list();
 if (!empty($sessionList)) {
     //$sessionList[] = ['name' => get_lang('PleaseSelect'), 'id' => 0];
     $sessionList = array_column($sessionList, 'name', 'id');
 }
 
+$form = new FormValidator('');
 $form->addHidden('sequence_type', 'session');
 $form->addSelect(
     'sessions',

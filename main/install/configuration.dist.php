@@ -292,3 +292,10 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['session_course_ordering'] = false;
 // Unoconv binary file
 //$_configuration['unoconv.binaries'] = '/usr/bin/unoconv';
+// Proxy settings for access external services
+/*$_configuration['proxy_settings'] = array(
+    'http' => array(
+        'proxy' => 'tcp://example.com:8080',
+        'request_fulluri'=>true
+    )
+);*/

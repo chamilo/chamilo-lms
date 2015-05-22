@@ -412,7 +412,22 @@ function downloadMP3_google($filepath, $dir)
 
 	// adding the file
 	// add new file to disk
-	file_put_contents($documentPath, file_get_contents("http://translate.google.com/translate_tts?tl=".$clean_lang."&q=".urlencode($clean_text).""));
+
+	$proxySettings = api_get_configuration_value('proxy_settings');
+	$url = "http://translate.google.com/translate_tts?tl=".$clean_lang."&q=".urlencode($clean_text)."";
+
+	if (empty($proxySettings)) {
+		$content = file_get_contents($url);
+	} else {
+		$context = stream_context_create($proxySettings);
+		$content = file_get_contents($url, false, $context);
+	}
+
+	file_put_contents(
+		$documentPath,
+		$content
+	);
+
 	// add document to database
 	$current_session_id = api_get_session_id();
 	$groupId = api_get_group_id();

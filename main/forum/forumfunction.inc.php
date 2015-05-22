@@ -1239,10 +1239,11 @@ function move_up_down($content, $direction, $id)
                 ORDER BY forum_categories.cat_order $sort_direction";
     }
     if ($content == 'forum') {
-        $sql = "SELECT * FROM".$table."
+        $sql = "SELECT *
+            FROM $table
             WHERE
                 c_id = $course_id AND
-                forum_category='".Database::escape_string($forum_category)."'
+                forum_category='" . Database::escape_string($forum_category) . "'
             ORDER BY forum_order $sort_direction";
     }
     // echo $sql.'<br />';

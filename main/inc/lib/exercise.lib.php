@@ -1704,28 +1704,18 @@ HTML;
         global $documentPath, $filter;
 
         $course_id = api_get_course_int_id();
-        $course_code = api_get_course_id();
         $sessionId = api_get_session_id();
 
-        $is_allowedToEdit = api_is_allowed_to_edit(
-                null,
-                true
-            ) || api_is_allowed_to_edit(true) || api_is_drh(
-            ) || api_is_student_boss();
+        $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+            api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
 
         $TBL_USER = Database:: get_main_table(TABLE_MAIN_USER);
         $TBL_EXERCICES = Database:: get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database:: get_course_table(TABLE_GROUP_USER);
         $TBL_GROUP = Database:: get_course_table(TABLE_GROUP);
-        $TBL_TRACK_EXERCICES = Database:: get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCISES
-        );
-        $TBL_TRACK_HOTPOTATOES = Database:: get_main_table(
-            TABLE_STATISTIC_TRACK_E_HOTPOTATOES
-        );
-        $TBL_TRACK_ATTEMPT_RECORDING = Database:: get_main_table(
-            TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING
-        );
+        $TBL_TRACK_EXERCICES = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $TBL_TRACK_HOTPOTATOES = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $TBL_TRACK_ATTEMPT_RECORDING = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
         $session_id_and = ' AND te.session_id = ' . $sessionId . ' ';
         $exercise_id = intval($exercise_id);
@@ -1742,37 +1732,41 @@ HTML;
         }
 
         // sql for chamilo-type tests for teacher / tutor view
-        $sql_inner_join_tbl_track_exercices = " (
-        SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
-        FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
-        ON (ttte.exe_id = tr.exe_id)
-        WHERE
-            c_id = $course_id AND
-            exe_exo_id = $exercise_id AND
-            ttte.session_id = " . $sessionId . "
-    )";
+        $sql_inner_join_tbl_track_exercices = "
+        (
+            SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
+            FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
+            ON (ttte.exe_id = tr.exe_id)
+            WHERE
+                c_id = $course_id AND
+                exe_exo_id = $exercise_id AND
+                ttte.session_id = " . $sessionId . "
+        )";
+
         if ($is_allowedToEdit) {
-            //Teacher view
-            if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-                //$exercise_where_query = ' te.exe_exo_id = ce.id AND ';
-            }
-
-            $sqlFromOption = "";
-            $sqlWhereOption = "";           // for hpsql
-
             //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
-            //Hack in order to filter groups
+            // Hack in order to filter groups
             $sql_inner_join_tbl_user = '';
 
             if (strpos($extra_where_conditions, 'group_id')) {
                 $sql_inner_join_tbl_user = "
-            (
-                SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
-                FROM $TBL_USER u
-                INNER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=" . $course_id . ")
-                INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id AND g.c_id=" . $course_id . ")
-            )";
+                (
+                    SELECT
+                        u.user_id,
+                        firstname,
+                        lastname,
+                        official_code,
+                        email,
+                        username,
+                        g.name as group_name,
+                        g.id as group_id
+                    FROM $TBL_USER u
+                    INNER JOIN $TBL_GROUP_REL_USER gru
+                    ON (gru.user_id = u.user_id AND gru.c_id=" . $course_id . ")
+                    INNER JOIN $TBL_GROUP g
+                    ON (gru.group_id = g.id AND g.c_id=" . $course_id . ")
+                )";
             }
 
             if (strpos($extra_where_conditions, 'group_all')) {
@@ -1794,10 +1788,18 @@ HTML;
                 );
 
                 $sql_inner_join_tbl_user = "
-            (
-                SELECT u.user_id, firstname, lastname, email, username, '' as group_name, '' as group_id
-                FROM $TBL_USER u
-            )";
+                (
+                    SELECT
+                        u.user_id,
+                        firstname,
+                        lastname,
+                        official_code,
+                        email,
+                        username,
+                        '' as group_name,
+                        '' as group_id
+                    FROM $TBL_USER u
+                )";
                 $sql_inner_join_tbl_user = null;
             }
 
@@ -1814,10 +1816,20 @@ HTML;
                 );
                 $sql_inner_join_tbl_user = "
             (
-                SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
+                SELECT
+                    u.user_id,
+                    firstname,
+                    lastname,
+                    official_code,
+                    email,
+                    username,
+                    g.name as group_name,
+                    g.id as group_id
                 FROM $TBL_USER u
-                LEFT OUTER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=" . $course_id . " )
-                LEFT OUTER JOIN $TBL_GROUP g ON (gru.group_id = g.id AND g.c_id = " . $course_id . ")
+                LEFT OUTER JOIN $TBL_GROUP_REL_USER gru
+                ON ( gru.user_id = u.user_id AND gru.c_id=" . $course_id . " )
+                LEFT OUTER JOIN $TBL_GROUP g
+                ON (gru.group_id = g.id AND g.c_id = " . $course_id . ")
             )";
             }
 
@@ -1830,18 +1842,13 @@ HTML;
             (
                 SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
                 FROM $TBL_USER u
-                WHERE u.status NOT IN(" . api_get_users_status_ignored_in_reports(
-                        'string'
-                    ) . ")
+                WHERE u.status NOT IN(" . api_get_users_status_ignored_in_reports('string') . ")
             )";
             }
 
             $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
-            $sqlWhereOption = "  AND gru.c_id = " . $course_id .
-                " AND gru.user_id = user.user_id ";
-
-            $first_and_last_name = api_is_western_name_order(
-            ) ? "firstname, lastname" : "lastname, firstname";
+            $sqlWhereOption = "  AND gru.c_id = " . $course_id ." AND gru.user_id = user.user_id ";
+            $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
 
             if ($get_count) {
                 $sql_select = "SELECT count(te.exe_id) ";
@@ -1871,8 +1878,10 @@ HTML;
 
             $sql = " $sql_select
                 FROM $TBL_EXERCICES AS ce
-                INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.id)
-                INNER JOIN $sql_inner_join_tbl_user  AS user ON (user.user_id = exe_user_id)
+                INNER JOIN $sql_inner_join_tbl_track_exercices AS te
+                ON (te.exe_exo_id = ce.id)
+                INNER JOIN $sql_inner_join_tbl_user AS user
+                ON (user.user_id = exe_user_id)
                 WHERE
                     te.status != 'incomplete' AND
                     te.c_id = " . $course_id . " $session_id_and AND

@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Fhaculty\Graph\Graph;
 
 /**
  * Class Sequence
@@ -25,26 +26,19 @@ class Sequence
     /**
      * @var string
      *
-     * @ORM\Column(name="is_part", type="boolean")
+     * @ORM\Column(name="name", type="string")
      */
-    private $part;
+    private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SequenceRowEntity")
-     * @ORM\JoinColumn(name="sequence_row_entity_id", referencedColumnName="id")
-     **/
-    private $rowEntity;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="SequenceRowEntity")
-     * @ORM\JoinColumn(name="sequence_row_entity_id_next", referencedColumnName="id")
-     **/
-    private $rowEntityNext;
-
-    /**
-     * Get id
+     * @var string
      *
-     * @return integer
+     * @ORM\Column(name="graph", type="text", nullable=true)
+     */
+    private $graph;
+
+    /**
+     * @return int
      */
     public function getId()
     {
@@ -52,59 +46,91 @@ class Sequence
     }
 
     /**
+     * @param int $id
+     * @return Sequence
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
-    public function getPart()
+    public function getName()
     {
-        return $this->part;
+        return $this->name;
     }
 
     /**
-     * @param string $part
+     * @param string $name
      * @return Sequence
      */
-    public function setPart($part)
+    public function setName($name)
     {
-        $this->part = $part;
+        $this->name = $name;
+
+        return $this;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getGraph()
+    {
+        return $this->graph;
+    }
+
+    /**
+     * @param string $graph
+     *
+     * @return Sequence
+     */
+    public function setGraph($graph)
+    {
+        $this->graph = $graph;
 
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getRowEntity()
+    public function hasGraph()
     {
-        return $this->rowEntity;
+        return !empty($this->graph) ? true : false;
     }
 
     /**
-     * @param mixed $rowEntity
+     * @return Graph
+     */
+    public function getUnSerializeGraph()
+    {
+        return unserialize($this->graph);
+    }
+
+    /**
+     * @param string $graph
+     *
      * @return Sequence
      */
-    public function setRowEntity($rowEntity)
+    public function setGraphAndSerialize($graph)
     {
-        $this->rowEntity = $rowEntity;
+        $this->setGraph(serialize($graph));
 
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getRowEntityNext()
+    public function __toString()
     {
-        return $this->rowEntityNext;
+        return $this->name;
     }
 
-    /**
-     * @param mixed $rowEntityNext
-     * @return Sequence
-     */
-    public function setRowEntityNext($rowEntityNext)
-    {
-        $this->rowEntityNext = $rowEntityNext;
 
-        return $this;
-    }
 }

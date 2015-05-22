@@ -5,10 +5,10 @@
  * Responses to AJAX calls
  */
 
+use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Graphp\GraphViz\GraphViz;
 
 require_once '../global.inc.php';
 
@@ -18,13 +18,14 @@ api_protect_admin_script();
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-$manager = Database::getManager();
-$repository = $manager->getRepository('ChamiloCoreBundle:SequenceResource');
+$em = Database::getManager();
+$repository = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 switch ($action) {
     case 'get_icon':
         $link = '';
         switch ($type) {
             case 'session':
+                $type = SequenceResource::SESSION_TYPE;
                 $showDelete = isset($_REQUEST['show_delete']) ? $_REQUEST['show_delete'] : false;
                 $image = Display::return_icon('window_list.png');
                 $sessionInfo = api_get_session_info($id);
@@ -48,23 +49,36 @@ switch ($action) {
         break;
     case 'delete_vertex':
         $vertexId = isset($_REQUEST['vertex_id']) ? $_REQUEST['vertex_id'] : null;
-        /** @var SequenceResource $resource */
-        $resource = $repository->findOneByResourceId($id);
+        $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
 
-        if (empty($resource)) {
+        $type = SequenceResource::SESSION_TYPE;
+
+        /** @var Sequence $sequence */
+        $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
+
+        if (empty($sequence)) {
             exit;
         }
 
-        if ($resource->hasGraph()) {
-            $graph = $resource->getUnserializeGraph();
+        /** @var SequenceResource $sequenceResource */
+        $sequenceResource = $repository->findOneBy(
+            ['resourceId' => $id, 'type' => $type, 'sequence' => $sequence]
+        );
+
+        if (empty($sequenceResource)) {
+            exit;
+        }
+
+        if ($sequenceResource->getSequence()->hasGraph()) {
+            $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
             if ($graph->hasVertex($vertexId)) {
                 $vertex = $graph->getVertex($vertexId);
                 $vertex->destroy();
+                $em->remove($sequenceResource);
 
-                $resource->setGraphAndSerialize($graph);
-
-                $manager->persist($resource);
-                $manager->flush();
+                $sequence->setGraphAndSerialize($graph);
+                $em->persist($sequence);
+                $em->flush();
             }
         }
 
@@ -72,16 +86,28 @@ switch ($action) {
     case 'load_resource':
         // children or parent
         $loadResourceType = isset($_REQUEST['load_resource_type']) ? $_REQUEST['load_resource_type'] : null;
-        /** @var SequenceResource $resource */
-        $resource = $repository->findOneByResourceId($id);
+        $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
+        $type = SequenceResource::SESSION_TYPE;
 
-        if (empty($resource)) {
+        /** @var Sequence $sequence */
+        $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
+
+        if (empty($sequence)) {
             exit;
         }
 
-        if ($resource->hasGraph()) {
-            $graph = $resource->getUnserializeGraph();
-            $graphviz = new GraphViz();
+        /** @var SequenceResource $sequenceResource */
+        $sequenceResource = $repository->findOneBy(
+            ['resourceId' => $id, 'type' => $type, 'sequence' => $sequence]
+        );
+
+        if (empty($sequenceResource)) {
+            exit;
+        }
+
+        if ($sequenceResource->hasGraph()) {
+            $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
+            //$graphviz = new GraphViz();
             //echo $graphviz->createImageHtml($graph);
 
             /** @var Vertex $mainVertice */
@@ -115,10 +141,21 @@ switch ($action) {
         }
         break;
     case 'save_resource':
-        $parents = isset($_REQUEST['parents']) ? $_REQUEST['parents'] : null;
-        if (empty($parents)) {
+        $parents = isset($_REQUEST['parents']) ? $_REQUEST['parents'] : '';
+        $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
+
+        if (empty($parents) || empty($sequenceId) || empty($type)) {
             exit;
         }
+
+        /** @var Sequence $sequence */
+        $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
+
+        if (empty($sequence)) {
+            exit;
+        }
+
         $parents = str_replace($id, '', $parents);
         $parents = explode(',', $parents);
         $parents = array_filter($parents);
@@ -127,6 +164,9 @@ switch ($action) {
 
         switch ($type) {
             case 'session':
+
+                $type = SequenceResource::SESSION_TYPE;
+
                 $sessionInfo = api_get_session_info($id);
                 $name = $sessionInfo['name'];
 
@@ -134,49 +174,66 @@ switch ($action) {
 
                 foreach ($parents as $parentId) {
                     $parent = $graph->createVertex($parentId);
-                    // Check if parent Id exists in the DB
-                    /** @var SequenceResource $resource */
-                    $resource = $repository->findOneByResourceId($parentId);
-                    if ($resource) {
-                        if ($resource->hasGraph()) {
-                            /** @var Graph $parentGraph */
-                            $parentGraph = $resource->getUnserializeGraph();
-                            try {
-                                $vertex = $parentGraph->getVertex($parentId);
-                                $parentMain = $parentGraph->createVertex($id);
-                                $vertex->createEdgeTo($parentMain);
-                                $resource->setGraphAndSerialize($parentGraph);
-
-                                $manager->persist($resource);
-                                $manager->flush();
-/*
-                                $graphviz = new GraphViz();
-                                echo $graphviz->createImageHtml($parentGraph);*/
-                            } catch (Exception $e) {
-
-                            }
-                        }
-                    }
-
                     $parent->createEdgeTo($main);
                 }
 
-                $graphviz = new GraphViz();
-                //echo $graphviz->createImageHtml($graph);
+                foreach ($parents as $parentId) {
+                    $sequenceResourceParent = $repository->findOneBy(
+                        ['resourceId' => $parentId, 'type' => $type, 'sequence' => $sequence]
+                    );
 
-                /** @var SequenceResource $sequence */
-                $sequence = $repository->findOneByResourceId($id);
-                if (empty($sequence)) {
-                    $sequence = new SequenceResource();
-                    $sequence
-                        ->setGraphAndSerialize($graph)
+                    if (empty($sequenceResourceParent)) {
+                        $sequenceResourceParent = new SequenceResource();
+                        $sequenceResourceParent
+                            ->setSequence($sequence)
+                            ->setType(SequenceResource::SESSION_TYPE)
+                            ->setResourceId($parentId);
+                        $em->persist($sequenceResourceParent);
+
+                        if ($sequenceResourceParent->hasGraph()) {
+                            /** @var Graph $parentGraph */
+                            /* $parentGraph = $resource->getGraph()getUnserializeGraph();
+                             try {
+                                 $vertex = $parentGraph->getVertex($parentId);
+                                 $parentMain = $parentGraph->createVertex($id);
+                                 $vertex->createEdgeTo($parentMain);
+                                 $resource->setGraphAndSerialize($parentGraph);
+
+                                 $em->persist($resource);
+                                 $em->flush();
+ /*
+                                 $graphviz = new GraphViz();
+                                 echo $graphviz->createImageHtml($parentGraph);*/
+                            /*} catch (Exception $e) {
+
+                            }*/
+                        }
+                    }
+
+                }
+
+                //$graphviz = new GraphViz();
+                //echo $graphviz->createImageHtml($graph);
+                /** @var SequenceResource $sequenceResource */
+                $sequenceResource = $repository->findOneBy(
+                    ['resourceId' => $id, 'type' => $type, 'sequence' => $sequence]
+                );
+
+                if (empty($sequenceResource)) {
+                    // Create
+                    $sequence->setGraphAndSerialize($graph);
+
+                    $sequenceResource = new SequenceResource();
+                    $sequenceResource
+                        ->setSequence($sequence)
                         ->setType(SequenceResource::SESSION_TYPE)
                         ->setResourceId($id);
                 } else {
-                    $sequence->setGraphAndSerialize($graph);
+                    // Update
+                    $sequenceResource->getSequence()->setGraphAndSerialize($graph);
                 }
-                $manager->persist($sequence);
-                $manager->flush();
+                $em->persist($sequenceResource);
+                $em->flush();
                 break;
         }
         break;

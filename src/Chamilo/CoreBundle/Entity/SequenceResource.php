@@ -4,7 +4,6 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Fhaculty\Graph\Graph;
 
 /**
  * Class SequenceResource
@@ -34,18 +33,19 @@ class SequenceResource
     private $type;
 
     /**
+     * @var Sequence
+     *
+     * @ORM\ManyToOne(targetEntity="Sequence")
+     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id")
+     **/
+    protected $sequence;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="resource_id", type="integer")
      */
     private $resourceId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="graph", type="text")
-     */
-    private $graph;
 
     /**
      * Get id
@@ -82,15 +82,7 @@ class SequenceResource
      */
     public function getGraph()
     {
-        return $this->graph;
-    }
-
-    /**
-     * @return Graph
-     */
-    public function getUnserializeGraph()
-    {
-        return unserialize($this->graph);
+        return $this->getSequence()->getGraph();
     }
 
     /**
@@ -98,31 +90,7 @@ class SequenceResource
      */
     public function hasGraph()
     {
-        return !empty($this->graph) ? true : false;
-    }
-
-    /**
-     * @param string $graph
-     *
-     * @return SequenceResource
-     */
-    public function setGraph($graph)
-    {
-        $this->graph = $graph;
-
-        return $this;
-    }
-
-    /**
-     * @param string $graph
-     *
-     * @return SequenceResource
-     */
-    public function setGraphAndSerialize($graph)
-    {
-        $this->setGraph(serialize($graph));
-
-        return $this;
+        return !empty($this->getSequence()->getGraph()) ? true : false;
     }
 
     /**
@@ -144,4 +112,25 @@ class SequenceResource
 
         return $this;
     }
+
+    /**
+     * @return Sequence
+     */
+    public function getSequence()
+    {
+        return $this->sequence;
+    }
+
+    /**
+     * @param mixed $sequence
+     * @return $this
+     */
+    public function setSequence(Sequence $sequence)
+    {
+        $this->sequence = $sequence;
+
+        return $this;
+    }
+
+
 }

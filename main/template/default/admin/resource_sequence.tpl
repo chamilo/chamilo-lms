@@ -5,6 +5,7 @@
         var url = '{{ _p.web_ajax }}sequence.ajax.php';
         var parentList = [];
         var resourceId = 0;
+        var sequenceId = 0;
 
         $(document).ready(function() {
             var type = $('input[name="sequence_type"]').val();
@@ -17,7 +18,7 @@
 
                 if (vertexId) {
                     $.ajax({
-                        url: url + '?a=delete_vertex&id='+resourceId+'&vertex_id=' + vertexId + '&type=' + type,
+                        url: url + '?a=delete_vertex&id='+resourceId+'&vertex_id=' + vertexId + '&type=' +type+'&sequence_id='+sequenceId,
                         success: function (data) {
                             parent.remove();
                         }
@@ -30,18 +31,20 @@
 
                 var id = $("#item option:selected" ).val();
 
+                sequenceId = $("#sequence_id option:selected" ).val();
+
                 // Cleaning parent list.
                 parentList = [];
 
                 // Check if data exists and load parents
                 $.ajax({
-                    url: url + '?a=load_resource&load_resource_type=parent&id=' + id + '&type='+type,
+                    url: url + '?a=load_resource&load_resource_type=parent&id=' + id + '&type='+type+'&sequence_id='+sequenceId,
                     success: function (data) {
                         if (data) {
                             var listLoaded = data.split(',');
                             listLoaded.forEach(function(value) {
                                 $.ajax({
-                                    url: url + '?a=get_icon&id='+ value+'&type='+type+'&show_delete=1',
+                                    url: url + '?a=get_icon&id='+ value+'&type='+type+'&sequence_id='+sequenceId+'&show_delete=1',
                                     success:function(data){
                                         $('#parents').append(data);
                                         parentList.push(id);
@@ -54,13 +57,13 @@
 
                 // Check if data exists and load children
                 $.ajax({
-                    url: url + '?a=load_resource&load_resource_type=children&id=' + id + '&type='+type,
+                    url: url + '?a=load_resource&load_resource_type=children&id=' + id + '&type='+type+'&sequence_id='+sequenceId,
                     success: function (data) {
                         if (data) {
                             var listLoaded = data.split(',');
                             listLoaded.forEach(function(value) {
                                 $.ajax({
-                                    url: url + '?a=get_icon&id='+ value+'&type='+type,
+                                    url: url + '?a=get_icon&id='+ value+'&type='+type+'&sequence_id='+sequenceId,
                                     success:function(data){
                                         $('#children').append(data);
                                     }
@@ -75,7 +78,7 @@
                 $('#children').html('');
 
                 $.ajax({
-                    url: url + '?a=get_icon&id='+ id+'&type='+type,
+                    url: url + '?a=get_icon&id='+ id+'&type='+type+'&sequence_id='+sequenceId,
                     success:function(data){
                         $('#resource').html(data);
                         parentList.push(id);
@@ -91,7 +94,7 @@
                     var id = $(this).val();
                     if ($.inArray(id, parentList) == -1) {
                         $.ajax({
-                            url: url + '?a=get_icon&id=' + id + '&type=' + type,
+                            url: url + '?a=get_icon&id=' + id + '&type='+type+'&sequence_id='+sequenceId,
                             success: function (data) {
                                 $('#parents').append(data);
                                 parentList.push(id);
@@ -106,7 +109,7 @@
                 if (resourceId != 0) {
                     var params = decodeURIComponent(parentList);
                     $.ajax({
-                        url: url + '?a=save_resource&id=' + resourceId + '&parents=' + params+'&type='+type,
+                        url: url + '?a=save_resource&id=' + resourceId + '&parents=' + params+'&type='+type+'&sequence_id='+sequenceId,
                         success: function (data) {
                             alert('saved');
                         }
@@ -127,9 +130,11 @@
             </h3>
             <div id="parents">
             </div>
+
             <h3>{{ 'Item' | get_lang }}</h3>
             <div id="resource">
             </div>
+
             <h3>{{ 'Dependencies' | get_lang }}</h3>
             <div id="children">
             </div>

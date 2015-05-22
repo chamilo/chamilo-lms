@@ -44,7 +44,7 @@ class SequenceRepository extends EntityRepository
         $sequence = $this->findRequirementForResource($resourceId, $type);
         $result = ['requirements' => '', 'dependencies' => ''];
         if ($sequence && $sequence->hasGraph()) {
-            $graph = $sequence->getUnserializeGraph();
+            $graph = $sequence->getUnSerializeGraph();
             $vertex = $graph->getVertex($resourceId);
             $from = $vertex->getVerticesEdgeFrom();
 
@@ -79,7 +79,7 @@ class SequenceRepository extends EntityRepository
 
         if ($sequence && $sequence->hasGraph()) {
             $em = $this->getEntityManager();
-            $graph = $sequence->getUnserializeGraph();
+            $graph = $sequence->getUnSerializeGraph();
 
             $mainVertex = $graph->getVertex($resourceId);
             $vertices = $graph->getVertices();
@@ -89,7 +89,7 @@ class SequenceRepository extends EntityRepository
                 $subResourceId = $vertex->getId();
                 $subSequence = $this->findRequirementForResource($subResourceId, $type);
                 if ($sequence && $subSequence->hasGraph()) {
-                    $graph = $subSequence->getUnserializeGraph();
+                    $graph = $subSequence->getUnSerializeGraph();
                     $subMainVertex = $graph->getVertex($resourceId);
                     $subMainVertex->destroy();
                     $subSequence->setGraphAndSerialize($graph);

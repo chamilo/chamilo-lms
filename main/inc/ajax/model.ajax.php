@@ -1402,10 +1402,10 @@ switch ($action) {
             foreach ($result as $group) {
                 $group['users'] = count($obj->get_users_by_usergroup($group['id']));
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
-                    $url  = 'class.php?action=remove_class_from_course&id='.$group['id'];
+                    $url  = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq();
                     $icon = Display::return_icon('delete.png', get_lang('Remove'));
                 } else {
-                    $url  = 'class.php?action=add_class_to_course&id='.$group['id'];
+                    $url  = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq();
                     $icon = Display::return_icon('add.png', get_lang('Add'));
                 }
                 $group['actions'] = Display::url($icon, $url);
@@ -1417,7 +1417,7 @@ switch ($action) {
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
-        //Multidimensional sort
+        // Multidimensional sort
         $result = msort($result, $sidx, $sord);
         break;
     default:
@@ -1459,10 +1459,10 @@ $allowed_actions = array(
 
 //5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
-    $response           = new stdClass();
-    $response->page     = $page;
-    $response->total    = $total_pages;
-    $response->records  = $count;
+    $response = new stdClass();
+    $response->page = $page;
+    $response->total = $total_pages;
+    $response->records = $count;
 
     if ($operation && $operation == 'excel') {
         $j = 1;

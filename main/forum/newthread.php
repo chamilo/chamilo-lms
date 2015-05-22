@@ -175,6 +175,6 @@ if (!empty($values) && isset($values['SubmitPost'])) {
     echo $attachmentAjaxForm;
 }
 
-if ($origin != 'learnpath') {
+if (isset($origin) && $origin != 'learnpath') {
     Display :: display_footer();
 }

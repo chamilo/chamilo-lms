@@ -149,6 +149,7 @@ class UserGroup extends Model
      * Gets a list of course ids by user group
      * @param int $id user group id
      * @param array $loadCourseData
+     *
      * @return  array
      */
     public function get_courses_by_usergroup($id, $loadCourseData = false)
@@ -393,6 +394,45 @@ class UserGroup extends Model
         if (!empty($results)) {
             foreach ($results as $row) {
                 $array[] = $row['user_id'];
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getUserGroupListByUser($userId)
+    {
+        if ($this->useMultipleUrl) {
+            $urlId = api_get_current_access_url_id();
+            $from = $this->usergroup_rel_user_table." u
+                INNER JOIN {$this->access_url_rel_usergroup} a
+                ON (a.usergroup_id AND u.usergroup_id)
+                INNER JOIN {$this->table} g
+                ON (u.usergroup_id = g.id)
+                ";
+            $where =  array('where' => array('user_id = ? AND access_url_id = ? ' => array($userId, $urlId)));
+        } else {
+            $from = $this->usergroup_rel_user_table." u
+                INNER JOIN {$this->table} g
+                ON (u.usergroup_id = g.id)
+                ";
+            $where =  array('where' => array('user_id = ?' => $userId));
+        }
+
+        $results = Database::select(
+            'g.*',
+            $from,
+            $where
+        );
+        $array = array();
+        if (!empty($results)) {
+            foreach ($results as $row) {
+                $array[] = $row;
             }
         }
 
@@ -899,4 +939,4 @@ class UserGroup extends Model
     }
 
 }
-/* CREATE TABLE IF NOT EXISTS access_url_rel_usergroup (access_url_id int unsigned NOT NULL, usergroup_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, usergroup_id));*/
+

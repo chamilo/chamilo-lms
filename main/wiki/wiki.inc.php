@@ -293,7 +293,7 @@ class Wiki
             $values['content'] = Security::remove_XSS($values['content']);
         }
         $version = intval($values['version']) + 1 ;
-        $linkTo = self::links_to($_clean['content']); //and check links content
+        $linkTo = self::links_to($values['content']); //and check links content
 
         //cleaning config variables
         if (!empty($values['task'])) {
@@ -372,13 +372,13 @@ class Wiki
 
         if ($pageId	== 0) {
             $sql = 'UPDATE '.$tbl_wiki.' SET
-                    page_id="'.$id.'"
+                    page_id = "'.$id.'"
                     WHERE c_id = '.$course_id.' AND id="'.$id.'"';
             Database::query($sql);
         }
 
         //update wiki config
-        if ($values['reflink'] == 'index' && $_clean['version'] == 1 ) {
+        if ($values['reflink'] == 'index' && $version == 1 ) {
             $sql = "INSERT INTO ".$tbl_wiki_conf." (c_id, page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit)
                    VALUES ($course_id, '".$id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
             Database::query($sql);
@@ -925,20 +925,21 @@ class Wiki
             //page action: notification
             if (api_is_allowed_to_session_edit()) {
                 if (self::check_notify_page($page)==1) {
-                    $notify_page= Display::return_icon('messagebox_info.png', get_lang('NotifyByEmail'),'',ICON_SIZE_SMALL);
+                    $notify_page = Display::return_icon('messagebox_info.png', get_lang('NotifyByEmail'),'',ICON_SIZE_SMALL);
                     $lock_unlock_notify_page='unlocknotify';
                 } else {
-                    $notify_page= Display::return_icon('mail.png', get_lang('CancelNotifyByEmail'),'',ICON_SIZE_SMALL);
+                    $notify_page = Display::return_icon('mail.png', get_lang('CancelNotifyByEmail'),'',ICON_SIZE_SMALL);
                     $lock_unlock_notify_page='locknotify';
                 }
             }
 
-            echo '<span style="float:right;">';
-            echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_notify_page.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_page.'</a>';
-            echo '</span>';
-
-            //ONly available if row['id'] is set
+            // ONly available if row['id'] is set
             if ($row['id']) {
+
+                echo '<span style="float:right;">';
+                echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_notify_page.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_page.'</a>';
+                echo '</span>';
+
                 //page action: export to pdf
                 echo '<span style="float:right;">';
                 echo '<form name="form_export2PDF" method="get" action="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq().'" >';
@@ -966,24 +967,23 @@ class Wiki
                         Display::return_icon('export_doc.png', get_lang('ExportToDoc'), array(), ICON_SIZE_SMALL).'</a>';
                     echo '</span>';
                 }
+
+                //export to print
+                ?>
+                <script>
+                    function goprint() {
+                        var a = window.open('','','width=800,height=600');
+                        a.document.open("text/html");
+                        a.document.write(document.getElementById('wikicontent').innerHTML);
+                        a.document.close();
+                        a.print();
+                    }
+                </script>
+                <?php
+                echo '<span style="float:right; cursor: pointer;">';
+                echo Display::return_icon('printer.png', get_lang('Print'),array('onclick' => "javascript: goprint();"),ICON_SIZE_SMALL);
+                echo '</span>';
             }
-
-            //export to print
-            ?>
-            <script>
-                function goprint() {
-                    var a = window.open('','','width=800,height=600');
-                    a.document.open("text/html");
-                    a.document.write(document.getElementById('wikicontent').innerHTML);
-                    a.document.close();
-                    a.print();
-                }
-            </script>
-            <?php
-            echo '<span style="float:right; cursor: pointer;">';
-            echo Display::return_icon('printer.png', get_lang('Print'),array('onclick' => "javascript: goprint();"),ICON_SIZE_SMALL);
-            echo '</span>';
-
             if (empty($title)) {
                 $title=get_lang('DefaultTitle');
             }

@@ -367,6 +367,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             $this->setSelected($values);
         }
         foreach ($arr as $key => $val) {
+            // Fix in order to use list of entities.
+            if (is_object($val)) {
+                $key = $val->getId();
+                $val = $val->__toString();
+            }
             // Warning: new API since release 2.3
             $this->addOption($val, $key);
         }
@@ -524,12 +529,14 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             $strHtml .= $tabs . '<select' . $attrString . ">\n";
 
             $strValues = is_array($this->_values)? array_map('strval', $this->_values): array();
+
             foreach ($this->_options as $option) {
+
                 if (!empty($strValues) && in_array($option['attr']['value'], $strValues, true)) {
                     $option['attr']['selected'] = 'selected';
                 }
-                $strHtml .= $tabs . "\t<option" . $this->_getAttrString($option['attr']) . '>' .
-                            $option['text'] . "</option>\n";
+                $strHtml .= $tabs . "<option" . $this->_getAttrString($option['attr']) . '>' .
+                    $option['text'] . "</option>";
             }
             foreach ($this->_optgroups as $optgroup) {
                 $strHtml .= $tabs . "<optgroup label=" . $optgroup['label'].">";

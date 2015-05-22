@@ -310,7 +310,7 @@ if (is_array($forumCategories)) {
                     );
                     $iconsEdit .= return_lock_unlock_icon(
                         'forumcategory',
-                        strval(intval($$idCategory)),
+                        strval(intval($idCategory)),
                         strval(intval($forumCategory['locked']))
                     );
                     $iconsEdit .= return_up_down_icon(
@@ -526,9 +526,10 @@ if (is_array($forumCategories)) {
                         $html .= '</div>';
                         $html .= '</div>';
 
+                        $iconEmpty='';
+
                         // The number of topics and posts.
                         if ($forum['forum_of_group'] !== '0') {
-                            $iconEmpty='';
                             $newPost='';
                             if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
                                 $newPost = ' '.

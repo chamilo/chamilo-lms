@@ -39,7 +39,7 @@ if (isset($rows)) {
             echo Display::page_subheader($name);
         }
 
-        echo "<div ".$style."><table class=\"data_table\">";
+        echo "<div ".$style."><table class=\"table table-stripped table-hover table-bordered\">";
         if ($row['visible']=='0') {
             $titleclass = 'forum_message_post_title_2_be_approved';
             $messageclass = 'forum_message_post_text_2_be_approved';
@@ -84,12 +84,12 @@ if (isset($rows)) {
 
         // The post has been displayed => it can be removed from the what's new array
         if (isset($whatsnew_post_info)) {
-            unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
-            unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']]);
+            unset($whatsnew_post_info[$currentForum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
+            unset($whatsnew_post_info[$currentForum['forum_id']][$current_thread['thread_id']]);
         }
         if (isset($_SESSION['whatsnew_post_info'])) {
-            unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
-            unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']]);
+            unset($_SESSION['whatsnew_post_info'][$currentForum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
+            unset($_SESSION['whatsnew_post_info'][$currentForum['forum_id']][$current_thread['thread_id']]);
         }
         echo "</table></div>";
         $counter++;

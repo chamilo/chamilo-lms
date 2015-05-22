@@ -48,6 +48,13 @@ $nameTools = get_lang('ToolForum');
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
+// Are we in a lp ?
+$origin = '';
+
+if (isset($_GET['origin'])) {
+    $origin =  Security::remove_XSS($_GET['origin']);
+}
+
 /* Header and Breadcrumbs */
 $gradebook = null;
 if (isset($_SESSION['gradebook'])) {
@@ -71,12 +78,6 @@ if (!empty($_GET['action']) && !empty($_GET['content'])) {
     }
 } else {
     $interbreadcrumb[] = array('url' => '#','name' => $current_forum_category['cat_title']);
-}
-
-// Are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-    $origin =  Security::remove_XSS($_GET['origin']);
 }
 
 if ($origin=='learnpath') {
@@ -175,7 +176,7 @@ if ($action_forums != 'add') {
     $linkForumCategory = 'viewforumcategory.php?'.api_get_cidreq().'&amp;forumcategory='.strval(intval($forumId));
     $descriptionCategory = $forum_category['cat_comment'];
     $icoCategory = Display::return_icon('forum_blue.png',
-        get_lang($forumCategory['cat_title']),
+        get_lang($forum_category['cat_title']),
         array('class'=>''),
         ICON_SIZE_MEDIUM
     );
@@ -201,6 +202,8 @@ if ($action_forums != 'add') {
         $iconsEdit .= return_up_down_icon('forumcategory', $forum_category['cat_id'], $forum_categories_list);
         $html .= Display::tag('div',$iconsEdit,array('class'=>'pull-right'));
     }
+
+    $session_img = api_get_session_image($forum_category['session_id'], $_user['status']);
 
     $html .= Display::tag(
         'h3',
@@ -347,7 +350,7 @@ if ($action_forums != 'add') {
                 $html .= '<div class="col-md-9">';
                 $iconForum = Display::return_icon(
                     'forum_yellow.png',
-                    get_lang($forumCategory['cat_title']),
+                    get_lang($forum_category['cat_title']),
                     null,
                     ICON_SIZE_MEDIUM
                 );
@@ -378,9 +381,10 @@ if ($action_forums != 'add') {
                 $html .= '</div>';
                 $html .= '<div class="col-md-6">';
 
+                $iconEmpty='';
+
                 // The number of topics and posts.
                 if ($forum['forum_of_group'] !== '0') {
-                    $iconEmpty='';
                     $newPost='';
                     if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                         $newPost = ' '.

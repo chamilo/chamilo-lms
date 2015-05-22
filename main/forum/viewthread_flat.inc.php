@@ -31,8 +31,17 @@ if (isset($current_thread['thread_id'])) {
         LINK_FORUM_THREAD
     );
 
+    $closedPost = null;
+
     if (!empty($rows)) {
         foreach ($rows as $row) {
+            if ($row['user_id']=='0') {
+                $name = prepare4display($row['poster_name']);
+            } else {
+                $name = api_get_person_name($row['firstname'], $row['lastname']);
+            }
+
+            $username = sprintf(get_lang('LoginX'), $row['username']);
 
             if (($current_forum_category && $current_forum_category['locked'] == 0) &&
                 $current_forum['locked'] == 0 &&
@@ -73,7 +82,7 @@ if (isset($current_thread['thread_id'])) {
                 if (api_get_course_setting('allow_user_image_forum')) {
                     $html .= '<div class="thumbnail">'.display_user_image($row['user_id'], $name).'</div>';
                 }
-                $html .= Display::tag('h4', display_user_link($row['user_id'], $name, '', $username), array('class' => 'title-username'));
+                $html .= Display::tag('h4', display_user_link($row['user_id'], $name), array('class' => 'title-username'));
             } else {
                 $html .=  Display::tag('span', $name, array('title' => api_htmlentities($username, ENT_QUOTES)));
             }
@@ -185,27 +194,6 @@ if (isset($current_thread['thread_id'])) {
             $html .= '</div>';
             $html .= '</div>';
 
-
-            // the style depends on the status of the message: approved or not
-            /* if ($row['visible']=='0') {
-                $titleclass = 'forum_message_post_title_2_be_approved';
-                $messageclass = 'forum_message_post_text_2_be_approved';
-                $leftclass = 'forum_message_left_2_be_approved';
-            } else {
-                $titleclass = 'forum_message_post_title';
-                $messageclass = 'forum_message_post_text';
-                $leftclass = 'forum_message_left';
-            }
-
-
-            if ($row['user_id']=='0') {
-                $name = prepare4display($row['poster_name']);
-            } else {
-                $name = api_get_person_name($row['firstname'], $row['lastname']);
-            }
-            $username = sprintf(get_lang('LoginX'), $row['username']);
-
-            */
 
             $html .= '<div class="row">';
             $html .= '<div class="col-md-12">';

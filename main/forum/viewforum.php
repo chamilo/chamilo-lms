@@ -178,7 +178,9 @@ if ($my_action == 'liststd' &&
     (api_is_allowed_to_edit(null, true) || $is_group_tutor)
 ) {
     $active = null;
-    switch ($_GET['list']) {
+    $listType = isset($_GET['list']) ? $_GET['list'] : null;
+
+    switch ($listType) {
         case 'qualify':
             $student_list = get_thread_users_qualify($_GET['id']);
             $nrorow3 = -2;
@@ -222,7 +224,7 @@ if ($my_action == 'liststd' &&
         $table_list .= '<tr >';
         $table_list .= '<th height="24">'.get_lang('NamesAndLastNames').'</th>';
 
-        if ($_GET['list'] == 'qualify') {
+        if ($listType == 'qualify') {
             $table_list.= '<th>'.get_lang('Qualification').'</th>';
         }
         if (api_is_allowed_to_edit(null, true)) {
@@ -234,7 +236,7 @@ if ($my_action == 'liststd' &&
 
         if (Database::num_rows($student_list) > 0) {
             while ($row_student_list=Database::fetch_array($student_list)) {
-                $userInfo = api_get_user_info($row_student_list['user_id']);
+                $userInfo = api_get_user_info($row_student_list['id']);
                 if ($counter_stdlist % 2 == 0) {
                     $class_stdlist = 'row_odd';
                 } else {
@@ -244,23 +246,23 @@ if ($my_action == 'liststd' &&
                 $table_list .= UserManager::getUserProfileLink($userInfo);
 
                 $table_list .= '</td>';
-                if ($_GET['list'] == 'qualify') {
+                if ($listType == 'qualify') {
                     $table_list .= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
                 }
                 if (api_is_allowed_to_edit(null, true)) {
                     $current_qualify_thread = showQualify(
                         '1',
-                        $row_student_list['user_id'],
+                        $row_student_list['id'],
                         $_GET['id']
                     );
                     $table_list .= '<td>
-                        <a href="'.$forumUrl.'forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user='.$row_student_list['user_id'].'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'&origin='.$origin.'">'.
+                        <a href="'.$forumUrl.'forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user='.$row_student_list['id'].'&user_id='.$row_student_list['id'].'&idtextqualify='.$current_qualify_thread.'&origin='.$origin.'">'.
                         Display::return_icon($icon_qualify, get_lang('Qualify')).'</a></td></tr>';
                 }
                 $counter_stdlist++;
             }
         } else {
-            if ($_GET['list'] == 'qualify') {
+            if ($listType == 'qualify') {
                 $table_list .= '<tr><td colspan="2">'.get_lang('ThereIsNotQualifiedLearners').'</td></tr>';
             } else {
                 $table_list .= '<tr><td colspan="2">'.get_lang('ThereIsNotUnqualifiedLearners').'</td></tr>';

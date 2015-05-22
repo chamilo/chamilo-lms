@@ -82,7 +82,7 @@ foreach ($rows as $post) {
     // The course admin him/herself can do this off course always
 
     if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) ||
-        ($current_forum['allow_edit'] == 1 && $row['user_id'] == $userId) ||
+        ($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
         (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
     ) {
         if ($locked == false) {
@@ -142,6 +142,10 @@ foreach ($rows as $post) {
         }
     }
 
+    if($iconEdit != ''){
+        $html .= '<div class="tools-icons">'.$iconEdit.'</div>';
+    }
+
     if (($current_forum_category && $current_forum_category['locked'] == 0) &&
         $current_forum['locked'] == 0 && $current_thread['locked'] == 0 || api_is_allowed_to_edit(false, true )
     ) {
@@ -164,11 +168,10 @@ foreach ($rows as $post) {
         if ($current_thread['locked']==1) {
             $closedPost = Display::tag('div','<i class="fa fa-exclamation-triangle"></i> '.get_lang('ThreadLocked'),array('class'=>'alert alert-warning post-closed'));
         }
+
+        $html .= $closedPost;
     }
-    if($iconEdit != ''){
-        $html .= '<div class="tools-icons">'.$iconEdit.'</div>';
-    }
-    $html .= $closedPost;
+
     $html .= '</div>';
 
 
@@ -229,8 +232,8 @@ foreach ($rows as $post) {
     $html .= '</div>';
     $html .= '</div>';
     // The post has been displayed => it can be removed from the what's new array
-    unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
-    unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
+    unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
+    unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]);
 
 
     $html .= '</div>';

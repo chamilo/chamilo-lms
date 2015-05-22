@@ -125,24 +125,25 @@
 
                         {% if session.requirements %}
                             <h4>{{ 'Requirements' | get_lang }}</h4>
+                            <p>
                             {% for requirement in session.requirements %}
                                 {{ requirement.name  }}
                             {% endfor %}
+                            </p>
                         {% endif %}
 
                         {% if session.dependencies %}
                             <h4>{{ 'Dependencies' | get_lang }}</h4>
+                            <p>
                             {% for dependency in session.dependencies %}
                                 {{ dependency.name  }}
                             {% endfor %}
+                            </p>
                         {% endif %}
-
 
                         <a id="list-course" class="btn btn-default" data-toggle="collapse" href="#session-{{ session.id }}-courses">
                             {{ 'CourseList' | get_lang }}
                         </a>
-
-
 
                         <div class="collapse" id="session-{{ session.id }}-courses">
                             <div class="list"></div>

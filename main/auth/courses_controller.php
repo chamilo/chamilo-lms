@@ -564,7 +564,7 @@ class CoursesController
         $sessionsBlocks = array();
 
         // Get session list catalogue URL
-        $sessionUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'display_sessions');
+        //$sessionUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'display_sessions');
         // Get session search catalogue URL
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
@@ -593,7 +593,7 @@ class CoursesController
             );
 
 
-            /** @var SequenceRepository $repo */
+            /** @var \Chamilo\CoreBundle\Entity\Repository\SequenceRepository $repo */
             $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
             $requirementAndDependencies = $repo->getRequirementAndDependencies(
                 $session['id'],
@@ -629,5 +629,4 @@ class CoursesController
 
         $tpl->display($contentTemplate);
     }
-
 }

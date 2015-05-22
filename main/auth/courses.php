@@ -120,14 +120,23 @@ if (isset($_GET['move'])) {
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
 if (isset($_POST['submit_change_course_category'])) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->change_course_category($_POST['course_2_edit_category'], $_POST['course_categories']);
+        $courses_controller->change_course_category(
+            $_POST['course_2_edit_category'],
+            $_POST['course_categories']
+        );
     }
 }
 
 // We edit course category
-if (isset($_POST['submit_edit_course_category']) && isset($_POST['title_course_category']) && strlen(trim($_POST['title_course_category'])) > 0) {
+if (isset($_POST['submit_edit_course_category']) &&
+    isset($_POST['title_course_category']) &&
+    strlen(trim($_POST['title_course_category'])) > 0
+) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->edit_course_category($_POST['title_course_category'], $_POST['edit_course_category']);
+        $courses_controller->edit_course_category(
+            $_POST['title_course_category'],
+            $_POST['edit_course_category']
+        );
     }
 }
 
@@ -140,7 +149,10 @@ if ($action == 'deletecoursecategory' && isset($_GET['id'])) {
 }
 
 // We are creating a new user defined course category (= Create Course Category).
-if (isset($_POST['create_course_category']) && isset($_POST['title_course_category']) && strlen(trim($_POST['title_course_category'])) > 0) {
+if (isset($_POST['create_course_category']) &&
+    isset($_POST['title_course_category']) &&
+    strlen(trim($_POST['title_course_category'])) > 0
+) {
     if ($ctok == $_POST['sec_token']) {
         $courses_controller->add_course_category($_POST['title_course_category']);
     }
@@ -176,7 +188,11 @@ if (isset($_POST['unsubscribe'])) {
 
 switch ($action) {
     case 'subscribe_user_with_password':
-        $courses_controller->subscribe_user($_POST['subscribe_user_with_password'], $_POST['search_term'], $_POST['category_code']);
+        $courses_controller->subscribe_user(
+            $_POST['subscribe_user_with_password'],
+            $_POST['search_term'],
+            $_POST['category_code']
+        );
         exit;
         break;
     case 'createcoursecategory':

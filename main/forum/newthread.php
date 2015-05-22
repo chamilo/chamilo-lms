@@ -137,7 +137,7 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
     $_SESSION['formelements']	= $_POST;
     $_SESSION['origin']			= $_SERVER['REQUEST_URI'];
     $_SESSION['breadcrumbs']	= $interbreadcrumb;
-    header('Location: ../resourcelinker/resourcelinker.php');
+    Header::location('../resourcelinker/resourcelinker.php');
 }
 
 /* Header */
@@ -175,6 +175,6 @@ if (!empty($values) && isset($values['SubmitPost'])) {
     echo $attachmentAjaxForm;
 }
 
-if ($origin != 'learnpath') {
+if (isset($origin) && $origin != 'learnpath') {
     Display :: display_footer();
 }

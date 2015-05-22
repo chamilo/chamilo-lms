@@ -1230,12 +1230,12 @@ function move_up_down($content, $direction, $id)
     // The SQL statement
     if ($content == 'forumcategory') {
         $sql = "SELECT *
-                FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
+                FROM $table_categories forum_categories, $table_item_property item_properties
                 WHERE
                     forum_categories.c_id = $course_id AND
                     item_properties.c_id = $course_id AND
                     forum_categories.cat_id=item_properties.ref AND
-                    item_properties.tool='".TOOL_FORUM_CATEGORY."'
+                    item_properties.tool='" . TOOL_FORUM_CATEGORY . "'
                 ORDER BY forum_categories.cat_order $sort_direction";
     }
     if ($content == 'forum') {

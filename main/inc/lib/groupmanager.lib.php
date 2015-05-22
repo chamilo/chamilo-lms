@@ -1904,31 +1904,29 @@ class GroupManager
 
         switch ($tool) {
             case self::GROUP_TOOL_FORUM :
-                $state_key = 'forum_state';
+                $key = 'forum_state';
                 break;
             case self::GROUP_TOOL_DOCUMENTS :
-                $state_key = 'doc_state';
+                $key = 'doc_state';
                 break;
             case self::GROUP_TOOL_CALENDAR :
-                $state_key = 'calendar_state';
+                $key = 'calendar_state';
                 break;
             case self::GROUP_TOOL_ANNOUNCEMENT :
-                $state_key = 'announcements_state';
+                $key = 'announcements_state';
                 break;
             case self::GROUP_TOOL_WORK :
-                $state_key = 'work_state';
+                $key = 'work_state';
                 break;
             case self::GROUP_TOOL_WIKI :
-                $state_key = 'wiki_state';
+                $key = 'wiki_state';
                 break;
             case self::GROUP_TOOL_CHAT :
-                $state_key = 'chat_state';
+                $key = 'chat_state';
                 break;
             default:
                 return false;
         }
-
-        $user_is_in_group = self::is_user_in_group($user_id, $group_id);
 
         // Check group properties
         $groupInfo = self::get_group_properties($group_id);
@@ -1937,26 +1935,86 @@ class GroupManager
             return false;
         }
 
-        if (!$user_is_in_group) {
+        if ($groupInfo['status'] == 0) {
             return false;
+        }
+
+        if (!isset($groupInfo[$key])) {
+            return false;
+        }
+
+        if (api_is_allowed_to_edit(false, true)) {
+            return true;
+        }
+
+        $status = $groupInfo[$key];
+
+        switch ($status) {
+            case self::TOOL_NOT_AVAILABLE:
+                return false;
+                break;
+            case self::TOOL_PUBLIC:
+                return true;
+                break;
+            case self::TOOL_PRIVATE:
+                $userIsInGroup = self::is_user_in_group($user_id, $group_id);
+                if ($userIsInGroup) {
+                    return true;
+                }
+                break;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $userId
+     * @param array $groupInfo
+     *
+     * @return bool
+     */
+    public static function userHasAccessToBrowse($userId, $groupInfo, $sessionId = 0)
+    {
+        if (empty($groupInfo)) {
+            return false;
+        }
+
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        if (api_is_allowed_to_edit(false, true)) {
+            return true;
+        }
+
+        $groupId = $groupInfo['id'];
+        $tutors = self::get_subscribed_tutors($groupId, true);
+
+        if (in_array($userId, $tutors)) {
+            return true;
         }
 
         if ($groupInfo['status'] == 0) {
             return false;
         }
 
-        if ($groupInfo[$state_key] == self::TOOL_NOT_AVAILABLE) {
-            return false;
-        } elseif ($groupInfo[$state_key] == self::TOOL_PUBLIC) {
+        if (
+            self::user_has_access($userId, $groupId, self::GROUP_TOOL_FORUM) ||
+            self::user_has_access($userId, $groupId, self::GROUP_TOOL_DOCUMENTS) ||
+            self::user_has_access($userId, $groupId, self::GROUP_TOOL_CALENDAR) ||
+            self::user_has_access($userId, $groupId, self::GROUP_TOOL_ANNOUNCEMENT) ||
+            self::user_has_access($userId, $groupId, self::GROUP_TOOL_WORK) ||
+            self::user_has_access($userId, $groupId, self::GROUP_TOOL_WIKI) ||
+            self::user_has_access($userId, $groupId, self::GROUP_TOOL_CHAT)
+        ) {
             return true;
-        } elseif (api_is_allowed_to_edit(false, true)) {
+        }
+
+        if (api_is_course_coach() && $groupInfo['session_id'] == $sessionId) {
             return true;
-        } elseif ($groupInfo[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
-            return false;
-        } else {
-            return $user_is_in_group;
         }
     }
+
 
     /**
      * Get all groups where a specific user is subscribed
@@ -2135,24 +2193,8 @@ class GroupManager
                 $row[] = $this_group['id'];
             }
 
-
-            // Group name
-            if ((api_is_allowed_to_edit(false, true) ||
-                    (
-                    in_array($user_id, $tutorsids_of_group) ||
-                    $this_group['is_member'] ||
-                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_FORUM) ||
-                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_DOCUMENTS) ||
-                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_CALENDAR) ||
-                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_ANNOUNCEMENT) ||
-                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WORK) ||
-                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WIKI) ||
-                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_CHAT)
-                    )
-                )
-                && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)
-            ) {
-
+            if (GroupManager::userHasAccessToBrowse($user_id, $this_group, $session_id)) {
+                // Group name
                 $groupNameClass = null;
                 if ($this_group['status'] == 0) {
                     $groupNameClass = 'muted';

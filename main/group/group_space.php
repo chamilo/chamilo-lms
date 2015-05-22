@@ -24,7 +24,6 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
 $current_group = GroupManager::get_group_properties($group_id);
-
 if (empty($current_group)) {
     api_not_allowed(true);
 }
@@ -37,35 +36,10 @@ $interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 
 $forums_of_groups = get_forums_of_group($current_group['id']);
 
-/*$forum_state_public = 0;
-if (is_array($forums_of_groups)) {
-    foreach ($forums_of_groups as $key => $value) {
-        if ($value['forum_group_public_private'] == 'public') {
-            $forum_state_public = 1;
-        }
-    }
-}
-
-if ($current_group['doc_state'] != 1 &&
-    $current_group['calendar_state'] != 1 &&
-    $current_group['work_state'] != 1 &&
-    $current_group['announcements_state'] != 1 &&
-    $current_group['wiki_state'] != 1 &&
-    $current_group['chat_state'] != 1 &&
-    $forum_state_public != 1
-) {
-
-}*/
-
-if (!api_is_allowed_to_edit(null, true) &&
-    (!GroupManager::is_user_in_group($user_id, $group_id) ||
-        $current_group['status']  == 0
-    )
-) {
+if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_session_id())) {
     api_not_allowed(true);
 }
 
-/*	Header */
 Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
 
 /*	Introduction section (editable by course admin) */
@@ -266,7 +240,7 @@ if (api_is_allowed_to_edit(false, true) OR
     if ($current_group['doc_state'] == GroupManager::TOOL_PUBLIC) {
         // Link to the documents area of this group
         $actions_array[] = array(
-            'url' => '../document/document.php?'.api_get_cidreq().'&origin='.$origin,
+            'url' => '../document/document.php?'.api_get_cidreq(),
             'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), array(), ICON_SIZE_MEDIUM)
         );
     }

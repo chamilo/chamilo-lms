@@ -104,7 +104,7 @@ if (isset($_GET['id'])) {
 // If categories allowed, show title & description field
 if (api_get_setting('allow_group_categories') == 'true') {
     $form->addElement('header', $nameTools);
-    $form->addElement('html', '<div class="row"><div class="span6">');
+    $form->addElement('html', '<div class="row"><div class="col-md-6">');
 	$form->addText('title', get_lang('Title'));
 
     // Groups per user
@@ -132,9 +132,9 @@ if (api_get_setting('allow_group_categories') == 'true') {
 
     $form->addElement('html', '</div>');
 
-    $form->addElement('html', '<div class="span6">');
+    $form->addElement('html', '<div class="col-md-6">');
     // Description
-    $form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
+    $form->addElement('textarea', 'description', get_lang('Description'), array ('rows' => 6));
     $form->addElement('html', '</div>');
     $form->addElement('html', '</div>');
 } else {
@@ -144,7 +144,7 @@ if (api_get_setting('allow_group_categories') == 'true') {
 
 $form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
 $form->addElement('hidden', 'action');
-$form->addElement('html', '<div class="span6">');
+$form->addElement('html', '<div class="col-md-6">');
 
 // Self registration
 $group = array(
@@ -178,7 +178,7 @@ $group = array(
 $form->addGroup($group, '', Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupCalendar'), '', false);
 
 $form->addElement('html', '</div>');
-$form->addElement('html', '<div class="span6">');
+$form->addElement('html', '<div class="col-md-6">');
 
 // Announcements settings.
 $group = array(
@@ -213,7 +213,7 @@ $group = array(
 $form->addGroup($group, '', Display::return_icon('chat.png', get_lang('Chat'), array(), ICON_SIZE_SMALL).' '.get_lang('Chat'), '', false);
 
 $form->addElement('html', '</div>');
-$form->addElement('html', '<div class="span12">');
+$form->addElement('html', '<div class="col-md-12">');
 
 // Submit
 $form->addButtonSave(get_lang('PropModify'), 'submit');
@@ -278,7 +278,8 @@ Display :: display_header($nameTools, 'Group');
 
 // actions bar
 echo '<div class="actions">';
-echo '<a href="group.php">'.Display::return_icon('back.png', get_lang('BackToGroupList'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="group.php">'.
+    Display::return_icon('back.png', get_lang('BackToGroupList'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $defaults = $category;

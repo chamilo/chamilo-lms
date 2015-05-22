@@ -3,13 +3,13 @@
 
 /**
  *	This script displays an area where teachers can edit the group properties and member list.
- *	Groups are also often called "teams" in the Dokeos code.
- *
+  *
  *	@author various contributors
  *	@author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
  *	@package chamilo.group
  *	@todo course admin functionality to create groups based on who is in which course (or class).
  */
+
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
@@ -32,10 +32,10 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
-$form->addElement('html', '<div class="span12">');
+$form->addElement('html', '<div class="col-md-12">');
 $form->addElement('header', $nameTools);
 $form->addElement('html', '</div>');
-$form->addElement('html', '<div class="span6">');
+$form->addElement('html', '<div class="col-md-6">');
 
 // Group name
 $form->addElement('text', 'name', get_lang('GroupName'));
@@ -62,16 +62,16 @@ $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callb
 
 $form->addElement('html', '</div>');
 
-$form->addElement('html', '<div class="span6">');
+$form->addElement('html', '<div class="col-md-6">');
 // Description
 $form->addElement('textarea', 'description', get_lang('Description'));
 $form->addElement('html', '</div>');
 
-$form->addElement('html', '<div class="span12">');
+$form->addElement('html', '<div class="col-md-12">');
 $form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
 $form->addElement('html', '</div>');
 
-$form->addElement('html', '<div class="span6">');
+$form->addElement('html', '<div class="col-md-6">');
 
 // Self registration
 $group = array(
@@ -105,7 +105,7 @@ $group = array(
 $form->addGroup($group, '', Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupCalendar'), '', false);
 
 $form->addElement('html', '</div>');
-$form->addElement('html', '<div class="span6">');
+$form->addElement('html', '<div class="col-md-6">');
 
 // Announcements settings
 $group = array(
@@ -140,7 +140,7 @@ $group = array(
 $form->addGroup($group, '', Display::return_icon('chat.png', get_lang('Chat'), array(), ICON_SIZE_SMALL).' '.get_lang('Chat'), '', false);
 
 $form->addElement('html', '</div>');
-$form->addElement('html', '<div class="span12">');
+$form->addElement('html', '<div class="col-md-12">');
 // Submit button
 $form->addButtonSave(get_lang('SaveSettings'));
 $form->addElement('html', '</div>');

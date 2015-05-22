@@ -301,10 +301,15 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->updateAttributes(array('style' => 'min-width:180px;'));
         }
         $this->_tableAttributes = $this->getAttribute('class');
+        $attr = null;
+        if (is_null($this->_tableAttributes)) {
+            $this->updateAttributes(array('class' => 'col-md-4'));
+        } else {
+        /*
         if (is_null($this->_tableAttributes)) {
             // default table layout
-            $attr = array('border' => '0', 'cellpadding' => '10', 'cellspacing' => '0');
-        } else {
+            $attr = array('border' => '0', 'cellpadding' => '10', 'cellspacing' => '0');*/
+        //} else {
             $attr = array('class' => $this->_tableAttributes);
             $this->_removeAttr('class', $this->_attributes);
         }
@@ -537,13 +542,13 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->_elementTemplate = $html;
         } else {
             $this->_elementTemplate = '
-{javascript}
-<div class="row">
-  <div class="col-sm-5"><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
-  <div class="col-sm-2"><div class="text-center">{add}{remove}</div></div>
-  <div class="col-sm-5"><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
-</div>
-';
+            {javascript}
+            <div class="row">
+              <div class="col-sm-5"><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
+              <div class="col-sm-2"><div class="text-center">{add}{remove}</div></div>
+              <div class="col-sm-5"><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
+            </div>
+            ';
         }
         if ($js == false) {
             $this->_elementTemplate = str_replace('{javascript}', '',
@@ -798,6 +803,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             }
             $strHtmlUnselected .= '</select>';
 
+            $strHtmlUnselected = '<input placeholder="'.get_lang('Search').'" id="'.$selectId.'-f-filter" type="text" class="search-query select_class_filter"><br /><br />'.$strHtmlUnselected;
             // The 'selected' multi-select which appears on the right
             $selected_count = count($arrHtmlSelected);
 
@@ -828,6 +834,8 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 $strHtmlSelected .= '<option value="">&nbsp;</option>';
             }
             $strHtmlSelected .= '</select>';
+
+            $strHtmlSelected = '<input placeholder="'.get_lang('Search').'" id="'.$selectId.'-t-filter" type="text" class="search-query select_class_filter"><br /><br />'.$strHtmlSelected;
 
             // The 'hidden' multi-select
             $strHtmlHidden = "<select$attrHidden>". PHP_EOL;
@@ -988,26 +996,45 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         }
 
         $placeHolders = array(
-            '{stylesheet}', '{javascript}',
+            '{stylesheet}',
+            '{javascript}',
             '{class}',
-            '{unselected_count_id}', '{selected_count_id}',
-            '{unselected_count}', '{selected_count}',
-            '{unselected}', '{selected}',
-            '{add}', '{remove}',
-            '{all}', '{none}', '{toggle}',
-            '{moveup}', '{movedown}',
-            '{movetop}', '{movebottom}'
+            '{unselected_count_id}',
+            '{selected_count_id}',
+            '{unselected_count}',
+            '{selected_count}',
+            '{unselected}',
+            '{selected}',
+            '{add}',
+            '{remove}',
+            '{all}',
+            '{none}',
+            '{toggle}',
+            '{moveup}',
+            '{movedown}',
+            '{movetop}',
+            '{movebottom}',
         );
+
         $htmlElements = array(
-            $this->getElementCss(false), $this->getElementJs(false),
+            $this->getElementCss(false),
+            $this->getElementJs(false),
             $this->_tableAttributes,
-            $strHtmlUnselectedCountId, $strHtmlSelectedCountId,
-            $strHtmlUnselectedCount, $strHtmlSelectedCount,
-            $strHtmlUnselected, $strHtmlSelected . $strHtmlHidden,
-            $strHtmlAdd, $strHtmlRemove,
-            $strHtmlAll, $strHtmlNone, $strHtmlToggle,
-            $strHtmlMoveUp, $strHtmlMoveDown,
-            $strHtmlMoveTop, $strHtmlMoveBottom
+            $strHtmlUnselectedCountId,
+            $strHtmlSelectedCountId,
+            $strHtmlUnselectedCount,
+            $strHtmlSelectedCount,
+            $strHtmlUnselected,
+            $strHtmlSelected.$strHtmlHidden,
+            $strHtmlAdd,
+            $strHtmlRemove,
+            $strHtmlAll,
+            $strHtmlNone,
+            $strHtmlToggle,
+            $strHtmlMoveUp,
+            $strHtmlMoveDown,
+            $strHtmlMoveTop,
+            $strHtmlMoveBottom,
         );
 
         if ($this->selectAllCheckBox) {
@@ -1023,7 +1050,6 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         }
 
         $strHtml = str_replace($placeHolders, $htmlElements, $strHtml);
-
         $comment = $this->getComment();
 
         if (!empty($comment)) {

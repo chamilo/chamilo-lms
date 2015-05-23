@@ -841,10 +841,6 @@ class ImportCsv
 
                 $eventComment = $event['comment'];
 
-                // To use the event comment you need
-                // ALTER TABLE c_calendar_event ADD COLUMN comment TEXT;
-                // add in configuration.php allow_agenda_event_comment = true
-
                 if (empty($courseInfo)) {
                     $this->logger->addInfo(
                         "No course found for added: #".$event['course_id']." Skipping ..."

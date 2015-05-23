@@ -524,7 +524,6 @@ $(document).ready(function() {
                     <div id="simple_content"></div>
                 </div>
             </div>
-            {% if allow_agenda_event_comment %}
             <div class="control-group">
                 <label class="control-label">
                     <b>{{ "Comment" |get_lang}}</b>
@@ -533,7 +532,6 @@ $(document).ready(function() {
                     <div id="simple_comment"></div>
                 </div>
             </div>
-            {% endif %}
 
         </form>
     </div>

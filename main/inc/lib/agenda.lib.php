@@ -161,14 +161,9 @@ class Agenda
                     'end_date' => $end,
                     'all_day' => $allDay,
                     'session_id' => $this->getSessionId(),
-                    'c_id' => $this->course['real_id']
+                    'c_id' => $this->course['real_id'],
+                    'comment' => $eventComment,
                 );
-
-                $allow = api_get_configuration_value('allow_agenda_event_comment');
-
-                if ($allow) {
-                    $attributes['comment'] = $eventComment;
-                }
 
                 if (!empty($parentEventId)) {
                     $attributes['parent_event_id'] = $parentEventId;
@@ -606,14 +601,9 @@ class Agenda
                         'content' => $content,
                         'start_date' => $start,
                         'end_date' => $end,
-                        'all_day' => $allDay
+                        'all_day' => $allDay,
+                        'comment' => $comment,
                     );
-
-                    $allow = api_get_configuration_value('allow_agenda_event_comment');
-
-                    if ($allow) {
-                        $attributes['comment'] = $comment;
-                    }
 
                     Database::update(
                         $this->tbl_course_agenda,
@@ -1356,8 +1346,6 @@ class Agenda
 
         $sql .= $dateCondition;
 
-        $allowComments = api_get_configuration_value('allow_agenda_event_comment');
-
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $events_added = array();
@@ -1462,12 +1450,7 @@ class Agenda
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
                 $event['parent_event_id'] = $row['parent_event_id'];
                 $event['has_children'] = $this->hasChildren($row['id'], $course_id) ? 1 : 0;
-
-                if ($allowComments) {
-                    $event['comment'] = $row['comment'];
-                } else {
-                    $event['comment'] = null;
-                }
+                $event['comment'] = $row['comment'];
 
                 $this->events[] = $event;
             }
@@ -1864,12 +1847,7 @@ class Agenda
         );
 
         if ($this->type == 'course') {
-            $allow = api_get_configuration_value('allow_agenda_event_comment');
-
-            if ($allow) {
-                $form->addElement('textarea', 'comment', get_lang('Comment'));
-            }
-
+            $form->addElement('textarea', 'comment', get_lang('Comment'));
             $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
             if ($showAttachmentForm) {
                 if (isset($params['attachment']) && !empty($params['attachment'])) {

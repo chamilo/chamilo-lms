@@ -162,9 +162,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Uncomment the following to prevent all admins to use the "login as" feature
 //$_configuration['login_as_forbidden_globally'] = true;
 
-// Boost query on last connection time
-//$_configuration['save_user_last_login'] = true;
-
 // Allow select the return link in the LP view
 //$_configuration['allow_lp_return_link'] = false;
 // If true the export link is blocked.

@@ -268,6 +268,13 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     protected $salt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
+     */
+    private $lastLogin;
+
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
      **/
     protected $courses;
@@ -1367,6 +1374,30 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     public function setSlug($slug)
     {
         return $this->setUsername($slug);
+    }
+
+    /**
+     * Set lastLogin
+     *
+     * @param \DateTime $lastLogin
+     *
+     * @return User
+     */
+    public function setLastLogin(\DateTime $lastLogin)
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
+    }
+
+    /**
+     * Get lastLogin
+     *
+     * @return \DateTime
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
     }
 
     /**

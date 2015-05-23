@@ -1663,4 +1663,4 @@ VALUES
 
 UPDATE user SET username_canonical = username;
 
-UPDATE settings_current SET selected_value = '1.10.0.39' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.40' WHERE variable = 'chamilo_database_version';

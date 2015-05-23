@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS user (
   openid varchar(255) DEFAULT NULL,
   theme varchar(255) DEFAULT NULL,
   hr_dept_id smallint unsigned NOT NULL default 0,
+  last_login datetime default NULL,
   PRIMARY KEY (id),
   UNIQUE KEY username (username)
 );
@@ -4603,5 +4604,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.39' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.40' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

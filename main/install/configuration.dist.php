@@ -161,25 +161,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
  */
 // Uncomment the following to prevent all admins to use the "login as" feature
 //$_configuration['login_as_forbidden_globally'] = true;
-
-// Allow select the return link in the LP view
-//$_configuration['allow_lp_return_link'] = false;
-// If true the export link is blocked.
-//$_configuration['hide_scorm_export_link'] = false;
-// If true the copy link is blocked.
-//$_configuration['hide_scorm_copy_link'] = false;
-// If true the pdf export link is blocked.
-//$_configuration['hide_scorm_pdf_link'] = false;
-// Default session days before coach access
-//$_configuration['session_days_before_coach_access'] = 0;
-// Default session days after coach access
-//$_configuration['session_days_after_coach_access'] = 0;
-// PDF Logo header in app/Resources/public/css/themes/xxx/images/pdf_logo_header.png
-//$_configuration['pdf_logo_header'] = false;
-// Order inscription user list by official_code
-//$_configuration['order_user_list_by_official_code'] = false;
-// Default course setting "email_alert_manager_on_new_quiz"
-//$_configuration['email_alert_manager_on_new_quiz'] = 1;
 // If session_stored_in_db is false, an alternative session storage mechanism
 // can be used, which allows for a volatile storage in Memcache, and a more
 // permanent "backup" storage in the database, every once in a while (see
@@ -199,94 +180,24 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //);
 // Define the frequency to which the data must be stored in the database
 //$_configuration['session_stored_after_n_times'] = 10;
-// Show official code in exercise report list.
-//$_configuration['show_official_code_exercise_result_list'] = false;
 // One connection per user
 //$_configuration['prevent_multiple_simultaneous_login'] = false;
-// Hide private courses from course catalog
-//$_configuration['course_catalog_hide_private'] = false;
-// Display sessions catalog
-// 0 = show only courses; 1 = show only sessions; 2 = show courses and sessions
-//$_configuration['catalog_show_courses_sessions'] = 0;
-// Auto detect language custom pages.
-// $_configuration['auto_detect_language_custom_pages'] = true;
 // If the database is down this css style will be used to show the errors.
 //$_configuration['theme_fallback'] = 'chamilo'; // (chamilo theme)
 // The default template that will be use in the system.
 //$_configuration['default_template'] = 'default'; // (main/template/default)
-// Show reduce LP report
-//$_configuration['lp_show_reduced_report'] = false;
-//Allow session-to-session copy
-//$_configuration['allow_session_course_copy_for_teachers'] = true;
-// Hide the logout button
-//$_configuration['hide_logout_button'] = true;
 // Hide fields in the main/user/user.php page
 //$_configuration['hide_user_field_from_list'] = array('username');
 // Aspell Settings
 //$_configuration['aspell_bin'] = '/usr/bin/hunspell';
 //$_configuration['aspell_opts'] = '-a -d en_GB -H -i utf-8';
 //$_configuration['aspell_temp_dir'] = './';
-// Prevent redirecting admin to admin page
-//$_configuration['redirect_admin_to_courses_list'] = true;
-// Shows the custom course icon instead of the classic green board icon
-//$_configuration['course_images_in_courses_list'] = false;
-// Which student publication will be taken when connected to the gradebook: first|last
-//$_configuration['student_publication_to_take_in_gradebook'] = 'first';
-// Show a filter by official code
-//$_configuration['certificate_filter_by_official_code'] = false;
-// Max quantity of fkceditor allowed in the exercise result page otherwise
-// Textareas are used.
-//$_configuration['exercise_max_ckeditors_in_page'] = 0;
-// Default upload option
-//$_configuration['document_if_file_exists_option'] = 'rename'; // overwrite
-// Enable add_gradebook_certificates.php cron task
-//$_configuration['add_gradebook_certificates_cron_task_enabled'] = true;
-// Which OpenBadges backpack send the badges
-//$_configuration['openbadges_backpack'] = 'https://backpack.openbadges.org/';
 // Custom name_order_conventions
 //$_configuration['name_order_conventions'] = array(
 // 'french' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name')
 //);
-// Shows a warning message explaining that the site uses cookies
-//$_configuration['cookie_warning'] = false;
-// Allows a comment field in the course calendar events. Requires DB change
-//$_configuration['allow_agenda_event_comment'] = false;
-// Filters administration users lists by the session admin who created them.
-// Change to true to restrict the visibility
-//$_configuration['prevent_session_admins_to_manage_all_users'] = false;
-// If there are any tool available and the user is not registered hide the group
-//$_configuration['hide_course_group_if_no_tools_available'] = false;
-// Allow student to enroll into a session without an approval needing
-//$_configuration['catalog_allow_session_auto_subscription'] = true;
-// Decode UTF-8 from Web Services (option passed to SOAP)
-//$_configuration['registration.soap.php.decode_utf8'] = false;
-// Show delete option in attendance
-//$_configuration['allow_delete_attendance'] = false;
-// Enable Gravatar profile image if no local image has been given
-//$_configuration['gravatar_enabled'] = true;
-// If Gravatar is enabled, tells which type of picture we want (default is "mm").
-// Options: mm | identicon | monsterid | wavatar
-//$_configuration['gravatar_type'] = 'mm';
 // Course log - Default columns to hide
 //$_configuration['course_log_hide_columns'] = array(1, 9);
-// Limit for the Session Admin role. The administration page show only
-// User block -> Add user
-// Course Sessions block -> Training session list
-//$_configuration['limit_session_admin_role'] = false;
-// Show session description
-//$_configuration['show_session_description'] = false;
-// Hide only for students the link to export certificates to PDF
-//$_configuration['hide_certificate_export_link_students'] = false;
-// Hide for all user roles the link to export certificates to PDF
-//$_configuration['hide_certificate_export_link'] = false;
-// Hide session course coach in dropbox sent to user list
-//$_configuration['dropbox_hide_course_coach'] = false;
-// If SSO is used, the redirection to the master server is forced.
-//$_configuration['force_sso_redirect'] = false;
-// Session course ordering in the the session view.
-// false = alphabetic order (default)
-// true = based in the session course list
-//$_configuration['session_course_ordering'] = false;
 // Unoconv binary file
 //$_configuration['unoconv.binaries'] = '/usr/bin/unoconv';
 // Proxy settings for access external services

@@ -7866,10 +7866,8 @@ function api_protect_course_group($tool, $showHeader = true)
  */
 function api_protect_limit_for_session_admin()
 {
-    if (
-        api_is_session_admin() &&
-        api_get_configuration_value('limit_session_admin_role')
-    ) {
+    $limitAdmin = api_get_setting('limit_session_admin_role');
+    if (api_is_session_admin() && $limitAdmin === 'true') {
         api_not_allowed(true);
     }
 }

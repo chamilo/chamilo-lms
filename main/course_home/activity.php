@@ -113,23 +113,22 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
     $content .= CourseHome::show_tools_category($my_list);
     $content .= '</div>';
 
-    if (isset($_configuration['allow_session_course_copy_for_teachers'])) {
-        if ($_configuration['allow_session_course_copy_for_teachers']) {
-            // Adding only maintenance for coaches.
-            $myList = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-            $onlyMaintenanceList = array();
+    $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
+    if ($sessionsCopy === 'true') {
+        // Adding only maintenance for coaches.
+        $myList = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
+        $onlyMaintenanceList = array();
 
-            foreach ($myList as $item) {
-                if ($item['name'] == 'course_maintenance') {
-                    $item['link'] = 'course_info/maintenance_coach.php';
+        foreach ($myList as $item) {
+            if ($item['name'] == 'course_maintenance') {
+                $item['link'] = 'course_info/maintenance_coach.php';
 
-                    $onlyMaintenanceList[] = $item;
-                }
+                $onlyMaintenanceList[] = $item;
             }
-
-            $items = CourseHome::show_tools_category($onlyMaintenanceList);
-            $content .= return_block(get_lang('Administration'), $items);
         }
+
+        $items = CourseHome::show_tools_category($onlyMaintenanceList);
+        $content .= return_block(get_lang('Administration'), $items);
     }
 } else {
     $tools = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);

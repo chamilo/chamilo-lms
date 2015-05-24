@@ -660,10 +660,11 @@ class AddCourse
         );
 
         $defaultEmailExerciseAlert = 1;
-        if (isset($_configuration['email_alert_manager_on_new_quiz'])) {
-            $defaultEmailExerciseAlert = intval(
-                $_configuration['email_alert_manager_on_new_quiz']
-            );
+        $alert = api_get_setting('email_alert_manager_on_new_quiz');
+        if ($alert === 'true') {
+            $defaultEmailExerciseAlert = 1;
+        } else {
+            $defaultEmailExerciseAlert = 0;
         }
 
         /* course_setting table (courseinfo tool)   */

@@ -5194,10 +5194,8 @@ class SessionManager
      */
     public static function orderCourseIsEnabled()
     {
-        global $_configuration;
-        if (isset($_configuration['session_course_ordering']) &&
-            $_configuration['session_course_ordering']
-        ) {
+        $sessionCourseOrder = api_get_setting('session_course_ordering');
+        if ($sessionCourseOrder === 'true') {
             return true;
         }
 

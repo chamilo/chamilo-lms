@@ -16,8 +16,9 @@ if (!api_is_platform_admin() || api_get_setting('allow_skills_tool') !== 'true')
 }
 $backpack = 'https://backpack.openbadges.org/';
 
-if (array_key_exists('openbadges_backpack', $_configuration)) {
-    $backpack = $_configuration['openbadges_backpack'];
+$configBackpack = api_get_seeting('openbadges_backpack');
+if (strcmp($backpack, $configBackpack) !== 0) {
+    $backpack = $configBackpack;
 }
 
 $interbreadcrumb = array(

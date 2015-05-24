@@ -519,9 +519,9 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
             );
         }
 
-        $hideCoach = api_get_configuration_value('dropbox_hide_course_coach');
+        $hideCoach = api_get_setting('dropbox_hide_course_coach');
 
-        if ($hideCoach == false) {
+        if ($hideCoach !== 'true') {
             $complete_user_list2 = CourseManager::get_coach_list_from_course_code(
                 $course_info['code'],
                 api_get_session_id()

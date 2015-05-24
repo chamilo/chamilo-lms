@@ -1422,10 +1422,8 @@ class GroupManager
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
-        global $_configuration;
-        if (isset($_configuration['order_user_list_by_official_code']) &&
-             $_configuration['order_user_list_by_official_code']
-        ) {
+        $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+        if ($orderListByOfficialCode === 'true') {
             $order_clause = " ORDER BY u.official_code, u.firstname, u.lastname";
         }
 
@@ -1468,10 +1466,8 @@ class GroupManager
         $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
 
-        global $_configuration;
-        if (isset($_configuration['order_user_list_by_official_code']) &&
-            $_configuration['order_user_list_by_official_code']
-        ) {
+        $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+        if ($orderListByOfficialCode === 'true') {
             $order_clause = " ORDER BY u.official_code, u.firstname, u.lastname";
         }
 
@@ -2169,7 +2165,7 @@ class GroupManager
 
         $orig = isset($origin) ? $origin : null;
 
-        $hideGroup = api_get_configuration_value('hide_course_group_if_no_tools_available');
+        $hideGroup = api_get_setting('hide_course_group_if_no_tools_available');
 
         foreach ($group_list as $this_group) {
 
@@ -2213,7 +2209,7 @@ class GroupManager
                 $group_name .= $session_img;
                 $row[] = $group_name.'<br />'.stripslashes(trim($this_group['description']));
             } else {
-                if ($hideGroup) {
+                if ($hideGroup === 'true') {
                     continue;
                 }
                 $row[] = $this_group['name'].'<br />'.stripslashes(trim($this_group['description']));

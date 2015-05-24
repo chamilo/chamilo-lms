@@ -141,10 +141,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 }
 
 global $_configuration;
-$defaultBeforeDays = isset($_configuration['session_days_before_coach_access']) ?
-    $_configuration['session_days_before_coach_access'] : 0;
-$defaultAfterDays = isset($_configuration['session_days_after_coach_access'])
-    ? $_configuration['session_days_after_coach_access'] : 0;
+$before = api_get_setting('session_days_before_coach_access');
+$defaultBeforeDays =  $before ? $before : 0;
+$after = api_get_setting('session_days_after_coach_access');
+$defaultAfterDays = $after ? $after : 0;
 
 $nb_days_acess_before = $defaultBeforeDays;
 $nb_days_acess_after = $defaultAfterDays;

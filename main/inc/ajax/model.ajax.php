@@ -363,8 +363,8 @@ switch ($action) {
         $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
 
         $description = '';
-        $setting = api_get_configuration_value('show_session_description');
-        if ($setting) {
+        $setting = api_get_setting('show_session_description');
+        if ($setting === 'true') {
             $description = $keyword;
         }
 
@@ -761,8 +761,8 @@ switch ($action) {
             $columns = array(
                 'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score',  'user_ip', 'status', 'lp', 'actions'
             );
-            $officialCodeInList = api_get_configuration_value('show_official_code_exercise_result_list');
-            if ($officialCodeInList == true) {
+            $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
+            if ($officialCodeInList === 'true') {
                 $columns = array_merge(array('official_code'), $columns);
             }
         }

@@ -13,10 +13,9 @@ $certificate = new Certificate($_GET['id']);
 
 switch ($action) {
     case 'export':
-        if (
-            api_get_configuration_value('hide_certificate_export_link') ||
-            (api_is_student() && api_get_configuration_value('hide_certificate_export_link_students'))
-        ) {
+        $hideExportLink = api_get_setting('hide_certificate_export_link');
+        $hideExportLinkStudent = api_get_setting('hide_certificate_export_link_students');
+        if ($hideExportLink === 'true' || (api_is_student() && $hideExportLinkStudent === 'true') ) {
             api_not_allowed(true);
         }
 

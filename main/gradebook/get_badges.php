@@ -44,8 +44,9 @@ foreach ($userSkills as $skill) {
 
 $backpack = 'https://backpack.openbadges.org/';
 
-if (array_key_exists('openbadges_backpack', $_configuration)) {
-    $backpack = $_configuration['openbadges_backpack'];
+$configBackpack = api_get_seeting('openbadges_backpack');
+if (strcmp($backpack, $configBackpack) !== 0) {
+    $backpack = $configBackpack;
 }
 
 $htmlHeadXtra[] = '<script src="' . $backpack . 'issuer.js"></script>';

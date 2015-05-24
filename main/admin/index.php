@@ -454,8 +454,8 @@ $admin_ajax_url = api_get_path(WEB_AJAX_PATH) . 'admin.ajax.php';
 $tpl = new Template();
 
 // Display the Site Use Cookie Warning Validation
-$useCookieValidation = api_get_configuration_value('cookie_warning');
-if ($useCookieValidation) {
+$useCookieValidation = api_get_setting('cookie_warning');
+if ($useCookieValidation === 'true') {
     if (isset($_POST['acceptCookies'])) {
         api_set_site_use_cookie_warning_cookie();
     } else if (!api_site_use_cookie_warning_cookie_exist()) {

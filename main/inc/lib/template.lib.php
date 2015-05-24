@@ -809,7 +809,8 @@ class Template
         //Preparing values for the menu
 
         //Logout link
-        if (isset($_configuration['hide_logout_button']) && $_configuration['hide_logout_button'] == 'true') {
+        $hideLogout = api_get_setting('hide_logout_button');
+        if ($hideLogout === 'true') {
             $this->assign('logout_link', null);
         } else {
             $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id());

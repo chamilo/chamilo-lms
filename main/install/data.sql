@@ -346,7 +346,7 @@ VALUES
 ('hide_certificate_export_link_students', NULL, 'radio', 'Gradebook', 'false', 'CertificateHideExportLinkStudentTitle', 'CertificateHideExportLinkStudentComment', NULL, NULL, 1),
 ('hide_certificate_export_link', NULL, 'radio', 'Gradebook', 'false', 'CertificateHideExportLinkTitle', 'CertificateHideExportLinkComment', NULL, NULL, 1),
 ('dropbox_hide_course_coach', NULL, 'radio', 'Tools', 'false', 'DropboxHideCourseCoachTitle', 'DropboxHideCourseCoachComment', NULL, NULL, 1),
-('force_sso_redirect', NULL, 'radio', 'Security', 'false', 'SSOForceRedirectTitle', 'SSOForceRedirectComment', NULL, NULL, 1),
+('sso_force_redirect', NULL, 'radio', 'Security', 'false', 'SSOForceRedirectTitle', 'SSOForceRedirectComment', NULL, NULL, 1),
 ('session_course_ordering', NULL, 'radio', 'Session', 'false', 'SessionCourseOrderingTitle', 'SessionCourseOrderingComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '0', 'DatabaseVersion', '', NULL, NULL, 0);
 
@@ -728,7 +728,7 @@ VALUES
 ('allow_delete_attendance', 'false', 'No'),
 ('gravatar_enabled', 'true', 'Yes'),
 ('gravatar_enabled', 'false', 'No'),
-('gravatar_type', 'mm', 'mm'),
+('gravatar_type', 'mm', 'mistery-man'),
 ('gravatar_type', 'identicon', 'identicon'),
 ('gravatar_type', 'monsterid', 'monsterid'),
 ('gravatar_type', 'wavatar', 'wavatar'),
@@ -742,8 +742,8 @@ VALUES
 ('hide_certificate_export_link', 'false', 'No'),
 ('dropbox_hide_course_coach', 'true', 'Yes'),
 ('dropbox_hide_course_coach', 'false', 'No'),
-('force_sso_redirect', 'true', 'Yes'),
-('force_sso_redirect', 'false', 'No'),
+('sso_force_redirect', 'true', 'Yes'),
+('sso_force_redirect', 'false', 'No'),
 ('session_course_ordering', 'true', 'Yes'),
 ('session_course_ordering', 'false', 'No');
 

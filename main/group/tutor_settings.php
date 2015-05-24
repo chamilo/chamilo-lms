@@ -55,10 +55,8 @@ function search_members_keyword($firstname, $lastname, $username, $official_code
  */
 function sort_users($user_a, $user_b)
 {
-    global $_configuration;
-    if (isset($_configuration['order_user_list_by_official_code']) &&
-        $_configuration['order_user_list_by_official_code']
-    ) {
+    $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+    if ($orderListByOfficialCode === 'true') {
         $cmp = api_strcmp($user_a['official_code'], $user_b['official_code']);
         if ($cmp !== 0) {
             return $cmp;
@@ -133,10 +131,8 @@ if (!empty($complete_user_list)) {
                 $user['lastname']
             ).' ('.$user['username'].')'.$officialCode;
 
-        global $_configuration;
-        if (isset($_configuration['order_user_list_by_official_code']) &&
-            $_configuration['order_user_list_by_official_code']
-        ) {
+        $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+        if ($orderListByOfficialCode === 'true') {
             $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
             $name = $officialCode." ".api_get_person_name(
                     $user['firstname'],

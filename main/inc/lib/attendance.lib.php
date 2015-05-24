@@ -143,7 +143,7 @@ class Attendance
 			$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
 		}
 		$user_info = api_get_user_info();
-		$allowDelete = api_get_configuration_value('allow_delete_attendance');
+		$allowDelete = api_get_setting('allow_delete_attendance');
 
 		while ($attendance = Database::fetch_row($res)) {
 
@@ -220,7 +220,7 @@ class Attendance
 								Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
 							$attendance[2] = '<span class="muted">'.$attendance[2].'</span>';
 						}
-						if ($allowDelete) {
+						if ($allowDelete === 'true') {
 							$actions .= ' <a href="index.php?' . api_get_cidreq() . '&action=attendance_delete&attendance_id=' . $attendance[0] . $param_gradebook . '">' .
 								Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
 						}

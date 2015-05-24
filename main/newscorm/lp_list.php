@@ -450,16 +450,18 @@ if (!empty($flat_list)) {
                 Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
         }
 
-        global $_configuration;
-        if (isset($_configuration['hide_scorm_export_link']) && $_configuration['hide_scorm_export_link']) {
+        $hideScormExportLink = api_get_setting('hide_scorm_export_link');
+        if ($hideScormExportLink === 'true') {
             $dsp_disk = null;
         }
 
-        if (isset($_configuration['hide_scorm_copy_link']) && $_configuration['hide_scorm_copy_link']) {
+        $hideScormCopyLink = api_get_setting('hide_scorm_copy_link');
+        if ($hideScormCopyLink === 'true') {
             $copy = null;
         }
 
-        if (isset($_configuration['hide_scorm_pdf_link']) && $_configuration['hide_scorm_pdf_link']) {
+        $hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
+        if ($hideScormPdfLink === 'true') {
             $export_icon = null;
         }
 

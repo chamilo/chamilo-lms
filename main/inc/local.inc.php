@@ -572,8 +572,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         } elseif (!$logout) {
             // Handle cookie from Master Server
 
-            $forceSsoRedirect = api_get_configuration_value('force_sso_redirect');
-            if ($forceSsoRedirect) {
+            $forceSsoRedirect = api_get_setting('sso_force_redirect');
+            if ($forceSsoRedirect === 'true') {
                 // all users to be redirected unless they are connected (removed req on sso_cookie)
                 $redirectToMasterConditions = !isset($_GET['sso_referer']) && !isset($_GET['loginFailed']);
             } else {

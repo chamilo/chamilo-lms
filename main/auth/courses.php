@@ -235,8 +235,8 @@ switch ($action) {
         $courses_controller->sessionsList($action, $nameTools, $limit);
         break;
     case 'subscribe_to_session':
-        $registrationAllowed = api_get_configuration_value('catalog_allow_session_auto_subscription');
-        if ($registrationAllowed) {
+        $registrationAllowed = api_get_setting('catalog_allow_session_auto_subscription');
+        if ($registrationAllowed === 'true') {
             SessionManager::suscribe_users_to_session(
                 $_GET['session_id'],
                 array($_GET['user_id'])

@@ -139,8 +139,9 @@ class CoursesController
 
         $data['catalogShowCoursesSessions'] = 0;
 
-        if (isset($_configuration['catalog_show_courses_sessions'])) {
-            $data['catalogShowCoursesSessions'] = $_configuration['catalog_show_courses_sessions'];
+        $showCoursesSessions = intval('catalog_show_courses_sessions');
+        if ($showCoursesSessions > 0) {
+            $data['catalogShowCoursesSessions'] = $showCoursesSessions;
         }
 
         // render to the view
@@ -570,7 +571,8 @@ class CoursesController
 
         $key = 'name';
         $catalogSessionAutoSubscriptionAllowed = false;
-        if (api_get_configuration_value('catalog_allow_session_auto_subscription')) {
+        $catalogSessionAutoSubscription = api_get_setting('catalog_allow_session_auto_subscription');
+        if ($catalogSessionAutoSubscription === 'true') {
             $key = 'id';
             $catalogSessionAutoSubscriptionAllowed = true;
         }

@@ -90,12 +90,12 @@ class PDF
         }
 
         // Use custom logo image.
-        if (isset($_configuration['pdf_logo_header']) &&
-            $_configuration['pdf_logo_header']
-        ) {
-            $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/pdf_logo_header.png';
+        $pdfLogo = api_get_setting('pdf_logo_header');
+        if ($pdfLogo === 'true') {
+            $visualTheme = api_get_visual_theme();
+            $img = api_get_path(SYS_CODE_PATH).'css/'.$visualTheme.'/images/pdf_logo_header.png';
             if (file_exists($img)) {
-                $img = api_get_path(WEB_CODE_PATH) . 'css/' . api_get_visual_theme() . '/images/pdf_logo_header.png';
+                $img = api_get_path(WEB_CODE_PATH) . 'css/' . $visualTheme . '/images/pdf_logo_header.png';
                 $organization = "<img src='$img'>";
             }
         }

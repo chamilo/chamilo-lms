@@ -26,9 +26,9 @@ $extendedAttempt = isset($_GET['extend_attempt']) ? $_GET['extend_attempt'] : nu
 $extendedAll = isset($_GET['extend_all']) ? $_GET['extend_all'] : null;
 $export = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 
-$lpReportType = api_get_configuration_value('lp_show_reduced_report');
+$lpReportType = api_get_setting('lp_show_reduced_report');
 $type = 'classic';
-if ($lpReportType) {
+if ($lpReportType === 'true') {
     $type = 'simple';
 }
 $courseInfo = api_get_course_info($courseCode);

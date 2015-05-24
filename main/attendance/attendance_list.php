@@ -47,8 +47,8 @@ if (api_is_allowed_to_edit(null, true)) {
         'attendance_set_visible_select' => get_lang('SetVisible')
     );
 
-    $allow = api_get_configuration_value('allow_delete_attendance');
-    if ($allow) {
+    $allow = api_get_setting('allow_delete_attendance');
+    if ($allow === 'true') {
         $actions['attendance_delete_select'] = get_lang('DeleteAllSelectedAttendances');
     }
     $table->set_form_actions($actions);

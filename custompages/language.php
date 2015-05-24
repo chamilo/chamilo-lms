@@ -51,10 +51,8 @@ if (isset($_REQUEST['lang']) && !empty($_REQUEST['lang']) && in_array($_REQUEST[
 	$lang_match = $chamilo_langs[$_REQUEST['lang']];
 }
 
-global $_configuration;
-if (isset($_configuration['auto_detect_language_custom_pages']) &&
-    $_configuration['auto_detect_language_custom_pages'] == true
-) {
+$detect = api_get_setting('auto_detect_language_custom_pages');
+if ($detect === 'true') {
     // Auto detect
     $_user['language'] = $lang_match;
     $_SESSION['user_language_choice'] = $lang_match;

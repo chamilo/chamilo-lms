@@ -185,7 +185,7 @@ class StudentPublicationLink extends AbstractLink
 			$sql .= " AND user_id = $stud_id ";
 		}
 
-		$order = api_get_configuration_value('student_publication_to_take_in_gradebook');
+		$order = api_get_setting('student_publication_to_take_in_gradebook');
 
 		switch ($order) {
 			case 'last':

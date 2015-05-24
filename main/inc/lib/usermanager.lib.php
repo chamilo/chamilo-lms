@@ -1462,13 +1462,13 @@ class UserManager
                 break;
         }
 
-        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
+        $gravatarEnabled = api_get_setting('gravatar_enabled');
 
-        if ($gravatarEnabled) {
+        if ($gravatarEnabled === 'true') {
             $file = self::getGravatar(
                 $imageWebPath['email'],
                 $gravatarSize,
-                api_get_configuration_value('gravatar_type')
+                api_get_setting('gravatar_type')
             );
 
             if ($addRandomId) {

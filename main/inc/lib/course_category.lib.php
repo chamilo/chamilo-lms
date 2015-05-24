@@ -544,12 +544,11 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
     }
 
     $visibilityCondition = null;
-    if (isset($_configuration['course_catalog_hide_private'])) {
-        if ($_configuration['course_catalog_hide_private'] == true) {
-            $courseInfo = api_get_course_info();
-            $courseVisibility = $courseInfo['visibility'];
-            $visibilityCondition = ' AND course.visibility <> 1';
-        }
+    $hidePrivate = api_get_setting('course_catalog_hide_private');
+    if ($hidePrivate === 'true') {
+        $courseInfo = api_get_course_info();
+        $courseVisibility = $courseInfo['visibility'];
+        $visibilityCondition = ' AND course.visibility <> 1';
     }
 
     if ($categoryCode == 'ALL') {
@@ -618,12 +617,11 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
         $without_special_courses = ' AND course.code NOT IN (' . implode(',', $specialCourseList) . ')';
     }
     $visibilityCondition = null;
-    if (isset($_configuration['course_catalog_hide_private'])) {
-        if ($_configuration['course_catalog_hide_private'] == true) {
-            $courseInfo = api_get_course_info();
-            $courseVisibility = $courseInfo['visibility'];
-            $visibilityCondition = ' AND course.visibility <> 1';
-        }
+    $hidePrivate = api_get_setting('course_catalog_hide_private');
+    if ($hidePrivate === 'true') {
+        $courseInfo = api_get_course_info();
+        $courseVisibility = $courseInfo['visibility'];
+        $visibilityCondition = ' AND course.visibility <> 1';
     }
     if (!empty($random_value)) {
         $random_value = intval($random_value);

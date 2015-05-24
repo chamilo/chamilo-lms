@@ -6113,7 +6113,8 @@ $server->register(
 function WSCertificatesList($startingDate = '', $endingDate = '')
 {
     global $_configuration;
-    if ($_configuration['add_gradebook_certificates_cron_task_enabled']) {
+    $certificatesCron = api_get_setting('add_gradebook_certificates_cron_task_enabled');
+    if ($certificatesCron === 'true') {
         require_once api_get_path(SYS_CODE_PATH).'cron/add_gradebook_certificates.php';
     }
     $result = array();
@@ -6494,11 +6495,10 @@ if (!empty($hook)) {
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 // If you send your data in utf8 then this value must be false.
-if (isset($_configuration['registration.soap.php.decode_utf8'])) {
-    if ($_configuration['registration.soap.php.decode_utf8']) {
-        $server->decode_utf8 = true;
-    } else {
-        $server->decode_utf8 = false;
-    }
+$decodeUTF8 = api_get_setting('registration.soap.php.decode_utf8');
+if ($decodeUTF8 === 'true') {
+    $server->decode_utf8 = true;
+} else {
+    $server->decode_utf8 = false;
 }
 $server->service($HTTP_RAW_POST_DATA);

@@ -80,10 +80,8 @@ function search_users($needle, $type)
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
         $showOfficialCode = false;
 
-        global $_configuration;
-        if (isset($_configuration['order_user_list_by_official_code']) &&
-            $_configuration['order_user_list_by_official_code']
-        ) {
+        $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+        if ($orderListByOfficialCode === 'true') {
             $showOfficialCode = true;
             $order_clause = ' ORDER BY official_code, firstname, lastname, username';
         }
@@ -230,14 +228,14 @@ function search_users($needle, $type)
                     $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
                     $person_name = $officialCode.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
                 }
-	            $return .= '<option value="'.$user['id'].'">'.$person_name.' </option>';
-			}
-			$return .= '</select>';
-			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
-		}
-	}
+                $return .= '<option value="'.$user['id'].'">'.$person_name.' </option>';
+            }
+            $return .= '</select>';
+            $xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
+        }
+    }
 
-	return $xajax_response;
+    return $xajax_response;
 }
 
 $xajax->processRequests();
@@ -328,10 +326,8 @@ $ajax_search = $add_type == 'unique' ? true : false;
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
 $showOfficialCode = false;
-global $_configuration;
-if (isset($_configuration['order_user_list_by_official_code']) &&
-    $_configuration['order_user_list_by_official_code']
-) {
+$orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+if ($orderListByOfficialCode === 'true') {
     $showOfficialCode = true;
     $order_clause = ' ORDER BY official_code, firstname, lastname, username';
 }

@@ -156,8 +156,8 @@ class AttendanceController
      */
     public function attendance_delete($attendance_id)
     {
-        $allowDeleteAttendance = api_get_configuration_value('allow_delete_attendance');
-        if ($allowDeleteAttendance == false) {
+        $allowDeleteAttendance = api_get_setting('allow_delete_attendance');
+        if ($allowDeleteAttendance !== 'true') {
             $this->attendance_list();
             return false;
         }

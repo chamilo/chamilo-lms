@@ -203,10 +203,8 @@ if (api_is_western_name_order()) {
     $order = array('firstname');
 }
 
-global $_configuration;
-if (isset($_configuration['order_user_list_by_official_code']) &&
-    $_configuration['order_user_list_by_official_code']
-) {
+$orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+if ($orderListByOfficialCode === 'true') {
     $order = array('official_code', 'lastname');
 }
 
@@ -249,9 +247,8 @@ if (!empty($complete_user_list)) {
                 $item['lastname']
             ).' ('.$item['username'].') '.$officialCode;
 
-            if (isset($_configuration['order_user_list_by_official_code']) &&
-                $_configuration['order_user_list_by_official_code']
-            ) {
+            $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+            if ($orderListByOfficialCode === 'true') {
                 $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
                 $person_name = $officialCode.api_get_person_name(
                     $item['firstname'],
@@ -297,9 +294,8 @@ if (!empty($user_list)) {
             $item['lastname']
         ).' ('.$item['username'].') '.$officialCode;
 
-        if (isset($_configuration['order_user_list_by_official_code']) &&
-            $_configuration['order_user_list_by_official_code']
-        ) {
+        $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+        if ($orderListByOfficialCode === 'true') {
             $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
             $person_name = $officialCode.api_get_person_name(
                 $item['firstname'],

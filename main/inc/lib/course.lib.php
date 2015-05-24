@@ -3651,7 +3651,7 @@ class CourseManager
         $html = '';
 
         $course_list = array();
-        $showCustomIcon = api_get_configuration_value('course_images_in_courses_list');
+        $showCustomIcon = api_get_setting('course_images_in_courses_list');
         $courseCount = 0;
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
@@ -3685,7 +3685,7 @@ class CourseManager
             );
 
             $iconName = basename($course_info['course_image']);
-            if ($showCustomIcon == true && $iconName != 'course.png') {
+            if ($showCustomIcon === 'true' && $iconName != 'course.png') {
                 $status_icon = Display::img(
                     $course_info['course_image'],
                     api_htmlentities($course_info['title']),
@@ -3950,9 +3950,9 @@ class CourseManager
             $session_title = $course_info['name'];
         }
 
-        $showCustomIcon = api_get_configuration_value('course_images_in_courses_list');
+        $showCustomIcon = api_get_setting('course_images_in_courses_list');
         $iconName = basename($course_info['course_image']);
-        if ($showCustomIcon && $iconName != 'course.png') {
+        if ($showCustomIcon === 'true' && $iconName != 'course.png') {
             $params['icon'] = Display::img(
                 $course_info['course_image'],
                 api_htmlentities($course_info['name']),
@@ -4769,12 +4769,11 @@ class CourseManager
 
         $visibilityCondition = null;
 
-        if (isset($_configuration['course_catalog_hide_private'])) {
-            if ($_configuration['course_catalog_hide_private'] == true) {
-                $courseInfo = api_get_course_info();
-                $courseVisibility = $courseInfo['visibility'];
-                $visibilityCondition = ' AND c.visibility <> 1';
-            }
+        $hidePrivate = api_get_setting('course_catalog_hide_private');
+        if ($hidePrivate === 'true') {
+            $courseInfo = api_get_course_info();
+            $courseVisibility = $courseInfo['visibility'];
+            $visibilityCondition = ' AND c.visibility <> 1';
         }
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(c.id) FROM $tableCourse c, $tableCourseRelAccessUrl u
@@ -5004,8 +5003,8 @@ class CourseManager
             'show_system_folders'
         );
 
-        global $_configuration;
-        if (isset($_configuration['allow_lp_return_link']) && $_configuration['allow_lp_return_link']) {
+        $allowLPReturnLink = api_get_setting('allow_lp_return_link');
+        if ($allowLPReturnLink === 'true') {
             $courseSettings[] = 'lp_return_link';
         }
 

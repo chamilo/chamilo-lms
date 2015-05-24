@@ -92,10 +92,8 @@ class Redirect
                         break;
                 }
             }
-            global $_configuration;
-            if (!isset($_configuration['redirect_admin_to_courses_list']) ||
-                $_configuration['redirect_admin_to_courses_list'] === 'false'
-            ) {
+            $redirect = api_get_setting('redirect_admin_to_courses_list');
+            if ($redirect !== 'true') {
                 // If the user is a platform admin, redirect to the main admin page
                 if (api_is_multiple_url_enabled()) {
                     // if multiple URLs are enabled, make sure he's admin of the

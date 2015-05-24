@@ -309,10 +309,8 @@ if (api_get_setting('allow_course_theme') == 'true') {
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '');
 }
 
-global $_configuration;
-if (isset($_configuration['allow_lp_return_link']) &&
-    $_configuration['allow_lp_return_link']
-) {
+$allowLPReturnLink = api_get_setting('allow_lp_return_link');
+if ($allowLPReturnLink === 'true') {
     $group = array(
         $form->createElement(
             'radio',

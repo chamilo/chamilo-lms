@@ -20,8 +20,8 @@ $nameTools = get_lang('Maintenance');
 api_protect_course_script(true);
 api_block_anonymous_users();
 
-if (!isset($_configuration['allow_session_course_copy_for_teachers'])
-     || !$_configuration['allow_session_course_copy_for_teachers']){
+$sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
+if ($sessionsCopy !== 'true') {
     api_not_allowed(true);
 }
 

@@ -395,7 +395,7 @@ if (!empty($group_parameters)) {
     $group_parameters = implode(';', $group_parameters);
 }
 
-$officialCodeInList = api_get_configuration_value('show_official_code_exercise_result_list');
+$officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
 
 if ($is_allowedToEdit || $is_tutor) {
 
@@ -416,7 +416,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('Actions')
     );
 
-    if ($officialCodeInList == true) {
+    if ($officialCodeInList === 'true') {
         $columns = array_merge(array(get_lang('OfficialCode')), $columns);
     }
 
@@ -448,7 +448,7 @@ if ($is_allowedToEdit || $is_tutor) {
         array('name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false')
     );
 
-    if ($officialCodeInList == true) {
+    if ($officialCodeInList == 'true') {
         $officialCodeRow = array('name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true');
         $column_model = array_merge(array($officialCodeRow), $column_model);
     }

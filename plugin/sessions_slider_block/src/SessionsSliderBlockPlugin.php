@@ -12,6 +12,7 @@ class SessionsSliderBlockPlugin extends Plugin
     const FIELD_VARIABLE_SHOW_IN_SLIDER = 'show_in_slider';
     const FIELD_VARIABLE_URL = 'url_in_slider';
     const FIELD_VARIABLE_IMAGE = 'image_in_slider';
+    const FIELD_VARIABLE_COURSE_LEVEL = 'course_level';
 
     /**
      * Class constructor
@@ -58,9 +59,9 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     private function createExtraFields()
     {
-        $extraField = new ExtraField('session');
+        $sessionExtraField = new ExtraField('session');
 
-        $extraField->save([
+        $sessionExtraField->save([
             'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             'variable' => self::FIELD_VARIABLE_SHOW_IN_SLIDER,
             'display_text' => $this->get_lang('ShowInSliderBlock'),
@@ -71,7 +72,7 @@ class SessionsSliderBlockPlugin extends Plugin
             'filter' => null
         ]);
 
-        $extraField->save([
+        $sessionExtraField->save([
             'field_type' => ExtraField::FIELD_TYPE_TEXT,
             'variable' => self::FIELD_VARIABLE_URL,
             'display_text' => $this->get_lang('UrlForSliderBlock'),
@@ -82,7 +83,7 @@ class SessionsSliderBlockPlugin extends Plugin
             'filter' => null
         ]);
 
-        $extraField->save([
+        $sessionExtraField->save([
             'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
             'variable' => self::FIELD_VARIABLE_IMAGE,
             'display_text' => $this->get_lang('ImageForSliderBlock'),
@@ -91,6 +92,22 @@ class SessionsSliderBlockPlugin extends Plugin
             'visible' => true,
             'changeable' => true,
             'filter' => null
+        ]);
+
+        $levelOptions = array(
+            get_lang('Beginner')
+        );
+
+        $courseExtraField = new ExtraField('course');
+        $courseExtraField->save([
+            'field_type' => ExtraField::FIELD_TYPE_SELECT,
+            'variable' => self::FIELD_VARIABLE_COURSE_LEVEL,
+            'display_text' => $this->get_lang('Level'),
+            'default_value' => null,
+            'field_order' => null,
+            'visible' => true,
+            'changeable' => true,
+            'field_options' => implode('; ', $levelOptions)
         ]);
     }
 
@@ -116,10 +133,10 @@ class SessionsSliderBlockPlugin extends Plugin
     }
 
     /**
-     * Get the created extrafields variables for this plugin
+     * Get the created extrafields variables for session by this plugin
      * @return array The variables
      */
-    public function getExtraFields(){
+    public function getSessionExtrafields(){
         return [
             self::FIELD_VARIABLE_SHOW_IN_SLIDER,
             self::FIELD_VARIABLE_IMAGE,
@@ -128,13 +145,23 @@ class SessionsSliderBlockPlugin extends Plugin
     }
 
     /**
+     * Get the created extrafields variables for courses by this plugin
+     * @return array The variables
+     */
+    public function getCourseExtrafields(){
+        return [
+            self::FIELD_VARIABLE_COURSE_LEVEL
+        ];
+    }
+
+    /**
      * Delete extra field and their values
      */
     private function deleteExtraFields()
     {
-        $variables = $this->getExtraFields();
+        $sessionVariables = $this->getSessionExtrafields();
 
-        foreach ($variables as $variable) {
+        foreach ($sessionVariables as $variable) {
             $fieldInfo = $this->getExtraFieldInfo($variable);
             $fieldExists = $fieldInfo !== false;
 
@@ -143,6 +170,20 @@ class SessionsSliderBlockPlugin extends Plugin
             }
 
             $extraField = new ExtraField('session');
+            $extraField->delete($fieldInfo['id']);
+        }
+
+        $courseVariables = $this->getSessionExtrafields();
+
+        foreach ($courseVariables as $variable) {
+            $fieldInfo = $this->getExtraFieldInfo($variable);
+            $fieldExists = $fieldInfo !== false;
+
+            if (!$fieldExists) {
+                continue;
+            }
+
+            $extraField = new ExtraField('course');
             $extraField->delete($fieldInfo['id']);
         }
     }

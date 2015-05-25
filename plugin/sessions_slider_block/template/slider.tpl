@@ -9,13 +9,20 @@
             {% for session in sessions_slider_block.sessions %}
             <div class="item">
                 <div class="thumbnail">
-                    <a href="{{ session.url_in_slider }}" target="_blank">
-                        <img src="{{ _p.web_upload ~ session.image_in_slider }}" alt="{{ session.name }}">
-                    </a>
                     <div class="caption">
-                        <h3>
-                            <a href="{{ session.url_in_slider }}" target="_blank">{{ session.name }}</a>
-                        </h3>
+                        <h3>{{ session.name }}</h3>
+                    </div>
+                    <img src="{{ _p.web_upload ~ session.image_in_slider }}" alt="{{ session.name }}">
+                    <div class="session-description">
+                        {{ session.course_description }}
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            {{ "LevelX"|get_lang|format(session.course_level) }}
+                        </div>
+                        <div class="col-xs-6">
+                            <a href="{{ session.url_in_slider }}" class="btn btn-primary">{{ "SeeCourse"|get_lang }}</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -23,17 +30,17 @@
         </div>
         <script src="{{ _p.web_plugin }}sessions_slider_block/resources/owl-carousel/owl.carousel.min.js"></script>
         <script type="text/javascript">
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $("#top-session").owlCarousel({
                     autoPlay: 3000, //Set AutoPlay to 3 seconds
-                    items : 3,
-                    itemsDesktop : [1199,3],
-                    itemsDesktopSmall : [979,3],
-                    navigation : true,
-                    pagination : false
+                    items: 3,
+                    itemsDesktop: [1199, 3],
+                    itemsDesktopSmall: [979, 3],
+                    navigation: true,
+                    pagination: false
                 });
             });
         </script>
     </div>
-</div>
+    </div>
 {% endif %}

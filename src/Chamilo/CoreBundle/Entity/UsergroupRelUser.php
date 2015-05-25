@@ -3,8 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ,
@@ -32,6 +32,13 @@ class UsergroupRelUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="relation_type", type="integer", nullable=false)
+     */
+    private $relationType;
 
     /**
      * @var User
@@ -105,4 +112,28 @@ class UsergroupRelUser
     {
         return $this->usergroup;
     }
+
+    /**
+     * Set relationType
+     *
+     * @param integer $relationType
+     * @return GroupRelUser
+     */
+    public function setRelationType($relationType)
+    {
+        $this->relationType = $relationType;
+
+        return $this;
+    }
+
+    /**
+     * Get relationType
+     *
+     * @return integer
+     */
+    public function getRelationType()
+    {
+        return $this->relationType;
+    }
+
 }

@@ -289,8 +289,8 @@ class MessageManager
 
             if (empty($group_id)) {
                 //message in outbox for user friend or group
-                $sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
-                    " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".$now."','$clean_subject','$clean_content', '$group_id', '$parent_id', '".$now."')";
+                $sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date )
+                        VALUES ('$user_sender_id', '$receiver_user_id', '4', '".$now."','$clean_subject','$clean_content', '$group_id', '$parent_id', '".$now."')";
                 Database::query($sql);
                 $outbox_last_id = Database::insert_id();
 
@@ -324,11 +324,12 @@ class MessageManager
                     $sender_info
                 );
             } else {
-                $group_info = GroupPortalManager::get_group_data($group_id);
+                $usergroup = new UserGroup();
+                $group_info = $usergroup->get($group_id);
                 $group_info['topic_id'] = $topic_id;
                 $group_info['msg_id'] = $inbox_last_id;
 
-                $user_list = GroupPortalManager::get_users_by_group($group_id, false, array(), 0, 1000);
+                $user_list = $usergroup->get_users_by_group($group_id, false, array(), 0, 1000);
 
                 // Adding more sense to the message group
                 $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
@@ -1102,8 +1103,14 @@ class MessageManager
                 }
 
                 $html .= '<div class="col-md-4">';
-                $html .= Display::tag('h4', Display::url(Security::remove_XSS($topic['title'], STUDENT, true), 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']));
-
+                $html .= Display::tag(
+                    'h4',
+                    Display::url(
+                        Security::remove_XSS($topic['title'], STUDENT, true),
+                        api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$group_id.'&topic_id='.$topic['id']
+                    )
+                );
+                $actions = '';
                 if ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
                     $my_group_role == GROUP_USER_PERMISSION_MODERATOR
                 ) {

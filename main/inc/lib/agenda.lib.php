@@ -941,7 +941,7 @@ class Agenda
                 }
                 break;
         }
-//var_dump($this->events);
+
         if (!empty($this->events)) {
             switch ($format) {
                 case 'json':

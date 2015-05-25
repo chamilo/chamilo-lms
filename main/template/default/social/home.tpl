@@ -13,6 +13,7 @@
             {{ social_search_block }}
             {{ social_skill_block }}
             {{ social_group_block }}
+            {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
             <div id="display_response_id"></div>
             {{ social_auto_extend_link }}

@@ -114,6 +114,9 @@
             //$('#tabs a:first').tab('show') // Select first tab
         });
 
+        // Fixes bug when loading links inside a tab.
+        $('.tab-wrapper .tab-pane a').unbind();
+
         /**
          * Advanced options
          * Usage

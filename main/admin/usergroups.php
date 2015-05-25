@@ -46,16 +46,21 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = array(
-    get_lang('Id'), get_lang('Name'), get_lang('Users'), get_lang('Courses'), get_lang('Sessions'), get_lang('Actions')
+    get_lang('Name'),
+    get_lang('Users'),
+    get_lang('Courses'),
+    get_lang('Sessions'),
+    get_lang('Type'),
+    get_lang('Actions'),
 );
 
 //Column config
 $column_model   = array(
-    array('name'=>'id',             'index'=>'id',          'width'=>'5',  'align'=>'left'),
     array('name'=>'name',           'index'=>'name',        'width'=>'35',  'align'=>'left'),
     array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
     array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
     array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
+    array('name'=>'group_type',    	'index'=>'group_type', 	'width'=>'15',  'align'=>'left'),
     array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left', 'sortable'=>'false','formatter'=>'action_formatter'),
 );
 
@@ -71,7 +76,7 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
     .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/course_to_class.png" title="'.get_lang('SubscribeClassToCourses').'"></a>'
     .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/sessions_to_class.png" title="'.get_lang('SubscribeClassToSessions').'"></a>'
-    .' <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'
+    .' <a href="?action=edit&id=\'+options.rowId+\'"><img width="22px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'
     .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
 }';
 
@@ -89,7 +94,7 @@ $(function() {
 Display::display_introduction_section(get_lang('Classes'));
 
 $usergroup = new UserGroup();
-
+$usergroup->showGroupTypeSetting = true;
 // Action handling: Adding a note
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
@@ -101,35 +106,26 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
 
     // Initiate the object
     $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
-    // Setting the form elements
-    $form->addElement('header', get_lang('Add'));
-    $form->addElement('text', 'name', get_lang('Name'), array('size' => '70', 'id' => 'name'));
-    $form->addHtmlEditor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
-    $form->addButtonCreate(get_lang('Add'));
-
-    // Setting the rules
-    $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+    $usergroup->setForm($form, 'add');
 
     // The validation or display
     if ($form->validate()) {
-        $check = Security::check_token('post');
-        if ($check) {
-            $values = $form->exportValues();
-            $res = $usergroup->save($values);
-            if ($res) {
-                Display::display_confirmation_message(get_lang('ItemAdded'));
-            } else {
-                Display::display_warning_message(
-                    Security::remove_XSS($values['name']).': '.
-                    get_lang('AlreadyExists')
-                );
-            }
+        $values = $form->exportValues();
+        $res = $usergroup->save($values);
+        if ($res) {
+            Display::display_confirmation_message(get_lang('ItemAdded'));
+        } else {
+            Display::display_warning_message(
+                Security::remove_XSS($values['name']).': '.
+                get_lang('AlreadyExists')
+            );
         }
-        Security::clear_token();
+
         $usergroup->display();
     } else {
         echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_self().'">'.
+                Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -137,39 +133,30 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $form->display();
     }
 } elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
-    // Action handling: Editing a note
-    // Initialize the object
-    $form = new FormValidator('career', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
+    $id = intval($_GET['id']);
+    $form = new FormValidator('usergroup', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.$id);
+    $defaults = $usergroup->get($id);
+    $usergroup->setForm($form, 'edit', $defaults);
+
     // Setting the form elements
-    $form->addElement('header', '', get_lang('Modify'));
-    $form->addElement('hidden', 'id', intval($_GET['id']));
-    $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
-    $form->addHtmlEditor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
-    $form->addButtonSave(get_lang('Save'));
+    $form->addElement('hidden', 'id', $id);
 
     // Setting the defaults
-    $defaults = $usergroup->get($_GET['id']);
     $form->setDefaults($defaults);
-
-    // Setting the rules.
-    $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
     // The validation or display.
     if ($form->validate()) {
-        $check = Security::check_token('post');
-        if ($check) {
-            $values = $form->exportValues();
-            $res = $usergroup->update($values);
-            if ($res) {
-                Display::display_confirmation_message(get_lang('Updated'));
-            } else {
-                Display::display_warning_message(
-                    Security::remove_XSS($values['name']).': '.
-                    get_lang('AlreadyExists')
-                );
-            }
+        $values = $form->getSubmitValues();
+        $res = $usergroup->update($values);
+        if ($res) {
+            Display::display_confirmation_message(get_lang('Updated'));
+        } else {
+            Display::display_warning_message(
+                Security::remove_XSS($values['name']).': '.
+                get_lang('AlreadyExists')
+            );
         }
-        Security::clear_token();
+
         $usergroup->display();
     } else {
         echo '<div class="actions">';
@@ -180,13 +167,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
             ICON_SIZE_MEDIUM
         ).'</a>';
         echo '</div>';
-        $token = Security::get_token();
-        $form->addElement('hidden', 'sec_token');
-        $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
 } elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
-    $res = $usergroup->delete(Security::remove_XSS($_GET['id']));
+    $res = $usergroup->delete($_GET['id']);
     if ($res) {
         Display::display_confirmation_message(get_lang('Deleted'));
     }

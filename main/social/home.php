@@ -185,7 +185,7 @@ if (!empty($results)) {
             $result['count'] = $result['count'] . ' ' . get_lang('Members');
         }
 
-        $group_url = "groups.php?id=$id";
+        $group_url = "group_view.php?id=$id";
 
         $result['name'] = '<div class="group-name">'.Display::url(
                           api_ucwords(cut($result['name'], 40, true)), $group_url)
@@ -222,7 +222,7 @@ foreach ($results as $result) {
     );
     $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
     $id = $result['id'];
-    $group_url = "groups.php?id=$id";
+    $group_url = "group_view.php?id=$id";
 
     if ($result['count'] == 1) {
         $result['count'] = '1 ' . get_lang('Member');

@@ -187,8 +187,8 @@ if (count($pending_invitations) > 0) {
     foreach ($pending_invitations as $invitation) {
         $picture = GroupPortalManager::get_picture_group($invitation['id'], $invitation['picture_uri'],80);
         $img = '<img class="social-groups-image" src="'.$picture['file'].'" />';
-        $invitation['picture_uri'] = '<a href="groups.php?id='.$invitation['id'].'">'.$img.'</a>';
-        $invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.cut($invitation['name'],120,true).'</a>';
+        $invitation['picture_uri'] = '<a href="group_view.php?id='.$invitation['id'].'">'.$img.'</a>';
+        $invitation['name'] = '<a href="group_view.php?id='.$invitation['id'].'">'.cut($invitation['name'],120,true).'</a>';
         $invitation['description'] = cut($invitation['description'],220,true);
         $new_invitation[]=$invitation;
 

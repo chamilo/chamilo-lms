@@ -3444,8 +3444,10 @@ class UserManager
 
         $sql = " $select
                 FROM $user_table u
-                INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id = url_rel_user.user_id)
-                LEFT JOIN $table_user_tag_values uv ON (u.user_id AND uv.user_id AND  uv.user_id = url_rel_user.user_id)
+                INNER JOIN $access_url_rel_user_table url_rel_user
+                ON (u.user_id = url_rel_user.user_id)
+                LEFT JOIN $table_user_tag_values uv
+                ON (u.user_id AND uv.user_id AND uv.user_id = url_rel_user.user_id)
                 LEFT JOIN $table_user_tag ut ON (uv.tag_id = ut.id)
                 WHERE
                     ($where_field tag LIKE '".Database::escape_string($tag."%")."') OR

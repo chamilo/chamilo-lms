@@ -5,140 +5,97 @@
  * Form for group message
  * @package chamilo.social
  */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') != 'true') {
+if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
 
 $tok = Security::get_token();
 
-$group_id = intval($_GET['group_id']);
+if (isset($_REQUEST['user_friend'])) {
+    $info_user_friend=array();
+    $info_path_friend=array();
+    $userfriend_id = intval($_REQUEST['user_friend']);
+    $panel = Security::remove_XSS($_REQUEST['view_panel']);
+    $info_user_friend = api_get_user_info($userfriend_id);
+    $info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id,'web');
+}
+
+$group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
 $message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
+$actions = array('add_message_group', 'edit_message_group', 'reply_message_group');
 
-$actions = array(
-    'add_message_group',
-    'edit_message_group',
-    'reply_message_group'
-);
+$allowed_action = isset($_GET['action']) && in_array($_GET['action'],$actions) ? Security::remove_XSS($_GET['action']):'';
 
-$allowed_action = (isset($_GET['action']) && in_array($_GET['action'], $actions)) ? Security::remove_XSS($_GET['action']) : '';
 $to_group = '';
 $subject = '';
 $message = '';
+$usergroup = new UserGroup();
 if (!empty($group_id) && $allowed_action) {
-    $group_info = GroupPortalManager::get_group_data($group_id);
-    $is_member = GroupPortalManager::is_group_member($group_id);
+    $group_info = $usergroup->get($group_id);
+    $is_member = $usergroup->is_group_member($group_id);
 
     if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member) {
         api_not_allowed(true);
     }
 
-    $to_group = $group_info['name'];
+    $to_group   = $group_info['name'];
     if (!empty($message_id)) {
         $message_info = MessageManager::get_message_by_id($message_id);
         if ($allowed_action == 'reply_message_group') {
-            $subject = get_lang('Reply') . ': ' . api_xml_http_response_encode(
-                    $message_info['title']
-                );
+            $subject  = get_lang('Reply').': '.api_xml_http_response_encode($message_info['title']);
             //$message  = api_xml_http_response_encode($message_info['content']);
         } else {
-            $subject = api_xml_http_response_encode($message_info['title']);
-            $message = api_xml_http_response_encode($message_info['content']);
+            $subject  = api_xml_http_response_encode($message_info['title']);
+            $message  = api_xml_http_response_encode($message_info['content']);
         }
     }
 }
 
-$page_item = !empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1;
-$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id']) ? ('&items_' . intval($_GET['topic_id']) . '_page_nr=' . (!empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1)) : '';
-$param_item_page .= isset($_GET['topic_id']) ? '&topic_id=' . intval($_GET['topic_id']) : null;
-$page_topic = !empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1;
-$anchor = isset($_GET['anchor_topic']) ? Security::remove_XSS($_GET['anchor_topic']) : null;
+$page_item = !empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']):1;
+$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id']) ? ('&items_'.intval($_GET['topic_id']).'_page_nr='.(!empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1)):'';
+if (isset($_GET['topic_id'])) {
+    $param_item_page .= '&topic_id='.intval($_GET['topic_id']);
+}
+$page_topic  = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1;
+$anchor_topic  = isset($_GET['anchor_topic']) ? Security::remove_XSS($_GET['anchor_topic']) : null;
 
+$url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$group_id.'&anchor_topic='.$anchor_topic.'&topics_page_nr='.$page_topic.$param_item_page;
 
-$form = new FormValidator(
-    'add_post',
-    'post',
-    api_get_path(WEB_CODE_PATH)."social/group_topics.php?id=$group_id&anchor_topic=$anchor&topics_page_nr=$page_topic"."$param_item_page",
-    null,
-    array('enctype' => 'multipart/form-data')
-);
-$form->addHidden('action', $allowed_action);
-$form->addHidden('group_id', $group_id);
-$form->addHidden('parent_id', $message_id);
-$form->addHidden('message_id',$message_id );
-$form->addHidden('token', $tok);
+$form = new FormValidator('form', 'post', $url, null, array('enctype' => 'multipart/form-data'));
+$form->addElement('hidden', 'action', $allowed_action);
+$form->addElement('hidden', 'group_id', $group_id);
+$form->addElement('hidden', 'parent_id', $message_id);
+$form->addElement('hidden', 'message_id', $message_id);
+$form->addElement('hidden', 'token', $tok);
 
-if (api_get_setting('allow_message_tool') == 'true') {
-    //normal message
+$tpl = new Template(get_lang('Groups'));
+
+if (api_get_setting('allow_message_tool')=='true') {
+    // Normal message
     $user_info = api_get_user_info($userfriend_id);
     $height = 180;
     if ($allowed_action == 'add_message_group') {
-        $form->addText('title', get_lang('Title'));
+        $form->addElement('text', 'title', get_lang('Title'));
         $height = 140;
     }
 
-    $config = array();
-    $config['ToolbarSet'] = 'Messages';
-    $form->addHtmlEditor(
-        'content',
-        get_lang('Content'),
-        false,
-        false,
-        $config
-    );
-    $form->addHtml('<span id="filepaths"><div id="filepath_1">');
-    $form->addFile('attach_1', get_lang('AttachmentFiles'));
-    $form->addHtml('</div></span>');
+    $form->addElement('html_editor', 'content');
 
-    $form->addLabel(null,
-        ' <div id="link-more-attach">
-        <a href="javascript://" onclick="return add_image_form()">
-            ' . get_lang('AddOneMoreFile') . '</a>
-        </div>'
-    );
-    $form->addLabel(null,
-        api_xml_http_response_encode(
-            sprintf(
-                get_lang('MaximunFileSizeX'),
-                format_file_size(
-                    api_get_setting('message_max_upload_filesize')
-                )
-            )
-        )
+    $form->addElement('label', null, get_lang('AttachmentFiles'));
+    $form->addElement('label', null, '<div id="link-more-attach">
+        <a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>'
     );
 
-    $form->addButtonSend(get_lang('SendMessage'), 'submit');
-    Display::display_no_header();
-    //Display::display_reduced_header();
+    $form->addElement('html', '<span id="filepaths"></span>');
+    $form->addElement('file', 'attach_1', sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))));
+    $form->addElement('html', '</div>');
+    $form->addElement('button', 'submit', get_lang('SendMessage'));
+
     $form->display();
 }
-/*
-                                ?>
-                                <button class="btn save"
-                                        onclick="if(validate_text_empty(this.form.title.value,'<?php echo get_lang(
-                                            'YouShouldWriteASubject'
-                                        ) ?>')){return false;}" type="submit"
-                                        value="<?php echo api_xml_http_response_encode(
-                                            get_lang('SendMessage')
-                                        ); ?>"><?php echo api_xml_http_response_encode(
-                                        get_lang('SendMessage')
-                                    ) ?></button>
-                            <?php } else { ?>
-                                <button class="btn save" type="submit"
-                                        value="<?php echo api_xml_http_response_encode(
-                                            get_lang('SendMessage')
-                                        ); ?>"><?php echo api_xml_http_response_encode(
-                                        get_lang('SendMessage')
-                                    ) ?></button>
-                            <?php } ?>
-                        <?php } ?>
-                    </dl>
-            </td>
-        </tr>
-        </div>
-    </table>
-</form>
-*/
+$tpl->display_blank_template();

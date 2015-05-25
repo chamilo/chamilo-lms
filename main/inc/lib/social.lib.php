@@ -610,15 +610,21 @@ class SocialManager extends UserManager
         $html = '<div class="avatar-profile">';
         if (in_array($show, $show_groups) && !empty($group_id)) {
             // Group image
-            $group_info = GroupPortalManager::get_group_data($group_id);
-            $big = GroupPortalManager::get_picture_group(
+            $userGroup = new UserGroup();
+            $group_info = $userGroup->get($group_id);
+
+            $big = $userGroup->get_picture_group(
                 $group_id,
-                $group_info['picture_uri'],
+                $group_info['picture'],
                 160,
                 GROUP_IMAGE_SIZE_BIG
             );
 
-            $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group_id);
+            $html .= Display::url(
+                '<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />',
+                api_get_path(WEB_CODE_PATH).'social/group_view.php?id='.$group_id
+            );
+
             if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
                 $html .= '<div id="edit_image">
                             <a href="'.api_get_path(WEB_CODE_PATH).'social/group_edit.php?id='.$group_id.'">'.
@@ -665,6 +671,8 @@ class SocialManager extends UserManager
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
+        $usergroup = new UserGroup();
+
         $user_info = api_get_user_info($user_id, true);
         $current_user_id = api_get_user_id();
         $current_user_info = api_get_user_info($current_user_id, true);
@@ -693,7 +701,7 @@ class SocialManager extends UserManager
         $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
 
         $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-        $group_pending_invitations = GroupPortalManager::get_groups_by_user(
+        $group_pending_invitations = $usergroup->get_groups_by_user(
             api_get_user_id(),
             GROUP_USER_PERMISSION_PENDING_INVITATION,
             false
@@ -737,7 +745,7 @@ class SocialManager extends UserManager
         }
 
         if (in_array($show, $show_groups) && !empty($group_id)) {
-            $html .= GroupPortalManager::show_group_column_information(
+            $html .= $usergroup->show_group_column_information(
                 $group_id,
                 api_get_user_id(),
                 $show
@@ -1542,7 +1550,12 @@ class SocialManager extends UserManager
         $template->assign('user', $userInfo);
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
-        $template->assign('social_avatar_block', $template->fetch('default/social/user_block.tpl'));
+
+        $templateName = 'default/social/user_block.tpl';
+        if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
+            $templateName = 'default/social/group_block.tpl';
+        }
+        $template->assign('social_avatar_block', $template->fetch($templateName));
     }
 
     /**

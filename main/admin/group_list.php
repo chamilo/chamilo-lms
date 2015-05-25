@@ -126,7 +126,7 @@ function get_group_data($from, $number_of_items, $column, $direction) {
             $groupRelations[$id]['name'] . " > " . $name :
             $groupRelations[$id]['name'];
         $group[3] = $status[$group[3]];
-        $group['1'] = '<a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group['0'].'">'.$name.'</a>';
+        $group['1'] = '<a href="'.api_get_path(WEB_CODE_PATH).'social/group_view.php?id='.$group['0'].'">'.$name.'</a>';
         $groups[] = $group;
     }
     return $groups;

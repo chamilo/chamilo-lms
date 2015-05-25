@@ -43,6 +43,8 @@ $totalGroups = array();
 $users = array();
 $totalUsers = array();
 
+$usergroup = new UserGroup();
+
 // I'm searching something
 if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) {
     $itemPerPage = 9;
@@ -61,7 +63,8 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         // Groups
         $fromGroups = intval(($pageGroup - 1) * $itemPerPage);
         $totalGroups = GroupPortalManager::get_all_group_tags($_GET['q'], 0, $itemPerPage, true);
-        $groups = GroupPortalManager::get_all_group_tags($_GET['q'], $fromGroups, $itemPerPage);
+
+        $groups = $usergroup->get_all_group_tags($_GET['q'], $fromGroups);
     }
 
     if (empty($users) && empty($groups)) {
@@ -143,18 +146,19 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             $group['name'] = Security::remove_XSS($group['name'], STUDENT, true);
             $group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
             $id = $group['id'];
-            $url_open = '<a class="btn btn-default" href="groups.php?id='.$id.'">';
+            $url_open = '<a class="btn btn-default" href="group_view.php?id='.$id.'">';
             $url_close = '</a>';
             $name = cut($group['name'], 60, true);
-            $count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
+            $count_users_group = count($usergroup->get_all_users_by_group($id));
             if ($count_users_group == 1) {
                 $count_users_group = $count_users_group.' '.get_lang('Member');
             } else {
                 $count_users_group = $count_users_group.' '.get_lang('Members');
             }
-            $picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'], GROUP_IMAGE_SIZE_ORIGINAL);
-            $tags = GroupPortalManager::get_group_tags($group['id']);
-            $group['picture_uri'] = '<img src="'.$picture['file'].'" />';
+            $picture = $usergroup->get_picture_group($group['id'], $group['picture'], GROUP_IMAGE_SIZE_ORIGINAL);
+            //$tags = $usergroup->get_group_tags($group['id']);
+            $tags = null;
+            $group['picture'] = '<img src="'.$picture['file'].'" />';
 
             $members = Display::span($count_users_group);
             $item_1  = Display::tag('h3', $url_open.$name.$url_close).$members;
@@ -163,7 +167,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                 <div class="col-md-4">
                     <div class="card">
                         <div class="avatar">
-                            '.$group['picture_uri'].'
+                            '.$group['picture'].'
                         </div>
                         <div class="content">
                             '.$item_1.'

@@ -289,7 +289,7 @@ $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 $social_right_content = null;
 if ($group_id != 0) {
 	$social_right_content .= '<div class=actions>';
-	$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id.'">'.
+	$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/group_view.php?id='.$group_id.'">'.
 		Display::return_icon('back.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
 	$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.
 		Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';

@@ -447,7 +447,7 @@ if ($show_full_profile) {
         foreach ($results as $result) {
             if ($i > $max_numbers_of_group) break;
             $id = $result['id'];
-            $url_open  = '<a href="groups.php?id='.$id.'">';
+            $url_open  = '<a href="group_view.php?id='.$id.'">';
             $url_close = '</a>';
             $icon = '';
             $name = cut($result['name'],CUT_GROUP_NAME,true);

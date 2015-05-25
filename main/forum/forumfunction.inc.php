@@ -2299,22 +2299,23 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         $clean_post_title = Database::escape_string(stripslashes($values['post_title']));
 
         // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
-        $sql = "INSERT INTO $table_threads (c_id, thread_title, forum_id, thread_poster_id, thread_poster_name, thread_date, thread_sticky,thread_title_qualify,thread_qualify_max,thread_weight,thread_peer_qualify, session_id)
-                VALUES (
-                    ".$course_id.",
-                    '".$clean_post_title."',
-                    '".Database::escape_string($values['forum_id'])."',
-                    '".Database::escape_string($_user['user_id'])."',
-                    '".Database::escape_string(stripslashes(isset($values['poster_name']) ? $values['poster_name'] : null))."',
-                    '".Database::escape_string($post_date)."',
-                    '".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."',".
-                    "'".Database::escape_string(stripslashes($values['calification_notebook_title']))."',".
-                    "'".Database::escape_string($values['numeric_calification'])."',".
-                    "'".Database::escape_string($values['weight_calification'])."',".
-                    "'".intval($values['thread_peer_qualify'])."',".
-                    "'".api_get_session_id()."')";
-        Database::query($sql);
-        $last_thread_id = Database::insert_id();
+        $last_thread_id = Database::insert(
+            $table_threads,
+            [
+                'c_id' => $course_id,
+                'thread_title' => $clean_post_title,
+                'forum_id' => $values['forum_id'],
+                'thread_poster_id' => $_user['user_id'],
+                'thread_poster_name' => stripslashes(isset($values['poster_name']) ? $values['poster_name'] : null),
+                'thread_date' => $post_date,
+                'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null,
+                'thread_title_qualify' => stripslashes($values['calification_notebook_title']),
+                'thread_qualify_max' => $values['numeric_calification'],
+                'thread_weight' => $values['weight_calification'],
+                'thread_peer_qualify' => $values['thread_peer_qualify'],
+                'session_id' => api_get_session_id()
+            ]
+        );
 
         // Add option gradebook qualify.
 
@@ -2441,7 +2442,10 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 }
             } else {
                 if ($result) {
-                    add_forum_attachment_file($values['file_comment'], $last_post_id);
+                    add_forum_attachment_file(
+                        isset($values['file_comment']) ? $values['file_comment'] : null,
+                        $last_post_id
+                    );
                 }
             }
         } else {
@@ -2611,6 +2615,21 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     }
 
     $form->addElement('html', '</div>');
+
+    if (in_array($action, ['quote', 'replymessage'])) {
+        $form->addFile('user_upload[]', get_lang('Attachment'));
+        $form->addButton(
+            'add_attachment',
+            get_lang('AddAttachment'),
+            'paperclip',
+            'default',
+            'default',
+            null,
+            ['id' => 'reply-add-attachment']
+        );
+    } else {
+        $form->addFile('user_upload', get_lang('Attachment'));
+    }
 
     // Setting the class and text of the form title and submit button.
     if ($action == 'quote') {
@@ -2996,20 +3015,21 @@ function store_reply($current_forum, $values)
 
     if ($upload_ok) {
         // We first store an entry in the forum_post table.
-        $sql = "INSERT INTO $table_posts (c_id, post_title, post_text, thread_id, forum_id, poster_id, post_date, post_notification, post_parent_id, visible)
-                VALUES (
-                    ".api_get_course_int_id().",
-                    '".Database::escape_string($values['post_title'])."',
-                    '".Database::escape_string(isset($values['post_text']) ? ($values['post_text']) : null)."',
-                    '".Database::escape_string($values['thread_id'])."',
-                    '".Database::escape_string($values['forum_id'])."',
-                    '".api_get_user_id()."',
-                    '".$post_date."',
-                    '".Database::escape_string(isset($values['post_notification']) ? $values['post_notification'] : null)."',
-                    '".Database::escape_string(isset($values['post_parent_id']) ? $values['post_parent_id'] : null)."',
-                    '".Database::escape_string($visible)."')";
-        Database::query($sql);
-        $new_post_id = Database::insert_id();
+        $new_post_id = Database::insert(
+            $table_posts,
+            [
+                'c_id' => api_get_course_int_id(),
+                'post_title' => $values['post_title'],
+                'post_text' => isset($values['post_text']) ? ($values['post_text']) : null,
+                'thread_id' => $values['thread_id'],
+                'forum_id' => $values['forum_id'],
+                'poster_id' => api_get_user_id(),
+                'post_date' => $post_date,
+                'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : null,
+                'post_parent_id' => isset($values['post_parent_id']) ? $values['post_parent_id'] : null,
+                'visible' => $visible
+            ]
+        );
         if ($new_post_id) {
 
             $sql = "UPDATE $table_posts SET post_id = iid WHERE iid = $new_post_id";
@@ -3058,6 +3078,8 @@ function store_reply($current_forum, $values)
             }
 
             send_notification_mails($values['thread_id'], $values);
+
+            add_forum_attachment_file('', $new_post_id);
         }
 
         Session::erase('formelements');
@@ -3222,6 +3244,18 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
     }
 
     $form->addElement('html', '</div>');
+
+    $form->addFile('user_upload[]', get_lang('Attachment'));
+    $form->addButton(
+        'add_attachment',
+        get_lang('AddAttachment'),
+        'paperclip',
+        'default',
+        'default',
+        null,
+        ['id' => 'reply-add-attachment']
+    );
+
     $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
 
     // Setting the default values for the form elements.
@@ -3248,7 +3282,7 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
     if ($form->validate()) {
         $values = $form->exportValues();
 
-        if ($values['thread_qualify_gradebook'] == '1' &&
+        if (isset($values['thread_qualify_gradebook']) && $values['thread_qualify_gradebook'] == '1' &&
             empty($values['weight_calification'])
         ) {
             Display::display_error_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.back()">'.get_lang('Back').'</a>', false);
@@ -3326,9 +3360,16 @@ function store_edit_post($values)
     }
 
     if (empty($values['id_attach'])) {
-        add_forum_attachment_file($values['file_comment'], $values['post_id']);
+        add_forum_attachment_file(
+            isset($values['file_comment']) ? $values['file_comment'] : null,
+            $values['post_id']
+        );
     } else {
-        edit_forum_attachment_file($values['file_comment'], $values['post_id'], $values['id_attach']);
+        edit_forum_attachment_file(
+            isset($values['file_comment']) ? $values['file_comment'] : null,
+            $values['post_id'],
+            $values['id_attach']
+        );
     }
 
     if (api_is_course_admin() == true) {
@@ -4286,62 +4327,87 @@ function add_forum_attachment_file($file_comment, $last_id)
     $_course = api_get_course_info();
     $agenda_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 
-    // Storing the attachments
-    if (!empty($_FILES['user_upload']['name'])) {
-        $upload_ok = process_uploaded_file($_FILES['user_upload']);
+    if (!isset($_FILES['user_upload'])) {
+        return false;
     }
 
-    if (!empty($upload_ok)) {
-        $course_dir = $_course['path'].'/upload/forum';
-        $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $updir = $sys_course_path.$course_dir;
+    $fileCount = count($_FILES['user_upload']['name']);
 
-        // Try to add an extension to the file if it hasn't one.
-        $new_file_name = add_ext_on_mime(
-            stripslashes($_FILES['user_upload']['name']),
-            $_FILES['user_upload']['type']
-        );
-        // User's file name
-        $file_name = $_FILES['user_upload']['name'];
+    $filesData = [];
 
-        if (!filter_extension($new_file_name)) {
-            Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-        } else {
-            $new_file_name = uniqid('');
-            $new_path = $updir . '/' . $new_file_name;
-            $result = @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-            $safe_file_comment = Database::escape_string($file_comment);
-            $safe_file_name = Database::escape_string($file_name);
-            $safe_new_file_name = Database::escape_string($new_file_name);
-            $last_id = intval($last_id);
-            // Storing the attachments if any.
-            if ($result) {
-                $last_id_file = Database::insert(
-                    $agenda_forum_attachment,
-                    [
-                        'c_id' => api_get_course_int_id(),
-                        'filename' => $safe_file_name,
-                        'comment' => $safe_file_comment,
-                        'path' => $safe_new_file_name,
-                        'post_id' => $last_id,
-                        'size' => intval($_FILES['user_upload']['size'])
-                    ]
-                );
+    if (!is_array($_FILES['user_upload']['name'])) {
+        $filesData[] = $_FILES['user_upload'];
+    } else {
+        $fileKeys = array_keys($_FILES['user_upload']);
 
-                api_item_property_update(
-                    $_course,
-                    TOOL_FORUM_ATTACH,
-                    $last_id_file,
-                    'ForumAttachmentAdded',
-                    api_get_user_id()
-                );
-
-                return $last_id_file;
+        for ($i = 0; $i < $fileCount; $i++) {
+            foreach ($fileKeys as $key) {
+                $filesData[$i][$key] = $_FILES['user_upload'][$key][$i];
             }
         }
     }
 
-    return false;
+    foreach ($filesData as $attachment) {
+        if (empty($attachment['name'])) {
+            continue;
+        }
+
+        $upload_ok = process_uploaded_file($attachment);
+
+        if (!$upload_ok) {
+            continue;
+        }
+
+        $course_dir = $_course['path'] . '/upload/forum';
+        $sys_course_path = api_get_path(SYS_COURSE_PATH);
+        $updir = $sys_course_path . $course_dir;
+
+        // Try to add an extension to the file if it hasn't one.
+        $new_file_name = add_ext_on_mime(
+            stripslashes($attachment['name']),
+            $attachment['type']
+        );
+        // User's file name
+        $file_name = $attachment['name'];
+
+        if (!filter_extension($new_file_name)) {
+            Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+
+            return;
+        }
+
+        $new_file_name = uniqid('');
+        $new_path = $updir . '/' . $new_file_name;
+        $result = @move_uploaded_file($attachment['tmp_name'], $new_path);
+        $safe_file_comment = Database::escape_string($file_comment);
+        $safe_file_name = Database::escape_string($file_name);
+        $safe_new_file_name = Database::escape_string($new_file_name);
+        $last_id = intval($last_id);
+        // Storing the attachments if any.
+        if (!$result) {
+            return;
+        }
+
+        $last_id_file = Database::insert(
+            $agenda_forum_attachment,
+            [
+                'c_id' => api_get_course_int_id(),
+                'filename' => $safe_file_name,
+                'comment' => $safe_file_comment,
+                'path' => $safe_new_file_name,
+                'post_id' => $last_id,
+                'size' => intval($attachment['size'])
+            ]
+        );
+
+        api_item_property_update(
+            $_course,
+            TOOL_FORUM_ATTACH,
+            $last_id_file,
+            'ForumAttachmentAdded',
+            api_get_user_id()
+        );
+    }
 }
 
 /**
@@ -4357,27 +4423,48 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
     $table_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
 
-    // Storing the attachments.
-    if (!empty($_FILES['user_upload']['name'])) {
-        $upload_ok = process_uploaded_file($_FILES['user_upload']);
+    $fileCount = count($_FILES['user_upload']['name']);
+
+    $filesData = [];
+
+    if (!is_array($_FILES['user_upload']['name'])) {
+        $filesData[] = $_FILES['user_upload'];
+    } else {
+        $fileKeys = array_keys($_FILES['user_upload']);
+
+        for ($i = 0; $i < $fileCount; $i++) {
+            foreach ($fileKeys as $key) {
+                $filesData[$i][$key] = $_FILES['user_upload'][$key][$i];
+            }
+        }
     }
 
-    if (!empty($upload_ok)) {
+    foreach ($filesData as $attachment) {
+        if (empty($attachment['name'])) {
+            continue;
+        }
+
+        $upload_ok = process_uploaded_file($attachment);
+
+        if (!$upload_ok) {
+            continue;
+        }
+
         $course_dir = $_course['path'].'/upload/forum';
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $updir = $sys_course_path.$course_dir;
 
         // Try to add an extension to the file if it hasn't one.
-        $new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+        $new_file_name = add_ext_on_mime(stripslashes($attachment['name']), $attachment['type']);
         // User's file name
-        $file_name = $_FILES['user_upload']['name'];
+        $file_name = $attachment['name'];
 
         if (!filter_extension($new_file_name)) {
             Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
         } else {
             $new_file_name = uniqid('');
             $new_path = $updir.'/'.$new_file_name;
-            $result = @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+            $result = @move_uploaded_file($attachment['tmp_name'], $new_path);
             $safe_file_comment = Database::escape_string($file_comment);
             $safe_file_name = Database::escape_string($file_name);
             $safe_new_file_name = Database::escape_string($new_file_name);
@@ -4385,7 +4472,7 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
             $safe_id_attach = (int) $id_attach;
             // Storing the attachments if any.
             if ($result) {
-                $sql = "UPDATE $table_forum_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', post_id = '$safe_post_id', size ='".$_FILES['user_upload']['size']."'
+                $sql = "UPDATE $table_forum_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', post_id = '$safe_post_id', size ='".$attachment['size']."'
                        WHERE c_id = $course_id AND id = '$safe_id_attach'";
                 Database::query($sql);
                 api_item_property_update($_course, TOOL_FORUM_ATTACH, $safe_id_attach, 'ForumAttachmentUpdated', api_get_user_id());

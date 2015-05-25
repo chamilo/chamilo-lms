@@ -132,7 +132,7 @@ if (isset($current_thread['thread_id'])) {
 
             // get attach id
             $attachment_list = get_attachment($row['post_id']);
-            $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
+            $id_attach = !empty($attachment_list) ? $attachment_list['iid'] : '';
             $iconEdit = '';
             // The user who posted it can edit his thread only if the course admin allowed
             // this in the properties of the forum
@@ -299,7 +299,7 @@ if (isset($current_thread['thread_id'])) {
                     ) {
                         $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;origin='
                             . Security::remove_XSS($_GET['origin']) . '&amp;action=delete_attach&amp;id_attach='
-                            . $attachment['id'] . '&amp;forum=' . $clean_forum_id . '&amp;thread=' . $clean_thread_id
+                            . $attachment['iid'] . '&amp;forum=' . $clean_forum_id . '&amp;thread=' . $clean_thread_id
                             . '" onclick="javascript:if(!confirm(\''
                             . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))
                             . '\')) return false;">'

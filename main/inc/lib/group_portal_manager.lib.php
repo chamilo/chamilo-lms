@@ -3,10 +3,10 @@
 
 /**
  * Class GroupPortalManager
- *  This library provides functions for the group management.
- * 	Include/require it in your code to use its functionality.
- * 	@author Julio Montoya <gugli100@gmail.com>
- * 	@package chamilo.library
+ * This library provides functions for the group management.
+ * Include/require it in your code to use its functionality.
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @package chamilo.library
  */
 class GroupPortalManager
 {
@@ -16,10 +16,10 @@ class GroupPortalManager
      * @author Julio Montoya <gugli100@gmail.com>,
      *
      * @param	string	$name The URL of the site
-     * @param	string  $description The description of the site
-     * @param  string  $url
+     * @param   string  $description The description of the site
+     * @param   string  $url
      * @param	int		$visibility is active or not
-     * @param  int     $picture
+     * @param   string  $picture
      *
      * @return boolean if success
      */
@@ -110,6 +110,7 @@ class GroupPortalManager
      * @param int	$visibility
      * @param int	$from which record the results will begin (use for pagination)
      * @param int	$number_of_items
+     *
      * @return array
      * */
     public static function get_all_group_data($visibility = GROUP_PERMISSION_OPEN, $from = 0, $number_of_items = 10)
@@ -128,7 +129,7 @@ class GroupPortalManager
 
     /**
      * Gets a list of all group
-     * @param inr $without_this_one id of a group not to include (i.e. to exclude)
+     * @param int $without_this_one id of a group not to include (i.e. to exclude)
      *
      * @return array : id => name
      * */
@@ -199,8 +200,8 @@ class GroupPortalManager
 
     /**
      * Get the parent group
-     * @param int group_id
-     * @param int relation_type
+     * @param int $group_id
+     * @param int $relation_type
      * @return int parent_group_id or false
      * */
     public static function get_parent_group($group_id, $relation_type = 1)
@@ -365,7 +366,11 @@ class GroupPortalManager
         $table_group_rel_tag = Database :: get_main_table(TABLE_MAIN_GROUP_REL_TAG);
         $group_id = intval($group_id);
 
-        $sql = "SELECT tag FROM $tag t INNER JOIN $table_group_rel_tag gt ON (gt.tag_id= t.id) WHERE gt.group_id = $group_id ";
+        $sql = "SELECT tag FROM $tag t
+                INNER JOIN $table_group_rel_tag gt
+                ON (gt.tag_id= t.id)
+                WHERE
+                    gt.group_id = $group_id ";
         $res = Database::query($sql);
         $tags = array();
         if (Database::num_rows($res) > 0) {
@@ -410,10 +415,13 @@ class GroupPortalManager
             $where_relation_condition = "AND gu.relation_type = $relation_type ";
         }
 
-        $sql = "SELECT g.picture_uri, g.name, g.description, g.id , gu.relation_type
+        $sql = "SELECT g.picture_uri, g.name, g.description, g.id, gu.relation_type
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
-				ON gu.group_id = g.id WHERE gu.user_id = $user_id $where_relation_condition ORDER BY created_on desc ";
+				ON gu.group_id = g.id
+				WHERE
+				    gu.user_id = $user_id $where_relation_condition
+				ORDER BY created_on desc ";
 
         $result = Database::query($sql);
         $array = array();
@@ -490,11 +498,12 @@ class GroupPortalManager
         }
         $where_relation_condition = " WHERE gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
         $sql = "SELECT DISTINCT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
-					 FROM $tbl_group g INNER JOIN $table_group_rel_user gu ON gu.group_id = g.id
-					 $where_relation_condition
-					 GROUP BY g.id
-					 ORDER BY created_on DESC
-					 LIMIT $num ";
+                FROM $tbl_group g INNER JOIN $table_group_rel_user gu
+                ON gu.group_id = g.id
+                $where_relation_condition
+                GROUP BY g.id
+                ORDER BY created_on DESC
+                LIMIT $num ";
 
         $result = Database::query($sql);
         $array = array();
@@ -598,9 +607,12 @@ class GroupPortalManager
         if (empty($group_id)) {
             return array();
         }
-        $sql = "SELECT u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
-			INNER JOIN $table_group_rel_user gu
-			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id ORDER BY relation_type, firstname";
+        $sql = "SELECT u.user_id, u.firstname, u.lastname, relation_type
+                FROM $tbl_user u
+                INNER JOIN $table_group_rel_user gu
+                ON (gu.user_id = u.user_id)
+                WHERE gu.group_id= $group_id
+                ORDER BY relation_type, firstname";
 
         $result = Database::query($sql);
         $array = array();
@@ -622,7 +634,10 @@ class GroupPortalManager
         $table_group_rel_user = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $return_value = 0;
         if (!empty($user_id) && !empty($group_id)) {
-            $sql = "SELECT relation_type FROM $table_group_rel_user WHERE group_id = ".intval($group_id)." AND  user_id = ".intval($user_id)." ";
+            $sql = "SELECT relation_type FROM $table_group_rel_user
+                    WHERE
+                        group_id = ".intval($group_id)." AND
+                        user_id = ".intval($user_id)." ";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_array($result, 'ASSOC');
@@ -647,17 +662,28 @@ class GroupPortalManager
             $role = self::get_user_group_role($user_id, $group_id);
             if ($role == 0) {
                 $sql = "INSERT INTO $table_url_rel_group
-           				SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type);
+           				SET
+           				    user_id = ".intval($user_id).",
+           				    group_id = ".intval($group_id).",
+           				    relation_type = ".intval($relation_type);
                 $result = Database::query($sql);
                 Event::addEvent(
                     LOG_GROUP_PORTAL_USER_SUBSCRIBED,
                     LOG_GROUP_PORTAL_REL_USER_ARRAY,
-                    array('user_id' => $user_id, 'group_id' => $group_id, 'relation_type' => $relation_type)
+                    array(
+                        'user_id' => $user_id,
+                        'group_id' => $group_id,
+                        'relation_type' => $relation_type,
+                    )
                 );
 
             } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
                 // If somebody already invited me I can be added
-                self::update_user_role($user_id, $group_id, GROUP_USER_PERMISSION_READER);
+                self::update_user_role(
+                    $user_id,
+                    $group_id,
+                    GROUP_USER_PERMISSION_READER
+                );
             }
         }
         return $result;
@@ -699,13 +725,14 @@ class GroupPortalManager
      * */
     public static function delete_users($group_id, $relation_type = null)
     {
-        $table_ = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
+        $table = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $condition_relation = "";
         if (!empty($relation_type)) {
             $relation_type = intval($relation_type);
             $condition_relation = " AND relation_type = '$relation_type'";
         }
-        $sql = "DELETE FROM $table_ WHERE group_id = ".intval($group_id).$condition_relation;
+        $sql = "DELETE FROM $table
+                WHERE group_id = ".intval($group_id).$condition_relation;
         $result = Database::query($sql);
 
         Event::addEvent(
@@ -727,7 +754,8 @@ class GroupPortalManager
     public static function delete_user_rel_group($user_id, $group_id)
     {
         $table = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
-        $sql = "DELETE FROM $table WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id);
+        $sql = "DELETE FROM $table
+                WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id);
         $result = Database::query($sql);
 
         Event::addEvent(
@@ -743,8 +771,8 @@ class GroupPortalManager
      * Updates the group_rel_user table  with a given user and group ids
      * @author Julio Montoya
      * @param int  $user_id
-     * @param int $group_id
-     * @param int $relation_type
+     * @param int  $group_id
+     * @param int  $relation_type
      *
      * @return bool
      **/
@@ -784,8 +812,11 @@ class GroupPortalManager
         $group_id = intval($group_id);
         $user_id = intval($user_id);
 
-        $sql = "SELECT user_id FROM  $table_group_rel_user WHERE
-   				relation_type = ".GROUP_USER_PERMISSION_ADMIN." AND user_id = $user_id AND group_id = $group_id";
+        $sql = "SELECT user_id FROM  $table_group_rel_user
+                WHERE
+                    relation_type = ".GROUP_USER_PERMISSION_ADMIN." AND
+                    user_id = $user_id AND
+                    group_id = $group_id";
         Database::query($sql);
     }
 
@@ -934,6 +965,7 @@ class GroupPortalManager
             && $medium && $medium->send_image($path.'medium_'.$filename)
             && $normal && $normal->send_image($path.'big_'.$filename)
             && $big && $big->send_image($path.$filename);
+
         return $ok ? $filename : false;
     }
 
@@ -1023,6 +1055,7 @@ class GroupPortalManager
                 $new_height = $thumbwidth;
             $temp->resize($thumbwidth, $new_height, 0);
         }
+
         return $temp;
     }
 
@@ -1259,8 +1292,8 @@ class GroupPortalManager
     }
 
     /**
-     * @param int $user_id
-     * @param int $relation_type
+     * @param int  $user_id
+     * @param int  $relation_type
      * @param bool $with_image
      * @return int
      */

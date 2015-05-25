@@ -4308,7 +4308,7 @@ function add_forum_attachment_file($file_comment, $last_id)
             Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
         } else {
             $new_file_name = uniqid('');
-            $new_path = $updir.'/'.$new_file_name;
+            $new_path = $updir . '/' . $new_file_name;
             $result = @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
             $safe_file_comment = Database::escape_string($file_comment);
             $safe_file_name = Database::escape_string($file_name);
@@ -4455,16 +4455,16 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
     $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
 
-    $cond = (!empty($id_attach)) ? " iid = ".(int) $id_attach."" : " post_id = ".(int) $post_id."";
+    $cond = (!empty($id_attach)) ? " iid = " . (int) $id_attach . "" : " post_id = " . (int) $post_id . "";
     $sql = "SELECT path FROM $forum_table_attachment WHERE c_id = $course_id AND $cond";
     $res = Database::query($sql);
     $row = Database::fetch_array($res);
 
-    $course_dir = $_course['path'].'/upload/forum';
+    $course_dir = $_course['path'] . '/upload/forum';
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
-    $updir = $sys_course_path.$course_dir;
+    $updir = $sys_course_path . $course_dir;
     $my_path = isset($row['path']) ? $row['path'] : null;
-    $file = $updir.'/'.$my_path;
+    $file = $updir . '/' . $my_path;
     if (Security::check_abs_path($file, $updir)) {
         @unlink($file);
     }

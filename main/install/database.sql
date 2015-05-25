@@ -3690,6 +3690,7 @@ CREATE TABLE c_calendar_event(
   parent_event_id INT NULL,
   session_id int unsigned NOT NULL default 0,
   all_day INT NOT NULL DEFAULT 0,
+  comment TEXT,
   PRIMARY KEY (id, c_id)
 );
 

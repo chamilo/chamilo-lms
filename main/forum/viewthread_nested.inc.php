@@ -259,9 +259,7 @@ foreach ($rows as $post) {
     $html .= '</div>';
 
     $html .= '<div class="row">';
-    $html .= '<div class="col-md-12">';
-
-    $html .= '<div class="pull-right">' . $buttonReply . ' ' . $buttonQuote . '</div>';
+    $html .= '<div class="col-md-6">';
     // The check if there is an attachment
     $attachment_list = getAllAttachment($post['post_id']);
     if (!empty($attachment_list) && is_array($attachment_list)) {
@@ -285,6 +283,10 @@ foreach ($rows as $post) {
             }
         }
     }
+
+    $html .= '</div>';
+    $html .= '<div class="col-md-6 text-right">';
+    $html .= $buttonReply . ' ' . $buttonQuote;
     $html .= '</div>';
     $html .= '</div>';
     // The post has been displayed => it can be removed from the what's new array

@@ -258,10 +258,7 @@ if (isset($current_thread['thread_id'])) {
 
 
             $html .= '<div class="row">';
-            $html .= '<div class="col-md-12">';
-            $html .= '<div class="pull-right">' . $buttonReply . ' ' . $buttonQuote . '</div>';
-            $html .= '</div>';
-            $html .= '</div>';
+            $html .= '<div class="col-md-7">';
 
             // prepare the notification icon
             if (
@@ -309,6 +306,12 @@ if (isset($current_thread['thread_id'])) {
                     $html .= '<span class="forum_attach_comment" >' . $attachment['comment'] . '</span>';
                 }
             }
+            
+            $html .= '</div>';
+            $html .= '<div class="col-md-5 text-right">';
+            $html .= $buttonReply . ' ' . $buttonQuote;
+            $html .= '</div>';
+            $html .= '</div>';
 
             // The post has been displayed => it can be removed from the what's new array
             unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);

@@ -142,6 +142,23 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
 
 /* Header */
 
+$htmlHeadXtra[] = <<<JS
+    <script>
+    $(document).on('ready', function() {
+        $('#reply-add-attachment').on('click', function(e) {
+            e.preventDefault();
+
+            var newInputFile = $('<input>', {
+                type: 'file',
+                name: 'user_upload[]'
+            });
+
+            $('[name="user_upload[]"]').parent().append(newInputFile);
+        });
+    });
+    </script>
+JS;
+
 if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
@@ -169,10 +186,6 @@ $values = show_add_post_form(
 if (!empty($values) && isset($values['SubmitPost'])) {
     // Add new thread in table forum_thread.
     store_thread($current_forum, $values);
-} else {
-    // Only show Forum attachment ajax form when do not pass form submit
-    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], 0, 0);
-    echo $attachmentAjaxForm;
 }
 
 if (isset($origin) && $origin != 'learnpath') {

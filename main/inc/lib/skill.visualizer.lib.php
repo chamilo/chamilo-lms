@@ -168,8 +168,6 @@ class SkillVisualizer
             $skill['x'] = $x;
             $skill['y'] = $y;
 
-
-            //    var_dump($skill);
             //$skill['description']  = "{$brothers[$skill['parent_id']]} $x - $y";
             //$skill['name']  =  $skill['name']."  |  $x = $my_count * 150  +  $parent_x - (150* $max/2) - 10*$childs ";
             $this->add_item($skill, array('x' => $this->offset_x + $x, 'y' => $this->offset_y +$y));

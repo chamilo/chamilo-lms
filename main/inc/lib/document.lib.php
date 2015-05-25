@@ -2512,7 +2512,7 @@ class DocumentManager
                             // Replace origin course path by destination course path.
                             if (strpos($content_html, $real_orig_url) !== false) {
                                 $url_course_path = str_replace($orig_course_info_path.'/'.$document_file, '', $real_orig_path);
-                                //var_dump($dest_course_path_rel);
+
                                 //$destination_url = $url_course_path . $destination_course_directory . '/' . $document_file . $dest_url_query;
                                 // See BT#7780
                                 $destination_url = $dest_course_path_rel . $document_file . $dest_url_query;

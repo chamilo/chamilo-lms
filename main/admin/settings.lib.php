@@ -374,7 +374,10 @@ function handle_stylesheets()
                 $( "#tabs" ).tabs();
             });
             </script>';
-            echo Display::tabs(array(get_lang('Update'), get_lang('UploadNewStylesheet')), array($form_change->return_form(), $form->return_form()));
+            echo Display::tabs(
+                array(get_lang('Update'), get_lang('UploadNewStylesheet')),
+                array($form_change->return_form(), $form->return_form())
+            );
         } else {
             $form_change->display();
         }

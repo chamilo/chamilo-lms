@@ -1055,21 +1055,31 @@ class Display
         return $main_div ;
     }
 
-    public static function tabs_only_link($header_list, $selected = null)
+    /**
+     * @param $headers
+     * @param null $selected
+     *
+     * @return string
+     */
+    public static function tabsOnlyLink($headers, $selected = null)
     {
          $id = uniqid();
          $i = 1;
          $lis = null;
-         foreach ($header_list as $item) {
+         foreach ($headers as $item) {
             $class = null;
             if ($i == $selected) {
                 $class = 'active';
             }
-            $item =self::tag('a', $item['content'], array('id'=>$id.'-'.$i, 'href' => $item['url']));
-            $lis .=self::tag('li', $item, array('class' => $class));
+             $item = self::tag(
+                 'a',
+                 $item['content'],
+                 array('id' => $id.'-'.$i, 'href' => $item['url'])
+             );
+             $lis .= self::tag('li', $item, array('class' => $class));
             $i++;
         }
-        return self::tag('ul',$lis, array('class' => 'nav nav-tabs'));
+        return self::tag('ul', $lis, array('class' => 'nav nav-tabs'));
     }
 
     /**

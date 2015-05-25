@@ -214,7 +214,7 @@ if ($my_action == 'liststd' &&
                 'url'    =>   $forumUrl.'viewforum.php?'.$url.'&origin='.$origin.'&list=notqualify'
             ),
         );
-        $table_list .= Display::tabs_only_link($tabs, $active);
+        $table_list .= Display::tabsOnlyLink($tabs, $active);
 
         $icon_qualify = 'blog_new.gif';
         $table_list .= '<center><br /><table class="data_table" style="width:50%">';

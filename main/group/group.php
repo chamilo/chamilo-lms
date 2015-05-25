@@ -186,14 +186,13 @@ if (api_is_allowed_to_edit(false, true)) {
     echo '<a href="group_overview.php?'.api_get_cidreq().'">'.
         Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="../user/user.php?'.api_get_cidreq().'">'.
-        Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICON_SIZE_MEDIUM).'</a>';
-
     echo GroupManager::getSearchForm();
 }
 
 $group_cats = GroupManager::get_categories(api_get_course_id());
 echo '</div>';
+
+echo UserManager::getUserSubscriptionTab(4);
 
 /*  List all categories */
 if (api_get_setting('allow_group_categories') == 'true') {

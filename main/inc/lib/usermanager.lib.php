@@ -5042,4 +5042,43 @@ SQL;
         return $users;
     }
 
+    /**
+     * @param int $optionSelected
+     * @return string
+     */
+    public static function getUserSubscriptionTab($optionSelected = 1)
+    {
+
+        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true'  ||
+            api_is_platform_admin()
+        ) {
+            $userPath = api_get_path(WEB_CODE_PATH).'user/';
+
+            $headers = [
+                [
+                    'url' => $userPath.'user.php?'.api_get_cidreq(),
+                    'content' => get_lang('Users'),
+                ],
+                [
+                    'url' => $userPath.'subscribe_user.php?'.api_get_cidreq(),
+                    'content' => get_lang('Students'),
+                ],
+                [
+                    'url' => $userPath.'subscribe_user.php?type=teacher&'.api_get_cidreq(),
+                    'content' => get_lang('Teachers'),
+                ],
+                [
+                    'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+                    'content' => get_lang('Groups'),
+                ],
+                [
+                    'url' => $userPath.'class.php?'.api_get_cidreq(),
+                    'content' => get_lang('Classes'),
+                ],
+            ];
+
+            return Display::tabsOnlyLink($headers, $optionSelected);
+        }
+    }
+
 }

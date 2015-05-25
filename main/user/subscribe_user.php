@@ -55,6 +55,7 @@ if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
     display_extra_profile_fields_filter();
 }
 
+
 // Build search-form
 $form = new FormValidator('search_user', 'get', '', '', null, false);
 $renderer = $form->defaultRenderer();
@@ -65,6 +66,10 @@ $form->addButtonSearch(get_lang('Search'));
 $form->addElement('static', 'additionalactions', null, $actions);
 $form->display();
 echo '</div>';
+
+
+$option = $type == 'teacher' ? 3 : 2;
+echo UserManager::getUserSubscriptionTab($option);
 
 /*
 		MAIN SECTION

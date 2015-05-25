@@ -39,7 +39,7 @@ if (api_is_allowed_to_edit()) {
     echo '</div>';
 }
 
-echo Display::page_header($tool_name);
+echo UserManager::getUserSubscriptionTab(5);
 
 if (api_is_allowed_to_edit()) {
     $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -68,9 +68,9 @@ $columns = array(get_lang('Name'), get_lang('Users'), get_lang('Actions'));
 
 //Column config
 $column_model = array(
-                    array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
-                    array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
-                    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false'),
+    array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
+    array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
+    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false'),
 );
 //Autowidth
 $extra_params['autowidth'] = 'true';
@@ -80,10 +80,10 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
-                    return \''
-                    .' <a href="class.php?action=add_class&id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
-                    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
-                 }';
+    return \''
+    .' <a href="class.php?action=add_class&id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
+    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
+}';
 ?>
 <script>
 $(function() {
@@ -94,5 +94,6 @@ $(function() {
 });
 </script>
 <?php
+
 $usergroup->display_teacher_view();
 Display :: display_footer();

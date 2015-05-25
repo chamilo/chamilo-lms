@@ -272,7 +272,7 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
      *
      * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
      */
-    private $lastLogin;
+    protected $lastLogin;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")

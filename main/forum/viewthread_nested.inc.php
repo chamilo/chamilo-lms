@@ -83,7 +83,7 @@ foreach ($rows as $post) {
 
     // get attach id
     $attachment_list = get_attachment($post['post_id']);
-    $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
+    $id_attach = !empty($attachment_list) ? $attachment_list['iid'] : '';
 
     $iconEdit = '';
     // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
@@ -266,20 +266,19 @@ foreach ($rows as $post) {
     $attachment_list = getAllAttachment($post['post_id']);
     if (!empty($attachment_list) && is_array($attachment_list)) {
         foreach ($attachment_list as $attachment) {
-            echo '<tr><td height="50%">';
             $realname = $attachment['path'];
             $user_filename = $attachment['filename'];
-            echo Display::return_icon('attachment.gif', get_lang('Attachment'));
-            echo '<a href="download.php?file=';
-            echo $realname;
-            echo ' "> ' . $user_filename . ' </a>';
-            echo '<span class="forum_attach_comment" >' . $attachment['comment'] . '</span>';
+            $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
+            $html .= '<a href="download.php?file=';
+            $html .= $realname;
+            $html .= ' "> ' . $user_filename . ' </a>';
+            $html .= '<span class="forum_attach_comment" >' . $attachment['comment'] . '</span>';
             if (($current_forum['allow_edit'] == 1 && $post['user_id'] == $userId) ||
                 (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
             ) {
-                echo '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&origin='
+                $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&origin='
                     . Security::remove_XSS($_GET['origin']) . '&action=delete_attach&id_attach='
-                    . $attachment['id'] . '&forum=' . $clean_forum_id . '&thread=' . $clean_thread_id
+                    . $attachment['iid'] . '&forum=' . $clean_forum_id . '&thread=' . $clean_thread_id
                     . '" onclick="javascript:if(!confirm(\''
                     . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)) . '\')) return false;">'
                     . Display::return_icon('delete.gif', get_lang('Delete')) . '</a><br />';

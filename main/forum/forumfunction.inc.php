@@ -4316,11 +4316,18 @@ function add_forum_attachment_file($file_comment, $last_id)
             $last_id = intval($last_id);
             // Storing the attachments if any.
             if ($result) {
-                $sql = "INSERT INTO $agenda_forum_attachment (c_id, filename, comment, path, post_id, size)
-                        VALUES (".api_get_course_int_id().", '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$last_id', '".intval($_FILES['user_upload']['size'])."' )";
-                Database::query($sql);
+                $last_id_file = Database::insert(
+                    $agenda_forum_attachment,
+                    [
+                        'c_id' => api_get_course_int_id(),
+                        'filename' => $safe_file_name,
+                        'comment' => $safe_file_comment,
+                        'path' => $safe_new_file_name,
+                        'post_id' => $last_id,
+                        'size' => intval($_FILES['user_upload']['size'])
+                    ]
+                );
 
-                $last_id_file = Database::insert_id();
                 api_item_property_update(
                     $_course,
                     TOOL_FORUM_ATTACH,
@@ -4400,7 +4407,7 @@ function get_attachment($post_id)
     $course_id = api_get_course_int_id();
     $row = array();
     $post_id = intval($post_id);
-    $sql = "SELECT id, path, filename,comment FROM $forum_table_attachment
+    $sql = "SELECT iid, path, filename,comment FROM $forum_table_attachment
             WHERE c_id = $course_id AND post_id = $post_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) != 0) {
@@ -4415,7 +4422,7 @@ function getAllAttachment($postId)
     $forumAttachmentTable = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
     $courseId = api_get_course_int_id();
     $postId = intval($postId);
-    $columns = array('id', 'path', 'filename', 'comment');
+    $columns = array('iid', 'path', 'filename', 'comment');
     $conditions = array(
         'where' => array(
             'c_id = ? AND post_id = ?' => array($courseId, $postId)
@@ -4448,7 +4455,7 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
     $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
 
-    $cond = (!empty($id_attach)) ? " id = ".(int) $id_attach."" : " post_id = ".(int) $post_id."";
+    $cond = (!empty($id_attach)) ? " iid = ".(int) $id_attach."" : " post_id = ".(int) $post_id."";
     $sql = "SELECT path FROM $forum_table_attachment WHERE c_id = $course_id AND $cond";
     $res = Database::query($sql);
     $row = Database::fetch_array($res);
@@ -5339,14 +5346,14 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
 
         return array();
     } elseif (empty($postId)) {
-        $filter = "AND id = $attachId";
+        $filter = "AND iid = $attachId";
     } elseif (empty($attachId)) {
         $filter = "AND post_id = $postId";
     } else {
-        $filter = "AND post_id = $postId AND id = $attachId";
+        $filter = "AND post_id = $postId AND iid = $attachId";
     }
     $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-    $sql = "SELECT id, comment, filename, path, size
+    $sql = "SELECT iid, comment, filename, path, size
             FROM $forumAttachmentTable
             WHERE c_id = $courseId $filter";
     $result = Database::query($sql);
@@ -5359,7 +5366,7 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
                 api_get_path(WEB_CODE_PATH) . 'forum/download.php?file='.$row['path'].'&'.api_get_cidreq(),
                 array('target'=>'_blank', 'class' => 'attachFilename')
             );
-            $json['id'] = $row['id'];
+            $json['id'] = $row['iid'];
             $json['comment'] = $row['comment'];
             // Format file size
             $json['size'] = format_file_size($row['size']);
@@ -5367,7 +5374,7 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
             if (!empty($row) && is_array($row)) {
                 // Set result as success and bring delete URL
                 $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded'));
-                $url = api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq() . '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId.'&amp;id_attach=' . $row['id'];
+                $url = api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq() . '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId.'&amp;id_attach=' . $row['iid'];
                 $json['delete'] = Display::url(
                     Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL),
                     $url,

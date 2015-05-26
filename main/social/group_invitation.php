@@ -61,7 +61,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 
     if ($form_sent == 1) {
-        //invite this users
+        // invite this users
         $result = $usergroup->add_users_to_groups(
             $user_list,
             array($group_id),
@@ -82,9 +82,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
                     $content
                 );
             }
+            Display::addFlash(Display::return_message(get_lang('InvitationSent')));
         }
-
-        Display::addFlash(Display::return_message(get_lang('InvitationSent')));
 
         header('Location: '.api_get_self().'?id='.$group_id);
         exit;

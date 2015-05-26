@@ -278,13 +278,16 @@ class Notification extends Model
                     case self::NOTIFY_MESSAGE_AT_ONCE:
                     case self::NOTIFY_INVITATION_AT_ONCE:
                     case self::NOTIFY_GROUP_AT_ONCE:
+                        $extraHeaders = [];
 
-                        $extraHeaders = array(
-                            'reply_to' => array(
-                                'name' => $senderInfo['complete_name'],
-                                'mail' => $senderInfo['email']
-                            )
-                        );
+                        if (isset($senderInfo['email'])) {
+                            $extraHeaders = array(
+                                'reply_to' => array(
+                                    'name' => $senderInfo['complete_name'],
+                                    'mail' => $senderInfo['email']
+                                )
+                            );
+                        }
 
                         if (!empty($userInfo['email'])) {
                             api_mail_html(

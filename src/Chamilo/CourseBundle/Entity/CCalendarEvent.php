@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -82,6 +83,13 @@ class CCalendarEvent
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
     private $allDay;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    private $comment;
 
     /**
      * Set title
@@ -289,4 +297,26 @@ class CCalendarEvent
     {
         return $this->cId;
     }
+
+    /**
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param string $comment
+     *
+     * @return CCalendarEvent
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+
 }

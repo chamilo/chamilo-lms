@@ -926,17 +926,23 @@ class IndexManager
             return;
         }
 
+        $userGroup = new UserGroup();
+
         $profile_content = '<ul class="nav nav-pills nav-stacked">';
 
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
             // New messages.
-            $number_of_new_messages             = MessageManager::get_new_messages();
+            $number_of_new_messages = MessageManager::get_new_messages();
             // New contact invitations.
-            $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+            $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
 
             // New group invitations sent by a moderator.
-            $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION, false);
+            $group_pending_invitations = $userGroup->get_groups_by_user(
+                api_get_user_id(),
+                GROUP_USER_PERMISSION_PENDING_INVITATION,
+                false
+            );
             $group_pending_invitations = count($group_pending_invitations);
 
             $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;

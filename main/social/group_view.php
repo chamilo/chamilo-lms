@@ -108,7 +108,7 @@ if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 // getting group information
 $group_id	= isset($_GET['id']) ? intval($_GET['id']) : null;
 $relation_group_title = '';
-$my_group_role = 0;
+$role = 0;
 
 $usergroup = new UserGroup();
 
@@ -157,9 +157,9 @@ if (isset($_GET['status']) && $_GET['status']=='sent') {
 }
 
 $is_group_member = $usergroup->is_group_member($group_id);
+$role = $usergroup->get_user_group_role(api_get_user_id(), $group_id);
 
 if (!$is_group_member && $group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
-    $role = $usergroup->get_user_group_role(api_get_user_id(), $group_id);
     if ($role == GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER) {
         $social_right_content .=  Display::return_message(get_lang('YouAlreadySentAnInvitation'));
     }
@@ -167,17 +167,21 @@ if (!$is_group_member && $group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
 
 if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     if (!$is_group_member) {
-        if (!in_array($my_group_role, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))) {
-            $social_right_content .=  '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
-        } elseif ($my_group_role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-            $social_right_content .=  '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a>';
+        if (!in_array($role,
+            array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))
+        ) {
+            $social_right_content .=  '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
+                get_lang('JoinGroup').'</a>';
+        } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
+            $social_right_content .=  '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
+                get_lang('YouHaveBeenInvitedJoinNow').'</a>';
         }
         $social_right_content .=  '<br /><br />';
     }
     $content = MessageManager::display_messages_for_group($group_id);
     if ($is_group_member) {
         if (empty($content)) {
-            $create_thread_link =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn" title="'.get_lang('ComposeMessage').'">'.
+            $create_thread_link =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=800&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn" title="'.get_lang('ComposeMessage').'">'.
                 get_lang('YouShouldCreateATopic').'</a></li>';
         } else {
             $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn" title="'.get_lang('ComposeMessage').'">'.
@@ -188,8 +192,9 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     $member_content = '';
 
     // Members
+
     if (count($members) > 0) {
-        if ($my_group_role == GROUP_USER_PERMISSION_ADMIN) {
+        if ($role == GROUP_USER_PERMISSION_ADMIN) {
             $member_content .= Display::url(
                 Display::return_icon('edit.gif', get_lang('EditMembersList')).' '.get_lang('EditMembersList'),
                 'group_members.php?id='.$group_id
@@ -225,7 +230,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 } else {
     // if I already sent an invitation message
     if (!in_array(
-        $my_group_role,
+        $role,
         array(
             GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,
             GROUP_USER_PERMISSION_PENDING_INVITATION,
@@ -233,7 +238,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     )
     ) {
         $social_right_content .=  '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
-    } elseif ($my_group_role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
+    } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
         $social_right_content .=  '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a>';
     }
 }

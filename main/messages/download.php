@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	This file is responsible for  passing requested file attachments from messages
 *	Html files are parsed to fix a few problems with URLs,
@@ -8,9 +9,6 @@
 *
 *	@package chamilo.messages
 */
-/**
- * MAIN CODE
- */
 
 session_cache_limiter('public');
 
@@ -32,18 +30,21 @@ $tbl_messsage = Database::get_main_table(TABLE_MESSAGE);
 $tbl_messsage_attachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
 $file_url = Database::escape_string($file_url);
-$sql= "SELECT filename, message_id FROM $tbl_messsage_attachment WHERE path LIKE BINARY '$file_url'";
+$sql = "SELECT filename, message_id
+        FROM $tbl_messsage_attachment
+		WHERE path LIKE BINARY '$file_url'";
 
-$result     = Database::query($sql);
-$row        = Database::fetch_array($result, 'ASSOC');
-$title      = str_replace(' ','_', $row['filename']);
+$result = Database::query($sql);
+$row = Database::fetch_array($result, 'ASSOC');
+$title = str_replace(' ', '_', $row['filename']);
 $message_id = $row['message_id'];
 
 // allow download only for user sender and user receiver
-$sql = "SELECT user_sender_id, user_receiver_id, group_id FROM $tbl_messsage WHERE id = '$message_id'";
-$rs           = Database::query($sql);
-$row_users    = Database::fetch_array($rs, 'ASSOC');
-$current_uid  = api_get_user_id();
+$sql = "SELECT user_sender_id, user_receiver_id, group_id
+		FROM $tbl_messsage WHERE id = '$message_id'";
+$rs = Database::query($sql);
+$row_users = Database::fetch_array($rs, 'ASSOC');
+$current_uid = api_get_user_id();
 
 // get message user id for inbox/outbox
 $message_uid = '';
@@ -58,8 +59,10 @@ if (in_array($_GET['type'],$message_type)) {
 
 // allow to the correct user for download this file
 $not_allowed_to_edit = false;
+$userGroup = new UserGroup();
+
 if (!empty($row_users['group_id'])) {
-	$users_group = GroupPortalManager::get_all_users_by_group($row_users['group_id']);
+	$users_group = $userGroup->get_all_users_by_group($row_users['group_id']);
 	if (!in_array($current_uid,array_keys($users_group))) {
 		$not_allowed_to_edit = true;
 	}
@@ -76,7 +79,11 @@ if ($not_allowed_to_edit) {
 
 // set the path directory file
 if (!empty($row_users['group_id'])) {
-	$path_user_info = GroupPortalManager::get_group_picture_path_by_id($row_users['group_id'], 'system', true);
+    $path_user_info = $userGroup->get_group_picture_path_by_id(
+        $row_users['group_id'],
+        'system',
+        true
+    );
 } else {
 	$path_user_info['dir'] = UserManager::getUserPathById($message_uid, 'system');
 }

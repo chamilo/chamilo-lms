@@ -22,7 +22,7 @@ $interbreadcrumb[] = array('url' => 'group_list.php','name' => get_lang('GroupLi
 // Database Table Definitions
 $tbl_group			= Database::get_main_table(TABLE_MAIN_GROUP);
 $tbl_user			= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
+$tbl_group_rel_user	= Database::get_main_table(TABLE_USERGROUP_REL_USER);
 $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 $needle = null;
 $user_anonymous = api_get_anonymous_id();
@@ -212,11 +212,11 @@ $group_name = $group_info['name'];
 Display::display_header($group_name);
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-    $form_sent			= $_POST['form_sent'];
-    $firstLetterUser	= isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
-    $UserList			= $_POST['sessionUsersList'];
-    $group_id			= intval($_POST['id']);
-    $relation_type		= intval($_POST['relation']);
+    $form_sent = $_POST['form_sent'];
+    $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
+    $UserList = $_POST['sessionUsersList'];
+    $group_id = intval($_POST['id']);
+    $relation_type = intval($_POST['relation']);
 
     if (!is_array($UserList)) {
         $UserList = array();

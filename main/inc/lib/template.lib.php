@@ -869,25 +869,23 @@ class Template
             $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
                 api_get_user_id()
             );
-            $group_pending_invitations        = GroupPortalManager::get_groups_by_user(
+            $usergroup = new UserGroup();
+            $group_pending_invitations = $usergroup->get_groups_by_user(
                 api_get_user_id(),
                 GROUP_USER_PERMISSION_PENDING_INVITATION,
                 false
             );
-            $group_pending_invitations        = 0;
+            $group_pending_invitations = 0;
             if (!empty($group_pending_invitations)) {
                 $group_pending_invitations = count($group_pending_invitations);
             }
-            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval(
-                    $count_unread_message
-                );
+            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
         }
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : null);
 
         $this->assign('user_notifications', $total_invitations);
 
-
-        //Block Breadcrumb
+        // Block Breadcrumb
         $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
         $this->assign('breadcrumb', $breadcrumb);
 

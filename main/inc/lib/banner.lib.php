@@ -68,29 +68,7 @@ function get_tabs() {
             $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
             $navigation['session_my_progress']['title'] = get_lang('MyProgress');
             $navigation['session_my_progress']['key'] = 'my-progress';
-	}
-
-
-    // Social
-    /*
-	if (api_get_setting('allow_social_tool')=='true') {
-		$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
-
-        // get count unread message and total invitations
-        $count_unread_message = MessageManager::get_number_of_messages(true);
-
-        $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-        $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
-        $group_pending_invitations = 0;
-        if (!empty($group_pending_invitations )) {
-	        $group_pending_invitations = count($group_pending_invitations);
-        }
-        $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
-        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) :'');
-
-		$navigation['social']['title'] = get_lang('SocialNetwork'). $total_invitations;
-	}
-    */
+    }
 
 	// Social
 	if (api_get_setting('allow_social_tool')=='true') {

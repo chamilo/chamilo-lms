@@ -532,7 +532,9 @@ class SortableTable extends HTML_Table
                 $i = 0;
                 $rows = '';
                 foreach ($row as & $element) {
-                    if ($filter || $visibility_options[$i]) {
+                    if ($filter ||
+                        isset($visibility_options[$i]) && $visibility_options[$i]
+                    ) {
                         $rows .= '<div class="'.$this->table_name.'_grid_element_'.$i.'">'.$element.'</div>';
                     }
                     $i++;

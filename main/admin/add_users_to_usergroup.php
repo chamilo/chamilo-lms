@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *   @package chamilo.admin
 */
+
 // resetting the course id
 $cidReset = true;
 
@@ -24,13 +26,19 @@ $interbreadcrumb[]= array('url' => 'usergroups.php','name' => get_lang('Classes'
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToClass');
 
-$add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
-    $add_type = Security::remove_XSS($_REQUEST['add_type']);
-}
+$id = intval($_GET['id']);
+
+$relation = isset($_REQUEST['relation']) ? intval($_REQUEST['relation']) : '';
 
 $htmlHeadXtra[] = '
 <script>
+
+$(document).ready( function() {
+    $("#relation").change(function() {
+        window.location = "add_users_to_usergroup.php?id='.$id.'" +"&relation=" + $(this).val();
+    });
+});
+
 function add_user_to_session (code, content) {
 
     document.getElementById("user_to_add").value = "";
@@ -58,12 +66,16 @@ function remove_item(origin) {
 }
 
 function validate_filter() {
-    document.formulaire.add_type.value = \''.$add_type.'\';
     document.formulaire.form_sent.value=0;
     document.formulaire.submit();
 }
 
 function checked_in_no_group(checked) {
+
+    $("#relation")
+    .find("option")
+    .attr("selected", false);
+
     $("#first_letter_user")
     .find("option")
     .attr("selected", false);
@@ -80,7 +92,6 @@ function change_select(val) {
 </script>';
 
 $form_sent  = 0;
-$errorMsg   = '';
 
 $extra_field_list = UserManager::get_extra_fields();
 $new_field_list = array();
@@ -97,7 +108,6 @@ if (is_array($extra_field_list)) {
 }
 
 $usergroup = new UserGroup();
-$id = intval($_GET['id']);
 
 if (empty($id)) {
     api_not_allowed(true);
@@ -105,16 +115,21 @@ if (empty($id)) {
 $first_letter_user = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-    $form_sent              = $_POST['form_sent'];
-    $elements_posted        = isset($_POST['elements_in_name']) ? $_POST['elements_in_name'] : null;
-    $first_letter_user      = $_POST['firstLetterUser'];
+    $form_sent = $_POST['form_sent'];
+    $elements_posted = isset($_POST['elements_in_name']) ? $_POST['elements_in_name'] : null;
+    $first_letter_user = $_POST['firstLetterUser'];
 
     if (!is_array($elements_posted)) {
-        $elements_posted=array();
+        $elements_posted = array();
     }
     if ($form_sent == 1) {
         //added a parameter to send emails when registering a user
-        $usergroup->subscribe_users_to_usergroup($id, $elements_posted);
+        $usergroup->subscribe_users_to_usergroup(
+            $id,
+            $elements_posted,
+            true,
+            $relation
+        );
         header('Location: usergroups.php');
         exit;
     }
@@ -138,7 +153,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
 }
 
 
-//Filter by Extra Fields
+// Filter by Extra Fields
 $use_extra_fields = false;
 if (is_array($extra_field_list)) {
     if (is_array($new_field_list) && count($new_field_list)>0 ) {
@@ -195,7 +210,7 @@ if ($searchForm->validate()) {
 }
 
 $data = $usergroup->get($id);
-$list_in = $usergroup->get_users_by_usergroup($id);
+$list_in = $usergroup->getUsersByUsergroupAndRelation($id, $relation);
 $list_all = $usergroup->get_users_by_usergroup();
 
 $order = array('lastname');
@@ -311,8 +326,6 @@ if (!empty($user_list)) {
     }
 }
 
-$add_type == 'unique' ? true : false;
-
 Display::display_header($tool_name);
 
 echo '<div class="actions">';
@@ -336,7 +349,7 @@ echo '</div>';
 <?php
 echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
 
-if ($add_type=='multiple') {
+
     if (is_array($extra_field_list)) {
         if (is_array($new_field_list) && count($new_field_list)>0) {
             echo '<h3>'.get_lang('FilterByUser').'</h3>';
@@ -361,18 +374,31 @@ if ($add_type=='multiple') {
             echo '<br /><br />';
         }
     }
-}
+
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
 
-if (!empty($errorMsg)) {
-    Display::display_normal_message($errorMsg);
-}
 ?>
 
 <div class="row">
     <div class="col-md-5">
+        <?php if ($data['group_type'] == UserGroup::SOCIAL_CLASS) { ?>
+        <select name="relation" id="relation">
+            <option value=""><?php echo get_lang('SelectARelationType')?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_ADMIN)?'selected=selected':'') ?> >
+                <?php echo get_lang('Admin') ?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_READER ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_READER)?'selected=selected':'') ?> >
+                <?php echo get_lang('Reader') ?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_PENDING_INVITATION)?'selected=selected':'') ?> >
+                <?php echo get_lang('PendingInvitation') ?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_MODERATOR)?'selected=selected':'') ?> >
+                <?php echo get_lang('Moderator') ?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_HRM)?'selected=selected':'') ?> >
+                <?php echo get_lang('Drh') ?></option>
+        </select>
+        <?php } ?>
+
         <div class="multiple_select_header">
         <b><?php echo get_lang('UsersInPlatform') ?> :</b>
         <?php echo get_lang('FirstLetterUser'); ?> :

@@ -39,7 +39,8 @@ $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['fi
 switch ($action) {
     case 'export_all_certificates':
         if (api_is_student_boss()) {
-            $userList = GroupPortalManager::getGroupUsersByUser(api_get_user_id());
+            $userGroup = new UserGroup();
+            $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
         } else {
             $userList = array();
             if (!empty($filterOfficialCodeGet)) {

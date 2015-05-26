@@ -80,10 +80,10 @@ define('TABLE_MAIN_TAG', 'tag');
 define('TABLE_MAIN_USER_REL_TAG', 'user_rel_tag');
 
 //User groups
-define('TABLE_MAIN_GROUP', 'groups');
+/*define('TABLE_MAIN_GROUP', 'groups');
 define('TABLE_MAIN_USER_REL_GROUP', 'group_rel_user');
 define('TABLE_MAIN_GROUP_REL_TAG', 'group_rel_tag');
-define('TABLE_MAIN_GROUP_REL_GROUP', 'group_rel_group');
+define('TABLE_MAIN_GROUP_REL_GROUP', 'group_rel_group');*/
 
 // Search engine
 define('TABLE_MAIN_SPECIFIC_FIELD', 'specific_field');
@@ -101,13 +101,6 @@ define('TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY', 'access_url_rel_course_categ
 
 // Global calendar
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
-
-// Reservation System
-define('TABLE_MAIN_RESERVATION_ITEM', 'reservation_item');
-define('TABLE_MAIN_RESERVATION_RESERVATION', 'reservation_main');
-define('TABLE_MAIN_RESERVATION_SUBSCRIBTION', 'reservation_subscription');
-define('TABLE_MAIN_RESERVATION_CATEGORY', 'reservation_category');
-define('TABLE_MAIN_RESERVATION_ITEM_RIGHTS', 'reservation_item_rights');
 
 // Social networking
 define('TABLE_MAIN_USER_REL_USER', 'user_rel_user');
@@ -147,13 +140,9 @@ define('TABLE_STATISTIC_TRACK_E_HOTSPOT', 'track_e_hotspot');
 define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY', 'track_e_item_property');
 define('TABLE_STATISTIC_TRACK_FILTERED_TERMS', 'track_filtered_terms');
 
-//Course catalog stats see #4191
+// Course catalog stats see #4191
 define('TABLE_STATISTIC_TRACK_COURSE_RANKING', 'track_course_ranking');
 define('TABLE_MAIN_USER_REL_COURSE_VOTE', 'user_rel_course_vote');
-
-// SCORM database tables this is used only during the migration from 1.6 to 1.8 see update-db-scorm-1.6.x-1.8.0.inc
-define('TABLE_SCORM_MAIN', 'scorm_main');
-define('TABLE_SCORM_SCO_DATA', 'scorm_sco_data');
 
 // Course tables
 define('TABLE_AGENDA', 'calendar_event');
@@ -175,7 +164,6 @@ define('TABLE_STUDENT_PUBLICATION', 'student_publication');
 define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT', 'student_publication_assignment');
 define('TABLE_STUDENT_PUBLICATION_REL_DOCUMENT', 'student_publication_rel_document');
 define('TABLE_STUDENT_PUBLICATION_REL_USER', 'student_publication_rel_user');
-
 define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT', 'student_publication_comment');
 
 // Course forum tables
@@ -294,7 +282,6 @@ define('TABLE_ATTENDANCE', 'attendance');
 define('TABLE_ATTENDANCE_CALENDAR', 'attendance_calendar');
 define('TABLE_ATTENDANCE_CALENDAR_REL_GROUP', 'attendance_calendar_rel_group');
 define('TABLE_ATTENDANCE_SHEET_LOG', 'attendance_sheet_log');
-
 define('TABLE_ATTENDANCE_SHEET', 'attendance_sheet');
 define('TABLE_ATTENDANCE_RESULT', 'attendance_result');
 
@@ -311,6 +298,7 @@ define('TABLE_USERGROUP', 'usergroup');
 define('TABLE_USERGROUP_REL_USER', 'usergroup_rel_user');
 define('TABLE_USERGROUP_REL_COURSE', 'usergroup_rel_course');
 define('TABLE_USERGROUP_REL_SESSION', 'usergroup_rel_session');
+define('TABLE_USERGROUP_REL_USERGROUP', 'usergroup_rel_usergroup');
 
 // Mail notifications
 define('TABLE_NOTIFICATION', 'notification');

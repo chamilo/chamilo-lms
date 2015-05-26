@@ -1,13 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Helper file for friends and groups profiles
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-/**
- * Initialization
- */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -18,6 +17,8 @@ if (api_get_setting('allow_social_tool') != 'true') {
 
 $views = array('friends', 'mygroups');
 $user_id = intval($_GET['user_id']);
+
+$userGroup = new UserGroup();
 
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
     // show all friends by user_id
@@ -36,13 +37,9 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
         $friend_html .= '<div id="friend-header" >';
 
         if ($number_friends == 1) {
-            $friend_html .= '<div style="float:left;width:80%">' . $number_friends . ' ' . get_lang(
-                    'Friend'
-                ) . '</div>';
+            $friend_html .= '<div style="float:left;width:80%">' . $number_friends . ' ' . get_lang('Friend') . '</div>';
         } else {
-            $friend_html .= '<div style="float:left;width:80%">' . $number_friends . ' ' . get_lang(
-                    'Friends'
-                ) . '</div>';
+            $friend_html .= '<div style="float:left;width:80%">' . $number_friends . ' ' . get_lang('Friends') . '</div>';
         }
 
         $friend_html .= '</div>'; // close div friend-header
@@ -58,7 +55,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 
                 $userPicture = UserManager::getUserPicture($friend['friend_user_id']);
 
-                $friend_html .= '<a href="profile.php?u=' . $friend['friend_user_id'] . '&amp;' . $link_shared . '">';
+                $friend_html .= '<a href="profile.php?u=' . $friend['friend_user_id'].'">';
                 $friend_html .= '<img src="' . $userPicture . '" id="imgfriend_' . $friend['friend_user_id'] . '" title="' . $name_user . '" />';
                 $friend_html .= '</center></span>';
                 $friend_html .= '<center class="friend">' . $name_user . '</a></center>';
@@ -70,7 +67,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
     } else {
         // show all groups by user_id
         // MY GROUPS
-        $results = GroupPortalManager::get_groups_by_user($user_id, 0);
+        $results = $userGroup->get_groups_by_user($user_id, 0);
         $grid_my_groups = array();
         if (is_array($results) && count($results) > 0) {
             $i = 1;
@@ -94,7 +91,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                     );
                 }
                 $count_users_group = count(
-                    GroupPortalManager::get_all_users_by_group($id)
+                    $userGroup->get_all_users_by_group($id)
                 );
                 if ($count_users_group == 1) {
                     $count_users_group = $count_users_group . ' ' . get_lang(
@@ -105,33 +102,26 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                             'Members'
                         );
                 }
-                $picture = GroupPortalManager::get_picture_group(
+                $picture = $userGroup->get_picture_group(
                     $result['id'],
                     $result['picture_uri'],
                     80
                 );
-                $item_name = '<div class="box_shared_profile_group_title">' . $url_open . api_xml_http_response_encode(
-                        $name
-                    ) . $icon . $url_close . '</div>';
+                $item_name = '<div class="box_shared_profile_group_title">' . $url_open . api_xml_http_response_encode($name) . $icon . $url_close . '</div>';
                 $item_description = '';
                 if (!empty($result['description'])) {
-                    $item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2">' . api_xml_http_response_encode(
-                            get_lang('Description')
-                        ) . '</span><p class="social-groups-text4">' . cut(
-                            api_xml_http_response_encode(
-                                $result['description']
-                            ),
-                            120,
-                            true
-                        ) . '</p></div>';
+                    $item_description = '<div class="box_shared_profile_group_description">
+                        <span class="social-groups-text2">' .
+                        api_xml_http_response_encode(get_lang('Description')) . '</span><p class="social-groups-text4">' .
+                        cut(api_xml_http_response_encode($result['description']), 120, true ) . '</p></div>';
                 }
 
-                $result['picture_uri'] = '<div class="box_shared_profile_group_image"><img class="social-groups-image" src="' . $picture['file'] . '" hspace="4" height="50" border="2" align="left" width="50" /></div>';
+                $result['picture_uri'] = '<div class="box_shared_profile_group_image">
+                                          <img class="social-groups-image" src="' . $picture['file'] . '" hspace="4" height="50" border="2" align="left" width="50" /></div>';
                 $item_actions = '';
                 if (api_get_user_id() == $user_id) {
-                    $item_actions = '<div class="box_shared_profile_group_actions"><a href="group_view.php?id=' . $id . '">' . get_lang(
-                            'SeeMore'
-                        ) . $url_close . '</div>';
+                    $item_actions = '<div class="box_shared_profile_group_actions"><a href="group_view.php?id=' . $id . '">' .
+                        get_lang('SeeMore') . $url_close . '</div>';
                 }
                 $grid_my_groups[] = array(
                     $item_name,

@@ -510,10 +510,11 @@ class MessageManager
                 $message_user_id = $sender_user_id;
             }
 
-            // User-reserved directory where photos have to be placed.
+            // User-reserved directory where photos have to be placed.*
+            $userGroup = new UserGroup();
 
             if (!empty($group_id)) {
-                $path_user_info = GroupPortalManager::get_group_picture_path_by_id($group_id, 'system', true);
+                $path_user_info = $userGroup->get_group_picture_path_by_id($group_id, 'system', true);
             } else {
                 $path_user_info['dir'] = UserManager::getUserPathById($message_user_id, 'system');
             }
@@ -559,7 +560,8 @@ class MessageManager
             $new_path = $path.'_DELETED_'.$attach_id;
 
             if (!empty($group_id)) {
-                $path_user_info = GroupPortalManager::get_group_picture_path_by_id($group_id, 'system', true);
+                $userGroup = new UserGroup();
+                $path_user_info = $userGroup->get_group_picture_path_by_id($group_id, 'system', true);
             } else {
                 $path_user_info['dir'] = UserManager::getUserPathById($message_uid, 'system');
             }
@@ -1084,25 +1086,20 @@ class MessageManager
                 $html = '';
                 // topics
                 $user_sender_info = api_get_user_info($topic['user_sender_id']);
-
-                $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
+                $name = $user_sender_info['complete_name'];
 
                 $html .= '<div class="row">';
 
                 $items = $topic['count'];
                 $reply_label = ($items == 1) ? get_lang('GroupReply') : get_lang('GroupReplies');
-
-                $html .= '<div class="col-md-1">';
-                $html .= Display::div(Display::tag('span', $items).$reply_label, array('class' => 'group_discussions_replies'));
-                $html .= '</div>';
-
+                $label =  Display::label($items.' '.$reply_label);
                 $topic['title'] = trim($topic['title']);
 
                 if (empty($topic['title'])) {
                     $topic['title'] = get_lang('Untitled');
                 }
 
-                $html .= '<div class="col-md-4">';
+                $html .= '<div class="col-md-8">';
                 $html .= Display::tag(
                     'h4',
                     Display::url(
@@ -1127,7 +1124,7 @@ class MessageManager
                 } else {
                     $date .= '<div class="message-group-date"> <i>'.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</i></div>';
                 }
-                $html .= $date.$actions;
+                $html .= $date.$label.$actions;
                 $html .= '</div>';
 
                 $image = $user_sender_info['avatar'];
@@ -1208,10 +1205,10 @@ class MessageManager
         $topic_page_nr = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : null;
         $links.= '<div id="message-reply-link">';
         if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $main_message['user_sender_id'] == $current_user_id) {
-            $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=edit_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$main_message['id'].'" class="group_message_popup" title="'.get_lang('Edit').'">';
+            $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=edit_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$main_message['id'].'" class="ajax btn" title="'.get_lang('Edit').'">';
             $links.= Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
         }
-        $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=reply_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$main_message['id'].'" class="group_message_popup" title="'.get_lang('Reply').'">';
+        $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=reply_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$main_message['id'].'" class="ajax btn" title="'.get_lang('Reply').'">';
         $links.= Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
         $links.= '</div>';
 
@@ -1253,9 +1250,10 @@ class MessageManager
 
                 $links.= '<div id="message-reply-link">';
                 if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
-                    $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="group_message_popup" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+                    $links.= '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn" title="'.get_lang('Edit').'">'.
+                        Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
                 }
-                $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="group_message_popup" title="'.get_lang('Reply').'">';
+                $links.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?height=400&width=800&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="ajax btn" title="'.get_lang('Reply').'">';
                 $links.= Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
                 $links.= '</div>';
 

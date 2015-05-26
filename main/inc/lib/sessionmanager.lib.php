@@ -6088,23 +6088,22 @@ class SessionManager
     public static function getSessionsFollowedForGroupAdmin($userId)
     {
         $sessionList = array();
-
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
-        $userIdList = GroupPortalManager::getGroupUsersByUser($userId);
+        $userGroup = new UserGroup();
+        $userIdList = $userGroup->getGroupUsersByUser($userId);
 
         if (empty($userIdList)) {
             return [];
         }
 
-        $sql = "SELECT DISTINCT s.* "
-            . "FROM $sessionTable s "
-            . "INNER JOIN $sessionUserTable sru ON s.id = sru.id_session "
-            . "WHERE ( "
-            . "sru.id_user IN (" . implode(', ', $userIdList) . ") "
-            . "AND sru.relation_type = 0"
-            . ")";
+        $sql = "SELECT DISTINCT s.*
+                FROM $sessionTable s
+                INNER JOIN $sessionUserTable sru ON s.id = sru.id_session
+                WHERE
+                    (sru.id_user IN (" . implode(', ', $userIdList) . ")
+                    AND sru.relation_type = 0
+                )";
 
         if (api_is_multiple_url_enabled()) {
             $sessionAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);

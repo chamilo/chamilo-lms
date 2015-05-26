@@ -572,7 +572,7 @@ function WSCreateUser($params) {
     if (isset($original_user_id_name) && isset($original_user_id_value)) {
         $_SESSION['ws_' . $original_user_id_name] = $original_user_id_value;
     }
-    
+
     /** @var User $user */
     $userId = UserManager::create_user(
         $firstName,
@@ -6188,7 +6188,12 @@ function WSCreateGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-    return GroupPortalManager::add($params['name'], null, null, 1);
+    $userGroup = new UserGroup();
+    $params = [
+        'name' => $params['name']
+    ]
+    return $userGroup->save($params);
+    //return GroupPortalManager::add($params['name'], null, null, 1);
 }
 
 /* Create group Web Service end */
@@ -6233,7 +6238,11 @@ function WSUpdateGroup($params)
         return return_error(WS_ERROR_SECRET_KEY);
     }
     $params['allow_member_group_to_leave'] = null;
-    return GroupPortalManager::update(
+
+    $userGroup = new UserGroup();
+    return $userGroup->update($params);
+
+    /*return GroupPortalManager::update(
         $params['id'],
         $params['name'],
         $params['description'],
@@ -6241,7 +6250,7 @@ function WSUpdateGroup($params)
         $params['visibility'],
         $params['picture_uri'],
         $params['allow_member_group_to_leave']
-    );
+    );*/
 }
 
 /* Update group Web Service end */
@@ -6279,7 +6288,11 @@ function WSDeleteGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-    return GroupPortalManager::delete($params['id']);
+    $userGroup = new UserGroup();
+
+    return $userGroup->delete($params['id']);
+
+    //return GroupPortalManager::delete($params['id']);
 }
 
 /* Delete group Web Service end */
@@ -6318,7 +6331,11 @@ function GroupBindToParent($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-    return GroupPortalManager::set_parent_group($params['id'], $params['parent_id']);
+    $userGroup = new UserGroup();
+
+    return $userGroup->set_parent_group($params['id'], $params['parent_id']);
+
+    //return GroupPortalManager::set_parent_group($params['id'], $params['parent_id']);
 }
 
 /* Bind group Web Service end */
@@ -6356,7 +6373,8 @@ function GroupUnbindFromParent($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-    return GroupPortalManager::set_parent_group($params['id'], 0);
+    $userGroup = new UserGroup();
+    return $userGroup->set_parent_group($params['id'], 0);
 }
 
 /* Unbind group Web Service end */
@@ -6395,7 +6413,10 @@ function WSAddUserToGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-    return GroupPortalManager::add_user_to_group($params['user_id'], $params['group_id']);
+
+    $userGroup = new UserGroup();
+
+    return $userGroup->add_user_to_group($params['user_id'], $params['group_id']);
 }
 
 /* Add user to group Web Service end */
@@ -6435,7 +6456,9 @@ function WSUpdateUserRoleInGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-    return GroupPortalManager::update_user_role(
+    $userGroup = new UserGroup();
+
+    return $userGroup->update_user_role(
         $params['user_id'],
         $params['group_id'],
         $params['relation_type']
@@ -6478,7 +6501,12 @@ function WSDeleteUserFromGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-    return GroupPortalManager::delete_user_rel_group($params['user_id'], $params['group_id']);
+    $userGroup = new UserGroup();
+
+    return $userGroup->delete_user_rel_group(
+        $params['user_id'],
+        $params['group_id']
+    );
 }
 
 /* Delete user from group Web Service end */

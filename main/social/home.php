@@ -14,7 +14,7 @@ require_once '../inc/global.inc.php';
 
 $user_id = api_get_user_id();
 $show_full_profile = true;
-//social tab
+// social tab
 $this_section = SECTION_SOCIAL;
 unset($_SESSION['this_section']); //for hmtl editor repository
 
@@ -25,6 +25,8 @@ if (api_get_setting('allow_social_tool') != 'true') {
     header('Location: ' . $url);
     exit;
 }
+
+$userGroup = new UserGroup();
 
 //fast upload image
 if (api_get_setting('profile', 'picture') == 'true') {
@@ -76,15 +78,6 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 //Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
-
-// Search box
-/*$social_search_block = '<div class="panel panel-default social-search">';
-$social_search_block .= '<div class="panel-heading">'.get_lang("SearchUsers").'</div>';
-$social_search_block .= '<div class="panel-body">';
-$social_search_block.= UserManager::get_search_form('');
-$social_search_block.= '</div>';
-$social_search_block.= '</div>';*/
-
 $social_search_block = Display::panel(UserManager::get_search_form(''), get_lang("SearchUsers"));
 
 //BLock Social Skill
@@ -168,8 +161,7 @@ if (api_get_setting('allow_skills_tool') == 'true') {
     }
 }
 
-
-$results = GroupPortalManager::get_groups_by_age(1, false);
+$results = $userGroup->get_groups_by_age(1, false);
 
 $groups_newest = array();
 
@@ -189,20 +181,21 @@ if (!empty($results)) {
 
         $result['name'] = '<div class="group-name">'.Display::url(
                           api_ucwords(cut($result['name'], 40, true)), $group_url)
-                          .'</div><div class="count-username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$result['count'].'</div>';
+                          .'</div><div class="count-username">'.
+                            Display::return_icon('user.png','','',ICON_SIZE_TINY).$result['count'].'</div>';
 
-        $picture = GroupPortalManager::get_picture_group(
+        $picture = $userGroup->get_picture_group(
             $id,
-            $result['picture_uri'],
+            $result['picture'],
             80
         );
 
-        $result['picture_uri'] = '<img class="group-image" src="' . $picture['file'] . '" />';
+        $result['picture'] = '<img class="group-image" src="' . $picture['file'] . '" />';
         $group_actions = '<div class="group-more"><a href="groups.php?#tab_browse-2">' . get_lang('SeeMore') . '</a></div>';
         $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
         $groups_newest[] = array(
             Display::url(
-                $result['picture_uri'],
+                $result['picture'],
                 $group_url
             ),
             $result['name'],
@@ -210,8 +203,9 @@ if (!empty($results)) {
         );
     }
 }
-//Top popular
-$results = GroupPortalManager::get_groups_by_popularity(1, false);
+
+// Top popular
+$results = $userGroup->get_groups_by_popularity(1, false);
 
 $groups_pop = array();
 foreach ($results as $result) {
@@ -233,9 +227,9 @@ foreach ($results as $result) {
             api_ucwords(cut($result['name'], 40, true)),$group_url)
         .'</div><div class="count-username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$result['count'].'</div>';
 
-    $picture = GroupPortalManager::get_picture_group(
+    $picture = $userGroup->get_picture_group(
         $id,
-        $result['picture_uri'],
+        $result['picture'],
         80
     );
     $result['picture_uri'] = '<img class="group-image" src="' . $picture['file'] . '" />';
@@ -274,16 +268,6 @@ if ($list > 0) {
         $social_group_block.="</div>";
     }
     $social_group_block.= "</div>";
-
-    /*$social_group_block .= Display::return_sortable_grid(
-        'home_group',
-        array(),
-        $groups_pop,
-        array('hide_navigation' => true, 'per_page' => 100),
-        array(),
-        false,
-        array(true, true, true, true, true)
-    );*/
 }
 
 $social_group_block = Display::panel($social_group_block, get_lang('Group'));

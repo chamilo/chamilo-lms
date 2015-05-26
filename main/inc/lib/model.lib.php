@@ -214,6 +214,7 @@ class Model
     {
         $params = $this->clean_parameters($params);
 
+
         if ($this->is_course_model) {
             if (!isset($params['c_id']) || empty($params['c_id'])) {
                 $params['c_id'] = api_get_course_int_id();
@@ -233,7 +234,11 @@ class Model
             $id = intval($params['id']);
             unset($params['id']); //To not overwrite the id
             if (is_numeric($id)) {
-                $result = Database::update($this->table, $params, array('id = ?'=>$id));
+                $result = Database::update(
+                    $this->table,
+                    $params,
+                    array('id = ?' => $id)
+                );
                 if ($result) {
                     return true;
                 }

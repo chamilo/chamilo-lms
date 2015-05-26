@@ -5538,8 +5538,8 @@ class CourseManager
 
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-        $userIdList = GroupPortalManager::getGroupUsersByUser($userId);
+        $userGroup = new UserGroup();
+        $userIdList = $userGroup->getGroupUsersByUser($userId);
 
         if (empty($userIdList)) {
             return [];

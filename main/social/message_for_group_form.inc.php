@@ -20,7 +20,6 @@ if (isset($_REQUEST['user_friend'])) {
     $info_user_friend=array();
     $info_path_friend=array();
     $userfriend_id = intval($_REQUEST['user_friend']);
-    $panel = Security::remove_XSS($_REQUEST['view_panel']);
     $info_user_friend = api_get_user_info($userfriend_id);
     $info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id,'web');
 }
@@ -43,15 +42,14 @@ if (!empty($group_id) && $allowed_action) {
         api_not_allowed(true);
     }
 
-    $to_group   = $group_info['name'];
+    $to_group = $group_info['name'];
     if (!empty($message_id)) {
         $message_info = MessageManager::get_message_by_id($message_id);
         if ($allowed_action == 'reply_message_group') {
-            $subject  = get_lang('Reply').': '.api_xml_http_response_encode($message_info['title']);
-            //$message  = api_xml_http_response_encode($message_info['content']);
+            $subject = get_lang('Reply').': '.api_xml_http_response_encode($message_info['title']);
         } else {
-            $subject  = api_xml_http_response_encode($message_info['title']);
-            $message  = api_xml_http_response_encode($message_info['content']);
+            $subject = api_xml_http_response_encode($message_info['title']);
+            $message = api_xml_http_response_encode($message_info['content']);
         }
     }
 }
@@ -83,19 +81,20 @@ if (api_get_setting('allow_message_tool')=='true') {
         $form->addElement('text', 'title', get_lang('Title'));
         $height = 140;
     }
-
-    $form->addElement('html_editor', 'content');
+    $config = ['ToolbarSet' => 'Messages'];
+    $form->addHtmlEditor('content', get_lang('Message'), true, false, $config);
 
     $form->addElement('label', null, get_lang('AttachmentFiles'));
     $form->addElement('label', null, '<div id="link-more-attach">
-        <a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>'
+        <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>'
     );
 
     $form->addElement('html', '<span id="filepaths"></span>');
     $form->addElement('file', 'attach_1', sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))));
     $form->addElement('html', '</div>');
-    $form->addElement('button', 'submit', get_lang('SendMessage'));
+    $form->addButtonSend(get_lang('SendMessage'));
 
+    $form->setDefaults(['content' => $message, 'title' => $subject]);
     $form->display();
 }
 $tpl->display_blank_template();

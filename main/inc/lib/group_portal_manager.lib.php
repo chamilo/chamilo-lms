@@ -3,7 +3,7 @@
 
 /**
  * Class GroupPortalManager
- * This library provides functions for the group management.
+ * @deprecated use UserGroup functions.
  * Include/require it in your code to use its functionality.
  * @author Julio Montoya <gugli100@gmail.com>
  * @package chamilo.library

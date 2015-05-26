@@ -595,11 +595,12 @@ class UserManager
         }
 
         if (api_get_setting('allow_social_tool') == 'true') {
+            $userGroup = new UserGroup();
             //Delete user from portal groups
-            $group_list = GroupPortalManager::get_groups_by_user($user_id);
+            $group_list = $userGroup->get_groups_by_user($user_id);
             if (!empty($group_list)) {
                 foreach ($group_list as $group_id => $data) {
-                    GroupPortalManager::delete_user_rel_group($user_id, $group_id);
+                    $userGroup->delete_user_rel_group($user_id, $group_id);
                 }
             }
 

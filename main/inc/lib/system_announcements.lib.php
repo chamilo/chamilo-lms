@@ -20,24 +20,22 @@ class SystemAnnouncementManager
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-        $temp_user_groups = GroupPortalManager::get_groups_by_user(api_get_user_id(),0);
-        $groups =array();
+		$userGroup = new UserGroup();
+
+        $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(),0);
+        $groups = array();
         foreach ($temp_user_groups as $user_group) {
             $groups = array_merge($groups, array($user_group['id']));
-            $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
+            $groups = array_merge($groups, $userGroup->get_parent_groups($user_group['id']));
         }
-        //checks if tables exists to not break platform not updated
-        $ann_group_db_ok =false;
-        if( Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
-        $ann_group_db_ok =true;
 
         $groups_string = '('.implode($groups,',').')';
         $now = api_get_utc_datetime();
-        $sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date"
-        ." FROM  $db_table"
-        ." WHERE (lang='$user_selected_language'"
-        ." OR lang IS NULL)"
-        ." AND (('$now' BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
+        $sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date
+				FROM  $db_table
+				WHERE
+				 	(lang='$user_selected_language' OR lang IS NULL) AND
+				 	(('$now' BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
 
         switch ($visible) {
             case self::VISIBLE_GUEST :
@@ -51,11 +49,12 @@ class SystemAnnouncementManager
                 break;
         }
 
-        if (count($groups) > 0 and $ann_group_db_ok ) {
-            $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group "
-                ." WHERE group_id in $groups_string) ";
+        if (count($groups) > 0) {
+            $sql .= " OR id IN (
+                        SELECT announcement_id FROM $tbl_announcement_group
+                        WHERE group_id in $groups_string
+                    ) ";
         }
-		global $_configuration;
 		$current_access_url_id = 1;
 		if (api_is_multiple_url_enabled()) {
 			$current_access_url_id = api_get_current_access_url_id();
@@ -109,25 +108,25 @@ class SystemAnnouncementManager
     {
 		$user_selected_language = api_get_interface_language();
 		$start	= intval($start);
-
+        $userGroup = new UserGroup();
 	    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-	    $temp_user_groups = GroupPortalManager::get_groups_by_user(api_get_user_id(),0);
-	    $groups =array();
+	    $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(),0);
+        $groups = array();
 	    foreach ($temp_user_groups as $user_group) {
-	      $groups = array_merge($groups, array($user_group['id']));
-	      $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
+	        $groups = array_merge($groups, array($user_group['id']));
+	        $groups = array_merge($groups, $userGroup->get_parent_groups($user_group['id']));
 	    }
-	    //checks if tables exists to not break platform not updated
-	    $ann_group_db_ok =false;
-	    if( Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
-	       $ann_group_db_ok =true;
+
+	    // Checks if tables exists to not break platform not updated
 	    $groups_string = '('.implode($groups,',').')';
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$now  = api_get_utc_datetime();
 
 		$sql = "SELECT * FROM ".$db_table."
-				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";
+				WHERE
+				    (lang = '$user_selected_language' OR lang IS NULL) AND
+				    ( '$now' >= date_start AND '$now' <= date_end) ";
 
 		switch ($visible) {
 			case self::VISIBLE_GUEST :
@@ -141,9 +140,11 @@ class SystemAnnouncementManager
 				break;
 		}
 
-	    if (count($groups) > 0 and $ann_group_db_ok ) {
-            $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group
-                              WHERE group_id in $groups_string) ";
+	    if (count($groups) > 0) {
+            $sql .= " OR id IN (
+                    SELECT announcement_id FROM $tbl_announcement_group
+                    WHERE group_id in $groups_string
+                    ) ";
 	    }
 
 		if (api_is_multiple_url_enabled()) {
@@ -249,7 +250,6 @@ class SystemAnnouncementManager
 			}
  		}
 
- 		global $_configuration;
 		$current_access_url_id = 1;
 		if (api_is_multiple_url_enabled()) {
 			$current_access_url_id = api_get_current_access_url_id();
@@ -257,10 +257,10 @@ class SystemAnnouncementManager
 		$sql .= " AND access_url_id = '$current_access_url_id' ";
 
 
-		$sql .= 'LIMIT '.$start.',21';
+		$sql .= 'LIMIT '.$start.', 21';
 		$announcements = Database::query($sql);
 		$i = 0;
-		while($rows = Database::fetch_array($announcements)) {
+		while ($rows = Database::fetch_array($announcements)) {
 			$i++;
 		}
 		return $i;
@@ -335,7 +335,12 @@ class SystemAnnouncementManager
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
 		}
-		if (($date_end_to_compare[1] || $date_end_to_compare[2] || $date_end_to_compare[0]) && !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])) {
+
+		if (($date_end_to_compare[1] ||
+            $date_end_to_compare[2] ||
+            $date_end_to_compare[0]) &&
+            !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
+        ) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
@@ -344,8 +349,8 @@ class SystemAnnouncementManager
 			return false;
 		}
 
-		$start    = api_get_utc_datetime($date_start);
-		$end      = api_get_utc_datetime($date_end);
+		$start = api_get_utc_datetime($date_start);
+        $end = api_get_utc_datetime($date_end);
 
 		$title = Database::escape_string($title);
 		$content = Database::escape_string($content);
@@ -365,17 +370,31 @@ class SystemAnnouncementManager
 				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$langsql.", ".$current_access_url_id.")";
 
         if ($sendEmailTest) {
-            SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang, true);
+            SystemAnnouncementManager::send_system_announcement_by_email(
+                $title,
+                $content,
+                $visible_teacher,
+                $visible_student,
+                $lang,
+                true
+            );
         } else {
             if ($send_mail == 1) {
-                SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
+                SystemAnnouncementManager::send_system_announcement_by_email(
+                    $title,
+                    $content,
+                    $visible_teacher,
+                    $visible_student,
+                    $lang
+                );
             }
         }
+
 		$res = Database::query($sql);
 		if ($res === false) {
-			Debug::log_s(mysql_error());
 			return false;
 		}
+
 		$id = null;
 		if ($add_to_calendar) {
 			$agenda = new Agenda();
@@ -393,30 +412,39 @@ class SystemAnnouncementManager
 	}
 
     /**
-   * Makes the announcement id visible only for groups in groups_array
-   * @param int announcement id
-   * @param array array of group id
-   **/
+    * Makes the announcement id visible only for groups in groups_array
+    * @param int announcement id
+    * @param array array of group id
+    **/
     public static function announcement_for_groups($announcement_id, $group_array)
     {
-        $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+        $tbl_announcement_group = Database:: get_main_table(
+            TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS
+        );
         //first delete all group associations for this announcement
-        $res = Database::query("DELETE FROM $tbl_announcement_group where announcement_id=".intval($announcement_id));
+        $res = Database::query(
+            "DELETE FROM $tbl_announcement_group WHERE announcement_id=".intval(
+                $announcement_id
+            )
+        );
+
         if ($res === false) {
-          Debug::log_s(mysql_error());
-          return false;
+            return false;
         }
 
         foreach ($group_array as $group_id) {
-          if (intval($group_id) != 0 ) {
-            $res = Database::query("INSERT into $tbl_announcement_group set announcement_id=".intval($announcement_id)
-              .", group_id=".intval($group_id));
-            if ($res === false) {
-              Debug::log_s(mysql_error());
-              return false;
+            if (intval($group_id) != 0) {
+                $sql = "INSERT INTO $tbl_announcement_group SET
+                        announcement_id=".intval($announcement_id).",
+                        group_id=".intval($group_id);
+                $res = Database::query($sql);
+                if ($res === false) {
+
+                    return false;
+                }
             }
-          }
         }
+
         return true;
     }
 
@@ -428,12 +456,17 @@ class SystemAnnouncementManager
     public static function get_announcement_groups($announcement_id)
     {
         $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-        $tbl_group = Database :: get_main_table(TABLE_MAIN_GROUP);
+        $tbl_group = Database :: get_main_table(TABLE_USERGROUP);
         //first delete all group associations for this announcement
 
-        $res = Database::query("SELECT g.id as group_id , g.name as group_name  FROM $tbl_group g , $tbl_announcement_group ag"
-                                ." WHERE announcement_id=".intval($announcement_id)
-                                ." AND ag.group_id = g.id");
+        $sql = "SELECT
+                    g.id as group_id,
+                    g.name as group_name
+                FROM $tbl_group g , $tbl_announcement_group ag
+                WHERE
+                    announcement_id =".intval($announcement_id)." AND
+                    ag.group_id = g.id";
+        $res = Database::query($sql);
         $groups = Database::fetch_array($res);
         return $groups;
     }
@@ -478,7 +511,11 @@ class SystemAnnouncementManager
 			return false;
 		}
 
-		if (($date_end_to_compare[1] || $date_end_to_compare[2] || $date_end_to_compare[0]) && !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])) {
+		if (($date_end_to_compare[1] ||
+            $date_end_to_compare[2] ||
+            $date_end_to_compare[0]) &&
+            !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
+        ) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
@@ -503,15 +540,28 @@ class SystemAnnouncementManager
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' , access_url_id = '".api_get_current_access_url_id()."'  WHERE id = ".$id;
 
         if ($sendEmailTest) {
-            SystemAnnouncementManager::send_system_announcement_by_email($title, $content, null, null, $lang, $sendEmailTest);
+            SystemAnnouncementManager::send_system_announcement_by_email(
+                $title,
+                $content,
+                null,
+                null,
+                $lang,
+                $sendEmailTest
+            );
         } else {
             if ($send_mail==1) {
-                SystemAnnouncementManager::send_system_announcement_by_email($title, $content, $visible_teacher, $visible_student, $lang);
+                SystemAnnouncementManager::send_system_announcement_by_email(
+                    $title,
+                    $content,
+                    $visible_teacher,
+                    $visible_student,
+                    $lang
+                );
             }
         }
 		$res = Database::query($sql);
 		if ($res === false) {
-			Debug::log_s(mysql_error());
+
 			return false;
 		}
 		return true;
@@ -529,7 +579,7 @@ class SystemAnnouncementManager
 		$sql = "DELETE FROM ".$db_table." WHERE id =".$id;
 		$res = Database::query($sql);
 		if ($res === false) {
-			Debug::log_s(mysql_error());
+
 			return false;
 		}
 		return true;
@@ -552,14 +602,15 @@ class SystemAnnouncementManager
 	/**
 	 * Change the visibility of an announcement
 	 * @param 	int $announcement_id
-	 * @param 	int $user For who should the visibility be changed (possible values are VISIBLE_TEACHER, VISIBLE_STUDENT, VISIBLE_GUEST)
+	 * @param 	int $user For who should the visibility be changed
+     * (possible values are VISIBLE_TEACHER, VISIBLE_STUDENT, VISIBLE_GUEST)
 	 * @return 	bool	True on success, false on failure
 	 */
 	public static function set_visibility($announcement_id, $user, $visible)
     {
-		$db_table 			= Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$visible			= intval($visible);
-		$announcement_id 	= intval($announcement_id);
+		$db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$visible = intval($visible);
+		$announcement_id = intval($announcement_id);
 
         if (!in_array($user, array(self::VISIBLE_GUEST, self::VISIBLE_STUDENT, self::VISIBLE_TEACHER))) {
             return false;
@@ -567,10 +618,10 @@ class SystemAnnouncementManager
 
 		$field = ($user == self::VISIBLE_TEACHER ? 'visible_teacher' : ($user == self::VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
 
-		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
+		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."'
+		        WHERE id='".$announcement_id."'";
 		$res = Database::query($sql);
 		if ($res === false) {
-			Debug::log_s(mysql_error());
 			return false;
 		}
 		return true;
@@ -659,7 +710,9 @@ class SystemAnnouncementManager
         $now = api_get_utc_datetime();
 
         $sql = "SELECT * FROM " . $table . "
-				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";
+				WHERE
+				    (lang = '$user_selected_language' OR lang IS NULL) AND
+				    ('$now' >= date_start AND '$now' <= date_end) ";
 
         switch ($visible) {
             case self::VISIBLE_GUEST :

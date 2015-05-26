@@ -597,16 +597,6 @@ class SocialManager extends UserManager
             'browse_groups'
         );
 
-        // get count unread message and total invitations
-        /*$count_unread_message = MessageManager::get_number_of_messages(true);
-        $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;*/
-
-        /*$number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-        $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION, false);
-        $group_pending_invitations = count($group_pending_invitations);
-        $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
-        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');*/
-
         $html = '<div class="avatar-profile">';
         if (in_array($show, $show_groups) && !empty($group_id)) {
             // Group image
@@ -625,7 +615,7 @@ class SocialManager extends UserManager
                 api_get_path(WEB_CODE_PATH).'social/group_view.php?id='.$group_id
             );
 
-            if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
+            if ($userGroup->is_group_admin($group_id, api_get_user_id())) {
                 $html .= '<div id="edit_image">
                             <a href="'.api_get_path(WEB_CODE_PATH).'social/group_edit.php?id='.$group_id.'">'.
                     get_lang('EditGroup').'</a></div>';
@@ -1559,7 +1549,7 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param $user_id
+     * @param int $user_id
      * @param $link_shared
      * @param $show_full_profile
      * @return string
@@ -1570,15 +1560,13 @@ class SocialManager extends UserManager
         $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
         $number_of_images = 30;
         $number_friends = count($friends);
-
-        $friendHtml = '<div class="nav-list"><h3>'.get_lang('SocialFriend').'<span>(' . $number_friends . ')</span></h3></div>';
-
+        $friendHtml = '';
         if ($number_friends != 0) {
             if ($number_friends > $number_of_images) {
                 if (api_get_user_id() == $user_id) {
-                    $friendHtml.= ' : <span><a href="friends.php">'.get_lang('SeeAll').'</a></span>';
+                    $friendHtml.= ' <span><a href="friends.php">'.get_lang('SeeAll').'</a></span>';
                 } else {
-                    $friendHtml.= ' : <span>'
+                    $friendHtml.= ' <span>'
                         .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
                         .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
                         .'class="ajax" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
@@ -1602,11 +1590,14 @@ class SocialManager extends UserManager
                     }
 
                     $friendHtml.= '<li class="">';
+                    $friendHtml.= '<div>';
+
                     // the height = 92 must be the same in the image_friend_network span style in default.css
                     $friends_profile = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_SMALL);
                     $friendHtml.= '<img src="'.$friends_profile.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'"/>';
                     $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
                     $friendHtml.= $statusIcon .'<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">' . $name_user .'</a>';
+                    $friendHtml.= '</div>';
                     $friendHtml.= '</li>';
                 }
                 $j++;
@@ -1616,6 +1607,8 @@ class SocialManager extends UserManager
             $friendHtml.= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
                 .'<a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php"><i class="fa fa-search"></i> '. get_lang('TryAndFindSomeFriends').'</a></div>';
         }
+
+        $friendHtml = Display::panel($friendHtml, get_lang('SocialFriend').' (' . $number_friends . ')' );
 
         return $friendHtml;
     }

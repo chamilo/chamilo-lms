@@ -212,9 +212,10 @@ switch ($action) {
         }
 
         if ($searchByGroups) {
+            $userGroup = new UserGroup();
             $userIdList = array_merge(
                 $userIdList,
-                GroupPortalManager::getGroupUsersByUser(api_get_user_id())
+                $userGroup->getGroupUsersByUser(api_get_user_id())
             );
         }
 
@@ -442,36 +443,36 @@ switch ($action) {
         break;
     case 'get_timelines':
         require_once $libpath.'timeline.lib.php';
-        $obj        = new Timeline();
-        $count      = $obj->get_count();
+        $obj = new Timeline();
+        $count = $obj->get_count();
         break;
     case 'get_gradebooks':
         require_once $libpath.'gradebook.lib.php';
-        $obj        = new Gradebook();
-        $count      = $obj->get_count();
+        $obj = new Gradebook();
+        $count = $obj->get_count();
         break;
     case 'get_event_email_template':
-        $obj        = new EventEmailTemplate();
-        $count      = $obj->get_count();
+        $obj = new EventEmailTemplate();
+        $count = $obj->get_count();
         break;
     case 'get_careers':
-        $obj        = new Career();
-        $count      = $obj->get_count();
+        $obj = new Career();
+        $count = $obj->get_count();
         break;
     case 'get_promotions':
-        $obj        = new Promotion();
-        $count      = $obj->get_count();
+        $obj = new Promotion();
+        $count = $obj->get_count();
         break;
     case 'get_grade_models':
-        $obj        = new GradeModel();
-        $count      = $obj->get_count();
+        $obj = new GradeModel();
+        $count = $obj->get_count();
         break;
     case 'get_usergroups':
-        $obj        = new UserGroup();
-        $count      = $obj->get_count();
+        $obj = new UserGroup();
+        $count = $obj->get_count();
         break;
     case 'get_usergroups_teacher':
-        $obj        = new UserGroup();
+        $obj = new UserGroup();
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
         $course_id = api_get_course_int_id();
         if ($type == 'registered') {
@@ -637,8 +638,9 @@ switch ($action) {
             $sessionIdList
         );
         if (api_is_student_boss()) {
+            $userGroup = new UserGroup();
             foreach ($result as &$item) {
-                $userGroups = GroupPortalManager::get_groups_by_user($item['user_id']);
+                $userGroups = $userGroup->get_groups_by_user($item['user_id']);
                 $item['group'] = implode(", ", array_column($userGroups, 'name'));
                 unset($item['user_id']);
             }
@@ -1383,7 +1385,7 @@ switch ($action) {
         );
         break;
     case 'get_usergroups_teacher':
-        $columns = array('name', 'users', 'actions');
+        $columns = array('name', 'users', 'status', 'group_type', 'actions');
         $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
         $options['course_id'] = $course_id;
 
@@ -1397,6 +1399,7 @@ switch ($action) {
                 $result = $obj->get_usergroup_in_course($options);
                 break;
         }
+
         $new_result = array();
         if (!empty($result)) {
             foreach ($result as $group) {
@@ -1408,6 +1411,18 @@ switch ($action) {
                     $url  = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq();
                     $icon = Display::return_icon('add.png', get_lang('Add'));
                 }
+
+                switch ($group['group_type']) {
+                    case 0:
+                        $group['group_type'] = Display::label(get_lang('Class'), 'info');
+                        break;
+                    case 1:
+                        $group['group_type'] = Display::label(get_lang('Social'), 'success');
+                        break;
+                }
+
+                $role = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
+                $group['status'] = $role;
                 $group['actions'] = Display::url($icon, $url);
                 $new_result[] = $group;
             }

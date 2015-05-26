@@ -64,7 +64,7 @@ if (isset($_POST['action'])) {
     $action_todo = true;
 }
 
-//Actions
+// Actions
 switch($action) {
     case 'make_visible':
     case 'make_invisible':
@@ -79,7 +79,6 @@ switch($action) {
         SystemAnnouncementManager :: delete_announcement($_GET['id']);
         Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
         break;
-
     case 'delete_selected':
         foreach($_POST['id'] as $index => $id) {
             SystemAnnouncementManager :: delete_announcement($id);
@@ -101,24 +100,24 @@ switch($action) {
         break;
     case 'edit':
         // Edit an announcement.
-        $announcement 				= SystemAnnouncementManager :: get_announcement($_GET['id']);
-        $values['id'] 				= $announcement->id;
-        $values['title'] 			= $announcement->title;
-        $values['content']			= $announcement->content;
-        $values['start'] 			= api_get_local_time($announcement->date_start);
-        $values['end'] 				= api_get_local_time($announcement->date_end);
+        $announcement = SystemAnnouncementManager:: get_announcement($_GET['id']);
+        $values['id'] = $announcement->id;
+        $values['title'] = $announcement->title;
+        $values['content'] = $announcement->content;
+        $values['start'] = api_get_local_time($announcement->date_start);
+        $values['end'] = api_get_local_time($announcement->date_end);
 
         $values['range'] =
             substr(api_get_local_time($announcement->date_start), 0, 16).' / '.
             substr(api_get_local_time($announcement->date_end), 0, 16);
 
-        $values['visible_teacher'] 	= $announcement->visible_teacher;
-        $values['visible_student'] 	= $announcement->visible_student ;
-        $values['visible_guest'] 	= $announcement->visible_guest ;
-        $values['lang'] 			= $announcement->lang;
-        $values['action']			= 'edit';
-        $groups = SystemAnnouncementManager :: get_announcement_groups($announcement->id);
-        $values['group'] = isset($groups[0]['group_id']) ? $groups[0]['group_id'] : 0;
+        $values['visible_teacher'] = $announcement->visible_teacher;
+        $values['visible_student'] = $announcement->visible_student;
+        $values['visible_guest'] = $announcement->visible_guest;
+        $values['lang'] = $announcement->lang;
+        $values['action'] = 'edit';
+        $groups = SystemAnnouncementManager::get_announcement_groups($announcement->id);
+        $values['group'] = isset($groups['group_id']) ? $groups['group_id'] : 0;
         $action_todo = true;
         break;
 }
@@ -126,21 +125,33 @@ switch($action) {
 if ($action_todo) {
     if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'add') {
         $form_title = get_lang('AddNews');
+        $url = api_get_self();
     } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
         $form_title = get_lang('EditNews');
+        $url = api_get_self().'?id='.intval($_GET['id']);
     }
-    $form = new FormValidator('system_announcement');
+    $form = new FormValidator('system_announcement', 'post', $url);
     $form->addElement('header', '', $form_title);
-    $form->addText('title', get_lang('Title'), true, array('class'=>'span4'));
+    $form->addText('title', get_lang('Title'), true);
     $language_list = api_get_languages();
     $language_list_with_keys = array();
     $language_list_with_keys['all'] = get_lang('All');
-    for($i=0; $i<count($language_list['name']) ; $i++) {
+    for ($i=0; $i<count($language_list['name']) ; $i++) {
         $language_list_with_keys[$language_list['folder'][$i]] = $language_list['name'][$i];
     }
 
     $form->addElement('select', 'lang',get_lang('Language'), $language_list_with_keys);
-    $form->addHtmlEditor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
+    $form->addHtmlEditor(
+        'content',
+        get_lang('Content'),
+        true,
+        false,
+        array(
+            'ToolbarSet' => 'PortalNews',
+            'Width' => '100%',
+            'Height' => '300',
+        )
+    );
     $form->addDateRangePicker('range', get_lang('StartTimeWindow'), true, array('id' => 'date_range'));
 
     $group = array();
@@ -152,15 +163,20 @@ if ($action_todo) {
     $form->addGroup($group, null, get_lang('Visible'), '');
 
     $form->addElement('hidden', 'id');
+    $userGroup = new UserGroup();
+    $group_list = $userGroup->get_all();
 
-    $group_list = GroupPortalManager::get_groups_list();
-    $group_list[0] = get_lang('All');
-    $form->addElement(
-        'select',
-        'group',
-        get_lang('AnnouncementForGroup'),
-        $group_list
-    );
+    if (!empty($group_list)) {
+        $group_list = array_column($group_list, 'name', 'id');
+        $group_list[0] = get_lang('All');
+        $form->addElement(
+            'select',
+            'group',
+            get_lang('AnnouncementForGroup'),
+            $group_list
+        );
+    }
+
     $values['group'] = isset($values['group']) ? $values['group'] : '0';
 
     $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
@@ -209,8 +225,8 @@ if ($action_todo) {
                     $values['visible_guest'],
                     $values['lang'],
                     $sendMail,
-                    empty($values['add_to_calendar'])?false:true,
-                    empty($values['send_email_test'])?false:true
+                    empty($values['add_to_calendar']) ? false : true,
+                    empty($values['send_email_test']) ? false : true
                 );
 
                 if ($announcement_id !== false) {
@@ -222,6 +238,8 @@ if ($action_todo) {
                 }
                 break;
             case 'edit':
+                $sendMailTest = isset($values['send_email_test']) ? $values['send_email_test'] : null;
+
                 if (SystemAnnouncementManager::update_announcement(
                     $values['id'],
                     $values['title'],
@@ -233,10 +251,13 @@ if ($action_todo) {
                     $values['visible_guest'],
                     $values['lang'],
                     $sendMail,
-                    $values['send_email_test']
+                    $sendMailTest
                 )
                 ) {
-                    SystemAnnouncementManager::announcement_for_groups($values['id'], array($values['group']));
+                    SystemAnnouncementManager::announcement_for_groups(
+                        $values['id'],
+                        array($values['group'])
+                    );
                     Display :: display_confirmation_message(get_lang('AnnouncementUpdated'));
                 } else {
                     $show_announcement_list = false;

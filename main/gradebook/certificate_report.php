@@ -5,7 +5,7 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.gradebook
  */
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 $cidReset = true;
 
@@ -31,7 +31,8 @@ $userId = api_get_user_id();
 $sessions = $courses = $months = $students = [0 => get_lang('Select')];
 
 if (api_is_student_boss()) {
-    $userList = GroupPortalManager::getGroupUsersByUser($userId);
+    $userGroup = new UserGroup();
+    $userList = $userGroup->getGroupUsersByUser($userId);
     $sessionsList = SessionManager::getSessionsFollowedForGroupAdmin($userId);
 } else {
     $sessionsList = SessionManager::getSessionsCoachedByUser($userId, false, api_is_platform_admin());

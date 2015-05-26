@@ -1,10 +1,11 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -94,11 +95,12 @@ if (isset($name_search) && $name_search != 'undefined') {
     $friends = SocialManager::get_friends($user_id);
 }
 
-$social_right_content = '<div class="span8">';
+$social_right_content = '<div class="col-md-9">';
 
 if (count($friends) == 0) {
     $social_right_content .= get_lang('NoFriendsInYourContactList').'<br /><br />';
-    $social_right_content .= '<a class="btn btn-primary" href="search.php"><i class="fa fa-search"></i>'.get_lang('TryAndFindSomeFriends').'</a>';
+    $social_right_content .= '<a class="btn btn-primary" href="search.php">
+								<i class="fa fa-search"></i>'.get_lang('TryAndFindSomeFriends').'</a>';
 } else {
     $social_right_content .= get_lang('Search').'&nbsp;&nbsp; : &nbsp;&nbsp;';
     $social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />';
@@ -108,27 +110,26 @@ if (count($friends) == 0) {
     $number_friends = count($friends);
     $j = 0;
 
-    $friend_html.= '<ul class="thumbnails">';
     for ($k = 0; $k < $number_friends; $k++) {
         while ($j < $number_friends) {
-
             if (isset($friends[$j])) {
-                $friend_html.='<li class="span2">';
+                $friend_html.='<div class="card">';
                 $friend = $friends[$j];
                 $user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
 				$userPicture = UserManager::getUserPicture($friend['friend_user_id']);
-                $friend_html.='<div class="thumbnail" onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
+                $friend_html.='<div class="avatar" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
                 $friend_html.='<img src="'.$userPicture.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" />                                    ';
-                $friend_html.='<div class="caption">
+				$friend_html.='</div>';
+
+                $friend_html.='<div class="content">
                                <a href="profile.php?u='.$friend['friend_user_id'].'"> <h5>'.$user_name.'</h5></a>';
                 $friend_html.='<p><button onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'  />'.get_lang('Delete').'</button></p>
-                        </div>';
-                $friend_html.='</li>';
+                        		</div>';
+                $friend_html.='</div>';
             }
             $j++;
         }
     }
-    $friend_html.='</ul>';
     $friend_html.='</div>';
     $social_right_content .= $friend_html;
 }

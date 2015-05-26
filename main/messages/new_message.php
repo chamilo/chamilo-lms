@@ -153,9 +153,9 @@ function show_compose_to_user ($receiver_id) {
 
 function manage_form($default, $select_from_user_list = null, $sent_to = null)
 {
-	$group_id 		= isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
-	$message_id 	= isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;
-	$param_f 		= isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
+	$group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
+	$message_id = isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;
+	$param_f = isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
 
 	$form = new FormValidator('compose_message', null, api_get_self().'?f='.$param_f, null, array('enctype'=>'multipart/form-data'));
 	if (empty($group_id)) {
@@ -185,7 +185,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
 			}
 		}
 	} else {
-		$group_info = GroupPortalManager::get_group_data($group_id);
+		$userGroup = new UserGroup();
+		$group_info = $userGroup->get($group_id);
 
 		$form->addElement('label', get_lang('ToGroup'), api_xml_http_response_encode($group_info['name']));
 		$form->addElement('hidden','group_id',$group_id);
@@ -193,7 +194,13 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
 	}
 
 	$form->addText('title', get_lang('Subject'), true);
-	$form->addHtmlEditor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250'));
+	$form->addHtmlEditor(
+		'content',
+		get_lang('Message'),
+		false,
+		false,
+		array('ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250')
+	);
 
 	if (isset($_GET['re_id'])) {
 	    $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);

@@ -53,7 +53,7 @@ if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
 
 $social_right_content = null;
 
-// My groups -----
+// My groups
 $results = $usergroup->get_groups_by_user(api_get_user_id(), 0);
 
 $grid_my_groups = array();

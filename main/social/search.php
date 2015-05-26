@@ -62,7 +62,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $pageGroup = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
         // Groups
         $fromGroups = intval(($pageGroup - 1) * $itemPerPage);
-        $totalGroups = GroupPortalManager::get_all_group_tags($_GET['q'], 0, $itemPerPage, true);
+        $totalGroups = count($usergroup->get_all_group_tags($_GET['q'], 0, $itemPerPage, true));
 
         $groups = $usergroup->get_all_group_tags($_GET['q'], $fromGroups);
     }

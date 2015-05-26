@@ -21,10 +21,9 @@ if (api_get_setting('allow_social_tool') !='true') {
 }
 
 $user_id = api_get_user_id();
-
 $friendId = isset($_GET['u']) ? intval($_GET['u']) : api_get_user_id();
-
 $isAdmin = api_is_platform_admin($user_id);
+$userGroup = new UserGroup();
 
 $show_full_profile = true;
 //social tab
@@ -191,15 +190,17 @@ function register_friend(element_input) {
         });
     }
 }
-
 </script>';
+
+$link_shared = '';
+
 $nametool = get_lang('ViewMySharedProfile');
 if (isset($_GET['shared'])) {
-    $my_link='../social/profile.php';
-    $link_shared='shared='.Security::remove_XSS($_GET['shared']);
+    $my_link = '../social/profile.php';
+    $link_shared = 'shared='.Security::remove_XSS($_GET['shared']);
 } else {
-    $my_link='../social/profile.php';
-    $link_shared='';
+    $my_link = '../social/profile.php';
+    $link_shared = '';
 }
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('SocialNetwork') );
 
@@ -219,17 +220,13 @@ if (isset($_GET['u'])) {
 
 $_SESSION['social_user_id'] = intval($user_id);
 
-/**
- * Display
- */
-
-//Setting some course info
-$my_user_id = isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
+// Setting some course info
+$my_user_id = isset($_GET['u']) ? intval($_GET['u']) : api_get_user_id();
 $personal_course_list = UserManager::get_personal_session_course_list($my_user_id);
 
 $course_list_code = array();
-$i=1;
-
+$i = 1;
+$list = [];
 if (is_array($personal_course_list)) {
     foreach ($personal_course_list as $my_course) {
         if ($i<=10) {
@@ -260,49 +257,6 @@ foreach ($sessionList as $session) {
 
 // My friends
 $friend_html = SocialManager::listMyFriends($user_id, $link_shared ,$show_full_profile);
-$social_left_content = '<div class="well sidebar-nav">' .$friend_html . '</div>';
-
-/*
-$personal_info = null;
-if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
-    $personal_info .= '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
-} else {
-    //--- Basic Information
-    $personal_info .=  '<div><h3>'.get_lang('Profile').'</h3></div>';
-}
-
-if ($show_full_profile) {
-    $personal_info .=  '<dl class="dl-horizontal">';
-    if ($isAdmin || $isSelfUser) {
-        $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'    </dd>';
-    }
-    if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
-        $personal_info .=  '<dt>'.get_lang('Name')
-            .'</dt><dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
-    }
-    if (($isAdmin || $isSelfUser) && !empty($user_info['official_code'])) {
-        $personal_info .=  '<dt>'.get_lang('OfficialCode').'</dt><dd>'.$user_info['official_code'].'</dd>';
-    }
-    if (!empty($user_info['email'])) {
-        if (api_get_setting('show_email_addresses')=='true') {
-            $personal_info .=  '<dt>'.get_lang('Email').'</dt><dd>'.$user_info['email'].'</dd>';
-        }
-        if (!empty($user_info['phone'])) {
-            $personal_info .=  '<dt>'.get_lang('Phone').'</dt><dd>'. $user_info['phone'].'</dd>';
-        }
-        $personal_info .=  '</dl>';
-    }
-} else {
-    $personal_info .=  '<dl class="dl-horizontal">';
-    if (!empty($user_info['username'])) {
-        if ($isAdmin || $isSelfUser) {
-            $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
-        }
-    }
-    $personal_info .=  '</dl>';
-}
-*/
-//Social Block Wall
 
 $wallSocialAddPost = SocialManager::getWallForm();
 $social_wall_block = $wallSocialAddPost;
@@ -333,7 +287,7 @@ $social_right_content = null;
 $show_full_profile = true;
 if ($show_full_profile) {
 
-    $t_ufo    = Database :: get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+    $t_ufo = Database :: get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
     $extra_user_data = UserManager::get_extra_user_data($user_id, false, true);
 
     $extra_information = '';
@@ -431,14 +385,14 @@ if ($show_full_profile) {
         $extra_information .= '</div></div>'; //social-profile-info
     }
 
- //If there are information to show Block Extra Information
+    // If there are information to show Block Extra Information
 
     if (!empty($extra_information_value)) {
         $social_extra_info_block =  $extra_information;
     }
 
     // MY GROUPS
-    $results = GroupPortalManager::get_groups_by_user($my_user_id, 0);
+    $results = $userGroup->get_groups_by_user($my_user_id, 0);
     $grid_my_groups = array();
     $max_numbers_of_group = 4;
 
@@ -464,36 +418,20 @@ if ($show_full_profile) {
                     array('style'=>'vertical-align:middle;width:16px;height:16px;')
                 );
             }
-            $count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
+            $count_users_group = count($userGroup->get_all_users_by_group($id));
             if ($count_users_group == 1 ) {
                 $count_users_group = $count_users_group.' '.get_lang('Member');
             } else {
                 $count_users_group = $count_users_group.' '.get_lang('Members');
             }
-            //$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
             $item_name = $url_open.$name.$icon.$url_close;
-
-            if ($result['description'] != '') {
-                //$item_description = '<div class="box_shared_profile_group_description">'
-                //.'<p class="social-groups-text4">'.cut($result['description'],100,true).'</p></div>';
-            } else {
-                //$item_description = '<div class="box_shared_profile_group_description">'
-                //.'<span class="social-groups-text2"></span><p class="social-groups-text4"></p></div>';
-            }
-            //$result['picture_uri'] = '<div class="box_shared_profile_group_image">'
-            //.'<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50"'
-            //.' border="2" align="left" width="50" /></div>';
             $item_actions = '';
-            //if (api_get_user_id() == $user_id) {
-                //$item_actions = '<div class="box_shared_profile_group_actions"><a href="groups.php?id='.$id.'">'
-                //.get_lang('SeeMore').$url_close.'</div>';
-            //}
-            $grid_my_groups[]= array($item_name,$url_open.$result['picture_uri'].$url_close, $item_actions);
+            $grid_my_groups[]= array($item_name,$url_open.$result['picture'].$url_close, $item_actions);
             $i++;
         }
     }
 
-    //Block My Groups
+    // Block My Groups
     if (count($grid_my_groups) > 0) {
         $my_groups = '';
         $count_groups = 0;
@@ -531,11 +469,11 @@ if ($show_full_profile) {
         $social_group_info_block = $my_groups;
     }
 
-    //Block Social Course
+    // Block Social Course
 
     $my_courses = null;
     // COURSES LIST
-    if ( is_array($list) ) {
+    if (is_array($list)) {
         $my_courses .=  '<div class="panel panel-default">';
         $my_courses .=  '<div class="panel-heading">'.api_ucfirst(get_lang('MyCourses')).'</div>';
         $my_courses .=  '<div class="panel-body">';
@@ -551,7 +489,6 @@ if ($show_full_profile) {
             }
         }
         $my_courses .=  '</div></div>';
-
         $social_course_block .=  $my_courses;
     }
 
@@ -573,7 +510,6 @@ if ($show_full_profile) {
         $rss .= '<div class="panel-heading">'.get_lang('RSSFeeds').'</div>';
         $rss .= '<div class="panel-body">'.$user_feeds.'</div></div>';
         $social_rss_block =  $rss;
-
     }
 
     //BLock Social Skill
@@ -634,7 +570,7 @@ if ($show_full_profile) {
             $social_skill_block .= '<div class="panel-body">';
             $social_skill_block .= Display::tag('ul', $lis, array('class' => 'list-badges'));
             $social_skill_block .= '</div>';
-        }else{
+        } else {
 
             $social_skill_block .= '<div class="panel-body">';
             $social_skill_block .= '<p>'. get_lang("WithoutAchievedSkills") . '</p>';
@@ -644,8 +580,7 @@ if ($show_full_profile) {
         $social_skill_block.='</div>';
     }
 
-
-    //--Productions
+    // Productions
     $production_list =  UserManager::build_production_list($user_id);
 
     // Images uploaded by course
@@ -759,6 +694,7 @@ $tpl = new Template(get_lang('Social'));
 // Block Avatar Social
 SocialManager::setSocialUserBlock($tpl, $user_id, 'shared_profile');
 
+$tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_wall_block', $social_wall_block);
 $tpl->assign('social_post_wall_block', $social_post_wall_block);

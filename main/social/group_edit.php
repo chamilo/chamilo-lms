@@ -50,7 +50,7 @@ $form->setDefaults($group_data);
 if ($form->validate()) {
     $group = $form->exportValues();
     $group['id'] = $group_id;
-    $group['type'] = $usergroup::SOCIAL_CLASS;
+    $group['group_type'] = $usergroup::SOCIAL_CLASS;
     $usergroup->update($group);
     Display::addFlash(Display::return_message(get_lang('GroupUpdated')));
     header('Location: group_view.php?id='.$group_id);

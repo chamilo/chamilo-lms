@@ -3017,8 +3017,8 @@ class SessionManager
                 return intval($count[0]);
             }
 
-            while ($row = Database::fetch_array($result,'ASSOC'))	{
-                $courses[$row['id']] = $row;
+            while ($row = Database::fetch_assoc($result)) {
+                $courses[$row['real_id']] = $row;
             }
         }
 

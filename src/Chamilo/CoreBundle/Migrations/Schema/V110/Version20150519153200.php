@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Username changes
  */
-class Version201505191532 extends AbstractMigrationChamilo
+class Version20150519153200 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
@@ -17,7 +17,6 @@ class Version201505191532 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
         $this->addSql('ALTER TABLE session_rel_user ADD COLUMN registered_at DATETIME NOT NULL');
-        $this->addSql("UPDATE settings_current SET selected_value = '1.10.0.40' WHERE variable = 'chamilo_database_version'");
     }
 
     /**
@@ -26,6 +25,5 @@ class Version201505191532 extends AbstractMigrationChamilo
     public function down(Schema $schema)
     {
         $this->addSql('ALTER TABLE session_rel_user DROP COLUMN registered_at');
-        $this->addSql("UPDATE settings_current SET selected_value = '1.10.0.39' WHERE variable = 'chamilo_database_version'");
     }
 }

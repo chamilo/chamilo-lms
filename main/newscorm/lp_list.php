@@ -102,7 +102,7 @@ $token = Security::get_token();
 
 /* DISPLAY SCORM LIST */
 
-$categories_temp = learnpath::getCategories(api_get_course_int_id());
+$categoriesTempList = learnpath::getCategories(api_get_course_int_id());
 $categoryTest = new \Chamilo\CourseBundle\Entity\CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
@@ -112,8 +112,8 @@ $categories = array(
     $categoryTest
 );
 
-if (!empty($categories_temp)) {
-    $categories = array_merge($categories, $categories_temp);
+if (!empty($categoriesTempList)) {
+    $categories = array_merge($categories, $categoriesTempList);
 }
 
 $userId = api_get_user_id();

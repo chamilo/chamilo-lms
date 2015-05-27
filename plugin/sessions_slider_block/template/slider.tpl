@@ -50,7 +50,8 @@
                         itemsDesktopSmall: [979, 3],
                         navigation: true,
                         pagination: false,
-                        stopOnHover: true
+                        stopOnHover: true,
+                        navigationText : ["<",">"]
                     });
                 });
             </script>

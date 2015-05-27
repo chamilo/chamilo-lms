@@ -29,9 +29,17 @@
   position: absolute;
   left: auto;
   top: 40%;
+  width: 35px;
+  height: 35px;
+  font-size: 17px;
+  font-weight: bold;
 }
 #top-session .owl-controls .owl-buttons .owl-prev{
   left: 0;
   position: absolute;
   top: 40%;
+  width: 35px;
+  height: 35px;
+  font-size: 17px;
+  font-weight: bold;
 }

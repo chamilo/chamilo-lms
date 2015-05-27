@@ -175,7 +175,9 @@ foreach ($categories as $item) {
     echo Display::page_subheader2($item->getName().$edit_link.$moveUpLink.$moveDownLink.$delete_link);
 
     if (!empty($flat_list)) {
-        echo '<table class="data_table">';
+        echo '<div class="table-responsive">';
+        echo '<table class="table table-stripped table-hover">';
+        echo '<thead>';
         echo '<tr>';
 
         if ($is_allowed_to_edit) {
@@ -192,6 +194,8 @@ foreach ($categories as $item) {
             echo '<th>'.get_lang('Actions')."</th>";
         }
         echo '</tr>';
+        echo '</thead>';
+        echo '</tbody>';
 
         $max = count($flat_list);
         $counter = 0;
@@ -800,7 +804,9 @@ foreach ($categories as $item) {
             $current++;
 
         } // end foreach ($flat_list)
+        echo "</tbody>";
         echo "</table>";
+        echo "</div>";
     }
 }
 

@@ -853,7 +853,13 @@ class Template
 
         //Menu
         $menu = return_menu();
+
+        $linkMyCourse = return_navigation_array();
+        $linkMyCourse = $linkMyCourse['navigation'];
+
+
         $this->assign('menu', $menu);
+        $this->assign('list', $linkMyCourse);
 
         //Setting notifications
 

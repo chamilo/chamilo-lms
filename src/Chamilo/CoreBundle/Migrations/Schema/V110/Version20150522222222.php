@@ -6,9 +6,9 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V110;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * Class Version20150522222222
+ * @package Chamilo\CoreBundle\Migrations\Schema\V110
  */
 class Version20150522222222 extends AbstractMigrationChamilo
 {

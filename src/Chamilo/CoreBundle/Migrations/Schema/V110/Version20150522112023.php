@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V110;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-
 /**
  * Usergroup changes
  */

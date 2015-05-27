@@ -5051,8 +5051,8 @@ SQL;
      */
     public static function getUserSubscriptionTab($optionSelected = 1)
     {
-
-        if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true'  ||
+        $allowAdmin = api_get_setting('allow_user_course_subscription_by_course_admin');
+        if (($allowAdmin == 'true' && api_is_allowed_to_edit()) ||
             api_is_platform_admin()
         ) {
             $userPath = api_get_path(WEB_CODE_PATH).'user/';

@@ -37,6 +37,9 @@ if ($showSlider) {
             if (!empty($course)) {
                 $courseDescription = new CourseDescription();
                 $descriptionData = $courseDescription->get_data_by_description_type(1, $course['code'], $session['id']);
+                if (empty($descriptionData)){
+                    $descriptionData = $courseDescription->get_data_by_description_type(1, $course['code']);
+                }
 
                 if (isset($descriptionData['description_content'])) {
                     $description = $descriptionData['description_content'];

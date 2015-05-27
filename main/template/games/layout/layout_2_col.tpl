@@ -18,7 +18,14 @@
                 </div>
             {% endif %}
         <!-- fin del slider -->
-
+        {% if _u.logged == 0 %}
+            {% if home_page_block %}
+            <!-- Bloque de contenido home -->
+            <div class="my-home">
+                    {{ home_page_block }}
+            </div>
+            {% endif %}
+        {% endif %}
 
 	    {#  Right column #}
 	    <div class="col-md-3 menu-column">
@@ -83,12 +90,6 @@
             </div>
         {% endif %}
 
-		{# Portal homepage #}
-        {% if home_page_block %}
-            <section id="homepage-home">
-                {{ home_page_block }}
-            </section>
-        {% endif %}
 
 		{#  ??  #}
 		{{ sniff_notification }}

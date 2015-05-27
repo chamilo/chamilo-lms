@@ -4889,7 +4889,7 @@ EOF;
      * @param string $until Optional. Until date
      * @return int The time
      */
-    public static function getExpendedTimeInCourses($userId, $courseId, $sessionId = 0, $from = '', $until = '')
+    public static function getTimeSpentInCourses($userId, $courseId, $sessionId = 0, $from = '', $until = '')
     {
         $userId = intval($userId);
         $sessionId = intval($sessionId);

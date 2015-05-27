@@ -7351,4 +7351,8 @@ $Dependencies = "Items that depend on the reference";
 $SetAsRequirementForSelected = "Set as requirement for selected item";
 $AddSequence = "Add new sequence";
 $ResourcesSequencing = "Resources sequencing";
+$GamificationModeTitle = "Gamification mode";
+$GamificationModeComment = "Activate the stars achievement in learning paths";
+$LevelX = "Level %s";
+$SeeCourse = "View course";
 ?>

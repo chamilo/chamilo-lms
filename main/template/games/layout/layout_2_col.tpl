@@ -55,11 +55,13 @@
             <div class="col-md-4">
                 {# Skills #}
                 {{ skills_block }}
-                {# Help #}
-                {{ help_block }}
+                {% if _u.logged == 0 %}
+                    {# Help #}
+                    {{ help_block }}
+                {% endif %}
             </div>
 	    </div>
-            
+
 
 		{# Plugin courses sidebar #}
         {# Plugins for footer section #}

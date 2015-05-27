@@ -7,28 +7,33 @@
     <div class="row">
         <div class="col-md-12"><h4 class="title-section">{{ "RecommendedCourses"|get_lang }}</h4><a href="#" class="more">Ver más</a></div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <div id="top-session">
                 {% for session in sessions_slider_block.sessions %}
                 <div class="item">
-                    <div class="thumbnail">
-                        <div class="caption">
-                            <h2 class="title-course">{{ session.name }}</h2>
+                    <div class="slider-block">
+                    <div class="caption">
+                        <h2 class="title-course">{{ session.name }}</h2>
+                    </div>
+                    <div class="card">
+                        <div class="front">
+                            <img src="{{ _p.web_upload ~ session.image_in_slider }}" alt="{{ session.name }}">
                         </div>
-                        <img src="{{ _p.web_upload ~ session.image_in_slider }}" alt="{{ session.name }}">
-                        <div class="session-description">
-                            {{ session.course_description }}
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6">
-                                {{ "LevelX"|get_lang|format(session.course_level) }}
+                        <div class="back">
+                            <div class="session-description">
+                                {{ session.course_description }}
                             </div>
-                            <div class="col-xs-6">
-                                <a href="{{ session.url_in_slider }}" class="btn btn-primary">{{ "SeeCourse"|get_lang }}</a>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    {{ "LevelX"|get_lang|format(session.course_level) }}
+                                </div>
+                                <div class="col-xs-6">
+                                    <a href="{{ session.url_in_slider }}" class="btn btn-primary">{{ "SeeCourse"|get_lang }}</a>
+                                </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
                 {% endfor %}

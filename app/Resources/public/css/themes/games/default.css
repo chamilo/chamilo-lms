@@ -23,6 +23,14 @@
 #slider-sessions .title-course{
   text-align: center;
 }
+#slider-sessions .card{
+  border: none;
+}
+#slider-sessions .slider-block{
+  padding-left: 30px;
+  padding-right: 30px;
+  box-sizing: border-box;
+}
 .my-courses-ranking .text-items-course{
 	padding:10px;
 	box-sizing: border-box;

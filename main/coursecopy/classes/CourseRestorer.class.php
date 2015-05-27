@@ -2077,7 +2077,7 @@ class CourseRestorer
 
 				//Adding the author's image
 				if (!empty($lp->preview_image)) {
-					$new_filename = uniqid('').$new_filename.substr($lp->preview_image,strlen($lp->preview_image)-7, strlen($lp->preview_image));
+					$new_filename = uniqid('').substr($lp->preview_image,strlen($lp->preview_image)-7, strlen($lp->preview_image));
 					if (file_exists($origin_path.$lp->preview_image) && !is_dir($origin_path.$lp->preview_image)) {
 						$copy_result = copy($origin_path.$lp->preview_image, $destination_path.$new_filename);
 						//$copy_result = true;

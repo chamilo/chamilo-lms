@@ -2003,12 +2003,15 @@ class GroupManager
             self::user_has_access($userId, $groupId, self::GROUP_TOOL_WIKI) ||
             self::user_has_access($userId, $groupId, self::GROUP_TOOL_CHAT)
         ) {
+
             return true;
         }
 
         if (api_is_course_coach() && $groupInfo['session_id'] == $sessionId) {
             return true;
         }
+
+        return false;
     }
 
 
@@ -2178,12 +2181,6 @@ class GroupManager
             // Create a new table-row
             $row = array();
 
-            if (!api_is_allowed_to_edit(false, true)) {
-                if ($this_group['status'] == 0) {
-                    continue;
-                }
-            }
-
             // Checkbox
             if (api_is_allowed_to_edit(false, true) && count($group_list) > 1) {
                 $row[] = $this_group['id'];
@@ -2195,6 +2192,7 @@ class GroupManager
                 if ($this_group['status'] == 0) {
                     $groupNameClass = 'muted';
                 }
+
                 $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {

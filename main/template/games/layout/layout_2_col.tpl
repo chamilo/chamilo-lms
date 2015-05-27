@@ -34,7 +34,7 @@
         {% endif %}
 
 	    {#  Right column #}
-	    <div class="col-md-3 menu-column">
+	    <div class="col-md-12 menu-column">
         {% if plugin_menu_top %}
             <div id="plugin_menu_top">
                 {{plugin_menu_top}}
@@ -43,40 +43,23 @@
 
 
 
-		{# User picture #}
-
-        {{ user_image_block }}
-
-        {# User Profile links #}
-		{{ profile_block }}
-
-
-        {# Course block - admin #}
-		{{ course_block }}
-
-        {# Course block - teacher #}
-		{{ teacher_block }}
-
-        {# Skills #}
-        {{ skills_block }}
-
-        {# Certificates search block #}
-        {{ certificates_search_block }}
-
-		{# Notice #}
-		{{ notice_block }}
-
-        {# Help #}
-		{{ help_block }}
-
-		{# Links that are not added in the tabs #}
-		{{ navigation_course_links }}
-
-		{# Search (xapian) #}
-		{{ search_block }}
-
-		{# Classes #}
-		{{ classes_block }}
+	    <div class="row">
+            <div class="col-md-4">
+                {# User Profile links #}
+                {{ profile_block }}
+            </div>
+            <div class="col-md-4">
+                {# Course block - admin #}
+                {{ course_block }}
+            </div>
+            <div class="col-md-4">
+                {# Skills #}
+                {{ skills_block }}
+                {# Help #}
+                {{ help_block }}
+            </div>
+	    </div>
+            
 
 		{# Plugin courses sidebar #}
         {# Plugins for footer section #}
@@ -88,7 +71,7 @@
         {% endif %}
 	</div>
 
-	<div class="col-md-9">
+	<div class="col-md-12">
         {# Plugin bottom #}
         {% if plugin_content_top %}
             <div id="plugin_content_top">

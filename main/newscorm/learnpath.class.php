@@ -10261,8 +10261,8 @@ EOD;
         $courseId = api_get_course_int_id();
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET category_id = '".$this->categoryId."'
-                WHERE c_id = ".$courseId." AND id = '$lp_id'";
+        $sql = "UPDATE $lp_table SET category_id = ".$this->categoryId."
+                WHERE c_id = $courseId AND id = $lp_id";
         Database::query($sql);
 
         return true;

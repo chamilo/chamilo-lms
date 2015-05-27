@@ -129,7 +129,7 @@ class CourseCopyLearnpath extends Resource
 		$author,
 		$preview_image,
 		$use_max_score,
-		$autolunch,
+		$autolaunch,
 		$created_on,
 		$modified_on,
 		$publicated_on,
@@ -156,7 +156,7 @@ class CourseCopyLearnpath extends Resource
 		$this->visibility=$visibility;
 
 		$this->use_max_score=$use_max_score;
-		$this->autolunch=$autolunch;
+		$this->autolaunch=$autolaunch;
 		$this->created_on=$created_on;
 		$this->modified_on=$modified_on;
 		$this->publicated_on=$publicated_on;

@@ -1211,7 +1211,7 @@ class CourseBuilder
                     $obj->author,
                     $obj->preview_image,
                     $obj->use_max_score,
-                    $obj->autolunch,
+                    $obj->autolaunch,
                     $obj->created_on,
                     $obj->modified_on,
                     $obj->publicated_on,

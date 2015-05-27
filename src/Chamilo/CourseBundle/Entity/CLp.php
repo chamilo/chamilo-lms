@@ -200,9 +200,9 @@ class CLp
     /**
      * @var integer
      *
-     * @ORM\Column(name="autolunch", type="integer", nullable=false)
+     * @ORM\Column(name="autolaunch", type="integer", nullable=false)
      */
-    private $autolunch;
+    private $autolaunch;
 
     /**
      * @var integer
@@ -783,26 +783,26 @@ class CLp
     }
 
     /**
-     * Set autolunch
+     * Set autolaunch
      *
-     * @param integer $autolunch
+     * @param integer $autolaunch
      * @return CLp
      */
-    public function setAutolunch($autolunch)
+    public function setAutolaunch($autolaunch)
     {
-        $this->autolunch = $autolunch;
+        $this->autolaunch = $autolaunch;
 
         return $this;
     }
 
     /**
-     * Get autolunch
+     * Get autolaunch
      *
      * @return integer
      */
-    public function getAutolunch()
+    public function getAutolaunch()
     {
-        return $this->autolunch;
+        return $this->autolaunch;
     }
 
     /**

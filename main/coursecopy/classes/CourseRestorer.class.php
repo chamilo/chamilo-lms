@@ -2120,7 +2120,7 @@ class CourseRestorer
 						"author             = '".self::DBUTF8escapestring($lp->author)."', " .
 						"preview_image      = '".self::DBUTF8escapestring($lp->preview_image)."', " .
         				"use_max_score      = '".self::DBUTF8escapestring($lp->use_max_score)."', " .
-        				"autolunch          = '".self::DBUTF8escapestring($lp->autolunch)."', " .
+        				"autolaunch          = '".self::DBUTF8escapestring($lp->autolaunch)."', " .
         				"created_on         = '".self::DBUTF8escapestring($lp->created_on)."', " .
         				"modified_on        = '".self::DBUTF8escapestring($lp->modified_on)."', " .
         				"publicated_on      = '".self::DBUTF8escapestring($lp->publicated_on)."', " .

@@ -196,7 +196,7 @@ foreach ($categories as $item) {
         $max = count($flat_list);
         $counter = 0;
         $current = 0;
-        $autolunch_exists = false;
+        $autolaunch_exists = false;
         foreach ($flat_list as $id => $details) {
 
             // Validation when belongs to a session.
@@ -368,7 +368,7 @@ foreach ($categories as $item) {
             $dsp_reinit = null;
             $dsp_disk = null;
             $copy = null;
-            $lp_auto_lunch_icon = null;
+            $lp_auto_launch_icon = null;
 
             if ($is_allowed_to_edit) {
 
@@ -657,18 +657,18 @@ foreach ($categories as $item) {
                     api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id"
                 );
 
-                /* Auto Lunch LP code */
+                /* Auto launch LP code */
                 if (api_get_course_setting('enable_lp_auto_launch') == 1) {
-                    if ($details['autolaunch'] == 1 && $autolunch_exists == false) {
-                        $autolunch_exists = true;
-                        $lp_auto_lunch_icon = '<a href="'.api_get_self(
+                    if ($details['autolaunch'] == 1 && $autolaunch_exists == false) {
+                        $autolaunch_exists = true;
+                        $lp_auto_launch_icon = '<a href="'.api_get_self(
                             ).'?'.api_get_cidreq(
                             ).'&action=auto_launch&status=0&lp_id='.$id.'">
                             <img src="../img/launch.png" border="0" title="'.get_lang(
                                 'DisableLPAutoLaunch'
                             ).'" /></a>';
                     } else {
-                        $lp_auto_lunch_icon = '<a href="'.api_get_self(
+                        $lp_auto_launch_icon = '<a href="'.api_get_self(
                             ).'?'.api_get_cidreq(
                             ).'&action=auto_launch&status=1&lp_id='.$id.'">
                             <img src="../img/launch_na.png" border="0" title="'.get_lang(
@@ -791,7 +791,7 @@ foreach ($categories as $item) {
             }
 
             echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
-                $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
+                $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_launch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
             $lp_showed = true;
 

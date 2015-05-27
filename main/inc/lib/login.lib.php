@@ -414,7 +414,7 @@ class Login
 
                 if (!empty($_SESSION)) {
                     foreach ($_SESSION as $key => $session_item) {
-                        if (strpos($key, 'lp_autolunch_') === false) {
+                        if (strpos($key, 'lp_autolaunch_') === false) {
                             continue;
                         } else {
                             if (isset($_SESSION[$key])) {

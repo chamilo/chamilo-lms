@@ -60,7 +60,7 @@ form .label {
     color: #ffffff;
     text-transform: none;
     background: none;
-    border-radius: none;
+    border-radius: unset;
     color: #404040;
     float: left;
     line-height: 18px;
@@ -592,9 +592,9 @@ switch ($action) {
                 api_not_allowed(true);
             }
             if ($debug > 0) error_log('New LP - auto_launch action triggered', 0);
-            if (!$lp_found) { error_log('New LP - No learnpath given for set_autolunch', 0); require 'lp_list.php'; }
+            if (!$lp_found) { error_log('New LP - No learnpath given for set_autolaunch', 0); require 'lp_list.php'; }
             else {
-                $_SESSION['oLP']->set_autolunch($_GET['lp_id'], $_GET['status']);
+                $_SESSION['oLP']->set_autolaunch($_GET['lp_id'], $_GET['status']);
                 require 'lp_list.php';
                 exit;
             }

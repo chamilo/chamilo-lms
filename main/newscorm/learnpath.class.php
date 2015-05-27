@@ -219,13 +219,13 @@ class learnpath
             Database::query($sql);
             $this->lp_view_id = Database::insert_id();
 
-            $sql = "UPDATE $lp_table SET id = iid WHERE iid = ".$this->lp_view_id;
+            if ($this->debug > 2) {
+                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql, 0);
+            }
 
+            $sql = "UPDATE $lp_table SET id = iid WHERE iid = ".$this->lp_view_id;
             Database::query($sql);
 
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql_ins, 0);
-            }
         }
 
         // Initialise items.
@@ -9864,20 +9864,20 @@ EOD;
      * @param int $lp_id
      * @param string $status
      */
-    public function set_autolunch($lp_id, $status)
+    public function set_autolaunch($lp_id, $status)
     {
         $course_id = api_get_course_int_id();
         $lp_id   = intval($lp_id);
         $status  = intval($status);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
 
-        // Setting everything to autolunch = 0
-        $attributes['autolunch'] = 0;
+        // Setting everything to autolaunch = 0
+        $attributes['autolaunch'] = 0;
         $where = array('session_id = ? AND c_id = ? '=> array(api_get_session_id(), $course_id));
         Database::update($lp_table, $attributes, $where);
         if ($status == 1) {
-            //Setting my lp_id to autolunch = 1
-            $attributes['autolunch'] = 1;
+            //Setting my lp_id to autolaunch = 1
+            $attributes['autolaunch'] = 1;
             $where = array('id = ? AND session_id = ? AND c_id = ?'=> array($lp_id, api_get_session_id(), $course_id));
             Database::update($lp_table, $attributes, $where );
         }

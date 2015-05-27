@@ -21,13 +21,46 @@ but due to the huge success of the 1.9.x series, we decided to take a transition
 step towards 2.0 to ensure a smooth migration of all our user base to the newer
 version (to be released sometime in 2016).
 
+# Contributing patches or new features
+
 If you'd like to contribute to this project, please read the following document:
 
 * [Coding conventions][1]: The main conventions document
 * [PSR-1][2]: PSR-1 are standard conventions rules we use as a base (conversion of old code still in progress)
 * [PSR-2][3]: PSR-2 are more detailed standard conventions rules we use as base (conversion of old code still in progress)
 
-We expect contributions to be sent through Pull Requests, a special feature of Github. We recommend you follow this guide to understand a little more about the way it works: https://guides.github.com/activities/contributing-to-open-source/
+In short, we expect contributions to be sent through Pull Requests, a very clean feature of Github.
+We recommend you follow this guide to understand a little more about the way it works: 
+https://guides.github.com/activities/contributing-to-open-source/
+
+# Making changes to the database
+
+If your changes require database changes, here are a few instructions on how to
+proceed. You will then need to submit these changes as explained above.
+
+## Database structure changes
+
+If your changes are about structure, you want to follow these steps:
+1. Create or modify an entity in src/Chamilo/CoreBundle/Entity/
+2. Create a new Migration in src/Chamilo/CoreBundle/Migrations/Schema/V110/
+
+This second step is most easily done by copying one of the current migration
+files in that directory. For example, if you're doing it on the 14th of July 2015 at noon:
+1. Copy Version20150527120703.php to Version20150714120000.php
+2. Edit the file and change any "20150527120703" you find to "20150714120000"
+3. Check it works by issuing an update command from the command line:
+```
+php bin/doctrine.php migrations:execute 20150714120000 --up --configuration=app/config/migrations.yml
+```
+
+## Database data changes
+
+If you only want to change the *data* in the database, then you don't need to 
+modify or create an entity, but you will still need to follow these two steps:
+1. Modify the main/install/data.sql file (at the end, add a new section before the chamilo_database_version update
+2. Create a new Migration in src/Chamilo/CoreBundle/Migrations/Schema/V110/ (see above section for details)
+
+
 
 [1]: https://support.chamilo.org/projects/chamilo-18/wiki/Coding_conventions
 [2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md

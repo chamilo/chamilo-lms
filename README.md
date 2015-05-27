@@ -81,5 +81,53 @@ git checkout origin 1.10.x
 ```
 Then load the Chamilo URL in your browser, adding "main/install/index.php" and follow the upgrade instructions. Select the "Upgrade from 1.9.x" button to proceed.
 
+# For developers and testers only
+
+This section is for developers only (or for people who have a good reason to use
+a development version of Chamilo), in the sense that other people will not 
+need to update their Chamilo portal as described here.
+
+## Updating code
+
+To update your code with the latest developments in the 1.10.x branch, go to
+your Chamilo folder and type:
+```
+git pull origin 1.10.x
+```
+If you have made customizations to your code before the update, you will have
+two options:
+- abandon your changes (use "git stash" to do that)
+- commit your changes locally and merge (use "git commit" and then "git pull")
+
+You are supposed to have a reasonable understanding of Git in order to
+use Chamilo as a developer, so if you feel lost, please check the Git manual
+first: http://git-scm.com/documentation
+
+## Updating your database from new code
+
+Since the 2015-05-27, Chamilo offers the possibility to make partial database
+upgrades through Doctrine migrations.
+
+To update your database to the latest version, go to your Chamilo root folder
+and type
+```
+php bin/doctrine.php migrations:migrate --configuration=app/config/migrations.yml
+```
+
+If you want to proceed with a single migration "step" (the steps reside in
+src/Chamilo/CoreBundle/Migrations/Schema/V110/), then check the datetime of the
+version and type the following (assuming you want to execute Version20150527120703)
+```
+php bin/doctrine.php migrations:execute 20150527120703 --up --configuration=app/config/migrations.yml
+```
+
+## Contributing
+
+If you want to submit new features or patches to Chamilo, please follow the
+Github contribution guide https://guides.github.com/activities/contributing-to-open-source/
+and our CONTRIBUTING.md file.
+In short, we ask you to send us Pull Requests based on a branch that you create
+with this purpose into your repository forked from the original Chamilo repository.
+
 # Documentation
 For more information on Chamilo, visit https://stable.chamilo.org/documentation

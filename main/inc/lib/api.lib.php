@@ -3730,7 +3730,7 @@ function api_item_property_update(
                                 visibility='$visibility',
                                 session_id = '$session_id' $set_type
                             WHERE $filter";
-                    Database::query($sql);
+                    $result = Database::query($sql);
                 } else {
                     $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
                             VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";

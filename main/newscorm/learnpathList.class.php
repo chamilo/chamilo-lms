@@ -26,15 +26,23 @@ class LearnpathList
      * This method is the constructor for the learnpathList. It gets a list of available learning paths from
      * the database and creates the learnpath objects. This list depends on the user that is connected
      * (only displays) items if he has enough permissions to view them.
-     * @param	integer		$user_id
-     * @param	string		$course_code Optional course code (otherwise we use api_get_course_id())
-     * @param int			$session_id Optional session id (otherwise we use api_get_session_id())
-     * @param string $order_by
-     * @param string $check_publication_dates
+     * @param	integer	$user_id
+     * @param	string	$course_code Optional course code (otherwise we use api_get_course_id())
+     * @param   int		$session_id Optional session id (otherwise we use api_get_session_id())
+     * @param   string  $order_by
+     * @param   string  $check_publication_dates
+     * @param   int     $categoryId
+     *
      * @return	void
      */
-    public function __construct($user_id, $course_code = '', $session_id = null, $order_by = null, $check_publication_dates = false)
-    {
+    public function __construct(
+        $user_id,
+        $course_code = '',
+        $session_id = null,
+        $order_by = null,
+        $check_publication_dates = false,
+        $categoryId = null
+    ) {
         $course_info = api_get_course_info($course_code);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -74,8 +82,21 @@ class LearnpathList
             ";
         }
 
+        $categoryFilter = '';
+
+        if (!is_null($categoryId) && is_numeric($categoryId)) {
+            $categoryId = intval($categoryId);
+            $categoryFilter = " AND category_id = $categoryId";
+        }
+
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = $course_id $time_conditions $condition_session $order";
+                WHERE
+                    c_id = $course_id
+                    $time_conditions
+                    $condition_session
+                    $categoryFilter
+                $order
+                    ";
 
         $res = Database::query($sql);
         $names = array();

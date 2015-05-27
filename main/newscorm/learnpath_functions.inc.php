@@ -24,7 +24,7 @@
  * @todo remove code duplication
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
  * This function deletes an item
@@ -547,7 +547,8 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
  * @return	void
  * @todo eliminate all global $lang declarations, use get_lang, improve structure.
  */
-function display_learnpath_items($categoryid) {
+function display_learnpath_items($categoryid)
+{
     global $xml_output;
     global $lg_prerequisites, $lg_move_down, $lg_move_up, $lg_edit_learnpath_item, $lg_delete_learnpath_item, $learnpath_id, $lg_add_prereq, $lg_prereq_deleted_error, $lg_pre_short, $langThisItem;
     $course_id = api_get_course_int_id();

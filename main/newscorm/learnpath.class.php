@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
 /**
@@ -73,6 +74,7 @@ class learnpath
     public $ref = null;
     public $course_int_id;
     public $course_info = array();
+    public $categoryId;
 
     /**
      * Constructor.
@@ -143,6 +145,7 @@ class learnpath
                 $this->created_on = $row['created_on'];
                 $this->modified_on = $row['modified_on'];
                 $this->ref = $row['ref'];
+                $this->categoryId = $row['category_id'];
 
                 if ($row['publicated_on'] != '0000-00-00 00:00:00') {
                     $this->publicated_on = $row['publicated_on'];
@@ -708,7 +711,8 @@ class learnpath
         $origin = 'zip',
         $zipname = '',
         $publicated_on = '',
-        $expired_on = ''
+        $expired_on = '',
+        $categoryId = 0
     ) {
         global $charset;
         $course_id = api_get_course_int_id();
@@ -717,6 +721,7 @@ class learnpath
         // Check lp_name doesn't exist, otherwise append something.
         $i = 0;
         $name = Database::escape_string($name);
+        $categoryId = intval($categoryId);
 
         // Session id.
         $session_id = api_get_session_id();
@@ -782,8 +787,8 @@ class learnpath
                     $dsp = $row[0] + 1;
                 }
 
-                $sql = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on)
-                        VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
+                $sql = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on, category_id)
+                        VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."', $categoryId)";
                 Database::query($sql);
                 $id = Database :: insert_id();
                 if ($id > 0) {
@@ -10023,6 +10028,179 @@ EOD;
     }
 
     /**
+     * @param array $params
+     */
+    public static function createCategory($params)
+    {
+        $em = Database::getManager();
+        $item = new CLpCategory();
+        $item->setName($params['name']);
+        $item->setCId($params['c_id']);
+        $em->persist($item);
+        $em->flush();
+    }
+    /**
+     * @param array $params
+     */
+    public static function updateCategory($params)
+    {
+        $em = Database::getManager();
+        $item = $em->find('ChamiloCourseBundle:CLpCategory', $params['id']);
+        if ($item) {
+            $item->setName($params['name']);
+            $item->setCId($params['c_id']);
+            $em->persist($item);
+            $em->flush();
+        }
+    }
+
+    /**
+     * @param int $id
+     */
+    public static function moveUpCategory($id)
+    {
+        $em = Database::getManager();
+        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        if ($item) {
+            $position = $item->getPosition() - 1;
+            $item->setPosition($position);
+            $em->persist($item);
+            $em->flush();
+        }
+    }
+
+    /**
+     * @param int $id
+     */
+    public static function moveDownCategory($id)
+    {
+        $em = Database::getManager();
+        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        if ($item) {
+            $position = $item->getPosition() + 1;
+            $item->setPosition($position);
+            $em->persist($item);
+            $em->flush();
+        }
+    }
+
+    /**
+     * @param int $courseId
+     * @return int|mixed
+     */
+    public static function getCountCategories($courseId)
+    {
+        if (empty($course_id)) {
+            return 0;
+        }
+        $em = Database::getManager();
+        $query = $em->createQuery('SELECT COUNT(u.id) FROM ChamiloCourseBundle:CLpCategory u WHERE u.cId = :id');
+        $query->setParameter('id', $courseId);
+
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * @param int $courseId
+     *
+     * @return mixed
+     */
+    public static function getCategories($courseId)
+    {
+        $em = Database::getManager();
+        //Default behaviour
+        /*$items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(
+            array('cId' => $course_id),
+            array('name' => 'ASC')
+        );*/
+
+        //Using doctrine extensions
+        $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->getBySortableGroupsQuery(
+            array('cId' => $courseId)
+        )->getResult();
+
+        return $items;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
+    public static function getCategory($id)
+    {
+        $em = Database::getManager();
+        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+
+        return $item;
+    }
+
+    /**
+     * @param int $courseId
+     * @return array
+     */
+    public static function getCategoryByCourse($courseId)
+    {
+        $em = Database::getManager();
+        $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(array('cId' => $courseId));
+
+        return $items;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
+    public static function deleteCategory($id)
+    {
+        $em = Database::getManager();
+        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        if ($item) {
+
+            $courseId = $item->getCId();
+            $query = $em->createQuery('SELECT u FROM ChamiloCourseBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');
+            $query->setParameter('id', $courseId);
+            $query->setParameter('catId', $item->getId());
+            $lps = $query->getResult();
+
+            // Setting category = 0.
+            if ($lps) {
+                foreach ($lps as $lpItem) {
+                    $lpItem->setCategoryId(0);
+                }
+            }
+
+            // Removing category.
+            $em->remove($item);
+            $em->flush();
+        }
+    }
+
+    /**
+     * @param int $courseId
+     * @param bool $addSelectOption
+     *
+     * @return mixed
+     */
+    static function getCategoryFromCourseIntoSelect($courseId, $addSelectOption = false)
+    {
+        $items = self::getCategoryByCourse($courseId);
+        $cats = array();
+        if ($addSelectOption) {
+            $cats = array(get_lang('SelectACategory'));
+        }
+
+        if (!empty($items)) {
+            foreach ($items as $cat) {
+                $cats[$cat->getId()] = $cat->getName();
+            }
+        }
+
+        return $cats;
+    }
+
+    /**
      * Return the scorm item type object with spaces replaced with _
      * The return result is use to build a css classname like scorm_type_$return
      * @param $in_type
@@ -10062,6 +10240,28 @@ EOD;
         }
 
         return false;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    public function setCategoryId($categoryId)
+    {
+        $this->categoryId = $categoryId;
+
+        $courseId = api_get_course_int_id();
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET category_id = '".intval($categoryId)."'
+                WHERE c_id = ".$courseId." AND id = '$lp_id'";
+        Database::query($sql);
+
+        return true;
     }
 }
 

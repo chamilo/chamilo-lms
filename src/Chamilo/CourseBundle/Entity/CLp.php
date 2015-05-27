@@ -205,6 +205,13 @@ class CLp
     private $autolunch;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="category_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $categoryId;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_on", type="datetime", nullable=false)
@@ -934,5 +941,24 @@ class CLp
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return CLp
+     */
+    public function setCategoryId($categoryId)
+    {
+        $this->categoryId = $categoryId;
+
+        return $this;
     }
 }

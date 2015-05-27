@@ -115,7 +115,13 @@ $form->addElement('hidden', 'action', 'add_lp');
 $form->addButtonAdvancedSettings('advanced_params');
 $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-//Start date
+$items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id());
+if (!empty($items)) {
+    $items = array_merge(array(get_lang('SelectACategory')), $items);
+}
+$form->addElement('select', 'category_id', get_lang('Category'), $items);
+
+// Start date
 $form->addElement('checkbox', 'activate_start_date_check', null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $form->addElement('html','<div id="start_date_div" style="display:block;">');
 $form->addElement('DatePicker', 'publicated_on', get_lang('PublicationDate'));

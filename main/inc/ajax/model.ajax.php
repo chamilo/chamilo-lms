@@ -1398,7 +1398,7 @@ switch ($action) {
                 break;
             case 'registered':
                 $options['where'] = array(" usergroup.course_id = ? " =>  $course_id);
-                $result = $obj->getUserGroupInCourse($options);
+                $result = $obj->getUserGroupInCourse($options, $groupFilter);
                 break;
         }
 

@@ -2154,8 +2154,10 @@ class GroupManager
     /**
      * @param array $group_list
      * @param int $category_id
+     *
+     * @return string
      */
-    static function process_groups($group_list, $category_id = null)
+    public static function process_groups($group_list, $category_id = null)
     {
         global $origin, $charset;
         $category_id = intval($category_id);
@@ -2255,6 +2257,7 @@ class GroupManager
                     $row[] = '-';
                 }
             }
+
             $url = api_get_path(WEB_CODE_PATH).'group/';
             // Edit-links
             if (api_is_allowed_to_edit(false, true) &&
@@ -2294,7 +2297,19 @@ class GroupManager
             $group_data[] = $row;
         } // end loop
 
-        $table = new SortableTableFromArrayConfig($group_data, 1, 20, 'group_category_'.$category_id);
+        // If no groups then don't show the table (only for students)
+        if (!api_is_allowed_to_edit(true, false)) {
+            if (empty($group_data)) {
+                return '';
+            }
+        }
+
+        $table = new SortableTableFromArrayConfig(
+            $group_data,
+            1,
+            20,
+            'group_category_'.$category_id
+        );
         $table->set_additional_parameters(array('category' => $category_id));
         $column = 0;
         if (api_is_allowed_to_edit(false, true) and count($group_list) > 1) {
@@ -2304,10 +2319,13 @@ class GroupManager
         $table->set_header($column++, get_lang('GroupTutor'));
         $table->set_header($column++, get_lang('Registered'), false);
 
-        if (!api_is_allowed_to_edit(false, true)) { // If self-registration allowed
+        if (!api_is_allowed_to_edit(false, true)) {
+            // If self-registration allowed
             $table->set_header($column++, get_lang('GroupSelfRegistration'), false);
         }
-        if (api_is_allowed_to_edit(false, true)) { // Only for course administrator
+
+        if (api_is_allowed_to_edit(false, true)) {
+            // Only for course administrator
             $table->set_header($column++, get_lang('Modify'), false);
             $form_actions = array();
             $form_actions['fill_selected'] = get_lang('FillGroup');
@@ -2317,7 +2335,8 @@ class GroupManager
                 $table->set_form_actions($form_actions, 'group');
             }
         }
-        $table->display();
+
+        return $table->return_table();
     }
 
     /**
@@ -2393,7 +2412,6 @@ class GroupManager
                 $elementsFound['categories'][] = $categoryId;
             } else {
                 $groupInfo = self::getGroupByName($data['group']);
-
                 $categoryInfo = self::getCategoryByTitle($data['category']);
                 $categoryId = null;
                 if (!empty($categoryInfo)) {

@@ -5245,6 +5245,7 @@ class Wiki
             return false;
         }
         $data = self::get_wiki_data($id);
+
         if (!empty($data['content'])) {
             $fs = new Filesystem();
             $paths = [
@@ -5265,9 +5266,18 @@ class Wiki
 
             $dataFileSystem = new Data($paths, $fs, $connector, $alchemyst);
             $content = $dataFileSystem->convertRelativeToAbsoluteUrl($data['content']);
-            $filePath = $dataFileSystem->putContentInTempFile($content, $data['reflink'], 'html');
+            $filePath = $dataFileSystem->putContentInTempFile(
+                $content,
+                api_replace_dangerous_char($data['reflink']),
+                'html'
+            );
             $convertedFile = $dataFileSystem->transcode($filePath, $format);
-            DocumentManager::file_send_for_download($convertedFile);
+
+            DocumentManager::file_send_for_download(
+                $convertedFile,
+                false,
+                $data['title'].'.'.$format
+            );
         }
         return false;
     }

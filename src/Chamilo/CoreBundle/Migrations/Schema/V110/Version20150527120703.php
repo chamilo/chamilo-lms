@@ -6,9 +6,11 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * Class Version20150527120703
+ * LP autolunch -> autolaunch
+ * @package Chamilo\CoreBundle\Migrations\Schema\V110
  */
-class Version20150527120703 extends AbstractMigration
+class Version20150527120703 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema

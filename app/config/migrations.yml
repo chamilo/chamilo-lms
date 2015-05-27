@@ -1,0 +1,4 @@
+name: Chamilo Migrations
+migrations_namespace: Chamilo\CoreBundle\Migrations\Schema\V110
+table_name: version
+migrations_directory: src/Chamilo/CoreBundle/Migrations/Schema/V110

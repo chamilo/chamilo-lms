@@ -37,5 +37,8 @@ $dbParams = array(
 $database->connect($dbParams, realpath(__DIR__).'/', realpath(__DIR__).'/');
 $entityManager = $database->getManager();
 
-return ConsoleRunner::createHelperSet($entityManager);
+$helperSet = ConsoleRunner::createHelperSet($entityManager);
+$dialogHelper = new Symfony\Component\Console\Helper\DialogHelper();
+$helperSet->set($dialogHelper);
 
+return $helperSet;

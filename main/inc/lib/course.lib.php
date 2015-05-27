@@ -3545,7 +3545,7 @@ class CourseManager
     /**
      * Display courses (without special courses) as several HTML divs
      * of course categories, as class userportal-catalog-item.
-     * @uses display_courses_in_category() to display the courses themselves
+     * @uses displayCoursesInCategory() to display the courses themselves
      * @param int        user id
      * @param bool      Whether to show the document quick-loader or not
      * @return string
@@ -3558,8 +3558,10 @@ class CourseManager
         }
 
         // Step 1: We get all the categories of the user
-        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT id, title FROM $tucc WHERE user_id='" . $user_id . "' ORDER BY sort ASC";
+        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
+        $sql = "SELECT id, title FROM $table
+                WHERE user_id = '" . $user_id . "'
+                ORDER BY sort ASC";
         $result = Database::query($sql);
         $html = null;
         $courseCount = 0;
@@ -3574,7 +3576,11 @@ class CourseManager
                 'class' => 'table_user_course_category'
             );
 
-            $courseInCategory = self:: display_courses_in_category($row['id'], $load_dirs);
+            $courseInCategory = self:: displayCoursesInCategory(
+                $row['id'],
+                $load_dirs
+            );
+
             $html .= self::course_item_parent(
                 self::course_item_html($params, true),
                 $courseInCategory['html']
@@ -3583,7 +3589,7 @@ class CourseManager
         }
 
         // Step 2: We display the course without a user category.
-        $courseInCategory = self:: display_courses_in_category(0, $load_dirs);
+        $courseInCategory = self::displayCoursesInCategory(0, $load_dirs);
 
         $html .= $courseInCategory['html'];
         $courseCount += $courseInCategory['course_count'];
@@ -3601,7 +3607,7 @@ class CourseManager
      * @param bool      Whether to show the document quick-loader or not
      * @return string
      */
-    public static function display_courses_in_category($user_category_id, $load_dirs = false)
+    public static function displayCoursesInCategory($user_category_id, $load_dirs = false)
     {
         $user_id = api_get_user_id();
         // Table definitions
@@ -3628,8 +3634,8 @@ class CourseManager
                 course_rel_user.status status,
                 course_rel_user.sort sort,
                 course_rel_user.user_course_cat user_course_cat
-                FROM $TABLECOURS      course,
-                     $TABLECOURSUSER  course_rel_user,
+                FROM $TABLECOURS course,
+                     $TABLECOURSUSER course_rel_user,
                      $TABLE_ACCESS_URL_REL_COURSE url
                 WHERE
                     course.id = course_rel_user.c_id AND

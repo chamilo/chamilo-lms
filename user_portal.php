@@ -9,7 +9,7 @@
  * - menu bar
  * Search for CONFIGURATION parameters to modify settings
  * @package chamilo.main
- * @todo Shouldn't the SCRIPTVAL_ and CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for?
+ * @todo Shouldn't the CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for?
  *       If these are really configuration settings then we can add those to the dokeos config settings.
  * @todo check for duplication of functions with index.php (user_portal.php is orginally a copy of index.php)
  * @todo display_digest, shouldn't this be removed and be made into an extension?
@@ -39,7 +39,7 @@ $load_dirs = api_get_setting('show_documents_preview');
 $controller = new IndexManager(get_lang('MyCourses'));
 
 // Main courses and session list
-$courseAndSessions = $controller->return_courses_and_sessions($userId);
+$courseAndSessions = $controller->returnCoursesAndSessions($userId);
 
 // Check if a user is enrolled only in one course for going directly to the course after the login.
 if (api_get_setting('go_to_course_after_login') == 'true') {

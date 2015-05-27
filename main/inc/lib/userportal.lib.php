@@ -1085,7 +1085,7 @@ class IndexManager
      * @param int $user_id
      * @return string
      */
-    public function return_courses_and_sessions($user_id)
+    public function returnCoursesAndSessions($user_id)
     {
         global $_configuration;
 
@@ -1123,10 +1123,16 @@ class IndexManager
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             // Display special courses.
-            $specialCourses = CourseManager::display_special_courses($user_id, $this->load_directories_preview);
+            $specialCourses = CourseManager::display_special_courses(
+                $user_id,
+                $this->load_directories_preview
+            );
             $special_courses = $specialCourses['html'];
             // Display courses.
-            $courses = CourseManager::display_courses($user_id, $this->load_directories_preview);
+            $courses = CourseManager::display_courses(
+                $user_id,
+                $this->load_directories_preview
+            );
             $courses_html .= $courses['html'];
             $courseCount = $specialCourses['course_count'] + $courses['course_count'];
         }

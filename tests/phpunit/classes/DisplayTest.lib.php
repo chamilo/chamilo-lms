@@ -531,18 +531,6 @@ class DisplayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Display::display_digest
-     * @todo   Implement testDisplay_digest().
-     */
-    public function testDisplay_digest()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers Display::get_session_title_box
      * @todo   Implement testGet_session_title_box().
      */

@@ -10,7 +10,9 @@ class SessionsSliderBlockPlugin extends Plugin
 {
     const CONFIG_SHOW_SLIDER = 'show_slider';
     const FIELD_VARIABLE_SHOW_IN_SLIDER = 'show_in_slider';
-    const FIELD_VARIABLE_VIDEO = 'video_url_in_slider';
+    const FIELD_VARIABLE_URL = 'url_in_slider';
+    const FIELD_VARIABLE_IMAGE = 'image_in_slider';
+    const FIELD_VARIABLE_COURSE_LEVEL = 'course_level';
 
     /**
      * Class constructor
@@ -57,8 +59,9 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     private function createExtraFields()
     {
-        $showInSliderField = new ExtraField('session');
-        $showInSliderField->save([
+        $sessionExtraField = new ExtraField('session');
+
+        $sessionExtraField->save([
             'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             'variable' => self::FIELD_VARIABLE_SHOW_IN_SLIDER,
             'display_text' => $this->get_lang('ShowInSliderBlock'),
@@ -69,16 +72,42 @@ class SessionsSliderBlockPlugin extends Plugin
             'filter' => null
         ]);
 
-        $videoUrlInSliderField = new ExtraField('session');
-        $videoUrlInSliderField->save([
+        $sessionExtraField->save([
             'field_type' => ExtraField::FIELD_TYPE_TEXT,
-            'variable' => self::FIELD_VARIABLE_VIDEO,
-            'display_text' => $this->get_lang('VideoUrlForSliderBlock'),
+            'variable' => self::FIELD_VARIABLE_URL,
+            'display_text' => $this->get_lang('UrlForSliderBlock'),
             'default_value' => null,
             'field_order' => null,
             'visible' => true,
             'changeable' => true,
             'filter' => null
+        ]);
+
+        $sessionExtraField->save([
+            'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
+            'variable' => self::FIELD_VARIABLE_IMAGE,
+            'display_text' => $this->get_lang('ImageForSliderBlock'),
+            'default_value' => null,
+            'field_order' => null,
+            'visible' => true,
+            'changeable' => true,
+            'filter' => null
+        ]);
+
+        $levelOptions = array(
+            get_lang('Beginner')
+        );
+
+        $courseExtraField = new ExtraField('course');
+        $courseExtraField->save([
+            'field_type' => ExtraField::FIELD_TYPE_SELECT,
+            'variable' => self::FIELD_VARIABLE_COURSE_LEVEL,
+            'display_text' => $this->get_lang('Level'),
+            'default_value' => null,
+            'field_order' => null,
+            'visible' => true,
+            'changeable' => true,
+            'field_options' => implode('; ', $levelOptions)
         ]);
     }
 
@@ -92,14 +121,37 @@ class SessionsSliderBlockPlugin extends Plugin
 
     /**
      * Get the extra field information by its variable
+     * @param sstring $fieldVariable The field variable
      * @return array The info
      */
-    private function getExtraFieldInfo()
+    private function getExtraFieldInfo($fieldVariable)
     {
         $extraField = new ExtraField('session');
-        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable(self::FIELD_VARIABLE_SHOW_IN_SLIDER);
+        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable($fieldVariable);
 
         return $extraFieldHandler;
+    }
+
+    /**
+     * Get the created extrafields variables for session by this plugin
+     * @return array The variables
+     */
+    public function getSessionExtrafields(){
+        return [
+            self::FIELD_VARIABLE_SHOW_IN_SLIDER,
+            self::FIELD_VARIABLE_IMAGE,
+            self::FIELD_VARIABLE_URL
+        ];
+    }
+
+    /**
+     * Get the created extrafields variables for courses by this plugin
+     * @return array The variables
+     */
+    public function getCourseExtrafields(){
+        return [
+            self::FIELD_VARIABLE_COURSE_LEVEL
+        ];
     }
 
     /**
@@ -107,20 +159,32 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     private function deleteExtraFields()
     {
-        $extraFieldInfo = $this->getExtraFieldInfo(self::FIELD_VARIABLE_SHOW_IN_SLIDER);
-        $extraFieldExists = $extraFieldInfo !== false;
+        $sessionVariables = $this->getSessionExtrafields();
 
-        if ($extraFieldExists) {
+        foreach ($sessionVariables as $variable) {
+            $fieldInfo = $this->getExtraFieldInfo($variable);
+            $fieldExists = $fieldInfo !== false;
+
+            if (!$fieldExists) {
+                continue;
+            }
+
             $extraField = new ExtraField('session');
-            $extraField->delete($extraFieldInfo['id']);
+            $extraField->delete($fieldInfo['id']);
         }
 
-        $extraFieldInfo = $this->getExtraFieldInfo(self::FIELD_VARIABLE_VIDEO);
-        $extraFieldExists = $extraFieldInfo !== false;
+        $courseVariables = $this->getSessionExtrafields();
 
-        if ($extraFieldExists) {
-            $extraField = new ExtraField('session');
-            $extraField->delete($extraFieldInfo['id']);
+        foreach ($courseVariables as $variable) {
+            $fieldInfo = $this->getExtraFieldInfo($variable);
+            $fieldExists = $fieldInfo !== false;
+
+            if (!$fieldExists) {
+                continue;
+            }
+
+            $extraField = new ExtraField('course');
+            $extraField->delete($fieldInfo['id']);
         }
     }
 
@@ -130,13 +194,19 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     public function getSessionList()
     {
-        $sessions = SessionManager::getSessionsByExtraFields([
-            self::FIELD_VARIABLE_SHOW_IN_SLIDER,
-            self::FIELD_VARIABLE_VIDEO
-        ]);
+        $showInSliderFieldInfo = $this->getExtraFieldInfo(self::FIELD_VARIABLE_SHOW_IN_SLIDER);
 
-        if ($sessions === false) {
+        $fieldValueInfo = new ExtraFieldValue('session');
+        $values = $fieldValueInfo->getValuesByFieldId($showInSliderFieldInfo['id']);
+
+        if (!is_array($values)) {
             return [];
+        }
+
+        $sessions = [];
+
+        foreach ($values as $valueInfo) {
+            $sessions[] = api_get_session_info($valueInfo['item_id']);
         }
 
         return $sessions;

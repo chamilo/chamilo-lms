@@ -11,7 +11,8 @@ $strings['plugin_comment'] = 'Add a sessions slider on the homepage.';
 $strings['show_slider'] = 'Show slider';
 
 $strings['ShowInSliderBlock'] = 'Show in slider block';
-$strings['VideoUrlForSliderBlock'] = 'Video URL to show in slider block';
+$strings['UrlForSliderBlock'] = 'URL to link in slider block';
+$strings['ImageForSliderBlock'] = 'Image to show in slider block';
 
 $strings['SeeMore'] = 'See more';
 $strings['RecommendedCourses'] = 'Recommended Courses';

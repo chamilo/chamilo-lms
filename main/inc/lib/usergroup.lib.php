@@ -926,7 +926,7 @@ class UserGroup extends Model
      */
     public function save($params, $show_query = false)
     {
-        $params['updated_at'] = $params['created_at'] = new \DateTime();
+        $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
         $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
 
         $groupExists = $this->usergroup_exists(trim($params['name']));
@@ -967,7 +967,7 @@ class UserGroup extends Model
      */
     public function update($values)
     {
-        $values['updated_on'] = new \DateTime();
+        $values['updated_on'] = api_get_utc_datetime();
         $values['group_type'] = isset($values['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
 
         if (isset($values['id'])) {

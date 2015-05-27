@@ -55,10 +55,6 @@
             <div class="col-md-4">
                 {# Skills #}
                 {{ skills_block }}
-
-                    {# Help #}
-                    {{ help_block }}
-               
             </div>
 	    </div>
 

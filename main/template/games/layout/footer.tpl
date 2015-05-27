@@ -1,59 +1,40 @@
-<footer> <!-- start of #footer section -->
+<footer>
     <div class="container">
         <div class="row">
-            <div id="footer_left" class="col-md-4">
-                {% if session_teachers is not null %}
-                    <div id="session_teachers">
-                        {{ session_teachers }}
-                    </div>
-                {% endif %}
+            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                <ul class="links-footer">
+                    <li><a href="#">¿Quienes somos?</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Cursos</a></li>
+                </ul>
 
-                {% if teachers is not null %}
-                    <div id="teachers">
-                        {{ teachers }}
-                    </div>
-                {% endif %}
-
-                {#  Plugins for footer section #}
-                {% if plugin_footer_left is not null %}
-                    <div id="plugin_footer_left">
-                        {{ plugin_footer_left }}
-                    </div>
-                {% endif %}
-                &nbsp;
             </div>
-
-            <div id="footer_center" class="col-md-4">
-                {#   Plugins for footer section  #}
-                {% if plugin_footer_center is not null %}
-                    <div id="plugin_footer_center">
-                        {{ plugin_footer_center }}
-                    </div>
-                {% endif %}
-                &nbsp;
+            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                <ul class="links-footer">
+                    <li><a href="#">Politicas de privadidad</a></li>
+                    <li><a href="#">Terminos y condiciones</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
             </div>
-
-            <div id="footer_right" class="col-md-4">
-                {% if administrator_name is not null %}
-                    <div id="admin_name">
-                        {{ administrator_name }}
-                    </div>
-                {% endif %}
-
-                <div id="software_name">
-                    {{ "Platform"|get_lang }} <a href="{{_p.web}}" target="_blank">{{_s.software_name}} {{_s.system_version}}</a>
-                    &copy; {{ "now"|date("Y") }}
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="red-social">
+                    <h3 class="social-footer">¡Siguienos en redes sociales!</h3>
+                    <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/facebook.png"></a>
+                    <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/twitter.png"></a>
+                    <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/youtube.png"></a>
                 </div>
-                {#   Plugins for footer section  #}
-                {% if plugin_footer_right is not null %}
-                    <div id="plugin_footer_right">
-                        {{ plugin_footer_right }}
-                    </div>
-                {% endif %}
-                &nbsp;
-            </div><!-- end of #footer_right -->
-        </div><!-- end of #row -->
-    </div><!-- end of #container -->
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="direction">
+                    <p>Rio de la plata 167 Of.503<br>
+                        San Isidro - Lima Perú
+                        (511) 221 - 2721<br>
+                        contacto@tademi.com
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </footer>
 
 {# Extra footer configured in admin section, only shown to non-admins #}
@@ -220,5 +201,6 @@
         });
     };
 </script>
+<script type="text/javascript" src="{{ _p.web_css_theme }}js/flip.js"></script>
 
 {{ execution_stats }}

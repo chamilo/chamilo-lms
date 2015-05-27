@@ -10269,6 +10269,146 @@ EOD;
 
         return true;
     }
+
+    /**
+     * Calculate the count of stars for a user
+     * @param int $lpId The learn path ID
+     * @param int $userId The user ID
+     * @param int $courseId The course ID
+     * @param int $sessionId Optional. The session ID
+     * @return int The count of stars
+     */
+    public function getCalculateStars()
+    {
+        $stars = 0;
+
+        $progress = self::getProgress($this->lp_id, $this->user_id, $this->course_int_id, $this->lp_session_id);
+
+        if ($progress > 50) {
+            $stars++;
+        }
+
+        // Calculate stars chapters evaluation
+        $exercisesItems = $this->getExercisesItems();
+
+        if ($exercisesItems === false) {
+            return $stars;
+        }
+
+        $totalResult = 0;
+
+        foreach ($exercisesItems as $exerciseItem) {
+            $exerciseResultInfo = Event::getExerciseResultsByUser(
+                $this->user_id,
+                $exerciseItem['ref'],
+                $this->course_int_id,
+                $this->lp_session_id,
+                $this->lp_id,
+                $exerciseItem['id']
+            );
+
+            $exerciseResult = 0;
+
+            foreach ($exerciseResultInfo as $result) {
+                $exerciseResult += $result['exe_result'] * 100 / $result['exe_weighting'];
+            }
+
+            $exerciseAverage = $exerciseResult / (count($exerciseResultInfo) > 0 ? count($exerciseResultInfo) : 1);
+
+            $totalResult += $exerciseAverage;
+        }
+
+        $totalExerciseAverage = $totalResult / (count($exercisesItems) > 0 ? count($exercisesItems) : 1);
+
+        if ($totalExerciseAverage >= 50) {
+            $stars++;
+        }
+
+        if ($totalExerciseAverage >= 80) {
+            $stars++;
+        }
+
+        // Calculate star for final evaluation
+        $finalEvaluationItem = $this->getFinalEvaluationItem();
+
+        if ($finalEvaluationItem === false) {
+            return $stars;
+        }
+
+        $evaluationResultInfo = Event::getExerciseResultsByUser(
+            $this->user_id,
+            $finalEvaluationItem['ref'],
+            $this->course_int_id,
+            $this->lp_session_id,
+            $this->lp_id,
+            $finalEvaluationItem['id']
+        );
+
+        $evaluationResult = 0;
+
+        foreach ($evaluationResultInfo as $result) {
+            $evaluationResult += $result['exe_result'] * 100 / $result['exe_weighting'];
+        }
+
+        $evaluationAverage = $evaluationResult / (count($evaluationResultInfo) > 0 ? count($evaluationResultInfo) : 1);
+
+        if ($evaluationAverage >= 80) {
+            $stars++;
+        }
+
+        return $stars;
+    }
+
+    /**
+     * Get the items of exercise type
+     * @return array The items. Otherwise return false
+     */
+    public function getExercisesItems()
+    {
+        $itemsData = Database::select(
+            '*',
+            Database::get_course_table(TABLE_LP_ITEM),
+            [
+                'where' => [
+                    'lp_id = ? AND item_type = ?' => [$this->lp_id, 'quiz']
+                ]
+            ]
+        );
+
+        if ($itemsData === false) {
+            return false;
+        }
+
+        array_pop($itemsData);
+
+        return $itemsData;
+    }
+
+    /**
+     * Get the item of exercise type (evaluation type)
+     * @return array The final evaluation. Otherwise return false
+     */
+    public function getFinalEvaluationItem()
+    {
+        $itemsData = Database::select(
+            '*',
+            Database::get_course_table(TABLE_LP_ITEM),
+            [
+                'where' => [
+                    'lp_id = ? AND item_type = ?' => [$this->lp_id, 'quiz']
+                ]
+            ]
+        );
+
+        if ($itemsData === false) {
+            return false;
+        }
+
+        $finalEvaluationData = array_pop($itemsData);
+
+        return $finalEvaluationData;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

@@ -261,7 +261,7 @@ class UserGroup extends Model
      *
      * @return array
      */
-    public function getUserGroupInCourse($options = array())
+    public function getUserGroupInCourse($options = array(), $type = -1)
     {
         if ($this->useMultipleUrl) {
             $sql = "SELECT u.* FROM {$this->usergroup_rel_course_table} usergroup
@@ -283,6 +283,12 @@ class UserGroup extends Model
 
         $conditions = Database::parse_conditions($options);
 
+        $typeCondition = '';
+        if ($type != -1) {
+            $type = intval($type);
+            $typeCondition = " AND group_type = $type ";
+        }
+
         if (empty($conditions)) {
             $conditions .= "WHERE 1 = 1 $typeCondition ";
         } else {
@@ -290,6 +296,7 @@ class UserGroup extends Model
         }
 
         $sql .= $conditions;
+
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $sql .= " AND access_url_id = $urlId ";

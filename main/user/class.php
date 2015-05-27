@@ -23,6 +23,18 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
+$groupFilter = isset($_GET['group_filter']) ? intval($_GET['group_filter']) : 0;
+
+$htmlHeadXtra[] = '
+<script>
+
+$(document).ready( function() {
+    $("#group_filter").change(function() {
+        window.location = "class.php?'.api_get_cidreq().'&type='.$type.'" +"&group_filter=" + $(this).val();
+    });
+});
+</script>
+';
 
 Display :: display_header($tool_name, "User");
 
@@ -36,6 +48,16 @@ if (api_is_allowed_to_edit()) {
     } else {
         echo '<a href="class.php?'.api_get_cidreq().'&type=registered">'.
             Display::return_icon('empty_evaluation.png', get_lang("Classes"), array(), ICON_SIZE_MEDIUM).'</a>';
+
+        $form = new FormValidator('groups', 'post', api_get_self(), '', '', FormValidator::LAYOUT_INLINE);
+        $options = [
+            -1 => get_lang('All'),
+            1 => get_lang('SocialGroups'),
+            0 => get_lang('Classes'),
+        ];
+        $form->addSelect('group_filter', get_lang('Groups'), $options, ['id' => 'group_filter']);
+        $form->setDefaults(['group_filter' => $groupFilter]);
+        $form->display();
     }
     echo '</div>';
 }
@@ -69,7 +91,7 @@ if (api_is_allowed_to_edit()) {
 
 //jqgrid will use this URL to do the selects
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = array(

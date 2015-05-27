@@ -255,7 +255,7 @@ EOT;
 	 */
     $options['where'] = array(" usergroup.course_id = ? " =>  api_get_real_course_id());
     $obj = new UserGroup();
-    $classes = $obj->get_usergroup_in_course($options);
+    $classes = $obj->getUserGroupInCourse($options);
 	if (count($classes) > 0) {
 		echo '<b>'.get_lang('GroupsFromClasses').'</b>';
 		echo '<blockquote>';

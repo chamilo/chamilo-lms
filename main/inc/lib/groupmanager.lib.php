@@ -326,7 +326,7 @@ class GroupManager
     {
         $options['where'] = array(" usergroup.course_id = ? " =>  api_get_real_course_id());
         $obj = new UserGroup();
-        $classes = $obj->get_usergroup_in_course($options);
+        $classes = $obj->getUserGroupInCourse($options);
         $group_ids = array();
         foreach ($classes as $class) {
             $users_ids = $obj->get_users_by_usergroup($class['id']);

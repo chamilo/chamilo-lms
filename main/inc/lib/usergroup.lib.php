@@ -71,7 +71,7 @@ class UserGroup extends Model
     /**
      * @return int
      */
-    public function get_count()
+    public function get_count($type = -1)
     {
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
@@ -89,22 +89,40 @@ class UserGroup extends Model
 
             return 0;
         } else {
-            return $this->getTotalCount();
+
+            $typeCondition = '';
+            if ($type != -1) {
+                $type = intval($type);
+                $typeCondition = " WHERE group_type = $type ";
+            }
+
+            $sql = "SELECT count(a.id) as count
+                    FROM {$this->table} a
+                    $typeCondition
+            ";
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                $row  = Database::fetch_array($result);
+                return $row['count'];
+            }
         }
     }
 
     /**
      * @param int $course_id
+     * @param int $type
      *
      * @return mixed
      */
-    public function get_usergroup_by_course_with_data_count($course_id)
+    public function getUserGroupByCourseWithDataCount($course_id, $type = -1)
     {
         if ($this->useMultipleUrl) {
             $course_id = intval($course_id);
             $urlId = api_get_current_access_url_id();
-            $sql = "SELECT count(c.usergroup_id) as count FROM {$this->usergroup_rel_course_table} c
-                    INNER JOIN {$this->access_url_rel_usergroup} a ON (c.usergroup_id = a.usergroup_id)
+            $sql = "SELECT count(c.usergroup_id) as count
+                    FROM {$this->usergroup_rel_course_table} c
+                    INNER JOIN {$this->access_url_rel_usergroup} a
+                    ON (c.usergroup_id = a.usergroup_id)
                     WHERE access_url_id = $urlId AND course_id = $course_id
             ";
             $result = Database::query($sql);
@@ -115,14 +133,26 @@ class UserGroup extends Model
 
             return 0;
         } else {
-            $row = Database::select(
-                'count(*) as count',
-                $this->usergroup_rel_course_table,
-                array('where' => array('course_id = ?' => $course_id)),
-                'first'
-            );
+            $typeCondition = '';
+            if ($type != -1) {
+                $type = intval($type);
+                $typeCondition = " AND group_type = $type ";
+            }
+            $sql = "SELECT count(c.usergroup_id) as count
+                    FROM {$this->usergroup_rel_course_table} c
+                    INNER JOIN {$this->table} a
+                    ON (c.usergroup_id = a.id)
+                    WHERE
+                        course_id = $course_id
+                        $typeCondition
+            ";
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                $row  = Database::fetch_array($result);
+                return $row['count'];
+            }
 
-            return $row['count'];
+            return 0;
         }
     }
 
@@ -231,7 +261,7 @@ class UserGroup extends Model
      *
      * @return array
      */
-    public function get_usergroup_in_course($options = array())
+    public function getUserGroupInCourse($options = array())
     {
         if ($this->useMultipleUrl) {
             $sql = "SELECT u.* FROM {$this->usergroup_rel_course_table} usergroup
@@ -239,7 +269,8 @@ class UserGroup extends Model
                     ON (u.id = usergroup.usergroup_id)
                     INNER JOIN {$this->table_course} c
                     ON (usergroup.course_id = c.id)
-                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = u.id)
+                    INNER JOIN {$this->access_url_rel_usergroup} a
+                    ON (a.usergroup_id = u.id)
                    ";
         } else {
             $sql = "SELECT u.* FROM {$this->usergroup_rel_course_table} usergroup
@@ -249,12 +280,21 @@ class UserGroup extends Model
                     ON (usergroup.course_id = c.id)
                    ";
         }
+
         $conditions = Database::parse_conditions($options);
+
+        if (empty($conditions)) {
+            $conditions .= "WHERE 1 = 1 $typeCondition ";
+        } else {
+            $conditions .= " $typeCondition ";
+        }
+
         $sql .= $conditions;
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $sql .= " AND access_url_id = $urlId ";
         }
+
 
         if (isset($options['LIMIT'])) {
             $limits = explode(',', $options['LIMIT']);
@@ -272,10 +312,11 @@ class UserGroup extends Model
 
     /**
      * @param array $options
+     * @param int   $type
      *
      * @return array|bool
      */
-    public function get_usergroup_not_in_course($options = array())
+    public function getUserGroupNotInCourse($options = array(), $type = -1)
     {
         $course_id = null;
         if (isset($options['course_id'])) {
@@ -285,6 +326,12 @@ class UserGroup extends Model
 
         if (empty($course_id)) {
             return false;
+        }
+
+        $typeCondition = '';
+        if ($type != -1) {
+            $type = intval($type);
+            $typeCondition = " AND group_type = $type ";
         }
 
         if ($this->useMultipleUrl) {
@@ -304,6 +351,13 @@ class UserGroup extends Model
             ";
         }
         $conditions = Database::parse_conditions($options);
+
+        if (empty($conditions)) {
+            $conditions .= "WHERE 1 = 1 $typeCondition ";
+        } else {
+            $conditions .= " $typeCondition ";
+        }
+
         $sql .= $conditions;
 
         if ($this->useMultipleUrl) {

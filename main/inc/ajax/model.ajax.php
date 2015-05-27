@@ -474,11 +474,13 @@ switch ($action) {
     case 'get_usergroups_teacher':
         $obj = new UserGroup();
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
+        $groupFilter = isset($_REQUEST['group_filter']) ? intval($_REQUEST['group_filter']) : 0;
+
         $course_id = api_get_course_int_id();
         if ($type == 'registered') {
-            $count = $obj->get_usergroup_by_course_with_data_count($course_id);
+            $count = $obj->getUserGroupByCourseWithDataCount($course_id, $groupFilter);
         } else {
-            $count = $obj->get_count();
+            $count = $obj->get_count($groupFilter);
         }
         break;
     default:
@@ -1392,11 +1394,11 @@ switch ($action) {
         switch ($type) {
             case 'not_registered':
                 $options['where'] = array(" (course_id IS NULL OR course_id != ?) " => $course_id);
-                $result = $obj->get_usergroup_not_in_course($options);
+                $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
                 break;
             case 'registered':
                 $options['where'] = array(" usergroup.course_id = ? " =>  $course_id);
-                $result = $obj->get_usergroup_in_course($options);
+                $result = $obj->getUserGroupInCourse($options);
                 break;
         }
 
@@ -1422,8 +1424,10 @@ switch ($action) {
                 }
 
                 $role = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
+
                 $group['status'] = $role;
-                $group['actions'] = Display::url($icon, $url);
+
+                $group['actions'] = Display::url(get_lang('reg'), $url, ['class' => 'btn btn-primary']);
                 $new_result[] = $group;
             }
             $result = $new_result;

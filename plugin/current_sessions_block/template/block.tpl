@@ -33,9 +33,11 @@
                                 <i class="fa fa-star fa-2x"></i>
                             {% endfor %}
                         {% endif %}
-                        {% for i in 1..4 - session.stars %}
-                            <i class="fa fa-star-o fa-2x"></i>
-                        {% endfor %}
+                        {% if session.stars < 4 %}
+                            {% for i in 1..4 - session.stars %}
+                                <i class="fa fa-star-o fa-2x"></i>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                     <div class="text-right">
                         <a href="#" class="btn btn-default" role="button">{{ "Continue"|get_lang }}</a>

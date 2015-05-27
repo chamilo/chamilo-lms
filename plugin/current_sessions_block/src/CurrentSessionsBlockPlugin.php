@@ -235,9 +235,34 @@ SQL;
      */
     private function getNumberOfStars($sessionId)
     {
-        $sessionId = intval($sessionId);
+        $totalStars = 0;
+        $userId = api_get_user_id();
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
 
-        return 3;
+        if (empty($courses)) {
+            return 0;
+        }
+
+        foreach ($courses as $course) {
+            $learnPathListObject = new LearnpathList($userId, $course['code'], $sessionId);
+            $learnPaths = $learnPathListObject->get_flat_list();
+
+            $stars = 0;
+
+            foreach ($learnPaths as $learnPathId => $learnPathInfo) {
+                if (empty($learnPathInfo['seriousgame_mode'])) {
+                    continue;
+                }
+
+                $learnPath = new learnpath($course['code'], $learnPathId, $userId);
+
+                $stars += $learnPath->getCalculateStars();
+            }
+
+            $totalStars += $stars;
+        }
+
+        return $totalStars / count($courses);
     }
 
 }

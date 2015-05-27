@@ -19,15 +19,22 @@ if (!$is_allowed_to_edit) {
     exit;
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list?'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths'),
+);
 
-$form = new FormValidator('lp_add_category', 'post', 'lp_controller.php');
+$form = new FormValidator(
+    'lp_add_category',
+    'post',
+    'lp_controller.php?'.api_get_cidreq()
+);
 
 // Form title
 $form->addElement('header', null, get_lang('AddLPCategory'));
 
 // Title
-$form->addElement('text', 'name', api_ucfirst(get_lang('Name')), array('class' => 'span6'));
+$form->addElement('text', 'name', api_ucfirst(get_lang('Name')));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 $form->addElement('hidden', 'action', 'add_lp_category');

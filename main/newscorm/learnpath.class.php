@@ -10045,11 +10045,11 @@ EOD;
     public static function updateCategory($params)
     {
         $em = Database::getManager();
+        /** @var CLpCategory $item */
         $item = $em->find('ChamiloCourseBundle:CLpCategory', $params['id']);
         if ($item) {
             $item->setName($params['name']);
-            $item->setCId($params['c_id']);
-            $em->persist($item);
+            $em->merge($item);
             $em->flush();
         }
     }
@@ -10060,6 +10060,7 @@ EOD;
     public static function moveUpCategory($id)
     {
         $em = Database::getManager();
+        /** @var CLpCategory $item */
         $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() - 1;
@@ -10075,6 +10076,7 @@ EOD;
     public static function moveDownCategory($id)
     {
         $em = Database::getManager();
+        /** @var CLpCategory $item */
         $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() + 1;
@@ -10114,7 +10116,7 @@ EOD;
             array('name' => 'ASC')
         );*/
 
-        //Using doctrine extensions
+        // Using doctrine extensions
         $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->getBySortableGroupsQuery(
             array('cId' => $courseId)
         )->getResult();

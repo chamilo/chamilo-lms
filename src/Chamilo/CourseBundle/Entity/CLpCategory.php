@@ -19,7 +19,7 @@ class CLpCategory
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue
      */
     private $iid;
 
@@ -51,6 +51,7 @@ class CLpCategory
     public function setCId($cId)
     {
         $this->cId = $cId;
+
         return $this;
     }
 
@@ -111,11 +112,19 @@ class CLpCategory
         return $this->name;
     }
 
+    /**
+     * @param int $position
+     */
     public function setPosition($position)
     {
         $this->position = $position;
+
+        return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getPosition()
     {
         return $this->position;

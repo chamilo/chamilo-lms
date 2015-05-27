@@ -27,6 +27,12 @@
             {% endif %}
         {% endif %}
 
+        {% if plugin_content_bottom %}
+        <div id="plugin_content_bottom">
+            {{plugin_content_bottom}}
+        </div>
+        {% endif %}
+
 	    {#  Right column #}
 	    <div class="col-md-3 menu-column">
         {% if plugin_menu_top %}
@@ -125,12 +131,8 @@
 		{# Hot courses template  #}
 		{% include template ~ "/layout/hot_courses.tpl" %}
 
-        {# Content bottom  #}
-        {% if plugin_content_bottom %}
-            <div id="plugin_content_bottom">
-                {{plugin_content_bottom}}
-            </div>
-        {% endif %}
+
+
         &nbsp;
 	</div>
 

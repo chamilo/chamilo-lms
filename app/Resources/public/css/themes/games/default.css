@@ -13,11 +13,15 @@
 	color: #a1a1a1;
 	text-decoration: underline;
 }
-.my-courses-ranking .title-course{
+.my-courses-ranking .title-course,
+#slider-sessions .title-course{
 	font-size: 14px;
 	color: #35a8c9;
 	text-transform: uppercase;
 	min-height: 40px;
+}
+#slider-sessions .title-course{
+  text-align: center;
 }
 .my-courses-ranking .text-items-course{
 	padding:10px;

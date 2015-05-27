@@ -5271,14 +5271,28 @@ class Wiki
                 api_replace_dangerous_char($data['reflink']),
                 'html'
             );
-            $convertedFile = $dataFileSystem->transcode($filePath, $format);
 
-            DocumentManager::file_send_for_download(
-                $convertedFile,
-                false,
-                $data['title'].'.'.$format
-            );
+            $try = true;
+
+            while ($try) {
+                try {
+                    $convertedFile = $dataFileSystem->transcode(
+                        $filePath,
+                        $format
+                    );
+
+                    $try = false;
+                    DocumentManager::file_send_for_download(
+                        $convertedFile,
+                        false,
+                        $data['title'].'.'.$format
+                    );
+                } catch (Exception $e) {
+
+                }
+            }
         }
+
         return false;
     }
 }

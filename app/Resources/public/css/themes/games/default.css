@@ -26,6 +26,31 @@
 #slider-sessions .card{
   border: none;
 }
+#slider-sessions .session-description p{
+  font-size: 12px;
+  color: #333;
+  text-align:justify;
+}
+#slider-sessions .level{
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  text-align: left;
+}
+#slider-sessions .btn-primary{
+  background-color: #35a8c9;
+  border-radius: 20px;
+  border-color: #35a8c9;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#slider-sessions .btn-primary:hover{
+  background-color: #2593b3;
+  border-radius: 20px;
+  border-color: #2593b3;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 #slider-sessions .slider-block{
   padding-left: 30px;
   padding-right: 30px;

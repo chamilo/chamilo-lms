@@ -18,7 +18,9 @@
                     </div>
                     <div class="card">
                         <div class="front">
-                            <img src="{{ _p.web_upload ~ session.image_in_slider }}" alt="{{ session.name }}">
+                            <div class="thumbnail">
+                                <img src="{{ _p.web_upload ~ session.image_in_slider }}" alt="{{ session.name }}">
+                            </div>
                         </div>
                         <div class="back">
                             <div class="session-description">
@@ -26,7 +28,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-6">
-                                    {{ "LevelX"|get_lang|format(session.course_level) }}
+                                   <p class="level">{{ "LevelX"|get_lang|format(session.course_level) }}</p>
                                 </div>
                                 <div class="col-xs-6">
                                     <a href="{{ session.url_in_slider }}" class="btn btn-primary">{{ "SeeCourse"|get_lang }}</a>
@@ -42,12 +44,13 @@
             <script type="text/javascript">
                 $(document).ready(function () {
                     $("#top-session").owlCarousel({
-                        autoPlay: 3000, //Set AutoPlay to 3 seconds
+                        autoPlay: 6000, //Set AutoPlay to 3 seconds
                         items: 3,
                         itemsDesktop: [1199, 3],
                         itemsDesktopSmall: [979, 3],
                         navigation: true,
-                        pagination: false
+                        pagination: false,
+                        stopOnHover: true
                     });
                 });
             </script>

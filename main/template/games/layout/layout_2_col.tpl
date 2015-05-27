@@ -55,10 +55,10 @@
             <div class="col-md-4">
                 {# Skills #}
                 {{ skills_block }}
-                {% if _u.logged == 0 %}
+
                     {# Help #}
                     {{ help_block }}
-                {% endif %}
+               
             </div>
 	    </div>
 

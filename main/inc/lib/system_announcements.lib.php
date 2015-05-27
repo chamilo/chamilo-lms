@@ -767,7 +767,7 @@ class SystemAnnouncementManager
         $template = new Template(null, false, false);
         $template->assign('announcements', $announcements);
 
-        return $template->fetch('default/announcement/slider.tpl');
+        return $template->fetch(api_get_configuration_value('default_template') . '/announcement/slider.tpl');
     }
 
     /**

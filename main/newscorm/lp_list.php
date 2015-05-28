@@ -326,6 +326,7 @@ foreach ($categories as $item) {
             $dsp_disk = null;
             $copy = null;
             $lp_auto_launch_icon = null;
+            $actionSeriousGame = null;
 
             if ($is_allowed_to_edit) {
 
@@ -703,6 +704,32 @@ foreach ($categories as $item) {
                 } else {
                     $start_time = $end_time = '';
                 }
+
+                if (api_get_setting('gamification_mode') != 0) {
+                    if ($details['seriousgame_mode'] == 0) {
+                        $actionSeriousGame = Display::toolbarButton(
+                            null,
+                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_seriousgame",
+                            'trophy',
+                            'default',
+                            [
+                                'class' => 'btn-xs',
+                                'title' => get_lang('ActivateSeriousGame')
+                            ]
+                        );
+                    } else {
+                        $actionSeriousGame = Display::toolbarButton(
+                            null,
+                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_seriousgame",
+                            'trophy',
+                            'warning',
+                            [
+                                'class' => 'btn-xs active',
+                                'title' => get_lang('DeactivateSeriousGame')
+                            ]
+                        );
+                    }
+                }
             } else {
                 // Student
                 $export_icon = Display::url(
@@ -747,7 +774,8 @@ foreach ($categories as $item) {
                 'action_auto_launch' => $lp_auto_launch_icon,
                 'action_pdf' => $export_icon,
                 'action_delete' => $dsp_delete,
-                'action_order' => $dsp_order
+                'action_order' => $dsp_order,
+                'action_seriousgame' => $actionSeriousGame
             ];
 
             $lp_showed = true;

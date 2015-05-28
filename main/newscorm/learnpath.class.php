@@ -5318,7 +5318,6 @@ class learnpath
      * but possibility to do again a completed item.
      *
      * @return boolean true if seriousgame_mode has been set to 1, false otherwise
-     * @deprecated seems not to be used
      * @author ndiechburg <noel@cblue.be>
      **/
     public function set_seriousgame_mode()

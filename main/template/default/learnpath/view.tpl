@@ -62,7 +62,6 @@
                 </div>
                 {# end TOC layout #}
 
-                
             </div>
             {# end left zone #}
 
@@ -98,7 +97,6 @@
         var heightTop = heightScormInfo + 100;
 
         //heightTop = (heightTop > 300)? heightTop : 300;
-
 
         var innerHeight = $(window).height();
 

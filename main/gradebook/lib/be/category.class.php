@@ -269,7 +269,7 @@ class Category implements GradebookItem
      * Get the generate_certificates value
      * @return int
      */
-    public function getGenerateCetificates()
+    public function getGenerateCertificates()
     {
         return $this->generateCertificates;
     }
@@ -1782,7 +1782,7 @@ class Category implements GradebookItem
         /** @var Category $category */
         $category = $cats_course[0];
 
-        if (!$category->getGenerateCetificates()) {
+        if (!$category->getGenerateCertificates()) {
 
             $skill = new Skill();
             $skill->add_skill_to_user(

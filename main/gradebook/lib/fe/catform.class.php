@@ -176,7 +176,7 @@ class CatForm extends FormValidator
                 'weight' 			=> $this->category_object->get_weight(),
                 'visible' 			=> $this->category_object->is_visible(),
                 'certif_min_score'  => $this->category_object->get_certificate_min_score(),
-                'generate_certificates' => $this->category_object->getGenerateCetificates()
+                'generate_certificates' => $this->category_object->getGenerateCertificates()
             )
         );
         $this->addElement('hidden', 'hid_id', $this->category_object->get_id());
@@ -357,7 +357,7 @@ class CatForm extends FormValidator
 
             $generateCertificatesParams = array();
 
-            if ($this->category_object->getGenerateCetificates()) {
+            if ($this->category_object->getGenerateCertificates()) {
                 $generateCertificatesParams['checked'] = 'checked';
             }
 

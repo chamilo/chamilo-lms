@@ -35,7 +35,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $tool = 'Add';
     $interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('Group'));
 }
-if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
+if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     $tool = 'Modify';
     $interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('Group'));
 }
@@ -101,12 +101,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         api_not_allowed();
     }
 
-    $_SESSION['notebook_view'] = 'creation_date';
-    //@todo move this in the career.lib.php
-
-    // Initiate the object
-    $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
+    $form = new FormValidator(
+        'usergroup',
+        'post',
+        api_get_self().'?action='.Security::remove_XSS($_GET['action'])
+    );
     $usergroup->setForm($form, 'add');
+
+    // Setting the defaults
+    $form->setDefaults(['visibility' => 2]);
 
     // The validation or display
     if ($form->validate()) {

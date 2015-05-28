@@ -90,7 +90,8 @@ class SequenceResource
      */
     public function hasGraph()
     {
-        return !empty($this->getSequence()->getGraph()) ? true : false;
+        $graph = $this->getSequence()->getGraph();
+        return !empty($graph) ? true : false;
     }
 
     /**

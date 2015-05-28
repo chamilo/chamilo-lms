@@ -6136,4 +6136,5 @@ class SessionManager
 
         return $sessionList;
     }
+
 }

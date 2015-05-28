@@ -17,13 +17,12 @@ class Version20150527101600 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $value = api_get_configuration_value('gamification_mode');
         $this->addSettingCurrent(
             'gamification_mode',
             '',
             'radio',
             'Platform',
-            $value == 0 ?  0: 1,
+            0,
             'GamificationModeTitle',
             'GamificationModeComment',
             null,

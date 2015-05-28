@@ -38,19 +38,6 @@ $(document).ready( function() {
 $nameTools = get_lang('GroupManagement');
 $course_id = api_get_course_int_id();
 
-// Create default category if it doesn't exist when group categories aren't allowed
-if (api_get_setting('allow_group_categories') == 'false') {
-    $cat_table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-    $sql = "SELECT * FROM $cat_table WHERE c_id = $course_id AND id = '".GroupManager::DEFAULT_GROUP_CATEGORY."'";
-    $res = Database::query($sql);
-    $num = Database::num_rows($res);
-    if ($num == 0) {
-        $sql = "INSERT INTO $cat_table (c_id, id , title , description , forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order)
-        VALUES ($course_id, '2', '".Database::escape_string(get_lang('DefaultGroupCategory'))."', '', '1', '1', '8', '0', '0', '0', '0');";
-        Database::query($sql);
-    }
-}
-
 /*	Header */
 Display::display_header(get_lang('Groups'));
 
@@ -196,28 +183,41 @@ echo UserManager::getUserSubscriptionTab(4);
 
 /*  List all categories */
 if (api_get_setting('allow_group_categories') == 'true') {
+    $defaultCategory = [
+        'id' => 0,
+        'description' => '',
+        'title' => get_lang('DefaultGroupCategory')
+    ];
+    $group_cats = array_merge($group_cats, [$defaultCategory]);
     foreach ($group_cats as $index => $category) {
-        $group_list = GroupManager::get_group_list($category['id']);
+        $categoryId = $category['id'];
+        $group_list = GroupManager::get_group_list($categoryId);
+        $groupToShow = GroupManager::process_groups($group_list, $categoryId);
+
+        if (empty($groupToShow)) {
+            continue;
+        }
+
         $label = Display::label(count($group_list).' '.get_lang('ExistingGroups'), 'info');
 
         $actions = null;
-        if (api_is_allowed_to_edit(false, true)) {
-            $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$category['id'].'" title="'.get_lang('Edit').'">'.
+        if (api_is_allowed_to_edit(false, true) && !empty($categoryId)) {
+            $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
                 Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
             $actions .=
                 Display::url(
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
-                    'group.php?'.api_get_cidreq().'&action=delete_category&id='.$category['id'],
+                    'group.php?'.api_get_cidreq().'&action=delete_category&id='.$categoryId,
                     array(
                         'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;'
                     )
                 );
             if ($index != 0) {
-                $actions .=  ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$category['id'].'&id2='.$group_cats[$index -1]['id'].'">'.
+                $actions .=  ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index -1]['id'].'">'.
                     Display::return_icon('up.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
             }
             if ($index != count($group_cats) - 1) {
-                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$category['id'].'&id2='.$group_cats[$index +1]['id'].'">'.
+                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index +1]['id'].'">'.
                     Display::return_icon('down.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
             }
         }
@@ -230,11 +230,11 @@ if (api_get_setting('allow_group_categories') == 'true') {
         );
 
         echo $category['description'];
-        GroupManager::process_groups($group_list, $category['id']);
+        echo $groupToShow;
     }
 } else {
     $group_list = GroupManager::get_group_list();
-    GroupManager::process_groups($group_list);
+    echo GroupManager::process_groups($group_list);
 }
 
 if (!isset($_GET['origin']) || $_GET['origin'] != 'learnpath') {

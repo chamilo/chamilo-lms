@@ -804,12 +804,12 @@ class GroupManager
         $categoryId = Database::insert_id();
 
         // @todo check if this code do something ... virtual course category?
-        if ($categoryId == self::VIRTUAL_COURSE_CATEGORY) {
+        /*if ($categoryId == self::VIRTUAL_COURSE_CATEGORY) {
             $sql = "UPDATE  ".$table_group_category." SET id = ". ($categoryId +1)."
                     WHERE c_id = $course_id AND id = $categoryId";
             Database::query($sql);
             $categoryId = $categoryId +1;
-        }
+        }*/
 
         $sql = "UPDATE $table_group_category SET id = iid WHERE iid = $categoryId";
         Database::query($sql);

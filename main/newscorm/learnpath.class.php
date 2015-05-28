@@ -3447,7 +3447,7 @@ class learnpath
                                     $linkProtocol = substr($file, 0, 5);
                                     if ($linkProtocol === 'http:') {
                                         //this is the special intervention case
-                                        $file = 'embed.php?type=nonhttps&source=' . $file;
+                                        $file = 'embed.php?type=nonhttps&source=' .  urlencode($file);
                                     }
                                 }
                             }

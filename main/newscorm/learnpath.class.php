@@ -10398,6 +10398,58 @@ EOD;
         return array_pop($exercises);
     }
 
+    /**
+     * Calculate the total points achieved for the current user in this learning path
+     * @return int
+     */
+    public function getCalculateScore()
+    {
+        // Calculate stars chapters evaluation
+        $exercisesItems = $this->getExercisesItems();
+        $finalEvaluationItem = $this->getFinalEvaluationItem();
+
+        $totalExercisesResult = 0;
+        $totalEvaluationResult = 0;
+
+        if ($exercisesItems !== false) {
+            foreach ($exercisesItems as $exerciseItem) {
+                $exerciseResultInfo = Event::getExerciseResultsByUser(
+                    $this->user_id,
+                    $exerciseItem->ref,
+                    $this->course_int_id,
+                    $this->lp_session_id,
+                    $this->lp_id,
+                    $exerciseItem->db_id
+                );
+
+                $exerciseResult = 0;
+
+                foreach ($exerciseResultInfo as $result) {
+                    $exerciseResult += $result['exe_result'];
+                }
+
+                $totalExercisesResult += $exerciseResult;
+            }
+        }
+
+        if ($finalEvaluationItem !== false) {
+            $evaluationResultInfo = Event::getExerciseResultsByUser(
+                $this->user_id,
+                $finalEvaluationItem->ref,
+                $this->course_int_id,
+                $this->lp_session_id,
+                $this->lp_id,
+                $finalEvaluationItem->db_id
+            );
+
+            foreach ($evaluationResultInfo as $result) {
+                $totalEvaluationResult += $result['exe_result'];
+            }
+        }
+
+        return $totalExercisesResult + $totalEvaluationResult;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

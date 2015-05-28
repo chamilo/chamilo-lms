@@ -401,6 +401,7 @@ $template->assign('jquery_web_path', api_get_jquery_web_path());
 $template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
 $template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
+$template->assign('gamification_mode', api_get_setting('gamification_mode'));
 
 $template->assign('breadcrumb', $breadcrumb);
 

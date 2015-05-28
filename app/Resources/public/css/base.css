@@ -5808,7 +5808,7 @@ ul.holder li.bit-box{
   font-size: 12px;
 }
 /* end thematic progress*/
-.card {
+.card-social {
   overflow: hidden;
   position: relative;
   border: 1px solid #CCC;
@@ -5819,7 +5819,7 @@ ul.holder li.bit-box{
   color: rgb(136, 172, 217);
   margin-bottom: 20px;
 }
-.card .header-bg {
+.card-social .header-bg {
   /* This stretches the canvas across the entire hero unit */
   position: absolute;
   top: 0;
@@ -5831,17 +5831,17 @@ ul.holder li.bit-box{
   z-index: 1;
 }
 
-.card .avatar {
+.card-social .avatar {
   position: relative;
   margin-top: 15px;
   z-index: 100;
 }
 
-.card .content {
+.card-social .content {
   margin-bottom: 15px;
 }
 
-.card .avatar img {
+.card-social .avatar img {
   width: 100px;
   height: 100px;
   -webkit-border-radius: 50%;

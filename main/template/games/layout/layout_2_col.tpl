@@ -26,7 +26,11 @@
             </div>
             {% endif %}
         {% endif %}
-
+        {% if plugin_content_top %}
+        <div id="plugin_content_top">
+            {{ plugin_content_top }}
+        </div>
+        {% endif %}
         {% if plugin_content_bottom %}
         <div id="plugin_content_bottom">
             {{plugin_content_bottom}}
@@ -71,11 +75,7 @@
 
 	<div class="col-md-12">
         {# Plugin bottom #}
-        {% if plugin_content_top %}
-            <div id="plugin_content_top">
-                {{ plugin_content_top }}
-            </div>
-        {% endif %}
+
 
 
 		{#  ??  #}

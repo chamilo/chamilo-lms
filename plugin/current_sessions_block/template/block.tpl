@@ -1,7 +1,9 @@
 {% if current_sessions_block.sessions|length > 0 %}
 <div class="my-courses-ranking">
     <div class="row">
-        <h4 class="title-section">{{ "MyCurrentCourses"|get_lang }}</h4><a href="#" class="more">Ver más</a>
+        <div class="col-xs-12 col-md-12">
+            <h4 class="title-section">{{ "MyCurrentCourses"|get_lang }}</h4><a href="#" class="more">Ver más</a>
+        </div>
     </div>
     <div class="row">
         {% for session in current_sessions_block.sessions %}
@@ -43,7 +45,16 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-12">
                                 <div class="start-progress">
-                                    <input type="hidden" class="rating-tooltip" data-filled="fa fa-star fa-2x" data-empty="fa fa-star fa-2x" data-fractions="3"/>
+                                    {% if session.stars > 0%}
+                                        {% for i in 1..session.stars %}
+                                            <i class="fa fa-star fa-2x"></i>
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if session.stars < 4 %}
+                                            {% for i in 1..4 - session.stars %}
+                                                <i class="fa fa-star-o fa-2x"></i>
+                                            {% endfor %}
+                                    {% endif %}
                                 </div>
                                 <div class="botton-items">
                                     <a href="#" class="btn btn-primary">{{ "Continue"|get_lang }}</a>
@@ -54,30 +65,7 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-                <div class="well">
-
-                    <div>
-                        {% if session.stars > 0%}
-                            {% for i in 1..session.stars %}
-                                <i class="fa fa-star fa-2x"></i>
-                            {% endfor %}
-                        {% endif %}
-                        {% if session.stars < 4 %}
-                            {% for i in 1..4 - session.stars %}
-                                <i class="fa fa-star-o fa-2x"></i>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
-                </div>
-
-            </div>
+        </div>
         {% endfor %}
     </div>
 </div>

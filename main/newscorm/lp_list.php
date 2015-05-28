@@ -49,12 +49,11 @@ if (api_get_setting('search_enabled') == 'true') {
     require api_get_path(LIBRARY_PATH).'search/search_widget.php';
     search_widget_prepare($htmlHeadXtra);
 }
-Display::display_header($nameTools, 'Path');
 $current_session = api_get_session_id();
 
 /* Introduction section (editable by course admins) */
 
-Display::display_introduction_section(TOOL_LEARNPATH, array(
+$introductionSection = Display::return_introduction_section(TOOL_LEARNPATH, array(
     'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
     'CreateDocumentDir' => '../../courses/'.api_get_course_path().'/document/',
     'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
@@ -62,40 +61,49 @@ Display::display_introduction_section(TOOL_LEARNPATH, array(
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
+$message = '';
+$actions = '';
+
 if ($is_allowed_to_edit) {
     if (!empty($dialog_box)) {
         switch ($_GET['dialogtype']) {
             case 'confirmation':
-                Display::display_confirmation_message($dialog_box);
+                $message = Display::return_message($dialog_box, 'success');
                 break;
             case 'error':
-                Display::display_error_message($dialog_box);
+                $message = Display::return_message($dialog_box, 'danger');
                 break;
             case 'warning':
-                Display::display_warning_message($dialog_box);
+                $message = Display::return_message($dialog_box, 'warning');
                 break;
             default:
-                Display::display_normal_message($dialog_box);
+                $message = Display::return_message($dialog_box);
                 break;
         }
     }
     if (api_failure::get_last_failure()) {
-        Display::display_normal_message(api_failure::get_last_failure());
+        $message = Display::return_message(api_failure::get_last_failure());
     }
 
-    echo '<div class="actions">';
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon('new_folder.png', get_lang('AddCategory'), array(), ICON_SIZE_MEDIUM),
         api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
     );
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('new_learnpath.png', get_lang('LearnpathAddLearnpath'), '', ICON_SIZE_MEDIUM).'</a>'.
-        str_repeat('&nbsp;', 3).
-        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import_scorm.png', get_lang('UploadScorm'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actions .= Display::url(
+        Display::return_icon('new_learnpath.png', get_lang('LearnpathAddLearnpath'), '', ICON_SIZE_MEDIUM),
+        api_get_self().'?'.api_get_cidreq().'&action=add_lp'
+    );
+    $actions .= Display::url(
+        Display::return_icon('import_scorm.png', get_lang('UploadScorm'), '', ICON_SIZE_MEDIUM),
+        '../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
+    );
+
     if (api_get_setting('service_ppt2lp', 'active') == 'true') {
-        echo str_repeat('&nbsp;', 3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">
-		'.Display::return_icon('import_powerpoint.png', get_lang('PowerPointConvert'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= Display::url(
+            Display::return_icon('import_powerpoint.png', get_lang('PowerPointConvert'), '', ICON_SIZE_MEDIUM),
+            '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
+        );
     }
-    echo '</div>';
 }
 
 $token = Security::get_token();
@@ -120,10 +128,10 @@ $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 
 $lp_showed = false;
-$total = count($categories);
-$counterCategories = 1;
 
 $test_mode = api_get_setting('server_type');
+
+$data = [];
 
 foreach ($categories as $item) {
     $categoryId = $item->getId();
@@ -144,63 +152,14 @@ foreach ($categories as $item) {
         continue;
     }
 
-    $edit_link = null;
-    $delete_link = null;
-    $moveUpLink = null;
-    $moveDownLink = null;
-
-    if ($item->getId() > 0 && api_is_allowed_to_edit()) {
-        $url = 'lp_controller.php?'.api_get_cidreq().'&action=add_lp_category&id='.$item->getId();
-
-        $edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit')), $url);
-        $delete_url = 'lp_controller.php?'.api_get_cidreq().'&action=delete_lp_category&id='.$item->getId();
-        $moveUpUrl = 'lp_controller.php?'.api_get_cidreq().'&action=move_up_category&id='.$item->getId();
-        $moveDownUrl = 'lp_controller.php?'.api_get_cidreq().'&action=move_down_category&id='.$item->getId();
-
-        if ($counterCategories == 1) {
-            $moveUpLink = Display::url(Display::return_icon('up_na.png', get_lang('Move')), '#');
-        } else {
-            $moveUpLink = Display::url(Display::return_icon('up.png', get_lang('Move')), $moveUpUrl);
-        }
-
-        if (($total -1) == $counterCategories) {
-            $moveDownLink = Display::url(Display::return_icon('down_na.png', get_lang('Move')), '#');
-        } else {
-            $moveDownLink = Display::url(Display::return_icon('down.png', get_lang('Move')), $moveDownUrl);
-        }
-        $delete_link = Display::url(Display::return_icon('delete.png', get_lang('Delete')), $delete_url);
-        $counterCategories++;
-    }
-
-    echo Display::page_subheader2($item->getName().$edit_link.$moveUpLink.$moveDownLink.$delete_link);
+    $listData = [];
 
     if (!empty($flat_list)) {
-        echo '<div class="table-responsive">';
-        echo '<table class="table table-stripped table-hover">';
-        echo '<thead>';
-        echo '<tr>';
-
-        if ($is_allowed_to_edit) {
-            echo '<th width="35%">'.get_lang('Title').'</th>';
-            echo '<th>'.get_lang('PublicationDate').'</th>';
-            echo '<th>'.get_lang('ExpirationDate').'</th>';
-            echo '<th>'.get_lang('Progress')."</th>";
-            echo '<th width="300px">'.get_lang('AuthoringOptions')."</th>";
-        } else {
-            echo '<th width="50%">'.get_lang('Title').'</th>';
-            if (!api_is_invitee()) {
-                echo '<th>'.get_lang('Progress')."</th>";
-            }
-            echo '<th>'.get_lang('Actions')."</th>";
-        }
-        echo '</tr>';
-        echo '</thead>';
-        echo '</tbody>';
-
         $max = count($flat_list);
         $counter = 0;
         $current = 0;
         $autolaunch_exists = false;
+
         foreach ($flat_list as $id => $details) {
 
             // Validation when belongs to a session.
@@ -351,20 +310,14 @@ foreach ($categories as $item) {
             }
 
             if ($is_allowed_to_edit) {
-                $dsp_progress = '<td><center>'.$progress.'</center></td>';
+                $dsp_progress = '<center>'.$progress.'</center>';
             } else {
                 $dsp_progress = "";
 
                 if (!api_is_invitee()) {
-                    $dsp_progress = '<td>'.learnpath::get_progress_bar(
-                            $progress,
-                            '%'
-                        ).'</td>';
+                    $dsp_progress = learnpath::get_progress_bar($progress, '%');
                 }
             }
-
-            $dsp_edit = '<td class="td_actions">';
-            $dsp_edit_close = '</td>';
 
             $token_parameter = "&sec_token=$token";
             $dsp_edit_lp = null;
@@ -756,14 +709,8 @@ foreach ($categories as $item) {
                     }
                 }
                 if ($is_allowed_to_edit) {
-                    $start_time = Display::tag(
-                        'td',
-                        Display::div($start_time, array('class' => 'small'))
-                    );
-                    $end_time = Display::tag(
-                        'td',
-                        Display::div($end_time, array('class' => 'small'))
-                    );
+                    $start_time = $start_time;
+                    $end_time = $end_time;
                 } else {
                     $start_time = $end_time = '';
                 }
@@ -794,31 +741,58 @@ foreach ($categories as $item) {
                 $export_icon = null;
             }
 
-            echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
-                $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_launch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
+            $listData[] = [
+                'learnpath_icon' => $icon_learnpath,
+                'url_start' => $url_start_lp,
+                'title' => $my_title,
+                'session_image' => $session_img,
+                'extra' => $extra,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'dsp_progress' => $dsp_progress,
+                'action_build' => $dsp_build,
+                'action_edit' => $dsp_edit_lp,
+                'action_visible' => $dsp_visible,
+                'action_publish' => $dsp_publish,
+                'action_reinit' => $dsp_reinit,
+                'action_default_view' => $dsp_default_view,
+                'action_debug' => $dsp_debug,
+                'action_export' => $dsp_disk,
+                'action_copy' => $copy,
+                'action_auto_launch' => $lp_auto_launch_icon,
+                'action_pdf' => $export_icon,
+                'action_delete' => $dsp_delete,
+                'action_order' => $dsp_order
+            ];
 
             $lp_showed = true;
-
-            echo "</tr>";
             //counter for number of elements treated
             $current++;
 
         } // end foreach ($flat_list)
-        echo "</tbody>";
-        echo "</table>";
-        echo "</div>";
     }
+
+    $data[] = [
+        'category' => $item,
+        'lp_list' => $listData
+    ];
 }
 
-if ($is_allowed_to_edit && $lp_showed == false) {
-    echo '<div id="no-data-view">';
-    echo '<h2>'.get_lang('LearningPaths').'</h2>';
-    echo Display::return_icon('scorms.png', '', array(), 64);
-    echo '<div class="controls">';
-    echo Display::url(get_lang('LearnpathAddLearnpath'), api_get_self().'?'.api_get_cidreq().'&action=add_lp', array('class' => 'btn'));
-    echo '</div>';
-    echo '</div>';
-}
+$template = new Template($nameTools);
+$template->assign('is_allowed_to_edit', $is_allowed_to_edit);
+$template->assign('is_invitee', api_is_invitee());
+$template->assign('actions', $actions);
+$template->assign('message', $message);
+$template->assign('introduction_section', $introductionSection);
+
+$template->assign('data', $data);
+$template->assign('lp_showed', $lp_showed);
+
+$content = $template->fetch('default/learnpath/list.tpl');
+
+$template->assign('content', $content);
+$template->display_one_col_template();
+
 $course_info = api_get_course_info();
 learnpath::generate_learning_path_folder($course_info);
 
@@ -826,4 +800,3 @@ learnpath::generate_learning_path_folder($course_info);
 Session::erase('oLP');
 Session::erase('lpobject');
 DocumentManager::removeGeneratedAudioTempFile();
-Display::display_footer();

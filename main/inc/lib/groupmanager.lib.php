@@ -73,12 +73,12 @@ class GroupManager
 
     /**
      * Get list of groups for current course.
-     * @param int $category The id of the category from which the groups are
+     * @param int $categoryId The id of the category from which the groups are
      * requested
      * @param string $course_code Default is current course
      * @return array An array with all information about the groups.
      */
-    public static function get_group_list($category = null, $course_code = null, $status = null)
+    public static function get_group_list($categoryId = null, $course_code = null, $status = null)
     {
         $course_info = api_get_course_info($course_code);
         $session_id = api_get_session_id();
@@ -109,8 +109,8 @@ class GroupManager
 
         $sql .= " WHERE 1=1 ";
 
-        if ($category != null) {
-            $sql .= "  AND  g.category_id = '".intval($category)."' ";
+        if (!is_null($categoryId)) {
+            $sql .= " AND g.category_id = '".intval($categoryId)."' ";
             $session_condition = api_get_session_condition($session_id);
             if (!empty($session_condition)) {
                 $sql .= $session_condition;

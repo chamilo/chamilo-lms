@@ -185,10 +185,12 @@ echo UserManager::getUserSubscriptionTab(4);
 if (api_get_setting('allow_group_categories') == 'true') {
     $defaultCategory = [
         'id' => 0,
+        'iid' => 0,
         'description' => '',
         'title' => get_lang('DefaultGroupCategory')
     ];
-    $group_cats = array_merge($group_cats, [$defaultCategory]);
+    $group_cats = array_merge([$defaultCategory], $group_cats);
+
     foreach ($group_cats as $index => $category) {
         $categoryId = $category['id'];
         $group_list = GroupManager::get_group_list($categoryId);

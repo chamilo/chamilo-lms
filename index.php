@@ -139,11 +139,8 @@ if (!api_is_anonymous()) {
     $controller->tpl->assign('profile_block', $controller->return_profile_block());
     $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
 
-    if (api_is_platform_admin()) {
-        $controller->tpl->assign('course_block', $controller->return_course_block());
-    } else {
-        $controller->tpl->assign('teacher_block', $controller->return_teacher_link());
-    }
+    $controller->tpl->assign('course_block', $controller->return_course_block());
+    //$controller->tpl->assign('teacher_block', $controller->return_teacher_link());
 }
 
 $hot_courses = null;

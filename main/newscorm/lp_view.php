@@ -290,7 +290,6 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 }
 
 // Not in fullscreen mode.
-Display::display_reduced_header($nameTools);
 
 // Check if audio recorder needs to be in studentview.
 if (isset($_SESSION['status']) && $_SESSION['status'][$course_code] == 5) {
@@ -342,226 +341,76 @@ if (Database::num_rows($res_media) > 0) {
     }
 }
 
-echo '<div id="learning_path_main" style="width:100%;height:100%;">';
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
 
+$breadcrumb = null;
+
 if ($is_allowed_to_edit) {
-    echo '<div class="row">';
-    echo '<div id="learning_path_breadcrumb_zone" class="col-md-12">';
     global $interbreadcrumb;
-    $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
-    $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
-    echo return_breadcrumb($interbreadcrumb, null, null);
-    echo '</div>';
-    echo '</div>';
+    $interbreadcrumb[] = array(
+        'url' => 'lp_controller.php?action=list&isStudentView=false',
+        'name' => get_lang('LearningPaths')
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false",
+        'name' => $_SESSION['oLP']->get_name()
+    );
+    $interbreadcrumb[] = array(
+        'url' => '#',
+        'name' => get_lang('Preview')
+    );
+    $breadcrumb = return_breadcrumb($interbreadcrumb, null, null);
 }
-    /* button hiden left zone */
-    echo '<a id="touch-button" class="hidden-touch" href="#"></a>';
-    /* Fin left zone */
-    echo '<div class="container-fluid"><div class="row">';
-    echo '<div id="learning_path_left_zone" class="sidebar-scorm"> ';
 
-    echo '<div id="scorm-info" class="panel panel-default">';
-    echo '<div class="panel-heading">
-        <a id="ui-option">
-        <i id="icon-down"class="fa fa-chevron-down hidden"></i>
-        <i id="icon-up" class="fa fa-chevron-up"></i>
-        </a></div>';
-    ?>
-        <!-- end header -->
+// Return to course home.
+if ($is_allowed_to_edit) {
+    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+        'isStudentView' => 'false',
+        'action' => 'return_to_course_homepage'
+    ]);
+} else {
+    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+        'action' => 'return_to_course_homepage'
+    ]);
+}
 
-        <!-- Author image preview -->
-            <div id="panel-scorm" class="panel-body">
-                <?php
-                // Return to course home.
-                if ($is_allowed_to_edit) {
-                $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
-                } else {
-                $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
-                }
+$buttonHomeText = get_lang('CourseHomepageLink');
+// Return to lp list
+if (api_get_course_setting('lp_return_link') == 1) {
+    $buttonHomeUrl .= '&redirectTo=lp_list';
+    $buttonHomeText = get_lang('LearningPathList');
+}
 
-                $iconHome='<i class="fa fa-home"></i>';
-                $name = get_lang('CourseHomepageLink');
-                // Return to lp list
-                if (api_get_course_setting('lp_return_link') == 1) {
-                $url .= '&redirectTo=lp_list';
-                $name = get_lang('LearningPathList');
-                }
+$template = new Template('title', false, false, true, true, false);
+$template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
+$template->assign(
+    'glossary_tool_availables',
+    ['true', 'lp', 'exercise_and_lp']
+);
+$template->assign('show_glossary_in_documents', api_get_setting('show_glossary_in_documents'));
+$template->assign('jquery_web_path', api_get_jquery_web_path());
+$template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
+$template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());
+$template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 
-                echo Display::url(
-                $iconHome.' '.$name,
-                $url,
-                array(
-                'class' => 'btn btn-success btn-block',
-                'target' => '_self',
-                'onclick' => 'javascript: window.parent.API.save_asset();'
-                )
-                );
+$template->assign('breadcrumb', $breadcrumb);
 
-                ?>
-                <div class="image-avatar">
-                <?php
-                if ($_SESSION['oLP']->get_preview_image() != '') {
-                    $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
-                    $style = null;
-                    if ($picture['1'] < 96) {
-                        $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" ';
-                    }
-                    $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
-                    $my_path = $_SESSION['oLP']->get_preview_image_path();
-                    echo '<img src="'.$my_path.'">';
-                } else {
-                    echo Display :: display_icon('unknown_250_100.jpg');
-                }
-                ?>
-                </div>
-                <div id="lp_navigation_elem" class="navegation-bar">
-                    <?php echo $navigation_bar; ?>
-                    <div id="progress_bar">
-                        <?php echo $progress_bar; ?>
-                    </div>
-                </div>
-                <div class="description-autor">
-                    <?php echo $_SESSION['oLP']->get_author(); ?>
-                </div>
-                <?php
-                if ($show_audioplayer) {
-                    echo '<div id="lp_media_file">';
-                    echo $mediaplayer;
-                    echo '</div>';
-                }
-                ?>
+$template->assign('button_home_url', $buttonHomeUrl);
+$template->assign('button_home_text', $buttonHomeText);
+$template->assign('navigation_bar', $navigation_bar);
+$template->assign('progress_bar', $progress_bar);
+$template->assign('oLP', $_SESSION['oLP']);
+$template->assign('show_audio_player', $show_audioplayer);
+$template->assign('media_player', $mediaplayer);
+$template->assign('toc_list', $get_toc_list);
+$template->assign('iframe_src', $src);
+$template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 
-        </div>
+$content = $template->fetch('default/learnpath/view.tpl');
 
-    </div>
+$template->assign('content', $content);
+$template->display_no_layout_template();
 
-        <!-- TOC layout -->
-
-        <div id="toc_id" name="toc_name">
-            <div id="learning_path_toc" class="scorm-list">
-                <?php echo $_SESSION['oLP']->get_html_toc($get_toc_list); ?>
-            </div>
-        </div>
-        <!-- end TOC layout -->
-    </div>
-
-    <!-- end left zone
-    <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div>-->
-    <!-- right zone -->
-    <div id="learning_path_right_zone" style="height:100%" class="content-scorm">
-    <?php
-        // hub 26-05-2010 Fullscreen or not fullscreen
-        $height = '100%';
-        if ($_SESSION['oLP']->mode == 'fullscreen') {
-            echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:'.$height.'" ></iframe>';
-        } else {
-            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:'.$height.'"></iframe>';
-        }
-    ?>
-    </div>
-
-    <!-- end right Zone -->
-</div>
-<?php echo $navigation_bar_bottom; ?>
-    </div></div>
-
-<script>
-    // Resize right and left pane to full height (HUB 20-05-2010).
-    function updateContentHeight() {
-        document.body.style.overflow = 'hidden';
-        var IE = window.navigator.appName.match(/microsoft/i);
-
-        /* Identified new height */
-        var heightControl = $('#control-bottom').height();
-        var heightBreadcrumb = ($('#learning_path_breadcrumb_zone').height())? $('#learning_path_breadcrumb_zone').height() : 0 ;
-
-        var heightScormInfo = $('#scorm-info').height();
-
-        var heightTop = heightScormInfo + 100;
-
-        //heightTop = (heightTop > 300)? heightTop : 300;
-
-
-        var innerHeight = $(window).height();
-
-        if(innerHeight<=640){
-            $('#inner_lp_toc').css('height',  innerHeight - heightTop + "px");
-            $('#content_id').css('height', innerHeight - heightControl + "px");
-        }else{
-            $('#inner_lp_toc').css('height',  innerHeight - heightBreadcrumb - heightTop + "px");
-            $('#content_id').css('height', innerHeight - heightControl + "px");
-        }
-
-        //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
-
-
-    // Loads the glossary library.
-    <?php
-    $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-    if (in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'))) {
-           if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
-                ?>
-            $.frameReady(function(){
-                   //  $("<div>I am a div courses</div>").prependTo("body");
-         }, "top.content_name",
-          { load: [
-              { type:"script", id:"_fr1", src:"<?php echo api_get_jquery_web_path(); ?>"},
-              { type:"script", id:"_fr4", src:"<?php echo api_get_jquery_ui_js_web_path(); ?>"},
-              { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_jquery_ui_css_web_path(); ?>"},
-              { type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
-          ] }
-          );
-    <?php } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { ?>
-    $.frameReady(function(){
-        //  $("<div>I am a div courses</div>").prependTo("body");
-      },
-        "top.content_name",
-      {
-      load: [
-          { type:"script", id:"_fr1", src:"<?php echo api_get_jquery_web_path(); ?>"},
-          { type:"script", id:"_fr4", src:"<?php echo api_get_jquery_ui_js_web_path(); ?>"},
-          { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_jquery_ui_css_web_path(); ?>"},
-          { type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
-      ]}
-      );
-    <?php }
-    }
-  ?>
-  }
-    $(document).ready(function() {
-        updateContentHeight();
-        $('#touch-button').children().click(function(){
-            updateContentHeight();
-        });
-        $(window).resize(function() {
-            updateContentHeight();
-        });
-    });
-    window.onload = updateContentHeight();
-    window.onresize = updateContentHeight();
-
-    $(document).ready(function(){
-
-        $("#icon-down").click(function(){
-            $("#icon-up").removeClass("hidden");
-            $(this).addClass("hidden");
-            $('#panel-scorm').slideDown("slow",function(){
-                updateContentHeight();
-            });
-        });
-        $("#icon-up").click(function(){
-            $("#icon-down").removeClass("hidden");
-            $(this).addClass("hidden");
-            $('#panel-scorm').slideUp("slow",function(){
-                updateContentHeight();
-            });
-        });
-    });
-
-</script>
-<?php
 // Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;
 

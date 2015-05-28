@@ -45,7 +45,7 @@
                                 <li><a href="{{ _p.web_main }}admin/">{{ "Home"|get_lang }}</a></li>
                                 <li><a href="{{ _p.web_main }}admin/user_list.php">{{ "UserList"|get_lang }}</a></li>
                                 <li><a href="{{ _p.web_main }}admin/course_list.php">{{ "CourseList"|get_lang }}</a></li>
-                                <li><a href="{{ _p.web_main }}admin/session_list.php">{{ "SessionList"|get_lang }}</a></li>
+                                <li><a href="{{ _p.web_main }}session/session_list.php">{{ "SessionList"|get_lang }}</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{{ _p.web_main }}admin/settings.php">{{ "Settings"|get_lang }}</a></li>
                                 <li class="divider"></li>
@@ -59,7 +59,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{{ _p.web_main }}admin/user_add.php">{{ "User"|get_lang }}</a></li>
                                 <li><a href="{{ _p.web_main }}admin/course_add.php">{{ "Course"|get_lang }}</a></li>
-                                <li><a href="{{ _p.web_main }}admin/session_add.php">{{ "Session"|get_lang }}</a></li>
+                                <li><a href="{{ _p.web_main }}session/session_add.php">{{ "Session"|get_lang }}</a></li>
                             </ul>
                         </li>
                         {% endif %}

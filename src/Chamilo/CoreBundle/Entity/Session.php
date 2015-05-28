@@ -4,9 +4,10 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+
 //use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 //use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -70,22 +71,6 @@ class Session
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
     private $duration;
-
-    /**
-     * @return int
-     */
-    public function getDuration()
-    {
-        return $this->duration;
-    }
-
-    /**
-     * @param int $duration
-     */
-    public function setDuration($duration)
-    {
-        $this->duration = $duration;
-    }
 
     /**
      * @var integer
@@ -263,6 +248,22 @@ class Session
         $this->userCourseSubscriptions = new ArrayCollection();
         $this->showDescription = 0;
         $this->category = null;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @param int $duration
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
     }
 
     /**

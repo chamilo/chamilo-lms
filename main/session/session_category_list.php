@@ -186,9 +186,9 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 <tr class="<?php echo $i ? 'row_odd' : 'row_even'; ?>">
                     <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
                     <td><?php echo api_htmlentities($enreg['name'], ENT_QUOTES, $charset); ?></td>
-                    <td><?php echo "<a href=\"session_list.php?id_category=".$enreg['id']."\">".$nb_courses." Sesion(es) </a>"; ?></td>
-                    <td><?php echo api_htmlentities($enreg['date_start'], ENT_QUOTES, $charset); ?></td>
-                    <td><?php echo api_htmlentities($enreg['date_end'], ENT_QUOTES, $charset); ?></td>
+                    <td><?php echo "<a href=\"session_list.php?id_category=".$enreg['id']."\">".$nb_courses." Session(s) </a>"; ?></td>
+                    <td><?php echo api_htmlentities($enreg['access_start_date'], ENT_QUOTES, $charset); ?></td>
+                    <td><?php echo api_htmlentities($enreg['access_end_date'], ENT_QUOTES, $charset); ?></td>
                     <td>
                         <a href="session_category_edit.php?&id=<?php echo $enreg['id']; ?>">
                             <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>

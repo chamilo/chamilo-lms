@@ -537,14 +537,14 @@ class SocialManager extends UserManager
 
                 $session = array();
                 $session['title'] = $my_course['session_name'];
-                if ($my_course['date_start'] == '0000-00-00') {
+                if ($my_course['access_start_date'] == '0000-00-00') {
                     $session['dates'] = get_lang('WithoutTimeLimits');
                     if (api_get_setting('show_session_coach') === 'true') {
                         $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
                     }
                     $active = true;
                 } else {
-                    $session ['dates'] = ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
+                    $session ['dates'] = ' - '.get_lang('From').' '.$my_course['access_start_date'].' '.get_lang('To').' '.$my_course['access_end_date'];
                     if (api_get_setting('show_session_coach') === 'true') {
                         $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
                     }

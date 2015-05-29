@@ -3701,7 +3701,7 @@ function WSCreateSession($params)
                 $results[] = 0;
                 continue;
             } else {
-                Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end)
+                Database::query("INSERT INTO $tbl_session(name,access_start_date,access_end_date,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end)
                                  VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
                 $id_session = Database::insert_id();
 
@@ -5800,10 +5800,10 @@ function WSListSessions($params) {
     $sql_params = array();
     // Dates should be provided in YYYY-MM-DD format, UTC
     if (!empty($params['date_start'])) {
-        $sql_params['s.date_start'] = array('operator' => '>=', 'value' => $params['date_start']);
+        $sql_params['s.access_start_date'] = array('operator' => '>=', 'value' => $params['date_start']);
     }
     if (!empty($params['date_end'])) {
-        $sql_params['s.date_end'] = array('operator' => '<=', 'value' => $params['date_end']);
+        $sql_params['s.access_end_date'] = array('operator' => '<=', 'value' => $params['date_end']);
     }
     $sessions_list = SessionManager::get_sessions_list($sql_params);
     $return_list = array();
@@ -5812,8 +5812,8 @@ function WSListSessions($params) {
             'id' => $session['id'],
             'title' => $session['name'],
             'url' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session['id'], // something like http://my.chamilo.net/main/session/index.php?session_id=5
-            'date_start' => $session['date_start'],
-            'date_end' => $session['date_end'],
+            'date_start' => $session['access_start_date'],
+            'date_end' => $session['access_end_date'],
         );
     }
 

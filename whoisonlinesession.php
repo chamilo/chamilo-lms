@@ -46,13 +46,13 @@ Display::display_header(get_lang('UserOnlineListSession'));
 		$_user['user_id'] = intval($_user['user_id']);
 		$sql = "SELECT DISTINCT session.id,
 					name,
-					date_start,
-					date_end
+					access_start_date,
+					access_end_date
 				FROM $tbl_session as session
 				INNER JOIN $tbl_session_course_user as srcru
 					ON srcru.user_id = ".$_user['user_id']." AND srcru.status=2
 					AND session.id = srcru.session_id
-				ORDER BY date_start, date_end, name";
+				ORDER BY access_start_date, access_end_date, name";
 		$result = Database::query($sql);
 
 		while ($session = Database:: fetch_array($result)) {
@@ -61,11 +61,11 @@ Display::display_header(get_lang('UserOnlineListSession'));
 
 		$sql = "SELECT DISTINCT session.id,
 					name,
-					date_start,
-					date_end
+					access_start_date,
+					access_end_date
 				FROM $tbl_session as session
 				WHERE session.id_coach = ".$_user['user_id']."
-				ORDER BY date_start, date_end, name";
+				ORDER BY access_start_date, access_end_date, name";
         $result = Database::query($sql);
 		while ($session = Database:: fetch_array($result)) {
 			$session_is_coach[$session['id']] = $session;

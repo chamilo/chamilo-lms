@@ -73,7 +73,7 @@ elseif(!empty($annee) && empty($id_session))
 	echo '<select name="id_session">';
 
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-	$sql = "SELECT id,name,nbr_courses,date_start,date_end " .
+	$sql = "SELECT id,name,nbr_courses,access_start_date,access_end_date " .
 		" FROM $tbl_session ".
 		" ORDER BY name";
 	$result = Database::query($sql);
@@ -81,7 +81,7 @@ elseif(!empty($annee) && empty($id_session))
 	$sessions=Database::store_result($result);
 	$nbr_results=count($sessions);
 	foreach($sessions as $row) {
-		echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name']).' ('.$row['date_start'].' - '.$row['date_end'].')</option>';
+		echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name']).' ('.$row['access_start_date'].' - '.$row['access_end_date'].')</option>';
 	}
 	echo '</select>';
 	echo '<input type="submit" value="'.get_lang('Submit').'">';

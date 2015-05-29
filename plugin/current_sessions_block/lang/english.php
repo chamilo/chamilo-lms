@@ -14,5 +14,6 @@ $strings['days_before_start'] = "Days before to start a session";
 
 $strings['ImageForCurrentSessionsBlock'] = "Image for the current sessions block";
 
+$strings['MyCurrentCourses'] = 'My current courses';
 $strings['Start'] = "Start";
 $strings['End'] = "End";

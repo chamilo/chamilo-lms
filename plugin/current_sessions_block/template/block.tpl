@@ -12,7 +12,7 @@
             <div class="card">
                 <div class="front">
                     <div id="items-img-1" class="img-items-course">
-                        <img class="img-responsive" src="{{ _p.web_css_theme }}images/banner03.png">
+                        <img class="img-responsive" src="{{ _p.web_upload ~ session.image }}">
                     </div>
                 </div>
                 <div class="back">

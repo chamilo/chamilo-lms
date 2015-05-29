@@ -14,6 +14,7 @@ $strings['days_before_start'] = "Número de días antes de empezar una sesión";
 
 $strings['ImageForCurrentSessionsBlock'] = "Imagen para el bloque de sesiones actuales";
 
+$strings['MyCurrentCourses'] = 'Mis cursos actuales';
 $strings['Start'] = "Inicio";
 $strings['End'] = "Fin";
 $strings['Continue'] = "Continuar";

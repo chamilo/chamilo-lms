@@ -13,6 +13,7 @@ class CurrentSessionsBlockPlugin extends Plugin
     const CONFIG_NUMBER_OF_SESSIONS = 'number_of_sessions';
     const CONFIG_DAYS_BEFORE = 'days_before_start';
     const CONFIG_SHOW_BLOCK = 'show_block';
+    const FIELD_VARIABLE_IMAGE = 'image_for_current_sessions_plugin';
 
     private $numberOfSessions;
 
@@ -64,6 +65,7 @@ class CurrentSessionsBlockPlugin extends Plugin
      */
     public function install()
     {
+        $this->createExtraFields();
     }
 
     /**
@@ -71,6 +73,7 @@ class CurrentSessionsBlockPlugin extends Plugin
      */
     public function uninstall()
     {
+        $this->deleteExtraFields();
     }
 
     /**
@@ -189,6 +192,16 @@ SQL;
 
             $session['stars'] = $this->getNumberOfStars($session['id']);
             $session['progress'] = $this->getSessionProgress($session['id']);
+
+            $fieldImage = new ExtraFieldValue('session');
+            $fieldValueInfo = $fieldImage->get_values_by_handler_and_field_variable(
+                $session['id'],
+                self::FIELD_VARIABLE_IMAGE
+            );
+
+            if (!empty($fieldValueInfo)) {
+                $session['image'] = $fieldValueInfo['value'];
+            }
         }
 
         return $sessions;
@@ -263,6 +276,69 @@ SQL;
         }
 
         return $totalStars / count($courses);
+    }
+
+    /**
+     * Create the new extra fields
+     */
+    private function createExtraFields()
+    {
+        $sessionExtraField = new ExtraField('session');
+        $sessionExtraField->save([
+            'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
+            'variable' => self::FIELD_VARIABLE_IMAGE,
+            'display_text' => $this->get_lang('ImageForCurrentSessionsBlock'),
+            'default_value' => null,
+            'field_order' => null,
+            'visible' => true,
+            'changeable' => true,
+            'filter' => null
+        ]);
+    }
+
+    /**
+     * Get the created extrafields variables by this plugin
+     * @return array The variables
+     */
+    public function getExtrafields(){
+        return [
+            self::FIELD_VARIABLE_SHOW_IN_SLIDER,
+            self::FIELD_VARIABLE_IMAGE,
+            self::FIELD_VARIABLE_URL
+        ];
+    }
+
+    /**
+     * Get the extra field information by its variable
+     * @param sstring $fieldVariable The field variable
+     * @return array The info
+     */
+    private function getExtraFieldInfo($fieldVariable)
+    {
+        $extraField = new ExtraField('session');
+        $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable($fieldVariable);
+
+        return $extraFieldHandler;
+    }
+
+    /**
+     * Delete extra field and their values
+     */
+    private function deleteExtraFields()
+    {
+        $fieldVariables = $this->getExtrafields();
+
+        foreach ($fieldVariables as $variable) {
+            $fieldInfo = $this->getExtraFieldInfo($variable);
+            $fieldExists = $fieldInfo !== false;
+
+            if (!$fieldExists) {
+                continue;
+            }
+
+            $extraField = new ExtraField('session');
+            $extraField->delete($fieldInfo['id']);
+        }
     }
 
 }

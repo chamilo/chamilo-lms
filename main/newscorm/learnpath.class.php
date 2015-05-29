@@ -3275,7 +3275,7 @@ class learnpath
                 $html .= stripslashes($title);
             } else {
                 $this->get_link('http', $item['id'], $toc_list);
-                $html .= '<a href="" onClick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
+                $html .= '<a class="items-list" href="" onClick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
             }
             $html .= "</div>";
 
@@ -5518,7 +5518,10 @@ class learnpath
 
             // We need to close the form when we are updating the mp3 files.
             if ($update_audio == 'true') {
-                $return .= '<div><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
+                $return .= '<div class="footer-audio">';
+                $return .= Display::button('save_audio','<i class="fa fa-file-audio-o"></i> '. get_lang('SaveAudioAndOrganization'),array('class'=>'btn btn-primary','type'=>'submit'));
+                $return .= '</div>';
+                //$return .= '<div><button class="btn btn-primary" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
             }
         }
 
@@ -5610,7 +5613,7 @@ class learnpath
             }
 
             // The audio column.
-            $return_audio  .= '<td align="center">';
+            $return_audio  .= '<td align="left" style="padding-left:10px;">';
 
             $audio = '';
 

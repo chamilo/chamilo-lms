@@ -3,11 +3,75 @@ File used to display Learning Path item in student view
 If scorm.css file exists in theme folder, scorm.css file is used instead of this one
 See https://support.chamilo.org/issues/6976
 */
+/* LP SCORM */
+/* Default LP left column values */
+
+#learning_path_left_zone {
+  float:left;
+  height:100%;
+  padding-left: 8px;
+  padding-right: 4px;
+}
+
+#learning_path_left_zone #header {
+  font-size:14px;
+}
+#scorm-info.panel-default{
+  margin: 0px;
+}
+
+#author_image {
+  border: 1px solid #CCCCCC;
+  float: left;
+  margin: 0;
+  padding: 8px;
+  position: relative;
+  width: 100%;
+}
+
+#author_name {
+  float: left;
+  text-align:center;
+  width: 100%;
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+
+#lp_media_file {
+  float: left;
+  text-align:center;
+  width: 94%;
+}
+
+#learning_path_toc {
+  font-size:9pt;
+  margin:0;
+}
+#learning_path_left_zone .image-avatar{
+  text-align: center;
+  padding: 10px;
+  border:1px solid #dddddd;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+#learning_path_left_zone .navegation-bar .buttons{
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+#learning_path_left_zone .description-autor{
+  color: #666666;
+  font-size: 12px;
+}
 
 .inner_lp_toc {
     overflow: auto;
-    background-color: white;
-    height: 210px;
+    border-top: 1px solid #dcdcdc;
 }
 
 .inner_lp_toc .scorm_item a {
@@ -71,28 +135,6 @@ See https://support.chamilo.org/issues/6976
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-.inner_lp_toc .scorm_item_1 {
-    border-bottom: 1px solid #CCCCCC;
-    background:#eee;
-    font-weight:bold;
-    color:#444;
-    text-shadow:0 1px 1px #f6f6f6;
-    margin-right: 1px;
-    text-decoration: none;
-    font-weight: normal;
-     background:#FDFDFD;
-}
-
-.inner_lp_toc .scorm_item_2 {
-    border-bottom: 1px solid #CCCCCC;
-    color: #444444;
-    font-weight: bold;
-    text-shadow: 0 1px 1px #F6F6F6;
-    margin-right: 1px;
-    text-decoration: none;
-    font-weight: normal;
-}
-
 .inner_lp_toc .scorm_item_section .scorm_item:before {
     content : url('../../img/lp_section.png');  /* path from main/newscorm/lp_controller.php file */
     vertical-align: text-top;
@@ -148,6 +190,111 @@ See https://support.chamilo.org/issues/6976
 .scorm_item_level_5 {
     padding : 0 0.5em 0 7.5em;
 }
+
+#learning_path_right_zone{
+  border-left: 1px solid #CCCCCC;
+  padding-left: 10px;
+  box-sizing: border-box;
+}
+#learning_path_breadcrumb_zone .breadcrumb{
+  background: #2b3d53; /* Old browsers */
+  background: -moz-linear-gradient(top, #2b3d53 0%, #2c3d4d 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b3d53), color-stop(100%,#2c3d4d)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #2b3d53 0%,#2c3d4d 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #2b3d53 0%,#2c3d4d 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #2b3d53 0%,#2c3d4d 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #2b3d53 0%,#2c3d4d 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b3d53', endColorstr='#2c3d4d',GradientType=0 ); /* IE6-9 */
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  color: #ffffff;
+}
+#learning_path_breadcrumb_zone .breadcrumb a{
+  color: #ffffff;
+  text-decoration: none;
+}
+#learning_path_breadcrumb_zone .breadcrumb a:hover{
+  color: #dddddd;
+}
+#view_as_link{
+  margin-top: 5px;
+  margin-right: 10px;
+}
+#learning_path_left_zone #accordion .panel-heading{
+  text-align: center;
+}
+#learning_path_left_zone #ui-option{
+  width: 100%;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+}
+#learning_path_left_zone #ui-option #icon-up,
+#learning_path_left_zone #ui-option #icon-down{
+  width: 100%;
+  display: block;
+}
+.hidden{
+  visibility: hidden;
+  display: none;
+}
+.sidebar-scorm,
+.content-scorm{
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.sidebar-scorm,
+.content-scorm{
+  float: left;
+}
+.total{
+  width: 100%;
+}
+.panel-default .panel-heading .btn{
+  top: -25px;
+}
+.panel-default .panel-heading .dropdown-menu{
+  top: 30%;
+}
+
+#touch-button{
+  text-decoration: none;
+  position: fixed;
+  top: 40px;
+  left: -5px;
+  overflow: hidden;
+  width: 51px;
+  height: 51px;
+  border: none;
+  opacity: 50;
+  z-index: 2;
+  font-size: 26px;
+}
+
+.inner_lp_toc{
+  overflow-y:scroll;
+}
+.scorm-heading{
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+}
+#control-bottom{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  left: 0;
+}
+#control-bottom.well{
+  margin-bottom: 0;
+}
+
+
+
 /*SCORM CSS BASE */
 #learning_path_left_zone .home{
   display: inline-block;
@@ -204,33 +351,32 @@ See https://support.chamilo.org/issues/6976
   padding-left: 3.5em;
   padding-right: .5em;
 }
-/* items scorm*/
-.scorm_item_normal.scorm_completed {
-  background:url("../img/icon_completed.png") no-repeat 98% center;
-}
-.scorm_item_normal.scorm_failed{
-  background:url("../img/icon_failed.png") no-repeat 98% center;
-}
+
 .scorm_item_normal .scorm_item_level_0{
-  padding-left: .5em;
+  /* padding-left: .5em;
   padding-right: 1.5em;
   padding-top: 10px;
   padding-bottom: 10px;
+  */
 }
 .scorm_item_normal{
   padding:0;
   border-bottom: 1px solid #DCDCDC;
-  border-left: 1px solid #DCDCDC;
-  border-right: 1px solid #DCDCDC;
 }
-.scorm_item_normal a{
+.scorm_item_normal a.items-list{
   color: #666666;
   text-decoration: none;
-}.scorm_item_normal a:hover{
+  display: block;
+  padding-left: 2em;
+  padding-right: 1.5em;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.scorm_item_normal a:hover{
    text-decoration: none;
- }
+}
 .scorm_highlight{
-  background-color: #6AAEFF !important;
+  background-color: #2B3D50 !important;
 }
 .scorm_highlight a{
   color: #ffffff !important;
@@ -238,26 +384,5 @@ See https://support.chamilo.org/issues/6976
 #scorm-info .panel-heading{
   padding: 5px;
 }
-/* .scorm_item_normal .scorm_item_level_1{
-  padding-left: 1.8em;
-  padding-right: 1.5em;
-  background:url("../img/level_one.png") no-repeat 0 top;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.scorm_item_normal .scorm_item_level_2{
-  padding-left: 2.5em;
-  padding-right: 1.5em;
-  background:url("../img/level_two.png") no-repeat 0 top;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.scorm_item_normal .scorm_item_level_3{
-  padding-left: 3.5em;
-  padding-right: 1.5em;
-  background:url("../img/level_tree.png") no-repeat 0 top;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}*/
 
 /* END SCORM CSS BASE*/

@@ -6,9 +6,7 @@
             </div>
         </div>
     {% endif %}
-
-    <a id="touch-button" class="hidden-touch" href="#"></a>
-
+    <button id="touch-button" class="btn btn-primary"><i class="fa fa-bars"></i></button>
     <div class="container-fluid">
         <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">

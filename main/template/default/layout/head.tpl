@@ -331,9 +331,9 @@ $(function() {
     }
 
     // Fixes buttons to the new btn class.
-    if (!$('#button').hasClass('btn')) {
+    /* if (!$('#button').hasClass('btn')) {
         $("button").addClass('btn');
-    }
+    } */
 
     // Dropdown effect.
     $('.dropdown-toggle').dropdown();

@@ -1383,6 +1383,9 @@ class UserManager
     /**
      * Get user path from user ID (returns an array).
      * The return format is a complete path to a folder ending with "/"
+     * In case the first level of subdirectory of users/ does not exist, the
+     * function will attempt to create it. Probably not the right place to do it
+     * but at least it avoids headaches in many other places.
      * @param   integer $id User ID
      * @param   string  $type Type of path to return (can be 'system', 'web', 'rel', 'last')
      * @return  string  User folder path (i.e. /var/www/chamilo/app/upload/users/1/1/)
@@ -1397,6 +1400,18 @@ class UserManager
         $userPath = "users/$id/";
         if (api_get_setting('split_users_upload_directory') === 'true') {
             $userPath = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
+            // In exceptional cases, on some portals, the intermediate base user
+            // directory might not have been created. Make sure it is before
+            // going further.
+            $rootPath = api_get_path(SYS_UPLOAD_PATH) . 'users/' . substr((string) $id, 0, 1);
+            if (!is_dir($rootPath)) {
+                $perm = api_get_permissions_for_new_directories();
+                try {
+                    mkdir($rootPath, $perm);
+                } catch (Exception $e) {
+                    //
+                }
+            }
         }
         switch ($type) {
             case 'system': // Base: absolute system path.
@@ -4889,7 +4904,7 @@ EOF;
      * @param string $until Optional. Until date
      * @return int The time
      */
-    public static function getExpendedTimeInCourses($userId, $courseId, $sessionId = 0, $from = '', $until = '')
+    public static function getTimeSpentInCourses($userId, $courseId, $sessionId = 0, $from = '', $until = '')
     {
         $userId = intval($userId);
         $sessionId = intval($sessionId);

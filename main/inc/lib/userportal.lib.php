@@ -1423,7 +1423,7 @@ class IndexManager
                         $params['title'] = $session_category['session_category']['name'];
 
                         if (api_is_platform_admin()) {
-                            $params['link']   = api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$session_category['session_category']['id'];
+                            $params['link']   = api_get_path(WEB_CODE_PATH).'session/session_category_edit.php?&id='.$session_category['session_category']['id'];
                         }
 
                         $session_category_start_date = $session_category['session_category']['date_start'];

@@ -49,7 +49,7 @@ function check_groups_per_user($value)
 }
 
 if (api_get_setting('allow_group_categories') == 'true') {
-    if (isset ($_GET['id'])) {
+    if (isset($_GET['id'])) {
         $category = GroupManager::get_category($_GET['id']);
         $nameTools = get_lang('EditGroupCategory').': '.$category['title'];
     } else {

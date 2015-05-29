@@ -146,13 +146,13 @@ if (!empty($complete_user_list)) {
         }
 
         $name = api_get_person_name($user['firstname'], $user['lastname']).
-                ' ('.$user['username'].')'.$officialCode.$groupNameListToString;
+                ' ('.$user['username'].')'.$officialCode;
 
-        if ($orderUserListByOfficialCode) {
+        if ($orderUserListByOfficialCode === 'true') {
             $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
             $name = $officialCode." ".api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
         }
-        $possible_users[$user['user_id']] = $name;
+        $possible_users[$user['user_id']] = $name.$groupNameListToString;
     }
 }
 

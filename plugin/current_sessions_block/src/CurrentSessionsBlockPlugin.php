@@ -92,7 +92,7 @@ class CurrentSessionsBlockPlugin extends Plugin
 SQL;
 
         $sessions = Database::select(
-            's.id, s.name, s.date_start, s.date_end',
+            's.id, s.name, s.access_start_date, s.access_end_date',
             $fakeFrom,
             [
                 'where' => ['su.user_id = ?' => api_get_user_id()],
@@ -119,32 +119,35 @@ SQL;
 
         if ($daysBeforeStart > 0) {
             $beforeStart = Database::select(
-                'id, name, date_start, date_end',
+                'id, name, access_start_date, access_end_date',
                 $sessionTable,
                 [
                     'where' => [
-                        'date_start >= DATE(?) - INTERVAL ? DAY' => [$currentUtcDateTime, $daysBeforeStart]
+                        'access_start_date >= DATE(?) - INTERVAL ? DAY' => [$currentUtcDateTime, $daysBeforeStart]
                     ]
                 ]
             );
         }
 
         $currentSessions = Database::select(
-            'id, name, date_start, date_end',
+            'id, name, access_start_date, access_end_date',
             $sessionTable,
             [
                 'where' => [
-                    'DATE(?) >= date_start AND DATE(?) <= date_end' => [$currentUtcDateTime, $currentUtcDateTime]
+                    'DATE(?) >= access_start_date AND DATE(?) <= access_end_date' => [
+                        $currentUtcDateTime,
+                        $currentUtcDateTime
+                    ]
                 ]
             ]
         );
 
         $dateWithoutEnd = Database::select(
-            'id, name, date_start, date_end',
+            'id, name, access_start_date, access_end_date',
             $sessionTable,
             [
                 'where' => [
-                    "date_start <= DATE(?) AND date_end = '0000-00-00'" => $currentUtcDateTime
+                    "access_start_date <= DATE(?) AND access_end_date = '0000-00-00'" => $currentUtcDateTime
                 ]
             ]
         );
@@ -182,12 +185,12 @@ SQL;
         $sessions = array_slice($sessions, 0, $this->numberOfSessions, true);
 
         foreach ($sessions as &$session) {
-            if ($session['date_start'] != '0000-00-00') {
-                $session['date_start'] = api_format_date($session['date_start'], DATE_FORMAT_NUMBER);
+            if ($session['access_start_date'] != '0000-00-00') {
+                $session['access_start_date'] = api_format_date($session['access_start_date'], DATE_FORMAT_NUMBER);
             }
 
-            if ($session['date_end'] != '0000-00-00') {
-                $session['date_end'] = api_format_date($session['date_end'], DATE_FORMAT_NUMBER);
+            if ($session['access_end_date'] != '0000-00-00') {
+                $session['access_end_date'] = api_format_date($session['access_end_date'], DATE_FORMAT_NUMBER);
             }
 
             $session['stars'] = $this->getNumberOfStars($session['id']);

@@ -2666,7 +2666,8 @@ function WSCreateCourse($params)
             CourseManager::create_course_extra_field(
                 $original_course_id_name,
                 1,
-                $original_course_id_name
+                $original_course_id_name,
+                ''
             );
 
             // Save the external system's id into user_field_value table.
@@ -2684,7 +2685,8 @@ function WSCreateCourse($params)
                     CourseManager::create_course_extra_field(
                         $extra_field_name,
                         1,
-                        $extra_field_name
+                        $extra_field_name,
+                        ''
                     );
                     // Save the external system's id into course_field_value table.
                     CourseManager::update_course_extra_field_value(
@@ -2888,7 +2890,8 @@ function WSCreateCourseByTitle($params)
                 CourseManager::create_course_extra_field(
                     $original_course_id_name,
                     1,
-                    $original_course_id_name
+                    $original_course_id_name,
+                    ''
                 );
 
                 // Save the external system's id into user_field_value table.
@@ -2906,7 +2909,8 @@ function WSCreateCourseByTitle($params)
                         CourseManager::create_course_extra_field(
                             $extra_field_name,
                             1,
-                            $extra_field_name
+                            $extra_field_name,
+                            ''
                         );
                         // Save the external system's id into course_field_value table.
                         CourseManager::update_course_extra_field_value(
@@ -4780,7 +4784,7 @@ function WSSuscribeUsersToSession($params)
             list($nbr_users) = Database::fetch_array($rs);
             // update the session-course relation to add the users total
             $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
-                           WHERE session_id='$id_session' AND c_id='$enreg_course'";
+                           WHERE session_id='$sessionId' AND c_id='$enreg_course'";
             Database::query($update_sql);
         }
 
@@ -5290,7 +5294,7 @@ function WSSuscribeCoursesToSession($params) {
             $courseId = $courseInfo['real_id'];
 
             $courseInfo = CourseManager::getCourseInfoFromOriginalId(
-                $original_course_id_value,
+                $course_code,
                 $original_course_id_name
             );
 
@@ -6191,7 +6195,7 @@ function WSCreateGroup($params)
     $userGroup = new UserGroup();
     $params = [
         'name' => $params['name']
-    ]
+    ];
     return $userGroup->save($params);
     //return GroupPortalManager::add($params['name'], null, null, 1);
 }

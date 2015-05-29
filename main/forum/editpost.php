@@ -94,6 +94,22 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
 $table_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */
+$htmlHeadXtra[] = <<<JS
+    <script>
+    $(document).on('ready', function() {
+        $('#reply-add-attachment').on('click', function(e) {
+            e.preventDefault();
+
+            var newInputFile = $('<input>', {
+                type: 'file',
+                name: 'user_upload[]'
+            });
+
+            $('[name="user_upload[]"]').parent().append(newInputFile);
+        });
+    });
+    </script>
+JS;
 
 // Are we in a lp ?
 $origin = '';
@@ -231,17 +247,9 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
             Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
         }
     }
-} else {
-    // Only show Forum attachment ajax form when do not pass form submit
-    $attachmentAjaxForm = getAttachmentAjaxForm(
-        $current_forum['forum_id'],
-        $current_thread['thread_id'],
-        $current_post['post_id']
-    );
-    echo $attachmentAjaxForm;
 }
 
 // Footer
-if ($origin != 'learnpath') {
+if (isset($origin) && $origin != 'learnpath') {
     Display :: display_footer();
 }

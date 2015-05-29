@@ -35,12 +35,12 @@ if ($_REQUEST['tab'] == 'sync') {
         $aux_code .= $row['code'];
         $aux_title .= $row['title'];
     }
-    $sql = "SELECT name, date_start, date_end FROM $tableSession;";
+    $sql = "SELECT name, access_start_date, access_end_date FROM $tableSession;";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
         $aux_name .= $row['name'];
-        $aux_date_start .= $row['date_start'];
-        $aux_date_end .= $row['date_end'];
+        $aux_date_start .= $row['access_start_date'];
+        $aux_date_end .= $row['access_end_date'];
     }
     echo json_encode(array("status" => "true", "content" => $content));
 }
@@ -160,8 +160,8 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
                 <div class="span4 ">
                     <div class="categories-course-description">
                         <h3>'.$session['name'].'</h3>
-                        <h5>'.get_lang('From').' '.$session['date_start'].
-                        ' '.get_lang('Until').' '.$session['date_end'].'</h5>';
+                        <h5>'.get_lang('From').' '.$session['access_start_date'].
+                        ' '.get_lang('Until').' '.$session['access_end_date'].'</h5>';
         if ($session['enrolled'] == "YES") {
             $content .= '<span class="label label-info">'.$plugin->get_lang('TheUserIsAlreadyRegisteredInTheSession').'</span>';
         }

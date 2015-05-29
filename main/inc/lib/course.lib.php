@@ -1809,7 +1809,7 @@ class CourseManager
             if (!empty($date_from) && !empty($date_to)) {
                 $date_from = Database::escape_string($date_from);
                 $date_to = Database::escape_string($date_to);
-                $sql_query .= " AND s.date_start >= '$date_from' AND s.date_end <= '$date_to'";
+                $sql_query .= " AND s.access_start_date >= '$date_from' AND s.access_end_date <= '$date_to'";
             }
 
             if ($session_id != 0) {
@@ -3878,8 +3878,8 @@ class CourseManager
                     ),
                 )
             );
-            $date_start = $sess[$course_info['id_session']]['date_start'];
-            $date_end = $sess[$course_info['id_session']]['date_end'];
+            $date_start = $sess[$course_info['id_session']]['access_start_date'];
+            $date_end = $sess[$course_info['id_session']]['access_end_date'];
         }
         if (empty($now)) {
             // maybe use api_get_utcdate() here?
@@ -4044,7 +4044,7 @@ class CourseManager
                 $session['title'] = $course_info['session_name'];
                 $session_category_id = CourseManager::get_session_category_id_by_session_id($course_info['id_session']);
                 $session['category'] = $sessioncoach['name'];
-                if ($course_info['date_start'] == '0000-00-00') {
+                if ($course_info['access_start_date'] == '0000-00-00') {
                     //$session['dates'] = get_lang('WithoutTimeLimits');
                     $session['dates'] = '';
                     if (api_get_setting('show_session_coach') === 'true') {
@@ -4053,7 +4053,7 @@ class CourseManager
                     }
                     $active = true;
                 } else {
-                    $session ['dates'] = ' - ' . get_lang('From') . ' ' . $course_info['date_start'] . ' ' . get_lang('To') . ' ' . $course_info['date_end'];
+                    $session ['dates'] = ' - ' . get_lang('From') . ' ' . $course_info['access_start_date'] . ' ' . get_lang('To') . ' ' . $course_info['access_end_date'];
                     if (api_get_setting('show_session_coach') === 'true') {
                         $session['coach'] = get_lang('GeneralCoach') . ': ' . api_get_person_name($sessioncoach['firstname'],
                                 $sessioncoach['lastname']);
@@ -5515,7 +5515,7 @@ class CourseManager
     {
         $dateConditional = ($startDate && $endDate) ?
             " WHERE session_id IN (SELECT id FROM " . Database::get_main_table(TABLE_MAIN_SESSION) .
-            " WHERE date_start = '$startDate' AND date_end = '$endDate')" :
+            " WHERE access_start_date = '$startDate' AND access_end_date = '$endDate')" :
             null;
         $visibility = ($includeClosed ? '' : 'visibility NOT IN (0, 4) AND ');
 

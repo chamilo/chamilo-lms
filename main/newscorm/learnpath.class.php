@@ -3275,7 +3275,7 @@ class learnpath
                 $html .= stripslashes($title);
             } else {
                 $this->get_link('http', $item['id'], $toc_list);
-                $html .= '<a href="" onClick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
+                $html .= '<a class="items-list" href="" onClick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
             }
             $html .= "</div>";
 
@@ -5318,7 +5318,6 @@ class learnpath
      * but possibility to do again a completed item.
      *
      * @return boolean true if seriousgame_mode has been set to 1, false otherwise
-     * @deprecated seems not to be used
      * @author ndiechburg <noel@cblue.be>
      **/
     public function set_seriousgame_mode()
@@ -5519,7 +5518,10 @@ class learnpath
 
             // We need to close the form when we are updating the mp3 files.
             if ($update_audio == 'true') {
-                $return .= '<div><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
+                $return .= '<div class="footer-audio">';
+                $return .= Display::button('save_audio','<i class="fa fa-file-audio-o"></i> '. get_lang('SaveAudioAndOrganization'),array('class'=>'btn btn-primary','type'=>'submit'));
+                $return .= '</div>';
+                //$return .= '<div><button class="btn btn-primary" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
             }
         }
 
@@ -5611,7 +5613,7 @@ class learnpath
             }
 
             // The audio column.
-            $return_audio  .= '<td align="center">';
+            $return_audio  .= '<td align="left" style="padding-left:10px;">';
 
             $audio = '';
 
@@ -10269,6 +10271,188 @@ EOD;
 
         return true;
     }
+
+    /**
+     * Calculate the count of stars for a user
+     * @param int $lpId The learn path ID
+     * @param int $userId The user ID
+     * @param int $courseId The course ID
+     * @param int $sessionId Optional. The session ID
+     * @return int The count of stars
+     */
+    public function getCalculateStars()
+    {
+        $stars = 0;
+
+        $progress = self::getProgress($this->lp_id, $this->user_id, $this->course_int_id, $this->lp_session_id);
+
+        if ($progress > 50) {
+            $stars++;
+        }
+
+        // Calculate stars chapters evaluation
+        $exercisesItems = $this->getExercisesItems();
+
+        if ($exercisesItems === false) {
+            return $stars;
+        }
+
+        $totalResult = 0;
+
+        foreach ($exercisesItems as $exerciseItem) {
+            $exerciseResultInfo = Event::getExerciseResultsByUser(
+                $this->user_id,
+                $exerciseItem->ref,
+                $this->course_int_id,
+                $this->lp_session_id,
+                $this->lp_id,
+                $exerciseItem->db_id
+            );
+
+            $exerciseResult = 0;
+
+            foreach ($exerciseResultInfo as $result) {
+                $exerciseResult += $result['exe_result'] * 100 / $result['exe_weighting'];
+            }
+
+            $exerciseAverage = $exerciseResult / (count($exerciseResultInfo) > 0 ? count($exerciseResultInfo) : 1);
+
+            $totalResult += $exerciseAverage;
+        }
+
+        $totalExerciseAverage = $totalResult / (count($exercisesItems) > 0 ? count($exercisesItems) : 1);
+
+        if ($totalExerciseAverage >= 50) {
+            $stars++;
+        }
+
+        if ($totalExerciseAverage >= 80) {
+            $stars++;
+        }
+
+        // Calculate star for final evaluation
+        $finalEvaluationItem = $this->getFinalEvaluationItem();
+
+        if ($finalEvaluationItem === false) {
+            return $stars;
+        }
+
+        $evaluationResultInfo = Event::getExerciseResultsByUser(
+            $this->user_id,
+            $finalEvaluationItem->ref,
+            $this->course_int_id,
+            $this->lp_session_id,
+            $this->lp_id,
+            $finalEvaluationItem->db_id
+        );
+
+        $evaluationResult = 0;
+
+        foreach ($evaluationResultInfo as $result) {
+            $evaluationResult += $result['exe_result'] * 100 / $result['exe_weighting'];
+        }
+
+        $evaluationAverage = $evaluationResult / (count($evaluationResultInfo) > 0 ? count($evaluationResultInfo) : 1);
+
+        if ($evaluationAverage >= 80) {
+            $stars++;
+        }
+
+        return $stars;
+    }
+
+    /**
+     * Get the items of exercise type
+     * @return array The items. Otherwise return false
+     */
+    public function getExercisesItems()
+    {
+        $exercises = [];
+
+        foreach ($this->items as $item) {
+            if ($item->type != 'quiz') {
+                continue;
+            }
+
+            $exercises[] = $item;
+        }
+
+        array_pop($exercises);
+
+        return $exercises;
+    }
+
+    /**
+     * Get the item of exercise type (evaluation type)
+     * @return array The final evaluation. Otherwise return false
+     */
+    public function getFinalEvaluationItem()
+    {
+        $exercises = [];
+
+        foreach ($this->items as $item) {
+            if ($item->type != 'quiz') {
+                continue;
+            }
+
+            $exercises[] = $item;
+        }
+
+        return array_pop($exercises);
+    }
+
+    /**
+     * Calculate the total points achieved for the current user in this learning path
+     * @return int
+     */
+    public function getCalculateScore()
+    {
+        // Calculate stars chapters evaluation
+        $exercisesItems = $this->getExercisesItems();
+        $finalEvaluationItem = $this->getFinalEvaluationItem();
+
+        $totalExercisesResult = 0;
+        $totalEvaluationResult = 0;
+
+        if ($exercisesItems !== false) {
+            foreach ($exercisesItems as $exerciseItem) {
+                $exerciseResultInfo = Event::getExerciseResultsByUser(
+                    $this->user_id,
+                    $exerciseItem->ref,
+                    $this->course_int_id,
+                    $this->lp_session_id,
+                    $this->lp_id,
+                    $exerciseItem->db_id
+                );
+
+                $exerciseResult = 0;
+
+                foreach ($exerciseResultInfo as $result) {
+                    $exerciseResult += $result['exe_result'];
+                }
+
+                $totalExercisesResult += $exerciseResult;
+            }
+        }
+
+        if ($finalEvaluationItem !== false) {
+            $evaluationResultInfo = Event::getExerciseResultsByUser(
+                $this->user_id,
+                $finalEvaluationItem->ref,
+                $this->course_int_id,
+                $this->lp_session_id,
+                $this->lp_id,
+                $finalEvaluationItem->db_id
+            );
+
+            foreach ($evaluationResultInfo as $result) {
+                $totalEvaluationResult += $result['exe_result'];
+            }
+        }
+
+        return $totalExercisesResult + $totalEvaluationResult;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

@@ -23,6 +23,8 @@ $id = intval($_GET['id']);
 SessionManager::protectSession($id);
 
 $infos = SessionManager::fetch($id);
+$infos['access_start_date'] = api_format_date($infos['access_start_date'], '%Y-%m-%d');
+$infos['access_end_date'] = api_format_date($infos['access_end_date'], '%Y-%m-%d');
 
 $id_coach = $infos['id_coach'];
 $tool_name = get_lang('EditSession');
@@ -31,8 +33,8 @@ $tool_name = get_lang('EditSession');
 $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
-list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
-list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
+list($year_start, $month_start, $day_start) = explode('-', $infos['access_start_date']);
+list($year_end, $month_end, $day_end) = explode('-', $infos['access_end_date']);
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent = 1;
@@ -164,7 +166,7 @@ if ($year_start!="0000") {
     $form->addElement('html','<div id="start_date" style="display:none">');
 }
 
-$form->addElement('date_picker', 'date_start');
+$form->addElement('date_picker', 'access_start_date');
 
 $form->addElement('html','</div>');
 
@@ -185,7 +187,7 @@ if ($year_end != "0000") {
     $form->addElement('html','<div id="end_date" style="display:none">');
 }
 
-$form->addElement('date_picker', 'date_end');
+$form->addElement('date_picker', 'access_end_date');
 
 $visibilityGroup = array();
 $visibilityGroup[] = $form->createElement(
@@ -239,8 +241,8 @@ $form->addButtonUpdate(get_lang('ModifyThisSession'));
 $formDefaults = array(
     'id_coach' => $infos['id_coach'],
     'session_category' => $infos['session_category_id'],
-    'date_start' => $infos['date_start'],
-    'date_end' => $infos['date_end'],
+    'access_start_date' => $infos['access_start_date'],
+    'access_end_date' => $infos['access_end_date'],
     'session_visibility' => $infos['visibility'],
     'description' => $infos['description']
 );
@@ -263,8 +265,8 @@ if ($form->validate()) {
     $params = $form->getSubmitValues();
 
     $name = $params['name'];
-    $startDate = $params['date_start'];
-    $endDate = $params['date_end'];
+    $startDate = $params['access_start_date'];
+    $endDate = $params['access_end_date'];
     $nb_days_acess_before = $params['nb_days_access_before'];
     $nb_days_acess_after = $params['nb_days_access_after'];
     $id_coach = $params['id_coach'];

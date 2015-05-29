@@ -53,7 +53,7 @@ class CForumThread
     /**
      * @var integer
      *
-     * @ORM\Column(name="thread_replies", type="integer", nullable=true)
+     * @ORM\Column(name="thread_replies", type="integer", nullable=false, options={"unsigned":true, "default" = 0})
      */
     private $threadReplies;
 
@@ -74,7 +74,7 @@ class CForumThread
     /**
      * @var integer
      *
-     * @ORM\Column(name="thread_views", type="integer", nullable=true)
+     * @ORM\Column(name="thread_views", type="integer", nullable=false, options={"unsigned":true, "default" = 0})
      */
     private $threadViews;
 

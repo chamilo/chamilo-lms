@@ -627,8 +627,8 @@ class AttendanceController
         } else {
            if (!empty($sessionId)) {
                $sessionInfo = api_get_session_info($sessionId);
-               $startDate = $sessionInfo['date_start'];
-               $endDate = $sessionInfo['date_end'];
+               $startDate = $sessionInfo['access_start_date'];
+               $endDate = $sessionInfo['access_end_date'];
            }
         }
 

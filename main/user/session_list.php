@@ -53,8 +53,8 @@ if($allowTutors == 'true') {
         array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
         array('name'=>'category_name',  'index'=>'category_name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'date_start',     'index'=>'date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'date_end',       'index'=>'date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
+        array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
+        array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
         array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),
         array('name'=>'status',         'index'=>'session_active','width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
           //for the bottom bar

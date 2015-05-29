@@ -976,14 +976,14 @@ class CourseHome
                     nbr_courses,
                     nbr_users,
                     nbr_classes,
-                    DATE_FORMAT(date_start,"%d-%m-%Y") as date_start,
-                    DATE_FORMAT(date_end,"%d-%m-%Y") as date_end,
+                    DATE_FORMAT(access_start_date,"%d-%m-%Y") as access_start_date,
+                    DATE_FORMAT(access_end_date,"%d-%m-%Y") as access_end_date,
                     lastname,
                     firstname,
                     username,
                     session_admin_id,
-                    nb_days_access_before_beginning,
-                    nb_days_access_after_end,
+                    coach_access_start_date,
+                    coach_access_end_date,
                     session_category_id,
                     visibility
                 FROM '.$session_table.'
@@ -1005,10 +1005,10 @@ class CourseHome
             $session_category = $rows_session_category['name'];
         }
 
-        if ($session['date_start'] == '00-00-0000') {
+        if ($session['access_start_date'] == '00-00-0000') {
             $msg_date = get_lang('NoTimeLimits');
         } else {
-            $msg_date = get_lang('From').' '.$session['date_start'].' '.get_lang('To').' '.$session['date_end'];
+            $msg_date = get_lang('From').' '.$session['access_start_date'].' '.get_lang('To').' '.$session['access_end_date'];
         }
 
         $output = '';

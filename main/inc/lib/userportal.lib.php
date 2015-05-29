@@ -1158,8 +1158,8 @@ class IndexManager
                         }
 
                         // Courses inside the current session.
-                        $date_session_start = $session['date_start'];
-                        $date_session_end = $session['date_end'];
+                        $date_session_start = $session['access_start_date'];
+                        $date_session_end = $session['access_end_date'];
                         $days_access_before_beginning  = $session['nb_days_access_before_beginning'];
                         $days_access_after_end = $session['nb_days_access_after_end'];
 
@@ -1294,8 +1294,8 @@ class IndexManager
                                 continue;
                             }
 
-                            $date_session_start = $session['date_start'];
-                            $date_session_end = $session['date_end'];
+                            $date_session_start = $session['access_start_date'];
+                            $date_session_end = $session['access_end_date'];
                             $days_access_before_beginning = $session['nb_days_access_before_beginning'];
                             $days_access_after_end = $session['nb_days_access_after_end'];
 

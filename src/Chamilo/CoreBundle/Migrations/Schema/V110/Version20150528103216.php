@@ -16,6 +16,13 @@ class Version20150528103216 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        $this->addSql('ALTER TABLE session ADD COLUMN access_start_date datetime NOT NULL');
+        $this->addSql('ALTER TABLE session ADD COLUMN access_end_date datetime NOT NULL');
+        $this->addSql('ALTER TABLE session ADD COLUMN coach_access_start_date datetime NOT NULL');
+        $this->addSql('ALTER TABLE session ADD COLUMN coach_access_end_date datetime NOT NULL');
+        $this->addSql('ALTER TABLE session ADD COLUMN display_start_date datetime NOT NULL');
+        $this->addSql('ALTER TABLE session ADD COLUMN display_end_date datetime NOT NULL');
+
         $this->addSql('UPDATE session SET access_start_date = date_start');
         $this->addSql("UPDATE session SET access_end_date = CONVERT(CONCAT(date_end, ' 23:59:59'), DATETIME)");
 

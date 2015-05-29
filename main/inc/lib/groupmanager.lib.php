@@ -701,7 +701,7 @@ class GroupManager
         }
 
         $course_info = api_get_course_info($course_code);
-        $course_id     = $course_info['real_id'];
+        $course_id = $course_info['real_id'];
 
         $group_id = intval($group_id);
         $sql = "SELECT gc.* FROM $table_group_cat gc, $table_group g
@@ -2099,14 +2099,20 @@ class GroupManager
         $_course = api_get_course_info();
 
         $category = self :: get_category_from_group($group_ids[0]);
-        $groups_per_user = $category['groups_per_user'];
+        $number_groups_per_user = self::GROUP_PER_MEMBER_NO_LIMIT;
+        $categoryId = 0;
+        if ($category) {
+            $groups_per_user = $category['groups_per_user'];
+            $number_groups_per_user = ($groups_per_user == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $groups_per_user);
+            $categoryId = $category['id'];
+        }
 
         $group_table = Database :: get_course_table(TABLE_GROUP);
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $session_id = api_get_session_id();
-        $complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode'], true, $session_id);
-        $number_groups_per_user = ($groups_per_user == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $groups_per_user);
+        $complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['code'], true, $session_id);
         $course_id = api_get_course_int_id();
+
         /*
          * Retrieve all the groups where enrollment is still allowed
          * (reverse) ordered by the number of place available
@@ -2136,10 +2142,12 @@ class GroupManager
          * of group they are already enrolled
          */
         for ($i = 0; $i < count($complete_user_list); $i ++) {
-
-            //find # of groups the user is enrolled in
-            $number_of_groups = self :: user_in_number_of_groups($complete_user_list[$i]["user_id"],$category['id']);
-            //add # of groups to user list
+            // find # of groups the user is enrolled in
+            $number_of_groups = self:: user_in_number_of_groups(
+                $complete_user_list[$i]["user_id"],
+                $categoryId
+            );
+            // add # of groups to user list
             $complete_user_list[$i]['number_groups_left'] = $number_groups_per_user - $number_of_groups;
         }
         //first sort by user_id to filter out duplicates

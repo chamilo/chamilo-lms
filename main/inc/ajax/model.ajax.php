@@ -888,8 +888,8 @@ switch ($action) {
             'nbr_courses',
             'nbr_users',
             'category_name',
-            'date_start',
-            'date_end',
+            'access_start_date',
+            'access_end_date',
             'coach_name',
             'session_active',
             'visibility'

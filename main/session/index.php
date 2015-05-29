@@ -363,13 +363,13 @@ if (!empty($new_exercises)) {
 
 $start = $end = $start_only = $end_only ='';
 
-if (!empty($session_info['date_start']) && $session_info['date_start'] != '0000-00-00') {
-    $start = api_convert_and_format_date($session_info['date_start'], DATE_FORMAT_SHORT);
-    $start_only = get_lang('From').' '.$session_info['date_start'];
+if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00') {
+    $start = api_convert_and_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
+    $start_only = get_lang('From').' '.$session_info['access_start_date'];
 }
-if (!empty($session_info['date_start']) && $session_info['date_end'] != '0000-00-00') {
-    $end = api_convert_and_format_date($session_info['date_end'], DATE_FORMAT_SHORT);
-    $end_only = get_lang('Until').' '.$session_info['date_end'];
+if (!empty($session_info['access_start_date']) && $session_info['access_end_date'] != '0000-00-00') {
+    $end = api_convert_and_format_date($session_info['access_end_date'], DATE_FORMAT_SHORT);
+    $end_only = get_lang('Until').' '.$session_info['access_end_date'];
 }
 
 if (!empty($start) && !empty($end)) {

@@ -2272,7 +2272,7 @@ class UserManager
      */
     public static function get_sessions_by_category(
         $user_id,
-        $is_time_over = false,
+        $is_time_over = true,
         $ignore_visibility_for_admins = false
     ) {
         // Database Table Definitions
@@ -2290,8 +2290,8 @@ class UserManager
         $sql = "SELECT DISTINCT
                     session.id,
                     session.name,
-                    session.date_start,
-                    session.date_end,
+                    session.access_start_date,
+                    session.access_end_date,
                     session_category_id,
                     session_category.name as session_category_name,
                     session_category.date_start session_category_date_start,
@@ -2319,13 +2319,13 @@ class UserManager
                 // User portal filters:
                 if ($is_time_over) {
                     // History
-                    if (isset($row['date_end']) && $row['date_end'] != '0000-00-00') {
-                        if ($row['date_end'].' 23:59:59' > $now) {
+                    if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00') {
+                        if ($row['access_end_date'].' 23:59:59' > $now) {
                             continue;
                         }
                     }
 
-                    if ($row['date_end'] == '0000-00-00') {
+                    if ($row['access_end_date'] == '0000-00-00') {
                         continue;
                     }
                 } else {
@@ -2333,8 +2333,8 @@ class UserManager
                     if (api_is_allowed_to_create_course()) {
                         // Teachers can access the session depending in the access_coach date
                     } else {
-                        if (isset($row['date_end']) && $row['date_end'] != '0000-00-00') {
-                            if ($row['date_end'].' 23:59:59' <= $now) {
+                        if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00') {
+                            if ($row['access_end_date'].' 23:59:59' <= $now) {
                                 continue;
                             }
                         }
@@ -2401,8 +2401,8 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
                     'session_name' => $row['name'],
                     'session_id' => $row['id'],
-                    'date_start' => $row['date_start'],
-                    'date_end' => $row['date_end'],
+                    'date_start' => $row['access_start_date'],
+                    'date_end' => $row['access_end_date'],
                     'nb_days_access_before_beginning' => $row['nb_days_access_before_beginning'],
                     'nb_days_access_after_end' => $row['nb_days_access_after_end'],
                     'courses' => $courseList

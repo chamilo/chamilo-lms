@@ -1706,7 +1706,7 @@ VALUES
 ('dropbox_hide_course_coach', NULL, 'radio', 'Tools', 'false', 'DropboxHideCourseCoachTitle', 'DropboxHideCourseCoachComment', NULL, NULL, 1),
 ('sso_force_redirect', NULL, 'radio', 'Security', 'false', 'SSOForceRedirectTitle', 'SSOForceRedirectComment', NULL, NULL, 1),
 ('session_course_ordering', NULL, 'radio', 'Session', 'false', 'SessionCourseOrderingTitle', 'SessionCourseOrderingComment', NULL, NULL, 1),
-('gamification_mode', NULL, 'radio', 'Platform', 0, 'GamificationModeTitle', 'GamificationModeComment', NULL, NULL, 1);
+('gamification_mode', NULL, 'radio', 'Platform', '0', 'GamificationModeTitle', 'GamificationModeComment', NULL, NULL, 1);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -1781,7 +1781,7 @@ VALUES
 ('sso_force_redirect', 'false', 'No'),
 ('session_course_ordering', 'true', 'Yes'),
 ('session_course_ordering', 'false', 'No'),
-('gamification_mode', '0', 'Yes'),
-('gamification_mode', '1', 'No');
+('gamification_mode', '1', 'Yes'),
+('gamification_mode', '0', 'No');
 
 UPDATE settings_current SET selected_value = '1.10.0.40' WHERE variable = 'chamilo_database_version';

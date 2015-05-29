@@ -54,7 +54,7 @@ if (!empty($selectedCourse)) {
     $teachers = CourseManager::get_teacher_list_from_course_code($selectedCourse);
 
     foreach ($teachers as $teacher) {
-        $totalTime = UserManager::getExpendedTimeInCourses(
+        $totalTime = UserManager::getTimeSpentInCourses(
             $teacher['user_id'],
             $course['real_id'],
             0,
@@ -87,7 +87,7 @@ if (!empty($selectedCourse)) {
 
         if ($coaches) {
             foreach ($coaches as $coach) {
-                $totalTime = UserManager::getExpendedTimeInCourses(
+                $totalTime = UserManager::getTimeSpentInCourses(
                     $coach['user_id'],
                     $course['real_id'],
                     $session['id'],
@@ -142,7 +142,7 @@ if (!empty($selectedSession)) {
 
         if ($coaches) {
             foreach ($coaches as $coach) {
-                $totalTime = UserManager::getExpendedTimeInCourses(
+                $totalTime = UserManager::getTimeSpentInCourses(
                     $coach['user_id'],
                     $course['id'],
                     $selectedSession,
@@ -189,7 +189,7 @@ if (!empty($selectedTeacher)) {
         foreach ($courses as $course) {
             $courseInfo = api_get_course_info_by_id($course['real_id']);
 
-            $totalTime = UserManager::getExpendedTimeInCourses(
+            $totalTime = UserManager::getTimeSpentInCourses(
                 $selectedTeacher,
                 $course['real_id'],
                 0,
@@ -221,7 +221,7 @@ if (!empty($selectedTeacher)) {
 
         $courseInfo = api_get_course_info_by_id($course['c_id']);
 
-        $totalTime = UserManager::getExpendedTimeInCourses(
+        $totalTime = UserManager::getTimeSpentInCourses(
             $selectedTeacher,
             $course['c_id'],
             $session['id'],

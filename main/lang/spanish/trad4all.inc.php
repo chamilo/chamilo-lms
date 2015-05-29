@@ -7380,4 +7380,8 @@ $Dependencies = "Elementos que dependen de la referencia";
 $SetAsRequirementForSelected = "Añadir como requerimiento del elemento de referencia";
 $AddSequence = "Añadir nueva secuencia";
 $ResourcesSequencing = "Secuencialización de recursos";
+$GamificationModeTitle = "Modo ludificación";
+$GamificationModeComment = "Activar el logro de estrellas en las lecciones";
+$LevelX = "Nivel %s";
+$SeeCourse = "Ver curso";
 ?>

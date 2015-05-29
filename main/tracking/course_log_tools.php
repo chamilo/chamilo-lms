@@ -52,8 +52,8 @@ $csv_content = array();
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => '../admin/session_list.php','name' => get_lang('SessionList'));
-    $interbreadcrumb[] = array('url' => '../admin/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
+    $interbreadcrumb[] = array('url' => '../session/session_list.php','name' => get_lang('SessionList'));
+    $interbreadcrumb[] = array('url' => '../session/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
 }
 
 $view = (isset($_REQUEST['view']) ? $_REQUEST['view'] : '');

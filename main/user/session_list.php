@@ -30,22 +30,22 @@ if($allowTutors == 'true') {
     if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
         $error_message = Security::remove_XSS($_GET['message']);
     }
-    
+
     if (!empty($error_message)) {
         Display::display_normal_message($error_message, false);
     }
-    
+
     //jqgrid will use this URL to do the selects
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&from_course_session=1';
     if (isset($_REQUEST['keyword'])) {
         //Begin with see the searchOper param
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&from_course_session=1&_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=bw';
     }
-    
+
     //The order is important you need to check the the $column variable in the model.ajax.php file
     $columns        = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang('NumberOfUsers'), get_lang('SessionCategoryName'),
                             get_lang('StartDate'), get_lang('EndDate'), get_lang('Coach'),  get_lang('Status'), get_lang('Visibility'), get_lang('Actions'));
-    
+
     //$activeurl = '?sidx=session_active';
     //Column config
     $column_model   = array(
@@ -68,12 +68,12 @@ if($allowTutors == 'true') {
     );
     //Autowidth
     $extra_params['autowidth'] = 'true';
-    
+
     //height auto
     $extra_params['height'] = 'auto';
     //$extra_params['excel'] = 'excel';
     //$extra_params['rowList'] = array(10, 20 ,30);
-    
+
     //With this function we can add actions to the jgrid (edit, delete, etc)
     $action_links = 'function action_formatter(cellvalue, options, rowObject) {
          return \'&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png',get_lang('SubscribeUsersToSession'),'',ICON_SIZE_SMALL).'</a>'.
@@ -81,7 +81,7 @@ if($allowTutors == 'true') {
     }';
     ?>
     <script>
-    
+
         function setSearchSelect(columnName) {
         $("#sessions").jqGrid('setColProp', columnName,
         {
@@ -95,15 +95,15 @@ if($allowTutors == 'true') {
             }
         });
     }
-    
-    
+
+
     $(function() {
         <?php
             echo Display::grid_js('sessions', $url,$columns,$column_model,$extra_params, array(), $action_links,true);
         ?>
-    
+
         setSearchSelect("status");
-    
+
         $("#sessions").jqGrid('navGrid','#sessions_pager', {edit:false,add:false,del:false},
             {height:280,reloadAfterSubmit:false}, // edit options
             {height:280,reloadAfterSubmit:false}, // add options
@@ -118,7 +118,7 @@ if($allowTutors == 'true') {
                    jQuery("#sessions").excelExport();
                }
         });
-    
+
         jQuery('#sessions').jqGrid('navButtonAdd','#sessions_pager',{id:'pager_csv',caption:'',title:'Export To CSV',onClickButton : function(e)
         {
             try {
@@ -128,8 +128,8 @@ if($allowTutors == 'true') {
             }
         },buttonicon:'ui-icon-document'})
         */
-    
-    
+
+
         //Adding search options
         var options = {
             'stringResult': true,
@@ -144,14 +144,14 @@ if($allowTutors == 'true') {
     <?php if (api_is_platform_admin()) {?>
         <div class="actions">
         <?php
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
     }
 } else {
     api_not_allowed();
-}    
+}
 echo Display::grid_html('sessions');
 Display::display_footer();
 

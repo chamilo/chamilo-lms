@@ -305,7 +305,7 @@ $form->addElement('checkbox', 'start_limit', '', get_lang('DateStartSession'), a
 ));
 
 $form->addElement('html','<div id="start_date" style="display:none">');
-$form->addElement('date_picker', 'date_start');
+$form->addElement('date_picker', 'access_start_date');
 $form->addElement('html','</div>');
 
 $form->addElement('checkbox', 'end_limit', '', get_lang('DateEndSession'), array(
@@ -315,7 +315,7 @@ $form->addElement('checkbox', 'end_limit', '', get_lang('DateEndSession'), array
 
 $form->addElement('html', '<div id="end_date" style="display:none">');
 
-$form->addElement('date_picker', 'date_end');
+$form->addElement('date_picker', 'access_end_date');
 
 $visibilityGroup = array();
 $visibilityGroup[] = $form->createElement('select', 'session_visibility', null, array(
@@ -361,8 +361,8 @@ $formDefaults = array(
 );
 
 if (!$formSent) {
-    $formDefaults['date_start'] = "$thisYear-$thisMonth-$thisDay";
-    $formDefaults['date_end'] = date('Y-m-d', strtotime("$thisYear-$thisMonth-$thisDay +1 year"));
+    $formDefaults['access_start_date'] = "$thisYear-$thisMonth-$thisDay";
+    $formDefaults['access_end_date'] = date('Y-m-d', strtotime("$thisYear-$thisMonth-$thisDay +1 year"));
 } else {
     $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);
 }
@@ -373,8 +373,8 @@ if ($form->validate()) {
     $params = $form->getSubmitValues();
 
     $name = $params['name'];
-    $startDate = $params['date_start'];
-    $endDate = $params['date_end'];
+    $startDate = $params['access_start_date'];
+    $endDate = $params['access_end_date'];
     $nb_days_acess_before = $params['nb_days_acess_before'];
     $nb_days_acess_after = $params['nb_days_acess_after'];
     $coach_username = intval($params['coach_username']);

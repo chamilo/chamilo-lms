@@ -204,16 +204,16 @@ if (count($sessions) > 0) {
             }
         }
 
-        if ($session_item['date_start'] == '0000-00-00') {
-            $session_item['date_start'] = null;
+        if ($session_item['access_start_date'] == '0000-00-00') {
+            $session_item['access_start_date'] = null;
         }
 
-        if ($session_item['date_end'] == '0000-00-00') {
-            $session_item['date_end'] = null;
+        if ($session_item['access_end_date'] == '0000-00-00') {
+            $session_item['access_end_date'] = null;
         }
 
         $dates = array_filter(
-            array($session_item['date_start'], $session_item['date_end'])
+            array($session_item['access_start_date'], $session_item['access_end_date'])
         );
 
         $sessionInformation .= Display::page_subheader(

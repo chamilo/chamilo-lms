@@ -2272,7 +2272,7 @@ class UserManager
      */
     public static function get_sessions_by_category(
         $user_id,
-        $is_time_over = false,
+        $is_time_over = true,
         $ignore_visibility_for_admins = false
     ) {
         // Database Table Definitions
@@ -2290,8 +2290,8 @@ class UserManager
         $sql = "SELECT DISTINCT
                     session.id,
                     session.name,
-                    session.date_start,
-                    session.date_end,
+                    session.access_start_date,
+                    session.access_end_date,
                     session_category_id,
                     session_category.name as session_category_name,
                     session_category.date_start session_category_date_start,
@@ -2319,13 +2319,13 @@ class UserManager
                 // User portal filters:
                 if ($is_time_over) {
                     // History
-                    if (isset($row['date_end']) && $row['date_end'] != '0000-00-00') {
-                        if ($row['date_end'].' 23:59:59' > $now) {
+                    if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00') {
+                        if ($row['access_end_date'].' 23:59:59' > $now) {
                             continue;
                         }
                     }
 
-                    if ($row['date_end'] == '0000-00-00') {
+                    if ($row['access_end_date'] == '0000-00-00') {
                         continue;
                     }
                 } else {
@@ -2333,8 +2333,8 @@ class UserManager
                     if (api_is_allowed_to_create_course()) {
                         // Teachers can access the session depending in the access_coach date
                     } else {
-                        if (isset($row['date_end']) && $row['date_end'] != '0000-00-00') {
-                            if ($row['date_end'].' 23:59:59' <= $now) {
+                        if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00') {
+                            if ($row['access_end_date'].' 23:59:59' <= $now) {
                                 continue;
                             }
                         }
@@ -2401,8 +2401,8 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
                     'session_name' => $row['name'],
                     'session_id' => $row['id'],
-                    'date_start' => $row['date_start'],
-                    'date_end' => $row['date_end'],
+                    'access_start_date' => $row['access_start_date'],
+                    'access_end_date' => $row['access_end_date'],
                     'nb_days_access_before_beginning' => $row['nb_days_access_before_beginning'],
                     'nb_days_access_after_end' => $row['nb_days_access_after_end'],
                     'courses' => $courseList
@@ -2500,7 +2500,7 @@ class UserManager
         // Get the list of sessions where the user is subscribed
         // This is divided into two different queries
         $sessions = array();
-        $sql = "SELECT DISTINCT s.id, name, date_start, date_end
+        $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
                 FROM $tbl_session_user, $tbl_session s
                 WHERE (
                     session_id = s.id AND
@@ -2508,7 +2508,7 @@ class UserManager
                     relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 )
                 $coachCourseConditions
-                ORDER BY date_start, date_end, name";
+                ORDER BY access_start_date, access_end_date, name";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)>0) {
@@ -2517,13 +2517,13 @@ class UserManager
             }
         }
 
-        $sql = "SELECT DISTINCT id, name, date_start, date_end
+        $sql = "SELECT DISTINCT id, name, access_start_date, access_end_date
                 FROM $tbl_session
                 WHERE (
                     id_coach = $user_id
                 )
                 $coachCourseConditions
-                ORDER BY date_start, date_end, name";
+                ORDER BY access_start_date, access_end_date, name";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)>0) {
@@ -2553,8 +2553,8 @@ class UserManager
                         email, course.course_language l,
                         1 sort,
                         category_code user_course_cat,
-                        date_start,
-                        date_end,
+                        access_start_date,
+                        access_end_date,
                         session.id as session_id,
                         session.name as session_name
                     FROM $tbl_session_course_user as session_course_user
@@ -2596,8 +2596,8 @@ class UserManager
                 course.course_language l,
                 1 sort,
                 category_code user_course_cat,
-                date_start,
-                date_end,
+                access_start_date,
+                access_end_date,
                 session.id as session_id,
                 session.name as session_name,
                 IF((session_course_user.user_id = 3 AND session_course_user.status=2),'2', '5')

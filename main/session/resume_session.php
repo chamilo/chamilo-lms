@@ -46,8 +46,8 @@ $sql = 'SELECT
             nbr_courses,
             nbr_users,
             nbr_classes,
-            DATE_FORMAT(date_start,"%d-%m-%Y") as date_start,
-            DATE_FORMAT(date_end,"%d-%m-%Y") as date_end,
+            DATE_FORMAT(access_start_date,"%d-%m-%Y") as access_start_date,
+            DATE_FORMAT(access_end_date,"%d-%m-%Y") as access_end_date,
             lastname,
             firstname,
             username,
@@ -170,20 +170,20 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 	<td><?php echo get_lang('Date'); ?> :</td>
 	<td>
 	<?php
-		if ($session['date_start'] == '00-00-0000' && $session['date_end']== '00-00-0000' )
+		if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date']== '00-00-0000' )
 			echo get_lang('NoTimeLimits');
 		else {
-            if ($session['date_start'] != '00-00-0000') {
-                $session['date_start'] =  get_lang('From').' '.$session['date_start'];
+            if ($session['access_start_date'] != '00-00-0000') {
+                $session['access_start_date'] =  get_lang('From').' '.$session['access_start_date'];
             } else {
-            	$session['date_start'] = '';
+            	$session['access_start_date'] = '';
             }
-            if ($session['date_end'] == '00-00-0000') {
-                $session['date_end'] ='';
+            if ($session['access_end_date'] == '00-00-0000') {
+                $session['access_end_date'] ='';
             } else {
-            	$session['date_end'] = get_lang('Until').' '.$session['date_end'];
+            	$session['access_end_date'] = get_lang('Until').' '.$session['access_end_date'];
             }
-			echo $session['date_start'].' '.$session['date_end'];
+			echo $session['access_start_date'].' '.$session['access_end_date'];
         }
         ?>
 	</td>

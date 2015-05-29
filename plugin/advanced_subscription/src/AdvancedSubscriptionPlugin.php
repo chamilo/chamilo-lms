@@ -216,7 +216,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $extra = new ExtraFieldValue('session');
         $joinSessionTable = Database::get_main_table(TABLE_MAIN_SESSION_USER) . ' su INNER JOIN ' .
             Database::get_main_table(TABLE_MAIN_SESSION) . ' s ON s.id = su.session_id';
-        $whereSessionParams = 'su.relation_type = ? AND s.date_start >= ? AND su.user_id = ?';
+        $whereSessionParams = 'su.relation_type = ? AND s.access_start_date >= ? AND su.user_id = ?';
         $whereSessionParamsValues = array(
             0,
             $newYearDate->format('Y-m-d'),

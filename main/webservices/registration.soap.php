@@ -2666,7 +2666,8 @@ function WSCreateCourse($params)
             CourseManager::create_course_extra_field(
                 $original_course_id_name,
                 1,
-                $original_course_id_name
+                $original_course_id_name,
+                ''
             );
 
             // Save the external system's id into user_field_value table.
@@ -2684,7 +2685,8 @@ function WSCreateCourse($params)
                     CourseManager::create_course_extra_field(
                         $extra_field_name,
                         1,
-                        $extra_field_name
+                        $extra_field_name,
+                        ''
                     );
                     // Save the external system's id into course_field_value table.
                     CourseManager::update_course_extra_field_value(
@@ -2888,7 +2890,8 @@ function WSCreateCourseByTitle($params)
                 CourseManager::create_course_extra_field(
                     $original_course_id_name,
                     1,
-                    $original_course_id_name
+                    $original_course_id_name,
+                    ''
                 );
 
                 // Save the external system's id into user_field_value table.
@@ -2906,7 +2909,8 @@ function WSCreateCourseByTitle($params)
                         CourseManager::create_course_extra_field(
                             $extra_field_name,
                             1,
-                            $extra_field_name
+                            $extra_field_name,
+                            ''
                         );
                         // Save the external system's id into course_field_value table.
                         CourseManager::update_course_extra_field_value(
@@ -3697,7 +3701,7 @@ function WSCreateSession($params)
                 $results[] = 0;
                 continue;
             } else {
-                Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end)
+                Database::query("INSERT INTO $tbl_session(name,access_start_date,access_end_date,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end)
                                  VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
                 $id_session = Database::insert_id();
 
@@ -4780,7 +4784,7 @@ function WSSuscribeUsersToSession($params)
             list($nbr_users) = Database::fetch_array($rs);
             // update the session-course relation to add the users total
             $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
-                           WHERE session_id='$id_session' AND c_id='$enreg_course'";
+                           WHERE session_id='$sessionId' AND c_id='$enreg_course'";
             Database::query($update_sql);
         }
 
@@ -5290,7 +5294,7 @@ function WSSuscribeCoursesToSession($params) {
             $courseId = $courseInfo['real_id'];
 
             $courseInfo = CourseManager::getCourseInfoFromOriginalId(
-                $original_course_id_value,
+                $course_code,
                 $original_course_id_name
             );
 
@@ -5796,10 +5800,10 @@ function WSListSessions($params) {
     $sql_params = array();
     // Dates should be provided in YYYY-MM-DD format, UTC
     if (!empty($params['date_start'])) {
-        $sql_params['s.date_start'] = array('operator' => '>=', 'value' => $params['date_start']);
+        $sql_params['s.access_start_date'] = array('operator' => '>=', 'value' => $params['date_start']);
     }
     if (!empty($params['date_end'])) {
-        $sql_params['s.date_end'] = array('operator' => '<=', 'value' => $params['date_end']);
+        $sql_params['s.access_end_date'] = array('operator' => '<=', 'value' => $params['date_end']);
     }
     $sessions_list = SessionManager::get_sessions_list($sql_params);
     $return_list = array();
@@ -5808,8 +5812,8 @@ function WSListSessions($params) {
             'id' => $session['id'],
             'title' => $session['name'],
             'url' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session['id'], // something like http://my.chamilo.net/main/session/index.php?session_id=5
-            'date_start' => $session['date_start'],
-            'date_end' => $session['date_end'],
+            'date_start' => $session['access_start_date'],
+            'date_end' => $session['access_end_date'],
         );
     }
 
@@ -6191,7 +6195,7 @@ function WSCreateGroup($params)
     $userGroup = new UserGroup();
     $params = [
         'name' => $params['name']
-    ]
+    ];
     return $userGroup->save($params);
     //return GroupPortalManager::add($params['name'], null, null, 1);
 }

@@ -3401,7 +3401,14 @@ class Wiki
         $groupfilter = $this->groupfilter;
         $_course = $this->courseInfo;
 
-        echo '<div class="actions">'.get_lang('AllPages').'</div>';
+        echo '<div class="actions">'.get_lang('AllPages');
+
+        // menu delete all wiki
+        if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
+            echo ' <a href="index.php?action=deletewiki&"'.api_get_cidreq().'>'.
+                Display::return_icon('delete.png', get_lang('DeleteWiki'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
+        echo '</div>';
 
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
             $sql = 'SELECT  *
@@ -4399,18 +4406,14 @@ class Wiki
         $page = $this->page;
 
         echo '<div class="actions">';
-        echo '<ul class="nav" style="margin-bottom:0px">
-                <li class="dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0)">'.
-                Display::return_icon('menu.png', get_lang('Menu'), '', ICON_SIZE_MEDIUM).'</a>';
-        // menu home
-        echo '<ul class="dropdown-menu">';
-        echo '<li><a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.
-            get_lang('Home').'</a></li>';
+
+        echo '<a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.
+            Display::return_icon('home.png', get_lang('Home'), '', ICON_SIZE_MEDIUM).'</a>';
+
         if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit()) {
             // menu add page
-            echo '<li><a href="index.php?cidReq=' . $_course['id'] . '&action=addnew&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('addnew').'>'
-            . get_lang('AddNew') . '</a>';
+            echo '<a href="index.php?cidReq=' . $_course['id'] . '&action=addnew&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('addnew').'>'
+            . Display::return_icon('add.png', get_lang('AddNew'), '', ICON_SIZE_MEDIUM) . '</a>';
         }
 
         $lock_unlock_addnew = null;
@@ -4427,30 +4430,29 @@ class Wiki
             }
         }
 
-        echo '<a href="index.php?action=show&amp;actionpage='.$lock_unlock_addnew.'&amp;title='.api_htmlentities(urlencode($page)).'">'.
-            $protect_addnewpage.'</a></li>';
+        /*echo '<a href="index.php?action=show&amp;actionpage='.$lock_unlock_addnew.'&amp;title='.api_htmlentities(urlencode($page)).'">'.
+            $protect_addnewpage.'</a></li>';*/
+
         // menu find
-        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('searchpages').'>'.
-            get_lang('SearchPages').'</a></li>';
-        // menu all pages
-        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('allpages').'>'.
-            get_lang('AllPages').'</a></li>';
-        // menu recent changes
-        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.
-            get_lang('RecentChanges').'</a></li>';
-        // menu delete all wiki
-        if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            echo '<li><a href="index.php?action=deletewiki&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('deletewiki').'>'.
-                get_lang('DeleteWiki').'</a></li>';
-        }
+        echo '<a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('searchpages').'>'.
+            Display::return_icon('search.png', get_lang('SearchPages'), '', ICON_SIZE_MEDIUM).'</a></li>';
+
         ///menu more
-        echo '<li><a href="index.php?action=more&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('more').'>'.get_lang('Statistics').'</a></li>';
-        echo '</ul>';
-        echo '</li>';
+        echo '<a href="index.php?action=more&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('more').'>'.
+            Display::return_icon('stats.png', get_lang('Statistics'), '', ICON_SIZE_MEDIUM).'</a></li>';
+
+        // menu all pages
+        echo '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('allpages').'>'.
+            get_lang('AllPages').'</a>';
+        // menu recent changes
+        echo '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.
+            get_lang('RecentChanges').'</a>';
+
+        echo '<div class="pull-right">';
 
         // Menu show page
         echo '<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('showpage').'>'.
-            Display::return_icon('page.png',get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('page.png', get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
 
         if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit() ||
             GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
@@ -4481,7 +4483,7 @@ class Wiki
             echo '<a href="index.php?action=delete&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('delete').'>'.
                 Display::return_icon('delete.png',get_lang('DeleteThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
         }
-        echo '</ul>';
+        echo '</div>';
         echo '</div>';
     }
 

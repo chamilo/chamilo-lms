@@ -178,8 +178,8 @@ class SessionManager
             if ($ready_to_create) {
                 $values = array(
                     'name' => $name,
-                    'date_start' => $date_start,
-                    'date_end' => $date_end,
+                    'access_start_date' => $date_start,
+                    'access_end_date' => $date_end,
                     'id_coach' => $id_coach,
                     'session_admin_id' => api_get_user_id(),
                     'nb_days_access_before_beginning' => $nb_days_acess_before,
@@ -199,8 +199,8 @@ class SessionManager
 
                 if (!empty($duration)) {
                     $sql = "UPDATE $tbl_session SET
-                              date_start = '0000-00-00',
-                              date_end = '0000-00-00',
+                              access_start_date = '0000-00-00',
+                              access_end_date = '0000-00-00',
                               duration = $duration
                             WHERE id = $session_id";
                     Database::query($sql);
@@ -325,12 +325,12 @@ class SessionManager
         $sql = "SELECT COUNT(id) as total_rows FROM (
                 SELECT DISTINCT
                  IF (
-					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
-                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start, '$today') <= s.nb_days_access_before_beginning) OR
-                    (s.nb_days_access_after_end > 0 AND DATEDIFF('$today',s.date_end) <= s.nb_days_access_after_end) OR
-                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
-					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
+					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
+                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.access_start_date, '$today') <= s.nb_days_access_before_beginning) OR
+                    (s.nb_days_access_after_end > 0 AND DATEDIFF('$today',s.access_end_date) <= s.nb_days_access_after_end) OR
+                    (s.access_start_date  = '0000-00-00' AND s.access_end_date  = '0000-00-00' ) OR
+					(s.access_start_date <= '$today' AND '0000-00-00' = s.access_end_date) OR
+					('$today' <= s.access_end_date AND '0000-00-00' = s.access_start_date)
 				, 1, 0) as session_active,
                 s.id
                 FROM $tbl_session s
@@ -349,12 +349,12 @@ class SessionManager
                 $sql = "SELECT count(id) as total_rows FROM (
                 SELECT DISTINCT
                   IF (
-					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
-                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start, '$today') <= s.nb_days_access_before_beginning) OR
-                    (s.nb_days_access_after_end > 0 AND DATEDIFF('$today',s.date_end) <= s.nb_days_access_after_end) OR
-                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
-					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
+					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
+                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.access_start_date, '$today') <= s.nb_days_access_before_beginning) OR
+                    (s.nb_days_access_after_end > 0 AND DATEDIFF('$today',s.access_end_date) <= s.nb_days_access_after_end) OR
+                    (s.access_start_date  = '0000-00-00' AND s.access_end_date  = '0000-00-00' ) OR
+					(s.access_start_date <= '$today' AND '0000-00-00' = s.access_end_date) OR
+					('$today' <= s.access_end_date AND '0000-00-00' = s.access_start_date)
 				, 1, 0)
 				as session_active,
 				s.id
@@ -445,19 +445,19 @@ class SessionManager
 
         $select = "SELECT DISTINCT * FROM (SELECT
                 IF (
-					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
-                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'" . $today . "' " . ") <= s.nb_days_access_before_beginning) OR
-                    (s.nb_days_access_after_end > 0 AND DATEDIFF('" . $today . "',s.date_end) <= s.nb_days_access_after_end) OR
-                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
-					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
+					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
+                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.access_start_date,'" . $today . "' " . ") <= s.nb_days_access_before_beginning) OR
+                    (s.nb_days_access_after_end > 0 AND DATEDIFF('" . $today . "',s.access_end_date) <= s.nb_days_access_after_end) OR
+                    (s.access_start_date  = '0000-00-00' AND s.access_end_date  = '0000-00-00' ) OR
+					(s.access_start_date <= '$today' AND '0000-00-00' = s.access_end_date) OR
+					('$today' <= s.access_end_date AND '0000-00-00' = s.access_start_date)
 				, 1, 0)
 				as session_active,
 				s.name,
                 nbr_courses,
                 s.nbr_users,
-                s.date_start,
-                s.date_end,
+                s.access_start_date,
+                s.access_end_date,
                 $coach_name,
                 sc.name as category_name,
                 s.visibility,
@@ -510,7 +510,7 @@ class SessionManager
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=" . $session['id']);
                 $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=" . $session['user_id']);
 
-                if ($session['date_start'] == '0000-00-00' && $session['date_end'] == '0000-00-00') {
+                if ($session['access_start_date'] == '0000-00-00' && $session['access_end_date'] == '0000-00-00') {
                     // $session['session_active'] = 1;
                 }
 
@@ -520,11 +520,11 @@ class SessionManager
                     $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
                 }
 
-                if ($session['date_start'] == '0000-00-00') {
-                    $session['date_start'] = '';
+                if ($session['access_start_date'] == '0000-00-00') {
+                    $session['access_start_date'] = '';
                 }
-                if ($session['date_end'] == '0000-00-00') {
-                    $session['date_end'] = '';
+                if ($session['access_end_date'] == '0000-00-00') {
+                    $session['access_end_date'] = '';
                 }
 
                 switch ($session['visibility']) {
@@ -1436,8 +1436,8 @@ class SessionManager
                 $values['duration'] = $duration;
 
                 $values['name'] = $name;
-                $values['date_start'] = $date_start;
-                $values['date_end'] = $date_end;
+                $values['access_start_date'] = $date_start;
+                $values['access_end_date'] = $date_end;
                 $values['id_coach'] = $id_coach;
                 $values['nb_days_access_before_beginning'] = $nb_days_acess_before;
                 $values['nb_days_access_after_end'] = $nb_days_acess_after;
@@ -2434,8 +2434,8 @@ class SessionManager
                     s.id,
                     s.name,
                     s.nbr_courses,
-                    s.date_start,
-                    s.date_end,
+                    s.access_start_date,
+                    s.access_end_date,
                     u.firstname,
                     u.lastname,
                     sc.name as category_name,
@@ -3422,12 +3422,12 @@ class SessionManager
     {
         $id = intval($id);
         $s = self::fetch($id);
-        $s['year_start'] = substr($s['date_start'], 0, 4);
-        $s['month_start'] = substr($s['date_start'], 5, 2);
-        $s['day_start'] = substr($s['date_start'], 8, 2);
-        $s['year_end'] = substr($s['date_end'], 0, 4);
-        $s['month_end'] = substr($s['date_end'], 5, 2);
-        $s['day_end'] = substr($s['date_end'], 8, 2);
+        $s['year_start'] = substr($s['access_start_date'], 0, 4);
+        $s['month_start'] = substr($s['access_start_date'], 5, 2);
+        $s['day_start'] = substr($s['access_start_date'], 8, 2);
+        $s['year_end'] = substr($s['access_end_date'], 0, 4);
+        $s['month_end'] = substr($s['access_end_date'], 5, 2);
+        $s['day_end'] = substr($s['access_end_date'], 8, 2);
         $consider_start = true;
         if ($s['year_start'] . '-' . $s['month_start'] . '-' . $s['day_start'] == '0000-00-00') {
             $consider_start = false;
@@ -3931,8 +3931,8 @@ class SessionManager
                     $sql = "INSERT IGNORE INTO $tbl_session SET
                             name = '" . $session_name . "',
                             id_coach = '$coach_id',
-                            date_start = '$date_start',
-                            date_end = '$date_end',
+                            access_start_date = '$date_start',
+                            access_end_date = '$date_end',
                             visibility = '$visibilityAfterExpirationPerSession',
                             $sessionCondition
                             session_admin_id = " . intval($defaultUserId) . $extraParameters . $extraSessionParameters;
@@ -3972,8 +3972,8 @@ class SessionManager
                         $sql = "INSERT IGNORE INTO $tbl_session SET
                                 name = '$session_name',
                                 id_coach = '$coach_id',
-                                date_start = '$date_start',
-                                date_end = '$date_end',
+                                access_start_date = '$date_start',
+                                access_end_date = '$date_end',
                                 visibility = '$visibilityAfterExpirationPerSession',
                                 session_category_id = '$session_category_id' " . $extraParameters . $extraSessionParameters;
 
@@ -4019,8 +4019,8 @@ class SessionManager
                         // Updating the session.
                         $params = array(
                             'id_coach' => $coach_id,
-                            'date_start' => $date_start,
-                            'date_end' => $date_end,
+                            'access_start_date' => $date_start,
+                            'access_end_date' => $date_end,
                             'visibility' => $visibilityAfterExpirationPerSession,
                             'session_category_id' => $session_category_id
                         );
@@ -5433,19 +5433,19 @@ class SessionManager
      */
     public static function getSessionFormattedDate($sessionInfo)
     {
-        if ($sessionInfo['date_start'] == '0000-00-00' && $sessionInfo['date_end'] == '0000-00-00') {
+        if ($sessionInfo['access_start_date'] == '0000-00-00' && $sessionInfo['access_end_date'] == '0000-00-00') {
             return get_lang('NoTimeLimits');
         } else {
-            if ($sessionInfo['date_start'] != '0000-00-00') {
-                $startDate = get_lang('From') . ' ' . api_format_date($sessionInfo['date_start'], DATE_FORMAT_LONG_NO_DAY);
+            if ($sessionInfo['access_start_date'] != '0000-00-00') {
+                $startDate = get_lang('From') . ' ' . api_format_date($sessionInfo['access_start_date'], DATE_FORMAT_LONG_NO_DAY);
             } else {
                 $startDate = '';
             }
 
-            if ($sessionInfo['date_end'] == '0000-00-00') {
+            if ($sessionInfo['access_end_date'] == '0000-00-00') {
                 $endDate = '';
             } else {
-                $endDate = get_lang('Until') . ' ' . api_format_date($sessionInfo['date_end'], DATE_FORMAT_LONG_NO_DAY);
+                $endDate = get_lang('Until') . ' ' . api_format_date($sessionInfo['access_end_date'], DATE_FORMAT_LONG_NO_DAY);
             }
 
             return "$startDate $endDate";
@@ -5686,7 +5686,7 @@ class SessionManager
             $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
             // Get the session list from session category and target
             $sessionList = Database::select(
-                'id, name, date_start, date_end',
+                'id, name, access_start_date, access_end_date',
                 $sTable,
                 array(
                     'where' => array(

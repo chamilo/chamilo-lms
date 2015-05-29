@@ -2218,8 +2218,8 @@ function api_get_session_visibility(
             $visibility = $original_visibility = $row['visibility'];
 
             // I don't care the session visibility.
-            if ($row['date_start'] == '0000-00-00' &&
-                $row['date_end'] == '0000-00-00'
+            if ($row['access_start_date'] == '0000-00-00' &&
+                $row['access_end_date'] == '0000-00-00'
             ) {
 
                 // Session duration per student.
@@ -2263,10 +2263,10 @@ function api_get_session_visibility(
                 return SESSION_AVAILABLE;
             } else {
                 // If start date was set.
-                if (!empty($row['date_start']) && $row['date_start'] != '0000-00-00') {
+                if (!empty($row['access_start_date']) && $row['access_start_date'] != '0000-00-00') {
                     // The beginning of the day starts at 00:00:00
-                    $row['date_start'] = $row['date_start'].' 00:00:00';
-                    if ($now > api_strtotime($row['date_start'], 'UTC')) {
+                    $row['access_start_date'] = $row['access_start_date'].' 00:00:00';
+                    if ($now > api_strtotime($row['access_start_date'], 'UTC')) {
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
@@ -2274,13 +2274,13 @@ function api_get_session_visibility(
                 }
 
                 // If the end date was set.
-                if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
+                if (!empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00') {
                     // End date finish at midnight.
-                    $row['date_end'] = $row['date_end'].' 23:59:59';
+                    $row['access_end_date'] = $row['access_end_date'].' 23:59:59';
 
-                    // Only if date_start said that it was ok
+                    // Only if access_start_date said that it was ok
                     if ($visibility == SESSION_AVAILABLE) {
-                        if ($now < api_strtotime($row['date_end'], 'UTC')) {
+                        if ($now < api_strtotime($row['access_end_date'], 'UTC')) {
                             // Date still available
                             $visibility = SESSION_AVAILABLE;
                         } else {
@@ -2297,12 +2297,12 @@ function api_get_session_visibility(
 
             if ($is_coach) {
                 // Test end date.
-                if (isset($row['date_end']) &&
-                    !empty($row['date_end']) &&
-                    $row['date_end'] != '0000-00-00' &&
+                if (isset($row['access_end_date']) &&
+                    !empty($row['access_end_date']) &&
+                    $row['access_end_date'] != '0000-00-00' &&
                     $row['nb_days_access_after_end'] != '0'
                 ) {
-                    $end_date_for_coach = new DateTime(substr($row['date_end'], 0 ,10).' 23:59:59');
+                    $end_date_for_coach = new DateTime(substr($row['access_end_date'], 0 ,10).' 23:59:59');
                     $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
                     $end_date_for_coach->add(new DateInterval($number_of_days));
 
@@ -2314,12 +2314,12 @@ function api_get_session_visibility(
                 }
 
                 // Test start date.
-                if (isset($row['date_start']) &&
-                    !empty($row['date_start']) &&
-                    $row['date_start'] != '0000-00-00' &&
+                if (isset($row['access_start_date']) &&
+                    !empty($row['access_start_date']) &&
+                    $row['access_start_date'] != '0000-00-00' &&
                     $row['nb_days_access_before_beginning'] != '0'
                 ) {
-                    $start_date_for_coach = new DateTime(substr($row['date_start'], 0, 10).' 00:00:00');
+                    $start_date_for_coach = new DateTime(substr($row['access_start_date'], 0, 10).' 00:00:00');
                     $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';
                     $start_date_for_coach->sub(new DateInterval($number_of_days));
                     if ($start_date_for_coach->getTimestamp() < $now) {
@@ -2793,7 +2793,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     $sessionIsCoach = null;
 
     if (!empty($course_code)) {
-        $sql = "SELECT DISTINCT s.id, name, date_start, date_end
+        $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
                 FROM $session_table s
                 INNER JOIN $session_rel_course_rel_user_table session_rc_ru
                 ON session_rc_ru.session_id = s.id AND session_rc_ru.user_id = '".$userId."'
@@ -2806,10 +2806,10 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     }
 
     if (!empty($session_id)) {
-        $sql = "SELECT DISTINCT id, name, date_start, date_end
+        $sql = "SELECT DISTINCT id, name, access_start_date, access_end_date
                 FROM $session_table
                 WHERE session.id_coach =  '".$userId."' AND id = '$session_id'
-                ORDER BY date_start, date_end, name";
+                ORDER BY access_start_date, access_end_date, name";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
             $sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));

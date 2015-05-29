@@ -261,8 +261,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             $sql_session = "INSERT IGNORE INTO $tbl_session SET
                                     name = '".Database::escape_string($session_name)."',
                                     id_coach = '$coach_id',
-                                    date_start = '$date_start',
-                                    date_end = '$date_end',
+                                    access_start_date = '$date_start',
+                                    access_end_date = '$date_end',
                                     visibility = '$visibility',
                                     session_category_id = '$session_category_id',
                                     session_admin_id=".intval($_user['user_id']);
@@ -278,8 +278,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $sql_session = "INSERT IGNORE INTO $tbl_session SET
                                         name = '".Database::escape_string($session_name)."',
                                         id_coach = '$coach_id',
-                                        date_start = '$date_start',
-                                        date_end = '$date_end',
+                                        access_start_date = '$date_start',
+                                        access_end_date = '$date_end',
                                         visibility = '$visibility',
                                         session_category_id = '$session_category_id',
                                         session_admin_id=".intval($_user['user_id']);
@@ -290,8 +290,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 // if the session already exists - update it.
                                 $sql_session = "UPDATE $tbl_session SET
                                         id_coach = '$coach_id',
-                                        date_start = '$date_start',
-                                        date_end = '$date_end',
+                                        access_start_date = '$date_start',
+                                        access_end_date = '$date_end',
                                         visibility = '$visibility',
                                         session_category_id = '$session_category_id'
                                     WHERE name = '$session_name'";

@@ -127,7 +127,7 @@ if (!empty($categoriesTempList)) {
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 
-$lp_showed = false;
+$lpIsShown = false;
 
 $test_mode = api_get_setting('server_type');
 
@@ -778,7 +778,7 @@ foreach ($categories as $item) {
                 'action_seriousgame' => $actionSeriousGame
             ];
 
-            $lp_showed = true;
+            $lpIsShown = true;
             //counter for number of elements treated
             $current++;
 
@@ -799,7 +799,7 @@ $template->assign('message', $message);
 $template->assign('introduction_section', $introductionSection);
 
 $template->assign('data', $data);
-$template->assign('lp_showed', $lp_showed);
+$template->assign('lp_is_shown', $lpIsShown);
 
 $content = $template->fetch('default/learnpath/list.tpl');
 

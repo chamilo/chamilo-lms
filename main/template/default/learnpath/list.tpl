@@ -120,7 +120,7 @@
     {% endif %}
 {% endfor %}
 
-{% if is_allowed_to_edit and not lp_showed %}
+{% if is_allowed_to_edit and not lp_is_shown %}
     <div id="no-data-view">
         <h2>{{ "LearningPaths"|get_lang }}</h2>
         <img src="{{ "scorms.png"|icon(64) }}">

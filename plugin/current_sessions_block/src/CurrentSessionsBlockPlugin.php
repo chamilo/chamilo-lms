@@ -92,7 +92,7 @@ class CurrentSessionsBlockPlugin extends Plugin
 SQL;
 
         $sessions = Database::select(
-            's.id, s.name, s.access_start_date, s.access_end_date',
+            's.id',
             $fakeFrom,
             [
                 'where' => ['su.user_id = ?' => api_get_user_id()],
@@ -106,9 +106,10 @@ SQL;
 
     /**
      * Get the current active sessions by date
+     * @param array $userSessions The user session
      * @return array The sessions
      */
-    private function getActiveSessions()
+    private function getFilteredActiveSessions(array $userSessions)
     {
         $daysBeforeStart = intval($this->get(self::CONFIG_DAYS_BEFORE));
 
@@ -117,37 +118,50 @@ SQL;
 
         $beforeStart = [];
 
+        $placeholders = [];
+
+        if (empty($userSessions)) {
+            return [];
+        }
+
+        for ($i = 0; $i < count($userSessions); $i++) {
+            $placeholders[] = '?';
+        }
+
         if ($daysBeforeStart > 0) {
             $beforeStart = Database::select(
-                'id, name, access_start_date, access_end_date',
+                'id',
                 $sessionTable,
                 [
                     'where' => [
-                        'access_start_date >= DATE(?) - INTERVAL ? DAY' => [$currentUtcDateTime, $daysBeforeStart]
+                        'access_start_date >= DATE(?) - INTERVAL ? DAY AND ' => [$currentUtcDateTime, $daysBeforeStart],
+                        'id IN (' . implode(', ', $placeholders) . ')' => array_keys($userSessions)
                     ]
                 ]
             );
         }
 
         $currentSessions = Database::select(
-            'id, name, access_start_date, access_end_date',
+            'id',
             $sessionTable,
             [
                 'where' => [
-                    'DATE(?) >= access_start_date AND DATE(?) <= access_end_date' => [
+                    'DATE(?) >= access_start_date AND DATE(?) <= access_end_date AND ' => [
                         $currentUtcDateTime,
                         $currentUtcDateTime
-                    ]
+                    ],
+                    'id IN (' . implode(', ', $placeholders) . ')' => array_keys($userSessions)
                 ]
             ]
         );
 
         $dateWithoutEnd = Database::select(
-            'id, name, access_start_date, access_end_date',
+            'id',
             $sessionTable,
             [
                 'where' => [
-                    "access_start_date <= DATE(?) AND access_end_date = '0000-00-00'" => $currentUtcDateTime
+                    "access_start_date <= DATE(?) AND access_end_date = '0000-00-00 00:00:00' AND " => $currentUtcDateTime,
+                    'id IN (' . implode(', ', $placeholders) . ')' => array_keys($userSessions)
                 ]
             ]
         );
@@ -158,13 +172,54 @@ SQL;
     }
 
     /**
-     * Get the finished session for a user
+     * Get the finished sessions for a user
+     * @param array $activeSessions The active sessions
      * @return array
      */
-    private function getFinishedSessions()
+    private function getFilteredFinishedSessions(array $activeSessions)
     {
-        //TODO: update this function to get the finished sessions
-        return [];
+        if (empty($activeSessions)) {
+            return [];
+        }
+
+        $finishedSessions = [];
+
+        $userId = api_get_user_id();
+
+        foreach ($activeSessions as $session) {
+            $courses = SessionManager::get_course_list_by_session_id($session['id']);
+            $notApprovedCoursesCount = 0;
+
+            if (empty($courses)) {
+                continue;
+            }
+
+            foreach ($courses as $course) {
+                $courseCategories = Category::load(
+                    null,
+                    null,
+                    $course['code'],
+                    null,
+                    null,
+                    $session['id'],
+                    false
+                );
+
+                if (count($courseCategories) <= 0 || Category::userFinishedCourse($userId, $courseCategories[0])) {
+                    continue;
+                }
+
+                $notApprovedCoursesCount++;
+            }
+
+            if (count($courses) == $notApprovedCoursesCount) {
+                continue;
+            }
+
+            $finishedSessions[] = $session;
+        }
+
+        return $finishedSessions;
     }
 
     /**
@@ -176,20 +231,21 @@ SQL;
         $userSessions = $this->getUserSessions();
         $activeSessions = $finishedSessions = [];
 
-        if (count($userSessions) < $this->numberOfSessions) {
-            $activeSessions = $this->getActiveSessions();
-            $finishedSessions = $this->getFinishedSessions();
-        }
+        $activeSessions = $this->getFilteredActiveSessions($userSessions);
+        $finishedSessions = $this->getFilteredFinishedSessions($activeSessions);
 
-        $sessions = $userSessions + $activeSessions + $finishedSessions;
-        $sessions = array_slice($sessions, 0, $this->numberOfSessions, true);
+        $finishedSessions = array_slice($finishedSessions, 0, $this->numberOfSessions, true);
 
-        foreach ($sessions as &$session) {
-            if ($session['access_start_date'] != '0000-00-00') {
+        $sessions = [];
+
+        foreach ($finishedSessions as $finishedSession) {
+            $session = api_get_session_info($finishedSession['id']);
+
+            if ($session['access_start_date'] != '0000-00-00 00:00:00') {
                 $session['access_start_date'] = api_format_date($session['access_start_date'], DATE_FORMAT_NUMBER);
             }
 
-            if ($session['access_end_date'] != '0000-00-00') {
+            if ($session['access_end_date'] != '0000-00-00 00:00:00') {
                 $session['access_end_date'] = api_format_date($session['access_end_date'], DATE_FORMAT_NUMBER);
             }
 
@@ -205,6 +261,8 @@ SQL;
             if (!empty($fieldValueInfo)) {
                 $session['image'] = $fieldValueInfo['value'];
             }
+
+            $sessions[] = $session;
         }
 
         return $sessions;

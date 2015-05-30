@@ -143,10 +143,10 @@ $form->addElement('checkbox', 'show_description', null, get_lang('ShowDescriptio
 
 $form->addElement('date_time_picker', 'display_start_date', array(get_lang('SessionDisplayStartDate'), get_lang('SessionDisplayStartDateComment')));
 $form->addElement('date_time_picker', 'display_end_date', array(get_lang('SessionDisplayEndDate'), get_lang('SessionDisplayEndDateComment')));
-$form->addElement('date_time_picker', 'access_start_date', array(get_lang('SessionAccessStartDate'), get_lang('SessionAccessStartDateComment')));
-$form->addElement('date_time_picker', 'access_end_date', array(get_lang('SessionAccessEndDate'), get_lang('SessionAccessEndDateComment')));
-$form->addElement('date_time_picker', 'coach_access_start_date', array(get_lang('CoachSessionAccessStartDate'), get_lang('CoachSessionAccessStartDateComment')));
-$form->addElement('date_time_picker', 'coach_access_end_date', array(get_lang('CoachSessionAccessEndDate'), get_lang('CoachSessionAccessEndDateComment')));
+$form->addElement('date_time_picker', 'access_start_date', array(get_lang('SessionStartDate'), get_lang('SessionStartDateComment')));
+$form->addElement('date_time_picker', 'access_end_date', array(get_lang('SessionEndDate'), get_lang('SessionEndDateComment')));
+$form->addElement('date_time_picker', 'coach_access_start_date', array(get_lang('SessionCoachStartDate'), get_lang('SessionCoachStartDateComment')));
+$form->addElement('date_time_picker', 'coach_access_end_date', array(get_lang('SessionCoachEndDate'), get_lang('SessionCoachEndDateComment')));
 
 $visibilityGroup = array();
 $visibilityGroup[] = $form->createElement(

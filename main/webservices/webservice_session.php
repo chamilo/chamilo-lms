@@ -37,17 +37,24 @@ class WSSession extends WS
 		if($user_id instanceof WSError) {
 			return $user_id;
 		}
-		// Build the date
-		$start_date_array = explode('-', $start_date);
-		foreach($start_date_array as &$sd_element) {
-			$sd_element = intval($sd_element);
-		}
-		$end_date_array = explode('-', $end_date);
-		foreach($end_date_array as &$ed_element) {
-			$ed_element = intval($ed_element);
-		}
+        $startDate = new DateTime($start_date);
+        $endDate = new DateTime($end_date);
+        $diffStart = new DateInterval($nb_days_access_before);
+        $diffEnd = new DateInterval($nb_days_access_after);
+        $coachStartDate = $startDate->sub($diffStart);
+        $coachEndDate = $endDate->add($diffEnd);
 		// Try to create the session
-		$session_id = SessionManager::create_session($name, $start_date_array[0], $start_date_array[1], $start_date_array[2], $end_date_array[0], $end_date_array[1], $end_date_array[2], (int)$nb_days_access_before, (int)$nb_days_access_after, (int)$nolimit, $user_id, 0, (int)$visibility);
+        $session_id = SessionManager::create_session(
+            $name,
+            $start_date,
+            $end_date,
+            $coachStartDate->format('Y-m-d H:i:s'),
+            $coachEndDate->format('Y-m-d H:i:s'),
+            $nolimit,
+            $user_id,
+            0,
+            $visibility
+        );
 		if(!is_int($session_id)) {
 			return new WSError(301, 'Could not create the session');
 		} else {
@@ -163,16 +170,24 @@ class WSSession extends WS
 			if($user_id instanceof WSError) {
 				return $user_id;
 			}
-			// Build the date
-			$start_date_array = explode('-', $start_date);
-			foreach($start_date_array as &$sd_element) {
-				$sd_element = intval($sd_element);
-			}
-			$end_date_array = explode('-', $end_date);
-			foreach($end_date_array as &$ed_element) {
-				$ed_element = intval($ed_element);
-			}
-			$result_id = SessionManager::edit_session($session_id, $name, $start_date_array[0], $start_date_array[1], $start_date_array[2], $end_date_array[0], $end_date_array[1], $end_date_array[2], (int)$nb_days_access_before, (int)$nb_days_access_after, (int)$nolimit, $user_id, 0, (int)$visibility);
+            $startDate = new DateTime($start_date);
+            $endDate = new DateTime($end_date);
+            $diffStart = new DateInterval($nb_days_access_before);
+            $diffEnd = new DateInterval($nb_days_access_after);
+            $coachStartDate = $startDate->sub($diffStart);
+            $coachEndDate = $endDate->add($diffEnd);
+            $result_id = SessionManager::edit_session(
+                $session_id,
+                $name,
+                $start_date,
+                $end_date,
+                $coachStartDate->format('Y-m-d H:i:s'),
+                $coachEndDate->format('Y-m-d H:i:s'),
+                $nolimit,
+                $user_id,
+                0,
+                $visibility
+            );
 			if(!is_int($result_id)) {
 				return new WSError(302, 'Could not edit the session');
 			} else {

@@ -1033,12 +1033,8 @@ class ImportCsv
                     if (empty($sessionId)) {
                         $result = SessionManager::create_session(
                             $session['SessionName'],
-                            $dateStart[0],
-                            $dateStart[1],
-                            $dateStart[2],
-                            $dateEnd[0],
-                            $dateEnd[1],
-                            $dateEnd[2],
+                            $dateStart,
+                            $dateEnd,
                             $this->daysCoachAccessBeforeBeginning,
                             $this->daysCoachAccessAfterBeginning,
                             null,
@@ -1060,19 +1056,26 @@ class ImportCsv
 
                         $sessionInfo = api_get_session_info($sessionId);
                         $accessBefore = null;
-                        $accessAfter = null;
 
-                        if (empty($sessionInfo['nb_days_access_before_beginning']) ||
-                            (!empty($sessionInfo['nb_days_access_before_beginning']) &&
-                                $sessionInfo['nb_days_access_before_beginning'] < $this->daysCoachAccessBeforeBeginning)
+                        $start_date_for_coach = new DateTime($sessionInfo['coach_access_start_date']);
+                        $start_date = new DateTime($sessionInfo['access_start_date']);
+                        $start_diff = $start_date->diff($start_date_for_coach)->d;
+
+                        if (empty($sessionInfo['coach_access_start_date']) ||
+                            (!empty($sessionInfo['coach_access_start_date']) &&
+                                $start_diff < $this->daysCoachAccessBeforeBeginning)
                         ) {
                             $accessBefore = intval($this->daysCoachAccessBeforeBeginning);
                         }
 
                         $accessAfter = null;
-                        if (empty($sessionInfo['nb_days_access_after_end']) ||
-                            (!empty($sessionInfo['nb_days_access_after_end']) &&
-                                $sessionInfo['nb_days_access_after_end'] < $this->daysCoachAccessAfterBeginning)
+                        $end_date_for_coach = new DateTime($sessionInfo['coach_access_end_date']);
+                        $end_date = new DateTime($sessionInfo['access_end_date']);
+                        $end_diff = $end_date->diff($end_date_for_coach)->d;
+
+                        if (empty($sessionInfo['coach_access_end_date']) ||
+                            (!empty($sessionInfo['coach_access_end_date']) &&
+                                $end_diff < $this->daysCoachAccessAfterBeginning)
                         ) {
                             $accessAfter = intval($this->daysCoachAccessAfterBeginning);
                         }
@@ -1082,12 +1085,8 @@ class ImportCsv
                         $result = SessionManager::edit_session(
                             $sessionId,
                             $session['SessionName'],
-                            $dateStart[0],
-                            $dateStart[1],
-                            $dateStart[2],
-                            $dateEnd[0],
-                            $dateEnd[1],
-                            $dateEnd[2],
+                            $dateStart,
+                            $dateEnd,
                             $accessBefore,
                             $accessAfter,
                             null,

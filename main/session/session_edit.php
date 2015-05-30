@@ -23,8 +23,6 @@ $id = intval($_GET['id']);
 SessionManager::protectSession($id);
 
 $infos = SessionManager::fetch($id);
-$infos['access_start_date'] = api_format_date($infos['access_start_date'], '%Y-%m-%d');
-$infos['access_end_date'] = api_format_date($infos['access_end_date'], '%Y-%m-%d');
 
 $id_coach = $infos['id_coach'];
 $tool_name = get_lang('EditSession');
@@ -142,52 +140,13 @@ if (!empty($infos['show_description'])) {
 }
 
 $form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'), $chkDescriptionAttributes);
-$form->addElement('text', 'nb_days_access_before', array('', '', get_lang('DaysBefore')), array(
-    'input-size' => '2',
-));
-$form->addElement('text', 'nb_days_access_after', array('', '', get_lang('DaysAfter')), array(
-    'input-size' => '2',
-));
 
-if ($year_start!="0000") {
-    $form->addElement('checkbox', 'start_limit', '', get_lang('DateStartSession'), array(
-        'onchange' => 'disable_starttime(this)',
-        'id' => 'start_limit',
-        'checked' => ''
-    ));
-
-    $form->addElement('html','<div id="start_date" style="display:block">');
-} else {
-    $form->addElement('checkbox', 'start_limit', '', get_lang('DateStartSession'), array(
-        'onchange' => 'disable_starttime(this)',
-        'id' => 'start_limit'
-    ));
-
-    $form->addElement('html','<div id="start_date" style="display:none">');
-}
-
-$form->addElement('date_picker', 'access_start_date');
-
-$form->addElement('html','</div>');
-
-if ($year_end != "0000") {
-    $form->addElement('checkbox', 'end_limit', '', get_lang('DateEndSession'), array(
-        'onchange' => 'disable_endtime(this)',
-        'id' => 'end_limit',
-        'checked' => ''
-    ));
-
-    $form->addElement('html','<div id="end_date" style="display:block">');
-} else {
-    $form->addElement('checkbox', 'end_limit', '', get_lang('DateEndSession'), array(
-        'onchange' => 'disable_endtime(this)',
-        'id' => 'end_limit'
-    ));
-
-    $form->addElement('html','<div id="end_date" style="display:none">');
-}
-
-$form->addElement('date_picker', 'access_end_date');
+$form->addElement('date_time_picker', 'display_start_date', array(get_lang('SessionDisplayStartDate'), get_lang('SessionDisplayStartDateComment')));
+$form->addElement('date_time_picker', 'display_end_date', array(get_lang('SessionDisplayEndDate'), get_lang('SessionDisplayEndDateComment')));
+$form->addElement('date_time_picker', 'access_start_date', array(get_lang('SessionAccessStartDate'), get_lang('SessionAccessStartDateComment')));
+$form->addElement('date_time_picker', 'access_end_date', array(get_lang('SessionAccessEndDate'), get_lang('SessionAccessEndDateComment')));
+$form->addElement('date_time_picker', 'coach_access_start_date', array(get_lang('CoachSessionAccessStartDate'), get_lang('CoachSessionAccessStartDateComment')));
+$form->addElement('date_time_picker', 'coach_access_end_date', array(get_lang('CoachSessionAccessEndDate'), get_lang('CoachSessionAccessEndDateComment')));
 
 $visibilityGroup = array();
 $visibilityGroup[] = $form->createElement(
@@ -241,21 +200,27 @@ $form->addButtonUpdate(get_lang('ModifyThisSession'));
 $formDefaults = array(
     'id_coach' => $infos['id_coach'],
     'session_category' => $infos['session_category_id'],
-    'access_start_date' => $infos['access_start_date'],
-    'access_end_date' => $infos['access_end_date'],
     'session_visibility' => $infos['visibility'],
     'description' => $infos['description']
 );
 
 if ($formSent) {
     $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);
-    $formDefaults['nb_days_access_before'] = api_htmlentities($nb_days_access_before, ENT_QUOTES,$charset);
-    $formDefaults['nb_days_access_after'] = api_htmlentities($nb_days_access_after, ENT_QUOTES,$charset);
+    $formDefaults['display_start_date'] = $displayStartDate;
+    $formDefaults['display_end_date'] = $displayEndDate;
+    $formDefaults['access_start_date'] = $startDate;
+    $formDefaults['access_end_date'] = $endDate;
+    $formDefaults['coach_access_start_date'] = $coachAccessStartDate;
+    $formDefaults['coach_access_end_date'] = $coachAccessEndDate;
     $formDefaults['duration'] = Security::remove_XSS($duration);
 } else {
     $formDefaults['name'] = Security::remove_XSS($infos['name']);
-    $formDefaults['nb_days_access_before'] = api_htmlentities($infos['nb_days_access_before_beginning'], ENT_QUOTES, $charset);
-    $formDefaults['nb_days_access_after'] = api_htmlentities($infos['nb_days_access_after_end'], ENT_QUOTES, $charset);
+    $formDefaults['display_start_date'] = $infos['display_start_date'];
+    $formDefaults['display_end_date'] = $infos['display_end_date'];
+    $formDefaults['access_start_date'] = $infos['access_start_date'];
+    $formDefaults['access_end_date'] = $infos['access_end_date'];
+    $formDefaults['coach_access_start_date'] = $infos['coach_access_start_date'];
+    $formDefaults['coach_access_end_date'] = $infos['coach_access_end_date'];
     $formDefaults['duration'] = $duration;
 }
 
@@ -265,10 +230,12 @@ if ($form->validate()) {
     $params = $form->getSubmitValues();
 
     $name = $params['name'];
+    $displayStartDate = $params['display_start_date'];
+    $displayEndDate = $params['display_end_date'];
     $startDate = $params['access_start_date'];
     $endDate = $params['access_end_date'];
-    $nb_days_acess_before = $params['nb_days_access_before'];
-    $nb_days_acess_after = $params['nb_days_access_after'];
+    $coachAccessStartDate = $params['coach_access_start_date'];
+    $coachAccessEndDate = $params['coach_access_end_date'];
     $id_coach = $params['id_coach'];
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];
@@ -276,13 +243,17 @@ if ($form->validate()) {
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;
 
-    $end_limit = isset($params['end_limit']);
-    $start_limit = isset($params['start_limit']);
-
-    if (!$end_limit && !$start_limit) {
-        $nolimit = 1;
-    } else {
-        $nolimit = null;
+    $noLimit = false;
+    $startLimit = true;
+    $endLimit = true;
+    if (empty($startDate) || $startDate == '0000-00-00 00:00:00') {
+        $startLimit = false;
+    }
+    if (empty($endDate) || $endDate == '0000-00-00 00:00:00') {
+        $endLimit = false;
+    }
+    if (!$startLimit && !$endLimit) {
+        $noLimit = true;
     }
 
     $extraFields = array();
@@ -298,24 +269,26 @@ if ($form->validate()) {
         $name,
         $startDate,
         $endDate,
-        $nb_days_acess_before,
-        $nb_days_acess_after,
-        $nolimit,
+        $coachAccessStartDate,
+        $coachAccessEndDate,
+        $noLimit,
         $id_coach,
         $id_session_category,
         $id_visibility,
-        $start_limit,
-        $end_limit,
+        $startLimit,
+        $endLimit,
         $description,
         $showDescription,
         $duration,
+        $displayStartDate,
+        $displayEndDate,
         $extraFields
     );
 
     if ($return == strval(intval($return))) {
-		header('Location: resume_session.php?id_session=' . $return);
-		exit();
-	}
+        header('Location: resume_session.php?id_session=' . $return);
+        exit();
+    }
 }
 
 // display the header
@@ -333,6 +306,7 @@ function setDisable(select) {
 	document.forms['edit_session'].elements['session_visibility'].disabled = (select.checked) ? true : false;
 	document.forms['edit_session'].elements['session_visibility'].selectedIndex = 0;
 
+    /*
     document.forms['edit_session'].elements['start_limit'].disabled = (select.checked) ? true : false;
     document.forms['edit_session'].elements['start_limit'].checked = false;
     document.forms['edit_session'].elements['end_limit'].disabled = (select.checked) ? true : false;
@@ -343,6 +317,7 @@ function setDisable(select) {
 
     var start_div = document.getElementById('start_date');
     start_div.style.display = 'none';
+    */
 }
 
 function disable_endtime(select) {

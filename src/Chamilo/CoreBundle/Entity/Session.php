@@ -92,35 +92,7 @@ class Session
      * @ORM\Column(name="nbr_classes", type="integer", nullable=true, unique=false)
      */
     private $nbrClasses;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_start", type="date", nullable=false)
-     */
-    //private $dateStart;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_end", type="date", nullable=false)
-     */
-    //private $dateEnd;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="nb_days_access_before_beginning", type="boolean", nullable=true)
-     */
-    private $nbDaysAccessBeforeBeginning;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="nb_days_access_after_end", type="boolean", nullable=true)
-     */
-    private $nbDaysAccessAfterEnd;
-
+    
     /**
      * @var integer
      *

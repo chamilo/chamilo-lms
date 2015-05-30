@@ -2292,7 +2292,7 @@ function api_get_session_visibility(
             }
 
             /* If I'm a coach the visibility can change in my favor depending in
-             the nb_days_access_after_end and nb_days_access_before_beginning */
+             the coach_access_start_date and coach_access_end_date */
             $is_coach = api_is_coach($session_id, $courseId);
 
             if ($is_coach) {
@@ -2300,11 +2300,9 @@ function api_get_session_visibility(
                 if (isset($row['access_end_date']) &&
                     !empty($row['access_end_date']) &&
                     $row['access_end_date'] != '0000-00-00' &&
-                    $row['nb_days_access_after_end'] != '0'
+                    $row['coach_access_end_date'] != $row['access_end_date']
                 ) {
-                    $end_date_for_coach = new DateTime(substr($row['access_end_date'], 0 ,10).' 23:59:59');
-                    $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
-                    $end_date_for_coach->add(new DateInterval($number_of_days));
+                    $end_date_for_coach = new DateTime($row['coach_access_end_date']);
 
                     if ($end_date_for_coach->getTimestamp() >= $now) {
                         $visibility = SESSION_AVAILABLE;
@@ -2317,11 +2315,9 @@ function api_get_session_visibility(
                 if (isset($row['access_start_date']) &&
                     !empty($row['access_start_date']) &&
                     $row['access_start_date'] != '0000-00-00' &&
-                    $row['nb_days_access_before_beginning'] != '0'
+                    $row['coach_access_start_date'] != $row['access_start_date']
                 ) {
-                    $start_date_for_coach = new DateTime(substr($row['access_start_date'], 0, 10).' 00:00:00');
-                    $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';
-                    $start_date_for_coach->sub(new DateInterval($number_of_days));
+                    $start_date_for_coach = new DateTime($row['coach_access_start_date']);
                     if ($start_date_for_coach->getTimestamp() < $now) {
                         $visibility = SESSION_AVAILABLE;
                     } else {

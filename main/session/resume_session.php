@@ -46,17 +46,20 @@ $sql = 'SELECT
             nbr_courses,
             nbr_users,
             nbr_classes,
-            DATE_FORMAT(access_start_date,"%d-%m-%Y") as access_start_date,
-            DATE_FORMAT(access_end_date,"%d-%m-%Y") as access_end_date,
+            access_start_date,
+            access_end_date,
             lastname,
             firstname,
             username,
             session_admin_id,
-            nb_days_access_before_beginning,
-            nb_days_access_after_end,
+            coach_access_start_date,
+            coach_access_end_date,
+            display_start_date,
+            display_end_date,
             session_category_id,
             visibility,
-            show_description, description
+            show_description,
+            description
 		FROM '.$tbl_session.'
 		LEFT JOIN '.$tbl_user.'
 		ON id_coach = user_id
@@ -120,9 +123,9 @@ switch ($action) {
 
         if (!empty($_GET['class'])) {
             $result = Database::query("DELETE FROM $tbl_session_rel_class
-                             WHERE session_id='$sessionId' AND class_id=".intval($_GET['class']));
+                             WHERE session_id = $sessionId AND class_id=".intval($_GET['class']));
             $nbr_affected_rows = Database::affected_rows($result);
-            Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$sessionId'");
+            Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id = $sessionId");
         }
 
         if (!empty($_GET['user'])) {
@@ -167,42 +170,38 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 </tr>
 <?php } ?>
 <tr>
-	<td><?php echo get_lang('Date'); ?> :</td>
-	<td>
-	<?php
-		if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date']== '00-00-0000' )
-			echo get_lang('NoTimeLimits');
-		else {
-            if ($session['access_start_date'] != '00-00-0000') {
-                $session['access_start_date'] =  get_lang('From').' '.$session['access_start_date'];
-            } else {
-            	$session['access_start_date'] = '';
+    <td>
+        <?php echo api_ucfirst(get_lang('SessionDisplayDate')) ?> :
+    </td>
+    <td>
+        <?php echo sprintf(get_lang('FromXUntilY'), $session['display_start_date'], $session['display_end_date']); ?>
+    </td>
+</tr>
+<tr>
+    <td><?php echo get_lang('AccessDates'); ?></td>
+    <td>
+    <?php
+        if ($session['access_start_date'] == '0000-00-00 00:00:00' && $session['access_end_date']== '0000-00-00 00:00:00' )
+          echo get_lang('NoTimeLimits');
+        else {
+            if ($session['access_start_date'] == '0000-00-00 00:00:00') {
+                $session['access_start_date'] = '';
             }
-            if ($session['access_end_date'] == '00-00-0000') {
+            if ($session['access_end_date'] == '0000-00-00 00:00:00') {
                 $session['access_end_date'] ='';
-            } else {
-            	$session['access_end_date'] = get_lang('Until').' '.$session['access_end_date'];
             }
-			echo $session['access_start_date'].' '.$session['access_end_date'];
+            echo sprintf(get_lang('FromXUntilY'), $session['access_start_date'], $session['access_end_date']);
         }
         ?>
-	</td>
+    </td>
 </tr>
 <!-- show nb_days_before and nb_days_after only if they are different from 0 -->
 <tr>
 	<td>
-		<?php echo api_ucfirst(get_lang('DaysBefore')) ?> :
+		<?php echo api_ucfirst(get_lang('CoachSessionAccessDates')) ?> :
 	</td>
 	<td>
-		<?php echo intval($session['nb_days_access_before_beginning']) ?>
-	</td>
-</tr>
-<tr>
-	<td>
-		<?php echo api_ucfirst(get_lang('DaysAfter')) ?> :
-	</td>
-	<td>
-		<?php echo intval($session['nb_days_access_after_end']) ?>
+		<?php echo sprintf(get_lang('FromXUntilY'), $session['coach_access_start_date'], $session['coach_access_end_date']); ?>
 	</td>
 </tr>
 <tr>

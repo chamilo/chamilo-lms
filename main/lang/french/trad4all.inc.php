@@ -7234,4 +7234,6 @@ $Readable = "Lisible";
 $NotReadable = "Non accessible en lecture";
 $DefaultInstallAdminFirstname = "Jean";
 $DefaultInstallAdminLastname = "Dupont";
+$AttendanceUpdated = "Présences mises à jour";
+$FromXUntilY = "Du %s au %s";
 ?>

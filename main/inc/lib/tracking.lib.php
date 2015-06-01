@@ -3038,14 +3038,13 @@ class Tracking
 
         if (!empty($sessions)) {
             foreach ($sessions as & $session) {
-                if ($session['access_start_date'] == '0000-00-00') {
+                if ($session['access_start_date'] == '0000-00-00 00:00:00' || empty($session['access_start_date'])
+                ) {
                     $session['status'] = get_lang('SessionActive');
                 }
                 else {
-                    $date_start = explode('-', $session['access_start_date']);
-                    $time_start = mktime(0, 0, 0, $date_start[1], $date_start[2], $date_start[0]);
-                    $date_end = explode('-', $session['access_end_date']);
-                    $time_end = mktime(0, 0, 0, $date_end[1], $date_end[2], $date_end[0]);
+                    $time_start = api_strtotime($session['access_start_date'], 'UTC');
+                    $time_end = api_strtotime($session['access_end_date'], 'UTC');
                     if ($time_start < time() && time() < $time_end) {
                         $session['status'] = get_lang('SessionActive');
                     } else {

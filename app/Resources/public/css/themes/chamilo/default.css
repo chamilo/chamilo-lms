@@ -192,13 +192,6 @@ a:focus {
  background: #ECF0F1;
  border-color: #ECF0F1;
 }
-.ui-widget-content{
-  border-color: #ECF0F1;
-}
-.ui-widget-header{
-  border: none;
-  background: transparent;
-}
 /* End Jquery UI */
 footer{
   background-color:#2C3E50;

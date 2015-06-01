@@ -7356,4 +7356,5 @@ $GamificationModeComment = "Activate the stars achievement in learning paths";
 $LevelX = "Level %s";
 $SeeCourse = "View course";
 $XPoints = "%s points";
+$FromXUntilY = "From %s until %s";
 ?>

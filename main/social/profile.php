@@ -474,42 +474,31 @@ if ($show_full_profile) {
     $my_courses = null;
     // COURSES LIST
     if (is_array($list)) {
-        $my_courses .=  '<div class="panel panel-default">';
-        $my_courses .=  '<div class="panel-heading">'.api_ucfirst(get_lang('MyCourses')).'</div>';
-        $my_courses .=  '<div class="panel-body">';
-
-        //Courses without sessions
-        $i=1;
+        // Courses without sessions
+        $my_course = '';
+        $i = 1;
         foreach ($list as $key => $value) {
             if ( empty($value[2]) ) { //if out of any session
                 $my_courses .=  $value[1];
-                $my_courses .=  '<div id="social_content'.$i.'"'
-                .' class="course_social_content" style="display:none" >s</div>';
+                $my_courses .=  '<div id="social_content'.$i.'" class="course_social_content" style="display:none" >s</div>';
                 $i++;
             }
         }
-        $my_courses .=  '</div></div>';
         $social_course_block .=  $my_courses;
+        $social_course_block = Display::panel($my_courses, get_lang('MyCourses'));
     }
 
     //Block Social Sessions
 
     if (count($sessionList) > 0) {
-        $sessions  = '<div class="panel panel-default">';
-        $sessions .= '<div class="panel-heading">'.api_ucfirst(get_lang('MySessions')).'</div>';
-        $sessions .= '<div class="panel-body">'.$htmlSessionList.'</div>';
-        $sessions .= '</div>';
-        $social_session_block = $sessions;
+        $social_session_block = Display::panel($htmlSessionList, get_lang('MySessions'));
     }
 
     // Block Social User Feeds
     $user_feeds = SocialManager::get_user_feeds($user_id);
 
     if (!empty($user_feeds)) {
-        $rss  = '<div class="panel panel-default social-rss">';
-        $rss .= '<div class="panel-heading">'.get_lang('RSSFeeds').'</div>';
-        $rss .= '<div class="panel-body">'.$user_feeds.'</div></div>';
-        $social_rss_block =  $rss;
+        $social_rss_block = Display::panel($user_feeds, get_lang('RSSFeeds'));
     }
 
     //BLock Social Skill

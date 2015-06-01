@@ -10,5 +10,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
     $templateName = 'glossary/glossary_manual.js.tpl';
 }
 
+$addReady = isset($_GET['add_ready']) ? true : false;
+$tpl->assign('add_ready', $addReady);
 $contentTemplate = $tpl->get_template($templateName);
 $tpl->display($contentTemplate);

@@ -87,10 +87,10 @@ class SessionManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers SessionManager::generate_nice_next_session_name
+     * @covers SessionManager::generateNextSessionName
      * @todo   Implement testGenerate_nice_next_session_name().
      */
-    public function testGenerate_nice_next_session_name()
+    public function testGenerateNextSessionName()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -459,10 +459,10 @@ class SessionManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers SessionManager::copy_session
+     * @covers SessionManager::copy
      * @todo   Implement testCopy_session().
      */
-    public function testCopy_session()
+    public function testCopy()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

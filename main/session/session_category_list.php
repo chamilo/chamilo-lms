@@ -40,7 +40,8 @@ $order = isset($_REQUEST['order']) ? Security::remove_XSS($_REQUEST['order']) : 
 if ($action == 'delete_on_session' || $action == 'delete_off_session') {
     $delete_session = ($action == 'delete_on_session') ? true : false;
     SessionManager::delete_session_category($idChecked, $delete_session);
-    header('Location: '.api_get_self().'?sort='.$sort.'&action=show_message&message='.urlencode(get_lang('SessionCategoryDelete')));
+    Display::addFlash(Display::return_message(get_lang('SessionCategoryDelete')));
+    header('Location: '.api_get_self().'?sort='.$sort);
     exit();
 }
 
@@ -104,14 +105,6 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $nbr_results = sizeof($Sessions);
     $tool_name = get_lang('ListSessionCategory');
     Display::display_header($tool_name);
-
-    if (!empty($_GET['warn'])) {
-        Display::display_warning_message(urldecode($_GET['warn']), false);
-    }
-    if (isset($_GET['action'])) {
-        Display::display_confirmation_message(stripslashes($_GET['message']), false);
-    }
-
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     ?>
 

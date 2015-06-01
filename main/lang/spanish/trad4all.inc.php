@@ -7385,4 +7385,5 @@ $GamificationModeComment = "Activar el logro de estrellas en las lecciones";
 $LevelX = "Nivel %s";
 $SeeCourse = "Ver curso";
 $XPoints = "%s puntos";
+$FromXUntilY = "De %s a %s";
 ?>

@@ -2296,8 +2296,8 @@ class UserManager
                     session_category.name as session_category_name,
                     session_category.date_start session_category_date_start,
                     session_category.date_end session_category_date_end,
-                    nb_days_access_before_beginning,
-                    nb_days_access_after_end
+                    coach_access_start_date,
+                    coach_access_end_date
 
               FROM $tbl_session as session
                   LEFT JOIN $tbl_session_category session_category
@@ -2319,13 +2319,13 @@ class UserManager
                 // User portal filters:
                 if ($is_time_over) {
                     // History
-                    if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00') {
-                        if ($row['access_end_date'].' 23:59:59' > $now) {
+                    if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {
+                        if ($row['access_end_date'] > $now) {
                             continue;
                         }
                     }
 
-                    if ($row['access_end_date'] == '0000-00-00') {
+                    if ($row['access_end_date'] == '0000-00-00 00:00:00') {
                         continue;
                     }
                 } else {
@@ -2333,8 +2333,8 @@ class UserManager
                     if (api_is_allowed_to_create_course()) {
                         // Teachers can access the session depending in the access_coach date
                     } else {
-                        if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00') {
-                            if ($row['access_end_date'].' 23:59:59' <= $now) {
+                        if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {
+                            if ($row['access_end_date'] <= $now) {
                                 continue;
                             }
                         }
@@ -2403,8 +2403,8 @@ class UserManager
                     'session_id' => $row['id'],
                     'access_start_date' => $row['access_start_date'],
                     'access_end_date' => $row['access_end_date'],
-                    'nb_days_access_before_beginning' => $row['nb_days_access_before_beginning'],
-                    'nb_days_access_after_end' => $row['nb_days_access_after_end'],
+                    'coach_access_start_date' => $row['coach_access_start_date'],
+                    'coach_access_end_date' => $row['coach_access_end_date'],
                     'courses' => $courseList
                 );
             }

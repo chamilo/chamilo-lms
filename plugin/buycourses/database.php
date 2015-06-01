@@ -28,11 +28,11 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
 Database::query($sql);
 
 $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
-$sql = "SELECT id, name, date_start, date_end FROM $tableSession";
+$sql = "SELECT id, name, access_start_date, access_end_date FROM $tableSession";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
     $presql = "INSERT INTO $table (id, name, date_start, date_end, visible)
-    VALUES ('" . $row['id'] . "','" . $row['name'] . "','" . $row['date_start'] . "','" . $row['date_end'] . "','NO')";
+    VALUES ('" . $row['id'] . "','" . $row['name'] . "','" . $row['access_start_date'] . "','" . $row['access_end_date'] . "','NO')";
     Database::query($presql);
 }
 

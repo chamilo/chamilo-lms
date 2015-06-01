@@ -1,7 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 require_once '../global.inc.php';
-$action = $_GET['a'];
+
+$action = isset($_GET['a']) ? $_GET['a'] : '';
 
 switch ($action) {
     case 'get_second_select_options':
@@ -11,7 +13,11 @@ switch ($action) {
 
         if (!empty($type) && !empty($field_id) && !empty($option_value_id)) {
             $field_options = new ExtraFieldOption($type);
-            echo $field_options->get_second_select_field_options_by_field($field_id, $option_value_id, true);
+            echo $field_options->get_second_select_field_options_by_field(
+                $field_id,
+                $option_value_id,
+                true
+            );
         }
         break;
     case 'search_tags':

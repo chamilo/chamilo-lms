@@ -273,9 +273,10 @@ class SystemAnnouncementManager
 	 */
 	public static function get_all_announcements()
     {
-		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$now = api_get_utc_datetime();
-		$sql = "SELECT *, IF( '$now'  >= date_start AND '$now' <= date_end, '1', '0') AS visible FROM $db_table";
+		$sql = "SELECT *, IF ( '$now'  >= date_start AND '$now' <= date_end, '1', '0') AS visible
+				FROM $table";
 
 		$current_access_url_id = 1;
 		if (api_is_multiple_url_enabled()) {

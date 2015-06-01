@@ -128,7 +128,7 @@ $(function() {
                     <div class="span4 ">
                         <div class="categories-course-description">
                             <h3>{{ session.name }}</h3>
-                            <h5>{{ 'From'|get_lang }} {{ session.date_start }} {{ 'Until'|get_lang }} {{ session.date_end }}</h5>
+                            <h5>{{ 'From'|get_lang }} {{ session.access_start_date }} {{ 'Until'|get_lang }} {{ session.access_end_date }}</h5>
                             {% if session.enrolled == "YES" %}
                                 <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                             {% endif %}

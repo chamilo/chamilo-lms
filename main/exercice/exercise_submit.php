@@ -46,7 +46,7 @@ if ($origin == 'learnpath') {
     $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
 }
 if ($showGlossary) {
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php"></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1"></script>';
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 
@@ -54,8 +54,8 @@ $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
 //This library is necessary for the time control feature
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
+//tmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
+//$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
 $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');

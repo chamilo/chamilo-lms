@@ -106,17 +106,18 @@ $searchOperator = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   :
 $searchString = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 $search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
 $forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
+$extra_fields = array();
 
 if ($search || $forceSearch) {
+    $whereCondition = ' 1 = 1 ';
     $whereConditionInForm = getWhereClause($searchField, $searchOperator, $searchString);
 
     if (!empty($whereConditionInForm)) {
         $whereCondition .= ' AND '.$whereConditionInForm;
     }
+    $filters = isset($_REQUEST['filters']) && !is_array($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
 
-    $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
-
-    if (!empty($filters) && !empty($filters->rules)) {
+    /*if (!empty($filters) && !empty($filters->rules)) {
         $whereCondition .= ' AND ( ';
         $counter = 0;
         foreach ($filters->rules as $key => $rule) {
@@ -128,6 +129,50 @@ if ($search || $forceSearch) {
             $counter++;
         }
         $whereCondition .= ' ) ';
+    }*/
+
+    // for now
+    if (!empty($filters)) {
+        switch ($action) {
+            case 'get_questions':
+                $type = 'question';
+                break;
+            case 'get_sessions':
+                $type = 'session';
+                break;
+        }
+
+        // Extra field.
+
+        $extraField = new ExtraField($type);
+        $result = $extraField->getExtraFieldRules($filters, 'extra_');
+        $extra_fields = $result['extra_fields'];
+        $condition_array = $result['condition_array'];
+
+        $extraCondition = '';
+        if (!empty($condition_array)) {
+            $extraCondition = ' AND ( ';
+            $extraCondition .= implode($filters->groupOp, $condition_array);
+            $extraCondition .= ' ) ';
+        }
+
+        $whereCondition .= $extraCondition;
+
+        // Question field
+
+        $resultQuestion = $extraField->getExtraFieldRules($filters, 'question_');
+        $questionFields = $resultQuestion['extra_fields'];
+        $condition_array = $resultQuestion['condition_array'];
+
+        if (!empty($condition_array)) {
+            $extraQuestionCondition = ' AND ( ';
+            $extraQuestionCondition .= implode($filters->groupOp, $condition_array);
+            $extraQuestionCondition .= ' ) ';
+            // Remove conditions already added
+            $extraQuestionCondition = str_replace($extraCondition, '', $extraQuestionCondition);
+        }
+
+        $whereCondition .= $extraQuestionCondition;
     }
 }
 
@@ -149,7 +194,6 @@ switch ($action) {
         }
 
         $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
-
         $courseCodeList = array();
         $userIdList  = array();
         $sessionIdList = [];
@@ -394,12 +438,17 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-        $courseId = isset($_GET['course_id']) && !empty($_GET['course_id']) ? intval($_GET['course_id']) : null;
-        $whereCondition = str_replace('category_name', 'sc.name', $whereCondition);
-        if (!empty($courseId)) {
-            $whereCondition .= " AND c.id = $courseId";
+        $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+        if ($list_type == 'simple') {
+            $count = SessionManager::get_sessions_admin(
+                array('where' => $whereCondition, 'extra' => $extra_fields),
+                true
+            );
+        } else {
+            $count = SessionManager::get_count_admin_complete(
+                array('where' => $whereCondition, 'extra' => $extra_fields)
+            );
         }
-        $count = SessionManager::get_count_admin($whereCondition);
         break;
     case 'get_session_lp_progress':
     case 'get_session_progress':
@@ -883,6 +932,31 @@ switch ($action) {
         break;
     case 'get_sessions':
 
+        $session_columns = SessionManager::getGridColumns($list_type);
+        $columns = $session_columns['simple_column_name'];
+
+        if ($list_type == 'simple') {
+            $result = SessionManager::get_sessions_admin(
+                array(
+                    'where' => $whereCondition,
+                    'order' => "$sidx $sord",
+                    'extra' => $extra_fields,
+                    'limit' => "$start , $limit",
+                ),
+                false
+            );
+        } else {
+            $result = SessionManager::get_sessions_admin_complete(
+                array(
+                    'where' => $whereCondition,
+                    'order' => "$sidx $sord",
+                    'extra' => $extra_fields,
+                    'limit' => "$start , $limit",
+                )
+            );
+        }
+        break;
+        /*
         $columns = array(
             'name',
             'nbr_courses',
@@ -915,7 +989,7 @@ switch ($action) {
                 )
             );
         }
-
+        */
         break;
     case 'get_exercise_progress':
         $sessionId  = intval($_GET['session_id']);
@@ -1267,15 +1341,17 @@ switch ($action) {
             'filter',
             'field_order',
         );
-        $result = Database::select(
+        $result = $obj->getAllGrid($sidx, $sord, $start, $limit);
+        /*$result = Database::select(
             '*',
             $obj->table,
             array('order' => "$sidx $sord", 'LIMIT' => "$start , $limit")
-        );
+        );*/
         $new_result = array();
         if (!empty($result)) {
             foreach ($result as $item) {
-                $item['field_type'] = $obj->get_field_type_by_id($item['field_type']);
+                $item['display_text'] = $item['displayText'];
+                $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
                 $item['changeable'] = $item['changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
                 $item['visible'] = $item['visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
                 $item['filter'] = $item['filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');

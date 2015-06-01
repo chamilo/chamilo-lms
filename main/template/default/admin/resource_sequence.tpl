@@ -47,7 +47,7 @@
                                     url: url + '?a=get_icon&id='+ value+'&type='+type+'&sequence_id='+sequenceId+'&show_delete=1',
                                     success:function(data){
                                         $('#parents').append(data);
-                                        parentList.push(id);
+                                        parentList.push(value);
                                     }
                                 });
                             });

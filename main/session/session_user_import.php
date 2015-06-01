@@ -17,12 +17,6 @@ $session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 SessionManager::protectSession($session_id);
 
 $form_sent = 0;
-$error_message = '';
-// Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
-if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
-    $error_message = Security::remove_XSS($_GET['message']);
-}
-
 $tool_name = get_lang('ImportUsers');
 
 //$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));

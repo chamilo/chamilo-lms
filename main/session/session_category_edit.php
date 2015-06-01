@@ -60,11 +60,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $day_end
     );
     if ($return == strval(intval($return))) {
-        header(
-            'Location: session_category_list.php?action=show_message&message=' . urlencode(
-                get_lang('SessionCategoryUpdate')
-            )
-        );
+		Display::addFlash(Display::return_message(get_lang('SessionCategoryUpdate')));
+        header('Location: session_category_list.php');
         exit();
     }
 }
@@ -89,7 +86,7 @@ if (!empty($return)) {
 </tr>
 <td colspan="2">
 	<a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('EditTimeLimit') ?></a>
-		<div style="display: <?php if($formSent && ($nb_days_acess_before!=0 || $nb_days_acess_after!=0)) echo 'block'; else echo 'none'; ?>;" id="options">
+		<div style="display: <?php if($formSent && ($coachAccessStartDate!='0000-00-00 00:00:00' || $coachAccessEndDate!='0000-00-00 00:00:00')) echo 'block'; else echo 'none'; ?>;" id="options">
 	<br>
 	<div>
 <table border="0" cellpadding="5" cellspacing="0" width="100%">

@@ -41,33 +41,10 @@ $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_C
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-$sql = 'SELECT
-            name,
-            nbr_courses,
-            nbr_users,
-            nbr_classes,
-            DATE_FORMAT(date_start,"%d-%m-%Y") as date_start,
-            DATE_FORMAT(date_end,"%d-%m-%Y") as date_end,
-            lastname,
-            firstname,
-            username,
-            session_admin_id,
-            nb_days_access_before_beginning,
-            nb_days_access_after_end,
-            session_category_id,
-            visibility,
-            show_description, description
-		FROM '.$tbl_session.'
-		LEFT JOIN '.$tbl_user.'
-		ON id_coach = user_id
-		WHERE '.$tbl_session.'.id='.$sessionId;
-
-$rs      = Database::query($sql);
-$session = Database::store_result($rs);
-$session = $session[0];
+$sessionInfo = api_get_session_info($sessionId);
 
 $sql = 'SELECT name FROM  '.$tbl_session_category.'
-        WHERE id = "'.intval($session['session_category_id']).'"';
+        WHERE id = "'.intval($sessionInfo['session_category_id']).'"';
 $rs = Database::query($sql);
 $session_category = '';
 
@@ -97,9 +74,11 @@ switch ($action) {
         $result = UrlManager::add_user_to_url($user_id, $url_id);
         $user_info = api_get_user_info($user_id);
         if ($result) {
-            $message = Display::return_message(
-                get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']),
-                'confirm'
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']),
+                    'confirm'
+                )
             );
         }
         break;
@@ -133,163 +112,43 @@ switch ($action) {
         }
         break;
 }
-Display::display_header($tool_name);
 
-if (!empty($_GET['warn'])) {
-    Display::display_warning_message(urldecode($_GET['warn']));
-}
-
-if (!empty($message)) {
-    echo $message;
-}
-
-echo Display::page_header(
-    Display::return_icon('session.png', get_lang('Session')).' '.$session['name']
+$sessionHeader = Display::page_header(
+    Display::return_icon('session.png', get_lang('Session')).' '.$sessionInfo['name']
 );
 
 $url = Display::url(
     Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
     "session_edit.php?page=resume_session.php&id=$sessionId"
 );
-echo Display::page_subheader(get_lang('GeneralProperties').$url);
 
-?>
-<!-- General properties -->
-<table class="data_table">
-<tr>
-	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
-	<td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
-</tr>
-<?php if(!empty($session_category)) { ?>
-<tr>
-	<td><?php echo get_lang('SessionCategory') ?></td>
-	<td><?php echo $session_category;  ?></td>
-</tr>
-<?php } ?>
-<tr>
-	<td><?php echo get_lang('Date'); ?> :</td>
-	<td>
-	<?php
-		if ($session['date_start'] == '00-00-0000' && $session['date_end']== '00-00-0000' )
-			echo get_lang('NoTimeLimits');
-		else {
-            if ($session['date_start'] != '00-00-0000') {
-                $session['date_start'] =  get_lang('From').' '.$session['date_start'];
-            } else {
-            	$session['date_start'] = '';
-            }
-            if ($session['date_end'] == '00-00-0000') {
-                $session['date_end'] ='';
-            } else {
-            	$session['date_end'] = get_lang('Until').' '.$session['date_end'];
-            }
-			echo $session['date_start'].' '.$session['date_end'];
-        }
-        ?>
-	</td>
-</tr>
-<!-- show nb_days_before and nb_days_after only if they are different from 0 -->
-<tr>
-	<td>
-		<?php echo api_ucfirst(get_lang('DaysBefore')) ?> :
-	</td>
-	<td>
-		<?php echo intval($session['nb_days_access_before_beginning']) ?>
-	</td>
-</tr>
-<tr>
-	<td>
-		<?php echo api_ucfirst(get_lang('DaysAfter')) ?> :
-	</td>
-	<td>
-		<?php echo intval($session['nb_days_access_after_end']) ?>
-	</td>
-</tr>
-<tr>
-	<td>
-		<?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
-	</td>
-	<td>
-		<?php
-        if ($session['visibility']==1)
-            echo get_lang('ReadOnly');
-        elseif($session['visibility']==2)
-            echo get_lang('Visible');
-        elseif($session['visibility']==3)
-            echo api_ucfirst(get_lang('Invisible'));
-        ?>
-	</td>
-</tr>
+$sessionTitle = Display::page_subheader(get_lang('GeneralProperties').$url);
+$generalCoach = api_get_user_info($sessionInfo['id_coach']);
 
-<?php
 $sessionField = new ExtraField('session');
 $extraFieldData = $sessionField->getDataAndFormattedValues($sessionId);
-
-foreach ($extraFieldData as $displayExtraField) {
-?>
-    <tr>
-        <td><?php echo $displayExtraField['text'] ?></td>
-        <td><?php echo $displayExtraField['value'] ?></td>
-    </tr>
-<?php
-}
-
 $multiple_url_is_on = api_get_multiple_access_url();
-
+$url_list = [];
 if ($multiple_url_is_on) {
-    echo '<tr><td>';
-    echo 'URL';
-    echo '</td>';
-    echo '<td>';
     $url_list = UrlManager::get_access_url_from_session($sessionId);
-    foreach ($url_list as $url_data) {
-        echo $url_data['url'].'<br />';
-    }
-    echo '</td></tr>';
 }
-
-$sessionInfo = api_get_session_info($sessionId);
-echo '<tr><td>';
-echo get_lang('Duration');
-echo '</td>';
-echo '<td>';
-echo $sessionInfo['duration'].' ';
-echo get_lang('Days');
-echo '</td></tr>';
-
-?>
-    <tr>
-        <td><?php echo get_lang('Description'); ?></td>
-        <td><?php echo $session['description'] ?></td>
-    </tr>
-    <tr>
-        <td><?php echo get_lang('ShowDescription'); ?></td>
-        <td><?php echo $session['show_description'] == 1 ? get_lang('Yes') : get_lang('No') ?></td>
-    </tr>
-</table>
-<br />
-
-<?php
 
 $url = Display::url(
     Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
     "add_courses_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
-echo Display::page_subheader(get_lang('CourseList').$url);
+$courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 
-?>
-
-<!--List of courses -->
-<table class="data_table">
+$courseListToShow .= '<table class="data_table">
 <tr>
-  <th width="35%"><?php echo get_lang('CourseTitle'); ?></th>
-  <th width="30%"><?php echo get_lang('CourseCoach'); ?></th>
-  <th width="10%"><?php echo get_lang('UsersNumber'); ?></th>
-  <th width="25%"><?php echo get_lang('Actions'); ?></th>
-</tr>
-<?php
-if ($session['nbr_courses'] == 0) {
-	echo '<tr>
+  <th width="35%">'.get_lang('CourseTitle').'</th>
+  <th width="30%">'.get_lang('CourseCoach').'</th>
+  <th width="10%">'.get_lang('UsersNumber').'</th>
+  <th width="25%">'.get_lang('Actions').'</th>
+</tr>';
+
+if ($sessionInfo['nbr_courses'] == 0) {
+    $courseListToShow .= '<tr>
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
 } else {
@@ -297,7 +156,8 @@ if ($session['nbr_courses'] == 0) {
 
     $orderBy = "ORDER BY position";
 	$sql = "SELECT c.id, code, title, visual_code, nbr_users
-			FROM $tbl_course c INNER JOIN $tbl_session_rel_course sc
+			FROM $tbl_course c
+			INNER JOIN $tbl_session_rel_course sc
 			ON (c.id = sc.c_id)
 			WHERE
 			    sc.c_id = c.id AND
@@ -307,7 +167,7 @@ if ($session['nbr_courses'] == 0) {
     $result = Database::query($sql);
     $courses = Database::store_result($result);
     $count = 0;
-
+    $courseItem = '';
 	foreach ($courses as $course) {
 		//select the number of users
 		$sql = "SELECT count(*)
@@ -378,29 +238,35 @@ if ($session['nbr_courses'] == 0) {
         );
 
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
-		echo '
+        $courseItem .= '
 		<tr>
-			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$sessionId),'</td>
+			<td>'.Display::url(
+                $course['title'].' ('.$course['visual_code'].')',
+                api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$sessionId
+            ).'</td>
 			<td>'.$coach.'</td>
 			<td>'.$course['nbr_users'].'</td>
 			<td>
-                <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$sessionId.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>
+                <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$sessionId.'">'.
+                Display::return_icon('course_home.gif', get_lang('Course')).'</a>
                 '.$orderButtons.'
-                <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course['code'].'">'.Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
-                <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course['code'].'&id_session='.$sessionId.'">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
-				<a href="../tracking/courseLog.php?id_session='.$sessionId.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
-				<a href="session_course_edit.php?id_session='.$sessionId.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
-				<a href="'.api_get_self().'?id_session='.$sessionId.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
+                <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course['code'].'">'.
+                Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
+                <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course['code'].'&id_session='.$sessionId.'">'.
+                Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
+				<a href="../tracking/courseLog.php?id_session='.$sessionId.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.
+                Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
+				<a href="session_course_edit.php?id_session='.$sessionId.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.
+                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
+				<a href="'.api_get_self().'?id_session='.$sessionId.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.
+            Display::return_icon('delete.png', get_lang('Delete')).'</a>
 			</td>
 		</tr>';
         $count++;
 	}
+    $courseListToShow .= $courseItem;
 }
-?>
-</table>
-<br />
-
-<?php
+$courseListToShow .= '</table><br />';
 
 $url = Display::url(
     Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
@@ -410,7 +276,8 @@ $url .= Display::url(
     Display::return_icon('import_csv.png', get_lang('ImportUsers'), array(), ICON_SIZE_SMALL),
     "session_user_import.php?id_session=$sessionId"
 );
-echo Display::page_subheader(get_lang('UserList').$url);
+
+$userListToShow = Display::page_subheader(get_lang('UserList').$url);
 
 $userList = SessionManager::get_users_by_session($sessionId);
 
@@ -491,21 +358,38 @@ if (!empty($userList)) {
         $table->setCellContents($row, 2, $link);
         $row++;
     }
-    $table->display();
+    $userListToShow .= $table->toHtml();
 }
 
 /** @var SequenceRepository $repo */
 $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
 $requirementAndDependencies = $repo->getRequirementAndDependencies($sessionId, SequenceResource::SESSION_TYPE);
 
+$requirements = '';
 if (!empty($requirementAndDependencies['requirements'])) {
-    echo Display::page_subheader(get_lang('Requirements'));
-    echo implode(',', array_column($requirementAndDependencies['requirements'], 'name'));
+    $requirements = Display::page_subheader(get_lang('Requirements'));
+    $requirements .= implode(',', array_column($requirementAndDependencies['requirements'], 'name'));
 }
-
+$dependencies = '';
 if (!empty($requirementAndDependencies['dependencies'])) {
-    echo Display::page_subheader(get_lang('Dependencies'));
-    echo implode(',', array_column($requirementAndDependencies['dependencies'], 'name'));
+    $dependencies = Display::page_subheader(get_lang('Dependencies'));
+    $dependencies .= implode(',', array_column($requirementAndDependencies['dependencies'], 'name'));
 }
 
-Display :: display_footer();
+$tpl = new Template();
+$tpl->assign('session_header', $sessionHeader);
+$tpl->assign('title', $sessionTitle);
+$tpl->assign('general_coach', $generalCoach);
+$tpl->assign('session', $sessionInfo);
+$tpl->assign('session_category', $session_category);
+$tpl->assign('session_dates', SessionManager::parseSessionDates($sessionInfo));
+$tpl->assign('session_visibility', SessionManager::getSessionVisibility($sessionInfo));
+$tpl->assign('url_list', $url_list);
+$tpl->assign('extra_fields', $extraFieldData);
+$tpl->assign('course_list', $courseListToShow);
+$tpl->assign('user_list', $userListToShow);
+$tpl->assign('dependencies', $dependencies);
+$tpl->assign('requirements', $requirements);
+
+$layout = $tpl->get_template('session/resume_session.tpl');
+$tpl->display($layout);

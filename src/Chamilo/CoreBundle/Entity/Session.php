@@ -94,34 +94,6 @@ class Session
     private $nbrClasses;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_start", type="date", nullable=false)
-     */
-    //private $dateStart;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_end", type="date", nullable=false)
-     */
-    //private $dateEnd;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="nb_days_access_before_beginning", type="boolean", nullable=true)
-     */
-    private $nbDaysAccessBeforeBeginning;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="nb_days_access_after_end", type="boolean", nullable=true)
-     */
-    private $nbDaysAccessAfterEnd;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="session_admin_id", type="integer", nullable=true, unique=false)
@@ -614,30 +586,6 @@ class Session
     public function getNbrClasses()
     {
         return $this->nbrClasses;
-    }
-
-
-    /**
-     * Set nbDaysAccessBeforeBeginning
-     *
-     * @param boolean $nbDaysAccessBeforeBeginning
-     * @return Session
-     */
-    public function setNbDaysAccessBeforeBeginning($nbDaysAccessBeforeBeginning)
-    {
-        $this->nbDaysAccessBeforeBeginning = $nbDaysAccessBeforeBeginning;
-
-        return $this;
-    }
-
-    /**
-     * Get nbDaysAccessBeforeBeginning
-     *
-     * @return boolean
-     */
-    public function getNbDaysAccessBeforeBeginning()
-    {
-        return $this->nbDaysAccessBeforeBeginning;
     }
 
     /**

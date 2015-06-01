@@ -1429,13 +1429,26 @@ class IndexManager
                         $session_category_start_date = $session_category['session_category']['date_start'];
                         $session_category_end_date = $session_category['session_category']['date_end'];
 
-                        if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00' && !empty($session_category_end_date) && $session_category_end_date != '0000-00-00' ) {
-                            $params['subtitle'] = sprintf(get_lang('FromDateXToDateY'), $session_category['session_category']['date_start'], $session_category['session_category']['date_end']);
+                        if (!empty($session_category_start_date) &&
+                            $session_category_start_date != '0000-00-00' &&
+                            !empty($session_category_end_date) &&
+                            $session_category_end_date != '0000-00-00'
+                        ) {
+                            $params['subtitle'] = sprintf(
+                                get_lang('FromDateXToDateY'),
+                                $session_category['session_category']['date_start'],
+                                $session_category['session_category']['date_end']
+                            );
                         } else {
-                            if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00') {
+                            if (!empty($session_category_start_date) &&
+                                $session_category_start_date != '0000-00-00'
+                            ) {
                                  $params['subtitle'] = get_lang('From').' '.$session_category_start_date;
                             }
-                            if (!empty($session_category_end_date) && $session_category_end_date != '0000-00-00') {
+
+                            if (!empty($session_category_end_date) &&
+                                $session_category_end_date != '0000-00-00'
+                            ) {
                                 $params['subtitle'] = get_lang('Until').' '.$session_category_end_date;
                             }
                         }
@@ -1444,7 +1457,6 @@ class IndexManager
                             $html_sessions
                         );
                     }
-
                 }
             }
         }

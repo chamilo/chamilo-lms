@@ -19,13 +19,16 @@ define("OFFSET", 2);
 $today = gmdate("Y-m-d");
 $expirationDate = gmdate("Y-m-d", strtotime($today." + ".OFFSET." day"));
 
-$query = "SELECT DISTINCT category.session_id, certificate.user_id FROM ".
-    Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY)." AS category
-    LEFT JOIN ".Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE).
-    " AS certificate ON category.id = certificate.cat_id
-    INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION).
-    " AS session ON category.session_id = session.id
-    WHERE session.date_end BETWEEN '$today' AND '$expirationDate' AND category.session_id IS NOT NULL";
+$query = "SELECT DISTINCT category.session_id, certificate.user_id
+          FROM ".Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY)." AS category
+          LEFT JOIN ".Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE)." AS certificate
+          ON category.id = certificate.cat_id
+          INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." AS session
+          ON category.session_id = session.id
+          WHERE
+            session.access_end_date BETWEEN '$today' AND
+            '$expirationDate' AND
+            category.session_id IS NOT NULL";
 
 $sessionId = 0;
 $userIds = array();
@@ -48,7 +51,7 @@ $usersToBeReminded = array();
 foreach ($sessions as $sessionId => $userIds) {
     $userId = 0;
     $userIds = $userIds ? " AND sessionUser.user_id NOT IN (".implode(",", $userIds).")" : null;
-    $query = "SELECT sessionUser.session_id, sessionUser.user_id, session.name, session.date_end FROM ".
+    $query = "SELECT sessionUser.session_id, sessionUser.user_id, session.name, session.access_end_date FROM ".
         Database::get_main_table(TABLE_MAIN_SESSION_USER)." AS sessionUser
         INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." AS session
         ON sessionUser.session_id = session.id
@@ -58,7 +61,7 @@ foreach ($sessions as $sessionId => $userIds) {
         $usersToBeReminded[$row['user_id']][$row['session_id']] =
         array(
             'name' => $row['name'],
-            'date_end' => $row['date_end']
+            'access_end_date' => $row['access_end_date']
         );
     }
 }
@@ -89,7 +92,7 @@ if ($usersToBeReminded) {
             PERSON_NAME_EMAIL_ADDRESS
         );
         foreach ($sessions as $sessionId => $session) {
-            $daysRemaining = date_diff($today, date_create($session['date_end']));
+            $daysRemaining = date_diff($today, date_create($session['access_end_date']));
             $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION)."ON id = access_url_id";
             $result = Database::select(
                 'url',
@@ -107,7 +110,7 @@ if ($usersToBeReminded) {
                 get_lang('MailCronCourseExpirationReminderBody', null, $platformLanguage),
                 $userCompleteName,
                 $session['name'],
-                $session['date_end'],
+                $session['access_end_date'],
                 $daysRemaining->format("%d"),
                 $result[0]['url'],
                 api_get_setting("siteName")
@@ -122,7 +125,7 @@ if ($usersToBeReminded) {
             );
             echo "Email sent to $userCompleteName (".$user['email'].")\n";
             echo "Session: ".$session['name']."\n";
-            echo "Date end: ".$session['date_end']."\n";
+            echo "Date end: ".$session['access_end_date']."\n";
             echo "Days remaining: ".$daysRemaining->format("%d")."\n\n";
         }
         echo "======================================================================\n\n";

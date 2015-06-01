@@ -2777,7 +2777,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     $sessionIsCoach = null;
 
     if (!empty($course_code)) {
-        $sql = "SELECT DISTINCT s.id, name, date_start, date_end
+        $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
                 FROM $session_table s
                 INNER JOIN $session_rel_course_rel_user_table session_rc_ru
                 ON session_rc_ru.session_id = s.id AND session_rc_ru.user_id = '".$userId."'
@@ -2790,18 +2790,18 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     }
 
     if (!empty($session_id)) {
-        $sql = "SELECT DISTINCT id, name, date_start, date_end
+        $sql = "SELECT DISTINCT id, name, access_start_date, access_end_date
                 FROM $session_table
                 WHERE session.id_coach =  '".$userId."' AND id = '$session_id'
-                ORDER BY date_start, date_end, name";
+                ORDER BY access_start_date, access_end_date, name";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
             $sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
         } else {
             $sessionIsCoach = Database::store_result($result);
         }
-
     }
+
     return (count($sessionIsCoach) > 0);
 }
 

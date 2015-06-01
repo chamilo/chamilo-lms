@@ -578,6 +578,8 @@ class CoursesController
         }
 
         foreach ($sessions as $session) {
+            $sessionDates = SessionManager::parseSessionDates($session);
+
             $sessionsBlock = array(
                 'id' => $session['id'],
                 'name' => $session['name'],
@@ -586,7 +588,7 @@ class CoursesController
                 'coach_name' => $session['coach_name'],
                 'is_subscribed' => $session['is_subscribed'],
                 'icon' => $this->getSessionIcon($session['name']),
-                'date' => SessionManager::getSessionFormattedDate($session),
+                'date' => $sessionDates['display'],
                 'subscribe_button' => $this->getRegisteredInSessionButton(
                     $session[$key],
                     $catalogSessionAutoSubscriptionAllowed

@@ -311,8 +311,10 @@ class SessionManager
         if (strpos($where_condition, 'c.id')) {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-            $courseCondition = " INNER JOIN $table course_rel_session ON (s.id = course_rel_session.session_id)
-                                 INNER JOIN $tableCourse c ON (course_rel_session.c_id = c.id)
+            $courseCondition = " INNER JOIN $table course_rel_session
+                                 ON (s.id = course_rel_session.session_id)
+                                 INNER JOIN $tableCourse c
+                                 ON (course_rel_session.c_id = c.id)
                                 ";
         }
 
@@ -320,16 +322,16 @@ class SessionManager
                 SELECT DISTINCT
                  IF (
 					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
-                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start, '$today') <= s.nb_days_access_before_beginning) OR
-                    (s.nb_days_access_after_end > 0 AND DATEDIFF('$today',s.date_end) <= s.nb_days_access_after_end) OR
-                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
-					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
+                    (s.access_start_date IS NULL AND s.access_end_date  = IS NULL ) OR
+					(s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
+					('$today' <= s.access_end_date AND s.access_start_date IS NULL)
 				, 1, 0) as session_active,
                 s.id
                 FROM $tbl_session s
-                LEFT JOIN $tbl_session_category sc ON s.session_category_id = sc.id
-                INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+                LEFT JOIN $tbl_session_category sc
+                ON s.session_category_id = sc.id
+                INNER JOIN $tbl_user u
+                ON s.id_coach = u.user_id
                 $courseCondition
                 $extraJoin
                 $where $where_condition ) as session_table";
@@ -343,19 +345,19 @@ class SessionManager
                 $sql = "SELECT count(id) as total_rows FROM (
                 SELECT DISTINCT
                   IF (
-					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
-                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start, '$today') <= s.nb_days_access_before_beginning) OR
-                    (s.nb_days_access_after_end > 0 AND DATEDIFF('$today',s.date_end) <= s.nb_days_access_after_end) OR
-                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
-					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
+					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
+                    (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
+					(s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
+					('$today' <= s.access_end_date AND s.access_start_date IS NULL)
 				, 1, 0)
 				as session_active,
 				s.id
                 FROM $tbl_session s
-                    LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+                    LEFT JOIN  $tbl_session_category sc
+                    ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-                    INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+                    INNER JOIN $table_access_url_rel_session ar
+                    ON ar.session_id = s.id
                     $courseCondition
                     $extraJoin
                 $where $where_condition) as session_table";
@@ -384,12 +386,16 @@ class SessionManager
         $user_id = api_get_user_id();
 
         if (!api_is_platform_admin()) {
-            if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
+            if (api_is_session_admin() &&
+                api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false'
+            ) {
                 $where .=" AND s.session_admin_id = $user_id ";
             }
         }
 
-        if (!api_is_platform_admin() && api_is_teacher() && api_get_setting('allow_teachers_to_create_sessions') == 'true') {
+        if (!api_is_platform_admin() && api_is_teacher() &&
+            api_get_setting('allow_teachers_to_create_sessions') == 'true'
+        ) {
             $where .=" AND s.id_coach = $user_id ";
         }
 
@@ -425,7 +431,10 @@ class SessionManager
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
-                $query = "$select FROM $tbl_session s $inject_joins INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id) $where";
+                $query = "$select
+                        FROM $tbl_session s $inject_joins
+                        INNER JOIN $table_access_url_rel_session ar
+                        ON (ar.session_id = s.id) $where";
             }
         }
 
@@ -2282,11 +2291,18 @@ class SessionManager
             return $msg;
         }
         if ($date_end <> null) {
-            $sql = "UPDATE $tbl_session_category SET name = '" . Database::escape_string($name) . "', date_start = '$date_start' " .
-                ", date_end = '$date_end' WHERE id= $id";
+            $sql = "UPDATE $tbl_session_category
+                    SET
+                        name = '" . Database::escape_string($name) . "',
+                        date_start = '$date_start' ,
+                        date_end = '$date_end'
+                    WHERE id= $id";
         } else {
-            $sql = "UPDATE $tbl_session_category SET name = '" . Database::escape_string($name) . "', date_start = '$date_start' " .
-                ", date_end = NULL WHERE id= $id";
+            $sql = "UPDATE $tbl_session_category SET
+                        name = '" . Database::escape_string($name) . "',
+                        date_start = '$date_start',
+                        date_end = NULL
+                    WHERE id= $id";
         }
         $result = Database::query($sql);
         return ($result ? true : false);
@@ -3933,8 +3949,8 @@ class SessionManager
                         // Updating the session.
                         $params = array(
                             'id_coach' => $coach_id,
-                            'date_start' => $date_start,
-                            'date_end' => $date_end,
+                            'access_start_date' => $date_start,
+                            'access_end_date' => $date_end,
                             'visibility' => $visibilityAfterExpirationPerSession,
                             'session_category_id' => $session_category_id
                         );
@@ -5340,32 +5356,6 @@ class SessionManager
     }
 
     /**
-     * Get the formatted date of a session by its start and end date
-     * @param array $sessionInfo The session information containing the start and end date
-     * @return string The formatted date
-     */
-    public static function getSessionFormattedDate($sessionInfo)
-    {
-        if ($sessionInfo['date_start'] == '0000-00-00' && $sessionInfo['date_end'] == '0000-00-00') {
-            return get_lang('NoTimeLimits');
-        } else {
-            if ($sessionInfo['date_start'] != '0000-00-00') {
-                $startDate = get_lang('From') . ' ' . api_format_date($sessionInfo['date_start'], DATE_FORMAT_LONG_NO_DAY);
-            } else {
-                $startDate = '';
-            }
-
-            if ($sessionInfo['date_end'] == '0000-00-00') {
-                $endDate = '';
-            } else {
-                $endDate = get_lang('Until') . ' ' . api_format_date($sessionInfo['date_end'], DATE_FORMAT_LONG_NO_DAY);
-            }
-
-            return "$startDate $endDate";
-        }
-    }
-
-    /**
      * Get the session coached by a user (general coach and course-session coach)
      * @param int $coachId The coach id
      * @param boolean $checkSessionRelUserVisibility Check the session visibility
@@ -5599,7 +5589,7 @@ class SessionManager
             $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
             // Get the session list from session category and target
             $sessionList = Database::select(
-                'id, name, date_start, date_end',
+                'id, name, access_start_date, access_end_date',
                 $sTable,
                 array(
                     'where' => array(
@@ -6068,33 +6058,38 @@ class SessionManager
      * Converts "start date" and "end date" to "From start date to end date" string
      * @param string $startDate
      * @param string $endDate
-     * @return null|string
+     *
+     * @return string
      */
     private static function convertSessionDateToString($startDate, $endDate)
     {
-        //This will clean the variables if 0000-00-00 00:00:00 the variable will be empty
-        $start_date = null;
-        $end_date = null;
-        if (isset($startDate)) {
-            $start_date = api_get_local_time($startDate, null, null, true);
+        $startDateToLocal = '';
+        $endDateToLocal = '';
+        // This will clean the variables if 0000-00-00 00:00:00 the variable will be empty
+        if (isset($startDateToLocal)) {
+            $startDateToLocal = api_get_local_time($startDate, null, null, true);
         }
-        if (isset($endDate)) {
-            $end_date = api_get_local_time($endDate, null, null, true);
+        if (isset($endDateToLocal)) {
+            $endDateToLocal = api_get_local_time($endDate, null, null, true);
         }
 
-        $msg_date = null;
-        if (!empty($start_date) && !empty($end_date)) {
-            $msg_date =  sprintf(get_lang('FromDateXToDateY'), $start_date, $end_date);
+        $result = '';
+        if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
+            $result =  sprintf(get_lang('FromDateXToDateY'), $startDateToLocal, $endDateToLocal);
         } else {
-            if (!empty($start_date)) {
-                $msg_date = get_lang('From').' '.$start_date;
+            if (!empty($startDateToLocal)) {
+                $result = get_lang('From').' '.$startDateToLocal;
             }
-            if (!empty($end_date)) {
-                $msg_date = get_lang('Until').' '.$end_date;
+            if (!empty($endDateToLocal)) {
+                $result = get_lang('Until').' '.$endDateToLocal;
             }
         }
 
-        return $msg_date;
+        if (empty($result)) {
+            $result = get_lang('NoTimeLimits');
+        }
+
+        return $result;
     }
 
     /**
@@ -6260,25 +6255,6 @@ class SessionManager
 
         $form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'));
 
-        /*
-        $form->addElement('checkbox', 'start_limit', '', get_lang('DateStartSession'), array(
-            'onchange' => 'disable_starttime(this)',
-            'id' => 'start_limit'
-        ));
-
-        $form->addElement('html','<div id="start_date" style="display:none">');
-        $form->addElement('date_picker', 'date_start');
-        $form->addElement('html','</div>');
-
-        $form->addElement('checkbox', 'end_limit', '', get_lang('DateEndSession'), array(
-            'onchange' => 'disable_endtime(this)',
-            'id' => 'end_limit'
-        ));
-
-        $form->addElement('html', '<div id="end_date" style="display:none">');
-
-        $form->addElement('date_picker', 'date_end');*/
-
         $visibilityGroup = array();
         $visibilityGroup[] = $form->createElement('select', 'session_visibility', null, array(
             SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
@@ -6286,8 +6262,6 @@ class SessionManager
             SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible'))
         ));
         $form->addGroup($visibilityGroup, 'visibility_group', get_lang('SessionVisibility'), null, false);
-
-
 
         $options = [
             0 => get_lang('ByDuration'),

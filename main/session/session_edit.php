@@ -31,9 +31,6 @@ $tool_name = get_lang('EditSession');
 $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
-list($year_start, $month_start, $day_start) = explode('-', $sessionInfo['date_start']);
-list($year_end, $month_end, $day_end) = explode('-', $sessionInfo['date_end']);
-
 if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent = 1;
 }
@@ -51,7 +48,8 @@ if (api_is_multiple_url_enabled()) {
 	if ($access_url_id != -1) {
 		$sql = "SELECT DISTINCT u.user_id,lastname,firstname,username
 		        FROM $tbl_user u
-                INNER JOIN $table_access_url_rel_user url_rel_user ON (url_rel_user.user_id = u.user_id)
+                INNER JOIN $table_access_url_rel_user url_rel_user
+                ON (url_rel_user.user_id = u.user_id)
 			    WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
 	}
 }
@@ -165,14 +163,10 @@ if ($form->validate()) {
 // display the header
 Display::display_header($tool_name);
 
-if (!empty($return)) {
-    Display::display_error_message($return,false);
-}
-
 $form->display();
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready( function() {
 
 <?php
@@ -183,13 +177,6 @@ $(document).ready( function() {
     }
 ?>
 });
-
-
-    function setDisable(select) {
-	document.forms['edit_session'].elements['session_visibility'].disabled = (select.checked) ? true : false;
-	document.forms['edit_session'].elements['session_visibility'].selectedIndex = 0;
-}
-
 
 function accessSwitcher(accessFromReady) {
     var access = $('#access option:selected').val();

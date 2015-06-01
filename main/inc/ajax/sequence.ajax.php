@@ -53,6 +53,7 @@ switch ($action) {
 
         $type = SequenceResource::SESSION_TYPE;
 
+
         /** @var Sequence $sequence */
         $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
 
@@ -74,14 +75,19 @@ switch ($action) {
             if ($graph->hasVertex($vertexId)) {
                 $vertex = $graph->getVertex($vertexId);
                 $vertex->destroy();
-                $em->remove($sequenceResource);
+
+                /** @var SequenceResource $sequenceResource */
+                $sequenceResourceToDelete = $repository->findOneBy(
+                    ['resourceId' => $vertexId, 'type' => $type, 'sequence' => $sequence]
+                );
+
+                $em->remove($sequenceResourceToDelete);
 
                 $sequence->setGraphAndSerialize($graph);
-                $em->persist($sequence);
+                $em->merge($sequence);
                 $em->flush();
             }
         }
-
         break;
     case 'load_resource':
         // children or parent

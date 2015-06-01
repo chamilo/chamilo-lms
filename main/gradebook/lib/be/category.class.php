@@ -2009,14 +2009,98 @@ class Category implements GradebookItem
      * @param \Category $category The gradebook category
      * @return boolean
      */
-    public static function userFinishedCourse($userId, \Category $category)
+    public static function userFinishedCourse($userId, \Category $category = null, $categoryId = 0)
     {
+        if (is_null($category) && empty($categoryId)) {
+            return false;
+        }
+
+        $courseCode = api_get_course_id();
+        $sessionId = api_get_session_id();
+
+        if (is_null($category) && !empty($categoryId)) {
+            $cats_course = Category::load(
+                $categoryId,
+                null,
+                $courseCode,
+                null,
+                null,
+                $sessionId,
+                false
+            );
+
+            $category = $cats_course[0];
+        }
+
+        $currentScore = self::getCurrentScore($userId, $category->get_id(), $courseCode, $sessionId, true);
+
+        $minCertificateScore = $category->get_certificate_min_score();
+
+        return !empty($minCertificateScore) && $currentScore >= $minCertificateScore;
+    }
+
+    /**
+     * Get the current score (as percentage) on a gradebook category for a user
+     * @param int $userId The user id
+     * @param int $categoryId The gradebook category
+     * @param int $courseCode The course code
+     * @param int $sessionId Optional. The session id
+     * @return float The score
+     */
+    public static function getCurrentScore($userId, $categoryId, $courseCode, $sessionId = 0, $recalculate = false)
+    {
+        if ($recalculate) {
+            return self::calculateCurrentScore($userId, $categoryId, $courseCode, $sessionId);
+        }
+
+        $resultData = Database::select(
+            '*',
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_LOG),
+            [
+                'where' => [
+                    'category_id = ? AND user_id = ?' => [$categoryId, $userId],
+                ],
+                'order' => 'registered_at DESC',
+                'limit' => '1'
+            ],
+            'fisrt'
+        );
+
+        if (empty($resultData)) {
+            return 0;
+        }
+
+        return $resultData['score'];
+    }
+
+    /**
+     * Calculate the current score on a gradebook category for a user
+     * @param int $userId The user id
+     * @param int $categoryId The gradebook category
+     * @param int $courseCode The course code
+     * @param int $sessionId Optional. The session id
+     * @return float The score
+     */
+    private static function calculateCurrentScore($userId, $categoryId, $courseCode, $sessionId)
+    {
+        $cats_course = Category::load(
+            $categoryId,
+            null,
+            $courseCode,
+            null,
+            null,
+            $sessionId,
+            false
+        );
+
+        $category = $cats_course[0];
+
         $courseEvaluations = $category->get_evaluations($userId, true);
         $courseLinks = $category->get_links($userId, true);
 
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
 
-        $totalItemValue = 0;
+        $categoryScore = 0;
 
         for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
             $item = $evaluationsAndLinks[$i];
@@ -2028,14 +2112,30 @@ class Category implements GradebookItem
                 $itemValue = $score[0] / $divider * $item->get_weight();
             }
 
-            $totalItemValue += $itemValue;
+            $categoryScore += $itemValue;
         }
 
-        $totalItemValue = floatval($totalItemValue);
+        return floatval($categoryScore);
+    }
 
-        $minCertificateScore = $category->get_certificate_min_score();
-
-        return !empty($minCertificateScore) && $totalItemValue >= $minCertificateScore;
+    /**
+     * Register the current score for a user on a category gradebook
+     * @param float $score The achieved score
+     * @param int $userId The user id
+     * @param int $categoryId The gradebook category
+     * @return int The insert id
+     */
+    public static function registerCurrentScore($score, $userId, $categoryId)
+    {
+        return Database::insert(
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_LOG),
+            [
+                'category_id' => intval($categoryId),
+                'user_id' => intval($userId),
+                'score' => floatval($score),
+                'registered_at' => api_get_utc_datetime()
+            ]
+        );
     }
 
 }

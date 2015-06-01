@@ -490,13 +490,13 @@ class Template
         // Default CSS Bootstrap
 
         $bowerCSSFiles = [
-            'bootstrap/dist/css/bootstrap.min.css',
             'bootstrap-daterangepicker/daterangepicker-bs3.css',
             'fontawesome/css/font-awesome.min.css',
-            'jquery-ui/themes/smoothness/jquery-ui.min.css',
             'jquery-ui/themes/smoothness/theme.css',
+            'jquery-ui/themes/smoothness/jquery-ui.min.css',
             'mediaelement/build/mediaelementplayer.min.css',
-            'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css'
+            'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css',
+            'bootstrap/dist/css/bootstrap.min.css',
         ];
 
         foreach ($bowerCSSFiles as $file) {
@@ -623,11 +623,11 @@ class Template
         $isoCode = api_get_language_isocode();
 
         $bowerJsFiles = [
+            'bootstrap/dist/js/bootstrap.min.js',
             'modernizr/modernizr.js',
             'jquery/dist/jquery.min.js',
             'moment/min/moment-with-locales.min.js',
             'jquery-ui/jquery-ui.min.js',
-            'bootstrap/dist/js/bootstrap.min.js',
             'ckeditor/ckeditor.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',

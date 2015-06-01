@@ -549,7 +549,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
     /**
      * Get a list of sessions (id, coach_id, name, courses_num, users_num, classes_num,
-     * date_start, date_end, access_days_before_num, session_admin_id, visibility,
+     * access_start_date, access_end_date, access_days_before_num, session_admin_id, visibility,
      * session_category_id, promotion_id,
      * validated_user_num, waiting_user_num,
      * extra, course) the validated_usernum and waiting_user_num are

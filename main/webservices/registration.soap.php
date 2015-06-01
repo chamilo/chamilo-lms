@@ -2666,7 +2666,8 @@ function WSCreateCourse($params)
             CourseManager::create_course_extra_field(
                 $original_course_id_name,
                 1,
-                $original_course_id_name
+                $original_course_id_name,
+                ''
             );
 
             // Save the external system's id into user_field_value table.
@@ -2684,7 +2685,8 @@ function WSCreateCourse($params)
                     CourseManager::create_course_extra_field(
                         $extra_field_name,
                         1,
-                        $extra_field_name
+                        $extra_field_name,
+                        ''
                     );
                     // Save the external system's id into course_field_value table.
                     CourseManager::update_course_extra_field_value(
@@ -2888,7 +2890,8 @@ function WSCreateCourseByTitle($params)
                 CourseManager::create_course_extra_field(
                     $original_course_id_name,
                     1,
-                    $original_course_id_name
+                    $original_course_id_name,
+                    ''
                 );
 
                 // Save the external system's id into user_field_value table.
@@ -2906,7 +2909,8 @@ function WSCreateCourseByTitle($params)
                         CourseManager::create_course_extra_field(
                             $extra_field_name,
                             1,
-                            $extra_field_name
+                            $extra_field_name,
+                            ''
                         );
                         // Save the external system's id into course_field_value table.
                         CourseManager::update_course_extra_field_value(
@@ -3652,8 +3656,8 @@ function WSCreateSession($params)
         $year_end = intval($session_param['year_end']);
         $month_end = intval($session_param['month_end']);
         $day_end = intval($session_param['day_end']);
-        $nb_days_acess_before = intval($session_param['nb_days_access_before']);
-        $nb_days_acess_after = intval($session_param['nb_days_access_after']);
+        $nb_days_access_before = intval($session_param['nb_days_access_before']);
+        $nb_days_access_after = intval($session_param['nb_days_access_after']);
         $id_coach = $session_param['user_id'];
         $nolimit = $session_param['nolimit'];
         $original_session_id_name = $session_param['original_session_id_name'];
@@ -3672,11 +3676,11 @@ function WSCreateSession($params)
         }
 
         if (empty($nolimit)){
-            $date_start = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-            $date_end = "$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
+            $date_start = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start) . ' 00:00:00';
+            $date_end = "$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end) . ' 23:59:59';
         } else {
-            $date_start = "000-00-00";
-            $date_end = "000-00-00";
+            $date_start = "";
+            $date_end = "";
         }
 
         if (empty($name)) {
@@ -3697,9 +3701,31 @@ function WSCreateSession($params)
                 $results[] = 0;
                 continue;
             } else {
-                Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end)
-                                 VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
-                $id_session = Database::insert_id();
+                $startDate = new DateTime($date_start);
+                $endDate = new DateTime($date_end);
+                $diffStart = new DateInterval($nb_days_access_before);
+                $diffEnd = new DateInterval($nb_days_access_after);
+                $coachStartDate = $startDate->sub($diffStart);
+                $coachEndDate = $endDate->add($diffEnd);
+
+                $id_session = SessionManager::create_session(
+                    $name,
+                    $date_start,
+                    $date_end,
+                    $date_start,
+                    $date_end,
+                    $coachStartDate->format('Y-m-d H:i:s'),
+                    $coachEndDate->format('Y-m-d H:i:s'),
+                    $id_coach,
+                    0,
+                    0,
+                    false,
+                    null,
+                    null,
+                    0,
+                    array(),
+                    $_user['user_id']
+                );
 
                 // Save new fieldlabel into course_field table.
                 $field_id = SessionManager::create_session_extra_field(
@@ -3861,8 +3887,8 @@ function WSEditSession($params)
         $year_end = intval($session_param['year_end']);
         $month_end = intval($session_param['month_end']);
         $day_end = intval($session_param['day_end']);
-        $nb_days_acess_before = intval($session_param['nb_days_access_before']);
-        $nb_days_acess_after = intval($session_param['nb_days_access_after']);
+        $nb_days_access_before = intval($session_param['nb_days_access_before']);
+        $nb_days_access_after = intval($session_param['nb_days_access_after']);
         $original_session_id_value = $session_param['original_session_id_value'];
         $original_session_id_name = $session_param['original_session_id_name'];
         $orig_session_id_value[] = $original_session_id_value;
@@ -3885,8 +3911,8 @@ function WSEditSession($params)
             $date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
             $date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
         } else {
-            $date_start="000-00-00";
-            $date_end="000-00-00";
+            $date_start="";
+            $date_end="";
         }
         if (empty($name)) {
             $results[] = 0; //SessionNameIsRequired
@@ -3901,16 +3927,33 @@ function WSEditSession($params)
             $results[] = 0; //StartDateShouldBeBeforeEndDate
             continue;
         } else {
-            $sql = "UPDATE $tbl_session SET " .
-                "name='".addslashes($name)."', " .
-                "date_start='".$date_start."', " .
-                "date_end='".$date_end."', " .
-                "id_coach='".        $id_coach."', " .
-                "session_admin_id='".        intval($_user['user_id'])."', " .
-                "nb_days_access_before_beginning='".        $nb_days_acess_before."', " .
-                "nb_days_access_after_end='".        $nb_days_acess_after."'" .
-                " WHERE id='".$id."'";
-            Database::query($sql);
+            $startDate = new DateTime($date_start);
+            $endDate = new DateTime($date_end);
+            $diffStart = new DateInterval($nb_days_access_before);
+            $diffEnd = new DateInterval($nb_days_access_after);
+            $coachStartDate = $startDate->sub($diffStart);
+            $coachEndDate = $endDate->add($diffEnd);
+
+            $sessionInfo = api_get_session_info($id);
+
+            SessionManager::edit_session(
+                $id,
+                $name,
+                $date_start,
+                $date_end,
+                $date_start,
+                $date_end,
+                $coachStartDate->format('Y-m-d H:i:s'),
+                $coachEndDate->format('Y-m-d H:i:s'),
+                $id_coach,
+                $sessionInfo['session_category_id'],
+                $sessionInfo['visibility'],
+                $sessionInfo['description'],
+                $sessionInfo['show_description'],
+                $sessionInfo['duration'],
+                null,
+                $_user['user_id']
+            );
 
             if (is_array($extra_list) && count($extra_list) > 0) {
                 foreach ($extra_list as $extra) {
@@ -4780,7 +4823,7 @@ function WSSuscribeUsersToSession($params)
             list($nbr_users) = Database::fetch_array($rs);
             // update the session-course relation to add the users total
             $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
-                           WHERE session_id='$id_session' AND c_id='$enreg_course'";
+                           WHERE session_id='$sessionId' AND c_id='$enreg_course'";
             Database::query($update_sql);
         }
 
@@ -5290,7 +5333,7 @@ function WSSuscribeCoursesToSession($params) {
             $courseId = $courseInfo['real_id'];
 
             $courseInfo = CourseManager::getCourseInfoFromOriginalId(
-                $original_course_id_value,
+                $course_code,
                 $original_course_id_name
             );
 
@@ -5796,10 +5839,10 @@ function WSListSessions($params) {
     $sql_params = array();
     // Dates should be provided in YYYY-MM-DD format, UTC
     if (!empty($params['date_start'])) {
-        $sql_params['s.date_start'] = array('operator' => '>=', 'value' => $params['date_start']);
+        $sql_params['s.access_start_date'] = array('operator' => '>=', 'value' => $params['date_start']);
     }
     if (!empty($params['date_end'])) {
-        $sql_params['s.date_end'] = array('operator' => '<=', 'value' => $params['date_end']);
+        $sql_params['s.access_end_date'] = array('operator' => '<=', 'value' => $params['date_end']);
     }
     $sessions_list = SessionManager::get_sessions_list($sql_params);
     $return_list = array();
@@ -5808,8 +5851,8 @@ function WSListSessions($params) {
             'id' => $session['id'],
             'title' => $session['name'],
             'url' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session['id'], // something like http://my.chamilo.net/main/session/index.php?session_id=5
-            'date_start' => $session['date_start'],
-            'date_end' => $session['date_end'],
+            'date_start' => $session['access_start_date'],
+            'date_end' => $session['access_end_date'],
         );
     }
 
@@ -6191,7 +6234,7 @@ function WSCreateGroup($params)
     $userGroup = new UserGroup();
     $params = [
         'name' => $params['name']
-    ]
+    ];
     return $userGroup->save($params);
     //return GroupPortalManager::add($params['name'], null, null, 1);
 }

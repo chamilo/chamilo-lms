@@ -1508,8 +1508,8 @@ class Display
             $session['coach'] = '';
             $session['dates'] =  '';
 
-            if ($session_info['date_end'] == '0000-00-00' &&
-                $session_info['date_start'] == '0000-00-00'
+            if ($session_info['access_end_date'] == '0000-00-00' &&
+                $session_info['access_start_date'] == '0000-00-00'
             ) {
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
@@ -1536,24 +1536,24 @@ class Display
             } else {
                 $start = $stop = false;
                 $start_buffer = $stop_buffer = '';
-                if ($session_info['date_start'] == '0000-00-00') {
-                    $session_info['date_start'] = '';
+                if ($session_info['access_start_date'] == '0000-00-00') {
+                    $session_info['access_start_date'] = '';
                 } else {
                     $start = true;
-                    $start_buffer = $session_info['date_start'];
-                    $session_info['date_start'] = get_lang('From').' '.$session_info['date_start'];
+                    $start_buffer = $session_info['access_start_date'];
+                    $session_info['access_start_date'] = get_lang('From').' '.$session_info['access_start_date'];
                 }
-                if ($session_info['date_end'] == '0000-00-00') {
-                    $session_info['date_end'] = '';
+                if ($session_info['access_end_date'] == '0000-00-00') {
+                    $session_info['access_end_date'] = '';
                 } else {
                     $stop = true;
-                    $stop_buffer = $session_info['date_end'];
-                    $session_info['date_end'] = get_lang('Until').' '.$session_info['date_end'];
+                    $stop_buffer = $session_info['access_end_date'];
+                    $session_info['access_end_date'] = get_lang('Until').' '.$session_info['access_end_date'];
                 }
                 if ($start && $stop) {
                     $session['dates'] = Display::tag('i', sprintf(get_lang('FromDateXToDateY'), $start_buffer, $stop_buffer));
                 } else {
-                    $session['dates'] = Display::tag('i', $session_info['date_start'].' '.$session_info['date_end']);
+                    $session['dates'] = Display::tag('i', $session_info['access_start_date'].' '.$session_info['access_end_date']);
                 }
 
                 if ( api_get_setting('show_session_coach') === 'true' ) {

@@ -25,6 +25,7 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
 $current_forum = get_forum_information($_REQUEST['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+$current_thread = get_thread_information($_REQUEST['thread']);
 
 // Check if exist action
 if (!empty($action)) {

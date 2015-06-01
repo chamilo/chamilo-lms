@@ -23,8 +23,13 @@ if (isset($rows)) {
     $counter = 1;
     foreach ($rows as $row) {
         if ($row['status']=='0') {
-            $style =" id = 'post".$post_en."' class=\"hide-me\" style=\"border:1px solid red; display:none; background-color:#F7F7F7; width:95%; margin: 0px 0px 4px 40px; \" ";
-            $url_post ='';
+            $style = <<<HTML
+                id="post$post_en" class="hide-me"
+                style="
+                    border:1px solid red; display:none; background-color: #F7F7F7; width:95%; margin: 0px 0px 4px 40px;
+                "
+HTML;
+            $url_post = '';
         } else {
             $style = "";
             $post_en = $row['post_parent_id'];
@@ -39,7 +44,7 @@ if (isset($rows)) {
             echo Display::page_subheader($name);
         }
 
-        echo "<div ".$style."><table class=\"data_table\">";
+        echo "<div " . $style . "><table class=\"table table-stripped table-hover table-bordered\">";
         if ($row['visible']=='0') {
             $titleclass = 'forum_message_post_title_2_be_approved';
             $messageclass = 'forum_message_post_text_2_be_approved';
@@ -53,16 +58,16 @@ if (isset($rows)) {
         echo "<tr>";
         echo "<td rowspan=\"3\" class=\"$leftclass\">";
 
-        echo '<br /><b>'.  api_convert_and_format_date($row['post_date'], DATE_TIME_FORMAT_LONG).'</b><br />';
+        echo '<br /><b>' . api_convert_and_format_date($row['post_date'], DATE_TIME_FORMAT_LONG) . '</b><br />';
         echo "</td>";
 
         // The post title
-        echo "<td class=\"$titleclass\">".prepare4display($row['post_title'])."</td>";
+        echo "<td class=\"$titleclass\">" . prepare4display($row['post_title']) . "</td>";
         echo "</tr>";
 
         // The post message
         echo "<tr >";
-        echo "<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>";
+        echo "<td class=\"$messageclass\">" . prepare4display($row['post_text']) . "</td>";
         echo "</tr>";
 
         // The check if there is an attachment
@@ -71,25 +76,25 @@ if (isset($rows)) {
         if (!empty($attachment_list)) {
             foreach ($attachment_list as $attachment) {
                 echo '<tr ><td height="50%">';
-                $realname=$attachment['path'];
-                $user_filename=$attachment['filename'];
-                echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+                $realname = $attachment['path'];
+                $user_filename = $attachment['filename'];
+                echo Display::return_icon('attachment.gif', get_lang('Attachment'));
                 echo '<a href="download.php?file=';
                 echo $realname;
-                echo ' "> '.$user_filename.' </a>';
-                echo '<span class="forum_attach_comment" >'.$attachment['comment'].'</span><br />';
+                echo ' "> ' . $user_filename . ' </a>';
+                echo '<span class="forum_attach_comment" >' . $attachment['comment'] . '</span><br />';
                 echo '</td></tr>';
             }
         }
 
         // The post has been displayed => it can be removed from the what's new array
         if (isset($whatsnew_post_info)) {
-            unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
-            unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']]);
+            unset($whatsnew_post_info[$currentForum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
+            unset($whatsnew_post_info[$currentForum['forum_id']][$current_thread['thread_id']]);
         }
         if (isset($_SESSION['whatsnew_post_info'])) {
-            unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
-            unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']]);
+            unset($_SESSION['whatsnew_post_info'][$currentForum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
+            unset($_SESSION['whatsnew_post_info'][$currentForum['forum_id']][$current_thread['thread_id']]);
         }
         echo "</table></div>";
         $counter++;
@@ -119,8 +124,10 @@ $result = get_statistical_information(
     api_get_course_int_id()
 );
 
+/*
 if ($userInfo['status']!='1') {
     echo '<div class="forum-qualification-input-box">';
     require_once 'forumbody.inc.php';
     echo '</div>';
 }
+*/

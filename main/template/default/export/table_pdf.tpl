@@ -27,10 +27,10 @@
             {% endif %}
         </tr>
 
-        {% if pdf_session_info.date_start != '0000-00-00' and pdf_session_info.date_end != '0000-00-00' %}
+        {% if pdf_session_info.access_start_date != '' and pdf_session_info.access_end_date != '0000-00-00' %}
             <tr>
             <td>
-                <strong>{{ "PeriodToDisplay" | get_lang }}:</strong> {{ "FromDateXToDateY"| get_lang | format(pdf_session_info.date_start, pdf_session_info.date_end ) }}
+                <strong>{{ "PeriodToDisplay" | get_lang }}:</strong> {{ "FromDateXToDateY"| get_lang | format(pdf_session_info.access_start_date, pdf_session_info.access_end_date ) }}
             </td>
             </tr>
         {% endif %}
@@ -39,7 +39,7 @@
     {% if pdf_course_info %}
     <tr>
         <td>
-         <strong>{{ "Course" | get_lang }}:</strong>  {{ pdf_course_info.title }} ({{ pdf_course_info.code }})
+         <strong>{{ "Course" | get_lang }}:</strong> {{ pdf_course_info.title }} ({{ pdf_course_info.code }})
 
          {% if pdf_course_category %}
             <strong>{{ "Category" | get_lang }}:</strong> {{ pdf_course_category }}

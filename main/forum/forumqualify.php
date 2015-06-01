@@ -233,6 +233,9 @@ if ($allowToQualify) {
         array(get_lang('Qualification'), get_lang('MaxScore').' '.$maxQualify),
         $qualify
     );
+
+    include 'viewpost.inc.php';
+
     $form->addButtonSave(get_lang('QualifyThisThread'));
     $form->setDefaults(array('idtextqualify' => $qualify));
     $form->display();

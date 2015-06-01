@@ -2025,8 +2025,6 @@ function attach_glossary_into_scorm(type) {
                 }
 
                 var complex_array = new Array();
-
-                //$("iframe").contents().find("body .glossary-ajax").on("click", ".glossary-ajax", function() {
                 $("iframe").contents().find("body").on("click", ".glossary-ajax", function() {
 
                 div_show_id="div_show_id";
@@ -2046,7 +2044,6 @@ function attach_glossary_into_scorm(type) {
                         var extra_left = 0;
                     }
 
-                    //$("#"+div_show_id).dialog("destroy");
                     show_dialog.dialog({
                         autoOpen: false,
                         width: 600,

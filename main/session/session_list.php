@@ -16,13 +16,14 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
+$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
 
 if ($action == 'delete') {
 	SessionManager::delete($idChecked);
 	header('Location: session_list.php');
 	exit();
 } elseif ($action == 'copy') {
-	SessionManager::copy_session($idChecked);
+	SessionManager::copy($idChecked);
     header('Location: session_list.php');
     exit();
 }
@@ -32,17 +33,8 @@ if ($action == 'delete') {
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
 
-$error_message = '';
-// Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
-if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
-    $error_message = Security::remove_XSS($_GET['message']);
-}
-
-if (!empty($error_message)) {
-    Display::display_normal_message($error_message, false);
-}
-
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course';
+
 $courseList = array();
 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
 if (!empty($courseId)) {
@@ -78,7 +70,6 @@ if (!empty($courseId)) {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
 }
 
-
 if (isset($_REQUEST['keyword'])) {
     //Begin with see the searchOper param
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=bw';
@@ -92,51 +83,30 @@ if (isset($_REQUEST['id_category'])) {
     }
 }
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(
-    get_lang('Name'),
-    get_lang('NumberOfCourses'),
-    get_lang('NumberOfUsers'),
-    get_lang('SessionCategoryName'),
-    get_lang('StartDate'),
-    get_lang('EndDate'),
-    get_lang('Coach'),
-    get_lang('Status'),
-    get_lang('Visibility'),
-    get_lang('Actions')
-);
+$url .= '&list_type='.$list_type;
 
-//Column config
-$column_model   = array(
-    array('name'=>'name',           'index'=>'s.name',        'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-    array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'category_name',  'index'=>'sc.name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'date_start',     'index'=>'s.date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'date_end',       'index'=>'s.date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),
-    array('name'=>'status',         'index'=>'session_active','width'=>'45',
-        'align'=>'left', 'search' => 'true', 'stype'=>'select',
-        //for the bottom bar
-        'searchoptions' => array(
-            'defaultValue'  => ':',
-            'value'         => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')
-        ),
-        //for the top bar
-        'editoptions' => array(
-            'value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')
-        )
-    ),
-    array('name'=>'visibility',     'index'=>'visibility', 'width'=>'45', 'align'=>'left', 'search' => 'false'),
-    array('name'=>'actions',        'index'=>'actions', 'width'=>'90',
-        'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
-);
+$result = SessionManager::getGridColumns($list_type);
+
+$columns = $result['columns'];
+$column_model = $result['column_model'];
 
 //Autowidth
 $extra_params['autowidth'] = 'true';
 
 //height auto
 $extra_params['height'] = 'auto';
+
+$extra_params['postData'] =array(
+    'filters' => array(
+        "groupOp" => "AND",
+        "rules" => $result['rules'],
+        /*array(
+            array( "field" => "display_start_date", "op" => "gt", "data" => ""),
+            array( "field" => "display_end_date", "op" => "gt", "data" => "")
+        ),*/
+        //'groups' => $groups
+    )
+);
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
@@ -147,72 +117,174 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
      '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
      '\';
 }';
+
+$urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
+
 ?>
 <script>
-
 function setSearchSelect(columnName) {
-    $("#sessions").jqGrid(
-        'setColProp',
-        columnName,
-        {
-            searchoptions: {
-                dataInit:function(el) {
-                    $("option[value='2']",el).attr("selected", "selected");
-                    setTimeout(function() {
-                        $(el).trigger('change');
-                    }, 1000);
-                }
+    $("#sessions").jqGrid('setColProp', columnName, {
+       /*searchoptions:{
+            dataInit:function(el){
+                $("option[value='1']",el).attr("selected", "selected");
+                setTimeout(function(){
+                    $(el).trigger('change');
+                }, 1000);
             }
-        }
-    );
+        }*/
+    });
+}
+var added_cols = [];
+var original_cols = [];
+
+function clean_cols(grid, added_cols) {
+    //Cleaning
+    for (key in added_cols) {
+        //console.log('hide: ' + key);
+        grid.hideCol(key);
+    };
+    grid.showCol('name');
+    grid.showCol('display_start_date');
+    grid.showCol('display_end_date');
+    grid.showCol('course_title');
 }
 
+function show_cols(grid, added_cols) {
+    grid.showCol('name').trigger('reloadGrid');
+    for (key in added_cols) {
+        //console.log('show: ' + key);
+        grid.showCol(key);
+    };
+}
+
+var second_filters = [];
+
 $(function() {
-    <?php
-        echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
-    ?>
+
+    date_pick_today = function(elem) {
+        $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
+        $(elem).datetimepicker('setDate', (new Date()));
+    }
+    date_pick_one_month = function(elem) {
+        $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
+        next_month = Date.today().next().month();
+        $(elem).datetimepicker('setDate', next_month);
+    }
+
+    //Great hack
+    register_second_select = function(elem) {
+        second_filters[$(elem).val()] = $(elem);
+    }
+
+    fill_second_select = function(elem) {
+        $(elem).on("change", function() {
+            composed_id = $(this).val();
+            field_id = composed_id.split("#")[0];
+            id = composed_id.split("#")[1];
+
+            $.ajax({
+                url: "<?php echo $urlAjaxExtraField; ?>&a=get_second_select_options",
+                dataType: "json",
+                data: "type=session&field_id="+field_id+"&option_value_id="+id,
+                success: function(data) {
+                    my_select = second_filters[field_id];
+                    my_select.empty();
+                    $.each(data, function(index, value) {
+                        my_select.append($("<option/>", {
+                            value: index,
+                            text: value
+                        }));
+                    });
+                }
+            });
+        });
+    }
+
+<?php
+echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+?>
 
     setSearchSelect("status");
 
-    $("#sessions").jqGrid(
-        'navGrid',
-        '#sessions_pager',
-        { edit: false, add: false, del: false},
-        { height:280, reloadAfterSubmit:false }, // edit options
-        { height:280, reloadAfterSubmit:false }, // add options
-        { reloadAfterSubmit:false }, // del options
-        { width:500 } // search options
+    var grid = $("#sessions"),
+        prmSearch = {
+            multipleSearch : true,
+            overlay : false,
+            width: 'auto',
+            caption: '<?php echo addslashes(get_lang('Search')); ?>',
+            formclass:'data_table',
+            onSearch : function() {
+                var postdata = grid.jqGrid('getGridParam', 'postData');
+
+                if (postdata && postdata.filters) {
+                    filters = jQuery.parseJSON(postdata.filters);
+                    clean_cols(grid, added_cols);
+                    added_cols = [];
+                    $.each(filters, function(key, value){
+                        //console.log('key: ' + key );
+                        if (key == 'rules') {
+                            $.each(value, function(subkey, subvalue) {
+                                if (subvalue.data == undefined) {
+                                }
+
+                                //if (added_cols[value.field] == undefined) {
+                                    added_cols[subvalue.field] = subvalue.field;
+                                //}
+                                //grid.showCol(value.field);
+                            });
+                        }
+                    });
+                    show_cols(grid, added_cols);
+                }
+           },
+           onReset: function() {
+                clean_cols(grid, added_cols);
+           }
+        };
+
+    original_cols = grid.jqGrid('getGridParam', 'colModel');
+
+    grid.jqGrid('navGrid','#sessions_pager',
+        {edit:false,add:false,del:false},
+        {height:280,reloadAfterSubmit:false}, // edit options
+        {height:280,reloadAfterSubmit:false}, // add options
+        {reloadAfterSubmit:false},// del options
+        prmSearch
     );
 
-    /*
-    // add custom button to export the data to excel
-    jQuery("#sessions").jqGrid('navButtonAdd','#sessions_pager',{
-           caption:"",
-           onClickButton : function () {
-               jQuery("#sessions").excelExport();
-           }
+    // Create the searching dialog.
+    grid.searchGrid(prmSearch);
+
+    // Fixes search table.
+    var searchDialogAll = $("#fbox_"+grid[0].id);
+    searchDialogAll.addClass("table");
+    var searchDialog = $("#searchmodfbox_"+grid[0].id);
+    searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
+    searchDialog.css({position:"relative", "z-index":"auto", "float":"left"})
+    var gbox = $("#gbox_"+grid[0].id);
+    gbox.before(searchDialog);
+    gbox.css({clear:"left"});
+
+    //Select first elements by default
+    $('.input-elm').each(function(){
+        $(this).find('option:first').attr('selected', 'selected');
     });
 
-    jQuery('#sessions').jqGrid('navButtonAdd','#sessions_pager',{id:'pager_csv',caption:'',title:'Export To CSV',onClickButton : function(e)
-    {
-        try {
-            jQuery("#sessions").jqGrid('excelExport',{tag:'csv', url:'grid.php'});
-        } catch (e) {
-            window.location= 'grid.php?oper=csv';
-        }
-    },buttonicon:'ui-icon-document'})
-    */
+    $('.delete-rule').each(function(){
+        $(this).click(function(){
+             $('.input-elm').each(function(){
+                $(this).find('option:first').attr('selected', 'selected');
+            });
+        });
+    });
 
-    // Adding search options
-    var options = {
-        'stringResult': true,
-        'autosearch' : true,
-        'searchOnEnter':false
-    }
-
-    jQuery("#sessions").jqGrid('filterToolbar', options);
-    var sgrid = $("#sessions")[0];
-    sgrid.triggerToolbar();
+    /*
+    $('.delete-rule').on('click', function(){
+        console.log('deleted');
+        $('.input-elm').each(function(){
+            $(this).find('option:first').attr('selected', 'selected');
+        });
+    });*/
 });
 </script>
 <div class="actions">
@@ -225,6 +297,12 @@ if (api_is_platform_admin()) {
         Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
         Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
+}
+
+if ($list_type == 'complete') {
+    echo '<a href="'.api_get_self().'?list_type=simple">'.Display::return_icon('view_remove.png',get_lang('Simple'),'',ICON_SIZE_MEDIUM).'</a>';
+} else {
+    echo '<a href="'.api_get_self().'?list_type=complete">'.Display::return_icon('view_text.png',get_lang('Complete'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 echo $actions;

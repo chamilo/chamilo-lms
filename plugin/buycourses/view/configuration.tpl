@@ -81,10 +81,10 @@ $(function() {
                         <a href="{{ server }}main/session/index.php?session_id={{ session.id }}">{{session.name}}</a>
                     </td>
                     <td>
-                        {{session.date_start}}
+                        {{ session.access_start_date }}
                     </td>
                     <td>
-                        {{session.date_end}}
+                        {{ session.access_end_date }}
                     </td>
                     <td class="ta-center">
                         {% if session.visible == 1 %}

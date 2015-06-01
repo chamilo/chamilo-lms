@@ -3032,8 +3032,8 @@ class Tracking
                 SELECT DISTINCT
                     id,
                     name,
-                    date_start,
-                    date_end
+                    access_start_date,
+                    access_end_date
                 FROM $tbl_session session INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (session.id = session_rel_url.session_id)
                 WHERE
@@ -3044,8 +3044,8 @@ class Tracking
                 SELECT DISTINCT
                     session.id,
                     session.name,
-                    session.date_start,
-                    session.date_end
+                    session.access_start_date,
+                    session.access_end_date
                 FROM $tbl_session as session
                 INNER JOIN $tbl_session_course_user as session_course_user
                     ON session.id = session_course_user.session_id AND
@@ -3072,14 +3072,13 @@ class Tracking
 
         if (!empty($sessions)) {
             foreach ($sessions as & $session) {
-                if ($session['date_start'] == '0000-00-00') {
+                if ($session['access_start_date'] == '0000-00-00 00:00:00' || empty($session['access_start_date'])
+                ) {
                     $session['status'] = get_lang('SessionActive');
                 }
                 else {
-                    $date_start = explode('-', $session['date_start']);
-                    $time_start = mktime(0, 0, 0, $date_start[1], $date_start[2], $date_start[0]);
-                    $date_end = explode('-', $session['date_end']);
-                    $time_end = mktime(0, 0, 0, $date_end[1], $date_end[2], $date_end[0]);
+                    $time_start = api_strtotime($session['access_start_date'], 'UTC');
+                    $time_end = api_strtotime($session['access_end_date'], 'UTC');
                     if ($time_start < time() && time() < $time_end) {
                         $session['status'] = get_lang('SessionActive');
                     } else {

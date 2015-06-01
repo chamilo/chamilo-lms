@@ -7,71 +7,45 @@
         </div>
     {% endif %}
     <button id="touch-button" class="btn btn-primary"><i class="fa fa-bars"></i></button>
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">
-                {% if gamification_mode == 1 %}
-                    <div class="row">
-                        <div class="col-xs-8">
-                            {% set lp_stars = oLP.getCalculateStars() %}
-                            {% if lp_stars > 0%}
-                                {% for i in 1..lp_stars %}
-                                    <i class="fa fa-star fa-2x"></i>
-                                {% endfor %}
-                            {% endif %}
 
-                            {% if lp_stars < 4 %}
-                                {% for i in 1..4 - lp_stars %}
-                                    <i class="fa fa-star-o fa-2x"></i>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="col-xs-4 text-right">
-                            {{ "XPoints"|get_lang|format(oLP.getCalculateScore()) }}
-                        </div>
-                    </div>
-                {% else %}
                     <div id="scorm-info" class="panel panel-default">
-                        <div class="panel-heading">
-                            <a id="ui-option">
-                                <i id="icon-down" class="fa fa-chevron-down hidden"></i>
-                                <i id="icon-up" class="fa fa-chevron-up"></i>
-                            </a>
-                        </div>
+
                         {# Author image preview #}
                         <div id="panel-scorm" class="panel-body">
-                            <a href="{{ button_home_url }}" class="btn btn-success btn-block" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                                <i class="fa fa-home"></i> {{ button_home_text }}
-                            </a>
-
-                            <div class="image-avatar">
-                                {% if oLP.get_preview_image() %}
-                                    <img src="{{ oLP.get_preview_image_path() }}" width="104" height="96">
-                                {% else %}
-                                    <img src="{{ "unknown_250_100.jpg"|icon }}" width="104" height="96">
-                                {% endif %}
-                            </div>
-
                             <div id="lp_navigation_elem" class="navegation-bar">
-                                {{ navigation_bar }}
-
+                                <div class="ranking-scorm">
+                                    {% if gamification_mode == 1 %}
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            {% set lp_stars = oLP.getCalculateStars() %}
+                                            {% if lp_stars > 0%}
+                                                {% for i in 1..lp_stars %}
+                                                    <i class="fa fa-star"></i>
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if lp_stars < 4 %}
+                                                {% for i in 1..4 - lp_stars %}
+                                                    <i class="fa fa-star plomo"></i>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-5 text-points">
+                                            {{ "XPoints"|get_lang|format(oLP.getCalculateScore()) }}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
                                 <div id="progress_bar">
                                     {{ progress_bar }}
                                 </div>
-                            </div>
 
-                            <div class="description-autor">
-                                {{ oLP.get_author() }}
                             </div>
-
-                            {% if show_audio_player %}
-                                <div id="lp_media_file">
-                                    {{ media_player }}
-                                </div>
-                            {% endif %}
                         </div>
                     </div>
-                {% endif %}
+
 
                 {# TOC layout #}
                 <div id="toc_id" name="toc_name">

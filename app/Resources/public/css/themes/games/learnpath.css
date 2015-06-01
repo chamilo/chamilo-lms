@@ -1,0 +1,40 @@
+/* items scorm*/
+.scorm_item_normal.scorm_completed {
+  background:url("images/scorm_completed.png") no-repeat left center;
+}
+.scorm_item_normal.scorm_failed{
+  background:url("images/scorm_failed.png") no-repeat left center;
+}
+.scorm_item_normal.scorm_not_attempted{
+  background:url("images/scorm_not_attempted.png") no-repeat left center;	
+}
+.scorm_item_normal.scorm_highlight{
+  background:url("images/scorm_highlight.png") no-repeat left center;	
+}
+.ranking-scorm .fa-star{
+  color: #E4C200;
+  font-size: 20px;
+}
+.ranking-scorm .fa-star.plomo{
+  color: #C2C2C2;
+  font-size: 20px;
+}
+#learning_path_left_zone .panel-body{
+  background-color:#EFEFEF ;
+}
+#learning_path_left_zone .progress-bar{
+  background-color: #35A8C9;
+}
+#learning_path_left_zone .progress{
+  background-color: #E73858;
+  margin-bottom: 10px;
+}
+#learning_path_left_zone #progress_bar{
+  padding-top: 10px;
+
+}
+.text-points{
+  font-size: 14px;
+  color: #35A8C9;
+  text-align: right;
+}

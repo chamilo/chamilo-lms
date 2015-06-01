@@ -1336,15 +1336,17 @@ switch ($action) {
             'filter',
             'field_order',
         );
-        $result = Database::select(
+        $result = $obj->getAllGrid($sidx, $sord, $start, $limit);
+        /*$result = Database::select(
             '*',
             $obj->table,
             array('order' => "$sidx $sord", 'LIMIT' => "$start , $limit")
-        );
+        );*/
         $new_result = array();
         if (!empty($result)) {
             foreach ($result as $item) {
-                $item['field_type'] = $obj->get_field_type_by_id($item['field_type']);
+                $item['display_text'] = $item['displayText'];
+                $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
                 $item['changeable'] = $item['changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
                 $item['visible'] = $item['visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
                 $item['filter'] = $item['filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');

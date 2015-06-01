@@ -134,16 +134,58 @@ class ExtraField extends Model
      */
     public function get_count()
     {
-        /*$row = Database::select('count(*) as count', $this->table, array(), 'first');
-
-        return $row['count'];*/
-
-        $query = Database::getManager()->getRepository('ChamiloCoreBundle:ExtraField')->createQueryBuilder('e');
+        $em = Database::getManager();
+        $query = $em->getRepository('ChamiloCoreBundle:ExtraField')->createQueryBuilder('e');
         $query->select('count(e.id)');
         $query->where('e.extraFieldType = :type');
         $query->setParameter('type', $this->getExtraFieldType());
 
         return $query->getQuery()->getScalarResult();
+    }
+
+    /**
+     * @param string $sidx
+     * @param string $sord
+     * @param int $start
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function getAllGrid($sidx, $sord, $start, $limit)
+    {
+        switch ($sidx) {
+            case 'field_order':
+                $sidx = 'e.fieldOrder';
+                break;
+            case 'variable':
+                $sidx = 'e.variable';
+                break;
+            case 'display_text':
+                $sidx = 'e.displayText';
+                break;
+            case 'changeable':
+                $sidx = 'e.changeable';
+                break;
+            case 'visible':
+                $sidx = 'e.visible';
+                break;
+            case 'filter':
+                $sidx = 'e.filter';
+                break;
+            case 'display_text':
+                $sidx = 'e.fieldType';
+                break;
+        }
+        $em = Database::getManager();
+        $query = $em->getRepository('ChamiloCoreBundle:ExtraField')->createQueryBuilder('e');
+        $query->select('e')
+            ->where('e.extraFieldType = :type')
+            ->setParameter('type', $this->getExtraFieldType())
+            ->orderBy($sidx, $sord)
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        //echo $query->getQuery()->getSQL();
+        return $query->getQuery()->getArrayResult();
     }
 
     /**

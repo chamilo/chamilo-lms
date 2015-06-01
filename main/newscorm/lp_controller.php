@@ -931,7 +931,7 @@ switch ($action) {
             }
 
             if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
-                $expired_on = $_REQUEST['expired_on'];
+            	$expired_on   = $_REQUEST['expired_on'];
             } else {
                 $expired_on = null;
             }

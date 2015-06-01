@@ -13,6 +13,11 @@
 	color: #a1a1a1;
 	text-decoration: underline;
 }
+.logo-header{
+  display: block;
+  padding-top: 15px;
+  padding-left: 15px;
+}
 .my-courses-ranking .title-course,
 #slider-sessions .title-course{
 	font-size: 14px;
@@ -109,10 +114,10 @@
 	padding-right: 30px;
 }
 /* ranting */
-.rating-symbol .rating-symbol-foreground {
+.start-progress .fa-star {
 	color: #e4c200;
 }
-.rating-symbol .rating-symbol-background  {
+.start-progress .fa-star-o  {
 	color: #c2c2c2;
 }
 /* end ranking */

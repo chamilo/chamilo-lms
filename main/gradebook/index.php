@@ -770,6 +770,9 @@ if ($category != '0') {
                 echo $certificate['pdf_link'];
                 echo '</div>';
             }
+
+            $currentScore = Category::getCurrentScore($stud_id, $category_id, $course_code, $session_id, true);
+            Category::registerCurrentScore($currentScore, $stud_id, $category_id);
         }
     }
 }

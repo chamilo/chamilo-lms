@@ -149,8 +149,8 @@ foreach($Sessions as $session){
 		}
 		// On ajoute la relation entre l'utilisateur et la session
 		foreach($UserList as $enreg_user){
-			$sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id) " .
-					"VALUES('$id_session','$enreg_user')";
+			$sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id, registered_at) " .
+					"VALUES('$id_session','$enreg_user', '" . api_get_utc_datetime() . "')";
 			Database::query($sql);
 		}
 		$sql = "SELECT COUNT(user_id) as nbUsers " .

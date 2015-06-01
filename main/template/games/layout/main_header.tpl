@@ -50,9 +50,11 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">
-                                {{ logo }}
-                            </a>
+
+                                <div class="logo-header">
+                                    {{ logo }}
+                                </div>
+
                         </div>
                         <!-- Collect the nav links, forms, and other content for toggling -->
                         <div class="collapse navbar-collapse" id="menu-bar-top">

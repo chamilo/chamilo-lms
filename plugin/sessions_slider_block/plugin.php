@@ -9,4 +9,6 @@ require_once __DIR__ . '/config.php';
 
 $plugin_info = SessionsSliderBlockPlugin::create()->get_info();
 
-$plugin_info['templates'] = ['template/slider.tpl'];
+if (api_is_anonymous()) {
+    $plugin_info['templates'] = ['template/slider.tpl'];
+}

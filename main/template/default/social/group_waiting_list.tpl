@@ -19,7 +19,7 @@
 
             {% for member in members %}
             <div class="col-md-4">
-                <div class="card">
+                <div class="card-social">
                     <div class="avatar">
                     {{ member.image }}
                     </div>

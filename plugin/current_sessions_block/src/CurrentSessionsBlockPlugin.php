@@ -176,7 +176,7 @@ SQL;
      * @param array $activeSessions The active sessions
      * @return array
      */
-    private function getFilteredFinishedSessions(array $activeSessions)
+    private function getFilteredNotFinishedSessions(array $activeSessions)
     {
         if (empty($activeSessions)) {
             return [];
@@ -212,7 +212,7 @@ SQL;
                 $notApprovedCoursesCount++;
             }
 
-            if (count($courses) == $notApprovedCoursesCount) {
+            if (count($courses) !== $notApprovedCoursesCount) {
                 continue;
             }
 
@@ -232,7 +232,7 @@ SQL;
         $activeSessions = $finishedSessions = [];
 
         $activeSessions = $this->getFilteredActiveSessions($userSessions);
-        $finishedSessions = $this->getFilteredFinishedSessions($activeSessions);
+        $finishedSessions = $this->getFilteredNotFinishedSessions($activeSessions);
 
         $finishedSessions = array_slice($finishedSessions, 0, $this->numberOfSessions, true);
 

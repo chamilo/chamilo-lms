@@ -79,7 +79,8 @@ class SessionManager
         $duration = null,
         $description = null,
         $showDescription = 0,
-        $extraFields = array()
+        $extraFields = array(),
+        $sessionAdminId = 0
     ) {
         global $_configuration;
 
@@ -147,10 +148,11 @@ class SessionManager
             }
 
             if ($ready_to_create) {
+                $sessionAdminId = !empty($sessionAdminId) ? $sessionAdminId : api_get_user_id();
                 $values = array(
                     'name' => $name,
                     'id_coach' => $coachId,
-                    'session_admin_id' => api_get_user_id(),
+                    'session_admin_id' => $sessionAdminId,
                     'visibility' => $id_visibility,
                     'description' => $description,
                     'show_description' => intval($showDescription)
@@ -1319,7 +1321,8 @@ class SessionManager
         $description = null,
         $showDescription = 0,
         $duration = null,
-        $extraFields = array()
+        $extraFields = array(),
+        $sessionAdminId = 0
     ) {
         $name = trim(stripslashes($name));
         $id_coach = intval($id_coach);
@@ -1365,6 +1368,10 @@ class SessionManager
                     'visibility' => $id_visibility
                 ];
 
+                if (!empty($sessionAdminId)) {
+                    $values['session_admin_id'] = $sessionAdminId;
+                }
+
                 if (!empty($startDate)) {
                     $values['access_start_date'] = $startDate;
                 }
@@ -1395,10 +1402,12 @@ class SessionManager
                 Database::update($tbl_session, $values, array(
                     'id = ?' => $id
                 ), true);
-                $extraFields['item_id'] = $id;
 
-                $sessionFieldValue = new ExtraFieldValue('session');
-                $sessionFieldValue->saveFieldValues($extraFields);
+                if (!empty($extraFields)) {
+                    $extraFields['item_id'] = $id;
+                    $sessionFieldValue = new ExtraFieldValue('session');
+                    $sessionFieldValue->saveFieldValues($extraFields);
+                }
 
                 return $id;
             }

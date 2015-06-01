@@ -3679,8 +3679,8 @@ function WSCreateSession($params)
             $date_start = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start) . ' 00:00:00';
             $date_end = "$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end) . ' 23:59:59';
         } else {
-            $date_start = "000-00-00 00:00:00";
-            $date_end = "000-00-00 00:00:00";
+            $date_start = "";
+            $date_end = "";
         }
 
         if (empty($name)) {
@@ -3707,27 +3707,25 @@ function WSCreateSession($params)
                 $diffEnd = new DateInterval($nb_days_access_after);
                 $coachStartDate = $startDate->sub($diffStart);
                 $coachEndDate = $endDate->add($diffEnd);
-                Database::query(
-                    "INSERT INTO $tbl_session(
-                        name,
-                        access_start_date,
-                        access_end_date,
-                        id_coach,
-                        session_admin_id,
-                        coach_access_start_date,
-                        coach_access_end_date
-                    )
-                    VALUES(
-                        '".addslashes($name)."',
-                        '$date_start',
-                        '$date_end',
-                        '$id_coach',
-                        ".intval($_user['user_id']).",
-                        '".$coachStartDate->format('Y-m-d H:i:s')."',
-                        '".$coachEndDate->format('Y-m-d H:i:s')."'
-                    )"
+
+                $id_session = SessionManager::create_session(
+                    $name,
+                    $date_start,
+                    $date_end,
+                    $date_start,
+                    $date_end,
+                    $coachStartDate->format('Y-m-d H:i:s'),
+                    $coachEndDate->format('Y-m-d H:i:s'),
+                    $id_coach,
+                    0,
+                    0,
+                    false,
+                    null,
+                    null,
+                    0,
+                    array(),
+                    $_user['user_id']
                 );
-                $id_session = Database::insert_id();
 
                 // Save new fieldlabel into course_field table.
                 $field_id = SessionManager::create_session_extra_field(
@@ -3913,8 +3911,8 @@ function WSEditSession($params)
             $date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
             $date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
         } else {
-            $date_start="000-00-00";
-            $date_end="000-00-00";
+            $date_start="";
+            $date_end="";
         }
         if (empty($name)) {
             $results[] = 0; //SessionNameIsRequired
@@ -3935,16 +3933,27 @@ function WSEditSession($params)
             $diffEnd = new DateInterval($nb_days_access_after);
             $coachStartDate = $startDate->sub($diffStart);
             $coachEndDate = $endDate->add($diffEnd);
-            $sql = "UPDATE $tbl_session SET " .
-                "name = '".addslashes($name)."', " .
-                "date_start = '".$date_start."', " .
-                "date_end = '".$date_end."', " .
-                "id_coach = '".        $id_coach."', " .
-                "session_admin_id = '".        intval($_user['user_id'])."', " .
-                "coach_access_start_date = '". $coachStartDate->format('Y-m-d H:i:s') . "', " .
-                "coach_access_end_date = '". $coachEndDate->format('Y-m-d H:i:s') . "'" .
-                " WHERE id = '".$id."'";
-            Database::query($sql);
+
+            $sessionInfo = api_get_session_info($id);
+
+            SessionManager::edit_session(
+                $id,
+                $name,
+                $date_start,
+                $date_end,
+                $date_start,
+                $date_end,
+                $coachStartDate->format('Y-m-d H:i:s'),
+                $coachEndDate->format('Y-m-d H:i:s'),
+                $id_coach,
+                $sessionInfo['session_category_id'],
+                $sessionInfo['visibility'],
+                $sessionInfo['description'],
+                $sessionInfo['show_description'],
+                $sessionInfo['duration'],
+                null,
+                $_user['user_id']
+            );
 
             if (is_array($extra_list) && count($extra_list) > 0) {
                 foreach ($extra_list as $extra) {

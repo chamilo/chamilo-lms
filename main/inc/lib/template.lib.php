@@ -623,11 +623,11 @@ class Template
         $isoCode = api_get_language_isocode();
 
         $bowerJsFiles = [
-            'bootstrap/dist/js/bootstrap.min.js',
             'modernizr/modernizr.js',
             'jquery/dist/jquery.min.js',
-            'moment/min/moment-with-locales.min.js',
+            'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
+            'moment/min/moment-with-locales.min.js',
             'ckeditor/ckeditor.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',

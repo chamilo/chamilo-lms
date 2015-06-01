@@ -32,15 +32,31 @@ if($allowTutors == 'true') {
 
     $table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-    $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
-    		FROM '.$tbl_session.' LEFT JOIN '.$tbl_user.' ON id_coach = user_id
-    		WHERE '.$tbl_session.'.id='.$id_session;
+    $sql = 'SELECT
+              name,
+              nbr_courses,
+              nbr_users,
+              nbr_classes,
+              DATE_FORMAT(access_start_date,"%d-%m-%Y") as access_start_date,
+              DATE_FORMAT(access_end_date,"%d-%m-%Y") as access_end_date,
+              lastname,
+              firstname,
+              username,
+              session_admin_id,
+              coach_access_start_date,
+              coach_access_end_date,
+              session_category_id,
+              visibility
+            FROM '.$tbl_session.' LEFT JOIN '.$tbl_user.' ON id_coach = user_id
+            WHERE '.$tbl_session.'.id='.$id_session;
 
     $rs      = Database::query($sql);
     $session = Database::store_result($rs);
     $session = $session[0];
 
-    $sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"';
+    $sql = 'SELECT name
+            FROM  '.$tbl_session_category.'
+            WHERE id = '.intval($session['session_category_id']);
     $rs = Database::query($sql);
     $session_category = '';
 
@@ -135,22 +151,22 @@ if($allowTutors == 'true') {
     	<td><?php echo get_lang('Date'); ?> :</td>
     	<td>
     	<?php
-    		if ($session['date_start'] == '00-00-0000' && $session['date_end']== '00-00-0000' ) {
+    		if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date']== '00-00-0000' ) {
     		    echo get_lang('NoTimeLimits');
             }
     		else {
-                if ($session['date_start'] != '00-00-0000') {
+                if ($session['access_start_date'] != '00-00-0000') {
                 	//$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
-                    $session['date_start'] =  get_lang('From').' '.$session['date_start'];
+                    $session['access_start_date'] =  get_lang('From').' '.$session['access_start_date'];
                 } else {
-                	$session['date_start'] = '';
+                	$session['access_start_date'] = '';
                 }
-                if ($session['date_end'] == '00-00-0000') {
-                    $session['date_end'] ='';
+                if ($session['access_end_date'] == '00-00-0000') {
+                    $session['access_end_date'] ='';
                 } else {
-                	$session['date_end'] = get_lang('Until').' '.$session['date_end'];
+                	$session['access_end_date'] = get_lang('Until').' '.$session['access_end_date'];
                 }
-    			echo $session['date_start'].' '.$session['date_end'];
+    			echo $session['access_start_date'].' '.$session['access_end_date'];
             }
             ?>
     	</td>
@@ -158,18 +174,18 @@ if($allowTutors == 'true') {
     <!-- show nb_days_before and nb_days_after only if they are different from 0 -->
     <tr>
     	<td>
-    		<?php echo api_ucfirst(get_lang('DaysBefore')) ?> :
+    		<?php echo api_ucfirst(get_lang('CoachSessionAccessStartDate')) ?> :
     	</td>
     	<td>
-    		<?php echo intval($session['nb_days_access_before_beginning']) ?>
+    		<?php echo intval($session['coach_access_start_date']) ?>
     	</td>
     </tr>
     <tr>
     	<td>
-    		<?php echo api_ucfirst(get_lang('DaysAfter')) ?> :
+    		<?php echo api_ucfirst(get_lang('CoachSessionAccessEndDate')) ?> :
     	</td>
     	<td>
-    		<?php echo intval($session['nb_days_access_after_end']) ?>
+    		<?php echo intval($session['coach_session_access_end_date']) ?>
     	</td>
     </tr>
     <tr>

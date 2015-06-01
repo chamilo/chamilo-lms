@@ -77,7 +77,7 @@ function sync()
     $sql = "UPDATE $tableBuySession SET sync = 0";
     Database::query($sql);
 
-    $sql = "SELECT id, name, date_start, date_end FROM $tableSession";
+    $sql = "SELECT id, name, access_start_date, access_end_date FROM $tableSession";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
         $sql = "SELECT 1 FROM $tableBuySession WHERE session_id='" . $row['id'] . "';";
@@ -88,7 +88,7 @@ function sync()
         } else {
             $sql = "INSERT INTO $tableBuySession (session_id, name, date_start, date_end, visible, sync)
             VALUES ('" . $row['id'] . "', '" . $row['name'] . "', '" .
-                $row['date_start'] .  "', '" . $row['date_end'] . "', 0, 1);";
+                $row['access_start_date'] .  "', '" . $row['access_end_date'] . "', 0, 1);";
             Database::query($sql);
         }
     }

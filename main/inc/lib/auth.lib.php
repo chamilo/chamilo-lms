@@ -552,7 +552,7 @@ class Auth
         $userId = api_get_user_id();
         $limitFilter = getLimitFilterFromArray($limit);
 
-        $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username, description, show_description "
+        $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.access_start_date, s.access_end_date, u.lastname, u.firstname, u.username, description, show_description "
             . "FROM $sessionTable AS s "
             . "INNER JOIN $userTable AS u "
             . "ON s.id_coach = u.user_id "
@@ -561,9 +561,9 @@ class Auth
         if (!is_null($date)) {
             $date = Database::escape_string($date);
 
-            $sql .= "AND ('$date' BETWEEN s.date_start AND s.date_end) "
-                . "OR (s.date_end = '0000-00-00') "
-                . "OR (s.date_start = '0000-00-00' AND s.date_end != '0000-00-00' AND s.date_end > '$date')";
+            $sql .= "AND ('$date' BETWEEN s.access_start_date AND s.access_end_date) "
+                . "OR (s.access_end_date = '0000-00-00') "
+                . "OR (s.access_start_date = '0000-00-00' AND s.access_end_date != '0000-00-00' AND s.access_end_date > '$date')";
         }
 
         // Add limit filter to do pagination
@@ -598,10 +598,10 @@ class Auth
         $date = Database::escape_string($date);
         $dateFilter = '';
         if (!empty($date)) {
-            $dateFilter = ' AND ("' . $date . '" BETWEEN s.date_start AND s.date_end) ' .
-                'OR (s.date_end = "0000-00-00") ' .
-                'OR (s.date_start = "0000-00-00" AND ' .
-                's.date_end != "0000-00-00" AND s.date_end > "' . $date . '") ';
+            $dateFilter = ' AND ("' . $date . '" BETWEEN s.access_start_date AND s.access_end_date) ' .
+                'OR (s.access_end_date = "0000-00-00") ' .
+                'OR (s.access_start_date = "0000-00-00" AND ' .
+                's.access_end_date != "0000-00-00" AND s.access_end_date > "' . $date . '") ';
         }
         $sql = "SELECT COUNT(*) FROM $sessionTable s WHERE 1 = 1 $dateFilter";
         $res = Database::query($sql);

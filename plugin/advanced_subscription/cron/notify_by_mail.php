@@ -25,7 +25,7 @@ $joinTables = Database::get_main_table(TABLE_MAIN_SESSION) . ' s INNER JOIN ' .
 $columns = 's.id AS session_id, uu.friend_user_id AS superior_id, uu.user_id AS student_id, asq.id AS queue_id, asq.status AS status';
 $conditions = array(
     'where' => array(
-        's.date_start >= ? AND uu.relation_type = ? AND asq.updated_at <= ?' => array(
+        's.access_start_date >= ? AND uu.relation_type = ? AND asq.updated_at <= ?' => array(
             $now,
             USER_RELATION_TYPE_BOSS,
             $weekAgo,

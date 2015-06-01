@@ -1158,10 +1158,10 @@ class IndexManager
                         }
 
                         // Courses inside the current session.
-                        $date_session_start = $session['date_start'];
-                        $date_session_end = $session['date_end'];
-                        $days_access_before_beginning  = $session['nb_days_access_before_beginning'];
-                        $days_access_after_end = $session['nb_days_access_after_end'];
+                        $date_session_start = $session['access_start_date'];
+                        $date_session_end = $session['access_end_date'];
+                        $coachAccessStartDate  = $session['coach_access_start_date'];
+                        $coachAccessEndDate = $session['coach_access_end_date'];
 
                         $session_now = time();
                         $count_courses_session = 0;
@@ -1174,15 +1174,15 @@ class IndexManager
                             $is_coach_course = api_is_coach($session_id, $course['real_id']);
                             $allowed_time = 0;
                             $dif_time_after = 0;
-                            if ($date_session_start != '0000-00-00') {
+                            if ($date_session_start != '0000-00-00 00:00:00') {
                                 if ($is_coach_course) {
-                                    $allowed_time = api_strtotime($date_session_start.' 00:00:00') - ($days_access_before_beginning * 86400);
+                                    $allowed_time = api_strtotime($coachAccessStartDate);
                                 } else {
-                                    $allowed_time = api_strtotime($date_session_start.' 00:00:00');
+                                    $allowed_time = api_strtotime($date_session_start);
                                 }
                                 if (!isset($_GET['history'])) {
-                                    if ($date_session_end != '0000-00-00') {
-                                        $endSessionToTms = api_strtotime($date_session_end.' 23:59:59');
+                                    if ($date_session_end != '0000-00-00 00:00:00') {
+                                        $endSessionToTms = api_strtotime($date_session_end);
                                         if ($session_now > $endSessionToTms) {
                                             $dif_time_after = $session_now - $endSessionToTms;
                                             $dif_time_after = round($dif_time_after/86400);
@@ -1192,7 +1192,7 @@ class IndexManager
                             }
 
                             if ($session_now > $allowed_time &&
-                                $days_access_after_end > $dif_time_after - 1
+                                $coachAccessEndDate > $dif_time_after - 1
                             ) {
                                 // Read only and accessible.
                                 $atLeastOneCourseIsVisible = true;
@@ -1294,10 +1294,10 @@ class IndexManager
                                 continue;
                             }
 
-                            $date_session_start = $session['date_start'];
-                            $date_session_end = $session['date_end'];
-                            $days_access_before_beginning = $session['nb_days_access_before_beginning'];
-                            $days_access_after_end = $session['nb_days_access_after_end'];
+                            $date_session_start = $session['access_start_date'];
+                            $date_session_end = $session['access_end_date'];
+                            $coachAccessStartDate = $session['coach_access_start_date'];
+                            $coachAccessEndDate = $session['coach_access_end_date'];
 
                             $session_now = time();
                             $html_courses_session = '';
@@ -1313,13 +1313,13 @@ class IndexManager
                                 $allowed_time = 0;
                                 if ($is_coach_course) {
                                     // 24 hours = 86400
-                                    if ($date_session_start != '0000-00-00') {
-                                        $allowed_time = api_strtotime($date_session_start . ' 00:00:00') - ($days_access_before_beginning * 86400);
+                                    if ($date_session_start != '0000-00-00 00:00:00') {
+                                        $allowed_time = api_strtotime($coachAccessStartDate);
                                     }
                                     if (!isset($_GET['history'])) {
-                                        if ($date_session_end != '0000-00-00') {
+                                        if ($date_session_end != '0000-00-00 00:00:00') {
                                             $endSessionToTms = api_strtotime(
-                                                $date_session_end . ' 23:59:59'
+                                                $date_session_end
                                             );
                                             if ($session_now > $endSessionToTms) {
                                                 $dif_time_after = $session_now - $endSessionToTms;
@@ -1331,12 +1331,12 @@ class IndexManager
                                     }
                                 } else {
                                     $allowed_time = api_strtotime(
-                                        $date_session_start . ' 00:00:00'
+                                        $date_session_start
                                     );
                                 }
 
                                 if ($session_now > $allowed_time &&
-                                    $days_access_after_end > $dif_time_after - 1
+                                    $coachAccessEndDate > $dif_time_after - 1
                                 ) {
                                     if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                         $c = CourseManager:: get_logged_user_course_html(

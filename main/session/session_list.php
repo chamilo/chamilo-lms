@@ -112,8 +112,8 @@ $column_model   = array(
     array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
     array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
     array('name'=>'category_name',  'index'=>'sc.name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'date_start',     'index'=>'s.date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'date_end',       'index'=>'s.date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
+    array('name'=>'access_start_date',     'index'=>'s.access_start_date',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
+    array('name'=>'access_end_date',       'index'=>'s.access_end_date',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
     array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),
     array('name'=>'status',         'index'=>'session_active','width'=>'50',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
         //for the bottom bar

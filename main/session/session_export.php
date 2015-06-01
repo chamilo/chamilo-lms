@@ -49,8 +49,8 @@ if (isset($_POST['formSent'])) {
 					name,
 					id_coach,
 					username,
-					date_start,
-					date_end,
+					access_start_date,
+					access_end_date,
 					visibility,
 					session_category_id
 				FROM $tbl_session s
@@ -62,7 +62,7 @@ if (isset($_POST['formSent'])) {
 			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
-			$sql = "SELECT s.id, name,id_coach,username,date_start,date_end,visibility,session_category_id
+			$sql = "SELECT s.id, name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id
 					FROM $tbl_session s
 					INNER JOIN $tbl_session_rel_access_url as session_rel_url
 					ON (s.id= session_rel_url.session_id)
@@ -74,7 +74,7 @@ if (isset($_POST['formSent'])) {
 
 		$result = Database::query($sql);
 	} else {
-		$sql = "SELECT s.id,name,username,date_start,date_end,visibility,session_category_id
+		$sql = "SELECT s.id,name,username,access_start_date,access_end_date,visibility,session_category_id
 				FROM $tbl_session s
 				INNER JOIN $tbl_user
 					ON $tbl_user.user_id = s.id_coach
@@ -113,18 +113,18 @@ if (isset($_POST['formSent'])) {
 			$add = '';
 			$row['name'] = str_replace(';',',',$row['name']);
 			$row['username'] = str_replace(';',',',$row['username']);
-			$row['date_start'] = str_replace(';',',',$row['date_start']);
-			$row['date_end'] = str_replace(';',',',$row['date_end']);
+			$row['access_start_date'] = str_replace(';',',',$row['access_start_date']);
+			$row['access_end_date'] = str_replace(';',',',$row['access_end_date']);
 			$row['visibility'] = str_replace(';',',',$row['visibility']);
 			$row['session_category'] = str_replace(';',',',$row['session_category_id']);
 			if ($cvs) {
-				$add.= $row['name'].';'.$row['username'].';'.$row['date_start'].';'.$row['date_end'].';'.$row['visibility'].';'.$row['session_category'].';';
+				$add.= $row['name'].';'.$row['username'].';'.$row['access_start_date'].';'.$row['access_end_date'].';'.$row['visibility'].';'.$row['session_category'].';';
 			} else {
 				$add = "\t<Session>\n"
 						 ."\t\t<SessionName>$row[name]</SessionName>\n"
 						 ."\t\t<Coach>$row[username]</Coach>\n"
-						 ."\t\t<DateStart>$row[date_start]</DateStart>\n"
-						 ."\t\t<DateEnd>$row[date_end]</DateEnd>\n"
+						 ."\t\t<DateStart>$row[access_start_date]</DateStart>\n"
+						 ."\t\t<DateEnd>$row[access_end_date]</DateEnd>\n"
 						 ."\t\t<Visibility>$row[visibility]</Visibility>\n"
 						 ."\t\t<SessionCategory>$row[session_category]</SessionCategory>\n";
 			}

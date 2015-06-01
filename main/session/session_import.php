@@ -13,11 +13,6 @@ api_protect_admin_script(true);
 api_protect_limit_for_session_admin();
 
 $form_sent = 0;
-$error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
-if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
-    $error_message = Security::remove_XSS($_GET['message']);
-}
-
 $tbl_user                   = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -517,10 +512,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             if ($file_type == 'csv') {
                 $session_id = current($sessionList);
             }
-            header('Location: resume_session.php?id_session='.$session_id.'&warn='.urlencode($warn));
+            Display::addFlash(Display::return_message($warn));
+            header('Location: resume_session.php?id_session='.$session_id);
             exit;
         } else {
-            header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$error_message).'&warn='.urlencode($warn));
+            Display::addFlash(Display::return_message(get_lang('FileImported').' '.$error_message));
+            header('Location: session_list.php');
             exit;
         }
     } else {

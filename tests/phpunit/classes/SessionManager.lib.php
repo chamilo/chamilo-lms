@@ -459,10 +459,10 @@ class SessionManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers SessionManager::copy_session
+     * @covers SessionManager::copy
      * @todo   Implement testCopy_session().
      */
-    public function testCopy_session()
+    public function testCopy()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

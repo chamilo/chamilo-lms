@@ -60,11 +60,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $day_end
     );
     if ($return == strval(intval($return))) {
-        header(
-            'Location: session_category_list.php?action=show_message&message=' . urlencode(
-                get_lang('SessionCategoryUpdate')
-            )
-        );
+		Display::addFlash(Display::return_message(get_lang('SessionCategoryUpdate')));
+        header('Location: session_category_list.php');
         exit();
     }
 }

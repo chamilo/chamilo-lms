@@ -3347,7 +3347,7 @@ class SessionManager
      * @return  int     The new session ID on success, 0 otherwise
      * @todo make sure the extra session fields are copied too
      */
-    public static function copy_session(
+    public static function copy(
         $id,
         $copy_courses = true,
         $copy_users = true,
@@ -6467,7 +6467,7 @@ class SessionManager
      * @param string $list_type
      * @return array
      */
-    public static function get_session_columns($list_type = 'simple')
+    public static function getGridColumns($list_type = 'simple')
     {
         //Column config
         $operators = array('cn', 'nc');
@@ -6562,5 +6562,235 @@ class SessionManager
         $params['coach_access_start_date'] = isset($params['coach_access_start_date']) ? api_get_local_time($params['coach_access_start_date'], null, null, true) : null;
         $params['coach_access_end_date'] = isset($params['coach_access_end_date']) ? api_get_local_time($params['coach_access_end_date'], null, null, true) : null;
         return $params;
+    }
+
+    /**
+     * Gets the admin session list callback of the session/session_list.php
+     * page with all user/details in the right fomat
+     * @param array
+     * @result array Array of rows results
+     * @asset ('a') === false
+     */
+    public static function get_sessions_admin_complete($options = array())
+    {
+        if (!is_array($options)) {
+            return false;
+        }
+
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tbl_session_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tbl_session_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+
+        $where = 'WHERE 1 = 1 ';
+        $user_id = api_get_user_id();
+
+        if (!api_is_platform_admin()) {
+            if (api_is_session_admin() &&
+                api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false'
+            ) {
+                $where.=" AND s.session_admin_id = $user_id ";
+            }
+        }
+
+        $coach_name = " CONCAT(u.lastname , ' ', u.firstname) as coach_name ";
+        if (api_is_western_name_order()) {
+            $coach_name = " CONCAT(u.firstname, ' ', u.lastname) as coach_name ";
+        }
+
+        $today = api_get_utc_datetime();
+        $inject_extra_fields = null;
+        $extra_fields = array();
+        $extra_fields_info = array();
+
+        //for now only sessions
+        $extra_field = new ExtraField('session');
+        $double_fields = array();
+
+        $extra_field_option = new ExtraFieldOption('session');
+
+        if (isset($options['extra'])) {
+            $extra_fields = $options['extra'];
+            if (!empty($extra_fields)) {
+                foreach ($extra_fields as $extra) {
+                    $inject_extra_fields .= " IF (fv.field_id = {$extra['id']}, fvo.option_display_text, NULL ) as {$extra['field']} , ";
+                    if (isset($extra_fields_info[$extra['id']])) {
+                        $info = $extra_fields_info[$extra['id']];
+                    } else {
+                        $info = $extra_field->get($extra['id']);
+                        $extra_fields_info[$extra['id']] = $info;
+                    }
+
+                    if ($info['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+                        $double_fields[$info['id']] = $info;
+                    }
+                }
+            }
+        }
+
+        $options_by_double = array();
+        foreach ($double_fields as $double) {
+            $my_options = $extra_field_option->get_field_options_by_field(
+                $double['id'],
+                true
+            );
+            $options_by_double['extra_'.$double['field_variable']] = $my_options;
+        }
+
+        //sc.name as category_name,
+        $select = "
+                SELECT * FROM (
+                    SELECT DISTINCT
+                         IF (
+                            (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
+                            (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
+                            (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
+                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
+                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
+                        , 1, 0) as session_active,
+                s.name,
+                s.nbr_courses,
+                s.nbr_users,
+                s.display_start_date,
+                s.display_end_date,
+                $coach_name,
+                access_start_date,
+                access_end_date,
+                s.visibility,
+                u.user_id,
+                $inject_extra_fields
+                c.title as course_title,
+                s.id ";
+
+        if (!empty($options['where'])) {
+            if (!empty($options['extra'])) {
+                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
+                $options['where'] = str_replace('AND', 'OR', $options['where']);
+                foreach ($options['extra'] as $extra) {
+                    $options['where'] = str_replace($extra['field'], 'fv.field_id = '.$extra['id'].' AND fvo.option_value', $options['where']);
+                }
+            }
+            $options['where'] = str_replace('course_title', 'c.title', $options['where']);
+
+            $where .= ' AND '.$options['where'];
+        }
+
+        if (!empty($options['limit'])) {
+            $where .= " LIMIT ".$options['limit'];
+        }
+        $query = "$select FROM $tbl_session s
+                    LEFT JOIN $tbl_session_field_values fv
+                    ON (fv.item_id = s.id)
+                    LEFT JOIN $extraFieldTable f
+                    ON f.id = fv.field_id
+                    LEFT JOIN $tbl_session_field_options fvo
+                    ON (fv.field_id = fvo.field_id)
+                    LEFT JOIN $tbl_session_rel_course src
+                    ON (src.session_id = s.id)
+                    LEFT JOIN $tbl_course c
+                    ON (src.c_id = c.id)
+                    LEFT JOIN $tbl_session_category sc
+                    ON (s.session_category_id = sc.id)
+                    INNER JOIN $tbl_user u
+                    ON (s.id_coach = u.user_id) ".
+            $where;
+
+        if (api_is_multiple_url_enabled()) {
+            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $where.= " AND ar.access_url_id = $access_url_id ";
+                $query = "$select
+                    FROM $tbl_session s
+                    LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
+                    LEFT JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id)
+                    LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id)
+                    LEFT JOIN $tbl_course c ON (src.c_id = c.id)
+                    LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id)
+                    INNER JOIN $tbl_user u ON (s.id_coach = u.user_id)
+                    INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id)
+                    $where";
+            }
+        }
+
+        $query .= ") AS session_table";
+
+        if (!empty($options['order'])) {
+            $query .= " ORDER BY ".$options['order'];
+        }
+
+        //error_log($query);
+        //echo $query;
+
+        $result = Database::query($query);
+        $formatted_sessions = array();
+
+        if (Database::num_rows($result)) {
+            $sessions   = Database::store_result($result, 'ASSOC');
+            foreach ($sessions as $session) {
+                $session_id = $session['id'];
+                $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
+                $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);
+                if ($session['session_active'] == 1) {
+                    $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);
+                } else {
+                    $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
+                }
+
+                $session = self::convert_dates_to_local($session);
+
+                switch ($session['visibility']) {
+                    case SESSION_VISIBLE_READ_ONLY: //1
+                        $session['visibility'] =  get_lang('ReadOnly');
+                        break;
+                    case SESSION_VISIBLE:           //2
+                    case SESSION_AVAILABLE:         //4
+                        $session['visibility'] =  get_lang('Visible');
+                        break;
+                    case SESSION_INVISIBLE:         //3
+                        $session['visibility'] =  api_ucfirst(get_lang('Invisible'));
+                        break;
+                }
+
+                //Cleaning double selects
+                foreach ($session as $key => &$value) {
+                    if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
+                        $options = explode('::', $value);
+                    }
+                    $original_key = $key;
+
+                    if (strpos($key, '_second') === false) {
+                    } else {
+                        $key = str_replace('_second', '', $key);
+                    }
+
+                    if (isset($options_by_double[$key])) {
+                        if (isset($options[0])) {
+                            if (isset($options_by_double[$key][$options[0]])) {
+                                if (strpos($original_key, '_second') === false) {
+                                    $value = $options_by_double[$key][$options[0]]['option_display_text'];
+                                } else {
+                                    $value = $options_by_double[$key][$options[1]]['option_display_text'];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Magic filter
+                if (isset($formatted_sessions[$session_id])) {
+                    $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);
+                } else {
+                    $formatted_sessions[$session_id] = $session;
+                }
+            }
+        }
+
+        return $formatted_sessions;
     }
 }

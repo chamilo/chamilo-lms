@@ -115,8 +115,7 @@ if ($search || $forceSearch) {
     if (!empty($whereConditionInForm)) {
         $whereCondition .= ' AND '.$whereConditionInForm;
     }
-
-    $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    $filters = isset($_REQUEST['filters']) && !is_array($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
 
     /*if (!empty($filters) && !empty($filters->rules)) {
         $whereCondition .= ' AND ( ';
@@ -928,7 +927,7 @@ switch ($action) {
         break;
     case 'get_sessions':
 
-        $session_columns = SessionManager::get_session_columns($list_type);
+        $session_columns = SessionManager::getGridColumns($list_type);
         $columns = $session_columns['simple_column_name'];
 
         if ($list_type == 'simple') {

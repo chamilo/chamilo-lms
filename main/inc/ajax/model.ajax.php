@@ -133,7 +133,7 @@ if ($search || $forceSearch) {
 
     // for now
     if (!empty($filters)) {
-        switch($action) {
+        switch ($action) {
             case 'get_questions':
                 $type = 'question';
                 break;
@@ -146,15 +146,17 @@ if ($search || $forceSearch) {
 
         $extraField = new ExtraField($type);
         $result = $extraField->getExtraFieldRules($filters, 'extra_');
-
         $extra_fields = $result['extra_fields'];
         $condition_array = $result['condition_array'];
 
+        $extraCondition = '';
         if (!empty($condition_array)) {
-            $whereCondition .= ' AND ( ';
-            $whereCondition .= implode($filters->groupOp, $condition_array);
-            $whereCondition .= ' ) ';
+            $extraCondition = ' AND ( ';
+            $extraCondition .= implode($filters->groupOp, $condition_array);
+            $extraCondition .= ' ) ';
         }
+
+        $whereCondition .= $extraCondition;
 
         // Question field
 
@@ -163,10 +165,14 @@ if ($search || $forceSearch) {
         $condition_array = $resultQuestion['condition_array'];
 
         if (!empty($condition_array)) {
-            $whereCondition .= ' AND ( ';
-            $whereCondition .= implode($filters->groupOp, $condition_array);
-            $whereCondition .= ' ) ';
+            $extraQuestionCondition = ' AND ( ';
+            $extraQuestionCondition .= implode($filters->groupOp, $condition_array);
+            $extraQuestionCondition .= ' ) ';
+            // Remove conditions already added
+            $extraQuestionCondition = str_replace($extraCondition, '', $extraQuestionCondition);
         }
+
+        $whereCondition .= $extraQuestionCondition;
     }
 }
 
@@ -188,7 +194,6 @@ switch ($action) {
         }
 
         $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
-
         $courseCodeList = array();
         $userIdList  = array();
         $sessionIdList = [];

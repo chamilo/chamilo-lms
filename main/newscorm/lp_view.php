@@ -416,7 +416,12 @@ $template->assign('toc_list', $get_toc_list);
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 
-$content = $template->fetch('default/learnpath/view.tpl');
+$templateFolder = api_get_configuration_value('default_template');
+if(!empty($templateFolder)){
+    $content = $template->fetch($templateFolder.'/learnpath/view.tpl');
+}else{
+    $content = $template->fetch('default/learnpath/view.tpl');
+}
 
 $template->assign('content', $content);
 $template->display_no_layout_template();

@@ -652,7 +652,7 @@ class ExtraFieldOption extends Model
         $field_id = intval($field_id);
         $limit = intval($limit);
         $tag = Database::escape_string($tag);
-        $sql = "SELECT DISTINCT id, option_display_text
+        $sql = "SELECT DISTINCT id, display_text
                 FROM {$this->table}
                 WHERE
                     field_id = '".$field_id."' AND
@@ -685,7 +685,7 @@ class ExtraFieldOption extends Model
             foreach ($result as $item) {
                 $values[] = array(
                     'value' => $item['id'],
-                    'caption' => $item['option_display_text'],
+                    'caption' => $item['display_text'],
                 );
             }
             $json = json_encode($values);

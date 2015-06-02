@@ -363,9 +363,7 @@ SQL;
      */
     public function getExtrafields(){
         return [
-            self::FIELD_VARIABLE_SHOW_IN_SLIDER,
-            self::FIELD_VARIABLE_IMAGE,
-            self::FIELD_VARIABLE_URL
+            self::FIELD_VARIABLE_IMAGE
         ];
     }
 

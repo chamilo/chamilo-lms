@@ -125,7 +125,7 @@ class ExtraFieldValue extends Model
                                     $extraFieldInfo['id']
                                 );
                             } else {
-                                /*  $old = self::getAllValuesByItemAndField(
+                                $old = self::getAllValuesByItemAndField(
                                     $params['item_id'],
                                     $extraFieldInfo['id']
                                 );
@@ -157,7 +157,7 @@ class ExtraFieldValue extends Model
                                             $deleteFieldValue
                                         );
                                     }
-                                }*/
+                                }
                             }
                             break;
                         case ExtraField::FIELD_TYPE_FILE_IMAGE:

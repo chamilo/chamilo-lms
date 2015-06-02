@@ -3169,23 +3169,36 @@ class learnpath
             return false;
         }
 
-        $lp = intval($lp);
-        $parent = intval($parent);
+        $learnpath = new learnpath(api_get_course_id(), $lp, api_get_user_id());
 
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT id, item_type, title FROM $tbl_lp_item
-                WHERE c_id = $course_id AND lp_id = $lp AND parent_item_id = $parent
-                ORDER BY display_order";
+        $list = [];
 
-        $res = Database::query($sql);
-        while ($row = Database :: fetch_array($res)) {
-            $sublist = learnpath :: get_tree_ordered_items_list($lp, $row['id'], $course_id, $level + 1);
-            if (!empty($sublist)) {
-                $list[] = array('id' => $row['id'], 'title' => $row['title'], 'level' => $level + 1, 'type' => $row['item_type'],  'tree' => $sublist);
-            } else {
-                $list[] = array('id' => $row['id'], 'title' => $row['title'], 'level' => $level + 1, 'type' => $row['item_type']);
+        foreach ($learnpath->items as $item) {
+            if (empty($item->parent)) {
+                continue;
             }
+
+            $list[$item->parent]['tree'][] = [
+                'id' => $item->db_id,
+                'title' => $item->title,
+                'level' => $item->level,
+                'status' => $item->status,
+                'type' => $item->type
+            ];
         }
+
+        foreach ($learnpath->items as $item) {
+            if (!empty($item->parent)) {
+                continue;
+            }
+
+            $list[$item->db_id]['id'] = $item->db_id;
+            $list[$item->db_id]['title'] = $item->title;
+            $list[$item->db_id]['level'] = $item->level;
+            $list[$item->db_id]['status'] = $item->status;
+            $list[$item->db_id]['type'] = $item->type;
+        }
+
         return $list;
     }
 
@@ -3202,87 +3215,109 @@ class learnpath
         );
     }
 
-    public function get_mini_html_toc($tree) {
+    /**
+     * Get the minified HTML for the table of content
+     * @param array $tree
+     * @return string
+     */
+    public function getMiniHtmlToc($tree)
+    {
         $html = '';
         $count = 0;
         foreach ($tree as $key => $subtree) {
             $html .= '<div class="panel panel-default">';
             if ($subtree['type'] == 'dokeos_chapter') {
-                $html .= '<div class="panel-heading" role="tab" id="heading'.$subtree['id'].'">';
+                $html .= '<div class="panel-heading" role="tab" id="heading' . $subtree['id'] . '">';
                 $html .= '<h4 class="panel-title">';
-                if($count==0){
-                    $html .= '<a data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'.$subtree['id'].'" aria-expanded="true" aria-controls="collapse'.$subtree['id'].'">';
-                }else{
-                    $html .= '<a data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'.$subtree['id'].'" aria-expanded="false" aria-controls="collapse'.$subtree['id'].'">';
+                if ($count == 0) {
+                    $html .= '<a data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
+                        . $subtree['id'] . '" aria-expanded="true" aria-controls="collapse' . $subtree['id'] . '">';
+                } else {
+                    $html .= '<a data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
+                        . $subtree['id'] . '" aria-expanded="false" aria-controls="collapse' . $subtree['id'] . '">';
                 }
-                $html .=  $subtree['title'];
+                $html .= $subtree['title'];
                 $html .= '</a></h4>';
                 $html .= '</div>';
-                if($count==0){
-                    $html .= '<div id="collapse'.$subtree['id'].'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$subtree['id'].'">';
-                }else{
-                    $html .= '<div id="collapse'.$subtree['id'].'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'.$subtree['id'].'">';
+                if ($count == 0) {
+                    $html .= '<div id="collapse' . $subtree['id']
+                        . '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'
+                        . $subtree['id'] . '">';
+                } else {
+                    $html .= '<div id="collapse' . $subtree['id']
+                        . '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'
+                        . $subtree['id'] . '">';
                 }
                 $html .= '<div class="panel-body">';
                 $count++;
-            } 
+            }
             if (!empty($subtree['tree'])) {
-                $html .= $this->get_mini_html_toc_subtree($subtree['tree']);
+                $html .= $this->getMiniHtmlTocSubtree($subtree['tree']);
             }
             $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';
         }
-        
+
         return $html;
     }
 
-    public function get_mini_html_toc_subtree($tree) {
+    /**
+     * Get the minified HTML fot table of content subtree
+     * @param array $tree
+     * @return string
+     */
+    public function getMiniHtmlTocSubtree($tree)
+    {
         $mycurrentitemid = $this->get_current_item_id();
         $class_name = array(
-                    'not attempted' => 'scorm_not_attempted',
-                    'incomplete' => 'scorm_not_attempted',
-                    'failed' => 'scorm_failed',
-                    'completed' => 'scorm_completed',
-                    'passed' => 'scorm_completed',
-                    'succeeded' => 'scorm_completed',
-                    'browsed' => 'scorm_completed',
-                );
+            'not attempted' => 'scorm_not_attempted',
+            'incomplete' => 'scorm_not_attempted',
+            'failed' => 'scorm_failed',
+            'completed' => 'scorm_completed',
+            'passed' => 'scorm_completed',
+            'succeeded' => 'scorm_completed',
+            'browsed' => 'scorm_completed',
+        );
         $dirTypes = self::getChapterTypes();
         $html = '';
-        
+
         $html .= '<ul class="scorm-items-accordion">';
         foreach ($tree as $key => $subtree) {
             $title = $subtree['title'];
-                if (empty ($title)) {
-                    $title = rl_get_resource_name(api_get_course_id(), $this->get_id(), $subtree['id']);
-                }
-                $title = Security::remove_XSS($title);
+            if (empty($title)) {
+                $title = rl_get_resource_name(api_get_course_id(), $this->get_id(), $subtree['id']);
+            }
+            $title = Security::remove_XSS($title);
 
 
             if ($subtree['id'] == $this->current) {
-                    $scorm_active = 'scorm_item_normal scorm_highlight';
-                } elseif (!in_array($subtree['type'], $dirTypes)) {
-                    $scorm_active = 'scorm_item_normal';
-            }    
-            
-            $html .= '<li class="scorm_level_' . $subtree['level'] . ' scorm_type_' . learnpath::format_scorm_type_item($subtree['type']) . ' ' . $scorm_active . ' ' . $class_name['incomplete'] . ' " >';
+                $scorm_active = 'scorm_item_normal scorm_highlight';
+            } elseif (!in_array($subtree['type'], $dirTypes)) {
+                $scorm_active = 'scorm_item_normal';
+            }
+
+            $html .= '<li id="toc_' . $subtree['id'] . '" class="scorm_level_' . $subtree['level'] . ' scorm_type_'
+                . learnpath::format_scorm_type_item($subtree['type'])
+                . ' ' . $scorm_active . ' ' . $class_name[$subtree['status']] . ' " >';
             if ($subtree['type'] != 'dokeos_chapter') {
                 $this->get_link('http', $subtree['id'], $tree);
-                $html .= '<a href="" onClick="switch_item(' . $mycurrentitemid . ',' . $subtree['id'] . ');' . 'return false;" >';
-                $html .=  $title;
-                $html .= '</a>';
+                $html .= Display::url(
+                    $title,
+                    '#',
+                    ['onclick' => "switch_item({$mycurrentitemid}, {$subtree['id']}); return false;"]
+                );
             } else {
                 $html .= '';
-                
             }
             $html .= '</li>';
         }
-        
+
         $html .= '</ul>';
-        
+
         return $html;
     }
+
     /**
      * Uses the table generated by get_toc() and returns an HTML-formatted string ready to display
      * @return	string	HTML TOC ready to display
@@ -3299,18 +3334,16 @@ class learnpath
             $toc_list = $this->get_toc();
         }
         if ($_configuration['new_scorm'] == 1) {
-
-
             // Temporary variables.
             $mycurrentitemid = $this->get_current_item_id();
             //$color_counter = 0;
             //$i = 0;
-            
+
             $html = '';
 
             //$contItem = count($toc_list);
             //echo $contItem;
-            
+
             $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
 
             if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
@@ -3326,13 +3359,10 @@ class learnpath
                 }
             }
             $html .= '<div class="panel-group" id="scorm-accordion" role="tablist" aria-multiselectable="false">';
-            
-            $toc_list = $this->get_tree_ordered_items_list($this->lp_id);
-            $html .= $this->get_mini_html_toc($toc_list);
-            
-            $html .= '</div>';
 
-            
+            $toc_list = $this->get_tree_ordered_items_list($this->lp_id);
+            $html .= $this->getMiniHtmlToc($toc_list);
+            $html .= '</div>';
 
         } else {
             $html = '<div id="scorm_title" class="scorm-heading">' . Security::remove_XSS($this->get_name()) . '</div>';
@@ -10491,7 +10521,7 @@ EOD;
         // Calculate star for final evaluation
         $finalEvaluationItem = $this->getFinalEvaluationItem();
 
-        if ($finalEvaluationItem === false) {
+        if (empty($finalEvaluationItem)) {
             return $stars;
         }
 
@@ -10593,7 +10623,7 @@ EOD;
             }
         }
 
-        if ($finalEvaluationItem !== false) {
+        if (!empty($finalEvaluationItem)) {
             $evaluationResultInfo = Event::getExerciseResultsByUser(
                 $this->user_id,
                 $finalEvaluationItem->ref,

@@ -1,12 +1,81 @@
+<div class="container">
+<header>
+    <div class="row">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-bar-top">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="navbar-brand" href="#">
+                        {{ logo }}
+                    </div>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="menu-bar-top">
+                    <ul class="nav navbar-nav navbar-right">
+                        {% for item in list %}
+                        {% if item['key'] == 'homepage' or item['key'] == 'my-course' %}
+                        <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if _u.logged == 0 %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                Iniciar Sesión<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="login-menu">
+                                    {# if user is not login show the login form #}
+                                    {% block login_form %}
+
+                                    {% include template ~ "/layout/login_form.tpl" %}
+
+                                    {% endblock %}
+                                </li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                        {% if _u.logged == 1 %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                {{ _u.complete_name }}<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+
+                                {% for item in list %}
+                                {% if item['key'] != 'my-space' and item['key'] != 'dashboard' and item['key'] != 'homepage' and item['key'] != 'my-course' %}
+                                <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                <li class="divider"></li>
+                                <li>
+                                    <a title="{{ "Logout"|get_lang }}" href="{{ logout_link }}">
+                                        <i class="fa fa-sign-out"></i>{{ "Logout"|get_lang }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+</header>
+</div>
+
 <div id="learning_path_main" style="width:100%; height: 100%;">
     <button id="touch-button" class="btn btn-primary"><i class="fa fa-bars"></i></button>
     <div class="container">
         <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">
-
                     <div id="scorm-info" class="panel panel-default">
-
-                        {# Author image preview #}
                         <div id="panel-scorm" class="panel-body">
                             <div id="lp_navigation_elem" class="navegation-bar">
                                 <div class="ranking-scorm">
@@ -49,7 +118,6 @@
                 {# end TOC layout #}
 
             </div>
-            {# end left zone #}
 
             {# <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div> #}
 
@@ -148,6 +216,7 @@
     window.onresize = updateContentHeight();
 
     $(document).ready(function(){
+
         $("#icon-down").click(function(){
             $("#icon-up").removeClass("hidden");
             $(this).addClass("hidden");

@@ -3204,20 +3204,28 @@ class learnpath
 
     public function get_mini_html_toc($tree) {
         $html = '';
+        $count = 0;
         foreach ($tree as $key => $subtree) {
             $html .= '<div class="panel panel-default">';
             if ($subtree['type'] == 'dokeos_chapter') {
                 $html .= '<div class="panel-heading" role="tab" id="heading'.$subtree['id'].'">';
                 $html .= '<h4 class="panel-title">';
-                $html .= '<a data-toggle="collapse" data-parent="#accordion" href="#collapse'.$subtree['id'].'" aria-expanded="true" aria-controls="collapse'.$subtree['id'].'">';
+                if($count==0){
+                    $html .= '<a data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'.$subtree['id'].'" aria-expanded="true" aria-controls="collapse'.$subtree['id'].'">';
+                }else{
+                    $html .= '<a data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'.$subtree['id'].'" aria-expanded="false" aria-controls="collapse'.$subtree['id'].'">';
+                }
                 $html .=  $subtree['title'];
                 $html .= '</a></h4>';
                 $html .= '</div>';
-                $html .= '<div id="collapse'.$subtree['id'].'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$subtree['id'].'">';
+                if($count==0){
+                    $html .= '<div id="collapse'.$subtree['id'].'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$subtree['id'].'">';
+                }else{
+                    $html .= '<div id="collapse'.$subtree['id'].'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'.$subtree['id'].'">';
+                }
                 $html .= '<div class="panel-body">';
-            } else {
-                $html .= '';
-            }
+                $count++;
+            } 
             if (!empty($subtree['tree'])) {
                 $html .= $this->get_mini_html_toc_subtree($subtree['tree']);
             }
@@ -3317,7 +3325,7 @@ class learnpath
                     $html .= '</div>';
                 }
             }
-            $html .= '<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">';
+            $html .= '<div class="panel-group" id="scorm-accordion" role="tablist" aria-multiselectable="false">';
             
             $toc_list = $this->get_tree_ordered_items_list($this->lp_id);
             $html .= $this->get_mini_html_toc($toc_list);

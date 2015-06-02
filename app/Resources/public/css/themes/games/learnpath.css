@@ -86,3 +86,26 @@
 .scorm-items-accordion a:hover{
   text-decoration: none;
 }
+@media (min-width: 1024px) {
+  .sidebar-scorm{
+    width: 25.66666667%;
+  }
+  .content-scorm{
+    width: 76.33333333%;
+  }
+  .total{
+    width: 100%;
+  }
+  #learning_path_right_zone{
+    width: 74%;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #learning_path_right_zone.total{
+    width: 100%;
+    visibility: visible;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}

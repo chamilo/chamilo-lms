@@ -26,6 +26,16 @@
             </div>
             {% endif %}
         {% endif %}
+
+
+        {# Homepage bottom region #}
+        {% if is_homepage and plugin_homepage_bottom %}
+        <div id="plugin-homepage" class="col-xs-12">
+            {{ plugin_homepage_bottom }}
+        </div>
+        {% endif %}
+
+
         {% if plugin_content_top %}
         <div id="plugin_content_top">
             {{ plugin_content_top }}
@@ -44,8 +54,6 @@
                 {{plugin_menu_top}}
             </div>
         {% endif %}
-
-
 
 	    <div class="row">
             <div class="col-md-4">
@@ -117,12 +125,7 @@
         &nbsp;
 	</div>
 
-                {# Homepage bottom region #}
-                {% if is_homepage and plugin_homepage_bottom %}
-                    <div id="plugin-homepage-bottom" class="col-xs-12">
-                        {{ plugin_homepage_bottom }}
-                    </div>
-                {% endif %}
+
 
     {# Plugin main bottom #}
     {% if plugin_main_bottom %}

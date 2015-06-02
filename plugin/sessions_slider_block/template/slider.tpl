@@ -2,7 +2,6 @@
 <link href="{{ _p.web_plugin }}sessions_slider_block/resources/owl-carousel/owl.carousel.css" rel="stylesheet">
 <link href="{{ _p.web_plugin }}sessions_slider_block/resources/owl-carousel/owl.theme.css" rel="stylesheet">
 <link href="{{ _p.web_plugin }}sessions_slider_block/resources/style.css" rel="stylesheet">
-
 <div id="slider-sessions">
     <div class="row">
         <div class="col-md-12"><h4 class="title-section">{{ "RecommendedCourses"|get_lang }}</h4><a href="#" class="more">Ver más</a></div>
@@ -27,10 +26,10 @@
                                 {{ session.course_description }}
                             </div>
                             <div class="row">
-                                <div class="col-xs-6">
+                                <div class="col-xs-7">
                                    <p class="level">{{ "LevelX"|get_lang|format(session.course_level) }}</p>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-xs-5 text-right">
                                     <a href="{{ session.url_in_slider }}" class="btn btn-primary">{{ "SeeCourse"|get_lang }}</a>
                                 </div>
                             </div>

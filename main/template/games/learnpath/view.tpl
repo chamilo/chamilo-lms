@@ -1,11 +1,4 @@
 <div id="learning_path_main" style="width:100%; height: 100%;">
-    {% if is_allowed_to_edit %}
-        <div class="row">
-            <div id="learning_path_breadcrumb_zone" class="col-md-12">
-                {{ breadcrumb }}
-            </div>
-        </div>
-    {% endif %}
     <button id="touch-button" class="btn btn-primary"><i class="fa fa-bars"></i></button>
     <div class="container">
         <div class="row">
@@ -50,26 +43,7 @@
                 {# TOC layout #}
                 <div id="toc_id" name="toc_name">
                     <div id="learning_path_toc" class="scorm-list">
-
-
-
-                        <div class="scorm-body">
-
-                            <div id="inner_lp_roc" class="inner_lp_toc">
-                                {% for item in toc_list %}
-                                <div id="toc_{{ item['id'] }}" class="scorm_item_normal scorm_item_2  scorm_{{ item['status'] }} ">
-                                    <div class=" scorm_item_level_{{ item['level'] }} scorm_type_{{ item['type'] }}" title="{{ item['title'] }}">
-                                        <a name="atoc_{{ item['id'] }}"></a>
-                                        <a class="items-list" href="" onclick="switch_item(18,18);return false;">{{ item['title'] }}</a>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-
-                        </div>
-
-
-
+                        {{ oLP.get_html_toc(toc_list) }}
                     </div>
                 </div>
                 {# end TOC layout #}

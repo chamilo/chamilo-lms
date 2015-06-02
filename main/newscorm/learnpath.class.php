@@ -3266,7 +3266,7 @@ class learnpath
                     $scorm_active = 'scorm_item_normal';
             }    
             
-            $html .= '<li class="scorm_level_' . $subtree['level'] . ' scorm_type_' . learnpath::format_scorm_type_item($subtree['type']) . ' ' . $scorm_active . ' ' . $class_name['incomplete'] . ' " >';
+            $html .= '<li id="toc_' . $subtree['id'] . '" class="scorm_level_' . $subtree['level'] . ' scorm_type_' . learnpath::format_scorm_type_item($subtree['type']) . ' ' . $scorm_active . ' ' . $class_name['incomplete'] . ' " >';
             if ($subtree['type'] != 'dokeos_chapter') {
                 $this->get_link('http', $subtree['id'], $tree);
                 $html .= '<a href="" onClick="switch_item(' . $mycurrentitemid . ',' . $subtree['id'] . ');' . 'return false;" >';

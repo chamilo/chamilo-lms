@@ -3169,23 +3169,36 @@ class learnpath
             return false;
         }
 
-        $lp = intval($lp);
-        $parent = intval($parent);
+        $learnpath = new learnpath(api_get_course_id(), $lp, api_get_user_id());
 
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT id, item_type, title FROM $tbl_lp_item
-                WHERE c_id = $course_id AND lp_id = $lp AND parent_item_id = $parent
-                ORDER BY display_order";
+        $list = [];
 
-        $res = Database::query($sql);
-        while ($row = Database :: fetch_array($res)) {
-            $sublist = learnpath :: get_tree_ordered_items_list($lp, $row['id'], $course_id, $level + 1);
-            if (!empty($sublist)) {
-                $list[] = array('id' => $row['id'], 'title' => $row['title'], 'level' => $level + 1, 'type' => $row['item_type'],  'tree' => $sublist);
-            } else {
-                $list[] = array('id' => $row['id'], 'title' => $row['title'], 'level' => $level + 1, 'type' => $row['item_type']);
+        foreach ($learnpath->items as $item) {
+            if (empty($item->parent)) {
+                continue;
             }
+
+            $list[$item->parent]['tree'][] = [
+                'id' => $item->db_id,
+                'title' => $item->title,
+                'level' => $item->level,
+                'status' => $item->status,
+                'type' => $item->type
+            ];
         }
+
+        foreach ($learnpath->items as $item) {
+            if (!empty($item->parent)) {
+                continue;
+            }
+
+            $list[$item->db_id]['id'] = $item->db_id;
+            $list[$item->db_id]['title'] = $item->title;
+            $list[$item->db_id]['level'] = $item->level;
+            $list[$item->db_id]['status'] = $item->status;
+            $list[$item->db_id]['type'] = $item->type;
+        }
+
         return $list;
     }
 
@@ -3286,7 +3299,7 @@ class learnpath
 
             $html .= '<li id="toc_' . $subtree['id'] . '" class="scorm_level_' . $subtree['level'] . ' scorm_type_'
                 . learnpath::format_scorm_type_item($subtree['type'])
-                . ' ' . $scorm_active . ' ' . $class_name['incomplete'] . ' " >';
+                . ' ' . $scorm_active . ' ' . $class_name[$subtree['status']] . ' " >';
             if ($subtree['type'] != 'dokeos_chapter') {
                 $this->get_link('http', $subtree['id'], $tree);
                 $html .= Display::url(

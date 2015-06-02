@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
+
 require_once '../global.inc.php';
 
 api_block_anonymous_users();
@@ -18,9 +19,31 @@ api_protect_admin_script();
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+$sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
+
 $em = Database::getManager();
 $repository = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 switch ($action) {
+    case 'graph':
+        switch ($type) {
+            case 'session':
+                $type = SequenceResource::SESSION_TYPE;
+
+                /** @var Sequence $sequence */
+                $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
+
+                if (empty($sequence)) {
+                    exit;
+                }
+
+                if ($sequence->hasGraph()) {
+                    $graph = $sequence->getUnSerializeGraph();
+                    $graphviz = new \Graphp\GraphViz\GraphViz();
+                    echo $graphviz->createImageHtml($graph);
+                }
+                break;
+        }
+        break;
     case 'get_icon':
         $link = '';
         switch ($type) {
@@ -40,7 +63,7 @@ switch ($action) {
                     }
 
                     $link = '<div class="parent" data-id="'.$id.'">'.
-                        $image.' '.$sessionInfo['name'].$linkDelete.
+                        $image.' '.$sessionInfo['name'].' ('.$id.')'.$linkDelete.
                         '</div>';
                 }
                 break;
@@ -49,10 +72,8 @@ switch ($action) {
         break;
     case 'delete_vertex':
         $vertexId = isset($_REQUEST['vertex_id']) ? $_REQUEST['vertex_id'] : null;
-        $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
 
         $type = SequenceResource::SESSION_TYPE;
-
 
         /** @var Sequence $sequence */
         $sequence = $em->getRepository('ChamiloCoreBundle:Sequence')->find($sequenceId);
@@ -113,8 +134,6 @@ switch ($action) {
 
         if ($sequenceResource->hasGraph()) {
             $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
-            //$graphviz = new GraphViz();
-            //echo $graphviz->createImageHtml($graph);
 
             /** @var Vertex $mainVertice */
             if ($graph->hasVertex($id)) {
@@ -166,20 +185,31 @@ switch ($action) {
         $parents = explode(',', $parents);
         $parents = array_filter($parents);
 
-        $graph = new Graph();
+        if ($sequence->hasGraph()) {
+            $graph = $sequence->getUnSerializeGraph();
+        } else {
+            $graph = new Graph();
+        }
 
         switch ($type) {
             case 'session':
 
                 $type = SequenceResource::SESSION_TYPE;
-
                 $sessionInfo = api_get_session_info($id);
                 $name = $sessionInfo['name'];
 
-                $main = $graph->createVertex($id);
+                if ($graph->hasVertex($id)) {
+                    $main = $graph->getVertex($id);
+                } else {
+                    $main = $graph->createVertex($id);
+                }
 
                 foreach ($parents as $parentId) {
-                    $parent = $graph->createVertex($parentId);
+                    if ($graph->hasVertex($parentId)) {
+                        $parent = $graph->getVertex($parentId);
+                    } else {
+                        $parent = $graph->createVertex($parentId);
+                    }
                     $parent->createEdgeTo($main);
                 }
 

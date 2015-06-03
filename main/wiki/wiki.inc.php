@@ -356,7 +356,7 @@ class Wiki
         $id = Database::insert($tbl_wiki, $params);
 
         if ($id > 0) {
-            $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
+            $sql = "UPDATE $tbl_wiki SET id = iid, page_id = iid WHERE iid = $id";
             Database::query($sql);
 
             // insert into item_property
@@ -370,24 +370,11 @@ class Wiki
             );
         }
 
-        if ($pageId	== 0) {
-            $sql = 'UPDATE '.$tbl_wiki.' SET
-                    page_id = "'.$id.'"
-                    WHERE c_id = '.$course_id.' AND id="'.$id.'"';
-            Database::query($sql);
-        }
-
         //update wiki config
         if ($values['reflink'] == 'index' && $version == 1 ) {
             $sql = "INSERT INTO ".$tbl_wiki_conf." (c_id, page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit)
-                   VALUES ($course_id, '".$id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
+                    VALUES ($course_id, '".$id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
             Database::query($sql);
-
-            $confId = Database::insert_id();
-            if ($confId) {
-                $sql = "UPDATE $tbl_wiki_conf SET page_id = $confId WHERE iid = $confId";
-                Database::query($sql);
-            }
         } else {
             $sql = 'UPDATE '.$tbl_wiki_conf.' SET
                         task="'.$_clean['task'].'",
@@ -499,22 +486,15 @@ class Wiki
         $groupfilter = $this->groupfilter;
         $course_id = $this->course_id;
 
-        //identify the first id by group = identify wiki
-        $sql = 'SELECT * FROM '.$tbl_wiki.'
-                WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
-                ORDER BY id DESC';
-        $allpages = Database::query($sql);
-        while ($row = Database::fetch_array($allpages)) {
-            $id 		= $row['id'];
-            $group_id	= $row['group_id'];
-            $session_id = $row['session_id'];
-            //$page_id	= $row['page_id'];
-            Database::query('DELETE FROM '.$tbl_wiki_conf.' 	WHERE page_id="'.$id.'" AND c_id = '.$course_id);
-            Database::query('DELETE FROM '.$tbl_wiki_discuss.'	WHERE publication_id="'.$id.'" AND c_id = '.$course_id);
-        }
+        $sql = "SELECT page_id FROM $tbl_wiki
+                WHERE  c_id = $course_id AND $groupfilter $condition_session
+                ORDER BY id DESC";
 
-        Database::query('DELETE FROM '.$tbl_wiki_mailcue.' WHERE session_id="'.$session_id.'" AND group_id="'.$group_id.'" AND c_id = '.$course_id);
-        Database::query('DELETE FROM '.$tbl_wiki.' WHERE session_id="'.$session_id.'" AND group_id="'.$group_id.'" AND c_id = '.$course_id);
+        Database::query("DELETE FROM $tbl_wiki_conf WHERE c_id = $course_id AND page_id IN ($sql)");
+        Database::query("DELETE FROM $tbl_wiki_discuss WHERE c_id = $course_id AND publication_id IN ($sql)");
+        Database::query("DELETE FROM $tbl_wiki_mailcue WHERE c_id = $course_id AND $groupfilter $condition_session ");
+        Database::query("DELETE FROM $tbl_wiki WHERE c_id = $course_id AND $groupfilter $condition_session ");
+
         return get_lang('WikiDeleted');
     }
 
@@ -3129,7 +3109,9 @@ class Wiki
         $groupfilter = $this->groupfilter;
         $tbl_wiki_discuss = $this->tbl_wiki_discuss;
 
-        if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
+        if (api_get_session_id()!=0 &&
+            api_is_allowed_to_session_edit(false,true)==false
+        ) {
             api_not_allowed();
         }
 
@@ -3145,29 +3127,50 @@ class Wiki
                     reflink = "'.Database::escape_string($page).'" AND
                     '.$groupfilter.$condition_session.'
                 ORDER BY id DESC';
-        $result=Database::query($sql);
-        $row=Database::fetch_array($result);
-        $lastversiondate=api_get_local_time($row['dtime'], null, date_default_timezone_get());
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        $lastversiondate = api_get_local_time($row['dtime']);
         $lastuserinfo = api_get_user_info($row['user_id']);
         $username = api_htmlentities(sprintf(get_lang('LoginX'), $lastuserinfo['username']), ENT_QUOTES);
 
-        //select page to discuss
+        // Select page to discuss
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$course_id.' AND
                     reflink="'.Database::escape_string($page).'" AND
                     '.$groupfilter.$condition_session.'
                 ORDER BY id ASC';
-        $result=Database::query($sql);
-        $row=Database::fetch_array($result);
-        $id=$row['id'];
-        $firstuserid=$row['user_id'];
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        $id = $row['id'];
+        $firstuserid = $row['user_id'];
+
+
+        if (isset($_POST['Submit']) && self::double_post($_POST['wpost_id'])) {
+            $dtime = api_get_utc_datetime();
+            $message_author = api_get_user_id();
+            $sql = "INSERT INTO $tbl_wiki_discuss (c_id, publication_id, userc_id, comment, p_score, dtime)
+                    VALUES ($course_id, '".$id."','".$message_author."','".Database::escape_string($_POST['comment'])."','".Database::escape_string($_POST['rating'])."','".$dtime."')";
+            Database::query($sql);
+
+            $discussId = Database::insert_id();
+            if ($discussId) {
+                $sql = "UPDATE $tbl_wiki_discuss SET id = iid WHERE iid = $discussId";
+                Database::query($sql);
+            }
+
+            self::check_emailcue($id, 'D', $dtime, $message_author);
+
+            header('Location: index.php?action=discuss&title='.api_htmlentities(urlencode($page)).'&'.api_get_cidreq());
+            exit;
+        }
+
 
         //mode assignment: previous to show  page type
         $icon_assignment = null;
-        if ($row['assignment']==1) {
+        if ($row['assignment'] == 1) {
             $icon_assignment = Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',ICON_SIZE_SMALL);
-        } elseif($row['assignment']==2) {
+        } elseif ($row['assignment'] == 2) {
             $icon_assignment = Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',ICON_SIZE_SMALL);
         }
 
@@ -3175,7 +3178,7 @@ class Wiki
         $avg_WPost_score = null;
 
         // Show title and form to discuss if page exist
-        if ($id!='') {
+        if ($id != '') {
             // Show discussion to students if isn't hidden.
             // Show page to all teachers if is hidden.
             // Mode assignments: If is hidden, show pages to student only if student is the author
@@ -3199,7 +3202,7 @@ class Wiki
                     }
                 }
                 echo '<span style="float:right">';
-                echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_disc.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$addlock_disc.'</a>';
+                echo '<a href="index.php?action=discuss&actionpage='.$lock_unlock_disc.'&title='.api_htmlentities(urlencode($page)).'">'.$addlock_disc.'</a>';
                 echo '</span>';
 
                 // discussion action: visibility.  Show discussion to students if isn't hidden. Show page to all teachers if is hidden.
@@ -3298,14 +3301,7 @@ class Wiki
                     </form>
 
                     <?php
-                    if (isset($_POST['Submit']) && self::double_post($_POST['wpost_id'])) {
-                        $dtime = date( "Y-m-d H:i:s" );
-                        $message_author = api_get_user_id();
-                        $sql = "INSERT INTO $tbl_wiki_discuss (c_id, publication_id, userc_id, comment, p_score, dtime)
-                                VALUES ($course_id, '".$id."','".$message_author."','".Database::escape_string($_POST['comment'])."','".Database::escape_string($_POST['rating'])."','".$dtime."')";
-                        Database::query($sql);
-                        self::check_emailcue($id, 'D', $dtime, $message_author);
-                    }
+
                 }//end discuss lock
 
                 echo '<hr noshade size="1">';
@@ -3327,12 +3323,12 @@ class Wiki
                         FROM $tbl_wiki_discuss
                         WHERE c_id = $course_id AND publication_id = '".$id."' AND NOT p_score='-'
                         ORDER BY id DESC";
-                $result2=Database::query($sql) or die(Database::error());
-                $row2=Database::fetch_array($result2);
+                $result2 = Database::query($sql);
+                $row2 = Database::fetch_array($result2);
 
                 $sql = "SELECT * FROM $tbl_wiki_discuss
                         WHERE c_id = $course_id AND publication_id='".$id."' AND NOT p_score='-'";
-                $result3=Database::query($sql);
+                $result3 = Database::query($sql);
                 $countWPost_score= Database::num_rows($result3);
 
                 echo ' - '.get_lang('NumCommentsScore').': '.$countWPost_score;//
@@ -3365,11 +3361,10 @@ class Wiki
                     }
 
                     $name = $userinfo['complete_name'];
-
                     $author_photo= '<img src="'.$userinfo['avatar'].'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top"  title="'.api_htmlentities($name).'"  />';
 
                     //stars
-                    $p_score=$row['p_score'];
+                    $p_score = $row['p_score'];
                     switch ($p_score) {
                         case  0:
                             $imagerating = Display::return_icon('rating/stars_0.gif');
@@ -3440,7 +3435,7 @@ class Wiki
 
         // menu delete all wiki
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            echo ' <a href="index.php?action=deletewiki&"'.api_get_cidreq().'>'.
+            echo ' <a href="index.php?action=deletewiki&'.api_get_cidreq().'">'.
                 Display::return_icon('delete.png', get_lang('DeleteWiki'), '', ICON_SIZE_MEDIUM).'</a>';
         }
         echo '</div>';
@@ -5105,9 +5100,10 @@ class Wiki
                 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                     $message = get_lang('ConfirmDeleteWiki');
                     $message .= '<p>
-                        <a href="index.php">'.get_lang('No').'</a>
+                        <a href="index.php?'.api_get_cidreq().'">'.get_lang('No').'</a>
                         &nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="'.api_get_self().'?action=deletewiki&amp;delete=yes">'.get_lang('Yes').'</a>
+                        <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletewiki&delete=yes">'.
+                        get_lang('Yes').'</a>
                     </p>';
 
                     if (!isset($_GET['delete'])) {

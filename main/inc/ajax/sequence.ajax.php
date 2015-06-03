@@ -38,6 +38,7 @@ switch ($action) {
 
                 if ($sequence->hasGraph()) {
                     $graph = $sequence->getUnSerializeGraph();
+                    $graph->setAttribute('graphviz.node.fontname', 'arial');
                     $graphviz = new \Graphp\GraphViz\GraphViz();
                     echo $graphviz->createImageHtml($graph);
                 }

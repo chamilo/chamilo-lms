@@ -10641,6 +10641,71 @@ EOD;
         return $totalExercisesResult + $totalEvaluationResult;
     }
 
+    /**
+     * Get the forum for this learning path
+     * @return boolean
+     */
+    public function getForum()
+    {
+        $forumTable = Database::get_course_table(TABLE_FORUM);
+        $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+        $fakeFrom = <<<SQL
+            $forumTable f
+            INNER JOIN $itemProperty ip
+                ON (f.forum_id = ip.ref AND f.c_id = ip.c_id AND f.session_id = ip.session_id)
+SQL;
+
+        $resultData = Database::select(
+            'f.*',
+            $fakeFrom,
+            [
+                'where' => [
+                    'ip.visibility != ? AND ' => 2,
+                    'ip.tool = ? AND ' => TOOL_FORUM,
+                    'f.session_id = ? AND ' => $this->lp_session_id,
+                    'f.c_id = ? AND ' => intval($this->course_int_id),
+                    'f.lp_id = ?' => intval($this->lp_id)
+                ]
+            ],
+            'first'
+        );
+
+        if (empty($resultData)) {
+            return false;
+        }
+
+        return $resultData;
+    }
+
+    /**
+     * Create a forum for this learning path
+     * @param type $forumCategoryId
+     * @return boolean
+     */
+    public function createForum($forumCategoryId)
+    {
+        require_once api_get_path(SYS_CODE_PATH) . '/forum/forumfunction.inc.php';
+
+        $forumId = store_forum(
+            [
+                'lp_id' => $this->lp_id,
+                'forum_title' => $this->name,
+                'forum_comment' => null,
+                'forum_category' => intval($forumCategoryId),
+                'students_can_edit_group' => ['students_can_edit' => 0],
+                'allow_new_threads_group' => ['allow_new_threads' => 0],
+                'default_view_type_group' => ['default_view_type' => 'flat'],
+                'group_forum' => 0,
+                'public_private_group_forum_group' => ['public_private_group_forum' => 'public']
+            ],
+            [],
+            true
+        );
+
+        return $forumId > 0;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

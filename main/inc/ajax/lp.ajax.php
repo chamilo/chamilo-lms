@@ -44,7 +44,32 @@ switch ($action) {
                 if ($_REQUEST['type'] == TOOL_QUIZ) {
                     $title = Exercise::format_title_variable($title);
                 }
-                echo $_SESSION['oLP']->add_item($_REQUEST['parent_id'], $_REQUEST['previous_id'], $_REQUEST['type'], $_REQUEST['id'], $title, null);
+                $itemId =  $_SESSION['oLP']->add_item(
+                    $_REQUEST['parent_id'],
+                    $_REQUEST['previous_id'],
+                    $_REQUEST['type'],
+                    $_REQUEST['id'],
+                    $title,
+                    null
+                );
+
+                if ($_REQUEST['type'] == 'document') {
+                    $forum = $_SESSION['oLP']->getForum();
+
+                    if (!empty($forum)) {
+                        $lpItem = new learnpathItem($itemId);
+                        $forumTheme = $lpItem->getForumThread(
+                            $_SESSION['oLP']->lp_session_id,
+                            $_SESSION['oLP']->course_int_id
+                        );
+
+                        if (empty($forumTheme)) {
+                            $lpItem->createForumTthread($forum['forum_id']);
+                        }
+                    }
+                }
+
+                echo $itemId;
             }
         }
         break;

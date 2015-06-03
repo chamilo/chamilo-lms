@@ -565,6 +565,33 @@ switch ($action) {
                         $new_lp_id,
                         api_get_user_id()
                     );
+
+                    if (isset($_REQUEST['create_forum'])) {
+                        require '../forum/forumfunction.inc.php';
+
+                        $forumCategory = getForumCategoryByTitle(
+                            get_lang('LearningPaths'),
+                            $_SESSION['oLP']->course_int_id,
+                            $_SESSION['oLP']->lp_session_id
+                        );
+
+                        if (empty($forumCategory)) {
+                            $forumCategoryId = store_forumcategory(
+                                [
+                                    'lp_id' => 0,
+                                    'forum_category_title' => get_lang('LearningPaths'),
+                                    'forum_category_comment' => null
+                                ],
+                                [],
+                                false
+                            );
+                        } else {
+                            $forumCategoryId = $forumCategory['cat_id'];
+                        }
+
+                        $_SESSION['oLP']->createForum($forumCategoryId);
+                    }
+
                     //require 'lp_build.php';
                     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id).'&'.api_get_cidreq();
                     header("Location: $url&isStudentView=false");

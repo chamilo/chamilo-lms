@@ -7357,4 +7357,5 @@ $LevelX = "Level %s";
 $SeeCourse = "View course";
 $XPoints = "%s points";
 $FromXUntilY = "From %s until %s";
+$CreateForumForThisLearningPath = "Create forum for this learning path";
 ?>

@@ -1,12 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-namespace ;
+namespace Chamilo\CoreBundle\Migrations\Schema\V110;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * Add branch
  */
 class Version20150603142550 extends AbstractMigration
 {
@@ -15,9 +15,6 @@ class Version20150603142550 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
         $this->addSql('CREATE TABLE room (id INT AUTO_INCREMENT NOT NULL, branch_id INT DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, geolocation VARCHAR(255) DEFAULT NULL, ip VARCHAR(39) DEFAULT NULL, ip_mask VARCHAR(6) DEFAULT NULL, INDEX IDX_729F519BDCD6CC49 (branch_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE branch_transaction_status (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE branch_transaction (id BIGINT AUTO_INCREMENT NOT NULL, status_id INT DEFAULT NULL, branch_id INT DEFAULT NULL, transaction_id BIGINT NOT NULL, action VARCHAR(20) DEFAULT NULL, item_id VARCHAR(255) DEFAULT NULL, origin VARCHAR(255) DEFAULT NULL, dest_id VARCHAR(255) DEFAULT NULL, external_info VARCHAR(255) DEFAULT NULL, time_insert DATETIME NOT NULL, time_update DATETIME NOT NULL, failed_attempts INT NOT NULL, INDEX IDX_FEFBA12B6BF700BD (status_id), INDEX IDX_FEFBA12BDCD6CC49 (branch_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -29,7 +26,6 @@ class Version20150603142550 extends AbstractMigration
         $this->addSql('ALTER TABLE course ADD room_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE course ADD CONSTRAINT FK_169E6FB954177093 FOREIGN KEY (room_id) REFERENCES room (id)');
         $this->addSql('CREATE INDEX IDX_169E6FB954177093 ON course (room_id)');
-        $this->addSql('ALTER TABLE session DROP date_start, DROP date_end, DROP nb_days_access_before_beginning, DROP nb_days_access_after_end');
         $this->addSql('ALTER TABLE c_calendar_event ADD room_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_calendar_event ADD CONSTRAINT FK_A062258154177093 FOREIGN KEY (room_id) REFERENCES room (id)');
         $this->addSql('CREATE INDEX IDX_A062258154177093 ON c_calendar_event (room_id)');
@@ -43,9 +39,6 @@ class Version20150603142550 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
         $this->addSql('ALTER TABLE course DROP FOREIGN KEY FK_169E6FB954177093');
         $this->addSql('ALTER TABLE c_calendar_event DROP FOREIGN KEY FK_A062258154177093');
         $this->addSql('ALTER TABLE c_thematic_advance DROP FOREIGN KEY FK_62798E9754177093');
@@ -63,6 +56,5 @@ class Version20150603142550 extends AbstractMigration
         $this->addSql('ALTER TABLE c_thematic_advance DROP room_id');
         $this->addSql('DROP INDEX IDX_169E6FB954177093 ON course');
         $this->addSql('ALTER TABLE course DROP room_id');
-        $this->addSql('ALTER TABLE session ADD date_start DATE NOT NULL, ADD date_end DATE NOT NULL, ADD nb_days_access_before_beginning TINYINT(1) DEFAULT NULL, ADD nb_days_access_after_end TINYINT(1) DEFAULT NULL');
     }
 }

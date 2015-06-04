@@ -216,7 +216,7 @@
     window.onresize = updateContentHeight();
 
     $(document).ready(function(){
-        
+
         $("#icon-down").click(function(){
             $("#icon-up").removeClass("hidden");
             $(this).addClass("hidden");

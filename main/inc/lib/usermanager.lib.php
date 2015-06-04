@@ -1265,7 +1265,7 @@ class UserManager
         }
 
         // Validation 2.
-        $allowed_types = array('jpg', 'jpeg', 'png', 'gif');
+        $allowed_types = api_get_supported_image_extensions();
         $file = str_replace('\\', '/', $file);
         $filename = (($pos = strrpos($file, '/')) !== false) ? substr($file, $pos + 1) : $file;
         $extension = strtolower(substr(strrchr($filename, '.'), 1));

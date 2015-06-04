@@ -53,10 +53,6 @@ class Version20150505142900 extends AbstractMigrationChamilo
         $chatVideoTable->addIndex(['to_user'], 'idx_chat_video_to_user');
         $chatVideoTable->addIndex(['from_user', 'to_user'], 'idx_chat_video_users');
         $chatVideoTable->addIndex(['room_name'], 'idx_chat_video_room_name');
-
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.38' WHERE variable = 'chamilo_database_version'
-        ");
     }
 
     /**
@@ -66,8 +62,5 @@ class Version20150505142900 extends AbstractMigrationChamilo
     public function down(Schema $schema)
     {
         $schema->dropTable('chat_video');
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.37' WHERE variable = 'chamilo_database_version'
-        ");
     }
 }

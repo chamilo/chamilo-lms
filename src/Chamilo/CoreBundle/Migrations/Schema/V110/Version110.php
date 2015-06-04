@@ -553,16 +553,26 @@ class Version110 extends AbstractMigrationChamilo
             }
         }
 
-        // Set NULL to session
+        // Set NULL if session = 0
         $sql = "UPDATE c_item_property SET session_id = NULL WHERE session_id = 0";
         $connection->executeQuery($sql);
 
-        // Set NULL to group
-        $sql = "UPDATE c_item_property SET group_id = NULL WHERE group_id = 0";
+        // Set NULL if group = 0
+        $sql = "UPDATE c_item_property SET to_group_id = NULL WHERE to_group_id = 0";
         $connection->executeQuery($sql);
 
-        // Delete session data of sessions that don't exists.
-        $sql = "DELETE FROM c_item_property WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)";
+        // Set NULL if insert_user_id = 0
+        $sql = "UPDATE c_item_property SET insert_user_id = NULL WHERE insert_user_id = 0";
+        $connection->executeQuery($sql);
+
+        // Delete session data of sessions that don't exist.
+        $sql = "DELETE FROM c_item_property
+                WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)";
+        $connection->executeQuery($sql);
+
+        // Delete group data of groups that don't exist.
+        $sql = "DELETE FROM c_item_property
+                WHERE to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT id FROM c_group_info)";
         $connection->executeQuery($sql);
 
         // This updates the group_id with c_group_info.iid instead of c_group_info.id

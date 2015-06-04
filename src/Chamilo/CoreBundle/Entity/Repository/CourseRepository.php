@@ -24,6 +24,7 @@ class CourseRepository extends EntityRepository
      */
     public function getSubscribedUsers(Course $course)
     {
+        // Course builder
         $queryBuilder = $this->createQueryBuilder('a');
 
         // Selecting user info.
@@ -41,7 +42,7 @@ class CourseRepository extends EntityRepository
         $wherePart = $queryBuilder->expr()->andx();
 
         // Get only users subscribed to this course
-        $wherePart->add($queryBuilder->expr()->eq('c.cId', $course->getId()));
+        $wherePart->add($queryBuilder->expr()->eq('a.id', $course->getId()));
 
         // $wherePart->add($queryBuilder->expr()->eq('c.status', $status));
 

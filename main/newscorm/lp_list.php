@@ -39,7 +39,6 @@ $nameTools = get_lang('LearningPaths');
 Event::event_access_tool(TOOL_LEARNPATH);
 
 api_protect_course_script();
-//if (!$is_allowed_in_course) api_not_allowed();
 
 /**
  * Display
@@ -283,8 +282,7 @@ foreach ($categories as $item) {
                 $oddclass = 'row_even';
             }
 
-            $url_start_lp = 'lp_controller.php?'.api_get_cidreq(
-                ).'&action=view&lp_id='.$id;
+            $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
             $name = Security::remove_XSS($details['lp_name']);
             $extra = null;
 
@@ -294,9 +292,7 @@ foreach ($categories as $item) {
                     $id,
                     $userId
                 );
-                $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.($studentVisibility ? '' : ' - ('.get_lang(
-                            'LPNotVisibleToStudent'
-                        ).')');
+                $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.($studentVisibility ? '' : ' - ('.get_lang('LPNotVisibleToStudent').')');
                 $extra = '<div class ="lp_content_type_label">'.$dsp_desc.'</div>';
             }
 
@@ -366,6 +362,7 @@ foreach ($categories as $item) {
             $dsp_edit_lp = null;
             $dsp_publish = null;
             $dsp_reinit = null;
+            $subscribeUsers = null;
             $dsp_disk = null;
             $copy = null;
             $lp_auto_launch_icon = null;
@@ -394,8 +391,7 @@ foreach ($categories as $item) {
                 // BUILD
                 if ($current_session == $details['lp_session']) {
                     if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
-                        $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq(
-                            ).'&amp;action=add_item&amp;type=step&amp;lp_id='.$id.'&isStudentView=false">'.
+                        $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$id.'&isStudentView=false">'.
                             Display::return_icon(
                                 'edit.png',
                                 get_lang('LearnpathEditLearnpath'),
@@ -425,24 +421,14 @@ foreach ($categories as $item) {
                     paths inside the session.
                     See http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions).
                 */
-                if ($details['lp_visibility'] == 0) {
-                    $dsp_visible = "<a href=\"".api_get_self(
-                        )."?".api_get_cidreq(
-                        )."&lp_id=$id&action=toggle_visible&new_status=1\">".Display::return_icon(
-                            'invisible.png',
-                            get_lang('Show'),
-                            '',
-                            ICON_SIZE_SMALL
-                        )."</a>";
-                } else {
-                    $dsp_visible = "<a href='".api_get_self(
-                        )."?".api_get_cidreq(
-                        )."&lp_id=$id&action=toggle_visible&new_status=0'>".Display::return_icon(
-                            'visible.png',
-                            get_lang('Hide'),
-                            '',
-                            ICON_SIZE_SMALL
-                        )."</a>";
+                if (!isset($details['subscribe_users']) || $details['subscribe_users'] != 1) {
+                    if ($details['lp_visibility'] == 0) {
+                        $dsp_visible = "<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">".
+                            Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL )."</a>";
+                    } else {
+                        $dsp_visible = "<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>".
+                            Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL )."</a>";
+                    }
                 }
 
                 /* PUBLISH COMMAND */
@@ -657,6 +643,17 @@ foreach ($categories as $item) {
                     api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id"
                 );
 
+                // Subscribe users
+                $subscribeUsers = null;
+
+                var_dump($details);
+                if ($details['subscribe_users'] == 1) {
+                    $subscribeUsers = Display::url(
+                        Display::return_icon('user.png', get_lang('SubscribeUsersToLp')),
+                        api_get_path(WEB_CODE_PATH)."newscorm/lp_subscribe_users.php?lp_id=$id&".api_get_cidreq()
+                    );
+                }
+
                 /* Auto launch LP code */
                 if (api_get_course_setting('enable_lp_auto_launch') == 1) {
                     if ($details['autolaunch'] == 1 && $autolaunch_exists == false) {
@@ -790,8 +787,29 @@ foreach ($categories as $item) {
                 $export_icon = null;
             }
 
-            echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
-                $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_launch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
+            echo
+                $dsp_line.
+                $start_time.
+                $end_time.
+                $dsp_progress.
+                $dsp_desc.
+                $dsp_export.
+                $dsp_edit.
+                $dsp_build.
+                $dsp_edit_lp.
+                $dsp_visible.
+                $dsp_publish.
+                $subscribeUsers.
+                $dsp_reinit.
+                $dsp_default_view.
+                $dsp_debug.
+                $dsp_disk.
+                $copy.
+                $lp_auto_launch_icon.
+                $export_icon.
+                $dsp_delete.
+                $dsp_order.
+                $dsp_edit_close;
 
             $lp_showed = true;
 

@@ -317,7 +317,6 @@ CREATE TABLE IF NOT EXISTS course_rel_user (
   user_id int unsigned NOT NULL default '0',
   status tinyint NOT NULL default '5',
   role varchar(60) default NULL,
-  group_id int NOT NULL default '0',
   tutor_id int unsigned NOT NULL default '0',
   sort int default NULL,
   user_course_cat int default '0',
@@ -2567,29 +2566,29 @@ CREATE TABLE IF NOT EXISTS group_rel_tag (
 ALTER TABLE group_rel_tag ADD INDEX ( group_id );
 ALTER TABLE group_rel_tag ADD INDEX ( tag_id );
 
-DROP TABLE IF EXISTS group_rel_user;
-CREATE TABLE IF NOT EXISTS group_rel_user (
-    id int NOT NULL AUTO_INCREMENT,
-    group_id int NOT NULL,
-    user_id int NOT NULL,
-    relation_type int NOT NULL,
-    PRIMARY KEY (id)
-);
-ALTER TABLE group_rel_user ADD INDEX ( group_id );
-ALTER TABLE group_rel_user ADD INDEX ( user_id );
-ALTER TABLE group_rel_user ADD INDEX ( relation_type );
-
-DROP TABLE IF EXISTS group_rel_group;
-CREATE TABLE IF NOT EXISTS group_rel_group (
-	id int NOT NULL AUTO_INCREMENT,
-	group_id int NOT NULL,
-	subgroup_id int NOT NULL,
-	relation_type int NOT NULL,
-	PRIMARY KEY (id)
-);
-ALTER TABLE group_rel_group ADD INDEX ( group_id );
-ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
-ALTER TABLE group_rel_group ADD INDEX ( relation_type );
+# DROP TABLE IF EXISTS group_rel_user;
+# CREATE TABLE IF NOT EXISTS group_rel_user (
+#     id int NOT NULL AUTO_INCREMENT,
+#     group_id int NOT NULL,
+#     user_id int NOT NULL,
+#     relation_type int NOT NULL,
+#     PRIMARY KEY (id)
+# );
+# ALTER TABLE group_rel_user ADD INDEX ( group_id );
+# ALTER TABLE group_rel_user ADD INDEX ( user_id );
+# ALTER TABLE group_rel_user ADD INDEX ( relation_type );
+#
+# DROP TABLE IF EXISTS group_rel_group;
+# CREATE TABLE IF NOT EXISTS group_rel_group (
+# 	id int NOT NULL AUTO_INCREMENT,
+# 	group_id int NOT NULL,
+# 	subgroup_id int NOT NULL,
+# 	relation_type int NOT NULL,
+# 	PRIMARY KEY (id)
+# );
+# ALTER TABLE group_rel_group ADD INDEX ( group_id );
+# ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
+# ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
 DROP TABLE IF EXISTS announcement_rel_group;
 CREATE TABLE IF NOT EXISTS announcement_rel_group (

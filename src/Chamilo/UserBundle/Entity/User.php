@@ -5,6 +5,7 @@ namespace Chamilo\UserBundle\Entity;
 
 //use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -481,7 +482,7 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
                 new Assert\Regex(array(
                         'pattern' => '/[0-9]{2}/',
                         'htmlPattern' => '/[0-9]{2}/')
-                )
+                ),
             )
             ;
     }
@@ -704,8 +705,9 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     {
         $classSubscription = $this->getClasses();
         $classList = array();
+        /** @var UsergroupRelUser $subscription */
         foreach ($classSubscription as $subscription) {
-            $class = $subscription->getClass();
+            $class = $subscription->getUsergroup();
             $classList[] = $class->getName();
         }
         $classString = !empty($classList) ? ' ['.implode(', ', $classList).']' : null;

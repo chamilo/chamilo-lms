@@ -240,7 +240,7 @@ class Course
     protected $sessions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="course", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist"})
      **/
     protected $sessionUserSubscriptions;
 

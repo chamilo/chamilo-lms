@@ -123,6 +123,7 @@ if (isset($_POST['number_of_groups'])) {
 		}
 		$group_categories = GroupManager::get_categories();
 		$group_id = GroupManager :: get_number_of_groups() + 1;
+		$cat_options = [];
 		foreach ($group_categories as $index => $category) {
 			$cat_options[$category['id']] = $category['title'];
 		}
@@ -270,7 +271,7 @@ EOT;
 		$create_class_groups_form->addElement('hidden', 'action');
 		if (api_get_setting('allow_group_categories') == 'true') {
 			$group_categories = GroupManager :: get_categories();
-			$cat_options = array ();
+			$cat_options = array();
 			foreach ($group_categories as $index => $category) {
 				$cat_options[$category['id']] = $category['title'];
 			}

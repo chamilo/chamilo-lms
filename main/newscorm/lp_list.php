@@ -646,7 +646,6 @@ foreach ($categories as $item) {
                 // Subscribe users
                 $subscribeUsers = null;
 
-                var_dump($details);
                 if ($details['subscribe_users'] == 1) {
                     $subscribeUsers = Display::url(
                         Display::return_icon('user.png', get_lang('SubscribeUsersToLp')),

@@ -7719,8 +7719,10 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
-        unset ($this->arrMenu);
+        if (isset($this->arrMenu)) {
+            $arrLP = $this->arrMenu;
+            unset ($this->arrMenu);
+        }
 
         if ($action == 'add') {
             $return .= get_lang('CreateTheDocument');
@@ -7786,7 +7788,7 @@ class learnpath
 
         if (!empty($id)) {
             $parent_select->setSelected($parent);
-        } else {
+        } else if (isset($_SESSION['parent_item_id'])) {
             $parent_item_id = $_SESSION['parent_item_id'];
             $parent_select->setSelected($parent_item_id);
         }

@@ -136,7 +136,6 @@ function save_item(
         if (isset($score) && $score != -1) {
             if ($debug > 1) {
                 error_log('Calling set_score('.$score.')', 0);
-                error_log('set_score changes the status to failed/passed if mastery score is provided', 0);
             }
 
             $myLPI->set_score($score);
@@ -457,9 +456,10 @@ function save_item(
         $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql = "SELECT login_id, login_date
-            FROM $tbl_track_login
-            WHERE login_user_id= ".api_get_user_id()."
-            ORDER BY login_date DESC LIMIT 0,1";
+                FROM $tbl_track_login
+                WHERE login_user_id= ".api_get_user_id()."
+                ORDER BY login_date DESC
+                LIMIT 0,1";
 
         $q_last_connection = Database::query($sql);
         if (Database::num_rows($q_last_connection) > 0) {

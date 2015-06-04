@@ -285,7 +285,7 @@ class learnpathItem
         $this->current_stop_time = time();
         $type = $this->get_type();
         if ($type != 'sco') {
-            if ($type == TOOL_QUIZ or $type == TOOL_HOTPOTATOES) {
+            if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES) {
                 $this->get_status(
                     true,
                     true
@@ -1943,7 +1943,7 @@ class learnpathItem
             $this->current_start_time = time();
         }
         //$this->current_stop_time=time();
-        if (time() < $this->current_stop_time or $this->current_stop_time == 0
+        if (time() < $this->current_stop_time || $this->current_stop_time == 0
         ) {
             if (self::debug > 2) {
                 error_log(
@@ -2247,7 +2247,7 @@ class learnpathItem
                 } else {
                     if (isset($items[$refs_list[$list[0]]])) {
                         $status = $items[$refs_list[$list[0]]]->get_status(true);
-                        $returnstatus = ($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]);
+                        $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
                         if (empty($this->prereq_alert) && !$returnstatus) {
                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                         }
@@ -2401,7 +2401,7 @@ class learnpathItem
                                         foreach ($list as $cond) {
                                             if (isset($items[$refs_list[$cond]])) {
                                                 $status = $items[$refs_list[$cond]]->get_status(true);
-                                                if ($status == $this->possible_status[2] OR
+                                                if ($status == $this->possible_status[2] ||
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mytrue++;
@@ -2449,7 +2449,7 @@ class learnpathItem
                                         foreach ($list as $cond) {
                                             if (isset($items[$refs_list[$cond]])) {
                                                 $status = $items[$refs_list[$cond]]->get_status(true);
-                                                if ($status == $this->possible_status[2] OR
+                                                if ($status == $this->possible_status[2] ||
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mycond = true;
@@ -2511,7 +2511,7 @@ class learnpathItem
 
                                         // 1. Checking the status in current items.
                                         $status = $items[$refs_list[$prereqs_string]]->get_status(true);
-                                        $returnstatus = $status == $this->possible_status[2] OR $status == $this->possible_status[3];
+                                        $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         if (!$returnstatus) {
                                             if (self::debug > 1) {
@@ -2596,7 +2596,7 @@ class learnpathItem
                                         return $returnstatus;
                                     } else {
                                         $status = $items[$refs_list[$prereqs_string]]->get_status(false);
-                                        $returnstatus = $status == $this->possible_status[2] OR $status == $this->possible_status[3];
+                                        $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         if (!$returnstatus) {
                                             if (self::debug > 1) {
@@ -2614,7 +2614,6 @@ class learnpathItem
                                             }
                                         }
 
-                                        //$returnstatus = true;
                                         if ($returnstatus && $this->prevent_reinit == 1) {
                                             // I would prefer check in the database.
                                             $lp_item_view = Database::get_course_table(
@@ -2625,22 +2624,30 @@ class learnpathItem
                                             );
 
                                             $sql = 'SELECT id FROM ' . $lp_view . '
-                                                    WHERE c_id = ' . $course_id . ' AND user_id = ' . $user_id . '  AND lp_id = ' . $this->lp_id . ' LIMIT 0, 1';
+                                                    WHERE
+                                                        c_id = ' . $course_id . ' AND
+                                                        user_id = ' . $user_id . '  AND
+                                                        lp_id = ' . $this->lp_id . '
+                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $lp_id = Database :: fetch_row(
+                                            $lp_id = Database::fetch_row(
                                                 $rs_lp
                                             );
                                             $my_lp_id = $lp_id[0];
 
                                             $sql = 'SELECT status FROM ' . $lp_item_view . '
-                                                   WHERE c_id = ' . $course_id . ' AND lp_view_id = ' . $my_lp_id . ' AND lp_item_id = ' . $refs_list[$prereqs_string] . ' LIMIT 0, 1';
+                                                    WHERE
+                                                        c_id = ' . $course_id . ' AND
+                                                        lp_view_id = ' . $my_lp_id . ' AND
+                                                        lp_item_id = ' . $refs_list[$prereqs_string] . '
+                                                    LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $status_array = Database :: fetch_row(
+                                            $status_array = Database::fetch_row(
                                                 $rs_lp
                                             );
                                             $status = $status_array[0];
 
-                                            $returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
+                                            $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
                                             if (!$returnstatus && empty($this->prereq_alert)) {
                                                 $this->prereq_alert = get_lang(
                                                     'LearnpathPrereqNotCompleted'
@@ -2726,7 +2733,7 @@ class learnpathItem
                 }
                 if (isset($items[$refs_list[$list[0]]])) {
                     $status = $items[$refs_list[$list[0]]]->get_status(true);
-                    $returnstatus = (($status == 'completed') OR ($status == 'passed'));
+                    $returnstatus = (($status == 'completed') || ($status == 'passed'));
                     if (!$returnstatus && empty($this->prereq_alert)) {
                         $this->prereq_alert = get_lang(
                             'LearnpathPrereqNotCompleted'
@@ -3232,8 +3239,7 @@ class learnpathItem
     }
 
     /**
-     * Sets the score value. If the mastery_score is set and the score reaches
-     * it, then set the status to 'passed'.
+     * Sets the score value.
      * @param   float    $score   Score
      * @return    boolean   True on success, false otherwise
      */
@@ -3253,23 +3259,6 @@ class learnpathItem
                 $masteryScore = $this->max_score;
             }
 
-            if ($debug > 0) {
-                error_log('get_mastery_score: ' . $masteryScore);
-                error_log('current_status: ' . $current_status);
-                error_log('current score : ' . $this->current_score);
-            }
-
-            // If mastery_score is set AND the current score reaches the mastery
-            //  score AND the current status is different from 'completed', then
-            //  set it to 'passed'.
-            /*
-            if ($master != -1 && $this->current_score >= $master && $current_status != $this->possible_status[2]) {
-                if ($debug > 0) error_log('Status changed to: '.$this->possible_status[3]);
-                $this->set_status($this->possible_status[3]); //passed
-            } elseif ($master != -1 && $this->current_score < $master) {
-                if ($debug > 0) error_log('Status changed to: '.$this->possible_status[4]);
-                $this->set_status($this->possible_status[4]); //failed
-            }*/
             return true;
         }
         return false;
@@ -3286,7 +3275,7 @@ class learnpathItem
         if (self::debug > 0) {
             error_log('learnpathItem::set_max_score(' . $score . ')', 0);
         }
-        if (is_int($score) or $score == '') {
+        if (is_int($score) || $score == '') {
             $this->view_max_score = $score;
             if (self::debug > 1) {
                 error_log(
@@ -3777,7 +3766,7 @@ class learnpathItem
         }
 
         if ((($save === false && $this->type == 'sco') ||
-           ($this->type == 'sco' && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))) &&
+           ($this->type == 'sco' && ($credit == 'no-credit' || $mode == 'review' || $mode == 'browse'))) &&
             ($this->seriousgame_mode != 1 && $this->type == 'sco')
         ) {
             if (self::debug > 1) {

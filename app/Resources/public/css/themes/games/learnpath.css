@@ -12,7 +12,11 @@
   background:url("images/scorm_not_attempted.png") no-repeat left center;	
 }
 .scorm_item_normal.scorm_highlight{
-  background:url("images/scorm_highlight.png") no-repeat left center;	
+  background:url("images/scorm_current.png") no-repeat left center !important;
+  color: #009AB8;
+}
+.scorm_item_normal.scorm_highlight a{
+  color: #009AB8 !important;
 }
 .ranking-scorm .fa-star{
   color: #E4C200;
@@ -54,14 +58,21 @@
 }
 .scorm-list .panel-default > .panel-heading{
   background-color: #ffffff;
+  padding: 0;
 }
 .scorm-list .panel-default .panel-title{
   text-align: left;
   font-size: 14px;
 }
 .scorm-list .panel-default .panel-title a{
+  background:url("images/arrow-right.png") no-repeat 95% center;
   color:#E33757;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 25px;
   text-decoration: none;
+  display: block;
 }
 .scorm-list .panel-default .panel-title a:hover{
   color:#E33757;
@@ -85,6 +96,10 @@
 }
 .scorm-items-accordion a:hover{
   text-decoration: none;
+}
+
+.scorm-list .panel-default .panel-title a.collapsed{
+  background:url("images/arrow-buttom.png") no-repeat 95% center !important;
 }
 @media (min-width: 1024px) {
   .sidebar-scorm{

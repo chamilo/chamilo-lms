@@ -139,7 +139,7 @@
 <script>
     // Resize right and left pane to full height (HUB 20-05-2010).
     var updateContentHeight = function () {
-        document.body.style.overflow = 'hidden';
+
         var IE = window.navigator.appName.match(/microsoft/i);
 
         /* Identified new height */
@@ -216,7 +216,11 @@
     window.onresize = updateContentHeight();
 
     $(document).ready(function(){
-
+        $("#link-scorm").click(function(){
+            this.removeClass("arrow-right");
+            this.addClass("arrow-buttom");
+            }
+        });
         $("#icon-down").click(function(){
             $("#icon-up").removeClass("hidden");
             $(this).addClass("hidden");

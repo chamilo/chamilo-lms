@@ -216,11 +216,7 @@
     window.onresize = updateContentHeight();
 
     $(document).ready(function(){
-        $("#link-scorm").click(function(){
-            this.removeClass("arrow-right");
-            this.addClass("arrow-buttom");
-            }
-        });
+        
         $("#icon-down").click(function(){
             $("#icon-up").removeClass("hidden");
             $(this).addClass("hidden");

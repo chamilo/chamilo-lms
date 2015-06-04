@@ -649,7 +649,7 @@ class Event
         $course_id = null,
         $sessionId = 0
     ) {
-        $TABLETRACK_DEFAULT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 
         if (empty($event_type)) {
             return false;
@@ -706,7 +706,8 @@ class Event
             'default_value' => $event_value,
             'session_id' => $sessionId
         );
-        Database::insert($TABLETRACK_DEFAULT, $params);
+        Database::insert($table, $params);
+
         return true;
     }
 
@@ -734,6 +735,7 @@ class Event
             $et['descLangVar'] = $event_config[$et["event_type_name"]]["desc_lang_var"];
             $to_return[] = $et;
         }
+
         return $to_return;
     }
 

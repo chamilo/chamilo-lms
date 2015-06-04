@@ -237,6 +237,7 @@ class SessionManager
                         $user_id
                     );
                 }
+
                 return $session_id;
             }
         }
@@ -1610,6 +1611,17 @@ class SessionManager
                                     user_id = $existing_user AND
                                     status = 0 ";
                         $result = Database::query($sql);
+
+                        Event::addEvent(
+                            LOG_SESSION_DELETE_USER_COURSE,
+                            LOG_USER_ID,
+                            $existing_user,
+                            api_get_utc_datetime(),
+                            api_get_user_id(),
+                            $courseId,
+                            $id_session
+                        );
+
                         if (Database::affected_rows($result)) {
                             $nbr_users--;
                         }
@@ -1619,13 +1631,26 @@ class SessionManager
 
             // Replace with this new function
             // insert new users into session_rel_course_rel_user and ignore if they already exist
+
             foreach ($user_list as $enreg_user) {
                 if (!in_array($enreg_user, $existingUsers)) {
                     $enreg_user = Database::escape_string($enreg_user);
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility, status)
                             VALUES($id_session, $courseId, $enreg_user, $session_visibility, 0)";
                     $result = Database::query($sql);
+
+                    Event::addEvent(
+                        LOG_SESSION_ADD_USER_COURSE,
+                        LOG_USER_ID,
+                        $enreg_user,
+                        api_get_utc_datetime(),
+                        api_get_user_id(),
+                        $courseId,
+                        $id_session
+                    );
+
                     if (Database::affected_rows($result)) {
+
                         $nbr_users++;
                     }
                 }
@@ -1938,6 +1963,7 @@ class SessionManager
         // Get the list of courses related to this session
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
+
         if (!empty($course_list)) {
             foreach ($course_list as $course) {
                 $courseId = $course['id'];
@@ -1945,6 +1971,17 @@ class SessionManager
                 $sql = "DELETE FROM $tbl_session_rel_course_rel_user
                         WHERE session_id = $session_id AND c_id = $courseId AND user_id = $user_id";
                 $result = Database::query($sql);
+
+                Event::addEvent(
+                    LOG_SESSION_DELETE_USER_COURSE,
+                    LOG_USER_ID,
+                    $user_id,
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    $courseId,
+                    $session_id
+                );
+
                 if (Database::affected_rows($result)) {
                     // Update number of users in this relation
                     $sql = "UPDATE $tbl_session_rel_course SET nbr_users = nbr_users - 1
@@ -2014,6 +2051,16 @@ class SessionManager
                             WHERE c_id = " . $existingCourse['c_id'] . " AND session_id = $sessionId";
                     Database::query($sql);
 
+                    Event::addEvent(
+                        LOG_SESSION_DELETE_COURSE,
+                        LOG_COURSE_ID,
+                        $existingCourse['c_id'],
+                        api_get_utc_datetime(),
+                        api_get_user_id(),
+                        $existingCourse['c_id'],
+                        $sessionId
+                    );
+
                     CourseManager::remove_course_ranking(
                         $existingCourse['c_id'],
                         $sessionId
@@ -2041,6 +2088,16 @@ class SessionManager
                         VALUES ($sessionId, $courseId)";
                 Database::query($sql);
 
+                Event::addEvent(
+                    LOG_SESSION_ADD_COURSE,
+                    LOG_COURSE_ID,
+                    $courseId,
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    $courseId,
+                    $sessionId
+                );
+
                 // We add the current course in the existing courses array,
                 // to avoid adding another time the current course
                 $existingCourses[] = array('c_id' => $courseId);
@@ -2053,6 +2110,17 @@ class SessionManager
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id)
                             VALUES ($sessionId, $courseId, $enreg_user_id)";
                     $result = Database::query($sql);
+
+                    Event::addEvent(
+                        LOG_SESSION_ADD_USER_COURSE,
+                        LOG_USER_ID,
+                        $enreg_user_id,
+                        api_get_utc_datetime(),
+                        api_get_user_id(),
+                        $courseId,
+                        $sessionId
+                    );
+
                     if (Database::affected_rows($result)) {
                         $nbr_users++;
                     }
@@ -2104,9 +2172,20 @@ class SessionManager
                 WHERE c_id = $course_id AND session_id = $session_id";
         Database::query($sql);
 
+        Event::addEvent(
+            LOG_SESSION_DELETE_COURSE,
+            LOG_COURSE_ID,
+            $course_id,
+            api_get_utc_datetime(),
+            api_get_user_id(),
+            $course_id,
+            $session_id
+        );
+
         if ($nb_affected > 0) {
             // Update number of courses in the session
-            $sql = "UPDATE $tbl_session SET nbr_courses= nbr_courses - $nb_affected WHERE id = $session_id";
+            $sql = "UPDATE $tbl_session SET nbr_courses= nbr_courses - $nb_affected
+                    WHERE id = $session_id";
             Database::query($sql);
             return true;
         } else {
@@ -2393,8 +2472,8 @@ class SessionManager
                     s.id,
                     s.name,
                     s.nbr_courses,
-                    s.date_start,
-                    s.date_end,
+                    s.access_start_date,
+                    s.access_end_date,
                     u.firstname,
                     u.lastname,
                     sc.name as category_name,

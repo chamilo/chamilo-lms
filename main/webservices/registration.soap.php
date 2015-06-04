@@ -549,26 +549,6 @@ function WSCreateUser($params) {
         return 0;
     }
 
-    /*$password = ($_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password);
-    $sql = "INSERT INTO $table_user SET
-                lastname = '".Database::escape_string(trim($lastName))."',
-                firstname = '".Database::escape_string(trim($firstName))."',
-                username = '".Database::escape_string(trim($loginName))."',
-                status = '".Database::escape_string($status)."',
-                password = '".Database::escape_string($password)."',
-                email = '".Database::escape_string($email)."',
-                official_code    = '".Database::escape_string($official_code)."',
-                picture_uri     = '".Database::escape_string($picture_uri)."',
-                creator_id      = '".Database::escape_string($creator_id)."',
-                auth_source = '".Database::escape_string($auth_source)."',
-                phone = '".Database::escape_string($phone)."',
-                language = '".Database::escape_string($language)."',
-                registration_date = now(),
-                $expirationDateStatement
-                hr_dept_id = '".Database::escape_string($hr_dept_id)."',
-                active = '".Database::escape_string($active)."'";
-    $result = Database::query($sql);-*/
-
     if (isset($original_user_id_name) && isset($original_user_id_value)) {
         $_SESSION['ws_' . $original_user_id_name] = $original_user_id_value;
     }
@@ -4810,6 +4790,17 @@ function WSSuscribeUsersToSession($params)
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
                             VALUES('$sessionId', '$enreg_course', '$enreg_user')";
                     $result = Database::query($sql);
+
+                    Event::addEvent(
+                        LOG_SESSION_ADD_USER_COURSE,
+                        LOG_USER_ID,
+                        $enreg_user,
+                        api_get_utc_datetime(),
+                        api_get_user_id(),
+                        $enreg_course,
+                        $sessionId
+                    );
+
                     if (Database::affected_rows($result)) {
                         $nbr_users++;
                     }
@@ -5127,7 +5118,19 @@ function WSUnsuscribeUsersFromSession($params) {
                                 session_id = '$id_session' AND
                                 user_id = '$enreg_user' AND
                                 relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+
             $result = Database::query($delete_sql);
+
+            Event::addEvent(
+                LOG_SESSION_DELETE_USER,
+                LOG_USER_ID,
+                $enreg_user,
+                api_get_utc_datetime(),
+                api_get_user_id(),
+                0,
+                $id_session
+            );
+
             $return = Database::affected_rows($result);
         }
         $nbr_users = 0;
@@ -5393,6 +5396,16 @@ function WSSuscribeCoursesToSession($params) {
                         VALUES ('$id_session','$enreg_course')";
                 Database::query($sql);
 
+                Event::addEvent(
+                    LOG_SESSION_ADD_COURSE,
+                    LOG_COURSE_ID,
+                    $enreg_course,
+                    api_get_utc_datetime(),
+                    api_get_user_id(),
+                    $enreg_course,
+                    $id_session
+                );
+
                 // We add the current course in the existing courses array,
                 // to avoid adding another time the current course
                 $existingCourses[] = array('c_id' => $enreg_course);
@@ -5405,6 +5418,17 @@ function WSSuscribeCoursesToSession($params) {
                     $enreg_user_id = Database::escape_string($enreg_user['user_id']);
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id)
                             VALUES ('$id_session','$enreg_course','$enreg_user_id')";
+
+                    Event::addEvent(
+                        LOG_SESSION_ADD_USER_COURSE,
+                        LOG_USER_ID,
+                        $enreg_user_id,
+                        api_get_utc_datetime(),
+                        api_get_user_id(),
+                        $enreg_course,
+                        $id_session
+                    );
+
                     $result = Database::query($sql);
                     if (Database::affected_rows($result)) {
                         $nbr_users++;
@@ -5586,6 +5610,17 @@ function WSUnsuscribeCoursesFromSession($params)
             Database::query("DELETE FROM $tbl_session_rel_course
                             WHERE c_id ='$courseId' AND session_id='$id_session'");
             $result = Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE c_id='$courseId' AND session_id = '$id_session'");
+
+            Event::addEvent(
+                LOG_SESSION_DELETE_COURSE,
+                LOG_COURSE_ID,
+                $courseId,
+                api_get_utc_datetime(),
+                api_get_user_id(),
+                $courseId,
+                $id_session
+            );
+
             $return = Database::affected_rows($result);
         }
 

@@ -3248,14 +3248,25 @@ class learnpath
                         . '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'
                         . $subtree['id'] . '">';
                 }
-                $html .= '<div class="panel-body">';
-                $count++;
             }
+
+            $html .= '<div class="panel-body">';
+            $count++;
+
             if (!empty($subtree['tree'])) {
                 $html .= $this->getMiniHtmlTocSubtree($subtree['tree']);
+            } else {
+                if ($subtree['type'] != 'dokeos_chapter') {
+                    $html .= $this->getMiniHtmlTocSubtree([$subtree]);
+                }
             }
+
             $html .= '</div>';
-            $html .= '</div>';
+
+            if ($subtree['type'] == 'dokeos_chapter') {
+                $html .= '</div>';
+            }
+
             $html .= '</div>';
         }
 

@@ -130,8 +130,6 @@ $form->addElement('html','<div id="end_date_div" style="display:none;">');
 $form->addElement('DatePicker', 'expired_on', get_lang('ExpirationDate'));
 $form->addElement('html','</div>');
 
-$form->addCheckBox('create_forum', null, get_lang('CreateForumForThisLearningPath'));
-
 $form->addElement('html','</div>');
 
 $defaults['activate_start_date_check']  = 1;

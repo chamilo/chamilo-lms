@@ -53,22 +53,6 @@ switch ($action) {
                     null
                 );
 
-                if ($_REQUEST['type'] == 'document') {
-                    $forum = $_SESSION['oLP']->getForum();
-
-                    if (!empty($forum)) {
-                        $lpItem = new learnpathItem($itemId);
-                        $forumTheme = $lpItem->getForumThread(
-                            $_SESSION['oLP']->lp_session_id,
-                            $_SESSION['oLP']->course_int_id
-                        );
-
-                        if (empty($forumTheme)) {
-                            $lpItem->createForumTthread($forum['forum_id']);
-                        }
-                    }
-                }
-
                 echo $itemId;
             }
         }

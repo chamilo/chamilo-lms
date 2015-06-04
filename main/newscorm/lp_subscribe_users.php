@@ -70,7 +70,6 @@ foreach ($subscribedUsersInLp as $itemProperty) {
 //Building the form for Users
 $formUsers = new \FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
-$formUsers->addElement('header', get_lang('SubscribeUsersToLp'));
 
 $userMultiSelect = $formUsers->addElement('advmultiselect', 'users', get_lang('Users'), $choices);
 $formUsers->addButtonSave(get_lang('Save'));
@@ -86,7 +85,6 @@ $formUsers->setDefaults($defaults);
 //Building the form for Groups
 
 $form = new \FormValidator('lp_edit', 'post', $url);
-$form->addElement('header', get_lang('SubscribeGroupsToLp'));
 $form->addElement('hidden', 'group_form', 1);
 
 // Group list
@@ -142,6 +140,7 @@ if ($form->validate()) {
             $lpId,
             $users
         );
+        Display::addFlash(Display::return_message(get_lang('Updated')));
     }
 
     // Subscribing groups
@@ -157,13 +156,15 @@ if ($form->validate()) {
             $lpId,
             $groups
         );
+        Display::addFlash(Display::return_message(get_lang('Updated')));
     }
 
     header("Location: $url");
     exit;
 } else {
-    $tpl->assign('form_users', $formUsers->toHtml());
-    $tpl->assign('form_groups', $form->toHtml());
+    $headers = [get_lang('SubscribeUsersToLp'), get_lang('SubscribeGroupsToLp')];
+    $tabs = Display::tabs($headers, [$formUsers->toHtml(),$form->toHtml()]);
+    $tpl->assign('tabs', $tabs);
 }
 
 $layout = $tpl->get_template('learnpath/subscribe_users.tpl');

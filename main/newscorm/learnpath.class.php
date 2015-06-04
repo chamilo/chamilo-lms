@@ -5847,6 +5847,7 @@ class learnpath
             $delete_icon = '';
             $audio_icon = '';
             $prerequisities_icon = '';
+            $forumIcon = '';
 
             if ($is_allowed_to_edit) {
                 if (!$update_audio || $update_audio <> 'true') {
@@ -5861,6 +5862,21 @@ class learnpath
                         $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&view=build&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '">';
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
+
+                        $forumIcon .= Display::toolbarButton(
+                            null,
+                            api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                                'action' => 'create_forum',
+                                'id' => $arrLP[$i]['id'],
+                                'lp_id' => $this->lp_id
+                            ]),
+                            'comments-o',
+                            'default',
+                            [
+                                'class' => 'btn-xs',
+                                'title' => get_lang('CreateForum')
+                            ]
+                        );
                     } else {
                         $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '">';
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
@@ -5881,7 +5897,7 @@ class learnpath
                 }
             }
             if ($update_audio != 'true') {
-                $row = $move_icon.' '.$icon.Display::span($title_cut).Display::span($audio.$edit_icon.$prerequisities_icon.$move_item_icon.$audio_icon.$delete_icon, array('class'=>'button_actions'));
+                $row = $move_icon.' '.$icon.Display::span($title_cut).Display::span($audio.$edit_icon.$forumIcon.$prerequisities_icon.$move_item_icon.$audio_icon.$delete_icon, array('class'=>'button_actions'));
             } else {
                 $row = Display::span($title.$icon).Display::span($audio, array('class'=>'button_actions'));
             }

@@ -3,12 +3,13 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V110;
 
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Add branch
  */
-class Version20150603142550 extends AbstractMigration
+class Version20150603142550 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema

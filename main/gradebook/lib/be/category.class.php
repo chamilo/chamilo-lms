@@ -2078,6 +2078,10 @@ class Category implements GradebookItem
             false
         );
 
+        if (empty($cats_course)) {
+            return 0;
+        }
+
         $category = $cats_course[0];
 
         $courseEvaluations = $category->get_evaluations($userId, true);

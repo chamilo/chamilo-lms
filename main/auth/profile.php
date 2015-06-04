@@ -213,10 +213,10 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
     if (!empty($user_data['picture_uri'])) {
         $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
     }
-    $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+    $allowed_picture_types = api_get_supported_image_extensions();
     $form->addRule(
         'picture',
-        get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+        get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowed_picture_types).')',
         'filetype',
         $allowed_picture_types
     );

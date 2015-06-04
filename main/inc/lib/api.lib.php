@@ -7499,7 +7499,8 @@ function api_get_configuration_value($variable)
  */
 function api_get_supported_image_extensions()
 {
-    $supportedImageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'svg');
+    // jpg can also be called jpeg, jpe, jfif and jif. See https://en.wikipedia.org/wiki/JPEG#JPEG_filename_extensions
+    $supportedImageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'svg', 'jpe', 'jfif', 'jif');
     if (version_compare(PHP_VERSION, '5.5.0', '>=')) {
         array_push($supportedImageExtensions, 'webp');
     }

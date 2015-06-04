@@ -4452,7 +4452,7 @@ SQL;
     /**
      * Create a forum thread for this learning path item
      * @param int $currentForumId The forum ID to add the new thread
-     * @return boolean
+     * @return int The forum thread if was created. Otherwise return false
      */
     public function createForumTthread($currentForumId)
     {
@@ -4479,7 +4479,7 @@ SQL;
             false
         );
 
-        return $threadId > 0;
+        return $threadId;
     }
 
 }

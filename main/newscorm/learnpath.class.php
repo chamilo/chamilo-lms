@@ -10694,7 +10694,7 @@ SQL;
     /**
      * Create a forum for this learning path
      * @param type $forumCategoryId
-     * @return boolean
+     * @return int The forum ID if was created. Otherwise return false
      */
     public function createForum($forumCategoryId)
     {
@@ -10716,7 +10716,7 @@ SQL;
             true
         );
 
-        return $forumId > 0;
+        return $forumId;
     }
 
 }

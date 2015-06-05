@@ -199,7 +199,8 @@ class GroupManager
 
         $table_group = Database :: get_course_table(TABLE_GROUP);
         $sql = "INSERT INTO ".$table_group." SET
-                c_id = $course_id ,
+                c_id = $course_id,
+                status = 1,
                 category_id='".Database::escape_string($category_id)."',
                 max_student = '".$places."',
                 doc_state = '".$docState."',
@@ -239,8 +240,8 @@ class GroupManager
 
             /* Stores the directory path into the group table */
             $sql = "UPDATE ".$table_group." SET
-                    name = '".Database::escape_string($name)."',
-                    secret_directory = '".$unique_name."'
+                        name = '".Database::escape_string($name)."',
+                        secret_directory = '".$unique_name."'
                     WHERE c_id = $course_id AND id ='".$lastId."'";
 
             Database::query($sql);

@@ -102,6 +102,7 @@
                                 {{ row.action_visible }}
                                 {{ row.action_publish }}
                                 {{ row.action_seriousgame }}
+                                {{ row.action_subscribe_users }}
                                 {{ row.action_reinit }}
                                 {{ row.action_default_view }}
                                 {{ row.action_debug }}

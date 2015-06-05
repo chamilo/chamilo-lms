@@ -128,6 +128,23 @@
                 {% else %}
                     <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" style="display: block; width: 100%; height: 100%"></iframe>
                 {% endif %}
+
+                <div id="forum-container">
+                    <div class="panel-group" id="forum-accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="forum-panel-header">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#forum-accordion" href="#forum-panel-body" aria-expanded="true" aria-controls="forum-panel-body">
+                                        {{ "Forum"|get_lang }}
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="forum-panel-body" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="forum-panel-header">
+                                <div class="panel-body"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             {# end right Zone #}
 
@@ -139,7 +156,6 @@
 <script>
     // Resize right and left pane to full height (HUB 20-05-2010).
     var updateContentHeight = function () {
-        document.body.style.overflow = 'hidden';
         var IE = window.navigator.appName.match(/microsoft/i);
 
         /* Identified new height */
@@ -210,6 +226,10 @@
         $(window).resize(function() {
             updateContentHeight();
         });
+
+        $('#forum-container').hide();
+
+        loadForumThead({{ oLP.lp_id }}, {{ oLP.get_current_item_id() }});
     });
 
     window.onload = updateContentHeight();

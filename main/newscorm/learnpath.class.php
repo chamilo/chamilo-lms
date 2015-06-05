@@ -3227,13 +3227,15 @@ class learnpath
         foreach ($tree as $key => $subtree) {
             $html .= '<div class="panel panel-default">';
             if ($subtree['type'] == 'dokeos_chapter') {
-                $html .= '<div class="panel-heading" role="tab" id="heading' . $subtree['id'] . '">';
-                $html .= '<h4 class="panel-title">';
+                
+                    $html .= '<div class="panel-heading" role="tab" id="heading' . $subtree['id'] . '">';   
+                    $html .= '<h4 class="panel-title">';
+
                 if ($count == 0) {
-                    $html .= '<a data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
+                    $html .= '<a id="link-scorm" data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
                         . $subtree['id'] . '" aria-expanded="true" aria-controls="collapse' . $subtree['id'] . '">';
                 } else {
-                    $html .= '<a data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
+                    $html .= '<a id="link-scorm" data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
                         . $subtree['id'] . '" aria-expanded="false" aria-controls="collapse' . $subtree['id'] . '">';
                 }
                 $html .= $subtree['title'];

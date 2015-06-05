@@ -2,52 +2,54 @@
 
 {% block body %}
 <script type="text/javascript">
-    $().ready(function() {
+    $(document).ready(function() {
         $('#date').datepicker({
             dateFormat: 'yy-mm-dd'
         });
 
-        $('#list-course').click(function(e) {
+        $('a[data-session]').on('click', function(e) {
             e.preventDefault();
-            var tempTarget = e.target.toString().split('#');
-            tempTarget = '#' + tempTarget[1];
-            // use the target of the link as the ID of the element to find
-            var target = $(tempTarget);
-            var targetContent = target.find('.list');
 
-            if (targetContent.is(':empty')) {
-                var idParts = tempTarget.split('-');
+            var link = $(this),
+                sessionId = parseInt(link.data('session')),
+                collapsible = $('#collapse-' + sessionId),
+                courseList = link.data('courses') || [];
 
-                var sessionId = parseInt(idParts[1], 10);
-
-                $.ajax('{{ web_session_courses_ajax_url }}', {
-                    data: {
+            if (courseList.length === 0) {
+                var getCourseList = $.getJSON(
+                    '{{ web_session_courses_ajax_url }}',
+                    {
                         a: 'display_sessions_courses',
                         session: sessionId
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        var coursesUL = '';
-                        $.each(response, function(index, course) {
-                            coursesUL += '<li><img src="{{ _p.web }}main/img/check.png"/> <strong>' + course.name + '</strong>';
-
-                            if (course.coachName != '') {
-                                coursesUL += ' (' + course.coachName + ')';
-                            }
-
-                            coursesUL += '</li>';
-                        });
-
-                        targetContent.html('<ul class="items-session">' + coursesUL + '</ul>');
-                        target.css({
-                            height: targetContent.outerHeight()
-                        }).addClass(' in');
                     }
+                );
+
+                $.when(getCourseList).done(function(courses) {
+                    courseList = courses;
+                    link.data('courses', courses);
+
+                    var coursesUL = '';
+
+                    $.each(courseList, function(index, course) {
+                        coursesUL += '<li><img src="{{ _p.web }}main/img/check.png"/> <strong>' + course.name + '</strong>';
+
+                        if (course.coachName !== '') {
+                            coursesUL += ' (' + course.coachName + ')';
+                        }
+
+                        coursesUL += '</li>';
+                    });
+
+                    collapsible.html('<div class="panel-body"><ul class="list-unstyled items-session">' + coursesUL + '</ul></div>');
+
+                    collapsible.collapse('show');
                 });
             } else {
-                target.addClass(' in');
+                collapsible.collapse('toggle');
             }
         });
+
+        $('.collapse').collapse('hide');
     });
 </script>
 
@@ -117,10 +119,10 @@
                 <div class="row">
                     <div class="col-md-9">
                         {% if show_tutor %}
-                        <div class="tutor">
+                        <p class="tutor">
                             <img src="{{ 'teacher.png' | icon(22) }}" width="16">
                             {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}
-                        </div>
+                        </p>
                         {% endif %}
 
                         {% if session.requirements %}
@@ -141,33 +143,38 @@
                             </p>
                         {% endif %}
 
-                        <a id="list-course" class="btn btn-default" data-toggle="collapse" href="#session-{{ session.id }}-courses">
-                            {{ 'CourseList' | get_lang }}
-                        </a>
-
-                        <div class="collapse" id="session-{{ session.id }}-courses">
-                            <div class="list"></div>
+                        <div class="panel-group" role="tablist">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading-session-{{ session.id }}">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" data-session="{{ session.id }}" data-toggle="false" href="#collapse-{{ session.id }}" aria-expanded="true" aria-controls="collapse-{{ session.id }}">
+                                            {{ 'CourseList' | get_lang }}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse-{{ session.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-session-{{ session.id }}"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         {% if session.show_description %}
-                        <div class="buttom-subscribed">
+                        <p class="buttom-subscribed">
                             <a class="ajax btn btn-large btn-info" href="{{ _p.web_ajax }}session.ajax.php?a=get_description&session={{ session.id }}">
                                 {{ 'Description' | get_lang }}
                             </a>
-                        </div>
+                        </p>
                         {% endif %}
 
-                        <div class="buttom-subscribed">
+                        <p class="buttom-subscribed">
                             {% if session.is_subscribed %}
                                 {{ already_subscribed_label }}
                             {% else %}
                                 {{ session.subscribe_button }}
                             {% endif %}
-                        </div>
-                        <div class="time">
+                        </p>
+                        <p class="time">
                             <img src="{{ 'agenda.png' | icon(22) }}"> {{ session.date }}
-                        </div>
+                        </p>
                     </div>
                 </div>
 

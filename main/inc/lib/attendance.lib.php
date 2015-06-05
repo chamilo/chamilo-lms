@@ -651,7 +651,7 @@ class Attendance
 			}
 
 			if (!empty($attendance_id)) {
-				$user_faults = $this->get_faults_of_user($uid, $attendance_id);
+				$user_faults = $this->get_faults_of_user($uid, $attendance_id, $groupId);
 				$value['attendance_result'] = $user_faults['faults'].'/'.$user_faults['total'].' ('.$user_faults['faults_porcent'].'%)';
 				$value['result_color_bar'] 	= $user_faults['color_bar'];
 			}
@@ -935,19 +935,20 @@ class Attendance
 
 	/**
 	 * Get results of faults (absents) by user
-	 * @param	int	   user id
-	 * @param	int	   attendance id
+	 * @param int $user_id
+	 * @param int $attendance_id
+	 * @param int $groupId
 	 * @return 	array  results containing number of faults, total done attendance,
 	 * percent of faults and color depend on result (red, orange)
 	 */
-	public function get_faults_of_user($user_id, $attendance_id)
+	public function get_faults_of_user($user_id, $attendance_id, $groupId = null)
 	{
 		// initializing database table and variables
 		$user_id 		= intval($user_id);
 		$attendance_id 	= intval($attendance_id);
 		$results = array();
 		$attendance_data = $this->get_attendance_by_id($attendance_id);
-		$calendar_count = self::get_number_of_attendance_calendar($attendance_id);
+		$calendar_count = self::get_number_of_attendance_calendar($attendance_id, $groupId);
 		$total_done_attendance 	= $attendance_data['attendance_qualify_max'];
 		$attendance_user_score  = $this->get_user_score($user_id, $attendance_id);
 
@@ -1323,15 +1324,32 @@ class Attendance
 	/**
 	 * Get number of attendance calendar inside current attendance
 	 * @param	int	$attendance_id
-	 * @return	int     number of dates in attendance calendar
+	 * @param	int	$groupId
+	 * @return	int number of dates in attendance calendar
 	 */
-	public static function get_number_of_attendance_calendar($attendance_id)
+	public static function get_number_of_attendance_calendar($attendance_id, $groupId = 0)
 	{
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+		$calendarRelGroup = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
 		$attendance_id = intval($attendance_id);
+		$groupId = intval($groupId);
+
+		$groupCondition = " group_id = $groupId ";
+		if (empty($groupId)) {
+			$groupCondition = "group_id IS NULL OR group_id = 0 ";
+		}
+
 		$course_id = api_get_course_int_id();
-		$sql = "SELECT count(id) FROM $tbl_attendance_calendar
-                WHERE c_id = $course_id AND attendance_id = '$attendance_id'";
+		$sql = "SELECT count(a.id)
+				FROM $tbl_attendance_calendar a
+				INNER JOIN $calendarRelGroup g
+				ON (a.id = g.calendar_id AND a.c_id = g.c_id)
+                WHERE
+                	a.c_id = $course_id AND
+                	attendance_id = '$attendance_id' AND
+                	$groupCondition
+				";
+
 		$rs = Database::query($sql);
 		$row = Database::fetch_row($rs);
 		$count = $row[0];

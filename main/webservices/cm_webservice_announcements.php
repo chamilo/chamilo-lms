@@ -97,71 +97,86 @@ class WSCMAnnouncements extends WSCM
         $group_memberships=GroupManager::get_group_ids($course_info['real_id'], $user_id);
 
         if (api_get_group_id() == 0) {
-            $cond_user_id = " AND ( ip.to_user_id='".$user_id."'" .
-                "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+            $cond_user_id = " AND (
+                ip.to_user_id='".$user_id."' OR
+                ip.to_group_id IN (0, ".implode(", ", $group_memberships).") OR
+                ip.to_group_id IS NULL
+            ) ";
         } else {
-            $cond_user_id = " AND ( ip.to_user_id='".$user_id."'" .
-                "OR ip.to_group_id IN (0, ".api_get_group_id().")) ";
+            $cond_user_id = " AND (
+                ip.to_user_id='".$user_id."' OR
+                ip.to_group_id IN (0, ".api_get_group_id().") OR
+                ip.to_group_id IS NULL
+            ) ";
         }
 
 
-        // the user is member of several groups => display personal announcements AND his group announcements AND the general announcements
+        // the user is member of several groups => display personal
+        // announcements AND his group announcements AND the general announcements
         if (is_array($group_memberships) && count($group_memberships)>0) {
             $sql="SELECT
-                            announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                            FROM $tbl_announcement announcement, $tbl_item_property ip
-                            WHERE announcement.id = ip.ref
-                            AND ip.tool='announcement'
-                            AND ip.visibility='1'
-                            $announcement_id
-                            $cond_user_id
-                            $condition_session
-                            GROUP BY ip.ref
-                            ORDER BY display_order DESC
-                            LIMIT 0,$maximum";
+                    announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+                FROM $tbl_announcement announcement, $tbl_item_property ip
+                WHERE
+                    announcement.id = ip.ref AND
+                    ip.tool='announcement' AND
+                    ip.visibility='1'
+                    $announcement_id
+                    $cond_user_id
+                    $condition_session
+                GROUP BY ip.ref
+                ORDER BY display_order DESC
+                LIMIT 0,$maximum";
         } else {
             // the user is not member of any group
             // this is an identified user => show the general announcements AND his personal announcements
             if ($user_id) {
 
                 if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-                    $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0')) ";
+                    $cond_user_id = " AND (
+                        ip.lastedit_user_id = '".api_get_user_id()."' OR
+                        ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL)
+                    ) ";
                 } else {
-                    $cond_user_id = " AND ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0') ";
+                    $cond_user_id = " AND ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL) ";
                 }
-                $sql="SELECT
-                                    announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                                    FROM $tbl_announcement announcement, $tbl_item_property ip
-                                    WHERE announcement.id = ip.ref
-                                    AND ip.tool='announcement'
-                                    AND ip.visibility='1'
-                                    $announcement_id
-                                    $cond_user_id
-                                    $condition_session
-                                    GROUP BY ip.ref
-                                    ORDER BY display_order DESC
-                                    LIMIT 0,$maximum";
+
+                $sql = "SELECT
+                        announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+                        FROM $tbl_announcement announcement, $tbl_item_property ip
+                        WHERE
+                            announcement.id = ip.ref AND
+                            ip.tool='announcement' AND
+                            ip.visibility='1'
+                            $announcement_id
+                            $cond_user_id
+                            $condition_session
+                        GROUP BY ip.ref
+                        ORDER BY display_order DESC
+                        LIMIT 0,$maximum";
             } else {
 
                 if (api_get_course_setting('allow_user_edit_announcement')) {
-                    $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0') ";
+                    $cond_user_id = " AND (
+                        ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL
+                    ) ";
                 } else {
                     $cond_user_id = " AND ip.to_group_id='0' ";
                 }
 
                 // the user is not identiefied => show only the general announcements
-                $sql="SELECT
-                                    announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                                    FROM $tbl_announcement announcement, $tbl_item_property ip
-                                    WHERE announcement.id = ip.ref
-                                    AND ip.tool='announcement'
-                                    AND ip.visibility='1'
-                                    AND ip.to_group_id='0'
-                                    $announcement_id
-                                    $condition_session
-                                    GROUP BY ip.ref
-                                    ORDER BY display_order DESC
-                                    LIMIT 0,$maximum";
+                $sql = "SELECT
+                        announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+                        FROM $tbl_announcement announcement, $tbl_item_property ip
+                        WHERE announcement.id = ip.ref
+                        AND ip.tool='announcement'
+                        AND ip.visibility='1'
+                        AND ip.to_group_id='0'
+                        $announcement_id
+                        $condition_session
+                        GROUP BY ip.ref
+                        ORDER BY display_order DESC
+                        LIMIT 0,$maximum";
             }
         }
 

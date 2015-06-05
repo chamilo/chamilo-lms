@@ -218,19 +218,20 @@ class CourseRestorer
                             values as users/groups possibly not exist in
 							the target course*/
 							$sql = "INSERT INTO $table SET
-									c_id 				= '".$this->destination_course_id."',
-									tool 				= '".self::DBUTF8escapestring($property['tool'])."',
-									insert_user_id 		= '".self::DBUTF8escapestring($property['insert_user_id'])."',
-									insert_date 		= '".self::DBUTF8escapestring($property['insert_date'])."',
-									lastedit_date 		= '".self::DBUTF8escapestring($property['lastedit_date'])."',
-									ref 				= '".self::DBUTF8escapestring($resource->destination_id)."',
-									lastedit_type 		= '".self::DBUTF8escapestring($property['lastedit_type'])."',
-									lastedit_user_id 	= '".self::DBUTF8escapestring($property['lastedit_user_id'])."',
-									visibility 			= '".self::DBUTF8escapestring($property['visibility'])."',
-									start_visible 		= '".self::DBUTF8escapestring($property['start_visible'])."',
-									end_visible 		= '".self::DBUTF8escapestring($property['end_visible'])."',
-									to_user_id  		= '".self::DBUTF8escapestring($property['to_user_id'])."',
-									to_group_id 		= '0' $condition_session" ;
+									c_id = '".$this->destination_course_id."',
+									tool = '".self::DBUTF8escapestring($property['tool'])."',
+									insert_user_id = '".self::DBUTF8escapestring($property['insert_user_id'])."',
+									insert_date = '".self::DBUTF8escapestring($property['insert_date'])."',
+									lastedit_date = '".self::DBUTF8escapestring($property['lastedit_date'])."',
+									ref = '".self::DBUTF8escapestring($resource->destination_id)."',
+									lastedit_type = '".self::DBUTF8escapestring($property['lastedit_type'])."',
+									lastedit_user_id = '".self::DBUTF8escapestring($property['lastedit_user_id'])."',
+									visibility = '".self::DBUTF8escapestring($property['visibility'])."',
+									start_visible = '".self::DBUTF8escapestring($property['start_visible'])."',
+									end_visible = '".self::DBUTF8escapestring($property['end_visible'])."',
+									to_user_id = '".self::DBUTF8escapestring($property['to_user_id'])."',
+									to_group_id = NULL
+									$condition_session" ;
 													;
 							Database::query($sql);
 						}
@@ -2352,7 +2353,8 @@ class CourseRestorer
                         start_visible,
                         end_visible
                         FROM '.$item_property_table.' ip
-                        INNER JOIN '.$work_table.' sp ON ip.ref=sp.id
+                        INNER JOIN '.$work_table.' sp
+                        ON ip.ref=sp.id
                         WHERE
                             sp.c_id = '.$this->course_origin_id.' AND
                             ip.c_id = '.$this->course_origin_id.' AND

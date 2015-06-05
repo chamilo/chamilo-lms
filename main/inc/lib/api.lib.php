@@ -2375,7 +2375,7 @@ function api_get_session_condition(
     $condition_add = $and ? " AND " : " WHERE ";
 
     if ($with_base_content) {
-        $condition_session = $condition_add." ( $session_field = $session_id OR $session_field = 0) ";
+        $condition_session = $condition_add." ( $session_field = $session_id OR $session_field = 0 OR $session_field IS NULL) ";
     } else {
         $condition_session = $condition_add." $session_field = $session_id ";
     }
@@ -3622,10 +3622,19 @@ function api_item_property_update(
     $lastEditTypeNoFilter = $lastedit_type;
     $lastedit_type = Database::escape_string($lastedit_type);
     $user_id = intval($user_id);
-    $to_group_id = intval($to_group_id);
-    $to_user_id = intval($to_user_id);
-    $start_visible = Database::escape_string($start_visible);
-    $end_visible = Database::escape_string($end_visible);
+
+    $startVisible = "NULL";
+    if (!empty($start_visible)) {
+        $start_visible = Database::escape_string($start_visible);
+        $startVisible = "'$start_visible'";
+    }
+
+    $endVisible = "NULL";
+    if (!empty($end_visible)) {
+        $end_visible = Database::escape_string($end_visible);
+        $endVisible = "'$end_visible'";
+    }
+
     $to_filter = '';
     $time = api_get_utc_datetime();
 
@@ -3644,6 +3653,7 @@ function api_item_property_update(
 
     if (!is_null($to_user_id)) {
         // $to_user_id has more priority than $to_group_id
+        $to_user_id = intval($to_user_id);
         $to_field = 'to_user_id';
         $to_value = $to_user_id;
     } else {
@@ -3651,6 +3661,8 @@ function api_item_property_update(
         $to_field = 'to_group_id';
         $to_value = $to_group_id;
     }
+
+    $toValueCondition = empty($to_value) ? "NULL" : "'$to_value'";
 
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
     $condition_session = '';
@@ -3670,6 +3682,7 @@ function api_item_property_update(
     if (is_null($to_user_id) && is_null($to_group_id)) {
         $to_group_id = 0;
     }
+
     if (!is_null($to_user_id)) {
         // Set filter to intended user.
         $to_filter = " AND to_user_id= '$to_user_id' $condition_session";
@@ -3709,12 +3722,13 @@ function api_item_property_update(
                     $result = Database::query($sql);
                 } else {
                     $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                            VALUES ($course_id, '$tool','$item_id','$time', '$user_id', '$time', '$lastedit_type','$user_id', '$to_value', '$visibility', '$start_visible','$end_visible', '$session_id')";
+                            VALUES ($course_id, '$tool','$item_id','$time', '$user_id', '$time', '$lastedit_type','$user_id', $toValueCondition, '$visibility', $startVisible, $endVisible, '$session_id')";
                     $result = Database::query($sql);
-
                     $id = Database::insert_id();
-                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
-                    Database::query($sql);
+                    if ($id) {
+                        $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
+                        Database::query($sql);
+                    }
                 }
             } else {
                 $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3750,9 +3764,8 @@ function api_item_property_update(
                     $result = Database::query($sql);
                 } else {
                     $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                            VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
+                            VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', $toValueCondition, '$visibility', $startVisible, $endVisible, '$session_id')";
                     $result = Database::query($sql);
-
                     $id = Database::insert_id();
                     if ($id) {
                         $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
@@ -3793,12 +3806,13 @@ function api_item_property_update(
                     $result = Database::query($sql);
                 } else {
                     $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
-                            VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
+                            VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', $toValueCondition, '$visibility', $startVisible, $endVisible, '$session_id')";
                     $result = Database::query($sql);
-
                     $id = Database::insert_id();
-                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
-                    Database::query($sql);
+                    if ($id) {
+                        $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
+                        Database::query($sql);
+                    }
                 }
             } else {
                 $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3826,17 +3840,17 @@ function api_item_property_update(
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
     if (Database::affected_rows($result) == 0) {
         $sessionCondition = empty($session_id) ? "NULL" : "'$session_id'";
-        $toValueCondition = empty($to_value) ? "NULL" : "'$to_value'";
         $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', $toValueCondition, '$visibility', '$start_visible', '$end_visible', $sessionCondition)";
+                VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', $toValueCondition, '$visibility', $startVisible, $endVisible, $sessionCondition)";
         $res = Database::query($sql);
-        if (!$res) {
-            $id = Database::insert_id();
+        $id = Database::insert_id();
+        if ($id) {
             $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
             Database::query($sql);
             return false;
         }
     }
+
     return true;
 }
 
@@ -3999,16 +4013,21 @@ function api_get_track_item_property_history($tool, $ref)
  */
 function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
 {
-    $course_info = api_get_course_info_by_id($course_id);
+    $courseInfo = api_get_course_info_by_id($course_id);
 
-    if (empty($course_info)) {
+    if (empty($courseInfo)) {
         return false;
     }
 
     $tool = Database::escape_string($tool);
     $ref = intval($ref);
-    $course_id = $course_info['real_id'];
+    $course_id = $courseInfo['real_id'];
     $session_id = intval($session_id);
+
+    $sessionCondition = " session_id = $session_id";
+    if (empty($session_id)) {
+        $sessionCondition = " (session_id = 0 OR session_id IS NULL) ";
+    }
 
     // Definition of tables.
     $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4018,13 +4037,14 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
                 c_id = $course_id AND
                 tool = '$tool' AND
                 ref = $ref AND
-                session_id = $session_id ";
+                $sessionCondition ";
 
     $rs  = Database::query($sql);
     $row = array();
     if (Database::num_rows($rs) > 0) {
         $row = Database::fetch_array($rs,'ASSOC');
     }
+
     return $row;
 }
 

@@ -70,11 +70,12 @@ if (file_exists($file)) {
     $chat_size_new = filesize($file);
 }
 
-$sql = "SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$userId."' $extra_condition";
+$sql = "SELECT user_id FROM $tbl_chat_connected
+        WHERE user_id='".$userId."' $extra_condition";
 $result = Database::query($sql);
 
 // The user_id exists so we must do an UPDATE and not a INSERT
-$current_time = date('Y-m-d H:i:s');
+$current_time = api_get_utc_datetime();
 if (Database::num_rows($result) == 0) {
 	$query = "INSERT INTO $tbl_chat_connected(c_id, user_id,last_connection,session_id,to_group_id)
 	          VALUES($course_id, '".$userId."','$current_time','$session_id','$group_id')";

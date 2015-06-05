@@ -98,7 +98,7 @@
 
 .text-items-course .botton-items{
 	text-align: right;
-	margin-top: 10px;
+	margin-top: 0;
 }
 .img-items-course img{
 	width: 100%;
@@ -162,6 +162,7 @@
 
 header .search-header{
 	text-align: right;
+  margin-bottom: 40px;
 }
 .navbar{
 	margin-bottom: 10px;
@@ -172,7 +173,7 @@ header .search-header{
 	min-height: 75px;
 }
 .navbar-right{
-	padding-top: 15px;
+	padding-top: 20px;
 }
 .navbar-nav > li > a{
 	font-size: 18px;
@@ -194,7 +195,7 @@ header .search-header{
 	bottom: -50px !important;
 }
 .carousel{
-	margin-bottom: 50px;
+	margin-bottom: 70px;
 }
 .carousel-indicators li{
 	width: 25px;

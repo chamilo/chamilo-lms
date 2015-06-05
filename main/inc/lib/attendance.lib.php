@@ -1345,37 +1345,49 @@ class Attendance
 	 * @param	int	$groupId
 	 * @return	int number of dates in attendance calendar
 	 */
-	public static function get_number_of_attendance_calendar($attendance_id, $groupId = 0)
-	{
-		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-		$calendarRelGroup = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
-		$attendance_id = intval($attendance_id);
-		$groupId = intval($groupId);
+    public static function get_number_of_attendance_calendar($attendance_id, $groupId = 0)
+    {
+        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        $calendarRelGroup = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+        $attendance_id = intval($attendance_id);
+        $groupId = intval($groupId);
+        $course_id = api_get_course_int_id();
 
-		$groupCondition = " group_id = $groupId ";
-		if (empty($groupId)) {
-			$groupCondition = "group_id IS NULL OR group_id = 0 ";
-		}
-
-		$course_id = api_get_course_int_id();
-		$sql = "SELECT count(a.id)
+        if (empty($groupId)) {
+            $sql = "SELECT count(a.id)
+                    FROM $tbl_attendance_calendar a
+					WHERE
+						c_id = $course_id AND
+						attendance_id = '$attendance_id' AND
+						id NOT IN (
+							SELECT calendar_id FROM $calendarRelGroup
+							WHERE
+							    c_id = $course_id AND
+							    group_id != 0 AND
+							    group_id IS NOT NULL
+						)
+					";
+        } else {
+            $sql = "SELECT count(a.id)
 				FROM $tbl_attendance_calendar a
 				INNER JOIN $calendarRelGroup g
 				ON (a.id = g.calendar_id AND a.c_id = g.c_id)
                 WHERE
                 	a.c_id = $course_id AND
                 	attendance_id = '$attendance_id' AND
-                	$groupCondition
+                	group_id = $groupId
 				";
+        }
 
-		$rs = Database::query($sql);
-		$row = Database::fetch_row($rs);
-		$count = $row[0];
+        $rs = Database::query($sql);
+        $row = Database::fetch_row($rs);
+        $count = $row[0];
 
-		return $count;
-	}
+        return $count;
+    }
 
-	/**
+
+    /**
 	 * Get count dates inside attendance calendar by attendance id
 	 * @param	int	$attendance_id
 	 * @return	int     count of dates

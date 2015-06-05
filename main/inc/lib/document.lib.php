@@ -520,18 +520,24 @@ class DocumentManager
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
+        $userGroupFilter = '';
         if (!is_null($to_user_id)) {
-            $to_field = 'last.to_user_id';
-            $to_value = $to_user_id;
+            $to_user_id = intval($to_user_id);
+            $userGroupFilter = "last.to_user_id = $to_user_id";
+            if (empty($to_user_id)) {
+                $userGroupFilter = " (last.to_user_id = 0 OR last.to_user_id IS NULL) ";
+            }
         } else {
-            $to_field = 'last.to_group_id';
-            $to_value = $to_group_id;
+            $to_group_id = intval($to_group_id);
+            $userGroupFilter = "last.to_group_id = $to_group_id";
+            if (empty($to_group_id)) {
+                $userGroupFilter = "( last.to_group_id = 0 OR last.to_group_id IS NULL) ";
+            }
         }
 
         // Escape underscores in the path so they don't act as a wildcard
         $originalPath = $path;
         $path = str_replace('_', '\_', $path);
-        $to_value = Database::escape_string($to_value);
 
         $visibility_bit = ' <> 2';
 
@@ -541,7 +547,7 @@ class DocumentManager
 
         // Condition for the session
         $sessionId = api_get_session_id();
-        $condition_session = " AND (last.session_id = '$sessionId' OR (last.session_id = '0') )";
+        $condition_session = " AND (last.session_id = '$sessionId' OR (last.session_id = '0' OR last.session_id IS NULL) )";
         $condition_session .= self::getSessionFolderFilters($originalPath, $sessionId);
 
         $sharedCondition = null;
@@ -581,13 +587,11 @@ class DocumentManager
                     docs.path LIKE '" . Database::escape_string($path . $added_slash.'%'). "' AND
                     docs.path NOT LIKE '" . Database::escape_string($path . $added_slash.'%/%')."' AND
                     docs.path NOT LIKE '%_DELETED_%' AND
-                    $to_field = $to_value AND
-                    last.visibility
-                    $visibility_bit
+                    $userGroupFilter AND
+                    last.visibility $visibility_bit
                     $condition_session
                     $sharedCondition
                 ";
-
         $result = Database::query($sql);
 
         $doc_list = array();
@@ -736,6 +740,11 @@ class DocumentManager
             }
         }
 
+        $groupCondition = " last.to_group_id = $to_group_id";
+        if (empty($to_group_id)) {
+            $groupCondition = " (last.to_group_id = 0 OR last.to_group_id IS NULL)";
+        }
+
         if ($can_see_invisible) {
             // condition for the session
             $session_id = api_get_session_id();
@@ -757,7 +766,7 @@ class DocumentManager
                        )
                        WHERE
                             docs.filetype 		= 'folder' AND
-                            last.to_group_id	= " . $to_group_id . " AND
+                            $groupCondition AND
                             docs.path NOT LIKE '%shared_folder%' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
                             last.visibility 	<> 2
@@ -775,7 +784,7 @@ class DocumentManager
                         WHERE
                             docs.filetype 		= 'folder' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
-                            last.to_group_id	= 0  AND
+                            $groupCondition AND
                             last.visibility 	<> 2
                             $show_users_condition $condition_session ";
             }
@@ -816,7 +825,7 @@ class DocumentManager
                         docs.id = last.ref AND
                         docs.filetype = 'folder' AND
                         last.tool = '" . TOOL_DOCUMENT . "' AND
-                        last.to_group_id = " . $to_group_id . " AND
+                        $groupCondition AND
                         last.visibility = 1
                         $condition_session AND
                         last.c_id = {$_course['real_id']}  AND
@@ -837,7 +846,7 @@ class DocumentManager
                         docs.id = last.ref AND
                         docs.filetype = 'folder' AND
                         last.tool = '" . TOOL_DOCUMENT . "' AND
-                        last.to_group_id = " . $to_group_id . " AND
+                        $groupCondition AND
                         last.visibility = 0 $condition_session AND
                         last.c_id = {$_course['real_id']} AND
                         docs.c_id = {$_course['real_id']} ";
@@ -855,7 +864,7 @@ class DocumentManager
                             docs.path LIKE '" . Database::escape_string($row['path'].'/%') . "' AND
                             docs.filetype = 'folder' AND
                             last.tool = '" . TOOL_DOCUMENT . "' AND
-                            last.to_group_id = " . $to_group_id . " AND
+                            $groupCondition AND
                             last.visibility = 1 $condition_session AND
                             last.c_id = {$_course['real_id']} AND
                             docs.c_id = {$_course['real_id']}  ";
@@ -1129,6 +1138,7 @@ class DocumentManager
             $documentId,
             $sessionId
         );
+
 
         if (empty($itemInfo)) {
             return false;
@@ -2917,14 +2927,12 @@ class DocumentManager
         }
 
         $group_condition = null;
-
         if (isset($group_id)) {
             $group_id = intval($group_id);
             $group_condition = " AND props.to_group_id='" . $group_id . "' ";
         }
 
         $session_condition = null;
-
         if (isset($session_id)) {
             $session_id = intval($session_id);
             $session_condition = " AND props.session_id='" . $session_id . "' ";
@@ -3232,7 +3240,7 @@ class DocumentManager
 
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_item_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $condition_session = " AND (last.session_id = '$session_id' OR last.session_id = '0' )";
+        $condition_session = " AND (last.session_id = '$session_id' OR last.session_id = '0' OR last.session_id IS NULL)";
 
         $add_folder_filter = null;
         if (!empty($filter_by_folder)) {

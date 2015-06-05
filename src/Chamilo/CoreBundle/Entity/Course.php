@@ -240,7 +240,7 @@ class Course
     protected $sessions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="course", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist"})
      **/
     protected $sessionUserSubscriptions;
 
@@ -265,12 +265,20 @@ class Course
     //protected $curriculumCategories;
 
     /**
+     * @var Room
+     *
+     * @ORM\ManyToOne(targetEntity="Room")
+     * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
+     **/
+    private $room;
+
+    /**
      * @var Session
      **/
     protected $currentSession;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
@@ -1109,6 +1117,25 @@ class Course
     public function getCourseTypeId()
     {
         return $this->courseTypeId;
+    }
+
+    /**
+     * @return Room
+     */
+    public function getRoom()
+    {
+        return $this->room;
+    }
+
+    /**
+     * @param Room $room
+     * @return Course
+     */
+    public function setRoom($room)
+    {
+        $this->room = $room;
+
+        return $this;
     }
 
     /**

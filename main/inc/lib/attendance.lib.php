@@ -651,7 +651,7 @@ class Attendance
 			}
 
 			if (!empty($attendance_id)) {
-				$user_faults = $this->get_faults_of_user($uid, $attendance_id);
+				$user_faults = $this->get_faults_of_user($uid, $attendance_id, $groupId);
 				$value['attendance_result'] = $user_faults['faults'].'/'.$user_faults['total'].' ('.$user_faults['faults_porcent'].'%)';
 				$value['result_color_bar'] 	= $user_faults['color_bar'];
 			}
@@ -935,19 +935,20 @@ class Attendance
 
 	/**
 	 * Get results of faults (absents) by user
-	 * @param	int	   user id
-	 * @param	int	   attendance id
+	 * @param int $user_id
+	 * @param int $attendance_id
+	 * @param int $groupId
 	 * @return 	array  results containing number of faults, total done attendance,
 	 * percent of faults and color depend on result (red, orange)
 	 */
-	public function get_faults_of_user($user_id, $attendance_id)
+	public function get_faults_of_user($user_id, $attendance_id, $groupId = null)
 	{
 		// initializing database table and variables
 		$user_id 		= intval($user_id);
 		$attendance_id 	= intval($attendance_id);
 		$results = array();
 		$attendance_data = $this->get_attendance_by_id($attendance_id);
-		$calendar_count = self::get_number_of_attendance_calendar($attendance_id);
+		$calendar_count = self::get_number_of_attendance_calendar($attendance_id, $groupId);
 		$total_done_attendance 	= $attendance_data['attendance_qualify_max'];
 		$attendance_user_score  = $this->get_user_score($user_id, $attendance_id);
 
@@ -957,15 +958,19 @@ class Attendance
 		// calculate results
 		$faults = $total_done_attendance - $attendance_user_score;
 
-		$faults = $faults > 0 ? $faults:0;
+        if (empty($calendar_count)) {
+            $faults = 0;
+        }
+
+        $faults = $faults > 0 ? $faults : 0;
 		$faults_porcent = $calendar_count > 0 ?round(($faults*100)/$calendar_count,0):0;
-		$results['faults'] 			= $faults;
-		$results['total']			= $calendar_count;
-		$results['faults_porcent'] 	= $faults_porcent;
+        $results['faults'] = $faults;
+        $results['total'] = $calendar_count;
+        $results['faults_porcent'] = $faults_porcent;
 		$color_bar = '';
 
-		if ($faults_porcent > 25  ) {
-			$color_bar = '#f28989';
+        if ($faults_porcent > 25) {
+            $color_bar = '#f28989';
 		} else if ($faults_porcent > 10) {
 			$color_bar = '#F90';
 		}
@@ -1242,10 +1247,11 @@ class Attendance
 
 	/**
 	 * Get all attendance calendar data inside current attendance
-	 * @param	int	$attendance_id
-	 * @param	string $type
-	 * @param	int $calendar_id
-	 * @param	int $groupId
+	 * @param int	$attendance_id
+	 * @param string $type
+	 * @param int $calendar_id
+	 * @param int $groupId
+	 * @param bool $showAll = false show group calendar items or not
 	 *
 	 * @return	array attendance calendar data
 	 */
@@ -1253,7 +1259,8 @@ class Attendance
 		$attendance_id,
 		$type = 'all',
 		$calendar_id = null,
-		$groupId = null
+		$groupId = null,
+		$showAll = false
 	) {
 		global $dateFormatShort, $timeNoSecFormat;
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
@@ -1261,8 +1268,20 @@ class Attendance
 		$course_id = api_get_course_int_id();
 		$groupCondition = null;
 
-		$sql = "SELECT * FROM $tbl_attendance_calendar
-				WHERE c_id = $course_id AND attendance_id = '$attendance_id' ";
+		if ($showAll) {
+			$sql = "SELECT * FROM $tbl_attendance_calendar
+					WHERE c_id = $course_id AND attendance_id = '$attendance_id'";
+		} else {
+			$sql = "SELECT * FROM $tbl_attendance_calendar
+					WHERE
+						c_id = $course_id AND
+						attendance_id = '$attendance_id' AND
+						id NOT IN (
+							SELECT calendar_id FROM $table
+							WHERE c_id = $course_id AND group_id != 0 AND group_id IS NOT NULL
+						)
+					";
+		}
 
 		if (!empty($groupId)) {
 			$groupId = intval($groupId);
@@ -1323,23 +1342,52 @@ class Attendance
 	/**
 	 * Get number of attendance calendar inside current attendance
 	 * @param	int	$attendance_id
-	 * @return	int     number of dates in attendance calendar
+	 * @param	int	$groupId
+	 * @return	int number of dates in attendance calendar
 	 */
-	public static function get_number_of_attendance_calendar($attendance_id)
-	{
-		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-		$attendance_id = intval($attendance_id);
-		$course_id = api_get_course_int_id();
-		$sql = "SELECT count(id) FROM $tbl_attendance_calendar
-                WHERE c_id = $course_id AND attendance_id = '$attendance_id'";
-		$rs = Database::query($sql);
-		$row = Database::fetch_row($rs);
-		$count = $row[0];
+    public static function get_number_of_attendance_calendar($attendance_id, $groupId = 0)
+    {
+        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        $calendarRelGroup = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+        $attendance_id = intval($attendance_id);
+        $groupId = intval($groupId);
+        $course_id = api_get_course_int_id();
 
-		return $count;
-	}
+        if (empty($groupId)) {
+            $sql = "SELECT count(a.id)
+                    FROM $tbl_attendance_calendar a
+					WHERE
+						c_id = $course_id AND
+						attendance_id = '$attendance_id' AND
+						id NOT IN (
+							SELECT calendar_id FROM $calendarRelGroup
+							WHERE
+							    c_id = $course_id AND
+							    group_id != 0 AND
+							    group_id IS NOT NULL
+						)
+					";
+        } else {
+            $sql = "SELECT count(a.id)
+				FROM $tbl_attendance_calendar a
+				INNER JOIN $calendarRelGroup g
+				ON (a.id = g.calendar_id AND a.c_id = g.c_id)
+                WHERE
+                	a.c_id = $course_id AND
+                	attendance_id = '$attendance_id' AND
+                	group_id = $groupId
+				";
+        }
 
-	/**
+        $rs = Database::query($sql);
+        $row = Database::fetch_row($rs);
+        $count = $row[0];
+
+        return $count;
+    }
+
+
+    /**
 	 * Get count dates inside attendance calendar by attendance id
 	 * @param	int	$attendance_id
 	 * @return	int     count of dates
@@ -1406,13 +1454,13 @@ class Attendance
 		$attendance_id = intval($attendance_id);
 		$course_id = api_get_course_int_id();
 		// check if datetime already exists inside the table
-		$sql = "SELECT id FROM $tbl_attendance_calendar
+		/*$sql = "SELECT id FROM $tbl_attendance_calendar
 		        WHERE
 		        	c_id = $course_id AND
 		        	date_time='".Database::escape_string($this->date_time)."' AND
 		        	attendance_id = '$attendance_id'";
 		$rs = Database::query($sql);
-		if (Database::num_rows($rs) == 0) {
+		if (Database::num_rows($rs) == 0) {*/
 			$params = array(
 				'c_id' =>  $course_id,
 				'date_time' => $this->date_time,
@@ -1426,7 +1474,7 @@ class Attendance
 				$affected_rows++;
 			}
 			$this->addAttendanceCalendarToGroup($id, $course_id, $groupList);
-		}
+		//}
 
 		// update locked attendance
 		$is_all_calendar_done = self::is_all_attendance_calendar_done($attendance_id);
@@ -1445,31 +1493,33 @@ class Attendance
 	 */
 	public function addAttendanceCalendarToGroup($calendarId, $courseId, $groupList)
 	{
-		if (empty($groupList)) {
-			return false;
-		}
+        if (empty($groupList)) {
+            return false;
+        }
 
-		$table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+        $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
 
-		foreach ($groupList as $groupId) {
-			$result = $this->getAttendanceCalendarGroup(
-				$calendarId,
-				$courseId,
-				$groupId
-			);
+        foreach ($groupList as $groupId) {
 
-			if (empty($result)) {
-				$params = array(
-					'calendar_id' => $calendarId,
-					'c_id' => $courseId,
-					'group_id' => $groupId,
-				);
-                $insertId = Database::insert($table, $params);
+            if (empty($groupId)) {
+                continue;
+            }
 
-                $sql = "UPDATE $table SET id = iid WHERE iid = $insertId";
-                Database::query($sql);
-			}
-		}
+            $result = $this->getAttendanceCalendarGroup(
+                $calendarId,
+                $courseId,
+                $groupId
+            );
+
+            if (empty($result)) {
+                $params = array(
+                    'calendar_id' => $calendarId,
+                    'c_id' => $courseId,
+                    'group_id' => $groupId,
+                );
+                Database::insert($table, $params);
+            }
+        }
 	}
 
 	/**

@@ -38,6 +38,7 @@ switch ($action) {
 
                 if ($sequence->hasGraph()) {
                     $graph = $sequence->getUnSerializeGraph();
+                    $graph->setAttribute('graphviz.node.fontname', 'arial');
                     $graphviz = new \Graphp\GraphViz\GraphViz();
                     echo $graphviz->createImageHtml($graph);
                 }
@@ -193,7 +194,6 @@ switch ($action) {
 
         switch ($type) {
             case 'session':
-
                 $type = SequenceResource::SESSION_TYPE;
                 $sessionInfo = api_get_session_info($id);
                 $name = $sessionInfo['name'];
@@ -207,10 +207,13 @@ switch ($action) {
                 foreach ($parents as $parentId) {
                     if ($graph->hasVertex($parentId)) {
                         $parent = $graph->getVertex($parentId);
+                        if (!$parent->hasEdgeTo($main)) {
+                            $parent->createEdgeTo($main);
+                        }
                     } else {
                         $parent = $graph->createVertex($parentId);
+                        $parent->createEdgeTo($main);
                     }
-                    $parent->createEdgeTo($main);
                 }
 
                 foreach ($parents as $parentId) {

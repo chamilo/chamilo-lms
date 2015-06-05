@@ -212,6 +212,20 @@ class CLp
     private $categoryId;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="max_attempts", type="integer", nullable=false)
+     */
+    private $maxAttempts;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="subscribe_users", type="integer", nullable=false)
+     */
+    private $subscribeUsers;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_on", type="datetime", nullable=false)

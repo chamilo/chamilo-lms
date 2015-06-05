@@ -187,7 +187,8 @@ class AnnouncementManager
     							    toolitemproperties.tool='announcement' AND
     							    (
     							        toolitemproperties.to_user_id='" . api_get_user_id() . "' OR
-    							        toolitemproperties.to_group_id IN ('0', '" . implode("', '", $group_list) . "')
+    							        toolitemproperties.to_group_id IN ('0', '" . implode("', '", $group_list) . "') OR
+    							        toolitemproperties.to_group_id IS NULL
                                     ) AND
     							    toolitemproperties.visibility='1' AND
     							    announcement.c_id = $course_id AND
@@ -200,7 +201,7 @@ class AnnouncementManager
     							    announcement.id = toolitemproperties.ref AND
     							    announcement.id = '$announcement_id' AND
     							    toolitemproperties.tool='announcement' AND
-    							    toolitemproperties.to_group_id='0' AND
+    							    (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id IS NULL) AND
     							    toolitemproperties.visibility='1' AND
     							    announcement.c_id = $course_id AND
     							    toolitemproperties.c_id = $course_id
@@ -675,7 +676,7 @@ class AnnouncementManager
 						toolitemproperties.tool='announcement' AND
 						(
 						  toolitemproperties.insert_user_id='$user_id' AND
-						  (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id is null)
+						  (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id IS NULL)
 						)
 						AND toolitemproperties.visibility='1'
 						AND announcement.session_id  = 0
@@ -1636,7 +1637,7 @@ class AnnouncementManager
                 if (api_get_group_id() == 0) {
                     $group_condition = "";
                 } else {
-                    $group_condition = " AND (ip.to_group_id='".api_get_group_id()."' OR ip.to_group_id = 0)";
+                    $group_condition = " AND (ip.to_group_id='".api_get_group_id()."' OR ip.to_group_id = 0 OR ip.to_group_id IS NULL)";
                 }
                 $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 				FROM $tbl_announcement announcement, $tbl_item_property ip
@@ -1660,19 +1661,34 @@ class AnnouncementManager
                 if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 
                     if (api_get_group_id() == 0) {
-                        $cond_user_id = " AND (ip.lastedit_user_id = '".$userId."' OR ( ip.to_user_id='".$userId."'" .
-                            "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
+                        $cond_user_id = " AND (
+                        ip.lastedit_user_id = '".$userId."' OR (
+                            ip.to_user_id='".$userId."' OR
+                            ip.to_group_id IN (0, ".implode(", ", $group_memberships).") OR
+                            ip.to_group_id IS NULL
+                            )
+                        )
+                        ";
                     } else {
-                        $cond_user_id = " AND (ip.lastedit_user_id = '".$userId."'
-                            OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+                        $cond_user_id = " AND (
+                            ip.lastedit_user_id = '".$userId."'OR
+                            ip.to_group_id IN (0, ".api_get_group_id().") OR
+                            ip.to_group_id IS NULL
+                        )";
                     }
                 } else {
                     if (api_get_group_id() == 0) {
-                        $cond_user_id = " AND ( ip.to_user_id='".$userId."'" .
-                            "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+                        $cond_user_id = " AND (
+                            ip.to_user_id='".$userId."' OR
+                            ip.to_group_id IN (0, ".implode(", ", $group_memberships).") OR
+                            ip.to_group_id IS NULL
+                        ) ";
                     } else {
-                        $cond_user_id = " AND ( ip.to_user_id='".$userId."'" .
-                            "OR ip.to_group_id IN (0, ".api_get_group_id().")) ";
+                        $cond_user_id = " AND (
+                            ip.to_user_id='".$userId."' OR
+                            ip.to_group_id IN (0, ".api_get_group_id().") OR
+                            ip.to_group_id IS NULL
+                        ) ";
                     }
                 }
 
@@ -1696,9 +1712,12 @@ class AnnouncementManager
                     // this is an identified user => show the general announcements AND his personal announcements
                     if ($userId) {
                         if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-                            $cond_user_id = " AND (ip.lastedit_user_id = '".$userId."' OR ( ip.to_user_id='".$userId."' OR ip.to_group_id='0')) ";
+                            $cond_user_id = " AND (
+                                ip.lastedit_user_id = '".$userId."' OR
+                                ( ip.to_user_id='".$userId."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL)
+                            ) ";
                         } else {
-                            $cond_user_id = " AND ( ip.to_user_id='".$userId."' OR ip.to_group_id='0') ";
+                            $cond_user_id = " AND ( ip.to_user_id='".$userId."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL) ";
                         }
                         $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
                             FROM $tbl_announcement announcement, $tbl_item_property ip
@@ -1716,7 +1735,9 @@ class AnnouncementManager
                     } else {
 
                         if (api_get_course_setting('allow_user_edit_announcement')) {
-                            $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0') ";
+                            $cond_user_id = " AND (
+                                ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL
+                            ) ";
                         } else {
                             $cond_user_id = " AND ip.to_group_id='0' ";
                         }

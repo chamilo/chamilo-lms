@@ -173,7 +173,9 @@ class LearnpathList
                 'created_on'        => $row['created_on'],
                 'modified_on'       => $row['modified_on'],
                 'publicated_on'     => $row['publicated_on'],
-                'expired_on'        => $row['expired_on']
+                'expired_on'        => $row['expired_on'],
+                //'category_id'       => $row['category_id'],
+                'subscribe_users'   => $row['subscribe_users']
             );
             $names[$row['name']] = $row['id'];
         }

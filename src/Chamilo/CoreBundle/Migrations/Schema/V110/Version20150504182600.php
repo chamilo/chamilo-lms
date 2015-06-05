@@ -49,9 +49,6 @@ class Version20150504182600 extends AbstractMigrationChamilo
         $this->addSql("
             UPDATE language SET parent_id = 45 WHERE english_name = 'trad_chinese'
         ");
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.37' WHERE variable = 'chamilo_database_version'
-        ");
     }
 
     /**
@@ -62,10 +59,6 @@ class Version20150504182600 extends AbstractMigrationChamilo
     {
         $this->addSql("
             UPDATE language SET parent_id = 0 WHERE english_name IN ('trad_chinese', 'brazilian', 'occitan', 'friulian', 'asturian', 'catalan', 'esperanto', 'galician', 'quechua_cusco')
-        ");
-
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.36' WHERE variable = 'chamilo_database_version'
         ");
     }
 }

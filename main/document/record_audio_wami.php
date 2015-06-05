@@ -71,8 +71,7 @@ if (!is_dir($filepath)) {
 if (!empty($groupId)) {
 	$interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
 	$noPHP_SELF = true;
-	$to_group_id = $_SESSION['_gid'];
-	$group = GroupManager :: get_group_properties($to_group_id);
+	$group = GroupManager :: get_group_properties($groupId);
 	$path = explode('/', $dir);
 	if ('/'.$path[1] != $group['directory']) {
 		api_not_allowed(true);

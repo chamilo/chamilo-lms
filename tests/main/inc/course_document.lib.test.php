@@ -32,9 +32,4 @@ class Testcdocu extends UnitTestCase{
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === true || $res === false);
 	}
-
 }
-
-
-
-?>

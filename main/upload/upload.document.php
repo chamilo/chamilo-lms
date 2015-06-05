@@ -91,7 +91,13 @@ if (isset($_FILES['user_upload'])) {
 		$missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);
 		if ($missing_files)  {
 			//show a form to upload the missing files
-			Display::display_normal_message(build_missing_files_form($missing_files,$_POST['curdirpath'],$_FILES['user_upload']['name']));
+            Display::display_normal_message(
+                build_missing_files_form(
+                    $missing_files,
+                    $_POST['curdirpath'],
+                    $_FILES['user_upload']['name']
+                )
+            );
 		}
 	}
 }
@@ -114,7 +120,16 @@ if (isset($_POST['submit_image'])) {
         );
         $missing_files_dir = $folderData['path'];
 		//put the uploaded files in the new directory and get the paths
-		$paths_to_replace_in_file = move_uploaded_file_collection_into_directory($_course, $_FILES['img_file'],$base_work_dir,$missing_files_dir,$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space);
+        $paths_to_replace_in_file = move_uploaded_file_collection_into_directory(
+            $_course,
+            $_FILES['img_file'],
+            $base_work_dir,
+            $missing_files_dir,
+            $_user['user_id'],
+            $to_group_id,
+            $to_user_id,
+            $max_filled_space
+        );
 		//open the html file and replace the paths
         replace_img_path_in_html_file(
             $_POST['img_file_path'],
@@ -129,7 +144,16 @@ if (isset($_POST['submit_image'])) {
 if (isset($_POST['create_dir']) && $_POST['dirname']!='') {
 	$added_slash = ($path=='/')?'':'/';
 	$dir_name = $path.$added_slash.api_replace_dangerous_char($_POST['dirname']);
-	$created_dir = create_unexisting_directory($_course,$_user['user_id'],api_get_session_id(), $to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
+    $created_dir = create_unexisting_directory(
+        $_course,
+        $_user['user_id'],
+        api_get_session_id(),
+        $to_group_id,
+        $to_user_id,
+        $base_work_dir,
+        $dir_name,
+        $_POST['dirname']
+    );
     if ($created_dir) {
         Display::display_normal_message(get_lang('DirCr'));
         $path = $created_dir;

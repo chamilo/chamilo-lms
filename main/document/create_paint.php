@@ -70,20 +70,19 @@ if (!is_dir($filepath)) {
 	$dir = '/';
 }
 
-//groups //TODO: clean
-if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
-		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
-		$noPHP_SELF = true;
-		$to_group_id = $_SESSION['_gid'];
-		$group = GroupManager :: get_group_properties($to_group_id);
-		$path = explode('/', $dir);
-		if ('/'.$path[1] != $group['directory']) {
-			api_not_allowed(true);
-		}
+$groupId = api_get_group_id();
+
+if (!empty($groupId)) {
+	$interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
+	$noPHP_SELF = true;
+	$group = GroupManager::get_group_properties($groupId);
+	$path = explode('/', $dir);
+	if ('/'.$path[1] != $group['directory']) {
+		api_not_allowed(true);
+	}
 }
 
-$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
+$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(), "name" => get_lang('Documents'));
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);

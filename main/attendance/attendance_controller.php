@@ -435,7 +435,13 @@ class AttendanceController
         }
 
         $data['action'] = $action;
-        $data['attendance_calendar'] = $attendance->get_attendance_calendar($attendance_id);
+        $data['attendance_calendar'] = $attendance->get_attendance_calendar(
+            $attendance_id,
+            'all',
+            null,
+            null,
+            true
+        );
         $data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);
         // render to the view
         $this->view->set_data($data);
@@ -471,7 +477,12 @@ class AttendanceController
             $filter_type = 'calendar_id';
         }
 
-        $data_array['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id, $filter_type, $my_calendar_id, $groupId);
+        $data_array['attendant_calendar'] = $attendance->get_attendance_calendar(
+            $attendance_id,
+            $filter_type,
+            $my_calendar_id,
+            $groupId
+        );
 
         if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
             $data_array['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
@@ -504,7 +515,9 @@ class AttendanceController
 
         $head_table = array('#', get_lang('Name'));
         foreach ($data_array['attendant_calendar'] as $class_day) {
-            $head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER_NO_YEAR);
+            $head_table[] =
+                api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER_NO_YEAR).' '.
+                api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT);
         }
         $data_table[] = $head_table;
         $dataClass = array();
@@ -574,7 +587,10 @@ class AttendanceController
                 }
             }
         } else {
-            $content = Export::convert_array_to_html($data_table, array('header_attributes' =>  array('align' => 'center')));
+            $content = Export::convert_array_to_html(
+                $data_table,
+                array('header_attributes' => array('align' => 'center'))
+            );
         }
 
         $params = array(

@@ -27,10 +27,14 @@ function user_connected_in_chat($user_id)
 		$extra_condition = api_get_session_condition($session_id);
 	}
 
- 	$sql = 'SELECT COUNT(*) AS count FROM '.$tbl_chat_connected .' c
- 	        WHERE c_id = '.$course_id.' AND user_id='.$user_id.$extra_condition;
+ 	$sql = 'SELECT COUNT(*) AS count
+ 	        FROM '.$tbl_chat_connected .' c
+ 	        WHERE
+ 	            c_id = '.$course_id.' AND
+ 	            user_id='.$user_id.$extra_condition;
  	$result = Database::query($sql);
  	$count  = Database::fetch_array($result,'ASSOC');
+
  	return $count['count'] == 1;
 }
 

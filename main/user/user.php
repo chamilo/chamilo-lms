@@ -634,7 +634,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $temp[] = $o_course_user['username'];
 
                 // Groups.
-                $temp[] = implode(', ', $groupsNameList);
+                $groupsNameListParsed = [];
+                if (!empty($groupsNameList)) {
+                    $groupsNameListParsed = array_column($groupsNameList, 'name');
+                }
+                $temp[] = implode(', ', $groupsNameListParsed);
 
                 // Status
                 $default_status = get_lang('Student');

@@ -39,7 +39,6 @@ $nameTools = get_lang('LearningPaths');
 Event::event_access_tool(TOOL_LEARNPATH);
 
 api_protect_course_script();
-//if (!$is_allowed_in_course) api_not_allowed();
 
 /**
  * Display
@@ -246,8 +245,7 @@ foreach ($categories as $item) {
                 $oddclass = 'row_even';
             }
 
-            $url_start_lp = 'lp_controller.php?'.api_get_cidreq(
-                ).'&action=view&lp_id='.$id;
+            $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
             $name = Security::remove_XSS($details['lp_name']);
             $extra = null;
 
@@ -257,9 +255,7 @@ foreach ($categories as $item) {
                     $id,
                     $userId
                 );
-                $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.($studentVisibility ? '' : ' - ('.get_lang(
-                            'LPNotVisibleToStudent'
-                        ).')');
+                $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.($studentVisibility ? '' : ' - ('.get_lang('LPNotVisibleToStudent').')');
                 $extra = '<div class ="lp_content_type_label">'.$dsp_desc.'</div>';
             }
 
@@ -323,6 +319,7 @@ foreach ($categories as $item) {
             $dsp_edit_lp = null;
             $dsp_publish = null;
             $dsp_reinit = null;
+            $subscribeUsers = null;
             $dsp_disk = null;
             $copy = null;
             $lp_auto_launch_icon = null;
@@ -380,16 +377,18 @@ foreach ($categories as $item) {
                     paths inside the session.
                     See http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions).
                 */
-                if ($details['lp_visibility'] == 0) {
-                    $dsp_visible = Display::url(
-                        Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL),
-                        api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_visible&new_status=1"
-                    );
-                } else {
-                    $dsp_visible = Display::url(
-                        Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL),
-                        api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_visible&new_status=0"
-                    );
+                if (!isset($details['subscribe_users']) || $details['subscribe_users'] != 1) {
+                    if ($details['lp_visibility'] == 0) {
+                        $dsp_visible = Display::url(
+                            Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL),
+                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_visible&new_status=1"
+                        );
+                    } else {
+                        $dsp_visible = Display::url(
+                            Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL),
+                            api_get_self() . '?' . api_get_cidreq() . "&lp_id=$id&action=toggle_visible&new_status=0"
+                        );
+                    }
                 }
 
                 /* PUBLISH COMMAND */
@@ -624,6 +623,16 @@ foreach ($categories as $item) {
                     api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id"
                 );
 
+                // Subscribe users
+                $subscribeUsers = null;
+
+                if ($details['subscribe_users'] == 1) {
+                    $subscribeUsers = Display::url(
+                        Display::return_icon('user.png', get_lang('SubscribeUsersToLp')),
+                        api_get_path(WEB_CODE_PATH)."newscorm/lp_subscribe_users.php?lp_id=$id&" . api_get_cidreq()
+                    );
+                }
+
                 /* Auto launch LP code */
                 if (api_get_course_setting('enable_lp_auto_launch') == 1) {
                     if ($details['autolaunch'] == 1 && $autolaunch_exists == false) {
@@ -775,7 +784,8 @@ foreach ($categories as $item) {
                 'action_pdf' => $export_icon,
                 'action_delete' => $dsp_delete,
                 'action_order' => $dsp_order,
-                'action_seriousgame' => $actionSeriousGame
+                'action_seriousgame' => $actionSeriousGame,
+                'action_subscribe_users' => $subscribeUsers
             ];
 
             $lpIsShown = true;

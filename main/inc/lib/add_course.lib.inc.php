@@ -870,11 +870,9 @@ class AddCourse
                                     );
                                     $image_id = Database:: insert_id();
 
-
-
                                     Database::query(
                                         "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                                        VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,0,NULL,0)"
+                                        VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,NULL,NULL,0)"
                                     );
                                 }
                             }
@@ -919,11 +917,14 @@ class AddCourse
                                             $example_cert_id = $image_id;
                                         }
                                         Database::query(
-                                            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,0,NULL,1)"
+                                            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+                                            VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,NULL,NULL,1)"
                                         );
                                         $docId = Database:: insert_id();
-                                        $sql = "UPDATE $TABLEITEMPROPERTY SET id = iid WHERE iid = $docId";
-                                        Database::query($sql);
+                                        if ($docId) {
+                                            $sql = "UPDATE $TABLEITEMPROPERTY SET id = iid WHERE iid = $docId";
+                                            Database::query($sql);
+                                        }
                                     }
                                 }
                             }
@@ -1174,15 +1175,14 @@ class AddCourse
 
             Database::query(
                 "INSERT INTO $tableItem (id, c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                VALUES ($counter, $course_id,'document',1,'$now', '$now', $docId, 'DocumentAdded', 1, 0, NULL, 0)"
+                VALUES ($counter, $course_id,'document',1,'$now', '$now', $docId, 'DocumentAdded', 1, NULL, NULL, 0)"
             );
-
             $id = Database:: insert_id();
-
-            $sql = "UPDATE $tableItem SET id = iid WHERE iid = $id";
-            Database::query($sql);
+            if ($id) {
+                $sql = "UPDATE $tableItem SET id = iid WHERE iid = $id";
+                Database::query($sql);
+            }
         }
-
     }
 
     /**
@@ -1511,7 +1511,7 @@ class AddCourse
     }
 
     /**
-     * Generate a new id for c_tool table 
+     * Generate a new id for c_tool table
      * @param int $courseId The course id
      * @return int the new id
      */

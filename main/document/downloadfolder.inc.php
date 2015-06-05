@@ -102,6 +102,12 @@ function fixDocumentNameCallback($p_event, &$p_header)
 
     return 1;
 }
+
+$groupCondition = " props.to_group_id = ".$groupId;
+if (empty($groupId)) {
+    $groupCondition = " (props.to_group_id = 0 OR props.to_group_id IS NULL ) ";
+}
+
 // Admins are allowed to download invisible files
 if (api_is_allowed_to_edit()) {
     // Set the path that will be used in the query
@@ -111,6 +117,7 @@ if (api_is_allowed_to_edit()) {
         $querypath = $path;
     }
     $querypath = Database::escape_string($querypath);
+
     // Search for all files that are not deleted => visibility != 2
     $sql = "SELECT
                 path,
@@ -128,8 +135,8 @@ if (api_is_allowed_to_edit()) {
                 docs.path LIKE '".$querypath."/%' AND
                 docs.filetype = 'file' AND
                 props.visibility <> '2' AND
-                props.to_group_id = ".$groupId." AND
-                props.session_id IN ('0', '$sessionId') AND
+                $groupCondition AND
+                (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
                 docs.c_id = ".$courseId." ";
 
     $sql.= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
@@ -181,18 +188,20 @@ if (api_is_allowed_to_edit()) {
     */
     $querypath = Database::escape_string($querypath);
     $sql = "SELECT path, session_id, docs.id, props.to_group_id, docs.c_id
-            FROM $doc_table AS docs INNER JOIN $prop_table AS props
+            FROM $doc_table AS docs
+            INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
                 docs.c_id = props.c_id
             WHERE
-                docs.c_id               = $courseId AND
-                props.tool              = '".TOOL_DOCUMENT."' AND
-                docs.path               LIKE '".$querypath."/%' AND
-                props.visibility        = '1' AND
-                docs.filetype           = 'file' AND
-                props.session_id        IN ('0', '$sessionId') AND
-                props.to_group_id       = ".$groupId;
+                docs.c_id = $courseId AND
+                props.tool = '".TOOL_DOCUMENT."' AND
+                docs.path LIKE '".$querypath."/%' AND
+                props.visibility = '1' AND
+                docs.filetype = 'file' AND
+                (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
+                $groupCondition
+            ";
 
     $sql.= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
     $result = Database::query($sql);
@@ -225,7 +234,7 @@ if (api_is_allowed_to_edit()) {
                 props.tool          = '".TOOL_DOCUMENT."' AND
                 docs.path             LIKE '".$querypath."/%' AND
                 props.visibility    <> '1' AND
-                props.session_id    IN ('0', '$sessionId') AND
+                (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
                 docs.filetype       = 'folder'";
     $query2 = Database::query($sql);
 
@@ -247,7 +256,7 @@ if (api_is_allowed_to_edit()) {
                         props.tool ='".TOOL_DOCUMENT."' AND
                         docs.path LIKE '".$invisible_folders['path']."/%' AND
                         docs.filetype       ='file' AND
-                        props.session_id    IN ('0', '$sessionId') AND
+                        (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
                         props.visibility    ='1'";
             $query3 = Database::query($sql);
             // Add tem to an array

@@ -14,7 +14,7 @@
  * INIT SECTION
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
@@ -596,7 +596,7 @@ if ($content == "Agenda")
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
 					WHERE agenda.id = toolitemproperties.ref
 					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND toolitemproperties.to_group_id='0'
+					AND (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id IS NULL)
 					AND toolitemproperties.visibility='1'";
 
 	$result = Database::query($sql);
@@ -667,7 +667,14 @@ if ($content == "Document" OR (empty($content) AND (api_is_allowed_to_edit() OR 
 if ($content == "Ad_Valvas")
 {
 	$tbl_announcement = Database :: get_course_table(TABLE_ANNOUNCEMENT);
-	$sql = "SELECT * FROM ".$tbl_announcement." a, ".$item_property_table." i  WHERE i.tool = '".TOOL_ANNOUNCEMENT."' AND a.id=i.ref AND i.visibility='1' AND i.to_group_id = 0 AND i.to_user_id IS NULL ORDER BY a.display_order ASC";
+	$sql = "SELECT * FROM ".$tbl_announcement." a, ".$item_property_table." i
+			WHERE
+				i.tool = '".TOOL_ANNOUNCEMENT."' AND
+				a.id=i.ref AND
+				i.visibility='1' AND
+				(i.to_group_id = 0 OR i.to_group_id IS NULL) AND
+				i.to_user_id IS NULL
+			ORDER BY a.display_order ASC";
 
 	$result = Database::query($sql);
 	while ($myrow = Database::fetch_array($result))

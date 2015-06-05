@@ -79,6 +79,14 @@ class CThematicAdvance
     private $doneAdvance;
 
     /**
+     * @var Room
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
+     * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
+     **/
+    private $room;
+
+    /**
      * Set thematicId
      *
      * @param integer $thematicId
@@ -260,5 +268,25 @@ class CThematicAdvance
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return Room
+     */
+    public function getRoom()
+    {
+        return $this->room;
+    }
+
+    /**
+     * @param Room $room
+     *
+     * @return $this
+     */
+    public function setRoom($room)
+    {
+        $this->room = $room;
+
+        return $this;
     }
 }

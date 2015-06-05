@@ -67,6 +67,7 @@ class learnpath
     public $lp_view_session_id = 0; // The specific view might be bound to a session.
     public $prerequisite = 0;
     public $use_max_score = 1; // 1 or 0
+    public $subscribeUsers = 0; // Subscribe users or not
     public $created_on      = '';
     public $modified_on     = '';
     public $publicated_on   = '';
@@ -142,6 +143,7 @@ class learnpath
                 $this->hide_toc_frame = $row['hide_toc_frame'];
                 $this->lp_session_id = $row['session_id'];
                 $this->use_max_score = $row['use_max_score'];
+                $this->subscribeUsers = $row['subscribe_users'];
                 $this->created_on = $row['created_on'];
                 $this->modified_on = $row['modified_on'];
                 $this->ref = $row['ref'];
@@ -2343,7 +2345,7 @@ class learnpath
         $sessionId = null
     ) {
         $lp_id = (int)$lp_id;
-        $course = api_get_course_info($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
         $sessionId = intval($sessionId);
 
         if (empty($sessionId)) {
@@ -2352,12 +2354,12 @@ class learnpath
 
         $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
         // Get current prerequisite
-        $sql = "SELECT id, prerequisite, publicated_on, expired_on
+        $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on
                 FROM $tbl_learnpath
-                WHERE c_id = ".$course['real_id']." AND id = $lp_id";
+                WHERE c_id = ".$courseInfo['real_id']." AND id = $lp_id";
 
         $itemInfo = api_get_item_property_info(
-            $course['real_id'],
+            $courseInfo['real_id'],
             TOOL_LEARNPATH,
             $lp_id,
             $sessionId
@@ -2379,7 +2381,7 @@ class learnpath
                 $progress = self::getProgress(
                     $prerequisite,
                     $student_id,
-                    $course['real_id'],
+                    $courseInfo['real_id'],
                     $sessionId
                 );
                 $progress = intval($progress);
@@ -2415,6 +2417,49 @@ class learnpath
                     if ($now > api_strtotime($row['expired_on'], 'UTC')) {
                         //api_not_allowed();
                         $is_visible = false;
+                    }
+                }
+            }
+
+            // Check if the subscription users/group to a LP is ON
+            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1) {
+
+                // Try group
+                $is_visible = false;
+
+                // Checking only the user visibility
+                $userVisibility = api_get_item_visibility(
+                    $courseInfo,
+                    'learnpath',
+                    $row['id'],
+                    $sessionId,
+                    $student_id,
+                    'LearnpathSubscription'
+                );
+
+                if ($userVisibility == 1) {
+                    $is_visible = true;
+                } else {
+                    $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
+                    if (!empty($userGroups)) {
+                        foreach ($userGroups as $groupInfo) {
+                            $groupId = $groupInfo['iid'];
+
+                            $userVisibility = api_get_item_visibility(
+                                $courseInfo,
+                                'learnpath',
+                                $row['id'],
+                                $sessionId,
+                                null,
+                                'LearnpathSubscription',
+                                $groupId
+                            );
+
+                            if ($userVisibility == 1) {
+                                $is_visible = true;
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -10793,6 +10838,32 @@ SQL;
         );
 
         return $forumId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSubscribeUsers()
+    {
+        return $this->subscribeUsers;
+    }
+
+    /**
+     * @param int $value
+     */
+    public function setSubscribeUsers($value)
+    {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::set_subscribe_users()', 0);
+        }
+        $this->subscribeUsers = intval($value);
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET subscribe_users = '{$this->subscribeUsers}'
+                WHERE c_id = {$this->course_int_id} AND id = '$lp_id'";
+        Database::query($sql);
+
+        return true;
     }
 
 }

@@ -502,7 +502,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("DROP TABLE track_c_referers");
 
         // Fix ids
-        /*
+
         // Fix c_lp_item
         $connection = $this->connection;
 
@@ -553,6 +553,66 @@ class Version110 extends AbstractMigrationChamilo
             }
         }
 
+        // Set NULL if session = 0
+        $sql = "UPDATE c_item_property SET session_id = NULL WHERE session_id = 0";
+        $connection->executeQuery($sql);
+
+        // Set NULL if group = 0
+        $sql = "UPDATE c_item_property SET to_group_id = NULL WHERE to_group_id = 0";
+        $connection->executeQuery($sql);
+
+        // Set NULL if insert_user_id = 0
+        $sql = "UPDATE c_item_property SET insert_user_id = NULL WHERE insert_user_id = 0";
+        $connection->executeQuery($sql);
+
+        // Delete session data of sessions that don't exist.
+        $sql = "DELETE FROM c_item_property
+                WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)";
+        $connection->executeQuery($sql);
+
+        // Delete group data of groups that don't exist.
+        $sql = "DELETE FROM c_item_property
+                WHERE to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT id FROM c_group_info)";
+        $connection->executeQuery($sql);
+
+        // This updates the group_id with c_group_info.iid instead of c_group_info.id
+
+        $groupTableTofix = [
+            'c_group_rel_user',
+            'c_group_rel_tutor',
+            'c_permission_group',
+            'c_role_group',
+            'c_survey_invitation',
+            'c_attendance_calendar_rel_group'
+        ];
+
+        foreach ($groupTableTofix as $table) {
+            $sql = "SELECT * FROM $table";
+            $result = $connection->fetchAll($sql);
+            foreach ($result as $item) {
+                $iid = $item['iid'];
+                $courseId = $item['c_id'];
+                $groupId = intval($item['group_id']);
+
+                // Fix group id
+                if (!empty($groupId)) {
+                    $sql = "SELECT * c_group_info
+                            WHERE c_id = $courseId AND id = $groupId LIMIT 1";
+                    $data = $connection->fetchArray($sql);
+                    if (!empty($data)) {
+                        $newGroupId = $data['iid'];
+                        $sql = "UPDATE $table SET group_id = $newGroupId
+                                WHERE iid = $iid";
+                        $connection->executeQuery($sql);
+                    } else {
+                        // The group does not exists clean this record
+                        $sql = "DELETE FROM $table WHERE iid = $iid";
+                        $connection->executeQuery($sql);
+                    }
+                }
+            }
+        }
+
         // Fix c_item_property
 
         $sql = "SELECT * FROM c_item_property";
@@ -560,8 +620,27 @@ class Version110 extends AbstractMigrationChamilo
         foreach ($result as $item) {
             $courseId = $item['c_id'];
             $sessionId = intval($item['session_id']);
+            $groupId = intval($item['to_group_id']);
             $iid = $item['iid'];
             $ref = $item['ref'];
+
+            // Fix group id
+
+            if (!empty($groupId)) {
+                $sql = "SELECT * c_group_info WHERE c_id = $courseId AND id = $groupId";
+                $data = $connection->fetchArray($sql);
+                if (!empty($data)) {
+                    $newGroupId = $data['iid'];
+                    $sql = "UPDATE c_item_property SET to_group_id = $newGroupId
+                            WHERE iid = $iid";
+                    $connection->executeQuery($sql);
+                } else {
+                    // The group does not exists clean this record
+                    $sql = "DELETE FROM c_item_property WHERE iid = $iid";
+                    $connection->executeQuery($sql);
+                }
+            }
+
             $sql = null;
 
             switch ($item['tool']) {
@@ -649,12 +728,6 @@ class Version110 extends AbstractMigrationChamilo
                 $connection->executeQuery($sql);
             }
         }
-
-
-        */
-
-        //$this->addSql('ALTER TABLE user DROP COLUMN user_id');
-        //$this->addSql("UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version'");
     }
 
     /**

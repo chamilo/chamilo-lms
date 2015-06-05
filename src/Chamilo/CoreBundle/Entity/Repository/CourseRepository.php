@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -24,28 +25,34 @@ class CourseRepository extends EntityRepository
      */
     public function getSubscribedUsers(Course $course)
     {
-        $queryBuilder = $this->createQueryBuilder('a');
+        // Course builder
+        $queryBuilder = $this->createQueryBuilder('c');
 
         // Selecting user info.
-        $queryBuilder->select('DISTINCT u');
-
-        // Loading EntityUser.
-        $queryBuilder->from('Chamilo\UserBundle\Entity\User', 'u');
+        $queryBuilder->select('DISTINCT user');
 
         // Selecting courses for users.
-        $queryBuilder->innerJoin('u.courses', 'c');
+        $queryBuilder->innerJoin('c.users', 'subscriptions');
+        $queryBuilder->innerJoin(
+            'ChamiloUserBundle:User',
+            'user',
+            Join::WITH,
+            'subscriptions.user = user.id'
+        );
 
         //@todo check app settings
-        $queryBuilder->add('orderBy', 'u.lastname ASC');
+        $queryBuilder->add('orderBy', 'user.lastname ASC');
 
         $wherePart = $queryBuilder->expr()->andx();
 
         // Get only users subscribed to this course
-        $wherePart->add($queryBuilder->expr()->eq('c.cId', $course->getId()));
+        $wherePart->add($queryBuilder->expr()->eq('c.id', $course->getId()));
 
         // $wherePart->add($queryBuilder->expr()->eq('c.status', $status));
 
         $queryBuilder->where($wherePart);
+
+        //var_dump($queryBuilder->getQuery()->getSQL());
         //$q = $queryBuilder->getQuery();
         //return $q->execute();
         return $queryBuilder;

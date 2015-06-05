@@ -1176,6 +1176,11 @@ class Agenda
         $courseId = intval($courseId);
         $sessionId = intval($sessionId);
 
+        $sessionCondition = "ip.session_id = $sessionId";
+        if (empty($sessionId)) {
+            $sessionCondition = " (ip.session_id = 0 OR ip.session_id IS NULL) ";
+        }
+
         $tlb_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -1185,11 +1190,11 @@ class Agenda
                 INNER JOIN $tlb_course_agenda agenda
                 ON (ip.ref = agenda.id AND ip.c_id = agenda.c_id)
                 WHERE
-                    ip.tool         = '".TOOL_CALENDAR_EVENT."' AND
-                    ref             = $eventId AND
-                    ip.visibility   = '1' AND
+                    ip.tool = '".TOOL_CALENDAR_EVENT."' AND
+                    ref = $eventId AND
+                    ip.visibility = '1' AND
                     ip.c_id         = $courseId AND
-                    ip.session_id = $sessionId
+                    $sessionCondition
                 ";
 
         $result = Database::query($sql);
@@ -1273,16 +1278,16 @@ class Agenda
 
             if (api_is_allowed_to_edit()) {
                 if (!empty($groupId)) {
-                    $where_condition = "( ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                    $where_condition = "( ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
                 } else {
                     if (!empty($user_id)) {
-                        $where_condition = "( ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                        $where_condition = "( ip.to_user_id = $user_id OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
                     } else {
-                        $where_condition = "( ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                        $where_condition = "( ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
                     }
                 }
             } else {
-                $where_condition = "( ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                $where_condition = "( ip.to_user_id = $user_id OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
             }
 
             $sql = "SELECT DISTINCT
@@ -1309,15 +1314,16 @@ class Agenda
                 if ($user_id == 0) {
                     $where_condition = "";
                 } else {
-                    $where_condition = " ( ip.to_user_id = ".$user_id. " OR ip.to_group_id='0' ) AND ";
+                    $where_condition = " ( ip.to_user_id = ".$user_id. " OR ip.to_group_id='0' OR ip.to_group_id IS NULL ) AND ";
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {
-                $where_condition = " ( ip.to_user_id = $user_id OR ip.to_group_id='0' ) AND ";
+                $where_condition = " ( ip.to_user_id = $user_id OR ip.to_group_id='0' OR ip.to_group_id IS NULL) AND ";
             }
 
             $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref, to_user_id
-                    FROM $tlb_course_agenda agenda INNER JOIN $tbl_property ip
+                    FROM $tlb_course_agenda agenda
+                    INNER JOIN $tbl_property ip
                     ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id)
                     WHERE
                         ip.tool='".TOOL_CALENDAR_EVENT."' AND
@@ -2468,7 +2474,7 @@ class Agenda
 								AND MONTH(agenda.start_date)='".$month."'
 								AND YEAR(agenda.start_date)='".$year."'
 								AND ip.tool='".TOOL_CALENDAR_EVENT."'
-								AND	( ip.to_user_id='".$user_id."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+								AND	( ip.to_user_id='".$user_id."' OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) )
 								AND ip.visibility='1'
 								ORDER BY start_date ";
                 } else {
@@ -2479,7 +2485,7 @@ class Agenda
 								AND MONTH(agenda.start_date)='".$month."'
 								AND YEAR(agenda.start_date)='".$year."'
 								AND ip.tool='".TOOL_CALENDAR_EVENT."'
-								AND ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0')
+								AND ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL)
 								AND ip.visibility='1'
 								ORDER BY start_date ";
                 }
@@ -2963,7 +2969,7 @@ class Agenda
                         " AND agenda.start_date>='$date_start' ".
                         " AND agenda.end_date<='$date_end' ".
                         " AND ip.tool='".TOOL_CALENDAR_EVENT."' ".
-                        " AND	( ip.to_user_id='".$user_id."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ".
+                        " AND	( ip.to_user_id='".$user_id."' OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ".
                         " AND ip.visibility='1' ".
                         " ORDER BY start_date ";
                 } else {
@@ -2975,7 +2981,7 @@ class Agenda
                         " AND agenda.start_date>='$date_start' ".
                         " AND agenda.end_date<='$date_end' ".
                         " AND ip.tool='".TOOL_CALENDAR_EVENT."' ".
-                        " AND ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0') ".
+                        " AND ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL) ".
                         " AND ip.visibility='1' ".
                         " ORDER BY start_date ";
                 }

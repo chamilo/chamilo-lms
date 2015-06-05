@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -12,6 +13,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackEDefault
 {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="default_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $defaultId;
+
     /**
      * @var integer
      *
@@ -36,14 +47,14 @@ class TrackEDefault
     /**
      * @var string
      *
-     * @ORM\Column(name="default_event_type", type="string", length=20, nullable=false)
+     * @ORM\Column(name="default_event_type", type="string", length=255, nullable=false)
      */
     private $defaultEventType;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="default_value_type", type="string", length=20, nullable=false)
+     * @ORM\Column(name="default_value_type", type="string", length=255, nullable=false)
      */
     private $defaultValueType;
 
@@ -60,17 +71,6 @@ class TrackEDefault
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="default_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $defaultId;
-
-
 
     /**
      * Set defaultUserId

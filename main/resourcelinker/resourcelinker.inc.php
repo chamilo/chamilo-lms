@@ -11,7 +11,7 @@
 */
 
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
  * INIT SECTION
@@ -77,7 +77,14 @@ function show_documents($folder)
 
 	$item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$document_table = Database::get_course_table(TABLE_DOCUMENT);
-	$sql="SELECT * from $document_table docs, $item_property_table ip WHERE docs.id=ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND $visibility AND ip.to_group_id = 0 AND ip.to_user_id IS NULL  ORDER BY docs.path ASC";
+	$sql = "SELECT * from $document_table docs, $item_property_table ip
+			WHERE
+			    docs.id=ip.ref AND
+			    ip.tool = '".TOOL_DOCUMENT."' AND
+			    $visibility AND
+			    (ip.to_group_id = 0 OR i.to_group_id IS NULL) AND
+			    ip.to_user_id IS NULL
+			ORDER BY docs.path ASC";
 	$result=Database::query($sql);
 	while ($row=Database::fetch_array($result))
 	{

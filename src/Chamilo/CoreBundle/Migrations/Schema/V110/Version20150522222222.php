@@ -757,11 +757,6 @@ class Version20150522222222 extends AbstractMigrationChamilo
             false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
-
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.40' WHERE variable = 'chamilo_database_version'
-        ");
-
     }
 
     /**
@@ -773,9 +768,5 @@ class Version20150522222222 extends AbstractMigrationChamilo
         $this->addSql("DELETE FROM settings_current WHERE variable IN ('session_course_ordering', 'sso_force_redirect', 'dropbox_hide_course_coach', 'hide_certificate_export_link', 'hide_certificate_export_link_students', 'show_session_description', 'limit_session_admin_role', 'gravatar_type', 'gravatar_enabled', 'allow_delete_attendance', 'registration.soap.php.decode_utf8', 'catalog_allow_session_auto_subscription', 'hide_course_group_if_no_tools_available', 'cookie_warning', 'openbadges_backpack', 'add_gradebook_certificates_cron_task_enabled', 'document_if_file_exists_option', 'exercise_max_ckeditors_in_page', 'certificate_filter_by_official_code', 'student_publication_to_take_in_gradebook', 'course_images_in_courses_list', 'redirect_admin_to_courses_list', 'hide_logout_button', 'allow_session_course_copy_for_teachers', 'lp_show_reduced_report', 'auto_detect_language_custom_pages', 'catalog_show_courses_sessions', 'course_catalog_hide_private', 'show_official_code_exercise_result_list', 'allow_lp_return_link', 'hide_scorm_export_link', 'hide_scorm_copy_link', 'hide_scorm_pdf_link', 'session_days_before_coach_access', 'session_days_after_coach_access', 'pdf_logo_header', 'order_user_list_by_official_code', 'email_alert_manager_on_new_quiz')");
 
         $this->addSql('ALTER TABLE user DROP COLUMN last_login');
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.39' WHERE variable = 'chamilo_database_version'
-        ");
-
     }
 }

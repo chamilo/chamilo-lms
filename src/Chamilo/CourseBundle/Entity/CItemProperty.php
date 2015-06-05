@@ -3,13 +3,15 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CItemProperty
  *
  * @ORM\Table(name="c_item_property", indexes={@ORM\Index(name="idx_item_property_toolref", columns={"tool", "ref"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository")
  */
 class CItemProperty
 {
@@ -29,12 +31,11 @@ class CItemProperty
      */
     private $id;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
+    /** //, inversedBy="users",
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    private $cId;
+    protected $course;
 
     /**
      * @var string
@@ -42,13 +43,6 @@ class CItemProperty
      * @ORM\Column(name="tool", type="string", length=100, nullable=false)
      */
     private $tool;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="insert_user_id", type="integer", nullable=false)
-     */
-    private $insertUserId;
 
     /**
      * @var \DateTime
@@ -85,19 +79,23 @@ class CItemProperty
      */
     private $lasteditUserId;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="to_group_id", type="integer", nullable=true)
+    /** //, inversedBy="users",
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", cascade={"persist"})
+     * @ORM\JoinColumn(name="to_group_id", referencedColumnName="iid")
      */
-    private $toGroupId;
+    protected $group;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="to_user_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
      */
-    private $toUserId;
+    protected $toUser;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="insert_user_id", referencedColumnName="id")
+     */
+    protected $insertUser;
 
     /**
      * @var boolean
@@ -109,28 +107,38 @@ class CItemProperty
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="start_visible", type="datetime", nullable=false)
+     * @ORM\Column(name="start_visible", type="datetime", nullable=true)
      */
     private $startVisible;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="end_visible", type="datetime", nullable=false)
+     * @ORM\Column(name="end_visible", type="datetime", nullable=true)
      */
     private $endVisible;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
+    /** //, inversedBy="users",
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    private $idSession;
+    protected $session;
+
+    /**
+     * CItemProperty constructor.
+     */
+    public function __construct(Course $course)
+    {
+        $this->course = $course;
+        $this->insertDate = new \DateTime();
+        $this->lasteditDate = new \DateTime();
+    }
 
     /**
      * Set tool
      *
      * @param string $tool
+     *
      * @return CItemProperty
      */
     public function setTool($tool)
@@ -151,32 +159,10 @@ class CItemProperty
     }
 
     /**
-     * Set insertUserId
-     *
-     * @param integer $insertUserId
-     * @return CItemProperty
-     */
-    public function setInsertUserId($insertUserId)
-    {
-        $this->insertUserId = $insertUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get insertUserId
-     *
-     * @return integer
-     */
-    public function getInsertUserId()
-    {
-        return $this->insertUserId;
-    }
-
-    /**
      * Set insertDate
      *
      * @param \DateTime $insertDate
+     *
      * @return CItemProperty
      */
     public function setInsertDate($insertDate)
@@ -200,6 +186,7 @@ class CItemProperty
      * Set lasteditDate
      *
      * @param \DateTime $lasteditDate
+     *
      * @return CItemProperty
      */
     public function setLasteditDate($lasteditDate)
@@ -223,6 +210,7 @@ class CItemProperty
      * Set ref
      *
      * @param integer $ref
+     *
      * @return CItemProperty
      */
     public function setRef($ref)
@@ -246,6 +234,7 @@ class CItemProperty
      * Set lasteditType
      *
      * @param string $lasteditType
+     *
      * @return CItemProperty
      */
     public function setLasteditType($lasteditType)
@@ -269,6 +258,7 @@ class CItemProperty
      * Set lasteditUserId
      *
      * @param integer $lasteditUserId
+     *
      * @return CItemProperty
      */
     public function setLasteditUserId($lasteditUserId)
@@ -289,55 +279,10 @@ class CItemProperty
     }
 
     /**
-     * Set toGroupId
-     *
-     * @param integer $toGroupId
-     * @return CItemProperty
-     */
-    public function setToGroupId($toGroupId)
-    {
-        $this->toGroupId = $toGroupId;
-
-        return $this;
-    }
-
-    /**
-     * Get toGroupId
-     *
-     * @return integer
-     */
-    public function getToGroupId()
-    {
-        return $this->toGroupId;
-    }
-
-    /**
-     * Set toUserId
-     *
-     * @param integer $toUserId
-     * @return CItemProperty
-     */
-    public function setToUserId($toUserId)
-    {
-        $this->toUserId = $toUserId;
-
-        return $this;
-    }
-
-    /**
-     * Get toUserId
-     *
-     * @return integer
-     */
-    public function getToUserId()
-    {
-        return $this->toUserId;
-    }
-
-    /**
      * Set visibility
      *
      * @param boolean $visibility
+     *
      * @return CItemProperty
      */
     public function setVisibility($visibility)
@@ -361,6 +306,7 @@ class CItemProperty
      * Set startVisible
      *
      * @param \DateTime $startVisible
+     *
      * @return CItemProperty
      */
     public function setStartVisible($startVisible)
@@ -384,6 +330,7 @@ class CItemProperty
      * Set endVisible
      *
      * @param \DateTime $endVisible
+     *
      * @return CItemProperty
      */
     public function setEndVisible($endVisible)
@@ -404,32 +351,10 @@ class CItemProperty
     }
 
     /**
-     * Set idSession
-     *
-     * @param integer $idSession
-     * @return CItemProperty
-     */
-    public function setIdSession($idSession)
-    {
-        $this->idSession = $idSession;
-
-        return $this;
-    }
-
-    /**
-     * Get idSession
-     *
-     * @return integer
-     */
-    public function getIdSession()
-    {
-        return $this->idSession;
-    }
-
-    /**
      * Set id
      *
      * @param integer $id
+     *
      * @return CItemProperty
      */
     public function setId($id)
@@ -450,25 +375,103 @@ class CItemProperty
     }
 
     /**
-     * Set cId
+     * @return Session
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param Session $session
      *
-     * @param integer $cId
      * @return CItemProperty
      */
-    public function setCId($cId)
+    public function setSession($session)
     {
-        $this->cId = $cId;
+        $this->session = $session;
 
         return $this;
     }
 
     /**
-     * Get cId
-     *
-     * @return integer
+     * @return Course
      */
-    public function getCId()
+    public function getCourse()
     {
-        return $this->cId;
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return CItemProperty
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    /**
+     * @return CgroupInfo
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * @param CgroupInfo $group
+     *
+     * @return CItemProperty
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getToUser()
+    {
+        return $this->toUser;
+    }
+
+    /**
+     * @param User $toUser
+     *
+     * @return $this
+     */
+    public function setToUser($toUser)
+    {
+        $this->toUser = $toUser;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getInsertUser()
+    {
+        return $this->insertUser;
+    }
+
+    /**
+     * @param User $insertUser
+     *
+     * @return $this
+     */
+    public function setInsertUser(User $insertUser)
+    {
+        $this->insertUser = $insertUser;
+        $this->lasteditUserId = $insertUser->getId();
+
+        return $this;
     }
 }

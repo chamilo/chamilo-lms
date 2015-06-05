@@ -211,10 +211,6 @@ class Version20150507152600 extends AbstractMigrationChamilo
             false,
             [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
         );
-
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.39' WHERE variable = 'chamilo_database_version'
-        ");
     }
 
     /**
@@ -228,9 +224,6 @@ class Version20150507152600 extends AbstractMigrationChamilo
         ");
         $this->addSql("
             DELETE FROM settings_current WHERE variable IN ('hide_home_top_when_connected', 'hide_global_announcements_when_not_connected', 'course_creation_use_template', 'allow_strength_pass_checker', 'allow_captcha', 'captcha_number_mistakes_to_block_account', 'captcha_time_to_block', 'drh_can_access_all_session_content', 'display_groups_forum_in_general_tool', 'allow_tutors_to_assign_students_to_session')
-        ");
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.38' WHERE variable = 'chamilo_database_version'
         ");
     }
 }

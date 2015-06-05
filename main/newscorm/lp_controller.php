@@ -565,6 +565,7 @@ switch ($action) {
                         $new_lp_id,
                         api_get_user_id()
                     );
+
                     //require 'lp_build.php';
                     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id).'&'.api_get_cidreq();
                     header("Location: $url&isStudentView=false");
@@ -1264,6 +1265,68 @@ switch ($action) {
         $_SESSION['refresh'] = 1;
         $_SESSION['oLP']->set_seriousgame_mode();
         require 'lp_list.php';
+        break;
+    case 'create_forum':
+        if (!isset($_GET['id'])) {
+            break;
+        }
+
+        $selectedItem = null;
+
+        foreach ($_SESSION['oLP']->items as $item) {
+            if ($item->db_id == $_GET['id']) {
+                $selectedItem = $item;
+            }
+        }
+
+        if (!empty($selectedItem)) {
+            $forumThread = $selectedItem->getForumThread(
+                $_SESSION['oLP']->course_int_id,
+                $_SESSION['oLP']->lp_session_id
+            );
+
+            if (empty($forumThread)) {
+                require '../forum/forumfunction.inc.php';
+
+                $forumCategory = getForumCategoryByTitle(
+                    get_lang('LearningPaths'),
+                    $_SESSION['oLP']->course_int_id,
+                    $_SESSION['oLP']->lp_session_id
+                );
+                $forumCategoryId = !empty($forumCategory) ? $forumCategory['cat_id']: 0;
+
+                if (empty($forumCategoryId)) {
+                    $forumCategoryId = store_forumcategory(
+                        [
+                            'lp_id' => 0,
+                            'forum_category_title' => get_lang('LearningPaths'),
+                            'forum_category_comment' => null
+                        ],
+                        [],
+                        false
+                    );
+                }
+
+                if (!empty($forumCategoryId)) {
+                    $forum = $_SESSION['oLP']->getForum();
+                    $forumId = !empty($forum) ? $forum['forum_id'] : 0;
+
+                    if (empty($forumId)) {
+                        $forumId = $_SESSION['oLP']->createForum($forumCategoryId);
+                    }
+
+                    if (!empty($forumId)) {
+                        $selectedItem->createForumTthread($forumId);
+                    }
+                }
+            }
+        }
+
+        header('Location:' . api_get_path(WEB_PATH) . api_get_self() . '?' . http_build_query([
+            'action' => 'add_item',
+            'type' => 'step',
+            'lp_id' => 1
+        ]));
         break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);

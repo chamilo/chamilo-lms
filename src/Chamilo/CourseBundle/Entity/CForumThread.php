@@ -149,6 +149,13 @@ class CForumThread
     private $threadPeerQualify;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="lp_item_id", type="integer", options={"unsigned":true})
+     */
+    private $lpItemId;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -564,4 +571,26 @@ class CForumThread
     {
         return $this->cId;
     }
+
+    /**
+     * Set lpItemId
+     * @param integer $lpItemId
+     * @return \Chamilo\CourseBundle\Entity\CForumThread
+     */
+    public function setLpItemId($lpItemId)
+    {
+        $this->lpItemId = $lpItemId;
+
+        return $this;
+    }
+
+    /**
+     * Get lpId
+     * @return integer
+     */
+    public function getLpItemId()
+    {
+        return $this->lpItemId;
+    }
+
 }

@@ -1631,8 +1631,40 @@ function switch_item(current_item, next_item){
     });
     olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
+    loadForumThead(olms.lms_lp_id, next_item);
+
     return true;
 }
+
+/**
+ * Get a forum info when the learning path item has a associated forum
+ */
+var loadForumThead = function(lpId, lpItemId) {
+    var loadForum = $.getJSON(
+        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php',
+        {
+            a: 'get_forum_thread',
+            lp: lpId,
+            lp_item: lpItemId
+        }
+    );
+
+    $.when(loadForum).done(function(forumThreadData) {
+        if (forumThreadData.error) {
+            $('#forum-container').hide();
+
+            return;
+        }
+
+        $('#forum-container').show();
+
+        var forumIframe = $('<iframe>').attr({
+            src: '<?php echo api_get_path(WEB_CODE_PATH) ?>forum/viewthread.php?<?php echo api_get_cidreq() ?>&gradebook=0&origin=learnpath&forum=' + forumThreadData.forumId +'&thread=' + forumThreadData.threadId
+        });
+
+        $('#forum-container .panel-body').html(forumIframe);
+    });
+};
 
 /**
  * Save a specific item (with its interactions, if any) into the LMS through

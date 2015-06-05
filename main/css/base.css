@@ -5333,3 +5333,13 @@ i.size-32.icon-new-work{
 #settings .span6:nth-child(2n+1) {
     clear:left
 }
+
+
+#gradebook_list table td {
+    text-align:center;
+    vertical-align:middle;
+}
+
+#gradebook_list table td .badge-group {
+    width: auto;
+}

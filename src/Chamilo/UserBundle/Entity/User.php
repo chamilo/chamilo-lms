@@ -1437,7 +1437,7 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     /**
      * {@inheritdoc}
      */
-    public function addExtraFields(UserFieldValues $extraFieldValue)
+    public function addExtraFields(ExtraFieldValues $extraFieldValue)
     {
         //if (!$this->hasExtraField($attribute)) {
         $extraFieldValue->setUser($this);

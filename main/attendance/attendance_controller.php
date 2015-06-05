@@ -435,7 +435,13 @@ class AttendanceController
         }
 
         $data['action'] = $action;
-        $data['attendance_calendar'] = $attendance->get_attendance_calendar($attendance_id);
+        $data['attendance_calendar'] = $attendance->get_attendance_calendar(
+            $attendance_id,
+            'all',
+            null,
+            null,
+            true
+        );
         $data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);
         // render to the view
         $this->view->set_data($data);

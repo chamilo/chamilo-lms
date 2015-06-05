@@ -1762,6 +1762,8 @@ class Wiki
 
     /**
      * Function export last wiki page version to document area
+     * @param int $doc_id wiki page id
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      */
     public function export2doc($doc_id)
@@ -1773,6 +1775,7 @@ class Wiki
         if (empty($data)) {
             return false;
         }
+
         $wikiTitle = $data['title'];
         $wikiContents = $data['content'];
 
@@ -1826,9 +1829,6 @@ class Wiki
 
         $exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
         $exportFile = api_replace_dangerous_char($wikiTitle) . $groupPart;
-
-        //$clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
-        //$array_clean_wikiContents= explode('|', $clean_wikiContents);
         $wikiContents = trim(preg_replace("/\[[\[]?([^\]|]*)[|]?([^|\]]*)\][\]]?/", "$1", $wikiContents));
         //TODO: put link instead of title
 
@@ -1841,16 +1841,33 @@ class Wiki
         }
 
         $i = 1;
-        while ( file_exists($exportDir . '/' .$exportFile.'_'.$i.'.html') )
-            $i++; //only export last version, but in new export new version in document area
+        //only export last version, but in new export new version in document area
+        while (file_exists($exportDir.'/'.$exportFile.'_'.$i.'.html')) {
+            $i++;
+        }
+
         $wikiFileName = $exportFile . '_' . $i . '.html';
         $exportPath = $exportDir . '/' . $wikiFileName;
-        file_put_contents( $exportPath, $wikiContents );
-        $doc_id = add_document($_course, $groupPath.'/'.$wikiFileName, 'file', filesize($exportPath), $wikiTitle);
-        api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);
+
+        file_put_contents($exportPath, $wikiContents);
+        $doc_id = add_document(
+            $_course,
+            $groupPath.'/'.$wikiFileName,
+            'file',
+            filesize($exportPath),
+            $wikiTitle
+        );
+
+        api_item_property_update(
+            $_course,
+            TOOL_DOCUMENT,
+            $doc_id,
+            'DocumentAdded',
+            api_get_user_id(),
+            $groupId
+        );
 
         return $doc_id;
-        // TODO: link to go document area
     }
 
     /**
@@ -5049,8 +5066,8 @@ class Wiki
                 }
                 break;
             case 'export2doc':
-                if (isset($_GET['doc_id'])) {
-                    $export2doc = self::export2doc($_GET['doc_id']);
+                if (isset($_GET['wiki_id'])) {
+                    $export2doc = self::export2doc($_GET['wiki_id']);
                     if ($export2doc) {
                         self::setMessage(
                             Display::display_confirmation_message(

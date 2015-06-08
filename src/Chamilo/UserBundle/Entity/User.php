@@ -690,11 +690,12 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * @todo don't use api_get_person_name
      * @return string
      */
     public function getCompleteName()
     {
-        return $this->lastname .', '. $this->firstname;
+        return api_get_person_name($this->firstname, $this->lastname);
     }
 
     /**

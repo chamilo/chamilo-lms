@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Fhaculty\Graph\Graph;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Class Sequence
@@ -36,6 +37,22 @@ class Sequence
      * @ORM\Column(name="graph", type="text", nullable=true)
      */
     private $graph;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    private $updatedAt;
 
     /**
      * @return int

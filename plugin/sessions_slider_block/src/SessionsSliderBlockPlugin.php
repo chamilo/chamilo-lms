@@ -124,13 +124,6 @@ class SessionsSliderBlockPlugin extends Plugin
             'visible' => true,
             'changeable' => true
         ]);
-
-        $tagOption = new ExtraFieldOption('session');
-        $tagOption->saveOptions([
-            'field_id' => $courseFieldId,
-            'option_value' => 'tag01',
-            'display_text' => $this->get_lang('Tag01')
-        ]);
     }
 
     /**

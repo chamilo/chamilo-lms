@@ -3929,7 +3929,8 @@ class SessionManager
                         if ($i > 1) {
                             $suffix = ' - ' . $i;
                         }
-                        $sql = 'SELECT 1 FROM ' . $tbl_session . ' WHERE name="' . $session_name . $suffix . '"';
+                        $sql = 'SELECT 1 FROM ' . $tbl_session . '
+                                WHERE name="' . $session_name . $suffix . '"';
                         $rs = Database::query($sql);
 
                         if (Database::result($rs, 0, 0)) {
@@ -3949,8 +3950,8 @@ class SessionManager
                     $sql = "INSERT IGNORE INTO $tbl_session SET
                             name = '" . $session_name . "',
                             id_coach = '$coach_id',
-                            date_start = '$date_start',
-                            date_end = '$date_end',
+                            access_start_date = '$date_start',
+                            access_end_date = '$date_end',
                             visibility = '$visibilityAfterExpirationPerSession',
                             $sessionCondition
                             session_admin_id = " . intval($defaultUserId) . $extraParameters . $extraSessionParameters;
@@ -3990,8 +3991,8 @@ class SessionManager
                         $sql = "INSERT IGNORE INTO $tbl_session SET
                                 name = '$session_name',
                                 id_coach = '$coach_id',
-                                date_start = '$date_start',
-                                date_end = '$date_end',
+                                access_start_date = '$date_start',
+                                access_end_date = '$date_end',
                                 visibility = '$visibilityAfterExpirationPerSession',
                                 session_category_id = '$session_category_id' " . $extraParameters . $extraSessionParameters;
 
@@ -4021,11 +4022,13 @@ class SessionManager
 
                             // Delete session-course-user relationships students and coaches.
                             if ($updateCourseCoaches) {
-                                $sql = "DELETE FROM $tbl_session_course_user WHERE session_id = '$session_id' AND status in ('0', '2')";
+                                $sql = "DELETE FROM $tbl_session_course_user
+                                        WHERE session_id = '$session_id' AND status in ('0', '2')";
                                 Database::query($sql);
                             } else {
                                 // Delete session-course-user relation ships *only* for students.
-                                $sql = "DELETE FROM $tbl_session_course_user WHERE session_id = '$session_id' AND status <> 2";
+                                $sql = "DELETE FROM $tbl_session_course_user
+                                        WHERE session_id = '$session_id' AND status <> 2";
                                 Database::query($sql);
                             }
                         }

@@ -78,6 +78,7 @@ define('TABLE_MAIN_CALENDAR_EVENT_VALUES', 'calendar_event_values');*/
 //User tags
 define('TABLE_MAIN_TAG', 'tag');
 define('TABLE_MAIN_USER_REL_TAG', 'user_rel_tag');
+define('TABLE_MAIN_EXTRA_FIELD_REL_TAG', 'extra_field_rel_tag');
 
 //User groups
 /*define('TABLE_MAIN_GROUP', 'groups');

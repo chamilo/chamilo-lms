@@ -37,6 +37,7 @@ define('DATE_TIME_FORMAT_SHORT', 6); // Aug 25, 2009 at 03:28 PM
 define('DATE_TIME_FORMAT_SHORT_TIME_FIRST', 7); // 03:28 PM, Aug 25 2009
 define('DATE_FORMAT_NUMBER_NO_YEAR', 8); // 25.08 dd-mm
 define('DATE_FORMAT_ONLY_DAYNAME', 9); // Monday, Sunday, etc
+define('DATE_TIME_FORMAT_NUMBER_NO_YEAR', 10); // 25.08 15:28
 
 // Formatting person's name.
 // Formatting a person's name using the pattern as it has been

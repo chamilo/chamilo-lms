@@ -89,13 +89,17 @@
                 var parent = $(this).parent();
 
                 if (vertexId) {
-                    $.ajax({
-                        url: url + '?a=delete_vertex&id='+resourceId+'&vertex_id=' + vertexId + '&type=' +type+'&sequence_id='+sequenceId,
-                        success: function (data) {
-                            parent.remove();
-                            useAsReference(type, sequenceId);
-                        }
-                    });
+                    var class_click = $(this).attr('class');
+
+                    if (class_click == 'undo_delete')  {
+                        parent.find('span').css('text-decoration', 'none');
+                        parent.find('.undo_delete').remove();
+                    } else {
+                        parent.parent().find('span').css('text-decoration', 'line-through');
+
+                        var link = "<a href=\"javascript:void(0);\" class=\"undo_delete\" data-id="+vertexId+">{{ 'Undo' | get_lang }}</a>";
+                        parent.parent().append(link);
+                    }
                 }
             });
 
@@ -131,6 +135,24 @@
 
             // Button save
             $('button[name="save_resource"]').click(function() {
+
+                // Delete all vertex confirmed to be deleted.
+                $('#parents .delete_vertex').each( function (index, data) {
+                    var vertexId = $(this).attr('data-id');
+                    var textDecoration = $(this).parent().css('text-decoration');
+                    if (textDecoration == 'line-through') {
+                        $.ajax({
+                            async:false,
+                            url: url + '?a=delete_vertex&id=' + resourceId + '&vertex_id=' + vertexId + '&type=' + type + '&sequence_id=' + sequenceId,
+                            success: function (data) {
+                                parentList.splice( $.inArray(vertexId, parentList), 1 );
+                                /*parent.remove();
+                                useAsReference(type, sequenceId);*/
+                            }
+                        });
+                    }
+                });
+
                 if (resourceId != 0) {
                     var params = decodeURIComponent(parentList);
                     $.ajax({

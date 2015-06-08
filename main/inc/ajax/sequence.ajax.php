@@ -58,14 +58,17 @@ switch ($action) {
                     if ($showDelete) {
                         $linkDelete = Display::url(
                             get_lang('Delete'),
-                            '#',
+                            'javascript:void(0);',
                             ['class' => 'delete_vertex', 'data-id' => $id]
                         );
                     }
 
-                    $link = '<div class="parent" data-id="'.$id.'">'.
-                        $image.' '.$sessionInfo['name'].' ('.$id.')'.$linkDelete.
-                        '</div>';
+                    $link = '<div class="parent" data-id="'.$id.'">
+                        <span>'.
+                        $image.' '.$sessionInfo['name'].' ('.$id.')'.
+                        $linkDelete.
+                        '</span>
+                        </div>';
                 }
                 break;
         }
@@ -73,7 +76,6 @@ switch ($action) {
         break;
     case 'delete_vertex':
         $vertexId = isset($_REQUEST['vertex_id']) ? $_REQUEST['vertex_id'] : null;
-
         $type = SequenceResource::SESSION_TYPE;
 
         /** @var Sequence $sequence */
@@ -100,7 +102,11 @@ switch ($action) {
 
                 /** @var SequenceResource $sequenceResource */
                 $sequenceResourceToDelete = $repository->findOneBy(
-                    ['resourceId' => $vertexId, 'type' => $type, 'sequence' => $sequence]
+                    [
+                        'resourceId' => $vertexId,
+                        'type' => $type,
+                        'sequence' => $sequence
+                    ]
                 );
 
                 $em->remove($sequenceResourceToDelete);
@@ -228,27 +234,7 @@ switch ($action) {
                             ->setType(SequenceResource::SESSION_TYPE)
                             ->setResourceId($parentId);
                         $em->persist($sequenceResourceParent);
-
-                        if ($sequenceResourceParent->hasGraph()) {
-                            /** @var Graph $parentGraph */
-                            /* $parentGraph = $resource->getGraph()getUnserializeGraph();
-                             try {
-                                 $vertex = $parentGraph->getVertex($parentId);
-                                 $parentMain = $parentGraph->createVertex($id);
-                                 $vertex->createEdgeTo($parentMain);
-                                 $resource->setGraphAndSerialize($parentGraph);
-
-                                 $em->persist($resource);
-                                 $em->flush();
- /*
-                                 $graphviz = new GraphViz();
-                                 echo $graphviz->createImageHtml($parentGraph);*/
-                            /*} catch (Exception $e) {
-
-                            }*/
-                        }
                     }
-
                 }
 
                 //$graphviz = new GraphViz();

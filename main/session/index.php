@@ -440,9 +440,10 @@ $column_model   = array(
 );
 
 $extra_params = array();
+$extra_params['sortname'] = 'date';
 
 /*
-$extra_params['sortname'] = 'date';
+
 $extra_params['sortorder'] = 'asc';
 $extra_params['pgbuttons'] = false;
 $extra_params['recordtext'] = '';

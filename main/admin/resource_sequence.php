@@ -25,6 +25,7 @@ $formSequence->addButtonCreate(get_lang('AddSequence'), 'submit_sequence');
 
 $em = Database::getManager();
 
+// Add sequence
 if ($formSequence->validate()) {
     $values = $formSequence->exportValues();
     $sequence = new Sequence();

@@ -1425,17 +1425,22 @@ class Event
             }
         }
 
-        //Getting the best results of every student
+        // Getting the best results of every student
         $best_score_return = array();
-
         foreach ($list as $student_result) {
             $user_id = $student_result['exe_user_id'];
             $current_best_score[$user_id] = $student_result['exe_result'];
 
-            if (isset($current_best_score[$user_id]) && isset($best_score_return[$user_id]) && $current_best_score[$user_id] > $best_score_return[$user_id]['exe_result']) {
+            //echo $current_best_score[$user_id].' - '.$best_score_return[$user_id]['exe_result'].'<br />';
+            if (!isset($best_score_return[$user_id]['exe_result'])) {
+                $best_score_return[$user_id] = $student_result;
+            }
+
+            if ($current_best_score[$user_id] > $best_score_return[$user_id]['exe_result']) {
                 $best_score_return[$user_id] = $student_result;
             }
         }
+
         return $best_score_return;
     }
 

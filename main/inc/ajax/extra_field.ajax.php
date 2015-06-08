@@ -25,7 +25,26 @@ switch ($action) {
         $fieldId = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
         $tag = isset($_REQUEST['tag']) ? $_REQUEST['tag'] : null;
         $extraFieldOption = new ExtraFieldOption($type);
-        echo $extraFieldOption->getSearchOptionsByField($tag, $fieldId, 10, 'json');
+
+        $result = [];
+        $tags = Database::getManager()
+            ->getRepository('ChamiloCoreBundle:Tag')
+            ->createQueryBuilder('t')
+            ->where("t.tag LIKE :tag")
+            ->andWhere('t.fieldId = :field')
+            ->setParameter('field', $fieldId)
+            ->setParameter('tag', "$tag%")
+            ->getQuery()
+            ->getResult();
+
+        foreach ($tags as $tag) {
+            $result[] = [
+                'caption' => $tag->getTag(),
+                'value' => $tag->getTag()
+            ];
+        }
+
+        echo json_encode($result);
         break;
     default:
         exit;

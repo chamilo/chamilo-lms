@@ -41,7 +41,9 @@ $userId = api_get_user_id();
 
 header('Content-type: text/javascript');
 
-?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+?>
+
+var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
 // API Object initialization (eases access later on)
@@ -1639,7 +1641,7 @@ function switch_item(current_item, next_item){
 /**
  * Get a forum info when the learning path item has a associated forum
  */
-var loadForumThead = function(lpId, lpItemId) {
+ var loadForumThead = function(lpId, lpItemId) {
     var loadForum = $.getJSON(
         '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php',
         {
@@ -1659,12 +1661,16 @@ var loadForumThead = function(lpId, lpItemId) {
         $('#forum-container').show();
 
         var forumIframe = $('<iframe>').attr({
+            width:'900px',
+            height:'600px',
+
             src: '<?php echo api_get_path(WEB_CODE_PATH) ?>forum/viewthread.php?<?php echo api_get_cidreq() ?>&gradebook=0&origin=learnpath&forum=' + forumThreadData.forumId +'&thread=' + forumThreadData.threadId
         });
 
         $('#forum-container .panel-body').html(forumIframe);
     });
 };
+
 
 /**
  * Save a specific item (with its interactions, if any) into the LMS through

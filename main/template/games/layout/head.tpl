@@ -16,6 +16,9 @@
 {{ css_static_file_to_string }}
 {{ js_file_to_string }}
 <script>
+    $(document).ready(function(){
+        $(".timeago").timeago();
+    });
 
 // External plugins not part of the default Ckeditor package.
 var plugins = [

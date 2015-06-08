@@ -82,6 +82,7 @@ if ($origin == 'group') {
     Display::display_header('');
 } else {
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
+
     if ($origin == 'learnpath') {
         Display::display_reduced_header();
     } else {
@@ -109,6 +110,7 @@ if ($origin == 'group') {
         );
 
         $message = isset($message) ? $message : '';
+
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
         Display::display_header('');
     }

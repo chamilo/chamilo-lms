@@ -182,6 +182,7 @@ switch ($action) {
 
         $forum = $learningPath->getForum();
 
+
         if (empty($forum)) {
             echo json_encode([
                 'error' => true,
@@ -199,6 +200,7 @@ switch ($action) {
         }
 
         $forumThread = $lpItem->getForumThread($course_id, api_get_session_id());
+
 
         if (empty($forumThread)) {
             echo json_encode([

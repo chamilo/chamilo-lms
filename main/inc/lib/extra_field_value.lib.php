@@ -125,39 +125,55 @@ class ExtraFieldValue extends Model
                                     $extraFieldInfo['id']
                                 );
                             } else {
-                                /*  $old = self::getAllValuesByItemAndField(
-                                    $params['item_id'],
-                                    $extraFieldInfo['id']
-                                );
+                                $em = Database::getManager();
+                                $tagValues = is_array($value) ? $value : [$value];
+                                $tags = [];
 
-                                $deleteItems = array();
-                                if (!empty($old)) {
-                                    $oldIds = array();
-                                    foreach ($old as $oldItem) {
-                                        $oldIds[] = $oldItem['value'];
+                                foreach ($tagValues as $tagValue) {
+                                    $tagsResult = $em->getRepository('ChamiloCoreBundle:Tag')->findBy([
+                                        'tag' => $tagValue,
+                                        'fieldId' => $extraFieldInfo['id']
+                                    ]);
+
+                                    if (empty($tagsResult)) {
+                                        $tag = new \Chamilo\CoreBundle\Entity\Tag();
+                                        $tag->setCount(0);
+                                        $tag->setFieldId($extraFieldInfo['id']);
+                                        $tag->setTag($tagValue);
+
+                                        $tags[] = $tag;
+                                    } else {
+                                        $tags = array_merge($tags, $tagsResult);
                                     }
-                                    $deleteItems = array_diff($oldIds, $value);
                                 }
 
-                                foreach ($value as $optionId) {
-                                    $newParams = array(
-                                        'item_id' => $params['item_id'],
-                                        'field_id' => $extraFieldInfo['id'],
-                                        'value' => $optionId,
-                                        'comment' => $comment
-                                    );
-                                    self::save($newParams);
-                                }
+                                foreach ($tags as $tag) {
+                                    $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')->findBy([
+                                        'fieldId' => $extraFieldInfo['id'],
+                                        'itemId' => $params['item_id'],
+                                        'tagId' => $tag->getId()
+                                    ]);
 
-                                if (!empty($deleteItems)) {
-                                    foreach ($deleteItems as $deleteFieldValue) {
-                                        self::deleteValuesByHandlerAndFieldAndValue(
-                                            $params['item_id'],
-                                            $extraFieldInfo['id'],
-                                            $deleteFieldValue
-                                        );
+                                    foreach ($fieldTags as $fieldTag) {
+                                        $em->remove($fieldTag);
+
+                                        $tag->setCount($tag->getCount() - 1);
+                                        $em->persist($tag);
+                                        $em->flush();
                                     }
-                                }*/
+
+                                    $tag->setCount($tag->getCount() + 1);
+                                    $em->persist($tag);
+                                    $em->flush();
+
+                                    $fieldRelTag = new Chamilo\CoreBundle\Entity\ExtraFieldRelTag();
+                                    $fieldRelTag->setFieldId($extraFieldInfo['id']);
+                                    $fieldRelTag->setItemId($params['item_id']);
+                                    $fieldRelTag->setTagId($tag->getId());
+
+                                    $em->persist($fieldRelTag);
+                                    $em->flush();
+                                }
                             }
                             break;
                         case ExtraField::FIELD_TYPE_FILE_IMAGE:

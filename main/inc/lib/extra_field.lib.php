@@ -1192,19 +1192,33 @@ EOF;
                             }
                             $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
                         } else {
-                            $extraFieldValue = new ExtraFieldValue($this->type);
-                            $tags = array();
-                            if (!empty($itemId)) {
-                                $tags = $extraFieldValue->getAllValuesByItemAndField($itemId, $field_id);
-                            }
                             $tag_list = '';
-                            if (is_array($tags) && count($tags) > 0) {
-                                $extraFieldOption = new ExtraFieldOption($this->type);
-                                foreach ($tags as $tag) {
-                                    $option = $extraFieldOption->get($tag['value']);
-                                    $tag_list .= '<option value="'.$option['id'].'" class="selected">'.$option['display_text'].'</option>';
+                            $em = Database::getManager();
+
+                            $fieldTags = $em
+                                ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                ->findBy([
+                                    'fieldId' => $field_id,
+                                    'itemId' => $itemId
+                                ]);
+
+                            foreach ($fieldTags as $fieldTag) {
+                                $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+
+                                if (empty($tag)) {
+                                    continue;
                                 }
+
+                                $tag_list .= Display::tag(
+                                    'option',
+                                    $tag->getTag(),
+                                    [
+                                        'value' => $tag->getTag(),
+                                        'class' => 'selected'
+                                    ]
+                                );
                             }
+
                             $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                         }
 

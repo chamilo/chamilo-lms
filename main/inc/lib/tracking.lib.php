@@ -4066,7 +4066,7 @@ class Tracking
         $simple_session_array = array();
         while ($row = Database :: fetch_array($rs)) {
             $course_info = CourseManager::get_course_information($row['code']);
-            $temp_course_in_session[$row['session_id']]['course_list'][$course_info['id']] = $course_info;
+            $temp_course_in_session[$row['session_id']]['course_list'][$course_info['real_id']] = $course_info;
             $temp_course_in_session[$row['session_id']]['name'] = $row['name'];
             $simple_session_array[$row['session_id']] = $row['name'];
         }

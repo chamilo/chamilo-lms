@@ -120,7 +120,7 @@ class WSCourse extends WS
 			}
 			// Get course id
 			$course_info = CourseManager::get_course_information($result);
-			return $course_info['id'];
+			return $course_info['real_id'];
 		}
 	}
 

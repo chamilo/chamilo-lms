@@ -207,3 +207,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
         'request_fulluri'=>true
     )
 );*/
+
+// Detail view of gradebook categories.
+//$_configuration['gradebook_detailed_admin_view'] = false;

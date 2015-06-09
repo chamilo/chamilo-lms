@@ -130,22 +130,8 @@
                 {% endif %}
 
                 <div id="forum-container">
-                    <div class="panel-group" id="forum-accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="forum-panel-header">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#forum-accordion" href="#forum-panel-body" aria-expanded="true" aria-controls="forum-panel-body">
-                                        {{ "Forum"|get_lang }}
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="forum-panel-body" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="forum-panel-header">
-                                <div class="panel-body"></div>
-                            </div>
-                        </div>
-                    </div>
+                     <div class="panel-body"></div>
                 </div>
-            </div>
             {# end right Zone #}
 
             {{ navigation_bar_bottom }}
@@ -154,7 +140,10 @@
 </div>
 
 <script>
+
+
     // Resize right and left pane to full height (HUB 20-05-2010).
+
     var updateContentHeight = function () {
         var IE = window.navigator.appName.match(/microsoft/i);
 
@@ -172,10 +161,10 @@
 
         if (innerHeight <= 640) {
             $('#inner_lp_toc').css('height', innerHeight - heightTop + "px");
-            $('#content_id').css('height', innerHeight - heightControl + "px");
+            //$('#content_id_').css('height', innerHeight - heightControl + "px");
         } else {
             $('#inner_lp_toc').css('height', innerHeight - heightBreadcrumb - heightTop + "px");
-            $('#content_id').css('height', innerHeight - heightControl + "px");
+            //$('#content_id_').css('height', innerHeight - heightControl + "px");
         }
 
         //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
@@ -228,6 +217,13 @@
         });
 
         $('#forum-container').hide();
+
+        $('#content_id').load(function() {
+            this.style.overflow = 'hidden';
+            this.style.height =
+                    this.contentWindow.document.body.offsetHeight + 30 + 'px';
+        });
+
 
         loadForumThead({{ oLP.lp_id }}, {{ oLP.get_current_item_id() }});
     });

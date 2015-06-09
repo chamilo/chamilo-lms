@@ -1654,21 +1654,28 @@ var loadForumThead = function(lpId, lpItemId) {
     $.when(loadForum).done(function(forumThreadData) {
         if (forumThreadData.error) {
             $('#forum-container').hide();
-
             return;
         }
 
         $('#forum-container').show();
-
         var forumIframe = $('<iframe>').attr({
-            width:'900px',
-            height:'600px',
+            width:'100%',
+            frameborder:'0',
+            scrolling:'no',
+            tabindex:'0',
 
+            id:'chamilo-disqus',
             src: '<?php echo api_get_path(WEB_CODE_PATH) ?>forum/viewthread.php?<?php echo api_get_cidreq() ?>&gradebook=0&origin=learnpath&forum=' + forumThreadData.forumId +'&thread=' + forumThreadData.threadId
         });
 
         $('#forum-container .panel-body').html(forumIframe);
+
+        $('#chamilo-disqus').load(function() {
+            this.style.height = this.contentWindow.document.body.offsetHeight + 800 + 'px';
+        });
+
     });
+
 };
 
 

@@ -150,6 +150,7 @@ $form->addButtonNext(get_lang('NextStep'));
 
 if (!$formSent) {
     $formDefaults['access_start_date'] =  $formDefaults['display_start_date'] = api_get_local_time();
+    $formDefaults['coach_username'] = api_get_user_id();
 } else {
     $formDefaults['name'] = api_htmlentities($name, ENT_QUOTES, $charset);
 }

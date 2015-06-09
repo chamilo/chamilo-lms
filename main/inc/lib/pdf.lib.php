@@ -45,6 +45,7 @@ class PDF
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
         $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;
         $this->params['show_real_course_teachers'] = isset($params['show_real_course_teachers']) ? $params['show_real_course_teachers'] : false;
+        $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
 
         $this->pdf = new mPDF(
             'UTF-8',

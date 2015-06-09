@@ -446,6 +446,10 @@ switch ($action) {
             $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
         }
         break;
+    case 'export_table':
+        //table will be export below
+        ob_start();
+        break;
 }
 
 //actions on the sortabletable
@@ -752,6 +756,8 @@ $no_qualification = false;
 // Show certificate link.
 $certificate = array();
 
+echo '<div class="actions" align="right">';
+
 if ($category != '0') {
     $cat = new Category();
     $category_id   = intval($_GET['selectcat']);
@@ -766,13 +772,23 @@ if ($category != '0') {
                 $stud_id
             );
             if (!empty($certificate)) {
-                echo '<div class="actions" align="right">';
-                echo $certificate['pdf_link'];
-                echo '</div>';
+                echo Display::url(
+                    get_lang('CertificateToPdf'),
+                    $certificate['pdf_url'],
+                    ['class' => 'btn btn-default']
+                );
             }
         }
     }
 }
+
+echo Display::url(
+    get_lang('ReportToPdf'),
+    api_get_self()."?".api_get_self()."&action=export_table",
+    ['class' => 'btn btn-default']
+);
+
+echo '</div>';
 
 if (api_is_allowed_to_edit(null, true)) {
     // Tool introduction
@@ -893,9 +909,41 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                         Display::display_normal_message(get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']);
                     }
                 }
-                $gradebooktable = new GradebookTable($cat, $allcat, $alleval, $alllink, $addparams);
-                $gradebooktable->display();
-                echo $gradebooktable->getGraph();
+
+                $exportToPdf = false;
+                if ($action == 'export_table') {
+                    $exportToPdf = true;
+                }
+
+                $gradebooktable = new GradebookTable(
+                    $cat,
+                    $allcat,
+                    $alleval,
+                    $alllink,
+                    $addparams,
+                    $exportToPdf
+                );
+
+                $table = $gradebooktable->return_table();
+                $graph = $gradebooktable->getGraph();
+
+                if ($action == 'export_table') {
+                    ob_clean();
+                    $params = array(
+                        //'filename' => get_lang('FlatView') . '_' . api_get_utc_datetime(),
+                        'pdf_title' => get_lang('Report'),
+                        'course_code' => api_get_course_id(),
+                        'session_info' => api_get_session_info(api_get_session_id()),
+                        'add_signatures' => false,
+                        'student_info' => api_get_user_info()
+                    );
+                    $pdf = new PDF('A4', $params['orientation'], $params);
+                    $pdf->html_to_pdf_with_template($table.$graph);
+                } else {
+                    echo $table;
+                    echo $graph;
+                }
+
             }
         }
     }

@@ -8,6 +8,14 @@
 {% endif %}
 
 <table align="center" width="100%">
+    {% if pdf_student_info %}
+        <tr>
+            <td>
+                <strong>{{ "Student" | get_lang }}:</strong>  {{ pdf_student_info.complete_name }}
+            </td>
+        </tr>
+    {% endif %}
+
     <tr>
         <td>
          <strong>{{ "Teacher" | get_lang }}:</strong> {{ pdf_teachers }}

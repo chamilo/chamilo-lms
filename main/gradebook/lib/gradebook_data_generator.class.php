@@ -337,16 +337,13 @@ class GradebookDataGenerator
                     $parentId = $category->get_parent_id();
                     $scoreWeight = [];
 
-                    if ($parentId == 0) {
+                    //if ($parentId == 0) {
                         $scoreWeight = [
                             $score[0] / $score[1] * $item->get_weight(),
                             $item->get_weight()
                         ];
-                    }
-                    /*$displaytype = SCORE_DIV_PERCENT;
-                    if ($ignore_score_color) {
-                        $displaytype |= SCORE_IGNORE_SPLIT;
-                    }*/
+                    //}
+
                     return array(
                         'display' => $scoredisplay->display_score($score, SCORE_DIV),
                         'score' => $score,

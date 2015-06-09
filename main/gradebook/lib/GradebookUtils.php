@@ -198,6 +198,16 @@ class GradebookUtils
             $modify_icons .= '<a class="view_children" data-cat-id="' . $cat->get_id() . '" href="javascript:void(0);">' .
                 Display::return_icon('view_more_stats.gif', get_lang('Show'), '', ICON_SIZE_SMALL) . '</a>';
 
+            if (!api_is_allowed_to_edit(null, true)) {
+                $modify_icons .= '  <a class="ajax" href="personal_stats.php?selectcat='.$cat->get_id().'&'.api_get_cidreq().'">'.
+                    Display::return_icon(
+                        'stats.png',
+                        get_lang('FlatView'),
+                        '',
+                        ICON_SIZE_SMALL
+                    ).'</a>';
+            }
+
             if (api_is_allowed_to_edit(null, true)) {
 
                 // Locking button
@@ -1175,7 +1185,7 @@ class GradebookUtils
     }
 
     /**
-     * 
+     *
      * Get the achieved certificates for a user in courses
      * @param int $userId The user id
      * @param type $includeNonPublicCertificates Whether include the non-plublic certificates

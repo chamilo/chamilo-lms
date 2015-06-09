@@ -164,12 +164,39 @@ class FlatViewDataGenerator
             // Means there are any subcategory
 
             foreach ($allcat as $sub_cat) {
+                $extra = '';
+
+                if (api_get_configuration_value('gradebook_detailed_admin_view') == true) {
+
+                    $links = $sub_cat->get_links();
+                    $evaluations = $sub_cat->get_evaluations();
+
+                    /** @var ExerciseLink $link */
+                    $linkNameList = [];
+                    foreach ($links as $link) {
+                        $linkNameList[] = $link->get_name();
+                    }
+
+                    $evalNameList = [];
+                    foreach ($evaluations as $evaluation) {
+                        $evalNameList[] = $evaluation->get_name();
+                    }
+
+                    $finalList = array_merge($linkNameList, $evalNameList);
+                    $extra = '';
+
+                    if (!empty($finalList)) {
+                        $finalList[] = get_lang('Average');
+                        $extra = '<br />'.implode(' / ', $finalList);
+                    }
+                }
+
                 $sub_cat_weight = round(100 * $sub_cat->get_weight() / $main_weight, 1);
                 $add_weight = " $sub_cat_weight %";
                 $headers[] = Display::url(
                         $sub_cat->get_name(),
                         api_get_self().'?selectcat='.$sub_cat->get_id().'&'.api_get_cidreq()
-                    ).$add_weight;
+                    ).$add_weight.$extra;
             }
         } else {
             if (!isset($this->params['only_total_category']) ||
@@ -443,7 +470,15 @@ class FlatViewDataGenerator
                         $this->params['only_total_category'] == false)
                     ) {
                         if (!$show_all) {
-                            $row[] = $temp_score.' ';
+                            if (api_get_configuration_value('gradebook_detailed_admin_view')) {
+                                $finalList = array_merge($linkScoreList, $evalScoreList);
+                                $average = array_sum($finalList) / count($finalList);
+                                $finalList[] = $average;
+                                $extra = implode(' / ', $finalList);
+                                $row[] = $extra;
+                            } else {
+                                $row[] = $temp_score.' ';
+                            }
                         } else {
                             $row[] = $temp_score;
                         }

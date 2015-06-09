@@ -23,8 +23,8 @@
 
 $forumUrl = api_get_path(WEB_CODE_PATH) . 'forum/';
 $_user = api_get_user_info();
-$rows = get_posts($_GET['thread']);
-$rows = calculate_children($rows);
+$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
+$rows = getPosts($_GET['thread'], $sortDirection, true);
 $sessionId = api_get_session_id();
 $currentThread = get_thread_information($_GET['thread']);
 $post_id = isset($_GET['post']) ? (int) $_GET['post'] : 0;
@@ -263,7 +263,7 @@ if (
 
 
 // Verified the post minor
-$my_post = get_posts($_GET['thread']);
+$my_post = getPosts($_GET['thread']);
 $id_posts = array();
 
 if (!empty($my_post) && is_array($my_post)) {

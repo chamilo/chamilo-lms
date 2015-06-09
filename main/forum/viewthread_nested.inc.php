@@ -22,8 +22,7 @@ if (isset($_GET['action']) &&
     delete_attachment(0, $_GET['id_attach']);
 }
 
-$rows = get_posts($_GET['thread']);
-$rows = calculate_children($rows);
+$rows = getPosts($_GET['thread'], 'ASC', true);
 $count = 0;
 $clean_forum_id  = intval($_GET['forum']);
 $clean_thread_id = intval($_GET['thread']);

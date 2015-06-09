@@ -20,8 +20,10 @@ $_user = api_get_user_info();
 $userId = api_get_user_id();
 $groupId = api_get_group_id();
 
+$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
+
 if (isset($current_thread['thread_id'])) {
-    $rows = getPosts($current_thread['thread_id']);
+    $rows = getPosts($current_thread['thread_id'], $sortDirection);
     $increment = 0;
     $clean_forum_id  = intval($_GET['forum']);
     $clean_thread_id = intval($_GET['thread']);

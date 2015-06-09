@@ -23,7 +23,8 @@
 
 $forumUrl = api_get_path(WEB_CODE_PATH) . 'forum/';
 $_user = api_get_user_info();
-$rows = getPosts($_GET['thread'], 'ASC', true);
+$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
+$rows = getPosts($_GET['thread'], $sortDirection, true);
 $sessionId = api_get_session_id();
 $currentThread = get_thread_information($_GET['thread']);
 $post_id = isset($_GET['post']) ? (int) $_GET['post'] : 0;

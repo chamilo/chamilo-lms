@@ -22,7 +22,9 @@ if (isset($_GET['action']) &&
     delete_attachment(0, $_GET['id_attach']);
 }
 
-$rows = getPosts($_GET['thread'], 'ASC', true);
+$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
+
+$rows = getPosts($_GET['thread'], $sortDirection, true);
 $count = 0;
 $clean_forum_id = intval($_GET['forum']);
 $clean_thread_id = intval($_GET['thread']);

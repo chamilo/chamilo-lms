@@ -208,26 +208,6 @@ if (!empty($_GET['category']) &&
             $values['allow_message_tool'] = 'true';
         }
 
-        // The first step is to set all the variables that have type=checkbox of the category
-        // to false as the checkbox that is unchecked is not in the $_POST data and can
-        // therefore not be set to false.
-        // This, however, also means that if the process breaks on the third of five checkboxes, the others
-        // will be set to false.
-
-        //$r = api_set_settings_category($my_category, 'false', $_configuration['access_url'], array('checkbox', 'radio'));
-
-        //This is a more accurate way of updating to false the checkboxes and radios the settings
-        //var_dump($settings);exit;
-
-        /*
-        foreach ($values as $key => $value) {
-            if (in_array($key, $settings_to_avoid)) { continue; }
-            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
-            $key = Database::escape_string($key);
-            $sql = "UPDATE $table_settings_current SET selected_value = 'false' WHERE variable = '".$key."' AND access_url = ".intval($url_id)."  AND type IN ('checkbox', 'radio') ";
-            $res = Database::query($sql);
-        }*/
-
         foreach ($settings as $item) {
             $key = $item['variable'];
             if (in_array($key, $settings_to_avoid)) {
@@ -239,7 +219,10 @@ if (!empty($_GET['category']) &&
             $key = Database::escape_string($key);
             $sql = "UPDATE $table_settings_current
                     SET selected_value = 'false'
-                    WHERE variable = '".$key."' AND access_url = ".intval($url_id)."  AND type IN ('checkbox', 'radio') ";
+                    WHERE
+                        variable = '".$key."' AND
+                        access_url = ".intval($url_id)." AND
+                        type IN ('checkbox', 'radio') ";
             $res = Database::query($sql);
         }
 
@@ -254,7 +237,7 @@ if (!empty($_GET['category']) &&
                 continue;
             }
             // Avoid form elements which have nothing to do with settings
-            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') {
+            if ($key == 'search_field' || $key == 'submit_fixed_in_bottom') {
                 continue;
             }
 
@@ -271,9 +254,9 @@ if (!empty($_GET['category']) &&
                         file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/footer_extra_content.txt', $value);
                         $value = api_get_home_path().'/footer_extra_content.txt';
                         break;
-                    // URL validation for some settings.
                     case 'InstitutionUrl':
                     case 'course_validation_terms_and_conditions_url':
+                        // URL validation for some settings.
                         $value = trim(Security::remove_XSS($value));
                         if ($value != '') {
                             // Here we accept absolute URLs only.
@@ -287,9 +270,8 @@ if (!empty($_GET['category']) &&
                         }
                         // If the new URL value is empty, then it will be stored (i.e. the setting will be deleted).
                         break;
-
-                    // Validation against e-mail address for some settings.
                     case 'emailAdministrator':
+                        // Validation against e-mail address for some settings.
                         $value = trim(Security::remove_XSS($value));
                         if ($value != '' && !api_valid_email($value)) {
                             // If the new (non-empty) e-mail address is invalid, then the old e-mail address stays.
@@ -298,19 +280,25 @@ if (!empty($_GET['category']) &&
                         }
                         break;
                 }
-                if ($old_value != $value) $keys[] = $key;
+                if ($old_value != $value) {
+                    $keys[] = $key;
+                }
                 $result = api_set_setting($key, $value, null, null, $url_id);
             } else {
-                $sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
+                $sql = "SELECT subkey FROM $table_settings_current
+                        WHERE variable = '$key'";
                 $res = Database::query($sql);
+
                 while ($row_subkeys = Database::fetch_array($res)) {
                     // If subkey is changed:
                     if ((isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'false') ||
-                        (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'true')) {
+                        (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'true')
+                    ) {
                         $keys[] = $key;
                         break;
                     }
                 }
+
                 foreach ($value as $subkey => $subvalue) {
                     $result = api_set_setting($key, 'true', $subkey, null, $url_id);
                 }
@@ -331,7 +319,9 @@ if (!empty($_GET['category']) &&
         // Add event configuration settings variable to the system log.
         if (is_array($keys) && count($keys) > 0) {
             foreach ($keys as $variable) {
-                if (in_array($key, $settings_to_avoid)) { continue; }
+                if (in_array($key, $settings_to_avoid)) {
+                    continue;
+                }
                 Event::addEvent(
                     LOG_CONFIGURATION_SETTINGS_CHANGE,
                     LOG_CONFIGURATION_SETTINGS_VARIABLE,
@@ -529,5 +519,4 @@ if (!empty($_GET['category'])) {
     }
 }
 
-/* FOOTER */
 Display :: display_footer();

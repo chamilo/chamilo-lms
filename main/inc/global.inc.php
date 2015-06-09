@@ -485,7 +485,7 @@ if (!empty($parent_path)) {
     // include English
     include $langpath.'english/trad4all.inc.php';
     // prepare string for current language
-        $langfile = $langpath.$language_interface.'/trad4all.inc.php';
+    $langfile = $langpath.$language_interface.'/trad4all.inc.php';
     if (file_exists($langfile)) {
         include $langfile;
     }

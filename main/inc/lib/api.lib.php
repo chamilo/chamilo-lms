@@ -5206,7 +5206,9 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
     if ($url_changeable == 1) {
         $where_condition = " AND access_url_changeable= '1' ";
     }
-    if (empty($access_url) or $access_url == -1) { $access_url = 1; }
+    if (empty($access_url) || $access_url == -1) {
+        $access_url = 1;
+    }
     $sql = "SELECT * FROM $table
             WHERE access_url = $access_url  $where_condition ";
 
@@ -5234,7 +5236,7 @@ function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $list = "'".implode("','",$exceptions)."'";
     $sql = "SELECT DISTINCT category FROM $t_cs WHERE category is NOT NULL ";
-    if ($list != "'',''" and $list != "''" and !empty($list)) {
+    if ($list != "'',''" && $list != "''" && !empty($list)) {
         $sql .= " AND category NOT IN ($list) ";
     }
     $result = Database::store_result(Database::query($sql));
@@ -7028,7 +7030,7 @@ function api_set_settings_and_plugins() {
         $_setting[$key][] = $row['selected_value'];
         $_plugins[$key][] = $row['selected_value'];
     }
-    //global $app;
+
     $_SESSION['_setting'] = $_setting;
     $_SESSION['_plugins'] = $_plugins;
 }

@@ -516,6 +516,10 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s', $time);
     }
+    if ($time instanceof DateTime) {
+        $time = $time->format('Y-m-d H:i:s');
+        $from_timezone = 'UTC';
+    }
     try {
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));

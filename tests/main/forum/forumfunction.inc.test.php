@@ -601,7 +601,7 @@ class TestForumFunction extends UnitTestCase {
 
 	public function testget_posts() {
 		$thread_id = 1;
-		$res = get_posts($thread_id);
+		$res = getPosts($thread_id);
 		if(!is_null($res)){
 			$this->assertTrue(is_array($res));
 		} else {

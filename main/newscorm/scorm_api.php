@@ -1641,7 +1641,7 @@ function switch_item(current_item, next_item){
 /**
  * Get a forum info when the learning path item has a associated forum
  */
- var loadForumThead = function(lpId, lpItemId) {
+var loadForumThead = function(lpId, lpItemId) {
     var loadForum = $.getJSON(
         '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php',
         {

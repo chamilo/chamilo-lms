@@ -4,6 +4,7 @@
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -148,6 +149,8 @@ class Database
             'Gedmo\Mapping\Annotation',
             $sysPath."vendor/gedmo/doctrine-extensions/lib"
         );
+
+        Type::overrideType('datetime', 'Chamilo\CoreBundle\DoctrineExtensions\DBAL\Types\UTCDateTimeType');
 
         $listener = new \Gedmo\Timestampable\TimestampableListener();
         $entityManager->getEventManager()->addEventSubscriber($listener);

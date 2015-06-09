@@ -335,7 +335,7 @@ if (isset($current_thread['thread_id'])) {
         /* end foreach*/
         if ($origin == 'learnpath') {
             /* start foreach type disqus*/
-            $rows = get_posts($_GET['thread']);
+
             $rows = calculate_children($rows);
             $html = '';
             $html .= '<div class="forum-disqus">';
@@ -371,6 +371,39 @@ if (isset($current_thread['thread_id'])) {
                         );
                     }
                 }
+
+                //buttons edit - delete post
+
+
+                    if (api_is_allowed_to_session_edit(false, true)) {
+                        if ($locked == false) {
+
+                            $buttonActions = '';
+
+                            $iconEdit = "<a class='btn btn-default' href=\"editpost.php?" . api_get_cidreq() . "&forum=" . $clean_forum_id
+                                . "&thread=" . $clean_thread_id . "&post=" . $row['post_id'] . "&amp;origin="
+                                . $origin . "&amp;edit=edition&amp;id_attach=" . $id_attach . "\"><i class='fa fa-pencil'></i></a>";
+
+                            $iconDelete = "<a class='btn btn-default' href=\"" . api_get_self() . "?" . api_get_cidreq() . "&forum="
+                                    . $clean_forum_id . "&thread=" . $clean_thread_id
+                                    . "&action=delete&amp;content=post&amp;id=" . $row['post_id'] . "&amp;origin="
+                                    . $origin . "\" onclick=\"javascript:if(!confirm('"
+                                    . addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
+                                    . "')) return false;\"><i class='fa fa-trash-o'></i></a>";
+
+
+                            $buttonActions .= '<div class="btn-group btn-group-xs" role="toolbar" >';
+                            $buttonActions .=  $iconEdit ;
+                            $buttonActions .=  $iconDelete ;
+                            $buttonActions .= '</div>';
+
+
+                        }
+                    }
+
+
+                //end buttons edit - delete
+
                 $indent = $row['indent_cnt'];
                 $html .= '<div class="post-disqus">';
                 $html .= '<div class="col-xs-offset-' . $indent . '" >';
@@ -384,21 +417,22 @@ if (isset($current_thread['thread_id'])) {
                     $aux = $row['post_parent_id'];
                     $usernameAux = api_get_person_name($rows[$aux]['firstname'],$rows[$aux]['lastname']);
                     $linkUserNameAux = display_user_link($rows[$aux]['user_id'], $usernameAux);
-                    $html .= ' <span class="reply-post"><i class="fa fa-reply"></i> '. $linkUserNameAux .'</span>';
+                    $html .= ' <span class="reply-post"><i class="fa fa-share"></i> '. $linkUserNameAux .'</span>';
                 }
                 $html .= ' . <span class="time timeago" title="'.$date.'">'.$date.'</span></h4>';
                 $html .= '<div class="description-disqus">'.$row['post_text'].'</div>';
-                $html .= '<div class="tools-disqus">' . $buttonReply .' ' . $buttonQuote . '</div>';
+                $html .= '<div class="tools-disqus">' . $buttonReply .' ' . $buttonQuote . ' ' . $buttonActions . '</div>';
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</div>';
 
             }
+            $html .= '<div  class="load-more-disqus" data-role="more">';
+            $html .= '<a id="more-post-disqus" href="#" data-action="more-posts" class="btn btn-default btn-block">Cargar más comentarios</a>';
             $html .= '</div>';
-            echo '<pre>';
-                print_r($rows);
-            echo '</pre>';
+            $html .= '</div>';
+
             echo $html;
             /* end foreach type disqus */
         }

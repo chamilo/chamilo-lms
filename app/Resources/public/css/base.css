@@ -5958,6 +5958,13 @@ div#chat-remote-video video {
   font-size: 12px;
   color: rgba(0, 39, 59, 0.5);
 }
+.forum-disqus .thumbnail{
+  padding: 0px;
+}
+.top-disqus{
+  border: 1px solid #dddddd;
+  padding: 10px;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

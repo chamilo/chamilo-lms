@@ -333,27 +333,70 @@ if (isset($current_thread['thread_id'])) {
         /* end foreach*/
         if ($origin == 'learnpath') {
             /* start foreach type disqus*/
+            $rows = get_posts($_GET['thread']);
+            $rows = calculate_children($rows);
             $html = '';
             $html .= '<div class="forum-disqus">';
             foreach ($rows as $row) {
                 $name = api_get_person_name($row['firstname'], $row['lastname']);
+                $linkUserName = display_user_link($row['user_id'], $name);
                 $username = sprintf(get_lang('LoginX'), $row['username']);
                 $date = api_get_local_time($row['post_date']);
+                //button reply to message and quote message
+                if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
+                    if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+
+                        $buttonReply = Display::tag(
+                            'a',
+                            '<i class="fa fa-reply"></i> ' . get_lang('Reply'),
+                            array(
+                                'href' => 'reply.php?' . api_get_cidreq()
+                                    . "&forum=$clean_forum_id&thread=$clean_thread_id&post="
+                                    . "{$row['post_id']}&action=replymessage&origin=$origin",
+                                'class' => 'btn btn-primary btn-xs reply-disqus'
+                            )
+                        );
+
+                        $buttonQuote = Display::tag(
+                            'a',
+                            '<i class="fa fa-quote-left"></i> ' . get_lang('Quote'),
+                            array(
+                                'href' => 'reply.php?' . api_get_cidreq()
+                                    . "&forum=$clean_forum_id&thread=$clean_thread_id"
+                                    . "&post={$row['post_id']}&action=quote&origin=$origin",
+                                'class' => 'btn btn-success btn-xs quote-disqus'
+                            )
+                        );
+                    }
+                }
+                $indent = $row['indent_cnt'];
+                $html .= '<div class="post-disqus">';
+                $html .= '<div class="col-xs-offset-' . $indent . '" >';
                 $html .= '<div class="row">';
                 $html .= '<div class="col-xs-1 col-md-2">';
                 $html .= '<div class="thumbnail">' . display_user_image($row['user_id'], $name) . '</div>';
                 $html .= '</div>';
                 $html .= '<div class="col-xs-11 col-md-10">';
-                $html .= '<h5>'.$name.'</h5>';
-
-                $html .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
+                $html .= '<h4 class="username-disqus">'. $linkUserName;
+                if(!empty($row['post_parent_id'])){
+                    $aux = $row['post_parent_id'];
+                    $usernameAux = api_get_person_name($rows[$aux]['firstname'],$rows[$aux]['lastname']);
+                    $linkUserNameAux = display_user_link($rows[$aux]['user_id'], $usernameAux);
+                    $html .= ' <span class="reply-post"><i class="fa fa-reply"></i> '. $linkUserNameAux .'</span>';
+                }
+                $html .= ' . <span class="time timeago" title="'.$date.'">'.$date.'</span></h4>';
                 $html .= '<div class="description-disqus">'.$row['post_text'].'</div>';
+                $html .= '<div class="tools-disqus">' . $buttonReply .' ' . $buttonQuote . '</div>';
                 $html .= '</div>';
-
+                $html .= '</div>';
+                $html .= '</div>';
                 $html .= '</div>';
 
             }
             $html .= '</div>';
+            echo '<pre>';
+                print_r($rows);
+            echo '</pre>';
             echo $html;
             /* end foreach type disqus */
         }

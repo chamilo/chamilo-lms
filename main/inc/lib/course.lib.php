@@ -3858,33 +3858,16 @@ class CourseManager
         $session_accessible = true,
         $load_dirs = false
     ) {
-        global $nosession;
         $user_id = api_get_user_id();
-
         $course_info = api_get_course_info_by_id($course['real_id']);
         $status_course = CourseManager::get_user_in_course_status($user_id, $course_info['code']);
         $course_info['status'] = empty($session_id) ? $status_course : STUDENT;
         $course_info['id_session'] = $session_id;
 
-        if (!$nosession) {
-            global $now, $date_start, $date_end;
-        }
-        if (empty($date_start) or empty($date_end)) {
-            $sess = SessionManager::get_sessions_list(
-                array(
-                    's.id' => array(
-                        'operator' => '=',
-                        'value' => $course_info['id_session'],
-                    ),
-                )
-            );
-            $date_start = $sess[$course_info['id_session']]['access_start_date'];
-            $date_end = $sess[$course_info['id_session']]['access_end_date'];
-        }
-        if (empty($now)) {
-            // maybe use api_get_utcdate() here?
-            $now = date('Y-m-d h:i:s');
-        }
+        /*$date_start = $sess[$course_info['id_session']]['access_start_date'];
+        $date_end = $sess[$course_info['id_session']]['access_end_date'];*/
+
+        $now = date('Y-m-d h:i:s');
 
         // Table definitions
         $main_user_table = Database:: get_main_table(TABLE_MAIN_USER);
@@ -3917,37 +3900,36 @@ class CourseManager
             array(),
             ICON_SIZE_LARGE
         );
+
         // Display the "what's new" icons
         $notifications = '';
         if ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) {
             $notifications .= Display:: show_notification($course_info);
         }
+
         if ($session_accessible) {
             if ($course_visibility != COURSE_VISIBILITY_CLOSED ||
                 $user_in_course_status == COURSEMANAGER
             ) {
-                if (!$nosession) {
-                    if (empty($course_info['id_session'])) {
-                        $course_info['id_session'] = 0;
-                    }
-
-                    $sessionCourseAvailable = false;
-                    $sessionCourseStatus = api_get_session_visibility($session_id, $course_info['id']);
-                    if (in_array($sessionCourseStatus,
-                        array(SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE, SESSION_AVAILABLE))) {
-                        $sessionCourseAvailable = true;
-                    }
-
-                    if ($user_in_course_status == COURSEMANAGER || $sessionCourseAvailable) {
-                        $session_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'];
-                        $session_title = '<h4><a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'] . '">'. $course_info['name'] . '</a>'.$notifications.'</h4>';
-                    } else {
-                        $session_title = $course_info['name'];
-                    }
-                } else {
-                    $session_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/';
-                    $session_title = '<h4><a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/">' . $course_info['name'] . '</a>'.$notifications.'</h4>';
+                if (empty($course_info['id_session'])) {
+                    $course_info['id_session'] = 0;
                 }
+
+                $sessionCourseAvailable = false;
+                $sessionCourseStatus = api_get_session_visibility($session_id, $course_info['real_id']);
+
+                if (in_array($sessionCourseStatus,
+                    array(SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE, SESSION_AVAILABLE))) {
+                    $sessionCourseAvailable = true;
+                }
+
+                if ($user_in_course_status == COURSEMANAGER || $sessionCourseAvailable) {
+                    $session_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'];
+                    $session_title = '<h4><a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'] . '">'. $course_info['name'] . '</a>'.$notifications.'</h4>';
+                } else {
+                    $session_title = $course_info['name'];
+                }
+
             } else {
                 $session_title = $course_info['name'] . ' ' . Display::tag('span', get_lang('CourseClosed'),
                         array('class' => 'item_closed'));
@@ -3974,12 +3956,16 @@ class CourseManager
             $course_visibility != COURSE_VISIBILITY_HIDDEN
         ) {
             if ($load_dirs) {
-                $params['right_actions'] .= '<a id="document_preview_' . $course_info['real_id'] . '_' . $course_info['id_session'] . '" class="document_preview" href="javascript:void(0);">' . Display::return_icon('folder.png',
-                        get_lang('Documents'), array('align' => 'absmiddle'), ICON_SIZE_SMALL) . '</a>';
+                $params['right_actions'] .= '<a id="document_preview_' . $course_info['real_id'] . '_' . $course_info['id_session'] . '" class="document_preview" href="javascript:void(0);">' .
+                    Display::return_icon('folder.png',
+                        get_lang('Documents'),
+                        array('align' => 'absmiddle'),
+                        ICON_SIZE_SMALL
+                    ) . '</a>';
                 $params['right_actions'] .= Display::div('', array(
-                        'id' => 'document_result_' . $course_info['real_id'] . '_' . $course_info['id_session'],
-                        'class' => 'document_preview_container'
-                    ));
+                    'id' => 'document_result_' . $course_info['real_id'] . '_' . $course_info['id_session'],
+                    'class' => 'document_preview_container'
+                ));
             }
         }
 
@@ -3988,34 +3974,36 @@ class CourseManager
         }
 
         if (api_get_setting('display_teacher_in_courselist') == 'true') {
-            $teacher_list = null;
-            if (!$nosession) {
 
-                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string(
-                    $course_info['code'],
-                    self::USER_SEPARATOR,
-                    true
-                );
-                $course_coachs = CourseManager::get_coachs_from_course_to_string(
-                    $course_info['id_session'],
-                    $course_info['real_id'],
-                    self::USER_SEPARATOR,
-                    true
-                );
-                $icon_coachs = Display::return_icon('teacher.png','',null,ICON_SIZE_TINY);
-                if ($course_info['status'] == COURSEMANAGER || ($course_info['status'] == STUDENT && empty($course_info['id_session'])) || empty($course_info['status'])) {
-                    $params['teachers'] = $teacher_list;
-                }
-                if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) || ($is_coach && $course_info['status'] != COURSEMANAGER)) {
-                    $params['coaches'] = $icon_coachs.$course_coachs;
-                }
-            } else {
+            $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string(
+                $course_info['code'],
+                self::USER_SEPARATOR,
+                true
+            );
+            $course_coachs = CourseManager::get_coachs_from_course_to_string(
+                $course_info['id_session'],
+                $course_info['real_id'],
+                self::USER_SEPARATOR,
+                true
+            );
+            $icon_coachs = Display::return_icon('teacher.png', '', null, ICON_SIZE_TINY);
+
+            if ($course_info['status'] == COURSEMANAGER ||
+                ($course_info['status'] == STUDENT && empty($course_info['id_session'])) ||
+                empty($course_info['status'])
+            ) {
                 $params['teachers'] = $teacher_list;
+            }
+
+            if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) ||
+                ($is_coach && $course_info['status'] != COURSEMANAGER)
+            ) {
+                $params['coaches'] = $icon_coachs.$course_coachs;
             }
         }
 
-        $session_title .= isset($course['special_course']) ? ' ' . Display::return_icon('klipper.png',
-                get_lang('CourseAutoRegister')) : '';
+        $session_title .= isset($course['special_course']) ? ' ' .
+                          Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
 
         $params['title'] = $session_title;
         $params['extra'] = '';
@@ -4023,18 +4011,20 @@ class CourseManager
         $html = self::session_items_html($params, true);
 
         $session_category_id = null;
-        if (!$nosession) {
+        if (1) {
             $session = '';
             $active = false;
             if (!empty($course_info['session_name'])) {
 
                 // Request for the name of the general coach
                 $sql = 'SELECT lastname, firstname,sc.name
-                FROM ' . $tbl_session . ' ts
-                LEFT JOIN ' . $main_user_table . ' tu
-                ON ts.id_coach = tu.user_id
-                INNER JOIN ' . $tbl_session_category . ' sc ON ts.session_category_id = sc.id
-                WHERE ts.id=' . (int)$course_info['id_session'] . ' LIMIT 1';
+                        FROM ' . $tbl_session . ' ts
+                        LEFT JOIN ' . $main_user_table . ' tu
+                        ON ts.id_coach = tu.user_id
+                        INNER JOIN ' . $tbl_session_category . ' sc
+                        ON ts.session_category_id = sc.id
+                        WHERE ts.id=' . (int)$course_info['id_session'] . '
+                        LIMIT 1';
 
                 $rs = Database::query($sql);
                 $sessioncoach = Database::store_result($rs);

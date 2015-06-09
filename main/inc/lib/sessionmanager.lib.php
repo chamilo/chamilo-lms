@@ -6266,9 +6266,9 @@ class SessionManager
                 $orderClause .= api_sort_by_first_name() ? "firstname, lastname, username" : "lastname, firstname, username";
 
                 $sql = "SELECT user_id, lastname, firstname, username
-                FROM $tbl_user
-                WHERE status = '1' ".
-                    $orderClause;
+                        FROM $tbl_user
+                        WHERE status = '1' ".
+                        $orderClause;
 
                 if (api_is_multiple_url_enabled()) {
                     $userRelAccessUrlTable = Database::get_main_table(
@@ -6383,6 +6383,26 @@ class SessionManager
         $form->addElement('html', '<div id="date_fields" style="display:none">');
 
         // Dates
+
+        $form->addDateTimePicker(
+            'access_start_date',
+            array(get_lang('SessionStartDate'), get_lang('SessionStartDateComment')),
+            array('id' => 'access_start_date')
+        );
+
+        $form->addDateTimePicker(
+            'access_end_date',
+            array(get_lang('SessionEndDate'), get_lang('SessionEndDateComment')),
+            array('id' => 'access_end_date')
+        );
+
+        $form->addRule(
+            array('access_start_date', 'access_end_date'),
+            get_lang('StartDateMustBeBeforeTheEndDate'),
+            'compare_datetime_text',
+            '< allow_empty'
+        );
+
         $form->addDateTimePicker(
             'display_start_date',
             array(
@@ -6402,25 +6422,6 @@ class SessionManager
 
         $form->addRule(
             array('display_start_date', 'display_end_date'),
-            get_lang('StartDateMustBeBeforeTheEndDate'),
-            'compare_datetime_text',
-            '< allow_empty'
-        );
-
-        $form->addDateTimePicker(
-            'access_start_date',
-            array(get_lang('SessionStartDate'), get_lang('SessionStartDateComment')),
-            array('id' => 'access_start_date')
-        );
-
-        $form->addDateTimePicker(
-            'access_end_date',
-            array(get_lang('SessionEndDate'), get_lang('SessionEndDateComment')),
-            array('id' => 'access_end_date')
-        );
-
-        $form->addRule(
-            array('access_start_date', 'access_end_date'),
             get_lang('StartDateMustBeBeforeTheEndDate'),
             'compare_datetime_text',
             '< allow_empty'

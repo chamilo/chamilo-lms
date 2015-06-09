@@ -2230,7 +2230,7 @@ function api_get_session_visibility(
 
                 // Session duration per student.
                 if (isset($row['duration']) && !empty($row['duration'])) {
-                    $duration = $row['duration']*24*60*60;
+                    $duration = $row['duration'] * 24 * 60 * 60;
 
                     $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
                         $session_id,
@@ -2780,11 +2780,12 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     } else {
         $courseId = api_get_course_int_id();
     }
+
     $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $sessionIsCoach = null;
 
-    if (!empty($course_code)) {
+    if (!empty($courseId)) {
         $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
                 FROM $session_table s
                 INNER JOIN $session_rel_course_rel_user_table session_rc_ru

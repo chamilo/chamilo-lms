@@ -437,6 +437,30 @@ class FlatViewDataGenerator
                 foreach ($allcat as $sub_cat) {
                     $score = $sub_cat->calc_score($user_id);
 
+                    if (api_get_configuration_value('gradebook_detailed_admin_view')) {
+                        $links = $sub_cat->get_links();
+                        $evaluations = $sub_cat->get_evaluations();
+
+                        /** @var ExerciseLink $link */
+                        $linkScoreList = [];
+                        foreach ($links as $link) {
+                            $linkScore = $link->calc_score($user_id);
+                            $linkScoreList[] = $scoredisplay->display_score(
+                                $linkScore,
+                                SCORE_SIMPLE
+                            );
+                        }
+
+                        $evalScoreList = [];
+                        foreach ($evaluations as $evaluation) {
+                            $evalScore = $evaluation->calc_score($user_id);
+                            $evalScoreList[] = $scoredisplay->display_score(
+                                $evalScore,
+                                SCORE_SIMPLE
+                            );
+                        }
+                    }
+
                     $real_score = $score;
 
                     $divide = $score[1] == 0 ? 1 : $score[1];
@@ -473,7 +497,7 @@ class FlatViewDataGenerator
                             if (api_get_configuration_value('gradebook_detailed_admin_view')) {
                                 $finalList = array_merge($linkScoreList, $evalScoreList);
                                 $average = array_sum($finalList) / count($finalList);
-                                $finalList[] = $average;
+                                $finalList[] = round($average, 2);
                                 $extra = implode(' / ', $finalList);
                                 $row[] = $extra;
                             } else {

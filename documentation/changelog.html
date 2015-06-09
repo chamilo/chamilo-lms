@@ -55,6 +55,7 @@
   <ul>
     <li>We changed/fixed several calls to SQL NOW() to api_get_utc_datetime(), as our coding conventions require. This *might* have a small adverse effect of generating a hole or a superposition in connections tracking in a few admin reports. See commits <a href="https://github.com/chamilo/chamilo-lms/commit/17c04edf6bb932361ecb1f5092aaed87962d4301">17c04ed</a>, <a href="https://github.com/chamilo/chamilo-lms/commit/df958828f8992aefcd8ef603cc7087979c753653">df95882</a>, <a href="https://github.com/chamilo/chamilo-lms/commit/b568eb4e67509a44bcafff68c580b65675cbd1d6">b568eb4</a> and <a href="https://github.com/chamilo/chamilo-lms/commit/3b8a26f3634da86fccab4db2921a6613e3c111d1">3b8a26f</a> for details</li>
     <li>A few languages now get a "parent" language which is not English. In this case, we have based the update query on an ID that we "assume" to be the right one for Spanish, Italian, French, Chinese and Portuguese. If the ID is not correct, you might, in the worst case scenario, get Chinese or Arabic terms appear in a language that is not the primary one, like Galician (normally taking Spanish as parent language). This can be fixed very easily by an "UPDATE language SET parent_id = NULL"; for all your languages, and then re-apply the parent manually to your sub-language if it needs one.</li>
+    <li>"Character set" platform setting can't be modified default UTF-8 #7652.</li>
   </ul>
 <h3>Notable new Features</h3>
 <h3>Improvements (minor features) and debug</h3>

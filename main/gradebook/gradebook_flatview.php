@@ -121,6 +121,8 @@ $flatviewtable = new FlatViewTable(
     $mainCourseCategory[0]
 );
 
+$flatviewtable->setAutoFill(false);
+
 $parameters = array('selectcat' => intval($_GET['selectcat']));
 $flatviewtable->set_additional_parameters($parameters);
 

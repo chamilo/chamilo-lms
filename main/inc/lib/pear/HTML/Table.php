@@ -1015,6 +1015,7 @@ class HTML_Table extends HTML_Common {
                 }
             } else {
                 for ($i = 0; $i < $this->_tbodyCount; $i++) {
+                    $this->_tbodies[$i]->setAutoFill($this->_autoFill);
                     $strHtml .= $this->_tbodies[$i]->toHtml($tabs, $tab);
                 }
             }

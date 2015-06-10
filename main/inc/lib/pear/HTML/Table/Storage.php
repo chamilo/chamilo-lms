@@ -290,8 +290,8 @@ class HTML_Table_Storage extends HTML_Common {
     {
         if (   isset($this->_structure[$row][$col])
             && $this->_structure[$row][$col] == '__SPANNED__'
-           ) {
-             return;
+        ) {
+            return;
         }
         $attributes = $this->_parseAttributes($attributes);
         $err = $this->_adjustEnds($row, $col, 'setCellAttributes', $attributes);
@@ -299,7 +299,8 @@ class HTML_Table_Storage extends HTML_Common {
             return $err;
         }
         $this->_structure[$row][$col]['attr'] = $attributes;
-        $this->_updateSpanGrid($row, $col);
+        // Fix use of rowspan/colspan
+        //$this->_updateSpanGrid($row, $col);
     }
 
     /**
@@ -315,7 +316,7 @@ class HTML_Table_Storage extends HTML_Common {
     {
         if (   isset($this->_structure[$row][$col])
             && $this->_structure[$row][$col] == '__SPANNED__'
-           ) {
+        ) {
             return;
         }
         $attributes = $this->_parseAttributes($attributes);
@@ -324,7 +325,7 @@ class HTML_Table_Storage extends HTML_Common {
             return $err;
         }
         $this->_updateAttrArray($this->_structure[$row][$col]['attr'], $attributes);
-        $this->_updateSpanGrid($row, $col);
+        //$this->_updateSpanGrid($row, $col);
     }
 
     /**
@@ -338,7 +339,7 @@ class HTML_Table_Storage extends HTML_Common {
     {
         if (   isset($this->_structure[$row][$col])
             && $this->_structure[$row][$col] != '__SPANNED__'
-           ) {
+        ) {
             return $this->_structure[$row][$col]['attr'];
         } elseif (!isset($this->_structure[$row][$col])) {
             return PEAR::raiseError('Invalid table cell reference[' .
@@ -370,7 +371,7 @@ class HTML_Table_Storage extends HTML_Common {
         if (is_array($contents)) {
             foreach ($contents as $singleContent) {
                 $ret = $this->_setSingleCellContents($row, $col, $singleContent,
-                                                     $type);
+                    $type);
                 if (PEAR::isError($ret)) {
                     return $ret;
                 }
@@ -406,7 +407,7 @@ class HTML_Table_Storage extends HTML_Common {
     {
         if (   isset($this->_structure[$row][$col])
             && $this->_structure[$row][$col] == '__SPANNED__'
-           ) {
+        ) {
             return;
         }
         $err = $this->_adjustEnds($row, $col, 'setCellContents');
@@ -428,7 +429,7 @@ class HTML_Table_Storage extends HTML_Common {
     {
         if (   isset($this->_structure[$row][$col])
             && $this->_structure[$row][$col] == '__SPANNED__'
-           ) {
+        ) {
             return;
         }
         if (!isset($this->_structure[$row][$col])) {
@@ -477,10 +478,10 @@ class HTML_Table_Storage extends HTML_Common {
     {
         if (isset($contents) && !is_array($contents)) {
             return PEAR::raiseError('First parameter to HTML_Table::addRow ' .
-                                    'must be an array');
+                'must be an array');
         }
         if (is_null($contents)) {
-          $contents = array();
+            $contents = array();
         }
 
         $type = strtolower($type);
@@ -620,10 +621,10 @@ class HTML_Table_Storage extends HTML_Common {
     {
         if (isset($contents) && !is_array($contents)) {
             return PEAR::raiseError('First parameter to HTML_Table::addCol ' .
-                                    'must be an array');
+                'must be an array');
         }
         if (is_null($contents)) {
-          $contents = array();
+            $contents = array();
         }
 
         $type = strtolower($type);
@@ -748,7 +749,7 @@ class HTML_Table_Storage extends HTML_Common {
                     if (isset($this->_structure[$i][$j]['contents'])) {
                         $contents = $this->_structure[$i][$j]['contents'];
                     }
-                    $strHtml .= $tabs . $tab . $tab . $extraTab . "<$type" . $this->_getAttrString($attr) . '>';
+
                     if (is_object($contents)) {
                         // changes indent and line end settings on nested tables
                         if (is_subclass_of($contents, 'html_common')) {
@@ -766,11 +767,22 @@ class HTML_Table_Storage extends HTML_Common {
                     if (is_array($contents)) {
                         $contents = implode(', ', $contents);
                     }
-                    if (isset($this->_autoFill) && $contents === '') {
-                        $contents = $this->_autoFill;
+
+                    $typeContent = $tabs . $tab . $tab . $extraTab . "<$type" . $this->_getAttrString($attr) . '>';
+
+                    if (empty($contents)) {
+                        if (isset($this->_autoFill) && $this->_autoFill) {
+                            $contents = $this->_autoFill;
+                        }
+                    } else {
+                        $typeContent .= $contents;
                     }
-                    $strHtml .= $contents;
-                    $strHtml .= "</$type>" . $lnEnd;
+                    $typeContent .= "</$type>" . $lnEnd;
+
+                    if (!empty($contents)) {
+                        $strHtml .= $typeContent;
+                    }
+
                 }
                 $strHtml .= $tabs . $tab . $extraTab . '</tr>' . $lnEnd;
             }
@@ -816,16 +828,16 @@ class HTML_Table_Storage extends HTML_Common {
     }
 
     /**
-    * Adjusts ends (total number of rows and columns)
-    * @param    int     $row        Row index
-    * @param    int     $col        Column index
-    * @param    string  $method     Method name of caller
-    *                               Used to populate PEAR_Error if thrown.
-    * @param    array   $attributes Assoc array of attributes
-    *                               Default is an empty array.
-    * @access   private
-    * @throws   PEAR_Error
-    */
+     * Adjusts ends (total number of rows and columns)
+     * @param    int     $row        Row index
+     * @param    int     $col        Column index
+     * @param    string  $method     Method name of caller
+     *                               Used to populate PEAR_Error if thrown.
+     * @param    array   $attributes Assoc array of attributes
+     *                               Default is an empty array.
+     * @access   private
+     * @throws   PEAR_Error
+     */
     function _adjustEnds($row, $col, $method, $attributes = array())
     {
         $colspan = isset($attributes['colspan']) ? $attributes['colspan'] : 1;
@@ -833,9 +845,10 @@ class HTML_Table_Storage extends HTML_Common {
         if (($row + $rowspan - 1) >= $this->_rows) {
             if ($this->_autoGrow) {
                 $this->_rows = $row + $rowspan;
+
             } else {
-                return PEAR::raiseError('Invalid table row reference[' .
-                    $row . '] in HTML_Table::' . $method);
+                /*return PEAR::raiseError('Invalid table row reference[' .
+                    $row . '] in HTML_Table::' . $method);*/
             }
         }
 
@@ -843,18 +856,18 @@ class HTML_Table_Storage extends HTML_Common {
             if ($this->_autoGrow) {
                 $this->_cols = $col + $colspan;
             } else {
-                return PEAR::raiseError('Invalid table column reference[' .
-                    $col . '] in HTML_Table::' . $method);
+                /*return PEAR::raiseError('Invalid table column reference[' .
+                    $col . '] in HTML_Table::' . $method);*/
             }
         }
     }
 
     /**
-    * Tells if the parameter is an array of attribute arrays/strings
-    * @param    mixed   $attributes Variable to test
-    * @access   private
-    * @return   bool
-    */
+     * Tells if the parameter is an array of attribute arrays/strings
+     * @param    mixed   $attributes Variable to test
+     * @access   private
+     * @return   bool
+     */
     function _isAttributesArray($attributes)
     {
         if (is_array($attributes) && isset($attributes[0])) {

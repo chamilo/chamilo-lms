@@ -5590,14 +5590,23 @@ function getAttachmentIdsByPostId($postId, $courseId = null) {
  */
 function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
 {
+    $sessionId = intval($sessionId);
+
     $forumCategoryTable = Database::get_course_table(TABLE_FORUM_CATEGORY);
     $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-    $fakeFrom = <<<SQL
-        $forumCategoryTable fc
-        INNER JOIN $itemProperty ip
-            ON (fc.cat_id = ip.ref AND fc.c_id = ip.c_id AND fc.session_id = ip.session_id)
-SQL;
+    $fakeFrom = "$forumCategoryTable fc
+        INNER JOIN $itemProperty ip ";
+
+    if ($sessionId === 0) {
+        $fakeFrom .= "ON (
+                fc.cat_id = ip.ref AND fc.c_id = ip.c_id AND (fc.session_id = ip.session_id OR ip.session_id IS NULL)
+            ) ";
+    } else {
+        $fakeFrom .= "ON (
+                fc.cat_id = ip.ref AND fc.c_id = ip.c_id AND fc.session_id = ip.session_id
+            ) ";
+    }
 
     $resultData = Database::select(
         'fc.*',

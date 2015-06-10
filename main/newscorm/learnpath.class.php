@@ -10784,11 +10784,20 @@ EOD;
         $forumTable = Database::get_course_table(TABLE_FORUM);
         $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        $fakeFrom = <<<SQL
-            $forumTable f
-            INNER JOIN $itemProperty ip
-                ON (f.forum_id = ip.ref AND f.c_id = ip.c_id AND f.session_id = ip.session_id)
-SQL;
+        $fakeFrom = "$forumTable f
+            INNER JOIN $itemProperty ip ";
+
+        if ($this->lp_session_id == 0) {
+            $fakeFrom .= "ON (
+                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND (
+                        f.session_id = ip.session_id OR ip.session_id IS NULL
+                    )
+                ) ";
+        } else {
+            $fakeFrom .= "ON (
+                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND f.session_id = ip.session_id
+                ) ";
+        }
 
         $resultData = Database::select(
             'f.*',

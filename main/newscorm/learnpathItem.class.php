@@ -4418,14 +4418,25 @@ class learnpathItem
      */
     public function getForumThread($lpCourseId, $lpSessionId = 0)
     {
+        $lpSessionId = intval($lpSessionId);
+
         $forumThreadTable = Database::get_course_table(TABLE_FORUM_THREAD);
         $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        $fakeFrom = <<<SQL
-            $forumThreadTable ft
-            INNER JOIN $itemProperty ip
-                ON (ft.thread_id = ip.ref AND ft.c_id = ip.c_id AND ft.session_id = ip.session_id)
-SQL;
+        $fakeFrom = "$forumThreadTable ft
+            INNER JOIN $itemProperty ip ";
+
+        if ($lpSessionId == 0) {
+            $fakeFrom .= "ON (
+                    ft.thread_id = ip.ref AND ft.c_id = ip.c_id AND (
+                        ft.session_id = ip.session_id OR ip.session_id IS NULL
+                    )
+                ) ";
+        } else {
+            $fakeFrom .= "ON (
+                    ft.thread_id = ip.ref AND ft.c_id = ip.c_id AND ft.session_id = ip.session_id
+                ) ";
+        }
 
         $resultData = Database::select(
             'ft.*',

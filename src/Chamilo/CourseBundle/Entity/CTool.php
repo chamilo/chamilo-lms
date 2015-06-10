@@ -107,6 +107,20 @@ class CTool
     private $sessionId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="custom_icon", type="string", length=255, nullable=true)
+     */
+    private $customIcon;
+
+    /**
      * Set name
      *
      * @param string $name
@@ -381,5 +395,43 @@ class CTool
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return CTool
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomIcon()
+    {
+        return $this->customIcon;
+    }
+
+    /**
+     * @param string $customIcon
+     * @return CTool
+     */
+    public function setCustomIcon($customIcon)
+    {
+        $this->customIcon = $customIcon;
+
+        return $this;
     }
 }

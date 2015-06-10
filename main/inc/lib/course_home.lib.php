@@ -805,17 +805,14 @@ class CourseHome
                 // If it's a link, we don't add the cidReq
 
                 if ($tool['image'] == 'file_html.png' || $tool['image'] == 'file_html_na.png') {
-
                     $tool['link'] = $tool['link'].$qm_or_amp;
                 } else {
                     $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
                 }
 
                 $tool_link_params = array();
-
                 $toolId = isset($tool["id"]) ? $tool["id"] : null;
 
-                //$tool['link'] = htmlspecialchars($tool['link']) ;
                 //@todo this visio stuff should be removed
                 if (strpos($tool['name'], 'visio_') !== false) {
                     $tool_link_params = array(
@@ -871,6 +868,18 @@ class CourseHome
                     false
                 );
 
+                /*if (!empty($tool['custom_icon'])) {
+                    $image = self::getCustomWebIconPath().$tool['custom_icon'];
+                    $icon = Display::img(
+                        $image,
+                        $tool['description'],
+                        array(
+                            'class' => 'tool-icon',
+                            'id' => 'toolimage_'.$tool['id']
+                        )
+                    );
+                }*/
+
                 // Validation when belongs to a session
                 $session_img = api_get_session_image($tool['session_id'], (!empty($_user['status']) ? $_user['status'] : ''));
                 if ($studentview) {
@@ -881,7 +890,11 @@ class CourseHome
                 $item['tool'] = $tool;
                 $item['name'] = $tool_name;
                 $tool_link_params['id'] = 'is'.$tool_link_params['id'];
-                $item['link'] = Display::url($tool_name.$session_img, $tool_link_params['href'], $tool_link_params);
+                $item['link'] = Display::url(
+                    $tool_name.$session_img,
+                    $tool_link_params['href'],
+                    $tool_link_params
+                );
 
                 $items[] = $item;
 
@@ -900,9 +913,21 @@ class CourseHome
                         $html .= '<div class="col-xs-6 col-md-3 course-tool">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
                         $toolId = isset($item['tool']['id']) ? $item['tool']['id'] : null;
+
                         if (isset($item['tool']['custom_image'])) {
                             $original_image = Display::img(
                                 $item['tool']['custom_image'],
+                                $item['name'],
+                                array('id' => 'toolimage_'.$toolId)
+                            );
+                        } elseif (isset($item['tool']['custom_icon'])) {
+                            $customIcon = $item['tool']['custom_icon'];
+                            if ($item['tool']['visibility'] == '0') {
+                                $fileInfo = pathinfo($item['tool']['custom_icon']);
+                                $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
+                            }
+                            $original_image = Display::img(
+                                self::getCustomWebIconPath().$customIcon,
                                 $item['name'],
                                 array('id' => 'toolimage_'.$toolId)
                             );
@@ -1204,5 +1229,194 @@ class CourseHome
             $html .= '</div>';
         }
         return $html;
+    }
+
+    /**
+     * List course homepage tools from authoring and interaction sections
+     * @param   int $courseId The course ID (guessed from context if not provided)
+     * @param   int $sessionId The session ID (guessed from context if not provided)
+     * @return  array List of all tools data from the c_tools table
+     */
+    public static function toolsIconsAction($courseId = null, $sessionId = null)
+    {
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        } else {
+            $courseId = intval($courseId);
+        }
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        } else {
+            $sessionId = intval($sessionId);
+        }
+
+        if (empty($courseId)) {
+            // We shouldn't get here, but for some reason api_get_course_int_id()
+            // doesn't seem to get the course from the context, sometimes
+            return array();
+        }
+
+        $table  = Database::get_course_table(TABLE_TOOL_LIST);
+        $sql = "SELECT * FROM $table
+                WHERE category in ('authoring','interaction')
+                AND c_id = $courseId
+                AND session_id = $sessionId
+                ORDER BY id";
+
+        $result = Database::query($sql);
+        $data = Database::store_result($result, 'ASSOC');
+
+        return $data;
+    }
+
+    /**
+     * @param int $editIcon
+     * @return array
+     */
+    public static function getTool($editIcon)
+    {
+        $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
+        $editIcon = intval($editIcon);
+
+        $sql = "SELECT * FROM $course_tool_table
+                WHERE iid = $editIcon";
+        $result = Database::query($sql);
+        $tool = Database::fetch_assoc($result, 'ASSOC');
+
+        return $tool;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCustomSysIconPath()
+    {
+        // Check if directory exists or create it if it doesn't
+        $dir = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/course_home_icons/';
+        if (!is_dir($dir)) {
+            mkdir($dir, api_get_permissions_for_new_directories(), true);
+        }
+
+        return $dir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCustomWebIconPath()
+    {
+        // Check if directory exists or create it if it doesn't
+        $dir = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/course_home_icons/';
+
+        return $dir;
+    }
+
+    /**
+     * @param string $icon
+     * @return string
+     */
+    public static function getDisableIcon($icon)
+    {
+        $fileInfo = pathinfo($icon);
+
+        return $fileInfo['filename'].'_na.'.$fileInfo['extension'];
+    }
+
+    /**
+     * @param int $id
+     * @param int $courseId
+     * @param int $sessionId
+     * @param $values
+     */
+    public static function updateTool($id, $values)
+    {
+        $table = Database::get_course_table(TABLE_TOOL_LIST);
+        $params = [
+            'name' => $values['name'],
+            'link' => $values['link'],
+            'target' => $values['target'],
+            'visibility' => $values['visibility'],
+            'description' => $values['description'],
+        ];
+
+        if (isset($_FILES['icon']['size']) && $_FILES['icon']['size'] !== 0) {
+            $dir = self::getCustomSysIconPath();
+
+            // Resize image if it is larger than 64px
+            $temp = new Image($_FILES['icon']['tmp_name']);
+            $picture_infos = $temp->get_image_info();
+            if ($picture_infos['width'] > 64) {
+                $thumbwidth = 64;
+            } else {
+                $thumbwidth = $picture_infos['width'];
+            }
+            if ($picture_infos['height'] > 64) {
+                $new_height = 64;
+            } else {
+                $new_height = $picture_infos['height'];
+            }
+            $temp->resize($thumbwidth, $new_height, 0);
+
+            //copy the image to the course upload folder
+            $path = $dir.$_FILES['icon']['name'];
+            $result = $temp->send_image($path);
+
+            $temp = new Image($path);
+            $r = $temp->convert2bw();
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+            $bwPath = substr($path,0,-(strlen($ext)+1)) . '_na.' . $ext;
+
+            if ($r === false) {
+                error_log('Conversion to B&W of '.$path.' failed in '.__FILE__.' at line '.__LINE__);
+            } else {
+                $temp->send_image($bwPath);
+                $iconName = $_FILES['icon']['name'];
+                $params['custom_icon'] = $iconName;
+            }
+        }
+
+        Database::update(
+            $table,
+            $params,
+            [' iid = ?' => [$id]]
+        );
+    }
+
+    /**
+     * @param int $id
+     */
+    public static function deleteIcon($id)
+    {
+        $table = Database::get_course_table(TABLE_TOOL_LIST);
+        $tool = self::getTool($id);
+
+        if ($tool && !empty($tool['custom_icon'])) {
+            $file = self::getCustomSysIconPath().$tool['custom_icon'];
+            $fileInfo = pathinfo($file);
+            $fileGray = $fileInfo['filename'].'_na.'.$fileInfo['extension'];
+            $fileGray = self::getCustomSysIconPath().$fileGray;
+
+            if (file_exists($file) && is_file($file)) {
+                if (Security::check_abs_path($file, self::getCustomSysIconPath())) {
+                    unlink($file);
+                }
+            }
+
+            if (file_exists($fileGray) && is_file($fileGray)) {
+                if (Security::check_abs_path($fileGray, self::getCustomSysIconPath())) {
+                    unlink($fileGray);
+                }
+            }
+
+            $params = [
+                'custom_icon' => '',
+            ];
+
+            Database::update(
+                $table,
+                $params,
+                [' iid = ?' => [$id]]
+            );
+        }
     }
 }

@@ -62,6 +62,11 @@ class Image
 	{
 		return $this->image_wrapper->get_image_info();
 	}
+
+	public function convert2bw()
+	{
+		$this->image_wrapper->convert2bw();
+	}
 }
 
 /**
@@ -203,6 +208,7 @@ class ImagickWrapper extends ImageWrapper {
 		    return $result;
 		}
 	}
+
 }
 
 /**
@@ -347,4 +353,27 @@ class GDWrapper extends ImageWrapper {
 		// TODO: Occupied memory is not released, because the following fragment of code is actually dead.
 		@imagedestroy($this->bg);
 	}
+
+    /**
+     * Convert image to black & white
+     */
+    function convert2bw()
+    {
+        if (!$this->image_validated) return false;
+
+        $dest_img = imagecreatetruecolor(imagesx($this->bg), imagesy($this->bg));
+        /* copy ignore the transparent color
+         * so that we can use black (0,0,0) as transparent, which is what
+         * the image is filled with when created.
+         */
+        $transparent = imagecolorallocate($dest_img, 0,0,0);
+        imagealphablending($dest_img, false);
+        imagesavealpha($dest_img, true);
+        imagecolortransparent($dest_img, $transparent);
+        imagecopy($dest_img, $this->bg, 0,0, 0, 0,imagesx($this->bg), imagesx($this->bg));
+        imagefilter($dest_img, IMG_FILTER_GRAYSCALE);
+        $this->bg = $dest_img;
+
+        return true;
+    }
 }

@@ -285,7 +285,18 @@ if (api_get_setting('homepage_view') == 'activity' ||
 } elseif (api_get_setting('homepage_view') == 'vertical_activity') {
 	require 'vertical_activity.php';
 }
-$content = '<div id="course_tools">'.$content.'</div>';
+
+$editIconButton = '';
+if (api_is_allowed_to_edit()) {
+    $editIconButton = '<div class="pull-right">'.Display::url(
+        get_lang('EditIcons'),
+        api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
+        ['class' => 'btn btn-default' ]
+    );
+    $editIconButton .= '</div>';
+}
+
+$content = '<div id="course_tools">'.$editIconButton.$content.'</div>';
 $tpl = new Template(null);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);

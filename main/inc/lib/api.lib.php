@@ -2377,7 +2377,11 @@ function api_get_session_condition(
     if ($with_base_content) {
         $condition_session = $condition_add." ( $session_field = $session_id OR $session_field = 0 OR $session_field IS NULL) ";
     } else {
-        $condition_session = $condition_add." $session_field = $session_id ";
+        if ($session_id === 0) {
+            $condition_session = "$condition_add ($session_field = 0 OR $session_field IS NULL) ";
+        } else {
+            $condition_session = $condition_add." $session_field = $session_id ";
+        }
     }
     return $condition_session;
 }

@@ -924,6 +924,20 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                     $exportToPdf
                 );
 
+                if (api_is_allowed_to_edit()) {
+                    $gradebooktable->td_attributes = [
+                        4 => 'class=centered'
+                    ];
+                } else {
+                    $gradebooktable->td_attributes = [
+                        3 => 'class=centered',
+                        4 => 'class=centered',
+                        5 => 'class=centered',
+                        6 => 'class=centered',
+                        7 => 'class=centered'
+                    ];
+                }
+
                 $table = $gradebooktable->return_table();
                 $graph = $gradebooktable->getGraph();
 

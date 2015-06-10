@@ -1865,54 +1865,71 @@ function get_threads($forum_id, $course_code = null)
 
 /**
  * Retrieve all posts of a given thread
- *
+ * @param int $threadId The thread ID
+ * @param string $orderDirection Optional. The direction for sort the posts
+ * @param boolean $recursive Optional. If the list is recursive
+ * @param int $postId Optional. The post ID for recursive list
+ * @param int $depth Optional. The depth to indicate the indent
  * @return array containing all the information about the posts of a given thread
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
  */
-function get_posts($thread_id)
+function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postId = 0, $depth = -1)
 {
-    $table_users = Database :: get_main_table(TABLE_MAIN_USER);
-    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $list = [];
 
-    $course_id = api_get_course_int_id();
-    $sessionId = api_get_session_id();
+    $em = Database::getManager();
 
-    // note: change these SQL so that only the relevant fields of the user table are used
-    /*
-     * INNER JOIN $tableItemProperty i
-                ON i.ref = posts.post_id AND i.c_id = posts.c_id*
-     i.session_id = $sessionId
-     */
-    if (api_is_allowed_to_edit(null, true)) {
-        $sql = "SELECT * FROM $table_posts posts
-                LEFT JOIN $table_users users
-                    ON posts.poster_id = users.user_id
-                WHERE
-                    posts.c_id = $course_id AND
-                    posts.thread_id = ".intval($thread_id)."
+    $whereCondition = [
+        'threadId' => $threadId,
+        'cId' => api_get_course_int_id(),
+        'visible' => 1
+    ];
 
-                ORDER BY posts.post_id ASC";
-    } else {
-        // students can only se the posts that are approved (posts.visible='1')
-        $sql = "SELECT * FROM $table_posts posts
-                LEFT JOIN  $table_users users
-                    ON posts.poster_id=users.user_id
-                WHERE
-                    posts.c_id = $course_id AND
-                    posts.thread_id = ".intval($thread_id)." AND
-                    posts.visible='1'
-                ORDER BY posts.post_id ASC";
-    }
-    $result = Database::query($sql);
-
-    $posts = array();
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
-        $posts[] = $row;
+    if ($recursive) {
+        $whereCondition['postParentId'] = $postId;
     }
 
-    return $posts;
+    $posts = $em->getRepository('ChamiloCourseBundle:CForumPost')->findBy(
+        $whereCondition,
+        ['postId' => $orderDirection]
+    );
+
+    $depth++;
+
+    foreach ($posts as $post) {
+        $user = $em->find('ChamiloUserBundle:User', $post->getPosterId());
+
+        $list[$post->getPostId()] = [
+            'c_id' => $post->getCId(),
+            'post_id' => $post->getPostId(),
+            'post_title' => $post->getPostTitle(),
+            'post_text' => $post->getPostText(),
+            'thread_id' => $post->getThreadId(),
+            'forum_id' => $post->getForumId(),
+            'poster_id' => $post->getPosterId(),
+            'poster_name' => $post->getPosterName(),
+            'post_date' => $post->getPostDate(),
+            'post_notification' => $post->getPostNotification(),
+            'post_parent_id' => $post->getPostParentId(),
+            'visible' => $post->getVisible(),
+            'indent_cnt' => $depth,
+            'user_id' => $user->getUserId(),
+            'username' => $user->getUsername(),
+            'username_canonical' => $user->getUsernameCanonical(),
+            'lastname' => $user->getLastname(),
+            'firstname' => $user->getFirstname(),
+        ];
+
+        if (!$recursive) {
+            continue;
+        }
+
+        $list = array_merge(
+            $list,
+            getPosts($threadId, $orderDirection, $recursive, $post->getPostId(), $depth)
+        );
+    }
+
+    return $list;
 }
 
 /**
@@ -3285,7 +3302,7 @@ function store_edit_post($values)
     // First we check if the change affects the thread and if so we commit
     // the changes (sticky and post_title=thread_title are relevant).
 
-    $posts = get_posts($values['thread_id']);
+    $posts = getPosts($values['thread_id']);
     $first_post = null;
     if (!empty($posts)) {
         $first_post = $posts[0];

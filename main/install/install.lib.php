@@ -1155,7 +1155,7 @@ function get_contact_registration_form()
             <div class="controls"><input id="company_name" type="text" name="company_name" size="30" /></div>
     </div>
     <div class="control-group">
-            <div class="control-label"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</div>
+            <label class="control-label"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</label>
             <div class="controls">
                     <select name="company_activity" id="company_activity" >
                             <option value="">--- '.get_lang('SelectOne').' ---</option>
@@ -1179,7 +1179,7 @@ function get_contact_registration_form()
     </div>
 
     <div class="control-group">
-            <div class="control-label"><span class="form_required">*</span>'.get_lang('PersonRole').'</div>
+            <label class="control-label"><span class="form_required">*</span>'.get_lang('PersonRole').'</label>
             <div class="controls">
                     <select name="person_role" id="person_role" >
                             <option value="">--- '.get_lang('SelectOne').' ---</option>
@@ -1199,17 +1199,17 @@ function get_contact_registration_form()
     </div>
 
     <div class="control-group">
-            <div class="control-label"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</div>
+            <label class="control-label"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</label>
             <div class="controls">'.get_countries_list_from_array(true).'</div>
     </div>
     <div class="control-group">
-            <div class="control-label">'.get_lang('CompanyCity').'</div>
+            <label class="control-label">'.get_lang('CompanyCity').'</label>
             <div class="controls">
                     <input type="text" id="company_city" name="company_city" size="30" />
             </div>
     </div>
     <div class="control-group">
-            <div class="control-label">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</div>
+            <label class="control-label">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</label>
             <div class="controls">
                     <select id="language" name="language">
                             <option value="bulgarian">Bulgarian</option>
@@ -1230,7 +1230,7 @@ function get_contact_registration_form()
     </div>
 
     <div class="control-group">
-            <div class="control-label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
+            <label class="control-label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</label>
             <div class="controls">
                     <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked />'.get_lang('Yes').'
                     <input type="radio" name="financial_decision" id="financial_decision2" value="0" />'.get_lang('No').'

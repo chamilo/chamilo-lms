@@ -170,8 +170,7 @@ if ($my_message != 'PostDeletedSpecial') {
 
     if ($origin == 'learnpath') {
         if (
-            ($current_forum_category &&
-                $current_forum_category['locked'] == 0) &&
+            ($current_forum_category && $current_forum_category['locked'] == 0) &&
             $current_forum['locked'] == 0 &&
             $current_thread['locked'] == 0 ||
             api_is_allowed_to_edit(false, true)
@@ -180,10 +179,16 @@ if ($my_message != 'PostDeletedSpecial') {
             if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
                 // reply link
                 if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                    $buttonReply = '<a class="btn btn-default" href="' . $forumUrl . 'reply.php?' . api_get_cidreq() . '&forum='
-                        . Security::remove_XSS($_GET['forum']) . '&thread='
-                        . Security::remove_XSS($_GET['thread']) . '&amp;action=replythread">'
-                        . ' <i class="fa fa-reply"></i> ' . get_lang('ReplyToThread') . '</a>';
+                    $buttonReply = Display::toolbarButton(
+                        get_lang('ReplyToThread'),
+                        "{$forumUrl}reply.php?" . api_get_cidreq() . '&' . http_build_query([
+                            'forum' => Security::remove_XSS($_GET['forum']),
+                            'thread' => Security::remove_XSS($_GET['thread']),
+                            'action' => 'replythread',
+                        ]),
+                        'reply',
+                        'default'
+                    );
                 }
                 // new thread link
                 if (
@@ -192,7 +197,11 @@ if ($my_message != 'PostDeletedSpecial') {
                         !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])
                     ) ||
                     ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
-                    ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
+                    (
+                        $current_forum['allow_new_threads'] == 1 &&
+                        !isset($_user['user_id']) &&
+                        $current_forum['allow_anonymous'] == 1
+                    )
                 ) {
                     if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
                         $buttonReply = '&nbsp;&nbsp;';

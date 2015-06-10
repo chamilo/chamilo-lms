@@ -7387,4 +7387,6 @@ $SeeCourse = "Ver curso";
 $XPoints = "%s puntos";
 $FromXUntilY = "De %s a %s";
 $CreateForumForThisLearningPath = "Crear foro para esta lección";
+$ByDate = "Por fecha";
+$ByTag = "Por etiqueta";
 ?>

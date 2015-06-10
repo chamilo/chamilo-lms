@@ -15,35 +15,6 @@ require_once '../inc/global.inc.php';
 
 $ctok = Security::get_existing_token();
 
-if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-    $htmlHeadXtra[] = '
-    <script>
-    $(document).ready(function() {
-        $(\'.ajax\').click(function() {
-            var url     = this.href;
-            var dialog  = $("#dialog");
-            if ($("#dialog").length == 0) {
-                dialog  = $(\'<div id="dialog" style="display:hidden"></div>\').appendTo(\'body\');
-            }
-
-            // load remote content
-            dialog.load(
-                url,
-                {},
-                function(responseText, textStatus, XMLHttpRequest) {
-                    dialog.dialog({
-                    modal : true,
-                    width : 540,
-                    height : 400
-                });
-            });
-            //prevent the browser to follow the link
-            return false;
-        });
-    });
-    </script>';
-}
-
 // Get Limit data
 $limit = getLimitArray();
 
@@ -77,7 +48,8 @@ $actions = array(
     'display_random_courses',
     'subscribe_user_with_password',
     'display_sessions',
-    'subscribe_to_session'
+    'subscribe_to_session',
+    'search_tag'
 );
 
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
@@ -261,5 +233,8 @@ switch ($action) {
             exit;
         }
         //else show error message?
+        break;
+    case 'search_tag':
+        $courses_controller->sessionsListByCoursesTag($limit);
         break;
 }

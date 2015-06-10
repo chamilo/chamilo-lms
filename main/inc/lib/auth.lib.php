@@ -720,4 +720,68 @@ SQL;
 
         return $count;
     }
+
+    /**
+     * Search sessions by the tags in their courses
+     * @param string $termTag Term for search in tags
+     * @param array $limit Limit info
+     * @return array The sessions
+     */
+    public function browseSessionsByTags($termTag, array $limit)
+    {
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
+
+        $sessions = $qb->select('s')
+            ->distinct(true)
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->innerJoin(
+                'ChamiloCoreBundle:SessionRelCourse',
+                'src',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                's.id = src.session'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:ExtraFieldRelTag',
+                'frt',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'src.course = frt.itemId'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:Tag',
+                't',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'frt.tagId = t.id'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:ExtraField',
+                'f',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'frt.fieldId = f.id'
+            )
+            ->where(
+                $qb->expr()->like('t.tag', ":tag")
+            )
+            ->andWhere(
+                $qb->expr()->eq('f.extraFieldType', Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE)
+            )
+            ->setFirstResult($limit['start'])
+            ->setMaxResults($limit['length'])
+            ->setParameter('tag', "$termTag%")
+            ->getQuery()
+            ->getResult();
+
+        $sessionsToBrowse = [];
+
+        foreach ($sessions as $session) {
+            if ($session->getNbrCourses() === 0) {
+                continue;
+            }
+
+            $sessionsToBrowse[] = $session;
+        }
+
+        return $sessionsToBrowse;
+    }
+
 }

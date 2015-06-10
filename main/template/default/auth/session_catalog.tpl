@@ -17,7 +17,7 @@
 
                 if (courseList.length === 0) {
                     var getCourseList = $.getJSON(
-                            '{{ web_session_courses_ajax_url }}',
+                            '{{ _p.web_ajax }}course.ajax.php',
                             {
                                 a: 'display_sessions_courses',
                                 session: sessionId
@@ -77,7 +77,7 @@
 
                     {% if course_category_list is not empty %}
                         <br>
-                        <a class="btn btn-block btn-default" href="{{ api_get_self }}?action=display_random_courses">{{ 'RandomPick'|get_lang }}</a>
+                        <a class="btn btn-block btn-default" href="{{ _p.web_self }}?action=display_random_courses">{{ 'RandomPick'|get_lang }}</a>
                     {% endif %}
                 </div>
             </div>
@@ -107,13 +107,28 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-12">
-                                <form class="form-search" method="post" action="{{ api_get_self }}?action=display_sessions">
-                                    <div class="input-group">
-                                        <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
-                                        </span>
-                                    </div>
+                                <form class="form-search" method="post" action="{{ _p.web_self }}?action=display_sessions">
+                                    <fieldset>
+                                        <legend>{{ "ByDate"|get_lang }}</legend>
+                                        <div class="input-group">
+                                            <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
+                                            </span>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                                <br>
+                                <form class="form-search" method="post" action="{{ _p.web_self }}?action=search_tag">
+                                    <fieldset>
+                                        <legend>{{ "ByTag"|get_lang }}</legend>
+                                        <div class="input-group">
+                                            <input type="text" name="search_tag" class="form-control" value="{{ search_tag }}" />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
+                                            </span>
+                                        </div>
+                                    </fieldset>
                                 </form>
                             </div>
                         </div>
@@ -192,6 +207,8 @@
                     </div>
                 </div>
             </div>
+        {% else %}
+            {{ message }}
         {% endfor %}
         {{ catalog_pagination }}
     </div>

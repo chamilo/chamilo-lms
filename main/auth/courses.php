@@ -48,7 +48,8 @@ $actions = array(
     'display_random_courses',
     'subscribe_user_with_password',
     'display_sessions',
-    'subscribe_to_session'
+    'subscribe_to_session',
+    'search_tag'
 );
 
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
@@ -232,5 +233,8 @@ switch ($action) {
             exit;
         }
         //else show error message?
+        break;
+    case 'search_tag':
+        $courses_controller->sessionsListByCoursesTag($limit);
         break;
 }

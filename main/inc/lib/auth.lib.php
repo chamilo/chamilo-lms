@@ -370,9 +370,9 @@ class Auth
         $category_id = intval($category_id);
         $result = false;
         $sql_delete = "DELETE FROM $tucc
-                       WHERE id='" . $category_id . "' and user_id='" . $current_user_id . "'";
+                      WHERE id='" . $category_id . "' and user_id='" . $current_user_id . "'";
         $resultQuery = Database::query($sql_delete);
-        if (Database::affected_rows($resultQuery)) {
+       if (Database::affected_rows($resultQuery)) {
             $result = true;
         }
         $sql = "UPDATE $TABLECOURSUSER
@@ -384,6 +384,104 @@ class Auth
         Database::query($sql);
 
         return $result;
+    }
+
+    /**
+     * Search the courses database for a course that matches the search term.
+     * The search is done on the code, title and tutor field of the course table.
+     * @param string $search_term The string that the user submitted, what we are looking for
+     * @param array $limit
+     * @return array An array containing a list of all the courses matching the the search term.
+     */
+    public function search_courses($search_term, $limit)
+    {
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $extraFieldTable = Database :: get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldValuesTable = Database :: get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+        $limitFilter = getLimitFilterFromArray($limit);
+
+        // get course list auto-register
+        $sql = "SELECT item_id
+                FROM $extraFieldValuesTable tcfv
+                INNER JOIN $extraFieldTable tcf ON tcfv.field_id =  tcf.id
+                WHERE
+                    tcf.variable = 'special_course' AND
+                    tcfv.value = 1 ";
+
+        $special_course_result = Database::query($sql);
+        if (Database::num_rows($special_course_result) > 0) {
+            $special_course_list = array();
+            while ($result_row = Database::fetch_array($special_course_result)) {
+                $special_course_list[] = '"' . $result_row['item_id'] . '"';
+            }
+        }
+        $without_special_courses = '';
+        if (!empty($special_course_list)) {
+            $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
+        }
+
+        $search_term_safe = Database::escape_string($search_term);
+        $sql_find = "SELECT * FROM $courseTable
+                    WHERE (
+                            code LIKE '%" . $search_term_safe . "%' OR
+                            title LIKE '%" . $search_term_safe . "%' OR
+                            tutor_name LIKE '%" . $search_term_safe . "%'
+                        )
+                        $without_special_courses
+                    ORDER BY title, visual_code ASC
+                    $limitFilter
+                    ";
+
+        if (api_is_multiple_url_enabled()) {
+            $url_access_id = api_get_current_access_url_id();
+            if ($url_access_id != -1) {
+                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $sql_find = "SELECT *
+                            FROM $courseTable as course
+                            INNER JOIN $tbl_url_rel_course as url_rel_course
+                            ON (url_rel_course.c_id = course.id)
+                            WHERE
+                                access_url_id = $url_access_id AND (
+                                    code LIKE '%" . $search_term_safe . "%' OR
+                                    title LIKE '%" . $search_term_safe . "%' OR
+                                    tutor_name LIKE '%" . $search_term_safe . "%'
+                                )
+                                $without_special_courses
+                            ORDER BY title, visual_code ASC
+                            $limitFilter
+                            ";
+            }
+        }
+        $result_find = Database::query($sql_find);
+        $courses = array();
+        while ($row = Database::fetch_array($result_find)) {
+            $row['registration_code'] = !empty($row['registration_code']);
+            $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
+            $count_connections_last_month = Tracking::get_course_connections_count(
+                    $row['id'], 0, api_get_utc_datetime(time() - (30 * 86400))
+            );
+
+            $point_info = CourseManager::get_course_ranking($row['id'], 0);
+
+            $courses[] = array(
+                'real_id' => $row['id'],
+                'point_info' => $point_info,
+                'code' => $row['code'],
+                'directory' => $row['directory'],
+                'visual_code' => $row['visual_code'],
+                'title' => $row['title'],
+                'tutor' => $row['tutor_name'],
+                'subscribe' => $row['subscribe'],
+                'unsubscribe' => $row['unsubscribe'],
+                'registration_code' => $row['registration_code'],
+                'creation_date' => $row['creation_date'],
+                'visibility' => $row['visibility'],
+                'count_users' => $count_users,
+                'count_connections' => $count_connections_last_month
+            );
+        }
+        return $courses;
     }
 
     /**
@@ -622,4 +720,68 @@ SQL;
 
         return $count;
     }
+
+    /**
+     * Search sessions by the tags in their courses
+     * @param string $termTag Term for search in tags
+     * @param array $limit Limit info
+     * @return array The sessions
+     */
+    public function browseSessionsByTags($termTag, array $limit)
+    {
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
+
+        $sessions = $qb->select('s')
+            ->distinct(true)
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->innerJoin(
+                'ChamiloCoreBundle:SessionRelCourse',
+                'src',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                's.id = src.session'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:ExtraFieldRelTag',
+                'frt',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'src.course = frt.itemId'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:Tag',
+                't',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'frt.tagId = t.id'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:ExtraField',
+                'f',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'frt.fieldId = f.id'
+            )
+            ->where(
+                $qb->expr()->like('t.tag', ":tag")
+            )
+            ->andWhere(
+                $qb->expr()->eq('f.extraFieldType', Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE)
+            )
+            ->setFirstResult($limit['start'])
+            ->setMaxResults($limit['length'])
+            ->setParameter('tag', "$termTag%")
+            ->getQuery()
+            ->getResult();
+
+        $sessionsToBrowse = [];
+
+        foreach ($sessions as $session) {
+            if ($session->getNbrCourses() === 0) {
+                continue;
+            }
+
+            $sessionsToBrowse[] = $session;
+        }
+
+        return $sessionsToBrowse;
+    }
+
 }

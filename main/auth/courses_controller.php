@@ -633,4 +633,90 @@ class CoursesController
 
         $tpl->display($contentTemplate);
     }
+
+    /**
+     * Show the Session Catalogue with filtered session by course tags
+     * @param array $limit Limit info
+     */
+    public function sessionsListByCoursesTag(array $limit)
+    {
+        $searchTag = isset($_POST['search_tag']) ? $_POST['search_tag'] : null;
+        $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
+        $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
+        $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+        $userId = api_get_user_id();
+
+        $sessionsBlocks = array();
+        $sessions = $this->model->browseSessionsByTags($searchTag, $limit);
+
+        $key = 'name';
+        $catalogSessionAutoSubscriptionAllowed = false;
+
+        if (api_get_setting('catalog_allow_session_auto_subscription') === 'true') {
+            $key = 'id';
+            $catalogSessionAutoSubscriptionAllowed = true;
+        }
+
+        foreach ($sessions as $session) {
+            $sessionDates = SessionManager::parseSessionDates([
+                'display_start_date' => $session->getDisplayStartDate(),
+                'display_end_date' => $session->getDisplayEndDate(),
+                'access_start_date' => $session->getAccessStartDate(),
+                'access_end_date' => $session->getAccessEndDate(),
+                'coach_access_start_date' => $session->getCoachAccessStartDate(),
+                'coach_access_end_date' => $session->getCoachAccessEndDate()
+            ]);
+
+            $sessionsBlock = array(
+                'id' => $session->getId(),
+                'name' => $session->getName(),
+                'nbr_courses' => $session->getNbrCourses(),
+                'nbr_users' => $session->getNbrUsers(),
+                'coach_name' => $session->getGeneralCoach()->getCompleteName(),
+                'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
+                'icon' => $this->getSessionIcon($session->getName()),
+                'date' => $sessionDates['display'],
+                'subscribe_button' => $this->getRegisteredInSessionButton(
+                    $key === 'id' ? $session->getId() : $session->getName(),
+                    $catalogSessionAutoSubscriptionAllowed
+                ),
+                'show_description' => $session->getShowDescription(),
+            );
+
+            /** @var \Chamilo\CoreBundle\Entity\Repository\SequenceRepository $repo */
+            $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
+            $requirementAndDependencies = $repo->getRequirementAndDependencies(
+                $session->getId(),
+                SequenceResource::SESSION_TYPE
+            );
+
+            $sessionsBlock = array_merge($sessionsBlock, $requirementAndDependencies);
+            $sessionsBlocks[] = $sessionsBlock;
+        }
+
+        $tpl = new Template();
+        $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
+        $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
+        $tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
+
+        $tpl->assign('course_url', $courseUrl);
+
+        $tpl->assign('course_category_list', $this->getCoursesCategoriesBlock(null, false, $limit));
+        $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
+
+        $tpl->assign('hidden_links', $hiddenLinks);
+
+        $tpl->assign('search_date', Security::remove_XSS($searchDate));
+        $tpl->assign('search_tag', Security::remove_XSS($searchTag));
+        $tpl->assign('sessions', $sessionsBlocks);
+
+        if (empty($sessionsBlocks)) {
+            $tpl->assign('message', Display::return_message(get_lang('NoResults'), 'warning'));
+        }
+
+        $contentTemplate = $tpl->get_template('auth/session_catalog.tpl');
+
+        $tpl->display($contentTemplate);
+    }
+
 }

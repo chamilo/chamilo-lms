@@ -1249,12 +1249,12 @@ abstract class Question
         if ($this->course['id'] != $course_info['id']) {
             $description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                 $description,
-                $this->course['id'],
+                $this->course['code'],
                 $course_info['id']
             );
             $question = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                 $question,
-                $this->course['id'],
+                $this->course['code'],
                 $course_info['id']
             );
         }

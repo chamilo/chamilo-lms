@@ -2298,7 +2298,6 @@ class UserManager
                     session_category.date_end session_category_date_end,
                     coach_access_start_date,
                     coach_access_end_date
-
               FROM $tbl_session as session
                   LEFT JOIN $tbl_session_category session_category
                   ON (session_category_id = session_category.id)
@@ -2314,19 +2313,20 @@ class UserManager
         $categories = array();
 
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result)) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
 
                 // User portal filters:
                 if ($is_time_over) {
                     // History
-                    if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {
+                    if (empty($row['access_end_date']) || $row['access_end_date'] == '0000-00-00 00:00:00') {
+                        continue;
+                    }
+
+                    if (isset($row['access_end_date'])) {
                         if ($row['access_end_date'] > $now) {
                             continue;
                         }
-                    }
 
-                    if ($row['access_end_date'] == '0000-00-00 00:00:00') {
-                        continue;
                     }
                 } else {
                     // Current user portal

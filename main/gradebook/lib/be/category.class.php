@@ -1878,7 +1878,8 @@ class Category implements GradebookItem
 
                 $html = array(
                     'certificate_link' => $certificates,
-                    'pdf_link' => $exportToPDF
+                    'pdf_link' => $exportToPDF,
+                    'pdf_url' => "$url&action=export"
                 );
 
                 if (api_get_setting('allow_skills_tool') == 'true') {

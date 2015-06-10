@@ -65,9 +65,9 @@ class FlatViewDataGenerator
     }
 
     /**
-    * Get total number of evaluations/links (columns) (the 2 users columns not included)
-    * @return int
-    */
+     * Get total number of evaluations/links (columns) (the 2 users columns not included)
+     * @return int
+     */
     public function get_total_items_count()
     {
         return count($this->evals_links);
@@ -164,12 +164,44 @@ class FlatViewDataGenerator
             // Means there are any subcategory
 
             foreach ($allcat as $sub_cat) {
+
                 $sub_cat_weight = round(100 * $sub_cat->get_weight() / $main_weight, 1);
                 $add_weight = " $sub_cat_weight %";
-                $headers[] = Display::url(
+
+                $mainHeader = Display::url(
                         $sub_cat->get_name(),
                         api_get_self().'?selectcat='.$sub_cat->get_id().'&'.api_get_cidreq()
                     ).$add_weight;
+
+                if (api_get_configuration_value('gradebook_detailed_admin_view') == true) {
+
+                    $links = $sub_cat->get_links();
+                    $evaluations = $sub_cat->get_evaluations();
+
+                    /** @var ExerciseLink $link */
+                    $linkNameList = [];
+                    foreach ($links as $link) {
+                        $linkNameList[] = $link->get_name();
+                    }
+
+                    $evalNameList = [];
+                    foreach ($evaluations as $evaluation) {
+                        $evalNameList[] = $evaluation->get_name();
+                    }
+
+                    $finalList = array_merge($linkNameList, $evalNameList);
+
+                    if (!empty($finalList)) {
+                        $finalList[] = get_lang('Average');
+                    }
+
+                    $list = [];
+                    $list['items'] = $finalList;
+                    $list['header'] = $mainHeader;
+                    $headers[]= $list;
+                } else {
+                    $headers[] = $mainHeader;
+                }
             }
         } else {
             if (!isset($this->params['only_total_category']) ||
@@ -410,8 +442,31 @@ class FlatViewDataGenerator
                 foreach ($allcat as $sub_cat) {
                     $score = $sub_cat->calc_score($user_id);
 
-                    $real_score = $score;
+                    if (api_get_configuration_value('gradebook_detailed_admin_view')) {
+                        $links = $sub_cat->get_links();
+                        $evaluations = $sub_cat->get_evaluations();
 
+                        /** @var ExerciseLink $link */
+                        $linkScoreList = [];
+                        foreach ($links as $link) {
+                            $linkScore = $link->calc_score($user_id);
+                            $linkScoreList[] = $scoredisplay->display_score(
+                                $linkScore,
+                                SCORE_SIMPLE
+                            );
+                        }
+
+                        $evalScoreList = [];
+                        foreach ($evaluations as $evaluation) {
+                            $evalScore = $evaluation->calc_score($user_id);
+                            $evalScoreList[] = $scoredisplay->display_score(
+                                $evalScore,
+                                SCORE_SIMPLE
+                            );
+                        }
+                    }
+
+                    $real_score = $score;
                     $divide = $score[1] == 0 ? 1 : $score[1];
 
                     $sub_cat_percentage = $sum_categories_weight_array[$sub_cat->get_id()];
@@ -428,7 +483,6 @@ class FlatViewDataGenerator
                         }
                     */
                     if (api_get_setting('gradebook_show_percentage_in_reports') == 'false') {
-                        //if (true)
                         $real_score = $scoredisplay->display_score($real_score, SCORE_SIMPLE);
                         $temp_score = $scoredisplay->display_score($score, SCORE_DIV_SIMPLE_WITH_CUSTOM);
                         $temp_score = Display::tip($real_score, $temp_score);
@@ -440,15 +494,24 @@ class FlatViewDataGenerator
 
                     if (!isset($this->params['only_total_category']) ||
                         (isset($this->params['only_total_category']) &&
-                        $this->params['only_total_category'] == false)
+                            $this->params['only_total_category'] == false)
                     ) {
                         if (!$show_all) {
-                            $row[] = $temp_score.' ';
+                            if (api_get_configuration_value('gradebook_detailed_admin_view')) {
+                                $finalList = array_merge($linkScoreList, $evalScoreList);
+                                $average = array_sum($finalList) / count($finalList);
+                                $finalList[] = round($average, 2);
+                                foreach ($finalList as $finalValue) {
+                                    $row[] = '<center>'.$finalValue.'</center>';
+                                }
+                            } else {
+                                $row[] = $temp_score.' ';
+                            }
                         } else {
                             $row[] = $temp_score;
                         }
                     }
-                    $item_value_total +=$item_value;
+                    $item_value_total += $item_value;
                 }
                 if ($convert_using_the_global_weight) {
                     //$item_total = $main_weight;
@@ -593,14 +656,14 @@ class FlatViewDataGenerator
             ) {
                 if (!$show_all) {
                     if (in_array($item->get_type(), array(
-                        LINK_EXERCISE,
-                        LINK_DROPBOX,
-                        LINK_STUDENTPUBLICATION,
-                        LINK_LEARNPATH,
-                        LINK_FORUM_THREAD,
-                        LINK_ATTENDANCE,
-                        LINK_SURVEY,
-                        LINK_HOTPOTATOES)
+                            LINK_EXERCISE,
+                            LINK_DROPBOX,
+                            LINK_STUDENTPUBLICATION,
+                            LINK_LEARNPATH,
+                            LINK_FORUM_THREAD,
+                            LINK_ATTENDANCE,
+                            LINK_SURVEY,
+                            LINK_HOTPOTATOES)
                     )
                     ) {
                         if (!empty($score[0])) {
@@ -630,7 +693,7 @@ class FlatViewDataGenerator
      * @param int $session_id
      * @return array
      */
-    public function get_evaluation_sumary_results ($session_id = null)
+    public function get_evaluation_sumary_results($session_id = null)
     {
         $usertable = array();
         foreach ($this->users as $user) {

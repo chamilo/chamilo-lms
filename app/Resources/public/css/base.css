@@ -141,6 +141,18 @@ ul#navigation .report a {
   padding: 6px 0 8px 6px;
 }
 
+
+#gradebook_list .centered {
+    text-align:center;
+    vertical-align:middle;
+}
+
+#gradebook_list .centered .badge-group {
+    width: auto;
+}
+
+
+
 /* END CSS BASE */
 
 .button-load{

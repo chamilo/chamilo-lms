@@ -3,9 +3,9 @@
 
 set_time_limit(0);
 
+use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
-use CpChart\Classes\pCache as pCache;
 
 /**
  * Class FlatViewTable
@@ -395,12 +395,43 @@ class FlatViewTable extends SortableTable
         // step 1: generate columns: evaluations and links
         $header_names = $this->datagen->get_header_names($this->offset, $selectlimit);
 
-        $this->set_header(0, $header_names[0]);
-        $this->set_header(1, $header_names[1]);
+        $userRowSpan = false;
+        foreach ($header_names as $item) {
+            if (is_array($item)) {
+                $userRowSpan = true;
+                break;
+            }
+        }
+
+        $thAttributes = '';
+        if ($userRowSpan) {
+            $thAttributes = 'rowspan=2';
+        }
+
+        $this->set_header(0, $header_names[0], true, $thAttributes);
+        $this->set_header(1, $header_names[1], true, $thAttributes);
 
         $column = 2;
+        $firstHeader = [];
         while ($column < count($header_names)) {
-            $this->set_header($column, $header_names[$column], false);
+            $headerData = $header_names[$column];
+
+            if (is_array($headerData)) {
+                $countItems = count($headerData['items']);
+
+                $this->set_header(
+                    $column,
+                    $headerData['header'],
+                    false,
+                    'colspan="'.$countItems.'"'
+                );
+
+                foreach ($headerData['items'] as $item) {
+                    $firstHeader[] = '<center>'.$item.'</center>';
+                }
+            } else {
+                $this->set_header($column, $headerData, false, $thAttributes);
+            }
             $column++;
         }
 
@@ -413,6 +444,11 @@ class FlatViewTable extends SortableTable
         );
 
         $table_data = array();
+
+        if (!empty($firstHeader)) {
+            $table_data[] = $firstHeader;
+        }
+
         foreach ($data_array as $user_row) {
             $user_id = $user_row[0];
             unset($user_row[0]);

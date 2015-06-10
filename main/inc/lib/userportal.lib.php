@@ -1150,6 +1150,7 @@ class IndexManager
                 ) {
                     // Independent sessions
                     foreach ($session_category['sessions'] as $session) {
+
                         $session_id = $session['session_id'];
 
                         // Don't show empty sessions.
@@ -1160,7 +1161,7 @@ class IndexManager
                         // Courses inside the current session.
                         $date_session_start = $session['access_start_date'];
                         $date_session_end = $session['access_end_date'];
-                        $coachAccessStartDate  = $session['coach_access_start_date'];
+                        $coachAccessStartDate = $session['coach_access_start_date'];
                         $coachAccessEndDate = $session['coach_access_end_date'];
 
                         $session_now = time();
@@ -1174,14 +1175,20 @@ class IndexManager
                             $is_coach_course = api_is_coach($session_id, $course['real_id']);
                             $allowed_time = 0;
                             $dif_time_after = 0;
-                            if ($date_session_start != '0000-00-00 00:00:00') {
+
+                            if (!empty($date_session_start) &&
+                                $date_session_start != '0000-00-00 00:00:00'
+                            ) {
                                 if ($is_coach_course) {
                                     $allowed_time = api_strtotime($coachAccessStartDate);
                                 } else {
                                     $allowed_time = api_strtotime($date_session_start);
                                 }
+
                                 if (!isset($_GET['history'])) {
-                                    if ($date_session_end != '0000-00-00 00:00:00') {
+                                    if (!empty($date_session_end) &&
+                                        $date_session_end != '0000-00-00 00:00:00'
+                                    ) {
                                         $endSessionToTms = api_strtotime($date_session_end);
                                         if ($session_now > $endSessionToTms) {
                                             $dif_time_after = $session_now - $endSessionToTms;
@@ -1191,8 +1198,8 @@ class IndexManager
                                 }
                             }
 
-                            if ($session_now > $allowed_time &&
-                                $coachAccessEndDate > $dif_time_after - 1
+                            if ($session_now > $allowed_time
+                                //($coachAccessEndDate > $dif_time_after - 1)
                             ) {
                                 // Read only and accessible.
                                 $atLeastOneCourseIsVisible = true;

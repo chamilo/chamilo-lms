@@ -2230,7 +2230,7 @@ function api_get_session_visibility(
 
                 // Session duration per student.
                 if (isset($row['duration']) && !empty($row['duration'])) {
-                    $duration = $row['duration']*24*60*60;
+                    $duration = $row['duration'] * 24 * 60 * 60;
 
                     $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
                         $session_id,
@@ -2780,11 +2780,12 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     } else {
         $courseId = api_get_course_int_id();
     }
+
     $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $sessionIsCoach = null;
 
-    if (!empty($course_code)) {
+    if (!empty($courseId)) {
         $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
                 FROM $session_table s
                 INNER JOIN $session_rel_course_rel_user_table session_rc_ru
@@ -5205,7 +5206,9 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
     if ($url_changeable == 1) {
         $where_condition = " AND access_url_changeable= '1' ";
     }
-    if (empty($access_url) or $access_url == -1) { $access_url = 1; }
+    if (empty($access_url) || $access_url == -1) {
+        $access_url = 1;
+    }
     $sql = "SELECT * FROM $table
             WHERE access_url = $access_url  $where_condition ";
 
@@ -5233,7 +5236,7 @@ function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $list = "'".implode("','",$exceptions)."'";
     $sql = "SELECT DISTINCT category FROM $t_cs WHERE category is NOT NULL ";
-    if ($list != "'',''" and $list != "''" and !empty($list)) {
+    if ($list != "'',''" && $list != "''" && !empty($list)) {
         $sql .= " AND category NOT IN ($list) ";
     }
     $result = Database::store_result(Database::query($sql));
@@ -7027,7 +7030,7 @@ function api_set_settings_and_plugins() {
         $_setting[$key][] = $row['selected_value'];
         $_plugins[$key][] = $row['selected_value'];
     }
-    //global $app;
+
     $_SESSION['_setting'] = $_setting;
     $_SESSION['_plugins'] = $_plugins;
 }

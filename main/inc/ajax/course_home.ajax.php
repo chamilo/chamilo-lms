@@ -15,21 +15,27 @@ switch ($action) {
             $tool_info = api_get_tool_information($_GET['id']);
             $tool_visibility = $tool_info['visibility'];
             $tool_image = $tool_info['image'];
+
             if (api_get_setting('homepage_view') != 'activity_big') {
                 $tool_image = Display::return_icon($tool_image, null, null, null, null, true);
                 $na_image = str_replace('.gif', '_na.gif', $tool_image);
             } else {
                 // Display::return_icon() also checks in the app/Resources/public/css/themes/{theme}/icons folder
-                $tool_image = (substr($tool_info['image'], 0, strpos($tool_info['image'], '.'))).'.png';
+                $tool_image = (substr($tool_image, 0, strpos($tool_image, '.'))).'.png';
                 $tool_image = Display::return_icon(
                     $tool_image,
-                    get_lang(ucfirst($too_info['name'])),
+                    get_lang(ucfirst($tool_info['name'])),
                     null,
                     ICON_SIZE_BIG,
                     null,
                     true
                 );
                 $na_image   = str_replace('.png', '_na.png', $tool_image);
+            }
+
+            if (isset($tool_info['custom_icon']) && !empty($tool_info['custom_icon'])) {
+                $tool_image = CourseHome::getCustomWebIconPath().$tool_info['custom_icon'];
+                $na_image = CourseHome::getCustomWebIconPath().CourseHome::getDisableIcon($tool_info['custom_icon']);
             }
 
             $requested_image = ($tool_visibility == 0 ) ? $tool_image : $na_image;
@@ -60,7 +66,9 @@ switch ($action) {
                 } else $sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".$_GET["id"]."'";
                 */
 
-                $sql = "UPDATE $tool_table SET visibility=$requested_visible WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
+                $sql = "UPDATE $tool_table SET
+                        visibility = $requested_visible
+                        WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
                 Database::query($sql);
             }
             $response_data = array(

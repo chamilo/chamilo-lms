@@ -23,7 +23,7 @@ switch ($action) {
                 $tool_image = (substr($tool_info['image'], 0, strpos($tool_info['image'], '.'))).'.png';
                 $tool_image = Display::return_icon(
                     $tool_image,
-                    get_lang(ucfirst($too_info['name'])),
+                    get_lang(ucfirst($tool_info['name'])),
                     null,
                     ICON_SIZE_BIG,
                     null,

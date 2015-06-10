@@ -499,7 +499,7 @@ class bbb
                                         ),
                                         api_get_self().'?'.
                                         api_get_cidreq().
-                                        '&action=delete_record&id='.$record['recordId']
+                                        '&action=delete_record&id='.$meetingDB['id']
                                     );
                                     if ($meetingDB['visibility'] == 0) {
                                         $actionLinks .= Display::url(
@@ -731,22 +731,39 @@ class bbb
      */
     public function deleteRecord($id)
     {
-        if (empty($id) or $id != intval($id)) {
+        if (empty($id)) {
             return false;
         }
-        $meetingData = Database::select('*', $this->table, array('where' => array('id = ?' => array($id))), 'first');
+
+        $meetingData = Database::select(
+            '*',
+            $this->table,
+            array('where' => array('id = ?' => array($id))),
+            'first'
+        );
+
         $recordingParams = array(
-           /*
-            * NOTE: Set the recordId below to a valid id after you have
-            * created a recorded meeting, and received a real recordID
-            * back from your BBB server using the
-            * getRecordingsWithXmlResponseArray method.
-            */
+            /*
+             * NOTE: Set the recordId below to a valid id after you have
+             * created a recorded meeting, and received a real recordID
+             * back from your BBB server using the
+             * getRecordingsWithXmlResponseArray method.
+             */
 
             // REQUIRED - We have to know which recording:
             'recordId' => $meetingData['remote_id'],
         );
-        return $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
+
+        $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
+
+        if (!empty($result) && isset($result['deleted']) && $result['deleted'] == 'true') {
+            Database::delete(
+                $this->table,
+                array('id = ?' => array($id))
+            );
+        }
+
+        return $result;
     }
 
     /**

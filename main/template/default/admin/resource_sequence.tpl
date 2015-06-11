@@ -167,31 +167,49 @@
             });
         });
     </script>
-
-    <div class="row">
-        <div class="col-md-4">
-            {{ left_block }}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    {{ create_sequence }}
+                </div>
+            </div>
         </div>
-        <div class="col-md-8">
-            <h3>
-                {{ 'ItemsTheReferenceDependsOn' | get_lang }}
-            </h3>
-            <div id="parents">
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    {{ save_sequence }}
+                </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ left_block }}
+                </div>
+                <div class="col-md-6">
+                    <h3>
+                        {{ 'ItemsTheReferenceDependsOn' | get_lang }}
+                    </h3>
+                    <div id="parents">
+                    </div>
 
-            <h3>{{ 'Item' | get_lang }}</h3>
-            <div id="resource">
+                    <h3>{{ 'Item' | get_lang }}</h3>
+                    <div id="resource">
+                    </div>
+
+                    <h3>{{ 'Dependencies' | get_lang }}</h3>
+                    <div id="children">
+                    </div>
+
+                    <h3>{{ 'Graph' | get_lang }}</h3>
+                    <div id="show_graph"></div>
+
+
+                    {{ right_block }}
+                </div>
             </div>
-
-            <h3>{{ 'Dependencies' | get_lang }}</h3>
-            <div id="children">
-            </div>
-
-            <h3>{{ 'Graph' | get_lang }}</h3>
-            <div id="show_graph"></div>
-
-
-            {{ right_block }}
         </div>
     </div>
 {% endblock %}

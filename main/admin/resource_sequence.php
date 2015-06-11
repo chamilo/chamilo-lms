@@ -22,9 +22,9 @@ if (!empty($sessionListFromDatabase)) {
     }
 }
 
-$formSequence = new FormValidator('sequence_form', 'post', api_get_self());
-$formSequence->addText('name', get_lang('Sequence'));
-$formSequence->addButtonCreate(get_lang('AddSequence'), 'submit_sequence');
+$formSequence = new FormValidator('sequence_form', 'post', api_get_self(),null,null,'horizontal');
+$formSequence->addText('name', get_lang('Sequence'), true, ['cols-size' => [4, 4, 2]]);
+$formSequence->addButtonCreate(get_lang('AddSequence'), 'submit_sequence', false, ['cols-size' => [4, 4, 2]]);
 
 $em = Database::getManager();
 
@@ -39,38 +39,41 @@ if ($formSequence->validate()) {
     exit;
 }
 
-$form = new FormValidator('');
-$form->addHidden('sequence_type', 'session');
+$saveForm = new FormValidator('');
+$saveForm->addHidden('sequence_type', 'session');
 $em = Database::getManager();
 
 $sequenceList = $em->getRepository('ChamiloCoreBundle:Sequence')->findAll();
 
-$form->addSelect(
+$saveForm->addSelect(
     'sequence',
     get_lang('Sequence'),
     $sequenceList,
-    ['id' => 'sequence_id']
+    ['id' => 'sequence_id', 'cols-size' => [4, 4, 2]]
 );
 
-$form->addSelect(
+$saveForm->addSelect(
     'sessions',
     get_lang('Sessions'),
     $sessionList,
-    ['id' => 'item']
+    ['id' => 'item', 'cols-size' => [4, 4, 2]]
 );
-$form->addButtonNext(get_lang('UseAsReference'), 'use_as_reference');
+$saveForm->addButtonNext(get_lang('UseAsReference'), 'use_as_reference');
 
+$form = new FormValidator('');
 $form->addSelect(
     'requirements',
     get_lang('Requirements'),
     $sessionList,
-    ['id' => 'requirements', 'multiple' => 'multiple']
+    ['id' => 'requirements', 'multiple' => 'multiple', 'cols-size' => [4, 4, 2]]
 );
 
 $form->addButtonCreate(get_lang('SetAsRequirementForSelected'), 'set_requirement');
 $form->addButtonSave(get_lang('Save'), 'save_resource');
 
-$tpl->assign('left_block', $formSequence->returnForm().$form->returnForm());
+$tpl->assign('create_sequence', $formSequence->returnForm());
+$tpl->assign('save_sequence', $saveForm->returnForm());
+$tpl->assign('left_block', $form->returnForm());
 $layout = $tpl->get_template('admin/resource_sequence.tpl');
 $tpl->display($layout);
 

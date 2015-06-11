@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Script showing information about a user (name, e-mail, courses and sessions)
  * @author Bart Mollet
  * @package chamilo.admin
  */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -29,7 +31,7 @@ $editUser = null;
 if (api_is_platform_admin()) {
     $login_as_icon =
         '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php'
-        .'?action=login_as&amp;user_id='.$user['user_id'].'&amp;'
+        .'?action=login_as&user_id='.$user['user_id'].'&'
         .'sec_token='.$_SESSION['sec_token'].'">'
         .Display::return_icon('login_as.png', get_lang('LoginAs'),
             array(), ICON_SIZE_MEDIUM).'</a>';
@@ -45,7 +47,8 @@ if (api_is_platform_admin()) {
 
     $exportLink = Display::url(
         Display::return_icon(
-            'export_csv.png', get_lang('ExportAsCSV'),'', ICON_SIZE_MEDIUM),
+            'export_csv.png', get_lang('ExportAsCSV'),'', ICON_SIZE_MEDIUM
+        ),
         api_get_self().'?user_id='.$user['user_id'].'&action=export'
     );
 }
@@ -106,6 +109,7 @@ $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_U
 $tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
 $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
+
 $user_id = $user['user_id'];
 $sessions = SessionManager::get_sessions_by_user($user_id, true);
 $personal_course_list = array();
@@ -155,11 +159,11 @@ if (count($sessions) > 0) {
             }
             $tools = '<a href="course_information.php?code='.$courseInfo['code'].'&id_session='.$id_session.'">'.
                 Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
-                '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'?id_session='.$id_session.'">'.
+                '<a href="'.$courseInfo['course_public_url'].'?id_session='.$id_session.'">'.
                 Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
             if ($my_course['status'] == STUDENT) {
-                $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$courseInfo['code'].'&user_id='.$user['user_id'].'">'.
+                $tools .= '<a href="user_information.php?action=unsubscribeSessionCourse&course_code='.$courseInfo['code'].'&user_id='.$user['user_id'].'&id_session='.$id_session.'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
 
@@ -179,7 +183,7 @@ if (count($sessions) > 0) {
 
             $row = array(
                 Display::url(
-                    $my_course['code'],
+                    $courseInfo['code'],
                     $courseInfo['course_public_url'].'?id_session='.$id_session
                 ),
                 $courseInfo['title'],
@@ -217,7 +221,7 @@ if (count($sessions) > 0) {
         );
 
         $sessionInformation .= Display::page_subheader(
-            '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session.'">'.
+            '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$id_session.'">'.
             $session_item['session_name'].'</a>',
             ' '.implode(' - ', $dates)
         );
@@ -270,9 +274,12 @@ if (Database::num_rows($res) > 0) {
         $courseCode = $courseInfo['code'];
         $courseToolInformation = null;
 
-        $tools = '<a href="course_information.php?code='.$courseCode.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
-            '<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
-            '<a href="course_edit.php?course_code='.$courseCode.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+        $tools = '<a href="course_information.php?code='.$courseCode.'">'.
+            Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
+            '<a href="'.$courseInfo['course_public_url'].'">'.
+            Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
+            '<a href="course_edit.php?course_code='.$courseCode.'">'.
+            Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
         if ($course->status == STUDENT) {
             $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$courseCode.'&user_id='.$user['user_id'].'">'.
                 Display::return_icon('delete.png', get_lang('Delete')).'</a>';
@@ -365,7 +372,7 @@ if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'unsubscribe':
             if (CourseManager::get_user_in_course_status($_GET['user_id'], $_GET['course_code']) == STUDENT) {
-                CourseManager::unsubscribe_user($_GET['user_id'], $_GET['course_code']);
+                CourseManager::unsubscribe_user($_GET['user_id'], $_GET['course_code'], $_GET['id_session']);
                 $message = Display::return_message(get_lang('UserUnsubscribed'));
             } else {
                 $message = Display::return_message(
@@ -373,6 +380,14 @@ if (isset($_GET['action'])) {
                     'error'
                 );
             }
+            break;
+        case 'unsubscribeSessionCourse':
+            SessionManager::removeUsersFromCourseSession(
+                array($_GET['user_id']),
+                $_GET['id_session'],
+                api_get_course_info($_GET['course_code'])
+            );
+            $message = Display::return_message(get_lang('UserUnsubscribed'));
             break;
         case 'export':
             Export :: arrayToCsv($csvContent, 'user_information_'.$user);
@@ -384,7 +399,8 @@ if (isset($_GET['action'])) {
 Display::display_header($tool_name);
 
 echo '<div class="actions">
-        <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_MEDIUM).'
+        <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.
+        Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_MEDIUM).'
         </a>
         '.$login_as_icon.'
         '.$editUser.'

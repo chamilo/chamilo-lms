@@ -166,13 +166,6 @@ class Course
     private $expirationDate;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="target_course_code", type="string", length=40, nullable=true, unique=false)
-     */
-    private $targetCourseCode;
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="subscribe", type="boolean", nullable=true, unique=false)
@@ -949,30 +942,6 @@ class Course
     public function getExpirationDate()
     {
         return $this->expirationDate;
-    }
-
-    /**
-     * Set targetCourseCode
-     *
-     * @param string $targetCourseCode
-     *
-     * @return Course
-     */
-    public function setTargetCourseCode($targetCourseCode)
-    {
-        $this->targetCourseCode = $targetCourseCode;
-
-        return $this;
-    }
-
-    /**
-     * Get targetCourseCode
-     *
-     * @return string
-     */
-    public function getTargetCourseCode()
-    {
-        return $this->targetCourseCode;
     }
 
     /**

@@ -19,6 +19,7 @@ class GradebookTable extends SortableTable
     private $evals_links;
     public $cats;
     private $dataForGraph;
+    public $exportToPdf;
 
     /**
      * Constructor

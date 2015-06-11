@@ -2,13 +2,13 @@
 /* For license terms, see /license.txt */
 /**
  * This page aims at requesting a password from a user to access a course
- * protected by password. If the password matches the course password, we 
+ * protected by password. If the password matches the course password, we
  * store the fact that user can access it during its session
  */
 /**
  * Initializing context
  */
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -26,7 +26,7 @@ if (empty($course_id)) {
 /**
  * Code
  */
-$course_info = CourseManager::get_course_information_by_id($course_id);
+$course_info = api_get_course_info_by_id($course_id);
 
 $tpl = new Template(null);
 

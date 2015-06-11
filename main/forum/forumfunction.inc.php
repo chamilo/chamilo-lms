@@ -1459,7 +1459,12 @@ function get_forums(
         $session_id = $sessionId;
     }
 
-    $condition_session = api_get_session_condition($session_id, true, false, 'item_properties.session_id');
+    $condition_session = api_get_session_condition(
+        $session_id,
+        true,
+        false,
+        'item_properties.session_id'
+    );
     $course_id = $course_info['real_id'];
 
     $forum_list = array();
@@ -1474,12 +1479,12 @@ function get_forums(
         $sql = "SELECT * FROM $table_forums forum
                 INNER JOIN ".$table_item_property." item_properties
                 ON (
-                    forum.forum_id=item_properties.ref AND
+                    forum.forum_id = item_properties.ref AND
                     forum.c_id = item_properties.c_id
                 )
                 WHERE
                     item_properties.visibility=1 AND
-                    item_properties.tool='".TOOL_FORUM."'
+                    item_properties.tool = '".TOOL_FORUM."'
                     $condition_session AND
                     forum.c_id = $course_id AND
                     item_properties.c_id = $course_id

@@ -65,27 +65,31 @@ function reports_template_CourseArticulate_getSQL() {
 
 	// SCORM Data
 	$scormData = array();
-    $course_list = CourseManager::get_real_course_list();
+    $course_list = CourseManager::get_courses_list();
 	foreach ($course_list as $code => $details) {
+		$courseId = $details['id'];
 		$list = Database::query('SELECT l.id as lid, l.name as lname, li.id as liid, li.title as lititle '.
 					' FROM '.Database::get_course_table(TABLE_LP_MAIN).' l, '.Database::get_course_table(TABLE_LP_ITEM).' li '.
-					' WHERE l.c_id = '.$details['real_id'].' AND li.c_id = '.$details['real_id'].' AND l.id = li.lp_id');
+					' WHERE l.c_id = '.$courseId.' AND li.c_id = '.$courseId.' AND l.id = li.lp_id');
 		while ($lpItem = Database::fetch_assoc($list)) {
-			$scormData[] = array('coursedb' => $details['db_name'],
+			$scormData[] = array(
+						//'coursedb' => $details['db_name'],
 						'lid' => $lpItem['lid'],
 						'liid' => $lpItem['liid'],
 						'target_view_count' => 1,
 						'target_indicator' => 'score',
 						'title' => $details['title'].'/'.$lpItem['lname'].'/'.$lpItem['lititle'].'/1/score',
 						'sql' => 'FIELD');
-			$scormData[] = array('coursedb' => $details['db_name'],
+			$scormData[] = array(
+						//'coursedb' => $details['db_name'],
 						'lid' => $lpItem['lid'],
 						'liid' => $lpItem['liid'],
 						'target_view_count' => 2,
 						'target_indicator' => 'score',
 						'title' => $details['title'].'/'.$lpItem['lname'].'/'.$lpItem['lititle'].'/2/score',
 						'sql' => 'FIELD');
-			$scormData[] = array('coursedb' => $details['db_name'],
+			$scormData[] = array(
+						//'coursedb' => $details['db_name'],
 						'lid' => $lpItem['lid'],
 						'liid' => $lpItem['liid'],
 						'target_view_count' => null,
@@ -95,15 +99,16 @@ function reports_template_CourseArticulate_getSQL() {
 		}
 	}
 
-	foreach($scormData as $v) {
-                if (!isset($v['sql']))
-                        $v['sql'] = 'FIELD';
-                $sqlField = str_replace('FIELD', $v['target_indicator'], $v['sql']);
-                $query = 'select '.$sqlField.' as "'.$v['title'].'" ';
-		$query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
-		$query .= 'left outer join '.Database::get_course_table(TABLE_LP_VIEW, $details['db_name']).' lv ';
+	foreach ($scormData as $v) {
+        if (!isset($v['sql'])) {
+            $v['sql'] = 'FIELD';
+        }
+        $sqlField = str_replace('FIELD', $v['target_indicator'], $v['sql']);
+        $query = 'select '.$sqlField.' as "'.$v['title'].'" ';
+        $query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
+		$query .= 'left outer join '.Database::get_course_table(TABLE_LP_VIEW).' lv ';
 		$query .= ' on u.user_id = lv.user_id and lv.lp_id = '.$v['lid'];
-		$query .= ' left outer join '.Database::get_course_table(TABLE_LP_ITEM_VIEW, $details['db_name']).' liv ';
+		$query .= ' left outer join '.Database::get_course_table(TABLE_LP_ITEM_VIEW).' liv ';
 		$query .= ' on lv.id = liv.lp_view_id ';
 		if ($v['target_view_count'])
 			$query .= ' and liv.view_count = '.$v['target_view_count'];

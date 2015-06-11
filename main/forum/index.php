@@ -246,6 +246,7 @@ if (is_array($forumCategories)) {
     foreach ($forumCategories as $forumCategory) {
         // The forums in this category.
         $forumsInCategory = get_forums_in_category($forumCategory['cat_id']);
+
         // Validation when belongs to a session.
         $session_img = api_get_session_image(
             $forumCategory['session_id'],
@@ -277,12 +278,12 @@ if (is_array($forumCategories)) {
 
         $descriptionCategory = $forumCategory['cat_comment'];
 
-        if (!empty($idCategory)){
+        if (!empty($idCategory)) {
             if (
                 api_is_allowed_to_edit(false, true) &&
                 !($forumCategory['session_id'] == 0 &&
                 intval($sessionId) != 0)
-            ){
+            ) {
                 $iconsEdit .= '<a href="' . api_get_self() . '?' . api_get_cidreq()
                     . '&action=edit&content=forumcategory&id=' . intval($idCategory)
                     . '">' . Display::return_icon(
@@ -365,7 +366,6 @@ if (is_array($forumCategories)) {
             echo '</tr>'; */
 
             // Step 5: We display all the forums in this category.
-
 
             foreach ($forum_list as $forum) {
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we

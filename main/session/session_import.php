@@ -252,6 +252,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     $session_name .= $suffix;
                                 }
                             }
+
                             // Creating the session.
                             $sql_session = "INSERT IGNORE INTO $tbl_session SET
                                     name = '".Database::escape_string($session_name)."',

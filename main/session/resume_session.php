@@ -12,6 +12,9 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
+// setting breadcrumbs
+$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('Sessions'));
+
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -376,7 +379,7 @@ if (!empty($requirementAndDependencies['dependencies'])) {
     $dependencies .= implode(',', array_column($requirementAndDependencies['dependencies'], 'name'));
 }
 
-$tpl = new Template();
+$tpl = new Template(get_lang('Session'));
 $tpl->assign('session_header', $sessionHeader);
 $tpl->assign('title', $sessionTitle);
 $tpl->assign('general_coach', $generalCoach);

@@ -224,7 +224,7 @@ class TestFileUpload extends UnitTestCase {
 			$upload_path='';
 			$user_id=1;
 			$to_group_id=0;
-			$to_user_id=NULL;			
+			$to_user_id=NULL;
 			$unzip=0;
 			$what_if_file_exists='';
 			$output=true;

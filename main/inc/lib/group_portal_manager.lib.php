@@ -975,6 +975,7 @@ class GroupPortalManager
      * with dirname() or the file with basename(). This also works for the
      * functions dealing with the user's productions, as they are located in
      * the same directory.
+     * @internal Don't delete this function
      * @param	integer	$id
      * @param	string	$type Type of path to return (can be 'system', 'web')
      * @param	bool	$preview Whether we want to have the directory name returned 'as if' there was a file or not

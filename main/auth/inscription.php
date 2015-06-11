@@ -221,9 +221,6 @@ if ($user_already_registered_show_terms == false) {
             $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
-    // EXTRA FIELDS
-    /*$extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-    UserManager::set_extra_fields_in_form($form, $extra_data);*/
 
     // EXTRA FIELDS
     $extraField = new ExtraField('user');

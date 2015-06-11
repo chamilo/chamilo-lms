@@ -20,10 +20,12 @@ $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
 
 if ($action == 'delete') {
 	SessionManager::delete($idChecked);
+    Display::addFlash(Display::return_message(get_lang('Deleted')));
 	header('Location: session_list.php');
 	exit();
 } elseif ($action == 'copy') {
 	SessionManager::copy($idChecked);
+    Display::addFlash(Display::return_message(get_lang('ItemCopied')));
     header('Location: session_list.php');
     exit();
 }

@@ -197,10 +197,10 @@ class FlatViewDataGenerator
 
                     $list = [];
                     $list['items'] = $finalList;
-                    $list['header'] = $mainHeader;
+                    $list['header'] = '<center>'.$mainHeader.'</center>';
                     $headers[]= $list;
                 } else {
-                    $headers[] = $mainHeader;
+                    $headers[] = '<center>'.$mainHeader.'</center>';
                 }
             }
         } else {
@@ -231,7 +231,7 @@ class FlatViewDataGenerator
             }
         }
 
-        $headers[] = api_strtoupper(get_lang('GradebookQualificationTotal'));
+        $headers[] = '<center>'.api_strtoupper(get_lang('GradebookQualificationTotal')).'</center>';
 
         return $headers;
     }
@@ -499,7 +499,11 @@ class FlatViewDataGenerator
                         if (!$show_all) {
                             if (api_get_configuration_value('gradebook_detailed_admin_view')) {
                                 $finalList = array_merge($linkScoreList, $evalScoreList);
-                                $average = array_sum($finalList) / count($finalList);
+                                if (empty($finalList)) {
+                                    $average = 0;
+                                } else {
+                                    $average = array_sum($finalList) / count($finalList);
+                                }
                                 $finalList[] = round($average, 2);
                                 foreach ($finalList as $finalValue) {
                                     $row[] = '<center>'.$finalValue.'</center>';

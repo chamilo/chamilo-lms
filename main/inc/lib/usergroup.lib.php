@@ -2233,7 +2233,7 @@ class UserGroup extends Model
         }
 
         foreach ($groupsId as $groupId) {
-            $groupUsers = GroupPortalManager::get_users_by_group($groupId);
+            $groupUsers = self::get_users_by_group($groupId);
 
             if (empty($groupUsers)) {
                 continue;

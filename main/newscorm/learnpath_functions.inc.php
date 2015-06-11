@@ -1812,43 +1812,6 @@ function deldir($dir) {
 }
 
 /**
- * Export SCORM content into a zip file
- *
- * Basically, all this function does is put the scorm directory back into a zip file (like the one
- * that was most probably used to import the course at first)
- * @deprecated this function is only called in the newscorm/scorm_admin.php which is deprecated
- *
- * @param	string	Name of the SCORM path (or the directory under which it resides)
- * @param	array		Not used right now. Should replace the use of global $_course
- * @return	void
- * @author	imandak80
- */
-function exportSCORM($scormname, $course) {
-    global $_course;
-
-    // Initialize.
-    $tmpname = api_get_path(SYS_COURSE_PATH).$_course['path'].'/scorm';
-    $zipfoldername = $tmpname.$scormname;
-    $zipfilename = $zipfoldername.'.zip';
-
-    // Create zipfile of given directory.
-    include_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-    $zip_folder = new PclZip($zipfilename);
-    $list = 1;
-    //$list = $zip_folder->create($zipfoldername.'/',PCLZIP_OPT_REMOVE_PATH,$tmpname.$scormname."/"); // whitout folder
-    $list = $zip_folder->create($zipfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $tmpname);
-    if ($list == 0) {
-        //echo "Error  : ".$zip_folder->errorInfo(true);
-    }
-
-    // Send to client.
-    DocumentManager :: file_send_for_download($zipfilename, false, basename($scormname.'.zip'));
-
-    // Clear.
-    my_delete($zipfilename);
-}
-
-/**
  * This function returns an xml tag
  * $data behaves as the content in case of full tags
  * $data is an array of attributes in case of returning an opening tag

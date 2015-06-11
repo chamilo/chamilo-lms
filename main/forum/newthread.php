@@ -137,7 +137,8 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
     $_SESSION['formelements']	= $_POST;
     $_SESSION['origin']			= $_SERVER['REQUEST_URI'];
     $_SESSION['breadcrumbs']	= $interbreadcrumb;
-    Header::location('../resourcelinker/resourcelinker.php');
+    header('Location: ../resourcelinker/resourcelinker.php');
+    exit;
 }
 
 /* Header */

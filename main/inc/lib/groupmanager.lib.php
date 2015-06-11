@@ -1783,23 +1783,23 @@ class GroupManager
     }
 
     /**
-     *    Get a combined list of all users of the real course $course_code
-     *        and all users in virtual courses linked to this course $course_code
-     *    Filter user list: remove duplicate users; plus
-     *        remove users that
-     *        - are already in the current group $group_id;
-     *        - do not have student status in these courses;
-     *        - are not appointed as tutor (group assistent) for this group;
-     *        - have already reached their maximum # of groups in this course.
+     * Get a combined list of all users of the real course $course_code
+     *     and all users in virtual courses linked to this course $course_code
+     * Filter user list: remove duplicate users; plus
+     *     remove users that
+     *     - are already in the current group $group_id;
+     *     - do not have student status in these courses;
+     *     - are not appointed as tutor (group assistent) for this group;
+     *     - have already reached their maximum # of groups in this course.
      *
-     *    Originally to get the correct list of users a big SQL statement was used,
-     *    but this has become more complicated now there is not just one real course but many virtual courses.
-     *    Still, that could have worked as well.
+     * Originally to get the correct list of users a big SQL statement was used,
+     * but this has become more complicated now there is not just one real course but many virtual courses.
+     * Still, that could have worked as well.
      *
-     *    @version 1.1.3
-     *    @author Roan Embrechts
+     * @version 1.1.3
+     * @author Roan Embrechts
      */
-    public static function get_complete_list_of_users_that_can_be_added_to_group ($course_code, $group_id)
+    public static function get_complete_list_of_users_that_can_be_added_to_group($course_code, $group_id)
     {
         $_course = api_get_course_info();
         $_user = api_get_user_info();
@@ -1809,14 +1809,11 @@ class GroupManager
         $real_course_code = $_course['sysCode'];
         $real_course_info = api_get_course_info($real_course_code);
         $real_course_user_list = CourseManager :: get_user_list_from_course_code($real_course_code);
-        //get list of all virtual courses
-        $user_subscribed_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($_user['user_id'], $real_course_code);
-        //add real course to the list
-        $user_subscribed_course_list[] = $real_course_info;
-        if (!is_array($user_subscribed_course_list)) {
-            return;
-        }
-        //for all courses...
+
+        // add real course to the list
+        $user_subscribed_course_list = array($real_course_info);
+
+        // for all courses...
         foreach ($user_subscribed_course_list as $this_course) {
             $this_course_code = $this_course['code'];
             $course_user_list = CourseManager :: get_user_list_from_course_code($this_course_code);

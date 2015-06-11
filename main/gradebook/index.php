@@ -785,11 +785,13 @@ if ($category != '0') {
     }
 }
 
-echo Display::url(
-    get_lang('ReportToPdf'),
-    api_get_self()."?".api_get_self()."&action=export_table",
-    ['class' => 'btn btn-default']
-);
+if (!api_is_allowed_to_edit(null, true)) {
+    echo Display::url(
+        get_lang('ReportToPdf'),
+        api_get_self()."?".api_get_self()."&action=export_table",
+        ['class' => 'btn btn-default']
+    );
+}
 
 echo '</div>';
 

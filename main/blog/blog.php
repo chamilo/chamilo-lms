@@ -285,9 +285,8 @@ Display::display_introduction_section(TOOL_BLOGS);
 <div class="sectiontitle"><?php echo Blog::get_blog_title($blog_id); ?></div>
 <div class="sectioncomment"><?php echo Blog::get_blog_subtitle($blog_id); ?></div>
 
-<table width="100%">
-<tr>
-	<td width="10%" style="float;left;" class="blog_left" valign="top">
+<div class="row">
+	<div class="col-md-3">
 		<?php
 
 $month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
@@ -323,7 +322,8 @@ Blog::display_minimonthcalendar($month, $year, $blog_id);
 			</tr>
 		</table>
 	</td>
-	<td valign="top" class="blog_right">
+	</div>
+	<div class="col-md-9">
 		<?php
 
 if (isset($error)) {
@@ -469,9 +469,8 @@ switch ($action) {
 		}
 }
 ?>
-	</td>
-</tr>
-</table>
+</div>
+</div>
 <?php
 // Display the footer
 Display::display_footer();

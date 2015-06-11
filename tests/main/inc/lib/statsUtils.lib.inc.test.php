@@ -7,34 +7,6 @@ class TestStatsUtils extends UnitTestCase
         $this->UnitTestCase('Stats utilities library - main/inc/lib/statsUtil.lib.inc.test.php');
     }
 
-	function testbuildTab2col() {
-		$array_of_results=array();
-		$title1='';
-		$title2='';
-		ob_start();
-		$res=StatsUtils::buildTab2col($array_of_results, $title1, $title2);
-		$this->assertTrue(is_null($res));
-		ob_end_clean();
-		//var_dump($res);
-	}
-	function testbuildTab2ColNoTitle() {
-		$array_of_results=array();
-		ob_start();
-		$res=StatsUtils::buildTab2ColNoTitle($array_of_results);
-		ob_end_clean();
-		$this->assertTrue(is_array($array_of_results));
-		//var_dump($array_of_results);
-	}
-
-	function testbuildTabDefcon() {
-		$array_of_results=array();
-		ob_start();
-		$res=StatsUtils::buildTabDefcon($array_of_results);
-		$this->assertTrue(is_array($array_of_results));
-		ob_end_clean();
-		//var_dump($array_of_results);
-	}
-
 	function testdaysTab() {
 		$sql='';
 		ob_start();

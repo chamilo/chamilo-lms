@@ -2083,6 +2083,12 @@ class SessionManager
 
         // Pass through the courses list we want to add to the session
         foreach ($courseList as $courseId) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+
+            // If course doesn't exists continue!
+            if (empty($courseInfo)) {
+                continue;
+            }
 
             $exists = false;
             // check if the course we want to add is already subscribed
@@ -3033,7 +3039,8 @@ class SessionManager
         }
 
         // select the courses
-        $sql = "SELECT *, c.id as real_id FROM $tbl_course c
+        $sql = "SELECT *, c.id, c.id as real_id
+                FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.id = src.c_id
 		        WHERE src.session_id = '$session_id' ";
@@ -3537,8 +3544,29 @@ class SessionManager
                                 $flat_list = $list->get_flat_list();
                                 if (!empty($flat_list)) {
                                     foreach ($flat_list as $lp_id => $data) {
-                                        api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0, 0, 0, 0, $sid);
-                                        api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0, 0, 0, 0);
+                                        api_item_property_update(
+                                            $course_info,
+                                            TOOL_LEARNPATH,
+                                            $lp_id,
+                                            'invisible',
+                                            api_get_user_id(),
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            $sid
+                                        );
+                                        api_item_property_update(
+                                            $course_info,
+                                            TOOL_LEARNPATH,
+                                            $lp_id,
+                                            'invisible',
+                                            api_get_user_id(),
+                                            0,
+                                            0,
+                                            0,
+                                            0
+                                        );
                                     }
                                 }
                                 $quiz_table = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -6924,7 +6952,7 @@ class SessionManager
 
                 // Magic filter
                 if (isset($formatted_sessions[$session_id])) {
-                    $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);
+                    $formatted_sessions[$session_id] = self::compareArraysToMerge($formatted_sessions[$session_id], $session);
                 } else {
                     $formatted_sessions[$session_id] = $session;
                 }
@@ -6932,5 +6960,26 @@ class SessionManager
         }
 
         return $formatted_sessions;
+    }
+
+    /**
+     * Compare two arrays
+     * @param array $array1
+     * @param array $array2
+     */
+    static function compareArraysToMerge($array1, $array2)
+    {
+        if (empty($array2)) {
+            return $array1;
+        }
+        foreach ($array1 as $key => $item) {
+            if (!isset($array1[$key])) {
+                //My string is empty try the other one
+                if (isset($array2[$key]) && !empty($array2[$key])) {
+                    $array1[$key] = $array2[$key];
+                }
+            }
+        }
+        return $array1;
     }
 }

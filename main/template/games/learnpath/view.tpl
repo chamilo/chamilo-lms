@@ -132,6 +132,7 @@
                 <div id="forum-container">
                      <div class="panel-body"></div>
                 </div>
+            </div>
             {# end right Zone #}
 
             {{ navigation_bar_bottom }}

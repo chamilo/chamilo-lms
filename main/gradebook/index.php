@@ -778,6 +778,9 @@ if ($category != '0') {
                     ['class' => 'btn btn-default']
                 );
             }
+
+            $currentScore = Category::getCurrentScore($stud_id, $category_id, $course_code, $session_id, true);
+            Category::registerCurrentScore($currentScore, $stud_id, $category_id);
         }
     }
 }

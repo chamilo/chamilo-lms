@@ -44,7 +44,16 @@ switch ($action) {
                 if ($_REQUEST['type'] == TOOL_QUIZ) {
                     $title = Exercise::format_title_variable($title);
                 }
-                echo $_SESSION['oLP']->add_item($_REQUEST['parent_id'], $_REQUEST['previous_id'], $_REQUEST['type'], $_REQUEST['id'], $title, null);
+                $itemId =  $_SESSION['oLP']->add_item(
+                    $_REQUEST['parent_id'],
+                    $_REQUEST['previous_id'],
+                    $_REQUEST['type'],
+                    $_REQUEST['id'],
+                    $title,
+                    null
+                );
+
+                echo $itemId;
             }
         }
         break;
@@ -153,6 +162,58 @@ switch ($action) {
             }
         }
 
+        break;
+    case 'get_forum_thread':
+        $lpId = isset($_GET['lp']) ? intval($_GET['lp']) : 0;
+        $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
+
+        if (empty($lpId) || empty($lpItemId)) {
+            echo json_encode([
+                'error' => true,
+            ]);
+            break;
+        }
+
+        $learningPath = new learnpath(
+            api_get_course_id(),
+            $lpId,
+            api_get_user_id()
+        );
+
+        $forum = $learningPath->getForum();
+
+
+        if (empty($forum)) {
+            echo json_encode([
+                'error' => true,
+            ]);
+            break;
+        }
+
+        $lpItem = $learningPath->getItem($lpItemId);
+
+        if (empty($lpItem)) {
+            echo json_encode([
+                'error' => true,
+            ]);
+            break;
+        }
+
+        $forumThread = $lpItem->getForumThread($course_id, api_get_session_id());
+
+
+        if (empty($forumThread)) {
+            echo json_encode([
+                'error' => true,
+            ]);
+            break;
+        }
+
+        echo json_encode([
+            'error' => false,
+            'forumId' => intval($forum['forum_id']),
+            'threadId' => intval($forumThread['thread_id'])
+        ]);
         break;
     default:
         echo '';

@@ -384,6 +384,7 @@ class SessionManager
     public static function get_sessions_admin($options = array(), $get_count = false)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
@@ -445,6 +446,7 @@ class SessionManager
         $query .= $limit;
         $result = Database::query($query);
 
+
         $formatted_sessions = array();
 
         if (Database::num_rows($result)) {
@@ -505,6 +507,7 @@ class SessionManager
                 $formatted_sessions[$session_id] = $session;
             }
         }
+
         return $formatted_sessions;
     }
 
@@ -1327,9 +1330,14 @@ class SessionManager
     ) {
         $name = trim(stripslashes($name));
         $id_coach = intval($id_coach);
+
+
         $id_session_category = intval($id_session_category);
         $id_visibility = intval($id_visibility);
+
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        
 
         if (empty($name)) {
             $msg = get_lang('SessionNameIsRequired');
@@ -1372,6 +1380,7 @@ class SessionManager
                 if (!empty($sessionAdminId)) {
                     $values['session_admin_id'] = $sessionAdminId;
                 }
+                $values['duration'] = $duration;
 
                 if (!empty($startDate)) {
                     $values['access_start_date'] = $startDate;
@@ -1399,6 +1408,7 @@ class SessionManager
                 if (!empty($id_session_category)) {
                     $values['session_category_id'] = $id_session_category;
                 }
+                
 
                 Database::update($tbl_session, $values, array(
                     'id = ?' => $id
@@ -1681,8 +1691,8 @@ class SessionManager
         foreach ($user_list as $enreg_user) {
             $enreg_user = Database::escape_string($enreg_user);
             $nbr_users++;
-            $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id)
-                    VALUES (0, $id_session, $enreg_user)";
+            $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
+                    VALUES (0, $id_session, $enreg_user, '" . api_get_utc_datetime() . "')";
             Database::query($sql);
         }
 
@@ -1906,8 +1916,8 @@ class SessionManager
 
             if (empty($count)) {
                 // If user is not registered to a session then add it.
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id)
-                        VALUES ($session_id, $enreg_user)";
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, registered_at)
+                        VALUES ($session_id, $enreg_user, '" . api_get_utc_datetime() . "')";
                 Database::query($sql);
 
                 $sql = "UPDATE $tbl_session SET nbr_users = nbr_users + 1
@@ -2763,8 +2773,13 @@ class SessionManager
 
             foreach ($sessions_list as $session_id) {
                 $session_id = intval($session_id);
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type)
-				        VALUES ($session_id, $userId, '" . SESSION_RELATION_TYPE_RRHH . "')";
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type, registered_at)
+                        VALUES (
+                            $session_id,
+                            $userId,
+                            '" . SESSION_RELATION_TYPE_RRHH . "',
+                            '" . api_get_utc_datetime() . "'
+                        )";
                 Database::query($sql);
                 $affected_rows++;
             }
@@ -3057,7 +3072,7 @@ class SessionManager
                 return intval($count[0]);
             }
 
-            while ($row = Database::fetch_array($result,'ASSOC'))	{
+            while ($row = Database::fetch_assoc($result)) {
                 $courses[$row['real_id']] = $row;
             }
         }
@@ -3467,6 +3482,7 @@ class SessionManager
     ) {
         $id = intval($id);
         $s = self::fetch($id);
+ 
         $sid = self::create_session(
             $s['name'] . ' ' . get_lang('CopyLabelSuffix'),
             $s['access_start_date'],
@@ -3478,6 +3494,7 @@ class SessionManager
             (int)$s['id_coach'],
             $s['session_category_id'],
             (int)$s['visibility'],
+          
             true
         );
 
@@ -4172,7 +4189,8 @@ class SessionManager
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET
                                     user_id = '$user_id',
-                                    session_id = '$session_id'";
+                                    session_id = '$session_id',
+                                    registered_at = '" . api_get_utc_datetime() . "'";
                             Database::query($sql);
                             if ($debug) {
                                 $logger->addInfo("Sessions - Adding User #$user_id ($user) to session #$session_id");
@@ -5472,6 +5490,7 @@ class SessionManager
         }
 
         return false;
+  
     }
 
     /**
@@ -5838,8 +5857,10 @@ class SessionManager
         if ($sessionCategoryId > 0) {
             // Get table names
             $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+
             $sessionFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
             $sessionFieldValueTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
             $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $userTable = Database::get_main_table(TABLE_MAIN_USER);
             $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);

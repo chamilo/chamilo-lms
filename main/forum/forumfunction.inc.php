@@ -673,27 +673,32 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             if (empty($_FILES['picture']['name'])) {
                 $sql_image = " ";
             } else {
-                $sql_image = " forum_image='".Database::escape_string($new_file_name)."', ";
+                $sql_image = $new_file_name;
                 delete_forum_image($values['forum_id']);
             }
         }
 
         // Storing after edition.
-        $sql = "UPDATE ".$table_forums." SET
-                forum_title='".$clean_title."',
-                ".$sql_image."
-                forum_comment='".Database::escape_string(stripslashes($values['forum_comment']))."',
-                forum_category='".Database::escape_string(stripslashes($values['forum_category']))."',
-                allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null)."',
-                allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
-                approval_direct_post='".Database::escape_string(isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null)."',
-                allow_attachments='".Database::escape_string(isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null)."',
-                allow_new_threads='".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
-                forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
-                default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
-                forum_of_group='".Database::escape_string($values['group_forum'])."'
-            WHERE c_id = $course_id AND forum_id = ".intval($values['forum_id'])."";
-        Database::query($sql);
+        Database::update(
+            $table_forums,
+            [
+                'forum_title' => $clean_title,
+                'forum_image' => $new_file_name,
+                'forum_comment' => stripslashes($values['forum_comment']),
+                'forum_category' => stripslashes($values['forum_category']),
+                'allow_anonymous' => isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null,
+                'allow_edit' => $values['students_can_edit_group']['students_can_edit'],
+                'approval_direct_post' => isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null,
+                'allow_attachments' => isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null,
+                'allow_new_threads' => $values['allow_new_threads_group']['allow_new_threads'],
+                'forum_group_public_private' => $values['public_private_group_forum_group']['public_private_group_forum'],
+                'default_view' => $values['default_view_type_group']['default_view_type'],
+                'forum_of_group' => $values['group_forum']
+            ],
+            [
+                'c_id = ? AND forum_id = ?' => [$course_id, intval($values['forum_id'])]
+            ]
+        );
 
         api_item_property_update(
             $courseInfo,
@@ -709,28 +714,30 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         $sql_image = '';
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
-            $sql_image = "'".$new_file_name."', ";
+            $sql_image = $new_file_name;
         }
 
-        $sql = "INSERT INTO ".$table_forums." (c_id, forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
-            VALUES (
-                ".$course_id.",
-                '".$clean_title."',
-                ".$sql_image."
-                '".Database::escape_string(isset($values['forum_comment']) ? $values['forum_comment'] : null)."',
-                '".Database::escape_string(isset($values['forum_category']) ? $values['forum_category'] : null)."',
-                '".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null)."',
-                '".Database::escape_string(isset($values['students_can_edit_group']['students_can_edit']) ? $values['students_can_edit_group']['students_can_edit'] : null)."',
-                '".Database::escape_string(isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null)."',
-                '".Database::escape_string(isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null)."',
-                '".Database::escape_string(isset($values['allow_new_threads_group']['allow_new_threads']) ? $values['allow_new_threads_group']['allow_new_threads'] : null)."',
-                '".Database::escape_string(isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null)."',
-                '".Database::escape_string(isset($values['group_forum']) ? $values['group_forum'] : null)."',
-                '".Database::escape_string(isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null)."',
-                '".Database::escape_string(isset($new_max) ? $new_max : null)."',
-                ".intval($session_id).")";
-        Database::query($sql);
-        $last_id = Database::insert_id();
+        $last_id = Database::insert(
+            $table_forums,
+            [
+                'c_id' => $course_id,
+                'forum_title' => $clean_title,
+                'forum_image' => $sql_image,
+                'forum_comment' => isset($values['forum_comment']) ? $values['forum_comment'] : null,
+                'forum_category' => isset($values['forum_category']) ? $values['forum_category'] : null,
+                'allow_anonymous' => isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null,
+                'allow_edit' => isset($values['students_can_edit_group']['students_can_edit']) ? $values['students_can_edit_group']['students_can_edit'] : null,
+                'approval_direct_post' => isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null,
+                'allow_attachments' => isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null,
+                'allow_new_threads' => isset($values['allow_new_threads_group']['allow_new_threads']) ? $values['allow_new_threads_group']['allow_new_threads'] : null,
+                'default_view' => isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
+                'forum_of_group' => isset($values['group_forum']) ? $values['group_forum'] : null,
+                'forum_group_public_private' => isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
+                'forum_order' => isset($new_max) ? $new_max : null,
+                'session_id' => $session_id,
+                'lp_id' => isset($values['lp_id']) ? $values['lp_id'] : 0
+            ]
+        );
         if ($last_id > 0) {
 
             $sql = "UPDATE $table_forums SET forum_id = $last_id
@@ -2335,7 +2342,8 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 'thread_qualify_max' => $values['numeric_calification'],
                 'thread_weight' => $values['weight_calification'],
                 'thread_peer_qualify' => $values['thread_peer_qualify'],
-                'session_id' => api_get_session_id()
+                'session_id' => api_get_session_id(),
+                'lp_item_id' => isset($values['lp_item_id']) ? intval($values['lp_item_id']) : 0
             ]
         );
 
@@ -5576,4 +5584,53 @@ function getAttachmentIdsByPostId($postId, $courseId = null) {
         }
     }
     return $array;
+}
+
+/**
+ * Check if the forum category exists looking for its title
+ * @param string $title The forum category title
+ * @param int $courseId The course ID
+ * @param int $sessionId Optional. The session ID
+ * @return boolean
+ */
+function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
+{
+    $sessionId = intval($sessionId);
+
+    $forumCategoryTable = Database::get_course_table(TABLE_FORUM_CATEGORY);
+    $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+    $fakeFrom = "$forumCategoryTable fc
+        INNER JOIN $itemProperty ip ";
+
+    if ($sessionId === 0) {
+        $fakeFrom .= "ON (
+                fc.cat_id = ip.ref AND fc.c_id = ip.c_id AND (fc.session_id = ip.session_id OR ip.session_id IS NULL)
+            ) ";
+    } else {
+        $fakeFrom .= "ON (
+                fc.cat_id = ip.ref AND fc.c_id = ip.c_id AND fc.session_id = ip.session_id
+            ) ";
+    }
+
+    $resultData = Database::select(
+        'fc.*',
+        $fakeFrom,
+        [
+            'where' => [
+                'ip.visibility != ? AND ' => 2,
+                'ip.tool = ? AND ' => TOOL_FORUM_CATEGORY,
+                'fc.session_id = ? AND ' => $sessionId,
+                'fc.cat_title = ? AND ' => $title,
+                'fc.c_id = ?' => intval($courseId)
+            ]
+        ],
+        'first'
+    );
+
+    if (empty($resultData)) {
+        return false;
+    }
+
+    return $resultData;
 }

@@ -1,0 +1,126 @@
+/* items scorm*/
+.scorm_item_normal{
+  padding-left: 15px;
+}
+.scorm_item_normal.scorm_completed {
+  background:url("images/scorm_completed.png") no-repeat left center;
+}
+.scorm_item_normal.scorm_failed{
+  background:url("images/scorm_failed.png") no-repeat left center;
+}
+.scorm_item_normal.scorm_not_attempted{
+  background:url("images/scorm_not_attempted.png") no-repeat left center;	
+}
+.scorm_item_normal.scorm_highlight{
+  background:url("images/scorm_current.png") no-repeat left center !important;
+  color: #009AB8;
+}
+.scorm_item_normal.scorm_highlight a{
+  color: #009AB8 !important;
+}
+.ranking-scorm .fa-star{
+  color: #E4C200;
+  font-size: 20px;
+}
+.ranking-scorm .fa-star.plomo{
+  color: #C2C2C2;
+  font-size: 20px;
+}
+#learning_path_left_zone #scorm-info{
+  margin-bottom: 10px;
+}
+#learning_path_left_zone .panel-body{
+  background-color:#EFEFEF ;
+
+}
+#learning_path_left_zone .panel-collapse .panel-body{
+  background-color:#ffffff ;
+  padding: 5px;
+}
+#learning_path_left_zone .progress-bar{
+  background-color: #35A8C9;
+}
+#learning_path_left_zone .progress{
+  background-color: #E73858;
+  margin-bottom: 10px;
+}
+#learning_path_left_zone #progress_bar{
+  padding-top: 10px;
+
+}
+.text-points{
+  font-size: 14px;
+  color: #35A8C9;
+  text-align: right;
+}
+.scorm-list .panel-default{
+  border: none;
+}
+.scorm-list .panel-default > .panel-heading{
+  background-color: #ffffff;
+  padding: 0;
+}
+.scorm-list .panel-default .panel-title{
+  text-align: left;
+  font-size: 14px;
+}
+.scorm-list .panel-default .panel-title a{
+  background:url("images/arrow-right.png") no-repeat 95% center;
+  color:#E33757;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 25px;
+  text-decoration: none;
+  display: block;
+}
+.scorm-list .panel-default .panel-title a:hover{
+  color:#E33757;
+  text-decoration: none;
+}
+.scorm-items-accordion{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.scorm-items-accordion .scorm_item_normal{
+  border: none;
+}
+.scorm-items-accordion a{
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #666;
+}
+.scorm-items-accordion a:hover{
+  text-decoration: none;
+}
+
+.scorm-list .panel-default .panel-title a.collapsed{
+  background:url("images/arrow-buttom.png") no-repeat 95% center !important;
+}
+@media (min-width: 1024px) {
+  .sidebar-scorm{
+    width: 25.66666667%;
+  }
+  .content-scorm{
+    width: 76.33333333%;
+  }
+  .total{
+    width: 100%;
+  }
+  #learning_path_right_zone{
+    width: 74%;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #learning_path_right_zone.total{
+    width: 100%;
+    visibility: visible;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}

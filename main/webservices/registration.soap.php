@@ -4823,8 +4823,8 @@ function WSSuscribeUsersToSession($params)
         foreach ($usersList as $enreg_user) {
             $enreg_user = Database::escape_string($enreg_user);
             $nbr_users++;
-            $sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id)
-                    VALUES ('$sessionId','$enreg_user')";
+            $sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id, registered_at)
+                    VALUES ('$sessionId','$enreg_user', '" . api_get_utc_datetime() . "')";
             Database::query($sql);
         }
 

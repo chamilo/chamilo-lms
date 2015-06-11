@@ -1,3 +1,7 @@
+<div class="top-disqus">
+    {{ button_reply_to_thread }}
+</div>
+
 <div class="forum-disqus">
     {% for post in posts %}
         <div class="post-disqus">
@@ -24,16 +28,14 @@
                             {{ post.post_text }}
                         </div>
                         <div class="tools-disqus">
-                            {% if _u.user_id or (forum.allow_anonymous == 1 and not _u.user_id) %}
-                                {% if not is_anonymous and is_allowed_to_session_edit %}
-                                    <a href="reply.php?{{ _p.web_cid_query ~ '&' ~ {'forum': forum.forum_id, 'thread': thread_id, 'post': post.post_id, 'action': 'replymessage'}|url_encode }}" class="btn btn-primary btn-xs reply-disqus">
-                                        <i class="fa fa-reply"></i> {{ "Reply"|get_lang }}
-                                    </a>
+                            {% if allow_reply %}
+                                <a href="reply.php?{{ _p.web_cid_query ~ '&' ~ {'forum': forum.forum_id, 'thread': thread_id, 'post': post.post_id, 'action': 'replymessage'}|url_encode }}" class="btn btn-primary btn-xs reply-disqus">
+                                    <i class="fa fa-reply"></i> {{ "Reply"|get_lang }}
+                                </a>
 
-                                    <a href="reply.php?{{ _p.web_cid_query ~ '&' ~ {'forum': forum.forum_id, 'thread': thread_id, 'post': post.post_id, 'action': 'quote'}|url_encode }}" class="btn btn-success btn-xs quote-disqus">
-                                        <i class="fa fa-quote-left"></i> {{ "Quote"|get_lang }}
-                                    </a>
-                                {% endif %}
+                                <a href="reply.php?{{ _p.web_cid_query ~ '&' ~ {'forum': forum.forum_id, 'thread': thread_id, 'post': post.post_id, 'action': 'quote'}|url_encode }}" class="btn btn-success btn-xs quote-disqus">
+                                    <i class="fa fa-quote-left"></i> {{ "Quote"|get_lang }}
+                                </a>
                             {% endif %}
 
                             {% if is_allowed_to_session_edit %}

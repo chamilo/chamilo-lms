@@ -156,6 +156,9 @@ if ($my_action == 'move' && isset($_GET['post'])) {
 
 /* Display the action messages */
 
+$buttonReplyToThread = null;
+$allowReply = false;
+
 $my_message = isset($message) ? $message : '';
 if ($my_message) {
     Display::display_confirmation_message(get_lang($my_message));
@@ -179,7 +182,9 @@ if ($my_message != 'PostDeletedSpecial') {
             if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
                 // reply link
                 if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                    $buttonReply = Display::toolbarButton(
+                    $allowReply = true;
+
+                    $buttonReplyToThread = Display::toolbarButton(
                         get_lang('ReplyToThread'),
                         "{$forumUrl}reply.php?" . api_get_cidreq() . '&' . http_build_query([
                             'forum' => Security::remove_XSS($_GET['forum']),
@@ -204,21 +209,13 @@ if ($my_message != 'PostDeletedSpecial') {
                     )
                 ) {
                     if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
-                        $buttonReply = '&nbsp;&nbsp;';
+                        $buttonReplyToThread = '&nbsp;&nbsp;';
                     } else {
-                        $buttonReply = get_lang('ForumLocked');
+                        $buttonReplyToThread = get_lang('ForumLocked');
                     }
                 }
             }
         }
-        $html = '';
-        $html .= '<div class="top-disqus">';
-
-        $html .= $buttonReply;
-
-        $html .= '</div>';
-        echo $html;
-
     }else{
         echo '<div class="actions">';
         echo '<span style="float:right;">'.search_link().'</span>';
@@ -282,7 +279,9 @@ if ($my_message != 'PostDeletedSpecial') {
     }
     $my_url = null;
 
-    echo '</div>&nbsp;';
+    if ($origin != 'learnpath') {
+        echo '</div>';
+    }
 
     /* Display Forum Category and the Forum information */
 

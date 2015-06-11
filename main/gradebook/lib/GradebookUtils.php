@@ -918,7 +918,7 @@ class GradebookUtils
             $table->updateCellAttributes($row, $column, 'colspan="' . $columns . '" align="center" class="row_odd"');
         }
 
-        $params = array(
+        $pdfParams = array(
             'filename' => get_lang('FlatView') . '_' . api_get_utc_datetime(),
             'pdf_title' => $title,
             'course_code' => $course_code,
@@ -926,8 +926,10 @@ class GradebookUtils
         );
 
         $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
-        $pdf = new PDF($page_format, $params['orientation'], $params);
-        $pdf->html_to_pdf_with_template($table->toHtml());
+        $pdf = new PDF($page_format, $page_format, $pdfParams);
+        $pdf->html_to_pdf_with_template($flatviewtable->return_table());
+        // Default
+        //$pdf->html_to_pdf_with_template($table->toHtml());
         exit;
     }
 

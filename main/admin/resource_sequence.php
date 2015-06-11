@@ -9,6 +9,9 @@ require_once '../inc/global.inc.php';
 
 api_protect_global_admin_script();
 
+// setting breadcrumbs
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+
 $tpl = new Template(get_lang('ResourcesSequencing'));
 
 $sessionListFromDatabase = SessionManager::get_sessions_list();

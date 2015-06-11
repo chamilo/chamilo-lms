@@ -123,6 +123,36 @@ if ($load_dirs) {
 	</script>';
 }
 
+// @todo : replace $_configuration with setting parameter
+$displayMyCourseViewbySessionLink = (isset($_configuration['my_courses_view_by_session']) && $_configuration['my_courses_view_by_session']);
+
+if ($displayMyCourseViewbySessionLink) {
+    $htmlHeadXtra[] = '
+    <script type="text/javascript">
+       userId = ' . $user_id . '
+        $(document).ready(function() {
+            changeMyCoursesView($.cookie("defaultMyCourseView"+userId));
+        });
+
+        /**
+        * Keep in cookie the last teacher view for the My Courses Tab. default view, or view by session
+        * @param inView
+        */
+        function changeMyCoursesView(inView)
+        {
+            $.cookie("defaultMyCourseView"+userId, inView, { expires: 365 });
+            if (inView == ' . IndexManager::VIEW_BY_SESSION . ') {
+                $("#viewBySession").addClass("view-by-session-active");
+                $("#viewByDefault").removeClass("view-by-session-active");
+            } else {
+                $("#viewByDefault").addClass("view-by-session-active");
+                $("#viewBySession").removeClass("view-by-session-active");
+            }
+        }
+	</script>
+';
+}
+
 /* Sniffing system */
 
 //store posts to sessions
@@ -145,9 +175,27 @@ if (isset($_SESSION['sniff_navigator']) && $_SESSION['sniff_navigator']!="checke
 $controller = new IndexManager(get_lang('MyCourses'));
 
 
-
 // Main courses and session list
-$courses_and_sessions = $controller->return_courses_and_sessions($user_id);
+if (isset($_COOKIE['defaultMyCourseView'.$user_id]) && $_COOKIE['defaultMyCourseView'.$user_id] == IndexManager::VIEW_BY_SESSION && $displayMyCourseViewbySessionLink) {
+    $courses_and_sessions = $controller->returnCoursesAndSessionsViewBySession($user_id);
+    IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_SESSION, $user_id);
+} else {
+    $courses_and_sessions = $controller->return_courses_and_sessions($user_id);
+    IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_DEFAULT, $user_id);
+}
+
+// if teacher, session coach or admin, display the button to change te course view
+// @todo : replace $_configuration with setting parameter
+if ($displayMyCourseViewbySessionLink && (api_is_drh() || api_is_course_coach() || api_is_platform_admin() || api_is_session_admin() || api_is_teacher())) {
+    $courses_and_sessions = "<p class='view-by-session-link'>
+                                <a id='viewByDefault' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_DEFAULT."\")'>
+                                ".get_lang('myCoursesDefaultView')."
+                                </a> -
+                                <a id='viewBySession' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_SESSION."\")'>
+                                ".get_lang('myCoursesSessionView')."
+                                </a></p>".$courses_and_sessions;
+}
+
 
 //Show the chamilo mascot
 if (empty($courses_and_sessions) && !isset($_GET['history'])) {

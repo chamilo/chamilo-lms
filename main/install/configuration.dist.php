@@ -307,3 +307,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['hide_certificate_export_link'] = false;
 // Hide session course coach in dropbox sent to user list
 // $_configuration['dropbox_hide_course_coach'] = false;
+// Show Default view and Session view link in My Courses tab
+//$_configuration['my_courses_view_by_session'] = false;

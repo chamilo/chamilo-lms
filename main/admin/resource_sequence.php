@@ -70,7 +70,7 @@ $form->addSelect(
     ['id' => 'requirements', 'multiple' => 'multiple', 'cols-size' => [4, 7, 1]]
 );
 
-$form->addButtonCreate(get_lang('SetAsRequirement'), 'set_requirement');
+$form->addButtonCreate(get_lang('SetAsRequirement'), 'set_requirement', false,['cols-size' => [4, 7, 1]]);
 $form->addButtonSave(get_lang('Save'), 'save_resource');
 
 $tpl->assign('create_sequence', $formSequence->returnForm());

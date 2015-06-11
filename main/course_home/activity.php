@@ -17,23 +17,6 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
 
-//	MAIN CODE
-
-if (api_is_allowed_to_edit(null, true)) {
-    // HIDE
-    if (!empty($_GET['hide'])) {
-        $sql = "UPDATE $tool_table SET visibility=0 WHERE c_id = $course_id AND id=".$id;
-        Database::query($sql);
-        $show_message = Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
-    } elseif (!empty($_GET['restore'])) {
-        // visibility 0,2 -> 1
-        // REACTIVATE
-        $sql = "UPDATE $tool_table SET visibility=1 WHERE c_id = $course_id AND id=".$id;
-        Database::query($sql);
-        //$show_message = Display::return_message(get_lang('ToolIsNowVisible'),'confirmation');
-    }
-}
-
 // Work with data post askable by admin of course
 if (api_is_platform_admin()) {
     // Show message to confirm that a tool it to be hidden from available tools
@@ -77,12 +60,17 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
     $content .= $pluginExtra;
 
     if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
-        $content .= '<div class="courseadminview">
-            <span class="viewcaption">'.get_lang('SessionData').'</span>
-            <table class="course_activity_home">'.CourseHome::show_session_data($session_id).'
-            </table>
+        $content .= '
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <span class="viewcaption">'.get_lang('SessionData').'</span>
+                <table class="course_activity_home">'.
+                    CourseHome::show_session_data($session_id).'
+                </table>
+            </div>
         </div>';
     }
+
     $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
     $items = CourseHome::show_tools_category($my_list);
     $content .= return_block(get_lang('Authoring'),  $items, 'course-tools-author');
@@ -102,10 +90,11 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
     $content .= $pluginExtra;
     if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
         $content .= '<div class="row">
+            <div class="col-xs-12 col-md-12">
 			<span class="viewcaption">'.get_lang('SessionData').'</span>
 			<table class="course_activity_home">';
         $content .= CourseHome::show_session_data($session_id);
-        $content .=  '</table></div>';
+        $content .=  '</table></div></div>';
     }
 
     $content .=  '<div class="row">';

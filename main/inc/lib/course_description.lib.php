@@ -89,36 +89,6 @@ class CourseDescription
     }
 
     /**
-     * Get all data of course description by session id,
-     * first you must set session_id property with the object CourseDescription
-     * @deprecated
-     * @return array
-     */
-    public function get_description_history($description_type)
-    {
-        $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
-        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-        $description_id = $this->get_id_by_description_type($description_type);
-        $item_property_id = api_get_item_property_id(api_get_course_id(), TOOL_COURSE_DESCRIPTION, $description_id);
-
-        $course_id = api_get_course_int_id();
-
-        $sql = "SELECT tip.id, tip.course_id, tip.item_property_id, tip.title, tip.content, tip.progress, tip.lastedit_date, tip.session_id
-				FROM $tbl_stats_item_property tip INNER JOIN $tbl_item_property ip
-				ON ip.tool = '" . TOOL_COURSE_DESCRIPTION . "' AND ip.id = tip.item_property_id
-				WHERE ip.c_id = $course_id AND tip.course_id = '$course_id' AND tip.session_id = '" . intval($this->session_id) . "'
-				ORDER BY tip.lastedit_date DESC";
-
-        $rs = Database::query($sql);
-        $data = array();
-        while ($description = Database::fetch_array($rs)) {
-            $data['descriptions'][] = $description;
-        }
-        return $data;
-    }
-
-    /**
      * Get all data by description and session id,
      * first you must set session_id property with the object CourseDescription
      * @param    int        description type

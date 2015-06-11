@@ -33,9 +33,9 @@ class AnnouncementEmail
     {
         if (empty($course)) {
             $course = api_get_course_int_id();
-            $course = CourseManager::get_course_information_by_id($course);
+            $course = api_get_course_info_by_id($course);
         } else if (is_numeric($course)) {
-            $course = CourseManager::get_course_information_by_id($course);
+            $course = api_get_course_info_by_id($course);
         }
         $this->course = $course;
         $this->session_id = api_get_session_id();

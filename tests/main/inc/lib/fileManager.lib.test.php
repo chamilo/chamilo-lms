@@ -113,15 +113,6 @@ class TestFileManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testMkpath(){
-		$path='/var/www/path/';
-		$res =mkpath($path, $verbose=false);
-		$this->assertFalse($res);
-		$this->assertNull($res);
-		$this->assertTrue($res === null);
-		//var_dump($res);
-	}
-
 	public function testGetextension(){
 		$filename='documents';
 		$res =getextension($filename);

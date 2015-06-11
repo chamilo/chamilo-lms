@@ -51,9 +51,11 @@ define('PERSON_NAME_WESTERN_ORDER', 1);
 define('PERSON_NAME_EASTERN_ORDER', 2);
 // Contextual: formatting person's name in library order: last_name, first_name
 define('PERSON_NAME_LIBRARY_ORDER', 3);
-// Contextual: formatting a person's name assotiated with an email-address. Ivan: I am not sure how seems email servers an clients would interpret name order, so I assign the Western order.
+// Contextual: formatting a person's name assotiated with an email-address.
+// Ivan: I am not sure how seems email servers an clients would interpret name order, so I assign the Western order.
 define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);
-// Contextual: formatting a person's name for data-exporting operations. For backward compatibility this format has been set to Eastern order.
+// Contextual: formatting a person's name for data-exporting operations.
+// For backward compatibility this format has been set to Eastern order.
 define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 
 // The following constants are used for tuning language detection functionality.
@@ -169,7 +171,6 @@ function get_lang($variable, $reserved = null, $language = null) {
     $used_lang_vars[$variable.$lang_postfix] = $ret;
 
     return $ret;
-
 }
 
 /**
@@ -324,11 +325,6 @@ function api_get_text_direction($language = null)
     return $text_direction[$language];
 }
 
-
-/**
- * Date and time conversions and formats
- */
-
 /**
  * Returns an alphabetized list of timezones in an associative array that can be used to populate a select
  *
@@ -390,7 +386,8 @@ function _api_get_timezone()
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false) {
+function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false)
+{
     $from_timezone = _api_get_timezone();
     $to_timezone = 'UTC';
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
@@ -893,7 +890,20 @@ function api_get_person_name(
 
     $format = $valid[$format][$language];
 
-    $keywords = array('%firstname', '%f', '%F', '%lastname', '%l', '%L', '%title', '%t', '%T', '%username', '%u', '%U');
+    $keywords = array(
+        '%firstname',
+        '%f',
+        '%F',
+        '%lastname',
+        '%l',
+        '%L',
+        '%title',
+        '%t',
+        '%T',
+        '%username',
+        '%u',
+        '%U',
+    );
 
     $values = array(
         $first_name,
@@ -1040,7 +1050,7 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
  */
 function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8')
 {
-    switch($quote_style) {
+    switch ($quote_style) {
         case ENT_COMPAT:
             $string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
             break;
@@ -1427,11 +1437,8 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
  * This function is aimed at replacing the function ucfirst() for human-language strings.
  * @link http://php.net/manual/en/function.ucfirst
  */
-function api_ucfirst($string, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    return api_strtoupper(api_substr($string, 0, 1, $encoding), $encoding) . api_substr($string, 1, api_strlen($string, $encoding), $encoding);*/
+function api_ucfirst($string, $encoding = null)
+{
     return Utf8::ucfirst($string);
 }
 
@@ -1443,19 +1450,10 @@ function api_ucfirst($string, $encoding = null) {
  * This function is aimed at replacing the function ucwords() for human-language strings.
  * @link http://php.net/manual/en/function.ucwords
  */
-function api_ucwords($string, $encoding = null) {
-    /*if (_api_mb_supports($encoding)) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        return mb_convert_case($string, MB_CASE_TITLE, $encoding);
-    }*/
+function api_ucwords($string, $encoding = null)
+{
     return Utf8::ucwords($string);
 }
-
-/**
- * String operations using regular expressions
- */
 
 /**
  * Performs a regular expression match, UTF-8 aware when it is applicable.
@@ -1529,7 +1527,6 @@ function api_preg_replace($pattern, $replacement, $subject, $limit = -1, &$count
     }
     return preg_replace($pattern, $replacement, $subject, $limit, $count);
 }
-
 
 /**
  * Splits a string by a regular expression, UTF-8 aware when it is applicable.
@@ -1705,6 +1702,7 @@ function api_is_utf8($encoding)
     }
     return $result[$encoding];
 }
+
 /**
  * This function returns the encoding, currently used by the system.
  * @return string	The system's encoding.
@@ -1804,8 +1802,29 @@ function &_api_get_day_month_names($language = null) {
         $language = api_get_interface_language();
     }
     if (!isset($date_parts[$language])) {
-        $week_day = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-        $month = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+        $week_day = array(
+            'Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+        );
+        $month = array(
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+        );
         for ($i = 0; $i < 7; $i++) {
             $date_parts[$language]['days_short'][] = get_lang($week_day[$i].'Short', '', $language);
             $date_parts[$language]['days_long'][] = get_lang($week_day[$i].'Long', '', $language);
@@ -2007,5 +2026,3 @@ function _api_convert_encoding_supports($encoding) {
     }
     return $supports[$encoding];
 }
-
-

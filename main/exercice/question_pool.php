@@ -13,7 +13,7 @@
 
 // name of the language file that needs to be included
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 
@@ -303,7 +303,7 @@ if (empty($selected_course) || $selected_course == '-1') {
     // no course selected, reset menu test / difficult� / type de reponse
     reset_menu_exo_lvl_type();
 } else {
-	$course_info = CourseManager::get_course_information_by_id($selected_course);
+	$course_info = api_get_course_info_by_id($selected_course);
 }
 // If course has changed, reset the menu default
 if ($course_id_changed) {

@@ -77,19 +77,7 @@ class TestLearnpath extends UnitTestCase {
 		ob_end_clean();
 	 	//var_dump($res);
 	}
-/*
-	public function testBuildTree() {
-		//ob_start();
-		$course = 'COURSETEST';
-		$lp_id = 0;
-		$user_id = 1;
-		$obj = new learnpath($course, $lp_id, $user_id);
-		$res = $obj->build_tree();
-	 	$this->assertTrue(is_string($res));
-		//ob_end_clean();
-	 	//var_dump($res);
-	}
-	*/
+
 	public function testClearMessage() {
 		//ob_start();
 		$res = learnpath::clear_message();
@@ -465,19 +453,6 @@ class TestLearnpath extends UnitTestCase {
 		//ob_start();
 		$res = learnpath::get_current_item_id();
 	 	$this->assertTrue(is_numeric($res));
-		//ob_end_clean();
-	 	//var_dump($res);
-	}
-
-	public function testGetDbProgress() {
-		//ob_start();
-		$lp_id = 0;
-		$user_id = 1;
-		$mode = '%';
-		$course_db = '';
-		$sincere = false;
-		$res = learnpath::get_db_progress($lp_id, $user_id, $mode, $course_db, $sincere);
-	 	$this->assertTrue(is_string($res));
 		//ob_end_clean();
 	 	//var_dump($res);
 	}

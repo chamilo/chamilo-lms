@@ -83,9 +83,6 @@ class WSCMAnnouncements extends WSCM
 
         $announcement_id = ($announcement_id == 0) ? "" : "AND announcement.id=".$announcement_id;
         $user_id = UserManager::get_user_id_from_username($username);
-
-        //$listOfCourses = CourseManager::get_course_information_by_id($course_id);
-
         $course_info = CourseManager::get_course_information($course_code);
 
         $course_db = $course_info['db_name'];

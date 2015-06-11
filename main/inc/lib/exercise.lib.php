@@ -3493,23 +3493,6 @@ HTML;
         return $res;
     }
 
-
-    /**
-     * Return a list of group for user with user_id=in_userid separated with in_separator
-     * @deprecated ?
-     */
-    public static function displayGroupsForUser($in_separator, $in_userid)
-    {
-        $res = implode(
-            $in_separator,
-            GroupManager::get_user_group_name($in_userid)
-        );
-        if ($res == "") {
-            $res = "<div style='text-align:center'>-</div>";
-        }
-        return $res;
-    }
-
     /**
      * @param int $exe_id
      */

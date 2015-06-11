@@ -172,23 +172,6 @@ class CourseManager
     }
 
     /**
-     * Returns all the information of a given coursecode
-     * @param   int     the course id
-     * @return an array with all the fields of the course table
-     * @deprecated use api_get_course_info_by_id()
-     * @assert ('') === false
-     */
-    public static function get_course_information_by_id($course_id)
-    {
-        return Database::select(
-            '*, id as real_id',
-            Database::get_main_table(TABLE_MAIN_COURSE),
-            array('where' => array('id = ?' => intval($course_id))),
-            'first'
-        );
-    }
-
-    /**
      * Returns a list of courses. Should work with quickform syntax
      * @param    integer $from Offset (from the 7th = '6'). Optional.
      * @param    integer $howmany Number of results we want. Optional.
@@ -1007,27 +990,6 @@ class CourseManager
         }
 
         return $data;
-    }
-
-    /**
-     *  Return an array of arrays, listing course info of all virtual course
-     *  linked to the real course ID $real_course_code
-     *
-     * @param string The id of the real course which the virtual courses are linked to
-     * @return array List of courses details
-     * @deprecated virtual courses doesn't exist anymore
-     */
-    public static function get_virtual_courses_linked_to_real_course($real_course_code)
-    {
-        $sql_result = Database::query(
-            "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-                WHERE target_course_code = '" . Database::get_main_table(TABLE_MAIN_COURSE) . "'"
-        );
-        $result_array = array();
-        while ($result = Database::fetch_array($sql_result)) {
-            $result_array[] = $result;
-        }
-        return $result_array;
     }
 
     /**
@@ -2014,8 +1976,6 @@ class CourseManager
      */
     public static function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id = 0)
     {
-        //get list of virtual courses
-        $virtual_course_list = self::get_virtual_courses_linked_to_real_course($course_code);
         $complete_user_list = array();
 
         //get users from real course
@@ -2024,51 +1984,7 @@ class CourseManager
             $complete_user_list[] = $this_user;
         }
 
-        //get users from linked courses
-        foreach ($virtual_course_list as $this_course) {
-            $course_code = $this_course['code'];
-            $user_list = self::get_user_list_from_course_code($course_code, $session_id);
-            foreach ($user_list as $this_user) {
-                $complete_user_list[] = $this_user;
-            }
-        }
-
         return $complete_user_list;
-    }
-
-    /**
-     * Return an array of arrays, listing course info of all courses in the list
-     * linked to the real course $real_course_code, to which the user $user_id is subscribed.
-     *
-     * @param $user_id , the id (int) of the user
-     * @param $real_course_code , the id (char) of the real course
-     *
-     * @return array of course info arrays
-     * @deprecated virtual course feature is not supported
-     */
-    public static function get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $course_code)
-    {
-        $result_array = array();
-
-        if ($user_id != strval(intval($user_id))) {
-            return $result_array;
-        }
-
-        $course_code = Database::escape_string($course_code);
-        $sql = "SELECT *
-                FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . " course
-                LEFT JOIN " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " course_user
-                ON course.id = course_user.c_id
-                WHERE
-                    course.target_course_code = '$course_code' AND
-                    course_user.user_id = '$user_id' AND
-                    course_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
-        $sql_result = Database::query($sql);
-
-        while ($result = Database::fetch_array($sql_result)) {
-            $result_array[] = $result;
-        }
-        return $result_array;
     }
 
     /**
@@ -2401,24 +2317,6 @@ class CourseManager
             }
         }
         return $course_sort;
-    }
-
-    /**
-     * create recursively all categories as option of the select passed in parameter.
-     *
-     * @param HTML_QuickForm_Element $element
-     * @param string $defaultCode the option value to select by default (used mainly for edition of courses)
-     * @param string $parentCode the parent category of the categories added (default=null for root category)
-     * @param string $padding the indent param (you shouldn't indicate something here)
-     * @deprecated use the select_ajax solution see admin/course_edit.php
-     */
-    public static function select_and_sort_categories(
-        $element,
-        $defaultCode = null,
-        $parentCode = null,
-        $padding = null
-    ) {
-        setCategoriesInForm($element, $defaultCode, $parentCode, $padding);
     }
 
     /**
@@ -3235,14 +3133,6 @@ class CourseManager
         if (file_exists($courseSmallImage)) {
             unlink($courseSmallImage);
         }
-    }
-
-    /**
-     * @deprecated See CourseManager::course_code_exists()
-     */
-    public static function is_existing_course_code($wanted_course_code)
-    {
-        return self::course_code_exists($wanted_course_code);
     }
 
     /**

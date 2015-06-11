@@ -106,15 +106,6 @@ class TestFileManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testMkpath(){
-		$path=api_get_path(SYS_COURSE_PATH).'document/';
-		$res =mkpath($path, $verbose=false);
-		if(!is_null($res)) {
-		$this->assertTrue(is_bool($res));
-		}
-		//var_dump($res);
-	}
-
 	public function testGetextension(){
 		$filename='documents';
 		$res =getextension($filename);

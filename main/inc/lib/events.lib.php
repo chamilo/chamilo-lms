@@ -780,20 +780,6 @@ class Event
     }
 
     /**
-     * @deprecated seems not to be use.
-     * @param $user_id
-     * @param $event_type
-     * @return mixed
-     */
-    function get_latest_event_by_user_and_type($user_id, $event_type)
-    {
-        $result = self::get_events_by_user_and_type($user_id, $event_type);
-        if ($result && !empty($result)) {
-            return $result[0];
-        }
-    }
-
-    /**
      * Save the new message for one event and for one language
      *
      * @param string $eventName
@@ -854,32 +840,6 @@ class Event
     }
 
     /**
-     * @param $etId
-     * @param $users
-     * @param $message
-     * @param $subject
-     * @deprecated seem not to be use
-     */
-    public static function eventTypeMod($etId, $users, $message, $subject) {
-        $etId = intval($etId);
-
-        $sql = 'DELETE FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' WHERE event_type_id = '.$etId.'	';
-        Database::query($sql);
-
-        foreach ($users as $user) {
-            $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' (user_id,event_type_id)
-                VALUES('.intval($user).','.$etId.') ';
-            Database::query($sql);
-        }
-
-        $sql = 'UPDATE '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).'
-                SET message = "'.Database::escape_string($message).'",
-                    subject = "'.Database::escape_string($subject).'"
-                    WHERE event_type_id = '.$etId.'';
-        Database::query($sql);
-    }
-
-    /**
      * Gets the last attempt of an exercise based in the exe_id
      * @param int $exe_id
      * @return mixed
@@ -892,6 +852,7 @@ class Event
         $rs_last_attempt = Database::query($sql_track_attempt);
         $row_last_attempt = Database::fetch_array($rs_last_attempt);
         $last_attempt_date = $row_last_attempt['last_attempt_date']; //Get the date of last attempt
+
         return $last_attempt_date;
     }
 

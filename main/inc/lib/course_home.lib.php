@@ -920,7 +920,9 @@ class CourseHome
                                 $item['name'],
                                 array('id' => 'toolimage_'.$toolId)
                             );
-                        } elseif (isset($item['tool']['custom_icon'])) {
+                        } elseif (isset($item['tool']['custom_icon']) &&
+                            !empty($item['tool']['custom_icon'])
+                        ) {
                             $customIcon = $item['tool']['custom_icon'];
                             if ($item['tool']['visibility'] == '0') {
                                 $fileInfo = pathinfo($item['tool']['custom_icon']);

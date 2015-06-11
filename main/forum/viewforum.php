@@ -399,26 +399,27 @@ $iconForum = Display::return_icon(
 $html = '';
 $html .= '<div class="topic-forum">';
 // The current forum
-if ($origin != 'learnpath'){
+if ($origin != 'learnpath') {
     $html .= Display::tag(
         'h3',
         $iconForum .' '. $titleForum,
         array(
             'class' => 'title-forum')
     );
-    if(!empty($descriptionForum)){
+
+    if (!empty($descriptionForum)) {
         $html .= Display::tag(
             'p',
             strip_tags($descriptionForum),
             array(
-                'class' => 'description')
+                'class' => 'description',
+            )
         );
     }
 }
 
 $html .= '</div>';
 echo $html;
-
 
 // Getting al the threads
 $threads = get_threads($my_forum);
@@ -427,14 +428,13 @@ $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsn
 
 $course_id = api_get_course_int_id();
 
-
 echo '<div class="forum_display">';
 if (is_array($threads)) {
     $html = '';
     $count = 1;
     foreach ($threads as $row) {
         // Thread who have no replies yet and the only post is invisible should not be displayed to students.
-        if (api_is_allowed_to_edit(false, true) OR
+        if (api_is_allowed_to_edit(false, true) ||
             !($row['thread_replies'] == '0' AND $row['visibility'] == '0')
         ) {
 

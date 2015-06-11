@@ -7,7 +7,7 @@
  * @package chamilo.forum
  */
 
-//delete attachment file
+// Delete attachment file
 if ((isset($_GET['action']) &&
     $_GET['action'] == 'delete_attach') &&
     isset($_GET['id_attach'])
@@ -29,7 +29,8 @@ if (isset($current_thread['thread_id'])) {
     $clean_thread_id = intval($_GET['thread']);
 
     $locked = api_resource_is_locked_by_gradebook(
-        $clean_thread_id, LINK_FORUM_THREAD
+        $clean_thread_id,
+        LINK_FORUM_THREAD
     );
 
     $closedPost = null;
@@ -308,7 +309,7 @@ if (isset($current_thread['thread_id'])) {
                     $html .= '<span class="forum_attach_comment" >' . $attachment['comment'] . '</span>';
                 }
             }
-            
+
             $html .= '</div>';
             $html .= '<div class="col-md-5 text-right">';
             $html .= $buttonReply . ' ' . $buttonQuote;

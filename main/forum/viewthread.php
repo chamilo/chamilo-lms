@@ -84,7 +84,7 @@ if ($origin == 'group') {
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
 
     if ($origin == 'learnpath') {
-        Display::display_reduced_header();
+        //Display::display_reduced_header();
     } else {
         $interbreadcrumb[] = array(
             'url' => 'index.php?'

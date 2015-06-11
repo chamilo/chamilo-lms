@@ -333,127 +333,45 @@ if (isset($current_thread['thread_id'])) {
         }
     }
 
-    /* end foreach */
     if ($origin == 'learnpath') {
         $rows = getPosts($current_thread['thread_id'], $sortDirection, true);
 
-        $html = '';
-        $html .= '<div class="forum-disqus">';
-        foreach ($rows as $row) {
-            $name = api_get_person_name($row['firstname'], $row['lastname']);
-            $linkUserName = display_user_link($row['user_id'], $name);
-            $username = sprintf(get_lang('LoginX'), $row['username']);
-            $date = api_get_local_time($row['post_date']);
-            //button reply to message and quote message
-            if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
-                if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+        foreach ($rows as &$row) {
+            $completeName = api_get_person_name($row['firstname'], $row['lastname']);
 
-                    $buttonReply = Display::toolbarButton(
-                        get_lang('Reply'),
-                        'reply.php?' . api_get_cidreq() . '&' . http_build_query([
-                            'forum' => $clean_forum_id,
-                            'thread' => $clean_thread_id,
-                            'post' => $row['post_id'],
-                            'action' => 'replymessage',
-                            'origin' => $origin
-                        ]),
-                        'reply',
-                        'primary',
-                        ['class' => 'btn-xs reply-disqus']
-                    );
+            $row['user_image'] = display_user_image($row['user_id'], $completeName);
+            $row['user_link'] = display_user_link($row['user_id'], $completeName);
+            $row['date'] = api_get_local_time($row['post_date']);
 
-                    $buttonQuote = Display::toolbarButton(
-                        get_lang('Quote'),
-                        'reply.php?' . api_get_cidreq() . '&' . http_build_query([
-                            'forum' => $clean_forum_id,
-                            'thread' => $clean_thread_id,
-                            'post' => $row['post_id'],
-                            'action' => 'quote',
-                            'origin' => $origin
-                        ]),
-                        'quote-left',
-                        'success',
-                        ['class' => 'btn-xs quote-disqus']
-                    );
-                }
-            }
-
-            if (api_is_allowed_to_session_edit(false, true)) {
-                if ($locked == false) {
-
-                    $buttonActions = '';
-
-                    $iconEdit = Display::toolbarButton(
-                        null,
-                        'editpost.php?' . api_get_cidreq() . '&' . http_build_query([
-                            'forum' => $clean_forum_id,
-                            'thread' => $clean_thread_id,
-                            'post' => $row['post_id'],
-                            'origin' => $origin,
-                            'edit' => 'edition',
-                            'id_attach' => null
-                        ]),
-                        'pencil'
-                    );
-
-                    $iconDelete = Display::toolbarButton(
-                        null,
-                        api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
-                            'forum' => $clean_forum_id,
-                            'thread' => $clean_thread_id,
-                            'action' => 'delete',
-                            'content' => 'post',
-                            'id' => $row['post_id'],
-                            'origin' => $origin
-                        ]),
-                        'trash-o',
-                        'default',
-                        [
-                            'onclick' => "javascript:if(!confirm('"
-                                . addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
-                                . "')) return false;"
-                        ]
-                    );
-
-
-                    $buttonActions .= '<div class="btn-group btn-group-xs" role="toolbar" >';
-                    $buttonActions .= $iconEdit;
-                    $buttonActions .= $iconDelete;
-                    $buttonActions .= '</div>';
-                }
-            }
-
-            //end buttons edit - delete
-
-            $indent = $row['indent_cnt'];
-            $html .= '<div class="post-disqus">';
-            $html .= '<div class="col-xs-offset-' . $indent . '" >';
-            $html .= '<div class="row">';
-            $html .= '<div class="col-xs-1 col-md-2">';
-            $html .= '<div class="thumbnail">' . display_user_image($row['user_id'], $name) . '</div>';
-            $html .= '</div>';
-            $html .= '<div class="col-xs-11 col-md-10">';
-            $html .= '<h4 class="username-disqus">' . $linkUserName;
             if (!empty($row['post_parent_id'])) {
-                $aux = $row['post_parent_id'];
-                $usernameAux = api_get_person_name($rows[$aux]['firstname'], $rows[$aux]['lastname']);
-                $linkUserNameAux = display_user_link($rows[$aux]['user_id'], $usernameAux);
-                $html .= ' <span class="reply-post"><i class="fa fa-share"></i> ' . $linkUserNameAux . '</span>';
+                $postParentId = $row['post_parent_id'];
+                $usernameAux = api_get_person_name(
+                    $rows[$postParentId]['firstname'],
+                    $rows[$postParentId]['lastname']
+                );
+
+                $row['parent_link_user'] = display_user_link($rows[$postParentId]['user_id'], $usernameAux);
             }
-            $html .= ' . <span class="time timeago" title="' . $date . '">' . $date . '</span></h4>';
-            $html .= '<div class="description-disqus">' . $row['post_text'] . '</div>';
-            $html .= '<div class="tools-disqus">' . $buttonReply . ' ' . $buttonQuote . ' ' . $buttonActions . '</div>';
-            $html .= '</div>';
-            $html .= '</div>';
-            $html .= '</div>';
-            $html .= '</div>';
         }
 
-        $html .= '<div  class="load-more-disqus" data-role="more">';
-        $html .= '<a id="more-post-disqus" href="#" data-action="more-posts" class="btn btn-default btn-block">Cargar más comentarios</a>';
-        $html .= '</div>';
-        $html .= '</div>';
+        $template = new Template(null, false, false, false, false, false);
+        $template->assign('is_anonymous', api_is_anonymous());
+        $template->assign('is_allowed_to_session_edit', api_is_allowed_to_session_edit(false, true));
+        $template->assign('posts', $rows);
+        $template->assign('forum', $current_forum);
+        $template->assign('thread_id', $clean_thread_id);
+        $template->assign('delete_confirm_message', addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES)));
+        $template->assign('locked', $locked);
 
-        echo $html;
+        $templateFolder = api_get_configuration_value('default_template');
+
+        if(!empty($templateFolder)){
+            $content = $template->fetch($templateFolder.'/forum/flat_learnpath.tpl');
+        }else{
+            $content = $template->fetch('default/forum/flat_learnpath.tpl');
+        }
+
+        $template->assign('content', $content);
+        $template->display_no_layout_template();
     }
 }

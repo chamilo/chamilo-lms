@@ -142,7 +142,6 @@ CREATE TABLE IF NOT EXISTS course (
   last_edit datetime default NULL,
   creation_date datetime default NULL,
   expiration_date datetime default NULL,
-  target_course_code varchar(40) default NULL,
   subscribe tinyint NOT NULL default '1',
   unsubscribe tinyint NOT NULL default '1',
   registration_code varchar(255) NOT NULL default '',

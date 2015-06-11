@@ -14,8 +14,6 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
  * virtual/linked/combined courses (this was already used in several universities
  * but not available in standard Chamilo).
  *
- * The implementation changed, initially a course was a real course
- * if target_course_code was 0 , this was changed to NULL.
  * There are probably some places left with the wrong code.
  *
  * @package chamilo.library
@@ -820,23 +818,6 @@ class CourseManager
     }
 
     /**
-     * @return an array with the course info of all real courses on the platform
-     *@deprecate don't use this function
-     */
-    public static function get_real_course_list()
-    {
-        $sql_result = Database::query(
-            "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-            WHERE target_course_code IS NULL"
-        );
-        $real_course_list = array();
-        while ($result = Database::fetch_array($sql_result)) {
-            $real_course_list[$result['code']] = $result;
-        }
-        return $real_course_list;
-    }
-
-    /**
      * Get course list as coach
      *
      * @param int $user_id
@@ -1153,7 +1134,7 @@ class CourseManager
                     WHERE
                         course_user.user_id = '$user_id' AND
                         course_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
-                        ( course.code = '$course_code' OR target_course_code = '$course_code')"
+                        ( course.code = '$course_code')"
                 )
             );
             return !empty($result);

@@ -86,6 +86,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL");
 
         $this->addSql("ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0");
+        $this->addSql("ALTER TABLE course DROP COLUMN target_course_code");
         $this->addSql("ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
         $this->addSql("ALTER TABLE course_field_values ADD COLUMN c_id int default NULL");

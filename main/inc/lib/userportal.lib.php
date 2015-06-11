@@ -1370,7 +1370,8 @@ class IndexManager
      * @param $user_id
      * @return string
      */
-    public function returnCoursesAndSessionsViewBySession($user_id) {
+    public function returnCoursesAndSessionsViewBySession($user_id)
+    {
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 
         if ($load_history) {
@@ -1401,9 +1402,13 @@ class IndexManager
             // Display special courses
             $special_courses = CourseManager::display_special_courses($user_id, $loadDirs);
             // Display courses
-            $listCourses = CourseManager::get_courses_list_by_user_id($user_id, false);  // [code=>xxx, real_id=>000]
+            // [code=>xxx, real_id=>000]
+            $listCourses = CourseManager::get_courses_list_by_user_id($user_id, false);
             foreach ($listCourses as $i => $listCourseCodeId) {
-                list($userCategoryId, $userCatTitle) = CourseManager::getUserCourseCategoryForCourse($user_id, $listCourseCodeId['real_id']);
+                list($userCategoryId, $userCatTitle) = CourseManager::getUserCourseCategoryForCourse(
+                    $user_id,
+                    $listCourseCodeId['real_id']
+                );
                 $listCourse = CourseManager::get_course_information_by_id($listCourseCodeId['real_id']);
                 $listCoursesInfo[] = array(
                     'code' => $listCourseCodeId['code'],
@@ -1416,7 +1421,8 @@ class IndexManager
         }
 
         if (is_array($session_categories)) {
-            $listCoursesInSession = SessionManager::getNamedSessionCourseForCoach($user_id); // all courses that are in a session
+            // all courses that are in a session
+            $listCoursesInSession = SessionManager::getNamedSessionCourseForCoach($user_id);
         }
 
         // we got all courses
@@ -1447,18 +1453,33 @@ class IndexManager
                     } else {
                         $htmlCategory .= '<div class="session-view-row" >';
                     }
-                    $htmlCategory .= self::getHtmlForCourse($listCourse['courseId'], $listCourse['title'], $listCourse['courseCode'], $userCategoryId, 1, $loadDirs);
+                    $htmlCategory .= self::getHtmlForCourse(
+                        $listCourse['courseId'],
+                        $listCourse['title'],
+                        $listCourse['courseCode'],
+                        $userCategoryId,
+                        1,
+                        $loadDirs
+                    );
                     // list of session category
                     $htmlSessionCategory = '<div class="session-view-row" style="display:none;" id="courseblock-'.$listCourse['courseId'].'">';
                     foreach ($listCourse['sessionCatList'] as $j => $listCategorySession) {
                         // add session category
-                        $htmlSessionCategory .= self::getHtmlSessionCatagory($listCategorySession['catSessionId'], $listCategorySession['catSessionName']);
+                        $htmlSessionCategory .= self::getHtmlSessionCategory(
+                            $listCategorySession['catSessionId'],
+                            $listCategorySession['catSessionName']
+                        );
                         // list of session
                         $htmlSession = '';    // start
                         foreach ($listCategorySession['sessionList'] as $k => $listSession) {
                             // add session
                             $htmlSession .= '<div class="session-view-row">';
-                            $htmlSession .= self::getHtmlForSession($listSession['sessionId'], $listSession['sessionName'], $listCategorySession['catSessionId'], $listCourse['courseCode']);
+                            $htmlSession .= self::getHtmlForSession(
+                                $listSession['sessionId'],
+                                $listSession['sessionName'],
+                                $listCategorySession['catSessionId'],
+                                $listCourse['courseCode']
+                            );
                             $htmlSession .= '</div>';
                         }
                         $htmlSession .= ''; // end session block
@@ -1481,7 +1502,14 @@ class IndexManager
                     } else {
                         $htmlCategory .= '<div class="session-view-well">';
                     }
-                    $htmlCategory .= self::getHtmlForCourse($listCourse['id'], $listCourse['title'], $listCourse['code'], $userCategoryId, 0, $loadDirs);
+                    $htmlCategory .= self::getHtmlForCourse(
+                        $listCourse['id'],
+                        $listCourse['title'],
+                        $listCourse['code'],
+                        $userCategoryId,
+                        0,
+                        $loadDirs
+                    );
                     $htmlCategory .= '</div>';
                 }
             }
@@ -1508,7 +1536,12 @@ class IndexManager
         if ($id == 0) {
             return '';
         }
-        $icon = Display::return_icon('folder_yellow.png', $title, array('class' => 'sessionView', 'width' => 24), ICON_SIZE_LARGE);
+        $icon = Display::return_icon(
+            'folder_yellow.png',
+            $title,
+            array('class' => 'sessionView', 'width' => 24),
+            ICON_SIZE_LARGE
+        );
         return "<div class='session-view-user-category'>$icon<span>$title</span></div>";
     }
 
@@ -1524,8 +1557,6 @@ class IndexManager
      */
     private static function getHtmlForCourse($id, $title, $code, $userCategoryId, $displayButton = false, $loadDirs)
     {
-        // <span class="session-view-lvl-7">&nbsp;</span></span>
-        // <input id="session-view-button" class="session-view-button" type="button" onclick="sessionViewClick(\''.$listCourse['courseId'].'\')" value="+" />
         $class = 'session-view-lvl-6';
         if ($userCategoryId != 0 && !$displayButton) {
             $class = 'session-view-lvl-7';
@@ -1541,20 +1572,34 @@ class IndexManager
             $button = '<input id="session-view-button-'.intval($id).'" class="session-view-button" type="button" onclick="hideUnhide(\'courseblock-'.intval($id).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
         }
 
-        $icon = Display::return_icon('blackboard.png', $title, array('class' => 'sessionView', 'width' => 24), ICON_SIZE_LARGE);
-        $courseLink = api_get_path(WEB_COURSE_PATH).$code.'/?id_session=0';
+        $icon = Display::return_icon(
+            'blackboard.png',
+            $title,
+            array('class' => 'sessionView', 'width' => 24),
+            ICON_SIZE_LARGE
+        );
+        $courseLink = api_get_path(WEB_COURSE_PATH).$code.'/index.php?id_session=0';
 
         // get html course params
-        $tabParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs); // ['right_actions'] ['teachers'] ['notifications']
+        // ['right_actions'] ['teachers'] ['notifications']
+        $tabParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs);
         // teacher list
         if (!empty($tabParams['teachers'])) {
             $teachers = '<p class="'.$class2.' view-by-session-teachers">'.$tabParams['teachers'].'</p>';
         }
+
         // notification
         if (!empty($tabParams['right_actions'])) {
             $rightActions = '<div class="view-by-session-right-actions">'.$tabParams['right_actions'].'</div>';
         }
-        return "<div>$button<span class='$class'>$icon<a  class='sessionView' href='$courseLink'>$title</a></span>".$tabParams['notifications']."$rightActions</div>$teachers";
+
+        return "<div>
+                    $button
+                    <span class='$class'>$icon
+                    <a class='sessionView' href='$courseLink'>$title</a>
+                    </span>".$tabParams['notifications']."$rightActions
+                </div>
+                $teachers";
     }
 
     /**
@@ -1563,13 +1608,25 @@ class IndexManager
      * @param $title
      * @return string
      */
-    private static function getHtmlSessionCatagory($id, $title)
+    private static function getHtmlSessionCategory($id, $title)
     {
         if ($id == 0) {
             return '';
         }
-        $icon = Display::return_icon('folder_blue.png', $title, array('class' => 'sessionView', 'width' => 24), ICON_SIZE_LARGE);
-        return "<div class='session-view-session-category'><span class='session-view-lvl-2'>$icon<span>$title</span></span></div>";
+
+        $icon = Display::return_icon(
+            'folder_blue.png',
+            $title,
+            array('class' => 'sessionView', 'width' => 24),
+            ICON_SIZE_LARGE
+        );
+
+        return "<div class='session-view-session-category'>
+                <span class='session-view-lvl-2'>
+                    $icon
+                    <span>$title</span>
+                </span>
+                </div>";
     }
 
     /**
@@ -1592,11 +1649,18 @@ class IndexManager
             $class2 = 'session-view-lvl-5';    // got to course in session link
         }
 
-        $icon = Display::return_icon('blackboard_blue.png', $title, array('class' => 'sessionView', 'width' => 24), ICON_SIZE_LARGE);
-        $courseLink = api_get_path(WEB_COURSE_PATH).$courseCode.'/?id_session='.$id;
+        $icon = Display::return_icon(
+            'blackboard_blue.png',
+            $title,
+            array('class' => 'sessionView', 'width' => 24),
+            ICON_SIZE_LARGE
+        );
+        $courseLink = api_get_path(WEB_COURSE_PATH).$courseCode.'/index.php?id_session='.intval($id);
 
         $html .= "<span class='$class1 session-view-session'>$icon$title</span>";
-        $html .= '<div class="'.$class2.' session-view-session-go-to-course-in-session"><a class="" href="'.$courseLink.'">Aller au cours dans la session</a></div>';
+        $html .= '<div class="'.$class2.' session-view-session-go-to-course-in-session">
+                <a class="" href="'.$courseLink.'">'.get_lang('GoToCourseInsideSession').'</a></div>';
+
         return '<div>'.$html.'</div>';
     }
 
@@ -1646,5 +1710,4 @@ class IndexManager
     {
         setcookie('defaultMyCourseView'.$userId, $view);
     }
-
 }

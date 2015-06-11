@@ -142,11 +142,11 @@ if ($displayMyCourseViewbySessionLink) {
         {
             $.cookie("defaultMyCourseView"+userId, inView, { expires: 365 });
             if (inView == ' . IndexManager::VIEW_BY_SESSION . ') {
-                $("#viewBySession").addClass("view-by-session-active");
-                $("#viewByDefault").removeClass("view-by-session-active");
+                $("#viewBySession").addClass("btn-primary");
+                $("#viewByDefault").removeClass("btn-primary");
             } else {
-                $("#viewByDefault").addClass("view-by-session-active");
-                $("#viewBySession").removeClass("view-by-session-active");
+                $("#viewByDefault").addClass("btn-primary");
+                $("#viewBySession").removeClass("btn-primary");
             }
         }
 	</script>
@@ -187,13 +187,17 @@ if (isset($_COOKIE['defaultMyCourseView'.$user_id]) && $_COOKIE['defaultMyCourse
 // if teacher, session coach or admin, display the button to change te course view
 // @todo : replace $_configuration with setting parameter
 if ($displayMyCourseViewbySessionLink && (api_is_drh() || api_is_course_coach() || api_is_platform_admin() || api_is_session_admin() || api_is_teacher())) {
-    $courses_and_sessions = "<p class='view-by-session-link'>
-                                <a id='viewByDefault' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_DEFAULT."\")'>
-                                ".get_lang('myCoursesDefaultView')."
-                                </a> -
-                                <a id='viewBySession' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_SESSION."\")'>
-                                ".get_lang('myCoursesSessionView')."
-                                </a></p>".$courses_and_sessions;
+    $courses_and_sessions = "<div class='view-by-session-link '>
+		<div class='btn-group pull-right'>
+		<a class='btn' id='viewByDefault' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_DEFAULT."\")'>
+		".get_lang('MyCoursesDefaultView')."
+		</a>
+		<a class='btn' id='viewBySession' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_SESSION."\")'>
+		".get_lang('MyCoursesSessionView')."
+		</a>
+		</div>
+	</div>
+	".$courses_and_sessions;
 }
 
 

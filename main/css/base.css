@@ -5408,16 +5408,7 @@ a.sessionView {
 }
 
 .view-by-session-link {
-    text-align: right;
-}
-
-p.view-by-session-link a {
-    padding-right : 10px;
-    padding-left : 10px;
-}
-
-.view-by-session-active {
-    text-decoration : underline;
+    min-height: 38px;
 }
 
 .view-by-session-teachers {

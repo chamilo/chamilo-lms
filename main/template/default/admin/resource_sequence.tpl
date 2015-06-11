@@ -170,8 +170,11 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     {{ create_sequence }}
+                </div>
+                <div class="col-md-6">
+                    {{ select_sequence }}
                 </div>
             </div>
         </div>
@@ -180,15 +183,10 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-12">
-                    {{ save_sequence }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-7">
                     {{ left_block }}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <h3>
                         {{ 'ItemsTheReferenceDependsOn' | get_lang }}
                     </h3>

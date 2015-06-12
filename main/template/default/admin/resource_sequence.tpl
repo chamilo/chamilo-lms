@@ -169,6 +169,7 @@
     </script>
     <div class="panel panel-default">
         <div class="panel-body">
+            <div class="section-title-sequence">Crear nombre de secuencia</div>
             <div class="row">
                 <div class="col-md-6">
                     {{ create_sequence }}
@@ -182,32 +183,43 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
+            <div class="section-title-sequence">Configuración de secuencia</div>
             <div class="row">
-                <div class="col-md-7">
-                    {{ left_block }}
-                </div>
-                <div class="col-md-5">
-                    <h3>
+
+                {{ configure_sequence }}
+            </div>
+
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="section-title-sequence">Vista previa de secuencia</div>
+            <div class="row">
+                <div class="col-md-9">
+                    <h4 class="title-sequence">
                         {{ 'ItemsTheReferenceDependsOn' | get_lang }}
-                    </h3>
+                    </h4>
                     <div id="parents">
                     </div>
 
-                    <h3>{{ 'Item' | get_lang }}</h3>
+                    <h4 class="title-sequence">{{ 'Item' | get_lang }}</h4>
                     <div id="resource">
                     </div>
 
-                    <h3>{{ 'Dependencies' | get_lang }}</h3>
+                    <h4 class="title-sequence">{{ 'Dependencies' | get_lang }}</h4>
                     <div id="children">
                     </div>
 
-                    <h3>{{ 'Graph' | get_lang }}</h3>
-                    <div id="show_graph"></div>
+                    <h4 class="title-sequence">{{ 'Graph' | get_lang }}</h4>
 
 
-                    {{ right_block }}
                 </div>
+                <div class="col-md-3">
+                    <div id="show_graph"></div>
+                </div>
+
             </div>
+            {{ save_sequence }}
         </div>
     </div>
 {% endblock %}

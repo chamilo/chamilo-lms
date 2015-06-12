@@ -51,7 +51,7 @@ switch ($action) {
             case 'session':
                 $type = SequenceResource::SESSION_TYPE;
                 $showDelete = isset($_REQUEST['show_delete']) ? $_REQUEST['show_delete'] : false;
-                $image = Display::return_icon('window_list.png');
+                $image = Display::return_icon('item-sequence.png',null,null,ICON_SIZE_LARGE);
                 $sessionInfo = api_get_session_info($id);
                 if (!empty($sessionInfo)) {
                     $linkDelete = '';
@@ -63,12 +63,13 @@ switch ($action) {
                         );
                     }
 
-                    $link = '<div class="parent" data-id="'.$id.'">
-                        <span>'.
-                        $image.' '.$sessionInfo['name'].' ('.$id.')'.
-                        $linkDelete.
-                        '</span>
-                        </div>';
+                    $link = '<div class="parent" data-id="' . $id . '">';
+                    $link .= '<div class="big-icon">';
+                    $link .= $image;
+                    $link .= '<div class="sequence-course">' . $sessionInfo['name'] . '</div>';
+                    $link .= '<div class="sequence-id">'.$id.'</div>';
+                    $link .= '<div class="sequence-deleted">' . $linkDelete . '</div>';
+                    $link .= '</div></div>';
                 }
                 break;
         }

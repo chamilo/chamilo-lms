@@ -53,6 +53,7 @@ $selectSequence->addSelect(
 );
 
 $form = new FormValidator('');
+$form->addHtml("<div class='col-md-6'>");
 $form->addHidden('sequence_type', 'session');
 $form->addSelect(
     'sessions',
@@ -61,21 +62,27 @@ $form->addSelect(
     ['id' => 'item', 'cols-size' => [4, 7, 1]]
 );
 $form->addButtonNext(get_lang('UseAsReference'), 'use_as_reference',['cols-size' => [4, 7, 1]]);
-
-
+$form->addHtml("</div>");
+$form->addHtml("<div class='col-md-6'>");
 $form->addSelect(
     'requirements',
     get_lang('Requirements'),
     $sessionList,
-    ['id' => 'requirements', 'multiple' => 'multiple', 'cols-size' => [4, 7, 1]]
+    ['id' => 'requirements', 'cols-size' => [3, 7, 2]]
 );
 
-$form->addButtonCreate(get_lang('SetAsRequirement'), 'set_requirement', false,['cols-size' => [4, 7, 1]]);
-$form->addButtonSave(get_lang('Save'), 'save_resource');
+$form->addButtonCreate(get_lang('SetAsRequirement'), 'set_requirement', false,['cols-size' => [3, 7, 2]]);
+$form->addHtml("</div>");
+
+$formSave = new FormValidator('');
+$formSave->addHidden('sequence_type', 'session');
+$formSave->addButton('save_resource',get_lang('SaveSettings'),'floppy-o','success',null,null,['cols-size' => [1, 10, 1]]);
+
 
 $tpl->assign('create_sequence', $formSequence->returnForm());
 $tpl->assign('select_sequence', $selectSequence->returnForm());
-$tpl->assign('left_block', $form->returnForm());
+$tpl->assign('configure_sequence', $form->returnForm());
+$tpl->assign('save_sequence', $formSave->returnForm());
 $layout = $tpl->get_template('admin/resource_sequence.tpl');
 $tpl->display($layout);
 

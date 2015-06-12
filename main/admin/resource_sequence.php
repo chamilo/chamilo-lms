@@ -61,7 +61,7 @@ $form->addSelect(
     $sessionList,
     ['id' => 'item', 'cols-size' => [4, 7, 1]]
 );
-$form->addButtonNext(get_lang('UseAsReference'), 'use_as_reference',['cols-size' => [4, 7, 1]]);
+$form->addButtonNext(get_lang('UseAsReference'), 'use_as_reference', ['cols-size' => [4, 7, 1]]);
 $form->addHtml("</div>");
 $form->addHtml("<div class='col-md-6'>");
 $form->addSelect(
@@ -71,12 +71,12 @@ $form->addSelect(
     ['id' => 'requirements', 'cols-size' => [3, 7, 2]]
 );
 
-$form->addButtonCreate(get_lang('SetAsRequirement'), 'set_requirement', false,['cols-size' => [3, 7, 2]]);
+$form->addButtonCreate(get_lang('SetAsRequirement'), 'set_requirement', false, ['cols-size' => [3, 7, 2]]);
 $form->addHtml("</div>");
 
 $formSave = new FormValidator('');
 $formSave->addHidden('sequence_type', 'session');
-$formSave->addButton('save_resource',get_lang('SaveSettings'),'floppy-o','success',null,null,['cols-size' => [1, 10, 1]]);
+$formSave->addButton('save_resource', get_lang('SaveSettings'), 'floppy-o', 'success', null, null, ['cols-size' => [1, 10, 1]]);
 
 
 $tpl->assign('create_sequence', $formSequence->returnForm());

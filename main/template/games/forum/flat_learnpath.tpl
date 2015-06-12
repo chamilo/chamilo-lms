@@ -86,6 +86,12 @@
                 }
             });
         });
+
+        {#
+        $('#more-post-disqus').on('', function(e) {
+            e.preventDefault();
+        });
+        #}
     });
 </script>
 
@@ -151,7 +157,9 @@
         </div>
     {% endfor %}
 
+    {#
     <div  class="load-more-disqus" data-role="more">
         <a id="more-post-disqus" href="#" data-action="more-posts" class="btn btn-default btn-block">{{ "LoadMoreComments"|get_lang }}</a>
     </div>
+    #}
 </div>

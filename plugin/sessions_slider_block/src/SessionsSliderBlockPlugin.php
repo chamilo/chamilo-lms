@@ -273,8 +273,8 @@ class SessionsSliderBlockPlugin extends Plugin
             ORDER BY count DESC";
 
         $result = Database::query($sql);
-
-        if (empty(Database::num_rows($result))) {
+        $num = Database::num_rows($result);
+        if (empty($num)) {
             return [];
         }
 

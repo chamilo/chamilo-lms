@@ -186,13 +186,10 @@ if ($my_message != 'PostDeletedSpecial') {
 
                     $buttonReplyToThread = Display::toolbarButton(
                         get_lang('ReplyToThread'),
-                        "{$forumUrl}reply.php?" . api_get_cidreq() . '&' . http_build_query([
-                            'forum' => Security::remove_XSS($_GET['forum']),
-                            'thread' => Security::remove_XSS($_GET['thread']),
-                            'action' => 'replythread',
-                        ]),
+                        '#',
                         'reply',
-                        'default'
+                        'default',
+                        ['id' => 'btn-reply-thread']
                     );
                 }
                 // new thread link

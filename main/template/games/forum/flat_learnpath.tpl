@@ -31,15 +31,13 @@
     };
 
     $(document).on('ready', function() {
-        $('.btn-reply-post').on('click', function(e) {
+        $('.btn-reply-post, #btn-reply-thread').on('click', function(e) {
             e.preventDefault();
 
             var replyToPost = $(this).data('reply-to') || 0;
 
-            if (replyToPost) {
-                replyForm.parentPostId = parseInt(replyToPost);
-                replyForm.show();
-            }
+            replyForm.parentPostId = parseInt(replyToPost);
+            replyForm.show();
         });
 
         $('body').on('submit', '#form_reply', function(e) {
@@ -67,6 +65,7 @@
 </div>
 
 <div class="forum-disqus">
+    <div id="form-reply-to-post-0"></div>
     {% for post in posts %}
         <div class="post-disqus">
             <div class="col-xs-offset-{{ post.indent_cnt }}" data-post="{{ post.post_id }}">

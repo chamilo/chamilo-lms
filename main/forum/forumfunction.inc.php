@@ -1936,10 +1936,7 @@ function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postI
             continue;
         }
 
-        $list = array_merge(
-            $list,
-            getPosts($threadId, $orderDirection, $recursive, $post->getPostId(), $depth)
-        );
+        $list += getPosts($threadId, $orderDirection, $recursive, $post->getPostId(), $depth);
     }
 
     return $list;

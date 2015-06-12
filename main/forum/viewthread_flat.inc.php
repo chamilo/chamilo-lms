@@ -357,12 +357,15 @@ if (isset($current_thread['thread_id'])) {
 
         $template = new Template(null, false, false, false, false, false);
         $template->assign('is_anonymous', api_is_anonymous());
+        $template->assign('is_allowed_to_edit', api_is_allowed_to_edit(false, true));
         $template->assign('is_allowed_to_session_edit', api_is_allowed_to_session_edit(false, true));
         $template->assign('posts', $rows);
         $template->assign('forum', $current_forum);
         $template->assign('thread_id', $clean_thread_id);
         $template->assign('delete_confirm_message', addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES)));
         $template->assign('locked', $locked);
+        $template->assign('allow_reply', $allowReply);
+        $template->assign('button_reply_to_thread', $buttonReplyToThread);
 
         $templateFolder = api_get_configuration_value('default_template');
 

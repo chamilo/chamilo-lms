@@ -1665,15 +1665,10 @@ var loadForumThead = function(lpId, lpItemId) {
             tabindex:'0',
 
             id:'chamilo-disqus',
-            src: '<?php echo api_get_path(WEB_CODE_PATH) ?>forum/viewthread.php?<?php echo api_get_cidreq() ?>&gradebook=0&origin=learnpath&forum=' + forumThreadData.forumId +'&thread=' + forumThreadData.threadId
+            src: '<?php echo api_get_path(WEB_CODE_PATH) ?>forum/viewthread.php?<?php echo api_get_cidreq() ?>&gradebook=0&origin=learnpath&forum=' + forumThreadData.forumId +'&thread=' + forumThreadData.threadId + '&posts_order=desc'
         });
 
         $('#forum-container .panel-body').html(forumIframe);
-
-        $('#chamilo-disqus').load(function() {
-            this.style.height = this.contentWindow.document.body.offsetHeight + 800 + 'px';
-        });
-
     });
 
 };

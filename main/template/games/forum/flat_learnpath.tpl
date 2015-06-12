@@ -17,6 +17,7 @@
                     return;
                 }
 
+                resizeContainer();
                 $('#form-reply-to-post-' + replyForm.parentPostId).html(response.form);
             });
         },
@@ -31,7 +32,25 @@
         }
     };
 
+    var resizeContainer = function(reset) {
+        var iframeContainer = window.parent.document.getElementById('chamilo-disqus');
+
+        if (reset) {
+            $(iframeContainer).height(0);
+        }
+
+        $(iframeContainer).height(
+            $('body').prop('scrollHeight')
+        );
+    };
+
     $(document).on('ready', function() {
+        resizeContainer(true);
+
+        CKEDITOR.on('instanceReady', function() {
+            resizeContainer();
+        });
+
         $('.btn-reply-post').on('click', function(e) {
             e.preventDefault();
 

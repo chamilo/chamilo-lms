@@ -1669,11 +1669,6 @@ var loadForumThead = function(lpId, lpItemId) {
         });
 
         $('#forum-container .panel-body').html(forumIframe);
-
-        $('#chamilo-disqus').load(function() {
-            this.style.height = this.contentWindow.document.body.offsetHeight + 800 + 'px';
-        });
-
     });
 
 };

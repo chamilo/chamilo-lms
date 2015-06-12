@@ -149,6 +149,49 @@ if (!empty($action)) {
                 }
             }
             break;
+        case 'reply_form':
+            $parentPostId = isset($_REQUEST['post']) ? intval($_REQUEST['post']) : 0;
+
+            $form = new FormValidator('form_reply');
+            $form->addHidden('thread', $current_thread['thread_id']);
+            $form->addHidden('forum', $current_forum['forum_id']);
+            $form->addHidden('post_parent_id', $parentPostId);
+            $form->addHidden('a', 'reply_form');
+            $form->addHtmlEditor('post_text', get_lang('Text'), true, false, ['ToolbarSet' => 'Minimal']);
+            $form->addButtonCreate(get_lang('ReplyToMessage'), 'SubmitPost');
+
+            if ($form->validate()) {
+                $check = Security::check_token('post');
+
+                if (!$check) {
+                    break;
+                }
+
+                $values = $form->exportValues();
+
+                $values['thread_id'] = $current_thread['thread_id'];
+                $values['forum_id'] = $current_forum['forum_id'];
+                $values['post_title'] = '';
+
+                $result = store_reply($current_forum, $values);
+
+                if ($result['type'] !== 'confirmation') {
+                    $json['errorMessage'] = $result['msg'];
+                    break;
+                }
+
+                $json['error'] = false;
+                $json['errorMessage'] = $result['msg'];
+
+                Security::clear_token();
+                break;
+            }
+
+            $form->addHidden('sec_token', Security::get_token());
+
+            $json['error'] = false;
+            $json['form'] = $form->returnForm();
+            break;
     }
 }
 

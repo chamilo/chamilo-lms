@@ -1,3 +1,67 @@
+<script>
+    var replyForm = {
+        parentPostId: 0,
+        show: function() {
+            $('#form_reply').remove();
+
+            var getForm = $.getJSON('{{ _p.web_ajax }}forum.ajax.php?{{ _p.web_cid_query }}', {
+                a: 'reply_form',
+                post: replyForm.parentPostId,
+                forum: parseInt({{ forum.forum_id }}),
+                thread: parseInt({{ thread_id }})
+            });
+
+            $.when(getForm).done(function(response) {
+                if (response.error) {
+                    return;
+                }
+
+                $('#form-reply-to-post-' + replyForm.parentPostId).html(response.form);
+            });
+        },
+        send: function(formData) {
+            var sendPost = $.ajax('{{ _p.web_ajax }}forum.ajax.php?{{ _p.web_cid_query }}', {
+                type: 'post',
+                dataType: 'json',
+                data: formData
+            });
+
+            return sendPost;
+        }
+    };
+
+    $(document).on('ready', function() {
+        $('.btn-reply-post').on('click', function(e) {
+            e.preventDefault();
+
+            var replyToPost = $(this).data('reply-to') || 0;
+
+            if (replyToPost) {
+                replyForm.parentPostId = parseInt(replyToPost);
+                replyForm.show();
+            }
+        });
+
+        $('body').on('submit', '#form_reply', function(e) {
+            e.preventDefault();
+
+            var self = $(this);
+            var formData = self.serialize();
+            var sendForm = replyForm.send(formData);
+
+            self.find(':submit').prop('disabled', true);
+
+            $.when(sendForm).done(function(response) {
+                if (!response.error) {
+                    window.location.reload();
+                } else {
+                    self.find(':submit').prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
+
 <div class="top-disqus">
     {{ button_reply_to_thread }}
 </div>
@@ -5,7 +69,7 @@
 <div class="forum-disqus">
     {% for post in posts %}
         <div class="post-disqus">
-            <div class="col-xs-offset-{{ post.indent_cnt }}">
+            <div class="col-xs-offset-{{ post.indent_cnt }}" data-post="{{ post.post_id }}">
                 <div class="row">
                     <div class="col-xs-1 col-md-2">
                         <div class="thumbnail">
@@ -29,7 +93,7 @@
                         </div>
                         <div class="tools-disqus">
                             {% if allow_reply %}
-                                <a href="reply.php?{{ _p.web_cid_query ~ '&' ~ {'forum': forum.forum_id, 'thread': thread_id, 'post': post.post_id, 'action': 'replymessage'}|url_encode }}" class="btn btn-primary btn-xs reply-disqus">
+                                <a data-reply-to="{{ post.post_id }}" href="#" class="btn btn-primary btn-xs reply-disqus btn-reply-post">
                                     <i class="fa fa-reply"></i> {{ "Reply"|get_lang }}
                                 </a>
 
@@ -54,6 +118,7 @@
                         </div>
                     </div>
                 </div>
+                <div id="form-reply-to-post-{{ post.post_id }}"></div>
             </div>
         </div>
     {% endfor %}

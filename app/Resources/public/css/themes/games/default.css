@@ -256,7 +256,7 @@ footer .media{
 	width: 1024px;
 }
 }
- 
+
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) { ... }
  	.links-footer{
@@ -301,4 +301,8 @@ footer .media{
 	.red-social{
 		text-align: center;
 	}
+  .carousel-inner .item img{
+    width: 100%;
+    /*display: inline;*/
+  }
 }

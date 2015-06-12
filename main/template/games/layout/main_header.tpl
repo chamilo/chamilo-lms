@@ -121,7 +121,7 @@
             </div>
 
         </header>
-
+</div>
 
         <section id="breadcrumb-bar">
             <div class="container">
@@ -131,8 +131,16 @@
                 {% endblock %}
             </div>
         </section>
-
-    <div id="top_main_content" class="container">
+    <!-- Inicia el slider -->
+    {# Announcements  #}
+    {% if announcements_block %}
+    <div class="slider-top">
+        {{ announcements_block }}
+    </div>
+    {% endif %}
+    <!-- fin del slider -->
+<div class="container">
+    <div id="top_main_content">
     <div class="row">
     {# course navigation links/shortcuts need to be activated by the admin #}
     {% include template ~ "/layout/course_navigation.tpl" %}

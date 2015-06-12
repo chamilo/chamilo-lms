@@ -10,14 +10,7 @@
         </div>
     {% endif %}
 
-        <!-- Inicia el slider -->
-            {# Announcements  #}
-            {% if announcements_block %}
-                <div class="slider-top">
-                    {{ announcements_block }}
-                </div>
-            {% endif %}
-        <!-- fin del slider -->
+
         {% if _u.logged == 0 %}
             {% if home_page_block %}
             <!-- Bloque de contenido home -->

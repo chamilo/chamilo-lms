@@ -151,6 +151,7 @@ if (!empty($action)) {
             break;
         case 'reply_form':
             $parentPostId = isset($_REQUEST['post']) ? intval($_REQUEST['post']) : 0;
+            $quotePost = isset($_REQUEST['action']) && $_REQUEST['action'] == 'quote';
 
             $form = new FormValidator('form_reply');
             $form->addHidden('thread', $current_thread['thread_id']);
@@ -188,6 +189,33 @@ if (!empty($action)) {
             }
 
             $form->addHidden('sec_token', Security::get_token());
+
+            if ($parentPostId > 0 && $quotePost) {
+                $parentPost = get_post_information($parentPostId);
+
+                $parentPostText = Display::tag('p', null);
+                $parentPostText .= Display::tag(
+                    'div',
+                    Display::tag(
+                        'div',
+                        Display::tag(
+                            'blockquote',
+                            Display::tag(
+                                'p',
+                                sprintf(
+                                    get_lang('QuotingToXUser'),
+                                    api_get_person_name($parentPost['firstname'], $parentPost['lastname'])
+                                )
+                            ) . prepare4display($parentPost['post_text'])
+                        )
+                    )
+                );
+                $parentPostText .= Display::tag('p', null);
+
+                $form->setDefaults([
+                    'post_text' => $parentPostText
+                ]);
+            }
 
             $json['error'] = false;
             $json['form'] = $form->returnForm();

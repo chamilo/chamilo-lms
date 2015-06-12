@@ -189,7 +189,7 @@ if ($my_message != 'PostDeletedSpecial') {
                         '#',
                         'reply',
                         'default',
-                        ['id' => 'btn-reply-thread']
+                        ['class' => 'btn-reply-post']
                     );
                 }
                 // new thread link

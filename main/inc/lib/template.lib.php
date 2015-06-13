@@ -532,18 +532,17 @@ class Template
         global $disable_js_and_css_files;
         // Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/default.css');
 
         if ($this->show_learnpath) {
-            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
-
-            // if we have a SCORM file in theme, don't use default_scorm.css file
-            if (is_file(api_get_path(SYS_CSS_PATH).$this->theme.'/scorm.css')) {
-                $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/scorm.css';
-            } else {
-                $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'default_scorm.css');
+            $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'scorm.css');
+            if (is_file(api_get_path(SYS_CSS_PATH).'themes/'.$this->theme.'/learnpath.css')) {
+                $css[] = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/learnpath.css';
             }
         }
+
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/default.css');
+
+
 
         $css_file_to_string = null;
         foreach ($css as $file) {

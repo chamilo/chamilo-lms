@@ -2,17 +2,16 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* This file was originally the copy of document.php, but many modifications happened since then ;
-* the direct file view is not needed anymore, if the user uploads a scorm zip file, a directory
-* will be automatically created for it, and the files will be uncompressed there for example ;
-*
-* @package chamilo.learnpath
-* @author Yannick Warnier <ywarnier@beeznest.org> - redesign
-* @author Denes Nagy, principal author
-* @author Isthvan Mandak, several new features
-* @author Roan Embrechts, code improvements and refactoring
-*/
-
+ * This file was originally the copy of document.php, but many modifications happened since then ;
+ * the direct file view is not needed anymore, if the user uploads a scorm zip file, a directory
+ * will be automatically created for it, and the files will be uncompressed there for example ;
+ *
+ * @package chamilo.learnpath
+ * @author Yannick Warnier <ywarnier@beeznest.org> - redesign
+ * @author Denes Nagy, principal author
+ * @author Isthvan Mandak, several new features
+ * @author Roan Embrechts, code improvements and refactoring
+ */
 use \ChamiloSession as Session;
 
 $use_anonymous = true;
@@ -21,7 +20,7 @@ $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 
 if ($lp_controller_touched != 1) {
-    header('location: lp_controller.php?action=view&item_id='.intval($_REQUEST['item_id']));
+    header('location: lp_controller.php?action=view&item_id=' . intval($_REQUEST['item_id']));
     exit;
 }
 
@@ -37,7 +36,8 @@ $lp_id = intval($_GET['lp_id']);
 // Check if the learning path is visible for student - (LP requisites)
 
 if (!api_is_platform_admin()) {
-    if (!api_is_allowed_to_edit(null, true) &&
+    if (
+        !api_is_allowed_to_edit(null, true) &&
         !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())
     ) {
         api_not_allowed(true);
@@ -77,25 +77,25 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) .
+    'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
-	$("div#log_content_cleaner").bind("click", function() {
-    	$("div#log_content").empty();
-	});
+    $("div#log_content_cleaner").bind("click", function() {
+        $("div#log_content").empty();
+    });
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
-
-if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
+if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame() == 1) {
     $htmlHeadXtra[] = 'hello';
 }
 
 //Impress js
 if ($_SESSION['oLP']->mode == 'impress') {
     $lp_id = $_SESSION['oLP']->get_id();
-    $url = api_get_path(WEB_CODE_PATH)."newscorm/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
+    $url = api_get_path(WEB_CODE_PATH) . "newscorm/lp_impress.php?lp_id=$lp_id&" . api_get_cidreq();
     header("Location: $url");
     exit;
 }
@@ -113,22 +113,21 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
 
 // additional APIs
 $htmlHeadXtra[] = '<script>
-chamilo_courseCode = "'.$course_code.'";
+chamilo_courseCode = "' . $course_code . '";
 </script>';
 // Document API
 $htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
 // Storage API
 $htmlHeadXtra[] = '<script>
-var sv_user = \''.api_get_user_id().'\';
+var sv_user = \'' . api_get_user_id() . '\';
 var sv_course = chamilo_courseCode;
-var sv_sco = \''.intval($_REQUEST['lp_id']).'\';
+var sv_sco = \'' . intval($_REQUEST['lp_id']) . '\';
 </script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
 $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
 /**
  * Get a link to the corresponding document.
  */
-
 if ($debug) {
     error_log(" src: $src ");
     error_log(" lp_type: $lp_type ");
@@ -155,10 +154,13 @@ if (!isset($src)) {
                 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
                 $file_info = pathinfo($file_info['path']);
-                if (isset($file_info['extension']) &&
+                if (
+                    isset($file_info['extension']) &&
                     api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
                 ) {
-                    $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
+                    $src = api_get_path(WEB_CODE_PATH)
+                        . 'newscorm/lp_view_item.php?lp_item_id=' . $lp_item_id
+                        . '&' . api_get_cidreq();
                 }
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
@@ -180,7 +182,8 @@ if (!isset($src)) {
         case 3:
             // aicc
             $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="'.$_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="' . $_SESSION['oLP']->get_js_lib()
+                . '" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
                 $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
@@ -198,13 +201,14 @@ $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 
 if ($debug) {
-    error_log('$type_quiz: '.$type_quiz);
-    error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
-    error_log('$lp_id: '.$lp_id);
-    error_log('$_GET[lp_item_id]: '.intval($_GET['lp_item_id']));
+    error_log('$type_quiz: ' . $type_quiz);
+    error_log('$_REQUEST[exeId]: ' . intval($_REQUEST['exeId']));
+    error_log('$lp_id: ' . $lp_id);
+    error_log('$_GET[lp_item_id]: ' . intval($_GET['lp_item_id']));
 }
 
-if (!empty($_REQUEST['exeId']) &&
+if (
+    !empty($_REQUEST['exeId']) &&
     isset($lp_id) &&
     isset($_GET['lp_item_id'])
 ) {
@@ -218,60 +222,66 @@ if (!empty($_REQUEST['exeId']) &&
     $safe_id = $lp_id;
     $safe_exe_id = intval($_REQUEST['exeId']);
 
-    if ($safe_id == strval(intval($safe_id)) &&
+    if (
+        $safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))
     ) {
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting
                 FROM ' . $TBL_TRACK_EXERCICES . '
-                WHERE exe_id = '.$safe_exe_id;
+                WHERE exe_id = ' . $safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
-        $time_start_date = api_strtotime($row_dates['start_date'],'UTC');
-        $time_exe_date   = api_strtotime($row_dates['exe_date'],'UTC');
+        $time_start_date = api_strtotime($row_dates['start_date'], 'UTC');
+        $time_exe_date = api_strtotime($row_dates['exe_date'], 'UTC');
 
-        $mytime 	= ((int)$time_exe_date-(int)$time_start_date);
-        $score 		= (float)$row_dates['exe_result'];
-        $max_score 	= (float)$row_dates['exe_weighting'];
+        $mytime = ((int) $time_exe_date - (int) $time_start_date);
+        $score = (float) $row_dates['exe_result'];
+        $max_score = (float) $row_dates['exe_weighting'];
 
         $sql = "UPDATE $TBL_LP_ITEM SET
                     max_score = '$max_score'
-                WHERE c_id = $course_id AND id = '".$safe_item_id."'";
+                WHERE c_id = $course_id AND id = '" . $safe_item_id . "'";
         Database::query($sql);
 
         $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = '$safe_item_id' AND
-                    lp_view_id = '".$_SESSION['oLP']->lp_view_id."'
+                    lp_view_id = '" . $_SESSION['oLP']->lp_view_id . "'
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
 
         if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
-        	$row_last_attempt = Database::fetch_row($res_last_attempt);
-        	$lp_item_view_id  = $row_last_attempt[0];
+            $row_last_attempt = Database::fetch_row($res_last_attempt);
+            $lp_item_view_id = $row_last_attempt[0];
             $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
                         status = 'completed' ,
                         score = $score,
                         total_time = $mytime
-                    WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
+                    WHERE id='" . $lp_item_view_id . "' AND c_id = $course_id ";
 
-            if ($debug) error_log($sql);
+            if ($debug) {
+                error_log($sql);
+            }
+
             Database::query($sql);
 
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET
                         orig_lp_item_view_id = $lp_item_view_id
-                    WHERE exe_id = ".$safe_exe_id;
+                    WHERE exe_id = " . $safe_exe_id;
             Database::query($sql);
         }
     }
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
-        $src = api_get_path(WEB_CODE_PATH).'exercice/result.php?origin=learnpath&id='.$safe_exe_id;
+        $src = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?origin=learnpath&id=' . $safe_exe_id;
 
-        if ($debug) error_log('Calling URL: '.$src);
+        if ($debug) {
+            error_log('Calling URL: ' . $src);
+        }
     }
     $autostart = 'false';
 }
@@ -290,13 +300,11 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 }
 
 // Not in fullscreen mode.
-Display::display_reduced_header($nameTools);
-
 // Check if audio recorder needs to be in studentview.
 if (isset($_SESSION['status']) && $_SESSION['status'][$course_code] == 5) {
-	$audio_recorder_studentview = true;
+    $audio_recorder_studentview = true;
 } else {
-	$audio_recorder_studentview = false;
+    $audio_recorder_studentview = false;
 }
 
 // Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
@@ -312,26 +320,26 @@ $scorm_css_header = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
 // Setting up the CSS theme if exists.
-if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
+if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
     global $lp_theme_css;
 } else {
     $lp_theme_css = $my_style;
 }
 
-$progress_bar   = "";
+$progress_bar = "";
 if (!api_is_invitee()) {
-    $progress_bar   = $_SESSION['oLP']->getProgressBar();
+    $progress_bar = $_SESSION['oLP']->getProgressBar();
 }
 $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-$navigation_bar_bottom = $_SESSION['oLP']->get_navigation_bar("control-bottom","display:none");
-$mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
+$navigation_bar_bottom = $_SESSION['oLP']->get_navigation_bar("control-bottom", "display:none");
+$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
 
-$tbl_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $show_audioplayer = false;
 // Getting all the information about the item.
 $sql = "SELECT audio FROM " . $tbl_lp_item . "
-        WHERE c_id = $course_id AND lp_id = '" . $_SESSION['oLP']->lp_id."'";
-$res_media= Database::query($sql);
+        WHERE c_id = $course_id AND lp_id = '" . $_SESSION['oLP']->lp_id . "'";
+$res_media = Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {
     while ($row_media = Database::fetch_array($res_media)) {
@@ -342,226 +350,77 @@ if (Database::num_rows($res_media) > 0) {
     }
 }
 
-echo '<div id="learning_path_main" style="width:100%;height:100%;">';
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
 
+$breadcrumb = null;
+
 if ($is_allowed_to_edit) {
-    echo '<div class="row">';
-    echo '<div id="learning_path_breadcrumb_zone" class="col-md-12">';
     global $interbreadcrumb;
-    $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
-    $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
-    echo return_breadcrumb($interbreadcrumb, null, null);
-    echo '</div>';
-    echo '</div>';
+    $interbreadcrumb[] = array(
+        'url' => 'lp_controller.php?action=list&isStudentView=false',
+        'name' => get_lang('LearningPaths')
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_self() . "?action=add_item&type=step&lp_id={$_SESSION['oLP']->lp_id}&isStudentView=false",
+        'name' => $_SESSION['oLP']->get_name()
+    );
+    $interbreadcrumb[] = array(
+        'url' => '#',
+        'name' => get_lang('Preview')
+    );
+    $breadcrumb = return_breadcrumb($interbreadcrumb, null, null);
 }
-    /* button hiden left zone */
-    echo '<a id="touch-button" class="hidden-touch" href="#"></a>';
-    /* Fin left zone */
-    echo '<div class="container-fluid"><div class="row">';
-    echo '<div id="learning_path_left_zone" class="sidebar-scorm"> ';
 
-    echo '<div id="scorm-info" class="panel panel-default">';
-    echo '<div class="panel-heading">
-        <a id="ui-option">
-        <i id="icon-down"class="fa fa-chevron-down hidden"></i>
-        <i id="icon-up" class="fa fa-chevron-up"></i>
-        </a></div>';
-    ?>
-        <!-- end header -->
+// Return to course home.
+if ($is_allowed_to_edit) {
+    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+        'isStudentView' => 'false',
+        'action' => 'return_to_course_homepage'
+    ]);
+} else {
+    $buttonHomeUrl = 'lp_controller.php?' . api_get_cidreq() . '&' . http_build_query([
+        'action' => 'return_to_course_homepage'
+    ]);
+}
 
-        <!-- Author image preview -->
-            <div id="panel-scorm" class="panel-body">
-                <?php
-                // Return to course home.
-                if ($is_allowed_to_edit) {
-                $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
-                } else {
-                $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
-                }
+$buttonHomeText = get_lang('CourseHomepageLink');
+// Return to lp list
+if (api_get_course_setting('lp_return_link') == 1) {
+    $buttonHomeUrl .= '&redirectTo=lp_list';
+    $buttonHomeText = get_lang('LearningPathList');
+}
 
-                $iconHome='<i class="fa fa-home"></i>';
-                $name = get_lang('CourseHomepageLink');
-                // Return to lp list
-                if (api_get_course_setting('lp_return_link') == 1) {
-                $url .= '&redirectTo=lp_list';
-                $name = get_lang('LearningPathList');
-                }
+$template = new Template('title', false, false, true, true, false);
+$template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
+$template->assign(
+    'glossary_tool_availables',
+    ['true', 'lp', 'exercise_and_lp']
+);
+$template->assign('show_glossary_in_documents', api_get_setting('show_glossary_in_documents'));
+$template->assign('jquery_web_path', api_get_jquery_web_path());
+$template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
+$template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());
+$template->assign('is_allowed_to_edit', $is_allowed_to_edit);
+$template->assign('gamification_mode', api_get_setting('gamification_mode'));
 
-                echo Display::url(
-                $iconHome.' '.$name,
-                $url,
-                array(
-                'class' => 'btn btn-success btn-block',
-                'target' => '_self',
-                'onclick' => 'javascript: window.parent.API.save_asset();'
-                )
-                );
+$template->assign('breadcrumb', $breadcrumb);
 
-                ?>
-                <div class="image-avatar">
-                <?php
-                if ($_SESSION['oLP']->get_preview_image() != '') {
-                    $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
-                    $style = null;
-                    if ($picture['1'] < 96) {
-                        $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" ';
-                    }
-                    $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
-                    $my_path = $_SESSION['oLP']->get_preview_image_path();
-                    echo '<img src="'.$my_path.'">';
-                } else {
-                    echo Display :: display_icon('unknown_250_100.jpg');
-                }
-                ?>
-                </div>
-                <div id="lp_navigation_elem" class="navegation-bar">
-                    <?php echo $navigation_bar; ?>
-                    <div id="progress_bar">
-                        <?php echo $progress_bar; ?>
-                    </div>
-                </div>
-                <div class="description-autor">
-                    <?php echo $_SESSION['oLP']->get_author(); ?>
-                </div>
-                <?php
-                if ($show_audioplayer) {
-                    echo '<div id="lp_media_file">';
-                    echo $mediaplayer;
-                    echo '</div>';
-                }
-                ?>
+$template->assign('button_home_url', $buttonHomeUrl);
+$template->assign('button_home_text', $buttonHomeText);
+$template->assign('navigation_bar', $navigation_bar);
+$template->assign('progress_bar', $progress_bar);
+$template->assign('oLP', $_SESSION['oLP']);
+$template->assign('show_audio_player', $show_audioplayer);
+$template->assign('media_player', $mediaplayer);
+$template->assign('toc_list', $get_toc_list);
+$template->assign('iframe_src', $src);
+$template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 
-        </div>
+$content = $template->fetch('default/learnpath/view.tpl');
 
-    </div>
+$template->assign('content', $content);
+$template->display_no_layout_template();
 
-        <!-- TOC layout -->
-
-        <div id="toc_id" name="toc_name">
-            <div id="learning_path_toc" class="scorm-list">
-                <?php echo $_SESSION['oLP']->get_html_toc($get_toc_list); ?>
-            </div>
-        </div>
-        <!-- end TOC layout -->
-    </div>
-
-    <!-- end left zone
-    <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div>-->
-    <!-- right zone -->
-    <div id="learning_path_right_zone" style="height:100%" class="content-scorm">
-    <?php
-        // hub 26-05-2010 Fullscreen or not fullscreen
-        $height = '100%';
-        if ($_SESSION['oLP']->mode == 'fullscreen') {
-            echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:'.$height.'" ></iframe>';
-        } else {
-            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:'.$height.'"></iframe>';
-        }
-    ?>
-    </div>
-
-    <!-- end right Zone -->
-</div>
-<?php echo $navigation_bar_bottom; ?>
-    </div></div>
-
-<script>
-    // Resize right and left pane to full height (HUB 20-05-2010).
-    function updateContentHeight() {
-        document.body.style.overflow = 'hidden';
-        var IE = window.navigator.appName.match(/microsoft/i);
-
-        /* Identified new height */
-        var heightControl = $('#control-bottom').height();
-        var heightBreadcrumb = ($('#learning_path_breadcrumb_zone').height())? $('#learning_path_breadcrumb_zone').height() : 0 ;
-
-        var heightScormInfo = $('#scorm-info').height();
-
-        var heightTop = heightScormInfo + 100;
-
-        //heightTop = (heightTop > 300)? heightTop : 300;
-
-
-        var innerHeight = $(window).height();
-
-        if(innerHeight<=640){
-            $('#inner_lp_toc').css('height',  innerHeight - heightTop + "px");
-            $('#content_id').css('height', innerHeight - heightControl + "px");
-        }else{
-            $('#inner_lp_toc').css('height',  innerHeight - heightBreadcrumb - heightTop + "px");
-            $('#content_id').css('height', innerHeight - heightControl + "px");
-        }
-
-        //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
-
-
-    // Loads the glossary library.
-    <?php
-    $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-    if (in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'))) {
-           if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
-                ?>
-            $.frameReady(function(){
-                   //  $("<div>I am a div courses</div>").prependTo("body");
-         }, "top.content_name",
-          { load: [
-              { type:"script", id:"_fr1", src:"<?php echo api_get_jquery_web_path(); ?>"},
-              { type:"script", id:"_fr4", src:"<?php echo api_get_jquery_ui_js_web_path(); ?>"},
-              { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_jquery_ui_css_web_path(); ?>"},
-              { type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
-          ] }
-          );
-    <?php } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { ?>
-    $.frameReady(function(){
-        //  $("<div>I am a div courses</div>").prependTo("body");
-      },
-        "top.content_name",
-      {
-      load: [
-          { type:"script", id:"_fr1", src:"<?php echo api_get_jquery_web_path(); ?>"},
-          { type:"script", id:"_fr4", src:"<?php echo api_get_jquery_ui_js_web_path(); ?>"},
-          { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_jquery_ui_css_web_path(); ?>"},
-          { type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
-      ]}
-      );
-    <?php }
-    }
-  ?>
-  }
-    $(document).ready(function() {
-        updateContentHeight();
-        $('#touch-button').children().click(function(){
-            updateContentHeight();
-        });
-        $(window).resize(function() {
-            updateContentHeight();
-        });
-    });
-    window.onload = updateContentHeight();
-    window.onresize = updateContentHeight();
-
-    $(document).ready(function(){
-
-        $("#icon-down").click(function(){
-            $("#icon-up").removeClass("hidden");
-            $(this).addClass("hidden");
-            $('#panel-scorm').slideDown("slow",function(){
-                updateContentHeight();
-            });
-        });
-        $("#icon-up").click(function(){
-            $("#icon-down").removeClass("hidden");
-            $(this).addClass("hidden");
-            $('#panel-scorm').slideUp("slow",function(){
-                updateContentHeight();
-            });
-        });
-    });
-
-</script>
-<?php
 // Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;
 

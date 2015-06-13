@@ -115,10 +115,7 @@ $form->addElement('hidden', 'action', 'add_lp');
 $form->addButtonAdvancedSettings('advanced_params');
 $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-$items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id());
-if (!empty($items)) {
-    $items = array_merge(array(get_lang('SelectACategory')), $items);
-}
+$items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id(), true);
 $form->addElement('select', 'category_id', get_lang('Category'), $items);
 
 // Start date

@@ -52,11 +52,14 @@ $current_session = api_get_session_id();
 
 /* Introduction section (editable by course admins) */
 
-$introductionSection = Display::return_introduction_section(TOOL_LEARNPATH, array(
-    'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-    'CreateDocumentDir' => '../../courses/'.api_get_course_path().'/document/',
-    'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
-));
+$introductionSection = Display::return_introduction_section(
+    TOOL_LEARNPATH,
+    array(
+        'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+        'CreateDocumentDir' => '../../courses/'.api_get_course_path().'/document/',
+        'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
+    )
+);
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 

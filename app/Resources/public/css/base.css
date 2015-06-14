@@ -156,7 +156,7 @@ ul#navigation .report a {
 /* END CSS BASE */
 
 .button-load{
-  background: url("../img/icons/64/file_upload.png") no-repeat center 20px;
+  background: url("../../main/img/icons/64/file_upload.png") no-repeat center 20px;
   padding-top: 70px;
 }
 
@@ -3321,7 +3321,7 @@ form .formw .freeze {
   padding-bottom: 1em;
 }
 .skill-options .skill-winner li a{
-  background: url("../img/icons/16/winner.png") no-repeat;
+  background: url("../../main/img/icons/16/winner.png") no-repeat;
   padding-left: 1.5em;
   padding-bottom: 1em;
 }
@@ -3728,7 +3728,7 @@ div#no-data-view div.controls {
     height: 25px;
     position: relative;
     overflow:hidden;
-    background: url(../img/alt_star.png) top left repeat-x;
+    background: url(../../main/img/alt_star.png) top left repeat-x;
 }
 .star-rating li{
     padding:0px;
@@ -3750,7 +3750,7 @@ div#no-data-view div.controls {
     overflow:hidden;
 }
 .star-rating li a:hover{
-    background: url(../img/alt_star.png) left bottom;
+    background: url(../../main/img/alt_star.png) left bottom;
     z-index: 2;
     left: 0px;
     border:none;
@@ -3786,7 +3786,7 @@ div#no-data-view div.controls {
     width: 125px;
 }
 .star-rating li.current-rating{
-    background: url(../img/alt_star.png) left center;
+    background: url(../../main/img/alt_star.png) left center;
     position: absolute;
     height: 25px;
     display: block;
@@ -3818,7 +3818,7 @@ a:active{
     height: 20px;
     width: 20px;
     position:absolute;
-    background: url("../img/offline.png") no-repeat scroll right center transparent;
+    background: url("../../main/img/offline.png") no-repeat scroll right center transparent;
 }
 
 .online_user {
@@ -3826,32 +3826,32 @@ a:active{
     height: 20px;
     width: 20px;
     position:absolute;
-    background: url("../img/online.png") no-repeat scroll right center transparent;
+    background: url("../../main/img/online.png") no-repeat scroll right center transparent;
 }
 
 .online_user_in_text {
-    background: url("../img/online.png") no-repeat scroll right center transparent;
+    background: url("../../main/img/online.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
     margin-right: 4px;
 }
 .send_msg_in_text {
-    background: url("../img/mail_send.png") no-repeat scroll right center transparent;
+    background: url("../../main/img/mail_send.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
     margin-right: 4px;
 }
 .send_inv_in_text {
-    background: url("../img/invitation.png") no-repeat scroll right center transparent;
+    background: url("../../main/img/invitation.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
     margin-right: 4px;
 }
 .teacher_online {
-    background: url("../img/icons/16/teacher.png") no-repeat scroll right center transparent;
+    background: url("../../main/img/icons/16/teacher.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
@@ -3859,7 +3859,7 @@ a:active{
 }
 
 .student_online {
-    background: url("../img/icons/16/user.png") no-repeat scroll right center transparent;
+    background: url("../../main/img/icons/16/user.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
@@ -3871,7 +3871,7 @@ a:active{
 }
 
 .offline_user_in_text {
-    background: url("../img/offline.png") no-repeat scroll right center transparent;
+    background: url("../../main/img/offline.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
@@ -3967,14 +3967,14 @@ a:active{
 }
 
 #my_timeline #next {
-    background: url("../img/action_next.png") no-repeat transparent;
+    background: url("../../main/img/action_next.png") no-repeat transparent;
     height: 32px;
     width: 32px;
     float:right;
 }
 
 #my_timeline #prev {
-    background: url("../img/action_prev.png") no-repeat transparent;
+    background: url("../../main/img/action_prev.png") no-repeat transparent;
     height: 32px;
     width: 32px;
     float:left;
@@ -4239,13 +4239,13 @@ a.forum_group_link {
     cursor:pointer;
     background-color:#eee;
     margin-left: 4px !important;
-    background-image: url("../img/hide0.png");
+    background-image: url("../../main/img/hide0.png");
     background-repeat: no-repeat;
     background-position: center center;
 }
 
 .hide_bar_template_not_hide {
-    background-image: url("../img/hide2.png") !important;
+    background-image: url("../../main/img/hide2.png") !important;
 }
 
 #hide_bar_template:hover {
@@ -4378,7 +4378,7 @@ a.forum_group_link {
 }
 
 .handle{
-    background-image: url('../img/div_show.gif');
+    background-image: url('../../main/img/div_show.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
@@ -4386,7 +4386,7 @@ a.forum_group_link {
 }
 
 .handle.collapsed{
-    background-image:  url('../img/div_show.gif');
+    background-image:  url('../../main/img/div_show.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
@@ -4394,7 +4394,7 @@ a.forum_group_link {
 }
 
 .handle.expanded{
-    background-image:  url('../img/div_hide.gif');
+    background-image:  url('../../main/img/div_hide.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
@@ -4402,7 +4402,7 @@ a.forum_group_link {
 }
 
 .collapsible .handle{
-    background-image: url('../img/div_hide.gif');
+    background-image: url('../../main/img/div_hide.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
@@ -4410,7 +4410,7 @@ a.forum_group_link {
 }
 
 .collapsible .handle.collapsed{
-    background-image:  url('../img/div_show.gif');
+    background-image:  url('../../main/img/div_show.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
@@ -4418,7 +4418,7 @@ a.forum_group_link {
 }
 
 .collapsible.expanded .handle{
-    background-image:  url('../img/div_hide.gif');
+    background-image:  url('../../main/img/div_hide.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
@@ -4434,7 +4434,7 @@ a.forum_group_link {
     margin:0;
     padding:0;
     display:inline-block;
-    background-image:  url('../img/icons/22/invisible.png');
+    background-image:  url('../../main/img/icons/22/invisible.png');
     background-repeat: no-repeat;
     background-position:center center;
     box-shadow:none;
@@ -4449,7 +4449,7 @@ a.forum_group_link {
     width:22px;
     height:22px;
     display:inline-block;
-    background-image:  url('../img/icons/22/visible.png');
+    background-image:  url('../../main/img/icons/22/visible.png');
     background-repeat: no-repeat;
     background-position:center center;
     box-shadow:none;
@@ -4464,7 +4464,7 @@ a.forum_group_link {
     margin:0;
     padding:0;
     display:inline-block;
-    background-image:  url('../img/loading1.gif') !important;
+    background-image:  url('../../main/img/loading1.gif') !important;
     background-repeat: no-repeat;
     background-position:center center;
     box-shadow:none;
@@ -4501,7 +4501,7 @@ a.forum_group_link {
     margin:0;
     padding:0;
     display:inline-block;
-    background-image:  url('../img/attachment.gif');
+    background-image:  url('../../main/img/attachment.gif');
     background-repeat: no-repeat;
     background-position:center center;
     box-shadow:none;
@@ -4617,11 +4617,11 @@ li.annoucement{
 }
 
 .link.invalid .status{
-    background-image:  url('../img/icons/22/error.png');
+    background-image:  url('../../main/img/icons/22/error.png');
 }
 
 .link.valid .status{
-    background-image:  url('../img/icons/22/accept.png');
+    background-image:  url('../../main/img/icons/22/accept.png');
 }
 
 .btn.validate_link{
@@ -4633,7 +4633,7 @@ li.annoucement{
     margin:0;
     padding:0;
     display:inline-block;
-    background-image:  url('../img/icons/22/preview_view.png');
+    background-image:  url('../../main/img/icons/22/preview_view.png');
     background-repeat: no-repeat;
     background-position:center center;
     box-shadow:none;
@@ -4644,7 +4644,7 @@ li.annoucement{
 */
 
 i.size-32.icon-new-glossary-term{
-    background-image:  url('../img/icons/32/new_glossary_term.png');
+    background-image:  url('../../main/img/icons/32/new_glossary_term.png');
 }
 
 /*
@@ -4652,7 +4652,7 @@ i.size-32.icon-new-glossary-term{
 */
 
 i.size-32.icon-new-note{
-    background-image:  url('../img/icons/32/new_note.png');
+    background-image:  url('../../main/img/icons/32/new_note.png');
 }
 
 .notebook.entries li{
@@ -4745,13 +4745,13 @@ i.size-32.icon-new-note{
 
 .dataTables_wrapper .paginate_disabled_previous, .dataTables_wrapper .paginate_enabled_previous {
     padding-left: 23px;
-    background: url("../img/action_prev.png") no-repeat scroll left top;
+    background: url("../../main/img/action_prev.png") no-repeat scroll left top;
 }
 
 .dataTables_wrapper .paginate_disabled_next, .dataTables_wrapper .paginate_enabled_next {
     margin-left: 10px;
     padding-right: 23px;
-    background: url("../img/action_next.png") no-repeat scroll left top;
+    background: url("../../main/img/action_next.png") no-repeat scroll left top;
 }
 
 .dataTables_wrapper .paginate_disabled_previous, .dataTables_wrapper .paginate_disabled_next{
@@ -4759,14 +4759,14 @@ i.size-32.icon-new-note{
 }
 
 .dataTables_wrapper .sorting_asc {
-    background-image: url("../img/sort_asc.png");
+    background-image: url("../../main/img/sort_asc.png");
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-position: right center;
 }
 
 .dataTables_wrapper .sorting_desc{
-    background-image: url("../img/sort_desc.png");
+    background-image: url("../../main/img/sort_desc.png");
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-position: right center;
@@ -4786,21 +4786,21 @@ i.size-32.icon-new-note{
         padding: 10px 0px 10px 40px;
         background-repeat:no-repeat;
     }
-    select#question_type_hidden option[value="1"] {background-image: url(../img/icons/32/mcua.png);}
-    select#question_type_hidden option[value="2"] {background-image: url(../img/icons/32/mcma.png);}
-    select#question_type_hidden option[value="3"] {background-image: url(../img/icons/32/fill_in_blanks.png);}
-    select#question_type_hidden option[value="4"] {background-image: url(../img/icons/32/matching.png);}
-    select#question_type_hidden option[value="5"] {background-image: url(../img/icons/32/open_answer.png);}
-    select#question_type_hidden option[value="6"] {background-image: url(../img/icons/32/hotspot.png);}
-    select#question_type_hidden option[value="7"] {background-image: url(../img/icons/32/mcma.png);}
-    select#question_type_hidden option[value="8"] {background-image: url(../img/icons/32/mcma.png);}
-    select#question_type_hidden option[value="9"] {background-image: url(../img/icons/32/mcmac.png);}
-    select#question_type_hidden option[value="10"] {background-image: url(../img/icons/32/mcuao.png);}
-    select#question_type_hidden option[value="11"] {background-image: url(../img/icons/32/mcmao.png);}
-    select#question_type_hidden option[value="12"] {background-image: url(../img/icons/32/mcmaco.png);}
-    select#question_type_hidden option[value="13"] {background-image: url(../img/icons/32/audio_question.png);}
-    select#question_type_hidden option[value="14"] {background-image: url(../img/icons/32/mcmagl.png);}
-    select#question_type_hidden option[value="16"] {background-image: url(../img/icons/32/calculated_answer.png);}
+    select#question_type_hidden option[value="1"] {background-image: url(../../main/img/icons/32/mcua.png);}
+    select#question_type_hidden option[value="2"] {background-image: url(../../main/img/icons/32/mcma.png);}
+    select#question_type_hidden option[value="3"] {background-image: url(../../main/img/icons/32/fill_in_blanks.png);}
+    select#question_type_hidden option[value="4"] {background-image: url(../../main/img/icons/32/matching.png);}
+    select#question_type_hidden option[value="5"] {background-image: url(../../main/img/icons/32/open_answer.png);}
+    select#question_type_hidden option[value="6"] {background-image: url(../../main/img/icons/32/hotspot.png);}
+    select#question_type_hidden option[value="7"] {background-image: url(../../main/img/icons/32/mcma.png);}
+    select#question_type_hidden option[value="8"] {background-image: url(../../main/img/icons/32/mcma.png);}
+    select#question_type_hidden option[value="9"] {background-image: url(../../main/img/icons/32/mcmac.png);}
+    select#question_type_hidden option[value="10"] {background-image: url(../../main/img/icons/32/mcuao.png);}
+    select#question_type_hidden option[value="11"] {background-image: url(../../main/img/icons/32/mcmao.png);}
+    select#question_type_hidden option[value="12"] {background-image: url(../../main/img/icons/32/mcmaco.png);}
+    select#question_type_hidden option[value="13"] {background-image: url(../../main/img/icons/32/audio_question.png);}
+    select#question_type_hidden option[value="14"] {background-image: url(../../main/img/icons/32/mcmagl.png);}
+    select#question_type_hidden option[value="16"] {background-image: url(../../main/img/icons/32/calculated_answer.png);}
 }
 
 
@@ -4812,7 +4812,7 @@ i.size-32.icon-new-note{
  * work
  */
 i.size-32.icon-new-work{
-    background-image:  url('../img/icons/32/new_work.png');
+    background-image:  url('../../main/img/icons/32/new_work.png');
 }
 
 /* Default skill partition colors */

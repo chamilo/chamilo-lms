@@ -1764,6 +1764,8 @@ function api_get_course_info($course_code = null, $strict = false)
 
  * Now if the course_code is given, the returned array gives info about that
  * particular course, not specially the current one.
+ * @param int $id Numeric ID of the course
+ * @return array The course info as an array formatted by api_format_course_array, including category.name
  */
 function api_get_course_info_by_id($id = null) {
     if (!empty($id)) {
@@ -3530,6 +3532,7 @@ function api_get_item_visibility(
  * @param int $userId
  * @param int $groupId
  * @param int $sessionId
+ * @return void
  */
 function api_item_property_delete(
     $courseInfo,
@@ -3673,11 +3676,11 @@ function api_item_property_update(
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
     $condition_session = " AND session_id = $session_id ";
 
-    $filter = " c_id = $course_id AND tool='$tool' AND ref = $item_id $condition_session ";
+    $filter = " c_id = $course_id AND tool = '$tool' AND ref = $item_id $condition_session ";
 
     if ($item_id === '*') {
         // For all (not deleted) items of the tool
-        $filter = " c_id = $course_id  AND tool = '$tool' AND visibility<>'2' $condition_session";
+        $filter = " c_id = $course_id  AND tool = '$tool' AND visibility <> 2 $condition_session";
     }
 
     // Check whether $to_user_id and $to_group_id are passed in the function call.
@@ -3829,7 +3832,7 @@ function api_item_property_update(
             }
             break;
         default : // The item will be added or updated.
-            $set_type = ", lastedit_type='$last_edit_type' ";
+            $set_type = ", lastedit_type = '$last_edit_type' ";
             $visibility = '1';
             //$filter .= $to_filter; already added
             $sql = "UPDATE $tableItemProperty
@@ -3862,6 +3865,8 @@ function api_item_property_update(
  * @param string    course code
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param int $session_id
+ * @return array All fields from c_item_property (all rows found) or empty array
  */
 function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
 {
@@ -3872,6 +3877,9 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $session_id = intval($session_id);
     $session_condition = ' AND session_id = '.$session_id;
+    if (empty($session_id)) {
+        $session_condition = " AND (session_id = 0 OR session_id IS NULL) ";
+    }
     $course_id = $course_info['real_id'];
 
     $sql = "SELECT * FROM $item_property_table
@@ -3879,7 +3887,6 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
                 c_id = $course_id AND
                 tool = '$tool'
                 $session_condition ";
-    error_log($sql);
     $rs  = Database::query($sql);
     $list = array();
     if (Database::num_rows($rs) > 0) {
@@ -3912,6 +3919,9 @@ function api_get_item_property_list_by_tool_by_user(
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $session_condition = ' AND session_id = '.$session_id;
+    if (empty($session_id)) {
+        $session_condition = " (session_id = 0 OR session_id IS NULL) ";
+    }
     $sql = "SELECT * FROM $item_property_table
             WHERE
                 insert_user_id = $userId AND
@@ -3931,21 +3941,27 @@ function api_get_item_property_list_by_tool_by_user(
 
 /**
  * Gets item property id from tool of a course
- * @param string    course code
- * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
- * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param string $course_code course code
+ * @param string $tool tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param int $ref id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param int $sessionId Session ID (optional)
+ * @return int
  */
-function api_get_item_property_id($course_code, $tool, $ref)
+function api_get_item_property_id($course_code, $tool, $ref, $sessionId = 0)
 {
     $course_info = api_get_course_info($course_code);
     $tool = Database::escape_string($tool);
     $ref = intval($ref);
 
     // Definition of tables.
-    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = $course_info['real_id'];
-    $sql = "SELECT id FROM $TABLE_ITEMPROPERTY
-            WHERE c_id = $course_id AND tool = '$tool' AND ref = '$ref'";
+    $sessionCondition = " AND session_id = $sessionId ";
+    if (empty($sessionId)) {
+        $sessionCondition = " (session_id = 0 OR session_id IS NULL) ";
+    }
+    $sql = "SELECT id FROM $tableItemProperty
+            WHERE c_id = $course_id AND tool = '$tool' AND ref = $ref $sessionCondition";
     $rs  = Database::query($sql);
     $item_property_id = '';
     if (Database::num_rows($rs) > 0) {
@@ -4014,6 +4030,7 @@ function api_get_track_item_property_history($tool, $ref)
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  * @param int $session_id
+ * @return array Array with all fields from c_item_property, empty array if not found or false if course could not be found
  */
 function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
 {

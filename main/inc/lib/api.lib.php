@@ -3594,6 +3594,7 @@ function api_item_property_delete(
  * @param int $to_user_id : id of the intended user (always has priority over $to_group_id !), only relevant for $type (1)
  * @param string $start_visible 0000-00-00 00:00:00 format
  * @param string $end_visible 0000-00-00 00:00:00 format
+ * @param int $session_id The session ID, if any, otherwise will default to 0
  * @return boolean False if update fails.
  * @author Toon Van Hoecke <Toon.VanHoecke@UGent.be>, Ghent University
  * @version January 2005
@@ -3603,7 +3604,7 @@ function api_item_property_update(
     $_course,
     $tool,
     $item_id,
-    $lastedit_type,
+    $last_edit_type,
     $user_id,
     $to_group_id = 0,
     $to_user_id = null,
@@ -3624,8 +3625,8 @@ function api_item_property_update(
     // Definition of variables.
     $tool = Database::escape_string($tool);
     $item_id = intval($item_id);
-    $lastEditTypeNoFilter = $lastedit_type;
-    $lastedit_type = Database::escape_string($lastedit_type);
+    $lastEditTypeNoFilter = $last_edit_type;
+    $last_edit_type = Database::escape_string($last_edit_type);
     $user_id = intval($user_id);
 
     $startVisible = "NULL";
@@ -3650,7 +3651,7 @@ function api_item_property_update(
     }
 
     // Definition of tables.
-    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     if ($to_user_id <= 0) {
         $to_user_id = null; // No to_user_id set
@@ -3670,12 +3671,9 @@ function api_item_property_update(
     $toValueCondition = empty($to_value) ? "NULL" : "'$to_value'";
 
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
-    $condition_session = '';
-    if (!empty($session_id)) {
-        $condition_session = " AND session_id = '$session_id' ";
-    }
+    $condition_session = " AND session_id = $session_id ";
 
-    $filter = " c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
+    $filter = " c_id = $course_id AND tool='$tool' AND ref = $item_id $condition_session ";
 
     if ($item_id === '*') {
         // For all (not deleted) items of the tool
@@ -3690,11 +3688,11 @@ function api_item_property_update(
 
     if (!is_null($to_user_id)) {
         // Set filter to intended user.
-        $to_filter = " AND to_user_id= '$to_user_id' $condition_session";
+        $to_filter = " AND to_user_id = $to_user_id $condition_session";
     } else {
         // Set filter to intended group.
         if (($to_group_id != 0) && $to_group_id == strval(intval($to_group_id))) {
-            $to_filter = " AND to_group_id = '$to_group_id' $condition_session";
+            $to_filter = " AND to_group_id = $to_group_id $condition_session";
         }
     }
 
@@ -3708,40 +3706,40 @@ function api_item_property_update(
             // delete = make item only visible for the platform admin.
             $visibility = '2';
             if (!empty($session_id)) {
-                // Check whether session id already exist into itemp_properties for updating visibility or add it.
-                $sql = "SELECT session_id FROM $TABLE_ITEMPROPERTY
+                // Check whether session id already exist into item_properties for updating visibility or add it.
+                $sql = "SELECT session_id FROM $tableItemProperty
                         WHERE
                             c_id = $course_id AND
                             tool = '$tool' AND
-                            ref='$item_id' AND
-                            session_id = '$session_id'";
+                            ref = $item_id AND
+                            session_id = $session_id";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
-                    $sql = "UPDATE $TABLE_ITEMPROPERTY
+                    $sql = "UPDATE $tableItemProperty
                             SET lastedit_type       = '".str_replace('_', '', ucwords($tool))."Deleted',
                                 lastedit_date       = '$time',
-                                lastedit_user_id    = '$user_id',
-                                visibility          = '$visibility',
-                                session_id          = '$session_id' $set_type
+                                lastedit_user_id    = $user_id,
+                                visibility          = $visibility,
+                                session_id          = $session_id $set_type
                             WHERE $filter";
                     $result = Database::query($sql);
                 } else {
-                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                            VALUES ($course_id, '$tool','$item_id','$time', '$user_id', '$time', '$lastedit_type','$user_id', $toValueCondition, '$visibility', $startVisible, $endVisible, '$session_id')";
+                    $sql = "INSERT INTO $tableItemProperty (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
+                            VALUES ($course_id, '$tool',$item_id, '$time', $user_id, '$time', '$last_edit_type',$user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $session_id)";
                     $result = Database::query($sql);
                     $id = Database::insert_id();
                     if ($id) {
-                        $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
+                        $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";
                         Database::query($sql);
                     }
                 }
             } else {
-                $sql = "UPDATE $TABLE_ITEMPROPERTY
+                $sql = "UPDATE $tableItemProperty
                         SET
                             lastedit_type='".str_replace('_', '', ucwords($tool))."Deleted',
                             lastedit_date='$time',
-                            lastedit_user_id = '$user_id',
-                            visibility='$visibility' $set_type
+                            lastedit_user_id = $user_id,
+                            visibility = $visibility $set_type
                         WHERE $filter";
                 $result = Database::query($sql);
             }
@@ -3750,40 +3748,40 @@ function api_item_property_update(
             $visibility = '1';
             if (!empty($session_id)) {
                 // Check whether session id already exist into item_properties for updating visibility or add it.
-                $sql = "SELECT session_id FROM $TABLE_ITEMPROPERTY
+                $sql = "SELECT session_id FROM $tableItemProperty
                         WHERE
                             c_id = $course_id AND
                             tool = '$tool' AND
-                            ref = '$item_id' AND
-                            session_id = '$session_id'";
+                            ref = $item_id AND
+                            session_id = $session_id";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
-                    $sql = "UPDATE $TABLE_ITEMPROPERTY
+                    $sql = "UPDATE $tableItemProperty
                             SET
                                 lastedit_type='".str_replace('_', '', ucwords($tool))."Visible',
                                 lastedit_date='$time',
-                                lastedit_user_id = '$user_id',
-                                visibility='$visibility',
-                                session_id = '$session_id' $set_type
+                                lastedit_user_id = $user_id,
+                                visibility = $visibility,
+                                session_id = $session_id $set_type
                             WHERE $filter";
                     $result = Database::query($sql);
                 } else {
-                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                            VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', $toValueCondition, '$visibility', $startVisible, $endVisible, '$session_id')";
+                    $sql = "INSERT INTO $tableItemProperty (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
+                            VALUES ($course_id, '$tool', $item_id, '$time', $user_id, '$time', '$last_edit_type', $user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $session_id)";
                     $result = Database::query($sql);
                     $id = Database::insert_id();
                     if ($id) {
-                        $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
+                        $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";
                         Database::query($sql);
                     }
                 }
             } else {
-                $sql = "UPDATE $TABLE_ITEMPROPERTY
+                $sql = "UPDATE $tableItemProperty
                         SET
                             lastedit_type='".str_replace('_', '', ucwords($tool))."Visible',
                             lastedit_date='$time',
-                            lastedit_user_id='$user_id',
-                            visibility='$visibility' $set_type
+                            lastedit_user_id = $user_id,
+                            visibility = $visibility $set_type
                         WHERE $filter";
                 $result = Database::query($sql);
             }
@@ -3792,65 +3790,65 @@ function api_item_property_update(
             $visibility = '0';
             if (!empty($session_id)) {
                 // Check whether session id already exist into item_properties for updating visibility or add it
-                $sql = "SELECT session_id FROM $TABLE_ITEMPROPERTY
+                $sql = "SELECT session_id FROM $tableItemProperty
                         WHERE
                             c_id = $course_id AND
                             tool = '$tool' AND
-                            ref='$item_id' AND
-                            session_id = '$session_id'";
+                            ref = $item_id AND
+                            session_id = $session_id";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
-                    $sql = "UPDATE $TABLE_ITEMPROPERTY
+                    $sql = "UPDATE $tableItemProperty
                             SET
                                 lastedit_type = '".str_replace('_', '', ucwords($tool))."Invisible',
                                 lastedit_date = '$time',
-                                lastedit_user_id='$user_id',
-                                visibility = '$visibility',
-                                session_id = '$session_id' $set_type
+                                lastedit_user_id = $user_id,
+                                visibility = $visibility,
+                                session_id = $session_id $set_type
                             WHERE $filter";
                     $result = Database::query($sql);
                 } else {
-                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
-                            VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', $toValueCondition, '$visibility', $startVisible, $endVisible, '$session_id')";
+                    $sql = "INSERT INTO $tableItemProperty (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
+                            VALUES ($course_id, '$tool', $item_id, '$time', $user_id, '$time', '$last_edit_type', $user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $session_id)";
                     $result = Database::query($sql);
                     $id = Database::insert_id();
                     if ($id) {
-                        $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
+                        $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";
                         Database::query($sql);
                     }
                 }
             } else {
-                $sql = "UPDATE $TABLE_ITEMPROPERTY
+                $sql = "UPDATE $tableItemProperty
                         SET
                             lastedit_type = '".str_replace('_', '', ucwords($tool))."Invisible',
                             lastedit_date = '$time',
-                            lastedit_user_id = '$user_id',
-                            visibility = '$visibility' $set_type
+                            lastedit_user_id = $user_id,
+                            visibility = $visibility $set_type
                         WHERE $filter";
                 $result = Database::query($sql);
             }
             break;
         default : // The item will be added or updated.
-            $set_type = ", lastedit_type='$lastedit_type' ";
+            $set_type = ", lastedit_type='$last_edit_type' ";
             $visibility = '1';
             //$filter .= $to_filter; already added
-            $sql = "UPDATE $TABLE_ITEMPROPERTY
+            $sql = "UPDATE $tableItemProperty
                     SET
                       lastedit_date = '$time',
-                      lastedit_user_id='$user_id' $set_type
+                      lastedit_user_id = $user_id $set_type
                     WHERE $filter";
             $result = Database::query($sql);
     }
 
-    // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
+    // Insert if no entries are found (can only happen in case of $last_edit_type switch is 'default').
     if (Database::affected_rows($result) == 0) {
         $sessionCondition = empty($session_id) ? "NULL" : "'$session_id'";
-        $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', $toValueCondition, '$visibility', $startVisible, $endVisible, $sessionCondition)";
+        $sql = "INSERT INTO $tableItemProperty (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
+                VALUES ($course_id, '$tool', $item_id, '$time', $user_id, '$time', '$last_edit_type', $user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $sessionCondition)";
         $res = Database::query($sql);
         $id = Database::insert_id();
         if ($id) {
-            $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
+            $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";
             Database::query($sql);
             return false;
         }
@@ -3881,6 +3879,7 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
                 c_id = $course_id AND
                 tool = '$tool'
                 $session_condition ";
+    error_log($sql);
     $rs  = Database::query($sql);
     $list = array();
     if (Database::num_rows($rs) > 0) {

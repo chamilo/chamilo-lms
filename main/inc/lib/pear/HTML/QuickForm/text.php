@@ -34,6 +34,7 @@
 class HTML_QuickForm_text extends HTML_QuickForm_input
 {
     private $inputSize;
+    private $columnsSize;
 
     /**
      * Class constructor
@@ -56,6 +57,8 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         }
         $inputSize = isset($attributes['input-size']) ? $attributes['input-size'] : null;
         $this->setInputSize($inputSize);
+        $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
+        $this->setColumnsSize($columnsSize);
         $icon = isset($attributes['icon']) ? $attributes['icon'] : null;
         $this->setIcon($icon);
 
@@ -98,8 +101,29 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      */
     public function getTemplate($layout)
     {
-        $size = $this->getInputSize();
-        $size = empty($size) ? '8' : $size;
+        $size = $this->getColumnsSize();
+
+        if (empty($size)) {
+            $sizeTemp = $this->getInputSize();
+            if (empty($size)) {
+                $sizeTemp = 8;
+            }
+            $size = array(2, $sizeTemp, 2);
+        } else {
+            if (is_array($size)) {
+                if (count($size) != 3) {
+                    $sizeTemp = $this->getInputSize();
+                    if (empty($size)) {
+                        $sizeTemp = 8;
+                    }
+                    $size = array(2, $sizeTemp, 2);
+                }
+                // else just keep the $size array as received
+            } else {
+                $size = array(2, intval($size), 2);
+            }
+        }
+
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
@@ -115,11 +139,11 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
                 <div class="form-group {error_class}">
-                    <label {label-for} class="col-sm-2 control-label" >
+                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
                     </label>
-                    <div class="col-sm-'.$size.'">
+                    <div class="col-sm-'.$size[1].'">
                         {icon}
                         {element}
 
@@ -131,7 +155,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                             <span class="help-inline">{error}</span>
                         <!-- END error -->
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-'.$size[2].'">
                         <!-- BEGIN label_3 -->
                             {label_3}
                         <!-- END label_3 -->
@@ -163,7 +187,21 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     {
         $this->inputSize = $inputSize;
     }
+    /**
+     * @return null
+     */
+    public function getColumnsSize()
+    {
+        return $this->columnsSize;
+    }
 
+    /**
+     * @param null $columnsSize
+     */
+    public function setColumnsSize($columnsSize)
+    {
+        $this->columnsSize = $columnsSize;
+    }
     /**
      * Sets size of text field
      *

@@ -22,9 +22,9 @@ if (!empty($sessionListFromDatabase)) {
     }
 }
 
-$formSequence = new FormValidator('sequence_form', 'post', api_get_self());
-$formSequence->addText('name', get_lang('Sequence'));
-$formSequence->addButtonCreate(get_lang('AddSequence'), 'submit_sequence');
+$formSequence = new FormValidator('sequence_form', 'post', api_get_self(),null,null,'inline');
+$formSequence->addText('name', get_lang('Sequence'), true, ['cols-size' => [3, 8, 1]]);
+$formSequence->addButtonCreate(get_lang('AddSequence'), 'submit_sequence', false, ['cols-size' => [3, 8, 1]]);
 
 $em = Database::getManager();
 
@@ -39,38 +39,50 @@ if ($formSequence->validate()) {
     exit;
 }
 
-$form = new FormValidator('');
-$form->addHidden('sequence_type', 'session');
+$selectSequence = new FormValidator('');
+$selectSequence ->addHidden('sequence_type', 'session');
 $em = Database::getManager();
 
 $sequenceList = $em->getRepository('ChamiloCoreBundle:Sequence')->findAll();
 
-$form->addSelect(
+$selectSequence->addSelect(
     'sequence',
     get_lang('Sequence'),
     $sequenceList,
-    ['id' => 'sequence_id']
+    ['id' => 'sequence_id', 'cols-size' => [3, 7, 2]]
 );
 
+$form = new FormValidator('');
+$form->addHtml("<div class='col-md-6'>");
+$form->addHidden('sequence_type', 'session');
 $form->addSelect(
     'sessions',
     get_lang('Sessions'),
     $sessionList,
-    ['id' => 'item']
+    ['id' => 'item', 'cols-size' => [4, 7, 1]]
 );
-$form->addButtonNext(get_lang('UseAsReference'), 'use_as_reference');
-
+$form->addButtonNext(get_lang('UseAsReference'), 'use_as_reference', ['cols-size' => [4, 7, 1]]);
+$form->addHtml("</div>");
+$form->addHtml("<div class='col-md-6'>");
 $form->addSelect(
     'requirements',
     get_lang('Requirements'),
     $sessionList,
-    ['id' => 'requirements', 'multiple' => 'multiple']
+    ['id' => 'requirements', 'cols-size' => [3, 7, 2]]
 );
 
-$form->addButtonCreate(get_lang('SetAsRequirementForSelected'), 'set_requirement');
-$form->addButtonSave(get_lang('Save'), 'save_resource');
+$form->addButtonCreate(get_lang('SetAsRequirement'), 'set_requirement', false, ['cols-size' => [3, 7, 2]]);
+$form->addHtml("</div>");
 
-$tpl->assign('left_block', $formSequence->returnForm().$form->returnForm());
+$formSave = new FormValidator('');
+$formSave->addHidden('sequence_type', 'session');
+$formSave->addButton('save_resource', get_lang('SaveSettings'), 'floppy-o', 'success', null, null, ['cols-size' => [1, 10, 1]]);
+
+
+$tpl->assign('create_sequence', $formSequence->returnForm());
+$tpl->assign('select_sequence', $selectSequence->returnForm());
+$tpl->assign('configure_sequence', $form->returnForm());
+$tpl->assign('save_sequence', $formSave->returnForm());
 $layout = $tpl->get_template('admin/resource_sequence.tpl');
 $tpl->display($layout);
 

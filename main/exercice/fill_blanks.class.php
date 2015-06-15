@@ -284,7 +284,7 @@ class FillBlanks extends Question
      * abstract function which creates the form to create / edit the answers of the question
      * @param FormValidator $form
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
         global $charset;
 
@@ -294,7 +294,7 @@ class FillBlanks extends Question
         $answer = api_html_entity_decode($answer, ENT_QUOTES, $charset);
 
         // remove the :: eventually written by the user
-        $answer = str_replace('::','',$answer);
+        $answer = str_replace('::', '', $answer);
 
         // remove starting and ending space and &nbsp;
         $answer = api_preg_replace("/\xc2\xa0/", " ", $answer);
@@ -307,7 +307,8 @@ class FillBlanks extends Question
         $blankEndSeparatorRegexp = self::escapeForRegexp($blankEndSeparator);
 
         // remove spaces at the beginning and the end of text in square brackets
-        $answer = preg_replace_callback("/".$blankStartSeparatorRegexp."[^]]+".$blankEndSeparatorRegexp."/",
+        $answer = preg_replace_callback(
+            "/".$blankStartSeparatorRegexp."[^]]+".$blankEndSeparatorRegexp."/",
             function ($matches) use ($blankStartSeparator, $blankEndSeparator) {
                 $matchingResult = $matches[0];
                 $matchingResult = trim($matchingResult, $blankStartSeparator);
@@ -318,12 +319,12 @@ class FillBlanks extends Question
                 $matchingResult = str_replace('/"/', "", $matchingResult);
                 return $blankStartSeparator.$matchingResult.$blankEndSeparator;
             },
-            $answer);
+            $answer
+        );
 
         // get the blanks weightings
         $nb = preg_match_all('/'.$blankStartSeparatorRegexp.'[^'.$blankStartSeparatorRegexp.']*'.$blankEndSeparatorRegexp.'/', $answer, $blanks);
-        if(isset($_GET['editQuestion']))
-        {
+        if (isset($_GET['editQuestion'])) {
             $this -> weighting = 0;
         }
 
@@ -344,10 +345,10 @@ class FillBlanks extends Question
         D : input width for the word [pen]
         E : equal @1 if "Allow answers order switches" has been checked, @ otherwise
         */
-        if($nb > 0) {
+        if ($nb > 0) {
             $answer .= '::';
             // weighting
-            for($i=0 ; $i < $nb ; ++$i) {
+            for ($i=0; $i < $nb; ++$i) {
                 // enter the weighting of word $i
                 $answer .= $form->getSubmitValue('weighting['.$i.']');
                 // not the last word, add ","
@@ -360,7 +361,7 @@ class FillBlanks extends Question
 
             // input width
             $answer .= ":";
-            for ($i=0 ; $i < $nb ; ++$i) {
+            for ($i=0; $i < $nb; ++$i) {
                 // enter the width of input for word $i
                 $answer .= $form->getSubmitValue('sizeofinput['.$i.']');
                 // not the last word, add ","
@@ -399,7 +400,7 @@ class FillBlanks extends Question
      * @param null $score
      * @return null|string
      */
-    function return_header($feedback_type = null, $counter = null, $score = null)
+    public function return_header($feedback_type = null, $counter = null, $score = null)
     {
         $header = parent::return_header($feedback_type, $counter, $score);
         $header .= '<table class="'.$this->question_table_class .'">
@@ -409,7 +410,7 @@ class FillBlanks extends Question
         return $header;
     }
 
-   /**
+    /**
      * @param $separatorStartRegexp
      * @param $separatorEndRegexp
      * @param $correctItemRegexp
@@ -429,33 +430,34 @@ class FillBlanks extends Question
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
             case self::FILL_THE_BLANK_MENU:
                 $selected = "";
-                    // the blank menu
-                    $optionMenu = "";
-                    // display a menu from answer separated with |
-                    // if display for student, shuffle the correct answer menu
-                    $listMenu = self::getFillTheBlankMenuAnswers($inTeacherSolution, $displayForStudent);
-                    $result .= '<select name="choice['.$questionId.'][]">';
-                    for ($k=0; $k < count($listMenu); $k++) {
-                        $selected = "";
-                        if ($correctItem == $listMenu[$k]) {
-                            $selected = " selected=selected ";
-                        }
-                        // if in teacher view, display the first item by default, which is the right answer
-                        if ($k==0 && !$displayForStudent) {
-                            $selected = " selected=selected ";
-                        }
-                        $optionMenu .= '<option '.$selected.' value="'.$listMenu[$k].'">'.$listMenu[$k].'</option>';
-                    }
-                    if ($selected == "") {
-                        // no good answer have been found...
+                // the blank menu
+                $optionMenu = "";
+                // display a menu from answer separated with |
+                // if display for student, shuffle the correct answer menu
+                $listMenu = self::getFillTheBlankMenuAnswers($inTeacherSolution, $displayForStudent);
+                $result .= '<select name="choice['.$questionId.'][]">';
+                for ($k=0; $k < count($listMenu); $k++) {
+                    $selected = "";
+                    if ($correctItem == $listMenu[$k]) {
                         $selected = " selected=selected ";
                     }
-                    $result .= "<option $selected value=''>--</option>";
-                    $result .= $optionMenu;
-                    $result .= '</select>';
+                    // if in teacher view, display the first item by default, which is the right answer
+                    if ($k==0 && !$displayForStudent) {
+                        $selected = " selected=selected ";
+                    }
+                    $optionMenu .= '<option '.$selected.' value="'.$listMenu[$k].'">'.$listMenu[$k].'</option>';
+                }
+                if ($selected == "") {
+                    // no good answer have been found...
+                    $selected = " selected=selected ";
+                }
+                $result .= "<option $selected value=''>--</option>";
+                $result .= $optionMenu;
+                $result .= '</select>';
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
-            case  self::FILL_THE_BLANK_STANDARD:
+                //no break
+            case self::FILL_THE_BLANK_STANDARD:
             default:
                 $result = Display::input('text', "choice[$questionId][]", $correctItem, $attributes);
                 break;
@@ -465,7 +467,7 @@ class FillBlanks extends Question
     
 
     /**
-     * Return an array with the differents choice avaliable when the bracket is a menu
+     * Return an array with the different choices available when the answers between bracket show as a menu
      * @param $correctAnswer
      * @param $displayForStudent  true if we want to shuffle the choices of the menu for students
      * @return array
@@ -482,7 +484,7 @@ class FillBlanks extends Question
 
 
     /**
-     * Return the array indice of the student answer
+     * Return the array index of the student answer
      * @param $correctAnswer  the menu Choice1|Choice2|Choice3
      * @param $studentAnswer  the student answer must be Choice1 or Choice2 or Choice3
      * @return int  in the exemple 0 1 or 2 depending of the choice of the student
@@ -500,7 +502,7 @@ class FillBlanks extends Question
 
 
     /**
-     * return the possible answer if bracket is a multiple choice menu
+     * Return the possible answer if the answer between brackets is a multiple choice menu
      * @param $correctAnswer
      * @return array
      */
@@ -513,8 +515,8 @@ class FillBlanks extends Question
 
     /**
      * Return true if student answer is right according to the correctAnswer
-     * it is not so simple as equality, because of the type of Fill The Blank question
-     * eg : studentNaswer = 'Un' and correctAnswer = 'Un||1||un'
+     * it is not as simple as equality, because of the type of Fill The Blank question
+     * eg : studentAnswer = 'Un' and correctAnswer = 'Un||1||un'
      * @param $studentAnswer the [studentanswer] of the info array of the answer field
      * @param $correctAnswer the [tabwords] of the info array of the answer field
      * @return bool
@@ -555,7 +557,7 @@ class FillBlanks extends Question
      * @param bool $inIsStudentAnswer : true if it is a student answer and not the empty question model
      * @return array of information about the answer
      */
-     public static function getAnswerInfo($userAnswer = "", $isStudentAnswer = false)
+    public static function getAnswerInfo($userAnswer = "", $isStudentAnswer = false)
     {
         $listAnswerResults = array();
         $listAnswerResults['text'] = "";
@@ -622,8 +624,9 @@ class FillBlanks extends Question
         if ($listAnswerResults['wordsCount'] > 0) {
             $listAnswerResults['tabwordsbracket'] = $listWords[0];
             // remove [ and ] in string
-            array_walk($listWords[0],function (&$value, $key, $tabBlankChar)
-                {
+            array_walk(
+                $listWords[0],
+                function (&$value, $key, $tabBlankChar) {
                     $trimChars = "";
                     for ($i=0; $i < count($tabBlankChar); $i++) {
                         $trimChars .= $tabBlankChar[$i];

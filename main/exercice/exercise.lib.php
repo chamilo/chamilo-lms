@@ -445,7 +445,7 @@ function showQuestion(
 
                 list($answer) = explode('::', $answer);
 
-                //Correct answer
+                //Correct answers
                 $correctAnswerList = $listAnswerInformations['tabwords'];
 
                 //Student's answer
@@ -455,7 +455,7 @@ function showQuestion(
                     $studentAnswerList = $arrayStudentAnswer['studentanswer'];
                 }
 
-                // If display the question with answer (in page exercice/admin.php) for teacher preview
+                // If the question must be shown with the answer (in page exercice/admin.php) for teacher preview
                 // set the student-answer to the correct answer
                 if ($debug_mark_answer) {
                     $studentAnswerList = $correctAnswerList;
@@ -473,9 +473,9 @@ function showQuestion(
                         // replace / with \/ to allow the preg_replace bellow and all the regexp char
                         $correctItemRegexp = FillBlanks::getRegexpProtected($correctItemRegexp);
                         if (isset($studentAnswerList[$i])) {
-                            // student already start this test and this question
+                            // If student already started this test and answered this question,
                             // fill the blank with his previous answers
-                            // may be "" if student did the question, but not fill the blanks
+                            // may be "" if student viewed the question, but did not fill the blanks
                             $correctItem = $studentAnswerList[$i];
                         }
                         $attributes["style"] = "width:".$listAnswerInformations["tabinputsize"][$i]."px";

@@ -2480,7 +2480,7 @@ class Exercise
                                       WHERE exe_id = $exeId
                                       AND question_id= ".intval($questionId);
                         $resfill = Database::query($queryfill);
-                        $str = Database::result($resfill,0,'answer');
+                        $str = Database::result($resfill, 0, 'answer');
 
                         $listStudentResults = FillBlanks::getAnswerInfo($str, true);
                         $choice = $listStudentResults['studentanswer'];

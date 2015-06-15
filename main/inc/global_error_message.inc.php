@@ -56,15 +56,18 @@ if (is_int($global_error_code) && $global_error_code > 0) {
         $theme = 'chamilo';
     }
 
-	$css_path = 'app/Resources/public/css/';
+	//$css_path = 'app/Resources/public/css/';
+
 	$themePath = $css_path.'themes/'.$theme.'/';
 
-	$css_web_path = 'web/assets/';
-	$bootstrap_file = $css_web_path.'bootstrap/dist/css/bootstrap.min.css';
-	$css_base_file = $css_path.'base.css';
+	$css_web_assets = 'web/assets/';
+    $css_web_fontawesome = $css_web_assets.'fontawesome/css/font-awesome.css';
+    $css_web_path = 'web/css/';
+	$bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
+	$css_base_file = $css_web_path.'base.css';
 
     $css_list = array($bootstrap_file, $css_base_file);
-
+    $web_img = 'main/img/';
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
 	if (!empty($root_rel)) {
@@ -122,11 +125,23 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			}
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);
 			$InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
-										<div class="install-mascot">
-                                        <p class="download-info">
-                                            <button class="btn btn-primary btn-large" type="submit" value="INSTALL Chamilo" >INSTALL Chamilo</button>
-                                            <a class="btn btn-default btn-large" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>
-                                        </p>
+			<div class="row"><div class="col-md-12"><h2 class="title">Bienvenido al asistente de instalación de Chamilo 1.10.x</h2></div></div>
+                                        <div class="row">
+										<div class="install col-md-6">
+                                        <div class="office">
+
+                                            <p class="download-info">
+                                                <button class="btn btn-primary btn-lg" type="submit" value="INSTALL Chamilo" ><i class="fa fa-download"></i> Instalar Chamilo</button>
+                                                <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> <i class="fa fa-file-text-o"></i> '.$read_installation_guide.'</a>
+                                            </p>
+                                             <div class="icon-install">
+                                                <img src="'.$web_img.'icons/128/install.png" />
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <img class="img-responsive" src="'.$web_img.'chamilo.png" />
+                                        </div>
                                         </div>
 										</form>';
 			$global_error_message['description'] = $InstallationDescription;
@@ -158,7 +173,10 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$global_error_message['powered_by'] = $PoweredBy;
 
 	$global_error_message['encoding'] = 'UTF-8';
-	$global_error_message['css'] = $css_def;
+	$global_error_message['css'] = $css_base_file;
+    $global_error_message['fontawesome'] = $css_web_fontawesome;
+    $global_error_message['bootstrap'] = $bootstrap_file;
+    $global_error_message['theme'] = $css_web_path.'themes/'.$theme.'/default.css';
 	$global_error_message['chamilo_logo'] = $css_web_path.'themes/'.$theme.'/images/header-logo.png';
 
 
@@ -170,64 +188,37 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		<head>
 			<title>{TITLE}</title>
             <meta charset="{ENCODING}" />
-			<style type="text/css" media="screen, projection">
-				/*<![CDATA[*/
-				{CSS}
-				/*]]>*/
-			</style>
+            <link rel="stylesheet" href="{BOOTSTRAP}">
+            <link rel="stylesheet" href="{FONTAWESOME}">
+            <link rel="stylesheet" href="{CSS}">
+            <link rel="stylesheet" href="{THEME}">
+            <style type="text/css">
+                body{
+                    background: url("$web_img/background-install.png") repeat-x #999999;
+                }
+                .office{
+                     background: url("$web_img/office.png") no-repeat center 0;
+                     padding-top:35%;
+                     background-size:contain;
+                }
+            </style>
 		</head>
 		<body>
-		<div id="page-wrap">
-			<header>
-				<section id="menu-bar">
-					<nav class="navbar navbar-default">
-					<div class="container">
-						<div class="navbar-header">
-						    <a class="navbar-brand" href="#">Chamilo</a>
-							<button type="button" class="navbar-toggle btn" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="true">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-						</div>
-						<!-- Collect the nav links, forms, and other content for toggling -->
-						<div class="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true">
-							<ul class="nav navbar-nav">
-								<li id="current" class="active tab-homepage">
-								<a target="_top" href="index.php">Homepage</a>
-								</li>
-							</ul>
-						</div><!-- /.navbar-collapse -->
-					</div><!-- /.container-fluid -->
-				</nav>
-				</section>
-                <!--
-				<section id="breadcrumb-bar">
-					<div class="container">
-						<ul class="breadcrumb"> <li> <a href="#">{SECTION}</a></li></ul>
-					</div>
-				</section>
-				!-->
-			</header>
-			<div id="top_main_content" class="container">
-				<div class="col-md-12">
-					<div style="text-align:center">
-						{DESCRIPTION}
-						{CODE}
-					</div>
-				</div>
+		<div id="page-install">
+			<div class="container">
+			    <div class="row">
+			        <div class="col-md-12">
+			            <div class="logo">
+			                <img src="{CHAMILO_LOGO}"/>
+			            </div>
+			        </div>
+			    </div>
+                <div class="welcome-install">
+                        {DESCRIPTION}
+                        {CODE}
+                </div>
 			</div>
 		</div>
-		<footer>
-            <div class="container">
-                <div class="row">
-                    <div style="text-align: center;">
-                    &nbsp;<br />{POWERED_BY}
-                    </div>
-                </div>
-            </div>
-		</footer>
 		</body>
 </html>
 EOM;

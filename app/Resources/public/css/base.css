@@ -2089,8 +2089,9 @@ div.system_announcement {
 }
 
 .RequirementHeading, .RequirementText, .RequirementContent  {
-    margin-top:12px;
-    line-height: 18px;
+  margin-top:12px;
+  line-height: 18px;
+  margin-bottom: 20px;
 }
 
 #toolshortcuts_horizontal {
@@ -5927,6 +5928,54 @@ div#chat-remote-video video {
 }
 #children .parent .big-icon .sequence-deleted{
   font-size: 12px;
+}
+/* INSTALL CHAMILO */
+#page-install .logo{
+  text-align: center;
+}
+#page-install .icon-install{
+  text-align: center;
+}
+#page-install .title{
+  text-align: center;
+  color:#2E75A3;
+}
+#page-install .text{
+  text-align: center;
+}
+#page-install .download-info{
+  padding-top: 10px;
+  text-align: center;
+}
+.RequirementHeading h2{
+  font-size: 25px;
+}
+#page-install footer{
+  color: #666666;
+}
+#page-install footer a{
+  color: #333333;
+}
+#page-install footer a:hover{
+  color: #666666;
+}
+#page-install pre{
+  margin-top: 5px !important;
+}
+#page-install .page-header{
+  margin: 20px 0px 20px;
+}
+#page-install .normal-message{
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-width: 1px 1px 1px 5px;
+  border-color: #eeeeee;
+  border-style: solid;
+  font-size: 12px;
+  color: #666666;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

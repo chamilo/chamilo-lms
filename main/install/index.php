@@ -352,24 +352,26 @@ if ($encryptPassForm == '1') {
     </script>
     <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 </head>
-<body dir="<?php echo api_get_text_direction(); ?>" class="install-chamilo">
+<body dir="<?php echo api_get_text_direction(); ?>">
 
-<div id="page-wrap">
-<div id="main" class="container well-install">
-    <header>
-        <div class="row">
-            <div id="header_left" class="col-md-4">
-                <div id="logo">
-                    <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
-                </div>
+<div id="page-install">
+<div id="main" class="container">
+    <header class="row">
+        <div class="col-md-12">
+            <div class="logo">
+                <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
             </div>
         </div>
     </header>
-    <?php
-    echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
-    ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <?php
+            echo '<h4>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h4>';
+            ?>
+        </div>
+    <div class="panel-body">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="well">
                 <ol>
                     <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
@@ -383,12 +385,12 @@ if ($encryptPassForm == '1') {
             </div>
             <div id="note">
                 <a class="btn btn-default" href="../../documentation/installation_guide.html" target="_blank">
-                    <?php echo get_lang('ReadTheInstallationGuide'); ?>
+                    <i class="fa fa-file-text-o"></i> <?php echo get_lang('ReadTheInstallationGuide'); ?>
                 </a>
             </div>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-8">
 
 <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
@@ -616,7 +618,14 @@ if (@$_POST['step2']) {
     }
     echo '<div class="RequirementHeading">
           <h2>'.display_step_sequence().$msg.'</h2>
-          <div id="pleasewait" class="warning-message">'.get_lang('PleaseWaitThisCouldTakeAWhile').'</div>
+          <div id="pleasewait" class="alert alert-success">'.get_lang('PleaseWaitThisCouldTakeAWhile').'
+
+          <div class="progress">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            <span class="sr-only">100% Complete</span>
+          </div>
+        </div>
+          </div>
           </div>';
 
     // Push the web server to send these strings before we start the real
@@ -750,20 +759,16 @@ if (@$_POST['step2']) {
 $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 ?>
           </form>
-        </div> <!-- col-md-9-->
-      </div> <!-- row -->
-    </div> <!-- main end-->
-    <div class="push"></div>
-  </div><!-- wrapper end-->
-  <footer>
-      <div class="container">
-          <div class="row">
-              <div style="text-align: center;">
-                  &nbsp;<br />
-                  <?php echo $poweredBy; ?>
-              </div>
-          </div>
+        </div>
       </div>
-  </footer>
+    </div>
+    </div>
+        <footer class="panel panel-default">
+            <div class="panel-body">
+                <div style="text-align: center;">
+                    <?php echo $poweredBy; ?>
+                </div>
+            </div>
+        </footer>
   </body>
 </html>

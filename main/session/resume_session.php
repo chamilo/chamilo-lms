@@ -146,12 +146,13 @@ if ($sessionInfo['nbr_courses'] == 0) {
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
 } else {
-    $sessionRelCourses = $session->getCourses();
-
     $count = 0;
     $courseItem = '';
-	foreach ($sessionRelCourses as $sessionRelCourse) {
-            $course = $sessionRelCourse->getCourse();
+
+    $sessionRepository = Database::getManager()->getRepository('ChamiloCoreBundle:Session');
+    $courses = $sessionRepository->getCoursesOrderedByPosition($session);
+
+	foreach ($courses as $course) {
                 //select the number of users
                 $sql = "SELECT count(*)
                 FROM $tbl_session_rel_user sru,
@@ -210,7 +211,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
         $downIcon = 'down.png';
         $downUrl = api_get_self().'?id_session='.$sessionId.'&course_id='.$course->getId().'&action=move_down';
 
-        if ($count +1 == count($sessionRelCourses)) {
+        if ($count +1 == count($courses)) {
             $downIcon = 'down_na.png';
             $downUrl = '#';
         }

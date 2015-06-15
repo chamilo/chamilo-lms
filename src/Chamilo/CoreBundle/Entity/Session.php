@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *          @ORM\Index(name="idx_id_session_admin_id", columns={"session_admin_id"})
  *      }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SessionRepository")
  */
 class Session
 {

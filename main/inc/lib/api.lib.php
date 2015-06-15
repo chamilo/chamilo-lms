@@ -278,6 +278,7 @@ define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path
 
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 define('WEB_PATH', 'WEB_PATH');
+define('WEB_APP_PATH', 'WEB_APP_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('SYS_APP_PATH', 'SYS_APP_PATH');
 define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
@@ -651,6 +652,7 @@ function api_get_path($path_type, $path = null)
         SYS_ARCHIVE_PATH        => 'app/cache/',
         WEB_ARCHIVE_PATH        => 'app/cache/',
         SYS_APP_PATH            => 'app/',
+        WEB_APP_PATH            => 'app/',
         SYS_UPLOAD_PATH         => 'app/upload/',
         REL_UPLOAD_PATH         => 'app/upload/',
         INCLUDE_PATH            => 'inc/',
@@ -773,6 +775,7 @@ function api_get_path($path_type, $path = null)
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
 
         $paths[SYS_APP_PATH]            = $paths[SYS_PATH].$paths[SYS_APP_PATH];
+        $paths[WEB_APP_PATH]            = $paths[WEB_PATH].$paths[WEB_APP_PATH];
         $paths[SYS_UPLOAD_PATH]         = $paths[SYS_PATH].$paths[SYS_UPLOAD_PATH];
 
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];

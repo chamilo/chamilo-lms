@@ -45,6 +45,7 @@ $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 $sessionInfo = api_get_session_info($sessionId);
+$session = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
 
 $sql = 'SELECT name FROM  '.$tbl_session_category.'
         WHERE id = "'.intval($sessionInfo['session_category_id']).'"';
@@ -155,36 +156,25 @@ if ($sessionInfo['nbr_courses'] == 0) {
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
 } else {
-	// select the courses
+    $sessionRelCourses = $session->getCourses();
 
-    $orderBy = "ORDER BY position";
-	$sql = "SELECT c.id, code, title, visual_code, nbr_users
-			FROM $tbl_course c
-			INNER JOIN $tbl_session_rel_course sc
-			ON (c.id = sc.c_id)
-			WHERE
-			    sc.c_id = c.id AND
-			    session_id='$sessionId'
-			$orderBy";
-
-    $result = Database::query($sql);
-    $courses = Database::store_result($result);
     $count = 0;
     $courseItem = '';
-	foreach ($courses as $course) {
-		//select the number of users
-		$sql = "SELECT count(*)
+	foreach ($sessionRelCourses as $sessionRelCourse) {
+            $course = $sessionRelCourse->getCourse();
+                //select the number of users
+                $sql = "SELECT count(*)
                 FROM $tbl_session_rel_user sru,
                 $tbl_session_rel_course_rel_user srcru
 				WHERE
 				    srcru.user_id = sru.user_id AND
 				    srcru.session_id = sru.session_id AND
-				    srcru.c_id = '".intval($course['id'])."' AND
+				    srcru.c_id = '".intval($course->getId())."' AND
 				    sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
 				    srcru.session_id = '".intval($sessionId)."'";
 
 		$rs = Database::query($sql);
-		$course['nbr_users'] = Database::result($rs, 0, 0);
+                $numberOfUsers = Database::result($rs, 0, 0);
 
 		// Get coachs of the courses in session
 
@@ -193,7 +183,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
 				WHERE
 				    session_rcru.user_id = user.user_id AND
 				    session_rcru.session_id = '".intval($sessionId)."' AND
-				    session_rcru.c_id ='".intval($course['id'])."' AND
+				    session_rcru.c_id ='".intval($course->getId())."' AND
 				    session_rcru.status=2";
 		$rs = Database::query($sql);
 
@@ -215,7 +205,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
         $orderButtons = null;
 
         $upIcon = 'up.png';
-        $urlUp = api_get_self().'?id_session='.$sessionId.'&course_id='.$course['id'].'&action=move_up';
+        $urlUp = api_get_self().'?id_session='.$sessionId.'&course_id='.$course->getId().'&action=move_up';
 
         if ($count == 0) {
             $upIcon = 'up_na.png';
@@ -228,9 +218,9 @@ if ($sessionInfo['nbr_courses'] == 0) {
         );
 
         $downIcon = 'down.png';
-        $downUrl = api_get_self().'?id_session='.$sessionId.'&course_id='.$course['id'].'&action=move_down';
+        $downUrl = api_get_self().'?id_session='.$sessionId.'&course_id='.$course->getId().'&action=move_down';
 
-        if ($count +1 == count($courses)) {
+        if ($count +1 == count($sessionRelCourses)) {
             $downIcon = 'down_na.png';
             $downUrl = '#';
         }
@@ -244,24 +234,24 @@ if ($sessionInfo['nbr_courses'] == 0) {
         $courseItem .= '
 		<tr>
 			<td>'.Display::url(
-                $course['title'].' ('.$course['visual_code'].')',
-                api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$sessionId
+                $course->getTitle().' ('.$course->getVisualCode().')',
+                api_get_path(WEB_COURSE_PATH).$course->getCode().'/?id_session='.$sessionId
             ).'</td>
 			<td>'.$coach.'</td>
-			<td>'.$course['nbr_users'].'</td>
+			<td>'.$numberOfUsers.'</td>
 			<td>
-                <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$sessionId.'">'.
+                <a href="'.api_get_path(WEB_COURSE_PATH).$course->getCode().'/?id_session='.$sessionId.'">'.
                 Display::return_icon('course_home.gif', get_lang('Course')).'</a>
                 '.$orderButtons.'
-                <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course['code'].'">'.
+                <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.
                 Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
-                <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course['code'].'&id_session='.$sessionId.'">'.
+                <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course->getCode().'&id_session='.$sessionId.'">'.
                 Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
-				<a href="../tracking/courseLog.php?id_session='.$sessionId.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.
+				<a href="../tracking/courseLog.php?id_session='.$sessionId.'&cidReq='.$course->getCode().$orig_param.'&hide_course_breadcrumb=1">'.
                 Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
-				<a href="session_course_edit.php?id_session='.$sessionId.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.
+				<a href="session_course_edit.php?id_session='.$sessionId.'&page=resume_session.php&course_code='.$course->getCode().''.$orig_param.'">'.
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
-				<a href="'.api_get_self().'?id_session='.$sessionId.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.
+				<a href="'.api_get_self().'?id_session='.$sessionId.'&action=delete&idChecked[]='.$course->getCode().'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.
             Display::return_icon('delete.png', get_lang('Delete')).'</a>
 			</td>
 		</tr>';

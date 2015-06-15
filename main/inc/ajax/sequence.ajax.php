@@ -51,7 +51,7 @@ switch ($action) {
             case 'session':
                 $type = SequenceResource::SESSION_TYPE;
                 $showDelete = isset($_REQUEST['show_delete']) ? $_REQUEST['show_delete'] : false;
-                $image = Display::return_icon('item-sequence.png',null,null,ICON_SIZE_LARGE);
+                $image = Display::return_icon('item-sequence.png', null, null, ICON_SIZE_LARGE);
                 $sessionInfo = api_get_session_info($id);
                 if (!empty($sessionInfo)) {
                     $linkDelete = '';

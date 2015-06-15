@@ -169,7 +169,7 @@
     </script>
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="section-title-sequence">Crear nombre de secuencia</div>
+            <div class="section-title-sequence">{{ 'SequenceSelection' | get_lang }}</div>
             <div class="row">
                 <div class="col-md-6">
                     {{ create_sequence }}
@@ -183,7 +183,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="section-title-sequence">Configuración de secuencia</div>
+            <div class="section-title-sequence">{{ 'SequenceConfiguration' | get_lang }}</div>
             <div class="row">
 
                 {{ configure_sequence }}
@@ -193,7 +193,7 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="section-title-sequence">Vista previa de secuencia</div>
+            <div class="section-title-sequence">{{ 'SequencePreview' | get_lang }}</div>
             <div class="row">
                 <div class="col-md-9">
                     <h4 class="title-sequence">

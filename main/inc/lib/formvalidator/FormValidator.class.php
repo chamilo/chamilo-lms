@@ -428,7 +428,7 @@ EOT;
      */
     public function addButtonNext($label, $name = 'submit',$attributes = array())
     {
-        return $this->addButton($name, $label, 'arrow-right', 'primary',null,null,$attributes);
+        return $this->addButton($name, $label, 'arrow-right', 'primary', null, null, $attributes);
     }
 
     /**

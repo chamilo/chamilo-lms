@@ -17,38 +17,39 @@
  */
 class ExerciseShowFunctions
 {
-	/**
-	 * Shows the answer to a fill-in-the-blanks question, as HTML
-	 * @param string    Answer text
-	 * @param int       Exercise ID
-	 * @param int       Question ID
-	 * @return void
-	 */
-	static function display_fill_in_blanks_answer($feedback_type, $answer, $id, $questionId)
-    {
+    /**
+     * Shows the answer to a fill-in-the-blanks question, as HTML
+     * Display in the student result page, with score and comm
+     * @param string    Answer text
+     * @param int       Exercise ID
+     * @param int       Question ID
+     * @return void
+     */
+    static function display_fill_in_blanks_answer($feedbackType, $answer, $id, $questionId, $inResultsDisabled) {
+        $answerHTML = FillBlanks::getHtmlDisplayForAsnwer($answer, $inResultsDisabled);
         if (empty($id)) {
-            echo '<tr><td>'. (Security::remove_XSS($answer)).'</td></tr>';
+            echo '<tr><td>';
+            echo Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY);
+            echo '</td></tr>';
         } else {
-		?>
-			<tr>
+            ?>
+            <tr>
                 <td>
-                    <?php
-                    echo (Security::remove_XSS($answer));
-                    ?>
+                    <?php echo nl2br(Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY)); ?>
                 </td>
 
-			<?php
-			if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-				<td>
-                    <?php
-                    $comm = get_comments($id,$questionId);
-                    ?>
-				</td>
-			<?php } ?>
+                <?php
+                if (!api_is_allowed_to_edit(null,true) && $feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+                    <td>
+                        <?php
+                        $comm = get_comments($id,$questionId);
+                        ?>
+                    </td>
+                <?php } ?>
             </tr>
-		<?php
+        <?php
         }
-	}
+    }
 
     /**
      * Shows the answer to a calculated question, as HTML

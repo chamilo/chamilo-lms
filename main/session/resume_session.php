@@ -220,18 +220,20 @@ if ($sessionInfo['nbr_courses'] == 0) {
             Display::return_icon($downIcon, get_lang('MoveDown')),
             $downUrl
         );
+        
+        $courseUrl = api_get_course_url($course->getCode(), $sessionId);
 
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
         $courseItem .= '
 		<tr>
 			<td>'.Display::url(
                 $course->getTitle().' ('.$course->getVisualCode().')',
-                api_get_path(WEB_COURSE_PATH).$course->getCode().'/?id_session='.$sessionId
+                $courseUrl
             ).'</td>
 			<td>'.$coach.'</td>
 			<td>'.$numberOfUsers.'</td>
 			<td>
-                <a href="'.api_get_path(WEB_COURSE_PATH).$course->getCode().'/?id_session='.$sessionId.'">'.
+                <a href="'. $courseUrl . '">'.
                 Display::return_icon('course_home.gif', get_lang('Course')).'</a>
                 '.$orderButtons.'
                 <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.

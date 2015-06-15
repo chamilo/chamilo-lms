@@ -713,7 +713,7 @@ foreach ($categories as $item) {
                     $start_time = $end_time = '';
                 }
 
-                if (api_get_setting('gamification_mode') != 0) {
+                if (api_get_setting('gamification_mode') == 'true') {
                     if ($details['seriousgame_mode'] == 0) {
                         $actionSeriousGame = Display::toolbarButton(
                             null,
@@ -722,7 +722,7 @@ foreach ($categories as $item) {
                             'default',
                             [
                                 'class' => 'btn-xs',
-                                'title' => get_lang('ActivateSeriousGame')
+                                'title' => get_lang('EnableGamificationMode')
                             ]
                         );
                     } else {
@@ -733,7 +733,7 @@ foreach ($categories as $item) {
                             'warning',
                             [
                                 'class' => 'btn-xs active',
-                                'title' => get_lang('DeactivateSeriousGame')
+                                'title' => get_lang('DisableGamificationMode')
                             ]
                         );
                     }
@@ -783,7 +783,7 @@ foreach ($categories as $item) {
                 'action_pdf' => $export_icon,
                 'action_delete' => $dsp_delete,
                 'action_order' => $dsp_order,
-                'action_seriousgame' => $actionSeriousGame,
+                'action_serious_game' => $actionSeriousGame,
                 'action_subscribe_users' => $subscribeUsers
             ];
 

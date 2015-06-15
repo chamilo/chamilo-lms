@@ -13,6 +13,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CCourseDescription
 {
+
+    const TYPE_DESCRIPTION = 1;
+    const TYPE_OBJECTIVES = 2;
+    const TYPE_TOPICS = 3;
+    const TYPE_METHODOLOGY = 4;
+    const TYPE_COURSE_MATERIAL = 5;
+    const TYPE_RESOURCES = 6;
+    const TYPE_ASSESMENT = 7;
+    const TYPE_CUSTOM = 8;
+
     /**
      * @var integer
      *
@@ -58,9 +68,9 @@ class CCourseDescription
     private $sessionId;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="description_type", type="boolean", nullable=false)
+     * @ORM\Column(name="description_type", type="integer", nullable=false)
      */
     private $descriptionType;
 
@@ -144,7 +154,7 @@ class CCourseDescription
     /**
      * Set descriptionType
      *
-     * @param boolean $descriptionType
+     * @param integer $descriptionType
      * @return CCourseDescription
      */
     public function setDescriptionType($descriptionType)
@@ -157,7 +167,7 @@ class CCourseDescription
     /**
      * Get descriptionType
      *
-     * @return boolean
+     * @return integer
      */
     public function getDescriptionType()
     {

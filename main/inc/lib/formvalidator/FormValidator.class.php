@@ -324,9 +324,10 @@ EOT;
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     * @param array $attributes Additional attributes
      * @return HTML_QuickForm_button
      */
-    public function addButtonCreate($label, $name = 'submit', $createElement = false)
+    public function addButtonCreate($label, $name = 'submit', $createElement = false, $attributes = array())
     {
         return $this->addButton(
             $name,
@@ -335,7 +336,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            $attributes,
             $createElement
         );
     }
@@ -422,12 +423,12 @@ EOT;
      * Returns a button with the primary color and a right-pointing arrow icon
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
-     *
+     * @param array $attributes Additional attributes
      * @return HTML_QuickForm_button
      */
-    public function addButtonNext($label, $name = 'submit')
+    public function addButtonNext($label, $name = 'submit',$attributes = array())
     {
-        return $this->addButton($name, $label, 'arrow-right', 'primary');
+        return $this->addButton($name, $label, 'arrow-right', 'primary', null, null, $attributes);
     }
 
     /**

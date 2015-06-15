@@ -5817,6 +5817,117 @@ div#chat-remote-video video {
 .forum-post .tools-icons a{
   padding: 2px;
 }
+/* Sequence */
+.title-sequence{
+  font-size: 12px;
+  text-align: center;
+}
+#parents{
+  text-align: center;
+}
+#parents .parent {
+  display: inline-block;
+  padding: 5px;
+  width: 15%;
+}
+#parents .parent .big-icon{
+  background-color: #ECF0F1 ;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  position: relative;
+}
+
+#parents .parent .big-icon .sequence-course{
+  font-size: 12px;
+}
+#parents .parent .big-icon .sequence-id{
+  border-radius: 50%;
+  background-color: #E74C3C;
+  width: 20%;
+  color: #ffffff;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+#parents .parent .big-icon .sequence-deleted{
+  font-size: 12px;
+}
+#resource{
+  text-align: center;
+}
+#resource .parent {
+  display: inline-block;
+  padding: 5px;
+  width: 15%;
+}
+#resource .parent .big-icon{
+  background-color: #eeffaa ;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  position: relative;
+}
+#resource .parent .big-icon .sequence-course{
+  font-size: 12px;
+}
+
+#resource .parent .big-icon .sequence-id{
+  border-radius: 50%;
+  background-color: #E74C3C;
+  width: 20%;
+  color: #ffffff;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+#resource .parent .big-icon .sequence-deleted{
+  font-size: 12px;
+}
+
+.section-title-sequence{
+  font-size: 22px;
+  color: #333333;
+  margin-bottom: 30px;
+  padding: 0;
+  border-bottom:1px solid #E5e5e5 ;
+}
+#children{
+  text-align: center;
+}
+#children .parent {
+  display: inline-block;
+  padding: 5px;
+  width: 15%;
+}
+#children .parent .big-icon{
+  background-color: #feffd6 ;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  position: relative;
+}
+#children .parent .big-icon .sequence-course{
+  font-size: 12px;
+}
+#children .parent .big-icon .sequence-id{
+  border-radius: 50%;
+  background-color: #E74C3C;
+  width: 20%;
+  color: #ffffff;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+#children .parent .big-icon .sequence-deleted{
+  font-size: 12px;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
@@ -5940,6 +6051,14 @@ div#chat-remote-video video {
   }
   .dl-horizontal dd{
     margin-left: 140px;
+  }
+  #parents .parent, #resource .parent, #children .parent {
+    display: inline-block;
+    padding: 5px;
+    width: 30%;
+  }
+  #show_graph{
+   text-align: center;
   }
 }
 @media (min-width : 480px) and (max-width: 767px) {

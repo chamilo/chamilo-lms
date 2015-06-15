@@ -38,6 +38,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
     private $style;
     private $size;
     private $class;
+    private $columnsSize;
 
     /**
      * @param string $name input name example 'submit'
@@ -61,6 +62,8 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         $this->setStyle($style);
         $this->setSize($size);
         $this->setClass($class);
+        $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
+        $this->setColumnsSize($columnsSize);
 
         parent::__construct(
             $name,
@@ -161,7 +164,21 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
     {
         return $this->size;
     }
+    /**
+     * @return null
+     */
+    public function getColumnsSize()
+    {
+        return $this->columnsSize;
+    }
 
+    /**
+     * @param null $columnsSize
+     */
+    public function setColumnsSize($columnsSize)
+    {
+        $this->columnsSize = $columnsSize;
+    }
     /**
      * @param mixed $size
      */
@@ -204,6 +221,23 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
      */
     public function getTemplate($layout)
     {
+        $size = $this->getColumnsSize();
+
+        if (empty($size)) {
+            $size = array(2, 8, 2);
+        } else {
+            if (is_array($size)) {
+                if (count($size) == 1) {
+                    $size = array(2, intval($size[0]), 2);
+                } elseif (count($size) != 3) {
+                    $size = array(2, 8, 2);
+                }
+                // else just keep the $size array as received
+            } else {
+                $size = array(2, intval($size), 2);
+            }
+        }
+
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
                 return '
@@ -213,11 +247,11 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
                 <div class="form-group {error_class}">
-                    <label {label-for} class="col-sm-2 control-label" >
+                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
                     </label>
-                    <div class="col-sm-8">
+                    <div class="col-sm-'.$size[1].'">
                         {icon}
                         {element}
 
@@ -229,7 +263,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                             <span class="help-inline">{error}</span>
                         <!-- END error -->
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-'.$size[2].'">
                         <!-- BEGIN label_3 -->
                             {label_3}
                         <!-- END label_3 -->

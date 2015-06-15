@@ -46,17 +46,7 @@ $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER
 
 $sessionInfo = api_get_session_info($sessionId);
 $session = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
-
-$sql = 'SELECT name FROM  '.$tbl_session_category.'
-        WHERE id = "'.intval($sessionInfo['session_category_id']).'"';
-$rs = Database::query($sql);
-$session_category = '';
-
-if (Database::num_rows($rs)>0) {
-	$rows_session_category = Database::store_result($rs);
-	$rows_session_category = $rows_session_category[0];
-	$session_category = $rows_session_category['name'];
-}
+$sessionCategory = $session->getCategory();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -374,7 +364,7 @@ $tpl->assign('session_header', $sessionHeader);
 $tpl->assign('title', $sessionTitle);
 $tpl->assign('general_coach', $generalCoach);
 $tpl->assign('session', $sessionInfo);
-$tpl->assign('session_category', $session_category);
+$tpl->assign('session_category', is_null($sessionCategory) ? null : $sessionCategory->getName());
 $tpl->assign('session_dates', SessionManager::parseSessionDates($sessionInfo));
 $tpl->assign('session_visibility', SessionManager::getSessionVisibility($sessionInfo));
 $tpl->assign('url_list', $url_list);

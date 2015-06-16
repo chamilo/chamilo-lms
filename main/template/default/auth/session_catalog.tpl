@@ -193,6 +193,12 @@
                                 </p>
                             {% endif %}
 
+                            <p>
+                                <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}" class="btn btn-block btn-info">
+                                    <i class="fa fa-info-circle"></i> {{ "SeeInformation"|get_lang }}
+                                </a>
+                            </p>
+
                             <p class="buttom-subscribed">
                                 {% if session.is_subscribed %}
                                     {{ already_subscribed_label }}

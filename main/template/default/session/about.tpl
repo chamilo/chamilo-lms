@@ -75,19 +75,24 @@
                         {% if course_data.coaches %}
                             <h5>{{ "Coaches"|get_lang }}</h5>
 
-                            <ul>
-                                {% for coach in course_data.coaches %}
-                                    <li>
-                                        <p>{{ coach.complete_name }}</p>
+                            {% for coach in course_data.coaches %}
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h4 class="media-heading">{{ coach.complete_name }}</h4>
+
                                         {% if coach.officer_position %}
                                             <p>{{ coach.officer_position }}</p>
                                         {% endif %}
+
                                         {% if coach.work_or_study_place %}
                                             <p>{{ coach.work_or_study_place }}</p>
                                         {% endif %}
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                                    </div>
+                                    <div class="media-right">
+                                        <img src="{{ coach.image }}" alt="{{ coach.complete_name }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
                             <hr>
                         {% endif %}
 

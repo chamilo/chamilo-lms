@@ -74,7 +74,8 @@ foreach ($sessionCourses as $sessionCourse) {
 
     foreach ($courseCoaches as $courseCoach) {
         $coachData = [
-            'complete_name' => $courseCoach->getCompleteName()
+            'complete_name' => $courseCoach->getCompleteName(),
+            'image' => UserManager::getUserPicture($courseCoach->getId(), USER_IMAGE_SIZE_ORIGINAL)
         ];
 
         if (!is_null($workOrStudyPlaceField)) {

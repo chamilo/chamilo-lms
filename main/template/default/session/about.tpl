@@ -20,6 +20,16 @@
             <div class="well">
                 {{ course_data.description.getContent }}
 
+                {% if course_data.tags %}
+                    <p>
+                        <i class="fa fa-check-square-o"></i>
+
+                        {% for tag in course_data.tags %}
+                            <span>{{ tag.getTag }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
                 <p class="text-right text-uppercase">
                     <a href="#" class="btn btn-success">{{ "Subscribe"|get_lang }}</a>
                 </p>

@@ -7,6 +7,7 @@
  * @package chamilo.session
  */
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CoreBundle\Entity\ExtraField;
 
 $cidReset = true;
 
@@ -26,14 +27,20 @@ $courses = [];
 $entityManager = Database::getManager();
 $fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
+$fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 
 $videoUrlField = $fieldsRepo->findOneBy([
-    'extraFieldType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
+    'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
     'variable' => 'video_url'
+]);
+$tagField = $fieldsRepo->findOneBy([
+    'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
+    'variable' => 'tags'
 ]);
 
 foreach ($sessionCourses as $sessionCourse) {
     $courseVideo = null;
+    $courseTags = [];
 
     if (!is_null($videoUrlField)) {
         $videoUrlValue = $fieldValuesRepo->findOneBy([
@@ -46,6 +53,10 @@ foreach ($sessionCourses as $sessionCourse) {
 
             $courseVideo = $essence->replace($videoUrlValue->getValue());
         }
+    }
+
+    if (!is_null($tagField)) {
+        $courseTags = $fieldTagsRepo->getTags($tagField, $sessionCourse->getId());
     }
 
     $courseCoaches = $entityManager->getRepository('ChamiloCoreBundle:Session')
@@ -83,6 +94,7 @@ foreach ($sessionCourses as $sessionCourse) {
         'course' => $sessionCourse,
         'video' => $courseVideo,
         'description' => $courseDescription,
+        'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,
         'coaches' => $courseCoaches

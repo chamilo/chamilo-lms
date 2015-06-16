@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 /**
  * SessionRepository
  *
+ * @package Chamilo\CoreBundle\Entity\Repository
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class SessionRepository extends EntityRepository

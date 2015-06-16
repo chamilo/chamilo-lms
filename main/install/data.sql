@@ -757,6 +757,7 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, v
 
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) VALUES (2, 1, 'special_course', 'Special course', 1 , 1, '');
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (2, 10, 'tags', 'Tags', 1, 1);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (2, 19, 'video_url', 'VideoUrl', 1, 1);
 
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '1', 'AtOnce',1);
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '8', 'Daily',2);
@@ -1785,4 +1786,4 @@ VALUES
 ('gamification_mode', '1', 'Yes'),
 ('gamification_mode', '0', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.40' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.41' WHERE variable = 'chamilo_database_version';

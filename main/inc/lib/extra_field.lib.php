@@ -60,6 +60,7 @@ class ExtraField extends Model
     const FIELD_TYPE_FILE_IMAGE = 16;
     const FIELD_TYPE_FLOAT = 17;
     const FIELD_TYPE_FILE = 18;
+    const FIELD_TYPE_VIDEO_URL = 19;
 
     public $type = 'user';
     public $pageName;
@@ -333,6 +334,7 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_FILE_IMAGE] = get_lang('FieldTypeFileImage');
         $types[self::FIELD_TYPE_FLOAT] = get_lang('FieldTypeFloat');
         $types[self::FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
+        $types[self::FIELD_TYPE_VIDEO_URL] = get_lang('FieldTypeVideoUrl');
 
         switch ($handler) {
             case 'course':
@@ -1436,6 +1438,14 @@ EOF;
                                 );
                             }
                         }
+                        break;
+                    case ExtraField::FIELD_TYPE_VIDEO_URL:
+                        $form->addUrl(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text'],
+                            false,
+                            ['placeholder' => 'https://']
+                        );
                         break;
                 }
             }

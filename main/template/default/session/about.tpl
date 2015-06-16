@@ -78,7 +78,10 @@
                             <ul>
                                 {% for coach in course_data.coaches %}
                                     <li>
-                                        {{ coach.getCompleteName }}
+                                        <p>{{ coach.complete_name }}</p>
+                                        {% if coach.work_or_study_place %}
+                                            <p>{{ coach.work_or_study_place }}</p>
+                                        {% endif %}
                                     </li>
                                 {% endfor %}
                             </ul>

@@ -28,6 +28,7 @@ $entityManager = Database::getManager();
 $fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
 $fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+$sessionsRepo = $entityManager->getRepository('ChamiloCoreBundle:Session');
 
 $videoUrlField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
@@ -36,6 +37,11 @@ $videoUrlField = $fieldsRepo->findOneBy([
 $tagField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
     'variable' => 'tags'
+]);
+
+$workOrStudyPlaceField = $fieldsRepo->findOneBy([
+    'extraFieldType' => ExtraField::USER_FIELD_TYPE,
+    'variable' => 'work_or_study_place'
 ]);
 
 foreach ($sessionCourses as $sessionCourse) {
@@ -59,8 +65,27 @@ foreach ($sessionCourses as $sessionCourse) {
         $courseTags = $fieldTagsRepo->getTags($tagField, $sessionCourse->getId());
     }
 
-    $courseCoaches = $entityManager->getRepository('ChamiloCoreBundle:Session')
-        ->getCourseCoachesForCoach($session, $sessionCourse);
+    $courseCoaches = $sessionsRepo->getCourseCoachesForCoach($session, $sessionCourse);
+    $coachesData = [];
+
+    foreach ($courseCoaches as $courseCoach) {
+        $coachData = [
+            'complete_name' => $courseCoach->getCompleteName()
+        ];
+
+        if (!is_null($workOrStudyPlaceField)) {
+            $workOrStudyPlaceValue = $fieldValuesRepo->findOneBy([
+                'field' => $workOrStudyPlaceField,
+                'itemId' => $courseCoach->getId()
+            ]);
+
+            if (!is_null($workOrStudyPlaceValue)) {
+                $coachData['work_or_study_place'] = $workOrStudyPlaceValue->getValue();
+            }
+        }
+
+        $coachesData[] = $coachData;
+    }
 
     $courseDescriptionTools = $entityManager->getRepository('ChamiloCourseBundle:CCourseDescription')
         ->findBy(
@@ -97,7 +122,7 @@ foreach ($sessionCourses as $sessionCourse) {
         'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,
-        'coaches' => $courseCoaches
+        'coaches' => $coachesData
     ];
 }
 

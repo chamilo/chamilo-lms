@@ -43,6 +43,10 @@ $workOrStudyPlaceField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::USER_FIELD_TYPE,
     'variable' => 'work_or_study_place'
 ]);
+$officerPositionField = $fieldsRepo->findOneBy([
+    'extraFieldType' => ExtraField::USER_FIELD_TYPE,
+    'variable' => 'officer_position'
+]);
 
 foreach ($sessionCourses as $sessionCourse) {
     $courseVideo = null;
@@ -81,6 +85,17 @@ foreach ($sessionCourses as $sessionCourse) {
 
             if (!is_null($workOrStudyPlaceValue)) {
                 $coachData['work_or_study_place'] = $workOrStudyPlaceValue->getValue();
+            }
+        }
+
+        if (!is_null($officerPositionField)) {
+            $officerPositionValue = $fieldValuesRepo->findOneBy([
+                'field' => $officerPositionField,
+                'itemId' => $courseCoach->getId()
+            ]);
+
+            if (!is_null($officerPositionValue)) {
+                $coachData['officer_position'] = $officerPositionValue->getValue();
             }
         }
 

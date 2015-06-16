@@ -23,7 +23,31 @@ $sessionCourses = $entityManager->getRepository('ChamiloCoreBundle:Session')
 
 $courses = [];
 
+$entityManager = Database::getManager();
+$fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
+$fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
+
+$videoUrlField = $fieldsRepo->findOneBy([
+    'extraFieldType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
+    'variable' => 'video_url'
+]);
+
 foreach ($sessionCourses as $sessionCourse) {
+    $courseVideo = null;
+
+    if (!is_null($videoUrlField)) {
+        $videoUrlValue = $fieldValuesRepo->findOneBy([
+            'field' => $videoUrlField,
+            'itemId' => $sessionCourse->getId()
+        ]);
+
+        if (!is_null($videoUrlValue)) {
+            $essence = \Essence\Essence::instance();
+
+            $courseVideo = $essence->replace($videoUrlValue->getValue());
+        }
+    }
+
     $courseCoaches = $entityManager->getRepository('ChamiloCoreBundle:Session')
         ->getCourseCoachesForCoach($session, $sessionCourse);
 
@@ -57,6 +81,7 @@ foreach ($sessionCourses as $sessionCourse) {
 
     $courses[] = [
         'course' => $sessionCourse,
+        'video' => $courseVideo,
         'description' => $courseDescription,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,

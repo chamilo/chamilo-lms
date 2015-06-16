@@ -8,7 +8,15 @@
     {% endif %}
 
     <div class="row">
-        <div class="col-xs-12">
+        {% if course_data.video %}
+            <div class="col-sm-6 col-md-7">
+                <div class="embed-responsive embed-responsive-16by9">
+                    {{ course_data.video }}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="{{ course_data.video ? 'col-sm-6 col-md-5' : 'col-sm-12' }}">
             <div class="well">
                 {{ course_data.description.getContent }}
 
@@ -26,7 +34,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-7">
+        <div class="col-sm-6 col-md-7">
             {% if course_data.objectives %}
                 <div class="row">
                     <div class="col-xs-12">
@@ -50,7 +58,7 @@
             {% endif %}
         </div>
 
-        <div class="col-sm-5">
+        <div class="col-sm-6 col-md-5">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="well">

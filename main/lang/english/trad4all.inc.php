@@ -7372,4 +7372,13 @@ $CatalogueShowCoursesAndSessions = "Show both courses and sessions in the catalo
 $SequenceSelection = "Sequence selection";
 $SequenceConfiguration = "Sequence configuration";
 $SequencePreview = "Sequence preview";
+$DisplayDates = "Dates shown";
+$AccessDates = "Access dates for students";
+$CoachDates = "Access dates for coaches";
+$ChatWithXUser = "Chat with %s";
+$StartVideoChat = "Start video call";
+$FieldTypeVideoUrl = "Video URL";
+$InsertAValidUrl = "Insert a valid URL";
+$SeeInformation = "See information";
+$ShareWithYourFriends = "Share with your friends";
 ?>

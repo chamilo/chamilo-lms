@@ -28,7 +28,7 @@ class GradebookTable extends SortableTable
      */
     public function GradebookTable($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null)
     {
-        parent::__construct('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
+        parent::__construct('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0), 20, 'ASC', 'gradebook_list');
         $this->evals_links = array_merge($evals, $links);
         $this->currentcat = $currentcat;
         $this->cats = $cats;

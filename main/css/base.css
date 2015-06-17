@@ -5333,3 +5333,109 @@ i.size-32.icon-new-work{
 #settings .span6:nth-child(2n+1) {
     clear:left
 }
+
+/* CSS for the view by session My Course tab */
+.session-view-block {
+    font-size : 14px;
+    font-weight : normal;
+}
+
+.session-view-row {
+    padding: 8px 0;
+}
+
+.session-view-lvl-2 {
+    margin-left : 66px;
+}
+
+.session-view-lvl-3 {
+    padding-left : 92px;
+}
+
+.session-view-lvl-4 {
+    padding-left : 102px;
+}
+
+.session-view-lvl-5 {
+    padding-left : 128px;
+    font-weight : normal;
+}
+
+.session-view-lvl-6 {
+    padding-left : 20px;
+}
+
+.session-view-lvl-7 {
+    padding-left : 48px;
+}
+
+img.sessionView {
+    padding-right: 10px;
+}
+
+a.sessionView {
+    font-weight : bold;
+}
+
+.session-view-user-category {
+    font-weight : bold;
+    padding-bottom : 10px;
+}
+
+.session-view-session-category {
+    font-weight : bold;
+    padding-bottom : 10px;
+}
+
+.session-view-session {
+    font-weight : bold;
+}
+
+/* Like the well class */
+.session-view-well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #F5F5F5;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05) inset;
+}
+
+.session-view-button {
+    border : none;
+    min-width : 28px;
+}
+
+.view-by-session-link {
+    min-height: 38px;
+}
+
+.view-by-session-teachers {
+    display : none; /* change this if you want to display teachers name in this view */
+    font-size : 10px;
+    overflow-x : auto;
+    overflow-y: auto;
+    max-height:50px;
+}
+
+.view-by-session-right-actions {
+    float : right;
+}
+
+.view-by-session-right-actions img {
+    width : 12px;
+}
+
+.session-view-session-go-to-course-in-session {
+    font-size : 12px;
+}
+
+#gradebook_list .centered {
+    text-align:center;
+    vertical-align:middle;
+}
+
+#gradebook_list .centered .badge-group {
+    width: auto;
+}

@@ -9740,7 +9740,17 @@ EOD;
     function verify_document_size($s)
     {
         $post_max = ini_get('post_max_size');
+        if (substr($post_max, -1, 1) == 'M') {
+            $post_max = intval(substr($post_max, 0, -1)) * 1024 * 1024;
+        } elseif (substr($post_max, -1, 1) == 'G') {
+            $post_max = intval(substr($post_max, 0, -1)) * 1024 * 1024 * 1024;
+        }
         $upl_max = ini_get('upload_max_filesize');
+        if (substr($upl_max, -1, 1) == 'M') {
+            $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024;
+        } elseif (substr($upl_max, -1, 1) == 'G') {
+            $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024 * 1024;
+        }
         $documents_total_space = DocumentManager::documents_total_space();
         $course_max_space = DocumentManager::get_course_quota();
         $total_size = filesize($s) + $documents_total_space;

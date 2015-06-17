@@ -67,7 +67,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$css_base_file = $css_web_path.'base.css';
 
     $css_list = array($bootstrap_file, $css_base_file);
-    $web_img = 'main/img/';
+    $web_img = 'main/img';
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
 	if (!empty($root_rel)) {
@@ -125,25 +125,17 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			}
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);
 			$InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
-			<div class="row"><div class="col-md-12"><h2 class="title">Bienvenido al asistente de instalación de Chamilo 1.10.x</h2></div></div>
-                                        <div class="row">
-										<div class="install col-md-6">
-                                        <div class="office">
+			<div class="row"><div class="col-md-12">
 
-                                            <p class="download-info">
-                                                <button class="btn btn-primary btn-lg" type="submit" value="INSTALL Chamilo" ><i class="fa fa-download"></i> Instalar Chamilo</button>
-                                                <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> <i class="fa fa-file-text-o"></i> '.$read_installation_guide.'</a>
-                                            </p>
-                                             <div class="icon-install">
-                                                <img src="'.$web_img.'icons/128/install.png" />
-                                            </div>
-                                        </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <img class="img-responsive" src="'.$web_img.'chamilo.png" />
-                                        </div>
-                                        </div>
-										</form>';
+                    <div class="office">
+                    <h2 class="title">Bienvenido al asistente de instalación de Chamilo 1.10.x</h2>
+                    <p class="text">A hora buena, es tiempo de aprender a cazar conocimientos con Chamilo LMS, el asiste de instalación le guíara en el proceso de configuración de Chamilo</p>
+                          <p class="download-info">
+                              <button class="btn btn-primary btn-lg" type="submit" value="INSTALL Chamilo" ><i class="fa fa-download"></i> Instalar Chamilo</button>
+                              <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> <i class="fa fa-file-text-o"></i> '.$read_installation_guide.'</a>
+                          </p>
+                    </div>
+            </form>';
 			$global_error_message['description'] = $InstallationDescription;
 			break;
 		case 3:
@@ -193,19 +185,47 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             <link rel="stylesheet" href="{CSS}">
             <link rel="stylesheet" href="{THEME}">
             <style type="text/css">
-                body{
-                    background: url("$web_img/background-install.png") repeat-x #999999;
-                }
-                .office{
-                     background: url("$web_img/office.png") no-repeat center 0;
-                     padding-top:35%;
-                     background-size:contain;
+                    body{
+                        background: #d2ebf9; /* Old browsers */
+background: -moz-linear-gradient(top, #d2ebf9 0%, #feffff 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d2ebf9), color-stop(100%,#feffff)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* IE10+ */
+background: linear-gradient(to bottom, #d2ebf9 0%,#feffff 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ebf9', endColorstr='#feffff',GradientType=0 ); /* IE6-9 */
+                    }
+                    .chamilo{
+                        background: url("$web_img/install-chamilo.gif") no-repeat center 0;
+                        margin:auto;
+                    }
+                    .office{
+                        padding-top:250px;
+                    }
+
+                    @media (max-width: 480px) {
+                    body{
+                        background-image: url("$web_img/install-chamilo.gif");
+                        background-repeat: no-repeat;
+                        background-position: -10px -5px;
+                        background-color: #DFF1FA;
+
+                     }
+                     .chamilo{
+                        background: none;
+                        height:300px;
+                        width:100%;
+                        margin:auto;
+                        }
+                     .download-info .btn-success{
+                            margin-top: 10px;
+                     }
                 }
             </style>
 		</head>
 		<body>
 		<div id="page-install">
-			<div class="container">
+			<div class="container chamilo">
 			    <div class="row">
 			        <div class="col-md-12">
 			            <div class="logo">

@@ -634,7 +634,7 @@ function display_language_selection()
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
         <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
         <div class="form-group">
-            <div class="col-sm-4">
+            <div class="col-sm-2">
                 <?php display_language_selection_box('language_list', api_get_interface_language()); ?>
             </div>
             <div class="col-sm-8">

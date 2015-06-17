@@ -5950,6 +5950,16 @@ div#chat-remote-video video {
 .RequirementHeading h2{
   font-size: 25px;
 }
+#page-install{
+  background: #d2ebf9; /* Old browsers */
+  background: -moz-linear-gradient(top, #d2ebf9 0%, #feffff 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d2ebf9), color-stop(100%,#feffff)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #d2ebf9 0%,#feffff 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ebf9', endColorstr='#feffff',GradientType=0 ); /* IE6-9 */
+}
 #page-install footer{
   color: #666666;
 }

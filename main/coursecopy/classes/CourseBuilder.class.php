@@ -151,7 +151,6 @@ class CourseBuilder
                             source_type = '".$resource->get_type()."' AND
                             source_id = '".$resource->get_id()."'";
                 $res = Database::query($sql);
-                error_log($sql);
                 while ($link = Database::fetch_object($res)) {
                     $this->course->resources[$type][$id]->add_linked_resource($link->resource_type, $link->resource_id);
                 }
@@ -177,7 +176,6 @@ class CourseBuilder
                 }
             }
         }
-        error_log(print_r($this->course, 1));
 
         return $this->course;
     }
@@ -760,7 +758,6 @@ class CourseBuilder
         $sessionCondition = api_get_session_condition($session_id, true, $with_base_content);
 
         $sql = 'SELECT * FROM '.$table_survey.' WHERE c_id = '.$course_id.' ' . $sessionCondition;
-        error_log($sql);
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $survey = new Survey($obj->survey_id, $obj->code,$obj->title,

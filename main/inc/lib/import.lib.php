@@ -39,7 +39,7 @@ class Import {
 	 * @return array			Returns an array (in the system encoding) that contains all data from the CSV-file.
      * 
      * 
-     * @deprecated use cvs_reader instead
+     * @deprecated use csv_reader instead
 	 */
 	static function csv_to_array($filename, $csv_order = 'vertical') {
 		$result = array();

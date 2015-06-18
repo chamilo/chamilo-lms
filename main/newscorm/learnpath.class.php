@@ -10711,32 +10711,6 @@ EOD;
         return $forumId;
     }
 
-    /**
-     * @return int
-     */
-    public function getSubscribeUsers()
-    {
-        return $this->subscribeUsers;
-    }
-
-    /**
-     * @param int $value
-     */
-    public function setSubscribeUsers($value)
-    {
-        if ($this->debug > 0) {
-            error_log('New LP - In learnpath::set_subscribe_users()', 0);
-        }
-        $this->subscribeUsers = intval($value);
-        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET subscribe_users = '{$this->subscribeUsers}'
-                WHERE c_id = {$this->course_int_id} AND id = '$lp_id'";
-        Database::query($sql);
-
-        return true;
-    }
-
 }
 
 if (!function_exists('trim_value')) {

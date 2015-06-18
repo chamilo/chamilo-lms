@@ -12,6 +12,10 @@
   background:url("images/scorm_not_attempted.png") no-repeat left center;	
 }
 .scorm_item_normal.scorm_highlight{
+  background:url("images/scorm_highlight.png") no-repeat left center !important;
+  color: #009AB8;
+}
+.scorm_item_normal.scorm_highlight.scorm_completed{
   background:url("images/scorm_current.png") no-repeat left center !important;
   color: #009AB8;
 }

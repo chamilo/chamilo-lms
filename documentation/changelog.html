@@ -46,16 +46,18 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-<h1>Chamilo 1.10.0 - ???, ??? 2015</h1>
+<h1>Chamilo 1.10.0 - San Juan, ?? July 2015</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.10.0 is a major version of the 1.10.x branch, with new features and bugfixes on top of 1.9.10. As a major version, it requires the use of the upgrade script in order to upgrade an existing Chamilo portal. See install instructions</p>
 <h3>Release name</h3>
+<p>San Juan (or the "Old San Juan") was the main (old) harbour of Puerto Rico island. A frequent stop-over harbour for Europe's immigrants to the "new world" (be it Latin America or North America). Chamilo 1.10.0 marks a very strong intermediate step between the "old" Chamilo, inheriting over 14 years of code and experiences, and the "new" Chamilo, still maintaining its history of user experiences, but reworking the building bricks in a way that will make new developments possible faster, so that Chamilo can spread to the rest of the world in a rapid but stable way. Chamilo 1.10.0 integrates several new techniques of development that should improve is reliability, speed and flexibility. Welcome to the New World of learning, welcome to Chamilo 1.10.0! (so to speak)</p>
 <h3>Security fixes</h3>
 <h3>Possibly breaking changes</h3>
   <ul>
     <li>We changed/fixed several calls to SQL NOW() to api_get_utc_datetime(), as our coding conventions require. This *might* have a small adverse effect of generating a hole or a superposition in connections tracking in a few admin reports. See commits <a href="https://github.com/chamilo/chamilo-lms/commit/17c04edf6bb932361ecb1f5092aaed87962d4301">17c04ed</a>, <a href="https://github.com/chamilo/chamilo-lms/commit/df958828f8992aefcd8ef603cc7087979c753653">df95882</a>, <a href="https://github.com/chamilo/chamilo-lms/commit/b568eb4e67509a44bcafff68c580b65675cbd1d6">b568eb4</a> and <a href="https://github.com/chamilo/chamilo-lms/commit/3b8a26f3634da86fccab4db2921a6613e3c111d1">3b8a26f</a> for details</li>
     <li>A few languages now get a "parent" language which is not English. In this case, we have based the update query on an ID that we "assume" to be the right one for Spanish, Italian, French, Chinese and Portuguese. If the ID is not correct, you might, in the worst case scenario, get Chinese or Arabic terms appear in a language that is not the primary one, like Galician (normally taking Spanish as parent language). This can be fixed very easily by an "UPDATE language SET parent_id = NULL"; for all your languages, and then re-apply the parent manually to your sub-language if it needs one.</li>
-    <li>"Character set" platform setting can't be modified default UTF-8 #7652.</li>
+    <li>"Character set" platform setting can't be modified. It is now fixed to UTF-8 (see #7652). This comes as a decision given the fact that other character encoding types were only there for backwards compatibility reasons, and that the last version with something else than UTF-8 was released more than 5 years ago.</li>
+    <li>Starting from 1.10.0, courses directories will really be deleted when the course is deleted. No more logical-delete-but-no-physical-delete policy where the folder used to remain available for last-minute recovery of resources. You are trusted to take backups when necessary to avoid inconvenient situations. This comes as a decision considering the increasing number of huge installations where ghost course directories become a considerable space issue very quickly, and as an observation that, in fact, this feature is very little known and very few people use it to actually recover deleted course material.</li>
   </ul>
 <h3>Notable new Features</h3>
 <h3>Improvements (minor features) and debug</h3>

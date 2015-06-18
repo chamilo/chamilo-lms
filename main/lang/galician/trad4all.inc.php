@@ -1552,7 +1552,6 @@ $Exercises = "Exercicios";
 $AllowPersonalAgendaTitle = "Axenda persoal";
 $AllowPersonalAgendaComment = "¿Un usuario pode engadir eventos a súa axenda persoal?";
 $CurrentValue = "valor actual";
-$myCoursesDefaultView = "Vista predeterminada";
 $UserPassword = "Contrasinal";
 $SubscriptionAllowed = "Permitir inscrición";
 $UnsubscriptionAllowed = "Desinscrición permitida";

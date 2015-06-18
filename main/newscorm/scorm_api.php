@@ -1236,7 +1236,6 @@ function update_toc(update_action, update_id, change_ids) {
         change_ids = 'yes';
     }
     var myelem = $("#toc_"+update_id);
-    var myelemimg = $("#toc_img_"+update_id);
     logit_lms('update_toc("'+update_action+'", '+update_id+')',2);
 
     if (update_id != 0) {
@@ -1244,13 +1243,11 @@ function update_toc(update_action, update_id, change_ids) {
         if (update_action == "unhighlight" || update_action == "highlight") {
             if (update_action == "unhighlight") {
                 myelem.removeClass('scorm_highlight');
-                //myelem.addClass('scorm_item_normal');
             } else {
                 if (change_ids=='yes') {
                    olms.lms_next_item = update_id;
                    olms.lms_previous_item = update_id;
                 }
-                //myelem.removeClass('scorm_item_normal');
                 myelem.addClass('scorm_highlight');
             }
         } else {

@@ -134,7 +134,7 @@ class CkEditor extends Editor
         foreach ($templates as $template) {
             $image = $template['image'];
             $image = !empty($image) ? $image : 'empty.gif';
-            $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$image;
+            $image = api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image;
 
             /*$image = $this->urlGenerator->generate(
                 'get_document_template_action',

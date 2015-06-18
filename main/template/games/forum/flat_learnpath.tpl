@@ -34,9 +34,8 @@
 
     var forumPagination = {
         currentPage: 1,
-
-        load: function() {
-            return $.ajax('{{ _p.web_ajax }}forum.ajax.php?{{ _p.web_cid_query }}', {
+        loadPreviousPosts: function(callback) {
+            var getPrevPost = $.ajax('{{ _p.web_ajax }}forum.ajax.php?{{ _p.web_cid_query }}', {
                 type: 'post',
                 dataType: 'json',
                 data: {
@@ -49,6 +48,26 @@
                 success: function() {
                     forumPagination.currentPage++;
                 }
+            });
+
+            $.when(getPrevPost).done(function(response) {
+                if (response.error) {
+                    return;
+                }
+
+                $.each(response.posts, function() {
+                    var post = this;
+
+                    if (post.parentId > 0) {
+                        $('[data-post="' + post.parentId +'"] > .media-body').append(post.html);
+                    } else {
+                        $(post.html).insertBefore('#form-reply-to-post-0');
+                    }
+
+                    if (callback) {
+                        callback();
+                    }
+                });
             });
         }
     };
@@ -66,7 +85,9 @@
     };
 
     $(document).on('ready', function() {
-        resizeContainer(true);
+        forumPagination.loadPreviousPosts(function() {
+            resizeContainer();
+        });
 
         CKEDITOR.on('instanceReady', function() {
             resizeContainer();
@@ -111,24 +132,8 @@
         $('#more-post-disqus').on('click', function(e) {
             e.preventDefault();
 
-            var getPrevPost = forumPagination.load();
-
-            $.when(getPrevPost).done(function(response) {
-                if (response.error) {
-                    return;
-                }
-
-                $.each(response.posts, function() {
-                    var post = this;
-
-                    if (post.parentId > 0) {
-                        $('[data-post="' + post.parentId +'"] > .media-body').append(post.html);
-                    } else {
-                        $(post.html).insertBefore('#form-reply-to-post-0');
-                    }
-
-                    resizeContainer();
-                });
+            forumPagination.loadPreviousPosts(function() {
+                resizeContainer();
             });
         });
     });

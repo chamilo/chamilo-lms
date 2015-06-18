@@ -220,6 +220,80 @@ if (!empty($action)) {
             $json['error'] = false;
             $json['form'] = $form->returnForm();
             break;
+        case 'get_more_posts':
+            $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+            $loadedPosts = isset($_POST['posts']) && is_array($_POST['posts']) ? $_POST['posts'] : [];
+            $locked = isset($_POST['locked']) && $_POST['locked'] === 'true' ? true : false;
+            $allowReply = false;
+
+            if (
+                ($current_forum_category && $current_forum_category['locked'] == 0) &&
+                $current_forum['locked'] == 0 &&
+                $current_thread['locked'] == 0 ||
+                api_is_allowed_to_edit(false, true)
+            ) {
+                // The link should only appear when the user is logged in or when anonymous posts are allowed.
+                if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
+                    // reply link
+                    if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+                        $allowReply = true;
+                    }
+                }
+            }
+
+            $templateFolder = api_get_configuration_value('default_template');
+            $templateFolder = empty($templateFolder) ? 'default' : $templateFolder;
+
+            $em = Database::getManager();
+            $postsRepo = $em->getRepository('ChamiloCourseBundle:CForumPost');
+
+            $thread = $em->find('ChamiloCourseBundle:CForumThread', $_REQUEST['thread']);
+            $posts = $postsRepo->getPostList($thread, 'desc', null, $page, 10);
+
+            $list = [];
+
+            foreach ($posts as $post) {
+                $user = $em->find('ChamiloUserBundle:User', $post->getPosterId());
+
+                $template = new Template(null, false, false, false, false, false);
+                $template->assign('is_anonymous', api_is_anonymous());
+                $template->assign('is_allowed_to_edit', api_is_allowed_to_edit(false, true));
+                $template->assign('is_allowed_to_session_edit', api_is_allowed_to_session_edit(false, true));
+                $template->assign(
+                    'delete_confirm_message',
+                    addslashes(
+                        api_htmlentities(
+                            get_lang('DeletePost'),
+                            ENT_QUOTES
+                        )
+                    )
+                );
+                $template->assign('locked', $locked);
+                $template->assign('allow_reply', $allowReply);
+                $template->assign('thread_id', $thread->getThreadId());
+                $template->assign('forum', $current_forum);
+                $template->assign('post_data', [
+                    'post' => [
+                        'id' => $post->getPostId(),
+                        'date' => api_get_local_time($post->getPostDate()),
+                        'text' => $post->getPostText()
+                    ],
+                    'user' => [
+                        'image' => display_user_image($user->getId(), $user->getCompleteName()),
+                        'link' => display_user_link($user->getId(), $user->getCompleteName()),
+                    ]
+                ]);
+
+                $list[] = [
+                    'id' => $post->getPostId(),
+                    'parentId' => $post->getPostParentId(),
+                    'html' => $template->fetch("$templateFolder/forum/flat_learnpath_post.tpl")
+                ];
+            }
+
+            $json['error'] = false;
+            $json['posts'] = $list;
+            break;
     }
 }
 

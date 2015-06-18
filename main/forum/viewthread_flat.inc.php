@@ -335,43 +335,20 @@ if (isset($current_thread['thread_id'])) {
     }
 
     if ($origin == 'learnpath') {
-        $rows = getPosts($current_thread['thread_id'], $sortDirection, true);
-
-        foreach ($rows as &$row) {
-            $completeName = api_get_person_name($row['firstname'], $row['lastname']);
-
-            $row['user_image'] = display_user_image($row['user_id'], $completeName);
-            $row['user_link'] = display_user_link($row['user_id'], $completeName);
-            $row['date'] = api_get_local_time($row['post_date']);
-
-            if (!empty($row['post_parent_id'])) {
-                $postParentId = $row['post_parent_id'];
-                $usernameAux = api_get_person_name(
-                    $rows[$postParentId]['firstname'],
-                    $rows[$postParentId]['lastname']
-                );
-
-                $row['parent_link_user'] = display_user_link($rows[$postParentId]['user_id'], $usernameAux);
-            }
-        }
+        $thread = Database::getManager()
+            ->find('ChamiloCourseBundle:CForumThread', $_REQUEST['thread']);
 
         $template = new Template(null, false, false, false, false, false);
-        $template->assign('is_anonymous', api_is_anonymous());
-        $template->assign('is_allowed_to_edit', api_is_allowed_to_edit(false, true));
-        $template->assign('is_allowed_to_session_edit', api_is_allowed_to_session_edit(false, true));
-        $template->assign('posts', $rows);
         $template->assign('forum', $current_forum);
-        $template->assign('thread_id', $clean_thread_id);
-        $template->assign('delete_confirm_message', addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES)));
+        $template->assign('thread_id', $thread->getThreadId());
         $template->assign('locked', $locked);
-        $template->assign('allow_reply', $allowReply);
         $template->assign('button_reply_to_thread', $buttonReplyToThread);
 
         $templateFolder = api_get_configuration_value('default_template');
 
-        if(!empty($templateFolder)){
-            $content = $template->fetch($templateFolder.'/forum/flat_learnpath.tpl');
-        }else{
+        if (!empty($templateFolder)) {
+            $content = $template->fetch($templateFolder . '/forum/flat_learnpath.tpl');
+        } else {
             $content = $template->fetch('default/forum/flat_learnpath.tpl');
         }
 

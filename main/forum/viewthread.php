@@ -157,7 +157,6 @@ if ($my_action == 'move' && isset($_GET['post'])) {
 /* Display the action messages */
 
 $buttonReplyToThread = null;
-$allowReply = false;
 
 $my_message = isset($message) ? $message : '';
 if ($my_message) {
@@ -182,8 +181,6 @@ if ($my_message != 'PostDeletedSpecial') {
             if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
                 // reply link
                 if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                    $allowReply = true;
-
                     $buttonReplyToThread = Display::toolbarButton(
                         get_lang('ReplyToThread'),
                         '#',

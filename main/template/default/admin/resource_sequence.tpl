@@ -210,11 +210,9 @@
                     <div id="children">
                     </div>
 
-                    <h4 class="title-sequence">{{ 'Graph' | get_lang }}</h4>
-
-
                 </div>
                 <div class="col-md-3">
+                    <h4 class="title-sequence">{{ 'GraphDependencyTree' | get_lang }}</h4>
                     <div id="show_graph"></div>
                 </div>
 

@@ -48,7 +48,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         $form->addElement('html', '<div id="div_custom_datetime" style="display:none">');
     }
 
-    $form->addElement('DatePicker', 'custom_start_date', get_lang('StartDate'));
+    $form->addElement('DateTimePicker', 'custom_start_date', get_lang('StartDate'));
     $form->addElement('html', '</div>');
 
     if (isset($thematic_advance_data['attendance_id']) &&
@@ -104,7 +104,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     }
 
     $default['start_date_type'] = 1;
-    $default['custom_start_date'] = date('Y-m-d', api_strtotime(api_get_local_time()));
+    $default['custom_start_date'] = date('Y-m-d H:i:s', api_strtotime(api_get_local_time()));
     $default['duration_in_hours'] = 1;
 
     if (!empty($thematic_advance_data)) {
@@ -117,7 +117,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
             $default['custom_start_date'] = null;
             if (isset($thematic_advance_data['start_date'])) {
                 $default['custom_start_date'] = date(
-                    'Y-m-d',
+                    'Y-m-d H:i:s',
                     api_strtotime(api_get_local_time($thematic_advance_data['start_date']))
                 );
             }

@@ -1540,7 +1540,6 @@ $AllowPersonalAgendaTitle = "Osebna agenda";
 $AllowPersonalAgendaComment = "Ali uporabniki lahko dodajajo zapise v orodju Moja agenda ?";
 $CurrentValue = "trenutna vrednost";
 $AlreadyRegisteredToSession = "Vpis v to sejo je bil že izveden";
-$myCoursesDefaultView = "Privzeti pogled";
 $UserPassword = "Geslo";
 $SubscriptionAllowed = "Vpis dovoljen";
 $UnsubscriptionAllowed = "Izpis dovoljen";

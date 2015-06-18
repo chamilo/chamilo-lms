@@ -167,31 +167,59 @@
             });
         });
     </script>
-
-    <div class="row">
-        <div class="col-md-4">
-            {{ left_block }}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="section-title-sequence">{{ 'SequenceSelection' | get_lang }}</div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ create_sequence }}
+                </div>
+                <div class="col-md-6">
+                    {{ select_sequence }}
+                </div>
+            </div>
         </div>
-        <div class="col-md-8">
-            <h3>
-                {{ 'ItemsTheReferenceDependsOn' | get_lang }}
-            </h3>
-            <div id="parents">
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="section-title-sequence">{{ 'SequenceConfiguration' | get_lang }}</div>
+            <div class="row">
+
+                {{ configure_sequence }}
             </div>
 
-            <h3>{{ 'Item' | get_lang }}</h3>
-            <div id="resource">
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="section-title-sequence">{{ 'SequencePreview' | get_lang }}</div>
+            <div class="row">
+                <div class="col-md-9">
+                    <h4 class="title-sequence">
+                        {{ 'ItemsTheReferenceDependsOn' | get_lang }}
+                    </h4>
+                    <div id="parents">
+                    </div>
+
+                    <h4 class="title-sequence">{{ 'Item' | get_lang }}</h4>
+                    <div id="resource">
+                    </div>
+
+                    <h4 class="title-sequence">{{ 'Dependencies' | get_lang }}</h4>
+                    <div id="children">
+                    </div>
+
+                    <h4 class="title-sequence">{{ 'Graph' | get_lang }}</h4>
+
+
+                </div>
+                <div class="col-md-3">
+                    <div id="show_graph"></div>
+                </div>
+
             </div>
-
-            <h3>{{ 'Dependencies' | get_lang }}</h3>
-            <div id="children">
-            </div>
-
-            <h3>{{ 'Graph' | get_lang }}</h3>
-            <div id="show_graph"></div>
-
-
-            {{ right_block }}
+            {{ save_sequence }}
         </div>
     </div>
 {% endblock %}

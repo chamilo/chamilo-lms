@@ -521,7 +521,7 @@ class Thematic
                     }
                 }
                 //DATE_TIME_FORMAT_LONG
-                $thematic_advance_item  = '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_FORMAT_LONG).$session_star.'</strong></div>';
+                $thematic_advance_item  = '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG).$session_star.'</strong></div>';
 //				$thematic_advance_item .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
                 $thematic_advance_item .= '<div>'.$thematic_advance['duration'].' '.get_lang('HourShort').'</div>';
                 $thematic_advance_item .= '<div>'.Security::remove_XSS($thematic_advance['content'], STUDENT).'</div>';
@@ -662,7 +662,7 @@ class Thematic
 
         // protect data
         $id = intval($this->thematic_advance_id);
-        $tematic_id = intval($this->thematic_id);
+        $thematic_id = intval($this->thematic_id);
         $attendance_id = intval($this->attendance_id);
         $content = Database::escape_string($this->thematic_advance_content);
         $start_date = Database::escape_string($this->start_date);
@@ -673,7 +673,7 @@ class Thematic
         if (empty($id)) {
             // Insert
             $sql = "INSERT INTO $tbl_thematic_advance (c_id, thematic_id, attendance_id, content, start_date, duration)
-					VALUES ($this->course_int_id, $tematic_id, $attendance_id, '$content', '".api_get_utc_datetime($start_date)."', '$duration') ";
+                    VALUES ($this->course_int_id, $thematic_id, $attendance_id, '$content', '".api_get_utc_datetime($start_date)."', '$duration') ";
             $result = Database::query($sql);
             $last_id = Database::insert_id();
 
@@ -685,7 +685,7 @@ class Thematic
             }
         } else {
             // update
-            $sql = "UPDATE $tbl_thematic_advance SET thematic_id = '$tematic_id', attendance_id = '$attendance_id', content = '$content', start_date = '".api_get_utc_datetime($start_date)."', duration = '$duration'
+            $sql = "UPDATE $tbl_thematic_advance SET thematic_id = $thematic_id, attendance_id = $attendance_id, content = '$content', start_date = '".api_get_utc_datetime($start_date)."', duration = '$duration'
                     WHERE c_id = {$this->course_int_id} AND id = $id ";
             $result = Database::query($sql);
             if (Database::affected_rows($result)) {

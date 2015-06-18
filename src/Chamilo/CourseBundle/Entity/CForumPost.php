@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CForumPost
  *
  * @ORM\Table(name="c_forum_post", indexes={@ORM\Index(name="poster_id", columns={"poster_id"}), @ORM\Index(name="forum_id", columns={"forum_id"}), @ORM\Index(name="idx_forum_post_thread_id", columns={"thread_id"}), @ORM\Index(name="idx_forum_post_visible", columns={"visible"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Entity\Repository\CForumPostRespository")
  */
 class CForumPost
 {

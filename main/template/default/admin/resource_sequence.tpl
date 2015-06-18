@@ -201,11 +201,11 @@
                     </h4>
                     <div id="parents">
                     </div>
-
+                    <div class="arrow-sequence"></div>
                     <h4 class="title-sequence">{{ 'Item' | get_lang }}</h4>
                     <div id="resource">
                     </div>
-
+                    <div class="arrow-sequence"></div>
                     <h4 class="title-sequence">{{ 'Dependencies' | get_lang }}</h4>
                     <div id="children">
                     </div>

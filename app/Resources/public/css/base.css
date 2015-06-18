@@ -5829,8 +5829,15 @@ div#chat-remote-video video {
 #parents .parent {
   display: inline-block;
   width: 15%;
-  padding: 5px 5px 48px;
-  background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center bottom;
+  padding: 5px;
+  /* background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center bottom; */
+}
+.arrow-sequence{
+  height: 68px;
+  background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center 15px;
+  margin-top: 10px;
+  border-top: 1px dotted #ccc;
+  padding-top: 10px;
 }
 #parents .parent .big-icon{
   background-color: #ECF0F1 ;
@@ -5862,8 +5869,7 @@ div#chat-remote-video video {
 }
 #resource .parent {
   display: inline-block;
-  padding: 5px 5px 48px;
-  background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center bottom;
+  padding: 5px;
   width: 15%;
 }
 #resource .parent .big-icon{

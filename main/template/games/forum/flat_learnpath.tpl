@@ -93,7 +93,7 @@
             resizeContainer();
         });
 
-        $('.btn-reply-post').on('click', function(e) {
+        $('.forum-disqus').on('click', '.btn-reply-post', function(e) {
             e.preventDefault();
 
             var parentPostId = $(this).data('parent-post') || 0;
@@ -102,7 +102,7 @@
             replyForm.show('reply');
         });
 
-        $('.btn-quote-post').on('click', function(e) {
+        $('.forum-disqus').on('click', '.btn-quote-post', function(e) {
             e.preventDefault();
 
             var parentPostId = $(this).data('parent-post') || 0;

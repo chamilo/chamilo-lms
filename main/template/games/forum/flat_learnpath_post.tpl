@@ -40,7 +40,7 @@
                 {% endif %}
             </div>
         </div>
-    </div>
 
-    <div id="form-reply-to-post-{{ post_data.post.id }}"></div>
+        <div id="form-reply-to-post-{{ post_data.post.id }}"></div>
+    </div>
 </div>

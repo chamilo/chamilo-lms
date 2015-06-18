@@ -248,7 +248,7 @@ if (!empty($action)) {
             $postsRepo = $em->getRepository('ChamiloCourseBundle:CForumPost');
 
             $thread = $em->find('ChamiloCourseBundle:CForumThread', $_REQUEST['thread']);
-            $posts = $postsRepo->getPostList($thread, 'desc', null, $page, 10);
+            $posts = $postsRepo->getPostList($thread, 'desc', null, $page, 20);
 
             $list = [];
 

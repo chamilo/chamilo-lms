@@ -18,6 +18,12 @@
   padding-top: 15px;
   padding-left: 15px;
 }
+.page-header{
+  margin: 10px 0px 10px;
+}
+.page-header h1{
+  margin-top: 10px;
+}
 .my-courses-ranking .title-course,
 #slider-sessions .title-course{
 	font-size: 14px;
@@ -108,15 +114,19 @@
 	background-color: #35a8c9;
 	border-radius: 5px;
 	border-color: #35a8c9;
-	padding-left: 30px;
-	padding-right: 30px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 .btn-primary:hover{
 	background-color: #2593b3;
 	border-radius: 5px;
 	border-color: #2593b3;
-	padding-left: 30px;
-	padding-right: 30px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+#breadcrumb-bar .btn{
+  margin-top: 5px;
+  margin-right: 5px;
 }
 /* ranting */
 .start-progress .fa-star {

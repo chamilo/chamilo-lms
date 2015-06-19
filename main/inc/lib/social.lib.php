@@ -887,7 +887,7 @@ class SocialManager extends UserManager
             $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a>';
 
             $html .= '<div class="col-md-4">
-                        <div class="card">
+                        <div class="card-social">
                             <div class="avatar">'.$img.'</div>
                             <div class="content">
                             '.$name.'

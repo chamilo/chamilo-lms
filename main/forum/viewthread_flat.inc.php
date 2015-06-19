@@ -23,7 +23,6 @@ $groupId = api_get_group_id();
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
 
 if (isset($current_thread['thread_id'])) {
-    $rows = getPosts($current_thread['thread_id'], $sortDirection);
     $increment = 0;
     $clean_forum_id = intval($_GET['forum']);
     $clean_thread_id = intval($_GET['thread']);
@@ -35,7 +34,9 @@ if (isset($current_thread['thread_id'])) {
 
     $closedPost = null;
 
-    if (!empty($rows)) {
+    if ($origin != 'learnpath') {
+        $rows = getPosts($current_thread['thread_id'], $sortDirection);
+        /* start foreach forum normal */
         foreach ($rows as $row) {
             if ($row['user_id'] == '0') {
                 $name = prepare4display($row['poster_name']);
@@ -65,8 +66,7 @@ if (isset($current_thread['thread_id'])) {
                         );
 
                         $buttonQuote = Display::tag(
-                            'a',
-                            '<i class="fa fa-quote-left"></i> ' . get_lang('QuoteMessage'),
+                            'a', '<i class="fa fa-quote-left"></i> ' . get_lang('QuoteMessage'),
                             array(
                                 'href' => 'reply.php?' . api_get_cidreq()
                                     . "&forum=$clean_forum_id&thread=$clean_thread_id"
@@ -144,8 +144,8 @@ if (isset($current_thread['thread_id'])) {
                 GroupManager::is_tutor_of_group($userId, $groupId) ||
                 ($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
                 (
-                api_is_allowed_to_edit(false, true) &&
-                !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                    api_is_allowed_to_edit(false, true) &&
+                    !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                 )
             ) {
                 if (api_is_allowed_to_session_edit(false, true)) {
@@ -181,9 +181,9 @@ if (isset($current_thread['thread_id'])) {
                 ) {
                     $iconEdit .= return_visible_invisible_icon(
                         'post', $row['post_id'], $row['visible'], array(
-                        'forum' => $clean_forum_id,
-                        'thread' => $clean_thread_id,
-                        'origin' => $origin,
+                            'forum' => $clean_forum_id,
+                            'thread' => $clean_thread_id,
+                            'origin' => $origin,
                         )
                     );
                     $iconEdit .= "";
@@ -294,8 +294,12 @@ if (isset($current_thread['thread_id'])) {
                     $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
                     $html .= '<a href="download.php?file=' . $realname . '"> ' . $user_filename . ' </a>';
 
-                    if (($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
-                        (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
+                    if (
+                        ($current_forum['allow_edit'] == 1 && $row['user_id'] == $_user['user_id']) ||
+                        (
+                            api_is_allowed_to_edit(false, true) &&
+                            !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
+                        )
                     ) {
                         $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;origin='
                             . Security::remove_XSS($_GET['origin']) . '&amp;action=delete_attach&amp;id_attach='
@@ -328,5 +332,50 @@ if (isset($current_thread['thread_id'])) {
             $html .= '</div>';
             echo $html;
         }
+    }
+
+    if ($origin == 'learnpath') {
+        $rows = getPosts($current_thread['thread_id'], $sortDirection, true);
+
+        foreach ($rows as &$row) {
+            $completeName = api_get_person_name($row['firstname'], $row['lastname']);
+
+            $row['user_image'] = display_user_image($row['user_id'], $completeName);
+            $row['user_link'] = display_user_link($row['user_id'], $completeName);
+            $row['date'] = api_get_local_time($row['post_date']);
+
+            if (!empty($row['post_parent_id'])) {
+                $postParentId = $row['post_parent_id'];
+                $usernameAux = api_get_person_name(
+                    $rows[$postParentId]['firstname'],
+                    $rows[$postParentId]['lastname']
+                );
+
+                $row['parent_link_user'] = display_user_link($rows[$postParentId]['user_id'], $usernameAux);
+            }
+        }
+
+        $template = new Template(null, false, false, false, false, false);
+        $template->assign('is_anonymous', api_is_anonymous());
+        $template->assign('is_allowed_to_edit', api_is_allowed_to_edit(false, true));
+        $template->assign('is_allowed_to_session_edit', api_is_allowed_to_session_edit(false, true));
+        $template->assign('posts', $rows);
+        $template->assign('forum', $current_forum);
+        $template->assign('thread_id', $clean_thread_id);
+        $template->assign('delete_confirm_message', addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES)));
+        $template->assign('locked', $locked);
+        $template->assign('allow_reply', $allowReply);
+        $template->assign('button_reply_to_thread', $buttonReplyToThread);
+
+        $templateFolder = api_get_configuration_value('default_template');
+
+        if(!empty($templateFolder)){
+            $content = $template->fetch($templateFolder.'/forum/flat_learnpath.tpl');
+        }else{
+            $content = $template->fetch('default/forum/flat_learnpath.tpl');
+        }
+
+        $template->assign('content', $content);
+        $template->display_no_layout_template();
     }
 }

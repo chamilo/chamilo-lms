@@ -581,8 +581,8 @@ function ldap_add_user_to_session($UserList, $id_session) {
     foreach ($UserList as $enreg_user) {
         $enreg_user = (int) $enreg_user;
         Database::query("INSERT IGNORE INTO $tbl_session_rel_user ".
-               " (session_id, user_id) " .
-               " VALUES('$id_session','$enreg_user')");
+               " (session_id, user_id, registered_at) " .
+               " VALUES('$id_session','$enreg_user', '" . api_get_utc_datetime() . "')");
     }
     // We update the number of users in the session
     $sql = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_user ".

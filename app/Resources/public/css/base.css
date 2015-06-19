@@ -160,7 +160,6 @@ ul#navigation .report a {
   padding-top: 70px;
 }
 
-/* END COURSE PROGRESS*/
 /* IMPRESS JS */
   .impress-content{
     position: relative;
@@ -5436,7 +5435,7 @@ ul.holder li.bit-box{
   font-size: 12px;
 }
 /* end thematic progress*/
-.card {
+.card-social {
   overflow: hidden;
   position: relative;
   border: 1px solid #CCC;
@@ -5447,7 +5446,7 @@ ul.holder li.bit-box{
   color: rgb(136, 172, 217);
   margin-bottom: 20px;
 }
-.card .header-bg {
+.card-social .header-bg {
   /* This stretches the canvas across the entire hero unit */
   position: absolute;
   top: 0;
@@ -5459,17 +5458,17 @@ ul.holder li.bit-box{
   z-index: 1;
 }
 
-.card .avatar {
+.card-social .avatar {
   position: relative;
   margin-top: 15px;
   z-index: 100;
 }
 
-.card .content {
+.card-social .content {
   margin-bottom: 15px;
 }
 
-.card .avatar img {
+.card-social .avatar img {
   width: 100px;
   height: 100px;
   -webkit-border-radius: 50%;
@@ -6041,6 +6040,55 @@ div#chat-remote-video video {
   border: 1px solid #ddd;
   width: 100px;
   height: 100px;
+}
+.forum-disqus{
+  padding: 10px;
+}
+.forum-disqus .reply-disqus, .forum-disqus .reply-disqus:hover{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.forum-disqus .post-disqus{
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #dddddd;
+}
+.forum-disqus .tools-disqus{
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.forum-disqus .username-disqus{
+  margin-top: 0;
+}
+.forum-disqus .username-disqus a{
+  color: #1977CA;
+  font-size: 14px;
+  font-weight: 700;
+}
+.forum-disqus .description-disqus{
+  font-size: 14px;
+  line-height: 21px;
+  color: #3F4549;
+}
+.forum-disqus .time{
+  font-size: 12px;
+
+  color:rgba(0, 39, 59, 0.5);
+}
+.forum-disqus .reply-post {
+  font-size: 12px;
+  color: rgba(0, 39, 59, 0.5);
+}
+.forum-disqus .reply-post a{
+  font-size: 12px;
+  color: rgba(0, 39, 59, 0.5);
+}
+.forum-disqus .thumbnail{
+  padding: 0px;
+}
+.top-disqus{
+  border: 1px solid #dddddd;
+  padding: 10px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

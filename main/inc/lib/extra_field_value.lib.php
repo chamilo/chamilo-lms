@@ -613,16 +613,27 @@ class ExtraFieldValue extends Model
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');
             if ($transform) {
-                if ($result['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
-                    if (!empty($result['value'])) {
-                        $field_option = new ExtraFieldOption($this->type);
-                        $options = explode('::', $result['value']);
-                        $result = $field_option->get($options[0]);
-                        $result_second = $field_option->get($options[1]);
-                        if (!empty($result)) {
-                            $result['value'] = $result['display_text'].' -> ';
-                            $result['value'] .= $result_second['display_text'];
-                        }
+                if (!empty($result['value'])) {
+                    switch ($result['field_type']) {
+                        case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
+                            $field_option = new ExtraFieldOption($this->type);
+                            $options = explode('::', $result['value']);
+                            $result = $field_option->get($options[0]);
+                            $result_second = $field_option->get($options[1]);
+                            if (!empty($result)) {
+                                $result['value'] = $result['display_text'].' -> ';
+                                $result['value'] .= $result_second['display_text'];
+                            }
+                            break;
+                        case ExtraField::FIELD_TYPE_SELECT:
+                            $extraFieldOption = new ExtraFieldOption('course');
+                            $optionData = $extraFieldOption->get_field_options_by_field($result['field_id']);
+                            $optionData = current($optionData);
+
+                            if (!empty($optionData)) {
+                                $result['value'] = get_lang($optionData['display_text']);
+                            }
+                            break;
                     }
                 }
             }

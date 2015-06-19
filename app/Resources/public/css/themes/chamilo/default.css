@@ -224,3 +224,6 @@ footer a{
 .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
   background-color: #00677C;
 }
+.page-header{
+  margin: 10px 0 10px;
+}

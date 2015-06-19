@@ -2089,8 +2089,9 @@ div.system_announcement {
 }
 
 .RequirementHeading, .RequirementText, .RequirementContent  {
-    margin-top:12px;
-    line-height: 18px;
+  margin-top:12px;
+  line-height: 18px;
+  margin-bottom: 20px;
 }
 
 #toolshortcuts_horizontal {
@@ -5927,6 +5928,64 @@ div#chat-remote-video video {
 }
 #children .parent .big-icon .sequence-deleted{
   font-size: 12px;
+}
+/* INSTALL CHAMILO */
+#page-install .logo{
+  text-align: center;
+}
+#page-install .icon-install{
+  text-align: center;
+}
+#page-install .title{
+  text-align: center;
+  color:#2E75A3;
+}
+#page-install .text{
+  text-align: center;
+}
+#page-install .download-info{
+  padding-top: 10px;
+  text-align: center;
+}
+.RequirementHeading h2{
+  font-size: 25px;
+}
+#page-install{
+  background: #d2ebf9; /* Old browsers */
+  background: -moz-linear-gradient(top, #d2ebf9 0%, #feffff 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d2ebf9), color-stop(100%,#feffff)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #d2ebf9 0%,#feffff 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ebf9', endColorstr='#feffff',GradientType=0 ); /* IE6-9 */
+}
+#page-install footer{
+  color: #666666;
+}
+#page-install footer a{
+  color: #333333;
+}
+#page-install footer a:hover{
+  color: #666666;
+}
+#page-install pre{
+  margin-top: 5px !important;
+}
+#page-install .page-header{
+  margin: 20px 0px 20px;
+}
+#page-install .normal-message{
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-width: 1px 1px 1px 5px;
+  border-color: #eeeeee;
+  border-style: solid;
+  font-size: 12px;
+  color: #666666;
 }
 #about-session .description-course{
   padding: 10px;

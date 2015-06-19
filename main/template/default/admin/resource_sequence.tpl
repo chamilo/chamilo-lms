@@ -21,11 +21,15 @@
                 success: function (data) {
                     if (data) {
                         var listLoaded = data.split(',');
-                        listLoaded.forEach(function(value) {
+                        var count = listLoaded.length;
+                        listLoaded.forEach(function(value, index) {
                             $.ajax({
                                 url: url + '?a=get_icon&id='+ value+'&type='+type+'&sequence_id='+sequenceId+'&show_delete=1',
                                 success:function(data){
                                     $('#parents').append(data);
+                                    if (index != (count - 1)) {
+                                        $('#parents').append('<div class="sequence-plus-icon">+</div>');
+                                    }
                                     parentList.push(value);
                                 }
                             });
@@ -201,20 +205,18 @@
                     </h4>
                     <div id="parents">
                     </div>
-
+                    <div class="arrow-sequence"></div>
                     <h4 class="title-sequence">{{ 'Item' | get_lang }}</h4>
                     <div id="resource">
                     </div>
-
+                    <div class="arrow-sequence"></div>
                     <h4 class="title-sequence">{{ 'Dependencies' | get_lang }}</h4>
                     <div id="children">
                     </div>
 
-                    <h4 class="title-sequence">{{ 'Graph' | get_lang }}</h4>
-
-
                 </div>
                 <div class="col-md-3">
+                    <h4 class="title-sequence">{{ 'GraphDependencyTree' | get_lang }}</h4>
                     <div id="show_graph"></div>
                 </div>
 

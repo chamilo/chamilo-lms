@@ -10,7 +10,7 @@
 {#  Page header #}
 {% if header != '' %}
     <div class="page-header">
-        <h1>{{ header }}</h1>
+        <h2>{{ header }}</h2>
     </div>
 {% endif %}
 

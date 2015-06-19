@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * FieldRelTag
  *
  * @ORM\Table(name="extra_field_rel_tag")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ExtraFieldRelTagRepository")
  */
 class ExtraFieldRelTag
 {

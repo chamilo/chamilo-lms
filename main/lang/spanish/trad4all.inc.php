@@ -7401,4 +7401,13 @@ $CatalogueShowCoursesAndSessions = "Mostrar ambos cursos y sesiones";
 $SequenceSelection = "Selección de secuencia";
 $SequenceConfiguration = "Configuración de la secuencia";
 $SequencePreview = "Vista previa de la secuencia";
+$DisplayDates = "Fechas mostradas";
+$AccessDates = "Fechas de acceso para estudiantes";
+$CoachDates = "Fechas de acceso para tutores";
+$ChatWithXUser = "Conversación con %s";
+$StartVideoChat = "Iniciar vídeollamada";
+$FieldTypeVideoUrl = "URL de video";
+$InsertAValidUrl = "Inserte una URL valida";
+$SeeInformation = "Ver información";
+$ShareWithYourFriends = "Comparte con tus amigos";
 ?>

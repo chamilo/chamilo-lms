@@ -160,7 +160,6 @@ ul#navigation .report a {
   padding-top: 70px;
 }
 
-
 /* IMPRESS JS */
   .impress-content{
     position: relative;
@@ -5828,8 +5827,16 @@ div#chat-remote-video video {
 }
 #parents .parent {
   display: inline-block;
-  padding: 5px;
   width: 15%;
+  padding: 5px;
+  /* background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center bottom; */
+}
+.arrow-sequence{
+  height: 68px;
+  background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center 15px;
+  margin-top: 10px;
+  border-top: 1px dotted #ccc;
+  padding-top: 10px;
 }
 #parents .parent .big-icon{
   background-color: #ECF0F1 ;
@@ -5987,7 +5994,61 @@ div#chat-remote-video video {
   font-size: 12px;
   color: #666666;
 }
-
+#about-session .description-course{
+  padding: 10px;
+  color: #666666;
+}
+#about-session .tags-course{
+  padding: 10px;
+  background-color:#ECF0F1 ;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+#about-session .tags-course .fa-tags{
+  color: #D94D38;
+}
+#about-session .tags-course a{
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color:#ffffff;
+  border-radius: 10%;
+  -moz-border-radius: 10%;
+  -webkit-border-radius: 10%;
+}
+#about-session .subscribe{
+  padding: 5px;
+  text-align: center;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+#about-session .info-course{
+  margin-top: 20px;
+  padding-top: 20px;
+}
+#about-session .info-course .panel-heading h4{
+  margin: 0px;
+}
+#about-session .info-course .title-info{
+  color: #00829C;
+  border-bottom: 1px dotted #eeeeee;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+#about-session .info-course .content-info{
+  padding: 10px;
+  color:#666666;
+}
+#about-session .teachers .img-circle{
+  border: 1px solid #ddd;
+  width: 100px;
+  height: 100px;
+}
 .forum-disqus{
   padding: 10px;
 }

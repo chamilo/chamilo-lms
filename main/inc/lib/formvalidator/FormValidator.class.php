@@ -973,6 +973,25 @@ EOT;
             isset($GLOBALS['_HTML_QuickForm_default_renderer']) ?
                 $GLOBALS['_HTML_QuickForm_default_renderer'] : null;
     }
+
+    /**
+     * Adds a input of type url to the form.
+     * @param type $name The label for the form-element
+     * @param type $label The element name
+     * @param type $required Optional. Is the form-element required (default=true)
+     * @param type $attributes Optional. List of attributes for the form-element
+     */
+    public function addUrl($name, $label, $required = true, $attributes = array())
+    {
+        $this->addElement('url', $name, $label, $attributes);
+        $this->applyFilter($name, 'trim');
+        $this->addRule($name, get_lang('InsertAValidUrl'), 'url');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+    }
+
 }
 
 /**

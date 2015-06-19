@@ -101,7 +101,7 @@
                                 {{ row.action_edit }}
                                 {{ row.action_visible }}
                                 {{ row.action_publish }}
-                                {{ row.action_seriousgame }}
+                                {{ row.action_serious_game }}
                                 {{ row.action_subscribe_users }}
                                 {{ row.action_reinit }}
                                 {{ row.action_default_view }}

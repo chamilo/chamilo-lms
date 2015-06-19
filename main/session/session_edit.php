@@ -101,6 +101,7 @@ $form->addButtonUpdate(get_lang('ModifyThisSession'));
 
 $formDefaults = $sessionInfo;
 
+$formDefaults['coach_username'] = $sessionInfo['id_coach'];
 $formDefaults['session_category'] = $sessionInfo['session_category_id'];
 $formDefaults['session_visibility'] = $sessionInfo['visibility'];
 

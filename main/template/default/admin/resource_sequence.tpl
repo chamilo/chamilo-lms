@@ -21,11 +21,15 @@
                 success: function (data) {
                     if (data) {
                         var listLoaded = data.split(',');
-                        listLoaded.forEach(function(value) {
+                        var count = listLoaded.length;
+                        listLoaded.forEach(function(value, index) {
                             $.ajax({
                                 url: url + '?a=get_icon&id='+ value+'&type='+type+'&sequence_id='+sequenceId+'&show_delete=1',
                                 success:function(data){
                                     $('#parents').append(data);
+                                    if (index != (count - 1)) {
+                                        $('#parents').append('<div class="sequence-plus-icon">+</div>');
+                                    }
                                     parentList.push(value);
                                 }
                             });

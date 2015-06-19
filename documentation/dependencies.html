@@ -63,7 +63,7 @@ We recommend using HTML5-compatible technology.
   <li>PC with a minimum of 512MB or any tablet or smartphone</li>
   <li>We recommend a Pentium-I as a minimum processor capability for PCs</li>
   <li>Works on Windows XP (SP3 recommended) and later versions, Linux (any version with a graphical interface), Mac OS (any version), FreeBSD, Android, iOS and pretty much any other operating system with a graphical interface you might think about</li>
-  <li>Any modern browser (IE6 and IE7 excluded). Safari is known to have small issues with the WYSIWYG editor.</li>
+  <li>Any modern browser (IE8 and inferior *excluded*).</li>
   <li>Optional: Flash plugin (only required for a few features like the hotspot image question type and the audio recorder)</li>
   <li>Optional: Java applet capability (only required in case you don't use the Flash version of the audio recorder)</li>
 </ul>
@@ -71,9 +71,8 @@ We recommend using HTML5-compatible technology.
 <h2>Dependencies - server-side</h2>
 <ul>
   <li>Apache 2+</li>
-  <li> PHP 5.4 or higher with MySQL bindings (mysqlnd is recommended) and php-gd extension to allow Chamilo to resize pictures. The
+  <li> PHP 5.4 or higher with MySQL bindings (mysqlnd is recommended) and php-gd extension to allow Chamilo to resize pictures. Not tested with PHP 7.0 yet</li>
   <li>MySQL 5.1+ or any version of MariaDB database server</li>
-  new components we have included from the Symfony framework highly depend on namespaces, a feature that appeared in PHP 5.3.0</li>
   <li>php5-intl package (for international behaviour support)</li>
   <li>php5-imagick</li>
   <li>php5-curl (only required for a feature in the links tool and an optional installer check)</li>
@@ -103,8 +102,11 @@ We recommend using HTML5-compatible technology.
   <li>WCAG_Rendering</li>
   <li>xajax </li>
   <li>jQuery</li>
+  <li>Others (see composer.json)</li>
 </ul>
+
 <h2>Extra features dependencies - server-side</h2>
+
 Chamilo LMS is a very complex software suite, and some of its components wil
 only work when some specific server-side libraries are installed. The names of
 the libraries below are taken from a Debian/Ubuntu installation, so you might
@@ -115,20 +117,23 @@ implying any warranty of any kind that this will work on your system, even on
 the intended Debian/Ubuntu systems. You should take your own precautions to
 ensure all components are installed by an expert in the field.<br />
   <ul>
-    <li>Chamilo Rapid (ex Oogie(TM))</li>
+    <li>Chamilo Rapid (ex Oogie(TM))
       <ul>
         <li>libreoffice</li>
       </ul>
-    <li>Audio recording (generate mp3 from wav)</li>
+    </li>
+    <li>Audio recording (generate mp3 from wav)
       <ul>
         <li>libav-tools</li>
         <li>libavcodec-extra-53</li>
         <li>libmp3lame0</li>
       </ul>
-    <li>BigBlueButton videoconference</li>
+    </li>
+    <li>BigBlueButton videoconference
       <ul>
         <li>bigbluebutton</li>
       </ul>
+    </li>
   </ul>
 </div>
 <hr />

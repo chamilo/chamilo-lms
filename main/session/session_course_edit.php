@@ -44,7 +44,7 @@ if (!list($session_name,$course_title) = Database::fetch_row($result)) {
 //$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
 $interbreadcrumb[]=array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
-$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>api_htmlentities($session_name,ENT_QUOTES,$charset));
+$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>api_htmlentities($session_name, ENT_QUOTES, $charset));
 
 $arr_infos = array();
 if (isset($_POST['formSent']) && $_POST['formSent']) {
@@ -54,20 +54,20 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$sql = "SELECT user_id
 	        FROM $tbl_session_rel_course_rel_user
 	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2";
-	$rs_coachs = Database::query($sql);
+	$rs_coaches = Database::query($sql);
 
-	$coachs_course_session = array();
-	if (Database::num_rows($rs_coachs) > 0){
-		while ($row_coachs = Database::fetch_row($rs_coachs)) {
-			$coachs_course_session[] = $row_coachs[0];
+	$coaches_course_session = array();
+	if (Database::num_rows($rs_coaches) > 0){
+		while ($row_coaches = Database::fetch_row($rs_coaches)) {
+			$coaches_course_session[] = $row_coaches[0];
 		}
 	}
 
-	$id_coachs= $_POST['id_coach'];
+	$id_coaches= $_POST['id_coach'];
 
-	if (is_array($id_coachs) && count($id_coachs) > 0) {
+	if (is_array($id_coaches) && count($id_coaches) > 0) {
 
-		foreach ($id_coachs as $id_coach) {
+		foreach ($id_coaches as $id_coach) {
 			$id_coach = intval($id_coach);
             $rs1 = SessionManager::set_coach_to_course_session(
                 $id_coach,
@@ -77,11 +77,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 		}
 
 		// set status to 0 other tutors from multiple list
-		$array_intersect = array_diff($coachs_course_session,$id_coachs);
+		$array_intersect = array_diff($coaches_course_session,$id_coaches);
 
-		foreach ($array_intersect as $nocoach_user_id) {
+		foreach ($array_intersect as $no_coach_user_id) {
 			$rs2 = SessionManager::set_coach_to_course_session(
-				$nocoach_user_id,
+				$no_coach_user_id,
 				$id_session,
                 $courseId,
 				true
@@ -164,7 +164,7 @@ api_display_tool_title($tool_name);
     </div>
     <div class="col-md-8">
 
-        <select name="id_coach[]" class="form-control">
+        <select name="id_coach[]" class="form-control" multiple>
             <option value="0">----- <?php echo get_lang("Choose") ?> -----</option>
             <option value="0" <?php if(count($arr_infos) == 0) echo 'selected="selected"'; ?>>
                 <?php echo get_lang('None') ?>

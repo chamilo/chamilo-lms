@@ -1,11 +1,10 @@
 <?php
 // Show the FACEBOOK login button
-
 $_template['show_message']   = false;
 
 //if (api_is_anonymous() && api_get_setting('facebook_login_activate') == 'true') {
 if (api_is_anonymous()) {
-    require_once api_get_path(SYS_CODE_PATH)."auth/external_login/facebook.init.php";
+    require_once api_get_path(SYS_CODE_PATH)."auth/external_login/facebook.inc.php";
     $_template['show_message']   = true;
     // the default title
     $button_url = api_get_path(WEB_PLUGIN_PATH)."add_facebook_login_button/img/cnx_fb.png";

@@ -114,6 +114,30 @@ switch ($action) {
             echo $sessionInfo['show_description'] == 1 ? $sessionInfo['description'] : get_lang('None');
             echo '</div></div></div>';
         }
+    case 'search_general_coach':
+        header('Content-Type: application/json');
+
+        if (api_is_anonymous()) {
+            echo '';
+            break;
+        }
+
+        $list = [];
+
+        $entityManager = Database::getManager();
+        $usersRepo = $entityManager->getRepository('ChamiloUserBundle:User');
+
+        $users = $usersRepo->searchUsersByStatus($_GET['q'], COURSEMANAGER);
+
+        foreach ($users as $user) {
+            $list[] = [
+                'id' => $user->getId(),
+                'text' => $user->getCompleteName()
+            ];
+        }
+
+        echo json_encode($list);
+        break;
     default:
         echo '';
 }

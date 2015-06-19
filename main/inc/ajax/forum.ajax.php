@@ -268,6 +268,7 @@ if (!empty($action)) {
                         )
                     )
                 );
+
                 $template->assign('locked', $locked);
                 $template->assign('allow_reply', $allowReply);
                 $template->assign('thread_id', $thread->getThreadId());
@@ -279,7 +280,7 @@ if (!empty($action)) {
                         'text' => $post->getPostText()
                     ],
                     'user' => [
-                        'image' => display_user_image($user->getId(), $user->getCompleteName()),
+                        'image' => display_user_image($user->getId(), $user->getCompleteName(),null,array('class'=>'media-object')),
                         'link' => display_user_link($user->getId(), $user->getCompleteName()),
                     ]
                 ]);

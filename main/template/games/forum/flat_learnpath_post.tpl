@@ -11,7 +11,6 @@
             <span class="small">•</span>
             <span class="time timeago" title="{{ post_data.post.date }}">{{ post_data.post.date }}</span>
         </h4>
-
         <div>
             {{ post_data.post.text }}
             <div>

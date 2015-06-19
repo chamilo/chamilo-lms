@@ -34,9 +34,6 @@
                 </div>
         </div>
     </div>
-
-
-
     <div class="row info-course">
         <div class="col-xs-12 col-md-7">
             <div class="panel panel-default">

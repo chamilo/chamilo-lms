@@ -38,16 +38,23 @@ switch ($action) {
         break;
     case 'search_category':
         if (api_is_platform_admin() || api_is_allowed_to_create_course()) {
-            $results = searchCategoryByKeyword($_REQUEST['q']);
-            if (!empty($results)) {
-                foreach ($results as &$item) {
-                    $item['id'] = $item['code'];
-                    $item['text'] = '('.$item['code'].') '.$item['name'];
-                }
-                echo json_encode($results);
-            } else {
-                echo json_encode(array());
+            $categories = searchCategoryByKeyword($_REQUEST['q']);
+
+            if (empty($categories)) {
+                echo json_encode([]);
+                break;
             }
+
+            $list = [];
+
+            foreach ($categories as $item) {
+                $list['items'][] = [
+                    'id' => $item['code'],
+                    'text' => '('.$item['code'].') '.$item['name']
+                ];
+            }
+
+            echo json_encode($list);
         }
         break;
     case 'search_course':

@@ -23,27 +23,29 @@
             </div>
             {% if course_data.tags %}
                 <div class="tags-course">
-                    <i class="fa fa-tags"></i>
+                    <i class="fa fa-check-square-o"></i>
                        {% for tag in course_data.tags %}
                        <a href="#">{{ tag.getTag }}</a>
                        {% endfor %}
                 </div>
             {% endif %}
                 <div class="subscribe">
-                    <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-book"></i> {{ "Subscribe"|get_lang }}</a>
+                    <a href="#" class="btn btn-success">{{ "Subscribe"|get_lang }}</a>
                 </div>
         </div>
     </div>
     <div class="row info-course">
+        <div class="col-xs-12 col-md-12">
+            <h4 class="title-section">{{ "CourseInformation"|get_lang }}</h4>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-xs-12 col-md-7">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>{{ "CourseInformation"|get_lang }}</h4>
-                </div>
+
                 <div class="panel-body">
                     {% if course_data.objectives %}
                     <div class="objective-course">
-                        <h4 class="title-info"><i class="fa fa-book"></i> {{ "Objectives"|get_lang }}</h4>
+                        <h4 class="title-info"><i class="fa fa-square"></i> {{ "Objectives"|get_lang }}</h4>
                         <div class="content-info">
                             {{ course_data.objectives.getContent }}
                         </div>
@@ -52,7 +54,7 @@
                     {% endif %}
                     {% if course_data.topics %}
                     <div class="topics">
-                        <h4 class="title-info"><i class="fa fa-book"></i> {{ "Topics"|get_lang }}</h4>
+                        <h4 class="title-info"><i class="fa fa-square"></i> {{ "Topics"|get_lang }}</h4>
                         <div class="content-info">
                             {{ course_data.topics.getContent }}
                         </div>
@@ -60,13 +62,13 @@
                     </div>
                     {% endif %}
                 </div>
-            </div>
+
         </div>
 
         <div class="col-xs-12 col-md-5">
             {% if course_data.coaches %}
-            <div class="panel panel-default teachers">
-                <div class="panel-heading">
+            <div class="teachers">
+                <div class="heading">
                     <h4>{{ "Coaches"|get_lang }}</h4>
                 </div>
                 <div class="panel-body">
@@ -92,18 +94,18 @@
                 </div>
             </div>
             {% endif %}
-            <div class="panel panel-default social-share">
-                <div class="panel-heading">{{ "ShareWithYourFriends"|get_lang }}</div>
+            <div class="social-share">
+                <div class="heading"><h4>¡{{ "ShareWithYourFriends"|get_lang }}!</h4></div>
                 <div class="panel-body">
                     <div class="icons-social text-center">
-                        <a href="#" class="btn bnt-link btn-lg">
-                            <i class="fa fa-facebook fa-2x"></i>
+                        <a href="#" class="btn-social">
+                            <i class="fa fa-facebook"></i>
                         </a>
-                        <a href="#" class="btn bnt-link btn-lg">
-                            <i class="fa fa-twitter fa-2x"></i>
+                        <a href="#" class="btn-social">
+                            <i class="fa fa-twitter"></i>
                         </a>
-                        <a href="#" class="btn bnt-link btn-lg">
-                            <i class="fa fa-linkedin fa-2x"></i>
+                        <a href="#" class="btn-social">
+                            <i class="fa fa-linkedin"></i>
                         </a>
                     </div>
                 </div>
@@ -111,9 +113,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4 col-md-offset-4t ">
-            <div class="text-center">
-                <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-book"></i> {{ "Subscribe"|get_lang }}</a>
+        <div class="col-md-4 col-md-offset-4">
+            <div class="subscribe text-center">
+                <a href="#" class="btn btn-success btn-lg">{{ "Subscribe"|get_lang }}</a>
             </div>
         </div>
     </div>

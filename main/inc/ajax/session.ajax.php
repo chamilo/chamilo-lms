@@ -25,27 +25,32 @@ switch ($action) {
         break;
     case 'search_session':
         if (api_is_platform_admin()) {
-            $results = SessionManager::get_sessions_list(
-                array('s.name' => array('operator' => 'LIKE', 'value' => "%".$_REQUEST['q']."%"))
+            $sessions = SessionManager::get_sessions_list(
+                [
+                    's.name' => [
+                        'operator' => 'LIKE',
+                        'value' => "%" . $_REQUEST['q'] . "%"
+                    ]
+                ]
             );
-            $results2 = array();
-            if (!empty($results)) {
-                foreach ($results as $item) {
-                    $item2 = array();
-                    foreach ($item as $id => $internal) {
-                        if ($id == 'id') {
-                            $item2[$id] = $internal;
-                        }
-                        if ($id == 'name') {
-                            $item2['text'] = $internal;
-                        }
-                    }
-                    $results2[] = $item2;
-                }
-                echo json_encode($results2);
-            } else {
-                echo json_encode(array());
+
+            $list = [
+                'items' => []
+            ];
+
+            if (empty($sessions)) {
+                echo json_encode([]);
+                break;
             }
+
+            foreach ($sessions as $session) {
+                $list['items'][] = [
+                    'id' => $session['id'],
+                    'text' => $session['name']
+                ];
+            }
+
+            echo json_encode($list);
         }
         break;
     case 'search_session_all':

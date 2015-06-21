@@ -30,7 +30,7 @@ use Facebook\HttpClients\FacebookHttpable;
 
 require_once dirname(__FILE__) . '/functions.inc.php';
 
-FacebookSession::setDefaultApplication( $facebook_config['appId'],$facebook_config['secret']);
+FacebookSession::setDefaultApplication($facebook_config['appId'], $facebook_config['secret']);
 
 /**
  * This function connect to facebook and retrieves the user info
@@ -56,7 +56,9 @@ function facebookConnect()
             $email = $graphObject->getProperty('email');
             $locale = $graphObject->getProperty('locale');
             $language = getLanguageForFacebook($locale);
-            if(!$language)$language='pl_PL';
+            if (!$language) {
+                $language='en_US';
+            }
 
             //Checks if user already exists in chamilo
             $u = array(
@@ -99,9 +101,9 @@ function facebookConnect()
                 exit();
             }
         }
-    } catch( FacebookRequestException $ex ) {
+    } catch (FacebookRequestException $ex) {
         echo $ex;
-    } catch( Exception $ex ) {
+    } catch (Exception $ex) {
         // When validation fails or other local issues
     }
 }
@@ -114,8 +116,9 @@ function facebookGetLoginUrl()
 {
     global $facebook_config;
     $helper = new FacebookRedirectLoginHelper($facebook_config['return_url']);
-    $loginUrl =   $helper->getLoginUrl(array(
-        'scope' => 'email'));
+    $loginUrl =   $helper->getLoginUrl(
+        array('scope' => 'email')
+    );
     return $loginUrl;
 }
 

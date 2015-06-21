@@ -52,7 +52,7 @@ if ($course_validation_feature) {
 
         if (!empty($course_request_info['category_code'])) {
             $data = getCategory($course_request_info['category_code']);
-            $categoryList[] = array('id' => $data['code'], 'text' => $data['name']);
+            $categoryList[$data['code']] = $data['name'];
         }
 
         $form->addElement(

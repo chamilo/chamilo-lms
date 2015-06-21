@@ -127,7 +127,9 @@ switch ($action) {
             break;
         }
 
-        $list = [];
+        $list = [
+            'items' => []
+        ];
 
         $entityManager = Database::getManager();
         $usersRepo = $entityManager->getRepository('ChamiloUserBundle:User');
@@ -135,7 +137,7 @@ switch ($action) {
         $users = $usersRepo->searchUsersByStatus($_GET['q'], COURSEMANAGER);
 
         foreach ($users as $user) {
-            $list[] = [
+            $list['items'][] = [
                 'id' => $user->getId(),
                 'text' => $user->getCompleteName()
             ];

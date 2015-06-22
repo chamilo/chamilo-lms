@@ -1145,7 +1145,7 @@ class IndexManager
                 $session_category_id = $session_category['session_category']['id'];
 
                 // Sessions and courses that are not in a session category
-                if ($session_category_id == 0 &&
+                if (empty($session_category_id) &&
                     isset($session_category['sessions'])
                 ) {
                     // Independent sessions
@@ -1342,8 +1342,8 @@ class IndexManager
                                     );
                                 }
 
-                                if ($session_now > $allowed_time &&
-                                    $coachAccessEndDate > $dif_time_after - 1
+                                if ($session_now > $allowed_time //&&
+                                    //$coachAccessEndDate > $dif_time_after - 1
                                 ) {
                                     if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                         $c = CourseManager:: get_logged_user_course_html(

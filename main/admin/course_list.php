@@ -354,9 +354,18 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     if (!empty($sessionId)) {
         $sessionList = array();
         $sessionInfo = SessionManager::fetch($sessionId);
-        $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
+        $sessionList[$sessionInfo['id']] = $sessionInfo['name'];
     }
-    $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchCourseBySession'), null, array('url' => $url, 'defaults' => $sessionList));
+    $sessionFilter->addElement(
+        'select_ajax',
+        'session_name',
+        get_lang('SearchCourseBySession'),
+        null,
+        array(
+            'url' => $url,
+            'defaults' => $sessionList
+        )
+    );
     $courseListUrl = api_get_self();
     $actions = '
     <script>

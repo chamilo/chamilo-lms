@@ -1291,7 +1291,7 @@ class IndexManager
                             foreach ($session['courses'] as $course) {
                                 $is_coach_course = api_is_coach(
                                     $session_id,
-                                    $course['code']
+                                    $course['real_id']
                                 );
 
                                 $dif_time_after = 0;

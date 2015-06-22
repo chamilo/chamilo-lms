@@ -6329,23 +6329,18 @@ class SessionManager
                     'select',
                     'coach_username',
                     get_lang('CoachName'),
-                    $coachesOptions,
-                    array(
-                        'id' => 'coach_username',
-                        'class' => 'chzn-select',
-                        'style' => 'width:370px;'
-                    )
+                    $coachesOptions
                 );
             } else {
                 $form->addElement(
-                    'text',
+                    'select_ajax',
                     'coach_username',
                     get_lang('CoachName'),
-                    array(
-                        'maxlength' => 50,
-                        'onkeyup' => "xajax_search_coachs(document.getElementById('coach_username').value)",
-                        'id' => 'coach_username'
-                    )
+                    null,
+                    [
+                        'url' => api_get_path(WEB_AJAX_PATH) . 'session.ajax.php?a=search_general_coach',
+                        'width' => '100%'
+                    ]
                 );
             }
         }

@@ -4,6 +4,7 @@
 namespace Chamilo\UserBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use \Doctrine\Common\Collections\Criteria;
 
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -105,4 +106,40 @@ class UserRepository extends EntityRepository
 
         return $query->execute();
     }*/
+
+    /**
+     * Get a filtered list of user by status and (optionally) access url
+     * @param string $query The query to filter
+     * @param int $status The status
+     * @param int $accessUrlId The access URL ID
+     * @return array
+     */
+    public function searchUsersByStatus($query, $status, $accessUrlId = null)
+    {
+        $accessUrlId = intval($accessUrlId);
+
+        $queryBuilder = $this->createQueryBuilder('u');
+
+        if ($accessUrlId > 0) {
+            $queryBuilder->innerJoin(
+                'ChamiloCoreBundle:AccessUrlRelUser',
+                'auru',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'u.id = auru.userId'
+            );
+        }
+
+        $queryBuilder->where('u.status = :status')
+            ->andWhere('u.username LIKE :query OR u.firstname LIKE :query OR u.lastname LIKE :query')
+            ->setParameter('status', $status)
+            ->setParameter('query', "$query%");
+
+        if ($accessUrlId > 0) {
+            $queryBuilder->andWhere('auru.accessUrlId = :url')
+                ->setParameter(':url', $accessUrlId);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
 }

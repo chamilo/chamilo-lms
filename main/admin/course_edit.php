@@ -162,12 +162,22 @@ if (!empty($coursesInSession)) {
 // Category code
 $url = api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_category';
 $categoryList = array();
-if (!empty($course['category_code'])) {
-    $data = getCategory($course['category_code']);
-    $categoryList[] = array('id' => $data['code'], 'text' => $data['name']);
+
+if (!empty($courseInfo['categoryCode'])) {
+    $data = getCategory($courseInfo['categoryCode']);
+    $categoryList[$data['code']] = $data['name'];
 }
 
-$form->addElement('select_ajax', 'category_code', get_lang('CourseFaculty'), null, array('url' => $url, 'defaults' => $categoryList));
+$form->addElement(
+    'select_ajax',
+    'category_code',
+    get_lang('CourseFaculty'),
+    null,
+    array(
+        'url' => $url,
+        'defaults' => $categoryList
+    )
+);
 
 $form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
 $form->applyFilter('department_name', 'html_filter');

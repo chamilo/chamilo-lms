@@ -59,7 +59,7 @@
                     var post = this;
 
                     if (post.parentId > 0) {
-                        $('[data-post="' + post.parentId +'"] > .media-body').append(post.html);
+                        $('[data-post="' + post.parentId +'"] > .post-disqus').append(post.html);
                         $(".timeago").timeago();
                     } else {
                         $(post.html).insertBefore('#form-reply-to-post-0');

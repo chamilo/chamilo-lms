@@ -6069,7 +6069,6 @@ div#chat-remote-video video {
 .forum-disqus .post-disqus{
   padding-bottom: 10px;
   margin-bottom: 10px;
-  border-bottom: 1px solid #dddddd;
 }
 .forum-disqus .tools-disqus{
   padding-bottom: 10px;
@@ -6091,6 +6090,7 @@ div#chat-remote-video video {
   font-size: 14px;
   line-height: 21px;
   color: #3F4549;
+  text-align: justify;
 }
 .forum-disqus .time{
   font-size: 12px;
@@ -6108,10 +6108,14 @@ div#chat-remote-video video {
   padding: 0px;
   width: 45px;
   height: 45px;
+  margin-bottom: 0px;
 }
 .top-disqus{
   border: 1px solid #dddddd;
   padding: 10px;
+}
+.forum-disqus .info-disqus{
+ display: none;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
@@ -6244,6 +6248,19 @@ div#chat-remote-video video {
   }
   #show_graph{
    text-align: center;
+  }
+  .forum-disqus .description-disqus{
+    text-align: justify;
+  }
+  .forum-disqus .username-disqus{
+    display: none;
+  }
+  .forum-disqus .thumbnail{
+    display: inline-block;
+    margin-bottom: 0px;
+  }
+  .forum-disqus .info-disqus{
+    display: inline-block;
   }
 }
 @media (min-width : 480px) and (max-width: 767px) {

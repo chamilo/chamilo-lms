@@ -7410,4 +7410,6 @@ $FieldTypeVideoUrl = "URL de video";
 $InsertAValidUrl = "Inserte una URL valida";
 $SeeInformation = "Ver información";
 $ShareWithYourFriends = "Comparte con tus amigos";
+$FromDateX = "Del %s";
+$UntilDateX = "Al %s";
 ?>

@@ -28,7 +28,7 @@
                                 success:function(data){
                                     $('#parents').append(data);
                                     if (index != (count - 1)) {
-                                        $('#parents').append('<div class="sequence-plus-icon">+</div>');
+                                        $('#parents').append('<div class="sequence-plus-icon"><i class="fa fa-plus"></i></div>');
                                     }
                                     parentList.push(value);
                                 }
@@ -205,11 +205,15 @@
                     </h4>
                     <div id="parents">
                     </div>
-                    <div class="arrow-sequence"></div>
+                    <div class="border-sequence">
+                        <div class="arrow-sequence"></div>
+                    </div>
                     <h4 class="title-sequence">{{ 'Item' | get_lang }}</h4>
                     <div id="resource">
                     </div>
-                    <div class="arrow-sequence"></div>
+                    <div class="border-sequence">
+                        <div class="arrow-sequence"></div>
+                    </div>
                     <h4 class="title-sequence">{{ 'Dependencies' | get_lang }}</h4>
                     <div id="children">
                     </div>

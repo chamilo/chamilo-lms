@@ -17,7 +17,7 @@ $plugin_info['comment'] = "If Facebook authntification is activated, this plugin
 //the plugin version
 $plugin_info['version'] = '1.0';
 //the plugin author
-$plugin_info['author'] = 'Hubert Borderiou';
+$plugin_info['author'] = 'Konrad Banasiak, Hubert Borderiou';
 //the plugin configuration
 $form = new FormValidator('add_facebook_button_form');
 $form->addElement(

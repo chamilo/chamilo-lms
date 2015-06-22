@@ -3175,37 +3175,6 @@ class CourseManager
         return $html;
     }
 
-    public static function session_list_html($params,$items_session, $is_sub_content = false)
-    {
-        $html = '';
-        $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
-        $class = "panel-body";
-        $html .= '<div class="panel-heading">';
-        if (!empty($params['link'])){
-            $html.= '<a href="'.$params['link'].'">';
-            $html.= $params['icon'];
-            $html.= '</a>';
-        }else{
-            $html.= $params['icon'];
-        }
-        $html .= $params['title'];
-        $html .= '<div class="pull-right">' . $params['right_actions'] . '</div>';
-        $html .= '</div>';
-        $html .= '<div class="sessions ' . $class . '">';
-        $html .= '<div class="row">';
-        $html .= '<div class="col-md-12">';
-        if (!empty($params['subtitle'])) {
-            $html .= '<p class="subtitle-session"><i class="fa fa-clock-o"></i> ' . $params['subtitle'] . '</p>';
-        }
-        if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
-            $html .= '<p class="description-session">' . $params['description'] . '</p>';
-        }
-        $html .= $items_session;
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        return $html;
-    }
     /**
      * Builds the course block in user_portal.php
      * @todo use Twig
@@ -3879,7 +3848,7 @@ class CourseManager
         $params['title'] = $session_title;
         $params['extra'] = '';
 
-        $html = self::session_items_html($params, true);
+        $html = $params;
 
         $session_category_id = null;
         if (1) {

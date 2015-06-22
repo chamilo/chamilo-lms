@@ -1168,7 +1168,7 @@ class IndexManager
                         $count_courses_session = 0;
 
                         // Loop course content
-                        $html_courses_session = '';
+                        $html_courses_session = [];
                         $atLeastOneCourseIsVisible = false;
 
                         foreach ($session['courses'] as $course) {
@@ -1212,7 +1212,9 @@ class IndexManager
                                         true,
                                         $this->load_directories_preview
                                     );
-                                    $html_courses_session .= isset($c[1]) ? $c[1] : null;
+                                    if (isset($c[1])) {
+                                        $html_courses_session[] = $c['1'];
+                                    }
                                 }
                                 $count_courses_session++;
                             }
@@ -1226,42 +1228,19 @@ class IndexManager
                         }
 
                         if ($count_courses_session > 0) {
-                            $params = array();
-                            $session_box = Display::get_session_title_box($session_id);
-                            $params['icon'] = Display::return_icon(
-                                'window_list.png',
-                                $session_box['title'],
-                                array('id' => 'session_img_' . $session_id),
-                                ICON_SIZE_MEDIUM
+                            $params = array(
+                                'id' => $session_id
                             );
+                            $session_box = Display::get_session_title_box($session_id);
+
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
                             $extra_info .= isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
 
-                            if (api_is_drh()) {
-                                $session_link = $session_box['title'];
-                                $params['link'] = null;
-                            } else {
-                                $session_link = Display::tag(
-                                    'a',
-                                    $session_box['title'],
-                                    array(
-                                        'href' => api_get_path(
-                                                WEB_CODE_PATH
-                                            ) . 'session/index.php?session_id=' . $session_id
-                                    )
-                                );
-                                $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
-                            }
-
-                            $params['title'] = $session_link;
+                            $params['show_link_to_session'] = api_is_drh() ? false : true;
+                            $params['title'] = $session_box['title'];
                             $params['subtitle'] = $extra_info;
-
-                            $params['right_actions'] = '';
-                            if (api_is_platform_admin()) {
-                                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">';
-                                $params['right_actions'] .= Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
-                            }
+                            $params['show_actions'] = api_is_platform_admin() ? true : false;
 
                             if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                 // $params['extra'] .=  $html_courses_session;
@@ -1269,20 +1248,19 @@ class IndexManager
 
                             $params['description'] = $session_box['description'];
                             $params['show_description'] = $session_box['show_description'];
+                            $params['courses'] = $html_courses_session;
+                            $params['show_simple_session_info'] = false;
 
-                            $items_courses_session = '<div class="sessions-items">'.$html_courses_session.'</div>';
-                            /* Icon session no category */
-                            $parentInfo = CourseManager::session_list_html($params,$items_courses_session,true);
-
-                            if (isset($_configuration['show_simple_session_info']) &&
+                            if (
+                                isset($_configuration['show_simple_session_info']) &&
                                 $_configuration['show_simple_session_info']
                             ) {
-                                $params['title'] = $session_box['title'];
-                                $parentInfo = CourseManager::course_item_html_no_icon($params);
+                                $params['show_simple_session_info'] = true;
                             }
 
-                            $sessions_with_no_category .= CourseManager::course_item_parent(
-                                $parentInfo,null
+                            $this->tpl->assign('session', $params);
+                            $sessions_with_no_category .= $this->tpl->fetch(
+                                "{$this->tpl->templateFolder}/user_portal/sessions_without_category.tpl"
                             );
 
                             $sessionCount++;

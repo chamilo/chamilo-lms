@@ -3246,12 +3246,6 @@ class CourseManager
         return '<div class="panel panel-default">' . $main_content . $sub_content . $sub_sub_content . '</div>';
     }
 
-
-    public static function session_item_parent($main_content, $sub_content, $sub_sub_content = null)
-    {
-        return '<div class="panel panel-default"><div class="panel-body">' . $main_content . $sub_content . $sub_sub_content . '</div></div>';
-    }
-
     /**
      * Display special courses (and only these) as several HTML divs of class userportal-course-item
      *

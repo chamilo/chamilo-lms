@@ -142,7 +142,7 @@ if (api_is_allowed_to_edit(null, true) ||
                         floatingHeaderRow.css("width", $(this).css("width"));
                         floatingHeaderRow.css("visibility", "visible");
                         floatingHeaderRow.css("z-index", "1000");
-                        originalHeaderRow.css("height", "80px");
+                        originalHeaderRow.css("height", "40px");
                     } else {
                         floatingHeaderRow.css("visibility", "hidden");
                         floatingHeaderRow.css("top", "0px");

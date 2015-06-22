@@ -1537,11 +1537,11 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 }
 
 .attendance-users-table td {
-    height:66px;
+    height:45px;
 }
 
 .attendance-calendar-table td {
-    height:66px;
+    height:45px;
 }
 
 /**********************************************
@@ -3263,8 +3263,8 @@ form .formw .freeze {
 .data_table th, .data_table td {
     border-top: 1px solid #DDDDDD;
     line-height: 18px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .data_table th {
@@ -3350,7 +3350,7 @@ form .formw .freeze {
     padding: 5px 5px 0px 5px;
 }
 .tableFloatingHeaderOriginal th, .tableWithFloatingHeader th{
-    height:80px;
+    height:40px;
 }
 
 /* jsPlumb */

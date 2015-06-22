@@ -22,32 +22,45 @@ class Version20150504182600 extends AbstractMigrationChamilo
     {
         // Set parent language to Spanish for all close-by languages. Same for Italian,
         // French, Portuguese and Chinese
+        $connection = $this->connection;
+        $sql = "SELECT id, english_name
+                FROM language
+                WHERE english_name IN ('spanish', 'italian', 'portuguese', 'simpl_chinese', 'french')";
+        $result = $connection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+        $languages = array();
+
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
+                $languages[$data['english_name']] = $data['id'];
+            }
+        }
         $this->addSql("
-            UPDATE language SET parent_id = 49 WHERE english_name = 'quechua_cusco'
+            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'quechua_cusco'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = 49 WHERE english_name = 'galician'
+            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'galician'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = 49 WHERE english_name = 'esperanto'
+            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'esperanto'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = 49 WHERE english_name = 'catalan'
+            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'catalan'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = 49 WHERE english_name = 'asturian'
+            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'asturian'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = 28 WHERE english_name = 'friulian'
+            UPDATE language SET parent_id = " . $languages['spanish'] . " WHERE english_name = 'friulian'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = 18 WHERE english_name = 'occitan'
+            UPDATE language SET parent_id = " . $languages['french'] . " WHERE english_name = 'occitan'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = 40 WHERE english_name = 'brazilian'
+            UPDATE language SET parent_id = " . $languages['portuguese'] . " WHERE english_name = 'brazilian'
         ");
         $this->addSql("
-            UPDATE language SET parent_id = 45 WHERE english_name = 'trad_chinese'
+            UPDATE language SET parent_id = " . $languages['simpl_chinese'] . " WHERE english_name = 'trad_chinese'
         ");
     }
 

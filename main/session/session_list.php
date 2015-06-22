@@ -42,7 +42,7 @@ $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = getParentsToString($courseInfo['categoryCode']);
-    $courseList[] = array('id' => $courseInfo['code'], 'text' => $parents.$courseInfo['title']);
+    $courseList[$courseInfo['code']] = $parents . $courseInfo['title'];
 }
 
 $sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);

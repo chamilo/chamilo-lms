@@ -38,16 +38,23 @@ switch ($action) {
         break;
     case 'search_category':
         if (api_is_platform_admin() || api_is_allowed_to_create_course()) {
-            $results = searchCategoryByKeyword($_REQUEST['q']);
-            if (!empty($results)) {
-                foreach ($results as &$item) {
-                    $item['id'] = $item['code'];
-                    $item['text'] = '('.$item['code'].') '.$item['name'];
-                }
-                echo json_encode($results);
-            } else {
-                echo json_encode(array());
+            $categories = searchCategoryByKeyword($_REQUEST['q']);
+
+            if (empty($categories)) {
+                echo json_encode([]);
+                break;
             }
+
+            $list = [];
+
+            foreach ($categories as $item) {
+                $list['items'][] = [
+                    'id' => $item['code'],
+                    'text' => '('.$item['code'].') '.$item['name']
+                ];
+            }
+
+            echo json_encode($list);
         }
         break;
     case 'search_course':
@@ -74,24 +81,27 @@ switch ($action) {
             }
 
             $results = array();
-            if (!empty($courseList)) {
-                foreach ($courseList as $courseInfo) {
-                    $title = $courseInfo['title'];
 
-                    if (!empty($courseInfo['category_code'])) {
-                        $parents = getParentsToString($courseInfo['category_code']);
-                        $title = $parents.$courseInfo['title'];
-                    }
-
-                    $results[] = array(
-                        'id' => $courseInfo['code'],
-                        'text' => $title
-                    );
-                }
-                echo json_encode($results);
-            } else {
-                echo json_encode(array());
+            if (empty($courseList)) {
+                echo json_encode([]);
+                break;
             }
+
+            foreach ($courseList as $course) {
+                $title = $course['title'];
+
+                if (!empty($course['category_code'])) {
+                    $parents = getParentsToString($course['category_code']);
+                    $title = $parents . $course['title'];
+                }
+
+                $results['items'][] = array(
+                    'id' => $course['id'],
+                    'text' => $title
+                );
+            }
+
+            echo json_encode($results);
         }
         break;
     case 'search_course_by_session':

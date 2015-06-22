@@ -23,9 +23,11 @@ class SelectAjax extends HTML_QuickForm_select
         $html = api_get_asset('select2/dist/js/select2.min.js');
 
         $iso = api_get_language_isocode(api_get_interface_language());
+        $languageCondition = '';
 
-        if (file_exists(api_get_path(SYS_PATH) . "web/assets/select2/dist/js/i18n/es.js")) {
+        if (file_exists(api_get_path(SYS_PATH) . "web/assets/select2/dist/js/i18n/$iso.js")) {
             $html .= api_get_asset("select2/dist/js/i18n/$iso.js");
+            $languageCondition = "language: '$iso',";
         }
 
         $html .= api_get_css(api_get_path(WEB_PATH).'web/assets/select2/dist/css/select2.min.css');
@@ -60,34 +62,37 @@ class SelectAjax extends HTML_QuickForm_select
             $plHolder = get_lang('SelectAnOption');
         }
 
-        $html .= '<script>
-                $(function() {
-                    $("#'.$this->getAttribute('name').'").select2({
-                        placeholder: "' . $plHolder . '",
+        $html .= <<<JS
+            <script>
+                $(function(){
+                    $('#{$this->getAttribute('name')}').select2({
+                        $languageCondition
+                        placeholder_: '$plHolder',
                         allowClear: true,
-                        width: "'.$width.'",
-                        minimumInputLength: ' . $minimumInputLength . ',
+                        width: '$width',
+                        minimumInputLength: '$minimumInputLength',
                         // instead of writing the function to execute the request we use Select2s convenient helper
                         ajax: {
-                            url: "'.$this->getAttribute('url').'",
-                            dataType: "json",
-                            data: function (params) {
+                            url: '{$this->getAttribute('url')}',
+                            dataType: 'json',
+                            data: function(params) {
                                 return {
                                     q: params.term, // search term
                                     page_limit: 10,
                                 };
                             },
-                            processResults: function (data, page) { // parse the results into the format expected by Select2.
-                                // since we are using custom formatting functions we do not need to alter remote JSON data
+                            processResults: function (data, page) {
+                                //parse the results into the format expected by Select2
                                 return {
                                     results: data.items
                                 };
                             }
+                            $formatCondition
                         }
-                        '.$formatCondition.'
                     });
                 });
-        </script>';
+            </script>
+JS;
 
         $html .= Display::select(
             $this->getAttribute('name'),

@@ -126,6 +126,8 @@ foreach ($sessionCourses as $sessionCourse) {
 
 /* View */
 $template = new Template($session->getName(), true, true, false, true, false);
+$template->assign('pageUrl', api_get_path(WEB_PATH) . "session/{$session->getId()}/about/");
+$template->assign('session', $session);
 $template->assign('courses', $courses);
 
 $templateFolder = api_get_configuration_value('default_template');

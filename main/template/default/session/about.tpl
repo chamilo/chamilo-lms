@@ -99,13 +99,13 @@
                     <div class="panel-heading">{{ "ShareWithYourFriends"|get_lang }}</div>
                     <div class="panel-body">
                         <div class="icons-social text-center">
-                            <a href="#" class="btn bnt-link btn-lg">
+                            <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
                                 <i class="fa fa-facebook fa-2x"></i>
                             </a>
-                            <a href="#" class="btn bnt-link btn-lg">
+                            <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
                                 <i class="fa fa-twitter fa-2x"></i>
                             </a>
-                            <a href="#" class="btn bnt-link btn-lg">
+                            <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
                                 <i class="fa fa-linkedin fa-2x"></i>
                             </a>
                         </div>

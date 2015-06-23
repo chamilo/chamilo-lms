@@ -54,12 +54,29 @@ switch ($action) {
                 $image = Display::return_icon('item-sequence.png', null, null, ICON_SIZE_LARGE);
                 $sessionInfo = api_get_session_info($id);
                 if (!empty($sessionInfo)) {
-                    $linkDelete = '';
+                    $linkDelete = $linkUndo = '';
                     if ($showDelete) {
-                        $linkDelete = Display::url(
+                        $linkDelete = Display::toolbarButton(
                             get_lang('Delete'),
-                            'javascript:void(0);',
-                            ['class' => 'delete_vertex', 'data-id' => $id]
+                            '#',
+                            'trash',
+                            'default',
+                            [
+                                'class' => 'delete_vertex btn btn-block btn-xs',
+                                'data-id' => $id
+                            ]
+                        );
+
+                        $linkUndo = Display::toolbarButton(
+                            get_lang('Undo'),
+                            '#',
+                            'undo',
+                            'default',
+                            [
+                                'class' => 'undo_delete btn btn-block btn-xs',
+                                'style' => 'display: none;',
+                                'data-id' => $id
+                            ]
                         );
                     }
 
@@ -68,7 +85,8 @@ switch ($action) {
                     $link .= $image;
                     $link .= '<div class="sequence-course">' . $sessionInfo['name'] . '</div>';
                     $link .= '<div class="sequence-id">' . $id . '</div>';
-                    $link .= '<div class="sequence-deleted">' . $linkDelete . '</div>';
+                    $link .= $linkDelete;
+                    $link .= $linkUndo;
                     $link .= '</div></div>';
                 }
                 break;

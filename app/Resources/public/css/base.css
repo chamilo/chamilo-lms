@@ -5857,7 +5857,9 @@ div#chat-remote-video video {
   -webkit-border-radius: 5px;
   position: relative;
 }
-
+#parents .parent.parent-deleted .sequence-course {
+    text-decoration: line-through;
+}
 #parents .parent .big-icon .sequence-course{
   font-size: 12px;
 }

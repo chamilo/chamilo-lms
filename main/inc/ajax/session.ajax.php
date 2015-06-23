@@ -119,6 +119,7 @@ switch ($action) {
             echo $sessionInfo['show_description'] == 1 ? $sessionInfo['description'] : get_lang('None');
             echo '</div></div></div>';
         }
+        break;
     case 'search_general_coach':
         header('Content-Type: application/json');
 

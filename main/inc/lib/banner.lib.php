@@ -208,7 +208,7 @@ function return_notification_menu()
             if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
                 (api_get_setting('showonline', 'users') == 'true' && $user_id)
             ) {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" >'.
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'.get_lang('UsersOnline').'" >'.
                             Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
             }
         }
@@ -219,7 +219,7 @@ function return_notification_menu()
                 api_get_setting('showonline', 'course') == 'true' &&
                 isset($_course['sysCode'])
             ) {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_self">'.
                         Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY).' '.$number_online_in_course.' </a></li>';
             }
         }
@@ -228,7 +228,7 @@ function return_notification_menu()
 
             // Display the who's online for the session
             if (isset($user_id) && api_get_session_id() != 0) {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_self">'.
                         Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
             }
         //}
@@ -460,7 +460,7 @@ function return_menu()
                 $current = '';
             }
             if (!empty($navigation_info['title'])) {
-                $pre_lis .= '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a></li>';
+                $pre_lis .= '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a></li>';
             }
         }
         $lis = $pre_lis.$lis;
@@ -606,7 +606,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             if ($navigation_info['url'] == '#') {
                 $final_navigation[$index] = $navigation_info['title'];
             } else {
-                $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
+                $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
             }
             $counter++;
         }

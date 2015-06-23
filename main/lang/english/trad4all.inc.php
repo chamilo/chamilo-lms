@@ -7381,4 +7381,11 @@ $FieldTypeVideoUrl = "Video URL";
 $InsertAValidUrl = "Insert a valid URL";
 $SeeInformation = "See information";
 $ShareWithYourFriends = "Share with your friends";
+$ChatRoomName = "Chatroom name";
+$TheVideoChatRoomXNameAlreadyExists = "The video chatroom %s already exists";
+$ChatRoomNotCreated = "Chatroom could not be created";
+$TheXUserBrowserDoesNotSupportWebRTC = "The browser of %s does not support native video transmission. Sorry.";
+$FromDateX = "From %s";
+$UntilDateX = "Until %s";
+$GraphDependencyTree = "Dependency tree";
 ?>

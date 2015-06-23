@@ -74,6 +74,16 @@ class FeatureContext extends MinkContext
         );
     }
     /**
+     * @Given /^I am a teacher in course "([^"]*)"$/
+     * @Todo implement
+     */
+    public function iAmATeacherInCourse($course)
+    {
+        //$sql = "SELECT * FROM course_rel_user WHERE c_id = X AND user_id = ";
+        //$result = ...
+        //if ($result !== false) { ... }
+    }
+    /**
      * @Given /^I am a student$/
      */
     public function iAmAStudent()
@@ -126,26 +136,46 @@ class FeatureContext extends MinkContext
         );
     }
     /**
-     * @Given /^course TEMP exists$/
+     * @Given /^course "([^"]*)" exists$/
      */
-    public function courseTempExists()
+    public function courseExists($argument)
     {
         return array(
             new Given('I am a platform administrator'),
-            new Given('I am on "/main/admin/course_add.php"'),
-            new Given('I press "/main/admin/course_list.php?delete_course=TEMP"'),
-            new Given('I press "OK"')
+            new Given('I am on "/main/admin/course_list.php?keyword=' . $argument . '"'),
+            new Given('I should see "' . $argument . '"'),
         );
     }
     /**
-     * @Given /^course TEMP is deleted$/
+     * @Given /^course "([^"]*)" is deleted$/
      */
-    public function courseTempIsDeleted()
+    public function courseIsDeleted($argument)
     {
         return array(
             new Given('I am a platform administrator'),
-            new Given('I am on "http://my.chamilo110.net/main/admin/course_list.php?keyword=TEMP"'),
+            new Given('I am on "/main/admin/course_list.php?keyword=' . $argument . '"'),
             new Given('I follow "Delete"')
+        );
+    }
+    /**
+     * @Given /^I am in course "([^"]*)"$/
+     * @Todo redefine function to be different from I am on course TEMP homepage
+     */
+    public function iAmInCourse($argument)
+    {
+        return array(
+            new Given('I am on "/main/course_home/course_home.php?cDir=' . $argument . '"'),
+            new Given('I should not see an ".alert-danger" element')
+        );
+    }
+    /**
+     * @Given /^I am on course "([^"]*)" homepage$/
+     */
+    public function iAmOnCourseXHomepage($argument)
+    {
+        return array(
+            new Given('I am on "/main/course_home/course_home.php?cDir=' . $argument . '"'),
+            new Given('I should not see an ".alert-danger" element')
         );
     }
 }

@@ -20,20 +20,45 @@
                 url: url + '?a=load_resource&load_resource_type=parent&id=' + id + '&type='+type+'&sequence_id='+sequenceId,
                 success: function (data) {
                     if (data) {
-                        var listLoaded = data.split(',');
-                        var count = listLoaded.length;
-                        listLoaded.forEach(function(value, index) {
-                            $.ajax({
-                                url: url + '?a=get_icon&id='+ value+'&type='+type+'&sequence_id='+sequenceId+'&show_delete=1',
-                                success:function(data){
-                                    $('#parents').append(data);
-                                    if (index != (count - 1)) {
-                                        $('#parents').append('<div class="sequence-plus-icon"><i class="fa fa-plus"></i></div>');
-                                    }
+                        var loadingResources = new Array(),
+                            listLoaded = data.split(',');
+
+                        listLoaded.forEach(function(value) {
+                            var loadResource = $.ajax(url, {
+                                data: {
+                                    a: 'get_icon',
+                                    id: value,
+                                    type: type,
+                                    sequence_id: sequenceId,
+                                    show_delete: 1
+                                },
+                                success: function() {
                                     parentList.push(value);
                                 }
                             });
+
+                            loadingResources.push(loadResource);
                         });
+
+                        if (loadingResources.length) {
+                            $.when.apply($, loadingResources).done(function() {
+                                if (loadingResources.length === 1) {
+                                    $('#parents').append(arguments[0]);
+
+                                    return;
+                                }
+
+                                var i;
+
+                                for (i = 0; i < arguments.length; i++) {
+                                    $('#parents').append(arguments[i][0]);
+
+                                    if (i !== arguments.length - 1) {
+                                        $('#parents').append('<i class="fa fa-plus fa-3x sequence-plus-icon"></i>');
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -88,22 +113,27 @@
             sequenceId = $("#sequence_id option:selected" ).val();
 
             // Load parents
-            $('#parents').on('click', 'a', function() {
-                var vertexId = $(this).attr('data-id');
-                var parent = $(this).parent();
+            $('#parents').on('click', 'a', function(e) {
+                e.preventDefault();
 
-                if (vertexId) {
-                    var class_click = $(this).attr('class');
+                var self = $(this),
+                    parent = self.parent(),
+                    vertexId = self.attr('data-id') || 0;
 
-                    if (class_click == 'undo_delete')  {
-                        parent.find('span').css('text-decoration', 'none');
-                        parent.find('.undo_delete').remove();
-                    } else {
-                        parent.parent().find('span').css('text-decoration', 'line-through');
+                if (!vertexId) {
+                    return;
+                }
 
-                        var link = "<a href=\"javascript:void(0);\" class=\"undo_delete\" data-id="+vertexId+">{{ 'Undo' | get_lang }}</a>";
-                        parent.parent().append(link);
-                    }
+                if (self.is('.delete_vertex')) {
+                    self.hide();
+                    parent.find('.undo_delete').show();
+
+                    self.parents('.parent').addClass('parent-deleted');
+                } else if (self.is('.undo_delete')) {
+                    self.hide();
+                    parent.find('.delete_vertex').show();
+
+                    self.parents('.parent').removeClass('parent-deleted');
                 }
             });
 
@@ -138,36 +168,57 @@
             });
 
             // Button save
-            $('button[name="save_resource"]').click(function() {
+            $('button[name="save_resource"]').click(function(e) {
+                e.preventDefault();
+
+                // parse to integer the parents IDs
+                parentList = parentList.map(function(id) {
+                    return parseInt(id);
+                });
+
+                var deletingVertex = new Array();
 
                 // Delete all vertex confirmed to be deleted.
-                $('#parents .delete_vertex').each( function (index, data) {
-                    var vertexId = $(this).attr('data-id');
-                    var textDecoration = $(this).parent().css('text-decoration');
-                    if (textDecoration == 'line-through') {
-                        $.ajax({
-                            async:false,
-                            url: url + '?a=delete_vertex&id=' + resourceId + '&vertex_id=' + vertexId + '&type=' + type + '&sequence_id=' + sequenceId,
+                $('#parents .parent.parent-deleted').each(function() {
+                    var self = $(this),
+                        vertexId = self.data('id') || 0,
+                        deleteVertex;
+
+                    deleteVertex = $.ajax(url, {
+                        data: {
+                            a: 'delete_vertex',
+                            id: resourceId,
+                            vertex_id: vertexId,
+                            type: type,
+                            sequence_id: sequenceId
+                        },
+                        success: function() {
+                            parentList.splice($.inArray(vertexId, parentList), 1);
+                        }
+                    });
+
+                    deletingVertex.push(deleteVertex);
+                });
+
+                $.when.apply($, deletingVertex).done(function() {
+                    if (resourceId != 0) {
+                        var params = decodeURIComponent(parentList);
+
+                        $.ajax(url, {
+                            data: {
+                                a: 'save_resource',
+                                id: resourceId,
+                                parents: params,
+                                type: type,
+                                sequence_id: sequenceId
+                            },
                             success: function (data) {
-                                parentList.splice( $.inArray(vertexId, parentList), 1 );
-                                /*parent.remove();
-                                useAsReference(type, sequenceId);*/
+                                alert('saved');
+                                useAsReference(type, sequenceId);
                             }
                         });
                     }
                 });
-
-                if (resourceId != 0) {
-                    var params = decodeURIComponent(parentList);
-                    $.ajax({
-                        url: url + '?a=save_resource&id=' + resourceId + '&parents=' + params+'&type='+type+'&sequence_id='+sequenceId,
-                        success: function (data) {
-                            alert('saved');
-                            useAsReference(type, sequenceId);
-                        }
-                    });
-                }
-                return false;
             });
         });
     </script>

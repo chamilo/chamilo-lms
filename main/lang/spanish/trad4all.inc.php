@@ -7410,4 +7410,11 @@ $FieldTypeVideoUrl = "URL de video";
 $InsertAValidUrl = "Inserte una URL valida";
 $SeeInformation = "Ver información";
 $ShareWithYourFriends = "Comparte con tus amigos";
+$ChatRoomName = "Nombre de sala de chat";
+$TheVideoChatRoomXNameAlreadyExists = "La sala '%s' de chat ya existe";
+$ChatRoomNotCreated = "La creación de la sala de chat ha fallado";
+$TheXUserBrowserDoesNotSupportWebRTC = "El navegador de %s no soporta nativamente la transmisión por videoconferencia. Lo sentimos.";
+$FromDateX = "Del %s";
+$UntilDateX = "Al %s";
+$GraphDependencyTree = "Árbol de dependencias";
 ?>

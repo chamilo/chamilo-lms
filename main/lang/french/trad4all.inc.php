@@ -6379,7 +6379,7 @@ $HideCoursesInSessionsComment = "Lorsque les sessions apparaîssent sur la page 
 $ShowGroupsToUsersTitle = "Montrer les classes aux apprenants";
 $ShowGroupsToUsersComment = "Montrer les classes aux utilisateurs. La fonctionnalité de classes permet d'inscrire/désinscrir des goupes d'utilisateurs à une session ou un cours directement, réduisant ainsi la charge administrative pour les inscriptions. Lorsque cette fonctionnalité est sélectionnée, les utilisateurs peuvent voir à quelle classe ils appartiennent à partir de leur interface de réseau social.";
 $ExerciseWillBeActivatedFromXToY = "L'exercice sera activé du %s au %s";
-$ExerciseAvailableFromX = "Exercice disponible depuis le %s";
+$ExerciseAvailableFromX = "Exercice disponible à partir du %s";
 $ExerciseAvailableUntilX = "Exercice disponible jusqu'au %s";
 $HomepageViewActivityBig = "Vue activité élargie (style iPad)";
 $CheckFilePermissions = "Vérifier les permissions sur les fichiers";
@@ -7004,7 +7004,12 @@ $ShibbolethMainActivateTitle = "<h3>Configuration de l'authentification Shibbole
 $ShibbolethMainActivateComment = "<p>Vous devez, en premier lieu, configurer Shibboleth pour votre serveur web. Pour le configurer pour Chamilo.</p><h5>éditez le fichier main/auth/shibboleth/config/aai.class.php</h5><p>Modifiez les valeurs de l'objet &#36;result avec les nom des attributs retourné par votre serveur Shibboleth.</p>Les valeurs à modifier sont<ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Vous trouverez dans les <a href='settings.php?category=Shibboleth'>Plugin</a> un bouton 'Login Shibboleth', paramétrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";
 $LdapDescriptionTitle = "Identification LDAP";
 $FacebookMainActivateTitle = "<h3>Configuration de l'authentification via Facebook</h3>";
-$FacebookMainActivateComment = "<p>Vous devez, en premier lieu, créer une application Facebook (cf. <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) avec votre compte Facebook. Le paramètre de l'application Facebook 'URL du site' doit comporter 'action=fbconnect' comme paramètre en GET (exemple : http://mychamilo.com/?action=fbconnect)</p>Ensuite, <h5>éditez le fichier main/auth/external_login/facebook.conf.php</h5>et entrez les valeurs 'appId' et 'secret', fournies par Facebook, pour la variable &#36;facebook_config.<br/>Vous trouverez dans les <a href='settings.php?category=Facebook'>Plugin</a> un bouton 'Login Facebook', parametrable, qui s'ajoutera à la page d'accueil de votre campus Chamilo.";
+$FacebookMainActivateComment = "<p>
+<h5>Créez votre apllication Facebook</h5>Vous devez, en premier lieu, créer une application Facebook (cf. <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) avec votre compte Facebook.<br/>
+<h5>Éditez le fichier main/inc/conf/configuration.php</h5>Et décommentez la ligne &#36;_configuration['facebook_auth'] = 1;<br/><br/>
+<h5>Éditez le fichier main/inc/conf/auth.conf.php<br/></h5>Entrez les valeurs 'appId' et 'secret', fournies par Facebook, pour la variable &#36;facebook_config.<br/><br/>
+<h5>Éditez le fichier main/inc/conf/auth.conf.php</h5>Et décommentez les lignes &#36;facebook_config<br/><br/>
+<h5>Activez le plugin Facebook de Chamilo<br/></h5>Et placez le dans la région login_top ou login_bottom.<br/>Vous pouvez changer l'image de connexion dans les options de configuration du plugin.</p>";
 $AnnouncementForGroup = "Annonce pour un groupe";
 $AllGroups = "Tous les groupes";
 $LanguagePriority1Title = "Langue priorité 1";
@@ -7361,4 +7366,20 @@ $CatalogueShowCoursesAndSessions = "Afficher les cours et les sessions";
 $SequenceSelection = "Sélection de la séquence";
 $SequenceConfiguration = "Configuration de la séquence";
 $SequencePreview = "Prévisualisation de la séquence";
+$DisplayDates = "Dates affichées";
+$AccessDates = "Dates d'accès pour les étudiants";
+$CoachDates = "Dates d'accès pour les coaches";
+$ChatWithXUser = "Conversation avec %s";
+$StartVideoChat = "Démarrer appel vidéo";
+$FieldTypeVideoUrl = "URL de vidéo";
+$InsertAValidUrl = "Veuillez indiquer une URL valide";
+$SeeInformation = "Voir information";
+$ShareWithYourFriends = "Partager avec vos amis";
+$ChatRoomName = "Nom de la salle de chat";
+$TheVideoChatRoomXNameAlreadyExists = "La salle de chat '%s' existe déjà";
+$ChatRoomNotCreated = "La création de la salle de chat a échoué";
+$TheXUserBrowserDoesNotSupportWebRTC = "Le navigateur de %s ne supporte pas nativement la transmission de vidéo. Désolé.";
+$FromDateX = "Du %s";
+$UntilDateX = "Au %s";
+$GraphDependencyTree = "Arbre de dépendances";
 ?>

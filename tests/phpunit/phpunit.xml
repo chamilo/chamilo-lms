@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="autoload.php" backupGlobals="false"
-         backupStaticAttributes="false" strict="true" verbose="true">
+         backupStaticAttributes="false" verbose="true">
   <testsuites>
     <testsuite name="Chamilo LMS classes">
       <directory suffix="Test.class.php">../phpunit/classes</directory>

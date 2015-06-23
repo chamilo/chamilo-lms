@@ -132,9 +132,8 @@ class FeatureContext extends MinkContext
     {
         return array(
             new Given('I am a platform administrator'),
-            new Given('I am on "/main/admin/course_add.php"'),
-            new Given('I press "/main/admin/course_list.php?delete_course=TEMP"'),
-            new Given('I press "OK"')
+            new Given('I am on "/main/admin/course_list.php?keyword=TEMP"'),
+            new Given('I should see "TEMP"'),
         );
     }
     /**

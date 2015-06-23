@@ -12,6 +12,7 @@ class ExtendedUserProfilePlugin extends Plugin
     const VARIABLE_NATIONAL_ID = 'national_id';
     const VARIABLE_GENDER = 'gender';
     const VARIABLE_WORKSTUDY_PLACE = 'work_or_study_place';
+    const VARIABLE_OFFICER_POSITION = 'officer_position';
 
     protected $strings;
 
@@ -119,6 +120,18 @@ class ExtendedUserProfilePlugin extends Plugin
             'changeable' => true,
             'filter' => null
         ]);
+
+        $officerPosition = new Extrafield('user');
+        $officerPosition->save([
+            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+            'variable' => self::VARIABLE_OFFICER_POSITION,
+            'display_text' => get_plugin_lang('OfficePosition', $className),
+            'default_value' => null,
+            'field_order' => null,
+            'visible' => true,
+            'changeable' => true,
+            'filter' => null
+        ]);
     }
 
     /**
@@ -131,7 +144,8 @@ class ExtendedUserProfilePlugin extends Plugin
             self::VARIABLE_DATE_OF_BIRTH,
             self::VARIABLE_NATIONAL_ID,
             self::VARIABLE_GENDER,
-            self::VARIABLE_WORKSTUDY_PLACE
+            self::VARIABLE_WORKSTUDY_PLACE,
+            self::VARIABLE_OFFICER_POSITION
         ];
     }
 

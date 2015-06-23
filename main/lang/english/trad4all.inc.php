@@ -7387,4 +7387,5 @@ $ChatRoomNotCreated = "Chatroom could not be created";
 $TheXUserBrowserDoesNotSupportWebRTC = "The browser of %s does not support native video transmission. Sorry.";
 $FromDateX = "From %s";
 $UntilDateX = "Until %s";
+$GraphDependencyTree = "Dependency tree";
 ?>

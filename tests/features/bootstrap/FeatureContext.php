@@ -74,6 +74,16 @@ class FeatureContext extends MinkContext
         );
     }
     /**
+     * @Given /^I am a teacher in course "([^"]*)"$/
+     * @Todo implement
+     */
+    public function iAmATeacherInCourse($course)
+    {
+        //$sql = "SELECT * FROM course_rel_user WHERE c_id = X AND user_id = ";
+        //$result = ...
+        //if ($result !== false) { ... }
+    }
+    /**
      * @Given /^I am a student$/
      */
     public function iAmAStudent()

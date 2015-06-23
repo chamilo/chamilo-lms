@@ -20,20 +20,45 @@
                 url: url + '?a=load_resource&load_resource_type=parent&id=' + id + '&type='+type+'&sequence_id='+sequenceId,
                 success: function (data) {
                     if (data) {
-                        var listLoaded = data.split(',');
-                        var count = listLoaded.length;
-                        listLoaded.forEach(function(value, index) {
-                            $.ajax({
-                                url: url + '?a=get_icon&id='+ value+'&type='+type+'&sequence_id='+sequenceId+'&show_delete=1',
-                                success:function(data){
-                                    $('#parents').append(data);
-                                    if (index != (count - 1)) {
-                                        $('#parents').append('<div class="sequence-plus-icon"><i class="fa fa-plus"></i></div>');
-                                    }
+                        var loadingResources = new Array(),
+                            listLoaded = data.split(',');
+
+                        listLoaded.forEach(function(value) {
+                            var loadResource = $.ajax(url, {
+                                data: {
+                                    a: 'get_icon',
+                                    id: value,
+                                    type: type,
+                                    sequence_id: sequenceId,
+                                    show_delete: 1
+                                },
+                                success: function() {
                                     parentList.push(value);
                                 }
                             });
+
+                            loadingResources.push(loadResource);
                         });
+
+                        if (loadingResources.length) {
+                            $.when.apply($, loadingResources).done(function() {
+                                if (loadingResources.length === 1) {
+                                    $('#parents').append(arguments[0]);
+
+                                    return;
+                                }
+
+                                var i;
+
+                                for (i = 0; i < arguments.length; i++) {
+                                    $('#parents').append(arguments[i][0]);
+
+                                    if (i !== arguments.length - 1) {
+                                        $('#parents').append('<i class="fa fa-plus fa-3x sequence-plus-icon"></i>');
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             });

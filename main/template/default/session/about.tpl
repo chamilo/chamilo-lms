@@ -77,13 +77,13 @@
                                 <div class="row">
                                     <div class="col-xs-7 col-md-7">
                                         <h4>{{ coach.complete_name }}</h4>
-                                        {% if coach.officer_position %}
-                                            <p>{{ coach.officer_position }}</p>
-                                        {% endif %}
 
-                                        {% if coach.work_or_study_place %}
-                                            <p>{{ coach.work_or_study_place }}</p>
-                                        {% endif %}
+                                        {% for extra_field in coach.extra_fields %}
+                                            <dl>
+                                                <dt>{{ extra_field.field }}</dt>
+                                                <dd>{{ extra_field.value }}</dd>
+                                            </dl>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-xs-5 col-md-5">
                                         <div class="text-center">

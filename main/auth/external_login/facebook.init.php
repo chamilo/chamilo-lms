@@ -10,23 +10,12 @@
  *
  * Configuration file 
  * Please edit this file to match with your FACEBOOK settings
- * */
+ */
+
 /**
  * Facebook application setting
- * */
-require_once dirname(__FILE__) . '/facebook-php-sdk/src/facebook.php';
-
-global $facebook_config;
-
-//Loads the portal facebook settings
-$conf = dirname(__FILE__) . '../../inc/conf/auth.conf.php';
-
-/**
+ * Loads the portal facebook settings
  * See facebook section of the auth.conf.php file
  */
-global $facebook;
-$facebook = new Facebook(array(
-            'appId' => $facebook_config['appId'],
-            'secret' => $facebook_config['secret']
-        ));
-require_once dirname(__FILE__) . '/facebook.inc.php';
+
+require_once dirname(__FILE__) . '/../../inc/conf/auth.conf.php';

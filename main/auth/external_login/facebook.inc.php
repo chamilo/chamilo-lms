@@ -13,7 +13,6 @@
 
 require_once dirname(__FILE__) . '/../../inc/global.inc.php';
 require_once dirname(__FILE__) . '/facebook.init.php';
-
 require_once dirname(__FILE__) . '/facebook-php-sdk/autoload.php';
 
 use Facebook\FacebookSession;
@@ -30,7 +29,8 @@ use Facebook\HttpClients\FacebookHttpable;
 
 require_once dirname(__FILE__) . '/functions.inc.php';
 
-FacebookSession::setDefaultApplication($facebook_config['appId'], $facebook_config['secret']);
+// dont rename $facebook_config to $facebookConfig otherwise get a "Facebook\\FacebookSDKException"
+FacebookSession::setDefaultApplication( $facebook_config['appId'],$facebook_config['secret']);
 
 /**
  * This function connect to facebook and retrieves the user info
@@ -55,12 +55,12 @@ function facebookConnect()
             $username = changeToValidChamiloLogin($graphObject->getProperty('email'));
             $email = $graphObject->getProperty('email');
             $locale = $graphObject->getProperty('locale');
-            $language = getLanguageForFacebook($locale);
+            $language = facebookPluginGetLanguage($locale);
             if (!$language) {
                 $language='en_US';
             }
 
-            //Checks if user already exists in chamilo
+            // Checks if user already exists in chamilo
             $u = array(
                 'firstname' => $graphObject->getProperty('first_name'),
                 'lastname' => $graphObject->getProperty('last_name'),
@@ -70,16 +70,16 @@ function facebookConnect()
                 'language' => $language,
                 'password' => DEFAULT_PASSWORD,
                 'auth_source' => 'facebook',
-                //'courses' => $user_info['courses'],
-                //'profile_link' => $user_info['profile_link'],
-                //'worldwide_bu' => $user_info['worlwide_bu'],
-                //'manager' => $user_info['manager'],
+                // 'courses' => $user_info['courses'],
+                // 'profile_link' => $user_info['profile_link'],
+                // 'worldwide_bu' => $user_info['worlwide_bu'],
+                // 'manager' => $user_info['manager'],
                 'extra' => array()
             );
 
             $chamiloUinfo = api_get_user_info_from_email($email);
             if ($chamiloUinfo === false) {
-                //we have to create the user
+                // we have to create the user
                 $chamilo_uid = external_add_user($u);
                 if ($chamilo_uid !== false) {
                     $_user['user_id'] = $chamilo_uid;
@@ -90,7 +90,8 @@ function facebookConnect()
                 } else {
                     return false;
                 }
-            } else {//User already exists, update info and login
+            } else {
+                // User already exists, update info and login
                 $chamilo_uid = $chamiloUinfo['user_id'];
                 $u['user_id'] = $chamilo_uid;
                 external_update_user($u);
@@ -110,21 +111,23 @@ function facebookConnect()
 
 /**
  * Get facebook login url for the platform
- * @return mixed
+ * @return string
  */
 function facebookGetLoginUrl()
 {
     global $facebook_config;
     $helper = new FacebookRedirectLoginHelper($facebook_config['return_url']);
-    $loginUrl =   $helper->getLoginUrl(
-        array('scope' => 'email')
+    $loginUrl = $helper->getLoginUrl(
+        array(
+            'scope' => 'email'
+        )
     );
     return $loginUrl;
 }
 
 /**
+ * Return a valid Chamilo login
  * Chamilo login only use characters lettres, des chiffres et les signes _ . -
- * return a string containing valid chamilo login characters
  * @param $in_txt
  * @return mixed
  */
@@ -138,13 +141,18 @@ function changeToValidChamiloLogin($in_txt)
  * @param string $language
  * @return bool
  */
-function getLanguageForFacebook($language = 'en_US')
+function facebookPluginGetLanguage($language = 'en_US')
 {
     $language = substr($language, 0, 2);
-    $sqlResult = Database::query("SELECT english_name FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE available = 1 AND isocode = '$language'");
+    $sqlResult = Database::query(
+        "SELECT english_name FROM ".
+        Database::get_main_table(TABLE_MAIN_LANGUAGE).
+        " WHERE available = 1 AND isocode = '$language'"
+    );
     if (Database::num_rows($sqlResult)) {
         $result = Database::fetch_array($sqlResult);
         return $result['english_name'];
     }
     return false;
-}
+} 
+

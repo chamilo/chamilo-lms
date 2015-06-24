@@ -265,14 +265,35 @@ footer .media{
 	display: inline-block;
 }
 #about-session .tags-course{
-  background-color: #ffffff;
+  background-color: #F8F8F8;
 }
-#about-session .tags-course .fa-check-square-o{
+#about-session .time-course, #about-session .level-course{
+  padding: 5px 10px;
+}
+#about-session .level-course span,
+#about-session .time-course span{
+  padding-left: 5px;
+  margin-left: 5px;
+  color: #666666;
+}
+#about-session .tags-course .fa-check-square-o,
+#about-session .level-course .fa-star-o,
+#about-session .time-course .fa-clock-o{
   font-size: 25px;
   color: #35a8c8;
 }
 #about-session .subscribe{
+  text-align: center;
+}
+#about-session .subscribe.text-right{
   text-align: right;
+}
+#about-session .block{
+  background-color: #F8F8F8;
+  padding: 10px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 #about-session .description-course{
   text-align: justify;
@@ -294,7 +315,8 @@ footer .media{
 }
 #about-session .tags-course a{
   color: #555555;
-  font-size: 16px;
+  font-size: 14px;
+  background-color: #F8F8F8;
 }
 #about-session .title-section{
   text-transform: uppercase;
@@ -307,21 +329,22 @@ footer .media{
   color: #E73858;
 }
 #about-session .title-info{
-  padding-bottom: 20px;
-  margin-bottom: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
   color: #666666;
 }
 #about-session .content-info{
-  padding-bottom: 20px;
-  margin-bottom: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  margin-bottom: 5px;
   color:#666666;
   text-align: justify;
 }
 #about-session .teachers .heading, #about-session .social-share .heading{
   color: #42adcc;
 }
-#about-session .teachers{
-  padding-top: 20px;
+#about-session .block.top{
+  margin-top: 65px;
 }
 #about-session .btn-social{
   background-color: #e3c200;

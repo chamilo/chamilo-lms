@@ -96,7 +96,20 @@
         {% block content %}
         {% if content is not null %}
             <section id="page-content">
-                {{ content }}
+                {% if template == 'games' %}
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" {% if not history %} class="active" {% endif %}>
+                            <a href="{{ _p.web }}user_portal.php?nosession=true" role="tab">{{ 'CurrentCourses'|get_lang }}</a>
+                        </li>
+                        <li role="presentation" {% if history %} class="active" {% endif %}>
+                            <a href="{{ _p.web }}user_portal.php?history=1" role="tab">{{ 'FinishedCourses'|get_lang }}</a>
+                        </li>
+                    </ul>
+                {% endif %}
+
+                <div class="block-course">
+                    {{ content }}
+                </div>
             </section>
         {% endif %}
         {% endblock %}

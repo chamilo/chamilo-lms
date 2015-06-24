@@ -98,10 +98,10 @@
             <section id="page-content">
                 {% if template == 'games' %}
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active">
-                            <a href="#current-courses" aria-controls="current-courses" role="tab" data-toggle="tab">{{ 'CurrentCourses'|get_lang }}</a>
+                        <li role="presentation" {% if not history %} class="active" {% endif %}>
+                            <a href="{{ _p.web }}user_portal.php?nosession=true" role="tab">{{ 'CurrentCourses'|get_lang }}</a>
                         </li>
-                        <li role="presentation">
+                        <li role="presentation" {% if history %} class="active" {% endif %}>
                             <a href="{{ _p.web }}user_portal.php?history=1" role="tab">{{ 'FinishedCourses'|get_lang }}</a>
                         </li>
                     </ul>

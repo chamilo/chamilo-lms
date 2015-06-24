@@ -137,15 +137,12 @@ if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
 	$controller->tpl->assign('welcome_to_course_block', $controller->return_welcome_to_course_block());
 }
 
-if($_configuration['default_template'] == 'games'){
-
+if ($_configuration['default_template'] == 'games') {
     $tpl = new Template(get_lang('CurrentCourses'));
     $tpl->assign('tabs_course', $courseAndSessions['html']);
-    $layout .= $tpl->get_template('user_portal/tabs.tpl');
+    $layout = $tpl->get_template('user_portal/tabs.tpl');
     $controller->tpl->assign('content', $tpl->fetch($layout));
-
-}
-else{
+} else {
     $controller->tpl->assign('content', $courseAndSessions['html']);
 }
 

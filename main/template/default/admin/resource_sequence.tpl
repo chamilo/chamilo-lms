@@ -213,7 +213,7 @@
                                 sequence_id: sequenceId
                             },
                             success: function (data) {
-                                alert('saved');
+                                alert('{{ 'Saved' | get_lang }}');
                                 useAsReference(type, sequenceId);
                             }
                         });

@@ -39,15 +39,6 @@ $tagField = $fieldsRepo->findOneBy([
     'variable' => 'tags'
 ]);
 
-$workOrStudyPlaceField = $fieldsRepo->findOneBy([
-    'extraFieldType' => ExtraField::USER_FIELD_TYPE,
-    'variable' => 'work_or_study_place'
-]);
-$officerPositionField = $fieldsRepo->findOneBy([
-    'extraFieldType' => ExtraField::USER_FIELD_TYPE,
-    'variable' => 'officer_position'
-]);
-
 foreach ($sessionCourses as $sessionCourse) {
     $courseVideo = null;
     $courseTags = [];
@@ -75,29 +66,20 @@ foreach ($sessionCourses as $sessionCourse) {
     foreach ($courseCoaches as $courseCoach) {
         $coachData = [
             'complete_name' => $courseCoach->getCompleteName(),
-            'image' => UserManager::getUserPicture($courseCoach->getId(), USER_IMAGE_SIZE_ORIGINAL)
+            'image' => UserManager::getUserPicture($courseCoach->getId(), USER_IMAGE_SIZE_ORIGINAL),
+            'extra_fields' => []
         ];
 
-        if (!is_null($workOrStudyPlaceField)) {
-            $workOrStudyPlaceValue = $fieldValuesRepo->findOneBy([
-                'field' => $workOrStudyPlaceField,
-                'itemId' => $courseCoach->getId()
-            ]);
+        $extraFieldValues = $fieldValuesRepo->getVisibleValues(
+            ExtraField::USER_FIELD_TYPE,
+            $courseCoach->getId()
+        );
 
-            if (!is_null($workOrStudyPlaceValue)) {
-                $coachData['work_or_study_place'] = $workOrStudyPlaceValue->getValue();
-            }
-        }
-
-        if (!is_null($officerPositionField)) {
-            $officerPositionValue = $fieldValuesRepo->findOneBy([
-                'field' => $officerPositionField,
-                'itemId' => $courseCoach->getId()
-            ]);
-
-            if (!is_null($officerPositionValue)) {
-                $coachData['officer_position'] = $officerPositionValue->getValue();
-            }
+        foreach ($extraFieldValues as $value) {
+            $coachData['extra_fields'][] = [
+                'field' => $value->getField()->getDisplayText(),
+                'value' => $value->getValue()
+            ];
         }
 
         $coachesData[] = $coachData;
@@ -144,6 +126,8 @@ foreach ($sessionCourses as $sessionCourse) {
 
 /* View */
 $template = new Template($session->getName(), true, true, false, true, false);
+$template->assign('pageUrl', api_get_path(WEB_PATH) . "session/{$session->getId()}/about/");
+$template->assign('session', $session);
 $template->assign('courses', $courses);
 
 $templateFolder = api_get_configuration_value('default_template');

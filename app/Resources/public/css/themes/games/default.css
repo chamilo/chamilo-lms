@@ -380,6 +380,67 @@ footer .media{
   color: #666;
   font-size: 12px;
 }
+/* Profile */
+#page-profile .section-profile{
+  color: #e73858;
+  font-size: 20px;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+#page-profile .section-profile .fa-square{
+  font-size: 14px;
+  color: #E4C200;
+}
+#page-profile .block{
+  background-color: #F8F8F8;
+  padding: 20px 40px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+#page-profile .dl-horizontal dt,
+#page-profile .dl-horizontal dd{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+#page-profile .dl-horizontal dt{
+  color: #35A8C9;
+  font-weight: normal;
+  text-align: left;
+}
+#page-profile .dl-horizontal dd{
+  color: #575757;
+}
+#page-profile .profile-user{
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+#page-profile .profile-user .username{
+  color: #E73858;
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+#page-profile .profile-user .points{
+  color: #35A8C9;
+  font-size: 26px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+/* end profile */
+.btn-press{
+  background-color: #E73858;
+  border-radius: 10px;
+  color: #ffffff;
+}
+.btn-press:hover{
+  background-color: #D81E49;
+  color: #ffffff;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
 	.container{

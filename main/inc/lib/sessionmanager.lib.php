@@ -6977,4 +6977,76 @@ class SessionManager
         }
         return $array1;
     }
+
+    /**
+     * Get the number of stars achieved in a session when gamification mode is activated
+     * @param int $sessionId The session id
+     * @return int The count
+     */
+    static function getNumberOfStarsFromGamification($sessionId)
+    {
+        $totalStars = 0;
+        $userId = api_get_user_id();
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+
+        if (empty($courses)) {
+            return 0;
+        }
+
+        foreach ($courses as $course) {
+            $learnPathListObject = new LearnpathList($userId, $course['code'], $sessionId);
+            $learnPaths = $learnPathListObject->get_flat_list();
+
+            $stars = 0;
+
+            foreach ($learnPaths as $learnPathId => $learnPathInfo) {
+                if (empty($learnPathInfo['seriousgame_mode'])) {
+                    continue;
+                }
+
+                $learnPath = new learnpath($course['code'], $learnPathId, $userId);
+
+                $stars += $learnPath->getCalculateStars();
+            }
+
+            $totalStars += $stars;
+        }
+
+        return $totalStars / count($courses);
+    }
+
+    /**
+     * Get the calculated progress for a session when gamification mode is activated
+     * @param int $sessionId The session id
+     * @return int The progress
+     */
+    public static function getProgressFromGamification($sessionId)
+    {
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+        $progress = 0;
+
+        if (empty($courses)) {
+            return 0;
+        }
+
+        foreach ($courses as $course) {
+            $courseProgress = Tracking::get_avg_student_progress(
+                api_get_user_id(),
+                $course['code'],
+                [],
+                $sessionId,
+                false,
+                true
+            );
+
+            if ($courseProgress === false) {
+                continue;
+            }
+
+            $progress += $courseProgress;
+        }
+
+        return $progress / count($courses);
+    }
+
 }

@@ -6058,6 +6058,15 @@ div#chat-remote-video video {
   width: 100px;
   height: 100px;
 }
+/* Catalog session */
+#session-list .item-content{
+  border: 1px solid #CCCCCC;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  padding: 10px;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

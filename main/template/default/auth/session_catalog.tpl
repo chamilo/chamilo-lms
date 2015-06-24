@@ -54,6 +54,7 @@
     </script>
 
     <div class="col-md-12">
+        <!-- view catalog course -->
         {% if show_courses %}
             <div class="panel panel-default">
                 <div class="panel-heading">{{ "Courses"|get_lang }}</div>
@@ -97,8 +98,10 @@
                 </div>
             {% endif %}
         {% endif %}
-
+        <!-- end view catalog course -->
+        <!-- view catalog sessions -->
         {% if show_sessions %}
+
             <div class="section-tile">{{ 'Sessions'|get_lang }}</div>
             <div class="row">
                 <div class="col-md-4">
@@ -135,86 +138,63 @@
 
         {% endif %}
     </div>
+<section id="session-list">
     <div class="col-md-12">
-        {% for session in sessions %}
-            <div class="panel panel-default" id="panel-{{ session.id }}">
-                <div class="panel-heading">
-                    {{ session.icon }} {{ session.name }}
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-9">
-                            {% if show_tutor %}
-                                <p class="tutor">
-                                    <img src="{{ 'teacher.png' | icon(22) }}" width="16">
-                                    {{ 'GeneralCoach'|get_lang }} {{ session.coach_name }}
-                                </p>
+        <div class="row">
+            {% for session in sessions %}
+            <div class="col-md-4">
+                <div class="item-content" id="session-{{ session.id }}">
+                    <div class="img-session"></div>
+                    <div class="title-session"><h3>{{ session.name }}</h3></div>
+                    <div class="author-session">
+                        <i class="fa fa-user"></i>
+                        {{ session.coach_name }}
+                    </div>
+                    <div class="date-session">
+                        <i class="fa fa-calendar-o"></i>
+                        {{ session.date }}
+                    </div>
+                    <div class="tags-session">
+                        <i class="fa fa-tags"></i>
+                    </div>
+                    <div class="requirements">
+                    {% if session.requirements %}
+                    <h4>{{ 'Requirements'|get_lang }}</h4>
+                    <p>
+                        {% for requirement in session.requirements %}
+                        {{ requirement.name  }}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+
+                    {% if session.dependencies %}
+                    <h4>{{ 'Dependencies'|get_lang }}</h4>
+                    <p>
+                        {% for dependency in session.dependencies %}
+                        {{ dependency.name  }}
+                        {% endfor %}
+                    </p>
+                    </div>
+                    {% endif %}
+                    <div class="options">
+                        <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}" class="btn btn-block btn-info">
+                            <i class="fa fa-info-circle"></i> {{ "SeeInformation"|get_lang }}
+                        </a>
+                        <div class="buttom-subscribed">
+                            {% if session.is_subscribed %}
+                            {{ already_subscribed_label }}
+                            {% else %}
+                            {{ session.subscribe_button }}
                             {% endif %}
-
-                            {% if session.requirements %}
-                                <h4>{{ 'Requirements'|get_lang }}</h4>
-                                <p>
-                                    {% for requirement in session.requirements %}
-                                        {{ requirement.name  }}
-                                    {% endfor %}
-                                </p>
-                            {% endif %}
-
-                            {% if session.dependencies %}
-                                <h4>{{ 'Dependencies'|get_lang }}</h4>
-                                <p>
-                                    {% for dependency in session.dependencies %}
-                                        {{ dependency.name  }}
-                                    {% endfor %}
-                                </p>
-                            {% endif %}
-
-                            <div class="panel-group" role="tablist">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="heading-session-{{ session.id }}">
-                                        <h4 class="panel-title">
-                                            <a class="collapsed" data-session="{{ session.id }}" data-toggle="false" href="#collapse-{{ session.id }}" aria-expanded="true" aria-controls="collapse-{{ session.id }}">
-                                                {{ 'CourseList'|get_lang }}
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapse-{{ session.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-session-{{ session.id }}"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            {% if session.show_description %}
-                                <p class="buttom-subscribed">
-                                    <a class="ajax btn btn-large btn-info" href="{{ _p.web_ajax }}session.ajax.php?a=get_description&session={{ session.id }}">
-                                        {{ 'Description'|get_lang }}
-                                    </a>
-                                </p>
-                            {% endif %}
-
-                            <p>
-                                <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}" class="btn btn-block btn-info">
-                                    <i class="fa fa-info-circle"></i> {{ "SeeInformation"|get_lang }}
-                                </a>
-                            </p>
-
-                            <p class="buttom-subscribed">
-                                {% if session.is_subscribed %}
-                                    {{ already_subscribed_label }}
-                                {% else %}
-                                    {{ session.subscribe_button }}
-                                {% endif %}
-                            </p>
-                            <p class="time">
-                                <img src="{{ 'agenda.png' | icon(22) }}"> {{ session.date }}
-                            </p>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% else %}
-            {{ message }}
-        {% endfor %}
+            </div></div>
+            {% endfor %}
+
+    </div>
         {{ catalog_pagination }}
     </div>
-
+</section>
+<!-- end view catalog session -->
 {% endblock %}

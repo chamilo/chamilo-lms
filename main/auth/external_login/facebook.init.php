@@ -16,10 +16,10 @@
  * */
 
 
-
-
 //Loads the portal facebook settings
 /**
+ * Facebook application setting
+ * Loads the portal facebook settings
  * See facebook section of the auth.conf.php file
  */
 

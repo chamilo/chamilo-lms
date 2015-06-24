@@ -17,6 +17,7 @@ $cidReset = true;
 require_once 'main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 require_once 'main/chat/chat_functions.lib.php';
+require_once 'main/auth/external_login/facebook.inc.php';
 
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
@@ -39,6 +40,11 @@ $htmlHeadXtra[] ='
         });
     });
 </script>';
+
+// Facebook connexion, if activated
+if (api_is_facebook_auth_activated() && !api_get_user_id()) {
+    facebookConnect();
+}
 
 $controller = new IndexManager($header_title);
 
@@ -127,11 +133,6 @@ if (api_get_setting('display_categories_on_homepage') == 'true') {
     $controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
 }
 
-// Facebook connexion, if activated
-if (api_is_facebook_auth_activated() && !api_get_user_id()) {
-    facebook_connect();
-}
-
 $controller->set_login_form();
 
 //@todo move this inside the IndexManager
@@ -139,8 +140,11 @@ if (!api_is_anonymous()) {
     $controller->tpl->assign('profile_block', $controller->return_profile_block());
     $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
 
-    $controller->tpl->assign('course_block', $controller->return_course_block());
-    //$controller->tpl->assign('teacher_block', $controller->return_teacher_link());
+    if (api_is_platform_admin()) {
+        $controller->tpl->assign('course_block', $controller->return_course_block());
+    } else {
+        $controller->tpl->assign('teacher_block', $controller->return_teacher_link());
+    }
 }
 
 $hot_courses = null;

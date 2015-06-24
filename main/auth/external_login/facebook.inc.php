@@ -8,51 +8,77 @@
  *
  * External login module : FACEBOOK
  *
- * This files provides the facebook_connect()  and facebook_get_url functions
+ * This files provides the facebookConnect()  and facebook_get_url functions
  * Please edit the facebook.conf.php file to adapt it to your fb application parameter
- * */
+ */
+
 require_once dirname(__FILE__) . '/../../inc/global.inc.php';
 require_once dirname(__FILE__) . '/facebook.init.php';
-require_once dirname(__FILE__) . '/facebook-php-sdk/src/facebook.php';
+require_once dirname(__FILE__) . '/facebook-php-sdk/autoload.php';
+
+use Facebook\FacebookSession;
+use Facebook\FacebookRedirectLoginHelper;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
+use Facebook\FacebookSDKException;
+use Facebook\FacebookRequestException;
+use Facebook\FacebookAuthorizationException;
+use Facebook\GraphObject;
+use Facebook\Entities\AccessToken;
+use Facebook\HttpClients\FacebookCurlHttpClient;
+use Facebook\HttpClients\FacebookHttpable;
+
 require_once dirname(__FILE__) . '/functions.inc.php';
+
+// dont rename $facebook_config to $facebookConfig otherwise get a "Facebook\\FacebookSDKException"
+FacebookSession::setDefaultApplication( $facebook_config['appId'],$facebook_config['secret']);
 
 /**
  * This function connect to facebook and retrieves the user info
  * If user does not exist in chamilo, it creates it and logs in
  * If user already exists, it updates his info
- * */
-function facebook_connect() {
-    global $facebook;
-    // See if there is a user from a cookie
-    $user = $facebook->getUser();
-    if ($user) {
-        try {
-            //Gets facebook user info
-            $fu = $facebook->api('/me');
-            $username = $fu['username'];
-            if (api_get_setting('login_is_email') == 'true' || empty($fu['username'])) {
-                $username = change_to_valid_chamilo_login($fu['email']);
-            }
-            //Checks if user already exists in chamilo
+ */
+function facebookConnect()
+{
+    global $facebook_config;
+    global $helper;
+
+    try {
+        $helper = new FacebookRedirectLoginHelper($facebook_config['return_url']);
+        $session = $helper->getSessionFromRedirect();
+        // see if we have a session
+        if ( isset( $session ) ) {
+            // graph api request for user data
+            $request = new FacebookRequest( $session, 'GET', '/me' );
+            $response = $request->execute();
+            // get response
+            $graphObject = $response->getGraphObject();
+            $username = changeToValidChamiloLogin($graphObject->getProperty('email'));
+            $email = $graphObject->getProperty('email');
+            $locale = $graphObject->getProperty('locale');
+            $language = facebookPluginGetLanguage($locale);
+            if(!$language)$language='en_US';
+
+            // Checks if user already exists in chamilo
             $u = array(
-                'firstname' => $fu['first_name'],
-                'lastname' => $fu['last_name'],
+                'firstname' => $graphObject->getProperty('first_name'),
+                'lastname' => $graphObject->getProperty('last_name'),
                 'status' => STUDENT,
-                'email' => $fu['email'],
+                'email' => $graphObject->getProperty('email'),
                 'username' => $username,
-                'language' => 'french',
-                'password' => DEFAULT_PASSWORD,
+                'language' => $language,
+                'password' => 'facebook',
                 'auth_source' => 'facebook',
-                //'courses' => $user_info['courses'],
-                //'profile_link' => $user_info['profile_link'],
-                //'worldwide_bu' => $user_info['worlwide_bu'],
-                //'manager' => $user_info['manager'],
+                // 'courses' => $user_info['courses'],
+                // 'profile_link' => $user_info['profile_link'],
+                // 'worldwide_bu' => $user_info['worlwide_bu'],
+                // 'manager' => $user_info['manager'],
                 'extra' => array()
             );
-            $cu = api_get_user_info_from_username($username);
-            $chamilo_uinfo = api_get_user_info_from_username($username);
-            if ($chamilo_uinfo === false) {
-                //we have to create the user
+
+            $chamiloUinfo = api_get_user_info_from_email($email);
+            if ($chamiloUinfo === false) {
+                // we have to create the user
                 $chamilo_uid = external_add_user($u);
                 if ($chamilo_uid !== false) {
                     $_user['user_id'] = $chamilo_uid;
@@ -63,8 +89,9 @@ function facebook_connect() {
                 } else {
                     return false;
                 }
-            } else {//User already exists, update info and login
-                $chamilo_uid = $chamilo_uinfo['user_id'];
+            } else {
+                // User already exists, update info and login
+                $chamilo_uid = $chamiloUinfo['user_id'];
                 $u['user_id'] = $chamilo_uid;
                 external_update_user($u);
                 $_user['user_id'] = $chamilo_uid;
@@ -73,34 +100,53 @@ function facebook_connect() {
                 header('Location:' . api_get_path(WEB_PATH));
                 exit();
             }
-        } catch (FacebookApiException $e) {
-            echo '<pre>' . htmlspecialchars(print_r($e, true)) . '</pre>';
-            $user = null;
         }
+    } catch( FacebookRequestException $ex ) {
+        echo $ex;
+    } catch( Exception $ex ) {
+        // When validation fails or other local issues
     }
 }
 
 /**
  * Get facebook login url for the platform
- * */
-function facebook_get_login_url() {
-    global $facebook, $facebook_config;
-
-    $login_url = $facebook->getLoginUrl(
-            array(
-                'scope' => 'email,publish_stream',
-                'redirect_uri' => $facebook_config['return_url']
-            )
-    );
-    return $login_url;
+ * @return string
+ */
+function facebookGetLoginUrl()
+{
+    global $facebook_config;
+    $helper = new FacebookRedirectLoginHelper($facebook_config['return_url']);
+    $loginUrl = $helper->getLoginUrl(array(
+                        'scope' => 'email'));
+    return $loginUrl;
 }
 
 /**
- * @input : a string
- * @return : a string containing valid chamilo login characters
+ * Return a valid Chamilo login
  * Chamilo login only use characters lettres, des chiffres et les signes _ . -
- * */
-function change_to_valid_chamilo_login($in_txt) {
+ * @param $in_txt
+ * @return mixed
+ */
+function changeToValidChamiloLogin($in_txt)
+{
     return preg_replace("/[^a-zA-Z1-9_\-.]/", "_", $in_txt);
-    exit;
 }
+
+/**
+ * Get user language
+ * @param string $language
+ * @return bool
+ */
+function facebookPluginGetLanguage($language = 'en_US')
+{
+    $language = substr($language, 0, 2);
+        $sqlResult = Database::query("SELECT english_name FROM ".
+                                    Database::get_main_table(TABLE_MAIN_LANGUAGE).
+                                    " WHERE available = 1 AND isocode = '$language'");
+        if (Database::num_rows($sqlResult)) {
+            $result = Database::fetch_array($sqlResult);
+            return $result['english_name'];
+        }
+    return false;
+} 
+

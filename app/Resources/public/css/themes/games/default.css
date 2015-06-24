@@ -441,20 +441,20 @@ footer .media{
   background-color: #D81E49;
   color: #ffffff;
 }
-#current-courses .title-course{
+.section-mycourses .title-course{
   color: #E73858;
   font-size: 24px;
   padding-top: 20px;
   padding-bottom: 20px;
   margin-top: 30px;
 }
-#current-courses .title-course a{
+.section-mycourses .title-course a{
   color: #E73858;
 }
-#current-courses .title-course .fa-square{
+.section-mycourses .title-course .fa-square{
   font-size: 16px;
 }
-#current-courses .current-item{
+.section-mycourses .current-item{
   background-color: #f4f4f4;
   border-radius: 5px;
   -moz-border-radius: 5px;
@@ -462,38 +462,38 @@ footer .media{
   padding: 20px;
   margin-bottom: 20px;
 }
-#current-courses .description-course{
+.section-mycourses .description-course{
   padding-top: 10px;
   padding-bottom: 10px;
   color: #555555;
 }
-#current-courses .teachers-course{
+.section-mycourses .teachers-course{
   padding-top: 10px;
   padding-bottom: 10px;
 }
-#current-courses .teachers-course .fa-pencil-square{
+.section-mycourses .teachers-course .fa-pencil-square{
   color: #35a8c8;
   font-size: 24px;
 }
-#current-courses .teachers-course span{
+.section-mycourses .teachers-course span{
   color: #555555;
 }
-#current-courses .teachers-course span .fa-square{
+.section-mycourses .teachers-course span .fa-square{
   color: #e1e1e1;
   font-size: 12px;
   margin-left: 10px;
 }
-#current-courses .time-course{
+.section-mycourses .time-course{
   padding-bottom: 5px;
   padding-top: 5px;
   color: #555555;
 }
-#current-courses .time-course .fa-clock-o{
+.section-mycourses .time-course .fa-clock-o{
   font-size: 24px;
   color: #35a8c8;
   margin-right: 10px;
 }
-#current-courses .btn{
+.section-mycourses .btn{
   float: right;
 }
 .btn-press{
@@ -517,7 +517,7 @@ footer .media{
 }
 
 /* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 979px) { ... }
+@media (min-width: 768px) and (max-width: 979px) {
  	.links-footer{
 		margin-bottom: 10px;
 		padding-bottom: 10px;
@@ -529,6 +529,7 @@ footer .media{
 	.red-social{
 		text-align: left;
 	}
+}
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
 

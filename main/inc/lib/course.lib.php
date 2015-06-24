@@ -1881,7 +1881,9 @@ class CourseManager
 
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
-                $coaches[] = $row;
+                $completeName = api_get_person_name($row['firstname'], $row['lastname']);
+
+                $coaches[] = $row + ['full_name' => $completeName];
             }
 
             return $coaches;
@@ -3814,13 +3816,10 @@ class CourseManager
                 self::USER_SEPARATOR,
                 true
             );
-            $course_coachs = CourseManager::get_coachs_from_course_to_string(
+            $course_coachs = self::get_coachs_from_course(
                 $course_info['id_session'],
-                $course_info['real_id'],
-                self::USER_SEPARATOR,
-                true
+                $course_info['real_id']
             );
-            $icon_coachs = Display::return_icon('teacher.png', '', null, ICON_SIZE_TINY);
 
             if ($course_info['status'] == COURSEMANAGER ||
                 ($course_info['status'] == STUDENT && empty($course_info['id_session'])) ||
@@ -3832,7 +3831,7 @@ class CourseManager
             if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) ||
                 ($is_coach && $course_info['status'] != COURSEMANAGER)
             ) {
-                $params['coaches'] = $icon_coachs.$course_coachs;
+                $params['coaches'] = $course_coachs;
             }
         }
 

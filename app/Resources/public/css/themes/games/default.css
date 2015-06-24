@@ -277,6 +277,10 @@ footer .media{
 #about-session .description-course{
   text-align: justify;
 }
+#about-session .description-course .fa-square{
+  color: #E3C200;
+  margin-bottom: 10px;
+}
 #about-session .subscribe .btn-success{
   background-color: #E73858;
   text-transform: uppercase;
@@ -330,6 +334,28 @@ footer .media{
 }
 #about-session .btn-social:hover{
   background-color: #d9b800;
+}
+#about-session .teachers .img-circle{
+  width: 80px;
+  height: 80px;
+  padding: 3px;
+  background-color: #ffffff;
+}
+#about-session .teachers .teachers-dates{
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+#about-session .teachers .teachers-dates .fa-circle{
+  font-size: 8px;
+  color: #E73858;
+}
+#about-session .teachers .teachers-dates h4{
+  color: #666;
+  font-size: 15px;
+}
+#about-session .teachers .teachers-dates .extras-field{
+  color: #666;
+  font-size: 12px;
 }
 /* Large desktop */
 @media (min-width: 1200px) { 

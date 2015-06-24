@@ -18,7 +18,9 @@
         {% endif %}
 
         <div class="{{ course_data.video ? 'col-sm-6 col-md-5' : 'col-sm-12' }}">
+
             <div class="description-course">
+                <i class="fa fa-square"></i>
                 {{ course_data.description.getContent }}
             </div>
             {% if course_data.tags %}
@@ -73,20 +75,18 @@
                 </div>
                 <div class="panel-body">
                     {% for coach in course_data.coaches %}
-                    <div class="row">
-                        <div class="col-xs-7 col-md-7">
-                            <h4>{{ coach.complete_name }}</h4>
-                            {% if coach.officer_position %}
-                            <p>{{ coach.officer_position }}</p>
-                            {% endif %}
-
-                            {% if coach.work_or_study_place %}
-                            <p>{{ coach.work_or_study_place }}</p>
-                            {% endif %}
-                        </div>
-                        <div class="col-xs-5 col-md-5">
-                            <div class="text-center">
-                                <img class="img-circle" src="{{ coach.image }}" alt="{{ coach.complete_name }}">
+                    <div class="teachers-dates">
+                        <div class="row">
+                            <div class="col-xs-7 col-md-7">
+                                <h4><i class="fa fa-circle"></i> {{ coach.complete_name }}</h4>
+                                {% for extra_field in coach.extra_fields %}
+                                <div class="extras-field">{{ extra_field.value }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-xs-5 col-md-5">
+                                <div class="text-center">
+                                    <img class="img-circle" src="{{ coach.image }}" alt="{{ coach.complete_name }}">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -98,13 +98,13 @@
                 <div class="heading"><h4>¡{{ "ShareWithYourFriends"|get_lang }}!</h4></div>
                 <div class="panel-body">
                     <div class="icons-social text-center">
-                        <a href="#" class="btn-social">
+                        <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}" target="_blank"  class="btn-social">
                             <i class="fa fa-facebook"></i>
                         </a>
-                        <a href="#" class="btn-social">
+                        <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}" target="_blank" class="btn-social">
                             <i class="fa fa-twitter"></i>
                         </a>
-                        <a href="#" class="btn-social">
+                        <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}" target="_blank" class="btn-social">
                             <i class="fa fa-linkedin"></i>
                         </a>
                     </div>

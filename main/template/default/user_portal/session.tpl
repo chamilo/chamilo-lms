@@ -80,7 +80,18 @@
                                 </div>
                                 <div class="col-md-10">
                                     {{ item.title }}
-                                    {{ item.coaches }}
+
+                                    {% if item.coaches|length > 0 %}
+                                        <img src="{{ 'teacher.png'|icon(16) }}">
+
+                                        {% for coach in item.coaches %}
+                                            {{ loop.index > 1 ? ' | ' }}
+
+                                            <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}" class="ajax">
+                                                {{ coach.full_name }}
+                                            </a>
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}

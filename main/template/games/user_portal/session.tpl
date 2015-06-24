@@ -40,7 +40,15 @@
 
                         {% if course.coaches %}
                             <div class="teachers-course">
-                                <i class="fa fa-pencil-square"></i> {{ course.coaches }}
+                                {% if course.coaches|length > 0 %}
+                                    <i class="fa fa-pencil-square"></i>
+
+                                    {% for coach in course.coaches %}
+                                        <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}" class="ajax">
+                                            <span><i class="fa fa-square"></i> {{ coach.full_name }}</span>
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         {% endif %}
 

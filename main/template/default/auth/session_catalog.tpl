@@ -144,7 +144,7 @@
             {% for session in sessions %}
             <div class="col-md-4">
                 <div class="item-content" id="session-{{ session.id }}">
-                    <div class="img-session"></div>
+                    <div class="img-session">{{ session.extra_field.image }}</div>
                     <div class="title-session"><h3>{{ session.name }}</h3></div>
                     <div class="author-session">
                         <i class="fa fa-user"></i>

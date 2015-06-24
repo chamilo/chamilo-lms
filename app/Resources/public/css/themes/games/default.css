@@ -441,6 +441,74 @@ footer .media{
   background-color: #D81E49;
   color: #ffffff;
 }
+#current-courses .title-course{
+  color: #E73858;
+  font-size: 24px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-top: 30px;
+}
+#current-courses .title-course a{
+  color: #E73858;
+}
+#current-courses .title-course .fa-square{
+  font-size: 16px;
+}
+#current-courses .current-item{
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+#current-courses .description-course{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #555555;
+}
+#current-courses .teachers-course{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+#current-courses .teachers-course .fa-pencil-square{
+  color: #35a8c8;
+  font-size: 24px;
+}
+#current-courses .teachers-course span{
+  color: #555555;
+}
+#current-courses .teachers-course span .fa-square{
+  color: #e1e1e1;
+  font-size: 12px;
+  margin-left: 10px;
+}
+#current-courses .time-course{
+  padding-bottom: 5px;
+  padding-top: 5px;
+  color: #555555;
+}
+#current-courses .time-course .fa-clock-o{
+  font-size: 24px;
+  color: #35a8c8;
+  margin-right: 10px;
+}
+#current-courses .btn{
+  float: right;
+}
+.btn-press{
+  background-color: #e73858;
+  color: #fff;
+  text-transform: uppercase;
+  border:1px solid #e73858;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+.btn-press:hover{
+  background-color: #cf3652;
+  color: #fff;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
 	.container{

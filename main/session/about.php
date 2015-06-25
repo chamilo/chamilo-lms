@@ -128,6 +128,13 @@ foreach ($sessionCourses as $sessionCourse) {
 $template = new Template($session->getName(), true, true, false, true, false);
 $template->assign('pageUrl', api_get_path(WEB_PATH) . "session/{$session->getId()}/about/");
 $template->assign('session', $session);
+$template->assign(
+    'is_subscribed',
+    SessionManager::isUserSubscribedAsStudent(
+        $session->getId(),
+        api_get_user_id()
+    )
+);
 $template->assign('courses', $courses);
 
 $templateFolder = api_get_configuration_value('default_template');

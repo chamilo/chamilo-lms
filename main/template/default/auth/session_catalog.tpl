@@ -127,9 +127,11 @@
                             <div class="img-session">{{ session.extra_field.image }}</div>
                             <h3 class="title-session">{{ session.name }}</h3>
                             <ul class="list-unstyled">
-                                <li class="author-session">
-                                    <i class="fa fa-user"></i> {{ session.coach_name }}
-                                </li>
+                                {% if show_tutor %}
+                                    <li class="author-session">
+                                        <i class="fa fa-user"></i> {{ session.coach_name }}
+                                    </li>
+                                {% endif %}
                                 <li class="date-session">
                                     <i class="fa fa-calendar-o"></i> {{ session.date }}
                                 </li>
@@ -171,6 +173,10 @@
                                 </p>
                             </div>
                         </div>
+                    </div>
+                {% else %}
+                    <div class="col-xs-12">
+                        {{ message }}
                     </div>
                 {% endfor %}
             </div>

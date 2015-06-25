@@ -1022,7 +1022,6 @@ $Description = "설명";
 $Links = "링크";
 $Works = "학생 출판";
 $Forums = "포럼";
-$Exercices = "테스트";
 $CreateDir = "디렉토리 생성";
 $Name = "이름";
 $Comment = "커멘트";

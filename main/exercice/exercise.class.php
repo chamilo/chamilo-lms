@@ -95,14 +95,14 @@ class Exercise
     public function read($id)
     {
         global $_configuration;
-        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         $id  = intval($id);
         if (empty($this->course_id)) {
             return false;
         }
-        $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = ".$this->course_id." AND id = ".$id;
+        $sql = "SELECT * FROM $TBL_EXERCISES WHERE c_id = ".$this->course_id." AND id = ".$id;
         $result = Database::query($sql);
 
         // if the exercise has been found
@@ -428,11 +428,11 @@ class Exercise
     public function selectQuestionList($from_db = false)
     {
         if ($from_db && !empty($this->id)) {
-            $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+            $TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
             $sql = "SELECT DISTINCT e.question_order
-                    FROM $TBL_EXERCICE_QUESTION e
+                    FROM $TBL_EXERCISE_QUESTION e
                     INNER JOIN $TBL_QUESTIONS  q
                     ON (e.question_id = q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
 					WHERE e.exercice_id	= ".intval($this->id)."";
@@ -441,7 +441,7 @@ class Exercise
             $count_question_orders = Database::num_rows($result);
 
             $sql = "SELECT e.question_id, e.question_order
-                    FROM $TBL_EXERCICE_QUESTION e
+                    FROM $TBL_EXERCISE_QUESTION e
                     INNER JOIN $TBL_QUESTIONS  q
                     ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
 					WHERE e.exercice_id	= ".intval($this->id)."
@@ -758,7 +758,7 @@ class Exercise
     public function save($type_e = '')
     {
         $_course = $this->course;
-        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 
         $id = $this->id;
         $exercise = $this->exercise;
@@ -802,7 +802,7 @@ class Exercise
                 $end_time = '0000-00-00 00:00:00';
             }
 
-            $sql = "UPDATE $TBL_EXERCICES SET
+            $sql = "UPDATE $TBL_EXERCISES SET
 				    title='".Database::escape_string($exercise)."',
 					description='".Database::escape_string($description)."'";
 
@@ -883,11 +883,11 @@ class Exercise
                 'pass_percentage' => $pass_percentage
             ];
 
-            $this->id = Database::insert($TBL_EXERCICES, $params);
+            $this->id = Database::insert($TBL_EXERCISES, $params);
 
             if ($this->id) {
 
-                $sql = "UPDATE $TBL_EXERCICES SET id = iid WHERE iid = {$this->id} ";
+                $sql = "UPDATE $TBL_EXERCISES SET id = iid WHERE iid = {$this->id} ";
                 Database::query($sql);
 
                 // insert into the item_property table
@@ -1004,8 +1004,8 @@ class Exercise
      */
     public function delete()
     {
-        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $TBL_EXERCICES SET active='-1'
+        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "UPDATE $TBL_EXERCISES SET active='-1'
                 WHERE c_id = ".$this->course_id." AND id = ".intval($this->id)."";
         Database::query($sql);
         api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizDeleted', api_get_user_id());
@@ -1168,7 +1168,7 @@ class Exercise
 
             $form->addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option, array('id'=>'exerciseAttempts','class'=>'chzn-select'));
 
-            // Exercice time limit
+            // Exercise time limit
             $form->addElement('checkbox', 'activate_start_date_check',null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 
             $var = Exercise::selectTimeLimit();
@@ -2952,7 +2952,7 @@ class Exercise
                         }
                         $user_array = substr($user_array,0,-1);
                     } else {
-                        if ($studentChoice) {
+                        if (!empty($studentChoice)) {
                             $newquestionList[]=$questionId;
                         }
 
@@ -4588,7 +4588,7 @@ class Exercise
         } else {
             if ($this->isRandom()) {
                 // USE question categories
-                // get questions by category for this exercice
+                // get questions by category for this exercise
                 // we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
                 // key of $tabCategoryQuestions are the categopy id (0 for not in a category)
                 // value is the array of question id of this category

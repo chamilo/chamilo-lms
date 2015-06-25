@@ -187,7 +187,7 @@ if (isset($_POST['comment'])) {
 
     // Just in case see BT#3525
     if (empty($title)) {
-		$title = $documen_data['title'];
+		$title = $document_data['title'];
 	}
 
 	if (empty($title)) {
@@ -333,7 +333,7 @@ if ($is_allowed_to_edit) {
 								$dir,
 								api_get_user_id()
 							);
-							header('Location: document.php?id=' . $document_data['parent_id'] . '&' . api_get_cidreq());
+							header('Location: document.php?id=' . $document_data['parent_id'] . '&' . api_get_cidreq() . ($is_certificate_mode?'&curdirpath=/certificates&selectcat=1':''));
 							exit;
 						} else {
 							$msgError = get_lang('Impossible');
@@ -421,6 +421,9 @@ if ($owner_id == api_get_user_id() ||
     )
 ) {
 	$action = api_get_self().'?id='.$document_data['id'].'&'.api_get_cidreq();
+    if ($is_certificate_mode) {
+        $action .= '&curdirpath=/certificates&selectcat=1';
+    }
 	$form = new FormValidator('formEdit', 'post', $action, null, array('class' => 'form-vertical'));
 
 	// Form title

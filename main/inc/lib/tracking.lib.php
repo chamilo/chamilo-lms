@@ -4564,7 +4564,7 @@ class Tracking
             //Course details
             $html .= '
                 <tr>
-                <th class="head" style="color:#000">'.get_lang('Exercices').'</th>
+                <th class="head" style="color:#000">'.get_lang('Exercises').'</th>
                 <th class="head" style="color:#000">'.get_lang('Attempts').'</th>
                 <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>
                 <th class="head" style="color:#000">'.get_lang('Ranking').'</th>

@@ -91,8 +91,6 @@ class GlobalMultipleAnswer extends Question
             //------------- Debut si un des scores par reponse est egal � 0 : la coche vaut 1 (coch�)
             if ($scoreA == 0) {
                 $defaults['pts'] = 1;
-            } else {
-                $defaults['pts'] = 0;
             }
 
             $renderer = & $form->defaultRenderer();

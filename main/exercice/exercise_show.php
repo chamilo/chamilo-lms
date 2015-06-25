@@ -29,9 +29,9 @@ if ($origin == 'learnpath') {
 }
 
 // Database table definitions
-$TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCISE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$TBL_TRACK_EXERCISES    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TBL_TRACK_ATTEMPT		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 // General parameters passed via POST/GET
@@ -112,7 +112,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 $fromlink = '';
 
-$interbreadcrumb[]= array("url" => "exercice.php?".api_get_cidreq(),"name" => get_lang('Exercices'));
+$interbreadcrumb[]= array("url" => "exercise.php?".api_get_cidreq(),"name" => get_lang('Exercises'));
 $interbreadcrumb[]= array("url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),"name" => $objExercise->name);
 $interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
 
@@ -178,7 +178,7 @@ if (!empty($track_exercise_info)) {
                       <tr>
                         <td colspan="2">';
                 Display::display_warning_message(
-                    get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>',
+                    get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercise.php">'.(get_lang('BackToExercisesList')).'</a>',
                     false
                 );
                 echo '</td>
@@ -229,11 +229,11 @@ $arrans  = array();
 $user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($student_id)." ";
 $sql = "SELECT attempts.question_id, answer
         FROM ".$TBL_TRACK_ATTEMPT." as attempts
-        INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices
-        ON stats_exercices.exe_id=attempts.exe_id
-        INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions
+        INNER JOIN ".$TBL_TRACK_EXERCISES." AS stats_exercises
+        ON stats_exercises.exe_id=attempts.exe_id
+        INNER JOIN ".$TBL_EXERCISE_QUESTION." AS quizz_rel_questions
         ON
-            quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND
+            quizz_rel_questions.exercice_id=stats_exercises.exe_exo_id AND
             quizz_rel_questions.question_id = attempts.question_id AND
             quizz_rel_questions.c_id=".api_get_course_int_id()."
         INNER JOIN ".$TBL_QUESTIONS." AS questions

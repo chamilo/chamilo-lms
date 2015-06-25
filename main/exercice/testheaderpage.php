@@ -28,6 +28,6 @@ if (!empty($gradebook) && $gradebook=='view') {
 		'name' => get_lang('ToolGradebook')
 	);
 }
-$interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
+$interbreadcrumb[]= array ("url"=>"./exercise.php", "name"=> get_lang('Exercises'));
 Display::display_header($nameTools,"Exercise");
 echo "<a name='TOP'></a>";

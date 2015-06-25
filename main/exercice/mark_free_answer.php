@@ -46,7 +46,7 @@ if(!empty($_POST['action'])){
 }
 
 if (empty($my_qst) or empty($my_usr) or empty($my_cid) or empty($my_exe)){
-	header('Location: exercice.php');
+	header('Location: exercise.php');
 	exit();
 }
 
@@ -68,9 +68,9 @@ if (!empty($gradebook) && $gradebook=='view') {
 		);
 }
 
-$nameTools=get_lang('Exercice');
+$nameTools=get_lang('Exercises');
 
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
 
 $my_msg = 'No change.';
 
@@ -143,7 +143,7 @@ $objAnswerTmp->selectAnswer($answerId);
 
 if($action == 'mark'){
 	echo $my_msg.'<br />
-		<a href="exercice.php?cidReq='.$cidReq.'">'.get_lang('Back').'</a>';
+		<a href="exercise.php?cidReq='.$cidReq.'">'.get_lang('Back').'</a>';
 } else {
 	echo '<h2>'.$obj_question->question .':</h2>
 		'.$obj_question->selectTitle().'<br /><br />

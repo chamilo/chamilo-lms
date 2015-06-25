@@ -920,7 +920,7 @@ if (!empty($student_id)) {
         <?php if ($user_info['status'] != INVITEE) { ?>
         <table class="data_table">
         <tr>
-            <th><?php echo get_lang('Exercices'); ?></th>
+            <th><?php echo get_lang('Exercises'); ?></th>
             <th><?php echo get_lang('LearningPath');?></th>
             <th><?php echo get_lang('AvgCourseScore').' '.Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
             <th><?php echo get_lang('Attempts'); ?></th>
@@ -931,7 +931,7 @@ if (!empty($student_id)) {
 
         $csv_content[] = array();
         $csv_content[] = array(
-            get_lang('Exercices'),
+            get_lang('Exercises'),
             get_lang('LearningPath'),
             get_lang('AvgCourseScore'),
             get_lang('Attempts')

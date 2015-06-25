@@ -1630,7 +1630,6 @@ $Description = "Opis";
 $Links = "Poveznice";
 $Works = "Studentski radovi";
 $Forums = "Forumi";
-$Exercices = "Vježbe";
 $CreateDir = "Izrada mape";
 $Name = "Naziv";
 $Comment = "Opaska";

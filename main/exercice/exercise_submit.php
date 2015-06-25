@@ -89,7 +89,7 @@ $currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']
 $error = '';
 
 //Table calls
-$exercice_attemp_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$exercise_attempt_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview,
     we delete the objExercise from the session in order to get the latest
@@ -132,7 +132,7 @@ if (!isset($objExercise) && isset($_SESSION['objExercise'])) {
 //3. $objExercise is not set, then return to the exercise list
 if (!is_object($objExercise)) {
 	if ($debug) {error_log('3. $objExercise was not set, kill the script'); };
-    header('Location: exercice.php');
+    header('Location: exercise.php');
     exit;
 }
 
@@ -158,7 +158,7 @@ $current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
 if ($time_control) {
-	// Get the expired time of the current exercice in track_e_exercises
+	// Get the expired time of the current exercise in track_e_exercises
 	$total_seconds = $objExercise->expired_time*60;
 }
 
@@ -369,7 +369,7 @@ if ($time_control) {
 			// First we update the attempt to today
 			/* How the expired time is changed into "track_e_exercises" table,
                then the last attempt for this student should be changed too */
-	        $sql = "UPDATE $exercice_attemp_table SET
+	        $sql = "UPDATE $exercise_attempt_table SET
 	                tms = '".api_get_utc_datetime()."'
 	                WHERE
 	                    exe_id = '".$exercise_stat_info['exe_id']."' AND
@@ -623,7 +623,7 @@ if (!empty ($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array ('url' => '../gradebook/' . Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('ToolGradebook'));
 }
 
-$interbreadcrumb[] = array ("url" => "exercice.php?".api_get_cidreq(),	"name" => get_lang('Exercices'));
+$interbreadcrumb[] = array ("url" => "exercise.php?".api_get_cidreq(),	"name" => get_lang('Exercises'));
 $interbreadcrumb[] = array ("url" => "#", "name" => $objExercise->name);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
@@ -719,7 +719,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
 //Timer control
 if ($time_control) {
     echo $objExercise->return_time_left_div();
-	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
+	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciseExpiredTimeMessage').'</div>';
 }
 
 if (!empty($objExercise->description)) {

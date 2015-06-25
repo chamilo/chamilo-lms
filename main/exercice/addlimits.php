@@ -78,9 +78,9 @@ if (!empty($gradebook) && $gradebook=='view') {
 			'name' => get_lang('ToolGradebook')
 		);
 }
-$nameTools=get_lang('Exercice');
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
-Display::display_header($nameTools,"Exercise");
+$nameTools=get_lang('Exercises');
+$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
+Display::display_header($nameTools,"Exercises");
 
 if (isset($_POST['ok'])) {
 	$message = get_lang('TestLimitsAdded');
@@ -156,19 +156,19 @@ if (isset($_POST['ok'])) {
 	$exercise_id = intval($_POST['exe_id']);
 	if ($_POST['limit']==1) {
 		$minutes = intval($_POST['minutes']);
-		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= $minutes WHERE id= $exercise_id";
+		$query = "UPDATE ".$TBL_EXERCISES." SET ques_time_limit= $minutes WHERE id= $exercise_id";
 		Database::query($query);
 	} else {
-		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= 0 WHERE id= $exercise_id";
+		$query = "UPDATE ".$TBL_EXERCISES." SET ques_time_limit= 0 WHERE id= $exercise_id";
 		Database::query($query);
 	}
 
 	if ($_POST['attempt']==1) {
 		$attempts = intval($_POST['attempts']);
-		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = $attempts WHERE id= $exercise_id";
+		$query = "UPDATE ".$TBL_EXERCISES." SET num_attempts = $attempts WHERE id= $exercise_id";
 		Database::query($query);
 	} else {
-		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = 0 WHERE id= $exercise_id";
+		$query = "UPDATE ".$TBL_EXERCISES." SET num_attempts = 0 WHERE id= $exercise_id";
 		Database::query($query);
 	}
 }

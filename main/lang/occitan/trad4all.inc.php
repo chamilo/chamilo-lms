@@ -201,7 +201,6 @@ $Description = "Descripcion";
 $Links = "Liames";
 $Works = "Pretzfachs deis estudiants";
 $Forums = "Fòrums";
-$Exercices = "Exercicis";
 $CreateDir = "Crear un dorsier";
 $Name = "Nom";
 $Comment = "Comentar";

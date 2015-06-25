@@ -38,7 +38,7 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777) {
 function aiken_display_form($msg = '') {
     $name_tools = get_lang('ImportAikenQuiz');
     $form  = '<div class="actions">';
-    $form .= '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+    $form .= '<a href="exercise.php?show=test">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
     $form .= $msg;
     $form_validator  = new FormValidator('aiken_upload', 'post',api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data') );

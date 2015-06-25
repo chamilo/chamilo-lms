@@ -1497,7 +1497,6 @@ $Description = "Opis";
 $Links = "Linkovi";
 $Works = "Publikacije polaznika";
 $Forums = "Forumi";
-$Exercices = "Testovi";
 $CreateDir = "Kreiraj direktorijum";
 $Name = "Ime";
 $Comment = "Komentar";

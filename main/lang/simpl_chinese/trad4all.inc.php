@@ -1696,7 +1696,6 @@ $Description = "简介";
 $Links = "链接";
 $Works = "作业论文";
 $Forums = "学习论坛";
-$Exercices = "测验";
 $CreateDir = "创建目录";
 $Name = "名称";
 $Comment = "摘要";

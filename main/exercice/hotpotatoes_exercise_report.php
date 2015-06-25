@@ -32,8 +32,8 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh();
 $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$TBL_TRACK_HOTPOTATOES_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$TBL_TRACK_EXERCISES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$TBL_TRACK_HOTPOTATOES_EXERCISES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
 $course_id = api_get_course_int_id();
@@ -76,7 +76,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.Security::remove_XSS($hotpotatoes_path).' ">'.Display::return_icon('save.png',   get_lang('Export'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 } else {
-    $actions .= '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+    $actions .= '<a href="exercise.php">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 if ($is_allowedToEdit) {
@@ -98,13 +98,13 @@ $nameTools = get_lang('Results');
 
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
-    $interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
+    $interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
     /*if ($objExerciseTmp->read($exercise_id)) {
         $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);
     }*/
 } else {
-    $interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
+    $interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
     $objExerciseTmp = new Exercise();
     /*if ($objExerciseTmp->read($exercise_id)) {
         $nameTools = get_lang('Results').': '.$objExerciseTmp->name;
@@ -139,7 +139,7 @@ $extra =  '<script type="text/javascript">
                         var extra_data  = $("input[name=load_extra_data]:checked").val();
                         location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data;
                         $( this ).dialog( "close" );
-                    },
+                    }
                 }
             });
             $( "#dialog-confirm" ).dialog("open");

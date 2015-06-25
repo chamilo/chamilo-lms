@@ -83,7 +83,7 @@ save_scores($test, $score);
 
 // Back
 if ($origin != 'learnpath') {
-    $url = "exercice.php"; // back to exercices
+    $url = "exercise.php"; // back to exercises
     $jscript2run .= '<script>'."window.open('$url', '_top', '')".'</script>';
     echo $jscript2run;
 } else {

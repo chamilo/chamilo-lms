@@ -31,7 +31,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 // The breadcrumbs.
-$interbreadcrumb[] = array('url' => './exercice.php', 'name' => get_lang('Exercices'));
+$interbreadcrumb[] = array('url' => './exercise.php', 'name' => get_lang('Exercises'));
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
@@ -178,14 +178,14 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
         }
     }
     if ($finish == 1) { /** ok -> send to main exercises page */
-        header('Location: exercice.php?'.api_get_cidreq());
+        header('Location: exercise.php?'.api_get_cidreq());
         exit;
     }
 
     Display::display_header($nameTools, get_lang('Exercise'));
 
     echo '<div class="actions">';
-    echo '<a href="exercice.php?show=test">'.
+    echo '<a href="exercise.php?show=test">'.
         Display :: return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
         '</a>';
     echo '</div>';

@@ -1774,7 +1774,6 @@ $Description = "Beskrivning";
 $Links = "Länkar";
 $Works = "Elevarbeten";
 $Forums = "Forum";
-$Exercices = "Prov";
 $CreateDir = "Skapa ny mapp";
 $Name = "Namn";
 $Comment = "Kommentar";

@@ -1458,7 +1458,6 @@ $Description = "Priskribo";
 $Links = "Ligiloj";
 $Works = "Studentaj publikaĵoj";
 $Forums = "Forumoj";
-$Exercices = "Ekzercoj";
 $CreateDir = "Nova dosierujo";
 $Name = "Nomo";
 $Comment = "Komento";

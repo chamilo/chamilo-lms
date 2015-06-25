@@ -1883,7 +1883,6 @@ $Description = "Leírás";
 $Links = "Hivatkozások";
 $Works = "Beadványok";
 $Forums = "Fórumok";
-$Exercices = "Tesztek";
 $CreateDir = "Könyvtár létrehozása";
 $Name = "Név";
 $Comment = "Megjegyzés";

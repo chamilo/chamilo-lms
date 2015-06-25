@@ -186,7 +186,7 @@ if (!is_object($objExercise)) {
 // Exercise can be edited in their course.
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
-    /*header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
+    /*header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercise.php?'.api_get_cidreq());
     exit;*/
 }
 
@@ -230,7 +230,7 @@ if ($cancelExercise) {
     } else {
         // new exercise
         // goes back to the exercise list
-        header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
+        header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercise.php?'.api_get_cidreq());
         exit();
     }
 }
@@ -292,7 +292,7 @@ if (!empty($gradebook) && $gradebook=='view') {
     );
 }
 
-$interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion']) ) {
     $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
 } else {
@@ -469,7 +469,7 @@ if ($inATest) {
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) &&  !isset($_GET['editQuestion'])) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidReq().'">'.
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercise.php?'.api_get_cidReq().'">'.
             Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.

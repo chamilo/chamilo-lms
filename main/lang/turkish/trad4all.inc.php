@@ -1706,7 +1706,6 @@ $Description = "Açıklama";
 $Links = "Bağlantılar";
 $Works = "Öğrenci Yazıları";
 $Forums = "Forumlar";
-$Exercices = "Alıştırmalar";
 $CreateDir = "Dizin yarat";
 $Name = "İsim";
 $Comment = "Yorum";

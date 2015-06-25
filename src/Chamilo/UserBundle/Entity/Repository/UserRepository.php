@@ -5,6 +5,10 @@ namespace Chamilo\UserBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use \Doctrine\Common\Collections\Criteria;
+use \Chamilo\CoreBundle\Entity\Session;
+use \Chamilo\CoreBundle\Entity\Course;
+use \Doctrine\ORM\Query\Expr\Join;
+use \Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -138,6 +142,34 @@ class UserRepository extends EntityRepository
             $queryBuilder->andWhere('auru.accessUrlId = :url')
                 ->setParameter(':url', $accessUrlId);
         }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Get the coaches for a course within a session
+     * @param Session $session The session
+     * @param Course $course The course
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getCoachesForSessionCourse(Session $session, Course $course)
+    {
+        $queryBuilder = $this->createQueryBuilder('u');
+
+        $queryBuilder->select('u')
+            ->innerJoin(
+                'ChamiloCoreBundle:SessionRelCourseRelUser',
+                'scu',
+                Join::WITH,
+                'scu.user = u'
+            )
+            ->where(
+                $queryBuilder->expr()->andX(
+                    $queryBuilder->expr()->eq('scu.session', $session->getId()),
+                    $queryBuilder->expr()->eq('scu.course', $course->getId()),
+                    $queryBuilder->expr()->eq('scu.status', SessionRelCourseRelUser::STATUS_COURSE_COACH)
+                )
+            );
 
         return $queryBuilder->getQuery()->getResult();
     }

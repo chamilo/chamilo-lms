@@ -28,7 +28,7 @@ $entityManager = Database::getManager();
 $fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
 $fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
-$sessionsRepo = $entityManager->getRepository('ChamiloCoreBundle:Session');
+$userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
 
 $videoUrlField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
@@ -60,7 +60,7 @@ foreach ($sessionCourses as $sessionCourse) {
         $courseTags = $fieldTagsRepo->getTags($tagField, $sessionCourse->getId());
     }
 
-    $courseCoaches = $sessionsRepo->getCourseCoachesForCoach($session, $sessionCourse);
+    $courseCoaches = $userRepo->getCoachesForSessionCourse($session, $sessionCourse);
     $coachesData = [];
 
     foreach ($courseCoaches as $courseCoach) {
@@ -128,6 +128,13 @@ foreach ($sessionCourses as $sessionCourse) {
 $template = new Template($session->getName(), true, true, false, true, false);
 $template->assign('pageUrl', api_get_path(WEB_PATH) . "session/{$session->getId()}/about/");
 $template->assign('session', $session);
+$template->assign(
+    'is_subscribed',
+    SessionManager::isUserSubscribedAsStudent(
+        $session->getId(),
+        api_get_user_id()
+    )
+);
 $template->assign('courses', $courses);
 
 $templateFolder = api_get_configuration_value('default_template');

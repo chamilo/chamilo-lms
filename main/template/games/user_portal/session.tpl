@@ -97,6 +97,9 @@
                                         {% endif %}
                                     </div>
                                 </div>
+                                <div class="col-xs-5 text-right">
+                                    <span>{{ 'XPoints'|get_lang|format(session.points) }}</span>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12">

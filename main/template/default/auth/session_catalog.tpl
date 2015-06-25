@@ -54,89 +54,73 @@
     </script>
 
     <div class="col-md-12">
-        <!-- view catalog course -->
-        {% if show_courses %}
-            <div class="panel panel-default">
-                <div class="panel-heading">{{ "Courses"|get_lang }}</div>
-                <div class="panel-body">
-                    {% if not hidden_links %}
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <form class="form-search" method="post" action="{{ course_url }}">
-                                    <div class="input-group">
-                                        <input type="text" name="search_term" class="form-control" />
-                                        <input type="hidden" name="sec_token" value="{{ search_token }}">
-                                        <input type="hidden" name="search_course" value="1" />
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
-                                        </span>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    {% endif %}
+        <!-- view catalog sessions -->
 
-                    {% if course_category_list is not empty %}
-                        <br>
-                        <a class="btn btn-block btn-default" href="{{ _p.web_self }}?action=display_random_courses">{{ 'RandomPick'|get_lang }}</a>
-                    {% endif %}
-                </div>
-            </div>
-
-            {% if coursesCategoriesList is not empty %}
-                <div class="sidebar-nav">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            {{ 'CourseCategories'|get_lang }}
+        <div class="row">
+            {% if show_courses %}
+            <div class="col-md-4">
+                <div class="section-tile">{{ 'Courses'|get_lang }}</div>
+                {% if not hidden_links %}
+                <form class="form-horizontal" method="post" action="{{ course_url }}">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                        <input type="hidden" name="sec_token" value="{{ search_token }}">
+                        <input type="hidden" name="search_course" value="1" />
+                        <div class="input-group">
+                        <input type="text" name="search_term" class="form-control" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
+                            </span>
                         </div>
-                        <div class="panel-body">
-                            <ul class="list-categories">
-                                {{ coursesCategoriesList }}
-                            </ul>
                         </div>
                     </div>
-                </div>
-            {% endif %}
-        {% endif %}
-        <!-- end view catalog course -->
-        <!-- view catalog sessions -->
-        {% if show_sessions %}
-
-            <div class="section-tile">{{ 'Sessions'|get_lang }}</div>
-            <div class="row">
-                <div class="col-md-4">
-                    <form class="form-horizontal" method="post" action="{{ _p.web_self }}?action=display_sessions">
-                        <div class="form-group">
-                            <label class="col-sm-3">{{ "ByDate"|get_lang }}</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-md-4">
-                    <form class="form-horizontal" method="post" action="{{ _p.web_self }}?action=search_tag">
-                        <div class="form-group">
-                            <label class="col-sm-4">{{ "ByTag"|get_lang }}</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <input type="text" name="search_tag" class="form-control" value="{{ search_tag }}" />
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                </form>
+                {% endif %}
             </div>
+            {% endif %}
+            <div class="col-md-8">
+                {% if show_sessions %}
 
-        {% endif %}
+                <div class="section-tile">{{ 'Sessions'|get_lang }}</div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <form class="form-horizontal" method="post" action="{{ _p.web_self }}?action=display_sessions">
+                            <div class="form-group">
+                                <label class="col-sm-3">{{ "ByDate"|get_lang }}</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <form class="form-horizontal" method="post" action="{{ _p.web_self }}?action=search_tag">
+                            <div class="form-group">
+                                <label class="col-sm-4">{{ "ByTag"|get_lang }}</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input type="text" name="search_tag" class="form-control" value="{{ search_tag }}" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {% endif %}
+            </div>
+        </div>
+
+
     </div>
 <section id="session-list">
     <div class="col-md-12">

@@ -6,50 +6,6 @@
             $('#date').datepicker({
                 dateFormat: 'yy-mm-dd'
             });
-
-            $('a[data-session]').on('click', function (e) {
-                e.preventDefault();
-
-                var link = $(this),
-                        sessionId = parseInt(link.data('session')),
-                        collapsible = $('#collapse-' + sessionId),
-                        courseList = link.data('courses') || [];
-
-                if (courseList.length === 0) {
-                    var getCourseList = $.getJSON(
-                            '{{ _p.web_ajax }}course.ajax.php',
-                            {
-                                a: 'display_sessions_courses',
-                                session: sessionId
-                            }
-                    );
-
-                    $.when(getCourseList).done(function (courses) {
-                        courseList = courses;
-                        link.data('courses', courses);
-
-                        var coursesUL = '';
-
-                        $.each(courseList, function (index, course) {
-                            coursesUL += '<li><img src="{{ _p.web }}main/img/check.png"/> <strong>' + course.name + '</strong>';
-
-                            if (course.coachName !== '') {
-                                coursesUL += ' (' + course.coachName + ')';
-                            }
-
-                            coursesUL += '</li>';
-                        });
-
-                        collapsible.html('<div class="panel-body"><ul class="list-unstyled items-session">' + coursesUL + '</ul></div>');
-
-                        collapsible.collapse('show');
-                    });
-                } else {
-                    collapsible.collapse('toggle');
-                }
-            });
-
-            $('.collapse').collapse('hide');
         });
     </script>
 

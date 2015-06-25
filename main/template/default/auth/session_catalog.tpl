@@ -135,9 +135,11 @@
                                 <li class="date-session">
                                     <i class="fa fa-calendar-o"></i> {{ session.date }}
                                 </li>
-                                <li class="tags-session">
-                                    <i class="fa fa-tags"></i>
-                                </li>
+                                {% if session.tags %}
+                                    <li class="tags-session">
+                                        <i class="fa fa-tags"></i> {{ session.tags|join(', ')}}
+                                    </li>
+                                {% endif %}
                             </ul>
                             <div class="requirements">
                                 {% if session.requirements %}
@@ -176,7 +178,9 @@
                     </div>
                 {% else %}
                     <div class="col-xs-12">
-                        {{ message }}
+                        <div class="alert alert-warning">
+                            {{ 'NoResults'|get_lang }}
+                        </div>
                     </div>
                 {% endfor %}
             </div>

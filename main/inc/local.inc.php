@@ -118,7 +118,15 @@
 
 use \ChamiloSession as Session;
 
-//Conditional login
+// Facebook connexion, if activated
+if (api_is_facebook_auth_activated() && !api_get_user_id()) {
+    require_once api_get_path(SYS_PATH).'main/auth/external_login/facebook.inc.php';
+    if (isset($facebook_config['appId']) && isset($facebook_config['secret'])) {
+        facebookConnect();
+    }
+}
+
+// Conditional login
 if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login'] === true) {
     $uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
     ConditionalLogin::check_conditions($uData);

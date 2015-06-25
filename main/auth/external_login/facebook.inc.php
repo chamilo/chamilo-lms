@@ -9,7 +9,7 @@
  *
  * This files provides the facebookConnect()  and facebook_get_url functions
  * Please edit the facebook.conf.php file to adapt it to your fb application parameter
- * */
+ */
 
 require_once dirname(__FILE__) . '/../../inc/global.inc.php';
 require_once dirname(__FILE__) . '/facebook.init.php';
@@ -30,7 +30,7 @@ use Facebook\HttpClients\FacebookHttpable;
 require_once dirname(__FILE__) . '/functions.inc.php';
 
 // dont rename $facebook_config to $facebookConfig otherwise get a "Facebook\\FacebookSDKException"
-FacebookSession::setDefaultApplication( $facebook_config['appId'],$facebook_config['secret']);
+FacebookSession::setDefaultApplication($facebook_config['appId'], $facebook_config['secret']);
 
 /**
  * This function connect to facebook and retrieves the user info
@@ -68,7 +68,7 @@ function facebookConnect()
                 'email' => $graphObject->getProperty('email'),
                 'username' => $username,
                 'language' => $language,
-                'password' => DEFAULT_PASSWORD,
+                'password' => 'facebook',
                 'auth_source' => 'facebook',
                 // 'courses' => $user_info['courses'],
                 // 'profile_link' => $user_info['profile_link'],

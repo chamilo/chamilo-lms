@@ -643,54 +643,34 @@ class Auth
      */
     public function browseSessions($date = null, $limit = array())
     {
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
 
-        $sessionsToBrowse = array();
-        $userId = api_get_user_id();
-        $limitFilter = getLimitFilterFromArray($limit);
-
-        $sql = <<<SQL
-            SELECT s.*, u.lastname, u.firstname, u.username, description,
-                show_description
-            FROM $sessionTable AS s
-            INNER JOIN $userTable AS u
-                ON s.id_coach = u.user_id
-            WHERE 1 = 1
-SQL;
+        $_sessions = $qb->select('s')
+            ->from('ChamiloCoreBundle:Session', 's')
+            ->setFirstResult($limit['start'])
+            ->setMaxResults($limit['length'])
+            ->where(
+                $qb->expr()->gt('s.nbrCourses', 0)
+            );
 
         if (!is_null($date)) {
-            $date = Database::escape_string($date);
-
-            $sql .= <<<SQL
-                AND ('$date' BETWEEN s.access_start_date AND s.access_end_date)
-                OR (s.access_end_date IS NULL)
-                OR (
-                    s.access_start_date IS NULL AND
-                    s.access_end_date IS NOT NULL AND
-                    s.access_end_date > '$date'
+            $_sessions
+                ->andWhere(
+                    $qb->expr()->orX(
+                        $qb->expr()->between(':date', 's.accessStartDate', 's.accessEndDate'),
+                        $qb->expr()->isNull('s.accessEndDate'),
+                        $qb->expr()->andX(
+                            $qb->expr()->isNull('s.accessStartDate'),
+                            $qb->expr()->isNotNull('s.accessEndDate'),
+                            $qb->expr()->gt('s.accessEndDate', ':date')
+                        )
+                    )
                 )
-SQL;
+                ->setParameter('date', $date);
         }
 
-        // Add limit filter to do pagination
-        $sql .= $limitFilter;
-
-        $sessionResult = Database::query($sql);
-
-        if ($sessionResult != false) {
-            while ($session = Database::fetch_assoc($sessionResult)) {
-                if ($session['nbr_courses'] > 0) {
-                    $session['coach_name'] = api_get_person_name($session['firstname'], $session['lastname']);
-                    $session['coach_name'] .= " ({$session['username']})";
-                    $session['is_subscribed'] = SessionManager::isUserSubscribedAsStudent($session['id'], $userId);
-
-                    $sessionsToBrowse[] = $session;
-                }
-            }
-        }
-
-        return $sessionsToBrowse;
+        return $_sessions->getQuery()->getResult();
     }
 
     /**

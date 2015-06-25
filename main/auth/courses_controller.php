@@ -551,7 +551,7 @@ class CoursesController
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
-
+        $userId = api_get_user_id();
         $limit = isset($limit) ? $limit : getLimitArray();
 
         $countSessions = $this->model->countSessions($date);
@@ -578,29 +578,35 @@ class CoursesController
         }
 
         foreach ($sessions as $session) {
-            $sessionDates = SessionManager::parseSessionDates($session);
+            $sessionDates = SessionManager::parseSessionDates([
+                'display_start_date' => $session->getDisplayStartDate(),
+                'display_end_date' => $session->getDisplayEndDate(),
+                'access_start_date' => $session->getAccessStartDate(),
+                'access_end_date' => $session->getAccessEndDate(),
+                'coach_access_start_date' => $session->getCoachAccessStartDate(),
+                'coach_access_end_date' => $session->getCoachAccessEndDate()
+            ]);
 
             $sessionsBlock = array(
-                'id' => $session['id'],
-                'name' => $session['name'],
-                'nbr_courses' => $session['nbr_courses'],
-                'nbr_users' => $session['nbr_users'],
-                'coach_name' => $session['coach_name'],
-                'is_subscribed' => $session['is_subscribed'],
-                'icon' => $this->getSessionIcon($session['name']),
+                'id' => $session->getId(),
+                'name' => $session->getName(),
+                'nbr_courses' => $session->getNbrCourses(),
+                'nbr_users' => $session->getNbrUsers(),
+                'coach_name' => $session->getGeneralCoach()->getCompleteName(),
+                'is_subscribed' => SessionManager::isUserSubscribedAsStudent($session->getId(), $userId),
+                'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
                 'subscribe_button' => $this->getRegisteredInSessionButton(
-                    $session[$key],
+                    $key === 'id' ? $session->getId() : $session->getName(),
                     $catalogSessionAutoSubscriptionAllowed
                 ),
-                'show_description' => $session['show_description'],
+                'show_description' => $session->getShowDescription(),
             );
-
 
             /** @var \Chamilo\CoreBundle\Entity\Repository\SequenceRepository $repo */
             $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
             $requirementAndDependencies = $repo->getRequirementAndDependencies(
-                $session['id'],
+                $session->getId(),
                 SequenceResource::SESSION_TYPE
             );
 

@@ -472,7 +472,6 @@ footer .media{
   color: #555555;
 }
 .section-mycourses .teachers-course{
-  padding-top: 10px;
   padding-bottom: 10px;
 }
 .section-mycourses .teachers-course .fa-pencil-square{
@@ -496,6 +495,10 @@ footer .media{
   font-size: 24px;
   color: #35a8c8;
   margin-right: 10px;
+}
+.progress-session{
+  margin-top: 10px;
+  padding-top: 10px;
 }
 .progress-session .score{
   font-size: 14px;

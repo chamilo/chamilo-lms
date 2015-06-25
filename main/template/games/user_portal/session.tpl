@@ -30,6 +30,51 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+                {% if session.courses|length > 1 %}
+
+                {% for field_value in session.extra_fields %}
+                {% if field_value.field.variable == 'human_text_duration' %}
+                <div class="time-course">
+                    <i class="fa fa-clock-o"></i>
+                    <span class="text-uppercase"> {{ field_value.value }} </span>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+                {% if gamification_mode %}
+                <div class="progress-session">
+                    <div class="row">
+                        <div class="col-xs-7">
+                            <div class="start-progress">
+                                {% if session.stars > 0%}
+                                {% for i in 1..session.stars %}
+                                <i class="fa fa-star"></i>
+                                {% endfor %}
+                                {% endif %}
+                                {% if session.stars < 4 %}
+                                {% for i in 1..4 - session.stars %}
+                                <i class="fa fa-star plomo"></i>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-xs-5 text-right">
+                            <span class="score">{{ 'XPoints'|get_lang|format(session.points) }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ session.progress }}%;">
+                                    <span class="sr-only">{{ session.progress }}% {{ 'Completed'|get_lang }}</span>
+                                </div>
+                            </div>
+                            <div class="text-right">{{ session.progress }}%</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
             </div>
             <div class="col-md-8">
                 {% for course in session.courses %}
@@ -58,7 +103,7 @@
 
                         {% if session.courses|length > 1 %}
                             <div class="row">
-                                <div class="col-md-offset-6 col-md-6">
+                                <div class="col-md-12 text-right">
                                     <a class="btn btn-press" href="{{ course.link }}" role="button">{{ 'Continue'|get_lang }}</a>
                                 </div>
                             </div>
@@ -68,16 +113,13 @@
 
                 <div class="row">
                     <div class="col-md-6">
+                        {% if session.courses|length == 1 %}
                         {% for field_value in session.extra_fields %}
                             {% if field_value.field.variable == 'human_text_duration' %}
-                                <div class="row">
-                                    <div class="col-xs-12">
                                         <div class="time-course">
                                             <i class="fa fa-clock-o"></i>
                                             <span class="text-uppercase"> {{ field_value.value }} </span>
                                         </div>
-                                    </div>
-                                </div>
                             {% endif %}
                         {% endfor %}
 
@@ -113,6 +155,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                         {% endif %}
                     </div>
 

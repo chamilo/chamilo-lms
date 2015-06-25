@@ -118,11 +118,12 @@
 
 use \ChamiloSession as Session;
 
-require_once api_get_path(SYS_PATH).'main/auth/external_login/facebook.inc.php';
-
 // Facebook connexion, if activated
 if (api_is_facebook_auth_activated() && !api_get_user_id()) {
-    facebookConnect();
+    require_once api_get_path(SYS_PATH).'main/auth/external_login/facebook.inc.php';
+    if (isset($facebook_config['appId']) && isset($facebook_config['secret'])) {
+        facebookConnect();
+    }
 }
 
 // Conditional login

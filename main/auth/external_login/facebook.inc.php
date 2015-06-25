@@ -30,7 +30,7 @@ use Facebook\HttpClients\FacebookHttpable;
 require_once dirname(__FILE__) . '/functions.inc.php';
 
 // dont rename $facebook_config to $facebookConfig otherwise get a "Facebook\\FacebookSDKException"
-FacebookSession::setDefaultApplication( $facebook_config['appId'],$facebook_config['secret']);
+FacebookSession::setDefaultApplication($facebook_config['appId'], $facebook_config['secret']);
 
 /**
  * This function connect to facebook and retrieves the user info

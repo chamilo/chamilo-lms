@@ -338,7 +338,6 @@ $Description = "Mô tả tóm tắt";
 $Links = "Liên kết";
 $Works = "Bài làm";
 $Forums = "Diễn đàn";
-$Exercices = "Bài tập";
 $CreateDir = "Tạo thư mục";
 $Name = "Tên";
 $Comment = "Ghi chú";

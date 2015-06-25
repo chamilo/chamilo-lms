@@ -1573,7 +1573,6 @@ $Description = "Aprašymas";
 $Links = "Nuorodos";
 $Works = "Studentų publikacijos";
 $Forums = "Forumai";
-$Exercices = "Testai";
 $CreateDir = "Create a folder";
 $Name = "Vardas";
 $Comment = "Komentaras";

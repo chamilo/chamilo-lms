@@ -1659,7 +1659,6 @@ $Description = "Beskrivelse";
 $Links = "Links";
 $Works = "Studerendes afleveringer";
 $Forums = "Diskussionsforum";
-$Exercices = "Øvelser";
 $CreateDir = "Opret en mappe";
 $Name = "Navn";
 $Comment = "Kommentar";

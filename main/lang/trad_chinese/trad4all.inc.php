@@ -1662,7 +1662,6 @@ $Description = "描述";
 $Links = "連結";
 $Works = "作業論文";
 $Forums = "討論區";
-$Exercices = "測驗";
 $CreateDir = "創建資料夾";
 $Name = "名稱";
 $Comment = "摘要";

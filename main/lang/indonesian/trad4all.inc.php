@@ -1287,7 +1287,6 @@ $Description = "Deskripsi";
 $Links = "Link";
 $Works = "Tugas-tugas";
 $Forums = "Forum";
-$Exercices = "Latihan";
 $CreateDir = "Buat direktori";
 $Name = "Nama";
 $Comment = "Komentar";

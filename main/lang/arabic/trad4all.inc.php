@@ -1849,7 +1849,6 @@ $Description = "وصف";
 $Links = " روابط";
 $Works = " نشرات الطلاب";
 $Forums = "منتديات";
-$Exercices = "اختبارات";
 $CreateDir = "إنشاء مجلد";
 $Name = "الإسم";
 $Comment = "تعليق";

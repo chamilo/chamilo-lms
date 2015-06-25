@@ -1835,7 +1835,6 @@ $Description = "توضیحات";
 $Links = "پیوندها";
 $Works = "تکالیف";
 $Forums = "انجمن ها";
-$Exercices = "آزمون ها";
 $CreateDir = "ساخت پوشه جدید";
 $Name = "نام";
 $Comment = "دیدگاه";

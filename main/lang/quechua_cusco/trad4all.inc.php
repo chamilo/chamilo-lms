@@ -2264,7 +2264,6 @@ $Description = "Nisqasqa";
 $Links = "Waskhanakuna";
 $Works = "Llank'aykuna";
 $Forums = "Rimarinakuykuna";
-$Exercices = "Llank'anapaqkuna";
 $CreateDir = "Wayaqata kamariy";
 $Name = "Suti";
 $Comment = "Ima nisqakuna";

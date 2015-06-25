@@ -339,7 +339,6 @@ $Description = "Penerangan";
 $Links = "Pautan";
 $Works = "Tugasan";
 $Forums = "Forum";
-$Exercices = "Latihan";
 $CreateDir = "Bina Direktori";
 $Name = "Nama";
 $Comment = "Komen";

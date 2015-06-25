@@ -1395,7 +1395,6 @@ $Description = "Descripción";
 $Links = "Enlaces";
 $Works = "Trabajos de Alumnos";
 $Forums = "Foros";
-$Exercices = "Ejercicios";
 $CreateDir = "Crear un directorio";
 $Name = "Nombre";
 $Comment = "Comentario";

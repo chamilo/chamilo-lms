@@ -1186,7 +1186,6 @@ $Description = "Kuvaus";
 $Links = "Linkit";
 $Works = "Tehtäväpalautus";
 $Forums = "Foorumit";
-$Exercices = "Harjoitukset";
 $CreateDir = "Luo hakemisto";
 $Name = "Nimi";
 $Comment = "Kommentti";

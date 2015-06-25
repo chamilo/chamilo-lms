@@ -38,7 +38,6 @@ $TryAndFindSomeFriends = "Finn vinfólk";
 $DateExo = "Dato";
 $Description = "Lýsing";
 $Links = "Leinkjur";
-$Exercices = "Royndir";
 $Name = "Navn";
 $Edit = "Broyt";
 $Language = "Mál";

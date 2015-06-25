@@ -23,9 +23,13 @@
     {% else %}
         <div class="row">
             <div class="col-md-4">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <img src="{{ session.image }}">
-                </div>
+                {% for field_value in session.extra_fields %}
+                    {% if field_value.field.variable == 'image' %}
+                        <div class="thumbnail">
+                            <img src="{{ _p.web_upload ~ field_value.value }}">
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
             <div class="col-md-8">
                 {% for course in session.courses %}
@@ -52,13 +56,6 @@
                             </div>
                         {% endif %}
 
-                        {% if course.human.text.duration %}
-                            <div class="time-course">
-                                <i class="fa fa-clock-o"></i>
-                                <span class="text-uppercase"> {{ course.human.text.duration }} </span>
-                            </div>
-                        {% endif %}
-
                         {% if session.courses|length > 1 %}
                             <div class="row">
                                 <div class="col-md-offset-6 col-md-6">
@@ -71,6 +68,19 @@
 
                 <div class="row">
                     <div class="col-md-6">
+                        {% for field_value in session.extra_fields %}
+                            {% if field_value.field.variable == 'human_text_duration' %}
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="time-course">
+                                            <i class="fa fa-clock-o"></i>
+                                            <span class="text-uppercase"> {{ field_value.value }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
                         {% if gamification_mode %}
                             <div class="row">
                                 <div class="col-xs-7">

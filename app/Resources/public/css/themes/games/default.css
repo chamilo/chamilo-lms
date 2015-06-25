@@ -462,6 +462,10 @@ footer .media{
   padding: 20px;
   margin-bottom: 20px;
 }
+.section-mycourses .current-item .thumbnail {
+    border: 0 none;
+    padding: 0;
+}
 .section-mycourses .description-course{
   padding-top: 10px;
   padding-bottom: 10px;

@@ -553,6 +553,7 @@ class CoursesController
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
         $userId = api_get_user_id();
         $limit = isset($limit) ? $limit : getLimitArray();
+        $extraFieldValue = new ExtraFieldValue('session');
 
         $countSessions = $this->model->countSessions($date);
         $sessions = $this->model->browseSessions($date, $limit);
@@ -587,9 +588,12 @@ class CoursesController
                 'coach_access_end_date' => $session->getCoachAccessEndDate()
             ]);
 
+            $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session->getId(), 'image');
+
             $sessionsBlock = array(
                 'id' => $session->getId(),
                 'name' => $session->getName(),
+                'image' => isset($imageField['value']) ? $imageField['value'] : null,
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
                 'coach_name' => $session->getGeneralCoach()->getCompleteName(),
@@ -651,6 +655,7 @@ class CoursesController
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
         $userId = api_get_user_id();
+        $extraFieldValue = new ExtraFieldValue('session');
 
         $sessionsBlocks = array();
         $sessions = $this->model->browseSessionsByTags($searchTag, $limit);
@@ -673,9 +678,12 @@ class CoursesController
                 'coach_access_end_date' => $session->getCoachAccessEndDate()
             ]);
 
+            $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session->getId(), 'image');
+
             $sessionsBlock = array(
                 'id' => $session->getId(),
                 'name' => $session->getName(),
+                'image' => isset($imageField['value']) ? $imageField['value'] : null,
                 'nbr_courses' => $session->getNbrCourses(),
                 'nbr_users' => $session->getNbrUsers(),
                 'coach_name' => $session->getGeneralCoach()->getCompleteName(),

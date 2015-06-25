@@ -123,8 +123,8 @@
             <div class="row">
                 {% for session in sessions %}
                     <div class="col-md-4">
-                        <div class="item-content" id="session-{{ session.id }}">
-                            <div class="img-session">{{ session.extra_field.image }}</div>
+                        <div class="thumbnail" id="session-{{ session.id }}">
+                            <img src="{{ session.image ? _p.web_upload ~ session.image : _p.web_img ~ 'session_default.png' }}">
                             <h3 class="title-session">{{ session.name }}</h3>
                             <ul class="list-unstyled">
                                 {% if show_tutor %}

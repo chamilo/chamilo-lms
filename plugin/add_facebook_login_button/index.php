@@ -9,7 +9,7 @@ if (api_is_anonymous()) {
     $_template['show_message']   = true;
     // the default title
     $button_url = api_get_path(WEB_PLUGIN_PATH)."add_facebook_login_button/img/cnx_fb.png";
-    $href_link = facebook_get_login_url();
+    $href_link = facebookGetLoginUrl();
     if (!empty($plugin_info['settings']['add_facebook_login_button_facebook_button_url'])) {
         $button_url = api_htmlentities($plugin_info['settings']['add_facebook_login_button_facebook_button_url']);
     }    

@@ -12,7 +12,7 @@ $this_section=SECTION_COURSES;
 
 if (isset($_REQUEST["cancel"])) {
     if ($_REQUEST["cancel"]==get_lang('Cancel')) {
-        header("Location: exercice.php");
+        header("Location: exercise.php");
     }
 }
 
@@ -47,7 +47,7 @@ if (!empty($gradebook) && $gradebook=='view') {
     );
 }
 
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
 
 $nameTools = get_lang('adminHP');
 
@@ -67,7 +67,7 @@ if (isset($newName)) {
     if ($newName!="") {
         //alter database record for that test
         SetComment($hotpotatoesName,$newName);
-        echo "<script language='Javascript' type='text/javascript'> window.location='exercice.php'; </script>";
+        echo "<script language='Javascript' type='text/javascript'> window.location='exercise.php'; </script>";
     }
 }
 

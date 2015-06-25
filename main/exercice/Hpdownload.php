@@ -97,11 +97,11 @@ if ($content_type == 'text/html') {
 	*/
 
 
-    $exercicePath = api_get_self();
-  	$exfile = explode('/',$exercicePath);
+    $exercisePath = api_get_self();
+  	$exfile = explode('/',$exercisePath);
   	$exfile = $exfile[sizeof($exfile)-1];
-  	$exercicePath = substr($exercicePath,0,strpos($exercicePath,$exfile));
-  	$exercicePath = $exercicePath;
+  	$exercisePath = substr($exercisePath,0,strpos($exercisePath,$exfile));
+  	$exercisePath = $exercisePath;
 
 		$content = $file_content;
 		$mit = "function Finish(){";
@@ -114,7 +114,7 @@ if ($content_type == 'text/html') {
 "			SaveScoreVariable = 1;\n".
 "			if (C.ie)\n".
 "			{\n".
-"				document.location.href = \"".$exercicePath."savescores.php?origin=$origin&time=$time&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
+"				document.location.href = \"".$exercisePath."savescores.php?origin=$origin&time=$time&test=".$doc_url."&uid=".$_user['user_id']."&cid=".$cid."&score=\"+Score;\n".
 "				//window.alert(Score);\n".
 "			}\n".
 "			else\n".

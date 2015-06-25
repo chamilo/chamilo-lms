@@ -23,8 +23,8 @@ if (!empty($gradebook) && $gradebook=='view') {
 		);
 }
 
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
-Display::display_header($nameTools,"Exercise");
+$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
+Display::display_header($nameTools,"Exercises");
 ?>
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
 <h4>

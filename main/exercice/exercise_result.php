@@ -62,9 +62,9 @@ if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
 }
 
-$nameTools = get_lang('Exercice');
+$nameTools = get_lang('Exercises');
 
-$interbreadcrumb[]= array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+$interbreadcrumb[]= array("url" => "exercise.php?gradebook=$gradebook","name" => get_lang('Exercises'));
 
 if ($origin != 'learnpath') {
 	// So we are not in learnpath tool
@@ -96,7 +96,7 @@ $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
 if ($origin == 'learnpath') {
 ?>
-	<form method="GET" action="exercice.php?<?php echo api_get_cidreq() ?>">
+	<form method="GET" action="exercise.php?<?php echo api_get_cidreq() ?>">
 	<input type="hidden" name="origin" 					value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" 			value="<?php echo $learnpath_id; ?>" />
     <input type="hidden" name="learnpath_item_id" 		value="<?php echo $learnpath_item_id; ?>" />

@@ -102,8 +102,8 @@ if (empty($exercise_stat_info) || empty($question_list)) {
     api_not_allowed();
 }
 
-$nameTools = get_lang('Exercice');
-$interbreadcrumb[] = array("url" => "exercice.php?".api_get_cidreq(), "name" => get_lang('Exercices'));
+$nameTools = get_lang('Exercises');
+$interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
 
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool

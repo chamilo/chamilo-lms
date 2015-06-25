@@ -20,7 +20,7 @@ if (!$result) {
 	api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
+$interbreadcrumb[] = array ("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 
 //Add the JS needed to use the jqgrid

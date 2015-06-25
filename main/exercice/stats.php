@@ -276,7 +276,7 @@ foreach ($data as $row_table) {
 $content .= $table->toHtml();
 
 
-$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
+$interbreadcrumb[] = array ("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 
 $tpl = new Template(get_lang('ReportByQuestion'));

@@ -37,7 +37,7 @@ $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_i
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
 $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : null;
 
-$interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
+$interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook", "name" => get_lang('Exercises'));
 $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 
 $time_control = false;

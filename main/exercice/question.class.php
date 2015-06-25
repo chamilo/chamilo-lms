@@ -118,7 +118,7 @@ abstract class Question
         }
 
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
         $sql = "SELECT question, description, ponderation, position, type, picture, level, extra
                 FROM $TBL_QUESTIONS
@@ -144,7 +144,7 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id);
 
-                $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION
+                $sql = "SELECT exercice_id FROM $TBL_EXERCISE_QUESTION
                         WHERE c_id = $course_id AND question_id = $id";
                 $result_exercise_list = Database::query($sql);
 
@@ -753,7 +753,7 @@ abstract class Question
      */
     public function save($exerciseId = 0)
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
         $id = $this->id;
@@ -807,7 +807,7 @@ abstract class Question
             // creates a new question
             $sql = "SELECT max(position)
                     FROM $TBL_QUESTIONS as question,
-                        $TBL_EXERCICE_QUESTION as test_question
+                        $TBL_EXERCISE_QUESTION as test_question
                     WHERE
                         question.id = test_question.question_id AND
                         test_question.exercice_id = " . intval($exerciseId) . " AND
@@ -1102,7 +1102,7 @@ abstract class Question
      */
     function removeFromList($exerciseId)
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
         $id = $this->id;
 
@@ -1119,7 +1119,7 @@ abstract class Question
             unset($this->exerciseList[$pos]);
             //update order of other elements
             $sql = "SELECT question_order
-                    FROM $TBL_EXERCICE_QUESTION
+                    FROM $TBL_EXERCISE_QUESTION
                     WHERE
                         c_id = $course_id
                         AND question_id = " . intval($id) . "
@@ -1128,7 +1128,7 @@ abstract class Question
             if (Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
                 if (!empty($row['question_order'])) {
-                    $sql = "UPDATE $TBL_EXERCICE_QUESTION
+                    $sql = "UPDATE $TBL_EXERCISE_QUESTION
                         SET question_order = question_order-1
                         WHERE
                             c_id = $course_id
@@ -1138,7 +1138,7 @@ abstract class Question
                 }
             }
 
-            $sql = "DELETE FROM $TBL_EXERCICE_QUESTION
+            $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
                     WHERE
                         c_id = $course_id
                         AND question_id = " . intval($id) . "
@@ -1161,7 +1161,7 @@ abstract class Question
     {
         $course_id = api_get_course_int_id();
 
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TBL_QUIZ_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
@@ -1171,14 +1171,14 @@ abstract class Question
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
             //update the question_order of each question to avoid inconsistencies
-            $sql = "SELECT exercice_id, question_order FROM $TBL_EXERCICE_QUESTION
+            $sql = "SELECT exercice_id, question_order FROM $TBL_EXERCISE_QUESTION
                     WHERE c_id = $course_id AND question_id = ".intval($id)."";
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 while ($row = Database::fetch_array($res)) {
                     if (!empty($row['question_order'])) {
-                        $sql = "UPDATE $TBL_EXERCICE_QUESTION
+                        $sql = "UPDATE $TBL_EXERCISE_QUESTION
                                 SET question_order = question_order-1
                                 WHERE
                                     c_id= $course_id
@@ -1189,7 +1189,7 @@ abstract class Question
                 }
             }
 
-            $sql = "DELETE FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = " . intval($id) . "";
+            $sql = "DELETE FROM $TBL_EXERCISE_QUESTION WHERE c_id = $course_id AND question_id = " . intval($id) . "";
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id = " . intval($id) . "";
@@ -1595,15 +1595,15 @@ abstract class Question
      */
     static function saveQuestionOption($question_id, $name, $course_id, $position = 0)
     {
-        $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
+        $TBL_EXERCISE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $params['question_id'] = intval($question_id);
         $params['name'] = $name;
         $params['position'] = $position;
         $params['c_id'] = $course_id;
         $result = self::readQuestionOption($question_id, $course_id);
-        $last_id = Database::insert($TBL_EXERCICE_QUESTION_OPTION, $params);
+        $last_id = Database::insert($TBL_EXERCISE_QUESTION_OPTION, $params);
         if ($last_id) {
-            $sql = "UPDATE $TBL_EXERCICE_QUESTION_OPTION SET id = iid WHERE iid = $last_id";
+            $sql = "UPDATE $TBL_EXERCISE_QUESTION_OPTION SET id = iid WHERE iid = $last_id";
             Database::query($sql);
         }
 
@@ -1616,9 +1616,9 @@ abstract class Question
      */
     static function deleteAllQuestionOptions($question_id, $course_id)
     {
-        $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
+        $TBL_EXERCISE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         Database::delete(
-            $TBL_EXERCICE_QUESTION_OPTION,
+            $TBL_EXERCISE_QUESTION_OPTION,
             array(
                 'c_id = ? AND question_id = ?' => array(
                     $course_id,
@@ -1636,11 +1636,11 @@ abstract class Question
      */
     static function updateQuestionOption($id, $params, $course_id)
     {
-        $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(
+        $TBL_EXERCISE_QUESTION_OPTION = Database::get_course_table(
             TABLE_QUIZ_QUESTION_OPTION
         );
         $result = Database::update(
-            $TBL_EXERCICE_QUESTION_OPTION,
+            $TBL_EXERCISE_QUESTION_OPTION,
             $params,
             array('c_id = ? AND id = ?' => array($course_id, $id))
         );
@@ -1654,12 +1654,12 @@ abstract class Question
      */
     static function readQuestionOption($question_id, $course_id)
     {
-        $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(
+        $TBL_EXERCISE_QUESTION_OPTION = Database::get_course_table(
             TABLE_QUIZ_QUESTION_OPTION
         );
         $result = Database::select(
             '*',
-            $TBL_EXERCICE_QUESTION_OPTION,
+            $TBL_EXERCISE_QUESTION_OPTION,
             array(
                 'where' => array(
                     'c_id = ? AND question_id = ?' => array(
@@ -1807,6 +1807,7 @@ abstract class Question
         $tabQuestionList = Question::get_question_type_list(); // [0]=file to include [1]=type name
 
         require_once $tabQuestionList[$type][0];
+        $img = $explanation = null;
         eval('$img = ' . $tabQuestionList[$type][1] . '::$typePicture;');
         eval('$explanation = get_lang(' . $tabQuestionList[$type][1] . '::$explanationLangVar);');
         return array($img, $explanation);

@@ -14,7 +14,7 @@ $this_section=SECTION_COURSES;
 api_protect_course_script(true);
 
 // breadcrumbs
-$interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
 
 // Tool name
 $nameTools=get_lang('AddQuestionToExercise');
@@ -34,17 +34,17 @@ $form->addElement('select', 'question_type_hidden', get_lang('QuestionType'), $q
 //session id
 $session_id  = api_get_session_id();
 
-// the exercices
-$tbl_exercices = Database :: get_course_table(TABLE_QUIZ_TEST);
+// the exercises
+$tbl_exercises = Database :: get_course_table(TABLE_QUIZ_TEST);
 $course_id = api_get_course_int_id();
 
-$sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE c_id = $course_id AND active<>'-1' AND session_id=".$session_id." ORDER BY title ASC";
+$sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercises WHERE c_id = $course_id AND active<>'-1' AND session_id=".$session_id." ORDER BY title ASC";
 $result = Database::query($sql);
-$exercises['-'] = '-'.get_lang('SelectExercice').'-';
+$exercises['-'] = '-'.get_lang('SelectExercise').'-';
 while ($row = Database :: fetch_array($result)) {
 	$exercises[$row['id']] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
 }
-$form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
+$form->addElement('select', 'exercise', get_lang('Exercise'), $exercises);
 
 // generate default content
 $form->addElement('checkbox', 'is_content', null, get_lang('DefaultContent'), array('checked' => true));
@@ -53,8 +53,8 @@ $form->addElement('checkbox', 'is_content', null, get_lang('DefaultContent'), ar
 $form->addButtonCreate(get_lang('CreateQuestion'), 'SubmitCreateQuestion');
 
 // setting the rules
-$form->addRule('exercice', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('exercice', get_lang('YouHaveToSelectATest'), 'numeric');
+$form->addRule('exercise', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('exercise', get_lang('YouHaveToSelectATest'), 'numeric');
 
 $form->registerRule('validquestiontype', 'callback', 'check_question_type');
 $form->addRule('question_type_hidden', get_lang('InvalidQuestionType'), 'validquestiontype');
@@ -64,8 +64,8 @@ if ($form->validate()) {
     $answer_type = $values['question_type_hidden'];
 
 	// check feedback_type from current exercise for type of question delineation
-	$exercise_id = intval($values['exercice']);
-	$sql = "SELECT feedback_type FROM $tbl_exercices WHERE c_id = $course_id AND id = '$exercise_id'";
+	$exercise_id = intval($values['exercise']);
+	$sql = "SELECT feedback_type FROM $tbl_exercises WHERE c_id = $course_id AND id = '$exercise_id'";
 	$rs_feedback_type = Database::query($sql);
 	$row_feedback_type = Database::fetch_row($rs_feedback_type);
 	$feedback_type = $row_feedback_type[0];
@@ -76,14 +76,14 @@ if ($form->validate()) {
 		header('Location: question_create.php?'.api_get_cidreq().'&error=true');
 		exit;
 	}
-	header('Location: admin.php?exerciseId='.$values['exercice'].'&newQuestion=yes&isContent='.$values['is_content'].'&answerType='.$answer_type);
+	header('Location: admin.php?exerciseId='.$values['exercise'].'&newQuestion=yes&isContent='.$values['is_content'].'&answerType='.$answer_type);
 	exit;
 } else {
 	// header
 	Display::display_header($nameTools);
 
 	echo '<div class="actions">';
-	echo '<a href="exercice.php?show=test">'.Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+	echo '<a href="exercise.php?show=test">'.Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
 	echo '</div>';
 
 	// displaying the form

@@ -22,8 +22,8 @@ if (!api_is_allowed_to_edit(null, true)) {
 
 // the breadcrumbs
 $interbreadcrumb[]= array (
-    "url" => api_get_path(WEB_CODE_PATH)."exercice/exercice.php?".api_get_cidreq(),
-    "name" => get_lang('Exercices')
+    "url" => api_get_path(WEB_CODE_PATH)."exercice/exercise.php?".api_get_cidreq(),
+    "name" => get_lang('Exercises')
 );
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
@@ -34,7 +34,7 @@ function ch_qti2_display_form()
 {
     $name_tools = get_lang('ImportQtiQuiz');
     $form  = '<div class="actions">';
-    $form .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?show=test&'.api_get_cidreq().'">'.
+    $form .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercise.php?show=test&'.api_get_cidreq().'">'.
         Display :: return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
     $formValidator = new FormValidator(

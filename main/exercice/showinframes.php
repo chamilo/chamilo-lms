@@ -82,7 +82,7 @@ $htmlHeadXtra[] = '
     });
 </script>';
 
-$interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
+$interbreadcrumb[]= array ("url"=>"./exercise.php", "name"=> get_lang('Exercises'));
 if ($origin == 'learnpath') {
     Display::display_reduced_header($nameTools,"Exercise");
 } else {

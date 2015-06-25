@@ -760,6 +760,7 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, v
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (2, 19, 'video_url', 'VideoUrl', 1, 1);
 
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (3, 16, 'image', 'Image', 1, 1);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0);
 
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '1', 'AtOnce',1);
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (8, '8', 'Daily',2);
@@ -1788,4 +1789,4 @@ VALUES
 ('gamification_mode', '1', 'Yes'),
 ('gamification_mode', '0', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.42' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.43' WHERE variable = 'chamilo_database_version';

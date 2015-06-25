@@ -28,7 +28,7 @@ $entityManager = Database::getManager();
 $fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
 $fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
-$sessionsRepo = $entityManager->getRepository('ChamiloCoreBundle:Session');
+$userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
 
 $videoUrlField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
@@ -60,7 +60,7 @@ foreach ($sessionCourses as $sessionCourse) {
         $courseTags = $fieldTagsRepo->getTags($tagField, $sessionCourse->getId());
     }
 
-    $courseCoaches = $sessionsRepo->getCourseCoachesForCoach($session, $sessionCourse);
+    $courseCoaches = $userRepo->getCoachesForSessionCourse($session, $sessionCourse);
     $coachesData = [];
 
     foreach ($courseCoaches as $courseCoach) {

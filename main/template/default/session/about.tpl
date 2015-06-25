@@ -1,4 +1,10 @@
 <div id="about-session">
+    {% if is_subscribed %}
+        <div class="alert alert-info">
+            {{ 'AlreadyRegisteredToSession'|get_lang }}
+        </div>
+    {% endif %}
+
     {% for course_data in courses %}
         {% if courses|length > 1 %}
             <div class="row">
@@ -29,9 +35,12 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <div class="subscribe">
-                    <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-book"></i> {{ "Subscribe"|get_lang }}</a>
-                </div>
+
+                {% if not is_subscribed %}
+                    <div class="subscribe">
+                        <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-book"></i> {{ "Subscribe"|get_lang }}</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
 

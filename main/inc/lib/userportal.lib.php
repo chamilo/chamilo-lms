@@ -1237,6 +1237,7 @@ class IndexManager
                                 ? ' ' . $session_box['duration']
                                 : null;
 
+                            $params['extra_fields'] = $session_box['extra_fields'];
                             $params['show_link_to_session'] = api_is_drh() ? false : true;
                             $params['title'] = $session_box['title'];
                             $params['subtitle'] = $extra_info;

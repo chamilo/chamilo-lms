@@ -497,8 +497,30 @@ footer .media{
   color: #35a8c8;
   margin-right: 10px;
 }
-.section-mycourses .btn{
-  float: right;
+.progress-session .score{
+  font-size: 14px;
+  color: #35A8C9;
+}
+.progress-session .start-progress .fa-star{
+  color: #E4C200;
+  font-size: 25px;
+}
+.progress-session .start-progress .fa-star.plomo{
+  color:#C2C2C2;
+}
+.progress-session .progress{
+  margin-top: 10px;
+  height: 15px;
+  background-color: #E73858;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+}
+.progress-session .progress .progress-bar{
+  background-color: #35A8C9;
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
 }
 .btn-press{
   background-color: #e73858;

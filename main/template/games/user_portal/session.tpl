@@ -82,23 +82,24 @@
                         {% endfor %}
 
                         {% if gamification_mode %}
+                        <div class="progress-session">
                             <div class="row">
                                 <div class="col-xs-7">
                                     <div class="start-progress">
                                         {% if session.stars > 0%}
                                             {% for i in 1..session.stars %}
-                                                <i class="fa fa-star fa-2x"></i>
+                                                <i class="fa fa-star"></i>
                                             {% endfor %}
                                         {% endif %}
                                         {% if session.stars < 4 %}
                                             {% for i in 1..4 - session.stars %}
-                                                <i class="fa fa-star-o fa-2x"></i>
+                                                <i class="fa fa-star plomo"></i>
                                             {% endfor %}
                                         {% endif %}
                                     </div>
                                 </div>
                                 <div class="col-xs-5 text-right">
-                                    <span>{{ 'XPoints'|get_lang|format(session.points) }}</span>
+                                    <span class="score">{{ 'XPoints'|get_lang|format(session.points) }}</span>
                                 </div>
                             </div>
                             <div class="row">
@@ -111,12 +112,13 @@
                                     <div class="text-right">{{ session.progress }}%</div>
                                 </div>
                             </div>
+                        </div>
                         {% endif %}
                     </div>
 
                     {% if session.courses|length == 1 %}
                         {% set course = session.courses|first %}
-                        <div class="col-md-6">
+                        <div class="col-md-6 text-right">
                             <a class="btn btn-press" href="{{ course.link }}" role="button">{{ 'Continue'|get_lang }}</a>
                         </div>
                     {% endif %}

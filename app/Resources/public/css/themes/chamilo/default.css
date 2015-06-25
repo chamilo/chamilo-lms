@@ -139,14 +139,15 @@ a:focus {
 .navbar-inverse li a{
   line-height: 30px;
   background: none !important;
-  border-right:1px solid rgba(0, 0, 0, 0.2) !important;
-  border-left:1px solid rgba(255, 255, 255, 0.1) !important;
   font-size: 12px;
   font-weight: normal;
   padding-top: 5px;
   padding-right: 10px;
   padding-left: 10px;
   padding-bottom: 5px;
+}
+.navbar-fixed-top .navbar-collapse{
+  min-height:auto;
 }
 .navbar-inverse .navbar-brand{
   padding: 10px;

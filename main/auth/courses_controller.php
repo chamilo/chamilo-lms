@@ -501,7 +501,7 @@ class CoursesController
             api_get_path(WEB_CODE_PATH)."inc/email_editor.php?action=subscribe_me_to_session&session=".
             Security::remove_XSS($sessionData);
 
-        $result = Display::url(get_lang('Subscribe'), $url, array(
+        $result = Display::url('<i class="fa fa-check-circle"></i> '.get_lang('Subscribe'), $url, array(
             'class' => 'btn btn-large btn-primary',
         ));
 

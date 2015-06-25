@@ -13,7 +13,7 @@
         <div class="row">
             {% if show_courses %}
                 <div class="col-md-4">
-                    <div class="section-tile">{{ 'Courses'|get_lang }}</div>
+                    <div class="section-title-catalog">{{ 'Courses'|get_lang }}</div>
                     {% if not hidden_links %}
                         <form class="form-horizontal" method="post" action="{{ course_url }}">
                             <div class="form-group">
@@ -35,7 +35,7 @@
 
             <div class="col-md-8">
                 {% if show_sessions %}
-                    <div class="section-tile">{{ 'Sessions'|get_lang }}</div>
+                    <div class="section-title-catalog">{{ 'Sessions'|get_lang }}</div>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -78,58 +78,63 @@
         <div class="col-md-12">
             <div class="row">
                 {% for session in sessions %}
-                    <div class="col-md-4">
-                        <div class="thumbnail" id="session-{{ session.id }}">
+                    <div class="col-md-3">
+                        <div class="item" id="session-{{ session.id }}">
                             <img src="{{ session.image ? _p.web_upload ~ session.image : _p.web_img ~ 'session_default.png' }}">
-                            <h3 class="title-session">{{ session.name }}</h3>
-                            <ul class="list-unstyled">
-                                {% if show_tutor %}
+
+                            <div class="information-item">
+                                <h3 class="title-session">
+                                    <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}" title="{{ session.name }}">
+                                        {{ session.name }}
+                                    </a>
+                                </h3>
+                                <ul class="list-unstyled">
+                                    {% if show_tutor %}
                                     <li class="author-session">
                                         <i class="fa fa-user"></i> {{ session.coach_name }}
                                     </li>
-                                {% endif %}
-                                <li class="date-session">
-                                    <i class="fa fa-calendar-o"></i> {{ session.date }}
-                                </li>
-                                {% if session.tags %}
+                                    {% endif %}
+                                    <li class="date-session">
+                                        <i class="fa fa-calendar-o"></i> {{ session.date }}
+                                    </li>
+                                    {% if session.tags %}
                                     <li class="tags-session">
                                         <i class="fa fa-tags"></i> {{ session.tags|join(', ')}}
                                     </li>
-                                {% endif %}
-                            </ul>
-                            <div class="requirements">
-                                {% if session.requirements %}
+                                    {% endif %}
+                                </ul>
+                                <div class="requirements">
+                                    {% if session.requirements %}
                                     <h4>{{ 'Requirements'|get_lang }}</h4>
                                     <p>
                                         {% for requirement in session.requirements %}
-                                            {{ requirement.name  }}
+                                        {{ requirement.name  }}
                                         {% endfor %}
                                     </p>
-                                {% endif %}
+                                    {% endif %}
 
-                                {% if session.dependencies %}
+                                    {% if session.dependencies %}
                                     <h4>{{ 'Dependencies'|get_lang }}</h4>
                                     <p>
                                         {% for dependency in session.dependencies %}
-                                            {{ dependency.name  }}
+                                        {{ dependency.name  }}
                                         {% endfor %}
                                     </p>
-                                {% endif %}
-                            </div>
-                            <div class="options">
-                                <p>
-                                    <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}" class="btn btn-block btn-info">
-                                        <i class="fa fa-info-circle"></i> {{ "SeeInformation"|get_lang }}
-                                    </a>
-                                </p>
-                                <p class="buttom-subscribed">
-                                    {% if session.is_subscribed %}
-                                        {{ already_subscribed_label }}
-                                    {% else %}
-                                        {{ session.subscribe_button }}
                                     {% endif %}
-                                </p>
+                                </div>
+                                <div class="options">
+
+                                    <p class="buttom-subscribed">
+                                        {% if session.is_subscribed %}
+                                        {{ already_subscribed_label }}
+                                        {% else %}
+                                        {{ session.subscribe_button }}
+                                        {% endif %}
+                                    </p>
+                                </div>
                             </div>
+
+
                         </div>
                     </div>
                 {% else %}

@@ -7049,4 +7049,41 @@ class SessionManager
         return $progress / count($courses);
     }
 
+    /**
+     * Get the achieved points in a session when gamification mode is activated
+     * @param int $sessionId The session id
+     * @return int The count of points
+     */
+    public static function getPointsFromGamification($sessionId)
+    {
+        $totalPoints = 0;
+        $userId = api_get_user_id();
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+
+        if (empty($courses)) {
+            return 0;
+        }
+
+        foreach ($courses as $course) {
+            $learnPathListObject = new LearnpathList($userId, $course['code'], $sessionId);
+            $learnPaths = $learnPathListObject->get_flat_list();
+
+            $score = 0;
+
+            foreach ($learnPaths as $learnPathId => $learnPathInfo) {
+                if (empty($learnPathInfo['seriousgame_mode'])) {
+                    continue;
+                }
+
+                $learnPath = new learnpath($course['code'], $learnPathId, $userId);
+
+                $score += $learnPath->getCalculateScore();
+            }
+
+            $totalPoints += $score;
+        }
+
+        return $totalPoints / count($courses);
+    }
+
 }

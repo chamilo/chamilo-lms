@@ -23,9 +23,13 @@
     {% else %}
         <div class="row">
             <div class="col-md-4">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <img src="{{ session.image }}">
-                </div>
+                {% for field_value in session.extra_fields %}
+                    {% if field_value.field.variable == 'image' %}
+                        <div class="thumbnail">
+                            <img src="{{ _p.web_upload ~ field_value.value }}">
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
             <div class="col-md-8">
                 {% for course in session.courses %}
@@ -40,14 +44,15 @@
 
                         {% if course.coaches %}
                             <div class="teachers-course">
-                                <i class="fa fa-pencil-square"></i> {{ course.coaches }}
-                            </div>
-                        {% endif %}
+                                {% if course.coaches|length > 0 %}
+                                    <i class="fa fa-pencil-square"></i>
 
-                        {% if course.human.text.duration %}
-                            <div class="time-course">
-                                <i class="fa fa-clock-o"></i>
-                                <span class="text-uppercase"> {{ course.human.text.duration }} </span>
+                                    {% for coach in course.coaches %}
+                                        <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}" class="ajax">
+                                            <span><i class="fa fa-square"></i> {{ coach.full_name }}</span>
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         {% endif %}
 
@@ -63,6 +68,19 @@
 
                 <div class="row">
                     <div class="col-md-6">
+                        {% for field_value in session.extra_fields %}
+                            {% if field_value.field.variable == 'human_text_duration' %}
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="time-course">
+                                            <i class="fa fa-clock-o"></i>
+                                            <span class="text-uppercase"> {{ field_value.value }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
                         {% if gamification_mode %}
                             <div class="row">
                                 <div class="col-xs-7">
@@ -78,6 +96,9 @@
                                             {% endfor %}
                                         {% endif %}
                                     </div>
+                                </div>
+                                <div class="col-xs-5 text-right">
+                                    <span>{{ 'XPoints'|get_lang|format(session.points) }}</span>
                                 </div>
                             </div>
                             <div class="row">

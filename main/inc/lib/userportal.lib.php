@@ -1239,6 +1239,7 @@ class IndexManager
                                 ? ' ' . $session_box['duration']
                                 : null;
 
+                            $params['extra_fields'] = $session_box['extra_fields'];
                             $params['show_link_to_session'] = api_is_drh() ? false : true;
                             $params['title'] = $session_box['title'];
                             $params['subtitle'] = $extra_info;
@@ -1263,6 +1264,7 @@ class IndexManager
                             if ($gamificationModeIsActive) {
                                 $params['stars'] = SessionManager::getNumberOfStarsFromGamification($params['id']);
                                 $params['progress'] = SessionManager::getProgressFromGamification($params['id']);
+                                $params['points'] = SessionManager::getPointsFromGamification($params['id']);
                             }
 
                             $this->tpl->assign('session', $params);

@@ -1602,6 +1602,25 @@ class Display
             $session['description'] = $session_info['description'];
             $session['show_description'] = $session_info['show_description'];
 
+            $entityManager = Database::getManager();
+            $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
+            $extraFieldValues = $fieldValuesRepo->getVisibleValues(
+                Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE,
+                $session_id
+            );
+
+            $session['extra_fields'] = [];
+
+            foreach ($extraFieldValues as $value) {
+                $session['extra_fields'][] = [
+                    'field' => [
+                        'variable' => $value->getField()->getVariable(),
+                        'display_text' => $value->getField()->getDisplayText()
+                    ],
+                    'value' => $value->getValue()
+                ];
+            }
+
             $output = $session;
         }
         return $output;

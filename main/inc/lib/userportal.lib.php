@@ -1089,6 +1089,8 @@ class IndexManager
     {
         global $_configuration;
 
+        $gamificationModeIsActive = api_get_setting('gamification_mode');
+
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
         if ($load_history) {
             // Load sessions in category in *history*
@@ -1259,7 +1261,15 @@ class IndexManager
                                 $params['show_simple_session_info'] = true;
                             }
 
+                            if ($gamificationModeIsActive) {
+                                $params['stars'] = SessionManager::getNumberOfStarsFromGamification($params['id']);
+                                $params['progress'] = SessionManager::getProgressFromGamification($params['id']);
+                                $params['points'] = SessionManager::getPointsFromGamification($params['id']);
+                            }
+
                             $this->tpl->assign('session', $params);
+                            $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
+
                             $sessions_with_no_category .= $this->tpl->fetch(
                                 "{$this->tpl->templateFolder}/user_portal/session.tpl"
                             );

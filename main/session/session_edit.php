@@ -87,7 +87,7 @@ $formAction .= http_build_query(array(
 
 $form = new FormValidator('edit_session', 'post', $formAction);
 $form->addElement('header', $tool_name);
-$result = SessionManager::setForm($form);
+$result = SessionManager::setForm($form, $id);
 
 $htmlHeadXtra[] = '
 <script>

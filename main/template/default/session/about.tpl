@@ -21,8 +21,8 @@
         {% set course_video = '' %}
 
         {% for extra_field in course_data.extra_fields %}
-            {% if extra_field.getField().getVariable() == 'video_url' %}
-                {% set course_video = extra_field.getValue() %}
+            {% if extra_field.value.getField().getVariable() == 'video_url' %}
+                {% set course_video = extra_field.value.getValue() %}
             {% endif %}
         {% endfor %}
 
@@ -109,8 +109,8 @@
 
                                         {% for extra_field in coach.extra_fields %}
                                             <dl>
-                                                <dt>{{ extra_field.field }}</dt>
-                                                <dd>{{ extra_field.value }}</dd>
+                                                <dt>{{ extra_field.value.getField().getDisplayText() }}</dt>
+                                                <dd>{{ extra_field.value.getValue() }}</dd>
                                             </dl>
                                         {% endfor %}
                                     </div>

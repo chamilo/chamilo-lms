@@ -6247,7 +6247,7 @@ class SessionManager
      *
      * @return array
      */
-    public static function setForm(FormValidator & $form)
+    public static function setForm(FormValidator & $form, $sessionId = 0)
     {
         $categoriesList = SessionManager::get_all_session_category();
         $userInfo = api_get_user_info();
@@ -6479,7 +6479,7 @@ class SessionManager
 
         // Extra fields
         $extra_field = new ExtraField('session');
-        $extra = $extra_field->addElements($form, null);
+        $extra = $extra_field->addElements($form, $sessionId);
 
         $form->addElement('html','</div>');
 

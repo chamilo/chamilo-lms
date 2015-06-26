@@ -26,7 +26,6 @@ $courses = [];
 
 $entityManager = Database::getManager();
 $fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
-$fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
 $fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 $userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
 
@@ -35,12 +34,11 @@ $tagField = $fieldsRepo->findOneBy([
     'variable' => 'tags'
 ]);
 
-foreach ($sessionCourses as $sessionCourse) {
-    $courseFieldValues = $fieldValuesRepo->getVisibleValues(
-        Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
-        $sessionCourse->getId()
-    );
+$courseValues = new ExtraFieldValue('course');
+$userValues = new ExtraFieldValue('user');
+$sessionValues = new ExtraFieldValue('session');
 
+foreach ($sessionCourses as $sessionCourse) {
     $courseTags = [];
 
     if (!is_null($tagField)) {
@@ -54,20 +52,8 @@ foreach ($sessionCourses as $sessionCourse) {
         $coachData = [
             'complete_name' => $courseCoach->getCompleteName(),
             'image' => UserManager::getUserPicture($courseCoach->getId(), USER_IMAGE_SIZE_ORIGINAL),
-            'extra_fields' => []
+            'extra_fields' => $userValues->getAllValuesForAnItem($courseCoach->getId(), true)
         ];
-
-        $extraFieldValues = $fieldValuesRepo->getVisibleValues(
-            ExtraField::USER_FIELD_TYPE,
-            $courseCoach->getId()
-        );
-
-        foreach ($extraFieldValues as $value) {
-            $coachData['extra_fields'][] = [
-                'field' => $value->getField()->getDisplayText(),
-                'value' => $value->getValue()
-            ];
-        }
 
         $coachesData[] = $coachData;
     }
@@ -107,7 +93,7 @@ foreach ($sessionCourses as $sessionCourse) {
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,
         'coaches' => $coachesData,
-        'extra_fields' => $courseFieldValues
+        'extra_fields' => $courseValues->getAllValuesForAnItem($sessionCourse->getId())
     ];
 }
 
@@ -135,6 +121,10 @@ $template->assign(
 );
 $template->assign('courses', $courses);
 $template->assign('essence', \Essence\Essence::instance());
+$template->assign(
+    'session_extra_fields',
+    $sessionValues->getAllValuesForAnItem($session->getId(), true)
+);
 
 $templateFolder = api_get_configuration_value('default_template');
 

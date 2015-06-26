@@ -1,5 +1,13 @@
 <div id="about-session">
     {% for course_data in courses %}
+        {% set course_video = '' %}
+
+        {% for extra_field in course_data.extra_fields %}
+            {% if extra_field.value.getField().getVariable() == 'video_url' %}
+                {% set course_video = extra_field.value.getValue() %}
+            {% endif %}
+        {% endfor %}
+
         {% if courses|length > 1 %}
             <div class="row">
                 <div class="col-xs-12">
@@ -9,15 +17,15 @@
         {% endif %}
 
         <div class="row">
-            {% if course_data.video %}
+            {% if course_video %}
                 <div class="col-sm-6 col-md-7">
                     <div class="embed-responsive embed-responsive-16by9">
-                        {{ course_data.video }}
+                        {{ essence.replace(course_video) }}
                     </div>
                 </div>
             {% endif %}
 
-            <div class="{{ course_data.video ? 'col-sm-6 col-md-5' : 'col-sm-12' }}">
+            <div class="{{ course_video ? 'col-sm-6 col-md-5' : 'col-sm-12' }}">
                 <div class="block">
                     <div class="description-course">
                         <i class="fa fa-square"></i>
@@ -37,9 +45,12 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-                    <div class="subscribe text-right">
-                        <a href="#" class="btn btn-success">{{ "Subscribe"|get_lang }}</a>
-                    </div>
+
+                    {% if not is_subscribed %}
+                        <div class="subscribe text-right">
+                            <a href="#" class="btn btn-success">{{ "Subscribe"|get_lang }}</a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -90,7 +101,7 @@
                                             <div class="col-xs-7 col-md-7">
                                                 <h4><i class="fa fa-circle"></i> {{ coach.complete_name }}</h4>
                                                 {% for extra_field in coach.extra_fields %}
-                                                    <div class="extras-field">{{ extra_field.value }}</div>
+                                                    <div class="extras-field">{{ extra_field.value.getValue() }}</div>
                                                 {% endfor %}
                                             </div>
                                             <div class="col-xs-5 col-md-5">
@@ -123,12 +134,15 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="subscribe text-center">
-                    <a href="#" class="btn btn-success btn-lg">{{ "Subscribe"|get_lang }}</a>
+
+        {% if not is_subscribed %}
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <div class="subscribe text-center">
+                        <a href="#" class="btn btn-success btn-lg">{{ "Subscribe"|get_lang }}</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     {% endfor %}
 </div>

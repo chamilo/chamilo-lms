@@ -1509,14 +1509,11 @@ function api_get_user_info(
         }
 
         if ($loadExtraData) {
-            $extraFieldValues = new ExtraFieldValue('user');
-            $values = $extraFieldValues->getAllValuesByItem($user_id);
+            $fieldValue = new ExtraFieldValue('user');
 
-            if (!empty($values)) {
-                foreach ($values as $value) {
-                    $result_array['extra'][$value['variable']] = $value['value'];
-                }
-            }
+            $result_array['extra'] = $fieldValue->getAllValuesForAnItem(
+                $user_id
+            );
         }
         $user = _api_format_user($result_array, $showPassword);
 

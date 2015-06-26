@@ -1487,7 +1487,7 @@ class SocialManager extends UserManager
             $profileEditionLink = Display::getProfileEditionLink($userId);
         }
 
-        $userInfo = api_get_user_info($userId, true);
+        $userInfo = api_get_user_info($userId, true, false, true);
         $template->assign('user', $userInfo);
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);

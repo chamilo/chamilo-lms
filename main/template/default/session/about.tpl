@@ -1,4 +1,16 @@
 <div id="about-session">
+    <p><i class="fa fa-clock-o"></i> <em>{{ session_date.display }}</em></p>
+
+    {% if show_tutor %}
+        <p><i class="fa fa-user"></i> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em></p>
+    {% endif %}
+
+    {% if session.getShowDescription() %}
+        <div class="lead">
+            {{ session.getDescription() }}
+        </div>
+    {% endif %}
+
     {% if is_subscribed %}
         <div class="alert alert-info">
             {{ 'AlreadyRegisteredToSession'|get_lang }}
@@ -6,6 +18,14 @@
     {% endif %}
 
     {% for course_data in courses %}
+        {% set course_video = '' %}
+
+        {% for extra_field in course_data.extra_fields %}
+            {% if extra_field.getField().getVariable() == 'video_url' %}
+                {% set course_video = extra_field.getValue() %}
+            {% endif %}
+        {% endfor %}
+
         {% if courses|length > 1 %}
             <div class="row">
                 <div class="col-xs-12">
@@ -15,15 +35,15 @@
         {% endif %}
 
         <div class="row">
-            {% if course_data.video %}
+            {% if course_video %}
                 <div class="col-sm-6 col-md-7">
                     <div class="embed-responsive embed-responsive-16by9">
-                        {{ course_data.video }}
+                        {{ essence.replace(course_video) }}
                     </div>
                 </div>
             {% endif %}
 
-            <div class="{{ course_data.video ? 'col-sm-6 col-md-5' : 'col-sm-12' }}">
+            <div class="{{ course_video ? 'col-sm-6 col-md-5' : 'col-sm-12' }}">
                 <div class="description-course">
                     {{ course_data.description.getContent }}
                 </div>

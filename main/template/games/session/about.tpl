@@ -1,3 +1,11 @@
+{% set session_human_text_duration = '' %}
+
+{% for extra_field in session_extra_fields %}
+    {% if extra_field.value.getField().getVariable() == 'human_text_duration' %}
+        {% set session_human_text_duration = extra_field.value.getValue() %}
+    {% endif %}
+{% endfor %}
+
 <div id="about-session">
     {% for course_data in courses %}
         {% set course_video = '' %}
@@ -34,9 +42,12 @@
                         <i class="fa fa-square"></i>
                         {{ course_data.description.getContent }}
                     </div>
-                    <div class="time-course">
-                        <i class="fa fa-clock-o"></i> <span>3 Horas</span>
-                    </div>
+
+                    {% if session_human_text_duration and courses|length == 1 %}
+                        <div class="time-course">
+                            <i class="fa fa-clock-o"></i> <span>{{ session_human_text_duration }}</span>
+                        </div>
+                    {% endif %}
 
                     {% if course_level %}
                         <div class="level-course">

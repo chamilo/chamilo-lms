@@ -1,10 +1,13 @@
 <div id="about-session">
     {% for course_data in courses %}
         {% set course_video = '' %}
+        {% set course_level = '' %}
 
         {% for extra_field in course_data.extra_fields %}
             {% if extra_field.value.getField().getVariable() == 'video_url' %}
                 {% set course_video = extra_field.value.getValue() %}
+            {% elseif extra_field.value.getField().getVariable() == 'level' %}
+                {% set course_level = extra_field.option.getDisplayText() %}
             {% endif %}
         {% endfor %}
 
@@ -34,9 +37,13 @@
                     <div class="time-course">
                         <i class="fa fa-clock-o"></i> <span>3 Horas</span>
                     </div>
-                    <div class="level-course">
-                        <i class="fa fa-star-o"></i> <span>Intermedio</span>
-                    </div>
+
+                    {% if course_level %}
+                        <div class="level-course">
+                            <i class="fa fa-star-o"></i> <span>{{ course_level }}</span>
+                        </div>
+                    {% endif %}
+
                     {% if course_data.tags %}
                         <div class="tags-course">
                             <i class="fa fa-check-square-o"></i>

@@ -1339,12 +1339,10 @@ EOF;
                         );
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
-                            $cleanImagePath = str_replace(api_get_path(SYS_PATH), '', $extraData[$fieldVariable]);
-                            $webImagePath = api_get_path(WEB_PATH) . $cleanImagePath;
 
-                            if (file_exists(api_get_path(SYS_PATH) . $cleanImagePath)) {
+                            if (file_exists(api_get_path(SYS_UPLOAD_PATH) . $extraData[$fieldVariable])) {
                                 $fieldTexts[] = Display::img(
-                                    $webImagePath,
+                                    api_get_path(WEB_UPLOAD_PATH) . $extraData[$fieldVariable],
                                     $field_details['display_text'],
                                     array('width' => '300')
                                 );
@@ -1406,13 +1404,10 @@ EOF;
                         if (is_array($extraData) &&
                             array_key_exists($fieldVariable, $extraData)
                         ) {
-                            $cleanFilePath = str_replace(api_get_path(SYS_PATH), '', $extraData[$fieldVariable]);
-                            $webFilePath = api_get_path(WEB_PATH) . $cleanFilePath;
-
-                            if (file_exists(api_get_path(SYS_PATH) . $cleanFilePath)) {
+                            if (file_exists(api_get_path(SYS_UPLOAD_PATH) . $extraData[$fieldVariable])) {
                                 $fieldTexts[] = Display::url(
-                                    $webFilePath,
-                                    $webFilePath,
+                                    api_get_path(WEB_UPLOAD_PATH) . $extraData[$fieldVariable],
+                                    api_get_path(WEB_UPLOAD_PATH) . $extraData[$fieldVariable],
                                     array(
                                         'title' => $field_details['display_text'],
                                         'target' => '_blank'

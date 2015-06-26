@@ -75,7 +75,7 @@ a:focus {
   -webkit-filter: none;
   filter: none;
   border: 1px solid rgba(0, 0, 0, 0.6);
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  text-shadow: none;
 }
 .nav > li > a{
    padding: 10px 15px;
@@ -86,9 +86,10 @@ a:focus {
   line-height: 21px;
   padding-top: 12.5px;
   padding-bottom: 12.5px;
-  background: url("images/border-line.png") no-repeat 100% 50%;
 }
-
+.navbar-collapse{
+  overflow: hidden !important;
+}
 .navbar-default .navbar-nav > li > a:focus,
 .navbar-default .navbar-nav > li > a:hover {
   color: #A4DC2D;
@@ -110,7 +111,7 @@ a:focus {
 }
 .navbar-nav > li > .dropdown-menu{
   min-width: 100%;
-  margin-top: 5px;
+  margin-top: 2px;
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -136,12 +137,33 @@ a:focus {
 }
 
 .navbar-inverse li a{
-  line-height: 26px !important;
+  line-height: 30px;
   background: none !important;
-  border-right:1px solid rgba(0, 0, 0, 0.2) !important;
-  border-left:1px solid rgba(255, 255, 255, 0.1) !important;
+  font-size: 12px;
+  font-weight: normal;
+  padding-top: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px;
 }
-
+.navbar-fixed-top .navbar-collapse{
+  min-height:auto;
+}
+.navbar-inverse .navbar-brand{
+  padding: 10px;
+  font-size: 14px;
+  height: auto;
+}
+.navbar-form .form-control{
+  height: 25px;
+  padding: 6px;
+}
+.navbar-fixed-top{
+  min-height: 40px;
+}
+.navbar-fixed-top .dropdown-menu li a{
+  line-height: 20px;
+}
 .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus{
   color: #ffffff;
 }

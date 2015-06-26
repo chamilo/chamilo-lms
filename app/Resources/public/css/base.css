@@ -211,7 +211,18 @@ ul#navigation .report a {
     background-color: #FFFFFF;
 }
 .buttom-subscribed .btn{
-    display: block;
+    font-size: 12px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.buttom-subscribed .btn.btn-primary{
+  background-color: #EF3E3E;
+  border: none;
+}
+.buttom-subscribed .btn.btn-primary:hover{
+  background-color: #CE2121;
 }
 .session-group .items-session{
     list-style: none;
@@ -221,6 +232,7 @@ ul#navigation .report a {
 .session-group .items-session li{
     padding-bottom: 5px;
 }
+
 /* SESSION CATALOG END*/
 
 #main .nav .dropdown {
@@ -6057,6 +6069,51 @@ div#chat-remote-video video {
   border: 1px solid #ddd;
   width: 100px;
   height: 100px;
+}
+/* Catalog session */
+#session-list .col-md-4:nth-child(3n+1) {
+  clear: left;
+}
+.section-title-catalog{
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+#session-list .title-session{
+  font-size: 16px;
+  line-height: 1.2;
+  height: 40px;
+  margin-top: 5px;
+}
+#session-list .item{
+  display: block;
+  padding: 0;
+  border: 1px solid #dddddd;
+  margin-bottom: 20px;
+}
+#session-list .item img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+#session-list .information-item{
+  padding: 10px;
+}
+#session-list .author-session,
+#session-list .date-session{
+  font-size: 12px;
+  color: #666666;
+}
+#session-list .author-session .fa-user,
+#session-list .date-session .fa-calendar-o{
+  color: #00829C;
+  margin-right: 10px;
+}
+#session-list .options p{
+  margin: 0;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

@@ -14,7 +14,7 @@ $cidReset = true;
 
 require_once 'main/inc/global.inc.php';
 require_once 'main/chat/chat_functions.lib.php';
-require_once 'main/auth/external_login/facebook.inc.php';
+//require_once 'main/auth/external_login/facebook.inc.php';
 
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
@@ -25,10 +25,10 @@ if (!api_is_anonymous()) {
 }
 
 // Facebook connexion, if activated
-if (api_is_facebook_auth_activated() && !api_get_user_id()) {
+/*if (api_is_facebook_auth_activated() && !api_get_user_id()) {
     facebookConnect();
 }
-
+*/
 $controller = new IndexManager($header_title);
 
 //Actions

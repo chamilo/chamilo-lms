@@ -26,35 +26,20 @@ $courses = [];
 
 $entityManager = Database::getManager();
 $fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
-$fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
 $fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 $userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
 
-$videoUrlField = $fieldsRepo->findOneBy([
-    'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
-    'variable' => 'video_url'
-]);
 $tagField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
     'variable' => 'tags'
 ]);
 
+$courseValues = new ExtraFieldValue('course');
+$userValues = new ExtraFieldValue('user');
+$sessionValues = new ExtraFieldValue('session');
+
 foreach ($sessionCourses as $sessionCourse) {
-    $courseVideo = null;
     $courseTags = [];
-
-    if (!is_null($videoUrlField)) {
-        $videoUrlValue = $fieldValuesRepo->findOneBy([
-            'field' => $videoUrlField,
-            'itemId' => $sessionCourse->getId()
-        ]);
-
-        if (!is_null($videoUrlValue)) {
-            $essence = \Essence\Essence::instance();
-
-            $courseVideo = $essence->replace($videoUrlValue->getValue());
-        }
-    }
 
     if (!is_null($tagField)) {
         $courseTags = $fieldTagsRepo->getTags($tagField, $sessionCourse->getId());
@@ -67,20 +52,8 @@ foreach ($sessionCourses as $sessionCourse) {
         $coachData = [
             'complete_name' => $courseCoach->getCompleteName(),
             'image' => UserManager::getUserPicture($courseCoach->getId(), USER_IMAGE_SIZE_ORIGINAL),
-            'extra_fields' => []
+            'extra_fields' => $userValues->getAllValuesForAnItem($courseCoach->getId(), true)
         ];
-
-        $extraFieldValues = $fieldValuesRepo->getVisibleValues(
-            ExtraField::USER_FIELD_TYPE,
-            $courseCoach->getId()
-        );
-
-        foreach ($extraFieldValues as $value) {
-            $coachData['extra_fields'][] = [
-                'field' => $value->getField()->getDisplayText(),
-                'value' => $value->getValue()
-            ];
-        }
 
         $coachesData[] = $coachData;
     }
@@ -115,19 +88,30 @@ foreach ($sessionCourses as $sessionCourse) {
 
     $courses[] = [
         'course' => $sessionCourse,
-        'video' => $courseVideo,
         'description' => $courseDescription,
         'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,
-        'coaches' => $coachesData
+        'coaches' => $coachesData,
+        'extra_fields' => $courseValues->getAllValuesForAnItem($sessionCourse->getId())
     ];
 }
 
+$sessionDates = SessionManager::parseSessionDates([
+    'display_start_date' => $session->getDisplayStartDate(),
+    'display_end_date' => $session->getDisplayEndDate(),
+    'access_start_date' => $session->getAccessStartDate(),
+    'access_end_date' => $session->getAccessEndDate(),
+    'coach_access_start_date' => $session->getCoachAccessStartDate(),
+    'coach_access_end_date' => $session->getCoachAccessEndDate()
+]);
+
 /* View */
 $template = new Template($session->getName(), true, true, false, true, false);
+$template->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
 $template->assign('pageUrl', api_get_path(WEB_PATH) . "session/{$session->getId()}/about/");
 $template->assign('session', $session);
+$template->assign('session_date', $sessionDates);
 $template->assign(
     'is_subscribed',
     SessionManager::isUserSubscribedAsStudent(
@@ -136,6 +120,11 @@ $template->assign(
     )
 );
 $template->assign('courses', $courses);
+$template->assign('essence', \Essence\Essence::instance());
+$template->assign(
+    'session_extra_fields',
+    $sessionValues->getAllValuesForAnItem($session->getId(), true)
+);
 
 $templateFolder = api_get_configuration_value('default_template');
 

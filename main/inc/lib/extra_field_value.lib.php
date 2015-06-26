@@ -886,4 +886,66 @@ class ExtraFieldValue extends Model
     public function compareItemValues($item_id, $item_to_compare)
     {
     }
+
+    /**
+     * Get all values for an item
+     * @param int $itemId The item ID
+     * @param boolean $onlyVisibleFields Get the visible extra field only
+     * @return array
+     */
+    public function getAllValuesForAnItem($itemId, $onlyVisibleFields = false)
+    {
+        $em = Database::getManager();
+        $queryBuilder = $em->createQueryBuilder();
+        $fieldOptionsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldOptions');
+
+        $queryBuilder = $queryBuilder->select('fv')
+            ->from('ChamiloCoreBundle:ExtraFieldValues', 'fv')
+            ->innerJoin(
+                'ChamiloCoreBundle:ExtraField',
+                'f',
+                Doctrine\ORM\Query\Expr\Join::WITH,
+                'fv.field = f'
+            )
+            ->where(
+                $queryBuilder->expr()->andX(
+                    $queryBuilder->expr()->eq('fv.itemId', ':item'),
+                    $queryBuilder->expr()->eq('f.extraFieldType', ':field_type')
+                )
+            );
+
+        if ($onlyVisibleFields) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->eq('f.visible', true)
+            );
+        }
+
+        $fieldValues = $queryBuilder
+            ->setParameter('item', $itemId)
+            ->setParameter('field_type', $this->getExtraField()->getExtraFieldType())
+            ->getQuery()
+            ->getResult();
+
+        $valueList = [];
+
+        foreach ($fieldValues as $fieldValue) {
+            $item = [
+                'value' => $fieldValue
+            ];
+
+            switch ($fieldValue->getField()->getFieldType()) {
+                case ExtraField::FIELD_TYPE_SELECT:
+                    $item['option'] = $fieldOptionsRepo->findOneBy([
+                        'field' => $fieldValue->getField(),
+                        'value' => $fieldValue->getValue()
+                    ]);
+                    break;
+            }
+
+            $valueList[] = $item;
+        }
+
+        return $valueList;
+    }
+
 }

@@ -30,31 +30,18 @@ $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldVa
 $fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 $userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
 
-$videoUrlField = $fieldsRepo->findOneBy([
-    'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
-    'variable' => 'video_url'
-]);
 $tagField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
     'variable' => 'tags'
 ]);
 
 foreach ($sessionCourses as $sessionCourse) {
-    $courseVideo = null;
+    $courseFieldValues = $fieldValuesRepo->getVisibleValues(
+        Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
+        $sessionCourse->getId()
+    );
+
     $courseTags = [];
-
-    if (!is_null($videoUrlField)) {
-        $videoUrlValue = $fieldValuesRepo->findOneBy([
-            'field' => $videoUrlField,
-            'itemId' => $sessionCourse->getId()
-        ]);
-
-        if (!is_null($videoUrlValue)) {
-            $essence = \Essence\Essence::instance();
-
-            $courseVideo = $essence->replace($videoUrlValue->getValue());
-        }
-    }
 
     if (!is_null($tagField)) {
         $courseTags = $fieldTagsRepo->getTags($tagField, $sessionCourse->getId());
@@ -115,12 +102,12 @@ foreach ($sessionCourses as $sessionCourse) {
 
     $courses[] = [
         'course' => $sessionCourse,
-        'video' => $courseVideo,
         'description' => $courseDescription,
         'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,
-        'coaches' => $coachesData
+        'coaches' => $coachesData,
+        'extra_fields' => $courseFieldValues
     ];
 }
 
@@ -136,6 +123,7 @@ $template->assign(
     )
 );
 $template->assign('courses', $courses);
+$template->assign('essence', \Essence\Essence::instance());
 
 $templateFolder = api_get_configuration_value('default_template');
 

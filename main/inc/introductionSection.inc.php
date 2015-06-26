@@ -275,62 +275,60 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_description_html.='</div></div></div></div></div></div>';
     }
 }
-
-$introduction_section .= '<div class="row"><div class="col-md-12">';
-$introduction_section .=  $thematic_description_html;
-$introduction_section .=  '</div>';
-
-$introduction_section .=  '<div class="home-course-intro col-md-12"><div class="page-course">';
-
-if ($intro_dispDefault) {
-    if (!empty($intro_content)) {
-        $introduction_section.='<div class="page-course-intro">';
-        $introduction_section .=  $intro_content;
-        $introduction_section.='</div>';
-    }
+$introduction_section .= '<div class="row">';
+if (!empty($thematic_advance_info)) {
+    $introduction_section .= '<div class="col-md-12">';
+    $introduction_section .= $thematic_description_html;
+    $introduction_section .= '</div>';
 }
-$introduction_section .=  '</div></div>';
-
+$editIconButton = '';
+if (api_is_allowed_to_edit()) {
+    $editIconButton = Display::url(
+        '<i class="fa fa-wrench"></i> ',
+        api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
+        ['class' => 'btn btn-default', 'title' => get_lang('CustomizeIcons') ]
+    );
+}
 if ($intro_dispCommand) {
     if (empty($intro_content)) {
         // Displays "Add intro" commands
-        $introduction_section .=  '<div id="courseintro_empty">';
+        $toolbar =  '<div class="btn-group" rol="group">';
         if (!empty ($GLOBALS['_cid'])) {
-            $introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">";
-            $introduction_section .=  Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';
-            $introduction_section .=  "</a>";
+            $toolbar .=  '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&amp;intro_cmdAdd=1">';
+            $toolbar .=   '<i class="fa fa-file-text"></i> ';
+            $toolbar .=  "</a>";
+            $toolbar .= $editIconButton;
         } else {
-            $introduction_section .= "<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>";
+            $toolbar .= '<a class="btn btn-default" href="' . api_get_self() . '?intro_cmdAdd=1">"' . get_lang('AddIntro') . '</a>';
+            $toolbar .= $editIconButton;
         }
-        $introduction_section .= "</div>";
+        $toolbar .= '</div>';
 
     } else {
         // Displays "edit intro && delete intro" commands
-        $introduction_section .=  '<div id="courseintro_empty">';
+        $toolbar .=  '<div class="btn-group" rol="group">';
         if (!empty ($GLOBALS['_cid'])) {
-            $introduction_section .=
-                "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdEdit=1\">".
-                Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).
-                "</a>";
-            $introduction_section .=
-                "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:
-                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\">".
-                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
-                "</a>";
+            $toolbar .=
+                '<a  class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().'&amp;intro_cmdEdit=1" title="'.get_lang('Modify').'">
+                <i class="fa fa-pencil"></i></a>';
+            $toolbar .= $editIconButton;
+            $toolbar .=
+                '<a class="btn btn-default" title="' . get_lang('Delete') . '" href="'.api_get_self().'?'.api_get_cidreq().'&amp;intro_cmdDel=1" onclick="javascript:
+                if(!confirm('.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
+                ')) return false;"> <i class="fa fa-trash-o"></i> </a>';
+
         } else {
-            $introduction_section .=
-                "<a href=\"".api_get_self()."?intro_cmdEdit=1\">".
-                Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL).
-                "</a>";
-            $introduction_section .=
-                "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:
-                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\">".
-                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
-                "</a>";
+            $toolbar .=
+                '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdEdit=1" title="'.get_lang('Modify').'">
+                <i class="fa fa-pencil"></i>
+                </a>"';
+            $toolbar .= $editIconButton;
+            $toolbar .=
+                '<a class="btn btn-default" title="' . get_lang('Delete') . '" href="'.api_get_self().'?intro_cmdDel=1" onclick="javascript:
+                if(!confirm('.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).')) return false;>
+                <i class="fa fa-trash-o"></i> </a>';
         }
-        $introduction_section .=  "</div>";
+        $toolbar .=  "</div>";
         // Fix for chrome XSS filter for videos in iframes - BT#7930
         $browser = api_get_navigator();
         if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {
@@ -338,6 +336,20 @@ if ($intro_dispCommand) {
         }
     }
 }
+
+$introduction_section .=  '<div class="col-md-12"><div class="page-course">';
+
+if ($intro_dispDefault) {
+    if (!empty($intro_content)) {
+        $introduction_section .=  $intro_content;
+    }
+}
+$introduction_section .= '</div>';
+$introduction_section .= $toolbar;
+$introduction_section .= '</div>';
+
+
+
 $introduction_section .=  '</div>';
 
 $browser = api_get_navigator();

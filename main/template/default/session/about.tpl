@@ -1,4 +1,16 @@
 <div id="about-session">
+    <p><i class="fa fa-clock-o"></i> <em>{{ session_date.display }}</em></p>
+
+    {% if show_tutor %}
+        <p><i class="fa fa-user"></i> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em></p>
+    {% endif %}
+
+    {% if session.getShowDescription() %}
+        <div class="lead">
+            {{ session.getDescription() }}
+        </div>
+    {% endif %}
+
     {% if is_subscribed %}
         <div class="alert alert-info">
             {{ 'AlreadyRegisteredToSession'|get_lang }}

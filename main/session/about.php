@@ -111,10 +111,21 @@ foreach ($sessionCourses as $sessionCourse) {
     ];
 }
 
+$sessionDates = SessionManager::parseSessionDates([
+    'display_start_date' => $session->getDisplayStartDate(),
+    'display_end_date' => $session->getDisplayEndDate(),
+    'access_start_date' => $session->getAccessStartDate(),
+    'access_end_date' => $session->getAccessEndDate(),
+    'coach_access_start_date' => $session->getCoachAccessStartDate(),
+    'coach_access_end_date' => $session->getCoachAccessEndDate()
+]);
+
 /* View */
 $template = new Template($session->getName(), true, true, false, true, false);
+$template->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
 $template->assign('pageUrl', api_get_path(WEB_PATH) . "session/{$session->getId()}/about/");
 $template->assign('session', $session);
+$template->assign('session_date', $sessionDates);
 $template->assign(
     'is_subscribed',
     SessionManager::isUserSubscribedAsStudent(

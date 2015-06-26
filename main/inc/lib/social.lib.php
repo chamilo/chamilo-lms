@@ -1603,4 +1603,34 @@ class SocialManager extends UserManager
 
         return $html;
     }
+
+    /**
+     * Get HTML code block for user skills
+     * @param int $userId The user ID
+     * @return string
+     */
+    public static function getSkillBlock($userId)
+    {
+        if (api_get_setting('allow_skills_tool') !== 'true') {
+            return null;
+        }
+
+        $skill = new Skill();
+
+        $ranking = $skill->get_user_skill_ranking($userId);
+        $skills = $skill->get_user_skills($userId, true);
+
+        $template = new Template(null, false, false, false, false, false);
+        $template->assign('ranking', $ranking);
+        $template->assign('skills', $skills);
+        $template->assign(
+            'show_skills_report_link',
+            api_is_student() || api_is_student_boss() || api_is_drh()
+        );
+
+        $skillBlock = $template->get_template('social/skills_block.tpl');
+
+        return $template->fetch($skillBlock);
+    }
+
 }

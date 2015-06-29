@@ -53,7 +53,7 @@ switch ($action) {
                 echo '</script>';
                 echo MessageManager::generate_message_form(
                     'send_message',
-                    [],
+                    array(),
                     'block'
                 );
 

@@ -1451,6 +1451,28 @@ class ImportCsv
         $sql = "DELETE FROM $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
+
+        // Remove all calendar items
+        $truncateTables = array(
+            Database::get_course_table(TABLE_AGENDA),
+            Database::get_course_table(TABLE_AGENDA_ATTACHMENT),
+            Database::get_course_table(TABLE_AGENDA_REPEAT),
+            Database::get_course_table(TABLE_AGENDA_REPEAT_NOT),
+            Database::get_main_table(TABLE_PERSONAL_AGENDA),
+            Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT_NOT),
+            Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT)
+        );
+
+        foreach ($truncateTables as $table) {
+            $sql = "TRUNCATE $table";
+            Database::query($sql);
+            echo $sql.PHP_EOL;
+        }
+
+        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $sql = "DELETE FROM $table WHERE tool = 'calendar_event'";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
     }
 }
 

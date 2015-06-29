@@ -10,6 +10,7 @@ $action = $_GET['a'];
 switch ($action) {
     case 'get_user_popup':
         $user_info = api_get_user_info($_REQUEST['user_id']);
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 
         echo '<div class="well">';
             echo '<div class="row">';
@@ -24,10 +25,44 @@ switch ($action) {
             } else {
                 $user_info['mail'] = ' '.$user_info['mail'].' ';
             }
+            echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_info['user_id'].'">';
             echo '<h3>'.$user_info['complete_name'].'</h3>'.$user_info['mail'].$user_info['official_code'];
-            echo '<br/><br/><a class="btn" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_info['user_id'].'">'.get_lang('ViewSharedProfile').'</a>';
+            echo '</a>';
             echo '</div>';
             echo '</div>';
+
+            if (api_get_setting('allow_message_tool') == 'true') {
+
+                echo '<script>';
+                echo '
+                $("#send_message").on("click", function() {
+
+                    var url = "'.$ajax_url.'?a=send_message&user_id='.$user_info['user_id'].'";
+                    var params = $("#send_message_form").serialize();
+                    $.ajax({
+                        url: url+"&"+params,
+                        success:function(data) {
+                            $("#subject_id").val("");
+                            $("#content_id").val("");
+                            $("#send_message_form").html(data);
+                            $("#send_message").hide();
+                        }
+                    });
+                });';
+
+                echo '</script>';
+                echo MessageManager::generate_message_form(
+                    'send_message',
+                    [],
+                    'block'
+                );
+
+                echo '<a class="btn btn-primary" id="send_message">'.
+                        get_lang('Send').
+                     '</a>';
+            }
+
+
         echo '</div>';
         break;
     case 'user_id_exists':

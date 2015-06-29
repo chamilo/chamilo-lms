@@ -752,11 +752,16 @@ class ImportCsv
                 $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.":00";
                 $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.":00";
 
-                if (!api_is_valid_date($startDate) OR !api_is_valid_date($endDate)) {
+                if (!api_is_valid_date($startDate) || !api_is_valid_date($endDate)) {
                     $this->logger->addInfo(
                         "Verify your dates:  '$startDate' : '$endDate' "
                     );
                     $errorFound = true;
+                }
+
+                // If old events do nothing.
+                if (api_strtotime($startDate) < time()) {
+                    continue;
                 }
 
                 if ($errorFound == false) {
@@ -818,6 +823,7 @@ class ImportCsv
                         );
                         continue;
                     }
+
                     $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                         $extraFieldName,
                         $externalEventId
@@ -858,7 +864,8 @@ class ImportCsv
                     continue;
                 }
 
-                if ($update) { //the event already exists, just update
+                if ($update) {
+                    //the event already exists, just update
                     $eventId = $agenda->edit_event(
                         $item,
                         $event['start'],
@@ -880,7 +887,8 @@ class ImportCsv
                             "Error while updating event."
                         );
                     }
-                } else { //New event. Create it.
+                } else {
+                    // New event. Create it.
                     $eventId = $agenda->add_event(
                         $event['start'],
                         $event['end'],

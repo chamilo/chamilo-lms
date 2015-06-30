@@ -761,9 +761,9 @@ class ImportCsv
                 }
 
                 // If old events do nothing.
-                if (api_strtotime($startDate) < time()) {
+                /*if (api_strtotime($startDate) < time()) {
                     continue;
-                }
+                }*/
 
                 if ($errorFound == false) {
                     $eventsToCreate[] = array(

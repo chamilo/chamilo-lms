@@ -137,6 +137,7 @@ class Agenda
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
         $id = null;
         $content = nl2br($content);
+        $eventComment = nl2br($eventComment);
 
         switch ($this->type) {
             case 'personal':
@@ -561,6 +562,8 @@ class Agenda
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
+        $content = nl2br($content);
+        $comment = nl2br($comment);
 
         switch ($this->type) {
             case 'personal':

@@ -20,6 +20,8 @@ class GradebookTable extends SortableTable
     public $cats;
     private $dataForGraph;
     public $exportToPdf;
+    public $teacherView;
+    public $userId;
 
     /**
      * Constructor
@@ -29,8 +31,20 @@ class GradebookTable extends SortableTable
      * @param array $links
      * @param null $addparams
      */
-    public function __construct($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null, $exportToPdf = false)
-    {
+    public function __construct(
+        $currentcat,
+        $cats = array(),
+        $evals = array(),
+        $links = array(),
+        $addparams = null,
+        $exportToPdf = false,
+        $showTeacherView = null,
+        $userId = null
+    ) {
+        $this->teacherView = is_null($showTeacherView) ? api_is_allowed_to_edit(null, true) : $showTeacherView;
+        $this->userId = is_null($userId) ? api_get_user_id() : $userId;
+        $this->exportToPdf = $exportToPdf;
+
         parent::__construct('gradebooklist', null, null, api_is_allowed_to_edit() ? 1 : 0, 20, 'ASC', 'gradebook_list');
         $this->evals_links = array_merge($evals, $links);
         $this->currentcat = $currentcat;
@@ -42,7 +56,7 @@ class GradebookTable extends SortableTable
         }
 
         $column= 0;
-        if (api_is_allowed_to_edit(null, true)) {
+        if ($this->teacherView) {
             if ($this->exportToPdf == false) {
                 $this->set_header($column++, '', '', 'width="25px"');
             }
@@ -55,7 +69,7 @@ class GradebookTable extends SortableTable
             $this->set_header($column++, get_lang('Description'), false);
         }
 
-        if (api_is_allowed_to_edit(null, true)) {
+        if ($this->teacherView) {
             $this->set_header(
                 $column++,
                 get_lang('Weight'),
@@ -80,7 +94,7 @@ class GradebookTable extends SortableTable
         $this->odd_even_rows_enabled = false;
 
         // Admins get an edit column.
-        if (api_is_allowed_to_edit(null, true)) {
+        if ($this->teacherView) {
             $this->set_header($column++, get_lang('Modify'), false, 'width="195px"');
             // Actions on multiple selected documents.
             $this->set_form_actions(array(
@@ -90,8 +104,14 @@ class GradebookTable extends SortableTable
                 )
             );
         } else {
-            if (empty($_GET['selectcat']) && !api_is_allowed_to_edit()) {
-                $this->set_header($column++, get_lang('Certificates'), false);
+            if (empty($_GET['selectcat']) && !$this->teacherView) {
+                if ($this->exportToPdf == false) {
+                    $this->set_header(
+                        $column++,
+                        get_lang('Certificates'),
+                        false
+                    );
+                }
             }
         }
     }
@@ -211,7 +231,7 @@ class GradebookTable extends SortableTable
             $invisibility_span_close = api_is_allowed_to_edit() && $item->is_visible() == '0' ? '</span>' : '';
 
             // Id
-            if (api_is_allowed_to_edit(null, true)) {
+            if ($this->teacherView) {
                 if ($this->exportToPdf == false) {
                     $row[] = $this->build_id_column($item);
                 }
@@ -251,7 +271,7 @@ class GradebookTable extends SortableTable
                 true
             );
 
-            if (api_is_allowed_to_edit(null, true)) {
+            if ($this->teacherView) {
                 $row[] = $invisibility_span_open .Display::tag('h4', $weight).$invisibility_span_close;
             } else {
                 $row[] = $invisibility_span_open .$weight.$invisibility_span_close;
@@ -260,7 +280,7 @@ class GradebookTable extends SortableTable
             $category_weight = $item->get_weight();
             $mainCategoryWeight = $main_cat[0]->get_weight();
 
-            if (api_is_allowed_to_edit(null, true)) {
+            if ($this->teacherView) {
                 $weight_total_links += $data[3];
             } else {
                 $cattotal = Category::load($_GET['selectcat']);
@@ -269,7 +289,7 @@ class GradebookTable extends SortableTable
             }
 
             // Edit (for admins).
-            if (api_is_allowed_to_edit(null, true)) {
+            if ($this->teacherView) {
                 $cat = new Category();
                 $show_message = $cat->show_message_resource_delete($item->get_course_code());
                 if ($show_message === false) {
@@ -344,16 +364,15 @@ class GradebookTable extends SortableTable
 
             // Loading children
             if (get_class($item) == 'Category') {
-                $stud_id = api_get_user_id();
                 $course_code = api_get_course_id();
                 $session_id = api_get_session_id();
                 $parent_id = $item->get_id();
                 $cats = Category::load($parent_id, null, null, null, null, null);
 
                 if (isset($cats[0])) {
-                    $allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
-                    $alleval = $cats[0]->get_evaluations($stud_id);
-                    $alllink = $cats[0]->get_links($stud_id);
+                    $allcat  = $cats[0]->get_subcategories($this->userId, $course_code, $session_id);
+                    $alleval = $cats[0]->get_evaluations($this->userId);
+                    $alllink = $cats[0]->get_links($this->userId);
 
                     $sub_cat_info = new GradebookDataGenerator($allcat, $alleval, $alllink);
                     $data_array = $sub_cat_info->get_data($sorting, $from, $this->per_page);
@@ -374,7 +393,7 @@ class GradebookTable extends SortableTable
                             $main_categories[$parent_id]['children'][$item->get_id()]['weight'] = $item->get_weight();
                         }
 
-                        if (api_is_allowed_to_edit(null, true)) {
+                        if ($this->teacherView) {
                             if ($this->exportToPdf == false) {
                                 $row[] = $this->build_id_column($item);
                             }
@@ -395,7 +414,7 @@ class GradebookTable extends SortableTable
                         // Weight
                         $row[] = $invisibility_span_open.$weight.$invisibility_span_close;
 
-                        if (api_is_allowed_to_edit(null, true)) {
+                        if ($this->teacherView) {
                             //$weight_total_links += intval($data[3]);
                         } else {
                             $cattotal = Category::load($_GET['selectcat']);
@@ -404,7 +423,7 @@ class GradebookTable extends SortableTable
                         }
 
                         // Admins get an edit column.
-                        if (api_is_allowed_to_edit(null, true)) {
+                        if ($this->teacherView) {
                             $cat = new Category();
                             $show_message = $cat->show_message_resource_delete($item->get_course_code());
                             if ($show_message === false) {
@@ -452,7 +471,7 @@ class GradebookTable extends SortableTable
 
                     // "Warning row"
                     if (!empty($data_array)) {
-                        if (api_is_allowed_to_edit()) {
+                        if ($this->teacherView) {
                             // Compare the category weight to the sum of all weights inside the category
                             if (intval($total_weight) == $category_weight) {
                                 $label = null;
@@ -484,7 +503,7 @@ class GradebookTable extends SortableTable
             }
         } //end looping categories
 
-        if (api_is_allowed_to_edit()) {
+        if ($this->teacherView) {
             // Total for teacher.
             if (count($main_cat) > 1) {
                 $main_weight = intval($main_cat[0]->get_weight());
@@ -573,7 +592,7 @@ class GradebookTable extends SortableTable
         // Warning messages
         $view = isset($_GET['view']) ? $_GET['view']: null;
 
-        if (api_is_allowed_to_edit()) {
+        if ($this->teacherView) {
             if (isset($_GET['selectcat']) &&
                 $_GET['selectcat'] > 0 &&
                 $view <> 'presence'

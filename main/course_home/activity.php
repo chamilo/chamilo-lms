@@ -177,14 +177,11 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
  */
 function return_block($title, $content, $class = null)
 {
-    $html = '<div class="row course-title-tools">
-                <div class="col-md-12">
-                    <div class="title-header-tools">
-                        <h4>'.$title.'</h4>
-                    </div>
+    $html = '<div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div class="title-tools">' . $title . '</div>
                 </div>
             </div>
             <div class="row '.$class.'">'.$content.'</div>';
-
     return $html;
 }

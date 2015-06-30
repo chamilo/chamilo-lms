@@ -744,6 +744,7 @@ class ImportCsv
                 $startTime  = $row['time_start'];
                 $endTime = $row['time_end'];
                 $title = $row['title'];
+                $content = $row['comment'];
 
                 $startDateYear = substr($date, 0, 4);
                 $startDateMonth = substr($date, 4, 2);
@@ -789,7 +790,7 @@ class ImportCsv
                 "Ready to insert events"
             );
 
-            $content = null;
+
             $agenda = new Agenda();
 
             $extraFieldValue = new ExtraFieldValue('calendar_event');

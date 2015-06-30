@@ -9,25 +9,56 @@ $action = $_GET['a'];
 switch ($action) {
     case 'get_user_popup':
         $user_info = api_get_user_info($_REQUEST['user_id']);
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 
         echo '<div class="well">';
-            echo '<div class="row">';
-            echo '<div class="span2">';
-            echo '<div class="thumbnail">';
-            echo '<img src="'.$user_info['avatar'].'" /> ';
-            echo '</div>';
-            echo '</div>';
-            echo '<div class="span3">';
-            if (api_get_setting('show_email_addresses') == 'false') {
-                $user_info['mail'] = ' ';
-            } else {
-                $user_info['mail'] = ' '.$user_info['mail'].' ';
-            }
-            echo '<h3>'.$user_info['complete_name'].'</h3>'.$user_info['mail'].$user_info['official_code'];
-            echo '<br/><br/><a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_info['user_id'].'">'.get_lang('ViewSharedProfile').'</a>';
-            echo '</div>';
-            echo '</div>';
+        echo '<div class="row">';
+        echo '<div class="span2">';
+        echo '<div class="thumbnail">';
+        echo '<img src="'.$user_info['avatar'].'" /> ';
         echo '</div>';
+        echo '</div>';
+        echo '<div class="span3">';
+        if (api_get_setting('show_email_addresses') == 'false') {
+            $user_info['mail'] = ' ';
+        } else {
+            $user_info['mail'] = ' '.$user_info['mail'].' ';
+        }
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_info['user_id'].'">';
+        echo '<h3>'.$user_info['complete_name'].'</h3>'.$user_info['mail'].$user_info['official_code'];
+        echo '</a>';
+        echo '</div>';
+        echo '</div>';
+
+        if (api_get_setting('allow_message_tool') == 'true') {
+
+            echo '<script>';
+            echo '
+                $("#send_message_link").on("click", function() {
+                    var url = "'.$ajax_url.'?a=send_message&user_id='.$user_info['user_id'].'";
+                    var params = $("#send_message").serialize();
+                    $.ajax({
+                        url: url+"&"+params,
+                        success:function(data) {
+                            $("#subject_id").val("");
+                            $("#content_id").val("");
+                            $("#send_message").html(data);
+                            $("#send_message_link").hide();
+                        }
+                    });
+                });';
+
+            echo '</script>';
+            echo MessageManager::generate_message_form(
+                'send_message',
+                array(),
+                'block'
+            );
+
+            echo '<a class="btn btn-primary" id="send_message_link">'.
+                get_lang('Send').
+                '</a>';
+        }
         break;
     case 'user_id_exists':
         if (api_is_anonymous()) {

@@ -1425,6 +1425,12 @@ class MessageManager
         return $form->return_form();
     }
 
+    /**
+     * @param $id
+     * @param array $params
+     * @param string $display
+     * @return string
+     */
     public static function generate_invitation_form($id, $params = array())
     {
         $form = new FormValidator('send_invitation');

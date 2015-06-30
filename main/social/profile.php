@@ -34,7 +34,6 @@ $social_extra_info_block = null;
 $social_course_block = null;
 $social_group_info_block = null;
 $social_rss_block = null;
-$social_skill_block = null;
 $social_session_block = null;
 
 if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
@@ -504,74 +503,6 @@ if ($show_full_profile) {
         $social_rss_block = Display::panel($user_feeds, get_lang('RSSFeeds'));
     }
 
-    //BLock Social Skill
-    if (api_get_setting('allow_skills_tool') == 'true') {
-        $skill = new Skill();
-
-        $ranking = $skill->get_user_skill_ranking($my_user_id);
-        $skills = $skill->get_user_skills($my_user_id, true);
-
-        $social_skill_block = '<div class="panel panel-default social-skill">';
-        $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
-        $social_skill_block .= '<div class="btn-group pull-right"> <a class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                            <span class="caret"></span></a>
-                             <ul class="dropdown-menu">';
-        if (api_is_student() || api_is_student_boss() || api_is_drh()) {
-            $social_skill_block .= '<li>' . Display::url(
-                    get_lang('SkillsReport'),
-                    api_get_path(WEB_CODE_PATH) . 'social/my_skills_report.php'
-                ) . '</li>';
-        }
-
-        $social_skill_block .= '<li>' . Display::url(
-                get_lang('SkillsWheel'),
-                api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php'
-            ) . '</li>';
-
-        $social_skill_block .= '<li>' . Display::url(
-                sprintf(get_lang('YourSkillRankingX'), $ranking),
-                api_get_path(WEB_CODE_PATH) . 'social/skills_ranking.php'
-            ) . '</li>';
-
-        $social_skill_block .= '</ul></div></div>';
-
-        $lis = '';
-        if (!empty($skills)) {
-            foreach ($skills as $skill) {
-                $badgeImage = null;
-
-                if (!empty($skill['icon'])) {
-                    $badgeImage = Display::img(
-                        api_get_path(WEB_DATA_PATH) . $skill['icon'],
-                        $skill['name']
-                    );
-                } else {
-                    $badgeImage = Display::return_icon(
-                        'badges-default.png',
-                        $skill['name'],
-                        array('title' => $skill['name']),ICON_SIZE_BIG
-                    );
-                }
-
-                $lis .= Display::tag(
-                    'li',
-                    $badgeImage .
-                    '<div class="badges-name">' . $skill['name'] . '</div>'
-                );
-            }
-            $social_skill_block .= '<div class="panel-body">';
-            $social_skill_block .= Display::tag('ul', $lis, array('class' => 'list-badges'));
-            $social_skill_block .= '</div>';
-        } else {
-
-            $social_skill_block .= '<div class="panel-body">';
-            $social_skill_block .= '<p>'. get_lang("WithoutAchievedSkills") . '</p>';
-            $social_skill_block .= '<p>' . Display::url(get_lang('SkillsWheel'),api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php').'</p>';
-            $social_skill_block .= '</div>';
-        }
-        $social_skill_block.='</div>';
-    }
-
     // Productions
     $production_list =  UserManager::build_production_list($user_id);
 
@@ -694,7 +625,7 @@ $tpl->assign('social_extra_info_block', $social_extra_info_block);
 $tpl->assign('social_course_block', $social_course_block);
 $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
-$tpl->assign('social_skill_block', $social_skill_block);
+$tpl->assign('social_skill_block', SocialManager::getSkillBlock($my_user_id));
 $tpl->assign('social_session_block', $social_session_block);
 $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);

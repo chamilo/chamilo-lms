@@ -548,38 +548,50 @@ class SocialManager extends UserManager
             'browse_groups'
         );
 
-        $html = '<div class="avatar-profile">';
+        $template = new Template(null, false, false, false, false, false);
+
         if (in_array($show, $show_groups) && !empty($group_id)) {
             // Group image
             $userGroup = new UserGroup();
             $group_info = $userGroup->get($group_id);
 
-            $big = $userGroup->get_picture_group(
+            $userGroupImage = $userGroup->get_picture_group(
                 $group_id,
                 $group_info['picture'],
                 160,
                 GROUP_IMAGE_SIZE_BIG
             );
 
-            $html .= Display::url(
-                '<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />',
-                api_get_path(WEB_CODE_PATH).'social/group_view.php?id='.$group_id
+            $template->assign('show_group', true);
+            $template->assign('group_id', $group_id);
+            $template->assign('user_group_image', $userGroupImage);
+            $template->assign(
+                'user_is_group_admin',
+                $userGroup->is_group_admin(
+                    $group_id,
+                    api_get_user_id()
+                )
             );
-
-            if ($userGroup->is_group_admin($group_id, api_get_user_id())) {
-                $html .= '<div id="edit_image">
-                            <a href="'.api_get_path(WEB_CODE_PATH).'social/group_edit.php?id='.$group_id.'">'.
-                    get_lang('EditGroup').'</a></div>';
-            }
         } else {
-            $big_image = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
-            $normal_image = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
-
-            $html .= '<a class="expand-image" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
+            $template->assign('show_user', true);
+            $template->assign(
+                'user_image',
+                [
+                    'big' => UserManager::getUserPicture(
+                        $user_id,
+                        USER_IMAGE_SIZE_BIG
+                    ),
+                    'normal' => UserManager::getUserPicture(
+                        $user_id,
+                        USER_IMAGE_SIZE_ORIGINAL
+                    )
+                ]
+            );
         }
-        $html .= '</div>';
 
-        return $html;
+        $skillBlock = $template->get_template('social/avatar_block.tpl');
+
+        return $template->fetch($skillBlock);
     }
 
     /**
@@ -1487,7 +1499,7 @@ class SocialManager extends UserManager
             $profileEditionLink = Display::getProfileEditionLink($userId);
         }
 
-        $userInfo = api_get_user_info($userId, true);
+        $userInfo = api_get_user_info($userId, true, false, true);
         $template->assign('user', $userInfo);
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
@@ -1603,4 +1615,34 @@ class SocialManager extends UserManager
 
         return $html;
     }
+
+    /**
+     * Get HTML code block for user skills
+     * @param int $userId The user ID
+     * @return string
+     */
+    public static function getSkillBlock($userId)
+    {
+        if (api_get_setting('allow_skills_tool') !== 'true') {
+            return null;
+        }
+
+        $skill = new Skill();
+
+        $ranking = $skill->get_user_skill_ranking($userId);
+        $skills = $skill->get_user_skills($userId, true);
+
+        $template = new Template(null, false, false, false, false, false);
+        $template->assign('ranking', $ranking);
+        $template->assign('skills', $skills);
+        $template->assign(
+            'show_skills_report_link',
+            api_is_student() || api_is_student_boss() || api_is_drh()
+        );
+
+        $skillBlock = $template->get_template('social/skills_block.tpl');
+
+        return $template->fetch($skillBlock);
+    }
+
 }

@@ -1345,6 +1345,9 @@ function getWorkListStudent(
     if (!in_array($direction, array('asc','desc'))) {
         $direction = 'desc';
     }
+    if (!empty($where_condition)) {
+        $where_condition = ' AND ' . $where_condition;
+    }
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
     $start = intval($start);
@@ -1482,6 +1485,9 @@ function getWorkListTeacher(
 
     if (!in_array($direction, array('asc', 'desc'))) {
         $direction = 'desc';
+    }
+    if (!empty($where_condition)) {
+        $where_condition = ' AND ' . $where_condition;
     }
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';

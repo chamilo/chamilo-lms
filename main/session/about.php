@@ -6,8 +6,8 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.session
  */
-use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
 
 $cidReset = true;
 
@@ -18,6 +18,10 @@ $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 $entityManager = Database::getManager();
 
 $session = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);
+
+if (!$session) {
+    api_not_allowed(true);
+}
 
 $sessionCourses = $entityManager->getRepository('ChamiloCoreBundle:Session')
     ->getCoursesOrderedByPosition($session);
@@ -119,6 +123,7 @@ $template->assign(
         api_get_user_id()
     )
 );
+
 $template->assign('courses', $courses);
 $template->assign('essence', \Essence\Essence::instance());
 $template->assign(

@@ -135,8 +135,10 @@ class Agenda
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
-
         $id = null;
+        $content = nl2br($content);
+        $eventComment = nl2br($eventComment);
+
         switch ($this->type) {
             case 'personal':
                 $attributes = array(
@@ -560,6 +562,8 @@ class Agenda
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
+        $content = nl2br($content);
+        $comment = nl2br($comment);
 
         switch ($this->type) {
             case 'personal':
@@ -1247,8 +1251,8 @@ class Agenda
         if (empty($course_id)) {
             return array();
         }
-        $user_id = intval($user_id);
 
+        $user_id = intval($user_id);
         $groupList = GroupManager::get_group_list(null, $courseInfo['code']);
 
         $group_name_list = array();
@@ -1314,14 +1318,29 @@ class Agenda
                 if ($user_id == 0) {
                     $where_condition = "";
                 } else {
-                    $where_condition = " ( ip.to_user_id = ".$user_id. " OR ip.to_group_id='0' OR ip.to_group_id IS NULL ) AND ";
+                    $where_condition = " ( ip.to_user_id = ".$user_id. " OR (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) AND ";
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {
-                $where_condition = " ( ip.to_user_id = $user_id OR ip.to_group_id='0' OR ip.to_group_id IS NULL) AND ";
+                $where_condition = " ( ip.to_user_id = $user_id OR (ip.to_group_id='0' OR ip.to_group_id IS NULL)) AND ";
             }
 
-            $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref, to_user_id
+
+            $sessionCondition =  " agenda.session_id = $session_id AND
+                                   ip.session_id = $session_id ";
+            if (empty($session_id)) {
+                $sessionCondition =  "
+                (agenda.session_id = 0 OR agenda.session_id IS NULL) AND
+                (ip.session_id = 0 OR ip.session_id IS NULL) ";
+            }
+
+            $sql = "SELECT DISTINCT
+                        agenda.*,
+                        ip.visibility,
+                        ip.to_group_id,
+                        ip.insert_user_id,
+                        ip.ref,
+                        to_user_id
                     FROM $tlb_course_agenda agenda
                     INNER JOIN $tbl_property ip
                     ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id)
@@ -1331,8 +1350,7 @@ class Agenda
                         $visibilityCondition
                         agenda.c_id = $course_id AND
                         ip.c_id = $course_id AND
-                        agenda.session_id = $session_id AND
-                        ip.session_id = $session_id
+                        $sessionCondition
                     ";
         }
 
@@ -1343,9 +1361,9 @@ class Agenda
                  agenda.start_date BETWEEN '".$start."' AND '".$end."' OR
                  agenda.end_date BETWEEN '".$start."' AND '".$end."' OR
                  (
-                 agenda.start_date <> '' AND agenda.end_date <> '' AND
-                 YEAR(agenda.start_date) = YEAR(agenda.end_date) AND
-                 MONTH('$start') BETWEEN MONTH(agenda.start_date) AND MONTH(agenda.end_date)
+                     agenda.start_date IS NOT NULL AND agenda.end_date IS NOT NULL AND
+                     YEAR(agenda.start_date) = YEAR(agenda.end_date) AND
+                     MONTH('$start') BETWEEN MONTH(agenda.start_date) AND MONTH(agenda.end_date)
                  )
             )";
         }
@@ -1741,6 +1759,10 @@ class Agenda
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
         } else {
             $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
+        }
+
+        if (isset($params['content'])) {
+            $params['content'] = nl2br($params['content']);
         }
 
         $form = new FormValidator(

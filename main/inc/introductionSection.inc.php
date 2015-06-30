@@ -294,10 +294,10 @@ if ($intro_dispCommand) {
         // Displays "Add intro" commands
         $toolbar =  '<div class="btn-group pull-right" rol="group">';
         if (!empty ($GLOBALS['_cid'])) {
-            $toolbar .=  '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&amp;intro_cmdAdd=1">';
-            $toolbar .=   '<i class="fa fa-file-text"></i> ';
-            $toolbar .=  "</a>";
-            $toolbar .= $editIconButton;
+            $textIntro  =  '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&amp;intro_cmdAdd=1">';
+            $textIntro .=   '<i class="fa fa-file-text"></i> ';
+            $textIntro .=  "</a>";
+            $toolbar .= $textIntro . $editIconButton;
         } else {
             $toolbar .= '<a class="btn btn-default" href="' . api_get_self() . '?intro_cmdAdd=1">"' . get_lang('AddIntro') . '</a>';
             $toolbar .= $editIconButton;
@@ -306,7 +306,7 @@ if ($intro_dispCommand) {
 
     } else {
         // Displays "edit intro && delete intro" commands
-        $toolbar .=  '<div class="btn-group" rol="group">';
+        $toolbar .=  '<div class="btn-group pull-right" rol="group">';
         if (!empty ($GLOBALS['_cid'])) {
             $toolbar .=
                 '<a  class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().'&amp;intro_cmdEdit=1" title="'.get_lang('Modify').'">
@@ -337,14 +337,20 @@ if ($intro_dispCommand) {
     }
 }
 
-$introduction_section .=  '<div class="col-md-12"><div class="page-course">';
+$introduction_section .=  '<div class="col-md-12">';
 
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {
+        $introduction_section .='<div class="page-course">';
         $introduction_section .=  $intro_content;
+        $introduction_section .= '</div>';
+    }else{
+        $introduction_section .= '<div class="help-course">';
+        $introduction_section .= get_lang('AddCustomCourse').' ' . $textIntro ;
+        $introduction_section .= '</div>';
     }
 }
-$introduction_section .= '</div>';
+
 $introduction_section .= $toolbar;
 $introduction_section .= '</div>';
 

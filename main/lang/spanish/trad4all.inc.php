@@ -7417,4 +7417,5 @@ $FromDateX = "Del %s";
 $UntilDateX = "Al %s";
 $GraphDependencyTree = "Árbol de dependencias";
 $CustomizeIcons = "Personalizar iconos";
+$AddCustomCourse = "Puede añadir una presentación para su curso en esta sección, puede empezar dando clic en el icono";
 ?>

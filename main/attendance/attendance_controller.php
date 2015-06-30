@@ -280,7 +280,7 @@ class AttendanceController
 
         if ($edit == true) {
             if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
-                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
+                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, 0, $groupId);
             }
         } else {
             if (!empty($student_id)) {
@@ -293,12 +293,12 @@ class AttendanceController
                 api_is_coach(api_get_session_id(), api_get_course_int_id()) ||
                 $isDrhOfCourse
             ) {
-                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
+                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, 0, $groupId);
             } else {
-                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, $user_id);
+                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, $user_id, $groupId);
             }
 
-            $data['faults']  = $attendance->get_faults_of_user($user_id, $attendance_id);
+            $data['faults']  = $attendance->get_faults_of_user($user_id, $attendance_id, $groupId);
             $data['user_id'] = $user_id;
         }
 
@@ -332,12 +332,12 @@ class AttendanceController
                 $my_calendar_id,
                 $groupId
             );
-            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar($attendance_id);
-            $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
+            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar($attendance_id, 'all', null, $groupId);
+            $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, 0, $groupId);
             $data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);
             $data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);
         } else {
-            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar($attendance_id);
+            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar($attendance_id, 'all', null, $groupId);
             $data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id, $filter_type, null, $groupId);
         }
 
@@ -485,15 +485,15 @@ class AttendanceController
         );
 
         if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
-            $data_array['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
+            $data_array['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, 0, $groupId);
         } else {
             if (!empty($student_id)) {
                 $user_id = intval($student_id);
             } else {
                 $user_id = api_get_user_id();
             }
-            $data_array['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, $user_id);
-            $data_array['faults'] = $attendance->get_faults_of_user($user_id, $attendance_id);
+            $data_array['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, $user_id, $groupId);
+            $data_array['faults'] = $attendance->get_faults_of_user($user_id, $attendance_id, $groupId);
             $data_array['user_id'] = $user_id;
         }
 

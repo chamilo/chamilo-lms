@@ -1299,4 +1299,93 @@ class GradebookUtils
         return $sessionList;
     }
 
+    /**
+     * @param int $userId
+     * @param int $categoryId
+     * @param bool $saveToFile
+     * @param bool $saveToHtmlFile
+     *
+     * @return string
+     */
+    public static function generateTable($userId, $categoryId, $saveToFile = false, $saveToHtmlFile = false)
+    {
+        $courseInfo = api_get_course_info();
+        $userInfo = api_get_user_info($userId);
+
+        $cats = Category::load($categoryId, null, null, null, null, null, false);
+        $cat = $cats[0];
+
+        $allcat = $cats[0]->get_subcategories(
+            $userId,
+            api_get_course_id(),
+            api_get_session_id()
+        );
+        $alleval = $cats[0]->get_evaluations($userId);
+        $alllink = $cats[0]->get_links($userId);
+
+        $gradebooktable = new GradebookTable(
+            $cat,
+            $allcat,
+            $alleval,
+            $alllink,
+            null, // params
+            true, // $exportToPdf
+            false, // showteacher
+            $userId
+        );
+
+        if (api_is_allowed_to_edit()) {
+            $gradebooktable->td_attributes = [
+                4 => 'class=centered'
+            ];
+        } else {
+            $gradebooktable->td_attributes = [
+                3 => 'class=centered',
+                4 => 'class=centered',
+                5 => 'class=centered',
+                6 => 'class=centered',
+                7 => 'class=centered'
+            ];
+        }
+
+        $table = $gradebooktable->return_table();
+        $graph = $gradebooktable->getGraph();
+
+        $sessionName = api_get_session_name(api_get_session_id());
+        $sessionName = !empty($sessionName) ? " - $sessionName" : '';
+        $params = array(
+            //'filename' => get_lang('FlatView') . '_' . api_get_utc_datetime(),
+            'pdf_title' => $courseInfo['title'].$sessionName,
+            'course_code' => api_get_course_id(),
+            'session_info' => api_get_session_info(api_get_session_id()),
+            'add_signatures' => false,
+            'student_info' => $userInfo,
+            'show_grade_generated_date' => true,
+            'show_real_course_teachers' => true
+        );
+
+        $file = api_get_path(SYS_ARCHIVE_PATH).uniqid().'.html';
+
+        $content =
+            $table.
+            $graph.
+            '<br />'.get_lang('Feedback').'<br />
+            <textarea rows="5" cols="100" ></textarea>';
+
+        $pdf = new PDF('A4', $params['orientation'], $params);
+
+        $result = $pdf->html_to_pdf_with_template(
+            $content,
+            $saveToFile,
+            $saveToHtmlFile
+        );
+
+        if ($saveToHtmlFile) {
+            file_put_contents($file, $result);
+            return $file;
+        }
+
+        return $file;
+    }
+
 }

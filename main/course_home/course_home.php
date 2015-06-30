@@ -287,7 +287,6 @@ if (api_get_setting('homepage_view') == 'activity' ||
 }
 
 
-
 $content = '<div id="course_tools">'.$content.'</div>';
 $tpl = new Template(null);
 $tpl->assign('message', $show_message);

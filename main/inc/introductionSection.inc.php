@@ -292,7 +292,7 @@ if (api_is_allowed_to_edit()) {
 if ($intro_dispCommand) {
     if (empty($intro_content)) {
         // Displays "Add intro" commands
-        $toolbar =  '<div class="btn-group" rol="group">';
+        $toolbar =  '<div class="btn-group pull-right" rol="group">';
         if (!empty ($GLOBALS['_cid'])) {
             $toolbar .=  '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&amp;intro_cmdAdd=1">';
             $toolbar .=   '<i class="fa fa-file-text"></i> ';

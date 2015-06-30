@@ -5,7 +5,7 @@
  * @package chamilo.calendar
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -232,7 +232,7 @@ if ($agenda->type == 'course') {
     $form->addElement('textarea', 'comment', get_lang('Comment'), array('id' => 'comment'));
 }
 
-$tpl->assign('form_add', $form->return_form());
+$tpl->assign('form_add', $form->returnForm());
 
 // Loading Agenda template.
 $content = $tpl->fetch('default/agenda/month.tpl');

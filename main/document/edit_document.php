@@ -25,7 +25,6 @@
  * not for validation at the moment)
  */
 
-/*	Included libraries */
 require_once '../inc/global.inc.php';
 
 // Template's javascript
@@ -140,7 +139,10 @@ $dbTable = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
 
 if (!empty($group_id)) {
-	$interbreadcrumb[] = array ('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace'));
+    $interbreadcrumb[] = array(
+        'url' => '../group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace'),
+    );
 	$group_document = true;
 	$noPHP_SELF = true;
 }
@@ -195,7 +197,8 @@ if (isset($_POST['comment'])) {
 	}
 
     if (!empty($document_id)) {
-        $query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE c_id = $course_id AND id = ".$document_id;
+        $query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."'
+        		WHERE c_id = $course_id AND id = ".$document_id;
         Database::query($query);
         $info_message = get_lang('fileModified');
     }
@@ -495,7 +498,13 @@ if ($owner_id == api_get_user_id() ||
 
 	$form->setDefaults($defaults);
 
-	show_return($parent_id, $dir_original, $call_from_tool, $slide_id, $is_certificate_mode);
+    show_return(
+        $parent_id,
+        $dir_original,
+        $call_from_tool,
+        $slide_id,
+        $is_certificate_mode
+    );
 
 	if ($is_certificate_mode) {
 		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(
@@ -537,8 +546,8 @@ Display::display_footer();
 	It returns nothing.
     @todo check if this function is used
 */
-function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
-
+function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
+{
 	$file_name_for_change = $base_work_dir.$dir.$source_file;
     $rename_to = disable_dangerous_file($rename_to); // Avoid renaming to .htaccess file
 	$rename_to = my_rename($file_name_for_change, stripslashes($rename_to)); // fileManage API

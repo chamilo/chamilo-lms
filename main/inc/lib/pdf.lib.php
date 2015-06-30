@@ -46,6 +46,7 @@ class PDF
         $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;
         $this->params['show_real_course_teachers'] = isset($params['show_real_course_teachers']) ? $params['show_real_course_teachers'] : false;
         $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
+        $this->params['show_grade_generated_date'] = isset($params['show_grade_generated_date']) ? $params['show_grade_generated_date'] : false;
 
         $this->pdf = new mPDF(
             'UTF-8',
@@ -64,11 +65,16 @@ class PDF
 
     /**
      * Export the given HTML to PDF, using a global template
-     * @param string $content the HTML content
      *
      * @uses export/table_pdf.tpl
+
+     * @param $content
+     * @param bool|false $saveToFile
+     * @param bool|false $returnHtml
+     *
+     * @return string
      */
-    public function html_to_pdf_with_template($content)
+    public function html_to_pdf_with_template($content, $saveToFile = false, $returnHtml = false)
     {
         global $_configuration;
         Display :: display_no_header();
@@ -132,6 +138,8 @@ class PDF
         Display::$global_template->assign('pdf_date', api_format_date(api_get_local_time(), DATE_TIME_FORMAT_LONG));
         Display::$global_template->assign('pdf_teachers', $teacher_list);
         Display::$global_template->assign('pdf_title', $this->params['pdf_title']);
+        Display::$global_template->assign('pdf_student_info', $this->params['student_info']);
+        Display::$global_template->assign('show_grade_generated_date', $this->params['show_grade_generated_date']);
         Display::$global_template->assign('add_signatures', $this->params['add_signatures']);
 
         // Getting template
@@ -141,12 +149,21 @@ class PDF
 
         $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
         $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
-        self::content_to_pdf(
+
+        $html = self::content_to_pdf(
             $html,
             $css,
             $this->params['filename'],
-            $this->params['course_code']
+            $this->params['course_code'],
+            'D',
+            $saveToFile,
+            null,
+            $returnHtml
         );
+
+        if ($returnHtml) {
+            return $html;
+        }
     }
 
     /**
@@ -170,7 +187,8 @@ class PDF
         $pdf_name = '',
         $course_code = null,
         $print_title = false,
-        $complete_style = true
+        $complete_style = true,
+        $addStyle = true
     ) {
         if ($complete_style === false) {
             error_log(__FUNCTION__.' with no style');
@@ -240,6 +258,13 @@ class PDF
             if (!file_exists($file)) {
                 //the file doesn't exist, skip
                 continue;
+            }
+
+            if ($addStyle) {
+                $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
+                $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
+
+                $this->pdf->WriteHTML($css, 1);
             }
 
             //it's not a chapter but the file exists, print its title
@@ -363,7 +388,10 @@ class PDF
         $css = '',
         $pdf_name = '',
         $course_code = null,
-        $outputMode = 'D'
+        $outputMode = 'D',
+        $saveInFile = false,
+        $fileToSave = null,
+        $returnHtml = false
     ) {
         global $_configuration;
 
@@ -434,6 +462,10 @@ class PDF
         // $_GET[] too, as it is done with file name.
         // At the moment the title is retrieved from the html document itself.
 
+        if ($returnHtml) {
+            return "<style>$css</style>".$document_html;
+        }
+
         if (!empty($css)) {
             $this->pdf->WriteHTML($css, 1);
         }
@@ -445,7 +477,25 @@ class PDF
             $pdf_name = api_replace_dangerous_char($pdf_name);
             $output_file = $pdf_name.'.pdf';
         }
-        $this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file
+        //$this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file
+
+        if ($saveInFile) {
+            $fileToSave = !empty($fileToSave) ? $fileToSave : api_get_path(SYS_ARCHIVE_PATH).uniqid();
+
+            $this->pdf->Output(
+                $fileToSave,
+                $outputMode
+            ); // F to save the pdf in a file
+
+        } else {
+            $this->pdf->Output(
+                $output_file,
+                $outputMode
+            ); // F to save the pdf in a file
+            exit;
+        }
+
+
         if ($outputMode == 'F') {
             // Do NOT exit when export to file
         } else {

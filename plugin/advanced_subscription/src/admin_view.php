@@ -68,7 +68,10 @@ if (!empty($sessionId)) {
         $studentId = intval($student['user_id']);
         $data['studentUserId'] = $studentId;
 
-        $student['area'] = api_get_user_info($studentId, false, false, true)['extra']['area'];
+        $fieldValue = new ExtraFieldValue('user');
+        $areaField = $foo->get_values_by_handler_and_field_variable($studentId, 'area', true);
+
+        $student['area'] = $areaField['value'];
         $student['userLink'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$studentId;
         $data['queueId'] = intval($student['queue_id']);
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED;

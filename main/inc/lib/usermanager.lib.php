@@ -2481,7 +2481,8 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sessionListFromCourseCoach = array();
-            $sql =" SELECT DISTINCT session_id FROM $tbl_session_course_user
+            $sql =" SELECT DISTINCT session_id
+                    FROM $tbl_session_course_user
                     WHERE user_id = $user_id AND status = 2 ";
 
             $result = Database::query($sql);
@@ -2493,7 +2494,7 @@ class UserManager
             }
             if (!empty($sessionListFromCourseCoach)) {
                 $condition = implode("','", $sessionListFromCourseCoach);
-                $coachCourseConditions = " OR ( id IN ('$condition'))";
+                $coachCourseConditions = " OR ( s.id IN ('$condition'))";
             }
         }
 
@@ -2517,8 +2518,9 @@ class UserManager
             }
         }
 
-        $sql = "SELECT DISTINCT id, name, access_start_date, access_end_date
-                FROM $tbl_session
+        $sql = "SELECT DISTINCT
+                id, name, access_start_date, access_end_date
+                FROM $tbl_session s
                 WHERE (
                     id_coach = $user_id
                 )

@@ -1829,7 +1829,7 @@ class CourseManager
                     $teacher['lastname']
                 );
                 if ($add_link_to_profile) {
-                    $url = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&resizable=0&height=300&user_id=' . $teacher['user_id'];
+                    $url = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&resizable=0&height=500&user_id=' . $teacher['user_id'];
                     $teacher_name = Display::url(
                         $teacher_name,
                         $url,

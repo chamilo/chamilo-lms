@@ -278,6 +278,8 @@ switch ($action) {
                 }
                 $em->persist($sequenceResource);
                 $em->flush();
+
+                echo Display::return_message(get_lang('Saved'), 'success');
                 break;
         }
         break;

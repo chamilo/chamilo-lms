@@ -187,6 +187,8 @@
             $('button[name="save_resource"]').click(function(e) {
                 e.preventDefault();
 
+                var self = $(this).prop('disabled', true);
+
                 // parse to integer the parents IDs
                 parentList = parentList.map(function(id) {
                     return parseInt(id);
@@ -220,18 +222,29 @@
                     if (resourceId != 0) {
                         var params = decodeURIComponent(parentList);
 
-                        $.ajax(url, {
+                        var savingResource = $.ajax(url, {
                             data: {
                                 a: 'save_resource',
                                 id: resourceId,
                                 parents: params,
                                 type: type,
                                 sequence_id: sequenceId
-                            },
-                            success: function (data) {
-                                alert('{{ 'Saved' | get_lang }}');
-                                useAsReference(type, sequenceId);
                             }
+                        });
+
+                        $.when(savingResource).done(function(response) {
+                            $('#global-modal')
+                                    .find('.modal-dialog')
+                                    .removeClass('modal-lg')
+                                    .addClass('modal-sm');
+                            $('#global-modal')
+                                    .find('.modal-body')
+                                    .html(response);
+                            $('#global-modal').modal('show');
+
+                            self.prop('disabled', false);
+
+                            useAsReference(type, sequenceId);
                         });
                     }
                 });

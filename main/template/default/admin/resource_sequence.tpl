@@ -236,6 +236,10 @@
                     }
                 });
             });
+
+            $('select#sequence_id').on('change', function() {
+                sequenceId = $(this).val();
+            });
         });
     </script>
     <div class="panel panel-default">

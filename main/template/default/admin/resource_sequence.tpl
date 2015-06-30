@@ -7,8 +7,8 @@
         var resourceId = 0;
         var sequenceId = 0;
 
-        function useAsReference(type, sequenceId) {
-            var id = $("#item option:selected" ).val();
+        function useAsReference(type, sequenceId, itemId) {
+            var id = itemId || $("#item option:selected" ).val();
 
             sequenceId = $("#sequence_id option:selected" ).val();
 
@@ -113,7 +113,7 @@
             sequenceId = $("#sequence_id option:selected" ).val();
 
             // Load parents
-            $('#parents').on('click', 'a', function(e) {
+            $('#parents').on('click', 'a.delete_vertex, a.undo_delete', function(e) {
                 e.preventDefault();
 
                 var self = $(this),
@@ -135,6 +135,22 @@
 
                     self.parents('.parent').removeClass('parent-deleted');
                 }
+            });
+
+            $('#parents, #resource, #children').on('click', '.parent .sequence-id', function(e) {
+                e.preventDefault();
+
+                var itemId = $(this).parents('.parent').data('id') || 0;
+
+                if (!itemId) {
+                    return;
+                }
+
+                $('button[name="set_requirement"]').prop('disabled', false);
+                $('#requirements').prop('disabled', false);
+                $('button[name="save_resource"]').prop('disabled', false);
+
+                useAsReference(type, sequenceId, itemId);
             });
 
             // Button use as reference
@@ -171,6 +187,8 @@
             $('button[name="save_resource"]').click(function(e) {
                 e.preventDefault();
 
+                var self = $(this).prop('disabled', true);
+
                 // parse to integer the parents IDs
                 parentList = parentList.map(function(id) {
                     return parseInt(id);
@@ -204,21 +222,36 @@
                     if (resourceId != 0) {
                         var params = decodeURIComponent(parentList);
 
-                        $.ajax(url, {
+                        var savingResource = $.ajax(url, {
                             data: {
                                 a: 'save_resource',
                                 id: resourceId,
                                 parents: params,
                                 type: type,
                                 sequence_id: sequenceId
-                            },
-                            success: function (data) {
-                                alert('{{ 'Saved' | get_lang }}');
-                                useAsReference(type, sequenceId);
                             }
+                        });
+
+                        $.when(savingResource).done(function(response) {
+                            $('#global-modal')
+                                    .find('.modal-dialog')
+                                    .removeClass('modal-lg')
+                                    .addClass('modal-sm');
+                            $('#global-modal')
+                                    .find('.modal-body')
+                                    .html(response);
+                            $('#global-modal').modal('show');
+
+                            self.prop('disabled', false);
+
+                            useAsReference(type, sequenceId);
                         });
                     }
                 });
+            });
+
+            $('select#sequence_id').on('change', function() {
+                sequenceId = $(this).val();
             });
         });
     </script>

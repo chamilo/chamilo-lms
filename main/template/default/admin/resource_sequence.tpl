@@ -7,8 +7,8 @@
         var resourceId = 0;
         var sequenceId = 0;
 
-        function useAsReference(type, sequenceId) {
-            var id = $("#item option:selected" ).val();
+        function useAsReference(type, sequenceId, itemId) {
+            var id = itemId || $("#item option:selected" ).val();
 
             sequenceId = $("#sequence_id option:selected" ).val();
 
@@ -113,7 +113,7 @@
             sequenceId = $("#sequence_id option:selected" ).val();
 
             // Load parents
-            $('#parents').on('click', 'a', function(e) {
+            $('#parents').on('click', 'a.delete_vertex, a.undo_delete', function(e) {
                 e.preventDefault();
 
                 var self = $(this),
@@ -135,6 +135,22 @@
 
                     self.parents('.parent').removeClass('parent-deleted');
                 }
+            });
+
+            $('#parents, #resource, #children').on('click', '.parent .sequence-id', function(e) {
+                e.preventDefault();
+
+                var itemId = $(this).parents('.parent').data('id') || 0;
+
+                if (!itemId) {
+                    return;
+                }
+
+                $('button[name="set_requirement"]').prop('disabled', false);
+                $('#requirements').prop('disabled', false);
+                $('button[name="save_resource"]').prop('disabled', false);
+
+                useAsReference(type, sequenceId, itemId);
             });
 
             // Button use as reference

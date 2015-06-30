@@ -84,7 +84,7 @@ switch ($action) {
                     $link .= '<div class="big-icon">';
                     $link .= $image;
                     $link .= '<div class="sequence-course">' . $sessionInfo['name'] . '</div>';
-                    $link .= '<div class="sequence-id">' . $id . '</div>';
+                    $link .= '<a href="#" class="sequence-id">' . $id . '</a>';
                     $link .= $linkDelete;
                     $link .= $linkUndo;
                     $link .= '</div></div>';

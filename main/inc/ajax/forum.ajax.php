@@ -246,6 +246,7 @@ if (!empty($action)) {
 
             $em = Database::getManager();
             $postsRepo = $em->getRepository('ChamiloCourseBundle:CForumPost');
+            $userRepo = $em->getRepository('ChamiloUserBundle:User');
 
             $thread = $em->find('ChamiloCourseBundle:CForumThread', $_REQUEST['thread']);
             $posts = $postsRepo->getPostList($thread, 'desc', null, $page, 20);
@@ -273,11 +274,27 @@ if (!empty($action)) {
                 $template->assign('allow_reply', $allowReply);
                 $template->assign('thread_id', $thread->getThreadId());
                 $template->assign('forum', $current_forum);
+
+                $postReplyTo = null;
+
+                if (!empty($post->getPostParentId())) {
+                    $foo = $postsRepo->find($post->getPostParentId());
+
+                    if (!empty($foo)) {
+                        $bar = $userRepo->find($foo->getPosterId());
+
+                        if (!empty($bar)) {
+                            $postReplyTo = $bar->getCompleteName();
+                        }
+                    }
+                }
+
                 $template->assign('post_data', [
                     'post' => [
                         'id' => $post->getPostId(),
                         'date' => api_get_local_time($post->getPostDate()),
-                        'text' => $post->getPostText()
+                        'text' => $post->getPostText(),
+                        'reply_to' => $postReplyTo
                     ],
                     'user' => [
                         'image' => display_user_image($user->getId(), $user->getCompleteName(),null,array('class'=>'media-object')),

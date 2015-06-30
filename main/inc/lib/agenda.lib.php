@@ -135,8 +135,9 @@ class Agenda
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
-
         $id = null;
+        $content = nl2br($content);
+
         switch ($this->type) {
             case 'personal':
                 $attributes = array(
@@ -1741,6 +1742,10 @@ class Agenda
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
         } else {
             $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
+        }
+
+        if (isset($params['content'])) {
+            $params['content'] = nl2br($params['content']);
         }
 
         $form = new FormValidator(

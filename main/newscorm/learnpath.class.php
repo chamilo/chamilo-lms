@@ -10312,7 +10312,7 @@ EOD;
      * Calculate the total points achieved for the current user in this learning path
      * @return int
      */
-    public function getCalculateScore()
+    public function getCalculateScore($sessionId)
     {
         // Calculate stars chapters evaluation
         $exercisesItems = $this->getExercisesItems();
@@ -10327,7 +10327,7 @@ EOD;
                     $this->user_id,
                     $exerciseItem->ref,
                     $this->course_int_id,
-                    $this->lp_session_id,
+                    $sessionId,
                     $this->lp_id,
                     $exerciseItem->db_id
                 );
@@ -10347,7 +10347,7 @@ EOD;
                 $this->user_id,
                 $finalEvaluationItem->ref,
                 $this->course_int_id,
-                $this->lp_session_id,
+                $sessionId,
                 $this->lp_id,
                 $finalEvaluationItem->db_id
             );

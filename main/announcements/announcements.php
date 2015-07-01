@@ -13,7 +13,6 @@
  */
 
 // name of the language file that needs to be included
-use \ChamiloSession as Session;
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -328,7 +327,7 @@ switch ($action) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
         }
 
-       $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
+        $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
         $form->setDefaults($defaults);
 
         $content = $form->return_form();
@@ -348,7 +347,7 @@ switch ($action) {
                         $id,
                         $data['title'],
                         $data['content'],
-                        $_POST['selectedform'],
+                        $data['users'],
                         $file,
                         $file_comment,
                         $sendToUsersInSession

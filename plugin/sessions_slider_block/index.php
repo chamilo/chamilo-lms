@@ -24,7 +24,7 @@ if ($showSlider) {
         );
         $imageInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
             $session['id'],
-            SessionsSliderBlockPlugin::FIELD_VARIABLE_IMAGE
+            'image'
         );
 
         $courses = SessionManager::get_course_list_by_session_id($session['id']);

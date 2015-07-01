@@ -13,7 +13,6 @@ class CurrentSessionsBlockPlugin extends Plugin
     const CONFIG_NUMBER_OF_SESSIONS = 'number_of_sessions';
     const CONFIG_DAYS_BEFORE = 'days_before_start';
     const CONFIG_SHOW_BLOCK = 'show_block';
-    const FIELD_VARIABLE_IMAGE = 'image_for_current_sessions_plugin';
 
     private $numberOfSessions;
 
@@ -65,7 +64,6 @@ class CurrentSessionsBlockPlugin extends Plugin
      */
     public function install()
     {
-        $this->createExtraFields();
     }
 
     /**
@@ -73,7 +71,6 @@ class CurrentSessionsBlockPlugin extends Plugin
      */
     public function uninstall()
     {
-        $this->deleteExtraFields();
     }
 
     /**
@@ -160,7 +157,7 @@ SQL;
             $sessionTable,
             [
                 'where' => [
-                    "access_start_date <= DATE(?) AND access_end_date = '0000-00-00 00:00:00' AND " => $currentUtcDateTime,
+                    "(access_start_date <= DATE(?) AND access_end_date IS NULL) AND " => $currentUtcDateTime,
                     'id IN (' . implode(', ', $placeholders) . ')' => array_keys($userSessions)
                 ]
             ]
@@ -239,27 +236,39 @@ SQL;
         $sessions = [];
 
         foreach ($finishedSessions as $finishedSession) {
-            $session = api_get_session_info($finishedSession['id']);
+            $sessionInfo = api_get_session_info($finishedSession['id']);
+            $session = [
+                'name' => $sessionInfo['name'],
+                'start_date' => null,
+                'end_date' => null,
+                'image' => api_get_path(WEB_IMG_PATH) . 'session_default.png',
+                'progress' => $this->getSessionProgress($sessionInfo['id']),
+                'stars' => $this->getNumberOfStars($sessionInfo['id'])
+            ];
 
-            if ($session['access_start_date'] != '0000-00-00 00:00:00') {
-                $session['access_start_date'] = api_format_date($session['access_start_date'], DATE_FORMAT_NUMBER);
+            if (!empty($sessionInfo['display_start_date'])) {
+                $session['start_date'] = api_format_date(
+                    $sessionInfo['display_start_date'],
+                    DATE_FORMAT_NUMBER
+                );
             }
 
-            if ($session['access_end_date'] != '0000-00-00 00:00:00') {
-                $session['access_end_date'] = api_format_date($session['access_end_date'], DATE_FORMAT_NUMBER);
+            if (!empty($sessionInfo['display_end_date'])) {
+                $session['end_date'] = api_format_date(
+                    $sessionInfo['display_end_date'],
+                    DATE_FORMAT_NUMBER
+                );
             }
 
-            $session['stars'] = $this->getNumberOfStars($session['id']);
-            $session['progress'] = $this->getSessionProgress($session['id']);
-
-            $fieldImage = new ExtraFieldValue('session');
-            $fieldValueInfo = $fieldImage->get_values_by_handler_and_field_variable(
-                $session['id'],
-                self::FIELD_VARIABLE_IMAGE
+            $extraField = new ExtraFieldValue('session');
+            $imageField = $extraField->get_values_by_handler_and_field_variable(
+                $sessionInfo['id'],
+                'image'
             );
 
-            if (!empty($fieldValueInfo)) {
-                $session['image'] = $fieldValueInfo['value'];
+            if (!empty($imageField)) {
+                $sessionInfo['image'] = $imageField['value'];
+                $session['image'] = $imageField['value'];
             }
 
             $sessions[] = $session;
@@ -330,41 +339,13 @@ SQL;
 
                 $learnPath = new learnpath($course['code'], $learnPathId, $userId);
 
-                $stars += $learnPath->getCalculateStars();
+                $stars += $learnPath->getCalculateStars($sessionId);
             }
 
             $totalStars += $stars;
         }
 
         return $totalStars / count($courses);
-    }
-
-    /**
-     * Create the new extra fields
-     */
-    private function createExtraFields()
-    {
-        $sessionExtraField = new ExtraField('session');
-        $sessionExtraField->save([
-            'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
-            'variable' => self::FIELD_VARIABLE_IMAGE,
-            'display_text' => $this->get_lang('ImageForCurrentSessionsBlock'),
-            'default_value' => null,
-            'field_order' => null,
-            'visible' => true,
-            'changeable' => true,
-            'filter' => null
-        ]);
-    }
-
-    /**
-     * Get the created extrafields variables by this plugin
-     * @return array The variables
-     */
-    public function getExtrafields(){
-        return [
-            self::FIELD_VARIABLE_IMAGE
-        ];
     }
 
     /**
@@ -378,26 +359,6 @@ SQL;
         $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable($fieldVariable);
 
         return $extraFieldHandler;
-    }
-
-    /**
-     * Delete extra field and their values
-     */
-    private function deleteExtraFields()
-    {
-        $fieldVariables = $this->getExtrafields();
-
-        foreach ($fieldVariables as $variable) {
-            $fieldInfo = $this->getExtraFieldInfo($variable);
-            $fieldExists = $fieldInfo !== false;
-
-            if (!$fieldExists) {
-                continue;
-            }
-
-            $extraField = new ExtraField('session');
-            $extraField->delete($fieldInfo['id']);
-        }
     }
 
 }

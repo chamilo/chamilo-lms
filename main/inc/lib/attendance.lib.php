@@ -717,8 +717,8 @@ class Attendance
 				$result = Database::query($sql);
 
 				$insertId = Database::insert_id();
-                //The table attendance_sheet do not hace id field
-                //$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
+                                //The table attendance_sheet do not have id field
+                                //$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
 				//Database::query($sql);
 
 				$affected_rows += Database::affected_rows($result);
@@ -750,9 +750,9 @@ class Attendance
 				$result = Database::query($sql);
 
 				$insertId = Database::insert_id();
-                //The table attendance_sheet do not hace id field
-				//$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
-				//Database::query($sql);
+                                //The table attendance_sheet do not hace id field
+                                //$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
+                                //Database::query($sql);
 
 				$affected_rows += Database::affected_rows($result);
 			} else {
@@ -1214,8 +1214,7 @@ class Attendance
 		$user_id = intval($user_id);
 		$attendance_id = intval($attendance_id);
 		$course_id = api_get_course_int_id();
-        if (empty($groupId))
-        {
+        if (empty($groupId)) {
             $sql = "SELECT score FROM $tbl_attendance_result
                     WHERE
                         c_id = $course_id AND
@@ -1289,7 +1288,7 @@ class Attendance
 	) {
 		global $dateFormatShort, $timeNoSecFormat;
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $tbl_acrg = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+                $tbl_acrg = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
 		$attendance_id = intval($attendance_id);
 		$course_id = api_get_course_int_id();
 		$groupCondition = null;
@@ -1317,7 +1316,7 @@ class Attendance
 					WHERE c.c_id = $course_id AND
 					      g.group_id = '$groupId' AND
 					      c.attendance_id = '$attendance_id'
-            ";
+                               ";
 		}
 
 		if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done','calendar_id'))) {
@@ -1383,14 +1382,11 @@ class Attendance
         $course_id = api_get_course_int_id();
 
         $where_attendance = '';
-        if ($done_attendance)
-        {
+        if ($done_attendance) {
             $where_attendance = ' done_attendance = 1 AND ';
         }
-        if (empty($userId))
-        {
-            if (empty($groupId))
-            {
+        if (empty($userId)) {
+            if (empty($groupId)) {
                 $sql = "SELECT count(a.id)
                         FROM $tbl_attendance_calendar a
                         WHERE

@@ -1116,6 +1116,7 @@ function api_valid_email($address)
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
 {
     $is_allowed_in_course = api_is_allowed_in_course();
+
     $is_visible = false;
     $course_info = api_get_course_info();
 
@@ -1654,7 +1655,7 @@ function api_get_course_setting($setting_name, $course_code = null)
  */
 function api_get_anonymous_id() {
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT user_id FROM $table WHERE status = 6";
+    $sql = "SELECT user_id FROM $table WHERE status =".ANONYMOUS;
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_array($res);
@@ -3253,15 +3254,18 @@ function api_is_anonymous($user_id = null, $db_check = false) {
     }
 
     $_user = api_get_user_info();
-    if ($_user['user_id'] == 0) {
+    if (isset($_user['status']) && $_user['status'] == ANONYMOUS) {
+        //if ($_user['user_id'] == 0) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
         // Occurs in agenda for admin links - YW
         global $use_anonymous;
         if (isset($use_anonymous) && $use_anonymous) {
             api_set_anonymous();
         }
+
         return true;
     }
+
     return isset($_user['is_anonymous']) && $_user['is_anonymous'] === true;
 }
 

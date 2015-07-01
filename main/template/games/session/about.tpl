@@ -14,7 +14,7 @@
         {% for extra_field in course_data.extra_fields %}
             {% if extra_field.value.getField().getVariable() == 'video_url' %}
                 {% set course_video = extra_field.value.getValue() %}
-            {% elseif extra_field.value.getField().getVariable() == 'level' %}
+            {% elseif extra_field.value.getField().getVariable() == 'course_level' %}
                 {% set course_level = extra_field.option.getDisplayText() %}
             {% endif %}
         {% endfor %}

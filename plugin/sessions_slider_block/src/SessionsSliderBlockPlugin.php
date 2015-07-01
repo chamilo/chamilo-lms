@@ -12,7 +12,6 @@ class SessionsSliderBlockPlugin extends Plugin
     const CONFIG_WITHING_DAYS_TO_OPEN = 'within_days_to_open';
     const FIELD_VARIABLE_SHOW_IN_SLIDER = 'show_in_slider';
     const FIELD_VARIABLE_COURSE_LEVEL = 'course_level';
-    const FIELD_VARIABLE_COURSE_TAG = 'tag';
 
     /**
      * Class constructor
@@ -92,16 +91,6 @@ class SessionsSliderBlockPlugin extends Plugin
             'changeable' => true,
             'field_options' => implode('; ', $levelOptions)
         ]);
-
-        $courseFieldId = $courseExtraField->save([
-            'field_type' => ExtraField::FIELD_TYPE_TAG,
-            'variable' => self::FIELD_VARIABLE_COURSE_TAG,
-            'display_text' => $this->get_lang('Tag'),
-            'default_value' => null,
-            'field_order' => null,
-            'visible' => true,
-            'changeable' => true
-        ]);
     }
 
     /**
@@ -141,8 +130,7 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     public function getCourseExtrafields(){
         return [
-            self::FIELD_VARIABLE_COURSE_LEVEL,
-            self::FIELD_VARIABLE_COURSE_TAG
+            self::FIELD_VARIABLE_COURSE_LEVEL
         ];
     }
 
@@ -244,7 +232,7 @@ class SessionsSliderBlockPlugin extends Plugin
                 ON fv.value = fo.id
             WHERE
                 scu.user_id = " . intval($userId) . " AND
-                f.variable = '" . self::FIELD_VARIABLE_COURSE_TAG . "'
+                f.variable = 'tags'
             GROUP BY scu.c_id
             ORDER BY count DESC";
 
@@ -351,7 +339,7 @@ class SessionsSliderBlockPlugin extends Plugin
                         ON fv.value = fo.id
                     WHERE
                         fv.item_id = " . $course['real_id'] . " AND
-                        f.variable = '" . self::FIELD_VARIABLE_COURSE_TAG . "'";
+                        f.variable = 'tags'";
 
                 $result = Database::query($sql);
 

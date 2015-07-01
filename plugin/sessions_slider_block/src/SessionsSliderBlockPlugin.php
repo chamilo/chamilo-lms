@@ -11,7 +11,6 @@ class SessionsSliderBlockPlugin extends Plugin
     const CONFIG_SHOW_SLIDER = 'show_slider';
     const CONFIG_WITHING_DAYS_TO_OPEN = 'within_days_to_open';
     const FIELD_VARIABLE_SHOW_IN_SLIDER = 'show_in_slider';
-    const FIELD_VARIABLE_URL = 'url_in_slider';
     const FIELD_VARIABLE_COURSE_LEVEL = 'course_level';
     const FIELD_VARIABLE_COURSE_TAG = 'tag';
 
@@ -76,17 +75,6 @@ class SessionsSliderBlockPlugin extends Plugin
             'filter' => null
         ]);
 
-        $sessionExtraField->save([
-            'field_type' => ExtraField::FIELD_TYPE_TEXT,
-            'variable' => self::FIELD_VARIABLE_URL,
-            'display_text' => $this->get_lang('UrlForSliderBlock'),
-            'default_value' => null,
-            'field_order' => null,
-            'visible' => true,
-            'changeable' => true,
-            'filter' => null
-        ]);
-
         $levelOptions = array(
             get_lang('Beginner')
         );
@@ -141,8 +129,7 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     public function getSessionExtrafields(){
         return [
-            self::FIELD_VARIABLE_SHOW_IN_SLIDER,
-            self::FIELD_VARIABLE_URL
+            self::FIELD_VARIABLE_SHOW_IN_SLIDER
         ];
     }
 

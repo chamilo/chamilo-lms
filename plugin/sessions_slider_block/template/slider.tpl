@@ -33,7 +33,7 @@
                                                 <p class="level">{{ "LevelX"|get_lang|format(session.course_level) }}</p>
                                             </div>
                                             <div class="col-xs-5 text-right">
-                                                <a href="{{ session.url_in_slider }}" class="btn btn-primary">{{ "SeeCourse"|get_lang }}</a>
+                                                <a href="{{ session.url }}" class="btn btn-primary">{{ "SeeCourse"|get_lang }}</a>
                                             </div>
                                         </div>
                                     </div>

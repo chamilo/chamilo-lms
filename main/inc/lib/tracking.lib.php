@@ -2067,10 +2067,14 @@ class Tracking
         $lPTable = Database::get_course_table(TABLE_LP_MAIN);
         $lPViewTable = Database::get_course_table(TABLE_LP_VIEW);
 
-        $lPConditions = [
-            'c_id = ? ' => $courseInfo['real_id'],
-            'AND session_id = ? ' => $sessionId
-        ];
+        $lPConditions = [];
+        $lPConditions['c_id = ? '] = $courseInfo['real_id'];
+
+        if ($onlySeriousGame) {
+            $lPConditions['AND (session_id = ? OR session_id = 0)'] = $sessionId;
+        } else {
+            $lPConditions['AND session_id = ?'] = $sessionId;
+        }
 
         if (is_array($lPIds) && count($lPIds) > 0) {
             $placeHolders = [];

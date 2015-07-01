@@ -7006,7 +7006,7 @@ class SessionManager
 
                 $learnPath = new learnpath($course['code'], $learnPathId, $userId);
 
-                $stars += $learnPath->getCalculateStars();
+                $stars += $learnPath->getCalculateStars($sessionId);
             }
 
             $totalStars += $stars;
@@ -7077,7 +7077,7 @@ class SessionManager
 
                 $learnPath = new learnpath($course['code'], $learnPathId, $userId);
 
-                $score += $learnPath->getCalculateScore();
+                $score += $learnPath->getCalculateScore($sessionId);
             }
 
             $totalPoints += $score;

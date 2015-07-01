@@ -160,7 +160,7 @@ SQL;
             $sessionTable,
             [
                 'where' => [
-                    "access_start_date <= DATE(?) AND access_end_date = '0000-00-00 00:00:00' AND " => $currentUtcDateTime,
+                    "(access_start_date <= DATE(?) AND access_end_date IS NULL) AND " => $currentUtcDateTime,
                     'id IN (' . implode(', ', $placeholders) . ')' => array_keys($userSessions)
                 ]
             ]

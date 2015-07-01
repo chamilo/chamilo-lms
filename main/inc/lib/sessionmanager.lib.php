@@ -2583,16 +2583,17 @@ class SessionManager
 
     /**
      * Assign a coach to course in session with status = 2
-     * @param int  		- user id
-     * @param int  		- session id
-     * @param int  	- $courseId
-     * @param bool  	- optional, if is true the user don't be a coach now, otherwise it'll assign a coach
+     * @param int  $user_id
+     * @param int  $session_id
+     * @param int  $courseId
+     * @param bool $nocoach optional, if is true the user don't be a coach now,
+     * otherwise it'll assign a coach
      * @return bool true if there are affected rows, otherwise false
      */
     public static function set_coach_to_course_session(
         $user_id,
         $session_id = 0,
-        $courseId = '',
+        $courseId = 0,
         $nocoach = false
     ) {
         // Definition of variables
@@ -4957,7 +4958,7 @@ class SessionManager
         $getCount = false,
         $sessionIdList = array()
     ) {
-        $teacherResult = array();
+        $teacherListId = array();
 
         if (api_is_drh() || api_is_platform_admin()) {
             // Followed teachers by drh
@@ -4983,13 +4984,11 @@ class SessionManager
                         INNER JOIN $courseUser cu ON (cu.c_id = c.id)
 		                WHERE src.session_id IN ('$sessionToString') AND cu.status = 1";
                 $result = Database::query($sql);
-                $teacherListId = array();
                 while($row = Database::fetch_array($result, 'ASSOC')) {
                     $teacherListId[$row['user_id']] = $row['user_id'];
                 }
             } else {
                 $teacherResult = UserManager::get_users_followed_by_drh($userId, COURSEMANAGER);
-                $teacherListId = array();
                 foreach ($teacherResult as $userInfo) {
                     $teacherListId[] = $userInfo['user_id'];
                 }
@@ -5119,7 +5118,8 @@ class SessionManager
         $sessionId = intval($sessionId);
         $courseId = intval($courseId);
         $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
-        $sql = "DELETE FROM $TBL_INTRODUCTION WHERE c_id = $courseId AND session_id = $sessionId";
+        $sql = "DELETE FROM $TBL_INTRODUCTION
+                WHERE c_id = $courseId AND session_id = $sessionId";
         Database::query($sql);
     }
 
@@ -5145,7 +5145,7 @@ class SessionManager
     }
 
     /**
-     * @param array $list  format see self::importSessionDrhCSV()
+     * @param array $userSessionList format see self::importSessionDrhCSV()
      * @param bool $sendEmail
      * @param bool $removeOldRelationShips
      * @return string
@@ -5419,8 +5419,8 @@ class SessionManager
 
     /**
      * Gets one row from the session_rel_user table
-     * @param int The user ID
-     * @param int The session ID
+     * @param int $userId
+     * @param int $sessionId
      * @return array
      */
     public static function getUserSession($userId, $sessionId)
@@ -5434,7 +5434,7 @@ class SessionManager
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $sql = "SELECT * FROM $table
-                WHERE session_id =$sessionId AND user_id = $userId";
+                WHERE session_id = $sessionId AND user_id = $userId";
         $result = Database::query($sql);
         $values = array();
         if (Database::num_rows($result)) {
@@ -5590,7 +5590,10 @@ class SessionManager
                         'lastname' => $userResult['lastname'],
                         'firstname' => $userResult['firstname'],
                         'username' => $userResult['username'],
-                        'completeName' => api_get_person_name($userResult['firstname'], $userResult['lastname'])
+                        'completeName' => api_get_person_name(
+                            $userResult['firstname'],
+                            $userResult['lastname']
+                        ),
                     );
                 }
             }
@@ -5662,15 +5665,14 @@ class SessionManager
         $tableUser = Database::get_main_table(TABLE_MAIN_USER);
         $tableSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sql = "SELECT COUNT(1) as count, u.id, scu.status status_in_session, u.status user_status
-              FROM $tableSessionRelCourseRelUser scu
-              INNER JOIN $tableUser u ON scu.user_id = u.id
-              WHERE scu.session_id = " . intval($sessionId) ."
-              GROUP BY u.id";
+                FROM $tableSessionRelCourseRelUser scu
+                INNER JOIN $tableUser u ON scu.user_id = u.id
+                WHERE scu.session_id = " . intval($sessionId) ."
+                GROUP BY u.id";
 
         $result = Database::query($sql);
 
         $list = array();
-
         while ($data = Database::fetch_assoc($result)) {
             $list[] = $data;
         }
@@ -6092,11 +6094,20 @@ class SessionManager
         return $extraData;
     }
 
+    /**
+     * @param int $sessionId
+     *
+     * @return bool
+     */
     public static function isValidId($sessionId)
     {
         $sessionId = intval($sessionId);
         if ($sessionId > 0) {
-            $rows = Database::select('id', Database::get_main_table(TABLE_MAIN_SESSION), array('where' => array('id = ?' => $sessionId)));
+            $rows = Database::select(
+                'id',
+                Database::get_main_table(TABLE_MAIN_SESSION),
+                array('where' => array('id = ?' => $sessionId))
+            );
             if (!empty($rows)) {
 
                 return true;
@@ -6213,7 +6224,7 @@ class SessionManager
 
     /**
      * Returns a human readable string
-     * @params array An array with all the session dates
+     * @params array $sessionInfo An array with all the session dates
      * @return string
      */
     public static function parseSessionDates($sessionInfo)
@@ -6899,7 +6910,7 @@ class SessionManager
                         break;
                 }
 
-                //Cleaning double selects
+                // Cleaning double selects
                 foreach ($session as $key => &$value) {
                     if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
                         $options = explode('::', $value);
@@ -6940,6 +6951,8 @@ class SessionManager
      * Compare two arrays
      * @param array $array1
      * @param array $array2
+     *
+     * @return array
      */
     static function compareArraysToMerge($array1, $array2)
     {

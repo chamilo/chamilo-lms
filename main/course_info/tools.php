@@ -120,8 +120,10 @@ switch ($action) {
             }
 
 
-            $delete = (!empty($tool['custom_icon'])) ? '<a class="btn btn-default" href="' . api_get_self() . '?action=delete_icon&id=' . $tool['iid'] . '&'.api_get_cidreq().'">
-            <i class="fa fa-trash-o"></i></a>' : '';
+            $delete = (!empty($tool['custom_icon'])) ? "<a class=\"btn btn-default\" onclick=\"javascript:
+                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
+                "')) return false;\" href=\"". api_get_self() . '?action=delete_icon&id=' . $tool['iid'] . '&'.api_get_cidreq()."\">
+            <i class=\"fa fa-trash-o\"></i></a>" : "";
             $edit = '<a class="btn btn-default" href="' . api_get_self() . '?action=edit_icon&id=' . $tool['iid'] . '&'.api_get_cidreq().'"><i class="fa fa-pencil"></i></a>';
 
 

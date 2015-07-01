@@ -24,7 +24,7 @@
         {{ social_right_information }}
     </div>
 </div>
-{% if formModals is defined %}
-{{ formModals }}
-{% endif %}
+    {% if formModals is defined %}
+        {{ formModals }}
+    {% endif %}
 {% endblock %}

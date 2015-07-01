@@ -1461,7 +1461,8 @@ class ImportCsv
             Database::get_course_table(TABLE_AGENDA_REPEAT_NOT),
             Database::get_main_table(TABLE_PERSONAL_AGENDA),
             Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT_NOT),
-            Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT)
+            Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT),
+            Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_VALUES),
         );
 
         foreach ($truncateTables as $table) {

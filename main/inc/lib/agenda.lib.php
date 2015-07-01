@@ -919,6 +919,42 @@ class Agenda
                     $my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
                 }
 
+                if (api_is_drh()) {
+                    if (api_drh_can_access_all_session_content()) {
+                        $session_list = array();
+                        $sessionList = SessionManager::get_sessions_followed_by_drh(
+                            api_get_user_id(),
+                            null,
+                            null,
+                            null,
+                            true,
+                            false
+                        );
+
+                        if (!empty($sessionList)) {
+                            foreach ($sessionList as $sessionId) {
+                                $courses = UserManager::get_courses_list_by_session(
+                                    api_get_user_id(),
+                                    $sessionId
+                                );
+                                $sessionInfo = array(
+                                    'session_id' => $sessionId,
+                                    'courses' => $courses
+                                );
+                                $session_list[] = $sessionInfo;
+                            }
+                        }
+
+                        //var_dump($session_list);
+
+                        /*$courseList = SessionManager::getAllCoursesFollowedByUser(
+                            api_get_user_id(),
+                            null
+                        );
+                        var_dump($courseList);*/
+                    }
+                }
+
                 if (!empty($session_list)) {
                     foreach ($session_list as $session_item) {
                         $my_courses = $session_item['courses'];

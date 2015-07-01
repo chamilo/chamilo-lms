@@ -236,27 +236,39 @@ SQL;
         $sessions = [];
 
         foreach ($finishedSessions as $finishedSession) {
-            $session = api_get_session_info($finishedSession['id']);
+            $sessionInfo = api_get_session_info($finishedSession['id']);
+            $session = [
+                'name' => $sessionInfo['name'],
+                'start_date' => null,
+                'end_date' => null,
+                'image' => api_get_path(WEB_IMG_PATH) . 'session_default.png',
+                'progress' => $this->getSessionProgress($sessionInfo['id']),
+                'stars' => $this->getNumberOfStars($sessionInfo['id'])
+            ];
 
-            if ($session['access_start_date'] != '0000-00-00 00:00:00') {
-                $session['access_start_date'] = api_format_date($session['access_start_date'], DATE_FORMAT_NUMBER);
+            if (!empty($sessionInfo['display_start_date'])) {
+                $session['start_date'] = api_format_date(
+                    $sessionInfo['display_start_date'],
+                    DATE_FORMAT_NUMBER
+                );
             }
 
-            if ($session['access_end_date'] != '0000-00-00 00:00:00') {
-                $session['access_end_date'] = api_format_date($session['access_end_date'], DATE_FORMAT_NUMBER);
+            if (!empty($sessionInfo['display_end_date'])) {
+                $session['end_date'] = api_format_date(
+                    $sessionInfo['display_end_date'],
+                    DATE_FORMAT_NUMBER
+                );
             }
 
-            $session['stars'] = $this->getNumberOfStars($session['id']);
-            $session['progress'] = $this->getSessionProgress($session['id']);
-
-            $fieldImage = new ExtraFieldValue('session');
-            $fieldValueInfo = $fieldImage->get_values_by_handler_and_field_variable(
-                $session['id'],
+            $extraField = new ExtraFieldValue('session');
+            $imageField = $extraField->get_values_by_handler_and_field_variable(
+                $sessionInfo['id'],
                 'image'
             );
 
-            if (!empty($fieldValueInfo)) {
-                $session['image'] = $fieldValueInfo['value'];
+            if (!empty($imageField)) {
+                $sessionInfo['image'] = $imageField['value'];
+                $session['image'] = $imageField['value'];
             }
 
             $sessions[] = $session;

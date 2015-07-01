@@ -76,7 +76,9 @@ class SessionsSliderBlockPlugin extends Plugin
         ]);
 
         $levelOptions = array(
-            get_lang('Beginner')
+            get_lang('Basic'),
+            get_lang('Intermediate'),
+            get_lang('Advanced')
         );
 
         $courseExtraField = new ExtraField('course');

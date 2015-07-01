@@ -2,7 +2,8 @@
 <div class="my-courses-ranking">
     <div class="row">
         <div class="col-xs-12 col-md-12">
-            <h4 class="title-section">{{ "MyCurrentCourses"|get_lang }}</h4><a href="#" class="more">Ver más</a>
+            <h4 class="title-section">{{ "MyCurrentCourses"|get_lang }}</h4>
+            <a href="{{ _p.web ~ 'user_portal.php' }}" class="more">{{ 'SeeMore'|get_lang }}</a>
         </div>
     </div>
     <div class="row">

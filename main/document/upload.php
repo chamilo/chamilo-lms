@@ -178,6 +178,7 @@ if ($groupId != 0) {
 }
 if (isset($_REQUEST['certificate'])) {
     $nameTools = get_lang('UploadCertificate').$add_group_to_title;
+    $is_certificate_mode = true;
 } else {
     $nameTools = get_lang('UplUploadDocument').$add_group_to_title;
 }

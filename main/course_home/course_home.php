@@ -311,5 +311,5 @@ $tpl->display_one_col_template();
 Session::erase('_gid');
 Session::erase('oLP');
 Session::erase('lpobject');
-api_remove_in_gradebook('in_gradebook');
+api_remove_in_gradebook();
 DocumentManager::removeGeneratedAudioTempFile();

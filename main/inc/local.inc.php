@@ -1205,10 +1205,11 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         $is_sessionAdmin = false;
     }
 
-    //Checking the course access
+    // Checking the course access
     $is_allowed_in_course = false;
 
     if (isset($_course) && isset($_course['visibility'])) {
+
         switch ($_course['visibility']) {
             case COURSE_VISIBILITY_OPEN_WORLD: //3
                 $is_allowed_in_course = true;
@@ -1293,10 +1294,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 } else {
     // Continue with the previous values
 
-    $is_courseAdmin = isset($_SESSION ['is_courseAdmin']) ? $_SESSION ['is_courseAdmin'] : false;
-    $is_courseTutor = isset($_SESSION ['is_courseTutor']) ? $_SESSION ['is_courseTutor'] : false;
-    $is_courseCoach = isset($_SESSION ['is_courseCoach']) ? $_SESSION ['is_courseCoach'] : false;
-    $is_courseMember = isset($_SESSION ['is_courseMember']) ? $_SESSION ['is_courseMember'] : false;
+    $is_courseAdmin = isset($_SESSION['is_courseAdmin']) ? $_SESSION['is_courseAdmin'] : false;
+    $is_courseTutor = isset($_SESSION['is_courseTutor']) ? $_SESSION['is_courseTutor'] : false;
+    $is_courseCoach = isset($_SESSION['is_courseCoach']) ? $_SESSION['is_courseCoach'] : false;
+    $is_courseMember = isset($_SESSION['is_courseMember']) ? $_SESSION['is_courseMember'] : false;
     $is_allowed_in_course = isset($_SESSION ['is_allowed_in_course']) ? $_SESSION ['is_allowed_in_course'] : false;
 }
 

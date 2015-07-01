@@ -587,6 +587,10 @@ if (isset($document_id) && empty($action)) {
     // If the path is not found (no document id), set the path to /
     $document_id = DocumentManager::get_document_id($courseInfo, $curdirpath);
 
+    if (!$document_id) {
+        $document_id = DocumentManager::get_document_id($courseInfo, $curdirpath, 0);
+    }
+
     $document_data = DocumentManager::get_document_data_by_id(
         $document_id,
         api_get_course_id(),

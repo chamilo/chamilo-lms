@@ -744,7 +744,7 @@ class ImportCsv
                 $startTime  = $row['time_start'];
                 $endTime = $row['time_end'];
                 $title = $row['title'];
-                $content = $row['comment'];
+                $comment = $row['comment'];
 
                 $startDateYear = substr($date, 0, 4);
                 $startDateMonth = substr($date, 4, 2);
@@ -773,6 +773,7 @@ class ImportCsv
                         'sender_id' => $teacherId,
                         'course_id' => $courseInfo['real_id'],
                         'session_id' => $sessionId,
+                        'comment' => $comment,
                         $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID']
                     );
                 }
@@ -864,6 +865,8 @@ class ImportCsv
                     );
                     continue;
                 }
+
+                $content = '';
 
                 if ($update) {
                     //the event already exists, just update

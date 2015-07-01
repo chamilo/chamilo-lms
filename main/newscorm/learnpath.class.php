@@ -10464,11 +10464,11 @@ EOD;
      * @param int $sessionId Optional. The session ID
      * @return int The count of stars
      */
-    public function getCalculateStars()
+    public function getCalculateStars($sessionId)
     {
         $stars = 0;
 
-        $progress = self::getProgress($this->lp_id, $this->user_id, $this->course_int_id, $this->lp_session_id);
+        $progress = self::getProgress($this->lp_id, $this->user_id, $this->course_int_id, $sessionId);
 
         if ($progress > 50) {
             $stars++;
@@ -10488,7 +10488,7 @@ EOD;
                 $this->user_id,
                 $exerciseItem->path,
                 $this->course_int_id,
-                $this->lp_session_id,
+                $sessionId,
                 $this->lp_id,
                 $exerciseItem->db_id
             );
@@ -10525,7 +10525,7 @@ EOD;
             $this->user_id,
             $finalEvaluationItem->path,
             $this->course_int_id,
-            $this->lp_session_id,
+            $sessionId,
             $this->lp_id,
             $finalEvaluationItem->db_id
         );

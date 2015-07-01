@@ -588,7 +588,7 @@ if (isset($document_id) && empty($action)) {
     $document_id = DocumentManager::get_document_id($courseInfo, $curdirpath);
 
     if (!$document_id) {
-        $document_id = DocumentManager::get_document_id($courseInfo, $curdirpath);
+        $document_id = DocumentManager::get_document_id($courseInfo, $curdirpath, 0);
     }
 
     $document_data = DocumentManager::get_document_data_by_id(
@@ -596,6 +596,7 @@ if (isset($document_id) && empty($action)) {
         api_get_course_id(),
         true
     );
+
     $parent_id = $document_data['parent_id'];
 }
 
@@ -1622,7 +1623,7 @@ if ($is_allowed_to_edit ||
     if ($is_certificate_mode) {
         $actions .= Display::url(
             Display::return_icon('upload_certificate.png', get_lang('UploadCertificate'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'document/upload.php?'.api_get_cidreq().'&id='.$current_folder_id
+            api_get_path(WEB_CODE_PATH).'document/upload.php?'.api_get_cidreq().'&id='.$current_folder_id.'&certificate=true'
         );
     } else {
         $actions .= Display::url(

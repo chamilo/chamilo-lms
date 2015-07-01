@@ -1943,7 +1943,10 @@ class DocumentManager
             $post_dir_name = get_lang('CertificatesFiles');
             $visibility_command = 'invisible';
 
-            if (!is_dir($base_work_dir_test)) {
+            $id = self::get_document_id_of_directory_certificate();
+
+            if (empty($id)) {
+
                 create_unexisting_directory(
                     $courseInfo,
                     api_get_user_id(),
@@ -1952,9 +1955,27 @@ class DocumentManager
                     $to_user_id,
                     $base_work_dir,
                     $dir_name,
-                    $post_dir_name
+                    $post_dir_name,
+                    null,
+                    false
                 );
+
                 $id = self::get_document_id_of_directory_certificate();
+
+                if (empty($id)) {
+
+                    $id = add_document(
+                        $courseInfo,
+                        $dir_name,
+                        'folder',
+                        0,
+                        $post_dir_name,
+                        null,
+                        0,
+                        true,
+                        $to_group_id
+                    );
+                }
 
                 if (!empty($id)) {
                     api_item_property_update(

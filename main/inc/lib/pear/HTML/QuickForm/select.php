@@ -46,7 +46,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @since     1.0
      * @access    private
      */
-    private $_options = array();
+    protected $_options = array();
 
     private $_optgroups = array();
 
@@ -57,7 +57,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @since     1.0
      * @access    private
      */
-    private $_values = null;
+    protected $_values = null;
 
     private $columnsSize;
 

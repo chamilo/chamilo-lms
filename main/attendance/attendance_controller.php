@@ -501,12 +501,13 @@ class AttendanceController
 
         // Set headers pdf.
         $courseCategory = CourseManager::get_course_category($courseInfo['category_code']);
-        $teacherInfo    = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
+        $teacherInfo = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
         $teacherName = null;
-        foreach ($teacherInfo as $dados) {
-            if ($teacherName != null)
-                $teacherName = $teacherName . " / ";
-            $teacherName.= $dados['firstname']." ".$dados['lastname'];
+        foreach ($teacherInfo as $teacherData) {
+            if ($teacherName != null) {
+                $teacherName = $teacherName." / ";
+            }
+            $teacherName .= api_get_person_name($teacherData['firstname'], $teacherData['lastname']);
         }
 
         // Get data table
@@ -537,7 +538,7 @@ class AttendanceController
                         if ($data_users_presence[$user['user_id']][$class_day['id']]['presence'] == 1)
                             $result[$class_day['id']] = get_lang('UserAttendedSymbol');
                         else
-                            $result[$class_day['id']] = get_lang('UserNotAttendedSymbol');
+                            $result[$class_day['id']] = '<span style="color:red">'.get_lang('UserNotAttendedSymbol').'</span>';
                     } else {
                         $result[$class_day['id']] = " ";
                     }

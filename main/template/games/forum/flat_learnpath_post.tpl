@@ -18,6 +18,9 @@
         <div class="username-disqus">
             <h4>
                 {{ post_data.user.link }}
+                {% if post_data.post.reply_to %}
+                    <small><i class="fa fa-share"></i> {{ post_data.post.reply_to }}</small>
+                {% endif %}
                 <span class="small">•</span>
                 <span class="time timeago" title="{{ post_data.post.date }}">{{ post_data.post.date }}</span>
             </h4>

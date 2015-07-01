@@ -330,7 +330,7 @@ SQL;
 
                 $learnPath = new learnpath($course['code'], $learnPathId, $userId);
 
-                $stars += $learnPath->getCalculateStars();
+                $stars += $learnPath->getCalculateStars($sessionId);
             }
 
             $totalStars += $stars;

@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h4 class="title-section">{{ "RecommendedCourses"|get_lang }}</h4>
-                <a href="#" class="more">Ver más</a>
+                <a href="{{ _p.web_main ~ 'auth/courses.php' }}" class="more">{{ 'SeeMore'|get_lang }}</a>
             </div>
         </div>
         <div class="row">

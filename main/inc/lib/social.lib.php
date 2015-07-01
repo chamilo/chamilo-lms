@@ -1500,13 +1500,14 @@ class SocialManager extends UserManager
         }
 
         $userInfo = api_get_user_info($userId, true, false, true);
+
         $template->assign('user', $userInfo);
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
 
-        $templateName = 'default/social/user_block.tpl';
+        $templateName = $template->get_template('social/user_block.tpl');
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
-            $templateName = 'default/social/group_block.tpl';
+            $templateName = $template->get_template('social/group_block.tpl');
         }
         $template->assign('social_avatar_block', $template->fetch($templateName));
     }
@@ -1631,7 +1632,6 @@ class SocialManager extends UserManager
 
         $ranking = $skill->get_user_skill_ranking($userId);
         $skills = $skill->get_user_skills($userId, true);
-
         $template = new Template(null, false, false, false, false, false);
         $template->assign('ranking', $ranking);
         $template->assign('skills', $skills);

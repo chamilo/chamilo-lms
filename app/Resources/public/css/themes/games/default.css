@@ -396,10 +396,12 @@ footer .media{
 }
 #page-profile .block{
   background-color: #F8F8F8;
-  padding: 20px 40px;
+  padding: 40px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  display: inline-block;
+  width: 100%;
 }
 #page-profile .dl-horizontal dt,
 #page-profile .dl-horizontal dd{
@@ -430,6 +432,35 @@ footer .media{
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+#page-profile .profile-user .avatar{
+  text-align: center;
+}
+#page-profile .profile-user .email{
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+#page-profile .games-skill .list-badges{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+#page-profile .games-skill .list-badges li{
+  display: block;
+  width: 17.667%;
+  text-align: center;
+  min-height: 165px;
+  float: left;
+  margin-left: 20px;
+}
+#page-profile .games-skill .list-badges .badges-name{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #35a8c9;
+  font-size: 12px;
+  min-height: 55px;
 }
 /* end profile */
 .btn-press{
@@ -538,6 +569,7 @@ footer .media{
   background-color: #cf3652;
   color: #fff;
 }
+
 /* Large desktop */
 @media (min-width: 1200px) { 
 	.container{
@@ -593,5 +625,23 @@ footer .media{
   .carousel-inner .item img{
     width: 100%;
     /*display: inline;*/
+  }
+  #page-profile .block{
+    padding: 40px 20px;
+  }
+  #page-profile .games-skill .list-badges li{
+    display: block;
+    width: 40.667%;
+    text-align: center;
+    min-height: 165px;
+    float: left;
+    margin-left: 20px;
+  }
+  #page-profile .games-skill .list-badges .badges-name{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #35a8c9;
+    font-size: 12px;
+    min-height: 55px;
   }
 }

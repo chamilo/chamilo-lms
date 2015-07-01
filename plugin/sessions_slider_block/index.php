@@ -18,13 +18,9 @@ if ($showSlider) {
 
     foreach ($sessionList as $session) {
         $extraFieldValue = new ExtraFieldValue('session');
-        $urlInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $session['id'],
-            SessionsSliderBlockPlugin::FIELD_VARIABLE_URL
-        );
         $imageInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
             $session['id'],
-            SessionsSliderBlockPlugin::FIELD_VARIABLE_IMAGE
+            'image'
         );
 
         $courses = SessionManager::get_course_list_by_session_id($session['id']);
@@ -58,7 +54,7 @@ if ($showSlider) {
 
         $sessions[] = [
             'name' => $session['name'],
-            'url_in_slider' => $urlInfo['value'],
+            'url' => api_get_path(WEB_PATH) . "session/{$session['id']}/about/",
             'image_in_slider' => $imageInfo['value'],
             'course_description' => $description,
             'course_level' => $level

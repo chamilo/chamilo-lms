@@ -10179,19 +10179,17 @@ EOD;
 
         return true;
     }
+
     /**
-     * Calculate the count of stars for a user
-     * @param int $lpId The learn path ID
-     * @param int $userId The user ID
-     * @param int $courseId The course ID
+     * Calculate the count of stars for a user in this LP
      * @param int $sessionId Optional. The session ID
      * @return int The count of stars
      */
-    public function getCalculateStars()
+    public function getCalculateStars($sessionId = 0)
     {
         $stars = 0;
 
-        $progress = self::getProgress($this->lp_id, $this->user_id, $this->course_int_id, $this->lp_session_id);
+        $progress = self::getProgress($this->lp_id, $this->user_id, $this->course_int_id, $sessionId);
 
         if ($progress > 50) {
             $stars++;
@@ -10211,7 +10209,7 @@ EOD;
                 $this->user_id,
                 $exerciseItem->ref,
                 $this->course_int_id,
-                $this->lp_session_id,
+                $sessionId,
                 $this->lp_id,
                 $exerciseItem->db_id
             );
@@ -10248,7 +10246,7 @@ EOD;
             $this->user_id,
             $finalEvaluationItem->ref,
             $this->course_int_id,
-            $this->lp_session_id,
+            $sessionId,
             $this->lp_id,
             $finalEvaluationItem->db_id
         );
@@ -10310,9 +10308,10 @@ EOD;
 
     /**
      * Calculate the total points achieved for the current user in this learning path
+     * @param int $sessionId Optional. The session Id
      * @return int
      */
-    public function getCalculateScore()
+    public function getCalculateScore($sessionId = 0)
     {
         // Calculate stars chapters evaluation
         $exercisesItems = $this->getExercisesItems();
@@ -10327,7 +10326,7 @@ EOD;
                     $this->user_id,
                     $exerciseItem->ref,
                     $this->course_int_id,
-                    $this->lp_session_id,
+                    $sessionId,
                     $this->lp_id,
                     $exerciseItem->db_id
                 );
@@ -10347,7 +10346,7 @@ EOD;
                 $this->user_id,
                 $finalEvaluationItem->ref,
                 $this->course_int_id,
-                $this->lp_session_id,
+                $sessionId,
                 $this->lp_id,
                 $finalEvaluationItem->db_id
             );

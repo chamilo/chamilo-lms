@@ -30,7 +30,10 @@
         <div class="profile-user">
             <div class="username">{{ user.complete_name }}</div>
             {{ socialAvatarBlock }}
-            <div class="points">189 Puntos</div>
+
+            {% if gamification_points %}
+                <div class="points">{{ 'XPoints'|get_lang|format(gamification_points) }}</div>
+            {% endif %}
         </div>
     </div>
 </div>

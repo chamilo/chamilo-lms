@@ -22,7 +22,7 @@ require_once '../inc/global.inc.php';
 
 /*	Sessions */
 
-$ctok = $_SESSION['sec_token'];
+$ctok = Security::get_existing_token();
 $stok = Security::get_token();
 
 $current_course_tool  = TOOL_ANNOUNCEMENT;

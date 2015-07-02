@@ -94,7 +94,7 @@
             resizeContainer();
         });
 
-        $('.forum-disqus').on('click', '.btn-reply-post', function(e) {
+        $('.top-disqus, .forum-disqus').on('click', '.btn-reply-post', function(e) {
             e.preventDefault();
 
             var parentPostId = $(this).data('parent-post') || 0;

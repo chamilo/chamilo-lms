@@ -4414,9 +4414,10 @@ class learnpathItem
      * Get the forum thread info
      * @param int $lpCourseId The course ID from the learning path
      * @param int $lpSessionId Optional. The session ID from the learning path
+     * @param int $lpItemId Optional. The LP item ID
      * @return boolean
      */
-    public function getForumThread($lpCourseId, $lpSessionId = 0)
+    public function getForumThread($lpCourseId, $lpSessionId = 0, $lpItemId = 0)
     {
         $lpSessionId = intval($lpSessionId);
 
@@ -4438,17 +4439,24 @@ class learnpathItem
                 ) ";
         }
 
+        $conditions = [
+            'ip.visibility != ? AND ' => 2,
+            'ip.tool = ? AND ' => TOOL_FORUM_THREAD,
+            'ft.c_id = ? AND ' => intval($lpCourseId),
+            'ft.lp_item_id = ? AND ' => intval($lpItemId)
+        ];
+
+        if (empty($lpSessionId)) {
+            $conditions['(ft.session_id = ? OR ft.session_id IS NULL ) '] = 0;
+        } else {
+            $conditions['ft.session_id = ? AND '] = $lpSessionId;
+        }
+
         $resultData = Database::select(
             'ft.*',
             $fakeFrom,
             [
-                'where' => [
-                    'ip.visibility != ? AND ' => 2,
-                    'ip.tool = ? AND ' => TOOL_FORUM_THREAD,
-                    'ft.session_id = ? AND ' => $lpSessionId,
-                    'ft.c_id = ? AND ' => intval($lpCourseId),
-                    'ft.lp_item_id = ?' => intval($this->db_id)
-                ]
+                'where' => $conditions
             ],
             'first'
         );

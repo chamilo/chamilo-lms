@@ -199,8 +199,11 @@ switch ($action) {
             break;
         }
 
-        $forumThread = $lpItem->getForumThread($course_id, api_get_session_id());
-
+        $forumThread = $lpItem->getForumThread(
+            $course_id,
+            $learningPath->lp_session_id,
+            $lpItemId
+        );
 
         if (empty($forumThread)) {
             echo json_encode([

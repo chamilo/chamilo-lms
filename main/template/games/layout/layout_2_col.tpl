@@ -48,23 +48,7 @@
             </div>
         {% endif %}
 
-	    <div class="row">
-            <div class="col-md-4">
-                {# User Profile links #}
-                {{ profile_block }}
-            </div>
-            <div class="col-md-4">
-                {# Course block - admin #}
-                {{ course_block }}
-            </div>
-            <div class="col-md-4">
-                {# Skills #}
-                {{ skills_block }}
-            </div>
-	    </div>
-
-
-		{# Plugin courses sidebar #}
+	    {# Plugin courses sidebar #}
         {# Plugins for footer section #}
 
         {% if plugin_menu_bottom %}

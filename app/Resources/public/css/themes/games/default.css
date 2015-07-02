@@ -28,6 +28,13 @@
   text-transform: uppercase;
   color: #E73858;
 }
+.new-messages{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.new-messages .badge{
+  background-color: #E73858 !important;
+}
 .my-courses-ranking .title-course,
 #slider-sessions .title-course{
 	font-size: 14px;

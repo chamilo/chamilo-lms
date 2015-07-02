@@ -64,7 +64,9 @@
                                         <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
                                     {% endif %}
                                 {% endfor %}
-
+                                {% if user_notifications is not null %}
+                                    <li><a class="new-messages" href="{{ message_url }}">{{ user_notifications }}</a></li>
+                                {% endif %}
                                 {% if _u.logged == 0 %}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -84,6 +86,7 @@
                                 {% endif %}
                                 {% if _u.logged == 1 %}
                                 <li class="dropdown">
+
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                         {{ _u.complete_name }}<span class="caret"></span>
                                     </a>
@@ -94,6 +97,7 @@
                                                 <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
                                             {% endif %}
                                         {% endfor %}
+                                        {% include template ~ "/layout/menu.tpl" %}
                                         <li class="divider"></li>
                                         <li>
                                             <a title="{{ "Logout"|get_lang }}" href="{{ logout_link }}">

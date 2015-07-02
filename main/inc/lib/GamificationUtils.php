@@ -36,8 +36,8 @@ class GamificationUtils
     }
 
     /**
-     * Get the achieved points for a user in a session
-     * @param int $sessionId The session id
+     * Get the achieved points for an user in a session
+     * @param int $sessionId The session ID
      * @param int $userId The user ID
      * @return int The count of points
      */
@@ -78,6 +78,41 @@ class GamificationUtils
         }
 
         return $totalPoints / count($courses);
+    }
+
+    /**
+     * Get the calculated progress for an user in a session
+     * @param int $sessionId The session ID
+     * @param int $userId The user ID
+     * @return float The progress
+     */
+    public static function getSessionProgress($sessionId, $userId)
+    {
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+        $progress = 0;
+
+        if (empty($courses)) {
+            return 0;
+        }
+
+        foreach ($courses as $course) {
+            $courseProgress = Tracking::get_avg_student_progress(
+                $userId,
+                $course['code'],
+                [],
+                $sessionId,
+                false,
+                true
+            );
+
+            if ($courseProgress === false) {
+                continue;
+            }
+
+            $progress += $courseProgress;
+        }
+
+        return $progress / count($courses);
     }
 
 }

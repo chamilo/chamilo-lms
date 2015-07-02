@@ -7007,38 +7007,4 @@ class SessionManager
         return $totalStars / count($courses);
     }
 
-    /**
-     * Get the calculated progress for a session when gamification mode is activated
-     * @param int $sessionId The session id
-     * @return int The progress
-     */
-    public static function getProgressFromGamification($sessionId)
-    {
-        $courses = SessionManager::get_course_list_by_session_id($sessionId);
-        $progress = 0;
-
-        if (empty($courses)) {
-            return 0;
-        }
-
-        foreach ($courses as $course) {
-            $courseProgress = Tracking::get_avg_student_progress(
-                api_get_user_id(),
-                $course['code'],
-                [],
-                $sessionId,
-                false,
-                true
-            );
-
-            if ($courseProgress === false) {
-                continue;
-            }
-
-            $progress += $courseProgress;
-        }
-
-        return $progress / count($courses);
-    }
-
 }

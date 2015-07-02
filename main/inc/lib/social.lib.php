@@ -1504,10 +1504,21 @@ class SocialManager extends UserManager
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
 
-        $templateName = 'default/social/user_block.tpl';
-        if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
-            $templateName = 'default/social/group_block.tpl';
+        if (api_get_setting('gamification_mode') === '1') {
+            $gamificationPoints = GamificationUtils::getTotalUserPoints(
+                $userId,
+                $userInfo['status']
+            );
+
+            $template->assign('gamification_points', $gamificationPoints);
         }
+
+        $templateName = $template->get_template('social/user_block.tpl');
+
+        if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
+            $templateName = $template->get_template('social/group_block.tpl');
+        }
+
         $template->assign('social_avatar_block', $template->fetch($templateName));
     }
 

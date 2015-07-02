@@ -778,7 +778,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
  * forum category and also the threads and replies inside these forums
  * @todo config setting for recovery or not
  * (see also the documents tool: real delete or not).
- * @return void
+ * @return string
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
@@ -789,6 +789,8 @@ function deleteForumCategoryThread($content, $id)
     $table_forums_post = Database::get_course_table(TABLE_FORUM_POST);
     $table_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
+    $groupId = api_get_group_id();
+    $userId = api_get_user_id();
     $id = intval($id);
 
     // Delete all attachment file about this tread id.
@@ -800,28 +802,37 @@ function deleteForumCategoryThread($content, $id)
     }
 
     $tool_constant = null;
-    $return_message = null;
+    $return_message = '';
 
     if ($content == 'forumcategory') {
         $tool_constant = TOOL_FORUM_CATEGORY;
         $return_message = get_lang('ForumCategoryDeleted');
 
         if (!empty($forum_list)) {
-            $sql = "SELECT forum_id FROM ".$table_forums."WHERE c_id = $course_id AND forum_category='".$id."'";
+            $sql = "SELECT forum_id FROM ".$table_forums."
+                    WHERE c_id = $course_id AND forum_category='".$id."'";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             foreach ($row as $arr_forum) {
                 $forum_id = $arr_forum['forum_id'];
-                api_item_property_update($_course, 'forum', $forum_id, 'delete', api_get_user_id());
+                api_item_property_update(
+                    $_course,
+                    'forum',
+                    $forum_id,
+                    'delete',
+                    api_get_user_id()
+                );
             }
         }
     }
+
     if ($content == 'forum') {
         $tool_constant = TOOL_FORUM;
         $return_message = get_lang('ForumDeleted');
 
         if (!empty($number_threads)) {
-            $sql = "SELECT thread_id FROM".$table_forum_thread."WHERE c_id = $course_id AND forum_id='".$id."'";
+            $sql = "SELECT thread_id FROM".$table_forum_thread."
+                    WHERE c_id = $course_id AND forum_id='".$id."'";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             foreach ($row as $arr_forum) {
@@ -830,16 +841,19 @@ function deleteForumCategoryThread($content, $id)
             }
         }
     }
+
     if ($content == 'thread') {
         $tool_constant = TOOL_FORUM_THREAD;
         $return_message = get_lang('ThreadDeleted');
     }
+
     api_item_property_update(
         $_course,
         $tool_constant,
         $id,
         'delete',
-        api_get_user_id()
+        $userId,
+        $groupId
     );
 
     // Check if this returns a true and if so => return $return_message, if not => return false;
@@ -1812,6 +1826,7 @@ function get_threads($forum_id, $course_code = null)
     // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
     // This is why it is added to the end of the field selection
     $groupCondition = api_get_group_id() != 0 ? " AND item_properties.to_group_id = '$groupId' AND item_properties.c_id = '$course_id'" : "";
+
     $sql = "SELECT
                 thread.*,
                 item_properties.*,
@@ -1822,10 +1837,10 @@ function get_threads($forum_id, $course_code = null)
             FROM $table_threads thread
             INNER JOIN $table_item_property item_properties
             ON
-                thread.thread_id=item_properties.ref AND
+                thread.thread_id = item_properties.ref AND
+                item_properties.c_id = thread.c_id
                 item_properties.c_id = $course_id AND
-                thread.c_id = $course_id AND
-                item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
+                item_properties.tool = '".TABLE_FORUM_THREAD."' $groupCondition
             LEFT JOIN $table_users users
                 ON thread.thread_poster_id=users.user_id
             WHERE
@@ -1834,11 +1849,7 @@ function get_threads($forum_id, $course_code = null)
             ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 
     if (api_is_allowed_to_edit()) {
-        // important note:  it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
-        // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
-        // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
-        //This is why it is added to the end of the field selection
-        $groupCondition = api_get_group_id() != 0 ? " AND item_properties.to_group_id = '$groupId' AND item_properties.c_id = '$course_id'" : "";
+
         $sql = "SELECT
                     thread.*,
                     item_properties.*,
@@ -2376,7 +2387,12 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 TOOL_FORUM_THREAD,
                 $last_thread_id,
                 'ForumThreadAdded',
-                api_get_user_id()
+                api_get_user_id(),
+                api_get_group_id(),
+                null,
+                null,
+                null,
+                api_get_session_id()
             );
 
             // If the forum properties tell that the posts have to be approved
@@ -2390,7 +2406,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             api_set_default_visibility(
                 $last_thread_id,
                 TOOL_FORUM_THREAD,
-                0,
+                api_get_group_id(),
                 $courseInfo
             );
 
@@ -2400,7 +2416,9 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                     TOOL_FORUM_THREAD,
                     $last_thread_id,
                     'invisible',
-                    api_get_user_id()
+                    api_get_user_id(),
+                    api_get_group_id()
+
                 );
                 $visible = 1;
             }

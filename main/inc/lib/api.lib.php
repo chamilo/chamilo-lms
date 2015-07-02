@@ -691,7 +691,6 @@ function api_get_path($path_type, $path = null)
     //default $_configuration['root_web'] configuration
     $root_web = $_configuration['root_web'];
 
-    $data_folder = 'data/';
     $code_folder = 'main/';
     $course_folder = 'courses/';
 
@@ -713,7 +712,6 @@ function api_get_path($path_type, $path = null)
         global $_configuration;
 
         $root_rel = $_configuration['url_append'];
-
 
         // Support for the installation process.
         // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
@@ -1661,6 +1659,7 @@ function api_get_anonymous_id() {
         $row = Database::fetch_array($res);
         return $row['user_id'];
     }
+
     // No anonymous user was found.
     return 0;
 }
@@ -2522,7 +2521,6 @@ function api_delete_settings_params($params) {
     return $result;
 }
 
-
 /**
  * Returns an escaped version of $_SERVER['PHP_SELF'] to avoid XSS injection
  * @return string   Escaped version of $_SERVER['PHP_SELF']
@@ -2651,7 +2649,7 @@ function api_get_user_platform_status($user_id = null) {
     $status     = array();
     $user_id    = intval($user_id);
     if (empty($user_id)) {
-        $user_id    = api_get_user_id();
+        $user_id = api_get_user_id();
     }
 
     if (empty($user_id)) {
@@ -3110,8 +3108,10 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
                 $is_allowed = $is_courseAdmin;
             }
         }
+
         return $is_allowed;
     } else {
+
         return $is_courseAdmin;
     }
 }
@@ -3679,6 +3679,9 @@ function api_item_property_update(
 
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
     $condition_session = " AND session_id = $session_id ";
+    if (empty($session_id)) {
+        $condition_session = " AND (session_id = 0 OR session_id IS NULL) ";
+    }
 
     $filter = " c_id = $course_id AND tool = '$tool' AND ref = $item_id $condition_session ";
 
@@ -3708,6 +3711,7 @@ function api_item_property_update(
 
     // Update if possible
     $set_type = '';
+
     switch ($lastEditTypeNoFilter) {
         case 'delete':
             // delete = make item only visible for the platform admin.
@@ -3852,7 +3856,7 @@ function api_item_property_update(
         $sessionCondition = empty($session_id) ? "NULL" : "'$session_id'";
         $sql = "INSERT INTO $tableItemProperty (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
                 VALUES ($course_id, '$tool', $item_id, '$time', $user_id, '$time', '$last_edit_type', $user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $sessionCondition)";
-        $res = Database::query($sql);
+        Database::query($sql);
         $id = Database::insert_id();
         if ($id) {
             $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";

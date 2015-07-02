@@ -868,10 +868,10 @@ class ImportCsv
 
                 $content = '';
 
-                if ($update) {
+                if ($update && isset($item['calendar_event_id'])) {
                     //the event already exists, just update
                     $eventId = $agenda->edit_event(
-                        $item,
+                        $item['calendar_event_id'],
                         $event['start'],
                         $event['end'],
                         false,

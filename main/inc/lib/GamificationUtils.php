@@ -115,4 +115,49 @@ class GamificationUtils
         return $progress / count($courses);
     }
 
+    /**
+     * Get the number of stars achieved for an user in a session
+     * @param int $sessionId The session ID
+     * @param int $userId The user ID
+     * @return int The number of stars
+     */
+    public static function getSessionStars($sessionId, $userId)
+    {
+        $totalStars = 0;
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+
+        if (empty($courses)) {
+            return 0;
+        }
+
+        foreach ($courses as $course) {
+            $learnPathListObject = new LearnpathList(
+                $userId,
+                $course['code'],
+                $sessionId
+            );
+            $learnPaths = $learnPathListObject->get_flat_list();
+
+            $stars = 0;
+
+            foreach ($learnPaths as $learnPathId => $learnPathInfo) {
+                if (empty($learnPathInfo['seriousgame_mode'])) {
+                    continue;
+                }
+
+                $learnPath = new learnpath(
+                    $course['code'],
+                    $learnPathId,
+                    $userId
+                );
+
+                $stars += $learnPath->getCalculateStars($sessionId);
+            }
+
+            $totalStars += $stars;
+        }
+
+        return $totalStars / count($courses);
+    }
+
 }

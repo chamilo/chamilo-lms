@@ -736,6 +736,8 @@ $tpl->assign('actions', $actions);
 
 SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
 
+
+
 if (api_get_setting('allow_social_tool') == 'true') {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
     $menu = SocialManager::show_social_menu(
@@ -745,7 +747,8 @@ if (api_get_setting('allow_social_tool') == 'true') {
         false,
         $show_delete_account_button
     );
-
+    $normalImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
+    $tpl->assign('avatar', $normalImage);
     $tpl->assign('social_menu_block', $menu);
     $tpl->assign('social_right_content', $form->returnForm());
     $social_layout = $tpl->get_template('social/edit_profile.tpl');
@@ -757,6 +760,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $imageToShow = '<div id="image-message-container">';
     $imageToShow .= '<a class="expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
     $imageToShow .= '</div>';
+
 
     $content = $imageToShow.$form->returnForm();
 

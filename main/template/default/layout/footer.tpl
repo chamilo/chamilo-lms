@@ -152,7 +152,10 @@
 
         // Chosen select
         $(".chzn-select").chosen({
-            disable_search_threshold: 10
+            disable_search_threshold: 10,
+            no_results_text: '{{ 'SearchNoResultsFound' | get_lang }}',
+            placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang }}',
+            placeholder_text_single: '{{ 'SelectAnOption' | get_lang }}'
         });
 
         // Adv multi-select search input.

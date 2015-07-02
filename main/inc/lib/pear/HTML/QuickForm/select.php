@@ -82,7 +82,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         $attributes = null
     ) {
         if (is_array($attributes) || empty($attributes)) {
-            $attributes['class'] = 'form-control';
+            $oldClass = '';
+            if (!empty($attributes['class'])) {
+                $oldClass = $attributes['class'];
+            }
+            $attributes['class'] = $oldClass.' form-control';
         }
         $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
         $this->setColumnsSize($columnsSize);

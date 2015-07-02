@@ -9,7 +9,8 @@
             <dl class="dl-horizontal">
                 <dt>{{ "Email" | get_lang }}</dt>
                 <dd>{{ user.email}}</dd>
-
+                <dt>{{ "Password" | get_lang }}</dt>
+                <dd>*********</dd>
                 {% for extra_field in user.extra %}
                     <dt>{{ extra_field.value.getField().getDisplayText() }}</dt>
                     <dd>

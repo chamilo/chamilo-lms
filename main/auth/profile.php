@@ -112,8 +112,7 @@ $form = new FormValidator(
     'profile',
     'post',
     api_get_self()."?".str_replace('&fe=1', '', Security::remove_XSS($_SERVER['QUERY_STRING'])),
-    null,
-    array('style' => 'width: 70%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;'))
+    null
 );
 
 if (api_is_western_name_order()) {
@@ -749,7 +748,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
     $tpl->assign('social_menu_block', $menu);
     $tpl->assign('social_right_content', $form->returnForm());
-    $social_layout = $tpl->get_template('social/inbox.tpl');
+    $social_layout = $tpl->get_template('social/edit_profile.tpl');
     $tpl->display($social_layout);
 } else {
     $bigImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);

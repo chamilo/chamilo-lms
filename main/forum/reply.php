@@ -31,7 +31,7 @@ $nameTools = get_lang('ForumCategories');
 $origin = '';
 if (isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
-    $origin_string = '&amp;origin='.$origin;
+    $origin_string = '&origin='.$origin;
 }
 
 /* Including necessary files */
@@ -92,14 +92,14 @@ if ($origin == 'group') {
     $group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
     $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&amp;forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => 'viewthread.php?origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']), 'name' => $current_thread['thread_title']);
+    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
+    $interbreadcrumb[] = array('url' => 'viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']), 'name' => $current_thread['thread_title']);
     $interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('Reply'));
 } else {
     $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook, 'name' => $nameTools);
     $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&amp;forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => 'viewthread.php?origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']), 'name' => $current_thread['thread_title']);
+    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
+    $interbreadcrumb[] = array('url' => 'viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']), 'name' => $current_thread['thread_title']);
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Reply'));
 }
 
@@ -143,7 +143,7 @@ if ($origin == 'learnpath') {
 if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
-    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;origin='.$origin.'">'.
+    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'">'.
         Display::return_icon('back.png', get_lang('BackToThread'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 } else {
@@ -151,7 +151,7 @@ if ($origin != 'learnpath') {
 }
 /*New display forum div*/
 echo '<div class="forum_title">';
-echo '<h1><a href="viewforum.php?&amp;origin='.$origin.'&amp;forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a></h1>';
+echo '<h1><a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a></h1>';
 echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
 echo '</div>';
 /* End new display forum */

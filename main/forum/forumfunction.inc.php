@@ -980,19 +980,19 @@ function return_visible_invisible_icon($content, $id, $current_visibility_status
         $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                $html .= $key . '=' . $value . '&amp;';
+                $html .= $key . '=' . $value . '&';
             }
         }
-       $html.='action=invisible&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), ICON_SIZE_SMALL).'</a>';
+       $html.='action=invisible&content='.$content.'&id='.$id.'">'.Display::return_icon('visible.png', get_lang('MakeInvisible'), array(), ICON_SIZE_SMALL).'</a>';
     }
     if ($current_visibility_status == '0') {
-        $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;';
+        $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
-                $html .= $key . '=' . $value . '&amp;';
+                $html .= $key . '=' . $value . '&';
             }
         }
-       $html .= 'action=visible&amp;content=' . $content . '&amp;id=' . $id . '">' . Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), ICON_SIZE_SMALL) . '</a>';
+       $html .= 'action=visible&content=' . $content . '&id=' . $id . '">' . Display::return_icon('invisible.png', get_lang('MakeVisible'), array(), ICON_SIZE_SMALL) . '</a>';
     }
     return $html;
 }
@@ -1080,14 +1080,14 @@ function return_up_down_icon($content, $id, $list)
     }
 
     if ($position > 1) {
-        $return_value = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.$forumCategory.'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.
+        $return_value = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=up&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'" title="'.get_lang('MoveUp').'">'.
             Display::return_icon('up.png', get_lang('MoveUp'), array(), ICON_SIZE_SMALL).'</a>';
     } else {
         $return_value = Display::return_icon('up_na.png', '-', array(), ICON_SIZE_SMALL);
     }
 
     if ($position < $total_items) {
-        $return_value .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.$forumCategory.'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.
+        $return_value .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=down&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'" title="'.get_lang('MoveDown').'" >'.
             Display::return_icon('down.png', get_lang('MoveDown'), array(), ICON_SIZE_SMALL).'</a>';
     } else {
         $return_value .= Display::return_icon('down_na.png', '-', array(), ICON_SIZE_SMALL);
@@ -2494,10 +2494,10 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
 
         if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
             $message .= get_lang('MessageHasToBeApproved').'<br />';
-            $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
+            $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
         } else {
-            $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
-            $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.$values['forum_id'].'&gradebook='.$gradebook.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
+            $message .= get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.get_lang('Forum').'</a><br />';
+            $message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gradebook='.$gradebook.'&thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
         }
         $reply_info['new_post_id'] = $last_post_id;
         $my_post_notification = isset($values['post_notification']) ? $values['post_notification'] : null;
@@ -2585,7 +2585,7 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     $iframe = null;
     $myThread = Security::remove_XSS($myThread);
     if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
-        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&amp;thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
+        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
     }
     if (!empty($iframe)) {
         $form->addElement('label', get_lang('Thread'), $iframe);
@@ -3908,7 +3908,7 @@ function send_mail($user_info = array(), $thread_information = array())
     $user_id = api_get_user_id();
     $subject = get_lang('NewForumPost').' - '.$_course['official_code'];
     if (isset($thread_information) && is_array($thread_information)) {
-        $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&amp;forum='.$thread_information['forum_id'].'&amp;thread='.$thread_information['thread_id'];
+        $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
     }
     $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
     $email_body .= get_lang('NewForumPost')."\n";
@@ -4348,7 +4348,7 @@ function search_link()
                     $url_parameter[] = Security::remove_XSS($key).'='.Security::remove_XSS($value);
                 }
             }
-            $url = $url.implode('&amp;', $url_parameter);
+            $url = $url.implode('&', $url_parameter);
             $return .= '<a href="'.$url.'">'.Display::return_icon('delete.gif', get_lang('RemoveSearchResults')).'</a>';
         }
     }
@@ -5157,7 +5157,7 @@ function get_all_post_from_user($user_id, $course_code)
                 $forum_results .='<div id="social-forum-title">'.
                     Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).
                     '<div style="float:right;margin-top:-35px">
-                                        <a href="../forum/viewforum.php?cidReq='.$course_code.'&amp;gidReq=&amp;forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a>
+                                        <a href="../forum/viewforum.php?cidReq='.$course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a>
                                     </div></div>';
                 $forum_results .='<br / >';
                 if ($post_counter > 0) {
@@ -5501,7 +5501,7 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
             if (!empty($row) && is_array($row)) {
                 // Set result as success and bring delete URL
                 $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded'));
-                $url = api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq() . '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId.'&amp;id_attach=' . $row['iid'];
+                $url = api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq() . '&action=delete_attach&forum=' . $forumId . '&thread=' . $threadId.'&id_attach=' . $row['iid'];
                 $json['delete'] = Display::url(
                     Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL),
                     $url,

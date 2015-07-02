@@ -286,18 +286,8 @@ if (api_get_setting('homepage_view') == 'activity' ||
 	require 'vertical_activity.php';
 }
 
-$editIconButton = '';
-// The icons customization is only available in the base course at this time
-if (api_is_allowed_to_edit() && empty($sessionId)) {
-    $editIconButton = '<div class="pull-right">'.Display::url(
-        get_lang('CustomizeIcons'),
-        api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
-        ['class' => 'btn btn-default' ]
-    );
-    $editIconButton .= '</div>';
-}
 
-$content = '<div id="course_tools">'.$editIconButton.$content.'</div>';
+$content = '<div id="course_tools">'.$content.'</div>';
 $tpl = new Template(null);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);

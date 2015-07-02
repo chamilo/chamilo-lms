@@ -10456,15 +10456,13 @@ EOD;
 
         return true;
     }
+
     /**
-     * Calculate the count of stars for a user
-     * @param int $lpId The learn path ID
-     * @param int $userId The user ID
-     * @param int $courseId The course ID
+     * Calculate the count of stars for a user in this LP
      * @param int $sessionId Optional. The session ID
      * @return int The count of stars
      */
-    public function getCalculateStars($sessionId)
+    public function getCalculateStars($sessionId = 0)
     {
         $stars = 0;
 
@@ -10587,9 +10585,10 @@ EOD;
 
     /**
      * Calculate the total points achieved for the current user in this learning path
+     * @param int $sessionId Optional. The session Id
      * @return int
      */
-    public function getCalculateScore($sessionId)
+    public function getCalculateScore($sessionId = 0)
     {
         // Calculate stars chapters evaluation
         $exercisesItems = $this->getExercisesItems();

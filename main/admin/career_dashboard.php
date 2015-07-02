@@ -43,14 +43,22 @@ foreach ($careers as $item) {
     $career_select_list[$item['id']] = $item['name'];
 }
 
-$form->addElement('select', 'filter', get_lang('Career'), $career_select_list, array('id'=>'filter_1', 'class'=>'chzn-select'));
+$form->addSelect(
+    'filter',
+    get_lang('Career'),
+    $career_select_list,
+    array('id' => 'filter_1', 'class' => 'chzn-select')
+);
 $form->addButtonSearch(get_lang('Filter'));
 
 // action links
 echo '<div class="actions" style="margin-bottom:20px">';
-    echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="careers.php">'.Display::return_icon('career.png',get_lang('Careers'),'',ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="promotions.php">'.Display::return_icon('promotion.png',get_lang('Promotions'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo  '<a href="../admin/index.php">'.
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="careers.php">'.
+            Display::return_icon('career.png',get_lang('Careers'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="promotions.php">'.
+            Display::return_icon('promotion.png',get_lang('Promotions'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $form->display();
@@ -64,8 +72,11 @@ $career_array = array();
 if (!empty($careers)) {
     foreach($careers as $career_item) {
         $promotion = new Promotion();
-        //Getting all promotions
-        $promotions = $promotion->get_all_promotions_by_career_id($career_item['id'], 'name DESC');
+        // Getting all promotions
+        $promotions = $promotion->get_all_promotions_by_career_id(
+            $career_item['id'],
+            'name DESC'
+        );
         $career_content = '';
         $promotion_array = array();
         if (!empty($promotions)) {
@@ -73,18 +84,32 @@ if (!empty($careers)) {
                 if (!$promotion_item['status']) {
                     continue; //avoid status = 0
                 }
-                //Getting all sessions from this promotion
-                $sessions = SessionManager::get_all_sessions_by_promotion($promotion_item['id']);
+
+                // Getting all sessions from this promotion
+                $sessions = SessionManager::get_all_sessions_by_promotion(
+                    $promotion_item['id']
+                );
 
                 $session_list = array();
                 foreach($sessions as $session_item) {
-                    $course_list = SessionManager::get_course_list_by_session_id($session_item['id']);
-                    $session_list[] = array('data'=>$session_item,'courses'=>$course_list);
+                    $course_list = SessionManager::get_course_list_by_session_id(
+                        $session_item['id']
+                    );
+                    $session_list[] = array(
+                        'data' => $session_item,
+                        'courses' => $course_list,
+                    );
                 }
-                $promotion_array[$promotion_item['id']] =array('name'=>$promotion_item['name'], 'sessions'=>$session_list);
+                $promotion_array[$promotion_item['id']] = array(
+                    'name' => $promotion_item['name'],
+                    'sessions' => $session_list,
+                );
             }
         }
-        $career_array[$career_item['id']] = array('name'=>$career_item['name'],'promotions'=>$promotion_array);
+        $career_array[$career_item['id']] = array(
+            'name' => $career_item['name'],
+            'promotions' => $promotion_array,
+        );
     }
 }
 
@@ -99,7 +124,7 @@ foreach($career_array as $career_id => $data) {
     foreach($promotions as $promotion_id => $promotion) {
     	$promotion_name = $promotion['name'];
         $promotion_url  = Display::url($promotion_name,'promotions.php?action=edit&id='.$promotion_id);
-        $sessions       = $promotion['sessions'];
+        $sessions = $promotion['sessions'];
         echo '<tr>';
         $count = count($sessions);
         $rowspan = '';
@@ -108,8 +133,7 @@ foreach($career_array as $career_id => $data) {
         	$rowspan = 'rowspan="'.$count.'"';
         }
         echo '<td '.$rowspan.'>';
-        //echo $promotion_url;
-          echo Display::tag('h4',$promotion_url);
+        echo Display::tag('h4',$promotion_url);
         echo '</td>';
         echo '</tr>';
 
@@ -127,7 +151,10 @@ foreach($career_array as $career_id => $data) {
                     foreach($course_list as $course) {
                        echo '<tr>';
 
-                       $url = Display::url($course['title'], api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session='.$session['data']['id']);
+                       $url = Display::url(
+                           $course['title'],
+                           api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session='.$session['data']['id']
+                       );
                        echo Display::tag('td',$url);
                        echo '</tr>';
                     }

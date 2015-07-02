@@ -56,17 +56,16 @@ if (is_int($global_error_code) && $global_error_code > 0) {
         $theme = 'chamilo';
     }
 
-	//$css_path = 'app/Resources/public/css/';
-
-	$themePath = $css_path.'themes/'.$theme.'/';
-
+	$css_path = 'app/Resources/public/css/';
 	$css_web_assets = 'web/assets/';
+	$css_web_path = 'web/css/';
+    $themePath = $css_path.'themes/'.$theme.'/default.css';
     $css_web_fontawesome = $css_web_assets.'fontawesome/css/font-awesome.css';
-    $css_web_path = 'web/css/';
 	$bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
 	$css_base_file = $css_web_path.'base.css';
 
-    $css_list = array($bootstrap_file, $css_base_file);
+    $css_list = array($bootstrap_file, $css_base_file, $css_web_fontawesome, $themePath);
+
     $web_img = 'main/img';
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);
@@ -160,19 +159,13 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$show_error_codes = defined('SHOW_ERROR_CODES') && SHOW_ERROR_CODES && $global_error_code != 2;
 	$global_error_message['code'] = $show_error_codes ? $ErrorCode.': '.$global_error_code.'<br /><br />' : '';
 	$global_error_message['details'] = empty($global_error_message['details']) ? '' : ($show_error_codes ? ': '.$global_error_message['details'] : $global_error_message['details']);
-
 	$global_error_message['organisation'] = $Organisation;
 	$global_error_message['powered_by'] = $PoweredBy;
-
 	$global_error_message['encoding'] = 'UTF-8';
-	$global_error_message['css'] = $css_base_file;
-    $global_error_message['fontawesome'] = $css_web_fontawesome;
-    $global_error_message['bootstrap'] = $bootstrap_file;
-    $global_error_message['theme'] = $css_web_path.'themes/'.$theme.'/default.css';
-	$global_error_message['chamilo_logo'] = $css_web_path.'themes/'.$theme.'/images/header-logo.png';
+	$global_error_message['chamilo_logo'] = "data:image/png;base64,".base64_encode(file_get_contents($root_sys.'web/css/themes/'.$theme.'/images/header-logo.png'));
 
+    $installChamiloImage = base64_encode(file_get_contents("$root_sys/main/img/install-chamilo.gif"));
 
-// {ORGANISATION}	moved from the header
 	$global_error_message_page =
 <<<EOM
 <!DOCTYPE html>
@@ -180,46 +173,47 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		<head>
 			<title>{TITLE}</title>
             <meta charset="{ENCODING}" />
-            <link rel="stylesheet" href="{BOOTSTRAP}">
-            <link rel="stylesheet" href="{FONTAWESOME}">
-            <link rel="stylesheet" href="{CSS}">
-            <link rel="stylesheet" href="{THEME}">
-            <style type="text/css">
-                    body{
-                        background: #d2ebf9; /* Old browsers */
-background: -moz-linear-gradient(top, #d2ebf9 0%, #feffff 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d2ebf9), color-stop(100%,#feffff)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* IE10+ */
-background: linear-gradient(to bottom, #d2ebf9 0%,#feffff 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ebf9', endColorstr='#feffff',GradientType=0 ); /* IE6-9 */
-                    }
-                    .chamilo{
-                        background: url("$web_img/install-chamilo.gif") no-repeat center 0;
-                        margin:auto;
-                    }
-                    .office{
-                        padding-top:250px;
-                    }
+            <style>
+            $css_def
+            </style>
 
-                    @media (max-width: 480px) {
+            <style type="text/css">
+                body{
+                    background: #d2ebf9; /* Old browsers */
+                    background: -moz-linear-gradient(top, #d2ebf9 0%, #feffff 100%); /* FF3.6+ */
+                    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d2ebf9), color-stop(100%,#feffff)); /* Chrome,Safari4+ */
+                    background: -webkit-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Chrome10+,Safari5.1+ */
+                    background: -o-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* Opera 11.10+ */
+                    background: -ms-linear-gradient(top, #d2ebf9 0%,#feffff 100%); /* IE10+ */
+                    background: linear-gradient(to bottom, #d2ebf9 0%,#feffff 100%); /* W3C */
+                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ebf9', endColorstr='#feffff',GradientType=0 ); /* IE6-9 */
+                }
+                .chamilo {
+                    background: url("data:image/gif;base64,$installChamiloImage") no-repeat center 0;
+                    margin:auto;
+                }
+                .office{
+                    padding-top:250px;
+                }
+
+                @media (max-width: 480px) {
                     body{
-                        background-image: url("$web_img/install-chamilo.gif");
+
+                        background: url("data:image/gif;base64,$installChamiloImage") no-repeat center 0;
                         background-repeat: no-repeat;
                         background-position: -10px -5px;
                         background-color: #DFF1FA;
 
-                     }
-                     .chamilo{
+                    }
+                    .chamilo{
                         background: none;
                         height:300px;
                         width:100%;
                         margin:auto;
-                        }
-                     .download-info .btn-success{
-                            margin-top: 10px;
-                     }
+                    }
+                    .download-info .btn-success{
+                        margin-top: 10px;
+                    }
                 }
             </style>
 		</head>
@@ -234,8 +228,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ebf9', end
 			        </div>
 			    </div>
                 <div class="welcome-install">
-                        {DESCRIPTION}
-                        {CODE}
+                    {DESCRIPTION}
+                    {CODE}
                 </div>
 			</div>
 		</div>

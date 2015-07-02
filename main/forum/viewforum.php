@@ -183,6 +183,7 @@ if (
     $locked = api_resource_is_locked_by_gradebook($_GET['id'], LINK_FORUM_THREAD);
     if ($locked == false) {
         $message = deleteForumCategoryThread($_GET['content'], $_GET['id']);
+
         // Delete link
         $link_info = GradebookUtils::is_resource_in_course_gradebook(
             api_get_course_id(),

@@ -130,7 +130,7 @@ if (!empty($current_group['description'])) {
  * Group Tools
  */
 // If the user is subscribed to the group or the user is a tutor of the group then
-if (api_is_allowed_to_edit(false, true) OR
+if (api_is_allowed_to_edit(false, true) ||
     GroupManager::is_user_in_group(api_get_user_id(), $current_group['id'])
 ) {
     $actions_array = array();
@@ -140,14 +140,16 @@ if (api_is_allowed_to_edit(false, true) OR
     if (is_array($forums_of_groups)) {
         if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE ) {
             foreach ($forums_of_groups as $key => $value) {
+
                 //*!empty($user_subscribe_to_current_group) && */
                 if ($value['forum_group_public_private'] == 'public' ||
                     ($value['forum_group_public_private'] == 'private') ||
                     !empty($user_is_tutor) ||
                     api_is_allowed_to_edit(false, true)
                 ) {
+
                     $actions_array[] = array(
-                        'url' => '../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'&origin=group',
+                        'url' => '../forum/viewforum.php?forum='.$value['forum_id'].'&'.api_get_cidreq().'&origin=group',
                         'content' => Display::return_icon('forum.png', get_lang('Forum').': '.$value['forum_title'] , array(), 32)
                     );
                 }
@@ -196,6 +198,7 @@ if (api_is_allowed_to_edit(false, true) OR
             'content' => Display::return_icon('wiki.png', get_lang('GroupWiki'), array(), 32)
         );
     }
+
     if ($current_group['chat_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
         // Link to the chat area of this group
         if (api_get_course_setting('allow_open_chat_window')) {

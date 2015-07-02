@@ -733,8 +733,8 @@ class ScormAnswerHotspot extends Answer
 
 						// Check to see if the version meets the requirements for playback
 						if (hasReqestedVersion) {  // if we've detected an acceptable version
-						    var oeTags = '<object type=\"application/x-shockwave-flash\"".' data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionJSId."&amp;canClick:".$canClick."\" width=\"380\" height=\"470\">'
-										+ '<param name=\"movie\"".' value="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionJSId."&amp;canClick:".$canClick."\" \/>'
+						    var oeTags = '<object type=\"application/x-shockwave-flash\"".' data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionJSId."&canClick:".$canClick."\" width=\"380\" height=\"470\">'
+										+ '<param name=\"movie\"".' value="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_user.swf?modifyAnswers='.$this->questionJSId."&canClick:".$canClick."\" \/>'
 										+ '<\/object>';
 						    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
 						} else {  // flash is too old or we can't detect the plugin

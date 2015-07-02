@@ -151,8 +151,8 @@ if (isset($current_thread['thread_id'])) {
                 if (api_is_allowed_to_session_edit(false, true)) {
                     if ($locked == false) {
                         $iconEdit .= "<a href=\"editpost.php?" . api_get_cidreq() . "&forum=" . $clean_forum_id
-                            . "&thread=" . $clean_thread_id . "&post=" . $row['post_id'] . "&amp;origin="
-                            . $origin . "&amp;edit=edition&amp;id_attach=" . $id_attach . "\">"
+                            . "&thread=" . $clean_thread_id . "&post=" . $row['post_id'] . "&origin="
+                            . $origin . "&edit=edition&id_attach=" . $id_attach . "\">"
                             . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . "</a>";
                     }
                 }
@@ -167,7 +167,7 @@ if (isset($current_thread['thread_id'])) {
                     if ($locked == false) {
                         $iconEdit .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&forum="
                             . $clean_forum_id . "&thread=" . $clean_thread_id
-                            . "&action=delete&amp;content=post&amp;id=" . $row['post_id'] . "&amp;origin="
+                            . "&action=delete&content=post&id=" . $row['post_id'] . "&origin="
                             . $origin . "\" onclick=\"javascript:if(!confirm('"
                             . addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
                             . "')) return false;\">"
@@ -188,9 +188,9 @@ if (isset($current_thread['thread_id'])) {
                     );
                     $iconEdit .= "";
                     if ($increment > 0) {
-                        $iconEdit .= "<a href=\"viewthread.php?" . api_get_cidreq() . "&amp;forum=" . $clean_forum_id
-                            . "&amp;thread=" . $clean_thread_id . "&amp;action=move&amp;post=" . $row['post_id']
-                            . "&amp;origin=" . $origin . "\">"
+                        $iconEdit .= "<a href=\"viewthread.php?" . api_get_cidreq() . "&forum=" . $clean_forum_id
+                            . "&thread=" . $clean_thread_id . "&action=move&post=" . $row['post_id']
+                            . "&origin=" . $origin . "\">"
                             . Display::return_icon('move.png', get_lang('MovePost'), array(), ICON_SIZE_SMALL)
                             . "</a>";
                     }
@@ -225,7 +225,7 @@ if (isset($current_thread['thread_id'])) {
                 if ($increment > 0 && $locked == false && $userCanEdit) {
                     $iconEdit .= "<a href=\"forumqualify.php?" . api_get_cidreq() . "&forum=" . $my_forum_id
                         . "&thread=" . $clean_thread_id . "&action=list&post=" . $row['post_id']
-                        . "&amp;user=" . $row['poster_id'] . "&amp;user_id=" . $row['poster_id']
+                        . "&user=" . $row['poster_id'] . "&user_id=" . $row['poster_id']
                         . "&origin=" . $origin . "&idtextqualify=" . $current_qualify_thread . "\" >"
                         . Display::return_icon('quiz.gif', get_lang('Qualify'))
                         . "</a> ";
@@ -301,9 +301,9 @@ if (isset($current_thread['thread_id'])) {
                             !(api_is_course_coach() && $current_forum['session_id'] != $sessionId)
                         )
                     ) {
-                        $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;origin='
-                            . Security::remove_XSS($_GET['origin']) . '&amp;action=delete_attach&amp;id_attach='
-                            . $attachment['iid'] . '&amp;forum=' . $clean_forum_id . '&amp;thread=' . $clean_thread_id
+                        $html .= '&nbsp;&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&origin='
+                            . Security::remove_XSS($_GET['origin']) . '&action=delete_attach&id_attach='
+                            . $attachment['iid'] . '&forum=' . $clean_forum_id . '&thread=' . $clean_thread_id
                             . '" onclick="javascript:if(!confirm(\''
                             . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))
                             . '\')) return false;">'

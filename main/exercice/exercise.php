@@ -459,14 +459,14 @@ if ($total > $limit) {
     echo '<div style="float:right;height:20px;">';
     //show pages navigation link for previous page
     if ($page) {
-        echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page - 1)."\">".Display :: return_icon('action_prev.png', get_lang('PreviousPage'))."</a>";
+        echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&page=".($page - 1)."\">".Display :: return_icon('action_prev.png', get_lang('PreviousPage'))."</a>";
     } elseif ($total_exercises + $hp_count > $limit) {
         echo Display :: return_icon('action_prev_na.png', get_lang('PreviousPage'));
     }
 
     //show pages navigation link for previous page
     if ($total_exercises > $from + $limit || $hp_count > $from + $limit) {
-        echo ' '."<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;page=".($page + 1)."\">".Display::return_icon('action_next.png', get_lang('NextPage'))."</a>";
+        echo ' '."<a href=\"".api_get_self()."?".api_get_cidreq()."&page=".($page + 1)."\">".Display::return_icon('action_next.png', get_lang('NextPage'))."</a>";
     } elseif ($page) {
         echo ' '.Display :: return_icon('action_next_na.png', get_lang('NextPage'));
     }
@@ -1000,13 +1000,13 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
             // if active
             if ($active) {
                 $nbrActiveTests = $nbrActiveTests + 1;
-                $actions .= '      <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=disable&amp;page='.$page.'&amp;file='.$path.'">'.
+                $actions .= '      <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=disable&page='.$page.'&file='.$path.'">'.
                     Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL).'</a>';
             } else { // else if not active
-                $actions .='    <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=enable&amp;page='.$page.'&amp;file='.$path.'">'.
+                $actions .='    <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=enable&page='.$page.'&file='.$path.'">'.
                     Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL).'</a>';
             }
-            $actions .= '<a href="'.$exercisePath.'?'.api_get_cidreq().'&amp;hpchoice=delete&amp;file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset).' '.$title."?").'\')) return false;">'.
+            $actions .= '<a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=delete&file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset).' '.$title."?").'\')) return false;">'.
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
             $item .= Display::tag('td', $actions);
             echo Display::tag('tr', $item, array('class' => $class));

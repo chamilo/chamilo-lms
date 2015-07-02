@@ -94,21 +94,21 @@ switch ($action) {
         $iconsTools = '<div id="custom-icons">';
         $iconsTools .= Display::page_header( get_lang('CustomizeIcons'),null,'h4');
         $iconsTools .= '<div class="row">';
-        foreach($toolList as $tool){
+        foreach ($toolList as $tool) {
 
-            if($tool['id']>20){
+            if ($tool['id']>20) {
                 $toolName = $tool['name'];
-            }else{
+            } else {
                 $toolName = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
             }
 
             $iconsTools .= '<div class="col-md-2">';
             $iconsTools .= '<div class="items-tools">';
 
-            if(!empty($tool['custom_icon'])){
+            if (!empty($tool['custom_icon'])) {
                 $image = getCustomWebIconPath().$tool['custom_icon'];
                 $icon = Display::img($image,$toolName);
-            }else{
+            } else {
                 $image = (substr($tool['image'], 0, strpos($tool['image'], '.'))).'.png';
                 $icon = Display::return_icon(
                     $image,
@@ -120,8 +120,10 @@ switch ($action) {
             }
 
 
-            $delete = (!empty($tool['custom_icon'])) ? '<a class="btn btn-default" href="' . api_get_self() . '?action=delete_icon&id=' . $tool['iid'] . '&'.api_get_cidreq().'">
-            <i class="fa fa-trash-o"></i></a>' : '';
+            $delete = (!empty($tool['custom_icon'])) ? "<a class=\"btn btn-default\" onclick=\"javascript:
+                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
+                "')) return false;\" href=\"". api_get_self() . '?action=delete_icon&id=' . $tool['iid'] . '&'.api_get_cidreq()."\">
+            <i class=\"fa fa-trash-o\"></i></a>" : "";
             $edit = '<a class="btn btn-default" href="' . api_get_self() . '?action=edit_icon&id=' . $tool['iid'] . '&'.api_get_cidreq().'"><i class="fa fa-pencil"></i></a>';
 
 

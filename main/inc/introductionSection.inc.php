@@ -312,10 +312,9 @@ if ($intro_dispCommand) {
                 '<a  class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().'&amp;intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <i class="fa fa-pencil"></i></a>';
             $toolbar .= $editIconButton;
-            $toolbar .=
-                '<a class="btn btn-default" title="' . get_lang('Delete') . '" href="'.api_get_self().'?'.api_get_cidreq().'&amp;intro_cmdDel=1" onclick="javascript:
-                if(!confirm('.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                ')) return false;"> <i class="fa fa-trash-o"></i> </a>';
+            $toolbar .="<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:
+                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
+                "')) return false;\"><i class=\"fa fa-trash-o\"></i></a>";
 
         } else {
             $toolbar .=
@@ -323,10 +322,9 @@ if ($intro_dispCommand) {
                 <i class="fa fa-pencil"></i>
                 </a>"';
             $toolbar .= $editIconButton;
-            $toolbar .=
-                '<a class="btn btn-default" title="' . get_lang('Delete') . '" href="'.api_get_self().'?intro_cmdDel=1" onclick="javascript:
-                if(!confirm('.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).')) return false;>
-                <i class="fa fa-trash-o"></i> </a>';
+            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:
+                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
+                "')) return false;\"><i class=\"fa fa-trash-o\"></i></a>";
         }
         $toolbar .=  "</div>";
         // Fix for chrome XSS filter for videos in iframes - BT#7930
@@ -344,7 +342,7 @@ if ($intro_dispDefault) {
         $introduction_section .='<div class="page-course">';
         $introduction_section .=  $intro_content;
         $introduction_section .= '</div>';
-    }else{
+    } else {
         $introduction_section .= '<div class="help-course">';
         $introduction_section .= get_lang('AddCustomCourse').' ' . $textIntro ;
         $introduction_section .= '</div>';
@@ -356,7 +354,7 @@ $introduction_section .= '</div>';
 
 
 
-$introduction_section .=  '</div>';
+$introduction_section .= '</div>';
 
 $browser = api_get_navigator();
 

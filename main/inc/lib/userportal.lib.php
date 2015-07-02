@@ -1264,7 +1264,7 @@ class IndexManager
                             if ($gamificationModeIsActive) {
                                 $params['stars'] = SessionManager::getNumberOfStarsFromGamification($params['id']);
                                 $params['progress'] = SessionManager::getProgressFromGamification($params['id']);
-                                $params['points'] = SessionManager::getPointsFromGamification($params['id']);
+                                $params['points'] = GamificationUtils::getSessionPoints($params['id'], $this->user_id);
                             }
 
                             $this->tpl->assign('session', $params);

@@ -613,6 +613,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
         ) {
 
             $groupsNameList = GroupManager::getAllGroupPerUserSubscription($user_id);
+            $groupsNameListParsed = [];
+            if (!empty($groupsNameList)) {
+                $groupsNameListParsed = array_column($groupsNameList, 'name');
+            }
+
             $temp = array();
             if (api_is_allowed_to_edit(null, true)) {
 
@@ -634,10 +639,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $temp[] = $o_course_user['username'];
 
                 // Groups.
-                $groupsNameListParsed = [];
-                if (!empty($groupsNameList)) {
-                    $groupsNameListParsed = array_column($groupsNameList, 'name');
-                }
                 $temp[] = implode(', ', $groupsNameListParsed);
 
                 // Status
@@ -689,7 +690,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 }
                 $temp[] = $o_course_user['username'];
                 // Group.
-                $temp[] = implode(', ', $groupsNameList);
+                $temp[] = implode(', ', $groupsNameListParsed);
 
                 if ($course_info['unsubscribe'] == 1) {
                     //User id for actions

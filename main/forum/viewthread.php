@@ -88,20 +88,20 @@ if ($origin == 'group') {
     } else {
         $interbreadcrumb[] = array(
             'url' => 'index.php?'
-                . (isset($gradebook) ? "gradebook=$gradebook&amp;" : '')
+                . (isset($gradebook) ? "gradebook=$gradebook&" : '')
                 . 'search=' . Security::remove_XSS(urlencode($my_search)),
             'name' => $nameTools
         );
         $interbreadcrumb[] = array(
             'url' => 'viewforumcategory.php?forumcategory='
                 . $current_forum_category['cat_id']
-                . "&amp;origin=$origin&amp;search="
+                . "&origin=$origin&search="
                 . Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($current_forum_category['cat_title'])
         );
         $interbreadcrumb[] = array(
             'url' => 'viewforum.php?forum=' . Security::remove_XSS($_GET['forum'])
-                . "&amp;origin=$origin&amp;search="
+                . "&origin=$origin&search="
                 . Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($current_forum['forum_title'])
         );
@@ -210,7 +210,7 @@ if ($my_message != 'PostDeletedSpecial') {
                 }
             }
         }
-    }else{
+    } else {
         echo '<div class="actions">';
         echo '<span style="float:right;">'.search_link().'</span>';
         if ($origin != 'learnpath') {
@@ -263,11 +263,11 @@ if ($my_message != 'PostDeletedSpecial') {
         $my_url = '<a href="' . $forumUrl . 'viewthread.php?' . api_get_cidreq() . '&' . api_get_cidreq()
             . '&forum=' . Security::remove_XSS($_GET['forum']) . '&thread=' . Security::remove_XSS($_GET['thread'])
             . '&search=' . Security::remove_XSS(urlencode($my_search));
-        echo $my_url . '&amp;view=flat">'
+        echo $my_url . '&view=flat">'
             . Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
             . get_lang('FlatView') . '</a>';
-        //echo $my_url.'&amp;view=threaded">'.Display::return_icon('forum_threadedview.gif', get_lang('ThreadedView')).get_lang('ThreadedView').'</a>';
-        echo $my_url . '&amp;view=nested">'
+        //echo $my_url.'&view=threaded">'.Display::return_icon('forum_threadedview.gif', get_lang('ThreadedView')).get_lang('ThreadedView').'</a>';
+        echo $my_url . '&view=nested">'
             . Display::return_icon('forum_nestedview.png', get_lang('NestedView'), null, ICON_SIZE_MEDIUM)
             . get_lang('NestedView') . '</a>';
     }

@@ -909,7 +909,7 @@ function get_action_icon_for_question(
 			unset($myObjEx);
 			break;
 		case "clone":
-            $url = api_get_self()."?".api_get_cidreq().$getParams."&amp;question_copy=$in_questionid&amp;course_id=$in_selected_course&amp;fromExercise=$from_exercise";
+            $url = api_get_self()."?".api_get_cidreq().$getParams."&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise";
             $res = Display::url(
                 Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest')),
                 $url

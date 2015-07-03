@@ -120,6 +120,7 @@
 .img-items-course img{
 	width: 100%;
 	border-radius:10px;
+  min-height: 180px;
 }
 .btn-primary{
 	background-color: #35a8c9;

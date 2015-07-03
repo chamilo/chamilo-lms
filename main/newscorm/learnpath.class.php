@@ -499,14 +499,14 @@ class learnpath
         if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
         }
-        $sql_count = "	SELECT COUNT(id) AS num
-                        FROM $tbl_lp_item
-                        WHERE
-                            c_id = $course_id AND
-                            lp_id = " . $this->get_id() . " AND
-                            parent_item_id = " . $parent;
+        $sql = "SELECT COUNT(id) AS num
+                FROM $tbl_lp_item
+                WHERE
+                    c_id = $course_id AND
+                    lp_id = " . $this->get_id() . " AND
+                    parent_item_id = " . $parent;
 
-        $res_count = Database::query($sql_count);
+        $res_count = Database::query($sql);
         $row = Database :: fetch_array($res_count);
         $num = $row['num'];
 
@@ -554,14 +554,17 @@ class learnpath
             $sql = 'SELECT SUM(ponderation)
 					FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
                     INNER JOIN  ' . Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION) . ' as quiz_rel_question
-                    ON quiz_question.id = quiz_rel_question.question_id
-                    WHERE   quiz_rel_question.exercice_id = '.$id." AND
-	            			quiz_question.c_id = $course_id AND
-	            			quiz_rel_question.c_id = $course_id ";
+                    ON
+                        quiz_question.id = quiz_rel_question.question_id AND
+                        quiz_question.c_id = quiz_rel_question.c_id
+                    WHERE
+                        quiz_rel_question.exercice_id = '.$id." AND
+	            		quiz_question.c_id = $course_id AND
+	            		quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database :: result($rsQuiz, 0, 0);
 
-            //Disabling the exercise if we add it inside a LP
+            // Disabling the exercise if we add it inside a LP
             $exercise = new Exercise();
             $exercise->read($id);
             $exercise->disable();
@@ -2281,8 +2284,9 @@ class learnpath
 
         $rs  = Database::query($sql);
         $now = time();
-        if (Database::num_rows($rs)>0) {
+        if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs, 'ASSOC');
+
             $prerequisite = $row['prerequisite'];
             $is_visible = true;
 
@@ -2332,7 +2336,6 @@ class learnpath
 
             // Check if the subscription users/group to a LP is ON
             if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1) {
-
                 // Try group
                 $is_visible = false;
 
@@ -9477,15 +9480,12 @@ class learnpath
                             $organization->appendChild($my_item);
                         }
 
-                        // Include export scripts.
-                        require_once api_get_path(SYS_CODE_PATH).'exercice/export/scorm/scorm_export.php';
-
                         // Get the path of the file(s) from the course directory root
                         //$my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
                         $my_file_path = 'quiz_'.$item->get_id().'.html';
                         // Write the contents of the exported exercise into a (big) html file
                         // to later pack it into the exported SCORM. The file will be removed afterwards.
-                        $contents = export_exercise($exe_id, true);
+                        $contents = ScormSection::export_exercise_to_scorm($exe_id, true);
                         $tmp_file_path = $archive_path.$temp_dir_short.'/'.$my_file_path;
                         $res = file_put_contents($tmp_file_path, $contents);
                         if ($res === false) { error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0); }
@@ -9836,7 +9836,12 @@ EOD;
         // Clean possible temporary files.
         foreach ($files_cleanup as $file) {
             $res = unlink($file);
-            if ($res === false) { error_log('Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__, 0); }
+            if ($res === false) {
+                error_log(
+                    'Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__,
+                    0
+                );
+            }
         }
         $name = api_replace_dangerous_char($this->get_name()).'.zip';
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);

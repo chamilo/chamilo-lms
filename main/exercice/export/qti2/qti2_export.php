@@ -230,7 +230,7 @@ class ImsSection
     {
         $out = "";
         foreach ($this->exercise->selectQuestionList() as $q) {
-        	$out .= export_question($q, false);
+        	$out .= export_question_qti($q, false);
         }
         return $out;
     }
@@ -419,7 +419,7 @@ class ImsItem
  * @param boolean $standalone Wether it should include XML tag and DTD line.
  * @return The XML as a string, or an empty string if there's no exercise with given ID.
  */
-function export_exercise($exerciseId, $standalone = true)
+function export_exercise_to_qti($exerciseId, $standalone = true)
 {
     $exercise = new Exercise();
     if (!$exercise->read($exerciseId)) {
@@ -436,7 +436,7 @@ function export_exercise($exerciseId, $standalone = true)
  * @param int $questionId
  * @param bool $standalone (ie including XML tag, DTD declaration, etc)
  */
-function export_question($questionId, $standalone = true)
+function export_question_qti($questionId, $standalone = true)
 {
     $question = new Ims2Question();
     $qst = $question->read($questionId);

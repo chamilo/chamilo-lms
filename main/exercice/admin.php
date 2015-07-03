@@ -147,7 +147,7 @@ $aType = array(
 
 if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';
-    $export = export_question($_GET['questionId'], true);
+    $export = export_question_qti($_GET['questionId'], true);
     $qid = (int)$_GET['questionId'];
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $temp_dir_short = uniqid();

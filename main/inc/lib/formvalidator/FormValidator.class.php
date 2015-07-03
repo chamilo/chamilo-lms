@@ -495,6 +495,46 @@ EOT;
     }
 
     /**
+     * Shortcut to reset button
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     * @return HTML_QuickForm_button
+     */
+    public function addButtonReset($label, $name = 'reset', $createElement = false)
+    {
+        $icon = 'eraser';
+        $style = 'default';
+        $size = 'default';
+        $class = null;
+        $attributes = array();
+
+        if ($createElement) {
+            return $this->createElement(
+                'reset',
+                $name,
+                $label,
+                $icon,
+                $style,
+                $size,
+                $class,
+                $attributes
+            );
+        }
+
+        return $this->addElement(
+            'reset',
+            $name,
+            $label,
+            $icon,
+            $style,
+            $size,
+            $class,
+            $attributes
+        );
+    }
+
+    /**
      * Returns a button with the primary color and an upload icon
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)

@@ -146,10 +146,7 @@ function api_utf8_encode_xml($string, $from_encoding = null) {
  * @param string $to_encoding (optional)    The encoding that text is being converted to. If it is omited, the platform character set is assumed.
  * @return string                           Returns the converted xml-text.
  */
-function api_utf8_decode_xml($string, $to_encoding = null) {
-    if (empty($to_encoding)) {
-        $to_encoding = _api_mb_internal_encoding();
-    }
+function api_utf8_decode_xml($string, $to_encoding = 'UTF-8') {
     return _api_convert_encoding_xml($string, $to_encoding, 'UTF-8');
 }
 

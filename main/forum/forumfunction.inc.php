@@ -1845,7 +1845,7 @@ function get_threads($forum_id, $course_code = null)
             INNER JOIN $table_item_property item_properties
             ON
                 thread.thread_id = item_properties.ref AND
-                item_properties.c_id = thread.c_id
+                item_properties.c_id = thread.c_id AND
                 item_properties.c_id = $course_id AND
                 item_properties.tool = '".TABLE_FORUM_THREAD."' $groupCondition
             LEFT JOIN $table_users users

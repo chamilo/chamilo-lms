@@ -25,6 +25,11 @@ $(document).ready(function() {
 	var m = date.getMonth()+1;
 	var y = date.getFullYear();
 
+    // Reset button.
+    $("button[type=reset]").click(function() {
+        $("#session_id").find('option').removeAttr("selected");
+    });
+
 	$("#dialog-form").dialog({
 		autoOpen: false,
 		modal	: false,
@@ -337,10 +342,9 @@ $(document).ready(function() {
                             window.location.href = url;
                             $("#dialog-form").dialog( "close" );
                         },
-
 						'{{ "Delete"|get_lang }}': function() {
 
-                            if (calEvent.parent_event_id || calEvent.has_children != '' ) {
+                            if (calEvent.parent_event_id || calEvent.has_children != '') {
                                 var newDiv = $(document.createElement('div'));
 
                                 newDiv.dialog({
@@ -425,8 +429,8 @@ $(document).ready(function() {
 					}
 				});
 			} else {
-			    //Simple form
-                //my_start_month = calEvent.start.getMonth() +1;
+			    // Simple form
+                // my_start_month = calEvent.start.getMonth() +1;
                 $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
 
                 if (end_date != '') {

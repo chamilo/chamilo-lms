@@ -905,11 +905,19 @@ class Agenda
                 break;
             case 'personal':
             default:
-                // Getting personal events
-                $this->getPersonalEvents($start, $end);
+                $sessionFilterActive = false;
 
-                // Getting platform/admin events
-                $this->getPlatformEvents($start, $end);
+                if (!empty($this->sessionId)) {
+                    $sessionFilterActive = true;
+                }
+
+                if ($sessionFilterActive == false) {
+                    // Getting personal events
+                    $this->getPersonalEvents($start, $end);
+
+                    // Getting platform/admin events
+                    $this->getPlatformEvents($start, $end);
+                }
 
                 // Getting course events
                 $my_course_list = array();
@@ -944,19 +952,18 @@ class Agenda
                                 $session_list[] = $sessionInfo;
                             }
                         }
-
-                        //var_dump($session_list);
-
-                        /*$courseList = SessionManager::getAllCoursesFollowedByUser(
-                            api_get_user_id(),
-                            null
-                        );
-                        var_dump($courseList);*/
                     }
                 }
 
+
                 if (!empty($session_list)) {
                     foreach ($session_list as $session_item) {
+                        if ($sessionFilterActive) {
+                            if ($this->sessionId != $session_item['session_id']) {
+                                continue;
+                            }
+                        }
+
                         $my_courses = $session_item['courses'];
                         $my_session_id = $session_item['session_id'];
                         if (!empty($my_courses)) {
@@ -968,7 +975,7 @@ class Agenda
                     }
                 }
 
-                if (!empty($my_course_list)) {
+                if (!empty($my_course_list) && $sessionFilterActive == false) {
                     foreach ($my_course_list as $course_info_item) {
                         if (isset($course_id) && !empty($course_id)) {
                             if ($course_info_item['real_id'] == $course_id) {
@@ -979,6 +986,7 @@ class Agenda
                         }
                     }
                 }
+
                 break;
         }
 
@@ -2291,8 +2299,8 @@ class Agenda
         $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".api_get_cidreq()."'>".
             Display::return_icon('week.png', get_lang('AgendaList'), '', ICON_SIZE_MEDIUM)."</a>";
 
-        if (api_is_allowed_to_edit(false, true) OR
-            (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) OR
+        if (api_is_allowed_to_edit(false, true) ||
+            (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) ||
             GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
             GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
         ) {
@@ -2324,6 +2332,49 @@ class Agenda
                 }
             }
         }
+
+        if (api_is_platform_admin() ||
+            api_is_teacher() ||
+            api_is_student_boss() ||
+            api_is_drh() ||
+            api_is_session_admin() ||
+            api_is_coach()
+        ) {
+            if ($this->type == 'personal') {
+                $form = null;
+                if (!isset($_GET['action'])) {
+
+                    $form = new FormValidator(
+                        'form-search',
+                        'get',
+                        api_get_self().'?type=personal&',
+                        '',
+                        array(),
+                        FormValidator::LAYOUT_INLINE
+                    );
+
+                    $sessions = SessionManager::get_sessions_by_user(api_get_user_id());
+                    $form->addHidden('type', 'personal');
+                    $sessions = array_column($sessions, 'session_name', 'session_id');
+                    $sessions = ['0' => get_lang('SelectAnOption')] + $sessions;
+
+                    $form->addSelect(
+                        'session_id',
+                        get_lang('Session'),
+                        $sessions,
+                        ['id' => 'session_id']
+                    );
+                    $form->addButtonFilter(get_lang('Filter'));
+                    $form->addButtonReset(get_lang('Reset'));
+                    $form = $form->returnForm();
+                }
+
+                if ($view == 'calendar') {
+                    $actions .= $form;
+                }
+            }
+        }
+
         return $actions;
     }
 

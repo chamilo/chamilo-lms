@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Show the achieved badges by an user
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.badge
  */
+
 require_once '../inc/global.inc.php';
 
 if (api_get_setting('allow_skills_tool') !== 'true') {
@@ -44,7 +46,7 @@ foreach ($userSkills as $skill) {
 
 $backpack = 'https://backpack.openbadges.org/';
 
-$configBackpack = api_get_seeting('openbadges_backpack');
+$configBackpack = api_get_setting('openbadges_backpack');
 if (strcmp($backpack, $configBackpack) !== 0) {
     $backpack = $configBackpack;
 }

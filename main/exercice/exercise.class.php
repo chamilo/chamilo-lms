@@ -4423,7 +4423,12 @@ class Exercise
         }
 
         // Checking visibility in the item_property table.
-        $visibility = api_get_item_visibility(api_get_course_info(), TOOL_QUIZ, $this->id, api_get_session_id());
+        $visibility = api_get_item_visibility(
+            api_get_course_info(),
+            TOOL_QUIZ,
+            $this->id,
+            api_get_session_id()
+        );
 
         if ($visibility == 0 || $visibility == 2) {
             $this->active = 0;
@@ -4431,7 +4436,7 @@ class Exercise
 
         // 2. If the exercise is not active.
         if (empty($lp_id)) {
-            //2.1 LP is OFF
+            // 2.1 LP is OFF
             if ($this->active == 0) {
                 return array(
                     'value' => false,
@@ -4439,8 +4444,8 @@ class Exercise
                 );
             }
         } else {
-            //2.1 LP is loaded
-            if ($this->active == 0 AND !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
+            // 2.1 LP is loaded
+            if ($this->active == 0 && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
                 return array(
                     'value' => false,
                     'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false)
@@ -4453,6 +4458,7 @@ class Exercise
             (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') ||
             (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')
         ) ? true : false;
+
 
         if ($limit_time_exists) {
             $time_now = time();

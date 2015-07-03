@@ -67,7 +67,6 @@ switch ($action) {
         }
         $form->addHtml('</div>');
 
-
         $form->setDefaults($tool);
 
         $content = $form->returnForm();
@@ -86,7 +85,6 @@ switch ($action) {
         break;
     case 'list':
     default:
-
         $toolList = CourseHome::toolsIconsAction(
             api_get_course_int_id(),
             api_get_session_id()
@@ -107,25 +105,23 @@ switch ($action) {
 
             if (!empty($tool['custom_icon'])) {
                 $image = getCustomWebIconPath().$tool['custom_icon'];
-                $icon = Display::img($image,$toolName);
+                $icon = Display::img($image, $toolName);
             } else {
                 $image = (substr($tool['image'], 0, strpos($tool['image'], '.'))).'.png';
                 $icon = Display::return_icon(
                     $image,
-                    $tool_name,
+                    $toolName,
                     array('id' => 'tool_'.$tool['id']),
                     ICON_SIZE_BIG,
                     false
                 );
             }
 
-
             $delete = (!empty($tool['custom_icon'])) ? "<a class=\"btn btn-default\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\" href=\"". api_get_self() . '?action=delete_icon&id=' . $tool['iid'] . '&'.api_get_cidreq()."\">
             <i class=\"fa fa-trash-o\"></i></a>" : "";
             $edit = '<a class="btn btn-default" href="' . api_get_self() . '?action=edit_icon&id=' . $tool['iid'] . '&'.api_get_cidreq().'"><i class="fa fa-pencil"></i></a>';
-
 
             $iconsTools .= '<div class="icon-tools">'. $icon . '</div>';
             $iconsTools .= '<div class="name-tools">' . $toolName . '</div>';
@@ -136,10 +132,11 @@ switch ($action) {
         $iconsTools .= '</div>';
         $iconsTools .= '</div>';
 
-        $content.=$iconsTools;
+        $content = $iconsTools;
 
         break;
 }
+
 /**
  * @return string
  */

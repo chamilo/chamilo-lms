@@ -277,7 +277,9 @@ if (!empty($action)) {
 
                 $postReplyTo = null;
 
-                if (!empty($post->getPostParentId())) {
+                $postParentId = $post->getPostParentId();
+
+                if (!empty($postParentId)) {
                     $foo = $postsRepo->find($post->getPostParentId());
 
                     if (!empty($foo)) {

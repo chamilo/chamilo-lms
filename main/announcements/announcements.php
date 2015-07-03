@@ -389,33 +389,41 @@ if ($allowToEdit) {
             if ($ctok == $_POST['sec_token']) {
                 $file = $_FILES['user_upload'];
                 $file_comment = $_POST['file_comment'];
-                if (!empty($group_id)) {
-                    $insert_id = AnnouncementManager::add_group_announcement(
-                        $safe_emailTitle,
-                        $safe_newContent,
-                        array('GROUP:' . $group_id),
-                        $_POST['selectedform'],
-                        $file,
-                        $file_comment,
-                        $sendToUsersInSession
-                    );
-                } else {
-                    $insert_id = AnnouncementManager::add_announcement(
-                        $safe_emailTitle,
-                        $safe_newContent,
-                        $_POST['selectedform'],
-                        $file,
-                        $file_comment,
-                        $sendToUsersInSession
-                    );
-                }
-                //store_resources($_SESSION['source_type'],$insert_id);
-                $_SESSION['select_groupusers']="hide";
-                $message = get_lang('AnnouncementAdded');
+                $users = isset($_POST['selectedform']) ? $_POST['selectedform'] : '';
+                if (!empty($users)) {
+                    if (!empty($group_id)) {
+                        $insert_id = AnnouncementManager::add_group_announcement(
+                            $safe_emailTitle,
+                            $safe_newContent,
+                            array('GROUP:'.$group_id),
+                            $users,
+                            $file,
+                            $file_comment,
+                            $sendToUsersInSession
+                        );
+                    } else {
+                        $insert_id = AnnouncementManager::add_announcement(
+                            $safe_emailTitle,
+                            $safe_newContent,
+                            $users,
+                            $file,
+                            $file_comment,
+                            $sendToUsersInSession
+                        );
+                    }
+                    //store_resources($_SESSION['source_type'],$insert_id);
+                    $_SESSION['select_groupusers'] = "hide";
+                    $message = get_lang('AnnouncementAdded');
 
-                /* MAIL FUNCTION */
-                if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
-                    AnnouncementManager::send_email($insert_id, $sendToUsersInSession);
+                    /* MAIL FUNCTION */
+                    if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
+                        AnnouncementManager::send_email(
+                            $insert_id,
+                            $sendToUsersInSession
+                        );
+                    }
+                } else {
+                    $message = get_lang('ErrorOccurred');
                 }
             } // end condition token
         }	// isset

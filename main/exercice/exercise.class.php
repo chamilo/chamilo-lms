@@ -195,7 +195,6 @@ class Exercise
             }*/
             return true;
         }
-
         return false;
     }
 
@@ -1027,7 +1026,7 @@ class Exercise
             '<a href="javascript://" onclick=" return show_media()">
                 <span id="media_icon">
                     <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />'.
-                    addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'
+            addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'
                 </span>
             </a>
         ');
@@ -1619,7 +1618,7 @@ class Exercise
                     exe_cours_id = '".api_get_course_id()."' AND
                     exe_exo_id = ".$this->id." AND
                     session_id = ".api_get_session_id()." ".
-                    $sql_where;
+            $sql_where;
 
         $result   = Database::query($sql);
         $exe_list = Database::store_result($result);
@@ -2821,6 +2820,7 @@ class Exercise
                         }
                         $user_array = substr($user_array,0,-1);
                     } else {
+                        $studentChoice = $choice['order'][$answerId];
                         if ($studentChoice) {
                             $newquestionList[]=$questionId;
                         }
@@ -2863,7 +2863,7 @@ class Exercise
                             //}
                         } elseif ($answerType == FILL_IN_BLANKS) {
                             // if ($origin!='learnpath') {
-                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,0,0);
+                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,0,0, $results_disabled);
                             //	}
                         } elseif ($answerType == CALCULATED_ANSWER) {
                             //if ($origin!='learnpath') {
@@ -3074,7 +3074,7 @@ class Exercise
                             }
                             break;
                         case FILL_IN_BLANKS:
-                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,$exeId,$questionId);
+                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,$exeId,$questionId, $results_disabled);
                             break;
                         case CALCULATED_ANSWER:
                             ExerciseShowFunctions::display_calculated_answer($feedback_type, $answer, $exeId, $questionId);
@@ -3273,35 +3273,35 @@ class Exercise
 
         //Fixes multiple answer question in order to be exact
         //if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
-       /* if ($answerType == GLOBAL_MULTIPLE_ANSWER) {
-            $diff = @array_diff($answer_correct_array, $real_answers);
+        /* if ($answerType == GLOBAL_MULTIPLE_ANSWER) {
+             $diff = @array_diff($answer_correct_array, $real_answers);
 
-            // All good answers or nothing works like exact
+             // All good answers or nothing works like exact
 
-            $counter = 1;
-            $correct_answer = true;
-            foreach ($real_answers as $my_answer) {
-                if ($debug) error_log(" my_answer: $my_answer answer_correct_array[counter]: ".$answer_correct_array[$counter]);
-                if ($my_answer != $answer_correct_array[$counter]) {
-                    $correct_answer = false;
-                    break;
-                }
-                $counter++;
-            }
+             $counter = 1;
+             $correct_answer = true;
+             foreach ($real_answers as $my_answer) {
+                 if ($debug) error_log(" my_answer: $my_answer answer_correct_array[counter]: ".$answer_correct_array[$counter]);
+                 if ($my_answer != $answer_correct_array[$counter]) {
+                     $correct_answer = false;
+                     break;
+                 }
+                 $counter++;
+             }
 
-            if ($debug) error_log(" answer_correct_array: ".print_r($answer_correct_array, 1)."");
-            if ($debug) error_log(" real_answers: ".print_r($real_answers, 1)."");
-            if ($debug) error_log(" correct_answer: ".$correct_answer);
+             if ($debug) error_log(" answer_correct_array: ".print_r($answer_correct_array, 1)."");
+             if ($debug) error_log(" real_answers: ".print_r($real_answers, 1)."");
+             if ($debug) error_log(" correct_answer: ".$correct_answer);
 
-            if ($correct_answer == false) {
-                $questionScore = 0;
-            }
+             if ($correct_answer == false) {
+                 $questionScore = 0;
+             }
 
-            // This makes the result non exact
-            if (!empty($diff)) {
-                $questionScore = 0;
-            }
-        }*/
+             // This makes the result non exact
+             if (!empty($diff)) {
+                 $questionScore = 0;
+             }
+         }*/
 
         $extra_data = array(
             'final_overlap' => $final_overlap,
@@ -3950,21 +3950,30 @@ class Exercise
     }
 
     /**
-     *  Checks if the exercise is visible due a lot of conditions - visibility, time limits, student attempts
-     * @return bool true if is active
+     * Checks if the exercise is visible due a lot of conditions
+     * visibility, time limits, student attempts
+     * Return associative array
+     * value : true if execise visible
+     * message : HTML formated message
+     * rawMessage : text message
+     * @param int $lpId
+     * @param int $lpItemId
+     * @param int $lpItemViewId
+     * @param bool $filterByAdmin
+     * @return array
      */
     public function is_visible(
-        $lp_id = 0,
-        $lp_item_id = 0,
-        $lp_item_view_id = 0,
-        $filter_by_admin = true
-    ) {
+        $lpId = 0,
+        $lpItemId = 0,
+        $lpItemViewId = 0,
+        $filterByAdmin = true)
+    {
         // 1. By default the exercise is visible
-        $is_visible = true;
+        $isVisible = true;
         $message = null;
 
         // 1.1 Admins and teachers can access to the exercise
-        if ($filter_by_admin) {
+        if ($filterByAdmin) {
             if (api_is_platform_admin() || api_is_course_admin()) {
                 return array('value' => true, 'message' => '');
             }
@@ -3974,101 +3983,172 @@ class Exercise
         if ($this->active == -1) {
             return array(
                 'value' => false,
-                'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false)
+                'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false),
+                'rawMessage' => get_lang('ExerciseNotFound')
             );
         }
 
         // Checking visibility in the item_property table.
-        $visibility = api_get_item_visibility(api_get_course_info(), TOOL_QUIZ, $this->id, api_get_session_id());
+        $visibility = api_get_item_visibility(api_get_course_info(),
+            TOOL_QUIZ, $this->id, api_get_session_id());
 
         if ($visibility == 0 || $visibility == 2) {
             $this->active = 0;
         }
 
         // 2. If the exercise is not active.
-        if (empty($lp_id)) {
-            //2.1 LP is OFF
+        if (empty($lpId)) {
+            // 2.1 LP is OFF
             if ($this->active == 0) {
                 return array(
                     'value' => false,
-                    'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false)
+                    'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false),
+                    'rawMessage' => get_lang('ExerciseNotFound')
                 );
             }
         } else {
-            //2.1 LP is loaded
-            if ($this->active == 0 AND !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
+            // 2.1 LP is loaded
+            if ($this->active == 0 AND !learnpath::is_lp_visible_for_student($lpId, api_get_user_id())) {
                 return array(
                     'value' => false,
-                    'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false)
+                    'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false),
+                    'rawMessage' => get_lang('ExerciseNotFound')
                 );
             }
         }
 
         //3. We check if the time limits are on
-        $limit_time_exists = ((!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') || (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')) ? true : false;
+        if ((!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00')
+            || (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00')) {
+            $limitTimeExists = true;
+        } else {
+            $limitTimeExists = false;
+        }
 
-        if ($limit_time_exists) {
-            $time_now = time();
+        if ($limitTimeExists) {
+            $timeNow = time();
 
+            $existsStartDate = false;
+            $nowIsAfterStartDate = true;
+            $existsEndDate = false;
+            $nowIsBeforeEndDate = true;
+
+            // check if we have a valid start date and/or end date
             if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
-                $is_visible = (($time_now - api_strtotime($this->start_time, 'UTC')) > 0) ? true : false;
+                $existsStartDate = true;
             }
 
-            if ($is_visible == false) {
-                $message = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($this->start_time));
+            if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
+                $existsEndDate = true;
             }
 
-            if ($is_visible == true) {
-                if ($this->end_time != '0000-00-00 00:00:00') {
-                    $is_visible = ((api_strtotime($this->end_time, 'UTC') > $time_now) > 0) ? true : false;
-                    if ($is_visible == false) {
-                        $message = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($this->end_time));
-                    }
+            // check if we are before-or-after end-or-start date
+            if ($existsStartDate && $timeNow < api_strtotime($this->start_time, 'UTC')) {
+                $nowIsAfterStartDate = false;
+            }
+
+            if ($existsEndDate & $timeNow >= api_strtotime($this->end_time, 'UTC')) {
+                $nowIsBeforeEndDate = false;
+            }
+
+            // lets check all cases
+            if ($existsStartDate && !$existsEndDate) {
+                // exists start date and dont exists end date
+                if ($nowIsAfterStartDate) {
+                    // after start date, no end date
+                    $isVisible = true;
+                    $message = sprintf(get_lang('ExerciseAvailableSinceX'),
+                        api_convert_and_format_date($this->start_time));
+                } else {
+                    // before start date, no end date
+                    $isVisible = false;
+                    $message = sprintf(get_lang('ExerciseAvailableFromX'),
+                        api_convert_and_format_date($this->start_time));
                 }
-            }
-            if ($is_visible == false && $this->start_time != '0000-00-00 00:00:00' && $this->end_time != '0000-00-00 00:00:00') {
-                $message = sprintf(
-                    get_lang('ExerciseWillBeActivatedFromXToY'),
-                    api_convert_and_format_date($this->start_time),
-                    api_convert_and_format_date($this->end_time)
-                );
+            } else if (!$existsStartDate && $existsEndDate) {
+                // doesnt exist start date, exists end date
+                if ($nowIsBeforeEndDate) {
+                    // before end date, no start date
+                    $isVisible = true;
+                    $message = sprintf(get_lang('ExerciseAvailableUntilX'),
+                        api_convert_and_format_date($this->end_time));
+                } else {
+                    // after end date, no start date
+                    $isVisible = false;
+                    $message = sprintf(get_lang('ExerciseAvailableUntilX'),
+                        api_convert_and_format_date($this->end_time));
+                }
+            } elseif ($existsStartDate && $existsEndDate) {
+                // exists start date and end date
+                if ($nowIsAfterStartDate) {
+                    if ($nowIsBeforeEndDate) {
+                        // after start date and before end date
+                        $isVisible = true;
+                        $message = sprintf(get_lang('ExerciseIsActivatedFromXToY'),
+                            api_convert_and_format_date($this->start_time),
+                            api_convert_and_format_date($this->end_time));
+                    } else {
+                        // after start date and after end date
+                        $isVisible = false;
+                        $message = sprintf(get_lang('ExerciseWasActivatedFromXToY'),
+                            api_convert_and_format_date($this->start_time),
+                            api_convert_and_format_date($this->end_time));
+                    }
+                } else {
+                    if ($nowIsBeforeEndDate) {
+                        // before start date and before end date
+                        $isVisible = false;
+                        $message = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'),
+                            api_convert_and_format_date($this->start_time),
+                            api_convert_and_format_date($this->end_time));
+                    }
+                    // case before start date and after end date is impossible
+                }
+            } elseif (!$existsStartDate && !$existsEndDate) {
+                // doesnt exist start date nor end date
+                $isVisible = true;
+                $message = "";
             }
         }
 
         // 4. We check if the student have attempts
         $exerciseAttempts = $this->selectAttempts();
 
-        if ($is_visible) {
+        if ($isVisible) {
             if ($exerciseAttempts > 0) {
 
-                $attempt_count = get_attempt_count_not_finished(
+                $attemptCount = get_attempt_count_not_finished(
                     api_get_user_id(),
                     $this->id,
-                    $lp_id,
-                    $lp_item_id,
-                    $lp_item_view_id
+                    $lpId,
+                    $lpItemId,
+                    $lpItemViewId
                 );
 
-                if ($attempt_count >= $exerciseAttempts) {
+                if ($attemptCount >= $exerciseAttempts) {
                     $message = sprintf(
                         get_lang('ReachedMaxAttempts'),
                         $this->name,
                         $exerciseAttempts
                     );
-                    $is_visible = false;
+                    $isVisible = false;
                 }
             }
         }
 
+        $rawMessage = "";
         if (!empty($message)){
+            $rawMessage = $message;
             $message = Display::return_message($message, 'warning', false);
         }
 
         return array(
-            'value' => $is_visible,
-            'message' => $message
+            'value' => $isVisible,
+            'message' => $message,
+            'rawMessage' => $rawMessage
         );
     }
+
 
     public function added_in_lp()
     {
@@ -4416,8 +4496,8 @@ class Exercise
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function get_formated_title()
     {
         return api_html_entity_decode($this->selectTitle());
@@ -4499,23 +4579,23 @@ class Exercise
         $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         if ($sessionId != 0) {
             $sql = "SELECT * FROM $track_exercises te "
-              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
-              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
-              . "WHERE "
-              . "c.id = %s AND "
-              . "te.session_id = %s AND "
-              . "cq.id IN (%s) "
-              . "ORDER BY cq.id ";
+                . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
+                . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
+                . "WHERE "
+                . "c.id = %s AND "
+                . "te.session_id = %s AND "
+                . "cq.id IN (%s) "
+                . "ORDER BY cq.id ";
 
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
             $sql = "SELECT * FROM $track_exercises te "
-              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
-              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
-              . "WHERE "
-              . "c.id = %s AND "
-              . "cq.id IN (%s) "
-              . "ORDER BY cq.id ";
+                . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
+                . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
+                . "WHERE "
+                . "c.id = %s AND "
+                . "cq.id IN (%s) "
+                . "ORDER BY cq.id ";
             $sql = sprintf($sql, $courseId, $ids);
         }
         $result = Database::query($sql);

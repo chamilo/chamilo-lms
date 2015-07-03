@@ -1,9 +1,11 @@
-This directory is the right place for override an existing template.
+Place template files in this directory to override any existing template.
 
-Just copy the orignal template with the same relative path.
-ex:
+Just copy the orignal template file with the same relative path.
+e.g.:
 ```
-default/layout/head.tpl
-
-the_plugin_dirnae_name/path/of/template/in/plugins.tpl
+layout/head.tpl
+```
+or
+```
+the_plugin_dirname/path/of/template/in/plugins.tpl
 ```

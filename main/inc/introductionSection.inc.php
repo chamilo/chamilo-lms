@@ -294,6 +294,7 @@ if (api_is_allowed_to_edit()) {
 }
 
 $toolbar = '';
+$textIntro = '';
 if ($intro_dispCommand) {
     if (empty($intro_content)) {
         // Displays "Add intro" commands
@@ -349,7 +350,7 @@ if ($intro_dispDefault) {
         $introduction_section .= '</div>';
     } else {
         $introduction_section .= '<div class="help-course">';
-        $introduction_section .= get_lang('AddCustomCourseIntro').' ' . $textIntro ;
+        $introduction_section .= get_lang('AddCustomCourseIntro').' ' . $textIntro;
         $introduction_section .= '</div>';
     }
 }

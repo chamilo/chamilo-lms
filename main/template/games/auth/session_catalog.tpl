@@ -106,6 +106,8 @@
                                     <p class="buttom-subscribed">
                                         {% if session.is_subscribed %}
                                         {{ already_subscribed_label }}
+                                        {% elseif _u.logged  == 0 %}
+                                        {{ '' }}
                                         {% else %}
                                         {{ session.subscribe_button }}
                                         {% endif %}

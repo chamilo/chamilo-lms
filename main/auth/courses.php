@@ -22,8 +22,9 @@ $limit = getLimitArray();
 $this_section = SECTION_COURSES;
 
 // Access rights: anonymous users can't do anything useful here.
-api_block_anonymous_users();
-
+if (!isset($_configuration['course_catalog_published']) || $_configuration['course_catalog_published'] !== 'true') {
+    api_block_anonymous_users();
+}
 $user_can_view_page = false;
 
 //For students

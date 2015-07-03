@@ -32,6 +32,7 @@ $show_learnpath = true;
 api_protect_course_script();
 
 $lp_id = intval($_GET['lp_id']);
+$sessionId = api_get_session_id();
 
 // Check if the learning path is visible for student - (LP requisites)
 
@@ -51,7 +52,7 @@ $visibility = api_get_item_visibility(
     $lp_id,
     $action,
     api_get_user_id(),
-    api_get_session_id()
+    $sessionId
 );
 if (!api_is_allowed_to_edit(false, true, false, false) && intval($visibility) == 0) {
     api_not_allowed(true);
@@ -401,7 +402,17 @@ $template->assign('jquery_web_path', api_get_jquery_web_path());
 $template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
 $template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
-$template->assign('gamification_mode', api_get_setting('gamification_mode'));
+
+if (api_get_setting('gamification_mode') == '1') {
+    $template->assign(
+        'gamification_stars',
+        $_SESSION['oLP']->getCalculateStars($sessionId)
+    );
+    $template->assign(
+        'gamification_score',
+        $_SESSION['oLP']->getCalculateScore($sessionId)
+    );
+}
 
 $template->assign('breadcrumb', $breadcrumb);
 

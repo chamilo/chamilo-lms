@@ -717,8 +717,9 @@ class Attendance
 				$result = Database::query($sql);
 
 				$insertId = Database::insert_id();
-				$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
-				Database::query($sql);
+                                //The table attendance_sheet do not have id field
+                                //$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
+				//Database::query($sql);
 
 				$affected_rows += Database::affected_rows($result);
 			} else {
@@ -749,8 +750,9 @@ class Attendance
 				$result = Database::query($sql);
 
 				$insertId = Database::insert_id();
-				$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
-				Database::query($sql);
+                                //The table attendance_sheet do not hace id field
+                                //$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
+                                //Database::query($sql);
 
 				$affected_rows += Database::affected_rows($result);
 			} else {
@@ -805,7 +807,7 @@ class Attendance
 
 		$attendance_id = intval($attendance_id);
 		// fill results about presence of students
-		$attendance_calendar = $this->get_attendance_calendar($attendance_id);
+		$attendance_calendar = $this->get_attendance_calendar($attendance_id, 'all', null, null, true);
 		$calendar_ids = array();
 		// get all dates from calendar by current attendance
 		foreach ($attendance_calendar as $cal) {
@@ -948,9 +950,10 @@ class Attendance
 		$attendance_id 	= intval($attendance_id);
 		$results = array();
 		$attendance_data = $this->get_attendance_by_id($attendance_id);
-		$calendar_count = self::get_number_of_attendance_calendar($attendance_id, $groupId);
-		$total_done_attendance 	= $attendance_data['attendance_qualify_max'];
-		$attendance_user_score  = $this->get_user_score($user_id, $attendance_id);
+		$calendar_count = self::get_number_of_attendance_calendar($attendance_id, $groupId, NULL, $user_id);
+		// $total_done_attendance 	= $attendance_data['attendance_qualify_max'];
+        $total_done_attendance 	= self::get_number_of_attendance_calendar($attendance_id, $groupId, true, $user_id);
+		$attendance_user_score  = $this->get_user_score($user_id, $attendance_id, $groupId);
 
 		//This is the main change of the BT#1381
 		//$total_done_attendance = $calendar_count;
@@ -1082,12 +1085,12 @@ class Attendance
 	 * @param	int	   $user_id for showing data for only one user (optional)
 	 * @return 	array  users attendance sheet data
 	 */
-	public function get_users_attendance_sheet($attendance_id, $user_id = 0)
+	public function get_users_attendance_sheet($attendance_id, $user_id = 0, $groupId = null)
 	{
 		$tbl_attendance_sheet 	= Database::get_course_table(TABLE_ATTENDANCE_SHEET);
 		$tbl_attendance_calendar= Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 
-		$attendance_calendar = $this->get_attendance_calendar($attendance_id);
+		$attendance_calendar = $this->get_attendance_calendar($attendance_id, 'all', null, $groupId);
 		$calendar_ids = array();
 		// get all dates from calendar by current attendance
 		foreach ($attendance_calendar as $cal) {
@@ -1202,17 +1205,38 @@ class Attendance
 	 * @param	int $attendance_id
 	 * @return	int score
 	 */
-	public function get_user_score($user_id, $attendance_id)
+	public function get_user_score($user_id, $attendance_id, $groupId = null)
 	{
 		$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT);
+        $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
+        $tbl_attendance_cal_rel_group = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+        $tbl_attendance_cal = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$user_id = intval($user_id);
 		$attendance_id = intval($attendance_id);
 		$course_id = api_get_course_int_id();
-		$sql = "SELECT score FROM $tbl_attendance_result
-				WHERE
-					c_id = $course_id AND
-					user_id='$user_id' AND
-					attendance_id='$attendance_id'";
+        if (empty($groupId)) {
+            $sql = "SELECT score FROM $tbl_attendance_result
+                    WHERE
+                        c_id = $course_id AND
+                        user_id='$user_id' AND
+                        attendance_id='$attendance_id'";
+        } else {
+            $sql = "SELECT count(presence) as score FROM $tbl_attendance_sheet
+                    WHERE
+                        c_id = $course_id AND
+                        user_id='$user_id' AND
+                        presence = 1 AND
+                        attendance_calendar_id IN (
+                            SELECT calendar_id FROM $tbl_attendance_cal_rel_group crg
+                            INNER JOIN $tbl_attendance_cal c
+                            ON (crg.calendar_id = c.id)
+                            WHERE
+                                crg.c_id = $course_id AND
+                                crg.group_id = $groupId AND
+                                c.attendance_id = $attendance_id
+                        )
+                    ";
+        }
 		$rs = Database::query($sql);
 		$score = 0;
 		if (Database::num_rows($rs) > 0) {
@@ -1264,6 +1288,7 @@ class Attendance
 	) {
 		global $dateFormatShort, $timeNoSecFormat;
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+                $tbl_acrg = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
 		$attendance_id = intval($attendance_id);
 		$course_id = api_get_course_int_id();
 		$groupCondition = null;
@@ -1277,7 +1302,7 @@ class Attendance
 						c_id = $course_id AND
 						attendance_id = '$attendance_id' AND
 						id NOT IN (
-							SELECT calendar_id FROM $table
+							SELECT calendar_id FROM $tbl_acrg
 							WHERE c_id = $course_id AND group_id != 0 AND group_id IS NOT NULL
 						)
 					";
@@ -1285,11 +1310,13 @@ class Attendance
 
 		if (!empty($groupId)) {
 			$groupId = intval($groupId);
-			$table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
 			$sql = "SELECT c.* FROM $tbl_attendance_calendar c
-					INNER JOIN $table g
+					INNER JOIN $tbl_acrg g
 					ON c.c_id = g.c_id AND c.id = g.calendar_id
-					WHERE c.c_id = $course_id AND g.group_id = '$groupId' ";
+					WHERE c.c_id = $course_id AND
+					      g.group_id = '$groupId' AND
+					      c.attendance_id = '$attendance_id'
+                               ";
 		}
 
 		if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done','calendar_id'))) {
@@ -1345,38 +1372,80 @@ class Attendance
 	 * @param	int	$groupId
 	 * @return	int number of dates in attendance calendar
 	 */
-    public static function get_number_of_attendance_calendar($attendance_id, $groupId = 0)
+    public static function get_number_of_attendance_calendar($attendance_id, $groupId = 0, $done_attendance = NULL, $userId = 0)
     {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $calendarRelGroup = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+        $tbl_groupRelUser = Database::get_course_table(TABLE_GROUP_USER);
         $attendance_id = intval($attendance_id);
         $groupId = intval($groupId);
         $course_id = api_get_course_int_id();
 
-        if (empty($groupId)) {
-            $sql = "SELECT count(a.id)
-                    FROM $tbl_attendance_calendar a
-					WHERE
-						c_id = $course_id AND
-						attendance_id = '$attendance_id' AND
-						id NOT IN (
-							SELECT calendar_id FROM $calendarRelGroup
-							WHERE
-							    c_id = $course_id AND
-							    group_id != 0 AND
-							    group_id IS NOT NULL
-						)
-					";
+        $where_attendance = '';
+        if ($done_attendance) {
+            $where_attendance = ' done_attendance = 1 AND ';
+        }
+        if (empty($userId)) {
+            if (empty($groupId)) {
+                $sql = "SELECT count(a.id)
+                        FROM $tbl_attendance_calendar a
+                        WHERE
+                            c_id = $course_id AND
+                            $where_attendance
+                            attendance_id = '$attendance_id' AND
+                            id NOT IN (
+                                SELECT calendar_id FROM $calendarRelGroup
+                                WHERE
+                                    c_id = $course_id AND
+                                    group_id != 0 AND
+                                    group_id IS NOT NULL
+                            )
+                        ";
+            } else {
+                $sql = "SELECT count(a.id)
+                        FROM $tbl_attendance_calendar a
+                        INNER JOIN $calendarRelGroup g
+                        ON (a.id = g.calendar_id AND a.c_id = g.c_id)
+                        WHERE
+                            a.c_id = $course_id AND
+                            $where_attendance
+                            attendance_id = '$attendance_id' AND
+                            group_id = $groupId
+                        ";
+            }
         } else {
-            $sql = "SELECT count(a.id)
-				FROM $tbl_attendance_calendar a
-				INNER JOIN $calendarRelGroup g
-				ON (a.id = g.calendar_id AND a.c_id = g.c_id)
-                WHERE
-                	a.c_id = $course_id AND
-                	attendance_id = '$attendance_id' AND
-                	group_id = $groupId
-				";
+            if (empty($groupId)) {
+                $sql = "SELECT count(a.id)
+                        FROM $tbl_attendance_calendar a
+                        WHERE
+                            c_id = $course_id AND
+                            $where_attendance
+                            attendance_id = '$attendance_id' AND
+                            id NOT IN (
+                                SELECT calendar_id FROM $calendarRelGroup
+                                WHERE
+                                    c_id = $course_id AND
+                                    group_id != 0 AND
+                                    group_id IS NOT NULL AND
+                                    group_id NOT IN (
+                                        SELECT group_id
+                                        FROM $tbl_groupRelUser
+                                        WHERE user_id = $userId
+                                    )
+                            )
+                        ";
+            } else {
+                $sql = "SELECT count(a.id)
+                        FROM $tbl_attendance_calendar a
+                        INNER JOIN $calendarRelGroup g
+                        ON (a.id = g.calendar_id AND a.c_id = g.c_id)
+                        WHERE
+                            a.c_id = $course_id AND
+                            $where_attendance
+                            attendance_id = '$attendance_id' AND
+                            group_id = $groupId
+                        ";
+            }
         }
 
         $rs = Database::query($sql);

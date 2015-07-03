@@ -98,6 +98,10 @@ select {
 .carousel-indicators{
   bottom: 0px !important;
 }
+.form-group .freeze{
+  display: inline-block;
+  padding-top: 8px;
+}
 #updatemp3 .footer-audio{
   padding-bottom: 10px;
   padding-top: 10px;

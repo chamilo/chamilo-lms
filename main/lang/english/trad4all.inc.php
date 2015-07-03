@@ -7388,4 +7388,9 @@ $FromDateX = "From %s";
 $UntilDateX = "Until %s";
 $GraphDependencyTree = "Dependency tree";
 $CustomizeIcons = "Customize icons";
+$ExportAllToPDF = "Export all to PDF";
+$ExerciseAvailableSinceX = "Exercise available since %s";
+$SelectSomeOptions = "Select some options";
+$AddCustomCourseIntro = "You may add an introduction to this course here by clicking the edition icon";
+$SocialGroup = "Social group";
 ?>

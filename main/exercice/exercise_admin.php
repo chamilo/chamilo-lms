@@ -113,13 +113,13 @@ $objExercise->createForm($form);
 if ($form->validate()) {
     $objExercise->processCreation($form);
     if ($form->getSubmitValue('edit') == 'true') {
-        $message = 'ExerciseEdited';
+        Display::addFlash(Display::return_message(get_lang('ExerciseEdited')));
     } else {
-        $message = 'ExerciseAdded';
+        Display::addFlash(Display::return_message(get_lang('ExerciseAdded')));
     }
     $exercise_id = $objExercise->id;
     Session::erase('objExercise');
-    header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id);
+    header('Location:admin.php?&exerciseId='.$exercise_id.'&'.api_get_cidreq());
     exit;
 } else {
     // DISPLAY FORM

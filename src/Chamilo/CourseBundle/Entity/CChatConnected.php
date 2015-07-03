@@ -36,7 +36,6 @@ class CChatConnected
      */
     private $cId;
 
-
     /**
      * @var integer
      *
@@ -55,8 +54,6 @@ class CChatConnected
      * @var integer
      *
      * @ORM\Column(name="user_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $userId;
 
@@ -64,12 +61,8 @@ class CChatConnected
      * @var \DateTime
      *
      * @ORM\Column(name="last_connection", type="datetime")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $lastConnection;
-
-
 
     /**
      * Set sessionId

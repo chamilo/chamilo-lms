@@ -94,12 +94,17 @@ switch ($action) {
         break;
     case 'get_events':
         $filter = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
+        $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : null;
         $result = $agenda->parseAgendaFilter($filter);
         $groupId = current($result['groups']);
         $userId = current($result['users']);
 
         $start = isset($_REQUEST['start']) ? api_strtotime($_REQUEST['start']) : null;
         $end = isset($_REQUEST['end']) ? api_strtotime($_REQUEST['end']) : null;
+
+        if ($type == 'personal' && !empty($sessionId)) {
+            $agenda->setSessionId($sessionId);
+        }
 
         $events = $agenda->getEvents(
             $start,

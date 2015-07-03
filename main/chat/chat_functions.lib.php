@@ -65,25 +65,30 @@ function disconnect_user_of_chat()
 {
     $list_info_user_in_chat = users_list_in_chat();
     $course_id = api_get_course_int_id();
-
-	$cd_date           = date('Y-m-d',time());
-	$cdate_h           = date('H',time());
-	$cdate_m           = date('i',time());
-	$cdate_s           = date('s',time());
+    $groupId = api_get_group_id();
+    $now = time();
+    $cd_date = date('Y-m-d', $now);
+    $cdate_h = date('H', $now);
+    $cdate_m = date('i', $now);
+    $cdate_s = date('s', $now);
 	$cd_count_time_seconds = $cdate_h*3600 + $cdate_m*60 + $cdate_s;
 
-	if (is_array($list_info_user_in_chat) && count($list_info_user_in_chat) > 0 ) {
+	if (is_array($list_info_user_in_chat) && count($list_info_user_in_chat) > 0) {
 		foreach ($list_info_user_in_chat as $list_info_user) {
-			$date_db_date = date('Y-m-d', strtotime($list_info_user['last_connection']));
-			$date_db_h  = date('H', strtotime($list_info_user['last_connection']));
-			$date_db_m  = date('i', strtotime($list_info_user['last_connection']));
-			$date_db_s  = date('s', strtotime($list_info_user['last_connection']));
-			$date_count_time_seconds=$date_db_h*3600 + $date_db_m*60 + $date_db_s;
+			$date_db_date = date('Y-m-d', api_strtotime($list_info_user['last_connection'], 'UTC'));
+			$date_db_h  = date('H', api_strtotime($list_info_user['last_connection'], 'UTC'));
+			$date_db_m  = date('i', api_strtotime($list_info_user['last_connection'], 'UTC'));
+			$date_db_s  = date('s', api_strtotime($list_info_user['last_connection'], 'UTC'));
+            $date_count_time_seconds = $date_db_h * 3600 + $date_db_m * 60 + $date_db_s;
 			if ($cd_date == $date_db_date) {
 				if (($cd_count_time_seconds - $date_count_time_seconds) > 5) {
                     $tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
 			 		$sql = 'DELETE FROM '.$tbl_chat_connected.'
-			 		        WHERE c_id = '.$course_id.' AND user_id ='.$list_info_user['user_id'];
+			 		        WHERE
+			 		            c_id = '.$course_id.' AND
+			 		            user_id = '.$list_info_user['user_id'].' AND
+			 		            to_group_id = '.$groupId.'
+                            ';
 			 		Database::query($sql);
 				}
 			}
@@ -114,6 +119,7 @@ function users_list_in_chat()
  	while ($row = Database::fetch_array($result, 'ASSOC')) {
  		$list_users_in_chat[] = $row;
  	}
+
  	return $list_users_in_chat;
 }
 

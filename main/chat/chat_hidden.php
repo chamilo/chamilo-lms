@@ -76,15 +76,21 @@ $result = Database::query($sql);
 
 // The user_id exists so we must do an UPDATE and not a INSERT
 $current_time = api_get_utc_datetime();
-if (Database::num_rows($result) == 0) {
-	$query = "INSERT INTO $tbl_chat_connected(c_id, user_id,last_connection,session_id,to_group_id)
-	          VALUES($course_id, '".$userId."','$current_time','$session_id','$group_id')";
-} else {
-	$query = "UPDATE $tbl_chat_connected set last_connection='".$current_time."'
-	          WHERE c_id = $course_id AND user_id='".$userId."' AND session_id='$session_id' AND to_group_id='$group_id'";
-}
 
-Database::query($query);
+if (Database::num_rows($result) == 0) {
+	$query = "INSERT INTO $tbl_chat_connected(c_id, user_id, last_connection,session_id,to_group_id)
+	          VALUES($course_id, '".$userId."','$current_time','$session_id','$group_id')";
+    Database::query($query);
+    $id = Database::insert_id();
+    if ($id) {
+        $sql = "UPDATE $tbl_chat_connected SET id = iid WHERE iid = $id";
+        Database::query($sql);
+    }
+} else {
+	$query = "UPDATE $tbl_chat_connected SET last_connection='".$current_time."'
+	          WHERE c_id = $course_id AND user_id='".$userId."' AND session_id='$session_id' AND to_group_id='$group_id'";
+    Database::query($query);
+}
 
 $query = "SELECT COUNT(user_id) FROM $tbl_chat_connected
           WHERE last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' $extra_condition";

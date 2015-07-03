@@ -194,6 +194,11 @@ if (!empty($userId)) {
 } else {
     $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 }
+
+if (isset($_GET['session_id'])) {
+    $agenda_ajax_url .= '&session_id='.intval($_GET['session_id']);
+}
+
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 $course_code = api_get_course_id();
 

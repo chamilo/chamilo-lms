@@ -1,6 +1,6 @@
 This directory is the right place for override an existing template.
 
-Just copy the orginal template with the same relative path.
+Just copy the orignal template with the same relative path.
 ex:
 ```
 default/layout/head.tpl

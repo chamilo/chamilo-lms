@@ -1309,7 +1309,9 @@ switch ($action) {
                 }
 
                 if (!empty($forumCategoryId)) {
-                    $forum = $_SESSION['oLP']->getForum();
+                    $forum = $_SESSION['oLP']->getForum(
+                        $_SESSION['oLP']->lp_session_id
+                    );
                     $forumId = !empty($forum) ? $forum['forum_id'] : 0;
 
                     if (empty($forumId)) {

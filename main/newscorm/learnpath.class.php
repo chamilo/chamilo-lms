@@ -10645,7 +10645,7 @@ EOD;
      * Get the forum for this learning path
      * @return boolean
      */
-    public function getForum()
+    public function getForum($sessionId = 0)
     {
         $forumTable = Database::get_course_table(TABLE_FORUM);
         $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -10672,7 +10672,7 @@ EOD;
                 'where' => [
                     'ip.visibility != ? AND ' => 2,
                     'ip.tool = ? AND ' => TOOL_FORUM,
-                    'f.session_id = ? AND ' => $this->lp_session_id,
+                    'f.session_id = ? AND ' => $sessionId,
                     'f.c_id = ? AND ' => intval($this->course_int_id),
                     'f.lp_id = ?' => intval($this->lp_id)
                 ]

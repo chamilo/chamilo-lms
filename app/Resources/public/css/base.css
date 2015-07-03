@@ -6148,7 +6148,7 @@ div#chat-remote-video video {
   text-transform: uppercase;
 }
 #session-list .title-session{
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.2;
   height: 40px;
   margin-top: 5px;
@@ -6168,6 +6168,14 @@ div#chat-remote-video video {
 }
 #session-list .information-item{
   padding: 10px;
+}
+#session-list .information-item .requirements .fa-book{
+  color: #00829C;
+  margin-right: 10px;
+}
+#session-list .information-item .requirements{
+  color: #666;
+  font-size: 12px;
 }
 #session-list .author-session,
 #session-list .date-session{

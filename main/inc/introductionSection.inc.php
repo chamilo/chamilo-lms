@@ -228,7 +228,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                 <div class="panel-heading">
                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                 <h4>
-                        '. $thematic_advance .' : '. $courseInfo['name'] . ' <b>( '. $thematicScore .' )</b>
+                    '. $thematic_advance .' : '. $courseInfo['name'] . ' <b>( '. $thematicScore .' )</b>
                 </h4>
                 </a>
                 </div>
@@ -240,11 +240,13 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                 <img src="' . $userInfo['avatar'] . '" class="img-responsive">
                             </div>
                             <div class="progress">
-                                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: ' . $thematicScore . ';">
-                                            '.$thematicScore.'
-                                        </div>
+                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: ' . $thematicScore . ';">
+                                    '.$thematicScore.'
+                                </div>
                             </div>
-                            <div class="separate"><a href="' . $thematicUrl . '" class="btn btn-block btn-info">' . get_lang('ShowFullCourseAdvance') . '</a></div>
+                            <div class="separate">
+                                <a href="' . $thematicUrl . '" class="btn btn-block btn-info">' . get_lang('ShowFullCourseAdvance') . '</a>
+                            </div>
                         </div>';
 
         $thematic_description_html .= '<div class="col-md-9">';
@@ -263,13 +265,14 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
             $thematic_advance_info2['start_date'] = api_get_local_time($thematic_advance_info2['start_date']);
             $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
-            $thematic_description_html .= '<div class="col-md-6 items-progress">
-                                                <div class="topics">'.$subTitle2.'</div>
-                                                <h4 class="title-topics">'.$thematic_info2['title'].'</h4>
-                                                <p class="date">'.$thematic_advance_info2['start_date'].'</p>
-                                                <div class="views">'.$thematic_advance_info2['content'].'</div>
-                                                <p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
-                                            </div>';
+            $thematic_description_html .= '
+                <div class="col-md-6 items-progress">
+                    <div class="topics">'.$subTitle2.'</div>
+                    <h4 class="title-topics">'.$thematic_info2['title'].'</h4>
+                    <p class="date">'.$thematic_advance_info2['start_date'].'</p>
+                    <div class="views">'.$thematic_advance_info2['content'].'</div>
+                    <p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
+                </div>';
         }
         $thematic_description_html.='</div>';
         $thematic_description_html.='</div></div></div></div></div></div>';
@@ -289,14 +292,16 @@ if (api_is_allowed_to_edit()) {
         ['class' => 'btn btn-default', 'title' => get_lang('CustomizeIcons') ]
     );
 }
+
+$toolbar = '';
 if ($intro_dispCommand) {
     if (empty($intro_content)) {
         // Displays "Add intro" commands
         $toolbar = '<div class="btn-group pull-right" rol="group">';
         if (!empty ($GLOBALS['_cid'])) {
-            $textIntro  =  '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&amp;intro_cmdAdd=1">';
-            $textIntro .=   '<i class="fa fa-file-text"></i> ';
-            $textIntro .=  "</a>";
+            $textIntro  = '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&intro_cmdAdd=1">';
+            $textIntro .= '<i class="fa fa-file-text"></i> ';
+            $textIntro .= "</a>";
             $toolbar .= $textIntro . $editIconButton;
         } else {
             $toolbar .= '<a class="btn btn-default" href="' . api_get_self() . '?intro_cmdAdd=1">"' . get_lang('AddIntro') . '</a>';
@@ -309,10 +314,10 @@ if ($intro_dispCommand) {
         $toolbar .= '<div class="btn-group pull-right" rol="group">';
         if (!empty ($GLOBALS['_cid'])) {
             $toolbar .=
-                '<a  class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().'&amp;intro_cmdEdit=1" title="'.get_lang('Modify').'">
+                '<a  class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <i class="fa fa-pencil"></i></a>';
             $toolbar .= $editIconButton;
-            $toolbar .="<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:
+            $toolbar .="<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><i class=\"fa fa-trash-o\"></i></a>";
 
@@ -322,7 +327,7 @@ if ($intro_dispCommand) {
                 <i class="fa fa-pencil"></i>
                 </a>"';
             $toolbar .= $editIconButton;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:
+            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><i class=\"fa fa-trash-o\"></i></a>";
         }
@@ -351,9 +356,6 @@ if ($intro_dispDefault) {
 
 $introduction_section .= $toolbar;
 $introduction_section .= '</div>';
-
-
-
 $introduction_section .= '</div>';
 
 $browser = api_get_navigator();

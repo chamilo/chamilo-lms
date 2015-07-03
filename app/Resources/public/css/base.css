@@ -6110,6 +6110,10 @@ div#chat-remote-video video {
 #session-list .information-item{
   padding: 10px;
 }
+#session-list .information-item .options .info-catalog{
+  font-size: 14px;
+  color: #666;
+}
 #session-list .author-session,
 #session-list .date-session{
   font-size: 12px;

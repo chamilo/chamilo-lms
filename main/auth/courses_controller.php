@@ -526,9 +526,9 @@ class CoursesController
      */
     public function getAlreadyRegisteredInSessionLabel()
     {
-        $icon = Display::return_icon('students.gif', get_lang('Student'));
+        $icon = '<i class="fa fa-smile-o"></i>';
 
-        return Display::label($icon . ' ' . get_lang("AlreadyRegisteredToSession"), "info");
+        return Display::div($icon . ' ' . get_lang("AlreadyRegisteredToSession"),array('class'=>'info-catalog'));
     }
 
     /**

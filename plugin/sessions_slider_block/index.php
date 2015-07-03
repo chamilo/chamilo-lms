@@ -61,6 +61,8 @@ if ($showSlider) {
         ];
     }
 
+    $_template['sessions'] = [];
+
     if (count($sessions) > 0) {
         $_template['sessions'] = $sessions;
     }

@@ -188,6 +188,17 @@ class SessionsSliderBlockPlugin extends Plugin
             return [];
         }
 
+        $userInfo = api_get_user_info();
+
+        $userSessions = SessionManager::getSessionsFollowedByUser(
+            $userInfo['id'],
+            $userInfo['status']
+        );
+
+        $userSessionsId = array_keys($userSessions);
+
+        $sessions = array_diff($sessions, $userSessionsId);
+
         $sessionToShow = [];
 
         foreach ($sessions as $sessionId) {

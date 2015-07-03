@@ -9203,15 +9203,12 @@ class learnpath
                             $organization->appendChild($my_item);
                         }
 
-                        // Include export scripts.
-                        require_once api_get_path(SYS_CODE_PATH).'exercice/export/scorm/scorm_export.php';
-
                         // Get the path of the file(s) from the course directory root
                         //$my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
                         $my_file_path = 'quiz_'.$item->get_id().'.html';
                         // Write the contents of the exported exercise into a (big) html file
                         // to later pack it into the exported SCORM. The file will be removed afterwards.
-                        $contents = export_exercise($exe_id, true);
+                        $contents = ScormSection::export_exercise_to_scorm($exe_id, true);
                         $tmp_file_path = $archive_path.$temp_dir_short.'/'.$my_file_path;
                         $res = file_put_contents($tmp_file_path, $contents);
                         if ($res === false) { error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0); }
@@ -9562,7 +9559,12 @@ EOD;
         // Clean possible temporary files.
         foreach ($files_cleanup as $file) {
             $res = unlink($file);
-            if ($res === false) { error_log('Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__, 0); }
+            if ($res === false) {
+                error_log(
+                    'Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__,
+                    0
+                );
+            }
         }
         $name = api_replace_dangerous_char($this->get_name()).'.zip';
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);

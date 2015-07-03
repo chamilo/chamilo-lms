@@ -51,34 +51,33 @@ class ScormQuestion extends Question
     /**
 	 * Include the correct answer class and create answer
 	 */
-	function setAnswer()
+	public function setAnswer()
 	{
-		switch($this->type)
-		{
-			case MCUA :
+		switch ($this->type) {
+			case MCUA:
 				$this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
-			case MCMA :
+			case MCMA:
             case GLOBAL_MULTIPLE_ANSWER:
 				$this->answer = new ScormAnswerMultipleChoice($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
-			case TF :
+			case TF:
 				$this->answer = new ScormAnswerTrueFalse($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
-			case FIB :
+			case FIB:
 				$this->answer = new ScormAnswerFillInBlanks($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
-			case MATCHING :
-                            //no break
-                        case MATCHING_DRAGGABLE:
+			case MATCHING:
+            case MATCHING_DRAGGABLE:
 				$this->answer = new ScormAnswerMatching($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
-			case FREE_ANSWER :
+            case ORAL_EXPRESSION:
+			case FREE_ANSWER:
 				$this->answer = new ScormAnswerFree($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
@@ -118,17 +117,20 @@ class ScormQuestion extends Question
 			$js .= $js2;
 			$html .= $html2;
 		}
-		return array($js,$html);
 
+		return array($js,$html);
 	}
+
     function createAnswersForm($form)
     {
     	return true;
     }
+
     function processAnswersCreation($form)
     {
     	return true;
     }
+
     /**
      * Returns an HTML-formatted question
      */
@@ -149,6 +151,7 @@ class ScormQuestion extends Question
 		   	'</tr>' . "\n";
 		return $s;
     }
+
     /**
      * Return the JavaScript code bound to the question
      */
@@ -333,6 +336,7 @@ class ScormAnswerTrueFalse extends Answer
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
     	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = '.$this->weighting[1].";\n";
     	$js .= $jstmpw;
+
         return array($js,$html);
     }
 }
@@ -358,12 +362,10 @@ class ScormAnswerFillInBlanks extends Answer
 		$blankList = array();
 		// build replacement
 		$replacementList = array();
-		foreach( $this->answer as $i => $answer )
-		{
+		foreach( $this->answer as $i => $answer) {
 			$blankList[] = '['.$answer.']';
 		}
 		$answerCount = count($blankList);
-
 
 		// splits text and weightings that are joined with the character '::'
 		list($answer,$weight)=explode('::',$answer);
@@ -377,8 +379,7 @@ class ScormAnswerFillInBlanks extends Answer
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
 		$startlocations=api_strpos($answer,'[');
 		$endlocations=api_strpos($answer,']');
-		while($startlocations !== false && $endlocations !== false)
-		{
+		while($startlocations !== false && $endlocations !== false) {
 			$texstring=api_substr($answer,$startlocations,($endlocations-$startlocations)+1);
 			$answer = api_substr_replace($answer,'<input type="text" name="question_'.$this->questionJSId.'_fib_'.$i.'" id="question_'.$this->questionJSId.'_fib_'.$i.'" size="10" value="" />',$startlocations,($endlocations-$startlocations)+1);
 			$jstmp .= $i.',';
@@ -441,18 +442,17 @@ class ScormAnswerMatching extends Answer
 		$s = '';
 		$jstmp = '';
 		$jstmpc = '';
-			$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
-			$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
-		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-		{
+        $jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+        $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
+
+		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$identifier = 'question_'.$qId.'_matching_';
 			$answer=$this->selectAnswer($answerId);
 			$answerCorrect=$this->isCorrect($answerId);
 			$weight=$this->selectWeighting($answerId);
 			$jstmp .= $answerId.',';
 
-			if(!$answerCorrect)
-			{
+			if (!$answerCorrect) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1;
 				// answers that will be shown at the right side
@@ -511,6 +511,7 @@ class ScormAnswerMatching extends Answer
     	$js .= $jstmpw;
 		$html .= $s;
 		$html .= '</table></td></tr>' . "\n";
+
         return array($js,$html);
     }
 }
@@ -530,16 +531,15 @@ class ScormAnswerFree extends Answer
      */
     function export()
     {
-    	$qId = $this->questionJSId;
+    	//$qId = $this->questionJSId;
     	$js = '';
-    	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
+    	/*$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// some javascript must be added for that kind of questions
-		$html .= '<tr>' . "\n"
-				.	'<td>' . "\n"
-		    	. '<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_free" rows="20" cols="100"></textarea>' . "\n"
-		    	.	'</td>' . "\n"
-		    	.	'</tr>' . "\n";
-		$html .= '</table></td></tr>' . "\n";
+		$html .= '<tr><td>
+		    	<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_free" rows="20" cols="100"></textarea>
+		    	</td>
+                </tr>';
+		$html .= '</table></td></tr>';*/
 		// currently the free answers cannot be displayed, so ignore the textarea
 		$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
 		$js .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
@@ -564,8 +564,7 @@ class ScormAnswerHotspot extends Answer
 	 */
 	function get_js_header()
 	{
-		if($this->standalone)
-		{
+		if ($this->standalone) {
 			$header = '<script type="text/javascript" language="javascript">';
 			$header .= file_get_contents('../plugin/hotspot/JavaScriptFlashGateway.js');
 			$header .= '</script>';
@@ -809,11 +808,9 @@ class ScormAssessmentItem
     public function ScormAssessmentItem($question, $standalone = false)
     {
         $this->question = $question;
-        //$this->answer = new Answer($question->id);
         $this->question->setAnswer();
         $this->questionIdent = "QST_" . $question->id ;
         $this->standalone = $standalone;
-        //echo "<pre>".print_r($this,1)."</pre>";
     }
 
     /**
@@ -883,7 +880,9 @@ class ScormAssessmentItem
      */
     function start_js()
     {
-        if($this->standalone){return '<script type="text/javascript" language="javascript">'. "\n";}
+        if ($this->standalone) {
+            return '<script type="text/javascript" language="javascript">'."\n";
+        }
         return '';
     }
     /**
@@ -939,6 +938,7 @@ class ScormAssessmentItem
         if($this->standalone){return $js. "\n";}
         return '';
     }
+
     /**
      * End the itemBody part.
      *
@@ -948,6 +948,7 @@ class ScormAssessmentItem
         if($this->standalone){return '</script>'. "\n";}
         return '';
     }
+
     /**
      * Start the itemBody
      *
@@ -1277,6 +1278,7 @@ class ScormSection
         $js .= 'addEvent(window,\'load\',addListeners,false);'."\n";
         return $js. "\n";
     }
+
     /**
      * End the itemBody part.
      *
@@ -1289,7 +1291,8 @@ class ScormSection
      * Start the itemBody
      *
      */
-    function start_body() {
+    function start_body()
+    {
         return '<body>'. "\n".
         '<h1>'.$this->exercise->selectTitle().'</h1><p>'.$this->exercise->selectDescription()."</p>\n".
         '<form id="dokeos_scorm_form" method="post" action="">'."\n".
@@ -1300,7 +1303,8 @@ class ScormSection
      * End the itemBody part.
      *
      */
-    function end_body() {
+    function end_body()
+    {
         return '</table><br /><input type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form>'."\n".'</body>'. "\n";
     }
 
@@ -1348,7 +1352,8 @@ class ScormSection
      * Export the questions, as a succession of <items>
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export_questions() {
+    function export_questions()
+    {
         $js = $html = "";
         $js_id = 0;
         foreach ($this->exercise->selectQuestionList() as $q) {

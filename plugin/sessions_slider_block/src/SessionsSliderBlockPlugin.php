@@ -221,20 +221,33 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     private function getUserCoursesTags($userId)
     {
-        $sql = "
-            SELECT scu.c_id, fo.display_text, fv.value, count(fv.value) count
-            FROM " . Database::get_main_table(TABLE_EXTRA_FIELD_VALUES) . " fv
-            INNER JOIN " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . " scu
-                ON fv.item_id = scu.c_id
-            INNER JOIN " . Database::get_main_table(TABLE_EXTRA_FIELD) . " f
-                ON fv.field_id = f.id
-            INNER JOIN " . Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS) . " fo
-                ON fv.value = fo.id
+        $userId = intval($userId);
+        $courseType = \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE;
+
+        $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
+        $sessionCourseUserTable = Database::get_main_table(
+            TABLE_MAIN_SESSION_COURSE_USER
+        );
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldTagTable = Database::get_main_table(
+            TABLE_MAIN_EXTRA_FIELD_REL_TAG
+        );
+
+        $sql = <<<SQL
+            SELECT scu.c_id, t.tag, ft.tag_id, count(ft.item_id) count
+            FROM $extraFieldTagTable ft
+            INNER JOIN $sessionCourseUserTable scu
+                ON ft.item_id = scu.c_id
+            INNER JOIN $extraFieldTable f
+                ON ft.field_id = f.id
+            INNER JOIN $tagTable t
+                ON ft.tag_id = t.id
             WHERE
-                scu.user_id = " . intval($userId) . " AND
-                f.variable = 'tags'
-            GROUP BY scu.c_id
-            ORDER BY count DESC";
+                scu.user_id = $userId AND
+                (f.variable = 'tags' AND f.extra_field_type = $courseType)
+            GROUP BY ft.item_id
+            ORDER BY count DESC
+SQL;
 
         $result = Database::query($sql);
         $num = Database::num_rows($result);
@@ -247,7 +260,7 @@ class SessionsSliderBlockPlugin extends Plugin
         while ($row = Database::fetch_assoc($result)) {
             $list[] = [
                 'count' => $row['count'],
-                'value' => $row['value']
+                'value' => $row['tag_id']
             ];
         }
 
@@ -312,6 +325,11 @@ class SessionsSliderBlockPlugin extends Plugin
      */
     private function getSessionsForLoggedUser()
     {
+        $fieldTagTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
+        $fieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
+        $courseType = \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE;
+
         $sessionsIdList = $this->getOpenSessions();
 
         if (empty($sessionsIdList)) {
@@ -330,16 +348,20 @@ class SessionsSliderBlockPlugin extends Plugin
             $courses = SessionManager::get_course_list_by_session_id($sessionId);
 
             foreach ($courses as $course) {
-                $sql = "
-                    SELECT fo.display_text, fv.value
-                    FROM " . Database::get_main_table(TABLE_EXTRA_FIELD_VALUES) . " fv
-                    INNER JOIN " . Database::get_main_table(TABLE_EXTRA_FIELD) . " f
-                        ON fv.field_id = f.id
-                    INNER JOIN " . Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS) . " fo
-                        ON fv.value = fo.id
+                $sql = <<<SQL
+                    SELECT t.tag, ft.tag_id
+                    FROM $fieldTagTable ft
+                    INNER JOIN $fieldTable f
+                        ON ft.field_id = f.id
+                    INNER JOIN $tagTable t
+                        ON ft.tag_id = t.id
                     WHERE
-                        fv.item_id = " . $course['real_id'] . " AND
-                        f.variable = 'tags'";
+                        ft.item_id = {$course['real_id']} AND
+                        (
+                            f.variable = 'tags' AND
+                            f.extra_field_type = $courseType
+                        )
+SQL;
 
                 $result = Database::query($sql);
 
@@ -351,7 +373,7 @@ class SessionsSliderBlockPlugin extends Plugin
                     $tagList[] = [
                         'session' => $sessionId,
                         'course' => $course['real_id'],
-                        'tag' => $row['value']
+                        'tag' => $row['tag_id']
                     ];
                 }
             }

@@ -66,6 +66,7 @@ class Template
         $this->load_plugins     = $load_plugins;
 
         $template_paths = array(
+       	    api_get_path(SYS_PATH) . 'custompages', // custom pages folder
             api_get_path(SYS_CODE_PATH).'template', //template folder
             api_get_path(SYS_PLUGIN_PATH) //plugin folder
         );

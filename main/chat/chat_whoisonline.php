@@ -43,23 +43,31 @@ if (!empty($course)) {
 	$isAllowed = !(empty($pseudo_user) || !$_cid);
 	$isMaster = api_is_course_admin();
 
-    $date_inter = date('Y-m-d H:i:s', time() - 120);
+    $date_inter = api_get_utc_datetime(time() - 120);
 
     $users = array();
     $course_id = api_get_course_int_id();
 
     if (empty($session_id)) {
-		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,email,t3.status
-				  FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_course_user t3
-				  WHERE
-				  	t2.c_id = $course_id AND
-					t1.user_id=t2.user_id AND
-					t3.user_id=t2.user_id AND
-					t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-					t3.c_id = '".$courseInfo['real_id']."' AND
-					t2.last_connection>'".$date_inter."' $extra_condition
-				  ORDER BY username";
-        $result = Database::query($query);
+		$sql = "SELECT DISTINCT
+		            t1.user_id,
+		            username,
+		            firstname,
+		            lastname,
+		            picture_uri,
+		            email,
+		            t3.status
+                FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_course_user t3
+                WHERE
+                    t2.c_id = $course_id AND
+                    t1.user_id=t2.user_id AND
+                    t3.user_id=t2.user_id AND
+                    t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                    t3.c_id = '".$courseInfo['real_id']."' AND
+                    t2.last_connection>'".$date_inter."' $extra_condition
+                ORDER BY username";
+
+        $result = Database::query($sql);
         $users = Database::store_result($result);
 	} else {
 		// select learners

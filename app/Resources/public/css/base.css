@@ -5452,6 +5452,9 @@ ul.holder li.bit-box{
   -webkit-border-radius: 4px;
   padding: 5px;
 }
+.current-item .thumbnail{
+  background: none;
+}
 #panel-thematic .views ul li{
   font-size: 12px;
 }

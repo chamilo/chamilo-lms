@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls
  */
@@ -38,13 +39,20 @@ switch ($action) {
     case 'add_lp_item':
         if (api_is_allowed_to_edit(null, true)) {
             if ($_SESSION['oLP']) {
-                //Updating the lp.modified_on
+                // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
                 $title = $_REQUEST['title'];
                 if ($_REQUEST['type'] == TOOL_QUIZ) {
                     $title = Exercise::format_title_variable($title);
                 }
-                echo $_SESSION['oLP']->add_item($_REQUEST['parent_id'], $_REQUEST['previous_id'], $_REQUEST['type'], $_REQUEST['id'], $title, null);
+                echo $_SESSION['oLP']->add_item(
+                    $_REQUEST['parent_id'],
+                    $_REQUEST['previous_id'],
+                    $_REQUEST['type'],
+                    $_REQUEST['id'],
+                    $title,
+                    null
+                );
             }
         }
         break;
@@ -95,7 +103,16 @@ switch ($action) {
                 $params['next_item_id']     = $LP_item->next_item_id;
                 $params['parent_item_id']	= $LP_item->parent_item_id;
 
-                Database::update($tbl_lp_item, $params, array('id = ? AND c_id = ? '=> array(intval($LP_item->id), $course_id)));
+                Database::update(
+                    $tbl_lp_item,
+                    $params,
+                    array(
+                        'id = ? AND c_id = ? ' => array(
+                            intval($LP_item->id),
+                            $course_id,
+                        ),
+                    )
+                );
             }
             Display::display_confirmation_message(get_lang('Saved'));
         }

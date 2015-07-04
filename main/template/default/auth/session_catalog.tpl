@@ -105,8 +105,7 @@
                                 </ul>
                                 <div class="requirements">
                                     {% if session.requirements %}
-                                    <h4>{{ 'Requirements'|get_lang }}</h4>
-                                    <p>
+                                    <p><i class="fa fa-book"></i> {{ 'RequiredCourse'|get_lang }} :
                                         {% for requirement in session.requirements %}
                                         {{ requirement.name  }}
                                         {% endfor %}
@@ -114,8 +113,7 @@
                                     {% endif %}
 
                                     {% if session.dependencies %}
-                                    <h4>{{ 'Dependencies'|get_lang }}</h4>
-                                    <p>
+                                    <p> <i class="fa fa-book"></i> {{ 'DependentCourse'|get_lang }} :
                                         {% for dependency in session.dependencies %}
                                         {{ dependency.name  }}
                                         {% endfor %}

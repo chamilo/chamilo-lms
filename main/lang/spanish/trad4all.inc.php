@@ -7419,4 +7419,6 @@ $GraphDependencyTree = "Árbol de dependencias";
 $CustomizeIcons = "Personalizar iconos";
 $AddCustomCourseIntro = "Puede añadir una introducción a su curso en esta sección, dando clic en el icono de edición";
 $SocialGroup = "Grupo de red social";
+$RequiredCourse = "Curso requerido";
+$DependentCourse = 'Curso dependiente';
 ?>

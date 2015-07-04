@@ -6107,8 +6107,25 @@ div#chat-remote-video video {
   margin-left: auto;
   margin-right: auto;
 }
+
 #session-list .information-item{
   padding: 10px;
+}
+#session-list .information-item .requirements .fa-book{
+  margin-right: 10px;
+  color: #00829C;
+}
+#session-list .information-item .requirements{
+  color: #666666;
+  font-size: 12px;
+}
+#session-list .information-item .options .info-catalog{
+  background-color: #35A8C9;
+  color: #ffffff;
+  padding: 5px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 12px;
 }
 #session-list .author-session,
 #session-list .date-session{

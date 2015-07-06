@@ -90,49 +90,48 @@
                                 </h3>
                                 <ul class="list-unstyled">
                                     {% if show_tutor %}
-                                    <li class="author-session">
-                                        <i class="fa fa-user"></i> {{ session.coach_name }}
-                                    </li>
+                                        <li class="author-session">
+                                            <i class="fa fa-user"></i> {{ session.coach_name }}
+                                        </li>
                                     {% endif %}
                                     <li class="date-session">
                                         <i class="fa fa-calendar-o"></i> {{ session.date }}
                                     </li>
                                     {% if session.tags %}
-                                    <li class="tags-session">
-                                        <i class="fa fa-tags"></i> {{ session.tags|join(', ')}}
-                                    </li>
+                                        <li class="tags-session">
+                                            <i class="fa fa-tags"></i> {{ session.tags|join(', ')}}
+                                        </li>
                                     {% endif %}
                                 </ul>
                                 <div class="requirements">
                                     {% if session.requirements %}
-                                    <p><i class="fa fa-book"></i> {{ 'RequiredSessions'|get_lang }} :
-                                        {% for requirement in session.requirements %}
-                                        {{ requirement.name  }}
-                                        {% endfor %}
-                                    </p>
+                                        <p><i class="fa fa-book"></i> {{ 'RequiredSessions'|get_lang }} :
+                                            {% for requirement in session.requirements %}
+                                                {{ requirement.name  }}
+                                            {% endfor %}
+                                        </p>
                                     {% endif %}
 
                                     {% if session.dependencies %}
-                                    <p> <i class="fa fa-book"></i> {{ 'DependentSessions'|get_lang }} :
-                                        {% for dependency in session.dependencies %}
-                                        {{ dependency.name  }}
-                                        {% endfor %}
-                                    </p>
+                                        <p> <i class="fa fa-book"></i> {{ 'DependentSessions'|get_lang }} :
+                                            {% for dependency in session.dependencies %}
+                                                {{ dependency.name  }}
+                                            {% endfor %}
+                                        </p>
                                     {% endif %}
                                 </div>
                                 <div class="options">
-
                                     <p class="buttom-subscribed">
                                         {% if session.is_subscribed %}
-                                        {{ already_subscribed_label }}
+                                            {{ already_subscribed_label }}
+                                        {% elseif _u.logged == 0 %}
+                                            {{ '' }}
                                         {% else %}
-                                        {{ session.subscribe_button }}
+                                            {{ session.subscribe_button }}
                                         {% endif %}
                                     </p>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 {% else %}

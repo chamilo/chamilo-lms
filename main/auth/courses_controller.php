@@ -49,7 +49,7 @@ class CoursesController
 
         // render to the view
         $this->view->set_data($data);
-        $this->view->set_layout('layout');
+        $this->view->set_layout('catalog_layout');
         $this->view->set_template('courses_list');
         $this->view->render();
     }
@@ -71,7 +71,7 @@ class CoursesController
 
         // render to the view
         $this->view->set_data($data);
-        $this->view->set_layout('layout');
+        $this->view->set_layout('catalog_layout');
         $this->view->set_template('categories_list');
         $this->view->render();
     }
@@ -146,7 +146,7 @@ class CoursesController
 
         // render to the view
         $this->view->set_data($data);
-        $this->view->set_layout('layout');
+        $this->view->set_layout('catalog_layout');
         $this->view->set_template('courses_categories');
         $this->view->render();
     }
@@ -190,7 +190,7 @@ class CoursesController
 
         // render to the view
         $this->view->set_data($data);
-        $this->view->set_layout('layout');
+        $this->view->set_layout('catalog_layout');
         $this->view->set_template('courses_categories');
         $this->view->render();
     }

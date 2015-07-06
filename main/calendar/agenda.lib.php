@@ -598,7 +598,7 @@ class Agenda
                 }
 
                 $groupId = api_get_group_id();
-                $course_id = api_get_course_int_id();
+                $course_id = $this->course['real_id'];
 
                 if (empty($course_id)) {
                     return false;

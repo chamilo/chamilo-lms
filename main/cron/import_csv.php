@@ -845,6 +845,7 @@ class ImportCsv
                 $agenda->setType('course');
                 $agenda->setSessionId($event['session_id']);
                 $agenda->setSenderId($event['sender_id']);
+                $agenda->setIsAllowedToEdit(true);
 
                 $eventComment = $event['comment'];
 

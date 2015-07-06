@@ -804,10 +804,20 @@ class ImportCsv
                         continue;
                     }
 
-                    $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                    $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                         $extraFieldName,
-                        $externalEventId
+                        $externalEventId,
+                        false,
+                        false,
+                        true
                     );
+
+                    $item = null;
+                    foreach ($items as $tempItem) {
+                        if ($tempItem['c_id'] == $event['course_id']) {
+                            $item = $tempItem;
+                        }
+                    }
 
                     if (!empty($item)) {
                         $this->logger->addInfo(
@@ -886,11 +896,13 @@ class ImportCsv
                         $eventComment
                     );
                     if (!empty($eventId)) {
+                        $extraFieldValue->is_course_model = true;
                         $extraFieldValue->save(
                             array(
                                 'field_value' => $externalEventId,
                                 'field_id' => $extraFieldInfo['id'],
-                                'calendar_event_id' => $eventId
+                                'calendar_event_id' => $eventId,
+                                'c_id' => $event['course_id']
                             )
                         );
                         $this->logger->addInfo(

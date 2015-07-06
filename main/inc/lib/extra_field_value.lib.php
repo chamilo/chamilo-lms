@@ -11,7 +11,7 @@
 class ExtraFieldValue extends Model
 {
     public $type = null;
-    public $columns = array('id', 'field_id', 'field_value', 'tms', 'comment');
+    public $columns = array('id', 'field_id', 'field_value', 'tms', 'comment', 'c_id');
     /** @var string session_id, course_code, user_id, question id */
     public $handler_id = null;
     public $entityName;
@@ -252,6 +252,15 @@ class ExtraFieldValue extends Model
                     $params[$this->handler_id],
                     $params['field_id']
                 );
+
+                if ($this->is_course_model) {
+                   if (isset($field_values['c_id']) && isset($params['c_id'])) {
+                       if ($field_values['c_id'] != $params['c_id']) {
+                           $field_values = null;
+                       }
+                   }
+                }
+
             }
 
             $params['field_value'] = $value_to_insert;
@@ -507,6 +516,7 @@ class ExtraFieldValue extends Model
      * @param string $field_value Data we are looking for in the given field
      * @param bool $transform Whether to transform the result to a human readable strings
      * @param bool $last Whether to return the last element or simply the first one we get
+     * @param bool $all return all items
      * @return mixed Give the ID if found, or false on failure or not found
      * @assert (-1,-1) === false
      */
@@ -514,7 +524,8 @@ class ExtraFieldValue extends Model
         $field_variable,
         $field_value,
         $transform = false,
-        $last = false
+        $last = false,
+        $all = false
     ) {
         $field_value = Database::escape_string($field_value);
         $field_variable = Database::escape_string($field_variable);
@@ -537,7 +548,11 @@ class ExtraFieldValue extends Model
 
         $result = Database::query($sql);
         if ($result !== false && Database::num_rows($result)) {
-            $result = Database::fetch_array($result, 'ASSOC');
+            if ($all) {
+                $result = Database::store_result($result, 'ASSOC');
+            } else {
+                $result = Database::fetch_array($result, 'ASSOC');
+            }
             return $result;
         } else {
             return false;

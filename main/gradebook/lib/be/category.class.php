@@ -519,22 +519,22 @@ class Category implements GradebookItem
         if (isset($this->name) && isset($this->user_id)) {
             $em = Database::getManager();
 
-            $foo = new \Chamilo\CoreBundle\Entity\GradebookCategory();
-            $foo->setName($this->name);
-            $foo->setDescription($this->description);
-            $foo->setUserId($this->user_id);
-            $foo->setCourseCode($this->course_code);
-            $foo->setParentId($this->parent);
-            $foo->setWeight($this->weight);
-            $foo->setVisible($this->visible);
-            $foo->setCertifMinScore($this->certificate_min_score);
-            $foo->setSessionId($this->session_id);
-            $foo->setGenerateCertificates($this->generateCertificates);
-            $foo->setGradeModelId($this->grade_model_id);
-            $foo->setIsRequirement($this->isRequirement);
-            $foo->setLocked(false);
+            $category = new \Chamilo\CoreBundle\Entity\GradebookCategory();
+            $category->setName($this->name);
+            $category->setDescription($this->description);
+            $category->setUserId($this->user_id);
+            $category->setCourseCode($this->course_code);
+            $category->setParentId($this->parent);
+            $category->setWeight($this->weight);
+            $category->setVisible($this->visible);
+            $category->setCertifMinScore($this->certificate_min_score);
+            $category->setSessionId($this->session_id);
+            $category->setGenerateCertificates($this->generateCertificates);
+            $category->setGradeModelId($this->grade_model_id);
+            $category->setIsRequirement($this->isRequirement);
+            $category->setLocked(false);
 
-            $em->persist($foo);
+            $em->persist($category);
             $em->flush();
 
             $id = Database::insert_id();

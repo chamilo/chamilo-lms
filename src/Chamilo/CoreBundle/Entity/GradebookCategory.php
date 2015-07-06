@@ -12,9 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookCategory
 {
-    public function setId($f) {
-        $this->id = $f;
-}
+
     /**
      * @var string
      *

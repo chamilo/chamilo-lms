@@ -495,15 +495,21 @@ class CoursesController
      */
     public function getRegisteredInSessionButton($sessionData, $catalogSessionAutoSubscriptionAllowed = false)
     {
-        $url = $catalogSessionAutoSubscriptionAllowed ?
-            api_get_path(WEB_CODE_PATH)."auth/courses.php?action=subscribe_to_session&session_id=".
-            intval($sessionData)."&user_id=".api_get_user_id() :
-            api_get_path(WEB_CODE_PATH)."inc/email_editor.php?action=subscribe_me_to_session&session=".
+        $url = api_get_path(WEB_CODE_PATH);
+        $url .= $catalogSessionAutoSubscriptionAllowed ?
+            "auth/courses.php?action=subscribe_to_session&session_id=" .
+            intval($sessionData) . "&user_id=" . api_get_user_id() :
+            "inc/email_editor.php?action=subscribe_me_to_session&session=" .
             Security::remove_XSS($sessionData);
 
-        $result = Display::url('<i class="fa fa-check-circle"></i> '.get_lang('Subscribe'), $url, array(
-            'class' => 'btn btn-large btn-primary',
-        ));
+        $result = Display::url(
+            '<i class="fa fa-check-circle"></i> ' . get_lang('Subscribe'),
+            $url,
+            array(
+                'class' => 'btn btn-large btn-primary s-c-subscription',
+                'data-session' => intval($sessionData)
+            )
+        );
 
         $hook = HookResubscribe::create();
         if (!empty($hook)) {
@@ -528,7 +534,10 @@ class CoursesController
     {
         $icon = '<i class="fa fa-smile-o"></i>';
 
-        return Display::div($icon . ' ' . get_lang("AlreadyRegisteredToSession"),array('class'=>'info-catalog'));
+        return Display::div(
+            $icon . ' ' . get_lang("AlreadyRegisteredToSession"),
+            array('class' => 'info-catalog')
+        );
     }
 
     /**

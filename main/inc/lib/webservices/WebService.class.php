@@ -45,28 +45,15 @@ abstract class WebService
             return false;
         }
 
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $user = UserManager::getRepository()->findOneBy([
+            'username' => $username
+        ]);
 
-        $whereConditions = array(
-            "username = '?' " => $username,
-            "AND password = '?'" => sha1($password)
-        );
-
-        $conditions = array(
-            'where' => $whereConditions
-        );
-
-        $table = Database::select('count(1) as qty', $userTable, $conditions);
-
-        if ($table != false) {
-            $row = current($table);
-
-            if ($row['qty'] > 0) {
-                return true;
-            }
+        if (empty($user)) {
+            return false;
         }
 
-        return false;
+        return UserManager::isPasswordValid($password, $user);
     }
 
 }

@@ -134,6 +134,12 @@ if ($form->validate()) {
         $cat->setGenerateCertificates(false);
     }
 
+    if (isset($values['is_requirement'])) {
+        $cat->setIsRequirement(true);
+    } else {
+        $cat->setIsRequirement(false);
+    }
+
     if (empty ($values['visible'])) {
         $visible = 0;
     } else {

@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookCategory
 {
+    public function setId($f) {
+        $this->id = $f;
+}
     /**
      * @var string
      *
@@ -109,6 +112,18 @@ class GradebookCategory
      * @ORM\Column(name="grade_model_id", type="integer", nullable=true)
      */
     private $gradeModelId;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(
+     *      name="is_requirement",
+     *      type="boolean",
+     *      nullable=false,
+     *      options={"default": 0 }
+     * )
+     */
+    private $isRequirement;
 
     /**
      * @var integer
@@ -441,6 +456,27 @@ class GradebookCategory
     public function getGradeModelId()
     {
         return $this->gradeModelId;
+    }
+
+    /**
+     * Set isRequirement
+     * @param boolean $isRequirement
+     * @return \Chamilo\CoreBundle\Entity\GradebookCategory
+     */
+    public function setIsRequirement($isRequirement)
+    {
+        $this->isRequirement = $isRequirement;
+
+        return $this;
+    }
+
+    /**
+     * Get isRequirement
+     * @return boolean
+     */
+    public function getIsRequirement()
+    {
+        return $this->isRequirement;
     }
 
     /**

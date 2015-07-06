@@ -176,7 +176,8 @@ class CatForm extends FormValidator
                 'weight' 			=> $this->category_object->get_weight(),
                 'visible' 			=> $this->category_object->is_visible(),
                 'certif_min_score'  => $this->category_object->get_certificate_min_score(),
-                'generate_certificates' => $this->category_object->getGenerateCertificates()
+                'generate_certificates' => $this->category_object->getGenerateCertificates(),
+                'is_requirement' => $this->category_object->getIsRequirement()
             )
         );
         $this->addElement('hidden', 'hid_id', $this->category_object->get_id());
@@ -368,6 +369,16 @@ class CatForm extends FormValidator
                 get_lang('GenerateCertificates'),
                 $generateCertificatesParams
             );
+        }
+
+        $isRequirementCheckbox = $this->addCheckBox(
+            'is_requirement',
+            null,
+            get_lang('IsRequirement')
+        );
+
+        if ($this->category_object->getIsRequirement()) {
+            $isRequirementCheckbox->setChecked(true);
         }
 
         if ($this->form_type == self :: TYPE_ADD) {

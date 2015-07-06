@@ -1396,64 +1396,64 @@ class ImportCsv
 
         // Course
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         // Sessions
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         // Extra fields
         $table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 

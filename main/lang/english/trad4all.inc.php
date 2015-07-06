@@ -7398,4 +7398,6 @@ $AddCustomCourseIntro = "You may add an introduction to this course here by clic
 $SocialGroup = "Social group";
 $RequiredSessions = "Required sessions";
 $DependentSessions = "Dependent sessions";
+$ByDuration = "By duration";
+$ByDates = "By dates";
 ?>

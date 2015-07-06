@@ -7427,4 +7427,6 @@ $AddCustomCourseIntro = "Puede añadir una introducción a su curso en esta secc
 $SocialGroup = "Grupo de red social";
 $RequiredSessions = "Sesiones requeridas";
 $DependentSessions = "Sesiones dependientes";
+$ByDuration = "Por duración";
+$ByDates = "Por fechas";
 ?>

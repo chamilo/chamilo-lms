@@ -3788,8 +3788,12 @@ class SessionManager
                     continue;
                 }
 
-                $date_start = $enreg['DateStart'];
-                $date_end = $enreg['DateEnd'];
+                /*$date_start = $enreg['DateStart'];
+                $date_end = $enreg['DateEnd'];*/
+
+                $date_start = str_replace('/', '-', $enreg['DateStart']);
+                $date_end = str_replace('/', '-', $enreg['DateEnd']);
+
                 $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
                 $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
 

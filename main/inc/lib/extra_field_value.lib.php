@@ -530,7 +530,14 @@ class ExtraFieldValue extends Model
         $field_value = Database::escape_string($field_value);
         $field_variable = Database::escape_string($field_variable);
 
-        $sql = "SELECT {$this->handler_id} FROM {$this->table} s
+        $sql = "SELECT {$this->handler_id} ";
+
+        if ($all) {
+            $sql = "SELECT s.* ";
+        }
+
+        $sql .= "
+                FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE

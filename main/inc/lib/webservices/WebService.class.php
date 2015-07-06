@@ -49,6 +49,10 @@ abstract class WebService
             'username' => $username
         ]);
 
+        if (empty($user)) {
+            return false;
+        }
+
         return UserManager::isPasswordValid($password, $user);
     }
 

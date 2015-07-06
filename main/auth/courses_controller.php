@@ -489,32 +489,47 @@ class CoursesController
 
     /**
      * Get a HTML button for subscribe to session
-     * @param string    The session data
-     * @param boolean   Session autosubscription set. False by default.
-     * @return string   The button
+     * @param int $sessionId The session ID
+     * @param string $sessionName The session name
+     * @param boolean Optional. Session autosubscription set. Default is false
+     * @return string The button HTML
      */
-    public function getRegisteredInSessionButton($sessionData, $catalogSessionAutoSubscriptionAllowed = false)
+    public function getRegisteredInSessionButton(
+        $sessionId,
+        $sessionName,
+        $catalogSessionAutoSubscriptionAllowed = false
+    )
     {
         $url = api_get_path(WEB_CODE_PATH);
-        $url .= $catalogSessionAutoSubscriptionAllowed ?
-            "auth/courses.php?action=subscribe_to_session&session_id=" .
-            intval($sessionData) . "&user_id=" . api_get_user_id() :
-            "inc/email_editor.php?action=subscribe_me_to_session&session=" .
-            Security::remove_XSS($sessionData);
+
+        if ($catalogSessionAutoSubscriptionAllowed) {
+            $url .= 'auth/courses.php?';
+            $url .= http_build_query([
+                'action' => 'subscribe_to_session',
+                'session_id' => intval($sessionId),
+                'user_id' => api_get_user_id()
+            ]);
+        } else {
+            $url .= 'inc/email_editor.php?';
+            $url .= http_build_query([
+                'action' => 'subscribe_me_to_session',
+                'session' => Security::remove_XSS($sessionName)
+            ]);
+        }
 
         $result = Display::url(
             '<i class="fa fa-check-circle"></i> ' . get_lang('Subscribe'),
             $url,
             array(
                 'class' => 'btn btn-large btn-primary s-c-subscription',
-                'data-session' => intval($sessionData)
+                'data-session' => intval($sessionId)
             )
         );
 
         $hook = HookResubscribe::create();
         if (!empty($hook)) {
             $hook->setEventData(array(
-                'session_id' => intval($sessionData)
+                'session_id' => intval($sessionId)
             ));
             try {
                 $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
@@ -642,7 +657,6 @@ class CoursesController
      */
     private function getFormatedSessionsBlock(array $sessions)
     {
-        $key = 'name';
         $catalogSessionAutoSubscriptionAllowed = false;
         $extraFieldValue = new ExtraFieldValue('session');
         $userId = api_get_user_id();
@@ -659,7 +673,6 @@ class CoursesController
         ]);
 
         if (api_get_setting('catalog_allow_session_auto_subscription') === 'true') {
-            $key = 'id';
             $catalogSessionAutoSubscriptionAllowed = true;
         }
 
@@ -709,7 +722,8 @@ class CoursesController
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
                 'subscribe_button' => $this->getRegisteredInSessionButton(
-                    $key === 'id' ? $session->getId() : $session->getName(),
+                    $session->getId(),
+                    $session->getName(),
                     $catalogSessionAutoSubscriptionAllowed
                 ),
                 'show_description' => $session->getShowDescription(),

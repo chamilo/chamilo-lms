@@ -516,7 +516,7 @@ class CoursesController
                 $url,
                 'check-circle',
                 'primary',
-                ['class' => 'btn-block ajax']
+                ['class' => 'btn-lg btn-block ajax']
             );
         }
 
@@ -550,7 +550,7 @@ class CoursesController
             $url,
             'check-circle',
             'primary',
-            ['class' => 'btn-large']
+            ['class' => 'btn-lg btn-block']
         );
 
         $hook = HookResubscribe::create();

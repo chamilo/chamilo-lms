@@ -1,32 +1,34 @@
 <h2 class="page-header">{{ 'SessionRequirements'|get_lang }}</h2>
 
-{% set finishedSessions = 0 %}
-
 {% for item in data %}
-    {% if item.status %}
-        {% set finishedSessions = finishedSessions + 1 %}
+    <h4>{{ item.name }}</h4>
 
-        <p class="bg-success">
-            <span class="pull-right">
-                <i class="fa fa-check"></i>
-            </span>
-            {{ item.session.name }}
-        </p>
-    {% else %}
-        <p class="bg-danger">
-            <span class="pull-right">
-                <i class="fa fa-exclamation-triangle"></i>
-            </span>
-            {{ item.session.name }}
-        </p>
-    {% endif %}
+    <div id="parents">
+        {% for session in item.sessions %}
+            <div class="parent">
+                <div class="big-icon">
+                    <img src="{{ 'item-sequence.png'|icon(48) }}">
+                    <p class="sequence-course">{{ session.name }}</p>
+                    <span class="label {{ session.status ? 'label-success' : 'label-danger' }}">
+                        {% if session.status %}
+                            <i class="fa fa-check"></i> {{ 'Complete'|get_lang }}
+                        {% else %}
+                            <i class="fa fa-exclamation-triangle"></i> {{ 'Incomplete'|get_lang }}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            {% if loop.index != item.sessions|length %}
+                <i class="fa fa-plus fa-3x sequence-plus-icon"></i>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endfor %}
 
 <hr>
 <p>
-    {% if finishedSessions == data|length %}
+    {% if allow_subscription %}
         {{ subscribe_button }}
-    {% else %}
-        {{ 'YouNeedCompleteAllSessions'|get_lang }}
     {% endif %}
 </p>

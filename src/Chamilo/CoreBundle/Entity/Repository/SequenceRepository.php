@@ -111,14 +111,27 @@ class SequenceRepository extends EntityRepository
      */
     public function getRequirements($resourceId, $type)
     {
-        $sequence = $this->findRequirementForResource($resourceId, $type);
+        $sequencesResource = $this->findBy([
+            'resourceId' => $resourceId,
+            'type' => $type
+        ]);
 
         $result = [];
 
-        if ($sequence && $sequence->hasGraph()) {
-            $graph = $sequence->getSequence()->getUnSerializeGraph();
+        foreach ($sequencesResource as $sequenceResource) {
+            if (!$sequenceResource->hasGraph()) {
+                continue;
+            }
+
+            $sequence = $sequenceResource->getSequence();
+            $graph = $sequence->getUnSerializeGraph();
             $vertex = $graph->getVertex($resourceId);
             $from = $vertex->getVerticesEdgeFrom();
+
+            $sequenceInfo = [
+                'name' => $sequence->getName(),
+                'requirements' => []
+            ];
 
             foreach ($from as $subVertex) {
                 $vertexId = $subVertex->getId();
@@ -134,10 +147,12 @@ class SequenceRepository extends EntityRepository
                             break;
                         }
 
-                        $result[] = $session;
+                        $sequenceInfo['requirements'][$vertexId] = $session;
                         break;
                 }
             }
+
+            $result[$sequence->getId()] = $sequenceInfo;
         }
 
         return $result;

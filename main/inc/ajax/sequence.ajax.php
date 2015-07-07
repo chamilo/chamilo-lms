@@ -294,70 +294,89 @@ switch ($action) {
                     'ChamiloCoreBundle:GradebookCategory'
                 );
 
-                $sessionRequirements = $repository->getRequirements(
+                $sequences = $repository->getRequirements(
                     $session['id'],
                     $type
                 );
 
-                $requiredGradebooks = [];
-
-                foreach ($sessionRequirements as $sessionRequired) {
-                    $sessionsCourses = $sessionRequired->getCourses();
-
-                    foreach ($sessionsCourses as $sessionCourse) {
-                        $course = $sessionCourse->getCourse();
-
-                        $gradebooks = $gradebookCategoryRepo->findBy([
-                            'courseCode' => $course->getCode(),
-                            'sessionId' => $sessionRequired->getId(),
-                            'isRequirement' => true
-                        ]);
-
-                        $requiredGradebooks = array_merge(
-                            $requiredGradebooks,
-                            $gradebooks
-                        );
-                    }
-                }
-
-                if (count($requiredGradebooks) === 0) {
+                if (count($sequences) === 0) {
                     break;
                 }
 
                 $data = [];
 
-                foreach ($requiredGradebooks as $gradebook) {
-                    $category = Category::createCategoryObjectFromEntity(
-                        $gradebook
-                    );
+                foreach ($sequences as $sequenceId => $sequence) {
+                    $item = [
+                        'name' => $sequence['name'],
+                        'sessions' => []
+                    ];
 
-                    if (array_key_exists($gradebook->getSessionId(), $data)) {
-                        continue;
+                    foreach ($sequence['requirements'] as $sessionRequired) {
+                        $itemSession = [
+                            'name' => $sessionRequired->getName(),
+                            'status' => true
+                        ];
+
+                        $sessionsCourses = $sessionRequired->getCourses();
+
+                        foreach ($sessionsCourses as $sessionCourse) {
+                            $course = $sessionCourse->getCourse();
+
+                            $gradebooks = $gradebookCategoryRepo->findBy([
+                                'courseCode' => $course->getCode(),
+                                'sessionId' => $sessionRequired->getId(),
+                                'isRequirement' => true
+                            ]);
+
+                            foreach ($gradebooks as $gradebook) {
+                                $category = Category::createCategoryObjectFromEntity(
+                                    $gradebook
+                                );
+
+                                $itemSession['status'] = $itemSession['status'] && Category::userFinishedCourse(
+                                    $userId,
+                                    $category
+                                );
+                            }
+                        }
+
+                        $item['sessions'][$sessionRequired->getId()] = $itemSession;
                     }
 
-                    $data[$gradebook->getSessionId()] = [
-                        'session' => api_get_session_info(
-                            $gradebook->getSessionId()
-                        ),
-                        'status' => Category::userFinishedCourse(
-                            $userId,
-                            $category
-                        )
-                    ];
+                    $data[$sequenceId] = $item;
+                }
+
+                $allowSubscription = false;
+
+                foreach ($data as $secuence) {
+                    $status = true;
+
+                    foreach ($secuence['sessions'] as $item) {
+                        $status = $status && $item['status'];
+                    }
+
+                    if ($status) {
+                        $allowSubscription = true;
+                        break;
+                    }
                 }
 
                 $courseController = new CoursesController();
 
                 $view = new Template(null, false, false, false, false, false);
-                $view->assign(
-                    'subscribe_button',
-                    $courseController->getRegisteredInSessionButton(
-                        $session['id'],
-                        $session['name'],
-                        false
-                    )
-                );
                 $view->assign('data', $data);
+                $view->assign('allow_subscription', $allowSubscription);
+
+                if ($allowSubscription) {
+                    $view->assign(
+                        'subscribe_button',
+                        $courseController->getRegisteredInSessionButton(
+                            $session['id'],
+                            $session['name'],
+                            false
+                        )
+                    );
+                }
 
                 $template = $view->get_template(
                     'sequence_resource/session_requirements.tpl'

@@ -1389,6 +1389,9 @@ function api_strtoupper($string, $encoding = null)
  */
 function api_substr($string, $start, $length = null, $encoding = null)
 {
+    if (is_null($length)) {
+        $length = api_strlen($string, $encoding);
+    }
     return Utf8::substr($string, $start, $length);
 }
 
@@ -1426,6 +1429,10 @@ function api_substr_count($haystack, $needle, $encoding = null)
  */
 function api_substr_replace($string, $replacement, $start, $length = null, $encoding = null)
 {
+    if (is_null($length)) {
+        $length = api_strlen($string);
+    }
+
     return UTf8::substr_replace($string, $replacement, $start, $length);
 }
 

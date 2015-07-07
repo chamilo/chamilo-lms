@@ -272,10 +272,13 @@ switch ($action) {
                 }
             }
 
-            CourseManager::addUserGroupMultiSelect($form, array());
+            $element = CourseManager::addUserGroupMultiSelect($form, array());
+            $form->setRequired($element);
+
             if (!isset($announcement_to_modify)) {
                 $announcement_to_modify = '';
             }
+
             $form->addElement(
                 'checkbox',
                 'email_ann',
@@ -286,7 +289,9 @@ switch ($action) {
             if (!isset($announcement_to_modify)) {
                 $announcement_to_modify = "";
             }
-            CourseManager::addGroupMultiSelect($form, $group_id, array());
+            $element = CourseManager::addGroupMultiSelect($form, $group_id, array());
+            $form->setRequired($element);
+
             $form->addElement(
                 'checkbox',
                 'email_ann',
@@ -330,8 +335,6 @@ switch ($action) {
 
         $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
         $form->setDefaults($defaults);
-
-        $content = $form->returnForm();
 
         if ($form->validate()) {
             $data = $form->getSubmitValues();
@@ -413,6 +416,8 @@ switch ($action) {
                 } // end condition token
             }
         }
+
+        $content = $form->returnForm();
         break;
 }
 

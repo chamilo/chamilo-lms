@@ -27,9 +27,12 @@ $form->add_textarea('content', get_lang('Content'));
 $form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
 
 $content = '';
-$setting = api_get_setting('text_content', 'text');
-if (!empty($setting)) {
-    $content = $setting;
+$setting = api_get_full_setting('text_content');
+if (!empty($setting) && is_array($setting)) {
+    $setting = current($setting);
+    if (isset($setting['selected_value'])) {
+        $content = $setting['selected_value'];
+    }
 }
 
 $form->setDefaults(array('content' => $content));

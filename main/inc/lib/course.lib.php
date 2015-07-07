@@ -1714,7 +1714,7 @@ class CourseManager
      */
     public static function get_coach_list_from_course_code($course_code, $session_id)
     {
-        if (empty($course_code) OR empty($session_id)) {
+        if (empty($course_code) || empty($session_id)) {
             return array();
         }
 

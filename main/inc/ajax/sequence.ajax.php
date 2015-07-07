@@ -283,4 +283,88 @@ switch ($action) {
                 break;
         }
         break;
+    case 'get_requirements':
+        $userId = api_get_user_id();
+
+        switch ($type) {
+            case SequenceResource::SESSION_TYPE:
+                $session = api_get_session_info($id);
+
+                $gradebookCategoryRepo = $em->getRepository(
+                    'ChamiloCoreBundle:GradebookCategory'
+                );
+
+                $sessionRequirements = $repository->getRequirements(
+                    $session['id'],
+                    $type
+                );
+
+                $requiredGradebooks = [];
+
+                foreach ($sessionRequirements as $sessionRequired) {
+                    $sessionsCourses = $sessionRequired->getCourses();
+
+                    foreach ($sessionsCourses as $sessionCourse) {
+                        $course = $sessionCourse->getCourse();
+
+                        $gradebooks = $gradebookCategoryRepo->findBy([
+                            'courseCode' => $course->getCode(),
+                            'sessionId' => $sessionRequired->getId(),
+                            'isRequirement' => true
+                        ]);
+
+                        $requiredGradebooks = array_merge(
+                            $requiredGradebooks,
+                            $gradebooks
+                        );
+                    }
+                }
+
+                if (count($requiredGradebooks) === 0) {
+                    break;
+                }
+
+                $data = [];
+
+                foreach ($requiredGradebooks as $gradebook) {
+                    $category = Category::createCategoryObjectFromEntity(
+                        $gradebook
+                    );
+
+                    if (array_key_exists($gradebook->getSessionId(), $data)) {
+                        continue;
+                    }
+
+                    $data[$gradebook->getSessionId()] = [
+                        'session' => api_get_session_info(
+                            $gradebook->getSessionId()
+                        ),
+                        'status' => Category::userFinishedCourse(
+                            $userId,
+                            $category
+                        )
+                    ];
+                }
+
+                $courseController = new CoursesController();
+
+                $view = new Template(null, false, false, false, false, false);
+                $view->assign(
+                    'subscribe_button',
+                    $courseController->getRegisteredInSessionButton(
+                        $session['id'],
+                        $session['name'],
+                        false
+                    )
+                );
+                $view->assign('data', $data);
+
+                $template = $view->get_template(
+                    'sequence_resource/session_requirements.tpl'
+                );
+
+                $view->display($template);
+                break;
+        }
+        break;
 }

@@ -103,4 +103,43 @@ class SequenceRepository extends EntityRepository
         }
     }
 
+    /**
+     * Get the requirements for a resource only
+     * @param int $resourceId The resource ID
+     * @param int $type The type of sequence resource
+     * @return array
+     */
+    public function getRequirements($resourceId, $type)
+    {
+        $sequence = $this->findRequirementForResource($resourceId, $type);
+
+        $result = [];
+
+        if ($sequence && $sequence->hasGraph()) {
+            $graph = $sequence->getSequence()->getUnSerializeGraph();
+            $vertex = $graph->getVertex($resourceId);
+            $from = $vertex->getVerticesEdgeFrom();
+
+            foreach ($from as $subVertex) {
+                $vertexId = $subVertex->getId();
+
+                switch ($type) {
+                    case SequenceResource::SESSION_TYPE:
+                        $session = $this->getEntityManager()->getReference(
+                            'ChamiloCoreBundle:Session',
+                            $vertexId
+                        );
+
+                        if (empty($session)) {
+                            break;
+                        }
+
+                        $result[] = $session;
+                        break;
+                }
+            }
+        }
+
+        return $result;
+    }
 }

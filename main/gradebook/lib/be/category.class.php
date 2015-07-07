@@ -508,6 +508,39 @@ class Category implements GradebookItem
     }
 
     /**
+     * Create a category object from a GradebookCategory entity
+     * @param Chamilo\CoreBundle\Entity\GradebookCategory $gradebookCategory
+     *         The entity
+     * @return \Category
+     */
+    public static function createCategoryObjectFromEntity(
+        Chamilo\CoreBundle\Entity\GradebookCategory $gradebookCategory
+    )
+    {
+        $category = new Category();
+        $category->set_id($gradebookCategory->getId());
+        $category->set_name($gradebookCategory->getName());
+        $category->set_description($gradebookCategory->getDescription());
+        $category->set_user_id($gradebookCategory->getUserId());
+        $category->set_course_code($gradebookCategory->getCourseCode());
+        $category->set_parent_id($gradebookCategory->getParentId());
+        $category->set_weight($gradebookCategory->getWeight());
+        $category->set_visible($gradebookCategory->getVisible());
+        $category->set_session_id($gradebookCategory->getSessionId());
+        $category->set_certificate_min_score(
+            $gradebookCategory->getCertifMinScore()
+        );
+        $category->set_grade_model_id($gradebookCategory->getGradeModelId());
+        $category->set_locked($gradebookCategory->getLocked());
+        $category->setGenerateCertificates(
+            $gradebookCategory->getGenerateCertificates()
+        );
+        $category->setIsRequirement($gradebookCategory->getIsRequirement());
+
+        return $category;
+    }
+
+    /**
      * Insert this category into the database
      */
     public function add()

@@ -491,15 +491,43 @@ class CoursesController
      * Get a HTML button for subscribe to session
      * @param int $sessionId The session ID
      * @param string $sessionName The session name
-     * @param boolean Optional. Session autosubscription set. Default is false
+     * @param boolean $checkRequirements Optional.
+     *        Whether the session has requirement. Default is false
      * @return string The button HTML
      */
     public function getRegisteredInSessionButton(
         $sessionId,
         $sessionName,
-        $catalogSessionAutoSubscriptionAllowed = false
+        $checkRequirements = false
     )
     {
+        if ($checkRequirements) {
+            $url = api_get_path(WEB_AJAX_PATH);
+            $url .= 'sequence.ajax.php?';
+            $url .= http_build_query([
+                'a' => 'get_requirements',
+                'id' => intval($sessionId),
+                'type' => SequenceResource::SESSION_TYPE,
+                'modal_size' => 'md'
+            ]);
+
+            return Display::toolbarButton(
+                get_lang('CheckRequirements'),
+                $url,
+                'check-circle',
+                'primary',
+                ['class' => 'btn-block ajax']
+            );
+        }
+
+        $catalogSessionAutoSubscriptionAllowed = false;
+
+        if (
+            api_get_setting('catalog_allow_session_auto_subscription') === 'true'
+        ) {
+            $catalogSessionAutoSubscriptionAllowed = true;
+        }
+
         $url = api_get_path(WEB_CODE_PATH);
 
         if ($catalogSessionAutoSubscriptionAllowed) {
@@ -517,13 +545,12 @@ class CoursesController
             ]);
         }
 
-        $result = Display::url(
-            '<i class="fa fa-check-circle"></i> ' . get_lang('Subscribe'),
+        $result = Display::toolbarButton(
+            get_lang('Subscribe'),
             $url,
-            array(
-                'class' => 'btn btn-large btn-primary s-c-subscription',
-                'data-session' => intval($sessionId)
-            )
+            'check-circle',
+            'primary',
+            ['class' => 'btn-large']
         );
 
         $hook = HookResubscribe::create();
@@ -657,7 +684,6 @@ class CoursesController
      */
     private function getFormatedSessionsBlock(array $sessions)
     {
-        $catalogSessionAutoSubscriptionAllowed = false;
         $extraFieldValue = new ExtraFieldValue('session');
         $userId = api_get_user_id();
         $sessionsBlocks = [];
@@ -671,10 +697,6 @@ class CoursesController
             'extraFieldType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
             'variable' => 'tags'
         ]);
-
-        if (api_get_setting('catalog_allow_session_auto_subscription') === 'true') {
-            $catalogSessionAutoSubscriptionAllowed = true;
-        }
 
         foreach ($sessions as $session) {
             $sessionDates = SessionManager::parseSessionDates([
@@ -711,6 +733,12 @@ class CoursesController
                 $sessionCourseTags = array_unique($sessionCourseTags);
             }
 
+            $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+            $requirementAndDependencies = $repo->getRequirementAndDependencies(
+                $session->getId(),
+                SequenceResource::SESSION_TYPE
+            );
+
             $sessionsBlock = array(
                 'id' => $session->getId(),
                 'name' => $session->getName(),
@@ -724,16 +752,10 @@ class CoursesController
                 'subscribe_button' => $this->getRegisteredInSessionButton(
                     $session->getId(),
                     $session->getName(),
-                    $catalogSessionAutoSubscriptionAllowed
+                    !empty($requirementAndDependencies['requirements'])
                 ),
                 'show_description' => $session->getShowDescription(),
                 'tags' => $sessionCourseTags
-            );
-
-            $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
-            $requirementAndDependencies = $repo->getRequirementAndDependencies(
-                $session->getId(),
-                SequenceResource::SESSION_TYPE
             );
 
             $sessionsBlock = array_merge($sessionsBlock, $requirementAndDependencies);

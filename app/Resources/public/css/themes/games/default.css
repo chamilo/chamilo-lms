@@ -626,11 +626,18 @@ footer .media{
   color: #ffffff;
   border: none !important;
 }
+.section-title-catalog{
+  font-size: 25px;
+  text-transform: none;
+}
+.form-group label{
+  font-weight: normal;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
-	.container{
+	/* .container{
 	width: 1024px;
-}
+} */
 }
 
 /* Portrait tablet to landscape and desktop */

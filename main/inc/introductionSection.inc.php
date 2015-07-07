@@ -351,7 +351,7 @@ if ($intro_dispDefault) {
     } else {
         if (api_is_allowed_to_edit()) {
             $introduction_section .= '<div class="help-course">';
-            $introduction_section .= get_lang('AddCustomCourseIntro') .' '. $textIntro;
+            $introduction_section .= get_lang('AddCustomCourseIntro') . ' ' . $textIntro;
             $introduction_section .= '</div>';
         }
     }

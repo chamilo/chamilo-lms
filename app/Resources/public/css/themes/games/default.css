@@ -577,7 +577,32 @@ footer .media{
   background-color: #cf3652;
   color: #fff;
 }
-
+.exercise{
+  border: none;
+  box-shadow: none;
+}
+.exercise .page-header{
+  margin: 0px;
+}
+.exercise .page-header h2{
+  font-size: 22px;
+  color: #666666;
+  margin-top: 10px;
+}
+.exercise .page-header h2 img{
+  margin-right: 10px;
+}
+.exercise_overview_options{
+  background: none;
+}
+.dl-horizontal dt{
+  float: left;
+  width: 25%;
+}
+.dl-horizontal dt, .dl-horizontal dd{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
 	.container{

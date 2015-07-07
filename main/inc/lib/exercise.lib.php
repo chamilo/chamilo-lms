@@ -3580,6 +3580,7 @@ HTML;
         if ($show_results || $show_only_score) {
             $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
             //Shows exercise header
+            echo '<div class="show-exercise">';
             echo $objExercise->show_exercise_result_header(
                 $user_info,
                 api_convert_and_format_date(
@@ -3589,6 +3590,7 @@ HTML;
                 $exercise_stat_info['duration'],
                 $exercise_stat_info['user_ip']
             );
+            echo '</div>';
         }
 
         // Display text when test is finished #4074 and for LP #4227
@@ -3710,7 +3712,8 @@ HTML;
                 }
 
                 $contents = ob_get_clean();
-                $question_content = '<div class="question_row_answer">';
+                $question_content = '<div class="show-exercise">';
+                $question_content .= '<div class="question_row_answer">';
 
                 if ($show_results) {
                     $show_media = false;
@@ -3728,6 +3731,7 @@ HTML;
                 $counter++;
 
                 $question_content .= $contents;
+                $question_content .= '</div>';
                 $question_content .= '</div>';
 
                 $exercise_content .= $question_content;

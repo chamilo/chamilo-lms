@@ -220,16 +220,17 @@
 
         $('#content_id').load(function() {
             this.style.overflow = 'hidden';
-            this.style.height =
-                    this.contentWindow.document.body.offsetHeight + 30 + 'px';
+            this.style.height = this.contentWindow.document.body.offsetHeight + 350 + 'px';
+
         });
 
+        //window.onload = updateContentHeight();
+        //window.onresize = updateContentHeight();
 
         loadForumThead({{ oLP.lp_id }}, {{ oLP.get_current_item_id() }});
     });
 
-    window.onload = updateContentHeight();
-    window.onresize = updateContentHeight();
+
 
     $(document).ready(function(){
 

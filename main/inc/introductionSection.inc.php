@@ -345,13 +345,15 @@ $introduction_section .=  '<div class="col-md-12">';
 
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {
-        $introduction_section .='<div class="page-course">';
-        $introduction_section .=  $intro_content;
+        $introduction_section .= '<div class="page-course">';
+        $introduction_section .= $intro_content;
         $introduction_section .= '</div>';
     } else {
-        $introduction_section .= '<div class="help-course">';
-        $introduction_section .= get_lang('AddCustomCourseIntro').' ' . $textIntro;
-        $introduction_section .= '</div>';
+        if (api_is_allowed_to_edit()) {
+            $introduction_section .= '<div class="help-course">';
+            $introduction_section .= get_lang('AddCustomCourseIntro') . ' ' . $textIntro;
+            $introduction_section .= '</div>';
+        }
     }
 }
 

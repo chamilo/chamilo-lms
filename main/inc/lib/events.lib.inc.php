@@ -609,10 +609,14 @@ function event_system(
     )
     ){
         $event_value = array(
-            'user_id' => api_get_user_id(),
+            'user_id' => $event_value,
             'course_code' => $course_code,
             'session_id' => $session_id,
         );
+
+        if (in_array($event_type, array(LOG_SESSION_ADD_COURSE, LOG_SESSION_DELETE_COURSE))) {
+            $event_value['user_id'] = api_get_user_id();
+        }
     }
 
     if (is_array($event_value)) {

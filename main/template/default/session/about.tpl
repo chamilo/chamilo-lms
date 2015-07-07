@@ -56,7 +56,7 @@
                     </div>
                 {% endif %}
 
-                {% if not is_subscribed %}
+                {% if courses|length == 1 and not is_subscribed %}
                     <div class="subscribe">
                         <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-book"></i> {{ "Subscribe"|get_lang }}</a>
                     </div>
@@ -142,6 +142,19 @@
                 </div>
             </div>
         </div>
+
+        {% if courses|length == 1 and not is_subscribed %}
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <div class="text-center">
+                        <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-book"></i> {{ "Subscribe"|get_lang }}</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    {% if courses|length > 1 and not is_subscribed %}
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
                 <div class="text-center">
@@ -149,5 +162,5 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
+    {% endif %}
 </div>

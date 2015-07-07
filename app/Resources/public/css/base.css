@@ -6140,6 +6140,17 @@ div#chat-remote-video video {
 #session-list .options p{
   margin: 0;
 }
+#session-list .dependent .tool-book .fa.fa-book{
+  color: #00829C;
+  margin-right: 10px;
+}
+#session-list .dependent{
+  font-size: 12px;
+  padding-bottom: 10px;
+}
+#session-list .dependent a{
+  color: #666666;
+}
 #custom-icons .items-tools{
   padding: 10px;
   border: 1px solid #CCCCCC;

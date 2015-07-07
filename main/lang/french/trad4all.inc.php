@@ -7396,4 +7396,5 @@ $ByDuration = "Par durée";
 $ByDates = "Par dates";
 $SendAnnouncementCopyToDRH = "Envoyer une copie du mail aux responsables RH des étudiants sélectionnés";
 $PoweredByX = "Créé avec %s";
+$AnnouncementErrorNoUserSelected = "Veuillez sélectionner au moins un utilisateur. L'annonce n'a pas été sauvée.";
 ?>

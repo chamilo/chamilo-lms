@@ -7402,4 +7402,5 @@ $ByDuration = "By duration";
 $ByDates = "By dates";
 $SendAnnouncementCopyToDRH = "Send a copy to HR managers of selected students";
 $PoweredByX = "Powered by %s";
+$AnnouncementErrorNoUserSelected = "Please select at least one user. The announcement has not been saved.";
 ?>

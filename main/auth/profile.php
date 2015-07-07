@@ -309,7 +309,6 @@ if (is_platform_authentication() &&
 
     $checkPass = api_get_setting('allow_strength_pass_checker');
     if ($checkPass == 'true') {
-        error_log('Adding label');
         $form->addElement('label', null, '<div id="password_progress"></div>');
     }
     $form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));

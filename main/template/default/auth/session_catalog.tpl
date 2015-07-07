@@ -103,9 +103,13 @@
                                         </li>
                                     {% endif %}
                                 </ul>
-                                <div class="requirements">
+                                <div class="dependent">
+                                    <a tabindex="0" role="button" class="tool-book" data-toggle="popover" data-trigger="focus"
+                                       title="{% if session.requirements %}{{ 'RequiredSessions'|get_lang }}{% endif %}
+                                    {% if session.dependencies %}{{ 'DependentSessions'|get_lang }}{% endif %}" data-content="
+                                        <div class='requirements'>
                                     {% if session.requirements %}
-                                        <p><i class="fa fa-book"></i> {{ 'RequiredSessions'|get_lang }} :
+                                        <p><i class='fa fa-book'></i> {{ 'RequiredSessions'|get_lang }} :
                                             {% for requirement in session.requirements %}
                                                 {{ requirement.name  }}
                                             {% endfor %}
@@ -113,13 +117,21 @@
                                     {% endif %}
 
                                     {% if session.dependencies %}
-                                        <p> <i class="fa fa-book"></i> {{ 'DependentSessions'|get_lang }} :
+                                        <p> <i class='fa fa-book'></i> {{ 'DependentSessions'|get_lang }} :
                                             {% for dependency in session.dependencies %}
                                                 {{ dependency.name  }}
                                             {% endfor %}
                                         </p>
                                     {% endif %}
                                 </div>
+                                   ">
+                                        <i class='fa fa-book'></i>
+                                        {% if session.requirements %}{{ 'RequiredSessions'|get_lang }}{% endif %}
+                                        {% if session.dependencies %}{{ 'DependentSessions'|get_lang }}{% endif %}
+                                    </a>
+                                </div>
+
+
                                 <div class="options">
                                     <p class="buttom-subscribed">
                                         {% if session.is_subscribed %}

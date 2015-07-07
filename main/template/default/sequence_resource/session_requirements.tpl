@@ -6,14 +6,14 @@
     {% if item.status %}
         {% set finishedSessions = finishedSessions + 1 %}
 
-        <p class="bg-success" style="padding: 10px;">
+        <p class="bg-success">
             <span class="pull-right">
                 <i class="fa fa-check"></i>
             </span>
             {{ item.session.name }}
         </p>
     {% else %}
-        <p class="bg-danger" style="padding: 10px;">
+        <p class="bg-danger">
             <span class="pull-right">
                 <i class="fa fa-exclamation-triangle"></i>
             </span>

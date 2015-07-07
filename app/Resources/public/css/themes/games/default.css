@@ -603,6 +603,29 @@ footer .media{
   padding-top: 5px;
   padding-bottom: 5px;
 }
+.games.nav-tabs{
+  margin-bottom: 20px;
+  border-bottom: 1px solid #F4F4F4;
+}
+.games.nav-tabs li{
+  margin-bottom: 0px;
+}
+.games.nav-tabs li a{
+  background-color: #F4F4F4;
+  color: #666;
+  border: none !important;
+  margin-left: 10px;
+}
+.games.nav-tabs li a:hover{
+  border: none !important;
+  background-color: #35A8C9;
+  color: #ffffff;
+}
+.games.nav-tabs .active a{
+  background-color: #35A8C9;
+  color: #ffffff;
+  border: none !important;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
 	.container{

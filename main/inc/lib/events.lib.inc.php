@@ -597,6 +597,24 @@ function event_system(
         }
     }
 
+    if (in_array(
+        $event_type,
+        array(
+            LOG_SESSION_ADD_USER_COURSE,
+            LOG_SESSION_DELETE_USER_COURSE,
+            LOG_SESSION_DELETE_USER,
+            LOG_SESSION_ADD_COURSE,
+            LOG_SESSION_DELETE_COURSE,
+        )
+    )
+    ){
+        $event_value = array(
+            'user_id' => api_get_user_id(),
+            'course_code' => $course_code,
+            'session_id' => $session_id,
+        );
+    }
+
     if (is_array($event_value)) {
         $event_value = serialize($event_value);
     }

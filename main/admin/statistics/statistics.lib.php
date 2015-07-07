@@ -179,7 +179,6 @@ class Statistics
      */
     static function get_activities_data($from, $number_of_items, $column, $direction)
     {
-        global $dateTimeFormatLong;
         $track_e_default    		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user 				= Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table	= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -235,20 +234,48 @@ class Statistics
         $res = Database::query($sql);
         $activities = array ();
         while ($row = Database::fetch_row($res)) {
-
-            if (strpos($row[1], '_object') === false && strpos($row[1], '_array') === false) {
-                $row[2] = $row[2];
-            } else {
+            if (
+                strpos(LOG_SESSION_ADD_USER_COURSE, $row[0]) !== false ||
+                strpos(LOG_SESSION_DELETE_USER_COURSE, $row[0]) !== false ||
+                strpos(LOG_SESSION_DELETE_USER, $row[0]) !== false ||
+                strpos(LOG_SESSION_ADD_COURSE, $row[0]) !== false ||
+                strpos(LOG_SESSION_DELETE_COURSE, $row[0]) !== false
+            ) {
                 if (!empty($row[2])) {
                     $originalData = $row[2];
-                    $row[2] = unserialize($originalData);
-                    if (is_array($row[2]) && !empty($row[2])) {
-                        $row[2] = implode_with_key(', ', $row[2]);
-                    } else {
-                        $row[2] = $originalData;
+                    if (!empty($originalData)) {
+                        $row[2] = @unserialize($originalData);
+                        if (is_array($row[2]) && !empty($row[2])) {
+                            $row[2] = implode_with_key(', ', $row[2]);
+                        } else {
+                            $row[2] = $originalData;
+                        }
+                    }
+                }
+            } else {
+
+                if (strpos($row[1], '_object') === false && strpos(
+                        $row[1],
+                        '_array'
+                    ) === false
+                ) {
+                    $row[2] = $row[2];
+                } else {
+                    if (!empty($row[2])) {
+                        $originalData = $row[2];
+                        $row[2] = unserialize($originalData);
+                        if (is_array($row[2]) && !empty($row[2])) {
+                            $row[2] = implode_with_key(', ', $row[2]);
+                        } else {
+                            $row[2] = $originalData;
+                        }
                     }
                 }
             }
+
+
+
+
             if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {
                 $row['default_date'] = api_get_local_time($row['default_date']);
             } else {

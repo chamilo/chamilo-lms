@@ -5165,6 +5165,8 @@ class CourseManager
     /**
      * @param FormValidator $form
      * @param array $to_already_selected
+     *
+     * @param HTML_QuickForm_element
      */
     public static function addUserGroupMultiSelect(&$form, $to_already_selected)
     {
@@ -5177,7 +5179,7 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        $form->addElement(
+        return $form->addElement(
             'advmultiselect',
             'users',
             get_lang('Users'),

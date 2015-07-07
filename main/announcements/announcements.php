@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: code cleaning
@@ -271,10 +272,13 @@ switch ($action) {
                 }
             }
 
-            CourseManager::addUserGroupMultiSelect($form, array());
+            $element = CourseManager::addUserGroupMultiSelect($form, array());
+            $form->setRequired($element);
+
             if (!isset($announcement_to_modify)) {
                 $announcement_to_modify = '';
             }
+
             $form->addElement(
                 'checkbox',
                 'email_ann',
@@ -285,7 +289,9 @@ switch ($action) {
             if (!isset($announcement_to_modify)) {
                 $announcement_to_modify = "";
             }
-            CourseManager::addGroupMultiSelect($form, $group_id, array());
+            $element = CourseManager::addGroupMultiSelect($form, $group_id, array());
+            $form->setRequired($element);
+
             $form->addElement(
                 'checkbox',
                 'email_ann',
@@ -330,8 +336,6 @@ switch ($action) {
         $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
         $form->setDefaults($defaults);
 
-        $content = $form->return_form();
-
         if ($form->validate()) {
             $data = $form->getSubmitValues();
 
@@ -357,7 +361,12 @@ switch ($action) {
                     if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
                         AnnouncementManager::send_email($id, $sendToUsersInSession);
                     }
-                    Display::addFlash(Display::return_message(get_lang('AnnouncementModified'), 'success'));
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('AnnouncementModified'),
+                            'success'
+                        )
+                    );
                     header('Location: '.$homeUrl);
                     exit;
                 }
@@ -396,7 +405,10 @@ switch ($action) {
 
                     /* MAIL FUNCTION */
                     if (isset($data['email_ann']) && $data['email_ann']) {
-                        AnnouncementManager::send_email($insert_id, $sendToUsersInSession);
+                        AnnouncementManager::send_email(
+                            $insert_id,
+                            $sendToUsersInSession
+                        );
                     }
                     header('Location: '.$homeUrl);
                     exit;
@@ -404,6 +416,8 @@ switch ($action) {
                 } // end condition token
             }
         }
+
+        $content = $form->returnForm();
         break;
 }
 
@@ -429,9 +443,9 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 
 // Actions
 $show_actions = false;
-if ((api_is_allowed_to_edit(false,true) OR
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and
-    (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
+if ((api_is_allowed_to_edit(false,true) ||
+    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) &&
+    (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
 ) {
     echo '<div class="actions">';
     if (in_array($action, array('add', 'modify','view'))) {

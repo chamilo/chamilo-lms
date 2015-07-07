@@ -23,15 +23,13 @@ $plugin_info['author'] = 'Julio Montoya';
 /* Plugin optional settings */
 
 $form = new FormValidator('text_form');
-
-// A simple select$plugin_info['settings']
 $form->add_textarea('content', get_lang('Content'));
 $form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
 
 $content = '';
-$setting = api_get_setting('text_content');
-if (isset($setting) && is_array($setting) && isset($setting['text'])) {
-    $content = $setting['text'];
+$setting = api_get_setting('text_content', 'text');
+if (!empty($setting)) {
+    $content = $setting;
 }
 
 $form->setDefaults(array('content' => $content));

@@ -515,13 +515,18 @@ abstract class Question
                 $path = str_replace($documentPath, '', $picturePath);
                 $title_path = basename($picturePath);
                 $doc_id = add_document($this->course, $path, 'folder', 0, $title_path);
-                api_item_property_update($this->course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
+                api_item_property_update(
+                    $this->course,
+                    TOOL_DOCUMENT,
+                    $doc_id,
+                    'FolderCreated',
+                    api_get_user_id()
+                );
             }
         }
 
         // if the question has got an ID
         if ($this->id) {
-            $extension = pathinfo($PictureName, PATHINFO_EXTENSION);
             $this->picture = 'quiz-' . $this->id . '.jpg';
             $o_img = new Image($Picture);
             $o_img->send_image($picturePath . '/' . $this->picture, -1, 'jpg');

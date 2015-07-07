@@ -2175,8 +2175,8 @@ class Exercise
         $arrques = null;
         $arrans  = null;
 
-        $questionId   = intval($questionId);
-        $exeId        = intval($exeId);
+        $questionId = intval($questionId);
+        $exeId = intval($exeId);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
@@ -2501,6 +2501,7 @@ class Exercise
                     for ($k = 0; $k < $last; $k++) {
                         $answer .= $pre_array[$k];
                     }
+
                     // splits weightings that are joined with a comma
                     $answerWeighting = explode(',', $is_set_switchable[0]);
 
@@ -2511,6 +2512,7 @@ class Exercise
                     $j = 0;
                     //initialise answer tags
                     $user_tags = $correct_tags = $real_text = array();
+
                     // the loop will stop at the end of the text
                     while (1) {
                         // quits the loop if there are no more blanks (detect '[')
@@ -2520,19 +2522,21 @@ class Exercise
                             $real_text[] = $answer;
                             break; //no more "blanks", quit the loop
                         }
+
                         // adds the piece of text that is before the blank
-                        //and ends with '[' into a general storage array
+                        // and ends with '[' into a general storage array
                         $real_text[] = api_substr($temp, 0, $pos +1);
                         $answer .= api_substr($temp, 0, $pos +1);
+
                         //take the string remaining (after the last "[" we found)
                         $temp = api_substr($temp, $pos +1);
+
                         // quit the loop if there are no more blanks, and update $pos to the position of next ']'
                         if (($pos = api_strpos($temp, ']')) === false) {
                             // adds the end of the text
                             $answer .= $temp;
                             break;
                         }
-
                         if ($from_database) {
                             $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                           WHERE
@@ -2557,7 +2561,9 @@ class Exercise
                             }
                         } else {
 							// This value is the user input, not escaped while correct answer is escaped by fckeditor
+
 							$choice[$j] = api_htmlentities(trim($choice[$j]));
+
                         }
 
                         $user_tags[] = $choice[$j];

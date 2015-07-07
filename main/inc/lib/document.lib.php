@@ -3340,7 +3340,6 @@ class DocumentManager
         $resources = Database::store_result($res_doc, 'ASSOC');
 
         $return = '';
-
         if ($lp_id) {
             if ($folderId === false) {
                 $return .= '<div class="lp_resource_element">';

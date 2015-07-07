@@ -58,7 +58,7 @@
 
                 {% if courses|length == 1 and not is_subscribed %}
                     <div class="subscribe">
-                        <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-book"></i> {{ "Subscribe"|get_lang }}</a>
+                        {{ subscribe_button }}
                     </div>
                 {% endif %}
             </div>
@@ -147,7 +147,7 @@
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
                     <div class="text-center">
-                        <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-book"></i> {{ "Subscribe"|get_lang }}</a>
+                        {{ subscribe_button }}
                     </div>
                 </div>
             </div>
@@ -158,7 +158,7 @@
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
                 <div class="text-center">
-                    <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-book"></i> {{ "Subscribe"|get_lang }}</a>
+                    {{ subscribe_button }}
                 </div>
             </div>
         </div>

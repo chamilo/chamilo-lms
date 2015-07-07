@@ -152,7 +152,11 @@ class HTML_QuickForm_RuleRegistry
             'html' => 'HTML_QuickForm_Rule_HTML',
             'CAPTCHA' => 'HTML_QuickForm_Rule_CAPTCHA',
             'date' => 'HTML_QuickForm_Rule_Date',
-            'compare_datetime_text' => 'HTML_QuickForm_Rule_CompareDateTimeText'
+            'compare_datetime_text' => 'HTML_QuickForm_Rule_CompareDateTimeText',
+            'uploadedfile' => 'HTML_QuickForm_Rule_UploadFile',
+            'maxfilesize', 'HTML_QuickForm_Rule_MaxFileSize',
+            'mimetype', 'HTML_QuickForm_Rule_MimeType',
+            'filename', 'HTML_QuickForm_Rule_FileName'
         );
 
         $class = $rules[$ruleName];

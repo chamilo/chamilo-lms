@@ -23,14 +23,6 @@
  * @link        http://pear.php.net/package/HTML_QuickForm
  */
 
-// register file-related rules
-if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerRule('uploadedfile', 'callback', '_ruleIsUploadedFile', 'HTML_QuickForm_file');
-    HTML_QuickForm::registerRule('maxfilesize', 'callback', '_ruleCheckMaxFileSize', 'HTML_QuickForm_file');
-    HTML_QuickForm::registerRule('mimetype', 'callback', '_ruleCheckMimeType', 'HTML_QuickForm_file');
-    HTML_QuickForm::registerRule('filename', 'callback', '_ruleCheckFileName', 'HTML_QuickForm_file');
-}
-
 /**
  * HTML class for a file upload field
  *
@@ -221,6 +213,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         return HTML_QuickForm_file::_ruleIsUploadedFile($this->_value);
     } // end func isUploadedFile
 
+
     // }}}
     // {{{ _ruleIsUploadedFile()
 
@@ -243,70 +236,6 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
     // }}}
     // {{{ _ruleCheckMaxFileSize()
-
-    /**
-     * Checks that the file does not exceed the max file size
-     *
-     * @param     array     Uploaded file info (from $_FILES)
-     * @param     int       Max file size
-     * @access    private
-     * @return    bool      true if filesize is lower than maxsize, false otherwise
-     */
-    function _ruleCheckMaxFileSize($elementValue, $maxSize)
-    {
-        if (!empty($elementValue['error']) &&
-            (UPLOAD_ERR_FORM_SIZE == $elementValue['error'] || UPLOAD_ERR_INI_SIZE == $elementValue['error'])) {
-            return false;
-        }
-        if (!HTML_QuickForm_file::_ruleIsUploadedFile($elementValue)) {
-            return true;
-        }
-        return ($maxSize >= @filesize($elementValue['tmp_name']));
-    } // end func _ruleCheckMaxFileSize
-
-    // }}}
-    // {{{ _ruleCheckMimeType()
-
-    /**
-     * Checks if the given element contains an uploaded file of the right mime type
-     *
-     * @param     array     Uploaded file info (from $_FILES)
-     * @param     mixed     Mime Type (can be an array of allowed types)
-     * @access    private
-     * @return    bool      true if mimetype is correct, false otherwise
-     */
-    function _ruleCheckMimeType($elementValue, $mimeType)
-    {
-        if (!HTML_QuickForm_file::_ruleIsUploadedFile($elementValue)) {
-            return true;
-        }
-        if (is_array($mimeType)) {
-            return in_array($elementValue['type'], $mimeType);
-        }
-        return $elementValue['type'] == $mimeType;
-    } // end func _ruleCheckMimeType
-
-    // }}}
-    // {{{ _ruleCheckFileName()
-
-    /**
-     * Checks if the given element contains an uploaded file of the filename regex
-     *
-     * @param     array     Uploaded file info (from $_FILES)
-     * @param     string    Regular expression
-     * @access    private
-     * @return    bool      true if name matches regex, false otherwise
-     */
-    function _ruleCheckFileName($elementValue, $regex)
-    {
-        if (!HTML_QuickForm_file::_ruleIsUploadedFile($elementValue)) {
-            return true;
-        }
-        return (bool)preg_match($regex, $elementValue['name']);
-    } // end func _ruleCheckFileName
-
-    // }}}
-    // {{{ _findValue()
 
    /**
     * Tries to find the element value from the values array

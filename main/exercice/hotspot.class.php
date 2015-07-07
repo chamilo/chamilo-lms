@@ -25,10 +25,13 @@ class HotSpot extends Question
 	{
 	}
 
-	function createForm (&$form, $fck_config=0)
+	/**
+	 * @param FormValidator $form
+	 * @param int $fck_config
+	 */
+	public function createForm (&$form, $fck_config=0)
 	{
 		parent::createForm($form, $fck_config);
-		global $text, $class;
 
 		if (!isset($_GET['editQuestion'])) {
 			$form->addElement('file','imageUpload',array('<img src="../img/hotspots.png" />', get_lang('UploadJpgPicture')) );

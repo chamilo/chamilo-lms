@@ -371,11 +371,16 @@ class CatForm extends FormValidator
             );
         }
 
-        $isRequirementCheckbox = $this->addCheckBox(
-            'is_requirement',
-            null,
-            get_lang('IsRequirement')
-        );
+        if (!empty(api_get_session_id())) {
+            $isRequirementCheckbox = $this->addCheckBox(
+                'is_requirement',
+                [
+                    null,
+                    get_lang('ConsiderThisGradebookAsRequirementForASessionSequence')
+                ],
+                get_lang('IsRequirement')
+            );
+        }
 
         if ($this->category_object->getIsRequirement()) {
             $isRequirementCheckbox->setChecked(true);

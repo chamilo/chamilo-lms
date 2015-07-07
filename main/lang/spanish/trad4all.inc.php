@@ -7429,4 +7429,6 @@ $RequiredSessions = "Sesiones requeridas";
 $DependentSessions = "Sesiones dependientes";
 $ByDuration = "Por duración";
 $ByDates = "Por fechas";
+$SendAnnouncementCopyToDRH = "Enviar una copia a los responsables RRHH de los estudiantes seleccionados";
+$PoweredByX = "Creado con %s";
 ?>

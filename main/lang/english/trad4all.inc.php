@@ -7400,4 +7400,6 @@ $RequiredSessions = "Required sessions";
 $DependentSessions = "Dependent sessions";
 $ByDuration = "By duration";
 $ByDates = "By dates";
+$SendAnnouncementCopyToDRH = "Send a copy to HR managers of selected students";
+$PoweredByX = "Powered by %s";
 ?>

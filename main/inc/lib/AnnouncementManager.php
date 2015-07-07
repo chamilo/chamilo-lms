@@ -253,9 +253,15 @@ class AnnouncementManager
             if ($result['to_group_id'] !== '0' and $result['to_group_id'] !== 'NULL') {
                 $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
             }
-            $sent_to = self::sent_to('announcement', $announcement_id);
-            $sent_to_form = self::sent_to_form($sent_to);
-            $html .= Display::tag('td', get_lang('SentTo') . ' : ' . $sent_to_form, array('class' => 'announcements_datum'));
+            if (api_is_allowed_to_edit(false, true)) {
+                $sent_to = self::sent_to('announcement', $announcement_id);
+                $sent_to_form = self::sent_to_form($sent_to);
+                $html .= Display::tag(
+                    'td',
+                    get_lang('SentTo') . ' : ' . $sent_to_form,
+                    array('class' => 'announcements_datum')
+                );
+            }
             $attachment_list = self::get_attachment($announcement_id);
 
             if (count($attachment_list) > 0) {

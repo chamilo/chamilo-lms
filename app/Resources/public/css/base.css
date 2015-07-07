@@ -5848,7 +5848,7 @@ div#chat-remote-video video {
 }
 #parents .parent {
   display: inline-block;
-  width: 15%;
+  width: 125px;
   padding: 5px;
   /* background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center bottom; */
 }
@@ -6176,6 +6176,14 @@ div#chat-remote-video video {
   margin-right: 5%;
   margin-left: 5%;
   text-align: center;
+}
+
+p.bg-primary,
+p.bg-success,
+p.bg-info,
+p.bg-warning,
+p.bg-danger {
+    padding: 10px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

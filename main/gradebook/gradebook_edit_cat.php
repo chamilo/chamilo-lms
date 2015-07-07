@@ -100,13 +100,23 @@ if ($form->validate()) {
         $cat->set_course_code($values['course_code']);
     }
 
-    $cat->set_grade_model_id($values['grade_model_id']);
+    if (isset($values['grade_model_id'])) {
+        $cat->set_grade_model_id($values['grade_model_id']);
+    }
+
     $cat->set_description($values['description']);
-    $cat->set_skills($values['skills']);
+
+    if (isset($values['skills'])) {
+        $cat->set_skills($values['skills']);
+    }
+
     $cat->set_user_id($values['hid_user_id']);
     $cat->set_parent_id($values['hid_parent_id']);
     $cat->set_weight($values['weight']);
-    $cat->setGenerateCertificates($values['generate_certificates']);
+
+    if (isset($values['generate_certificates'])) {
+        $cat->setGenerateCertificates($values['generate_certificates']);
+    }
 
     if ($values['hid_parent_id'] == 0 ) {
         $cat->set_certificate_min_score($values['certif_min_score']);
@@ -119,6 +129,13 @@ if ($form->validate()) {
     }
 
     $cat->set_visible($visible);
+
+    if (isset($values['is_requirement'])) {
+        $cat->setIsRequirement(true);
+    } else {
+        $cat->setIsRequirement(false);
+    }
+
     $cat->save();
     header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id().'&'.api_get_cidreq());
     exit;

@@ -118,12 +118,27 @@ if ($form->validate()) {
     $cat->set_session_id(api_get_session_id());
     //Always add the gradebook to the course
     $cat->set_course_code(api_get_course_id());
-    $cat->set_skills($values['skills']);
+
+    if (isset($values['skills'])) {
+        $cat->set_skills($values['skills']);
+    }
+
     $cat->set_description($values['description']);
     $cat->set_user_id($values['hid_user_id']);
     $cat->set_parent_id($values['hid_parent_id']);
     $cat->set_weight($values['weight']);
-    $cat->setGenerateCertificates($values['generate_certificates']);
+
+    if (isset($values['generate_certificates'])) {
+        $cat->setGenerateCertificates(true);
+    } else {
+        $cat->setGenerateCertificates(false);
+    }
+
+    if (isset($values['is_requirement'])) {
+        $cat->setIsRequirement(true);
+    } else {
+        $cat->setIsRequirement(false);
+    }
 
     if (empty ($values['visible'])) {
         $visible = 0;

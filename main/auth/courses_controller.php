@@ -489,26 +489,74 @@ class CoursesController
 
     /**
      * Get a HTML button for subscribe to session
-     * @param string    The session data
-     * @param boolean   Session autosubscription set. False by default.
-     * @return string   The button
+     * @param int $sessionId The session ID
+     * @param string $sessionName The session name
+     * @param boolean $checkRequirements Optional.
+     *        Whether the session has requirement. Default is false
+     * @return string The button HTML
      */
-    public function getRegisteredInSessionButton($sessionData, $catalogSessionAutoSubscriptionAllowed = false)
+    public function getRegisteredInSessionButton(
+        $sessionId,
+        $sessionName,
+        $checkRequirements = false
+    )
     {
-        $url = $catalogSessionAutoSubscriptionAllowed ?
-            api_get_path(WEB_CODE_PATH)."auth/courses.php?action=subscribe_to_session&session_id=".
-            intval($sessionData)."&user_id=".api_get_user_id() :
-            api_get_path(WEB_CODE_PATH)."inc/email_editor.php?action=subscribe_me_to_session&session=".
-            Security::remove_XSS($sessionData);
+        if ($checkRequirements) {
+            $url = api_get_path(WEB_AJAX_PATH);
+            $url .= 'sequence.ajax.php?';
+            $url .= http_build_query([
+                'a' => 'get_requirements',
+                'id' => intval($sessionId),
+                'type' => SequenceResource::SESSION_TYPE,
+                'modal_size' => 'md'
+            ]);
 
-        $result = Display::url('<i class="fa fa-check-circle"></i> '.get_lang('Subscribe'), $url, array(
-            'class' => 'btn btn-large btn-primary',
-        ));
+            return Display::toolbarButton(
+                get_lang('CheckRequirements'),
+                $url,
+                'check-circle',
+                'primary',
+                ['class' => 'btn-lg btn-block ajax']
+            );
+        }
+
+        $catalogSessionAutoSubscriptionAllowed = false;
+
+        if (
+            api_get_setting('catalog_allow_session_auto_subscription') === 'true'
+        ) {
+            $catalogSessionAutoSubscriptionAllowed = true;
+        }
+
+        $url = api_get_path(WEB_CODE_PATH);
+
+        if ($catalogSessionAutoSubscriptionAllowed) {
+            $url .= 'auth/courses.php?';
+            $url .= http_build_query([
+                'action' => 'subscribe_to_session',
+                'session_id' => intval($sessionId),
+                'user_id' => api_get_user_id()
+            ]);
+        } else {
+            $url .= 'inc/email_editor.php?';
+            $url .= http_build_query([
+                'action' => 'subscribe_me_to_session',
+                'session' => Security::remove_XSS($sessionName)
+            ]);
+        }
+
+        $result = Display::toolbarButton(
+            get_lang('Subscribe'),
+            $url,
+            'check-circle',
+            'primary',
+            ['class' => 'btn-lg btn-block']
+        );
 
         $hook = HookResubscribe::create();
         if (!empty($hook)) {
             $hook->setEventData(array(
-                'session_id' => intval($sessionData)
+                'session_id' => intval($sessionId)
             ));
             try {
                 $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
@@ -528,7 +576,10 @@ class CoursesController
     {
         $icon = '<i class="fa fa-smile-o"></i>';
 
-        return Display::div($icon . ' ' . get_lang("AlreadyRegisteredToSession"),array('class'=>'info-catalog'));
+        return Display::div(
+            $icon . ' ' . get_lang("AlreadyRegisteredToSession"),
+            array('class' => 'info-catalog')
+        );
     }
 
     /**
@@ -633,8 +684,6 @@ class CoursesController
      */
     private function getFormatedSessionsBlock(array $sessions)
     {
-        $key = 'name';
-        $catalogSessionAutoSubscriptionAllowed = false;
         $extraFieldValue = new ExtraFieldValue('session');
         $userId = api_get_user_id();
         $sessionsBlocks = [];
@@ -648,11 +697,6 @@ class CoursesController
             'extraFieldType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
             'variable' => 'tags'
         ]);
-
-        if (api_get_setting('catalog_allow_session_auto_subscription') === 'true') {
-            $key = 'id';
-            $catalogSessionAutoSubscriptionAllowed = true;
-        }
 
         foreach ($sessions as $session) {
             $sessionDates = SessionManager::parseSessionDates([
@@ -689,6 +733,12 @@ class CoursesController
                 $sessionCourseTags = array_unique($sessionCourseTags);
             }
 
+            $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+            $requirementAndDependencies = $repo->getRequirementAndDependencies(
+                $session->getId(),
+                SequenceResource::SESSION_TYPE
+            );
+
             $sessionsBlock = array(
                 'id' => $session->getId(),
                 'name' => $session->getName(),
@@ -700,17 +750,12 @@ class CoursesController
                 'icon' => $this->getSessionIcon($session->getName()),
                 'date' => $sessionDates['display'],
                 'subscribe_button' => $this->getRegisteredInSessionButton(
-                    $key === 'id' ? $session->getId() : $session->getName(),
-                    $catalogSessionAutoSubscriptionAllowed
+                    $session->getId(),
+                    $session->getName(),
+                    !empty($requirementAndDependencies['requirements'])
                 ),
                 'show_description' => $session->getShowDescription(),
                 'tags' => $sessionCourseTags
-            );
-
-            $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
-            $requirementAndDependencies = $repo->getRequirementAndDependencies(
-                $session->getId(),
-                SequenceResource::SESSION_TYPE
             );
 
             $sessionsBlock = array_merge($sessionsBlock, $requirementAndDependencies);

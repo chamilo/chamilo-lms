@@ -101,7 +101,7 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
                 $sql = "SELECT lastname, firstname
                 FROM course_rel_user a, user b
                 WHERE a.c_id=" . $row['id'] . "
-                AND a.role<>'' AND a.role<>'NULL'
+                AND a.status <> 6
                 AND a.user_id=b.id;";
                 $tmp = Database::query($sql);
                 $rowTmp = Database::fetch_assoc($tmp);
@@ -265,8 +265,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         $sql = "SELECT lastname, firstname
             FROM $tableCourseRelUser a, $tableUser b
             WHERE a.c_id = " . $row['id'] . "
-            AND a.role <> ''
-            AND a.role IS NOT NULL
+            AND a.status <> 6
             AND a.user_id = b.id;";
 
         $tmp = Database::query($sql);

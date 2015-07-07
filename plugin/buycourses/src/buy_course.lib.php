@@ -179,7 +179,7 @@ function userSessionList()
                 $sql = "SELECT lastname, firstname
                 FROM course_rel_user a, user b
                 WHERE a.c_id='" . $row['id'] . "'
-                AND a.role<>'' AND a.role<>'NULL'
+                AND a.status <> 6
                 AND a.user_id=b.id;";
                 $tmp = Database::query($sql);
                 $rowTmp = Database::fetch_assoc($tmp);
@@ -255,8 +255,7 @@ function userCourseList()
             FROM $tableCourseRelUser a, user b
             WHERE
                 a.c_id='" . $row['id'] . "' AND
-                a.role<>'' AND
-                a.role<>'NULL' AND
+                a.status <> 6 AND
                 a.user_id=b.user_id;";
         $tmp = Database::query($sql);
         $rowTmp = Database::fetch_assoc($tmp);
@@ -507,7 +506,7 @@ function sessionInfo($code)
             $sql = "SELECT lastname, firstname
             FROM course_rel_user a, user b
             WHERE a.c_id='".$row['id']."'
-            AND a.role<>'' AND a.role<>'NULL'
+            AND a.status <> 6
             AND a.user_id=b.id;";
             $tmp = Database::query($sql);
             $rowTmp = Database::fetch_assoc($tmp);
@@ -579,8 +578,7 @@ function courseInfo($code)
         FROM $tableCourseRelUser a, $tableUser b
         WHERE
             a.c_id = '" . $row['id'] . "' AND
-            a.role <> '' AND
-            a.role <> 'NULL' AND
+            a.status <> 6 AND
             a.user_id = b.user_id;";
     $tmp = Database::query($sql);
     $rowTmp = Database::fetch_assoc($tmp);

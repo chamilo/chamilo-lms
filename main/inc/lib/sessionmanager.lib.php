@@ -5769,12 +5769,13 @@ class SessionManager
             }
             // Get session field values
             $extra = new ExtraFieldValue('session');
-            $sessionFieldValueList = $extra->get_all(array('field_id IN ( ' . $questionMarks . ' )' => array_keys($fields)));
+            $questionMarksFields = substr(str_repeat('?, ', count($fields)), 0, -2);
+            $sessionFieldValueList = $extra->get_all(array ('where' => array('field_id IN ( ' . $questionMarksFields . ' )' => array_keys($fields))));
             // Add session fields values to session list
             foreach ($sessionList as $id => &$session) {
                 foreach ($sessionFieldValueList as $sessionFieldValue) {
                     // Match session field values to session
-                    if ($sessionFieldValue['session_id'] == $id) {
+                    if ($sessionFieldValue['item_id'] == $id) {
                         // Check if session field value is set in session field list
                         if (isset($fields[$sessionFieldValue['field_id']])) {
                             // Avoid overwriting the session's ID field

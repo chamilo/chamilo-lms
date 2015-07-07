@@ -168,7 +168,6 @@ ul#navigation .report a {
   padding-top: 70px;
 }
 
-
 /* IMPRESS JS */
   .impress-content{
     position: relative;
@@ -6170,11 +6169,19 @@ div#chat-remote-video video {
   padding: 10px;
 }
 #session-list .information-item .requirements .fa-book{
-  color: #00829C;
   margin-right: 10px;
+  color: #00829C;
 }
 #session-list .information-item .requirements{
-  color: #666;
+  color: #666666;
+  font-size: 12px;
+}
+#session-list .information-item .options .info-catalog{
+  background-color: #35A8C9;
+  color: #ffffff;
+  padding: 5px;
+  text-align: center;
+  border-radius: 5px;
   font-size: 12px;
 }
 #session-list .author-session,

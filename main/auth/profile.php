@@ -30,6 +30,7 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
     api_not_allowed(true);
 }
 
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 $htmlHeadXtra[] = '<script>
 function confirmation(name) {
     if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?")) {
@@ -308,6 +309,7 @@ if (is_platform_authentication() &&
 
     $checkPass = api_get_setting('allow_strength_pass_checker');
     if ($checkPass == 'true') {
+        error_log('Adding label');
         $form->addElement('label', null, '<div id="password_progress"></div>');
     }
     $form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));

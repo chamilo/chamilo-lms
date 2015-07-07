@@ -65,8 +65,8 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
     sync int)";
 Database::query($sql);
 
-$tableSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$sql = "SELECT * FROM $tableSessionCourse";
+$table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$sql = "SELECT * FROM $table";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
     $presql = "INSERT INTO $table (session_id, c_id, nbr_users)

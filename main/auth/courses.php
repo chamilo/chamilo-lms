@@ -21,8 +21,8 @@ $limit = getLimitArray();
 // Section for the tabs.
 $this_section = SECTION_COURSES;
 
-// Access rights: anonymous users can't do anything useful here.
-if (!isset($_configuration['course_catalog_published']) || $_configuration['course_catalog_published'] !== 'true') {
+if (api_get_configuration_value('course_catalog_published') !== 'true') {
+    // Access rights: anonymous users can't do anything useful here.
     api_block_anonymous_users();
 }
 

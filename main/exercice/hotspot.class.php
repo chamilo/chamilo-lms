@@ -25,10 +25,13 @@ class HotSpot extends Question
 	{
 	}
 
-	function createForm (&$form, $fck_config=0)
+	/**
+	 * @param FormValidator $form
+	 * @param int $fck_config
+	 */
+	public function createForm (&$form, $fck_config=0)
 	{
 		parent::createForm($form, $fck_config);
-		global $text, $class;
 
 		if (!isset($_GET['editQuestion'])) {
 			$form->addElement('file','imageUpload',array('<img src="../img/hotspots.png" />', get_lang('UploadJpgPicture')) );
@@ -46,20 +49,29 @@ class HotSpot extends Question
 		}
 	}
 
+	/**
+	 * @param FormValidator $form
+	 * @param null $objExercise
+	 * @return bool
+	 */
 	public function processCreation($form, $objExercise = null)
 	{
-		$file_info = $form -> getSubmitValue('imageUpload');
-		parent::processCreation ($form, $objExercise);
+		$file_info = $form->getSubmitValue('imageUpload');
+		$_course = api_get_course_info();
+		parent::processCreation($form, $objExercise);
+
 		if(!empty($file_info['tmp_name'])) {
 			$this->uploadPicture($file_info['tmp_name'], $file_info['name']);
-			global $picturePath;
-			//fixed width ang height
+			$documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+			$picturePath   = $documentPath.'/images';
+
+			// fixed width ang height
 			if (file_exists($picturePath.'/'.$this->picture)) {
 				list($width,$height) = @getimagesize($picturePath.'/'.$this->picture);
-				if($width>$height) {
-					$this->resizePicture('width',545);
+				if ($width > $height) {
+					$this->resizePicture('width', 545);
 				} else {
-					$this->resizePicture('height',350);
+					$this->resizePicture('height', 350);
 				}
 				$this->save();
 			} else {
@@ -68,11 +80,13 @@ class HotSpot extends Question
 		}
 	}
 
-	function createAnswersForm ($form) {
+	function createAnswersForm ($form)
+	{
 		// nothing
 	}
 
-	function processAnswersCreation ($form) {
+	function processAnswersCreation ($form)
+	{
 		// nothing
 	}
 }

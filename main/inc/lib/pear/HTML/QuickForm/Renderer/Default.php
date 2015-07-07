@@ -318,8 +318,8 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         } else {
             $html = preg_replace("/([ \t\n\r]*)?<!-- BEGIN required -->.*<!-- END required -->([ \t\n\r]*)?/isU", '', $html);
         }
-
         if (isset($error)) {
+
             $html = str_replace('{error}', $error, $html);
             $html = str_replace('{error_class}', 'error has-error', $html);
             $html = str_replace('<!-- BEGIN error -->', '', $html);

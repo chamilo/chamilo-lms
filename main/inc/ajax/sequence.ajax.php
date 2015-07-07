@@ -290,10 +290,6 @@ switch ($action) {
             case SequenceResource::SESSION_TYPE:
                 $session = api_get_session_info($id);
 
-                $gradebookCategoryRepo = $em->getRepository(
-                    'ChamiloCoreBundle:GradebookCategory'
-                );
-
                 $sequences = $repository->getRequirements(
                     $session['id'],
                     $type
@@ -303,68 +299,13 @@ switch ($action) {
                     break;
                 }
 
-                $data = [];
-
-                foreach ($sequences as $sequenceId => $sequence) {
-                    $item = [
-                        'name' => $sequence['name'],
-                        'sessions' => []
-                    ];
-
-                    foreach ($sequence['requirements'] as $sessionRequired) {
-                        $itemSession = [
-                            'name' => $sessionRequired->getName(),
-                            'status' => true
-                        ];
-
-                        $sessionsCourses = $sessionRequired->getCourses();
-
-                        foreach ($sessionsCourses as $sessionCourse) {
-                            $course = $sessionCourse->getCourse();
-
-                            $gradebooks = $gradebookCategoryRepo->findBy([
-                                'courseCode' => $course->getCode(),
-                                'sessionId' => $sessionRequired->getId(),
-                                'isRequirement' => true
-                            ]);
-
-                            foreach ($gradebooks as $gradebook) {
-                                $category = Category::createCategoryObjectFromEntity(
-                                    $gradebook
-                                );
-
-                                $itemSession['status'] = $itemSession['status'] && Category::userFinishedCourse(
-                                    $userId,
-                                    $category
-                                );
-                            }
-                        }
-
-                        $item['sessions'][$sessionRequired->getId()] = $itemSession;
-                    }
-
-                    $data[$sequenceId] = $item;
-                }
-
-                $allowSubscription = false;
-
-                foreach ($data as $secuence) {
-                    $status = true;
-
-                    foreach ($secuence['sessions'] as $item) {
-                        $status = $status && $item['status'];
-                    }
-
-                    if ($status) {
-                        $allowSubscription = true;
-                        break;
-                    }
-                }
+                $sequenceList = SecuenceResourceManager::checkRequirementsForUser($sequences, $userId, $type);
+                $allowSubscription = SecuenceResourceManager::checkSequenceAreCompleted($sequenceList);
 
                 $courseController = new CoursesController();
 
                 $view = new Template(null, false, false, false, false, false);
-                $view->assign('data', $data);
+                $view->assign('sequences', $sequenceList);
                 $view->assign('allow_subscription', $allowSubscription);
 
                 if ($allowSubscription) {

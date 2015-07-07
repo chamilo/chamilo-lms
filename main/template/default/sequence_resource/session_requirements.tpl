@@ -1,10 +1,10 @@
 <h2 class="page-header">{{ 'SessionRequirements'|get_lang }}</h2>
 
-{% for item in data %}
+{% for item in sequences %}
     <h4>{{ item.name }}</h4>
 
     <div id="parents">
-        {% for session in item.sessions %}
+        {% for session in item.requirements %}
             <div class="parent">
                 <div class="big-icon">
                     <img src="{{ 'item-sequence.png'|icon(48) }}">
@@ -19,16 +19,14 @@
                 </div>
             </div>
 
-            {% if loop.index != item.sessions|length %}
+            {% if loop.index != item.requirements|length %}
                 <i class="fa fa-plus fa-3x sequence-plus-icon"></i>
             {% endif %}
         {% endfor %}
     </div>
 {% endfor %}
 
-<hr>
-<p>
-    {% if allow_subscription %}
-        {{ subscribe_button }}
-    {% endif %}
-</p>
+{% if allow_subscription %}
+    <hr>
+    <p>{{ subscribe_button }}</p>
+{% endif %}

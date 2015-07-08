@@ -944,9 +944,9 @@ class Agenda
                         );
 
                         if (!empty($sessionList)) {
-                            foreach ($sessionList as $sessionId) {
-                                $courses = UserManager::get_courses_list_by_session(
-                                    api_get_user_id(),
+                            foreach ($sessionList as $sessionItem) {
+                                $sessionId = $sessionItem['id'];
+                                $courses = SessionManager::get_course_list_by_session_id(
                                     $sessionId
                                 );
                                 $sessionInfo = array(
@@ -956,14 +956,6 @@ class Agenda
                                 $session_list[] = $sessionInfo;
                             }
                         }
-
-                        //var_dump($session_list);
-
-                        /*$courseList = SessionManager::getAllCoursesFollowedByUser(
-                            api_get_user_id(),
-                            null
-                        );
-                        var_dump($courseList);*/
                     }
                 }
 

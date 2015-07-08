@@ -17,6 +17,7 @@ class Agenda
     /** @var array */
     public $course;
     public $comment;
+    private $isAllowedToEdit;
 
     /**
      * Constructor
@@ -37,6 +38,7 @@ class Agenda
         }
         $this->setSessionId(api_get_session_id());
         $this->setSenderId(api_get_user_id());
+        $this->setIsAllowedToEdit(api_is_allowed_to_edit(null, true));
         $this->events = array();
 
         // Event colors
@@ -598,7 +600,7 @@ class Agenda
                     return false;
                 }
 
-                if (api_is_allowed_to_edit(null, true)) {
+                if ($this->getIsAllowedToEdit()) {
 
                     $attributes = array(
                         'title' => $title,
@@ -3172,6 +3174,22 @@ class Agenda
         $start_end_array['end']['month'] = $end_month;
         $start_end_array['end']['year'] = $end_year;
         return $start_end_array;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsAllowedToEdit()
+    {
+        return $this->isAllowedToEdit;
+    }
+
+    /**
+     * @param bool $isAllowedToEdit
+     */
+    public function setIsAllowedToEdit($isAllowedToEdit)
+    {
+        $this->isAllowedToEdit = $isAllowedToEdit;
     }
 
 

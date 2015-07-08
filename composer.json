@@ -72,6 +72,7 @@
         "bower-asset/modernizr": "2.8.*",
         "bower-asset/jqueryui-timepicker-addon": "1.5.*",
         "bower-asset/imageMap-resizer": "0.5.*",
+        "bower-asset/fullcalendar": "2.3.2",
         "bower-asset/simplewebrtc": "1.15.*",
         "bower-asset/select2": "4.*",
         "clue/graph": "~0.9.0",

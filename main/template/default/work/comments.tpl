@@ -1,9 +1,9 @@
 {# "UpdatedBy"|get_lang|format(comment.username) #}
 
 <hr>
-<h4>
+<h3>
     {{ 'Comments' | get_lang }}
-</h4>
+</h3>
 <hr>
 <ul>
     {% for comment in comments %}

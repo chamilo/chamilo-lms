@@ -1328,6 +1328,7 @@ class AnnouncementManager
     /**
      * @param int $id
      * @param bool $sendToUsersInSession
+     * @param bool $sendToDrhUsers
      */
     public static function send_email($id, $sendToUsersInSession = false, $sendToDrhUsers = false)
     {

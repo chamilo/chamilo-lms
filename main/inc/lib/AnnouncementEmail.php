@@ -308,29 +308,9 @@ class AnnouncementEmail
                 $user['user_id'],
                 $subject,
                 $message,
-                $sender['user_id']
+                $sender['user_id'],
+                $sendToDrhUsers
             );
-
-            $userInfo = api_get_user_info($user['user_id']);
-
-            if ($sendToDrhUsers) {
-                $drhList = UserManager::getDrhListFromUser($user['user_id']);
-                if (!empty($drhList)) {
-                    foreach ($drhList as $drhInfo) {
-                        $message = sprintf(
-                            get_lang('CopyOfOriginalMessageSentToX'),
-                            $userInfo['complete_name']
-                        ).' '.$message;
-
-                        MessageManager::send_message_simple(
-                            $drhInfo['user_id'],
-                            $subject,
-                            $message,
-                            $sender['user_id']
-                        );
-                    }
-                }
-            }
         }
 
         if ($sendToUsersInSession) {

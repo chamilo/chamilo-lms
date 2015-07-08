@@ -124,7 +124,12 @@ class LearnpathList
             }
 
             // Check if visible.
-            $vis = api_get_item_visibility(api_get_course_info($course_code), 'learnpath', $row['id'], $session_id);
+            $vis = api_get_item_visibility(
+                api_get_course_info($course_code),
+                'learnpath',
+                $row['id'],
+                $session_id
+            );
 
             if (!empty($row['created_on']) && $row['created_on'] != '0000-00-00 00:00:00') {
                 $row['created_on'] = $row['created_on'];
@@ -187,7 +192,7 @@ class LearnpathList
      * This applies a transformation internally on list and ref_list and returns a copy of the refs list
      * @return	array	List of references to learnpath objects
      */
-    function get_refs()
+    public function get_refs()
     {
         foreach ($this->list as $id => $dummy) {
             $this->ref_list[$id] = new learnpath($this->course_code, $id, $this->user_id);
@@ -200,10 +205,11 @@ class LearnpathList
      * Gets a table of the different learnpaths we have at the moment
      * @return	array	Learnpath info as [lp_id] => ([lp_type]=> ..., [lp_name]=>...,[lp_desc]=>...,[lp_path]=>...)
      */
-    function get_flat_list()
+    public function get_flat_list()
     {
         return $this->list;
     }
+
     /**
      *  Gets a list of lessons  of the given course_code and session_id
      *  This functions doesn't need user_id
@@ -211,24 +217,22 @@ class LearnpathList
      *  @param int  $session_id Id of session
      *  @return array List of lessons with lessons id as keys
      */
-    static function  get_course_lessons($course_code, $session_id)
+    public static function  get_course_lessons($course_code, $session_id)
     {
         $tbl_course_lp = Database::get_course_table(TABLE_LP_MAIN);
         $course = api_get_course_info($course_code);
-        //QUery
-        $sql = "SELECT * FROM $tbl_course_lp
-        WHERE c_id = %s ";  //TODO AND session_id = %s ?
+        // @todo AND session_id = %s ?
+        $sql = "SELECT * FROM $tbl_course_lp WHERE c_id = %s ";
         $sql_query = sprintf($sql, $course['real_id']);
         $result = Database::query($sql_query);
 
         $lessons = array();
-        while ($row = Database::fetch_array($result))
-        {
-            if (api_get_item_visibility($course, 'learnpath', $row['id'],  $session_id))
-            {
+        while ($row = Database::fetch_array($result)) {
+            if (api_get_item_visibility($course, 'learnpath', $row['id'],  $session_id)) {
                 $lessons[$row['id']] = $row;
             }
         }
+
         return $lessons;
     }
 }

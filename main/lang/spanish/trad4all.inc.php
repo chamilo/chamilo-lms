@@ -7433,4 +7433,6 @@ $SendAnnouncementCopyToDRH = "Enviar una copia a los responsables RRHH de los es
 $PoweredByX = "Creado con %s";
 $AnnouncementErrorNoUserSelected = "Seleccione por lo mínimo un usuario. El anuncio no ha sido guardado.";
 $NoDependencies = "Sin dependencias";
+$SendMailToStudent = "Avisar el estudiante por correo";
+$SendMailToHR = "Avisar el responsable RRHH por correo";
 ?>

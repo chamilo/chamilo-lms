@@ -4705,7 +4705,11 @@ class Tracking
             $lp_list = $list->get_flat_list();
 
             if (!empty($lp_list) > 0) {
-                foreach($lp_list as $lp_id => $learnpath) {
+                foreach ($lp_list as $lp_id => $learnpath) {
+
+                    if ($learnpath['lp_visibility'] == 0) {
+                        continue;
+                    }
 
                     $progress = Tracking::get_avg_student_progress($user_id, $course, array($lp_id), $session_id);
                     $last_connection_in_lp = Tracking::get_last_connection_time_in_lp($user_id, $course, $lp_id, $session_id);

@@ -723,6 +723,7 @@ class ImportCsv
                 $endTime = $row['time_end'];
                 $title = $row['title'];
                 $comment = $row['comment'];
+                $color = isset($row['color']) ? $row['color'] : '';
 
                 $startDateYear = substr($date, 0, 4);
                 $startDateMonth = substr($date, 4, 2);
@@ -752,6 +753,7 @@ class ImportCsv
                         'course_id' => $courseInfo['real_id'],
                         'session_id' => $sessionId,
                         'comment' => $comment,
+                        'color' => $color,
                         $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID']
                     );
                 }
@@ -768,7 +770,6 @@ class ImportCsv
             $this->logger->addInfo(
                 "Ready to insert events"
             );
-
 
             $agenda = new Agenda();
 
@@ -836,6 +837,7 @@ class ImportCsv
                 $agenda->setIsAllowedToEdit(true);
 
                 $eventComment = $event['comment'];
+                $color = $event['color'];
 
                 // To use the event comment you need
                 // ALTER TABLE c_calendar_event ADD COLUMN comment TEXT;
@@ -869,7 +871,8 @@ class ImportCsv
                         array('everyone'), // send to
                         array(), //$attachmentArray = array(),
                         null, //$attachmentComment = null,
-                        $eventComment
+                        $eventComment,
+                        $color
                     );
                     if ($eventId !== false) {
                         $this->logger->addInfo(
@@ -893,7 +896,8 @@ class ImportCsv
                         null, //  $parentEventId
                         array(), //$attachmentArray = array(),
                         null, //$attachmentComment = null,
-                        $eventComment
+                        $eventComment,
+                        $color
                     );
                     if (!empty($eventId)) {
                         $extraFieldValue->is_course_model = true;

@@ -18,6 +18,7 @@ class Agenda
     public $course;
     public $comment;
     private $isAllowedToEdit;
+    public $allowEventColoring;
 
     /**
      * Constructor
@@ -47,6 +48,8 @@ class Agenda
         $this->event_group_color = '#A0522D'; //siena
         $this->event_session_color = '#00496D'; // kind of green
         $this->event_personal_color = 'steel blue'; //steel blue
+
+        $this->allowEventColoring = api_get_configuration_value('allow_agenda_events_coloring');
     }
 
     /**
@@ -122,6 +125,7 @@ class Agenda
      * @param array $attachmentArray $_FILES['']
      * @param string $attachmentComment
      * @param string $eventComment
+     * @param string $color
      *
      * @return int
      */
@@ -136,7 +140,8 @@ class Agenda
         $parentEventId = null,
         $attachmentArray = array(),
         $attachmentComment = null,
-        $eventComment = null
+        $eventComment = null,
+        $color = ''
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -155,6 +160,11 @@ class Agenda
                     'enddate' => $end,
                     'all_day' => $allDay
                 );
+
+                if ($this->allowEventColoring) {
+                    $attributes['color'] = $color;
+                }
+
                 $id = Database::insert(
                     $this->tbl_personal_agenda,
                     $attributes
@@ -175,6 +185,10 @@ class Agenda
 
                 if ($allow) {
                     $attributes['comment'] = $eventComment;
+                }
+
+                if ($this->allowEventColoring) {
+                    $attributes['color'] = $color;
                 }
 
                 if (!empty($parentEventId)) {
@@ -551,6 +565,7 @@ class Agenda
      * @param array $attachmentArray
      * @param string $attachmentComment
      * @param string $comment
+     * @param string $color
      *
      * @return bool
      */
@@ -564,7 +579,8 @@ class Agenda
         $usersToSend = array(),
         $attachmentArray = array(),
         $attachmentComment = null,
-        $comment = null
+        $comment = null,
+        $color = ''
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -586,6 +602,11 @@ class Agenda
                     'enddate' => $end,
                     'all_day' => $allDay
                 );
+
+                if ($this->allowEventColoring) {
+                    $attributes['color'] = $color;
+                }
+
                 Database::update(
                     $this->tbl_personal_agenda,
                     $attributes,
@@ -620,6 +641,10 @@ class Agenda
 
                     if ($allow) {
                         $attributes['comment'] = $comment;
+                    }
+
+                    if ($this->allowEventColoring) {
+                        $attributes['color'] = $color;
                     }
 
                     Database::update(
@@ -1432,9 +1457,10 @@ class Agenda
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_group_color;
                 }
 
-
-                if (isset($row['color']) && !empty($row['color'])) {
-                    $event['borderColor'] = $event['backgroundColor'] = $row['color'];
+                if ($this->allowEventColoring) {
+                    if (isset($row['color']) && !empty($row['color'])) {
+                        $event['borderColor'] = $event['backgroundColor'] = $row['color'];
+                    }
                 }
 
                 $event['editable'] = false;

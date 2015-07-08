@@ -192,7 +192,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
     $form->addCheckBox(
         'send_email',
         null,
-        get_lang('SendEmail')
+        get_lang('SendMailToStudent')
     );
 
     // Check if user to qualify has some DRHs
@@ -201,7 +201,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
         $form->addCheckBox(
             'send_to_drh_users',
             null,
-            get_lang('SendToHR')
+            get_lang('SendMailToHR')
         );
     }
 }

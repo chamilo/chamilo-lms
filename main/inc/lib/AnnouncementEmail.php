@@ -291,8 +291,10 @@ class AnnouncementEmail
     /**
      * Send emails to users.
      * @param bool $sendToUsersInSession
+     * @param bool $sendToDrhUsers send a copy of the message to the DRH users
+     * related to the main user
      */
-    public function send($sendToUsersInSession = false)
+    public function send($sendToUsersInSession = false, $sendToDrhUsers = false)
     {
         $sender = $this->sender();
         $subject = $this->subject();
@@ -308,6 +310,27 @@ class AnnouncementEmail
                 $message,
                 $sender['user_id']
             );
+
+            $userInfo = api_get_user_info($user['user_id']);
+
+            if ($sendToDrhUsers) {
+                $drhList = UserManager::getDrhListFromUser($user['user_id']);
+                if (!empty($drhList)) {
+                    foreach ($drhList as $drhInfo) {
+                        $message = sprintf(
+                            get_lang('CopyOfOriginalMessageSentToX'),
+                            $userInfo['complete_name']
+                        ).' '.$message;
+
+                        MessageManager::send_message_simple(
+                            $drhInfo['user_id'],
+                            $subject,
+                            $message,
+                            $sender['user_id']
+                        );
+                    }
+                }
+            }
         }
 
         if ($sendToUsersInSession) {

@@ -4520,11 +4520,8 @@ class Tracking
             $session_id = intval($session_id);
             $course = Database::escape_string($course_code);
             $course_info = CourseManager::get_course_information($course);
-            $course_id = $course_info['real_id'];
-            //$session_name               = api_get_session_name($session_id);
 
             $html .= Display::page_subheader($course_info['title']);
-
             $html .= '<table class="data_table" width="100%">';
 
             //Course details
@@ -4539,9 +4536,21 @@ class Tracking
                 </tr>';
 
             if (empty($session_id)) {
-                $user_list  = CourseManager::get_user_list_from_course_code($course, $session_id, null, null, STUDENT);
+                $user_list = CourseManager::get_user_list_from_course_code(
+                    $course,
+                    $session_id,
+                    null,
+                    null,
+                    STUDENT
+                );
             } else {
-                $user_list  = CourseManager::get_user_list_from_course_code($course, $session_id, null, null, 0);
+                $user_list = CourseManager::get_user_list_from_course_code(
+                    $course,
+                    $session_id,
+                    null,
+                    null,
+                    0
+                );
             }
 
             //$exercise_list = ExerciseLib::get_all_exercises($course_info, $session_id, true);
@@ -4676,7 +4685,7 @@ class Tracking
             $html .= '</table>';
 
 
-            //LP table results
+            // LP table results
             $html .='<table class="data_table">';
             $html .= Display::tag('th', get_lang('Learnpaths'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('LatencyTimeSpent'), array('class'=>'head', 'style'=>'color:#000'));
@@ -4685,16 +4694,23 @@ class Tracking
             $html .= Display::tag('th', get_lang('LastConnexion'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= '</tr>';
 
-            $list = new LearnpathList(api_get_user_id(), $course_info['code'], $session_id, 'publicated_on ASC', true);
-            $lp_list        = $list->get_flat_list();
+            $list = new LearnpathList(
+                api_get_user_id(),
+                $course_info['code'],
+                $session_id,
+                'publicated_on ASC',
+                true
+            );
+
+            $lp_list = $list->get_flat_list();
 
             if (!empty($lp_list) > 0) {
                 foreach($lp_list as $lp_id => $learnpath) {
 
-                    $progress               = Tracking::get_avg_student_progress($user_id, $course, array($lp_id), $session_id);
-                    $last_connection_in_lp  = Tracking::get_last_connection_time_in_lp($user_id, $course, $lp_id, $session_id);
-                    $time_spent_in_lp       = Tracking::get_time_spent_in_lp($user_id, $course, array($lp_id), $session_id);
-                    $percentage_score 		= Tracking::get_avg_student_score($user_id, $course, array($lp_id), $session_id);
+                    $progress = Tracking::get_avg_student_progress($user_id, $course, array($lp_id), $session_id);
+                    $last_connection_in_lp = Tracking::get_last_connection_time_in_lp($user_id, $course, $lp_id, $session_id);
+                    $time_spent_in_lp = Tracking::get_time_spent_in_lp($user_id, $course, array($lp_id), $session_id);
+                    $percentage_score = Tracking::get_avg_student_score($user_id, $course, array($lp_id), $session_id);
                     if (is_numeric($percentage_score)) {
                         $percentage_score = $percentage_score.'%';
                     } else {

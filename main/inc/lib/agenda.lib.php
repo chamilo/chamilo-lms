@@ -1308,11 +1308,21 @@ class Agenda
             }
         }
 
-        if (!api_is_allowed_to_edit()) {
-            $group_memberships = GroupManager::get_group_ids($course_id, api_get_user_id());
-            $user_id = api_get_user_id();
-        } else {
-            $group_memberships = GroupManager::get_group_ids($course_id, $user_id);
+        $group_memberships = [];
+
+        if (!empty($groupId)) {
+            if (!api_is_allowed_to_edit()) {
+                $group_memberships = GroupManager::get_group_ids(
+                    $course_id,
+                    api_get_user_id()
+                );
+                $user_id = api_get_user_id();
+            } else {
+                $group_memberships = GroupManager::get_group_ids(
+                    $course_id,
+                    $user_id
+                );
+            }
         }
 
         $tlb_course_agenda = Database::get_course_table(TABLE_AGENDA);
@@ -1325,10 +1335,9 @@ class Agenda
         $session_id = intval($session_id);
 
         if (is_array($group_memberships) && count($group_memberships) > 0) {
-
             if (api_is_allowed_to_edit()) {
                 if (!empty($groupId)) {
-                    $where_condition = "( ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                    $where_condition = "( ip.to_group_id IN (".implode(", ", $group_memberships).") ) ";
                 } else {
                     if (!empty($user_id)) {
                         $where_condition = "( ip.to_user_id = $user_id OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
@@ -1364,13 +1373,12 @@ class Agenda
                 if ($user_id == 0) {
                     $where_condition = "";
                 } else {
-                    $where_condition = " ( ip.to_user_id = ".$user_id. " OR (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) AND ";
+                    $where_condition = " ( ip.to_user_id = ".$user_id. ") AND ";
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {
-                $where_condition = " ( ip.to_user_id = $user_id OR (ip.to_group_id='0' OR ip.to_group_id IS NULL)) AND ";
+                $where_condition = " ( ip.to_user_id = ".api_get_user_id()." AND (ip.to_group_id='0' OR ip.to_group_id IS NULL)) AND ";
             }
-
 
             $sessionCondition =  " agenda.session_id = $session_id AND
                                    ip.session_id = $session_id ";
@@ -1672,7 +1680,7 @@ class Agenda
             'data-placeholder' => get_lang('Select'),
             'multiple' => 'multiple',
             'style' => 'width:250px',
-            'class' => 'chzn-select'
+            //'class' => 'chzn-select'
         );
 
         if (!empty($attributes)) {
@@ -2316,7 +2324,8 @@ class Agenda
                         '',
                         '',
                         array(),
-                        FormValidator::LAYOUT_INLINE);
+                        FormValidator::LAYOUT_INLINE
+                    );
                     $attributes = array(
                         'multiple' => false,
                         'id' => 'select_form_id_search'

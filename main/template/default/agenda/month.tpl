@@ -19,6 +19,7 @@ function clean_user_select() {
 }
 
 var region_value = '{{ region_value }}';
+
 $(document).ready(function() {
 	var date = new Date();
 	var d = date.getDate();
@@ -50,8 +51,17 @@ $(document).ready(function() {
 	content = $( "#content" ),
 	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
 
-	$('#users_to_send_id').bind('change', function() {
-	    var selected_counts = $("#users_to_send_id option:selected").size();
+    $("#select_form_id_search").change(function() {
+        var temp ="&user_id="+$("#select_form_id_search").val();
+        var position =String(window.location).indexOf("&user");
+        var url_length = String(window.location).length;
+        var url = String(window.location).substring(0,position)+temp;
+        if (position > 0) {
+            window.location.replace(url);
+        } else {
+            url = String(window.location)+temp;
+            window.location.replace(url);
+        }
     });
 
     $.datepicker.setDefaults( $.datepicker.regional[region_value] );

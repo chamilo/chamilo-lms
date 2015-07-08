@@ -1432,6 +1432,11 @@ class Agenda
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_group_color;
                 }
 
+
+                if (isset($row['color']) && !empty($row['color'])) {
+                    $event['borderColor'] = $event['backgroundColor'] = $row['color'];
+                }
+
                 $event['editable'] = false;
 
                 if (api_is_allowed_to_edit() && $this->type == 'course') {

@@ -571,8 +571,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4"
-     inkscape:cx="33.299296"
-     inkscape:cy="57.041415"
+     inkscape:cx="73.375"
+     inkscape:cy="52.791415"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -589,7 +589,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -600,9 +600,9 @@
      transform="translate(0,-928.36218)">
     <g
        id="g4555"
-       inkscape:export-filename="/var/www/chamilo/main/img/icons/16/uaimg.png"
-       inkscape:export-xdpi="11.612906"
-       inkscape:export-ydpi="11.612906">
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/uaimg_na.png"
+       inkscape:export-xdpi="15.967745"
+       inkscape:export-ydpi="15.967745">
       <rect
          y="928.36218"
          x="6.0792113e-06"

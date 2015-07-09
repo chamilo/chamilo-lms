@@ -319,12 +319,16 @@ if (!empty($student_id)) {
 
     // Actions bar
     echo '<div class="actions">';
-    echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="javascript: window.back();" ">'.
+            Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
+    echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
+            Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv">'.
+            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
     if (!empty ($user_info['email'])) {
-        $send_mail = '<a href="mailto:'.$user_info['email'].'">'.Display :: return_icon('mail_send.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM).'</a>';
+        $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
+                Display :: return_icon('mail_send.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
         $send_mail = Display :: return_icon('mail_send_na.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM);
     }
@@ -357,7 +361,6 @@ if (!empty($student_id)) {
             unset($courses[$key]);
         }
     } else {
-
         $avg_student_progress = Tracking::get_avg_student_progress(
             $user_info['user_id'],
             $course_code,
@@ -572,7 +575,7 @@ if (!empty($student_id)) {
                 <?php
                 if (!empty($nb_login)) {
                     echo '<tr><td align="right">'.get_lang('CountToolAccess').'</td>';
-                    echo '<td align="left">'.$nb_login.'</td>';
+                    echo '<td align="left"> '.$nb_login.'</td>';
                     echo '</tr>';
                 }
             } ?>
@@ -585,10 +588,10 @@ if (!empty($student_id)) {
     $table_title = '';
     if (!empty($sessionId)) {
         $session_name = api_get_session_name($sessionId);
-        $table_title  = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ':'');
+        $table_title  = $session_name ? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ':'';
     }
     if (!empty($info_course['title'])) {
-        $table_title .= ($info_course ? Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$info_course['title'].'  ':'');
+        $table_title .= $info_course ? Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$info_course['title'].'  ':'';
     }
 
     echo Display::page_subheader($table_title);

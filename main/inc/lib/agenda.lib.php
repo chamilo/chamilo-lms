@@ -1005,15 +1005,16 @@ class Agenda
 
                 if (!empty($my_course_list) && $sessionFilterActive == false) {
                     foreach ($my_course_list as $course_info_item) {
+                        $courseInfo = api_get_course_info_by_id($course_item['real_id']);
                         if (isset($course_id) && !empty($course_id)) {
                             if ($course_info_item['real_id'] == $course_id) {
-                                $this->getCourseEvents($start, $end, $course_info_item);
+                                $this->getCourseEvents($start, $end, $courseInfo);
                             }
                         } else {
                             $this->getCourseEvents(
                                 $start,
                                 $end,
-                                $course_info_item
+                                $courseInfo
                             );
                         }
                     }
@@ -1493,8 +1494,6 @@ class Agenda
                 $event['allDay'] = 'false';
                 $event['course_id'] = $course_id;
 
-                $event['course_name'] = isset($courseInfo['name']) ? $courseInfo['name'] : '';
-                $event['session_name'] = isset($sessionInfo['name']) ? $sessionInfo['name'] : '';
                 $event['borderColor'] = $event['backgroundColor'] = $this->event_course_color;
 
                 $sessionInfo = [];
@@ -1502,6 +1501,9 @@ class Agenda
                     $sessionInfo = api_get_session_info($session_id);
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_session_color;
                 }
+
+                $event['session_name'] = isset($sessionInfo['name']) ? $sessionInfo['name'] : '';
+                $event['course_name'] = isset($courseInfo['name']) ? $courseInfo['name'] : '';
 
                 if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_group_color;

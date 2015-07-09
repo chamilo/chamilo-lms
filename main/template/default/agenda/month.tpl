@@ -435,19 +435,7 @@ $(document).ready(function() {
                     $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
                     $('#simple_end_date').html(' ' + calEvent.end.format("YY-MM-DD"));
                 }
-                console.log(calEvent);
-
-                var courseInfoText = '';
-
-                $.ajax({
-                    url: '{{ _p.web_ajax }}' + 'course.ajax.php?a=get_course_info&id=' + calEvent.course_id,
-                    dataType: 'json',
-                    async: false,
-                    success: function (data) {
-                        courseInfoText = data.title;
-                    }
-                });
-
+console.log(calEvent.course_name);
                 if (calEvent.course_name) {
                     $("#calendar_course_info").html('<h4>{{ 'Course' | get_lang }}</h4>' + calEvent.course_name);
                 } else {

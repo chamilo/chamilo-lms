@@ -342,7 +342,7 @@ $(function() {
     $('.dropdown-toggle').dropdown();
 
     // Responsive effect.
-    $(".collapse").collapse();
+    //$(".collapse").collapse();
 
     $(".accordion_jquery").accordion({
         autoHeight: false,

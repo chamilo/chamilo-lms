@@ -977,7 +977,6 @@ class Agenda
                     }
                 }
 
-
                 if (!empty($session_list)) {
                     foreach ($session_list as $session_item) {
                         if ($sessionFilterActive) {
@@ -988,10 +987,17 @@ class Agenda
 
                         $my_courses = $session_item['courses'];
                         $my_session_id = $session_item['session_id'];
+
                         if (!empty($my_courses)) {
                             foreach ($my_courses as $course_item) {
                                 $courseInfo = api_get_course_info_by_id($course_item['real_id']);
-                                $this->getCourseEvents($start, $end, $courseInfo, 0, $my_session_id);
+                                $this->getCourseEvents(
+                                    $start,
+                                    $end,
+                                    $courseInfo,
+                                    0,
+                                    $my_session_id
+                                );
                             }
                         }
                     }
@@ -1004,7 +1010,11 @@ class Agenda
                                 $this->getCourseEvents($start, $end, $course_info_item);
                             }
                         } else {
-                            $this->getCourseEvents($start, $end, $course_info_item);
+                            $this->getCourseEvents(
+                                $start,
+                                $end,
+                                $course_info_item
+                            );
                         }
                     }
                 }
@@ -1318,6 +1328,8 @@ class Agenda
             return array();
         }
 
+        $session_id = intval($session_id);
+
         $user_id = intval($user_id);
         $groupList = GroupManager::get_group_list(null, $courseInfo['code']);
 
@@ -1351,8 +1363,6 @@ class Agenda
         if (!empty($groupId)) {
             $group_memberships = array($groupId);
         }
-
-        $session_id = intval($session_id);
 
         if (is_array($group_memberships) && count($group_memberships) > 0) {
             if (api_is_allowed_to_edit()) {
@@ -1393,19 +1403,22 @@ class Agenda
                 if ($user_id == 0) {
                     $where_condition = "";
                 } else {
-                    $where_condition = " ( ip.to_user_id = ".$user_id. ") AND ";
+                    $where_condition = " (ip.to_user_id = ".$user_id.") OR ";
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {
-                $where_condition = " ( ip.to_user_id = ".api_get_user_id()." AND (ip.to_group_id='0' OR ip.to_group_id IS NULL)) AND ";
+                $where_condition = " ( ip.to_user_id = ".api_get_user_id()." AND (ip.to_group_id='0' OR ip.to_group_id IS NULL)) OR ";
             }
 
             $sessionCondition =  " agenda.session_id = $session_id AND
                                    ip.session_id = $session_id ";
+
             if (empty($session_id)) {
                 $sessionCondition =  "
-                (agenda.session_id = 0 OR agenda.session_id IS NULL) AND
-                (ip.session_id = 0 OR ip.session_id IS NULL) ";
+                (
+                    (agenda.session_id = 0 OR agenda.session_id IS NULL) AND
+                    (ip.session_id = 0 OR ip.session_id IS NULL)
+                ) ";
             }
 
             $sql = "SELECT DISTINCT
@@ -1445,8 +1458,11 @@ class Agenda
         $sql .= $dateCondition;
 
         $result = Database::query($sql);
+
         if (Database::num_rows($result)) {
-            $events_added = array();
+
+            $events_added = array_column($this->events, 'id');
+
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $eventId = $row['ref'];
                 $items = $this->getUsersAndGroupSubscribedToEvent($eventId, $course_id, $this->sessionId);
@@ -1456,7 +1472,7 @@ class Agenda
                 $event['id'] = 'course_'.$row['id'];
 
                 // To avoid doubles
-                if (in_array($row['id'], $events_added)) {
+                if (in_array($event['id'], $events_added)) {
                     continue;
                 }
 
@@ -1477,15 +1493,19 @@ class Agenda
                 $event['allDay'] = 'false';
                 $event['course_id'] = $course_id;
 
+                $event['course_name'] = isset($courseInfo['name']) ? $courseInfo['name'] : '';
+                $event['session_name'] = isset($sessionInfo['name']) ? $sessionInfo['name'] : '';
                 $event['borderColor'] = $event['backgroundColor'] = $this->event_course_color;
+
+                $sessionInfo = [];
                 if (isset($row['session_id']) && !empty($row['session_id'])) {
+                    $sessionInfo = api_get_session_info($session_id);
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_session_color;
                 }
 
                 if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_group_color;
                 }
-
 
                 if (isset($row['color']) && !empty($row['color'])) {
                     $event['borderColor'] = $event['backgroundColor'] = $row['color'];
@@ -1763,6 +1783,9 @@ class Agenda
         if (is_array($userList)) {
             $options = array();
             foreach ($userList as $user) {
+                if ($user['status'] == ANONYMOUS) {
+                    continue;
+                }
                 $option = array(
                     'text' => api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')',
                     'value' => "USER:".$user['user_id']

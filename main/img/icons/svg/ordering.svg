@@ -60,7 +60,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4.1852206"
-     inkscape:cx="39.849577"
+     inkscape:cx="-3.0023008"
      inkscape:cy="56.856152"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -88,7 +88,10 @@
      id="layer1"
      transform="translate(0,-928.36218)">
     <g
-       id="g6893">
+       id="g6893"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/ordering_na.png"
+       inkscape:export-xdpi="15.967745"
+       inkscape:export-ydpi="15.967745">
       <rect
          style="opacity:0;fill:#ffffff;fill-opacity:1;stroke:none"
          id="rect4392"

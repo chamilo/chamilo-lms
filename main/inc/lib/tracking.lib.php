@@ -2076,9 +2076,11 @@ class Tracking
             if (is_array($student_id)) {
                 $student_id = array_map('intval', $student_id);
                 $conditions[] = " lp_view.user_id IN (".implode(',', $student_id).")  ";
+                $groupBy = 'GROUP BY lp_id';
             } else {
                 $student_id = intval($student_id);
                 $conditions[] = " lp_view.user_id = '$student_id' ";
+                $groupBy = 'GROUP BY user_id';
             }
             if (!empty($session_id)) {
                 $conditions[] = " session_id = $session_id ";
@@ -2094,8 +2096,9 @@ class Tracking
                         count(progress) count_progress
                     FROM $tbl_course_lp_view lp_view
                     WHERE
-                      $conditionToString
-                    GROUP BY user_id";
+                        $conditionToString
+                    $groupBy
+                    ";
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
@@ -2152,9 +2155,9 @@ class Tracking
 
             // Get course tables names
             $tbl_quiz_questions = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-            $lp_table           = Database :: get_course_table(TABLE_LP_MAIN);
-            $lp_item_table      = Database :: get_course_table(TABLE_LP_ITEM);
-            $lp_view_table      = Database :: get_course_table(TABLE_LP_VIEW);
+            $lp_table = Database:: get_course_table(TABLE_LP_MAIN);
+            $lp_item_table = Database:: get_course_table(TABLE_LP_ITEM);
+            $lp_view_table = Database:: get_course_table(TABLE_LP_VIEW);
             $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
             $course_id = $course['real_id'];
@@ -2335,7 +2338,6 @@ class Tracking
                                 $item_id = $row_max_score['iid'];
                                 $item_path = $row_max_score['path'];
                                 $lp_item_view_id = $row_max_score['lp_item_view_id'];
-                                $courseId = api_get_course_int_id($course_code);
 
                                 // Get last attempt to this exercise through
                                 // the current lp for the current user
@@ -2449,10 +2451,12 @@ class Tracking
                         return array($global_result, $lp_with_quiz);
                     }
                 } else {
+
                     return '-';
                 }
             }
         }
+
         return null;
     }
 
@@ -4508,12 +4512,12 @@ class Tracking
 
     /**
      * Shows the user detail progress (when clicking in the details link)
-     * @param   int     user id
-     * @param   string  course code
-     * @param   int     session id
+     * @param   int     $user_id
+     * @param   string  $course_code
+     * @param   int     $session_id
      * @return  string  html code
      */
-    static function show_course_detail($user_id, $course_code, $session_id)
+    public static function show_course_detail($user_id, $course_code, $session_id)
     {
         $html = '';
         if (isset($course_code)) {
@@ -4555,7 +4559,6 @@ class Tracking
                 );
             }
 
-            //$exercise_list = ExerciseLib::get_all_exercises($course_info, $session_id, true);
             // Show exercise results of invisible exercises? see BT#4091
             $exercise_list = ExerciseLib::get_all_exercises(
                 $course_info,
@@ -4563,7 +4566,7 @@ class Tracking
                 false,
                 null,
                 false,
-                1
+                2
             );
 
             $to_graph_exercise_result = array();
@@ -4590,12 +4593,16 @@ class Tracking
                     $url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
 
                     if ($visible_return['value'] == true) {
-                        $exercices['title'] = Display::url($exercices['title'], $url, array('target'=>SESSION_LINK_TARGET));
+                        $exercices['title'] = Display::url(
+                            $exercices['title'],
+                            $url,
+                            array('target' => SESSION_LINK_TARGET)
+                        );
                     }
 
                     $html .= Display::tag('td', $exercices['title']);
 
-                    //Exercise configuration show results or show only score
+                    // Exercise configuration show results or show only score
                     if ($exercices['results_disabled'] == 0 || $exercices['results_disabled'] == 2) {
                         //For graphics
                         $best_exercise_stats = Event::get_best_exercise_results_by_user(
@@ -4651,7 +4658,7 @@ class Tracking
                                 //@todo this function slows the page
                                 $position = ExerciseLib::get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
 
-                                $graph         = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
+                                $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
                                 $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
                             }
                         }

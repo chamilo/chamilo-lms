@@ -4706,11 +4706,6 @@ class Tracking
 
             if (!empty($lp_list) > 0) {
                 foreach ($lp_list as $lp_id => $learnpath) {
-
-                    if ($learnpath['lp_visibility'] == 0) {
-                        continue;
-                    }
-
                     $progress = Tracking::get_avg_student_progress($user_id, $course, array($lp_id), $session_id);
                     $last_connection_in_lp = Tracking::get_last_connection_time_in_lp($user_id, $course, $lp_id, $session_id);
                     $time_spent_in_lp = Tracking::get_time_spent_in_lp($user_id, $course, array($lp_id), $session_id);
@@ -4725,7 +4720,13 @@ class Tracking
 
                     $html .= '<tr class="row_even">';
                     $url = api_get_path(WEB_CODE_PATH)."newscorm/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
-                    $html .= Display::tag('td', Display::url($learnpath['lp_name'], $url, array('target'=>SESSION_LINK_TARGET)));
+
+                    if ($learnpath['lp_visibility'] == 0) {
+                        $html .= Display::tag('td', $learnpath['lp_name']);
+                    } else {
+                        $html .= Display::tag('td', Display::url($learnpath['lp_name'], $url, array('target'=>SESSION_LINK_TARGET)));
+                    }
+
                     $html .= Display::tag('td', $time_spent_in_lp, array('align'=>'center'));
                     if (is_numeric($progress)) {
                         $progress = $progress.'%';

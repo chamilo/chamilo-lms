@@ -70,7 +70,11 @@ class Agenda
      */
     public function setType($type)
     {
-        $this->type = $type;
+        $typeList = $this->getTypes();
+
+        if (in_array($type, $typeList)) {
+            $this->type = $type;
+        }
     }
 
     /**
@@ -118,6 +122,7 @@ class Agenda
      * @param array $attachmentArray $_FILES['']
      * @param string $attachmentComment
      * @param string $eventComment
+     * @param string $color
      *
      * @return int
      */
@@ -131,8 +136,9 @@ class Agenda
         $addAsAnnouncement = false,
         $parentEventId = null,
         $attachmentArray = array(),
-        $attachmentComment = null,
-        $eventComment = null
+        $attachmentComment = '',
+        $eventComment = '',
+        $color = ''
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -152,6 +158,10 @@ class Agenda
                     'all_day' => $allDay
                 );
 
+                if ($this->allowEventColoring) {
+                    $attributes['color'] = $color;
+                }
+
                 $id = Database::insert(
                     $this->tbl_personal_agenda,
                     $attributes
@@ -167,6 +177,7 @@ class Agenda
                     'session_id' => $this->getSessionId(),
                     'c_id' => $this->course['real_id'],
                     'comment' => $eventComment,
+                    'color' => $color
                 );
 
                 if (!empty($parentEventId)) {
@@ -336,13 +347,13 @@ class Agenda
     }
 
     /**
-    * @param int $eventId
-    * @param string $type
-    * @param string $end in local time
-    * @param array $sentTo
-    *
-    * @return bool
-    */
+     * @param int $eventId
+     * @param string $type
+     * @param string $end in local time
+     * @param array $sentTo
+     *
+     * @return bool
+     */
     public function addRepeatedItem($eventId, $type, $end, $sentTo = array())
     {
         $t_agenda = Database::get_course_table(TABLE_AGENDA);
@@ -546,6 +557,7 @@ class Agenda
      * @param array $attachmentArray
      * @param string $attachmentComment
      * @param string $comment
+     * @param string $color
      *
      * @return bool
      */
@@ -558,8 +570,9 @@ class Agenda
         $content,
         $usersToSend = array(),
         $attachmentArray = array(),
-        $attachmentComment = null,
-        $comment = null
+        $attachmentComment = '',
+        $comment = '',
+        $color = ''
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -578,7 +591,8 @@ class Agenda
                     'text' => $content,
                     'date' => $start,
                     'enddate' => $end,
-                    'all_day' => $allDay
+                    'all_day' => $allDay,
+                    'color' => $color
                 );
                 Database::update(
                     $this->tbl_personal_agenda,
@@ -594,7 +608,7 @@ class Agenda
                 }
 
                 $groupId = api_get_group_id();
-                $course_id = api_get_course_int_id();
+                $course_id = $this->course['real_id'];
 
                 if (empty($course_id)) {
                     return false;
@@ -609,6 +623,7 @@ class Agenda
                         'end_date' => $end,
                         'all_day' => $allDay,
                         'comment' => $comment,
+                        'color' => $color
                     );
 
                     Database::update(
@@ -925,8 +940,13 @@ class Agenda
                 $my_course_list = array();
 
                 if (!api_is_anonymous()) {
-                    $session_list = SessionManager::get_sessions_by_user(api_get_user_id());
-                    $my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
+                    $session_list = SessionManager::get_sessions_by_user(
+                        api_get_user_id()
+                    );
+                    $my_course_list = CourseManager::get_courses_list_by_user_id(
+                        api_get_user_id(),
+                        true
+                    );
                 }
 
                 if (api_is_drh()) {
@@ -942,9 +962,9 @@ class Agenda
                         );
 
                         if (!empty($sessionList)) {
-                            foreach ($sessionList as $sessionId) {
-                                $courses = UserManager::get_courses_list_by_session(
-                                    api_get_user_id(),
+                            foreach ($sessionList as $sessionItem) {
+                                $sessionId = $sessionItem['id'];
+                                $courses = SessionManager::get_course_list_by_session_id(
                                     $sessionId
                                 );
                                 $sessionInfo = array(
@@ -1464,6 +1484,11 @@ class Agenda
 
                 if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_group_color;
+                }
+
+
+                if (isset($row['color']) && !empty($row['color'])) {
+                    $event['borderColor'] = $event['backgroundColor'] = $row['color'];
                 }
 
                 $event['editable'] = false;
@@ -2133,7 +2158,7 @@ class Agenda
                 // Storing the attachments if any
                 if ($result) {
                     $sql = 'INSERT INTO '.$agenda_table_attachment.'(c_id, filename, comment, path, agenda_id, size) '.
-                            "VALUES ($course_id, '".$file_name."', '".$comment."', '".$new_file_name."' , '".$eventId."', '".$size."' )";
+                        "VALUES ($course_id, '".$file_name."', '".$comment."', '".$new_file_name."' , '".$eventId."', '".$size."' )";
                     Database::query($sql);
                     $id = Database::insert_id();
                     if ($id) {

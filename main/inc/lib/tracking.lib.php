@@ -2089,15 +2089,17 @@ class Tracking
             // Also filter on LPs of this session
             $sql = " SELECT
                         MAX(view_count),
-                        AVG(progress) average,
-                        SUM(progress) sum_progress,
+                        AVG(COALESCE(progress, 0)) average,
+                        SUM(COALESCE(progress, 0)) sum_progress,
                         count(progress) count_progress
                     FROM $tbl_course_lp_view lp_view
                     WHERE
                       $conditionToString
-                    GROUP BY lp_id";
+                    GROUP BY user_id";
+
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
+
             if (!$return_array) {
                 $avg_progress = round($row['average'], 1);
                 return $avg_progress;

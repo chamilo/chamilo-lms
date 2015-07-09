@@ -6095,8 +6095,10 @@ div#chat-remote-video video {
 #session-list .title-session{
   font-size: 16px;
   line-height: 1.2;
-  height: 40px;
   margin-top: 5px;
+}
+#session-list .session-col:nth-child(4n+1) {
+    clear: left;
 }
 #session-list .item{
   display: block;
@@ -6141,7 +6143,7 @@ div#chat-remote-video video {
   color: #00829C;
   margin-right: 10px;
 }
-#session-list .options p{
+#session-list .options :last-child{
   margin: 0;
 }
 #session-list .dependent .tool-book .fa.fa-book{

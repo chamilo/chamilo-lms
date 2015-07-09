@@ -1,9 +1,16 @@
 {% if not session.show_simple_session_info %}
     <div class="title-course">
         {% if session.show_link_to_session %}
-            <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ session.id }}" alt="{{ session.title }}" title="{{ session.title }}">
-                <i class="fa fa-square"></i> {{ session.title }}
-            </a>
+            {% if session.courses|length == 1 %}
+                {% set course = session.courses|first %}
+                <a href="{{ course.link }}" alt="{{ session.title }}" title="{{ session.title }}">
+                    <i class="fa fa-square"></i> {{ session.title }}
+                </a>
+            {% else %}
+                <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ session.id }}" alt="{{ session.title }}" title="{{ session.title }}">
+                    <i class="fa fa-square"></i> {{ session.title }}
+                </a>
+            {% endif %}
         {% else %}
             <i class="fa fa-square"></i> {{ session.title }}
         {% endif %}

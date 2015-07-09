@@ -2562,7 +2562,7 @@ class Exercise
                         } else {
 							// This value is the user input, not escaped while correct answer is escaped by fckeditor
 							// Works with cyrillic alphabet and when using ">" chars
-                            $choice[$j] = htmlspecialchars(trim($choice[$j]));
+                            $choice[$j] = htmlentities(api_utf8_encode(trim($choice[$j])));
                         }
 
                         $user_tags[] = $choice[$j];

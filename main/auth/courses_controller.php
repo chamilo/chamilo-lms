@@ -738,6 +738,10 @@ class CoursesController
                 $session->getId(),
                 SequenceResource::SESSION_TYPE
             );
+            $foo = $repo->getRequirementsAndDependenciesWitihSequences(
+                $session->getId(),
+                SequenceResource::SESSION_TYPE
+            );
 
             $sessionsBlock = array(
                 'id' => $session->getId(),
@@ -759,6 +763,7 @@ class CoursesController
             );
 
             $sessionsBlock = array_merge($sessionsBlock, $requirementAndDependencies);
+            $sessionsBlock = array_merge($sessionsBlock, $foo);
             $sessionsBlocks[] = $sessionsBlock;
         }
 

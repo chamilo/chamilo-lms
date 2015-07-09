@@ -157,4 +157,79 @@ class SequenceRepository extends EntityRepository
 
         return $result;
     }
+
+    /**
+     * Get the requirements and dependencies within a sequence for a resource
+     * @param int $resourceId The resource ID
+     * @param int $type The type of sequence resource
+     * @return array
+     */
+    public function getRequirementsAndDependenciesWitihSequences($resourceId, $type)
+    {
+        $sequencesResource = $this->findBy([
+            'resourceId' => $resourceId,
+            'type' => $type
+        ]);
+
+        $result = [];
+
+        foreach ($sequencesResource as $sequenceResource) {
+            if (!$sequenceResource->hasGraph()) {
+                continue;
+            }
+
+            $sequence = $sequenceResource->getSequence();
+            $graph = $sequence->getUnSerializeGraph();
+            $vertex = $graph->getVertex($resourceId);
+            $from = $vertex->getVerticesEdgeFrom();
+            $to = $vertex->getVerticesEdgeTo();
+
+            $requirements = [];
+            $dependencies = [];
+
+            switch ($type) {
+                case SequenceResource::SESSION_TYPE:
+                    $requirements = $this->findSessionFromVerticesEdges($from);
+                    $dependencies = $this->findSessionFromVerticesEdges($to);
+                    break;
+            }
+
+            $result[$sequence->getId()] = [
+                'name' => $sequence->getName(),
+                'requirements' => $requirements,
+                'dependencies' => $dependencies
+            ];
+        }
+
+        return [
+            'sequences' => $result
+        ];
+    }
+
+    /**
+     * Get sessiones from vertices
+     * @param \Fhaculty\Graph\Set\Vertices $verticesEdges The vertices
+     * @return array
+     */
+    private function findSessionFromVerticesEdges(\Fhaculty\Graph\Set\Vertices $verticesEdges)
+    {
+        $sessionVertices = [];
+
+        foreach ($verticesEdges as $supVertex) {
+            $vertexId = $supVertex->getId();
+            $session = $this->getEntityManager()->getReference(
+                'ChamiloCoreBundle:Session',
+                $vertexId
+            );
+
+            if (empty($session)) {
+                continue;
+            }
+
+            $sessionVertices[$vertexId] = $session;
+        }
+
+        return $sessionVertices;
+    }
+
 }

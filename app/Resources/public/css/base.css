@@ -6141,7 +6141,7 @@ div#chat-remote-video video {
   color: #00829C;
   margin-right: 10px;
 }
-#session-list .options p{
+#session-list .options :last-child{
   margin: 0;
 }
 #session-list .dependent .tool-book .fa.fa-book{

@@ -103,36 +103,11 @@
                                         </li>
                                     {% endif %}
                                 </ul>
-                                <div class="dependent">
-                                    <a tabindex="0" role="button" class="tool-book" data-toggle="popover" data-trigger="focus"
-                                       title="{% if session.requirements %}{{ 'RequiredSessions'|get_lang }}{% endif %}
-                                    {% if session.dependencies %}{{ 'DependentSessions'|get_lang }}{% endif %}" data-content="
-                                        <div class='requirements'>
-                                    {% if session.requirements %}
-                                        <p><i class='fa fa-book'></i> {{ 'RequiredSessions'|get_lang }} :
-                                            {% for requirement in session.requirements %}
-                                                {{ requirement.name  }}
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
-
-                                    {% if session.dependencies %}
-                                        <p> <i class='fa fa-book'></i> {{ 'DependentSessions'|get_lang }} :
-                                            {% for dependency in session.dependencies %}
-                                                {{ dependency.name  }}
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
-                                </div>
-                                   ">
-                                        <i class='fa fa-book'></i>
-                                        {% if session.requirements %}{{ 'RequiredSessions'|get_lang }}{% endif %}
-                                        {% if session.dependencies %}{{ 'DependentSessions'|get_lang }}{% endif %}
-                                    </a>
-                                </div>
-
 
                                 <div class="options">
+                                    <p>
+                                        <a class="btn btn-info btn-block btn-sm" role="button" data-toggle="popover" id="session-{{ session.id }}-sequences">{{ 'SeeSequences'|get_lang }}</a>
+                                    </p>
                                     <p class="buttom-subscribed">
                                         {% if session.is_subscribed %}
                                             {{ already_subscribed_label }}
@@ -144,6 +119,57 @@
                                     </p>
                                 </div>
                             </div>
+
+                            <script>
+                                $('#session-{{ session.id }}-sequences').popover({
+                                    placement: 'bottom',
+                                    html: true,
+                                    trigger: 'click',
+                                    content: function () {
+                                        var content = '';
+
+                                        {% if session.sequences %}
+                                            {% for sequence in session.sequences %}
+                                                content += '<p class="lead">{{ sequence.name }}</p>';
+
+                                                {% if sequence.requirements %}
+                                                    content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'RequiredSessions'|get_lang }}</p>';
+                                                    content += '<ul>';
+
+                                                    {% for requirement in sequence.requirements %}
+                                                        content += '<li>';
+                                                        content += '<a href="{{ _p.web ~ 'session/' ~ requirement.id ~ '/about/' }}">{{ requirement.name }}</a>';
+                                                        content += '</li>';
+                                                    {% endfor %}
+
+                                                    content += '</ul>';
+                                                {% endif %}
+
+                                                {% if sequence.dependencies %}
+                                                    content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'DependentSessions'|get_lang }}</p>';
+                                                    content += '<ul>';
+
+                                                    {% for dependency in sequence.dependencies %}
+                                                        content += '<li>';
+                                                        content += '<a href="{{ _p.web ~ 'session/' ~ dependency.id ~ '/about/' }}">{{ dependency.name }}</a>';
+                                                        content += '</li>';
+                                                    {% endfor %}
+
+                                                    content += '</ul>';
+                                                {% endif %}
+
+                                                {% if session.sequences|length > 1 %}
+                                                    content += '<hr>';
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            content = "{{ 'NoDependencies'|get_lang }}";
+                                        {% endif %}
+
+                                        return content;
+                                    }
+                                });
+                            </script>
                         </div>
                     </div>
                 {% else %}

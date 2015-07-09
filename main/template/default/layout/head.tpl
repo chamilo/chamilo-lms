@@ -428,13 +428,6 @@ $(function() {
 
     /* Make responsive image maps */
     $('map').imageMapResize();
-
-    $(function () {
-        $('.tool-book').popover({
-            html:true,
-            placement:'bottom'
-        });
-    });
 });
 </script>
 {{ css_custom_file_to_string }}

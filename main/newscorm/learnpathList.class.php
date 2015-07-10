@@ -106,6 +106,7 @@ class LearnpathList
             // is done using domesticate()
             $myname = domesticate($row['name']);
             $mylink = 'newscorm/lp_controller.php?action=view&lp_id='.$row['id'].'&id_session='.$session_id;
+
             $sql2 = "SELECT * FROM $tbl_tool
                      WHERE
                         c_id = $course_id AND (

@@ -1,30 +1,41 @@
 <link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
 <div class="row">
-    <div class="span12">
-        <div class="row">
+    <div class="col-md-12">
+
         {% if isAdmin == 'true' %}
-            <div class="span12">
-                <div>
-                    <h2>{{ 'TitlePlugin'|get_plugin_lang('BuyCoursesPlugin') }}</h2>
-                    <p>{{ 'PluginPresentation'|get_plugin_lang('BuyCoursesPlugin') }}</p>
-                </div>
-                <div class="normal-message">
-                    <h3>{{ 'Instructions'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
-                    <ul>
-                        <li>{{ 'InstructionsStepOne'|get_plugin_lang('BuyCoursesPlugin') }}</li>
-                        <li>{{ 'InstructionsStepTwo'|get_plugin_lang('BuyCoursesPlugin') }}</li>
-                        <li>{{ 'InstructionsStepThree'|get_plugin_lang('BuyCoursesPlugin') }}</li>
-                    </ul>
+            <div class="help-bycourse">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h3>{{ 'TitlePlugin'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+                                <p>{{ 'PluginPresentation'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+                                <p>&nbsp;</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                {{ 'Instructions'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </div>
+                            <div class="panel-body">
+                                <ul>
+                                    <li>{{ 'InstructionsStepOne'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                                    <li>{{ 'InstructionsStepTwo'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                                    <li>{{ 'InstructionsStepThree'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endif %}
-            <div class="span12">
 
-            </div>
-        </div>
+
         <div class="row">
 
-            <div class="span3">
+            <div class="col-md-3">
                 <div class="thumbnail">
                     <a href="src/list.php">
                         <img src="resources/img/128/buycourses.png">
@@ -35,7 +46,7 @@
                 </div>
             </div>
             {% if isAdmin == 'true' %}
-            <div class="span3">
+            <div class="col-md-3">
                 <div class="thumbnail">
                     <a href="src/configuration.php">
                         <img src="resources/img/128/settings.png">
@@ -45,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div class="span3">
+            <div class="col-md-3">
                 <div class="thumbnail">
                     <a href="src/paymentsetup.php">
                         <img src="resources/img/128/paymentsettings.png">
@@ -55,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="span3">
+            <div class="col-md-3">
                 <div class="thumbnail">
                     <a href="src/pending_orders.php">
                         <img src="resources/img/128/backlogs.png">

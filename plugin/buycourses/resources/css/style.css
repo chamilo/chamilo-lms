@@ -117,3 +117,6 @@ select#lsessions, select#lcourses, select#lexercises, select#status {
   font-weight: bold;
   font-family: Arial;
 }
+.top-button{
+  padding-top: 30px;
+}

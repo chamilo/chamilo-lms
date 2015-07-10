@@ -19,111 +19,125 @@ $(function() {
 {% endif %}
 
 <div id="tabs-1">
-<div class="row">
-    <div class="span3">
-        <div class="category_well well">
-            <div class="form-content">
-                <h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4>
-                <label class="control-label">{{ 'CourseName'|get_lang }}:</label>
-                <input type="text" class="name" />
-                <label class="control-label">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" class="pricemin span1"/>
-                <label class="control-label">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" class="pricemax span1"/>
-                    {% for category in categories %}
-                        <label class="control-label">{{ 'Categories'|get_lang }}:</label>
-                        <select id="courses_category">
-                            <option value="" selected="selected"></option>
-                                <option value="{{ category.code }}">{{ category.name }}</option>
-                        </select>
-                    {% endfor %}
-                <br>
-                 <input type="button" class="filter btn btn-primary" value="{{ 'Search'|get_lang }}" id="courses_filter" />
-            </div>
-        </div>
-    </div>
-    <div class="span8" id="course_results">
-        {% if rmessage == "YES" %}
-            <div class="{{ class }}">
-                {{ responseMessage }}
-            </div>
-        {% endif %}
-        {% for course in courses %}
-            <div class="span8">
-                <div class="row well-course">
-                    <div class="span1 icon-course">
-                        <div class="thumbnail">
-                            <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
-                                <img alt="" src="{{ server }}{{ course.course_img }}">
-                            </a>
-                        </div>
+    <div class="row">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}</div>
+            <div class="panel-body">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>{{ 'CourseName'|get_lang }}:</label>
+                        <input class="form-control" type="text" class="name" />
                     </div>
-                    <div class="span3">
-                        <div class="categories-course-description">
-                            <h3>{{ course.title }}</h3>
-                            <h5>{{ 'Teacher'|get_lang }}: {{ course.teacher }}</h5>
-                        </div>
-                        {% if course.enrolled == "YES" %}
-                            <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}</span>
-                        {% endif %}
-                        {% if course.enrolled == "TMP" %}
-                            <span class="label label-warning">{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</span>
-                        {% endif %}
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
+                        <input type="text" class="form-control"/>
                     </div>
-                    <div class="span3 right">
-                        <div class="sprice right">
-                            {{ course.price }} {{ currency }}
-                        </div>
-                        <div class="cleared"></div>
-                        <div class="btn-group right">
-                            <a class="ajax btn btn-primary" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
-                                {{ 'Description'|get_lang }}
-                            </a>
-                            {% if course.enrolled == "NO" %}
-                                <a class="btn btn-success" title="" href="{{ server }}plugin/buycourses/src/process.php?code={{ course.id }}">
-                                    {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
-                                </a>
-                            {% endif %}
-                        </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
+                        <input type="text" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="top-button">
+                        <input type="button" class="btn btn-success btn-block" value="{{ 'Search'|get_lang }}" id="courses_filter" />
                     </div>
                 </div>
             </div>
-        {% endfor %}
+        </div>
+
     </div>
+<div class="row" id="course_results">
+
+    {% if rmessage == "YES" %}
+    <div class="{{ class }}">
+        {{ responseMessage }}
+    </div>
+    {% endif %}
+    {% for course in courses %}
+        <div class="col-md-3">
+            <div class="items-course">
+                <div class="items-imagen">
+                    <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
+                        <img alt="" src="{{ server }}{{ course.course_img }}">
+                    </a>
+                </div>
+                <div class="items-title">
+                    {{ course.title }}
+                </div>
+                <div class="items-teacher">
+                    {{ 'Teacher'|get_lang }}: {{ course.teacher }}
+                </div>
+                <div class="items-status">
+                    {% if course.enrolled == "YES" %}
+                        <p>{{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+                    {% endif %}
+                    {% if course.enrolled == "TMP" %}
+                        <p>{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+                    {% endif %}
+                </div>
+                <div class="items-price">
+                    {{ course.price }} {{ currency }}
+                </div>
+                <div class="items-button">
+                    <a class="ajax btn btn-primary" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
+                        {{ 'Description'|get_lang }}
+                    </a>
+                    {% if course.enrolled == "NO" %}
+                    <a class="btn btn-success" title="" href="{{ server }}plugin/buycourses/src/process.php?code={{ course.id }}">
+                        {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>
 </div>
 {% if sessionsAreIncluded == "YES" %}
 <div id="tabs-2" class="row">
-    <div class="span3">
-        <div class="category_well well">
-            <div class="form-content">
-                <h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4>
-                <label class="control-label">{{ 'SessionName'|get_lang }}:</label>
-                <input type="text" class="name" />
-                <label class="control-label">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" class="pricemin span1"/>
-                <label class="control-label">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" class="pricemax span1"/>
-                    {% for category in categories %}
-                        <label class="control-label">{{ 'Categories'|get_lang }}:</label>
-                        <select id="sessions_category">
-                            <option value="" selected="selected"></option>
-                                <option value="{{ category.code }}">{{ category.name }}</option>
-                        </select>
-                    {% endfor %}
-                <br>
-                 <input type="button" class="filter btn btn-primary" value="{{ 'Search'|get_lang }}" id="sessions_filter" />
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}
+        </div>
+        <div class="panel-body">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>{{ 'SessionName'|get_lang }}:</label>
+                    <input type="text" class="form-control"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
+                    <input type="text" class="form-control"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label>{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
+                <input type="text" class="form-control"/>
+            </div>
+            <div class="col-md-3">
+                <div class="top-button">
+                    <input type="button" class="btn btn-success btn-block" value="{{ 'Search'|get_lang }}" id="sessions_filter" />
+                </div>
             </div>
         </div>
     </div>
-    <div class="span8" id="session_results">
+
+    <div class="col-md-12" id="session_results">
         {% if rmessage == "YES" %}
             <div class="{{ class }}">
                 {{ responseMessage }}
             </div>
         {% endif %}
         {% for session in sessions %}
-            <div class="span8 well-course">
+            <div class="col-md-8 well-course">
                 <div class="row">
                     <div class="span4 ">
                         <div class="categories-course-description">

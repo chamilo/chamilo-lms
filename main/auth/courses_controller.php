@@ -734,14 +734,21 @@ class CoursesController
             }
 
             $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
-            $requirementAndDependencies = $repo->getRequirementAndDependencies(
+            $sequences = $repo->getRequirementsAndDependenciesWithinSequences(
                 $session->getId(),
                 SequenceResource::SESSION_TYPE
             );
-            $foo = $repo->getRequirementsAndDependenciesWitihSequences(
-                $session->getId(),
-                SequenceResource::SESSION_TYPE
-            );
+
+            $hasRequirements = false;
+
+            foreach ($sequences['sequences'] as $sequence) {
+                if (count($sequence['requirements']) === 0) {
+                    continue;
+                }
+
+                $hasRequirements = true;
+                break;
+            }
 
             $sessionsBlock = array(
                 'id' => $session->getId(),
@@ -756,14 +763,13 @@ class CoursesController
                 'subscribe_button' => $this->getRegisteredInSessionButton(
                     $session->getId(),
                     $session->getName(),
-                    !empty($requirementAndDependencies['requirements'])
+                    $hasRequirements
                 ),
                 'show_description' => $session->getShowDescription(),
                 'tags' => $sessionCourseTags
             );
 
-            $sessionsBlock = array_merge($sessionsBlock, $requirementAndDependencies);
-            $sessionsBlock = array_merge($sessionsBlock, $foo);
+            $sessionsBlock = array_merge($sessionsBlock, $sequences);
             $sessionsBlocks[] = $sessionsBlock;
         }
 

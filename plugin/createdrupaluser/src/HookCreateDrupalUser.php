@@ -54,6 +54,7 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
             );
 
             $client = new SoapClient(null, $options);
+            $drupalUserId = false;
             
             if (isset($_SESSION['ws_drupal_user_id'])) {
                 $drupalUserId = $_SESSION['ws_drupal_user_id'];

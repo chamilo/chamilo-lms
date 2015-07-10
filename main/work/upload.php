@@ -28,19 +28,11 @@ if (empty($work_id)) {
     api_not_allowed(true);
 }
 
+protectWork($course_info, $work_id);
+
 $workInfo = get_work_data_by_id($work_id);
 
-if (empty($workInfo)) {
-    api_not_allowed(true);
-}
-
-if ($workInfo['active'] != 1) {
-    api_not_allowed(true);
-}
-
-allowOnlySubscribedUser($user_id, $work_id, $course_id);
-
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id);
+$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id, $session_id);
 $is_course_member = $is_course_member || api_is_platform_admin();
 
 if ($is_course_member == false || api_is_invitee()) {

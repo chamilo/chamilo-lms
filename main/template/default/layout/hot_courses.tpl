@@ -27,7 +27,7 @@ $(document).ready( function() {
             {% if _u.is_admin %}
             <span class="pull-right">
                 <a title="{{ "Hide"|get_lang }}" alt="{{ "Hide"|get_lang }}" href="{{ _p.web_main }}admin/settings.php?search_field=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting">
-                    <img src="{{ "eyes.png"|icon(22) }}">
+                    <img src="{{ "eyes.png"|icon(22) }}" width="22" height="22">
                 </a>
             </span>
             {% endif %}

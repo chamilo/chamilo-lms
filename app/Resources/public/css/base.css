@@ -800,6 +800,10 @@ a.tag {
     background-color: #FFCA8D;
 }
 
+#calendar_course_info h4, #calendar_session_info h4 {
+    font-weight: bold;
+}
+
 /* ---------------------------------------------------
     styles for the personal agenda
 -----------------------------------------------------*/
@@ -5850,7 +5854,7 @@ div#chat-remote-video video {
 }
 #parents .parent {
   display: inline-block;
-  width: 15%;
+  width: 125px;
   padding: 5px;
   /* background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center bottom; */
 }
@@ -6149,8 +6153,10 @@ div#chat-remote-video video {
 #session-list .title-session{
   font-size: 15px;
   line-height: 1.2;
-  height: 40px;
   margin-top: 5px;
+}
+#session-list .session-col:nth-child(4n+1) {
+    clear: left;
 }
 #session-list .item{
   display: block;
@@ -6194,8 +6200,19 @@ div#chat-remote-video video {
   color: #00829C;
   margin-right: 10px;
 }
-#session-list .options p{
+#session-list .options :last-child{
   margin: 0;
+}
+#session-list .dependent .tool-book .fa.fa-book{
+  color: #00829C;
+  margin-right: 10px;
+}
+#session-list .dependent{
+  font-size: 12px;
+  padding-bottom: 10px;
+}
+#session-list .dependent a{
+  color: #666666;
 }
 #custom-icons .items-tools{
   padding: 10px;
@@ -6237,6 +6254,14 @@ div#chat-remote-video video {
 .show-exercise{
   padding-left: 20px;
   padding-right: 20px;
+}
+
+p.bg-primary,
+p.bg-success,
+p.bg-info,
+p.bg-warning,
+p.bg-danger {
+    padding: 10px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

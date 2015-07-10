@@ -31,9 +31,9 @@
                             <tr>
                                 <td>
                                     {% if skill.icon is empty %}
-                                        <img src="{{ 'badges-default.png' | icon(128) }}" width="50" alt="{{ skill.name }}">
+                                        <img src="{{ 'badges-default.png' | icon(128) }}" width="50" height="50" alt="{{ skill.name }}">
                                     {% else %}
-                                        <img src="{{ skill.web_icon_path }}" width="50" alt="{{ skill.name }}">
+                                        <img src="{{ skill.web_icon_path }}" width="50" height="50" alt="{{ skill.name }}">
                                     {% endif %}
 
                                     {{ skill.name }}
@@ -41,7 +41,7 @@
                                 <td>{{ skill.description }}</td>
                                 <td>
                                     <a href="{{ _p.web_main }}admin/skill_badge_create.php?id={{ skill.id }}" title="{{ 'Edit' | get_lang }}">
-                                        <img src="{{ _p.web_img }}icons/22/edit.png" alt="{{ 'Edit' | get_lang }}">
+                                        <img src="{{ 'edit.png' | icon(22) }}" width="22" height="22" alt="{{ 'Edit' | get_lang }}">
                                     </a>
                                 </td>
                             </tr>

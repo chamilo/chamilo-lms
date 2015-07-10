@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * 	Exercise list: This script shows the list of exercises for administrators and students.
  * 	@package chamilo.exercise
@@ -9,7 +10,7 @@
  *  @todo fix excel export
  *
  */
-// including the global library
+
 require_once '../inc/global.inc.php';
 
 // Setting the tabs
@@ -318,7 +319,10 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete_be
     if ($check) {
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exercise_id)) {
-            $count = $objExerciseTmp->clean_results(true, $_GET['delete_before_date'].' 23:59:59');
+            $count = $objExerciseTmp->clean_results(
+                true,
+                $_GET['delete_before_date'].' 23:59:59'
+            );
             Display::display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $count));
         }
     }

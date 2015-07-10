@@ -333,6 +333,8 @@ switch ($action) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
         }
 
+        $form->addCheckBox('send_to_hrm_users', null, get_lang('SendAnnouncementCopyToDRH'));
+
         $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
         $form->setDefaults($defaults);
 
@@ -358,9 +360,14 @@ switch ($action) {
                     );
 
                     /*		MAIL FUNCTION	*/
-                    if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
-                        AnnouncementManager::send_email($id, $sendToUsersInSession);
+                    if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
+                        AnnouncementManager::send_email(
+                            $id,
+                            $sendToUsersInSession,
+                            isset($data['send_to_hrm_users'])
+                        );
                     }
+
                     Display::addFlash(
                         Display::return_message(
                             get_lang('AnnouncementModified'),

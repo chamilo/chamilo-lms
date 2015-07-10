@@ -19,11 +19,9 @@ function clean_user_select() {
 }
 
 var region_value = '{{ region_value }}';
+
 $(document).ready(function() {
 	var date = new Date();
-	var d = date.getDate();
-	var m = date.getMonth()+1;
-	var y = date.getFullYear();
 
     // Reset button.
     $("button[type=reset]").click(function() {
@@ -50,8 +48,17 @@ $(document).ready(function() {
 	content = $( "#content" ),
 	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
 
-	$('#users_to_send_id').bind('change', function() {
-	    var selected_counts = $("#users_to_send_id option:selected").size();
+    $("#select_form_id_search").change(function() {
+        var temp ="&user_id="+$("#select_form_id_search").val();
+        var position =String(window.location).indexOf("&user");
+        var url_length = String(window.location).length;
+        var url = String(window.location).substring(0,position)+temp;
+        if (position > 0) {
+            window.location.replace(url);
+        } else {
+            url = String(window.location)+temp;
+            window.location.replace(url);
+        }
     });
 
     $.datepicker.setDefaults( $.datepicker.regional[region_value] );
@@ -92,9 +99,6 @@ $(document).ready(function() {
         },
 		// Add event
 		select: function(start, end, jsEvent, view) {
-			//Removing UTC stuff
-            //var start_date = $.datepicker.formatDate("yy-mm-dd", start) + " " + start.toTimeString().substr(0, 8);
-            //var end_date  = $.datepicker.formatDate("yy-mm-dd", end) + " " + end.toTimeString().substr(0, 8);
             var start_date = start.format("YY-MM-DD");
             var end_date = end.format("YY-MM-DD");
 
@@ -235,7 +239,6 @@ $(document).ready(function() {
             } else {
                 var end_date 	= '';
                 if (calEvent.end && calEvent.end != '') {
-                    //var end_date 	= Math.round(calEvent.end.getTime() / 1000);
                     var end_date  = calEvent.end.format("YY-MM-DD");
                 }
             }
@@ -258,12 +261,8 @@ $(document).ready(function() {
                 $('#color_calendar').removeClass('group_event');
                 $('#color_calendar').addClass(calEvent.type+'_event');
 
-                //my_start_month = calEvent.start.getMonth() +1;
-                //$('#start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear());
                 $('#start_date').html(calEvent.start.format("YY-MM-DD"));
                 if (calEvent.end) {
-                    //my_end_month = calEvent.end.getMonth() +1;
-                    //$('#end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear());
                     $('#end_date').html(' - '+calEvent.end.format("YY-MM-DD"));
                 }
 
@@ -430,15 +429,23 @@ $(document).ready(function() {
 				});
 			} else {
 			    // Simple form
-                // my_start_month = calEvent.start.getMonth() +1;
                 $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
 
                 if (end_date != '') {
-                    my_end_month = calEvent.end.getMonth() +1;
-                    //$('#simple_start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear() +" - "+calEvent.start.toLocaleTimeString());
                     $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
-                    //$('#simple_end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear() +" - "+calEvent.end.toLocaleTimeString());
                     $('#simple_end_date').html(' ' + calEvent.end.format("YY-MM-DD"));
+                }
+console.log(calEvent.course_name);
+                if (calEvent.course_name) {
+                    $("#calendar_course_info").html('<h4>{{ 'Course' | get_lang }}</h4>' + calEvent.course_name);
+                } else {
+                    $("#calendar_course_info").html('');
+                }
+
+                if (calEvent.session_name) {
+                    $("#calendar_session_info").html('<h4>{{ 'Session' | get_lang }}</h4>' + calEvent.session_name);
+                } else {
+                    $("#calendar_session_info").html('');
                 }
 
                 $("#simple_title").html(calEvent.title);
@@ -502,6 +509,8 @@ $(document).ready(function() {
 <div id="simple-dialog-form" style="display:none;">
     <div style="width:500px">
         <form name="form-simple" class="form-vertical">
+            <span id="calendar_course_info"></span>
+            <span id="calendar_session_info"></span>
             <div class="control-group">
                 <label class="control-label">
                     <b>{{ "Date" |get_lang}}</b>
@@ -536,7 +545,6 @@ $(document).ready(function() {
                     <div id="simple_comment"></div>
                 </div>
             </div>
-
         </form>
     </div>
 </div>

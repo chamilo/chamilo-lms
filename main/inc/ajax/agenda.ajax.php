@@ -96,6 +96,7 @@ switch ($action) {
         $filter = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
         $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : null;
         $result = $agenda->parseAgendaFilter($filter);
+
         $groupId = current($result['groups']);
         $userId = current($result['users']);
 
@@ -113,6 +114,7 @@ switch ($action) {
             $groupId,
             $userId
         );
+
         echo $events;
         break;
     case 'get_user_agenda':

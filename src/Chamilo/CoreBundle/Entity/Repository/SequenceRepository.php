@@ -164,7 +164,7 @@ class SequenceRepository extends EntityRepository
      * @param int $type The type of sequence resource
      * @return array
      */
-    public function getRequirementsAndDependenciesWitihSequences($resourceId, $type)
+    public function getRequirementsAndDependenciesWithinSequences($resourceId, $type)
     {
         $sequencesResource = $this->findBy([
             'resourceId' => $resourceId,

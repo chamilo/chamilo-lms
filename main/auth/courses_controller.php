@@ -738,7 +738,7 @@ class CoursesController
                 $session->getId(),
                 SequenceResource::SESSION_TYPE
             );
-            $foo = $repo->getRequirementsAndDependenciesWitihSequences(
+            $foo = $repo->getRequirementsAndDependenciesWithinSequences(
                 $session->getId(),
                 SequenceResource::SESSION_TYPE
             );

@@ -445,6 +445,27 @@ RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA
 </pre><br />
 This is easy, doesn't require a server reload and you should see the results pretty quickly. As mentioned above, if security of your content is an issue, though, you should avoid using this technique.
 </p>
+<p>
+You can also mitigate the risk by disabling permissions check only 
+for some static resource like css,js and fonts files.
+<br/>
+For that is required to load header module  
+in apache (check with a2enmod in your favorite root terminal)<br />
+add theses line after RewriteBase /courses/:
+<pre>
+&lt;IfModule mod_headers.c&gt;
+    # all file name ended with these  extensions names will bypass the permission check   (and also served by the browser cache at  the next request)
+    &lt;FilesMatch &quot;\.(gif|jpg|jpeg|png|js|pdf|ico|icon|css|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff)$&quot;&gt;
+        Header unset Cache-Control  
+        Header set Cache-Control &quot;public, max-age=29030400&quot; 
+        RequestHeader unset Cookie      
+        Header unset ETag
+    &lt;/FilesMatch&gt;
+&lt;/IfModule&gt;
+# also adjust files here 
+RewriteRule (\.(html|gif|jpg|jpeg|png|js|pdf|ico|icon|css|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff))$ - [L]
+</pre>
+</p>
 <hr />
 <h2><a name="12.MySQL-compression"></a>MySQL/MariaDB compression</h2>
 <p>

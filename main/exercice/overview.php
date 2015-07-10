@@ -211,7 +211,7 @@ if (!empty($attempts)) {
         $i--;
     }
 
-    $table = new HTML_Table(array('class' => 'data_table'));
+    $table = new HTML_Table(array('class' => 'table table-striped table-hover'));
 
     //Hiding score and answer
     switch ($objExercise->results_disabled) {
@@ -241,11 +241,7 @@ if (!empty($attempts)) {
         foreach ($my_attempt_array as $data) {
             $column = 0;
             $table->setCellContents($row, $column, $data);
-            $class = 'class="row_odd"';
-            if($row % 2) {
-                $class = 'class="row_even"';
-            }
-            $table->setRowAttributes($row, $class, true);
+            $table->setRowAttributes($row, null, true);
             $column++;
             $row++;
         }
@@ -282,10 +278,12 @@ if (!empty($exercise_url_button)) {
     );
 }
 
-$html .= $table_content;
+$html .= Display::tag(
+    'div',
+    $table_content,
+    ['class' => 'table-responsive']
+);
 $html.= '</div>';
 echo $html;
 
-if ($origin != 'learnpath') {
-    Display::display_footer();
-}
+Display::display_footer();

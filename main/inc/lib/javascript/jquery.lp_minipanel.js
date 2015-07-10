@@ -24,24 +24,16 @@ $(document).ready(function() {
     });
 
     // effects items scorm content
-    $('.scorm_item_normal').click(function() {
-        $('#learning_path_right_zone').fadeOut(300);
-        setTimeout(function(){
-            $('#learning_path_right_zone').fadeIn(300);
-        },300);
+    $('.scorm_item_normal, .scorm-previous, .scorm-next').on('click', function () {
+        $('#learning_path_right_zone').fadeOut('slow');
+
+        var loadLearningPathRigthZone = function () {
+            $('#learning_path_right_zone').fadeIn(100);
+
+            $('#learning_path_right_zone iframe').off('load', loadLearningPathRigthZone);
+        };
+
+        $('#learning_path_right_zone iframe').on('load', loadLearningPathRigthZone);
     });
 
-    $('.scorm-previous').click(function() {
-        $('#learning_path_right_zone').fadeOut(300);
-        setTimeout(function(){
-            $('#learning_path_right_zone').fadeIn(300);
-        },300);
-    });
-
-    $('.scorm-next').click(function() {
-        $('#learning_path_right_zone').fadeOut(300);
-        setTimeout(function(){
-            $('#learning_path_right_zone').fadeIn(300);
-        },300);
-    });
 });

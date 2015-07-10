@@ -493,6 +493,7 @@ function sessionInfo($code)
     WHERE a.session_id = b.session_id AND a.session_id = " . $rowSession['session_id'] . ";";
     $resSessionCourse = Database::query($sqlSessionCourse);
     $aux = array();
+
     // loop through courses of current session
     while ($rowSessionCourse = Database::fetch_assoc($resSessionCourse)) {
         // get course of current session
@@ -511,6 +512,7 @@ function sessionInfo($code)
             $tmp = Database::query($sql);
             $rowTmp = Database::fetch_assoc($tmp);
             $row['teacher'] = $rowTmp['firstname'].' '.$rowTmp['lastname'];
+
             //check images
             if (file_exists(api_get_path(SYS_COURSE_PATH).$row['directory']."/course-pic.png")) {
                 $row['course_img'] = "courses/".$row['directory']."/course-pic.png";
@@ -532,6 +534,7 @@ function sessionInfo($code)
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
                     WHERE user_id='".$currentUserId."';";
             $result = Database::query($sql);
+
             if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "TMP";
             } else {

@@ -3,22 +3,35 @@
 <link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
 
 <div class="row">
-    <div class="span12">
-        <div id="course_category_well" class="well span3">
-            <ul class="nav nav-list">
-                <li class="nav-header"><h4>{{ 'UserInformation'|get_plugin_lang('BuyCoursesPlugin') }}:</h4></li>
-                <li class="nav-header">{{ 'Name'|get_lang }}:</li>
-                <li><h5>{{ name }}</h5></li>
-                <li class="nav-header">{{ 'User'|get_lang }}:</li>
-                <li><h5>{{ user }}</h5></li>
-                <li class="nav-header">{{ 'Email'|get_lang }}:</li>
-                <li><h5>{{ email }}</h5></li>
-                <br/>
-            </ul>
-        </div>
+    <div class="col-md-12">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">Datos de la Compra</div>
+                <div class="panel-body">
 
-        <br/><br/>
-        <div class="well_border span8">
+
+
+                </div>
+            </div>
+        </div>
+        <div id="course_category_well" class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{ 'UserInformation'|get_plugin_lang('BuyCoursesPlugin') }}
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>{{ 'Name'|get_lang }}:</dt>
+                        <dd>{{ name }}</dd>
+                        <dt>{{ 'User'|get_lang }}:</dt>
+                        <dd>{{ user }}</dd>
+                        <dt>{{ 'Email'|get_lang }}:</dt>
+                        <dd>{{ email }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
         {% if isSession == "YES" %}
             <div class="row">
                 <div class="span4">

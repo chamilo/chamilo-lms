@@ -171,7 +171,7 @@ $(document).ready(function() {
                         {% if skills is not empty %}
                             {% for skill in skills %}
                                 {% if skill.icon is empty %}
-                                    <img src="{{ 'badges.png' | icon(32) }}" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                    <img src="{{ 'badges.png' | icon(32) }}" width="32" height="32" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% else %}
                                     <img src="{{ skill.web_icon_thumb_path }}" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% endif %}
@@ -179,7 +179,7 @@ $(document).ready(function() {
                         {% endif %}
 
                         {% for i in 1..(9 - ranking) %}
-                            <img src="{{ 'badges-default.png' | icon(32) }}">
+                            <img src="{{ 'badges-default.png' | icon(32) }}" width="32" height="32">
                         {% endfor %}
                     </div>
                 </div>

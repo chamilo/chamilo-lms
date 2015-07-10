@@ -7,7 +7,7 @@
         {% for session in item.requirements %}
             <div class="parent">
                 <div class="big-icon">
-                    <img src="{{ 'item-sequence.png'|icon(48) }}">
+                    <img src="{{ 'item-sequence.png'|icon(48) }}" width="48" height="48">
                     <p class="sequence-course">{{ session.name }}</p>
                     <span class="label {{ session.status ? 'label-success' : 'label-danger' }}">
                         {% if session.status %}

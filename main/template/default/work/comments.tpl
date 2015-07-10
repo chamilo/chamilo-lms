@@ -23,12 +23,12 @@
             {% if comment.file_url is not empty %}
                 <p>
                     <a href="{{ comment.file_url }}">
-                        <img src="{{ "attachment.gif"|icon(32) }}">
+                        <img src="{{ "attachment.gif"|icon(32) }}" width="32" height="32">
                         {{ comment.file_name_to_show }}
                     </a>
                     {% if is_allowed_to_edit %}
                         <a href="{{ comment.delete_file_url }}">
-                            <img src="{{ "delete.png"|icon(22) }}">
+                            <img src="{{ "delete.png"|icon(22) }}" width="22" height="22">
                         </a>
                     {% endif %}
                 </p>

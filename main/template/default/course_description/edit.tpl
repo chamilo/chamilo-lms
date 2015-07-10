@@ -14,7 +14,7 @@
         <div class="btn-group edit new">
             {% for type in types %}        
                 <a href="{{root}}&amp;action=add&amp;description_type={{type.id}}" class="btn btn-default">
-                    <img title="{{type.title}}" alt="{{type.title}}" src="{{type.icon|icon(32)}} ">
+                    <img title="{{type.title}}" alt="{{type.title}}" src="{{type.icon|icon(32)}} " width="32" height="32">
                 </a>    
             {% endfor %}
         </div>

@@ -12,7 +12,7 @@
     <div class="tab-content">
         <div class="tab-pane active">
             <div class="openbadges-introduction">
-                <h1 class="title"><img src="{{ 'badges.png' | icon(64) }}">{{ 'OpenBadgesTitle' | get_lang }}</h1>
+                <h1 class="title"><img src="{{ 'badges.png' | icon(64) }}" width="64" height="64">{{ 'OpenBadgesTitle' | get_lang }}</h1>
                 <div class="row">
                     <div class="col-xs-12 col-md-6">
                         <p class="lead">
@@ -23,7 +23,7 @@
                         </p>
                     </div>
                     <div class="col-xs-12 col-md-6">
-                        <img class="img-responsive" src="{{ 'openbadges.png' | icon() }}">
+                        <img class="img-responsive" src="{{ 'openbadges.png' | icon() }}" width="22" height="22">
                     </div>
                 </div>
 

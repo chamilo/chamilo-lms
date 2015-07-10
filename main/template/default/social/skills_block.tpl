@@ -26,7 +26,7 @@
             <ul class="list-badges">
                 {% for skill in skills %}
                     <li>
-                        <img title="{{ skill.name }}" src="{{ skill.icon ? skill.web_icon_thumb_path : 'badges-default.png'|icon(64) }}" alt="{{ skill.name }}">
+                        <img title="{{ skill.name }}" src="{{ skill.icon ? skill.web_icon_thumb_path : 'badges-default.png'|icon(64) }}" width="64" height="64" alt="{{ skill.name }}">
                         <div class="badges-name">{{ skill.name }}</div>
                     </li>
                 {% endfor %}

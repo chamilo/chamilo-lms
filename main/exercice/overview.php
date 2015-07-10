@@ -286,6 +286,4 @@ $html .= $table_content;
 $html.= '</div>';
 echo $html;
 
-if ($origin != 'learnpath') {
-    Display::display_footer();
-}
+Display::display_footer();

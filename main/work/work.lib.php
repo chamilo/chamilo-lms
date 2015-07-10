@@ -748,29 +748,6 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 }
 
 /**
- * Checks if the first given directory exists as a subdir of the second given directory
- * This function should now be deprecated by Security::check_abs_path()
- * @param   string  Subdir
- * @param   string  Base dir
- * @return  integer -1 on error, 0 if not subdir, 1 if subdir
- */
-// TODO: This function is a candidate for removal, it is not used anywhere.
-function is_subdir_of($subdir, $basedir)
-{
-    if (empty($subdir) or empty($basedir)) {
-        return -1;
-    }
-    if (substr($basedir, -1, 1) != '/') {
-        $basedir = $basedir.'/';
-    }
-    if (substr($subdir, 0, 1) == '/') {
-        $subdir = substr($subdir, 1);
-    }
-
-    return is_dir($basedir.$subdir) ? 1 : 0;
-}
-
-/**
  * creates a new directory trying to find a directory name
  * that doesn't already exist
  * (we could use unique_name() here...)
@@ -1037,8 +1014,9 @@ function insert_all_directory_in_course_table($base_work_dir)
     $course_id = api_get_course_int_id();
     $group_id  = api_get_group_id();
 
+    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+
     for($i = 0; $i < count($only_dir); $i++) {
-        global $work_table;
         $url = Database::escape_string($only_dir[$i]);
         $sql = "INSERT INTO " . $work_table . " SET
                c_id         = '$course_id',
@@ -2129,7 +2107,7 @@ function get_work_user_list(
  */
 function send_reminder_users_without_publication($task_data)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $task_id = $task_data['id'];
     $task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);
     $subject = '[' . api_get_setting('siteName') . '] ';

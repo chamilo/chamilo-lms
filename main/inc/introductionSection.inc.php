@@ -28,7 +28,7 @@
  * @package chamilo.include
  */
 
-/*  Constants and variables */
+use Chamilo\CourseBundle\Entity\CToolIntro;
 
 $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit;
@@ -69,16 +69,39 @@ if ($intro_editAllowed) {
     if ($intro_cmdUpdate) {
         if ($form->validate()) {
             $form_values = $form->exportValues();
-            $intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
+            $intro_content = Security::remove_XSS(
+                stripslashes(
+                    api_html_entity_decode($form_values['intro_content'])
+                ),
+                COURSEMANAGERLOWSECURITY
+            );
+
+            $criteria = [
+                'cId' => $course_id,
+                'id' => $moduleId,
+                'sessionId' => $session_id,
+            ];
 
             if (!empty($intro_content)) {
-                $sql = "REPLACE $TBL_INTRODUCTION
-                        SET
-                            c_id = $course_id, id='".Database::escape_string($moduleId)."',
-                            intro_text='".Database::escape_string($intro_content)."',
-                            session_id='".intval($session_id)."'
-                        ";
-                Database::query($sql);
+                /** @var CToolIntro $toolIntro */
+                $toolIntro = Database::getManager()
+                    ->getRepository('ChamiloCourseBundle:CToolIntro')
+                    ->findOneBy($criteria);
+
+                if ($toolIntro) {
+                    $toolIntro
+                        ->setIntroText($intro_content);
+                } else {
+                    $toolIntro = new CToolIntro();
+                    $toolIntro
+                        ->setSessionId($session_id)
+                        ->setCId($course_id)
+                        ->setIntroText($intro_content)
+                        ->setId($moduleId);
+                }
+                Database::getManager()->persist($toolIntro);
+                Database::getManager()->flush();
+
                 $introduction_section .= Display::return_message(
                     get_lang('IntroductionTextUpdated'),
                     'confirmation',

@@ -2550,9 +2550,12 @@ class Exercise
                             $resfill = Database::query($queryfill);
                             $str = Database::result($resfill, 0, 'answer');
 
+
                             api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
                             $str = str_replace('\r\n', '', $str);
+
                             $choice = $arr[1];
+
 
                             if (isset($choice[$j])) {
                                 $tmp = api_strrpos($choice[$j], ' / ');
@@ -2564,6 +2567,7 @@ class Exercise
                             } else {
                                 $choice[$j] = null;
                             }
+
                         } else {
 							// This value is the user input, not escaped while correct answer is escaped by fckeditor
 							// Works with cyrillic alphabet and when using ">" chars
@@ -2571,6 +2575,7 @@ class Exercise
                         }
 
                         $user_tags[] = $choice[$j];
+
                         //put the contents of the [] answer tag into correct_tags[]
                         $correct_tags[] = api_substr($temp, 0, $pos);
                         $j++;
@@ -2627,7 +2632,7 @@ class Exercise
                         // adds the correct word, followed by ] to close the blank
                         $answer .= ' / <font color="green"><b>' . $real_correct_tags[$i] . '</b></font>]';
                         if (isset($real_text[$i +1])) {
-                            $answer .= $real_text[$i +1];
+                            $answer .= $real_text[$i + 1];
                         }
                     }
                     break;
@@ -3278,12 +3283,12 @@ class Exercise
                     if ($debug) error_log('Showing questions $from '.$from);
 
                     switch ($answerType) {
-                        case UNIQUE_ANSWER :
+                        case UNIQUE_ANSWER:
                         case UNIQUE_ANSWER_IMAGE:
                         case UNIQUE_ANSWER_NO_OPTION:
-                        case MULTIPLE_ANSWER :
+                        case MULTIPLE_ANSWER:
                         case GLOBAL_MULTIPLE_ANSWER :
-                        case MULTIPLE_ANSWER_COMBINATION :
+                        case MULTIPLE_ANSWER_COMBINATION:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
                                     $feedback_type,

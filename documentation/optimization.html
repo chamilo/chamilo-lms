@@ -462,6 +462,8 @@ add theses line after RewriteBase /courses/:
         Header unset ETag
     &lt;/FilesMatch&gt;
 &lt;/IfModule&gt;
+# also adjust files here 
+RewriteRule (\.(html|gif|jpg|jpeg|png|js|pdf|ico|icon|css|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff))$ - [L]
 </pre>
 <hr />
 <h2><a name="12.MySQL-compression"></a>MySQL/MariaDB compression</h2>

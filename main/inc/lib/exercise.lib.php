@@ -2446,7 +2446,7 @@ HTML;
             // only end is set
             $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now') OR ";
             // nothing is set
-            $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time =  '0000-00-00 00:00:00'))  ";
+            $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time = '0000-00-00 00:00:00'))  ";
         }
 
         $needle_where = !empty($search) ? " AND title LIKE '?' " : '';

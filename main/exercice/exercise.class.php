@@ -1608,6 +1608,7 @@ class Exercise
 
         // if we want to delete attempts before date $cleanResultBeforeDate
         // $cleanResultBeforeDate must be a valid UTC-0 date yyyy-mm-dd
+
         if (!empty($cleanResultBeforeDate)) {
             $cleanResultBeforeDate = Database::escape_string($cleanResultBeforeDate);
             if (api_is_valid_date($cleanResultBeforeDate)) {
@@ -1633,7 +1634,8 @@ class Exercise
         $i = 0;
         if (is_array($exe_list) && count($exe_list) > 0) {
             foreach ($exe_list as $item) {
-                $sql = "DELETE FROM $table_track_e_attempt WHERE exe_id = '".$item['exe_id']."'";
+                $sql = "DELETE FROM $table_track_e_attempt
+                        WHERE exe_id = '".$item['exe_id']."'";
                 Database::query($sql);
                 $i++;
             }
@@ -1901,6 +1903,9 @@ class Exercise
 
     /**
      * So the time control will work
+     *
+     * @param string $time_left
+     * @return string
      */
     public function show_time_control_js($time_left)
     {

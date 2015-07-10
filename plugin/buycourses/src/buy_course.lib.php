@@ -185,10 +185,10 @@ function userSessionList()
                 $rowTmp = Database::fetch_assoc($tmp);
                 $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
                 //check images
-                if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['directory'] . "/course-pic85x85.png")) {
-                    $row['course_img'] = "courses/" . $row['directory'] . "/course-pic85x85.png";
+                if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['directory'] . "/course-pic.png")) {
+                    $row['course_img'] = "courses/" . $row['directory'] . "/course-pic.png";
                 } else {
-                    $row['course_img'] = "main/img/without_picture.png";
+                    $row['course_img'] = "main/img/session_default.png";
                 }
                 $row['price'] = number_format($row['price'], 2, '.', ' ');
                 $aux[] = $row;
@@ -291,10 +291,10 @@ function userCourseList()
             }
         }
         //check images
-        if (file_exists("../../courses/" . $row['code'] . "/course-pic85x85.png")) {
-            $row['course_img'] = "courses/" . $row['code'] . "/course-pic85x85.png";
+        if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['code'] . "/course-pic.png")) {
+            $row['course_img'] = "courses/" . $row['code'] . "/course-pic.png";
         } else {
-            $row['course_img'] = "main/img/without_picture.png";
+            $row['course_img'] = "main/img/session_default.png";
         }
         $row['price'] = number_format($row['price'], 2, '.', ' ');
         $aux[] = $row;
@@ -512,10 +512,10 @@ function sessionInfo($code)
             $rowTmp = Database::fetch_assoc($tmp);
             $row['teacher'] = $rowTmp['firstname'].' '.$rowTmp['lastname'];
             //check images
-            if (file_exists(api_get_path(SYS_COURSE_PATH).$row['directory']."/course-pic85x85.png")) {
-                $row['course_img'] = "courses/".$row['directory']."/course-pic85x85.png";
+            if (file_exists(api_get_path(SYS_COURSE_PATH).$row['directory']."/course-pic.png")) {
+                $row['course_img'] = "courses/".$row['directory']."/course-pic.png";
             } else {
-                $row['course_img'] = "main/img/without_picture.png";
+                $row['course_img'] = "main/img/session_default.png";
             }
             $row['price'] = number_format($row['price'], 2, '.', ' ');
             $aux[] = $row;
@@ -599,10 +599,10 @@ function courseInfo($code)
         $row['enrolled'] = "NO";
     }
     //check img
-    if (file_exists("../../courses/" . $row['code'] . "/course-pic85x85.png")) {
-        $row['course_img'] = "courses/" . $row['code'] . "/course-pic85x85.png";
+    if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['code'] . "/course-pic.png")) {
+        $row['course_img'] = "courses/" . $row['code'] . "/course-pic.png";
     } else {
-        $row['course_img'] = "main/img/without_picture.png";
+        $row['course_img'] = "main/img/session_default.png";
     }
     $row['price'] = number_format($row['price'], 2, '.', ' ');
 

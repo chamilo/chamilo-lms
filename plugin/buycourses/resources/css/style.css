@@ -71,52 +71,53 @@ textarea#message {
 select#lsessions, select#lcourses, select#lexercises, select#status {
     margin-bottom: 0px;
 }
-
-.column_field_filter {
-    padding: 6px 10px 1px 1px;
-    text-align: right;
-}
-
-.height5 {
-    height: 5px;
-}
-
-.margin-left-fifty{
-    margin-left: 50px !important;
-}
-.category_well h4{
-	padding-left: 0;
-}
-.category_well .form-content{
-	padding-left: 1em;
-	padding-right: 1em;
-}
-.category_well .btn{
-	width: 100%;
-	line-height: 30px;
-	font-size: 16px;
-}
-.icon-course .thumbnail{
-	border: none;
-	box-shadow: none;
-}
-.well-course{
-	padding-top: 1em;
-	padding-bottom: 1em;
-	border-bottom: 1px solid #D3E6F0;
-}
-.ui-widget-content .well-course a, .ui-widget-content .well-course a:hover{
-	color: #fff;
-}
-.label-info, .badge-info {
-  background-color: #53a0c6;
-  font-weight: normal;
-}
-.categories-course-description h3 {
-  color: #666;
-  font-weight: bold;
-  font-family: Arial;
-}
 .top-button{
   padding-top: 30px;
+}
+#course_results .items-course{
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  padding-bottom: 20px;
+}
+#course_results .items-course .items-title,
+#course_results .items-course .items-teacher,
+#course_results .items-course .items-status,
+#course_results .items-course .items-price{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+#course_results .items-course .items-teacher{
+  font-size: 12px;
+  color: #666666;
+}
+#course_results .items-course .items-status{
+  font-size: 12px;
+  color: #449D44;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+#course_results .items-course .items-price{
+  text-align: right;
+  font-size: 22px;
+  color: #4D984E;
+  font-weight: bold;
+}
+#course_results .items-course .btn{
+  color: #ffffff;
+}
+#course_results .items-imagen{
+  text-align: center;
+}
+#course_results .items-course .items-title{
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 5px;
+}
+#course_results .items-course .items-button{
+  text-align: center;
+}
+#course_results .items-course a{
+  color: #00829C;
 }

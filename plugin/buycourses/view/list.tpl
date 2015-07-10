@@ -63,35 +63,41 @@ $(function() {
             <div class="items-course">
                 <div class="items-imagen">
                     <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
-                        <img alt="" src="{{ server }}{{ course.course_img }}">
+                        <img alt="" class="img-responsive" src="{{ server }}{{ course.course_img }}">
                     </a>
                 </div>
                 <div class="items-title">
-                    {{ course.title }}
+                    <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
+                        {{ course.title }}
+                    </a>
                 </div>
                 <div class="items-teacher">
-                    {{ 'Teacher'|get_lang }}: {{ course.teacher }}
+                    <i class="fa fa-user"></i> {{ 'Teacher'|get_lang }}: {{ course.teacher }}
                 </div>
                 <div class="items-status">
                     {% if course.enrolled == "YES" %}
-                        <p>{{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+                        {{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}
                     {% endif %}
                     {% if course.enrolled == "TMP" %}
-                        <p>{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+                        {{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}
                     {% endif %}
                 </div>
                 <div class="items-price">
                     {{ course.price }} {{ currency }}
                 </div>
                 <div class="items-button">
-                    <a class="ajax btn btn-primary" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
-                        {{ 'Description'|get_lang }}
-                    </a>
-                    {% if course.enrolled == "NO" %}
-                    <a class="btn btn-success" title="" href="{{ server }}plugin/buycourses/src/process.php?code={{ course.id }}">
-                        {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
-                    </a>
-                    {% endif %}
+                    <div class="btn-group btn-group-sm">
+                        <a class="ajax btn btn-primary" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
+                            <i class="fa fa-file-text"></i> {{ 'Description'|get_lang }}
+                        </a>
+                        {% if course.enrolled == "NO" %}
+                        <a class="btn btn-success" title="" href="{{ server }}plugin/buycourses/src/process.php?code={{ course.id }}">
+                            <i class="fa fa-shopping-cart"></i> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                        </a>
+                        {% endif %}
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -136,10 +142,11 @@ $(function() {
                 {{ responseMessage }}
             </div>
         {% endif %}
+
         {% for session in sessions %}
-            <div class="col-md-8 well-course">
-                <div class="row">
-                    <div class="span4 ">
+            <div class="row">
+
+                    <div class="col-md-12">
                         <div class="categories-course-description">
                             <h3>{{ session.name }}</h3>
                             <h5>{{ 'From'|get_lang }} {{ session.access_start_date }} {{ 'Until'|get_lang }} {{ session.access_end_date }}</h5>
@@ -151,12 +158,12 @@ $(function() {
                             {% endif %}
                         </div>
                     </div>
-                    <div class="span right">
-                        <div class="sprice right">
+                    <div class="col-md-12">
+                        <div class="">
                             {{ session.price }} {{ currency }}
                         </div>
-                        <div class="cleared"></div>
-                        <div class="btn-group right">
+
+                        <div class="btn-group">
                             {% if session.enrolled == "NO" %}
                                 <a class="btn btn-success" title="" href="{{ server }}plugin/buycourses/src/process.php?scode={{ session.session_id }}">
                                     {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -164,9 +171,9 @@ $(function() {
                             {% endif %}
                         </div>
                     </div>
-                </div>
+                <div class="row">
                 {% for course in session.courses %}
-                    <div class="row">
+                    <div class="col-md-3">
                         <div class="span">
                             <div class="thumbnail">
                                 <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
@@ -194,8 +201,10 @@ $(function() {
                                 </a>
                             </div>
                         </div>
-                    </div>
+
                 {% endfor %}
+                    </div>
+
             </div>
         {% endfor %}
     </div>

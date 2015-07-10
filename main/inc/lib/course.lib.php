@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt*/
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use ChamiloSession as Session;
 
 /**
  * Class CourseManager
@@ -5408,5 +5409,65 @@ class CourseManager
         }
 
         return $coursesList;
+    }
+
+    /**
+     * Direct course link see #5299
+     *
+     * You can send to your students an URL like this
+     * http://chamilodev.beeznest.com/main/auth/inscription.php?c=ABC&e=3
+     * Where "c" is the course code and "e" is the exercise Id, after a successful
+     * registration the user will be sent to the course or exercise
+     *
+     */
+    public static function redirectToCourse($form_data)
+    {
+        $course_code_redirect = Session::read('course_redirect');
+        $_user = api_get_user_info();
+        $user_id = api_get_user_id();
+
+        if (!empty($course_code_redirect)) {
+            $course_info = api_get_course_info($course_code_redirect);
+            if (!empty($course_info)) {
+                if (in_array($course_info['visibility'],
+                    array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))
+                ) {
+
+                    if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
+
+                        $form_data['action'] = $course_info['course_public_url'];
+                        $form_data['message'] = sprintf(get_lang('YouHaveBeenRegisteredToCourseX'), $course_info['title']);
+                        $form_data['button'] = Display::button(
+                            'next',
+                            get_lang('GoToCourse', null, $_user['language']),
+                            array('class' => 'btn btn-primary btn-large')
+                        );
+
+                        $exercise_redirect = intval(Session::read('exercise_redirect'));
+                        // Specify the course id as the current context does not
+                        // hold a global $_course array
+                        $objExercise = new Exercise($course_info['real_id']);
+                        $result = $objExercise->read($exercise_redirect);
+
+                        if (!empty($exercise_redirect) && !empty($result)) {
+                            $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
+                            $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
+                            $form_data['button'] = Display::button(
+                                'next',
+                                get_lang('Go', null, $_user['language']),
+                                array('class' => 'btn btn-primary btn-large')
+                            );
+                        }
+
+                        if (!empty($form_data['action'])) {
+                            header('Location: '.$form_data['action']);
+                            exit;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $form_data;
     }
 }

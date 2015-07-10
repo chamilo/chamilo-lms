@@ -14,10 +14,10 @@ api_protect_course_script(true);
 
 require_once 'work.lib.php';
 
-$course_info    = api_get_course_info();
-$course_id      = $course_info['real_id'];
-$user_id 	    = api_get_user_id();
-$id_session     = api_get_session_id();
+$course_info = api_get_course_info();
+$course_id = $course_info['real_id'];
+$user_id = api_get_user_id();
+$id_session = api_get_session_id();
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -79,11 +79,11 @@ if (!empty($group_id)) {
     }
 
     if ($action == 'upload_form') {
-        $interbreadcrumb[] = array('url' => 'work.php','name' => get_lang('UploadADocument'));
+        $interbreadcrumb[] = array('url' => 'work.php?'.api_get_cidreq(),'name' => get_lang('UploadADocument'));
     }
 
     if ($action == 'create_dir') {
-        $interbreadcrumb[] = array('url' => 'work.php','name' => get_lang('CreateAssignment'));
+        $interbreadcrumb[] = array('url' => 'work.php?'.api_get_cidreq(),'name' => get_lang('CreateAssignment'));
     }
 } else {
     if ($origin != 'learnpath') {
@@ -254,6 +254,63 @@ switch ($action) {
             header('Location: '.$currentUrl);
             exit;
         }
+        break;
+    case 'visible':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed();
+        }
+
+        api_item_property_update(
+            $courseInfo,
+            'work',
+            $work_id,
+            'visible',
+            api_get_user_id(),
+            null,
+            null,
+            null,
+            null,
+            $session_id
+        );
+        Display::addFlash(
+            Display::return_message(
+                get_lang('VisibilityChanged'),
+                'confirmation'
+            )
+        );
+
+        header('Location: '.$currentUrl);
+        exit;
+
+        break;
+    case 'invisible':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed();
+        }
+
+        api_item_property_update(
+            $courseInfo,
+            'work',
+            $work_id,
+            'invisible',
+            api_get_user_id(),
+            null,
+            null,
+            null,
+            null,
+            $session_id
+        );
+
+        Display::addFlash(
+            Display::return_message(
+                get_lang('VisibilityChanged'),
+                'confirmation'
+            )
+        );
+
+        header('Location: '.$currentUrl);
+        exit;
+
         break;
     case 'list':
         /*	Display list of student publications */

@@ -1113,17 +1113,17 @@ class CourseManager
      *    Is the user subscribed in the real course or linked courses?
      *
      * @param int the id of the user
-     * @param array info about the course (comes from course table, see database lib)
+     * @param int $courseId
      * @deprecated linked_courses definition doesn't exists
      * @return true if the user is registered in the real course or linked courses, false otherwise
      */
-    public static function is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id = '')
+    public static function is_user_subscribed_in_real_or_linked_course($user_id, $courseId, $session_id = '')
     {
         if ($user_id != strval(intval($user_id))) {
             return false;
         }
 
-        $course_code = Database::escape_string($course_code);
+        $courseId = intval($courseId);
 
         if ($session_id == '') {
             $result = Database::fetch_array(
@@ -1135,7 +1135,7 @@ class CourseManager
                     WHERE
                         course_user.user_id = '$user_id' AND
                         course_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
-                        ( course.code = '$course_code')"
+                        ( course.id = '$courseId')"
                 )
             );
             return !empty($result);
@@ -1160,7 +1160,7 @@ class CourseManager
                 FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
                 WHERE session_id='" . $session_id . "'
                 AND user_id = '$user_id' AND status = 2
-                AND course_code='$course_code'"))
+                AND c_id ='$courseId'"))
         ) {
             return true;
         }

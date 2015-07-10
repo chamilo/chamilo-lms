@@ -31,7 +31,8 @@ if (!empty($workData)) {
     }
 
     $work = get_work_data_by_id($workData['work_id']);
-    allowOnlySubscribedUser(api_get_user_id(), $work['parent_id'], $courseInfo['real_id']);
+
+    protectWork($courseInfo, $work['parent_id']);
 
     if (user_is_author($workData['work_id']) ||
         $courseInfo['show_score'] == 0 &&

@@ -1386,6 +1386,13 @@ function getWorkListStudent(
         if ($isSubscribed == false) {
             continue;
         }
+
+        $visibility = api_get_item_visibility($courseInfo, 'work', $work['id'], $session_id);
+
+        if ($visibility != 1) {
+            continue;
+        }
+
         $work['type'] = Display::return_icon('work.png');
         $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
 
@@ -1409,12 +1416,6 @@ function getWorkListStudent(
         if (!is_null($count) && !empty($count)) {
             $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info');
         }
-
-        /*$score = getTotalWorkScore($workList);
-
-        if (!is_null($score) && !empty($score)) {
-            $work['title'] .= ' '.Display::return_icon('rate_work.png', get_lang('Score'));
-        }*/
 
         $lastWork = getLastWorkStudentFromParentByUser($userId, $work['id'], $courseInfo);
 
@@ -1453,8 +1454,9 @@ function getWorkListTeacher(
     $getCount = false
 ) {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $workTableAssignment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+    $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
+    $courseInfo = api_get_course_info();
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
@@ -1483,7 +1485,8 @@ function getWorkListTeacher(
         }
         $sql = " $select
                 FROM $workTable w
-                LEFT JOIN $workTableAssignment a ON (a.publication_id = w.id AND a.c_id = w.c_id)
+                LEFT JOIN $workTableAssignment a
+                ON (a.publication_id = w.id AND a.c_id = w.c_id)
                 WHERE
                     w.c_id = $course_id
                     $condition_session AND
@@ -1526,10 +1529,29 @@ function getWorkListTeacher(
                 'success'
             );
 
+            $visibility = api_get_item_visibility($courseInfo, 'work', $workId, $session_id);
+
+            if ($visibility == 1) {
+                $icon = 'visible.png';
+                $text = get_lang('Visible');
+                $action = 'invisible';
+                $class = '';
+            } else {
+                $icon = 'invisible.png';
+                $text = get_lang('invisible');
+                $action = 'visible';
+                $class = 'muted';
+            }
+
+            $visibilityLink = Display::url(
+                Display::return_icon($icon, $text, array(), ICON_SIZE_SMALL),
+                api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action='.$action.'&'.api_get_cidreq()
+            );
+
             if (empty($work['title'])) {
                 $work['title'] = basename($work['url']);
             }
-            $work['title'] = Display::url($work['title'], $url.'&id='.$workId);
+            $work['title'] = Display::url($work['title'], $url.'&id='.$workId, ['class' => $class]);
             $work['title'] .= ' '.Display::label(get_count_work($work['id']), 'success');
             $work['sent_date'] = api_get_local_time($work['sent_date']);
 
@@ -1572,7 +1594,7 @@ function getWorkListTeacher(
                 $deleteLink = null;
                 $editLink = null;
             }
-            $work['actions'] = $downloadLink.$editLink.$deleteLink;
+            $work['actions'] = $visibilityLink.$downloadLink.$editLink.$deleteLink;
             $works[] = $work;
         }
     }
@@ -2739,6 +2761,7 @@ function allowOnlySubscribedUser($userId, $workId, $courseId)
     if (api_is_platform_admin() || api_is_allowed_to_edit()) {
         return true;
     }
+
     if (userIsSubscribedToWork($userId, $workId, $courseId) == false) {
         api_not_allowed(true);
     }
@@ -4827,4 +4850,50 @@ function getWorkCreatedByUser($user_id, $courseId, $sessionId)
     }
 
     return $forumList;
+}
+
+/**
+ * @param array $courseInfo
+ * @param int $workId
+ * @return bool
+ */
+function protectWork($courseInfo, $workId)
+{
+    $userId = api_get_user_id();
+    $groupId = api_get_group_id();
+    $sessionId = api_get_session_id();
+    $workData = get_work_data_by_id($workId);
+
+    if (empty($workData) || empty($courseInfo)) {
+        api_not_allowed(true);
+    }
+
+    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        return true;
+    }
+
+    $workId = $workData['id'];
+
+    if ($workData['active'] != 1) {
+        api_not_allowed(true);
+    }
+
+    $visibility = api_get_item_visibility($courseInfo, 'work', $workId, $sessionId);
+
+    if ($visibility != 1) {
+        api_not_allowed(true);
+    }
+
+    allowOnlySubscribedUser($userId, $workId, $courseInfo['real_id']);
+
+    if (!empty($groupId)) {
+        $showWork = GroupManager::user_has_access(
+            $userId,
+            $groupId,
+            GroupManager::GROUP_TOOL_WORK
+        );
+        if (!$showWork) {
+            api_not_allowed(true);
+        }
+    }
 }

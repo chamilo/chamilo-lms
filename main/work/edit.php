@@ -36,7 +36,7 @@ if (empty($parent_data)) {
 
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
     $user_id,
-    $course_code,
+    $course_id,
     $session_id
 );
 

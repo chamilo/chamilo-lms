@@ -92,8 +92,7 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
 
 } else {
     $courseInfo = api_get_course_info();
-
-    allowOnlySubscribedUser(api_get_user_id(), $work_id, $courseInfo['real_id']);
+    protectWork($courseInfo, $work_id);
 
     $userCondition = null;
 

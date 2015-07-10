@@ -4,12 +4,15 @@
 // The file that contains all the initialisation stuff (and includes all the configuration stuff)
 require_once 'dropbox_init.inc.php';
 
+$last_access = '';
 // get the last time the user accessed the tool
 if (isset($_SESSION[$_course['id']]) && $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] == '') {
 	$last_access = get_last_tool_access(TOOL_DROPBOX);
 	$_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] = $last_access;
 } else {
-	$last_access = $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX];
+	if (isset($_SESSION[$_course['id']])) {
+		$last_access = $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX];
+	}
 }
 
 $postAction = isset($_POST['action']) ? $_POST['action'] : null;
@@ -42,16 +45,19 @@ if (isset($_GET['dropbox_direction'])) {
 }
 
 $sort_params = Security::remove_XSS(implode('&', $sort_params));
-
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-/*	ACTIONS: add a dropbox file, add a dropbox category. */
 
 // Display the form for adding a new dropbox item.
 if ($action == 'add') {
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
-	display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategory, $view);
+    display_add_form(
+        $dropbox_unid,
+        $viewReceivedCategory,
+        $viewSentCategory,
+        $view
+    );
 }
 
 if (isset($_POST['submitWork'])) {

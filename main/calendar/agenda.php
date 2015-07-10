@@ -115,7 +115,7 @@ if (api_is_allowed_to_edit(false, true) ||
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
-                $eventId = $agenda->add_event(
+                $eventId = $agenda->addEvent(
                     $startDate,
                     $endDate,
                     $allDay,

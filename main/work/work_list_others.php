@@ -31,7 +31,7 @@ if ($courseInfo['show_score'] == 1) {
     api_not_allowed(true);
 }
 
-allowOnlySubscribedUser(api_get_user_id(), $workId, $courseInfo['real_id']);
+protectWork($courseInfo, $workId);
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 

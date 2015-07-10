@@ -32,6 +32,9 @@ $entityManager = Database::getManager();
 $fieldsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
 $fieldTagsRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
 $userRepo = $entityManager->getRepository('ChamiloUserBundle:User');
+$sequenceResourceRepo = $entityManager->getRepository(
+    'ChamiloCoreBundle:SequenceResource'
+);
 
 $tagField = $fieldsRepo->findOneBy([
     'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,
@@ -110,6 +113,13 @@ $sessionDates = SessionManager::parseSessionDates([
     'coach_access_end_date' => $session->getCoachAccessEndDate()
 ]);
 
+$sessionRequirements = $sequenceResourceRepo->getRequirements(
+    $session->getId(),
+    \Chamilo\CoreBundle\Entity\SequenceResource::SESSION_TYPE
+);
+
+$courseController = new CoursesController();
+
 /* View */
 $template = new Template($session->getName(), true, true, false, true, false);
 $template->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
@@ -121,6 +131,14 @@ $template->assign(
     SessionManager::isUserSubscribedAsStudent(
         $session->getId(),
         api_get_user_id()
+    )
+);
+$template->assign(
+    'subscribe_button',
+    $courseController->getRegisteredInSessionButton(
+        $session->getId(),
+        $session->getName(),
+        !empty($sessionRequirements)
     )
 );
 

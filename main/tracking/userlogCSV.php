@@ -50,7 +50,7 @@ $nameTools = get_lang('ToolName');
 $is_allowedToTrack = $is_courseAdmin;
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
     $user_id,
-    $course_id
+    $courseId
 );
 
 // Database Table Definitions

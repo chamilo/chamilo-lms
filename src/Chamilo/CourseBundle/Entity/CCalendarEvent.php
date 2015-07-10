@@ -35,6 +35,7 @@ class CCalendarEvent
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
+
     /**
      * @var string
      *
@@ -90,6 +91,13 @@ class CCalendarEvent
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="color", type="string", length=100, nullable=true)
+     */
+    private $color;
 
     /**
      * @var Room
@@ -345,5 +353,24 @@ class CCalendarEvent
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     *
+     * @return $this
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
 
 }

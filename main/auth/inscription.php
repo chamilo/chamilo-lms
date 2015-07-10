@@ -83,7 +83,7 @@ if ($user_already_registered_show_terms == false) {
     if (api_get_setting('openid_authentication') == 'true') {
         $form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
     }
-    // Enabled by Ivan Tcholakov, 06-APR-2009. CONFVAL_ASK_FOR_OFFICIAL_CODE = false by default.
+
     // OFFICIAL CODE
     if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
         $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
@@ -133,13 +133,6 @@ if ($user_already_registered_show_terms == false) {
     if (api_get_setting('registration', 'phone') == 'true') {
         $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
     }
-
-    // PICTURE
-    /*if (api_get_setting('profile', 'picture') == 'true') {
-        $form->addElement('file', 'picture', get_lang('AddPicture'));
-        $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-        $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-    }*/
 
     // LANGUAGE
     if (api_get_setting('registration', 'language') == 'true') {
@@ -364,16 +357,17 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 
 $form->addButtonCreate(get_lang('RegisterUser'));
 
+$course_code_redirect = Session::read('course_redirect');
+
 if ($form->validate()) {
     $values = $form->getSubmitValues(1);
-    //make *sure* the login isn't too long
+    // Make *sure* the login isn't too long
     $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH);
 
     if (api_get_setting('allow_registration_as_teacher') == 'false') {
         $values['status'] = STUDENT;
     }
 
-    // Added by Ivan Tcholakov, 06-MAR-2008.
     if (empty($values['official_code'])) {
         $values['official_code'] = api_strtoupper($values['username']);
     }
@@ -458,30 +452,42 @@ if ($form->validate()) {
         if ($user_id) {
             // Storing the extended profile
             $store_extended = false;
+
             $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
-            if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
+
+            if (api_get_setting('extended_profile') == 'true' &&
+                api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
+            ) {
                 $sql_set[] = "competences = '".Database::escape_string($values['competences'])."'";
                 $store_extended = true;
             }
-            if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true') {
+
+            if (api_get_setting('extended_profile') == 'true' &&
+                api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
+            ) {
                 $sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
                 $store_extended = true;
             }
-            if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'myteach') == 'true') {
+
+            if (api_get_setting('extended_profile') == 'true' &&
+                api_get_setting('extendedprofile_registration', 'myteach') == 'true'
+            ) {
                 $sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
                 $store_extended = true;
             }
-            if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true') {
+
+            if (api_get_setting('extended_profile') == 'true' &&
+                api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
+            ) {
                 $sql_set[] = "openarea = '".Database::escape_string($values['openarea'])."'";
                 $store_extended = true;
             }
+
             if ($store_extended) {
                 $sql .= implode(',', $sql_set);
                 $sql .= " WHERE user_id = ".intval($user_id)."";
                 Database::query($sql);
             }
-
-            $course_code_redirect = Session::read('course_redirect');
 
             // Saving user to course if it was set.
             if (!empty($course_code_redirect)) {
@@ -553,7 +559,7 @@ if ($form->validate()) {
                 // 3. exit the page
                 unset($user_id);
 
-                Display :: display_header($tool_name);
+                Display::display_header($tool_name);
                 echo Display::page_header($tool_name);
                 echo $content;
                 Display::display_footer();
@@ -584,7 +590,7 @@ if ($form->validate()) {
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
     $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;
-    $usersCanCreateCourse = (api_get_setting('allow_users_to_create_courses') == 'true');
+    $usersCanCreateCourse = api_get_setting('allow_users_to_create_courses') == 'true';
 
     Session::write('_user', $_user);
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
@@ -596,8 +602,11 @@ if ($form->validate()) {
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
     Session::write('user_last_login_datetime', $user_last_login_datetime);
     $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
-
-    $text_after_registration = '<p>'.get_lang('Dear', null, $_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>";
+    $text_after_registration =
+        '<p>'.
+        get_lang('Dear', null, $_user['language']).' '.
+        stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.
+        get_lang('PersonalSettings',null,$_user['language']).".</p>";
 
     $form_data = array(
         'button' => Display::button('next', get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')),
@@ -609,8 +618,8 @@ if ($form->validate()) {
         $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
     } else {
 
-        if (!empty ($values['email'])) {
-            $text_after_registration.= '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
+        if (!empty($values['email'])) {
+            $text_after_registration.= '<p>'.get_lang('MailHasBeenSent', null, $_user['language']).'.</p>';
         }
 
         if ($is_allowedCreateCourse) {
@@ -620,83 +629,49 @@ if ($form->validate()) {
             $form_data['action']  = '../create_course/add_course.php';
 
             if (api_get_setting('course_validation') == 'true') {
-                $form_data['button'] = Display::button('next', get_lang('CreateCourseRequest', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
+                $form_data['button'] = Display::button(
+                    'next',
+                    get_lang('CreateCourseRequest', null, $_user['language']),
+                    array('class' => 'btn btn-primary btn-large')
+                );
             } else {
-                $form_data['button'] = Display::button('next', get_lang('CourseCreate', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
-                $form_data['go_button'] = '&nbsp;&nbsp;<a href="'.api_get_path(WEB_PATH).'index.php'.'">'.Display::span(get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')).'</a>';
+                $form_data['button'] = Display::button(
+                    'next',
+                    get_lang('CourseCreate', null, $_user['language']),
+                    array('class' => 'btn btn-primary btn-large')
+                );
+                $form_data['go_button'] = '&nbsp;&nbsp;<a href="'.api_get_path(WEB_PATH).'index.php'.'">'.
+                    Display::span(get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')).'</a>';
             }
         } else {
             if (api_get_setting('allow_students_to_browse_courses') == 'true') {
-                $form_data['action']    = 'courses.php?action=subscribe';
-                $form_data['message']   = '<p>'. get_lang('NowGoChooseYourCourses', null, $_user['language']). ".</p>";
+                $form_data['action'] = 'courses.php?action=subscribe';
+                $form_data['message'] = '<p>'. get_lang('NowGoChooseYourCourses', null, $_user['language']). ".</p>";
             } else {
-                $form_data['action']  = api_get_path(WEB_PATH).'user_portal.php';
+                $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
             }
-            $form_data['button'] = Display::button('next', get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
+            $form_data['button'] = Display::button(
+                'next',
+                get_lang('Next', null, $_user['language']),
+                array('class' => 'btn btn-primary btn-large')
+            );
         }
     }
 
-    /*
-     * Direct course link see #5299
-     *
-     * You can send to your students an URL like this
-     * http://chamilodev.beeznest.com/main/auth/inscription.php?c=ABC&e=3
-     * Where "c" is the course code and "e" is the exercise Id, after a successful
-     * registration the user will be sent to the course or exercise
-     *
-     */
-    $course_code_redirect = Session::read('course_redirect');
-
-    if (!empty($course_code_redirect)) {
-        $course_info = api_get_course_info($course_code_redirect);
-        if (!empty($course_info)) {
-            if (in_array($course_info['visibility'], array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))) {
-                $user_id = api_get_user_id();
-                if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
-
-                    $form_data['action'] = $course_info['course_public_url'];
-                    $form_data['message'] = sprintf(get_lang('YouHaveBeenRegisteredToCourseX'), $course_info['title']);
-                    $form_data['button'] = Display::button(
-                        'next',
-                        get_lang('GoToCourse', null, $_user['language']),
-                        array('class' => 'btn btn-primary btn-large')
-                    );
-
-                    $exercise_redirect = intval(Session::read('exercise_redirect'));
-                    // Specifiy course ID as the current context does not
-                    // hold a global $_course array
-                    $objExercise = new Exercise($course_info['real_id']);
-                    $result = $objExercise->read($exercise_redirect);
-
-                    if (!empty($exercise_redirect) && !empty($result)) {
-                        $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
-                        $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
-                        $form_data['button'] = Display::button(
-                            'next',
-                            get_lang('Go', null, $_user['language']),
-                            array('class' => 'btn btn-primary btn-large')
-                        );
-                    }
-
-                    if (!empty($form_data['action'])) {
-                        header('Location: '.$form_data['action']);
-                        exit;
-                    }
-                }
-            }
-        }
-    }
+    $form_data = CourseManager::redirectToCourse($form_data);
 
     $form_register = new FormValidator('form_register', 'post', $form_data['action']);
     if (!empty($form_data['message'])) {
         $form_register->addElement('html', $form_data['message'].'<br /><br />');
     }
+
     if ($usersCanCreateCourse) {
         $form_register->addElement('html', $form_data['button']);
     } else {
         $form_register->addElement('html', $form_data['go_button']);
     }
-    $text_after_registration .= $form_register->return_form();
+
+    $text_after_registration .= $form_register->returnForm();
 
     // Just in case
     Session::erase('course_redirect');
@@ -719,10 +694,35 @@ if ($form->validate()) {
     if (CustomPages::enabled()) {
         CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
     } else {
+
+        if (!api_is_anonymous()) {
+            // Saving user to course if it was set.
+            if (!empty($course_code_redirect)) {
+                $course_info = api_get_course_info($course_code_redirect);
+                if (!empty($course_info)) {
+                    if (in_array(
+                        $course_info['visibility'],
+                        array(
+                            COURSE_VISIBILITY_OPEN_PLATFORM,
+                            COURSE_VISIBILITY_OPEN_WORLD
+                        )
+                    )
+                    ) {
+                        CourseManager::subscribe_user(
+                            $user_id,
+                            $course_info['code']
+                        );
+                    }
+                }
+            }
+            CourseManager::redirectToCourse([]);
+        }
+
         Display :: display_header($tool_name);
         echo Display::page_header($tool_name);
         echo $content;
         $form->display();
+
         Display :: display_footer();
     }
 }

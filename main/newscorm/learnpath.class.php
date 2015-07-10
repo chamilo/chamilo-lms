@@ -6495,7 +6495,6 @@ class learnpath
 
         // Get all the docs.
         $documents = $this->get_documents(true);
-
         // Get all the exercises.
         $exercises = $this->get_exercises();
 

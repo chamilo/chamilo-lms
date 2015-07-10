@@ -533,9 +533,15 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
         }
     } else {
         if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
-            $complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], api_get_session_id());
+            $complete_user_list_for_dropbox = CourseManager::get_user_list_from_course_code(
+                $course_info['code'],
+                api_get_session_id()
+            );
         } else {
-            $complete_user_list_for_dropbox = CourseManager :: get_teacher_list_from_course_code($course_info['code'], false);
+            $complete_user_list_for_dropbox = CourseManager::get_teacher_list_from_course_code(
+                $course_info['code'],
+                false
+            );
         }
     }
 
@@ -553,6 +559,7 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
 
     $current_user_id = '';
     $options = array();
+    $userGroup = new UserGroup();
     foreach ($complete_user_list_for_dropbox as $current_user) {
         if (($dropbox_person -> isCourseTutor
                 || $dropbox_person -> isCourseAdmin
@@ -563,13 +570,21 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
             if ($current_user['user_id'] == $current_user_id) {
                 continue;
             }
-            $full_name = $current_user['lastcommafirst'];
+            $userId = $current_user['user_id'];
+            $userInfo = api_get_user_info($userId);
+
+            $groupNameListToString = '';
+            if (!empty($groups)) {
+                $groupNameList = array_column($groups, 'name');
+                $groupNameListToString = ' - ['.implode(', ', $groupNameList).']';
+            }
+            $groups = $userGroup->getUserGroupListByUser($userId);
+
+            $full_name = $userInfo['complete_name'].$groupNameListToString;
             $current_user_id = $current_user['user_id'];
             $options['user_' . $current_user_id] = $full_name;
-            //echo '<option value="user_' . $current_user_id . '">' . $full_name . '</option>';
         }
     }
-
 
     /*
     * Show groups
@@ -581,7 +596,6 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
         if (count($complete_group_list_for_dropbox) > 0) {
             foreach ($complete_group_list_for_dropbox as $current_group) {
                 if ($current_group['number_of_members'] > 0) {
-                    //echo '<option value="group_'.$current_group['id'].'">G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users').'</option>';
                     $options['group_'.$current_group['id']] = 'G: '.$current_group['name'].' - '.$current_group['number_of_members'].' '.get_lang('Users');
                 }
             }
@@ -589,13 +603,20 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     }
 
     if (dropbox_cnf('allowJustUpload')) {
-        //echo '<option value="upload">'.get_lang('JustUploadInSelect').'</option>';
-        //echo '<option value="user_'.$_user['user_id'].'">'.get_lang('JustUploadInSelect').'</option>';
         $options['user_'.$_user['user_id']] = get_lang('JustUploadInSelect');
     }
 
-    $form->addElement('select', 'recipients', get_lang('SendTo'), $options, array('multiple' => 'multiple', 'size' => '10', 'class' => 'span4'));
-    $form->addElement('button', 'submitWork', get_lang('Upload'),'paper-plane','btn btn-success');
+    $form->addSelect(
+        'recipients',
+        get_lang('SendTo'),
+        $options,
+        array(
+            'multiple' => 'multiple',
+            'size' => '10',
+            'class' => 'chzn-select',
+        )
+    );
+    $form->addButtonUpload(get_lang('Upload'), 'submitWork');
     $form->display();
 }
 
@@ -1003,27 +1024,32 @@ function user_can_download_file($id, $user_id) {
     $id = intval($id);
     $user_id = intval($user_id);
 
-    $sql = "SELECT file_id FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id = $user_id AND file_id = ".$id;
+    $sql = "SELECT file_id FROM ".$dropbox_cnf['tbl_person']."
+            WHERE c_id = $course_id AND user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."  WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
+    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."
+            WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $count = Database::num_rows($result);
     return $number_users_who_see_file > 0 || $count > 0;
 }
 
-// we now check if the other users have not delete this document yet. If this is the case then it is useless to see the
+// we now check if the other users have not delete this document yet.
+// If this is the case then it is useless to see the
 // add feedback since the other users will never get to see the feedback.
 function check_if_file_exist($id) {
     $dropbox_cnf = getDropboxConf();
     $id = intval($id);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT file_id FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND file_id = ".$id;
+    $sql = "SELECT file_id FROM ".$dropbox_cnf['tbl_person']."
+            WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."  WHERE c_id = $course_id AND file_id = ".$id;
+    $sql = "SELECT file_id FROM ".$dropbox_cnf["tbl_post"]."
+            WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $count = Database::num_rows($result);
     return $number_users_who_see_file > 0 || $count > 0;

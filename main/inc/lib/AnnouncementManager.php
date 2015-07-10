@@ -564,7 +564,11 @@ class AnnouncementManager
 
         // save attachment file
         $row_attach = self::get_attachment($id);
-        $id_attach = intval($row_attach['id']);
+
+        $id_attach = 0;
+        if ($row_attach) {
+            $id_attach = intval($row_attach['id']);
+        }
 
         if (!empty($file)) {
             if (empty($id_attach)) {
@@ -1324,11 +1328,12 @@ class AnnouncementManager
     /**
      * @param int $id
      * @param bool $sendToUsersInSession
+     * @param bool $sendToDrhUsers
      */
-    public static function send_email($id, $sendToUsersInSession = false)
+    public static function send_email($id, $sendToUsersInSession = false, $sendToDrhUsers = false)
     {
         $email = AnnouncementEmail::create(null, $id);
-        $email->send($sendToUsersInSession);
+        $email->send($sendToUsersInSession, $sendToDrhUsers);
     }
 
     /**

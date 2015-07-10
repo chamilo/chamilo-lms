@@ -1847,7 +1847,7 @@ function api_format_course_array($course_data)
     $_course['department_name'] = $course_data['department_name'];
     $_course['department_url'] = $course_data['department_url'];
 
-    //Course password
+    // Course password
     $_course['registration_code'] = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota'] = $course_data['disk_quota'];
     $_course['course_public_url'] = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';

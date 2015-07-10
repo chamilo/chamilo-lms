@@ -291,8 +291,10 @@ class AnnouncementEmail
     /**
      * Send emails to users.
      * @param bool $sendToUsersInSession
+     * @param bool $sendToDrhUsers send a copy of the message to the DRH users
+     * related to the main user
      */
-    public function send($sendToUsersInSession = false)
+    public function send($sendToUsersInSession = false, $sendToDrhUsers = false)
     {
         $sender = $this->sender();
         $subject = $this->subject();
@@ -306,7 +308,8 @@ class AnnouncementEmail
                 $user['user_id'],
                 $subject,
                 $message,
-                $sender['user_id']
+                $sender['user_id'],
+                $sendToDrhUsers
             );
         }
 

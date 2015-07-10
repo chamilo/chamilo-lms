@@ -1608,6 +1608,7 @@ class Exercise
 
         // if we want to delete attempts before date $cleanResultBeforeDate
         // $cleanResultBeforeDate must be a valid UTC-0 date yyyy-mm-dd
+
         if (!empty($cleanResultBeforeDate)) {
             $cleanResultBeforeDate = Database::escape_string($cleanResultBeforeDate);
             if (api_is_valid_date($cleanResultBeforeDate)) {
@@ -1633,7 +1634,8 @@ class Exercise
         $i = 0;
         if (is_array($exe_list) && count($exe_list) > 0) {
             foreach ($exe_list as $item) {
-                $sql = "DELETE FROM $table_track_e_attempt WHERE exe_id = '".$item['exe_id']."'";
+                $sql = "DELETE FROM $table_track_e_attempt
+                        WHERE exe_id = '".$item['exe_id']."'";
                 Database::query($sql);
                 $i++;
             }
@@ -1901,6 +1903,9 @@ class Exercise
 
     /**
      * So the time control will work
+     *
+     * @param string $time_left
+     * @return string
      */
     public function show_time_control_js($time_left)
     {
@@ -2545,9 +2550,12 @@ class Exercise
                             $resfill = Database::query($queryfill);
                             $str = Database::result($resfill, 0, 'answer');
 
+
                             api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
                             $str = str_replace('\r\n', '', $str);
+
                             $choice = $arr[1];
+
 
                             if (isset($choice[$j])) {
                                 $tmp = api_strrpos($choice[$j], ' / ');
@@ -2559,14 +2567,15 @@ class Exercise
                             } else {
                                 $choice[$j] = null;
                             }
+
                         } else {
 							// This value is the user input, not escaped while correct answer is escaped by fckeditor
-
-							$choice[$j] = api_htmlentities(trim($choice[$j]));
-
+							// Works with cyrillic alphabet and when using ">" chars
+                            $choice[$j] = htmlentities(api_utf8_encode(trim($choice[$j])));
                         }
 
                         $user_tags[] = $choice[$j];
+
                         //put the contents of the [] answer tag into correct_tags[]
                         $correct_tags[] = api_substr($temp, 0, $pos);
                         $j++;
@@ -2623,7 +2632,7 @@ class Exercise
                         // adds the correct word, followed by ] to close the blank
                         $answer .= ' / <font color="green"><b>' . $real_correct_tags[$i] . '</b></font>]';
                         if (isset($real_text[$i +1])) {
-                            $answer .= $real_text[$i +1];
+                            $answer .= $real_text[$i + 1];
                         }
                     }
                     break;
@@ -3274,12 +3283,12 @@ class Exercise
                     if ($debug) error_log('Showing questions $from '.$from);
 
                     switch ($answerType) {
-                        case UNIQUE_ANSWER :
+                        case UNIQUE_ANSWER:
                         case UNIQUE_ANSWER_IMAGE:
                         case UNIQUE_ANSWER_NO_OPTION:
-                        case MULTIPLE_ANSWER :
+                        case MULTIPLE_ANSWER:
                         case GLOBAL_MULTIPLE_ANSWER :
-                        case MULTIPLE_ANSWER_COMBINATION :
+                        case MULTIPLE_ANSWER_COMBINATION:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
                                     $feedback_type,

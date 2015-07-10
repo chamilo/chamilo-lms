@@ -244,22 +244,6 @@ class TestWork extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	/**
-	 * Checks if the first given directory exists as a subdir of the second given directory
-	 * This function should now be deprecated by Security::check_abs_path()
-	 * @param	string	Subdir
-	 * @param	string	Base dir
-	 * @return	integer	-1 on error, 0 if not subdir, 1 if subdir
-	 */
-
-	function testis_subdir_of() {
-		$path_name = api_get_path(SYS_COURSE_PATH);
-		$subdir=$path_name.'work/testing';
-		$basedir=$path_name;
-		$res=is_subdir_of($subdir,$basedir);
-		$this->assertTrue(is_numeric($res));
-		//var_dump($res);
-	}
 
 	/**
 	* returns all the javascript that is required for easily

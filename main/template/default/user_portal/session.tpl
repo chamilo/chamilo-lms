@@ -3,17 +3,17 @@
         <div class="panel-heading">
             {% if session.show_link_to_session %}
                 <a href="{{ _p.web_main ~ 'session/index.php?session_id=' ~ session.id }}">
-                    <img id="session_img_{{ session.id }}" src="{{ "window_list.png"|icon(32) }}" alt="{{ session.title }}" title="{{ session.title }}">
+                    <img id="session_img_{{ session.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32" alt="{{ session.title }}" title="{{ session.title }}">
                     {{ session.title }}
                 </a>
             {% else %}
-                <img id="session_img_{{ session.id }}" src="{{ "window_list.png"|icon(32) }}" alt="{{ session.title }}" title="{{ session.title }}">
+                <img id="session_img_{{ session.id }}" src="{{ "window_list.png"|icon(32) }}" width="32" height="32" alt="{{ session.title }}" title="{{ session.title }}">
                 {{ session.title }}
             {% endif %}
             {% if session.show_actions %}
                 <div class="pull-right">
                     <a href="{{ _p.web_main ~ "session/resume_session.php?id_session=" ~ session.id }}">
-                        <img src="{{ "edit.png"|icon(22) }}" alt="{{ "Edit"|get_lang }}" title="{{ "Edit"|get_lang }}">
+                        <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}" title="{{ "Edit"|get_lang }}">
                     </a>
                 </div>
             {% endif %}
@@ -50,7 +50,7 @@
                 {% if session.show_actions %}
                     <div class="col-md-5 text-right">
                         <a href="{{ _p.web_main ~ "session/resume_session.php?id_session=" ~ session.id }}">
-                            <img src="{{ "edit.png"|icon(22) }}" alt="{{ "Edit"|get_lang }}" title="{{ "Edit"|get_lang }}">
+                            <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}" title="{{ "Edit"|get_lang }}">
                         </a>
                     </div>
                 {% endif %}
@@ -82,7 +82,7 @@
                                     {{ item.title }}
 
                                     {% if item.coaches|length > 0 %}
-                                        <img src="{{ 'teacher.png'|icon(16) }}">
+                                        <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">
 
                                         {% for coach in item.coaches %}
                                             {{ loop.index > 1 ? ' | ' }}

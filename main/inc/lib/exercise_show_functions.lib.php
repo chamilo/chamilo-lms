@@ -27,13 +27,13 @@ class ExerciseShowFunctions
 	static function display_fill_in_blanks_answer($feedback_type, $answer, $id, $questionId)
     {
         if (empty($id)) {
-            echo '<tr><td>'. (Security::remove_XSS($answer)).'</td></tr>';
+            echo '<tr><td>'. Security::remove_XSS($answer).'</td></tr>';
         } else {
 		?>
 			<tr>
                 <td>
                     <?php
-                    echo (Security::remove_XSS($answer));
+                    echo Security::remove_XSS($answer);
                     ?>
                 </td>
 

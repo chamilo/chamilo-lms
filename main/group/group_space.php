@@ -101,20 +101,12 @@ if (isset($_GET['action'])) {
 
 /*	Main Display Area */
 
-$course_code = api_get_course_id();
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
-    api_get_user_id(),
-    $course_code
-);
-
-// Edit the group.
-
 $edit_url = '';
-if (api_is_allowed_to_edit(false, true) or
+if (api_is_allowed_to_edit(false, true) ||
     GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
 ) {
     $my_origin = isset($origin) ? $origin : '';
-    $edit_url =  '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?cidReq='.api_get_course_id().'&origin='.$my_origin.'&gidReq='.api_get_group_id().'">'.
+    $edit_url =  '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'&origin='.$my_origin.'">'.
         Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
 }
 

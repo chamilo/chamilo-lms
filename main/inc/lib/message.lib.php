@@ -356,15 +356,22 @@ class MessageManager
     }
 
     /**
-     * A handy way to send message
+     * @param int $receiver_user_id
+     * @param int $subject
+     * @param string $message
+     * @param int $sender_id
+     * @param int $sendCopyToDrhUsers send copy to related DRH users
+     *
+     * @return bool
      */
     public static function send_message_simple(
         $receiver_user_id,
         $subject,
         $message,
-        $sender_id = null
+        $sender_id = null,
+        $sendCopyToDrhUsers = false
     ) {
-        return MessageManager::send_message(
+        $result = MessageManager::send_message(
             $receiver_user_id,
             $subject,
             $message,
@@ -376,6 +383,31 @@ class MessageManager
             null,
             $sender_id
         );
+
+        if ($sendCopyToDrhUsers) {
+
+            $userInfo = api_get_user_info($receiver_user_id);
+            $drhList = UserManager::getDrhListFromUser($receiver_user_id);
+            if (!empty($drhList)) {
+                foreach ($drhList as $drhInfo) {
+                    $message = sprintf(
+                            get_lang('CopyOfOriginalMessageSentToX'),
+                            $userInfo['complete_name']
+                        ).' <br />'.$message;
+
+                    MessageManager::send_message_simple(
+                        $drhInfo['user_id'],
+                        $subject,
+                        $message,
+                        $sender_id
+                    );
+                }
+            }
+
+
+        }
+
+        return $result;
     }
 
     /**

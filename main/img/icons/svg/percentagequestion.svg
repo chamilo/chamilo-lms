@@ -14,7 +14,7 @@
    height="124"
    id="svg7613"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="percentagequestion.svg">
   <defs
      id="defs7615">
@@ -67,15 +67,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.5062374"
-     inkscape:cx="197.27395"
-     inkscape:cy="-40.944736"
+     inkscape:zoom="2.2198802"
+     inkscape:cx="249.23775"
+     inkscape:cy="5.7444916"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="percentagequestion"
      showgrid="false"
-     inkscape:window-width="1871"
+     inkscape:window-width="1855"
      inkscape:window-height="1056"
-     inkscape:window-x="1415"
+     inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
@@ -86,7 +86,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -134,11 +134,11 @@
          sodipodi:linespacing="125%"
          id="text6846"
          y="1006.547"
-         x="36.784214"
-         style="font-size:64.18797302px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#006192;fill-opacity:1;stroke:none;font-family:Freeroad;-inkscape-font-specification:Freeroad"
+         x="30.784214"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64.18797302px;line-height:125%;font-family:Freeroad;-inkscape-font-specification:Freeroad;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#006192;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
            y="1006.547"
-           x="36.784214"
+           x="30.784214"
            id="tspan6848"
            sodipodi:role="line">%</tspan></text>
     </g>

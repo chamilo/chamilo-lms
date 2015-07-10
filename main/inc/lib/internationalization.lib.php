@@ -144,7 +144,7 @@ function get_lang($variable, $reserved = null, $language = null) {
     // - from a global variable (the faster way) - on production server mode;
     // - from a local variable after reloading the language files - on test server mode or when requested language
     // is different than the genuine interface language.
-    $read_global_variables = $is_interface_language && !$test_server_mode;
+    $read_global_variables = $is_interface_language;
 
     if ($read_global_variables) {
         if (isset($GLOBALS[$variable])) {
@@ -155,13 +155,13 @@ function get_lang($variable, $reserved = null, $language = null) {
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
         }
     } else {
-        if (isset($$variable)) {
+        /*if (isset($$variable)) {
             $langvar = $$variable;
         } elseif (isset(${"lang$variable"})) {
             $langvar = ${"lang$variable"};
         } else {
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
-        }
+        }*/
     }
     if (empty($langvar) || !is_string($langvar)) {
         $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;

@@ -19,9 +19,11 @@ table td.ta-center, table th.ta-center {
 
 #courses_table td, #transfer_table td, #order_table td {
     vertical-align: middle;
+    font-size: 12px;
+  padding: 5px;
 }
 
-#courses_table td input.price, #transfer_table td input, #currency_type {
+#courses_table td input.price, #transfer_table td input, #currency_tfoype {
     margin: 0;
 }
 

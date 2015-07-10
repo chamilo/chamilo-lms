@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	@package chamilo.admin
-* 	@todo use formvalidator
+* @package chamilo.admin
+* @todo use formvalidator
 */
 // resetting the course id
 $cidReset = true;
@@ -93,7 +93,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
     if ($categoryId != 0 && count($sessionCategoryList) > 0) {
         // Removing all
-        $sql = "UPDATE $tbl_session SET session_category_id = '' WHERE session_category_id = $categoryId";
+        $sql = "UPDATE $tbl_session SET session_category_id = NULL WHERE session_category_id = $categoryId";
         Database::query($sql);
         // Adding new
         $sessionCategoryList = array_map('intval', $sessionCategoryList);
@@ -129,7 +129,7 @@ $where = '';
 $rows_category_session = array();
 if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category'])) {
 
-    $where = 'WHERE session_category_id !=' . $categoryId;
+    $where = 'WHERE session_category_id != ' . $categoryId .' OR session_category_id IS NULL';
     $sql = 'SELECT id, name  FROM ' . $tbl_session . ' WHERE session_category_id =' . $categoryId . ' ORDER BY name';
     $result = Database::query($sql);
     $rows_category_session = Database::store_result($result);
@@ -230,11 +230,11 @@ if (!empty($OkMsg)) {
   </td>
   <td width="10%" valign="middle" align="center">
       <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
-        <i class="fa fa-arrow-left"></i>
+        <i class="fa fa-arrow-right"></i>
     </button>
     <br /><br />
     <button class="btn  btn-default" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-        <i class="fa fa-arrow-right"></i>
+        <i class="fa fa-arrow-left"></i>
     </button>
     <br /><br /><br /><br /><br /><br />
     <?php

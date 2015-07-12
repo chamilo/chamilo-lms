@@ -77,7 +77,7 @@ if (!empty($hook)) {
 
 /* Users */
 
-$blocks['users']['icon'] = Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_SMALL, false);
+$blocks['users']['icon'] = Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_MEDIUM, false);
 $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 $blocks['users']['class'] = 'block-admin-users';
 
@@ -262,7 +262,7 @@ $blocks['sessions']['icon'] = Display::return_icon(
     'session.png',
     get_lang('Sessions'),
     array(),
-    ICON_SIZE_SMALL,
+    ICON_SIZE_MEDIUM,
     false
 );
 $blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
@@ -329,7 +329,7 @@ if (api_is_platform_admin()) {
         'settings.png',
         get_lang('System'),
         array(),
-        ICON_SIZE_SMALL,
+        ICON_SIZE_MEDIUM,
         false
     );
     $blocks['settings']['label'] = api_ucfirst(get_lang('System'));
@@ -376,7 +376,7 @@ if (api_is_platform_admin()) {
             'logo.png',
             get_lang('Skills'),
             array(),
-            ICON_SIZE_SMALL,
+            ICON_SIZE_MEDIUM,
             false
         );
         $blocks['skills']['label'] = get_lang('Skills');
@@ -404,7 +404,7 @@ if (api_is_platform_admin()) {
 
     /* Chamilo.org */
 
-    $blocks['chamilo']['icon'] = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
+    $blocks['chamilo']['icon'] = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_MEDIUM, false);
     $blocks['chamilo']['label'] = 'Chamilo.org';
     $blocks['chamilo']['class'] = 'block-admin-chamilo';
 
@@ -428,7 +428,7 @@ if (api_is_platform_admin()) {
     $blocks['chamilo']['search_form'] = null;
 
     // Version check
-    $blocks['version_check']['icon'] = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
+    $blocks['version_check']['icon'] = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_MEDIUM, false);
     $blocks['version_check']['label'] = get_lang('VersionCheck');
     $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;

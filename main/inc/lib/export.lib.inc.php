@@ -8,6 +8,14 @@ use Ddeboer\DataImport\Workflow;
 use Ddeboer\DataImport\Reader\CsvReader;
 use Ddeboer\DataImport\Reader\ArrayReader;
 use Ddeboer\DataImport\Writer\ArrayWriter;
+use Chamilo\CoreBundle\Component\Editor\Connector;
+use Chamilo\CoreBundle\Component\Filesystem\Data;
+use ChamiloSession as Session;
+use MediaAlchemyst\Alchemyst;
+use MediaAlchemyst\DriversContainer;
+use Neutron\TemporaryFilesystem\Manager;
+use Neutron\TemporaryFilesystem\TemporaryFilesystem;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  *  This is the export library for Chamilo.
@@ -253,4 +261,69 @@ class Export
         $table_tp_html = $table->toHtml();
         return $table_tp_html;
     }
+
+    /**
+     * Export HTML content in a ODF document
+     * @param string $html
+     * @param string $name
+     * @param string $format
+     *
+     * @return bool
+     */
+    public static function htmlToOdt($html, $name, $format = 'odt')
+    {
+        $unoconv = api_get_configuration_value('unoconv.binaries');
+
+        if (empty($unoconv)) {
+            return false;
+        }
+
+        if (!empty($html)) {
+            $fs = new Filesystem();
+            $paths = [
+                'root_sys' => api_get_path(SYS_PATH),
+                'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
+            ];
+            $connector = new Connector();
+
+            $drivers = new DriversContainer();
+            $drivers['configuration'] = array(
+                'unoconv.binaries' => $unoconv,
+                'unoconv.timeout' => 60,
+            );
+
+            $tempFilesystem = TemporaryFilesystem::create();
+            $manager = new Manager($tempFilesystem, $fs);
+            $alchemyst = new Alchemyst($drivers, $manager);
+
+            $dataFileSystem = new Data($paths, $fs, $connector, $alchemyst);
+            $content = $dataFileSystem->convertRelativeToAbsoluteUrl($html);
+            $filePath = $dataFileSystem->putContentInTempFile(
+                $content,
+                api_replace_dangerous_char($name),
+                'html'
+            );
+
+            $try = true;
+
+            while ($try) {
+                try {
+                    $convertedFile = $dataFileSystem->transcode(
+                        $filePath,
+                        $format
+                    );
+
+                    $try = false;
+                    DocumentManager::file_send_for_download(
+                        $convertedFile,
+                        false,
+                        $name.'.'.$format
+                    );
+                } catch (Exception $e) {
+                    // error_log($e->getMessage());
+                }
+            }
+        }
+    }
+
 }

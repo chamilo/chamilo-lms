@@ -2757,7 +2757,7 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
 
 /**
  * Checks whether the current user is a course or session coach
- * @param int - optional, session id
+ * @param int $session_id
  * @param int $courseId
  * @param bool  Check whether we are in student view and, if we are, return false
  * @return boolean True if current user is a course or session coach

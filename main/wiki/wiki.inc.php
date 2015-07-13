@@ -960,7 +960,6 @@ class Wiki
                 echo '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_notify_page.'&title='.api_htmlentities(urlencode($page)).'">'.
                     $notify_page.'</a>';
 
-
                 // Page action: copy last version to doc area
                 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                     echo '<a href="index.php?'.api_get_cidreq().'&action=export2doc&wiki_id='.$row['id'].'">'.
@@ -5248,64 +5247,17 @@ class Wiki
     }
 
     /**
-     * Export wiki content in a odf
+     * Export wiki content in a ODF
      * @param int $id
      * @param string int
      * @return bool
      */
     public function exportTo($id, $format = 'doc')
     {
-        $unoconv = api_get_configuration_value('unoconv.binaries');
-        if (empty($unoconv)) {
-            return false;
-        }
         $data = self::get_wiki_data($id);
 
-        if (!empty($data['content'])) {
-            $fs = new Filesystem();
-            $paths = [
-                'root_sys' => api_get_path(SYS_PATH),
-                'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
-            ];
-            $connector = new Connector();
-
-            $drivers = new DriversContainer();
-            $drivers['configuration'] = array(
-                'unoconv.binaries' => $unoconv,
-                'unoconv.timeout' => 60,
-            );
-
-            $tempFilesystem = TemporaryFilesystem::create();
-            $manager = new Manager($tempFilesystem, $fs);
-            $alchemyst = new Alchemyst($drivers, $manager);
-
-            $dataFileSystem = new Data($paths, $fs, $connector, $alchemyst);
-            $content = $dataFileSystem->convertRelativeToAbsoluteUrl($data['content']);
-            $filePath = $dataFileSystem->putContentInTempFile(
-                $content,
-                api_replace_dangerous_char($data['reflink']),
-                'html'
-            );
-
-            $try = true;
-
-            while ($try) {
-                try {
-                    $convertedFile = $dataFileSystem->transcode(
-                        $filePath,
-                        $format
-                    );
-
-                    $try = false;
-                    DocumentManager::file_send_for_download(
-                        $convertedFile,
-                        false,
-                        $data['title'].'.'.$format
-                    );
-                } catch (Exception $e) {
-
-                }
-            }
+        if (isset($data['content']) && !empty($data['content'])) {
+            Export::htmlToOdt($data['content'], $data['reflink'], $format);
         }
 
         return false;

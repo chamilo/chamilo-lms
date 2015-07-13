@@ -26,7 +26,9 @@ if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 
-$result = downloadFile($id, $courseInfo);
+$correction = isset($_REQUEST['correction']) ? true : false;
+
+$result = downloadFile($id, $courseInfo, $correction);
 if ($result == false) {
     api_not_allowed(true);
 }

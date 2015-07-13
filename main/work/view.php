@@ -22,12 +22,6 @@ $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPubl
 $my_folder_data = get_work_data_by_id($work['parent_id']);
 $courseInfo = api_get_course_info();
 
-/*allowOnlySubscribedUser(
-    api_get_user_id(),
-    $work['parent_id'],
-    $courseInfo['real_id']
-);*/
-
 protectWork(api_get_course_info(), $work['parent_id']);
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(

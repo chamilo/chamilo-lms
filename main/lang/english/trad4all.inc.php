@@ -7406,4 +7406,9 @@ $AnnouncementErrorNoUserSelected = "Please select at least one user. The announc
 $NoDependencies = "No dependencies";
 $SendMailToStudent = "Send mail to student";
 $SendMailToHR = "Send mail to HR manager";
+$CourseFields = "Course fields";
+$FieldTypeCheckbox = "Checkbox options";
+$FieldTypeInteger = "Integer value";
+$FieldTypeFileImage = "Image file";
+$FieldTypeFloat = "Float value";
 ?>

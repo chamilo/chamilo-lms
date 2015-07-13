@@ -911,16 +911,31 @@ class Agenda
                 break;
             case 'course':
                 $session_id = $this->sessionId;
+                $courseInfo = api_get_course_info_by_id($course_id);
+
                 // Session coach can see all events inside a session.
                 if (api_is_coach()) {
+
+                    // Own course
+                    $this->getCourseEvents(
+                        $start,
+                        $end,
+                        $courseInfo,
+                        $groupId,
+                        $session_id,
+                        $user_id
+                    );
+
+                    // Others
                     $this->getSessionEvents(
                         $start,
                         $end,
                         api_get_session_id(),
-                        $user_id
+                        $user_id,
+                        $this->eventOtherSessionColor
                     );
                 } else {
-                    $courseInfo = api_get_course_info_by_id($course_id);
+
                     $this->getCourseEvents(
                         $start,
                         $end,

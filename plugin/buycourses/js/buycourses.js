@@ -98,7 +98,7 @@ $(document).ready(function () {
     });
 
     $("#save_currency").click(function (e) {
-        var currency_type = $("#currency_type").attr("value");
+        var currency_type = $("#currency_type").val();
         $.post("function.php", {tab: "save_currency", currency: currency_type},
             function (data) {
                 alert(data.content);
@@ -109,9 +109,9 @@ $(document).ready(function () {
     });
 
     $("#save_paypal").click(function (e) {
-        var name = $("#username").attr("value");
-        var clave = $("#password").attr("value");
-        var firma = $("#signature").attr("value");
+        var name = $("#username").val();
+        var clave = $("#password").val();
+        var firma = $("#signature").val();
         if ($("#sandbox").attr("checked") == "checked") {
             var vsandbox = "YES";
         } else {
@@ -127,9 +127,9 @@ $(document).ready(function () {
     });
 
     $("#add_account").click(function (e) {
-        var tname = $("#tname").attr("value");
-        var taccount = $("#taccount").attr("value");
-        var tswift = $("#tswift").attr("value");
+        var tname = $("#tname").val();
+        var taccount = $("#taccount").val();
+        var tswift = $("#tswift").val();
         if (tname == '' || taccount == '') {
             alert("Complete los campos antes de insertar");
         } else {
@@ -182,7 +182,7 @@ $(document).ready(function () {
     });
 
     $(".slt_tpv").change(function () {
-        var vcod = $(this).attr("value");
+        var vcod = $(this).val();
         $.post("function.php", {tab: "activar_tpv", cod: vcod});
     });
 });

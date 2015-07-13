@@ -453,14 +453,13 @@ $(document).ready(function() {
                     $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
                     $('#simple_end_date').html(' ' + calEvent.end.format("YY-MM-DD"));
                 }
-
                 if (calEvent.course_name) {
-                    $("#calendar_course_info").html(
+                    $("#calendar_course_info_simple").html(
                         '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Course' | get_lang }}</label>' +
                         '<div class="col-sm-8">' + calEvent.course_name+"</div></div>"
                     );
                 } else {
-                    $("#calendar_course_info").html('');
+                    $("#calendar_course_info_simple").html('');
                 }
 
                 if (calEvent.session_name) {
@@ -534,7 +533,7 @@ $(document).ready(function() {
 <div id="simple-dialog-form" style="display:none;">
     <div style="width:500px">
         <form name="form-simple" class="form-horizontal">
-            <span id="calendar_course_info"></span>
+            <span id="calendar_course_info_simple"></span>
             <span id="calendar_session_info"></span>
             <div class="form-group">
                 <label class="col-sm-2 control-label">

@@ -910,15 +910,25 @@ class Agenda
                 break;
             case 'course':
                 $session_id = $this->sessionId;
-                $courseInfo = api_get_course_info_by_id($course_id);
-                $this->getCourseEvents(
-                    $start,
-                    $end,
-                    $courseInfo,
-                    $groupId,
-                    $session_id,
-                    $user_id
-                );
+                // Session coach can see all events inside a session.
+                if (api_is_coach()) {
+                    $this->getSessionEvents(
+                        $start,
+                        $end,
+                        api_get_session_id(),
+                        $user_id
+                    );
+                } else {
+                    $courseInfo = api_get_course_info_by_id($course_id);
+                    $this->getCourseEvents(
+                        $start,
+                        $end,
+                        $courseInfo,
+                        $groupId,
+                        $session_id,
+                        $user_id
+                    );
+                }
                 break;
             case 'personal':
             default:
@@ -1305,6 +1315,34 @@ class Agenda
         );
     }
 
+
+    /**
+     * @param int $start
+     * @param int $end
+     * @param int $sessionId
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getSessionEvents($start, $end, $sessionId = 0, $userId = 0)
+    {
+        $courses = SessionManager::get_course_list_by_session_id($sessionId);
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
+                //if (api_is_coach($sessionId, $course['real_id'])) {
+                    $this->getCourseEvents(
+                        $start,
+                        $end,
+                        $course,
+                        0,
+                        $sessionId
+                    );
+                //}
+            }
+        }
+
+    }
+
     /**
      * @param int $start
      * @param int $end
@@ -1312,10 +1350,17 @@ class Agenda
      * @param int $groupId
      * @param int $session_id
      * @param int $user_id
+     *
      * @return array
      */
-    public function getCourseEvents($start, $end, $courseInfo, $groupId = 0, $session_id = 0, $user_id = 0)
-    {
+    public function getCourseEvents(
+        $start,
+        $end,
+        $courseInfo,
+        $groupId = 0,
+        $session_id = 0,
+        $user_id = 0
+    ) {
         $start = isset($start) && !empty($start) ? api_get_utc_datetime(intval($start)) : null;
         $end = isset($end) && !empty($end) ? api_get_utc_datetime(intval($end)) : null;
 
@@ -1460,6 +1505,11 @@ class Agenda
 
         $result = Database::query($sql);
 
+        $coachCanEdit = false;
+        if (!empty($session_id)) {
+            $coachCanEdit = api_is_coach($session_id, $course_id);
+        }
+
         if (Database::num_rows($result)) {
 
             $events_added = array_column($this->events, 'id');
@@ -1503,7 +1553,7 @@ class Agenda
                 }
 
                 $event['session_name'] = isset($sessionInfo['name']) ? $sessionInfo['name'] : '';
-                $event['course_name'] = isset($courseInfo['name']) ? $courseInfo['name'] : '';
+                $event['course_name'] = isset($courseInfo['title']) ? $courseInfo['title'] : '';
 
                 if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_group_color;
@@ -1517,6 +1567,9 @@ class Agenda
 
                 if (api_is_allowed_to_edit() && $this->type == 'course') {
                     $event['editable'] = true;
+                    if ($coachCanEdit == false) {
+                        $event['editable'] = false;
+                    }
                 }
 
                 if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00') {

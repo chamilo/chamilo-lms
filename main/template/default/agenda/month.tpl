@@ -281,6 +281,24 @@ $(document).ready(function() {
                     $("#comment").parent().append('<div id="comment_edit"></div>');
                 }
 
+                if (calEvent.course_name) {
+                    $("#calendar_course_info").html(
+                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Course' | get_lang }}</label>' +
+                        '<div class="class="col-sm-8">' + calEvent.course_name+"</div></div>"
+                    );
+                } else {
+                    $("#calendar_course_info").html('');
+                }
+
+                if (calEvent.session_name) {
+                    $("#calendar_session_info").html(
+                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Session' | get_lang }}</label>'+
+                        '<div class="class="col-sm-8">' + calEvent.session_name+"</div></div>"
+                    );
+                } else {
+                    $("#calendar_session_info").html('');
+                }
+
                 $("#comment_edit").html(calEvent.comment);
 
                 $("#title_edit").show();
@@ -435,15 +453,22 @@ $(document).ready(function() {
                     $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
                     $('#simple_end_date').html(' ' + calEvent.end.format("YY-MM-DD"));
                 }
-console.log(calEvent.course_name);
+
                 if (calEvent.course_name) {
-                    $("#calendar_course_info").html('<h4>{{ 'Course' | get_lang }}</h4>' + calEvent.course_name);
+                    $("#calendar_course_info").html(
+                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Course' | get_lang }}</label>' +
+                        '<div class="col-sm-8">' + calEvent.course_name+"</div></div>"
+                    );
                 } else {
                     $("#calendar_course_info").html('');
                 }
 
                 if (calEvent.session_name) {
-                    $("#calendar_session_info").html('<h4>{{ 'Session' | get_lang }}</h4>' + calEvent.session_name);
+                    $("#calendar_session_info").html(
+                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Session' | get_lang }}</label>' +
+                        '<div class="col-sm-8">' + calEvent.session_name+"</div></div>"
+                    );
+
                 } else {
                     $("#calendar_session_info").html('');
                 }
@@ -508,40 +533,40 @@ console.log(calEvent.course_name);
 
 <div id="simple-dialog-form" style="display:none;">
     <div style="width:500px">
-        <form name="form-simple" class="form-vertical">
+        <form name="form-simple" class="form-horizontal">
             <span id="calendar_course_info"></span>
             <span id="calendar_session_info"></span>
-            <div class="control-group">
-                <label class="control-label">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
                     <b>{{ "Date" |get_lang}}</b>
                 </label>
-                <div class="controls">
+                <div class="col-sm-8">
                     <span id="simple_start_date"></span>
                     <span id="simple_end_date"></span>
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
                     <b>{{ "Title" |get_lang}}</b>
                 </label>
-                <div class="controls">
+                <div class="col-sm-8">
                     <div id="simple_title"></div>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
                     <b>{{ "Description" |get_lang}}</b>
                 </label>
-                <div class="controls">
+                <div class="col-sm-8">
                     <div id="simple_content"></div>
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
                     <b>{{ "Comment" |get_lang}}</b>
                 </label>
-                <div class="controls">
+                <div class="col-sm-8">
                     <div id="simple_comment"></div>
                 </div>
             </div>

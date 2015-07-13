@@ -46,6 +46,7 @@ class Agenda
         $this->event_course_color = '#458B00'; //green
         $this->event_group_color = '#A0522D'; //siena
         $this->event_session_color = '#00496D'; // kind of green
+        $this->eventOtherSessionColor = '#4469AD';
         $this->event_personal_color = 'steel blue'; //steel blue
     }
 
@@ -1010,6 +1011,15 @@ class Agenda
                                 );
                             }
                         }
+
+                        $this->getSessionEvents(
+                            $start,
+                            $end,
+                            $my_session_id,
+                            api_get_user_id(),
+                            $this->eventOtherSessionColor
+                        );
+
                     }
                 }
 
@@ -1315,18 +1325,19 @@ class Agenda
         );
     }
 
-
     /**
      * @param int $start
      * @param int $end
      * @param int $sessionId
      * @param int $userId
+     * @param string $color
      *
      * @return array
      */
-    public function getSessionEvents($start, $end, $sessionId = 0, $userId = 0)
+    public function getSessionEvents($start, $end, $sessionId = 0, $userId = 0, $color = '')
     {
         $courses = SessionManager::get_course_list_by_session_id($sessionId);
+
         if (!empty($courses)) {
             foreach ($courses as $course) {
                 //if (api_is_coach($sessionId, $course['real_id'])) {
@@ -1335,7 +1346,9 @@ class Agenda
                         $end,
                         $course,
                         0,
-                        $sessionId
+                        $sessionId,
+                        0,
+                        $color
                     );
                 //}
             }
@@ -1350,6 +1363,7 @@ class Agenda
      * @param int $groupId
      * @param int $session_id
      * @param int $user_id
+     * @param string $color
      *
      * @return array
      */
@@ -1359,7 +1373,8 @@ class Agenda
         $courseInfo,
         $groupId = 0,
         $session_id = 0,
-        $user_id = 0
+        $user_id = 0,
+        $color = ''
     ) {
         $start = isset($start) && !empty($start) ? api_get_utc_datetime(intval($start)) : null;
         $end = isset($end) && !empty($end) ? api_get_utc_datetime(intval($end)) : null;
@@ -1557,6 +1572,10 @@ class Agenda
 
                 if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
                     $event['borderColor'] = $event['backgroundColor'] = $this->event_group_color;
+                }
+
+                if (!empty($color)) {
+                    $event['borderColor'] = $event['backgroundColor'] = $color;
                 }
 
                 if (isset($row['color']) && !empty($row['color'])) {

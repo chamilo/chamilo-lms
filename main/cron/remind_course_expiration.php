@@ -93,7 +93,7 @@ if ($usersToBeReminded) {
         );
         foreach ($sessions as $sessionId => $session) {
             $daysRemaining = date_diff($today, date_create($session['access_end_date']));
-            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION)."ON id = access_url_id";
+            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION)." ON id = access_url_id";
             $result = Database::select(
                 'url',
                 Database::get_main_table(TABLE_MAIN_ACCESS_URL).$join,

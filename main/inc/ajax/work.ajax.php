@@ -49,9 +49,9 @@ switch ($action) {
                 $title = isset($resultUpload['filename']) && !empty($resultUpload['filename']) ? $resultUpload['filename'] : get_lang('Untitled');
 
                 $sql = "UPDATE $work_table SET
-                    url_correction = '".$url."',
-                    title_correction = '".$title."'
-                    WHERE iid = $itemId";
+                            url_correction = '".$url."',
+                            title_correction = '".$title."'
+                        WHERE iid = $itemId";
                 Database::query($sql);
 
                 $result['title'] = $resultUpload['filename'];

@@ -14,8 +14,12 @@ if ($_POST['payment_type'] == '') {
     header('Location:process.php');
 }
 
+$plugin = BuyCoursesPlugin::create();
+
 $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
 $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
+
+$buySessionTemporaryTable = Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY);
 
 if (isset($_POST['Confirm'])) {
     // Save the user, course and reference in a tmp table
@@ -29,7 +33,7 @@ if (isset($_POST['Confirm'])) {
     }
 
     $sql = $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
-        "INSERT INTO $tableBuySessionTemporal (user_id, name, session_id, title, reference, price)
+        "INSERT INTO $buySessionTemporaryTable (user_id, name, session_id, title, reference, price)
         VALUES ('" . $user_id . "', '" . $name . "','" . $_SESSION['bc_code'] . "','" . $title . "','" . $reference . "','" . $price . "');" :
         "INSERT INTO $tableBuyCourseTemporal (user_id, name, course_code, title, reference, price)
         VALUES ('" . $user_id . "', '" . $name . "','" . $_SESSION['bc_codetext'] . "','" . $title . "','" . $reference . "','" . $price . "');";

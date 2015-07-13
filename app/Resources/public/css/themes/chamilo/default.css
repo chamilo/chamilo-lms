@@ -208,12 +208,6 @@ a:focus {
 .ui-accordion .ui-accordion-icons{
   padding-left: 0.2em;
 }
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default{
- background: #ECF0F1;
- border-color: #ECF0F1;
-}
 /* End Jquery UI */
 footer{
   background-color:#2C3E50;

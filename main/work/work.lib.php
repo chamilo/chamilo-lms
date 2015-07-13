@@ -544,11 +544,11 @@ function showStudentWorkGrid()
     );
 
     $columnModel = array(
-        array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'left', 'sortable' => 'false'),
+        array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'center', 'sortable' => 'false'),
         array('name'=>'title', 'index'=>'title', 'width'=>'250',   'align'=>'left'),
-        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'80',  'align'=>'left', 'sortable'=>'false'),
-        array('name'=>'feedback', 'index'=>'feedback', 'width'=>'80',  'align'=>'left'),
-        array('name'=>'last_upload', 'index'=>'feedback', 'width'=>'125',  'align'=>'left'),
+        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'80',  'align'=>'center', 'sortable'=>'false'),
+        array('name'=>'feedback', 'index'=>'feedback', 'width'=>'80',  'align'=>'center'),
+        array('name'=>'last_upload', 'index'=>'feedback', 'width'=>'125',  'align'=>'center'),
     );
 
     if ($courseInfo['show_score'] == 0) {
@@ -584,11 +584,11 @@ function showStudentWorkGrid()
 function showTeacherWorkGrid()
 {
     $columnModel = array(
-        array('name'=>'type', 'index'=>'type', 'width'=>'35', 'align'=>'left', 'sortable' => 'false'),
+        array('name'=>'type', 'index'=>'type', 'width'=>'35', 'align'=>'center', 'sortable' => 'false'),
         array('name'=>'title', 'index'=>'title',  'width'=>'300',   'align'=>'left', 'wrap_cell' => "true"),
-        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'125',  'align'=>'left'),
-        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'125',  'align'=>'left'),
-        array('name'=>'amount', 'index'=>'end_on', 'width'=>'110',  'align'=>'left'),
+        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'125',  'align'=>'center'),
+        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'125',  'align'=>'center'),
+        array('name'=>'amount', 'index'=>'end_on', 'width'=>'110',  'align'=>'center'),
         array('name'=>'actions', 'index'=>'actions', 'width'=>'110', 'align'=>'left', 'sortable'=>'false')
     );
 
@@ -4304,8 +4304,8 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
 function showStudentList($workId)
 {
     $columnModel = array(
-        array('name'=>'student', 'index'=>'student', 'width'=>'150', 'align'=>'left', 'sortable' => 'false'),
-        array('name'=>'works', 'index'=>'works',  'width'=>'50', 'align'=>'left', 'sortable' => 'false')
+        array('name'=>'student', 'index'=>'student', 'width'=>'350px', 'align'=>'left', 'sortable' => 'false'),
+        array('name'=>'works', 'index'=>'works', 'align'=>'center', 'sortable' => 'false')
     );
     $token = null;
 
@@ -4320,7 +4320,7 @@ function showStudentList($workId)
     $params = array(
         'autowidth' => 'true',
         'height' => 'auto',
-        'rowNum' => 10,
+        'rowNum' => 5,
         'sortname' => $order,
         'sortorder' => 'asc'
     );

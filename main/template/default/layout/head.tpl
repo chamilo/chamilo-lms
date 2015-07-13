@@ -138,7 +138,14 @@ function get_url_params(q, attribute) {
         }
     }
 }
-
+$(document).ready(function(){
+    $("#open-view-list").click(function(){
+        $("#student-list-work").fadeIn(300);
+    });
+    $("#closed-view-list").click(function(){
+        $("#student-list-work").fadeOut(300);
+    });
+});
 function check_brand() {
     if ($('.subnav').length) {
         if ($(window).width() >= 969) {

@@ -46,7 +46,7 @@ class Agenda
         $this->event_course_color = '#458B00'; //green
         $this->event_group_color = '#A0522D'; //siena
         $this->event_session_color = '#00496D'; // kind of green
-        $this->eventOtherSessionColor = '#4469AD';
+        $this->eventOtherSessionColor = '#999';
         $this->event_personal_color = 'steel blue'; //steel blue
     }
 

@@ -521,8 +521,9 @@ if (!empty($_GET['category'])) {
             handle_templates();
             break;
         case 'search_setting':
-            search_setting($_REQUEST['search_field']);
             if (isset($_REQUEST['search_field'])) {
+
+                search_setting($_REQUEST['search_field']);
                 $form->display();
             }
             break;

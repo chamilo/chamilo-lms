@@ -591,13 +591,13 @@ class Category implements GradebookItem
                             $gradebook =  new Gradebook();
                             $params = array();
 
-                            $params['name']             = $component['acronym'];
-                            $params['description']      = $component['title'];
-                            $params['user_id']          = api_get_user_id();
-                            $params['parent_id']        = $id;
-                            $params['weight']           = $component['percentage']/100*$default_weight;
-                            $params['session_id']       = api_get_session_id();
-                            $params['course_code']      = $this->get_course_code();
+                            $params['name'] = $component['acronym'];
+                            $params['description'] = $component['title'];
+                            $params['user_id'] = api_get_user_id();
+                            $params['parent_id'] = $id;
+                            $params['weight'] = $component['percentage'] / 100 * $default_weight;
+                            $params['session_id'] = api_get_session_id();
+                            $params['course_code'] = $this->get_course_code();
 
                             $gradebook->save($params);
                         }

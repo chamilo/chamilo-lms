@@ -151,66 +151,36 @@
                             </div>
                         {% endif %}
 
-                        {% for session in sessions %}
-                            <div class="row">
+                        <div class="row">
+                            {% for session in sessions %}
+                                <div class="col-md-3">
+                                    <div class="thumbnail">
+                                        <div class="caption">
+                                            <h3>{{ session.name }}</h3>
+                                            <p>{{ 'From'|get_lang }} {{ session.access_start_date }} {{ 'Until'|get_lang }} {{ session.access_end_date }}</p>
+                                            <p class="lead">{{ session.price }} {{ currency }}</p>
 
-                                <div class="col-md-12">
-                                    <div class="categories-course-description">
-                                        <h3>{{ session.name }}</h3>
-                                        <h5>{{ 'From'|get_lang }} {{ session.access_start_date }} {{ 'Until'|get_lang }} {{ session.access_end_date }}</h5>
-                                        {% if session.enrolled == "YES" %}
-                                            <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}</span>
-                                        {% endif %}
-                                        {% if session.enrolled == "TMP" %}
-                                            <span class="label label-warning">{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="">
-                                        {{ session.price }} {{ currency }}
-                                    </div>
+                                            <dl>
+                                                {% for course in session.courses %}
+                                                    <dt>{{ course.title }}</dt>
+                                                    <dd>
+                                                        <i class="fa fa-user"></i> {{ 'Teacher'|get_lang }}: {{ course.teacher }}
+                                                    </dd>
+                                                {% endfor %}
+                                            </dl>
 
-                                    <div class="btn-group">
-                                        {% if session.enrolled == "NO" %}
-                                            <a class="btn btn-success" title="" href="{{ server }}plugin/buycourses/src/process.php?scode={{ session.session_id }}">
-                                                {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    {% for course in session.courses %}
-                                        <div class="col-md-3">
-                                            <div class="span">
-                                                <div class="thumbnail">
-                                                    <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
-                                                        <img alt="" src="{{ server }}{{ course.course_img }}">
+                                            <p class="text-center">
+                                                {% if session.enrolled == "YES" %}
+                                                    <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                                                {% elseif session.enrolled == "NO" %}
+                                                    <a class="btn btn-success btn-sm" title="" href="{{ server }}plugin/buycourses/src/process.php?scode={{ session.session_id }}">
+                                                        <i class="fa fa-shopping-cart"></i> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
-                                                </div>
-                                            </div>
-                                            <div class="span4">
-                                                <div class="categories-course-description">
-                                                    <h3>{{ course.title }}</h3>
-                                                    <h5>{{ 'Teacher'|get_lang }}: {{ course.teacher }}</h5>
-                                                </div>
-                                                {% if course.enrolled == "YES" %}
-                                                    <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}</span>
-                                                {% endif %}
-                                                {% if course.enrolled == "TMP" %}
+                                                {% elseif session.enrolled == "TMP" %}
                                                     <span class="label label-warning">{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                                                 {% endif %}
-                                            </div>
-                                            <div class="span right">
-                                                <div class="cleared"></div>
-                                                <div class="btn-group right">
-                                                    <a class="ajax btn btn-primary" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
-                                                        {{ 'Description'|get_lang }}
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                        {% endfor %}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             {% endfor %}

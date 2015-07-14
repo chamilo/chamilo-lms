@@ -2001,6 +2001,8 @@ function get_work_user_list(
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
 
+                $work['title_clean'] = $work['title'];
+
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'], 0, 27).'...';
                     $work['title'] = Display::span($short_title, array('class' => $class, 'title' => $work['title']));
@@ -3420,9 +3422,19 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     $filesize = filesize($_FILES['file']['tmp_name']);
 
     if (empty($filesize)) {
-        return array('error' => Display :: return_message(get_lang('UplUploadFailedSizeIsZero'), 'error'));
+        return array(
+            'error' => Display:: return_message(
+                get_lang('UplUploadFailedSizeIsZero'),
+                'error'
+            ),
+        );
     } elseif (!filter_extension($new_file_name)) {
-        return array('error' => Display :: return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
+        return array(
+            'error' => Display:: return_message(
+                get_lang('UplUnableToSaveFileFilteredExtension'),
+                'error'
+            ),
+        );
     }
 
     $totalSpace = DocumentManager::documents_total_space($_course['real_id']);

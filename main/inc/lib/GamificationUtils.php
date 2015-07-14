@@ -160,4 +160,56 @@ class GamificationUtils
         return $totalStars / count($courses);
     }
 
+    /**
+     * Get the stars on sessions with gamification mode
+     * @param int $userId The user ID
+     * @param int $userStatus The user Status
+     * @return int
+     */
+    public static function getTotalUserStars($userId, $userStatus)
+    {
+        $stars = 0;
+
+        $sessions = SessionManager::getSessionsFollowedByUser(
+            $userId,
+            $userStatus
+        );
+
+        if (empty($sessions)) {
+            return 0;
+        }
+
+        foreach ($sessions as $session) {
+            $stars += self::getSessionStars($session['id'], $userId);
+        }
+
+        return $stars;
+    }
+
+    /**
+     * Get the total progress on sessions with gamification mode
+     * @param int $userId The user ID
+     * @param int $userStatus The user Status
+     * @return int
+     */
+    public static function getTotalUserProgress($userId, $userStatus)
+    {
+        $progress = 0;
+
+        $sessions = SessionManager::getSessionsFollowedByUser(
+            $userId,
+            $userStatus
+        );
+
+        if (empty($sessions)) {
+            return 0;
+        }
+
+        foreach ($sessions as $session) {
+            $progress += self::getSessionProgress($session['id'], $userId);
+        }
+
+        return $progress;
+    }
+
 }

@@ -159,8 +159,6 @@ ul#navigation .report a {
     width: auto;
 }
 
-
-
 /* END CSS BASE */
 
 .button-load{
@@ -168,6 +166,23 @@ ul#navigation .report a {
   padding-top: 70px;
 }
 
+/* work correction upload */
+#results .file_upload_highlight {
+    background: #F4D364;
+}
+
+.work_correction_file_upload .button-load {
+    position: absolute;
+    top: -60px;
+    left: -30px;
+    font-size: 10px;
+    width: 100px;
+    padding-top: 0px;
+    background: none;
+}
+
+
+/* END COURSE PROGRESS*/
 /* IMPRESS JS */
   .impress-content{
     position: relative;
@@ -6042,7 +6057,9 @@ div#chat-remote-video video {
 #about-session .tags-course a{
   display: inline-block;
   margin-left: 5px;
+  margin-right: 5px;
   padding-left: 5px;
+  padding-right: 5px;
   background-color:#ffffff;
   border-radius: 10%;
   -moz-border-radius: 10%;
@@ -6167,6 +6184,7 @@ div#chat-remote-video video {
   margin-left: auto;
   margin-right: auto;
 }
+
 #session-list .information-item{
   padding: 10px;
 }

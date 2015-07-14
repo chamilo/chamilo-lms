@@ -747,23 +747,25 @@ switch ($action) {
     case 'get_work_user_list_all':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
             $columns = array(
-                'type',
+                //'type',
                 'firstname',
                 'lastname',
                 'title',
                 'qualification',
                 'sent_date',
                 'qualificator_id',
+                'correction',
                 'actions'
             );
         } else {
             $columns = array(
-                'type',
+                //'type',
                 'firstname',
                 'lastname',
                 'title',
                 'qualification',
                 'sent_date',
+                'correction',
                 'actions'
             );
         }

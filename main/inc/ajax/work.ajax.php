@@ -44,9 +44,9 @@ switch ($action) {
 
             if (isset($resultUpload['url']) && !empty($resultUpload['url'])) {
 
-                $url = Database::escape_string($resultUpload['url']);
-
                 $title = isset($resultUpload['filename']) && !empty($resultUpload['filename']) ? $resultUpload['filename'] : get_lang('Untitled');
+                $url = Database::escape_string($resultUpload['url']);
+                $title = Database::escape_string($title);
 
                 $sql = "UPDATE $work_table SET
                             url_correction = '".$url."',

@@ -2001,6 +2001,8 @@ function get_work_user_list(
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
 
+                $work['title_clean'] = $work['title'];
+
                 if (strlen($work['title']) > 30) {
                     $short_title = substr($work['title'], 0, 27).'...';
                     $work['title'] = Display::span($short_title, array('class' => $class, 'title' => $work['title']));
@@ -2042,47 +2044,53 @@ function get_work_user_list(
                 $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . '<br />' . $work_date;
 
                 // Actions.
+                $correction = '';
 
                 $action = '';
                 if (api_is_allowed_to_edit()) {
-                    $action .= $item_id.'<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .=  '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
-                    $action .= '
+
+                    $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
-                        class="work_correction_upload file_upload file_upload_small"
-                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data">
+                        class="work_correction_file_upload file_upload_small"
+                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
+                        >
+                        <div class="button-load">
+                            '.get_lang('ClickOrDropFilesHere').'
+                        </div>
                         <input type="file" name="file" multiple>
-                        <button type="submit">Upload</button>
+                        <button type="submit"></button>
                         </form>
                     ';
 
-                    $action .= "
+                    $correction .= "
                         <script>
                         $(document).ready(function() {
-                        $('#file_upload_".$item_id."').fileUploadUI({
-                            uploadTable: $('.files'),
-                            downloadTable: $('.files'),
-                            buildUploadRow: function (files, index) {
-                                $('.files').show();
-                                return $('<tr><td>' + files[index].name + '<\/td>' +
+                            $('#file_upload_".$item_id."').fileUploadUI({
+                                uploadTable: $('.files'),
+                                downloadTable: $('.files'),
+                                buildUploadRow: function (files, index) {
+                                    $('.files').show();
+                                    return
+                                        $('<tr><td>' + files[index].name + '<\/td>' +
                                         '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
                                         '<td class=\"file_upload_cancel\">' +
                                         '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +
                                         '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
                                         '<\/td><\/tr>');
-                            },
-                            buildDownloadRow: function (file) {
-                                return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
-                            }
+                                },
+                                buildDownloadRow: function (file) {
+                                    return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
+                                }
+                            });
                         });
-                        });
-
                         </script>
                     ";
 
@@ -2153,9 +2161,11 @@ function get_work_user_list(
                 }
                 $work['qualificator_id'] = $qualificator_id;
                 $work['actions'] = $send_to.$link_to_download.$action;
+                $work['correction'] = $correction;
                 $works[] = $work;
             }
         }
+
         return $works;
     }
 }
@@ -3280,19 +3290,22 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 
 /**
  * @param array $work
+ * @param string $page
  * @return string
  */
-function getWorkCommentForm($work)
+function getWorkCommentForm($work, $page = 'view')
 {
+    $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq().'&page='.$page;
     $form = new FormValidator(
         'work_comment',
         'post',
-        api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq()
+        $url
     );
 
     $form->addElement('file', 'file', get_lang('Attachment'));
     $form->addElement('textarea', 'comment', get_lang('Comment'), array('rows' => '8'));
     $form->addElement('hidden', 'id', $work['id']);
+    $form->addElement('hidden', 'page', $page);
     if (api_is_allowed_to_edit()) {
         $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
     }
@@ -3420,9 +3433,19 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     $filesize = filesize($_FILES['file']['tmp_name']);
 
     if (empty($filesize)) {
-        return array('error' => Display :: return_message(get_lang('UplUploadFailedSizeIsZero'), 'error'));
+        return array(
+            'error' => Display:: return_message(
+                get_lang('UplUploadFailedSizeIsZero'),
+                'error'
+            ),
+        );
     } elseif (!filter_extension($new_file_name)) {
-        return array('error' => Display :: return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
+        return array(
+            'error' => Display:: return_message(
+                get_lang('UplUnableToSaveFileFilteredExtension'),
+                'error'
+            ),
+        );
     }
 
     $totalSpace = DocumentManager::documents_total_space($_course['real_id']);

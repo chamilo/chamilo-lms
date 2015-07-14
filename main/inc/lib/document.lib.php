@@ -5329,9 +5329,10 @@ class DocumentManager
                 }
             } elseif (strstr($basename, 'sf_user_')) {
                 $userinfo = api_get_user_info(substr($basename, 8));
-                $icon = $userinfo['avatar'];
+                $icon = $userinfo['avatar_small'];
 
                 $basename = get_lang('UserFolder') . ' ' . $userinfo['complete_name'];
+                $user_image = true;
             } elseif (strstr($path, 'shared_folder_session_')) {
                 if ($is_allowed_to_edit) {
                     $basename = '***(' . api_get_session_name($current_session_id) . ')*** ' . get_lang('HelpUsersFolder');

@@ -207,46 +207,155 @@ if (!empty($work_data['enable_qualification']) &&
     $type = 'simple';
 
     $columns = array(
-        get_lang('Type'),
+        //get_lang('Type'),
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('Title'),
         get_lang('Feedback'),
         get_lang('Date'),
         get_lang('Status'),
+        get_lang('UploadCorrection'),
         get_lang('Actions')
     );
 
     $column_model = array(
-        array('name'=>'type',           'index'=>'file',            'width'=>'8',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-        array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
-        array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'sent_date',      'index'=>'sent_date',       'width'=>'40',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'25',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'actions',        'index'=>'actions',         'width'=>'30',   'align'=>'left', 'search' => 'false', 'sortable'=>'false', )
+        /*array(
+            'name' => 'type',
+            'index' => 'file',
+            'width' => '8',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),*/
+        array(
+            'name' => 'firstname',
+            'index' => 'firstname',
+            'width' => '35',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '35',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'title',
+            'index' => 'title',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+            'wrap_cell' => 'true',
+        ),
+        array(
+            'name' => 'qualification',
+            'index' => 'qualification',
+            'width' => '20',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'sent_date',
+            'index' => 'sent_date',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'true',
+            'wrap_cell' => 'true',
+        ),
+        array(
+            'name' => 'qualificator_id',
+            'index' => 'qualificator_id',
+            'width' => '25',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'correction',
+            'index' => 'correction',
+            'width' => '30',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
+        array(
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '30',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
     );
 } else {
     $type = 'complex';
 
     $columns = array(
-        get_lang('Type'),
+        //get_lang('Type'),
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('Title'),
         get_lang('Feedback'),
         get_lang('Date'),
+        get_lang('UploadCorrection'),
         get_lang('Actions')
     );
 
     $column_model = array(
-        array('name'=>'type',      'index'=>'file',      'width'=>'8',  'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-        array('name'=>'firstname', 'index'=>'firstname', 'width'=>'35', 'align'=>'left', 'search' => 'true'),
-        array('name'=>'lastname',  'index'=>'lastname',  'width'=>'35', 'align'=>'left', 'search' => 'true'),
-        array('name'=>'title',     'index'=>'title',     'width'=>'40', 'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-        array('name'=>'qualification',  'index'=>'qualification',  'width'=>'25', 'align'=>'left', 'search' => 'true'),
-        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30', 'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
+        /*array(
+            'name' => 'type',
+            'index' => 'file',
+            'width' => '8',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),*/
+        array(
+            'name' => 'firstname',
+            'index' => 'firstname',
+            'width' => '35',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '35',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'title',
+            'index' => 'title',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+            'wrap_cell' => "true",
+        ),
+        array(
+            'name' => 'qualification',
+            'index' => 'qualification',
+            'width' => '25',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'sent_date',
+            'index' => 'sent_date',
+            'width' => '30',
+            'align' => 'left',
+            'search' => 'true',
+            'wrap_cell' => 'true',
+        ),
+        array(
+            'name' => 'correction',
+            'index' => 'correction',
+            'width' => '30',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
         array(
             'name' => 'actions',
             'index' => 'actions',
@@ -256,7 +365,6 @@ if (!empty($work_data['enable_qualification']) &&
             'sortable' => 'false'
             //'wrap_cell' => 'true',
         )
-
     );
 }
 

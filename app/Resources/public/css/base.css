@@ -159,14 +159,28 @@ ul#navigation .report a {
     width: auto;
 }
 
-
-
 /* END CSS BASE */
 
 .button-load{
   background: url("../../main/img/icons/64/file_upload.png") no-repeat center 20px;
   padding-top: 70px;
 }
+
+/* work correction upload */
+#results .file_upload_highlight {
+    background: #F4D364;
+}
+
+.work_correction_file_upload .button-load {
+    position: absolute;
+    top: -60px;
+    left: -30px;
+    font-size: 10px;
+    width: 100px;
+    padding-top: 0px;
+    background: none;
+}
+
 
 /* END COURSE PROGRESS*/
 /* IMPRESS JS */

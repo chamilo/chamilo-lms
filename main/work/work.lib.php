@@ -2044,47 +2044,53 @@ function get_work_user_list(
                 $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . '<br />' . $work_date;
 
                 // Actions.
+                $correction = '';
 
                 $action = '';
                 if (api_is_allowed_to_edit()) {
-                    $action .= $item_id.'<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .=  '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
-                    $action .= '
+
+                    $correction = '
                         <form
                         id="file_upload_'.$item_id.'"
-                        class="work_correction_upload file_upload file_upload_small"
-                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data">
+                        class="work_correction_file_upload file_upload_small"
+                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
+                        >
+                        <div class="button-load">
+                            '.get_lang('ClickOrDropFilesHere').'
+                        </div>
                         <input type="file" name="file" multiple>
-                        <button type="submit">Upload</button>
+                        <button type="submit"></button>
                         </form>
                     ';
 
-                    $action .= "
+                    $correction .= "
                         <script>
                         $(document).ready(function() {
-                        $('#file_upload_".$item_id."').fileUploadUI({
-                            uploadTable: $('.files'),
-                            downloadTable: $('.files'),
-                            buildUploadRow: function (files, index) {
-                                $('.files').show();
-                                return $('<tr><td>' + files[index].name + '<\/td>' +
+                            $('#file_upload_".$item_id."').fileUploadUI({
+                                uploadTable: $('.files'),
+                                downloadTable: $('.files'),
+                                buildUploadRow: function (files, index) {
+                                    $('.files').show();
+                                    return
+                                        $('<tr><td>' + files[index].name + '<\/td>' +
                                         '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
                                         '<td class=\"file_upload_cancel\">' +
                                         '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +
                                         '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
                                         '<\/td><\/tr>');
-                            },
-                            buildDownloadRow: function (file) {
-                                return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
-                            }
+                                },
+                                buildDownloadRow: function (file) {
+                                    return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
+                                }
+                            });
                         });
-                        });
-
                         </script>
                     ";
 
@@ -2155,9 +2161,11 @@ function get_work_user_list(
                 }
                 $work['qualificator_id'] = $qualificator_id;
                 $work['actions'] = $send_to.$link_to_download.$action;
+                $work['correction'] = $correction;
                 $works[] = $work;
             }
         }
+
         return $works;
     }
 }

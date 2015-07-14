@@ -3282,19 +3282,22 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 
 /**
  * @param array $work
+ * @param string $page
  * @return string
  */
-function getWorkCommentForm($work)
+function getWorkCommentForm($work, $page = 'view')
 {
+    $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq().'&page='.$page;
     $form = new FormValidator(
         'work_comment',
         'post',
-        api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq()
+        $url
     );
 
     $form->addElement('file', 'file', get_lang('Attachment'));
     $form->addElement('textarea', 'comment', get_lang('Comment'), array('rows' => '8'));
     $form->addElement('hidden', 'id', $work['id']);
+    $form->addElement('hidden', 'page', $page);
     if (api_is_allowed_to_edit()) {
         $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
     }

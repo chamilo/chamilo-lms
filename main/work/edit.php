@@ -319,6 +319,12 @@ if (!empty($work_id)) {
             $template = $tpl->get_template('work/comments.tpl');
             $tpl->assign('comments', $comments);
 
+            $commentForm = getWorkCommentForm($work_item, 'edit');
+
+            if (api_is_allowed_to_session_edit()) {
+                $tpl->assign('form', $commentForm);
+            }
+
             $content .= $form->returnForm();
             $content .= $tpl->fetch($template);
         }

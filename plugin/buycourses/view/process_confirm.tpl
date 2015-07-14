@@ -3,23 +3,22 @@
 <link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
 
 <div class="row">
-    <div class="span12">
-        <div id="course_category_well" class="well span3">
-            <ul class="nav nav-list">
-                <li class="nav-header"><h4>{{ 'UserInformation'|get_plugin_lang('BuyCoursesPlugin') }}:</h4></li>
-                <li class="nav-header">{{ 'Name'|get_lang }}:</li>
-                <li><h5>{{ name | e }}</h5></li>
-                <li class="nav-header">{{ 'User'|get_lang }}:</li>
-                <li><h5>{{ user | e }}</h5></li>
-                <li class="nav-header">{{ 'Email'|get_lang }}:</li>
-                <li><h5>{{ email | e}}</h5></li>
-                <br/>
-            </ul>
+    <div class="col-md-3">
+        <div id="course_category_well" class="well">
+            <h4>{{ 'UserInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h4>
+            <dl>
+                <dt>{{ 'Name'|get_lang }}</dt>
+                <dd>{{ name|e }}</dd>
+                <dt>{{ 'User'|get_lang }}</dt>
+                <dd>{{ user | e }}</dd>
+                <dt>{{ 'Email'|get_lang }}</dt>
+                <dd>{{ email | e}}</dd>
+            </dl>
         </div>
+    </div>
 
-        <br/><br/>
-
-        <div class="well_border span8">
+    <div class="col-md-9">
+        <div class="well">
             <div class="row">
                 <div class="span">
                     <div class="thumbnail">
@@ -47,42 +46,59 @@
             </div>
         </div>
     </div>
-    <div class="cleared"></div>
-    <hr/>
-    <div align="center">
-        <table class="data_table" style="width:70%">
-            <tr>
-                <th class="ta-center">{{ 'BankAccountInformation'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-            </tr>
-            {% set i = 0 %}
-            {% for account in accounts %}
-            {{ i%2==0 ? '<tr class="row_even">' : '<tr class="row_odd">' }}
-                {% set i = i + 1 %}
-                <td class="ta-center">
-                <font color="#0000FF">{{ account.name | e }}</font><br/>
-                {% if account.swift != '' %}
-                SWIFT: <strong>{{ account.swift | e }}</strong><br/>
-                {% endif %}
-                {{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}: <strong>{{ account.account | e }}</strong><br/>
-                </td></tr>
-            {% endfor %}
-            </table>
-            <br />
-            <div class="normal-message">{{ 'OnceItIsConfirmed,YouWillReceiveAnEmailWithTheBankInformationAndAnOrderReference'|get_plugin_lang('BuyCoursesPlugin') | e}}
-    </div>
-    <br/>
-
-    <form method="post" name="frmConfirm" action="../src/process_confirm.php">
-        <input type="hidden" name="payment_type" value="Transfer"/>
-        <input type="hidden" name="name" value="{{ name | e }}"/>
-        <input type="hidden" name="price" value="{{ course.price }}"/>
-        <input type="hidden" name="title" value="{{ course.title | e }}"/>
-
-        <div class="btn_next">
-            <input class="btn btn-success" type="submit" name="Confirm" value="{{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}"/>
-            <input class="btn btn-danger" type="button" name="Cancel" value="{{ 'CancelOrder'|get_plugin_lang('BuyCoursesPlugin') }}" id="CancelOrder"/>
-        </div>
-    </form>
 </div>
-<div class="cleared"></div>
+
+<hr/>
+
+<div class="row">
+    <div class="col-md-5 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'BankAccountInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+            </div>
+            <div class="panel-body">
+                {% for account in accounts %}
+                    <p class="lead text-center">{{ account.name | e }}</p>
+
+                    <dl class="dl-horizontal">
+                        {% if account.swift != '' %}
+                            <dt>SWIFT</dt>
+                            <dd>{{ account.swift | e }}</dd>
+                        {% endif %}
+
+                        <dt>{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
+                        <dd>{{ account.account }}</dd>
+                    </dl>
+
+                    {% if lopp.index > 1 %}
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i>
+            {{ 'OnceItIsConfirmed,YouWillReceiveAnEmailWithTheBankInformationAndAnOrderReference'|get_plugin_lang('BuyCoursesPlugin') }}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <hr>
+
+        <form method="post" name="frmConfirm" action="../src/process_confirm.php">
+            <input type="hidden" name="payment_type" value="Transfer"/>
+            <input type="hidden" name="name" value="{{ name | e }}"/>
+            <input type="hidden" name="price" value="{{ course.price }}"/>
+            <input type="hidden" name="title" value="{{ course.title | e }}"/>
+
+            <p class="text-center">
+                <input class="btn btn-success" type="submit" name="Confirm" value="{{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}"/>
+                <input class="btn btn-danger" type="button" name="Cancel" value="{{ 'CancelOrder'|get_plugin_lang('BuyCoursesPlugin') }}" id="CancelOrder"/>
+            </p>
+        </form>
+    </div>
 </div>

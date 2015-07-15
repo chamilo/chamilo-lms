@@ -1360,7 +1360,7 @@ class Display
                 && ((in_array($item_property['to_group_id'], $group_ids)
                 // Drop the dropbox, notebook and chat tools (we don't care)
                 && (
-                        $item_property['tool'] != TOOL_DROPBOX &&
+                        //$item_property['tool'] != TOOL_DROPBOX &&
                         $item_property['tool'] != TOOL_NOTEBOOK &&
                         $item_property['tool'] != TOOL_CHAT)
                    )

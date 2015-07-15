@@ -274,7 +274,7 @@ unset($Courses);
                     <br />
                     <label>
                         <input type="checkbox" name="copy_evaluation">
-                        <?php echo get_lang('CopyEvaluation'); ?>
+                        <?php echo get_lang('ImportGradebookInCourse'); ?>
                     </label>
                     <br />
                 <?php

@@ -153,15 +153,17 @@ class Tracking
         }
 
         if ($origin != 'tracking') {
+            $output .= '<div class="section-status">';
             $output .= Display::page_header(get_lang('ScormMystatus'));
+            $output .= '</div>';
         }
 
         $actionColumn = null;
         if ($type == 'classic') {
             $actionColumn = ' <th>' . get_lang('Actions') . '</th>';
         }
-
-        $output .= '<table class="data_table">
+        $output .= '<div class="table-responsive">';
+        $output .= '<table class="table">
             <tr>
                 <th width="16">' . $extend_all_link . '</th>
                 <th colspan="4">
@@ -1068,6 +1070,7 @@ class Tracking
            </tr>';
 
         $output .= "</table>";
+        $output .= '</div>';
 
         if (!empty($export_csv)) {
             $temp = array(

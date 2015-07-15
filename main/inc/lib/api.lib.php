@@ -1821,6 +1821,7 @@ function api_format_course_array($course_data)
     $_course['sysCode'] = $course_data['code'];
     $_course['path'] = $course_data['directory']; // Use as key in path.
     $_course['directory'] = $course_data['directory'];
+    $_course['creation_date'] = $course_data['creation_date'];
 
     //@todo should be deprecated
     // Use as key in db list.

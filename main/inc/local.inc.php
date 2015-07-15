@@ -847,11 +847,18 @@ if (isset($cidReset) && $cidReset) {
             $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
             if (!empty($_GET['id_session'])) {
-                $_SESSION['id_session'] = intval($_GET['id_session']);
                 $sql = 'SELECT name FROM '.$tbl_session . '
-                        WHERE id="'.intval($_SESSION['id_session']) . '"';
+                        WHERE id="'.intval($_GET['id_session']) . '"';
                 $rs = Database::query($sql);
-                list($_SESSION['session_name']) = Database::fetch_array($rs);
+                if (Database::num_rows($rs)) {
+                    list($_SESSION['session_name']) = Database::fetch_array(
+                        $rs
+                    );
+                    $_SESSION['id_session'] = intval($_GET['id_session']);
+                } else {
+                    api_not_allowed(true);
+                }
+
             } else {
                 Session::erase('session_name');
                 Session::erase('id_session');
@@ -928,16 +935,19 @@ if (isset($cidReset) && $cidReset) {
         $_cid = $_SESSION['_cid'];
         $_course = $_SESSION['_course'];
 
-        // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
+        // these lines are useful for tracking. Indeed we can have lost the id_session and not the cid.
         // Moreover, if we want to track a course with another session it can be usefull
         if (!empty($_GET['id_session']) && is_numeric($_GET['id_session'])) {
             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
+            $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_GET['id_session']). '"';
             $rs = Database::query($sql);
-            list($_SESSION['session_name']) = Database::fetch_array($rs);
-            $_SESSION['id_session'] = intval($_GET['id_session']);
+            if (Database::num_rows($rs)) {
+                list($_SESSION['session_name']) = Database::fetch_array($rs);
+                $_SESSION['id_session'] = intval($_GET['id_session']);
+            } else {
+                api_not_allowed(true);
+            }
         }
-
 
         if (!empty($_REQUEST['gidReq'])) {
             $_SESSION['_gid'] = intval($_REQUEST['gidReq']);

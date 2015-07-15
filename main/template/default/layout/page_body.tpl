@@ -9,8 +9,10 @@
 
 {#  Page header #}
 {% if header != '' %}
-    <div class="page-header">
-        <h2>{{ header }}</h2>
+    <div class="section-page">
+        <div class="page-header">
+            <h3>{{ header }}</h3>
+        </div>
     </div>
 {% endif %}
 

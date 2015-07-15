@@ -271,7 +271,7 @@ if (isset($_GET['movelink'])) {
 if (isset($_GET['visiblecat'])) {
     GradebookUtils::block_students();
 
-    if (isset ($_GET['set_visible'])) {
+    if (isset($_GET['set_visible'])) {
         $visibility_command= 1;
     } else {
         $visibility_command= 0;
@@ -723,7 +723,6 @@ if (isset($_GET['studentoverview'])) {
         }
         unset($cats);
     }
-
     $cats = Category::load($category, null, null, null, null, null, false);
 
     //with this fix the teacher only can view 1 gradebook
@@ -877,6 +876,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                 }
             }
         }
+
 
         $i = 0;
         $allcat = array();

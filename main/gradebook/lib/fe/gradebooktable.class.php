@@ -54,6 +54,7 @@ class GradebookTable extends SortableTable
             'ASC',
             'gradebook_list'
         );
+
         $this->evals_links = array_merge($evals, $links);
         $this->currentcat = $currentcat;
         $this->cats = $cats;
@@ -236,7 +237,6 @@ class GradebookTable extends SortableTable
 
         // Categories.
         foreach ($data_array as $data) {
-
             // list of items inside the gradebook (exercises, lps, forums, etc)
             $row  = array();
             /** @var AbstractLink $item */

@@ -266,19 +266,4 @@ class TestDisplay extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-
-	/**
-	* Show the so-called "left" menu for navigating
-	*/
-	public function testshow_course_navigation_menu() {
-		global $output_string_menu;
-		global $_setting;
-		ob_start();
-		$res=Display::show_course_navigation_menu();
-		ob_end_clean();
-		$this->assertNull($res);
-		//var_dump($res);
-	}
-
 }
-?>

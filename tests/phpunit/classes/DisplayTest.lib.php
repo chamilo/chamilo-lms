@@ -314,17 +314,6 @@ class DisplayTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers Display::show_course_navigation_menu
-     * @todo   Implement testShow_course_navigation_menu().
-     */
-    public function testShow_course_navigation_menu()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
 
     /**
      * @covers Display::display_icon

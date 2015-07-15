@@ -8,6 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Version20150713132630
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\V110
  */
 class Version20150713132630 extends AbstractMigrationChamilo
@@ -19,6 +20,7 @@ class Version20150713132630 extends AbstractMigrationChamilo
     {
         $this->addSql('ALTER TABLE c_student_publication ADD url_correction VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE c_student_publication ADD title_correction VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_student_publication ADD document_id INT NOT NULL');
     }
 
     /**
@@ -28,5 +30,6 @@ class Version20150713132630 extends AbstractMigrationChamilo
     {
         $this->addSql('ALTER TABLE c_student_publication DROP url_correction');
         $this->addSql('ALTER TABLE c_student_publication DROP title_correction');
+        $this->addSql('ALTER TABLE c_student_publication DROP document_id');
     }
 }

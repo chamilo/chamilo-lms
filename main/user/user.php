@@ -774,12 +774,18 @@ function modify_filter($user_id, $row, $data)
             $isTutor = isset($data['is_tutor']) ? intval($data['is_tutor']) : 0;
             $isTutor = empty($isTutor) ? 1 : 0;
 
+            $text = get_lang('RemoveTutorStatus');
+            if ($isTutor) {
+                $text = get_lang('SetTutor');
+            }
+
             $disabled = '';
+
             if ($data['user_status_in_course'] == COURSEMANAGER) {
                 $disabled = 'disabled';
             }
             $result .= Display::url(
-                    get_lang('SetTutor'),
+                    $text,
                     'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id,
                     array('class' => 'btn btn-default '.$disabled)
                 ).'&nbsp;';

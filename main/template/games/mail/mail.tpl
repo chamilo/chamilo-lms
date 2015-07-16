@@ -6,28 +6,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body style="margin: 0; padding: 0;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%">
-            <tr>
-                <td>
-                    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
-                        <tr>
-                            <td>
-                                {% include template ~ '/mail/header.tpl' %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td cellpadding="0" cellspacing="0" style="padding: 40px 10px">
+
+    <table align="center" width="100%" style="background-color:#F8F8F8; font-family:Helvetica Neue,Helvetica,Arial,sans-serif;">
+        <tr>
+            <td>
+
+                <table border="0" align="center" cellpadding="20" cellspacing="0" width="600px" style="background-color:#ffffff;margin-top:25px;margin-bottom:25px;border-radius:10px; border:1px solid #ddd">
+                    <tr>
+                        <td>
+                            {% include template ~ '/mail/header.tpl' %}
+                        </td>
+                    </tr>   
+                    <tr>
+                        <td>
+                            <div style="padding:20px; text-align: justify; color:#666666">
                                 {{ content }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {% include template ~ '/mail/footer.tpl' %}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% include template ~ '/mail/footer.tpl' %}
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
     </body>
 </html>

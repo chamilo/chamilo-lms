@@ -1,12 +1,11 @@
-<table border="0" cellpadding="10" cellspacing="0" width="100%">
+<table style="background-color:#F8F8F8;" border="0" cellpadding="20" cellspacing="0" width="100%">
     <tr>
-        <td width="245">
-            <a href="{{ _p.web }}">
-                <img src="{{ _p.web_css_theme ~ 'images/header-logo.png' }}" alt="{{ _s.site_name }}">
+        <td width="60%">
+            <a style="text-decoration: none;" href="{{ _p.web }}">
+                <img src="{{ _p.web_css_theme ~ 'logo-tademi.png' }}" alt="{{ _s.site_name }}">
             </a>
         </td>
-        <td width="100%">
-            &nbsp;
-        </td>
-    </tr>
+        <td width="20%"><a style="color:#009CBB; text-decoration:none; font-weight:normal;" href="{{ _p.web }}" target="_blank">Cursos</a></td>
+        <td width="20%"><a style="color:#009CBB; text-decoration:none; font-weight:normal;" href="#{{ _p.web }}" target="_blank">Mi Perfil</a></td>
+    <tr>
 </table>

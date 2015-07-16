@@ -16,7 +16,7 @@
                         <td>
                             {% include template ~ '/mail/header.tpl' %}
                         </td>
-                    </tr>   
+                    </tr>
                     <tr>
                         <td>
                             <div style="padding:20px; text-align: justify; color:#666666">

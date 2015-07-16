@@ -5,7 +5,7 @@
                 <img src="{{ _p.web_css_theme ~ 'logo-tademi.png' }}" alt="{{ _s.site_name }}">
             </a>
         </td>
-        <td width="20%"><a style="color:#009CBB; text-decoration:none; font-weight:normal;" href="{{ _p.web }}" target="_blank">Cursos</a></td>
-        <td width="20%"><a style="color:#009CBB; text-decoration:none; font-weight:normal;" href="#{{ _p.web }}" target="_blank">Mi Perfil</a></td>
+        <td width="20%"><a style="color:#009CBB; text-decoration:none; font-weight:normal;" href="{{ _p.web }}user_portal.php?nosession=true" target="_blank">Cursos</a></td>
+        <td width="20%"><a style="color:#009CBB; text-decoration:none; font-weight:normal;" href="#{{ _p.web }}main/social/home.php" target="_blank">Mi Perfil</a></td>
     <tr>
 </table>

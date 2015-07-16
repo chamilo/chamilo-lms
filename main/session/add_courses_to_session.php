@@ -82,7 +82,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $courseList = $_POST['SessionCoursesList'];
     $copyEvaluation = isset($_POST['copy_evaluation']);
 
-    SessionManager::add_courses_to_session($sessionId, $courseList, true, $copyEvaluation);
+    SessionManager::add_courses_to_session(
+        $sessionId,
+        $courseList,
+        true,
+        $copyEvaluation
+    );
+
     Display::addFlash(Display::return_message(get_lang('Updated')));
 
     if (isset($add)) {

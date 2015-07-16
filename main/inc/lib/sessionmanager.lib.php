@@ -1990,6 +1990,7 @@ class SessionManager
                 }
             }
         }
+
         return true;
     }
 
@@ -2025,11 +2026,11 @@ class SessionManager
         $sql = "SELECT c_id
                 FROM $tbl_session_rel_course
                 WHERE session_id = $sessionId";
-        $rs = Database::query($sql );
+        $rs = Database::query($sql);
         $existingCourses = Database::store_result($rs);
         $nbr_courses = count($existingCourses);
 
-        // get list of users subscribed to this session
+        // Get list of users subscribed to this session
         $sql = "SELECT user_id
                 FROM $tbl_session_rel_user
                 WHERE
@@ -2045,11 +2046,15 @@ class SessionManager
                 if (!in_array($existingCourse['c_id'], $courseList)) {
 
                     $sql = "DELETE FROM $tbl_session_rel_course
-                            WHERE c_id = " . $existingCourse['c_id'] . " AND session_id = $sessionId";
+                            WHERE
+                                c_id = " . $existingCourse['c_id'] . " AND
+                                session_id = $sessionId";
                     Database::query($sql);
 
                     $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                            WHERE c_id = " . $existingCourse['c_id'] . " AND session_id = $sessionId";
+                            WHERE
+                                c_id = ".$existingCourse['c_id']." AND
+                                session_id = $sessionId";
                     Database::query($sql);
 
                     Event::addEvent(
@@ -2110,6 +2115,7 @@ class SessionManager
                             $newCategoryIdList[$oldCategoryId] = $newId;
 
                             $parentId = $cat->get_parent_id();
+
                             if (!empty($parentId)) {
                                 $newParentId = $newCategoryIdList[$parentId];
                                 $cat->set_parent_id($newParentId);
@@ -2123,6 +2129,9 @@ class SessionManager
                                 $link->add();
                             }
                         }
+
+                        // Create
+                        DocumentManager::generateDefaultCertificate($courseInfo, true, $sessionId);
                     }
                 }
 

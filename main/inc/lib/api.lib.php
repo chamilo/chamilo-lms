@@ -7845,7 +7845,12 @@ function api_mail_html(
         }
     }
     $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
-    $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
+
+    $mailView = new Template(null, false, false, false, false, false);
+    $mailView->assign('content', $message);
+    $layout = $mailView->get_template('mail/mail.tpl');
+
+    $mail->Body = $mailView->fetch($layout);
 
     // Attachment ...
     if (!empty($data_file)) {

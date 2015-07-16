@@ -633,6 +633,38 @@ footer .media{
 .form-group label{
   font-weight: normal;
 }
+#login_block .btn-press{
+  display: inline-block;
+  width: 100%;
+  border-radius: 5px;
+  text-transform: capitalize;
+  font-size: 18px;
+}
+#login_block .btn-lost{
+  text-align: center;
+  color: #666666;
+  width: 100%;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+#login_block .btn-lost:hover{
+  text-decoration: underline;
+}
+hr.separator {
+  border-top: 2px solid #F0F0F0;
+  text-align: center;
+}
+hr.separator:after {
+  font-family: FontAwesome;
+  content: '';
+  display: inline-block;
+  position: relative;
+  top: -15px;
+  padding: 0 10px;
+  background: #ffffff;
+  color: #F0F0F0;
+  font-size: 18px;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
 	/* .container{

@@ -14,6 +14,8 @@ if (!empty($_POST['language'])) {
 }
 require_once '../inc/global.inc.php';
 
+$hideHeaders = isset($_GET['hide_headers']);
+
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 
 // User is not allowed if Terms and Conditions are disabled and
@@ -683,11 +685,12 @@ if ($form->validate()) {
             array('info' => $text_after_registration)
         );
     } else {
-        Display :: display_header($tool_name);
+        Display:: display_header($tool_name);
         echo Display::page_header($tool_name);
         echo $content;
         echo $text_after_registration;
-        Display :: display_footer();
+
+        Display:: display_footer();
     }
 } else {
     // Custom pages
@@ -718,11 +721,17 @@ if ($form->validate()) {
             CourseManager::redirectToCourse([]);
         }
 
-        Display :: display_header($tool_name);
+        if ($hideHeaders) {
+            Display:: display_no_header();
+        } else {
+            Display:: display_header($tool_name);
+        }
         echo Display::page_header($tool_name);
         echo $content;
         $form->display();
 
-        Display :: display_footer();
+        if ($hideHeaders == false) {
+            Display:: display_footer();
+        }
     }
 }

@@ -16,7 +16,7 @@
         {% if "allow_lostpassword" | get_setting == 'true' and "allow_registration" | get_setting == 'true' %}
             <ul class="nav nav-pills nav-stacked">
                 {% if "allow_registration" | get_setting != 'false' %}
-                    <li><a href="main/auth/inscription.php"> {{ 'SignUp' | get_lang }} </a></li>
+                    <li><a href="main/auth/inscription.php?hide_headers=1"> {{ 'SignUp' | get_lang }} </a></li>
                 {% endif %}
 
                 {% if "allow_lostpassword" | get_setting == 'true' %}

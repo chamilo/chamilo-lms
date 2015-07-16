@@ -877,7 +877,6 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             }
         }
 
-
         $i = 0;
         $allcat = array();
         /** @var Category $cat */

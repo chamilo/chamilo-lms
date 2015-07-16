@@ -24,7 +24,8 @@ $allowedFields = [
 ];
 
 $allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
-if ($allowedFieldsConfiguration != false) {
+
+if ($allowedFieldsConfiguration !== false) {
     $allowedFields = $allowedFieldsConfiguration;
 }
 

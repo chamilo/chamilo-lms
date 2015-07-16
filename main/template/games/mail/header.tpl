@@ -2,7 +2,7 @@
     <tr>
         <td width="60%">
             <a style="text-decoration: none;" href="{{ _p.web }}">
-                <img src="{{ _p.web_css_theme ~ 'logo-tademi.png' }}" alt="{{ _s.site_name }}">
+                <img src="{{ _p.web_css_theme ~ 'images/logo-tademi.png' }}" alt="{{ _s.site_name }}">
             </a>
         </td>
         <td width="20%"><a style="color:#009CBB; text-decoration:none; font-weight:normal;" href="{{ _p.web }}user_portal.php?nosession=true" target="_blank">Cursos</a></td>

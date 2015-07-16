@@ -34,9 +34,6 @@ class IndexManager
     function set_login_form($setLoginForm = true)
     {
         global $loginFailed;
-
-        $login_form = '';
-
         if (!($this->user_id) || api_is_anonymous($this->user_id)) {
 
             // Only display if the user isn't logged in.
@@ -47,18 +44,6 @@ class IndexManager
                 if ($loginFailed) {
                     $this->tpl->assign('login_failed',  self::handle_login_failed());
                 }
-
-                if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-                    $login_form .= '<ul class="nav nav-pills nav-stacked">';
-                    if (api_get_setting('allow_registration') != 'false') {
-                        $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('SignUp').'</a></li>';
-                    }
-                    if (api_get_setting('allow_lostpassword') == 'true') {
-                        $login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
-                    }
-                    $login_form .= '</ul>';
-                }
-                $this->tpl->assign('login_options',  $login_form);
             }
         }
     }

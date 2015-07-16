@@ -24,7 +24,7 @@ class ToolIntro extends Resource
 	 */
 	public function __construct($id, $intro_text)
 	{
-		parent::__construct($id,RESOURCE_TOOL_INTRO);
+		parent::__construct($id, RESOURCE_TOOL_INTRO);
 		$this->id = $id;
 		$this->intro_text = $intro_text;
 	}

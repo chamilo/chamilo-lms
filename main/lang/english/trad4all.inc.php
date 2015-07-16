@@ -7411,4 +7411,11 @@ $FieldTypeCheckbox = "Checkbox options";
 $FieldTypeInteger = "Integer value";
 $FieldTypeFileImage = "Image file";
 $FieldTypeFloat = "Float value";
+$DocumentsDefaultVisibilityDefinedInCourseTitle = "Document visibility defined in course";
+$DocumentsDefaultVisibilityDefinedInCourseComment = "The default document visibility for all courses";
+$HtmlPurifierWikiTitle = "HTMLPurifier in Wiki";
+$HtmlPurifierWikiComment = "Enable HTML purifier in the wiki tool (will increase security but reduce style features)";
+$ClickOrDropFilesHere = "Click or drop files";
+$RemoveTutorStatus = "Remove tutor status";
+$ImportGradebookInCourse = "Import gradebook from base course";
 ?>

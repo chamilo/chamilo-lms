@@ -86,8 +86,8 @@ Display :: display_footer();
  * @param   string  Filename
  * @param   string  The subdirectory in which to put the files in each course
  */
-function import_pdfs($file, $subDir = '/') {
-    global $_configuration;
+function import_pdfs($file, $subDir = '/')
+{
     $baseDir = api_get_path(SYS_ARCHIVE_PATH);
     $uploadPath = 'pdfimport/';
     $errors = array ();
@@ -146,5 +146,6 @@ function import_pdfs($file, $subDir = '/') {
     if ($i == 0) {
         $errors[] = array('Line' => 0, 'Code' => '.', 'Title' => get_lang('NoPDFFoundAtRoot'));
     }
+
     return $errors;
 }

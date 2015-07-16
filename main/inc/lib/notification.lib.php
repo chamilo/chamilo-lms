@@ -233,21 +233,21 @@ class Notification extends Model
         $content = $this->formatContent($content, $senderInfo);
         $titleToNotification = $this->formatTitle($title, $senderInfo);
 
-        $setting_to_check = '';
+        $settingToCheck = '';
         $avoid_my_self = false;
 
         switch ($this->type) {
             case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
             case self::NOTIFICATION_TYPE_MESSAGE:
-                $setting_to_check = 'mail_notify_message';
+                $settingToCheck = 'mail_notify_message';
                 $defaultStatus = self::NOTIFY_MESSAGE_AT_ONCE;
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
-                $setting_to_check = 'mail_notify_invitation';
+                $settingToCheck = 'mail_notify_invitation';
                 $defaultStatus = self::NOTIFY_INVITATION_AT_ONCE;
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
-                $setting_to_check = 'mail_notify_group_message';
+                $settingToCheck = 'mail_notify_group_message';
                 $defaultStatus = self::NOTIFY_GROUP_AT_ONCE;
                 $avoid_my_self = true;
                 break;
@@ -256,7 +256,7 @@ class Notification extends Model
                 break;
         }
 
-        $settingInfo = UserManager::get_extra_field_information_by_name($setting_to_check);
+        $settingInfo = UserManager::get_extra_field_information_by_name($settingToCheck);
 
         if (!empty($user_list)) {
             foreach ($user_list as $user_id) {
@@ -268,11 +268,13 @@ class Notification extends Model
                 $userInfo = api_get_user_info($user_id);
 
                 // Extra field was deleted or removed? Use the default status.
-                if (empty($settingInfo)) {
-                    $userSetting = $defaultStatus;
-                } else {
+                $userSetting = $defaultStatus;
+
+                if (!empty($settingInfo)) {
                     $extra_data = UserManager::get_extra_user_data($user_id);
-                    $userSetting = $extra_data[$setting_to_check];
+                    if (isset($extra_data[$settingToCheck]) && !empty($extra_data[$settingToCheck])) {
+                        $userSetting = $extra_data[$settingToCheck];
+                    }
                 }
 
                 $sendDate = null;

@@ -6,11 +6,7 @@
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-/**
- * Code
- */
 
-// Including the global initialization file
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
@@ -33,7 +29,6 @@ $interbreadcrumb[] = array(
 $nameTools = get_lang('RecycleCourse');
 Display::display_header($nameTools);
 
-// Include additional libraries
 require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseArchiver.class.php';
 require_once 'classes/CourseRecycler.class.php';

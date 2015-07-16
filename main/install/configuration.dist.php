@@ -215,3 +215,11 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 
 // Allow anonymous users to see the courses/sessions catalogue
 //$_configuration['course_catalog_published'] = 'false';
+// Only shows the fields in this list
+/*$_configuration['allow_fields_inscription'] = [
+    'official_code',
+    'phone',
+    'status',
+    'language',
+    'extra_fields'
+];*/

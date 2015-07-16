@@ -451,7 +451,9 @@ class Category implements GradebookItem
 
         $categories = array();
         if (Database::num_rows($result) > 0) {
-            $categories = Category::create_category_objects_from_sql_result($result);
+            $categories = Category::create_category_objects_from_sql_result(
+                $result
+            );
         }
 
         return $categories;
@@ -570,7 +572,8 @@ class Category implements GradebookItem
             $em->persist($category);
             $em->flush();
 
-            $id = Database::insert_id();
+            $id = $category->getId();
+
             $this->set_id($id);
 
             if (!empty($id)) {
@@ -591,13 +594,13 @@ class Category implements GradebookItem
                             $gradebook =  new Gradebook();
                             $params = array();
 
-                            $params['name']             = $component['acronym'];
-                            $params['description']      = $component['title'];
-                            $params['user_id']          = api_get_user_id();
-                            $params['parent_id']        = $id;
-                            $params['weight']           = $component['percentage']/100*$default_weight;
-                            $params['session_id']       = api_get_session_id();
-                            $params['course_code']      = $this->get_course_code();
+                            $params['name'] = $component['acronym'];
+                            $params['description'] = $component['title'];
+                            $params['user_id'] = api_get_user_id();
+                            $params['parent_id'] = $id;
+                            $params['weight'] = $component['percentage'] / 100 * $default_weight;
+                            $params['session_id'] = api_get_session_id();
+                            $params['course_code'] = $this->get_course_code();
 
                             $gradebook->save($params);
                         }
@@ -959,7 +962,6 @@ class Category implements GradebookItem
                     return array($ressum, $weightsum);
                     break;
                 case 'ranking':
-                    //var_dump($students);
                     return null;
                     return AbstractLink::getCurrentUserRanking($students);
                     break;
@@ -1487,6 +1489,7 @@ class Category implements GradebookItem
             // All students
             // Course admin
             if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
+
                 // root
                 if ($this->id == 0) {
                     return $this->get_root_categories_for_teacher(api_get_user_id(), $course_code, $session_id, false);
@@ -1501,7 +1504,7 @@ class Category implements GradebookItem
                 }
             } elseif (api_is_platform_admin()) {
                 // platform admin
-                //we explicitly avoid listing subcats from another session
+                // we explicitly avoid listing subcats from another session
                 return Category::load(null, null, $course_code, $this->id, null, $session_id, $order);
             }
         }

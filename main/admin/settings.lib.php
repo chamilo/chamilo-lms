@@ -404,6 +404,7 @@ function upload_stylesheet($values, $picture)
     $cssToUpload = CSS_UPLOAD_PATH;
 
     // Create the folder if needed.
+
     if (!is_dir($cssToUpload.$style_name.'/')) {
         mkdir($cssToUpload.$style_name.'/', api_get_permissions_for_new_directories());
     }
@@ -504,7 +505,7 @@ function upload_stylesheet($values, $picture)
 
     if ($result) {
         $fs = new Filesystem();
-        $fs->mirror($cssToUpload, api_get_path(SYS_PATH).'web/css/');
+        $fs->mirror($cssToUpload, api_get_path(SYS_PATH).'web/css/themes/');
     }
 
     return $result;
@@ -1380,7 +1381,6 @@ function generate_settings_form($settings, $settings_by_access_list) {
         $form->setDefaults($default_values);
     }
     $form->addButtonSave(get_lang('SaveSettings'));
-    //$form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'class="save"');
     return $form;
 }
 

@@ -45,7 +45,16 @@ class GradebookTable extends SortableTable
         $this->userId = is_null($userId) ? api_get_user_id() : $userId;
         $this->exportToPdf = $exportToPdf;
 
-        parent::__construct('gradebooklist', null, null, api_is_allowed_to_edit() ? 1 : 0, 20, 'ASC', 'gradebook_list');
+        parent::__construct(
+            'gradebooklist',
+            null,
+            null,
+            api_is_allowed_to_edit() ? 1 : 0,
+            20,
+            'ASC',
+            'gradebook_list'
+        );
+
         $this->evals_links = array_merge($evals, $links);
         $this->currentcat = $currentcat;
         $this->cats = $cats;
@@ -210,7 +219,15 @@ class GradebookTable extends SortableTable
         $sortable_data = array();
         $weight_total_links = 0;
         $main_categories = array();
-        $main_cat =  Category::load(null, null, $course_code, null, null, $session_id, false);
+        $main_cat = Category::load(
+            null,
+            null,
+            $course_code,
+            null,
+            null,
+            $session_id,
+            false
+        );
         $total_categories_weight = 0;
         $scoredisplay = ScoreDisplay :: instance();
 
@@ -220,7 +237,6 @@ class GradebookTable extends SortableTable
 
         // Categories.
         foreach ($data_array as $data) {
-
             // list of items inside the gradebook (exercises, lps, forums, etc)
             $row  = array();
             /** @var AbstractLink $item */
@@ -239,7 +255,6 @@ class GradebookTable extends SortableTable
 
             // Type.
             $row[] = $this->build_type_column($item);
-
 
             // Name.
             if (get_class($item) == 'Category') {
@@ -367,7 +382,14 @@ class GradebookTable extends SortableTable
                 $course_code = api_get_course_id();
                 $session_id = api_get_session_id();
                 $parent_id = $item->get_id();
-                $cats = Category::load($parent_id, null, null, null, null, null);
+                $cats = Category::load(
+                    $parent_id,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                );
 
                 if (isset($cats[0])) {
                     $allcat  = $cats[0]->get_subcategories($this->userId, $course_code, $session_id);
@@ -427,7 +449,7 @@ class GradebookTable extends SortableTable
                             $cat = new Category();
                             $show_message = $cat->show_message_resource_delete($item->get_course_code());
                             if ($show_message === false) {
-                                if ($this->exportToPdf) {
+                                if ($this->exportToPdf == false) {
                                     $row[] = $this->build_edit_column($item);
                                 }
                             }

@@ -1707,37 +1707,49 @@ class DocumentManager
 
     /**
      * Allow attach a certificate to a course
-     * @param string The course id
-     * @param int The document id
+     * @param string $course_id
+     * @param int $document_id
+     * @param int $session_id
+     *
      * @return void()
      */
-    public static function attach_gradebook_certificate($course_id, $document_id)
+    public static function attach_gradebook_certificate($course_id, $document_id, $session_id = 0)
     {
         $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $session_id = api_get_session_id();
-        if ($session_id == 0 || is_null($session_id)) {
-            $sql_session = 'AND (session_id=' . intval($session_id) . ' OR isnull(session_id)) ';
+        $session_id = intval($session_id);
+        if (empty($session_id)) {
+            $session_id = api_get_session_id();
+        }
+
+        if (empty($session_id)) {
+            $sql_session = 'AND (session_id = 0 OR isnull(session_id)) ';
         } elseif ($session_id > 0) {
             $sql_session = 'AND session_id=' . intval($session_id);
         } else {
             $sql_session = '';
         }
         $sql = 'UPDATE ' . $tbl_category . ' SET document_id="' . intval($document_id) . '"
-               WHERE course_code="' . Database::escape_string($course_id) . '" ' . $sql_session;
+                WHERE course_code="' . Database::escape_string($course_id) . '" ' . $sql_session;
         Database::query($sql);
     }
 
     /**
      * get the document id of default certificate
      * @param string $course_id
+     * @param int $session_id
+     *
      * @return int The default certificate id
      */
-    public static function get_default_certificate_id($course_id)
+    public static function get_default_certificate_id($course_id, $session_id = 0)
     {
         $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $session_id = api_get_session_id();
-        if ($session_id == 0 || is_null($session_id)) {
-            $sql_session = 'AND (session_id=' . intval($session_id) . ' OR isnull(session_id)) ';
+        $session_id = intval($session_id);
+        if (empty($session_id)) {
+            $session_id = api_get_session_id();
+        }
+
+        if (empty($session_id)) {
+            $sql_session = 'AND (session_id = 0 OR isnull(session_id)) ';
         } elseif ($session_id > 0) {
             $sql_session = 'AND session_id=' . intval($session_id);
         } else {
@@ -1751,12 +1763,15 @@ class DocumentManager
             return null;
         }
         $row = Database::fetch_array($rs);
+
         return $row['document_id'];
     }
 
     /**
      * allow replace user info in file html
-     * @param string The course code
+     * @param int $user_id
+     * @param string $course_code
+     * @param bool $is_preview
      * @return string The html content of the certificate
      */
     public static function replace_user_info_into_html($user_id, $course_code, $is_preview = false)
@@ -1788,7 +1803,11 @@ class DocumentManager
                     $my_content_html
                 );
             }
-            return array('content' => $new_content, 'variables' => $all_user_info);
+
+            return array(
+                'content' => $new_content,
+                'variables' => $all_user_info,
+            );
         }
         return array();
     }
@@ -1812,7 +1831,13 @@ class DocumentManager
         $portal_name = api_get_setting('siteName');
 
         //Extra user data information
-        $extra_user_info_data = UserManager::get_extra_user_data($user_id, false, false, false, true);
+        $extra_user_info_data = UserManager::get_extra_user_data(
+            $user_id,
+            false,
+            false,
+            false,
+            true
+        );
 
         //Student information
         $user_info = api_get_user_info($user_id);
@@ -4589,8 +4614,10 @@ class DocumentManager
      * @global string $default_course_dir Course directory
      * @global string $js JS directory
      * @param array $courseData The course info
+     * @param bool $fromBaseCourse
+     * @param int $sessionId
      */
-    public static function generateDefaultCertificate($courseData)
+    public static function generateDefaultCertificate($courseData, $fromBaseCourse = false, $sessionId = 0)
     {
         global $css, $img_dir, $default_course_dir, $js;
         $codePath = api_get_path(REL_CODE_PATH);
@@ -4617,6 +4644,24 @@ class DocumentManager
             mkdir($filePath, api_get_permissions_for_new_directories());
         }
 
+        if ($fromBaseCourse) {
+            $defaultCertificateId = self::get_default_certificate_id($courseData['code'], 0);
+
+            if (!empty($defaultCertificateId)) {
+                // We have a certificate from the course base
+                $documentData = DocumentManager::get_document_data_by_id(
+                    $defaultCertificateId,
+                    $courseData['code'],
+                    false,
+                    0
+                );
+
+                if ($documentData) {
+                    $fileContent = file_get_contents($documentData['absolute_path']);
+                }
+            }
+        }
+
         $defaultCertificateFile = $fp = @fopen($fileFullPath, 'w');
 
         if ($defaultCertificateFile != false) {
@@ -4627,12 +4672,39 @@ class DocumentManager
             $fileSize = filesize($fileFullPath);
         }
 
-        $documentId = add_document($courseData, $saveFilePath, $fileType, $fileSize, $title, $comment);
+        $documentId = add_document(
+            $courseData,
+            $saveFilePath,
+            $fileType,
+            $fileSize,
+            $title,
+            $comment,
+            0,//$readonly = 0,
+            true, //$save_visibility = true,
+            null, //$group_id = null,
+            $sessionId
+        );
 
-        $defaultCertificateId = self::get_default_certificate_id($courseData['code']);
+        api_item_property_update(
+            $courseData,
+            TOOL_DOCUMENT,
+            $documentId,
+            'DocumentAdded',
+            api_get_user_id(),
+            null,
+            null,
+            null,
+            null,
+            $sessionId
+        );
+
+        $defaultCertificateId = self::get_default_certificate_id(
+            $courseData['code'],
+            $sessionId
+        );
 
         if (!isset($defaultCertificateId)) {
-            self::attach_gradebook_certificate($courseData['code'], $documentId);
+            self::attach_gradebook_certificate($courseData['code'], $documentId, $sessionId);
         }
     }
 

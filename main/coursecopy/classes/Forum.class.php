@@ -103,33 +103,10 @@ class Forum extends Resource
     /**
      * Create a new Forum
      */
-    /* function Forum($id, $title, $description, $category_id, $last_post, $topics, $posts, $allow_anonymous, $allow_edit, $approval_direct_post, $allow_attachements,
-      $allow_new_topics, $default_view, $of_group, $group_public_private, $order, $locked, $session_id, $image)
-      { */
     function __construct($obj)
     {
         parent::__construct($obj->forum_id, RESOURCE_FORUM);
         $this->obj = $obj;
-
-        /*
-          $this->title = $title;
-          $this->description = $description;
-          $this->category_id = $category_id;
-          $this->last_post = $last_post;
-          $this->topics = $topics;
-          $this->posts = $posts;
-          $this->allow_anonymous = $allow_anonymous;
-          $this->allow_edit = $allow_edit;
-          $this->approval_direct_post = $approval_direct_post;
-          $this->allow_attachements = $allow_attachements;
-          $this->allow_new_topics = $allow_new_topics;
-          $this->default_view = $default_view;
-          $this->of_group = $of_group;
-          $this->group_public_private = $group_public_private;
-          $this->order = $order;
-          $this->locked = $locked;
-          $this->session_id = $session_id;
-          $this->image = $image; */
     }
 
     /**

@@ -1652,7 +1652,8 @@ function get_work_user_list_from_documents(
 
     $sql = "(
                 $select1 FROM $userTable u
-                INNER JOIN $workTable w ON (u.user_id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
+                INNER JOIN $workTable w
+                ON (u.user_id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
                 WHERE
                     w.c_id = $courseId
                     $userCondition
@@ -1661,8 +1662,10 @@ function get_work_user_list_from_documents(
                     $workParentCondition
             ) UNION (
                 $select2 FROM $workTable w
-                INNER JOIN $workRelDocument w_rel ON (w_rel.work_id = w.id AND w.active IN (0, 1) AND w_rel.c_id = w.c_id)
-                INNER JOIN $documentTable d ON (w_rel.document_id = d.id AND d.c_id = w.c_id)
+                INNER JOIN $workRelDocument w_rel
+                ON (w_rel.work_id = w.id AND w.active IN (0, 1) AND w_rel.c_id = w.c_id)
+                INNER JOIN $documentTable d
+                ON (w_rel.document_id = d.id AND d.c_id = w.c_id)
                 INNER JOIN $userTable u ON (u.user_id = $studentId)
                 WHERE
                     w.c_id = $courseId

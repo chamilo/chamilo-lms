@@ -92,7 +92,7 @@ if (Security::check_token('post') && (
     }
     $sql .= ' AND
             cu.user_id = '.$user_info['user_id'].' AND
-            c.c_id != '."'".$course_info['real_id']."'".'
+            c.id != '."'".$course_info['real_id']."'".'
             ORDER BY title ASC';
     $res = Database::query($sql);
     if (Database::num_rows($res) == 0) {

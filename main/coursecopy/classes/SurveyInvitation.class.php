@@ -41,7 +41,7 @@ class SurveyInvitation extends Resource
 	 */
 	public function __construct($id,$code,$user,$invitation_code,$invitation_date,$reminder_date)
 	{
-		parent::__construct($id,RESOURCE_SURVEYINVITATION);
+		parent::__construct($id, RESOURCE_SURVEYINVITATION);
 		$this->code = $code;
 		$this->user = $user;
 		$this->invitation_code = $invitation_code;

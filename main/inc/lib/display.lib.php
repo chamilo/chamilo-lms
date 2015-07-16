@@ -107,12 +107,14 @@ class Display
         echo self::$global_template->show_header_template();
     }
 
+    /**
+     * Display no header
+     */
     public static function display_no_header()
     {
         global $tool_name, $show_learnpath;
         $disable_js_and_css_files = true;
         self::$global_template = new Template($tool_name, false, false, $show_learnpath);
-        //echo self::$global_template->show_header_template();
     }
 
     /**
@@ -183,7 +185,7 @@ class Display
         if (file_exists($localised_file_name)) {
             include $localised_file_name;
         } else {
-            include ($default_file_name);
+            include $default_file_name;
         }
     }
 
@@ -431,8 +433,10 @@ class Display
     /**
      * Displays a normal message. It is recommended to use this public function
      * to display any normal information messages.
+     * @param string $message
+     * @param bool	$filter (true) or not (false)
+     * @param bool $returnValue
      *
-     * @param bool	Filter (true) or not (false)
      * @return void
      */
     public static function display_normal_message($message, $filter = true, $returnValue = false)
@@ -533,6 +537,7 @@ class Display
             default:
                 $class .= 'alert alert-info';
         }
+
         return self::div($message, array('class'=> $class));
     }
 
@@ -605,6 +610,7 @@ class Display
         // icon html code
         $icon_html_source = self::return_icon($icon_file, $hmail, '', $icon_size);
         // Return encrypted mailto hyperlink
+
         return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link">'.$icon_html_source.'</a>';
     }
 
@@ -660,51 +666,6 @@ class Display
             $result .= '>'.$i.'</option>';
         }
         return $result;
-    }
-
-    /**
-     * Shows the so-called "left" menu for navigating
-     */
-    public static function show_course_navigation_menu($isHidden = false)
-    {
-        global $output_string_menu;
-        global $_setting;
-
-        // Check if the $_SERVER['REQUEST_URI'] contains already url parameters (thus a questionmark)
-        if (strpos($_SERVER['REQUEST_URI'], '?') === false) {
-            $sourceurl = api_get_self().'?';
-        } else {
-            $sourceurl = $_SERVER['REQUEST_URI'];
-        }
-        $output_string_menu = '';
-        if ($isHidden == 'true' and $_SESSION['hideMenu']) {
-
-            $_SESSION['hideMenu'] = 'hidden';
-
-            $sourceurl = str_replace('&isHidden=true', '', $sourceurl);
-            $sourceurl = str_replace('&isHidden=false', '', $sourceurl);
-
-            $output_string_menu .= ' <a href="'.$sourceurl.'&isHidden=false"><img src="../../main/img/expand.gif" alt="'.'Show menu1'.'" padding:"2px"/></a>';
-        } elseif ($isHidden == 'false' && $_SESSION['hideMenu']) {
-            $sourceurl = str_replace('&isHidden=true', '', $sourceurl);
-            $sourceurl = str_replace('&isHidden=false', '', $sourceurl);
-
-            $_SESSION['hideMenu'] = 'shown';
-            $output_string_menu .= '<div id="leftimg"><a href="'.$sourceurl.'&isHidden=true"><img src="../../main/img/collapse.gif" alt="'.'Hide menu2'.'" padding:"2px"/></a></div>';
-        } elseif ($_SESSION['hideMenu']) {
-            if ($_SESSION['hideMenu'] == 'shown') {
-                $output_string_menu .= '<div id="leftimg"><a href="'.$sourceurl.'&isHidden=true"><img src="../../main/img/collapse.gif" alt="'.'Hide menu3'.' padding:"2px"/></a></div>';
-            }
-            if ($_SESSION['hideMenu'] == 'hidden') {
-                $sourceurl = str_replace('&isHidden=true', '', $sourceurl);
-                $output_string_menu .= '<a href="'.$sourceurl.'&isHidden=false"><img src="../../main/img/expand.gif" alt="'.'Hide menu4'.' padding:"2px"/></a>';
-            }
-        } elseif (!$_SESSION['hideMenu']) {
-            $_SESSION['hideMenu'] = 'shown';
-            if (isset($_cid)) {
-                $output_string_menu .= '<div id="leftimg"><a href="'.$sourceurl.'&isHidden=true"><img src="main/img/collapse.gif" alt="'.'Hide menu5'.' padding:"2px"/></a></div>';
-            }
-        }
     }
 
     /**
@@ -1174,7 +1135,7 @@ class Display
 
         $json = '';
         if (!empty($extra_params['datatype'])) {
-            $obj->datatype  = $extra_params['datatype'];
+            $obj->datatype = $extra_params['datatype'];
         }
 
         // Row even odd style.
@@ -1184,24 +1145,24 @@ class Display
         }
 
         if (!empty($extra_params['sortname'])) {
-            $obj->sortname      = $extra_params['sortname'];
+            $obj->sortname = $extra_params['sortname'];
         }
 
         if (!empty($extra_params['sortorder'])) {
-            $obj->sortorder     = $extra_params['sortorder'];
+            $obj->sortorder = $extra_params['sortorder'];
         }
 
         if (!empty($extra_params['rowList'])) {
-            $obj->rowList     = $extra_params['rowList'];
+            $obj->rowList = $extra_params['rowList'];
         }
         //Sets how many records we want to view in the grid
         $obj->rowNum = 20;
         if (!empty($extra_params['rowNum'])) {
-            $obj->rowNum     = $extra_params['rowNum'];
+            $obj->rowNum = $extra_params['rowNum'];
         }
 
         if (!empty($extra_params['viewrecords'])) {
-            $obj->viewrecords   = $extra_params['viewrecords'];
+            $obj->viewrecords = $extra_params['viewrecords'];
         }
 
         $beforeSelectRow = null;
@@ -1295,7 +1256,7 @@ class Display
         $row = 0;
         $column = 0;
 
-        //Course headers
+        // Course headers
         if (!empty($headers)) {
 	        foreach ($headers as $item) {
 	            $table->setHeaderContents($row, $column, $item);
@@ -1329,10 +1290,10 @@ class Display
      */
     public static function show_notification($course_info)
     {
-        $t_track_e_access 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $course_tool_table	= Database::get_course_table(TABLE_TOOL_LIST);
-        $tool_edit_table 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $course_code        = Database::escape_string($course_info['code']);
+        $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
+        $tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $course_code = Database::escape_string($course_info['code']);
 
         $user_id = api_get_user_id();
         $course_id = intval($course_info['real_id']);
@@ -1358,15 +1319,7 @@ class Display
         if ($oldestTrackDate == $oldestTrackDateOrig) {
             //if there was no connexion to the course ever, then take the
             // course creation date as a reference
-            $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql = "SELECT course.creation_date ".
-                 "FROM $course_table course ".
-                 "WHERE course.code = '".$course_code."'";
-            $res = Database::query($sql);
-            if ($res && Database::num_rows($res)>0) {
-                $row = Database::fetch_array($res);
-            }
-            $oldestTrackDate = $row['creation_date'];
+            $oldestTrackDate = $course_info['creation_date'];
         }
 
         // Get the last edits of all tools of this course.
@@ -1406,9 +1359,10 @@ class Display
                 // user is not part of.
                 && ((in_array($item_property['to_group_id'], $group_ids)
                 // Drop the dropbox, notebook and chat tools (we don't care)
-                && ($item_property['tool'] != TOOL_DROPBOX
-                      && $item_property['tool'] != TOOL_NOTEBOOK
-                      && $item_property['tool'] != TOOL_CHAT)
+                && (
+                        //$item_property['tool'] != TOOL_DROPBOX &&
+                        $item_property['tool'] != TOOL_NOTEBOOK &&
+                        $item_property['tool'] != TOOL_CHAT)
                    )
                 )
                 // Take only what's visible or "invisible but where the user is a teacher" or where the visibility is unset.
@@ -1416,9 +1370,6 @@ class Display
                     || ($course_info['status'] == '1' && $item_property['visibility'] == '0')
                     || !isset($item_property['visibility']))
             ) {
-                if ($course_info['real_id'] == 1) {
-                  //  var_dump($item_property);
-                }
                 // Also drop announcements and events that are not for the user or his group.
                 if ((
                         $item_property['tool'] == TOOL_ANNOUNCEMENT ||
@@ -1637,9 +1588,8 @@ class Display
      **/
     public static function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true)
     {
-		$number_of_users_who_voted =  isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
-
-		$percentage =  isset($point_info['point_average']) ? $point_info['point_average'] : 0;
+		$number_of_users_who_voted = isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
+		$percentage = isset($point_info['point_average']) ? $point_info['point_average'] : 0;
 
 		if (!empty($percentage)) {
             $percentage = $percentage*125/100;
@@ -1677,6 +1627,7 @@ class Display
         if ($add_div_wrapper) {
 			$html = Display::div($html, array('id' => 'rating_wrapper_'.$id));
 		}
+
         return $html;
     }
 
@@ -1738,6 +1689,10 @@ class Display
         return self::page_header($title, $second_title, 'h4');
     }
 
+    /**
+     * @param array $list
+     * @return null|string
+     */
     public static function description($list)
     {
         $html = null;
@@ -1782,7 +1737,13 @@ class Display
         return $div;
     }
 
-    public static function badge($count, $type ="warning") {
+    /**
+     * @param string $count
+     * @param string $type
+     * @return null|string
+     */
+    public static function badge($count, $type ="warning")
+    {
         $class = '';
 
         switch ($type) {
@@ -1830,7 +1791,6 @@ class Display
      */
     public static function label($content, $type = 'default')
     {
-        $class = '';
         switch ($type) {
             case 'success':
                 $class = 'label-success';
@@ -1860,6 +1820,7 @@ class Display
             $html .= $content;
             $html .='</span>';
         }
+
         return $html;
     }
 
@@ -2130,5 +2091,4 @@ class Display
 
         return self::url("$icon $text", $url, $attributes);
     }
-
 }

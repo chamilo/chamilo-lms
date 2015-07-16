@@ -206,6 +206,8 @@ $studentIds = array();
 if (!empty($students)) {
     // Students
     $nb_students = count($students);
+    $progress  = Tracking::get_avg_student_progress($studentIds);
+    $countAssignments = Tracking::count_student_assignments($studentIds);
     $studentIds = array_values($students);
     $countHumanResourcesUsers = count($humanResourcesUsers);
 
@@ -224,8 +226,6 @@ if (!empty($teachers)) {
 //$countInactiveUsers = Tracking::getInactiveUsers($studentIds, $daysAgo);
 $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds);
 $posts = Tracking::count_student_messages($studentIds);
-$countAssignments = Tracking::count_student_assignments($studentIds);
-$progress  = Tracking::get_avg_student_progress($studentIds);
 $averageScore = Tracking::getAverageStudentScore($studentIds);
 $avg_results_to_exercises = $averageScore;
 

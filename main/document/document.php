@@ -1437,7 +1437,6 @@ if ($is_allowed_to_edit ||
         $message = Display::return_message(get_lang('DocumentUnsetAsTemplate'), 'confirmation');
         Session::write('message', $message);
     }
-
 }
 
 // END ACTION MENU
@@ -1455,7 +1454,6 @@ if (isset($_GET['curdirpath']) &&
         Session::write('message', $message);
     }
 }
-
 /* 	GET ALL DOCUMENT DATA FOR CURDIRPATH */
 if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
     $documentAndFolders = DocumentManager::get_all_document_data(

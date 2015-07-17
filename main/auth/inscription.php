@@ -738,12 +738,13 @@ if ($form->validate()) {
             array('info' => $text_after_registration)
         );
     } else {
-        Display:: display_header($tool_name);
-        echo Display::page_header($tool_name);
-        echo $content;
-        echo $text_after_registration;
 
-        Display:: display_footer();
+        $tpl = new Template($tool_name);
+
+        $tpl->assign('inscription_content', $content);
+        $tpl->assign('text_after_registration', $text_after_registration);
+        $inscription = $tpl->get_template('auth/inscription.tpl');
+        $tpl->display($inscription);
     }
 } else {
     // Custom pages
@@ -775,16 +776,18 @@ if ($form->validate()) {
         }
 
         if ($hideHeaders) {
-            Display:: display_no_header();
+            $showHeader = false;
         } else {
-            Display:: display_header($tool_name);
+            $showHeader = true;
         }
-        echo Display::page_header($tool_name);
-        echo $content;
-        $form->display();
 
-        if ($hideHeaders == false) {
-            Display:: display_footer();
-        }
+        $tpl = new Template($tool_name, $showHeader, $showHeader);
+
+        $tpl->assign('inscription_header', Display::page_header($tool_name));
+        $tpl->assign('inscription_content', $content);
+        $tpl->assign('form', $form->returnForm());
+
+        $inscription = $tpl->get_template('auth/inscription.tpl');
+        $tpl->display($inscription);
     }
 }

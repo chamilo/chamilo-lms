@@ -60,10 +60,10 @@ class Template
         $load_plugins = true
     ) {
         // Page title
-        $this->title            = $title;
-        $this->show_learnpath   = $show_learnpath;
+        $this->title = $title;
+        $this->show_learnpath = $show_learnpath;
         $this->hide_global_chat = $hide_global_chat;
-        $this->load_plugins     = $load_plugins;
+        $this->load_plugins = $load_plugins;
 
         $template_paths = array(
             api_get_path(SYS_CODE_PATH) . 'template/overrides', // user defined templates
@@ -83,20 +83,25 @@ class Template
         if (api_get_setting('server_type') == 'test') {
             $options = array(
                 //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
-                'autoescape'       => false,
-                'debug'            => true,
-                'auto_reload'      => true,
-                'optimizations'    => 0, // turn on optimizations with -1
-                'strict_variables' => false, //If set to false, Twig will silently ignore invalid variables
+                'autoescape' => false,
+                'debug' => true,
+                'auto_reload' => true,
+                'optimizations' => 0,
+                // turn on optimizations with -1
+                'strict_variables' => false,
+                //If set to false, Twig will silently ignore invalid variables
             );
         } else {
             $options = array(
-                'cache'            => $cache_folder, //path to the cache folder
-                'autoescape'       => false,
-                'debug'            => false,
-                'auto_reload'      => false,
-                'optimizations'    => -1, // turn on optimizations with -1
-                'strict_variables' => false //If set to false, Twig will silently ignore invalid variables
+                'cache' => $cache_folder,
+                //path to the cache folder
+                'autoescape' => false,
+                'debug' => false,
+                'auto_reload' => false,
+                'optimizations' => -1,
+                // turn on optimizations with -1
+                'strict_variables' => false
+                //If set to false, Twig will silently ignore invalid variables
             );
         }
 

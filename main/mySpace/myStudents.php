@@ -426,8 +426,8 @@ if (!empty($student_id)) {
         get_lang('Tracking', '')
     );
     $csv_content[] = array(
-        get_lang('FirstLogin', ''),
-        get_lang('LatestLogin', ''),
+        get_lang('FirstLoginInPlatform', ''),
+        get_lang('LatestLoginInPlatform', ''),
         get_lang('TimeSpentInTheCourse', ''),
         get_lang('Progress', ''),
         get_lang('Score', '')
@@ -544,11 +544,11 @@ if (!empty($student_id)) {
             <tr>
                 <th colspan="2"><?php echo get_lang('Tracking'); ?></th>
             </tr>
-            <tr><td align="right"><?php echo get_lang('FirstLogin') ?></td>
+            <tr><td align="right"><?php echo get_lang('FirstLoginInPlatform') ?></td>
                 <td align="left"><?php echo $first_connection_date ?></td>
             </tr>
             <tr>
-                <td align="right"><?php echo get_lang('LatestLogin') ?></td>
+                <td align="right"><?php echo get_lang('LatestLoginInPlatform') ?></td>
                 <td align="left"><?php echo $last_connection_date ?></td>
             </tr>
             <?php if (isset($_GET['details']) && $_GET['details'] == 'true') {?>

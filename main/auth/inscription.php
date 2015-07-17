@@ -743,13 +743,16 @@ if ($form->validate()) {
 
         $tpl->assign('inscription_content', $content);
         $tpl->assign('text_after_registration', $text_after_registration);
+        $tpl->assign('hide_header', $hideHeaders);
         $inscription = $tpl->get_template('auth/inscription.tpl');
         $tpl->display($inscription);
     }
 } else {
     // Custom pages
     if (CustomPages::enabled()) {
-        CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
+        CustomPages::display(
+            CustomPages::REGISTRATION, array('form' => $form)
+        );
     } else {
 
         if (!api_is_anonymous()) {
@@ -775,17 +778,12 @@ if ($form->validate()) {
             CourseManager::redirectToCourse([]);
         }
 
-        if ($hideHeaders) {
-            $showHeader = false;
-        } else {
-            $showHeader = true;
-        }
-
-        $tpl = new Template($tool_name, $showHeader, $showHeader);
+        $tpl = new Template($tool_name);
 
         $tpl->assign('inscription_header', Display::page_header($tool_name));
         $tpl->assign('inscription_content', $content);
         $tpl->assign('form', $form->returnForm());
+        $tpl->assign('hide_header', $hideHeaders);
 
         $inscription = $tpl->get_template('auth/inscription.tpl');
         $tpl->display($inscription);

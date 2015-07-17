@@ -1,4 +1,8 @@
-{% extends template ~ "/layout/layout_1_col.tpl" %}
+{%
+    extends hide_header == true
+    ? template ~ "/layout/blank.tpl"
+    : template ~ "/layout/layout_1_col.tpl"
+%}
 
 {% block content %}
 

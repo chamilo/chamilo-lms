@@ -80,15 +80,6 @@
                 <div class="description-course">
                     {{ course_data.description.getContent }}
                 </div>
-                {% if course_data.tags %}
-                    <div class="tags-course">
-                        <i class="fa fa-tags"></i>
-
-                        {% for tag in course_data.tags %}
-                            <a href="#">{{ tag.getTag }}</a>
-                        {% endfor %}
-                    </div>
-                {% endif %}
 
                 {% if courses|length == 1 and not is_subscribed %}
                     <div class="subscribe">
@@ -152,6 +143,21 @@
                                     </div>
                                 </div>
                             {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if course_data.tags %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{{ 'Tags'|get_lang }}</div>
+                        <div class="panel-body">
+                            <ul class="list-inline">
+                                {% for tag in course_data.tags %}
+                                    <li>
+                                        <span class="label label-info">{{ tag.getTag }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
                 {% endif %}

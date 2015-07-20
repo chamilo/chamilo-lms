@@ -74,13 +74,13 @@
 
                     {% if session_human_text_duration and courses|length == 1 %}
                         <div class="time-course">
-                            <i class="fa fa-clock-o"></i> <span>{{ session_human_text_duration }}</span>
+                            <i class="fa fa-clock-o"></i> <span>{{ 'Hours'|get_lang }}</span> <span>{{ session_human_text_duration }}</span>
                         </div>
                     {% endif %}
 
                     {% if course_level %}
                         <div class="level-course">
-                            <i class="fa fa-star-o"></i> <span>{{ course_level }}</span>
+                            <i class="fa fa-star-o"></i> <span>{{ 'Level'|get_lang }}</span> <span>{{ course_level }}</span>
                         </div>
                     {% endif %}
 

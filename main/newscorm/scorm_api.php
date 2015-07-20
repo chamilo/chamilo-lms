@@ -1649,7 +1649,6 @@ var loadForumThead = function(lpId, lpItemId) {
     );
 
     $.when(loadForum).done(function(forumThreadData) {
-        console.log(forumThreadData);
         if (forumThreadData.error) {
             $('#forum-container').hide();
             return;

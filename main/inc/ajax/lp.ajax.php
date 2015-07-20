@@ -228,15 +228,6 @@ switch ($action) {
             $forumId = $forum['forum_id'];
         }
 
-        $basisForumThread = $lpItem->getForumThread($course_id);
-
-        if (empty($basisForumThread)) {
-            echo json_encode([
-                'error' => true,
-            ]);
-            break;
-        }
-
         $forumThread = $lpItem->getForumThread($course_id, $sessionId);
 
 

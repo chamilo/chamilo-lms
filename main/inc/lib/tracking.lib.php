@@ -6197,8 +6197,8 @@ class TrackingCourseLog
     	$sql .= " ORDER BY col$column $direction ";
     	$sql .= " LIMIT $from,$number_of_items";
 
-    	$res      = Database::query($sql);
-    	$users    = array();
+        $res = Database::query($sql);
+        $users = array();
 
         $course_info = api_get_course_info($course_code);
         $total_surveys = 0;
@@ -6233,11 +6233,18 @@ class TrackingCourseLog
             $courseInfo = api_get_course_info($course_code);
             $courseId = $courseInfo['real_id'];
 
-    		$user['official_code']  = $user['col0'];
-            $user['lastname']       = $user['col1'];
-            $user['firstname']      = $user['col2'];
-    		$user['username']       = $user['col3'];
-    		$user['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $courseId, $session_id));
+            $user['official_code'] = $user['col0'];
+            $user['lastname'] = $user['col1'];
+            $user['firstname'] = $user['col2'];
+            $user['username'] = $user['col3'];
+
+            $user['time'] = api_time_to_hms(
+                Tracking::get_time_spent_on_the_course(
+                    $user['user_id'],
+                    $courseId,
+                    $session_id
+                )
+            );
 
             $avg_student_score = Tracking::get_avg_student_score(
                 $user['user_id'],
@@ -6252,10 +6259,11 @@ class TrackingCourseLog
                 array(),
                 $session_id
             );
+
     		if (empty($avg_student_progress)) {
     			$avg_student_progress=0;
     		}
-    		$user['average_progress']   = $avg_student_progress.'%';
+    		$user['average_progress'] = $avg_student_progress.'%';
 
             $total_user_exercise = Tracking::get_exercise_student_progress(
                 $total_exercises,
@@ -6264,7 +6272,7 @@ class TrackingCourseLog
                 $session_id
             );
 
-            $user['exercise_progress']  = $total_user_exercise;
+            $user['exercise_progress'] = $total_user_exercise;
 
             $total_user_exercise = Tracking::get_exercise_student_average_best_attempt(
                 $total_exercises,

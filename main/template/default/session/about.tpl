@@ -1,13 +1,48 @@
 <div id="about-session">
-    <p><i class="fa fa-clock-o"></i> <em>{{ session_date.display }}</em></p>
+    <div class="row">
+        <div class="col-xs-12">
+            <p><i class="fa fa-clock-o"></i> <em>{{ session_date.display }}</em></p>
 
-    {% if show_tutor %}
-        <p><i class="fa fa-user"></i> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em></p>
-    {% endif %}
+            {% if show_tutor %}
+                <p>
+                    <i class="fa fa-user"></i> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em>
+                </p>
+            {% endif %}
 
-    {% if session.getShowDescription() %}
-        <div class="lead">
-            {{ session.getDescription() }}
+            {% if session.getShowDescription() %}
+                <div class="lead">
+                    {{ session.getDescription() }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if has_requirements %}
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ 'RequiredSessions'|get_lang }}</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            {% for sequence in sequences %}
+                                <div class="col-md-4">
+                                    <dl class="dl-horizontal">
+                                        {% if sequence.requirements %}
+                                            <dt>{{ sequence.name }}</dt>
+
+                                            {% for requirement in sequence.requirements %}
+                                                <dd>
+                                                    <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">{{ requirement.getName }}</a>
+                                                </dd>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </dl>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     {% endif %}
 
@@ -26,15 +61,13 @@
             {% endif %}
         {% endfor %}
 
-        {% if courses|length > 1 %}
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2 class="text-uppercase">{{ course_data.course.getTitle }}</h2>
-                </div>
-            </div>
-        {% endif %}
-
         <div class="row">
+            {% if courses|length > 1 %}
+                <div class="col-xs-12">
+                    <h3 class="text-uppercase">{{ course_data.course.getTitle }}</h3>
+                </div>
+            {% endif %}
+
             {% if course_video %}
                 <div class="col-sm-6 col-md-7">
                     <div class="embed-responsive embed-responsive-16by9">
@@ -50,6 +83,7 @@
                 {% if course_data.tags %}
                     <div class="tags-course">
                         <i class="fa fa-tags"></i>
+
                         {% for tag in course_data.tags %}
                             <a href="#">{{ tag.getTag }}</a>
                         {% endfor %}
@@ -64,8 +98,6 @@
             </div>
         </div>
 
-
-
         <div class="row info-course">
             <div class="col-xs-12 col-md-7">
                 <div class="panel panel-default">
@@ -79,16 +111,15 @@
                                 <div class="content-info">
                                     {{ course_data.objectives.getContent }}
                                 </div>
-
                             </div>
                         {% endif %}
+
                         {% if course_data.topics %}
                             <div class="topics">
                                 <h4 class="title-info"><i class="fa fa-book"></i> {{ "Topics"|get_lang }}</h4>
                                 <div class="content-info">
                                     {{ course_data.topics.getContent }}
                                 </div>
-
                             </div>
                         {% endif %}
                     </div>
@@ -124,6 +155,7 @@
                         </div>
                     </div>
                 {% endif %}
+
                 <div class="panel panel-default social-share">
                     <div class="panel-heading">{{ "ShareWithYourFriends"|get_lang }}</div>
                     <div class="panel-body">

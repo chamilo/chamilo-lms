@@ -23,7 +23,7 @@
     <hr class="separator">
     <div class="registration">
         {% if "allow_registration" | get_setting != 'false' %}
-        <a class="btn btn-press ajax" href="main/auth/inscription.php?hide_headers=1&width=650"> {{ 'SignUp' | get_lang }} </a>
+        <a class="btn btn-press ajax" href="main/auth/inscription.php?hide_headers=1&width=550"> {{ 'SignUp' | get_lang }} </a>
         {% endif %}
     </div>
     {% endif %}

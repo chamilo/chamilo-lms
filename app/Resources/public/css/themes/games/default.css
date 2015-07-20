@@ -647,6 +647,9 @@ footer .media{
   padding-bottom: 10px;
   padding-top: 10px;
 }
+#formLogin .btn-primary{
+  font-size: 18px;
+}
 #login_block .btn-lost:hover{
   text-decoration: underline;
 }
@@ -664,6 +667,30 @@ hr.separator:after {
   background: #ffffff;
   color: #F0F0F0;
   font-size: 18px;
+}
+.registration-form{
+  padding: 35px;
+}
+.registration-form label{
+  color: #5b5b5f;
+}
+.registration-form .btn-press{
+  display: inline-block;
+  width: 60%;
+  margin-right: 20%;
+  margin-left: 20%;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  text-transform: capitalize;
+  font-size: 18px;
+  font-weight:bold;
+}
+.registration-form .terms{
+  padding: 20px;
+  text-align: center;
+  color: #bcbcbc;
+  font-size: 12px;
 }
 /* Large desktop */
 @media (min-width: 1200px) { 

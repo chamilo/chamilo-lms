@@ -283,6 +283,7 @@ class AppPlugin
     {
         global $language_interface;
         $root = api_get_path(SYS_PLUGIN_PATH);
+        $strings = null;
 
         // 1. Loading english if exists
         $english_path = $root.$plugin_name."/lang/english.php";

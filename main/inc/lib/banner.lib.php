@@ -64,8 +64,16 @@ function get_tabs() {
         $navigation['session_my_space']['title'] = get_lang('MySpace');
         $navigation['session_my_space']['key'] = 'my-space';
     } else {
+        $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH);
             // Link to my progress
-            $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
+        switch (api_get_setting('gamification_mode')) {
+            case 1:
+                $navigation['session_my_progress']['url'] .= 'gamification/my_progress.php';
+                break;
+            default:
+                $navigation['session_my_progress']['url'] .= 'auth/my_progress.php';
+        }
+
             $navigation['session_my_progress']['title'] = get_lang('MyProgress');
             $navigation['session_my_progress']['key'] = 'my-progress';
     }

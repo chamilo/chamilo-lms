@@ -1,5 +1,6 @@
 .body-row{
-  display: table-row;
+  display: table;
+  width: 100%;
 }
 .title-section{
 	font-size: 18px;

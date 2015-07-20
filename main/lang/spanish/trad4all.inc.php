@@ -7447,4 +7447,6 @@ $HtmlPurifierWikiComment = "Activar HTMLPurifier en la herramienta de wiki (aume
 $ClickOrDropFilesHere = "Haga clic o suelte un o más archivos";
 $RemoveTutorStatus = "Quitar el status de tutor";
 $ImportGradebookInCourse = "Importar las evaluaciones desde el curso base";
+$QuotingToXUser = "Citando a";
+$LoadMoreComments = "Cargar más comentarios";
 ?>

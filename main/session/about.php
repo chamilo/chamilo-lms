@@ -151,11 +151,9 @@ $template->assign(
 
 $templateFolder = api_get_configuration_value('default_template');
 
-if (!empty($templateFolder)) {
-    $content = $template->fetch($templateFolder.'/session/about.tpl');
-} else {
-    $content = $template->fetch('default/session/about.tpl');
-}
+$layout = $template->get_template('session/about.tpl');
+
+$content = $template->fetch($layout);
 
 $template->assign('header', $session->getName());
 $template->assign('content', $content);

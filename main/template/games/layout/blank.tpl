@@ -1,1 +1,3 @@
+{% block content %}
 {{ content }}
+{% endblock %}

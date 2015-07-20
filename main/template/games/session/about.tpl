@@ -7,6 +7,35 @@
 {% endfor %}
 
 <div id="about-session">
+    {% if has_requirements and courses|length > 1 %}
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ 'RequiredSessions'|get_lang }}</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            {% for sequence in sequences %}
+                                <div class="col-md-4">
+                                    <dl class="dl-horizontal">
+                                        {% if sequence.requirements %}
+                                            <dt>{{ sequence.name }}</dt>
+
+                                            {% for requirement in sequence.requirements %}
+                                                <dd>
+                                                    <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">{{ requirement.getName }}</a>
+                                                </dd>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </dl>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     {% for course_data in courses %}
         {% set course_video = '' %}
         {% set course_level = '' %}
@@ -52,6 +81,28 @@
                     {% if course_level %}
                         <div class="level-course">
                             <i class="fa fa-star-o"></i> <span>{{ course_level }}</span>
+                        </div>
+                    {% endif %}
+
+                    {% if has_requirements and courses|length == 1 %}
+                        <div>
+                            <p><i class="fa fa-check-square-o"></i> {{ 'RequiredSessions'|get_lang }}</p>
+                            <div class="row">
+                                {% for sequence in sequences %}
+                                    {% if sequence.requirements %}
+                                        <div class="col-md-6">
+                                            <p>{{ sequence.name }}</p>
+                                            <ul>
+                                                {% for requirement in sequence.requirements %}
+                                                    <li>
+                                                        <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">{{ requirement.getName }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </div>
                     {% endif %}
 

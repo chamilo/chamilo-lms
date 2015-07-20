@@ -253,9 +253,15 @@ class AnnouncementManager
             if ($result['to_group_id'] !== '0' and $result['to_group_id'] !== 'NULL') {
                 $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
             }
-            $sent_to = self::sent_to('announcement', $announcement_id);
-            $sent_to_form = self::sent_to_form($sent_to);
-            $html .= Display::tag('td', get_lang('SentTo') . ' : ' . $sent_to_form, array('class' => 'announcements_datum'));
+            if (api_is_allowed_to_edit(false, true)) {
+                $sent_to = self::sent_to('announcement', $announcement_id);
+                $sent_to_form = self::sent_to_form($sent_to);
+                $html .= Display::tag(
+                    'td',
+                    get_lang('SentTo') . ' : ' . $sent_to_form,
+                    array('class' => 'announcements_datum')
+                );
+            }
             $attachment_list = self::get_attachment($announcement_id);
 
             if (count($attachment_list) > 0) {
@@ -558,7 +564,11 @@ class AnnouncementManager
 
         // save attachment file
         $row_attach = self::get_attachment($id);
-        $id_attach = intval($row_attach['id']);
+
+        $id_attach = 0;
+        if ($row_attach) {
+            $id_attach = intval($row_attach['id']);
+        }
 
         if (!empty($file)) {
             if (empty($id_attach)) {
@@ -1318,11 +1328,12 @@ class AnnouncementManager
     /**
      * @param int $id
      * @param bool $sendToUsersInSession
+     * @param bool $sendToDrhUsers
      */
-    public static function send_email($id, $sendToUsersInSession = false)
+    public static function send_email($id, $sendToUsersInSession = false, $sendToDrhUsers = false)
     {
         $email = AnnouncementEmail::create(null, $id);
-        $email->send($sendToUsersInSession);
+        $email->send($sendToUsersInSession, $sendToDrhUsers);
     }
 
     /**

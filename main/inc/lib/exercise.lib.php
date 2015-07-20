@@ -2446,7 +2446,7 @@ HTML;
             // only end is set
             $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now') OR ";
             // nothing is set
-            $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time =  '0000-00-00 00:00:00'))  ";
+            $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time = '0000-00-00 00:00:00'))  ";
         }
 
         $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
@@ -3580,6 +3580,7 @@ HTML;
         if ($show_results || $show_only_score) {
             $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
             //Shows exercise header
+            echo '<div class="show-exercise">';
             echo $objExercise->show_exercise_result_header(
                 $user_info,
                 api_convert_and_format_date(
@@ -3589,6 +3590,7 @@ HTML;
                 $exercise_stat_info['duration'],
                 $exercise_stat_info['user_ip']
             );
+            echo '</div>';
         }
 
         // Display text when test is finished #4074 and for LP #4227
@@ -3710,9 +3712,11 @@ HTML;
                 }
 
                 $contents = ob_get_clean();
-                $question_content = '<div class="question_row_answer">';
 
+                $question_content = '';
                 if ($show_results) {
+                    $question_content = '<div class="question_row_answer">';
+
                     $show_media = false;
                     /*if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $media_list)) {
                     $show_media = true;
@@ -3728,7 +3732,10 @@ HTML;
                 $counter++;
 
                 $question_content .= $contents;
-                $question_content .= '</div>';
+
+                if ($show_results) {
+                    $question_content .= '</div>';
+                }
 
                 $exercise_content .= $question_content;
 

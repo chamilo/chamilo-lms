@@ -3189,24 +3189,30 @@ class learnpath
                     $html .= '<h4 class="panel-title">';
 
                 if ($count == 0) {
-                    $html .= '<a id="link-scorm" data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
+                    $html .= '<a role="button" data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
                         . $subtree['id'] . '" aria-expanded="true" aria-controls="collapse' . $subtree['id'] . '">';
                 } else {
-                    $html .= '<a id="link-scorm" data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
+                    $html .= '<a role="button" data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
                         . $subtree['id'] . '" aria-expanded="false" aria-controls="collapse' . $subtree['id'] . '">';
                 }
                 $html .= $subtree['title'];
                 $html .= '</a></h4>';
                 $html .= '</div>';
-                if ($count == 0) {
-                    $html .= '<div id="collapse' . $subtree['id']
-                        . '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'
-                        . $subtree['id'] . '">';
-                } else {
-                    $html .= '<div id="collapse' . $subtree['id']
-                        . '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'
-                        . $subtree['id'] . '">';
+
+                $panelCollapseClass= 'panel-collapse collapse';
+
+                if (!empty($subtree['tree'])) {
+                    foreach ($subtree['tree'] as $subItem) {
+                        if ($subItem['id'] == $this->current) {
+                            $panelCollapseClass = 'panel-collapse collapse in';
+                            break;
+                        }
+                    }
                 }
+
+                $html .= '<div id="collapse' . $subtree['id']
+                    . '" class="' . $panelCollapseClass . '" role="tabpanel" aria-labelledby="heading'
+                    . $subtree['id'] . '">';
             }
 
             $html .= '<div class="panel-body">';
@@ -3328,7 +3334,7 @@ class learnpath
                     $html .= '</div>';
                 }
             }
-            $html .= '<div class="panel-group" id="scorm-accordion" role="tablist" aria-multiselectable="false">';
+            $html .= '<div class="panel-group" id="scorm-accordion" role="tablist" aria-multiselectable="true">';
 
             $toc_list = $this->get_tree_ordered_items_list($this->lp_id);
             $html .= $this->getMiniHtmlToc($toc_list);
@@ -6489,7 +6495,6 @@ class learnpath
 
         // Get all the docs.
         $documents = $this->get_documents(true);
-
         // Get all the exercises.
         $exercises = $this->get_exercises();
 

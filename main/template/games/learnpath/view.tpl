@@ -79,23 +79,22 @@
                         <div id="panel-scorm" class="panel-body">
                             <div id="lp_navigation_elem" class="navegation-bar">
                                 <div class="ranking-scorm">
-                                    {% if gamification_mode == 1 %}
+                                    {% if gamification_stars and gamification_score %}
                                     <div class="row">
                                         <div class="col-md-7">
-                                            {% set lp_stars = oLP.getCalculateStars() %}
-                                            {% if lp_stars > 0%}
-                                                {% for i in 1..lp_stars %}
+                                            {% if gamification_stars > 0%}
+                                                {% for i in 1..gamification_stars %}
                                                     <i class="fa fa-star"></i>
                                                 {% endfor %}
                                             {% endif %}
-                                            {% if lp_stars < 4 %}
-                                                {% for i in 1..4 - lp_stars %}
+                                            {% if gamification_stars < 4 %}
+                                                {% for i in 1..4 - gamification_stars %}
                                                     <i class="fa fa-star plomo"></i>
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
                                         <div class="col-md-5 text-points">
-                                            {{ "XPoints"|get_lang|format(oLP.getCalculateScore()) }}
+                                            {{ "XPoints"|get_lang|format(gamification_score) }}
                                         </div>
                                     </div>
                                     {% endif %}
@@ -221,16 +220,17 @@
 
         $('#content_id').load(function() {
             this.style.overflow = 'hidden';
-            this.style.height =
-                    this.contentWindow.document.body.offsetHeight + 30 + 'px';
+            this.style.height = this.contentWindow.document.body.offsetHeight + 350 + 'px';
+
         });
 
+        //window.onload = updateContentHeight();
+        //window.onresize = updateContentHeight();
 
         loadForumThead({{ oLP.lp_id }}, {{ oLP.get_current_item_id() }});
     });
 
-    window.onload = updateContentHeight();
-    window.onresize = updateContentHeight();
+
 
     $(document).ready(function(){
 

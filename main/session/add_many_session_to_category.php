@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	@package chamilo.admin
-* 	@todo use formvalidator
+* @package chamilo.admin
+* @todo use formvalidator
 */
 // resetting the course id
 $cidReset = true;
@@ -39,11 +39,11 @@ if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
 }
 
 if (!api_is_platform_admin() && !api_is_session_admin()) {
-	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql);
-	if (Database::result($rs,0,0)!=$_user['user_id']) {
-		api_not_allowed(true);
-	}
+    $sql = 'SELECT session_admin_id FROM ' . Database:: get_main_table(TABLE_MAIN_SESSION) . ' WHERE id=' . $id_session;
+    $rs = Database::query($sql);
+    if (Database::result($rs, 0, 0) != $_user['user_id']) {
+        api_not_allowed(true);
+    }
 }
 
 $xajax -> processRequests();
@@ -51,32 +51,32 @@ $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function add_course_to_session (code, content) {
-	document.getElementById("course_to_add").value = "";
-	document.getElementById("ajax_list_courses_single").innerHTML = "";
-	destination = document.getElementById("destination");
-	for (i=0;i<destination.length;i++) {
-		if(destination.options[i].text == content) {
-				return false;
-		}
-	}
-	destination.options[destination.length] = new Option(content,code);
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
+    document.getElementById("course_to_add").value = "";
+    document.getElementById("ajax_list_courses_single").innerHTML = "";
+    destination = document.getElementById("destination");
+    for (i=0;i<destination.length;i++) {
+        if(destination.options[i].text == content) {
+                return false;
+        }
+    }
+    destination.options[destination.length] = new Option(content,code);
+    destination.selectedIndex = -1;
+    sortOptions(destination.options);
 }
 function send() {
-	if (document.formulaire.CategorySessionId.value!=0) {
-		document.formulaire.formSent.value=0;
-		document.formulaire.submit();
-	}
+    if (document.formulaire.CategorySessionId.value!=0) {
+        document.formulaire.formSent.value=0;
+        document.formulaire.submit();
+    }
 }
 function remove_item(origin)
 {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
+    for(var i = 0 ; i<origin.options.length ; i++) {
+        if(origin.options[i].selected) {
+            origin.options[i]=null;
+            i = i-1;
+        }
+    }
 }
 </script>';
 
@@ -93,7 +93,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
     if ($categoryId != 0 && count($sessionCategoryList) > 0) {
         // Removing all
-        $sql = "UPDATE $tbl_session SET session_category_id = '' WHERE session_category_id = $categoryId";
+        $sql = "UPDATE $tbl_session SET session_category_id = NULL WHERE session_category_id = $categoryId";
         Database::query($sql);
         // Adding new
         $sessionCategoryList = array_map('intval', $sessionCategoryList);
@@ -129,7 +129,7 @@ $where = '';
 $rows_category_session = array();
 if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category'])) {
 
-    $where = 'WHERE session_category_id !=' . $categoryId;
+    $where = 'WHERE session_category_id != ' . $categoryId .' OR session_category_id IS NULL';
     $sql = 'SELECT id, name  FROM ' . $tbl_session . ' WHERE session_category_id =' . $categoryId . ' ORDER BY name';
     $result = Database::query($sql);
     $rows_category_session = Database::store_result($result);
@@ -154,18 +154,18 @@ $rows_session = Database::store_result($result);
 ?>
 <form name="formulaire" method="post"
       action="<?php echo api_get_self(); ?>?page=<?php echo $page;
-      if (!empty($_GET['add'])) {
-          echo '&add=true';
-      } ?>" style="margin:0px;">
-    <?php echo '<legend>' . $tool_name . '</legend>'; ?>
-    <input type="hidden" name="formSent" value="1"/>
-    <?php
-    if (!empty($errorMsg)) {
-        Display::display_error_message($errorMsg); //main API
-    }
+if (!empty($_GET['add'])) {
+    echo '&add=true';
+} ?>" style="margin:0px;">
+<?php echo '<legend>' . $tool_name . '</legend>'; ?>
+<input type="hidden" name="formSent" value="1"/>
+<?php
+if (!empty($errorMsg)) {
+    Display::display_error_message($errorMsg); //main API
+}
 
-if(!empty($OkMsg)) {
-	Display::display_confirmation_message($OkMsg); //main API
+if (!empty($OkMsg)) {
+    Display::display_confirmation_message($OkMsg); //main API
 }
 
 /*
@@ -187,24 +187,24 @@ if(!empty($OkMsg)) {
 ?>
 <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
 <tr>
-	<td align="left"></td>
-	<td align="left"></td>
-	<td  align="center">
-	<b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
-	<select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
-		<option value="0" ></option>
-		<?php
-		if (!empty($rows_session_category)) {
-    		foreach($rows_session_category as $category) {
-    			if($category['id'] == $categoryId)
-      				echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
-      			else
-      				echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
-    		}
-		}
-  		?>
-  	</select>
-	</td>
+    <td align="left"></td>
+    <td align="left"></td>
+    <td  align="center">
+    <b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
+    <select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
+        <option value="0" ></option>
+        <?php
+        if (!empty($rows_session_category)) {
+            foreach($rows_session_category as $category) {
+                if($category['id'] == $categoryId)
+                      echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
+                  else
+                      echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+            }
+        }
+          ?>
+      </select>
+    </td>
 </tr>
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('SessionListInPlatform') ?> :</b></td>
@@ -218,35 +218,35 @@ if(!empty($OkMsg)) {
 <?php } ?>
 <tr>
   <td width="45%" align="center">
-	<div id="ajax_list_courses_multiple">
-	<select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
-	<?php
-	foreach($rows_session as $enreg) {
-	?>
-		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; if(in_array($enreg['id'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
-	<?php } ?>
-	</select></div>
+    <div id="ajax_list_courses_multiple">
+    <select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
+    <?php
+    foreach($rows_session as $enreg) {
+    ?>
+        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; if(in_array($enreg['id'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
+    <?php } ?>
+    </select></div>
 <?php unset($nosessionCourses); ?>
   </td>
   <td width="10%" valign="middle" align="center">
-  	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+      <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+        <i class="fa fa-arrow-right"></i>
+    </button>
+    <br /><br />
+    <button class="btn  btn-default" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
         <i class="fa fa-arrow-left"></i>
     </button>
-	<br /><br />
-	<button class="btn  btn-default" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-        <i class="fa fa-arrow-right"></i>
-	</button>
-	<br /><br /><br /><br /><br /><br />
-	<?php
-		echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToCategory').'</button>';
-	?>
+    <br /><br /><br /><br /><br /><br />
+    <?php
+        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToCategory').'</button>';
+    ?>
   </td>
   <td width="45%" align="center">
   <select id='destination' name="SessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
-	<?php
-	foreach($rows_category_session as $enreg) { ?>
-		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; if(in_array($enreg['id'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
-	<?php } ?>
+    <?php
+    foreach($rows_category_session as $enreg) { ?>
+        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; if(in_array($enreg['id'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
+    <?php } ?>
   </select></td>
 </tr>
 </table>
@@ -254,47 +254,47 @@ if(!empty($OkMsg)) {
 </form>
 <script type="text/javascript">
 function moveItem(origin , destination) {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
+    for(var i = 0 ; i<origin.options.length ; i++) {
+        if(origin.options[i].selected) {
+            destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
+            origin.options[i]=null;
+            i = i-1;
+        }
+    }
+    destination.selectedIndex = -1;
+    sortOptions(destination.options);
 }
 
 function sortOptions(options) {
-	newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++) {
-		newOptions[i] = options[i];
-	}
+    newOptions = new Array();
+    for (i = 0 ; i<options.length ; i++) {
+        newOptions[i] = options[i];
+    }
 
-	newOptions = newOptions.sort(mysort);
-	options.length = 0;
+    newOptions = newOptions.sort(mysort);
+    options.length = 0;
 
-	for(i = 0 ; i < newOptions.length ; i++){
-		options[i] = newOptions[i];
-	}
+    for(i = 0 ; i < newOptions.length ; i++){
+        options[i] = newOptions[i];
+    }
 }
 
 function mysort(a, b){
-	if(a.text.toLowerCase() > b.text.toLowerCase()){
-		return 1;
-	}
-	if(a.text.toLowerCase() < b.text.toLowerCase()){
-		return -1;
-	}
-	return 0;
+    if(a.text.toLowerCase() > b.text.toLowerCase()){
+        return 1;
+    }
+    if(a.text.toLowerCase() < b.text.toLowerCase()){
+        return -1;
+    }
+    return 0;
 }
 
 function valide(){
-	var options = document.getElementById('destination').options;
-	for (i = 0 ; i<options.length ; i++)
-		options[i].selected = true;
-
-	document.forms.formulaire.submit();
+    var options = document.getElementById('destination').options;
+    for (i = 0; i < options.length; i++) {
+        options[i].selected = true;
+    }
+    document.forms.formulaire.submit();
 }
 </script>
 <?php

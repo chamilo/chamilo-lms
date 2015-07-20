@@ -80,7 +80,15 @@ $courses = $sessions = array();
 if (isset($_POST['formSent']) && $_POST['formSent']) {
 
     $courseList = $_POST['SessionCoursesList'];
-    SessionManager::add_courses_to_session($sessionId, $courseList, true);
+    $copyEvaluation = isset($_POST['copy_evaluation']);
+
+    SessionManager::add_courses_to_session(
+        $sessionId,
+        $courseList,
+        true,
+        $copyEvaluation
+    );
+
     Display::addFlash(Display::return_message(get_lang('Updated')));
 
     if (isset($add)) {
@@ -269,13 +277,21 @@ unset($Courses);
                 <?php
                 }
                 ?>
+                    <br />
+                    <label>
+                        <input type="checkbox" name="copy_evaluation">
+                        <?php echo get_lang('ImportGradebookInCourse'); ?>
+                    </label>
+                    <br />
                 <?php
+
                 if (isset($_GET['add'])) {
                     echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
                 } else {
                     echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
                 }
                 ?>
+
                 </div>
             </div>
             <div class="col-md-5">

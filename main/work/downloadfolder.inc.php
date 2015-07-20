@@ -56,6 +56,8 @@ $files = array();
 $course_id = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
+$sessionCondition = api_get_session_condition($sessionId, true, false, 'props.session_id');
+
 $filenameCondition = null;
 if (array_key_exists('filename', $work_data)) {
     $filenameCondition = ", filename";
@@ -63,7 +65,7 @@ if (array_key_exists('filename', $work_data)) {
 
 if (api_is_allowed_to_edit() || api_is_coach()) {
     //Search for all files that are not deleted => visibility != 2
-    $sql = "SELECT DISTINCT
+   $sql = "SELECT DISTINCT
                 url,
                 title,
                 description,
@@ -86,14 +88,13 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 work.filetype = 'file' AND
                 props.visibility <> '2' AND
                 work.active IN (0, 1) AND
-                work.post_group_id = $groupId AND
-                session_id = $sessionId
+                work.post_group_id = $groupId
+                $sessionCondition
             ";
 
 } else {
     $courseInfo = api_get_course_info();
-
-    allowOnlySubscribedUser(api_get_user_id(), $work_id, $courseInfo['real_id']);
+    protectWork($courseInfo, $work_id);
 
     $userCondition = null;
 

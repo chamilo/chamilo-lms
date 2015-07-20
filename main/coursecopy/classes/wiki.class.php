@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once('Resource.class.php');
 
 /**
  * Class for migrating the wiki
@@ -33,17 +32,17 @@ class Wiki extends Resource
 		$progress,
 		$version
 	) {
-		parent::Resource($id,RESOURCE_WIKI);
-		$this->id						= $id;
-		$this->page_id					= $page_id;
-		$this->reflink 					= $reflink;
-		$this->title 					= $title;
-		$this->content					= $content;
-		$this->user_id					= $user_id;
-		$this->group_id					= $group_id;
-		$this->dtime					= $timestamp;
-		$this->progress					= $progress;
-		$this->version					= $version;
+		parent::__construct($id,RESOURCE_WIKI);
+        $this->id = $id;
+        $this->page_id = $page_id;
+        $this->reflink = $reflink;
+        $this->title = $title;
+        $this->content = $content;
+        $this->user_id = $user_id;
+        $this->group_id = $group_id;
+        $this->dtime = $timestamp;
+        $this->progress = $progress;
+        $this->version = $version;
 	}
 
 	function show()

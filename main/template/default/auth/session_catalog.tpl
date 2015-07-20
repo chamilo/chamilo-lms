@@ -78,7 +78,7 @@
         <div class="col-md-12">
             <div class="row">
                 {% for session in sessions %}
-                    <div class="col-md-3">
+                    <div class="col-md-3 session-col">
                         <div class="item" id="session-{{ session.id }}">
                             <img src="{{ session.image ? _p.web_upload ~ session.image : _p.web_img ~ 'session_default.png' }}">
 
@@ -90,51 +90,86 @@
                                 </h3>
                                 <ul class="list-unstyled">
                                     {% if show_tutor %}
-                                    <li class="author-session">
-                                        <i class="fa fa-user"></i> {{ session.coach_name }}
-                                    </li>
+                                        <li class="author-session">
+                                            <i class="fa fa-user"></i> {{ session.coach_name }}
+                                        </li>
                                     {% endif %}
                                     <li class="date-session">
                                         <i class="fa fa-calendar-o"></i> {{ session.date }}
                                     </li>
                                     {% if session.tags %}
-                                    <li class="tags-session">
-                                        <i class="fa fa-tags"></i> {{ session.tags|join(', ')}}
-                                    </li>
+                                        <li class="tags-session">
+                                            <i class="fa fa-tags"></i> {{ session.tags|join(', ')}}
+                                        </li>
                                     {% endif %}
                                 </ul>
-                                <div class="requirements">
-                                    {% if session.requirements %}
-                                    <h4>{{ 'Requirements'|get_lang }}</h4>
-                                    <p>
-                                        {% for requirement in session.requirements %}
-                                        {{ requirement.name  }}
-                                        {% endfor %}
-                                    </p>
-                                    {% endif %}
 
-                                    {% if session.dependencies %}
-                                    <h4>{{ 'Dependencies'|get_lang }}</h4>
-                                    <p>
-                                        {% for dependency in session.dependencies %}
-                                        {{ dependency.name  }}
-                                        {% endfor %}
-                                    </p>
-                                    {% endif %}
-                                </div>
                                 <div class="options">
-
+                                    <p>
+                                        <a class="btn btn-info btn-block btn-sm" role="button" data-toggle="popover" id="session-{{ session.id }}-sequences">{{ 'SeeSequences'|get_lang }}</a>
+                                    </p>
                                     <p class="buttom-subscribed">
                                         {% if session.is_subscribed %}
-                                        {{ already_subscribed_label }}
+                                            {{ already_subscribed_label }}
+                                        {% elseif _u.logged == 0 %}
+                                            {{ '' }}
                                         {% else %}
-                                        {{ session.subscribe_button }}
+                                            {{ session.subscribe_button }}
                                         {% endif %}
                                     </p>
                                 </div>
                             </div>
 
+                            <script>
+                                $('#session-{{ session.id }}-sequences').popover({
+                                    placement: 'bottom',
+                                    html: true,
+                                    trigger: 'click',
+                                    content: function () {
+                                        var content = '';
 
+                                        {% if session.sequences %}
+                                            {% for sequence in session.sequences %}
+                                                content += '<p class="lead">{{ sequence.name }}</p>';
+
+                                                {% if sequence.requirements %}
+                                                    content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'RequiredSessions'|get_lang }}</p>';
+                                                    content += '<ul>';
+
+                                                    {% for requirement in sequence.requirements %}
+                                                        content += '<li>';
+                                                        content += '<a href="{{ _p.web ~ 'session/' ~ requirement.id ~ '/about/' }}">{{ requirement.name }}</a>';
+                                                        content += '</li>';
+                                                    {% endfor %}
+
+                                                    content += '</ul>';
+                                                {% endif %}
+
+                                                {% if sequence.dependencies %}
+                                                    content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'DependentSessions'|get_lang }}</p>';
+                                                    content += '<ul>';
+
+                                                    {% for dependency in sequence.dependencies %}
+                                                        content += '<li>';
+                                                        content += '<a href="{{ _p.web ~ 'session/' ~ dependency.id ~ '/about/' }}">{{ dependency.name }}</a>';
+                                                        content += '</li>';
+                                                    {% endfor %}
+
+                                                    content += '</ul>';
+                                                {% endif %}
+
+                                                {% if session.sequences|length > 1 %}
+                                                    content += '<hr>';
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            content = "{{ 'NoDependencies'|get_lang }}";
+                                        {% endif %}
+
+                                        return content;
+                                    }
+                                });
+                            </script>
                         </div>
                     </div>
                 {% else %}

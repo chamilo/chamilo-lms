@@ -404,6 +404,7 @@ function upload_stylesheet($values, $picture)
     $cssToUpload = CSS_UPLOAD_PATH;
 
     // Create the folder if needed.
+
     if (!is_dir($cssToUpload.$style_name.'/')) {
         mkdir($cssToUpload.$style_name.'/', api_get_permissions_for_new_directories());
     }
@@ -504,7 +505,7 @@ function upload_stylesheet($values, $picture)
 
     if ($result) {
         $fs = new Filesystem();
-        $fs->mirror($cssToUpload, api_get_path(SYS_PATH).'web/css/');
+        $fs->mirror($cssToUpload, api_get_path(SYS_PATH).'web/css/themes/');
     }
 
     return $result;
@@ -926,9 +927,9 @@ function actions_filter($id) {
  */
 function image_filter($image) {
     if (!empty($image)) {
-        return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
     } else {
-        return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
     }
 }
 
@@ -983,9 +984,9 @@ function add_edit_template() {
 
         // Adding an extra field: a preview of the image that is currently used.
         if (!empty($row['image'])) {
-            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
+            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
         } else {
-            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
+            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
         }
 
         // Setting the information of the template that we are editing.
@@ -1380,7 +1381,6 @@ function generate_settings_form($settings, $settings_by_access_list) {
         $form->setDefaults($default_values);
     }
     $form->addButtonSave(get_lang('SaveSettings'));
-    //$form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'class="save"');
     return $form;
 }
 

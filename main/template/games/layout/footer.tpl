@@ -1,36 +1,38 @@
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                <ul class="links-footer">
-                    <li><a href="#">¿Quienes somos?</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Cursos</a></li>
-                </ul>
+<footer class="body-row">
+    <div class="subfooter">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                    <ul class="links-footer">
+                        <li><a href="#">¿Quienes somos?</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Cursos</a></li>
+                    </ul>
 
-            </div>
-            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
-                <ul class="links-footer">
-                    <li><a href="#">Politicas de privadidad</a></li>
-                    <li><a href="#">Terminos y condiciones</a></li>
-                    <li><a href="#">Contacto</a></li>
-                </ul>
-            </div>
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="red-social">
-                    <h3 class="social-footer">¡Siguienos en redes sociales!</h3>
-                    <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/facebook.png"></a>
-                    <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/twitter.png"></a>
-                    <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/youtube.png"></a>
                 </div>
-            </div>
-            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-                <div class="direction">
-                    <p>Rio de la plata 167 Of.503<br>
-                        San Isidro - Lima Perú
-                        (511) 221 - 2721<br>
-                        contacto@tademi.com
-                    </p>
+                <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                    <ul class="links-footer">
+                        <li><a href="#">Politicas de privadidad</a></li>
+                        <li><a href="#">Terminos y condiciones</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                    <div class="red-social">
+                        <h3 class="social-footer">¡Siguienos en redes sociales!</h3>
+                        <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/facebook.png"></a>
+                        <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/twitter.png"></a>
+                        <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/youtube.png"></a>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                    <div class="direction">
+                        <p>Rio de la plata 167 Of.503<br>
+                            San Isidro - Lima Perú
+                            (511) 221 - 2721<br>
+                            contacto@tademi.com
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

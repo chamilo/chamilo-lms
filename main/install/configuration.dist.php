@@ -212,5 +212,14 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['gradebook_detailed_admin_view'] = false;
 // E-mail accounts to send notifications to when executing cronjobs - works for main/cron/import_csv.php
 //$_configuration['cron_notification_mails'] = array('email@example.com', 'email2@example.com');
+
 // Allow anonymous users to see the courses/sessions catalogue
 //$_configuration['course_catalog_published'] = 'false';
+// Only shows the fields in this list
+/*$_configuration['allow_fields_inscription'] = [
+    'official_code',
+    'phone',
+    'status',
+    'language',
+    'extra_fields'
+];*/

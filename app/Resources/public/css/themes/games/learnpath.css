@@ -118,8 +118,8 @@
   #learning_path_right_zone{
     width: 74%;
     display: block;
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 20px;
+    padding-right: 20px;
   }
   #learning_path_right_zone.total{
     width: 100%;

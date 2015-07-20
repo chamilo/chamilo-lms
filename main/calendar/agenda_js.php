@@ -209,7 +209,9 @@ $form = new FormValidator(
     null,
     array('id' => 'add_event_form')
 );
-$form->addElement('html', '<div id="visible_to_input">');
+
+
+$form->addElement('html', '<span id="calendar_course_info"></span><div id="visible_to_input">');
 
 $sendTo = $agenda->parseAgendaFilter($userId);
 $addOnlyItemsInSendTo = true;

@@ -1,3 +1,10 @@
+body{
+  display: table;
+  width: 100%;
+}
+.body-row{
+  display: table-row;
+}
 .title-section{
 	font-size: 18px;
 	text-transform: uppercase;
@@ -120,6 +127,7 @@
 .img-items-course img{
 	width: 100%;
 	border-radius:10px;
+  height: 180px;
 }
 .btn-primary{
 	background-color: #35a8c9;
@@ -244,13 +252,13 @@ header .search-header{
 }
 footer{
 	background-color: #35A8C9;
-	padding-top: 20px;
-	padding-bottom: 30px;
 	color: #fff;
 	font-size: 12px;
-	padding-left: 20px;
-	padding-right: 20px;
 	box-sizing:border-box;
+}
+.subfooter{
+  padding-top: 30px;
+  padding-bottom: 20px;
 }
 footer a{
 	color: #fff;
@@ -576,12 +584,126 @@ footer .media{
   background-color: #cf3652;
   color: #fff;
 }
-
+.exercise{
+  border: none;
+  box-shadow: none;
+}
+.exercise .page-header{
+  margin: 0px;
+}
+.exercise .page-header h2{
+  font-size: 22px;
+  color: #666666;
+  margin-top: 10px;
+}
+.exercise .page-header h2 img{
+  margin-right: 10px;
+}
+.exercise_overview_options{
+  background: none;
+}
+.dl-horizontal dt{
+  float: left;
+  width: 25%;
+}
+.dl-horizontal dt, .dl-horizontal dd{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.games.nav-tabs{
+  margin-bottom: 20px;
+  border-bottom: 1px solid #F4F4F4;
+}
+.games.nav-tabs li{
+  margin-bottom: 0px;
+}
+.games.nav-tabs li a{
+  background-color: #F4F4F4;
+  color: #666;
+  border: none !important;
+  margin-left: 10px;
+}
+.games.nav-tabs li a:hover{
+  border: none !important;
+  background-color: #35A8C9;
+  color: #ffffff;
+}
+.games.nav-tabs .active a{
+  background-color: #35A8C9;
+  color: #ffffff;
+  border: none !important;
+}
+.section-title-catalog{
+  font-size: 25px;
+  text-transform: none;
+}
+.form-group label{
+  font-weight: normal;
+}
+#login_block .btn-press{
+  display: inline-block;
+  width: 100%;
+  border-radius: 5px;
+  text-transform: capitalize;
+  font-size: 18px;
+}
+#login_block .btn-lost{
+  text-align: center;
+  color: #666666;
+  width: 100%;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+#formLogin .btn-primary{
+  font-size: 18px;
+}
+#login_block .btn-lost:hover{
+  text-decoration: underline;
+}
+hr.separator {
+  border-top: 2px solid #F0F0F0;
+  text-align: center;
+}
+hr.separator:after {
+  font-family: FontAwesome;
+  content: '';
+  display: inline-block;
+  position: relative;
+  top: -15px;
+  padding: 0 10px;
+  background: #ffffff;
+  color: #F0F0F0;
+  font-size: 18px;
+}
+.registration-form{
+  padding: 35px;
+}
+.registration-form label{
+  color: #5b5b5f;
+}
+.registration-form .btn-press{
+  display: inline-block;
+  width: 60%;
+  margin-right: 20%;
+  margin-left: 20%;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  text-transform: capitalize;
+  font-size: 18px;
+  font-weight:bold;
+}
+.registration-form .terms{
+  padding: 20px;
+  text-align: center;
+  color: #bcbcbc;
+  font-size: 12px;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
-	.container{
+	/* .container{
 	width: 1024px;
-}
+} */
 }
 
 /* Portrait tablet to landscape and desktop */

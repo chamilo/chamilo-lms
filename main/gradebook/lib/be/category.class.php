@@ -21,12 +21,26 @@ class Category implements GradebookItem
     private $skills = array();
     private $grade_model_id;
     private $generateCertificates;
+    private $isRequirement;
 
     /**
      * Consctructor
      */
     public function __construct()
     {
+        $this->id = 0;
+        $this->name = null;
+        $this->description = null;
+        $this->user_id = 0;
+        $this->course_code = null;
+        $this->parent = 0;
+        $this->weight = 0;
+        $this->visible = false;
+        $this->certificate_min_score = 0;
+        $this->session_id = 0;
+        $this->grade_model_id = 0;
+        $this->generateCertificates = false;
+        $this->isRequirement = false;
     }
 
     /**
@@ -111,6 +125,15 @@ class Category implements GradebookItem
     public function is_visible()
     {
         return $this->visible;
+    }
+
+    /**
+     * Get $isRequirement
+     * @return int
+     */
+    public function getIsRequirement()
+    {
+        return $this->isRequirement;
     }
 
     /**
@@ -208,6 +231,15 @@ class Category implements GradebookItem
     public function set_locked($locked)
     {
         $this->locked = $locked;
+    }
+
+    /**
+     * Set $isRequirement
+     * @param int $isRequirement
+     */
+    public function setIsRequirement($isRequirement)
+    {
+        $this->isRequirement = $isRequirement;
     }
 
     /**
@@ -419,7 +451,9 @@ class Category implements GradebookItem
 
         $categories = array();
         if (Database::num_rows($result) > 0) {
-            $categories = Category::create_category_objects_from_sql_result($result);
+            $categories = Category::create_category_objects_from_sql_result(
+                $result
+            );
         }
 
         return $categories;
@@ -440,6 +474,7 @@ class Category implements GradebookItem
         $cat->set_weight(0);
         $cat->set_visible(1);
         $cat->setGenerateCertificates(0);
+        $cat->setIsRequirement(false);
 
         return $cat;
     }
@@ -467,10 +502,44 @@ class Category implements GradebookItem
             $cat->set_grade_model_id($data['grade_model_id']);
             $cat->set_locked($data['locked']);
             $cat->setGenerateCertificates($data['generate_certificates']);
+            $cat->setIsRequirement($data['is_requirement']);
             $categories[] = $cat;
         }
 
         return $categories;
+    }
+
+    /**
+     * Create a category object from a GradebookCategory entity
+     * @param Chamilo\CoreBundle\Entity\GradebookCategory $gradebookCategory
+     *         The entity
+     * @return \Category
+     */
+    public static function createCategoryObjectFromEntity(
+        Chamilo\CoreBundle\Entity\GradebookCategory $gradebookCategory
+    )
+    {
+        $category = new Category();
+        $category->set_id($gradebookCategory->getId());
+        $category->set_name($gradebookCategory->getName());
+        $category->set_description($gradebookCategory->getDescription());
+        $category->set_user_id($gradebookCategory->getUserId());
+        $category->set_course_code($gradebookCategory->getCourseCode());
+        $category->set_parent_id($gradebookCategory->getParentId());
+        $category->set_weight($gradebookCategory->getWeight());
+        $category->set_visible($gradebookCategory->getVisible());
+        $category->set_session_id($gradebookCategory->getSessionId());
+        $category->set_certificate_min_score(
+            $gradebookCategory->getCertifMinScore()
+        );
+        $category->set_grade_model_id($gradebookCategory->getGradeModelId());
+        $category->set_locked($gradebookCategory->getLocked());
+        $category->setGenerateCertificates(
+            $gradebookCategory->getGenerateCertificates()
+        );
+        $category->setIsRequirement($gradebookCategory->getIsRequirement());
+
+        return $category;
     }
 
     /**
@@ -483,71 +552,28 @@ class Category implements GradebookItem
         }
 
         if (isset($this->name) && isset($this->user_id)) {
-            $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'INSERT INTO '.$tbl_grade_categories.' (name,user_id,weight,visible';
-            if (isset($this->description)) {
-                $sql .= ',description';
-            }
-            if (isset($this->course_code)) {
-                $sql .= ',course_code';
-            }
-            if (isset($this->parent)) {
-                $sql .= ',parent_id';
-            }
-            if (!empty($this->session_id)) {
-                $sql .= ', session_id';
-            }
+            $em = Database::getManager();
 
-            if (isset($this->grade_model_id)) {
-                $sql .= ', grade_model_id ';
-            }
-            if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
-                $sql .= ', certif_min_score ';
-            }
+            $category = new \Chamilo\CoreBundle\Entity\GradebookCategory();
+            $category->setName($this->name);
+            $category->setDescription($this->description);
+            $category->setUserId($this->user_id);
+            $category->setCourseCode($this->course_code);
+            $category->setParentId($this->parent);
+            $category->setWeight($this->weight);
+            $category->setVisible($this->visible);
+            $category->setCertifMinScore($this->certificate_min_score);
+            $category->setSessionId($this->session_id);
+            $category->setGenerateCertificates($this->generateCertificates);
+            $category->setGradeModelId($this->grade_model_id);
+            $category->setIsRequirement($this->isRequirement);
+            $category->setLocked(false);
 
-            if (isset($this->generateCertificates)) {
-                $sql .= ', generate_certificates ';
-            }
+            $em->persist($category);
+            $em->flush();
 
-            /*
-            $setting = api_get_setting('tool_visible_by_default_at_creation');
-            $visible = 1;
-            if (isset($setting['gradebook'])) {
-                if ($setting['gradebook'] == 'false') {
-                    $visible = 0;
-                }
-            }*/
+            $id = $category->getId();
 
-            $visible = intval($this->is_visible());
-
-            $sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
-                .','.intval($this->get_user_id())
-                .','.Database::escape_string($this->get_weight())
-                .','.$visible;
-            if (isset($this->description)) {
-                $sql .= ",'".Database::escape_string($this->get_description())."'";
-            }
-            if (isset($this->course_code)) {
-                $sql .= ",'".Database::escape_string($this->get_course_code())."'";
-            }
-            if (isset($this->parent)) {
-                $sql .= ','.intval($this->get_parent_id());
-            }
-            if (!empty($this->session_id)) {
-                $sql .= ', '.intval($this->get_session_id());
-            }
-            if (isset($this->grade_model_id)) {
-                $sql .= ', '.intval($this->get_grade_model_id());
-            }
-            if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
-                $sql .= ', '.intval($this->get_certificate_min_score());
-            }
-            if (isset($this->generateCertificates)) {
-                $sql .= ', ' . intval($this->generateCertificates);
-            }
-            $sql .= ')';
-            Database::query($sql);
-            $id = Database::insert_id();
             $this->set_id($id);
 
             if (!empty($id)) {
@@ -568,13 +594,13 @@ class Category implements GradebookItem
                             $gradebook =  new Gradebook();
                             $params = array();
 
-                            $params['name']             = $component['acronym'];
-                            $params['description']      = $component['title'];
-                            $params['user_id']          = api_get_user_id();
-                            $params['parent_id']        = $id;
-                            $params['weight']           = $component['percentage']/100*$default_weight;
-                            $params['session_id']       = api_get_session_id();
-                            $params['course_code']      = $this->get_course_code();
+                            $params['name'] = $component['acronym'];
+                            $params['description'] = $component['title'];
+                            $params['user_id'] = api_get_user_id();
+                            $params['parent_id'] = $id;
+                            $params['weight'] = $component['percentage'] / 100 * $default_weight;
+                            $params['session_id'] = api_get_session_id();
+                            $params['course_code'] = $this->get_course_code();
 
                             $gradebook->save($params);
                         }
@@ -595,44 +621,32 @@ class Category implements GradebookItem
      */
     public function save()
     {
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $em = Database::getManager();
 
-        $sql = 'UPDATE '.$tbl_grade_categories." SET
-                name = '".Database::escape_string($this->get_name())."'".',
-                description = ';
-        if (isset($this->description)) {
-            $sql .= "'".Database::escape_string($this->get_description())."'";
-        } else {
-            $sql .= 'null';
-        }
-        $sql .= ', user_id = '.intval($this->get_user_id())
-            .', course_code = ';
-        if (isset($this->course_code)) {
-            $sql .= "'".Database::escape_string($this->get_course_code())."'";
-        } else {
-            $sql .= 'null';
-        }
-        $sql .=    ', parent_id = ';
-        if (isset($this->parent)) {
-            $sql .= intval($this->get_parent_id());
-        } else {
-            $sql .= 'null';
-        }
-        $sql .= ', certif_min_score = ';
-        if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
-            $sql .= intval($this->get_certificate_min_score());
-        } else {
-            $sql .= 'null';
-        }
-        if (isset($this->grade_model_id)) {
-            $sql .= ', grade_model_id = '.intval($this->get_grade_model_id());
-        }
-        $sql .= ', weight = "'.Database::escape_string($this->get_weight())
-            .'", visible = '.intval($this->is_visible())
-            . ', generate_certificates = ' . intval($this->generateCertificates)
-            .' WHERE id = '.intval($this->id);
+        $gradebookCategory = $em
+            ->getRepository('ChamiloCoreBundle:GradebookCategory')
+            ->find($this->id);
 
-        Database::query($sql);
+        if (empty($gradebookCategory)) {
+            return false;
+        }
+
+        $gradebookCategory->setName($this->name);
+        $gradebookCategory->setDescription($this->description);
+        $gradebookCategory->setUserId($this->user_id);
+        $gradebookCategory->setCourseCode($this->course_code);
+        $gradebookCategory->setParentId($this->parent);
+        $gradebookCategory->setWeight($this->weight);
+        $gradebookCategory->setVisible($this->visible);
+        $gradebookCategory->setCertifMinScore($this->certificate_min_score);
+        $gradebookCategory->setGenerateCertificates(
+            $this->generateCertificates
+        );
+        $gradebookCategory->setGradeModelId($this->grade_model_id);
+        $gradebookCategory->setIsRequirement($this->isRequirement);
+
+        $em->persist($gradebookCategory);
+        $em->flush();
 
         if (!empty($this->id)) {
             $parent_id = $this->get_parent_id();
@@ -746,7 +760,7 @@ class Category implements GradebookItem
             return null;
         } else {
             $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id, generate_certificates
+            $sql = 'SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id, generate_certificates, is_requirement
                     FROM '.$tbl_category.' c
                     WHERE c.id='.intval($selectcat);
             $result = Database::query($sql);
@@ -948,7 +962,6 @@ class Category implements GradebookItem
                     return array($ressum, $weightsum);
                     break;
                 case 'ranking':
-                    //var_dump($students);
                     return null;
                     return AbstractLink::getCurrentUserRanking($students);
                     break;
@@ -1476,6 +1489,7 @@ class Category implements GradebookItem
             // All students
             // Course admin
             if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
+
                 // root
                 if ($this->id == 0) {
                     return $this->get_root_categories_for_teacher(api_get_user_id(), $course_code, $session_id, false);
@@ -1490,7 +1504,7 @@ class Category implements GradebookItem
                 }
             } elseif (api_is_platform_admin()) {
                 // platform admin
-                //we explicitly avoid listing subcats from another session
+                // we explicitly avoid listing subcats from another session
                 return Category::load(null, null, $course_code, $this->id, null, $session_id, $order);
             }
         }

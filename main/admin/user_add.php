@@ -278,6 +278,10 @@ $defaults['active'] = 1;
 $days = api_get_setting('account_valid_duration');
 $defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
 
+$defaults['extra_mail_notify_invitation'] = 1;
+$defaults['extra_mail_notify_message'] = 1;
+$defaults['extra_mail_notify_group_message'] = 1;
+
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);

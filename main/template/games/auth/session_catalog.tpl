@@ -84,7 +84,7 @@
                                 </ul>
                                 <div class="requirements">
                                     {% if session.requirements %}
-                                    <h4>{{ 'Requirements'|get_lang }}</h4>
+                                    <p><i class="fa fa-book"></i> {{ 'Requirements'|get_lang }}</p>
                                     <p>
                                         {% for requirement in session.requirements %}
                                         {{ requirement.name  }}
@@ -93,7 +93,7 @@
                                     {% endif %}
 
                                     {% if session.dependencies %}
-                                    <h4>{{ 'Dependencies'|get_lang }}</h4>
+                                    <p><i class="fa fa-book"></i> {{ 'Dependencies'|get_lang }}</p>
                                     <p>
                                         {% for dependency in session.dependencies %}
                                         {{ dependency.name  }}
@@ -106,7 +106,7 @@
                                     <p class="buttom-subscribed">
                                         {% if session.is_subscribed %}
                                         {{ already_subscribed_label }}
-                                        {% elseif _u.logged  == 0 %}
+                                        {% elseif _u.logged == 0 %}
                                         {{ '' }}
                                         {% else %}
                                         {{ session.subscribe_button }}

@@ -36,7 +36,7 @@ if (empty($parent_data)) {
 
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
     $user_id,
-    $course_code,
+    $course_id,
     $session_id
 );
 
@@ -147,7 +147,7 @@ if ($submitGroupWorkUrl) {
 
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'item_id', $item_id);
-$form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
+$form->addText('title', get_lang('Title'), true, array('id' => 'file_upload'));
 if ($is_allowed_to_edit && !empty($item_id)) {
     $sql = "SELECT contains_file, url
             FROM $work_table
@@ -156,33 +156,53 @@ if ($is_allowed_to_edit && !empty($item_id)) {
     if ($result !== false && Database::num_rows($result) > 0) {
         $row = Database::fetch_array($result);
         if ($row['contains_file'] || !empty($row['url'])) {
-            $form->addElement(
-                'html',
-                '<div class="control-group">
-                    <label class="control-label">'.get_lang('Download').'</label>
-                    <div class="controls"><a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
-                    Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_MEDIUM).'</a>
-                    </div>
-                </div>'
+            $form->addLabel(
+                get_lang('Download'),
+                '<a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
+                    Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_MEDIUM).'
+                </a>'
             );
         }
     }
 }
-$form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+$form->addHtmlEditor(
+    'description',
+    get_lang('Description'),
+    false,
+    false,
+    getWorkDescriptionToolbar()
+);
 
-$defaults['title'] 			= $work_item['title'];
-$defaults["description"] 	= $work_item['description'];
-$defaults['qualification']  = $work_item['qualification'];
+$defaults['title'] = $work_item['title'];
+$defaults["description"] = $work_item['description'];
+$defaults['qualification'] = $work_item['qualification'];
 
 if ($is_allowed_to_edit && !empty($item_id)) {
     // Get qualification from parent_id that will allow the validation qualification over
-    $sql = "SELECT qualification FROM $work_table WHERE c_id = $course_id AND id ='$work_id' ";
+    $sql = "SELECT qualification FROM $work_table
+            WHERE c_id = $course_id AND id ='$work_id' ";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     $qualification_over = $row['qualification'];
     if (!empty($qualification_over) && intval($qualification_over) > 0) {
-        $form->addElement('text', 'qualification', array(get_lang('Qualification'), null, " / ".$qualification_over), 'size="10"');
+        $form->addText('qualification', array(get_lang('Qualification'), " / ".$qualification_over), false, 'size="10"');
         $form->addElement('hidden', 'qualification_over', $qualification_over);
+    }
+
+    $form->addCheckBox(
+        'send_email',
+        null,
+        get_lang('SendMailToStudent')
+    );
+
+    // Check if user to qualify has some DRHs
+    $drhList = UserManager::getDrhListFromUser($work_item['user_id']);
+    if (!empty($drhList)) {
+        $form->addCheckBox(
+            'send_to_drh_users',
+            null,
+            get_lang('SendMailToHR')
+        );
     }
 }
 
@@ -209,8 +229,8 @@ if ($form->validate()) {
          * SPECIAL CASE ! For a work edited
         */
         //Get the author ID for that document from the item_property table
-        $item_to_edit_id 	= intval($_POST['item_to_edit']);
-        $is_author 			= user_is_author($item_to_edit_id);
+        $item_to_edit_id = intval($_POST['item_to_edit']);
+        $is_author = user_is_author($item_to_edit_id);
 
         if ($is_author) {
             $work_data = get_work_data_by_id($item_to_edit_id);
@@ -225,10 +245,27 @@ if ($form->validate()) {
                 $add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
                 $add_to_update .= ' qualification = '."'".Database::escape_string($_POST['qualification'])."',";
                 $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";
+
+                if (isset($_POST['send_email'])) {
+                    $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$item_to_edit_id;
+                    $subject = sprintf(get_lang('ThereIsANewWorkFeedback'), $work_item['title']);
+                    $message = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $url);
+
+                    MessageManager::send_message_simple(
+                        $work_item['user_id'],
+                        $subject,
+                        $message,
+                        api_get_user_id(),
+                        isset($_POST['send_to_drh_users'])
+                    );
+                }
             }
 
             if ($_POST['qualification'] > $_POST['qualification_over']) {
-                $error_message .= Display::return_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'), 'error');
+                $error_message .= Display::return_message(
+                    get_lang('QualificationMustNotBeMoreThanQualificationOver'),
+                    'error'
+                );
             } else {
                 $sql = "UPDATE  " . $work_table . "
                         SET	title = '".Database::escape_string($title)."',
@@ -237,10 +274,17 @@ if ($form->validate()) {
                         WHERE c_id = $course_id AND id = $item_to_edit_id";
                 Database::query($sql);
             }
-            api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
+
+            api_item_property_update(
+                $_course,
+                'work',
+                $item_to_edit_id,
+                'DocumentUpdated',
+                $user_id
+            );
 
             $succeed = true;
-            $error_message .= Display::return_message(get_lang('ItemUpdated'), 'warning');
+            $error_message .= Display::return_message(get_lang('ItemUpdated'));
         }
         Security::clear_token();
     } else {
@@ -275,8 +319,14 @@ if (!empty($work_id)) {
             $template = $tpl->get_template('work/comments.tpl');
             $tpl->assign('comments', $comments);
 
+            $commentForm = getWorkCommentForm($work_item, 'edit');
+
+            if (api_is_allowed_to_session_edit()) {
+                $tpl->assign('form', $commentForm);
+            }
+
             $content .= $form->returnForm();
-            $content  .= $tpl->fetch($template);
+            $content .= $tpl->fetch($template);
         }
     } elseif ($is_author) {
         if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {

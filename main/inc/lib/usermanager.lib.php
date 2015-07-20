@@ -4915,7 +4915,7 @@ EOF;
 
         $whereConditions = array(
             'user_id = ? ' => $userId,
-            "AND c_i = '?' " => $courseId,
+            'AND c_id = ? ' => $courseId,
             'AND session_id = ? ' => $sessionId
         );
 

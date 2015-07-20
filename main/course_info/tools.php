@@ -36,7 +36,6 @@ switch ($action) {
         }
 
         $interbreadcrumb[] = array('url' => api_get_self().'?'.api_get_cidreq(), 'name' => get_lang('CustomizeIcons'));
-
         $toolName = $tool['name'];
 
         $currentUrl = api_get_self().'?action=edit_icon&id=' . $id.'&'.api_get_cidreq();

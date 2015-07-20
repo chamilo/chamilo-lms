@@ -9,7 +9,7 @@ $action = $_REQUEST['a'];
 switch ($action) {
     case 'upload_file':
         api_protect_course_script(true);
-        //User access same as upload.php
+        // User access same as upload.php
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         // This needs cleaning!
         if (api_get_group_id()) {

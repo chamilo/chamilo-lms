@@ -279,7 +279,7 @@ if (!empty($end_of_message) && ($origin == 'learnpath')) {
 // for each question
 $total_weighting = 0;
 foreach ($questionList as $questionId) {
-    $objQuestionTmp     = Question::read($questionId);
+    $objQuestionTmp = Question::read($questionId);
     $total_weighting  +=$objQuestionTmp->selectWeighting();
 }
 

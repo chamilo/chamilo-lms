@@ -126,11 +126,7 @@ for ($i = 0; $i < $array_len; $i++) {
 	$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
 	//Max char 80
 	$url_to_who = cut($dir_array[$i],80);
-	if ($is_certificate_mode) {
-		$interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
-	} else {
-		$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
-	}
+	$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
 	$dir_acum .= $dir_array[$i].'/';
 }
 
@@ -193,13 +189,14 @@ $(document).ready(function(){
 </style>
 <div id="textareaCallBack"></div>
 <?php
-if (Security::remove_XSS($_POST['text2voice_mode'])=='google') {
+
+if (isset($_POST['text2voice_mode']) && $_POST['text2voice_mode'] == 'google') {
 	downloadMP3_google($filepath, $dir);
-} elseif (Security::remove_XSS($_POST['text2voice_mode']) == 'pediaphon') {
+} elseif (isset($_POST['text2voice_mode']) && $_POST['text2voice_mode'] == 'pediaphon') {
 	downloadMP3_pediaphon($filepath, $dir);
 }
 
-$tbl_admin_languages    = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 
@@ -207,12 +204,7 @@ $options = $options_pedia = array();
 $selected_language = null;
 
 while ($row = Database::fetch_array($result_select)) {
-	if (api_get_setting('platformLanguage') == $row['english_name']) {
-		//$selected_language = $row['isocode'];//lang default is the default platform language
-	}
-
 	$options[$row['isocode']] =$row['original_name'].' ('.$row['english_name'].')';
-
 	if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))){
 		$options_pedia[$row['isocode']] =$row['original_name'].' ('.$row['english_name'].')';
 	}
@@ -423,17 +415,34 @@ function downloadMP3_google($filepath, $dir)
 		$content = file_get_contents($url, false, $context);
 	}
 
-	file_put_contents(
-		$documentPath,
-		$content
-	);
+    file_put_contents(
+        $documentPath,
+        $content
+    );
 
 	// add document to database
 	$current_session_id = api_get_session_id();
 	$groupId = api_get_group_id();
 	$relativeUrlPath=$dir;
-	$doc_id = add_document($_course, $relativeUrlPath.$audio_filename, 'file', filesize($documentPath), $audio_title);
-	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+	$doc_id = add_document(
+		$_course,
+		$relativeUrlPath.$audio_filename,
+		'file',
+		filesize($documentPath),
+		$audio_title
+	);
+	api_item_property_update(
+		$_course,
+		TOOL_DOCUMENT,
+		$doc_id,
+		'DocumentAdded',
+		$_user['user_id'],
+		$groupId,
+		null,
+		null,
+		null,
+		$current_session_id
+	);
 	Display::display_confirmation_message(get_lang('DocumentCreated'));
 	//return to location
 	echo '<script>window.location.href="'.$location.'"</script>';

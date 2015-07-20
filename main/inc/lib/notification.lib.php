@@ -31,13 +31,13 @@ class Notification extends Model
     public $adminEmail;
     public $titlePrefix;
 
-    //mail_notify_message ("At once", "Daily", "No")
+    // mail_notify_message ("At once", "Daily", "No")
     const NOTIFY_MESSAGE_AT_ONCE = 1;
     const NOTIFY_MESSAGE_DAILY = 8;
     const NOTIFY_MESSAGE_WEEKLY = 12;
     const NOTIFY_MESSAGE_NO = 0;
 
-    //mail_notify_invitation ("At once", "Daily", "No")
+    // mail_notify_invitation ("At once", "Daily", "No")
     const NOTIFY_INVITATION_AT_ONCE = 1;
     const NOTIFY_INVITATION_DAILY = 8;
     const NOTIFY_INVITATION_WEEKLY = 12;
@@ -48,13 +48,16 @@ class Notification extends Model
     const NOTIFY_GROUP_DAILY = 8;
     const NOTIFY_GROUP_WEEKLY = 12;
     const NOTIFY_GROUP_NO = 0;
+
+    // Notification types
     const NOTIFICATION_TYPE_MESSAGE = 1;
     const NOTIFICATION_TYPE_INVITATION = 2;
     const NOTIFICATION_TYPE_GROUP = 3;
     const NOTIFICATION_TYPE_WALL_MESSAGE = 4;
+    const NOTIFICATION_TYPE_DIRECT_MESSAGE = 5;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
@@ -102,7 +105,7 @@ class Notification extends Model
 
     /**
      *  Send the notifications
-     *  @param int notification frequency
+     *  @param int $frequency notification frequency
      */
     public function send($frequency = 8)
     {
@@ -138,7 +141,7 @@ class Notification extends Model
 
     /**
      * @param string $title
-     * @param array $senderInfo
+     * @param array  $senderInfo
      *
      * @return string
      */
@@ -152,6 +155,7 @@ class Notification extends Model
                 $title = $data['title'];
             }
         }
+
         $newTitle = $this->getTitlePrefix();
 
         switch ($this->type) {
@@ -165,6 +169,9 @@ class Notification extends Model
                     );
                     $newTitle .= sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
                 }
+                break;
+            case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
+                $newTitle = $title;
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
                 if (!empty($senderInfo)) {
@@ -205,14 +212,14 @@ class Notification extends Model
 
     /**
      * Save message notification
-     * @param	int	$type message type
+     * @param int	    $type message type
      * NOTIFICATION_TYPE_MESSAGE,
      * NOTIFICATION_TYPE_INVITATION,
      * NOTIFICATION_TYPE_GROUP
-     * @param	array	$user_list recipients: user list of ids
-     * @param	string	$title
-     * @param	string	$content
-     * @param	array	$sender_info
+     * @param array	    $user_list recipients: user list of ids
+     * @param string	$title
+     * @param string	$content
+     * @param array	    $sender_info
      * result of api_get_user_info() or GroupPortalManager:get_group_data()
      */
     public function save_notification(
@@ -226,20 +233,21 @@ class Notification extends Model
         $content = $this->formatContent($content, $senderInfo);
         $titleToNotification = $this->formatTitle($title, $senderInfo);
 
-        $setting_to_check = '';
+        $settingToCheck = '';
         $avoid_my_self = false;
 
         switch ($this->type) {
+            case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
             case self::NOTIFICATION_TYPE_MESSAGE:
-                $setting_to_check = 'mail_notify_message';
+                $settingToCheck = 'mail_notify_message';
                 $defaultStatus = self::NOTIFY_MESSAGE_AT_ONCE;
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
-                $setting_to_check = 'mail_notify_invitation';
+                $settingToCheck = 'mail_notify_invitation';
                 $defaultStatus = self::NOTIFY_INVITATION_AT_ONCE;
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
-                $setting_to_check = 'mail_notify_group_message';
+                $settingToCheck = 'mail_notify_group_message';
                 $defaultStatus = self::NOTIFY_GROUP_AT_ONCE;
                 $avoid_my_self = true;
                 break;
@@ -248,7 +256,7 @@ class Notification extends Model
                 break;
         }
 
-        $settingInfo = UserManager::get_extra_field_information_by_name($setting_to_check);
+        $settingInfo = UserManager::get_extra_field_information_by_name($settingToCheck);
 
         if (!empty($user_list)) {
             foreach ($user_list as $user_id) {
@@ -260,11 +268,13 @@ class Notification extends Model
                 $userInfo = api_get_user_info($user_id);
 
                 // Extra field was deleted or removed? Use the default status.
-                if (empty($settingInfo)) {
-                    $userSetting = $defaultStatus;
-                } else {
+                $userSetting = $defaultStatus;
+
+                if (!empty($settingInfo)) {
                     $extra_data = UserManager::get_extra_user_data($user_id);
-                    $userSetting = $extra_data[$setting_to_check];
+                    if (isset($extra_data[$settingToCheck]) && !empty($extra_data[$settingToCheck])) {
+                        $userSetting = $extra_data[$settingToCheck];
+                    }
                 }
 
                 $sendDate = null;
@@ -339,6 +349,13 @@ class Notification extends Model
         $new_message_text = $link_to_new_message = '';
 
         switch ($this->type) {
+            case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
+                $new_message_text = $content;
+                $link_to_new_message = Display::url(
+                    get_lang('SeeMessage'),
+                    api_get_path(WEB_CODE_PATH) . 'messages/inbox.php'
+                );
+                break;
             case self::NOTIFICATION_TYPE_MESSAGE:
                 if (!empty($sender_info)) {
                     $senderName = api_get_person_name(

@@ -1328,7 +1328,7 @@ switch ($action) {
         header('Location:' . api_get_path(WEB_PATH) . api_get_self() . '?' . http_build_query([
             'action' => 'add_item',
             'type' => 'step',
-            'lp_id' => 1
+            'lp_id' => $_SESSION['oLP']->lp_id
         ]));
         break;
     default:

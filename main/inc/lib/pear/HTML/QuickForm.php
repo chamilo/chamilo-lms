@@ -1427,7 +1427,6 @@ class HTML_QuickForm extends HTML_Common
     function isRuleRegistered($name, $autoRegister = false)
     {
         return true;
-        var_dump($name);
         if (is_scalar($name) && isset($GLOBALS['_HTML_QuickForm_registered_rules'][$name])) {
             return true;
         } elseif (!$autoRegister) {
@@ -1575,6 +1574,7 @@ class HTML_QuickForm extends HTML_Common
         foreach ($this->_rules as $target => $rules) {
             $submitValue = $this->getSubmitValue($target);
 
+
             foreach ($rules as $rule) {
                 if ((isset($rule['group']) && isset($this->_errors[$rule['group']])) ||
                      isset($this->_errors[$target])) {
@@ -1620,7 +1620,9 @@ class HTML_QuickForm extends HTML_Common
                 } elseif (is_array($submitValue) && !isset($rule['howmany'])) {
                     $result = $registry->validate($rule['type'], $submitValue, $rule['format'], true);
                 } else {
+
                     $result = $registry->validate($rule['type'], $submitValue, $rule['format'], false);
+
                 }
 
                 if (!$result || (!empty($rule['howmany']) && $rule['howmany'] > (int)$result)) {
@@ -1738,7 +1740,7 @@ class HTML_QuickForm extends HTML_Common
             $element =& $this->_elements[$key];
             $elementName = $element->getName();
             $required    = ($this->isElementRequired($elementName) && !$element->isFrozen());
-            $error       = $this->getElementError($elementName);
+            $error = $this->getElementError($elementName);
             $element->accept($renderer, $required, $error);
         }
         $renderer->finishForm($this);
@@ -1783,6 +1785,7 @@ class HTML_QuickForm extends HTML_Common
         }
         $renderer =& $this->defaultRenderer();
         $this->accept($renderer);
+
         return $renderer->toHtml();
     } // end func toHtml
 
@@ -2078,7 +2081,11 @@ class HTML_QuickForm extends HTML_Common
      */
     public function setRequired(HTML_QuickForm_element $element)
     {
-        $this->addRule($element->getName(), get_lang('ThisFieldIsRequired'), 'required');
+        $this->addRule(
+            $element->getName(),
+            get_lang('ThisFieldIsRequired'),
+            'required'
+        );
     }
 }
 

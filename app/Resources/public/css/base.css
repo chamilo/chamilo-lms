@@ -159,8 +159,6 @@ ul#navigation .report a {
     width: auto;
 }
 
-
-
 /* END CSS BASE */
 
 .button-load{
@@ -168,7 +166,23 @@ ul#navigation .report a {
   padding-top: 70px;
 }
 
+/* work correction upload */
+#results .file_upload_highlight {
+    background: #F4D364;
+}
 
+.work_correction_file_upload .button-load {
+    position: absolute;
+    top: -60px;
+    left: -30px;
+    font-size: 10px;
+    width: 100px;
+    padding-top: 0px;
+    background: none;
+}
+
+
+/* END COURSE PROGRESS*/
 /* IMPRESS JS */
   .impress-content{
     position: relative;
@@ -5851,7 +5865,7 @@ div#chat-remote-video video {
 }
 #parents .parent {
   display: inline-block;
-  width: 15%;
+  width: 125px;
   padding: 5px;
   /* background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center bottom; */
 }
@@ -6043,7 +6057,9 @@ div#chat-remote-video video {
 #about-session .tags-course a{
   display: inline-block;
   margin-left: 5px;
+  margin-right: 5px;
   padding-left: 5px;
+  padding-right: 5px;
   background-color:#ffffff;
   border-radius: 10%;
   -moz-border-radius: 10%;
@@ -6148,10 +6164,12 @@ div#chat-remote-video video {
   text-transform: uppercase;
 }
 #session-list .title-session{
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.2;
-  height: 40px;
   margin-top: 5px;
+}
+#session-list .session-col:nth-child(4n+1) {
+    clear: left;
 }
 #session-list .item{
   display: block;
@@ -6166,8 +6184,25 @@ div#chat-remote-video video {
   margin-left: auto;
   margin-right: auto;
 }
+
 #session-list .information-item{
   padding: 10px;
+}
+#session-list .information-item .requirements .fa-book{
+  margin-right: 10px;
+  color: #00829C;
+}
+#session-list .information-item .requirements{
+  color: #666666;
+  font-size: 12px;
+}
+#session-list .information-item .options .info-catalog{
+  background-color: #35A8C9;
+  color: #ffffff;
+  padding: 5px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 12px;
 }
 #session-list .author-session,
 #session-list .date-session{
@@ -6179,8 +6214,19 @@ div#chat-remote-video video {
   color: #00829C;
   margin-right: 10px;
 }
-#session-list .options p{
+#session-list .options :last-child{
   margin: 0;
+}
+#session-list .dependent .tool-book .fa.fa-book{
+  color: #00829C;
+  margin-right: 10px;
+}
+#session-list .dependent{
+  font-size: 12px;
+  padding-bottom: 10px;
+}
+#session-list .dependent a{
+  color: #666666;
 }
 #custom-icons .items-tools{
   padding: 10px;
@@ -6218,6 +6264,18 @@ div#chat-remote-video video {
   margin-right: 5%;
   margin-left: 5%;
   text-align: center;
+}
+.show-exercise{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+p.bg-primary,
+p.bg-success,
+p.bg-info,
+p.bg-warning,
+p.bg-danger {
+    padding: 10px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

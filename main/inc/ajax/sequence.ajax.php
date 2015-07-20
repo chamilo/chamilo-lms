@@ -283,4 +283,48 @@ switch ($action) {
                 break;
         }
         break;
+    case 'get_requirements':
+        $userId = api_get_user_id();
+
+        switch ($type) {
+            case SequenceResource::SESSION_TYPE:
+                $session = api_get_session_info($id);
+
+                $sequences = $repository->getRequirements(
+                    $session['id'],
+                    $type
+                );
+
+                if (count($sequences) === 0) {
+                    break;
+                }
+
+                $sequenceList = SecuenceResourceManager::checkRequirementsForUser($sequences, $userId, $type);
+                $allowSubscription = SecuenceResourceManager::checkSequenceAreCompleted($sequenceList);
+
+                $courseController = new CoursesController();
+
+                $view = new Template(null, false, false, false, false, false);
+                $view->assign('sequences', $sequenceList);
+                $view->assign('allow_subscription', $allowSubscription);
+
+                if ($allowSubscription) {
+                    $view->assign(
+                        'subscribe_button',
+                        $courseController->getRegisteredInSessionButton(
+                            $session['id'],
+                            $session['name'],
+                            false
+                        )
+                    );
+                }
+
+                $template = $view->get_template(
+                    'sequence_resource/session_requirements.tpl'
+                );
+
+                $view->display($template);
+                break;
+        }
+        break;
 }

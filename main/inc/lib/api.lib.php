@@ -14,7 +14,6 @@
 
 // PHP version requirement.
 define('REQUIRED_PHP_VERSION', '5.4');
-
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -47,12 +46,12 @@ define('STUDENT_BOSS', 17); // student is boss
 define('INVITEE', 20);
 
 // Table of status
-$_status_list[COURSEMANAGER]    = 'teacher';        // 1
-$_status_list[SESSIONADMIN]     = 'session_admin';  // 3
-$_status_list[DRH]              = 'drh';            // 4
-$_status_list[STUDENT]          = 'user';           // 5
-$_status_list[ANONYMOUS]        = 'anonymous';      // 6
-$_status_list[INVITEE]     = 'invited';        // 20
+$_status_list[COURSEMANAGER] = 'teacher';        // 1
+$_status_list[SESSIONADMIN] = 'session_admin';  // 3
+$_status_list[DRH] = 'drh';            // 4
+$_status_list[STUDENT] = 'user';           // 5
+$_status_list[ANONYMOUS] = 'anonymous';      // 6
+$_status_list[INVITEE] = 'invited';        // 20
 
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
@@ -66,14 +65,14 @@ define('COURSE_VISIBILITY_OPEN_WORLD', 3);
 /** Invisible to all except admin */
 define('COURSE_VISIBILITY_HIDDEN', 4);
 
-define('COURSE_REQUEST_PENDING',  0);
+define('COURSE_REQUEST_PENDING', 0);
 define('COURSE_REQUEST_ACCEPTED', 1);
 define('COURSE_REQUEST_REJECTED', 2);
 define('DELETE_ACTION_ENABLED', false);
 
 
 // EMAIL SENDING RECIPIENT CONSTANTS
-define('SEND_EMAIL_EVERYONE',  1);
+define('SEND_EMAIL_EVERYONE', 1);
 define('SEND_EMAIL_STUDENTS', 2);
 define('SEND_EMAIL_TEACHERS', 3);
 
@@ -83,7 +82,7 @@ define('SESSION_VISIBLE', 2);
 define('SESSION_INVISIBLE', 3); // not available
 define('SESSION_AVAILABLE', 4);
 
-define('SESSION_LINK_TARGET','_self');
+define('SESSION_LINK_TARGET', '_self');
 
 define('SUBSCRIBE_ALLOWED', 1);
 define('SUBSCRIBE_NOT_ALLOWED', 0);
@@ -97,7 +96,7 @@ define('SURVEY_VISIBLE_PUBLIC', 2);
 
 // CONSTANTS defining all tools, using the english version
 /* When you add a new tool you must add it into function api_get_tools_lists() too */
-define('TOOL_DOCUMENT','document');
+define('TOOL_DOCUMENT', 'document');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
@@ -109,11 +108,11 @@ define('TOOL_LEARNPATH', 'learnpath');
 define('TOOL_AGENDA', 'agenda');
 define('TOOL_ANNOUNCEMENT', 'announcement');
 define('TOOL_FORUM', 'forum');
-define('TOOL_FORUM_CATEGORY','forum_category');
-define('TOOL_FORUM_THREAD','forum_thread');
-define('TOOL_FORUM_POST','forum_post');
-define('TOOL_FORUM_ATTACH','forum_attachment');
-define('TOOL_FORUM_THREAD_QUALIFY','forum_thread_qualify');
+define('TOOL_FORUM_CATEGORY', 'forum_category');
+define('TOOL_FORUM_THREAD', 'forum_thread');
+define('TOOL_FORUM_POST', 'forum_post');
+define('TOOL_FORUM_ATTACH', 'forum_attachment');
+define('TOOL_FORUM_THREAD_QUALIFY', 'forum_thread_qualify');
 define('TOOL_THREAD', 'thread');
 define('TOOL_POST', 'post');
 define('TOOL_DROPBOX', 'dropbox');
@@ -133,18 +132,18 @@ define('TOOL_COPY_COURSE_CONTENT', 'copy_course_content');
 define('TOOL_RECYCLE_COURSE', 'recycle_course');
 define('TOOL_COURSE_HOMEPAGE', 'course_homepage');
 define('TOOL_COURSE_RIGHTS_OVERVIEW', 'course_rights');
-define('TOOL_UPLOAD','file_upload');
-define('TOOL_COURSE_MAINTENANCE','course_maintenance');
-define('TOOL_VISIO','visio');
-define('TOOL_VISIO_CONFERENCE','visio_conference');
-define('TOOL_VISIO_CLASSROOM','visio_classroom');
-define('TOOL_SURVEY','survey');
-define('TOOL_WIKI','wiki');
-define('TOOL_GLOSSARY','glossary');
-define('TOOL_GRADEBOOK','gradebook');
-define('TOOL_NOTEBOOK','notebook');
-define('TOOL_ATTENDANCE','attendance');
-define('TOOL_COURSE_PROGRESS','course_progress');
+define('TOOL_UPLOAD', 'file_upload');
+define('TOOL_COURSE_MAINTENANCE', 'course_maintenance');
+define('TOOL_VISIO', 'visio');
+define('TOOL_VISIO_CONFERENCE', 'visio_conference');
+define('TOOL_VISIO_CLASSROOM', 'visio_classroom');
+define('TOOL_SURVEY', 'survey');
+define('TOOL_WIKI', 'wiki');
+define('TOOL_GLOSSARY', 'glossary');
+define('TOOL_GRADEBOOK', 'gradebook');
+define('TOOL_NOTEBOOK', 'notebook');
+define('TOOL_ATTENDANCE', 'attendance');
+define('TOOL_COURSE_PROGRESS', 'course_progress');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -154,7 +153,7 @@ define('SECTION_MYAGENDA', 'myagenda');
 define('SECTION_COURSE_ADMIN', 'course_admin');
 define('SECTION_PLATFORM_ADMIN', 'platform_admin');
 define('SECTION_MYGRADEBOOK', 'mygradebook');
-define('SECTION_TRACKING','session_my_space');
+define('SECTION_TRACKING', 'session_my_space');
 define('SECTION_SOCIAL', 'social');
 define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
@@ -166,7 +165,7 @@ define('CAS_AUTH_SOURCE', 'cas');
 define('LDAP_AUTH_SOURCE', 'extldap');
 
 // CONSTANT defining the default HotPotatoes files directory
-define('DIR_HOTPOTATOES','/HotPotatoes_files');
+define('DIR_HOTPOTATOES', '/HotPotatoes_files');
 
 // event logs types
 define('LOG_COURSE_DELETE', 'course_deleted');
@@ -195,9 +194,7 @@ define('LOG_SESSION_CREATE', 'session_created');
 define('LOG_SESSION_DELETE', 'session_deleted');
 define('LOG_SESSION_ADD_USER_COURSE', 'session_add_user_course');
 define('LOG_SESSION_DELETE_USER_COURSE', 'session_delete_user_course');
-
 define('LOG_SESSION_DELETE_USER', 'session_delete_user');
-
 define('LOG_SESSION_ADD_COURSE', 'session_add_course');
 define('LOG_SESSION_DELETE_COURSE', 'session_delete_course');
 
@@ -421,7 +418,7 @@ define('HOOK_EVENT_TYPE_ALL', 10);
 define('CAREER_STATUS_ACTIVE', 1);
 define('CAREER_STATUS_INACTIVE', 0);
 
-define('PROMOTION_STATUS_ACTIVE',  1);
+define('PROMOTION_STATUS_ACTIVE', 1);
 define('PROMOTION_STATUS_INACTIVE', 0);
 
 // Group permissions
@@ -490,9 +487,9 @@ define('MCMA', 2);
 define('FIB', 3);
 
 // Skills
-define ('SKILL_TYPE_REQUIREMENT', 'required');
-define ('SKILL_TYPE_ACQUIRED', 'acquired');
-define ('SKILL_TYPE_BOTH', 'both');
+define('SKILL_TYPE_REQUIREMENT', 'required');
+define('SKILL_TYPE_ACQUIRED', 'acquired');
+define('SKILL_TYPE_BOTH', 'both');
 
 // Message
 define('MESSAGE_STATUS_NEW', '0');
@@ -941,7 +938,7 @@ function api_get_path($path_type, $path = null)
 /**
  * Gets a modified version of the path for the CDN, if defined in
  * configuration.php
- * @param string The path of the resource without CDN
+ * @param string $web_path The path of the resource without CDN
  * @return string The path of the resource converted to CDN
  * @author Yannick Warnier <ywarnier@beeznst.org>
  */
@@ -966,7 +963,7 @@ function api_get_cdn_path($web_path)
 }
 
 /**
- * @return bool     Return true if CAS authentification is activated
+ * @return bool Return true if CAS authentification is activated
  *
  */
 function api_is_cas_activated() {
@@ -1425,7 +1422,6 @@ function _api_format_user($user, $add_password = false)
     $result['lastLogin'] = $last_login;
 
     // Getting user avatar.
-    $picture_filename = trim($result['picture_uri']);
 
     $originalFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL, $result);
     $smallFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL, $result);
@@ -1561,13 +1557,15 @@ function api_get_user_info_from_email($email = '')
         $result_array = Database::fetch_array($result);
         return _api_format_user($result_array);
     }
+
     return false;
 }
 
 /**
  * @return string
  */
-function api_get_course_id() {
+function api_get_course_id()
+{
     return isset($GLOBALS['_cid']) ? $GLOBALS['_cid'] : null;
 }
 
@@ -1767,7 +1765,8 @@ function api_get_course_info($course_code = null, $strict = false)
  * @param int $id Numeric ID of the course
  * @return array The course info as an array formatted by api_format_course_array, including category.name
  */
-function api_get_course_info_by_id($id = null) {
+function api_get_course_info_by_id($id = null)
+{
     if (!empty($id)) {
         $id = intval($id);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1822,6 +1821,7 @@ function api_format_course_array($course_data)
     $_course['sysCode'] = $course_data['code'];
     $_course['path'] = $course_data['directory']; // Use as key in path.
     $_course['directory'] = $course_data['directory'];
+    $_course['creation_date'] = $course_data['creation_date'];
 
     //@todo should be deprecated
     // Use as key in db list.
@@ -1849,7 +1849,7 @@ function api_format_course_array($course_data)
     $_course['department_name'] = $course_data['department_name'];
     $_course['department_url'] = $course_data['department_url'];
 
-    //Course password
+    // Course password
     $_course['registration_code'] = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota'] = $course_data['disk_quota'];
     $_course['course_public_url'] = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
@@ -2479,6 +2479,7 @@ function api_get_setting($variable, $key = null)
             $value = $_setting[$variable][$key];
         }
     }
+
     return $value;
 }
 
@@ -2494,6 +2495,7 @@ function api_get_plugin_setting($plugin, $variable)
     if (isset($result[$plugin])) {
         return $result[$plugin];
     }
+
     return null;
 }
 
@@ -2579,6 +2581,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
             WHERE access_url_id = $url AND user_id = $user_id";
     $res = Database::query($sql);
     $is_on_url = Database::num_rows($res) === 1;
+
     return $is_on_url;
 }
 
@@ -2759,8 +2762,9 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
 
 /**
  * Checks whether the current user is a course or session coach
- * @param int - optional, session id
+ * @param int $session_id
  * @param int $courseId
+ * @param bool  Check whether we are in student view and, if we are, return false
  * @return boolean True if current user is a course or session coach
  */
 function api_is_coach($session_id = 0, $courseId = null, $check_student_view = true)
@@ -5014,11 +5018,13 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
     if (Database::num_rows($res) > 0) {
         // Found item for this access_url.
         $row = Database::fetch_array($res);
-        $update = "UPDATE $t_settings SET selected_value = '$value' WHERE id = ".$row['id'] ;
-        Database::query($update);
+        $sql = "UPDATE $t_settings SET selected_value = '$value'
+                WHERE id = ".$row['id'] ;
+        Database::query($sql);
     } else {
         // Item not found for this access_url, we have to check if it exist with access_url = 1
-        $select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = 1 ";
+        $select = "SELECT * FROM $t_settings
+                   WHERE variable = '$var' AND access_url = 1 ";
         // Just in case
         if ($access_url == 1) {
             if (!empty($subvar)) {
@@ -7840,7 +7846,12 @@ function api_mail_html(
         }
     }
     $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
-    $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
+
+    $mailView = new Template(null, false, false, false, false, false);
+    $mailView->assign('content', $message);
+    $layout = $mailView->get_template('mail/mail.tpl');
+
+    $mail->Body = $mailView->fetch($layout);
 
     // Attachment ...
     if (!empty($data_file)) {
@@ -7941,4 +7952,8 @@ function api_protect_limit_for_session_admin()
     if (api_is_session_admin() && $limitAdmin === 'true') {
         api_not_allowed(true);
     }
+}
+
+function api_is_student_view_active() {
+    return (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview");
 }

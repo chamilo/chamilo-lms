@@ -43,6 +43,6 @@ switch ($action) {
         }
         break;
     default:
-        //Show certificate HTML
+        // Show certificate HTML
         $certificate->show();
 }

@@ -1,15 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Create a backup.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-/**
- * Code
- */
-// Including the global initialization file
+
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 

@@ -59,7 +59,7 @@ Display::display_header($nameTools,"Tracking");
 /*	Constants and variables */
 
 $is_allowedToTrack = $is_courseAdmin;
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id);
+$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $courseId);
 
 // Database Table Definitions
 $TABLECOURSUSER	        	= Database::get_main_table(TABLE_MAIN_COURSE_USER);

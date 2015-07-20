@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-2">
                         <div class="thumbnail">
-                            <img src="{{ hot_course.extra_info.course_image }}" alt="{{ hot_course.extra_info.title|e }}" />
+                            <img src="{{ hot_course.extra_info.course_image }}" alt="{{ hot_course.extra_info.title|e }}" width="85" height="85" />
                         </div>
                     </div>
                     <div class="col-md-10">

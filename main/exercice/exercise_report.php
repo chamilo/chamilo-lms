@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * 	Exercise list: This script shows the list of exercises for administrators and students.
  * 	@package chamilo.exercise
@@ -9,7 +10,7 @@
  *  @todo fix excel export
  *
  */
-// including the global library
+
 require_once '../inc/global.inc.php';
 
 // Setting the tabs
@@ -288,7 +289,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
         Database::query($sql);
         $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
         Database::query($sql);
-        header('Location: exercise_report.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&exerciseId='.$exercise_id);
+        header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
         exit;
     }
 }
@@ -318,7 +319,10 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete_be
     if ($check) {
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exercise_id)) {
-            $count = $objExerciseTmp->clean_results(true, $_GET['delete_before_date'].' 23:59:59');
+            $count = $objExerciseTmp->clean_results(
+                true,
+                $_GET['delete_before_date'].' 23:59:59'
+            );
             Display::display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $count));
         }
     }
@@ -619,7 +623,7 @@ $extra_params['height'] = 'auto';
             });
         });
 </script>
-<form id="export_report_form" method="post" action="exercise_report.php">
+<form id="export_report_form" method="post" action="exercise_report.php?<?php echo api_get_cidreq(); ?>">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
     <input type="hidden" name="export_report" id="export_report" value="1" />
     <input type="hidden" name="exerciseId" id="exerciseId" value="<?php echo $exercise_id ?>" />

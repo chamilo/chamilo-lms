@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+use \Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
 * Template (front controller in MVC pattern) used for distpaching
@@ -21,10 +22,11 @@ $limit = getLimitArray();
 // Section for the tabs.
 $this_section = SECTION_COURSES;
 
-// Access rights: anonymous users can't do anything useful here.
-if (!isset($_configuration['course_catalog_published']) || $_configuration['course_catalog_published'] !== 'true') {
+if (api_get_configuration_value('course_catalog_published') !== 'true') {
+    // Access rights: anonymous users can't do anything useful here.
     api_block_anonymous_users();
 }
+
 $user_can_view_page = false;
 
 //For students
@@ -210,6 +212,29 @@ switch ($action) {
     case 'subscribe_to_session':
         $registrationAllowed = api_get_setting('catalog_allow_session_auto_subscription');
         if ($registrationAllowed === 'true') {
+            $entityManager = Database::getManager();
+            $repository = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+
+            $sequences = $repository->getRequirements(
+                $_GET['session_id'],
+                SequenceResource::SESSION_TYPE
+            );
+
+            if (count($sequences) > 0) {
+                $requirementsData = SecuenceResourceManager::checkRequirementsForUser(
+                    $sequences,
+                    api_get_user_id(),
+                    SequenceResource::SESSION_TYPE
+                );
+
+                $continueWithSubscription = SecuenceResourceManager::checkSequenceAreCompleted($requirementsData);
+
+                if (!$continueWithSubscription) {
+                    header('Location: ' .  api_get_path(WEB_CODE_PATH) . 'auth/courses.php');
+                    exit;
+                }
+            }
+
             SessionManager::suscribe_users_to_session(
                 $_GET['session_id'],
                 array($_GET['user_id'])

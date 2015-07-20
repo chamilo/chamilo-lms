@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt*/
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use ChamiloSession as Session;
 
 /**
  * Class CourseManager
@@ -1112,17 +1113,17 @@ class CourseManager
      *    Is the user subscribed in the real course or linked courses?
      *
      * @param int the id of the user
-     * @param array info about the course (comes from course table, see database lib)
+     * @param int $courseId
      * @deprecated linked_courses definition doesn't exists
      * @return true if the user is registered in the real course or linked courses, false otherwise
      */
-    public static function is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id = '')
+    public static function is_user_subscribed_in_real_or_linked_course($user_id, $courseId, $session_id = '')
     {
         if ($user_id != strval(intval($user_id))) {
             return false;
         }
 
-        $course_code = Database::escape_string($course_code);
+        $courseId = intval($courseId);
 
         if ($session_id == '') {
             $result = Database::fetch_array(
@@ -1134,7 +1135,7 @@ class CourseManager
                     WHERE
                         course_user.user_id = '$user_id' AND
                         course_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
-                        ( course.code = '$course_code')"
+                        ( course.id = '$courseId')"
                 )
             );
             return !empty($result);
@@ -1159,7 +1160,7 @@ class CourseManager
                 FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
                 WHERE session_id='" . $session_id . "'
                 AND user_id = '$user_id' AND status = 2
-                AND course_code='$course_code'"))
+                AND c_id ='$courseId'"))
         ) {
             return true;
         }
@@ -3314,16 +3315,27 @@ class CourseManager
                     $params['right_actions'] = '';
                     if (api_is_platform_admin()) {
                         if ($load_dirs) {
-                            $params['right_actions'] .= '<a id="document_preview_' . $course['real_id'] . '_0" class="document_preview" href="javascript:void(0);">' . Display::return_icon('folder.png',
-                                    get_lang('Documents'), array('align' => 'absmiddle'), ICON_SIZE_SMALL) . '</a>';
-                            $params['right_actions'] .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'] . '">' . Display::return_icon('edit.png',
-                                    get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL) . '</a>';
+                            $params['right_actions'] .= '<a id="document_preview_' . $course['real_id'] . '_0" class="document_preview" href="javascript:void(0);">' .
+                                Display::return_icon(
+                                    'folder.png',
+                                    get_lang('Documents'),
+                                    array('align' => 'absmiddle'),
+                                    ICON_SIZE_SMALL
+                                ).'</a>';
+                            $params['right_actions'] .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'] . '">' .
+                                Display::return_icon(
+                                    'edit.png',
+                                    get_lang('Edit'),
+                                    array('align' => 'absmiddle'),
+                                    ICON_SIZE_SMALL
+                                ).'</a>';
                             $params['right_actions'] .= Display::div('', array(
                                     'id' => 'document_result_' . $course['real_id'] . '_0',
                                     'class' => 'document_preview_container'
                                 ));
                         } else {
-                            $params['right_actions'] .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'] . '">' . Display::return_icon('edit.png',
+                            $params['right_actions'] .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'course_info/infocours.php?cidReq=' . $course['code'] . '">' .
+                                Display::return_icon('edit.png',
                                     get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL) . '</a>';
                         }
                         if ($course['status'] == COURSEMANAGER) {
@@ -3332,8 +3344,13 @@ class CourseManager
                     } else {
                         if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                             if ($load_dirs) {
-                                $params['right_actions'] .= '<a id="document_preview_' . $course['real_id'] . '_0" class="document_preview" href="javascript:void(0);">' . Display::return_icon('folder.png',
-                                        get_lang('Documents'), array('align' => 'absmiddle'), ICON_SIZE_SMALL) . '</a>';
+                                $params['right_actions'] .= '<a id="document_preview_' . $course['real_id'] . '_0" class="document_preview" href="javascript:void(0);">' .
+                                    Display::return_icon(
+                                        'folder.png',
+                                        get_lang('Documents'),
+                                        array('align' => 'absmiddle'),
+                                        ICON_SIZE_SMALL
+                                    ).'</a>';
                                 $params['right_actions'] .= Display::div('', array(
                                         'id' => 'document_result_' . $course['real_id'] . '_0',
                                         'class' => 'document_preview_container'
@@ -3343,7 +3360,7 @@ class CourseManager
                     }
 
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                        $course_title = '<a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=0&amp;autoreg=1">' . $course_info['title'] . '</a>';
+                        $course_title = '<a href="' . $course_info['course_public_url'] . '?id_session=0&autoreg=1">' . $course_info['title'] . '</a>';
                     } else {
                         $course_title = $course_info['title'] . " " . Display::tag('span', get_lang('CourseClosed'),
                                 array('class' => 'item_closed'));
@@ -3353,14 +3370,17 @@ class CourseManager
                         $course_title .= ' (' . $course_info['visual_code'] . ') ';
                     }
                     if (api_get_setting('display_teacher_in_courselist') == 'true') {
-                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['code'],
-                            self::USER_SEPARATOR, true);
+                        $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string(
+                            $course['code'],
+                            self::USER_SEPARATOR,
+                            true
+                        );
                     }
                     $course_title .= '&nbsp;';
                     $course_title .= Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
 
                     $params['title'] = $course_title;
-                    $params['link'] = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=0&amp;autoreg=1';
+                    $params['link'] = $course_info['course_public_url'].'?id_session=0&autoreg=1';
 
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                         $params['notifications'] = $show_notification;
@@ -3778,8 +3798,8 @@ class CourseManager
                 }
 
                 if ($user_in_course_status == COURSEMANAGER || $sessionCourseAvailable) {
-                    $session_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'];
-                    $session_title = '<h4><a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'] . '">'. $course_info['name'] . '</a>'.$notifications.'</h4>';
+                    $session_url = $course_info['course_public_url'] . '?id_session=' . $course_info['id_session'];
+                    $session_title = '<h4><a href="' . $session_url. '">'. $course_info['name'] . '</a>'.$notifications.'</h4>';
                 } else {
                     $session_title = $course_info['name'];
                 }
@@ -5183,6 +5203,8 @@ class CourseManager
     /**
      * @param FormValidator $form
      * @param array $to_already_selected
+     *
+     * @param HTML_QuickForm_element
      */
     public static function addUserGroupMultiSelect(&$form, $to_already_selected)
     {
@@ -5195,7 +5217,7 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        $form->addElement(
+        return $form->addElement(
             'advmultiselect',
             'users',
             get_lang('Users'),
@@ -5424,5 +5446,65 @@ class CourseManager
         }
 
         return $coursesList;
+    }
+
+    /**
+     * Direct course link see #5299
+     *
+     * You can send to your students an URL like this
+     * http://chamilodev.beeznest.com/main/auth/inscription.php?c=ABC&e=3
+     * Where "c" is the course code and "e" is the exercise Id, after a successful
+     * registration the user will be sent to the course or exercise
+     *
+     */
+    public static function redirectToCourse($form_data)
+    {
+        $course_code_redirect = Session::read('course_redirect');
+        $_user = api_get_user_info();
+        $user_id = api_get_user_id();
+
+        if (!empty($course_code_redirect)) {
+            $course_info = api_get_course_info($course_code_redirect);
+            if (!empty($course_info)) {
+                if (in_array($course_info['visibility'],
+                    array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))
+                ) {
+
+                    if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
+
+                        $form_data['action'] = $course_info['course_public_url'];
+                        $form_data['message'] = sprintf(get_lang('YouHaveBeenRegisteredToCourseX'), $course_info['title']);
+                        $form_data['button'] = Display::button(
+                            'next',
+                            get_lang('GoToCourse', null, $_user['language']),
+                            array('class' => 'btn btn-primary btn-large')
+                        );
+
+                        $exercise_redirect = intval(Session::read('exercise_redirect'));
+                        // Specify the course id as the current context does not
+                        // hold a global $_course array
+                        $objExercise = new Exercise($course_info['real_id']);
+                        $result = $objExercise->read($exercise_redirect);
+
+                        if (!empty($exercise_redirect) && !empty($result)) {
+                            $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
+                            $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
+                            $form_data['button'] = Display::button(
+                                'next',
+                                get_lang('Go', null, $_user['language']),
+                                array('class' => 'btn btn-primary btn-large')
+                            );
+                        }
+
+                        if (!empty($form_data['action'])) {
+                            header('Location: '.$form_data['action']);
+                            exit;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $form_data;
     }
 }

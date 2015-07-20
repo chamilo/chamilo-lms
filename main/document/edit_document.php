@@ -60,6 +60,7 @@ $lib_path = api_get_path(LIBRARY_PATH);
 
 $course_info = api_get_course_info();
 $group_id = api_get_group_id();
+$sessionId = api_get_session_id();
 
 if (api_is_in_group()) {
 	$group_properties = GroupManager::get_group_properties($group_id);
@@ -73,8 +74,18 @@ if (isset($_GET['id'])) {
     $document_data = DocumentManager::get_document_data_by_id(
         $_GET['id'],
         api_get_course_id(),
-        true
+        true,
+		0
     );
+
+    if (!empty($sessionId) && empty($document_data)) {
+        $document_data = DocumentManager::get_document_data_by_id(
+            $_REQUEST['id'],
+            api_get_course_id(),
+            true,
+            $sessionId
+        );
+    }
 
 	$document_id = $document_data['id'];
 	$file = $document_data['path'];

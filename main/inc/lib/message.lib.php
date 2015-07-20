@@ -195,7 +195,8 @@ class MessageManager
         $parent_id = 0,
         $edit_message_id = 0,
         $topic_id = 0,
-        $sender_id = null
+        $sender_id = null,
+        $directMessage = false
     ) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
@@ -316,8 +317,12 @@ class MessageManager
             $sender_info = api_get_user_info($user_sender_id);
 
             if (empty($group_id)) {
+                $type = Notification::NOTIFICATION_TYPE_MESSAGE;
+                if ($directMessage) {
+                    $type = Notification::NOTIFICATION_TYPE_DIRECT_MESSAGE;
+                }
                 $notification->save_notification(
-                    Notification::NOTIFICATION_TYPE_MESSAGE,
+                    $type,
                     array($receiver_user_id),
                     $subject,
                     $content,
@@ -350,21 +355,32 @@ class MessageManager
                     $group_info
                 );
             }
+
             return $inbox_last_id;
         }
+
         return false;
     }
 
     /**
-     * A handy way to send message
+     * @param int $receiver_user_id
+     * @param int $subject
+     * @param string $message
+     * @param int $sender_id
+     * @param bool $sendCopyToDrhUsers send copy to related DRH users
+     * @param bool $directMessage
+     *
+     * @return bool
      */
     public static function send_message_simple(
         $receiver_user_id,
         $subject,
         $message,
-        $sender_id = null
+        $sender_id = null,
+        $sendCopyToDrhUsers = false,
+        $directMessage = false
     ) {
-        return MessageManager::send_message(
+        $result = MessageManager::send_message(
             $receiver_user_id,
             $subject,
             $message,
@@ -374,8 +390,34 @@ class MessageManager
             null,
             null,
             null,
-            $sender_id
+            $sender_id,
+            $directMessage
         );
+
+        if ($sendCopyToDrhUsers) {
+
+            $userInfo = api_get_user_info($receiver_user_id);
+            $drhList = UserManager::getDrhListFromUser($receiver_user_id);
+            if (!empty($drhList)) {
+                foreach ($drhList as $drhInfo) {
+                    $message = sprintf(
+                            get_lang('CopyOfOriginalMessageSentToX'),
+                            $userInfo['complete_name']
+                        ).' <br />'.$message;
+
+                    MessageManager::send_message_simple(
+                        $drhInfo['user_id'],
+                        $subject,
+                        $message,
+                        $sender_id,
+                        false,
+                        $directMessage
+                    );
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**

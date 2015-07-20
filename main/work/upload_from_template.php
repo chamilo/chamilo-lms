@@ -29,19 +29,16 @@ if (empty($work_id)) {
     api_not_allowed(true);
 }
 
+protectWork($course_info, $work_id);
+
 $workInfo = get_work_data_by_id($work_id);
-
-if (empty($workInfo)) {
-    api_not_allowed(true);
-}
-
-allowOnlySubscribedUser($user_id, $work_id, $course_id);
 
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
     $user_id,
-    $course_code,
+    $course_id,
     $session_id
 );
+
 $is_course_member = $is_course_member || api_is_platform_admin();
 
 if ($is_course_member == false) {
@@ -60,7 +57,13 @@ $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'
 $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id, 'name' =>  $workInfo['title']);
 $interbreadcrumb[] = array('url' => '#', 'name'  => get_lang('UploadFromTemplate'));
 
-$form = new FormValidator('form', 'POST', api_get_self()."?".api_get_cidreq()."&id=".$work_id, '', array('enctype' => "multipart/form-data"));
+$form = new FormValidator(
+    'form',
+    'POST',
+    api_get_self()."?".api_get_cidreq()."&id=".$work_id,
+    '',
+    array('enctype' => "multipart/form-data")
+);
 setWorkUploadForm($form, $workInfo['allow_text_assignment']);
 $form->addElement('hidden', 'document_id', $documentId);
 $form->addElement('hidden', 'id', $work_id);
@@ -68,6 +71,7 @@ $form->addElement('hidden', 'sec_token', $token);
 
 $documentTemplateData = getDocumentTemplateFromWork($work_id, $course_info, $documentId);
 
+$defaults = [];
 if (!empty($documentTemplateData)) {
     $defaults['title'] = $userInfo['complete_name'].'_'.$documentTemplateData['title'].'_'.substr(api_get_utc_datetime(), 0, 10);
     $defaults['description'] = $documentTemplateData['file_content'];
@@ -82,7 +86,14 @@ if ($form->validate()) {
     if ($student_can_edit_in_session && $check) {
         $values = $form->getSubmitValues();
         // Process work
-        $error_message = processWorkForm($workInfo, $values, $course_info, $id_session, $group_id, $user_id);
+        $error_message = processWorkForm(
+            $workInfo,
+            $values,
+            $course_info,
+            $id_session,
+            $group_id,
+            $user_id
+        );
         $script = 'work_list.php';
         if ($is_allowed_to_edit) {
             $script = 'work_list_all.php';

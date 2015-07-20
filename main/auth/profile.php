@@ -30,6 +30,7 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
     api_not_allowed(true);
 }
 
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 $htmlHeadXtra[] = '<script>
 function confirmation(name) {
     if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?")) {

@@ -305,11 +305,6 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         if (is_null($this->_tableAttributes)) {
             $this->updateAttributes(array('class' => 'col-md-4'));
         } else {
-        /*
-        if (is_null($this->_tableAttributes)) {
-            // default table layout
-            $attr = array('border' => '0', 'cellpadding' => '10', 'cellspacing' => '0');*/
-        //} else {
             $attr = array('class' => $this->_tableAttributes);
             $this->_removeAttr('class', $this->_attributes);
         }
@@ -989,6 +984,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 $strHtml = str_replace("<!-- END label_{$key} -->", '', $strHtml);
             }
         }
+
         // clean up useless label tags
         if (strpos($strHtml, '{label_')) {
             $strHtml = preg_replace('/\s*<!-- BEGIN label_(\S+) -->'.

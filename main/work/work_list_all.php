@@ -89,6 +89,16 @@ $itemId = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
 $message = null;
 
 switch ($action) {
+    case 'export_to_doc':
+        if ($is_allowed_to_edit) {
+            if (!empty($itemId)) {
+                $work = get_work_data_by_id($itemId);
+                if (!empty($work)) {
+                    Export::htmlToOdt($work['description'], $work['title']);
+                }
+            }
+        }
+        break;
     case 'delete':
         /*	Delete document */
         if ($itemId) {
@@ -132,6 +142,8 @@ switch ($action) {
         break;
 }
 
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-upload'));
+
 Display :: display_header(null);
 
 echo $message;
@@ -145,6 +157,9 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
     /*echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'">';
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';*/
+
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId.'">';
+    echo Display::return_icon('upload_file.png', get_lang('UploadCorrections'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
     echo Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -192,54 +207,172 @@ if (!empty($work_data['enable_qualification']) &&
     $type = 'simple';
 
     $columns = array(
-        get_lang('Type'),
+        //get_lang('Type'),
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('Title'),
         get_lang('Feedback'),
         get_lang('Date'),
         get_lang('Status'),
+        get_lang('UploadCorrection'),
         get_lang('Actions')
     );
 
     $column_model = array(
-        array('name'=>'type',           'index'=>'file',            'width'=>'8',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-        array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
-        array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'sent_date',      'index'=>'sent_date',       'width'=>'40',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'25',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'actions',        'index'=>'actions',         'width'=>'30',   'align'=>'left', 'search' => 'false', 'sortable'=>'false', )
+        /*array(
+            'name' => 'type',
+            'index' => 'file',
+            'width' => '8',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),*/
+        array(
+            'name' => 'firstname',
+            'index' => 'firstname',
+            'width' => '35',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '35',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'title',
+            'index' => 'title',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+            'wrap_cell' => 'true',
+        ),
+        array(
+            'name' => 'qualification',
+            'index' => 'qualification',
+            'width' => '20',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'sent_date',
+            'index' => 'sent_date',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'true',
+            'wrap_cell' => 'true',
+        ),
+        array(
+            'name' => 'qualificator_id',
+            'index' => 'qualificator_id',
+            'width' => '25',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'correction',
+            'index' => 'correction',
+            'width' => '30',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
+        array(
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '30',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
     );
 } else {
     $type = 'complex';
 
     $columns = array(
-        get_lang('Type'),
+        //get_lang('Type'),
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('Title'),
         get_lang('Feedback'),
         get_lang('Date'),
+        get_lang('UploadCorrection'),
         get_lang('Actions')
     );
 
     $column_model = array(
-        array('name'=>'type',      'index'=>'file',      'width'=>'8',  'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-        array('name'=>'firstname', 'index'=>'firstname', 'width'=>'35', 'align'=>'left', 'search' => 'true'),
-        array('name'=>'lastname',  'index'=>'lastname',  'width'=>'35', 'align'=>'left', 'search' => 'true'),
-        array('name'=>'title',     'index'=>'title',     'width'=>'40', 'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-        array('name'=>'qualification',  'index'=>'qualification',  'width'=>'25', 'align'=>'left', 'search' => 'true'),
-        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'45', 'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        array('name'=>'actions',   'index'=>'actions',   'width'=>'40', 'align'=>'left', 'search' => 'false', 'sortable'=>'false', 'wrap_cell' => 'true')
+        /*array(
+            'name' => 'type',
+            'index' => 'file',
+            'width' => '8',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),*/
+        array(
+            'name' => 'firstname',
+            'index' => 'firstname',
+            'width' => '35',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '35',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'title',
+            'index' => 'title',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+            'wrap_cell' => "true",
+        ),
+        array(
+            'name' => 'qualification',
+            'index' => 'qualification',
+            'width' => '25',
+            'align' => 'left',
+            'search' => 'true',
+        ),
+        array(
+            'name' => 'sent_date',
+            'index' => 'sent_date',
+            'width' => '30',
+            'align' => 'left',
+            'search' => 'true',
+            'wrap_cell' => 'true',
+        ),
+        array(
+            'name' => 'correction',
+            'index' => 'correction',
+            'width' => '30',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false',
+        ),
+        array(
+            'name' => 'actions',
+            'index' => 'actions',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false',
+            'sortable' => 'false'
+            //'wrap_cell' => 'true',
+        )
     );
 }
 
 $extra_params = array(
     'autowidth' =>  'true',
     'height' =>  'auto',
-    'sortname' => 'firstname'
+    'sortname' => 'firstname',
+    'sortable' => 'false'
 );
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type;
@@ -250,9 +383,18 @@ $(function() {
     echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
 ?>
 });
+
 </script>
 <?php
 
 echo $documentsAddedInWork;
 echo Display::grid_html('results');
+
+echo '<table style="display:none; width:50%" class="files data_table">
+        <tr>
+            <th>'.get_lang('FileName').'</th>
+            <th>'.get_lang('Size').'</th>
+            <th>'.get_lang('Status').'</th>
+        </tr>
+    </table>';
 Display :: display_footer();

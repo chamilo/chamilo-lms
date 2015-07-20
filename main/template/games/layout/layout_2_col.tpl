@@ -81,12 +81,12 @@
         {% if content is not null %}
             <section id="page-content">
                 {% if template == 'games' %}
-                    <ul class="nav nav-tabs" role="tablist">
+                    <ul class="games nav nav-tabs" role="tablist">
                         <li role="presentation" {% if not history %} class="active" {% endif %}>
-                            <a href="{{ _p.web }}user_portal.php?nosession=true" role="tab">{{ 'CurrentCourses'|get_lang }}</a>
+                            <a href="{{ _p.web }}user_portal.php?nosession=true" role="tab">Cursos Actuales</a>
                         </li>
                         <li role="presentation" {% if history %} class="active" {% endif %}>
-                            <a href="{{ _p.web }}user_portal.php?history=1" role="tab">{{ 'FinishedCourses'|get_lang }}</a>
+                            <a href="{{ _p.web }}user_portal.php?history=1" role="tab">Cursos Concluidos</a>
                         </li>
                     </ul>
                 {% endif %}

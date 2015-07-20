@@ -28,6 +28,9 @@ class ZombieManager
      */
     static function listZombies($ceiling, $active_only = true, $count = 0, $from = 10, $column = 'user.firstname', $direction = 'desc')
     {
+        if (empty($column)) {
+            $column = 'user.firstname';
+        }
         $ceiling = is_numeric($ceiling) ? (int) $ceiling : strtotime($ceiling);
         $ceiling = date('Y-m-d H:i:s', $ceiling);
 

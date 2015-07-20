@@ -14,10 +14,10 @@ api_protect_course_script(true);
 
 require_once 'work.lib.php';
 
-$course_info    = api_get_course_info();
-$course_id      = $course_info['real_id'];
-$user_id 	    = api_get_user_id();
-$id_session     = api_get_session_id();
+$course_info = api_get_course_info();
+$course_id = $course_info['real_id'];
+$user_id = api_get_user_id();
+$id_session = api_get_session_id();
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -33,23 +33,15 @@ $_course = api_get_course_info();
 /*	Constants and variables */
 
 $tool_name = get_lang('StudentPublications');
-$course_code = $_course['code'];
 $session_id = api_get_session_id();
 $group_id = api_get_group_id();
 
-$item_id 		        = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
-$parent_id 		        = isset($_REQUEST['parent_id']) ? intval($_REQUEST['parent_id']) : '';
-$origin 		        = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
-$submitGroupWorkUrl     = isset($_REQUEST['submitGroupWorkUrl']) ? Security::remove_XSS($_REQUEST['submitGroupWorkUrl']) : '';
-$title 			        = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
-$description 	        = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
-$uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : $course_info['show_score'];
-$course_dir 		= api_get_path(SYS_COURSE_PATH).$_course['path'];
-$base_work_dir 		= $course_dir . '/work';
-$link_target_parameter = ""; // e.g. "target=\"_blank\"";
-$display_list_users_without_publication = isset($_GET['list']) && Security::remove_XSS($_GET['list']) == 'without' ? true : false;
-
+$item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
+$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
+$course_dir = api_get_path(SYS_COURSE_PATH).$_course['path'];
+$base_work_dir = $course_dir . '/work';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
+
 //Download folder
 if ($action == 'downloadfolder') {
     require 'downloadfolder.inc.php';
@@ -76,43 +68,43 @@ if (!empty($gradebook) && $gradebook == 'view') {
 if (!empty($group_id)) {
     api_protect_course_group(GroupManager::GROUP_TOOL_WORK);
 
-    $group_properties  = GroupManager::get_group_properties($group_id);
+    $group_properties = GroupManager::get_group_properties($group_id);
 
-    $interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
-    $interbreadcrumb[] = array ('url' =>'work.php?gidReq='.$group_id,'name' => get_lang('StudentPublications'));
-    $url_dir = 'work.php?&id=' . $work_id;
+    $interbreadcrumb[] = array('url' => '../group/group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array('url' =>'work.php?'.api_get_cidreq(),'name' => get_lang('StudentPublications'));
+    $url_dir = 'work.php?&id=' . $work_id.'&'.api_get_cidreq();
     if (!empty($my_folder_data)) {
-        $interbreadcrumb[] = array ('url' => $url_dir, 'name' =>  $my_folder_data['title']);
+        $interbreadcrumb[] = array('url' => $url_dir, 'name' =>  $my_folder_data['title']);
     }
 
     if ($action == 'upload_form') {
-        $interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('UploadADocument'));
+        $interbreadcrumb[] = array('url' => 'work.php?'.api_get_cidreq(),'name' => get_lang('UploadADocument'));
     }
 
     if ($action == 'create_dir') {
-        $interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('CreateAssignment'));
+        $interbreadcrumb[] = array('url' => 'work.php?'.api_get_cidreq(),'name' => get_lang('CreateAssignment'));
     }
 } else {
     if ($origin != 'learnpath') {
         if (isset($_GET['id']) && !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir') {
-            $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));
+            $interbreadcrumb[] = array('url' => 'work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
         } else {
-            $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('StudentPublications'));
+            $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('StudentPublications'));
         }
 
         if (!empty($my_folder_data)) {
-            $interbreadcrumb[] = array ('url' => 'work.php?id=' . $work_id, 'name' =>  $my_folder_data['title']);
+            $interbreadcrumb[] = array('url' => 'work.php?id=' . $work_id.'&'.api_get_cidreq(), 'name' =>  $my_folder_data['title']);
         }
 
         if ($action == 'upload_form') {
-            $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('UploadADocument'));
+            $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UploadADocument'));
         }
         if ($action == 'settings') {
-            $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditToolOptions'));
+            $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditToolOptions'));
         }
         if ($action == 'create_dir') {
-            $interbreadcrumb[] = array ('url' => '#','name' => get_lang('CreateAssignment'));
+            $interbreadcrumb[] = array('url' => '#','name' => get_lang('CreateAssignment'));
         }
     }
 }
@@ -262,6 +254,63 @@ switch ($action) {
             header('Location: '.$currentUrl);
             exit;
         }
+        break;
+    case 'visible':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed();
+        }
+
+        api_item_property_update(
+            $courseInfo,
+            'work',
+            $work_id,
+            'visible',
+            api_get_user_id(),
+            null,
+            null,
+            null,
+            null,
+            $session_id
+        );
+        Display::addFlash(
+            Display::return_message(
+                get_lang('VisibilityChanged'),
+                'confirmation'
+            )
+        );
+
+        header('Location: '.$currentUrl);
+        exit;
+
+        break;
+    case 'invisible':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed();
+        }
+
+        api_item_property_update(
+            $courseInfo,
+            'work',
+            $work_id,
+            'invisible',
+            api_get_user_id(),
+            null,
+            null,
+            null,
+            null,
+            $session_id
+        );
+
+        Display::addFlash(
+            Display::return_message(
+                get_lang('VisibilityChanged'),
+                'confirmation'
+            )
+        );
+
+        header('Location: '.$currentUrl);
+        exit;
+
         break;
     case 'list':
         /*	Display list of student publications */

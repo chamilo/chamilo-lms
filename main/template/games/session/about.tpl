@@ -55,15 +55,6 @@
                         </div>
                     {% endif %}
 
-                    {% if course_data.tags %}
-                        <div class="tags-course">
-                            <i class="fa fa-check-square-o"></i>
-                            {% for tag in course_data.tags %}
-                                <a href="#">{{ tag.getTag }}</a>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
                     {% if not is_subscribed %}
                         <div class="subscribe text-right">
                             <a href="#" class="btn btn-success">{{ "Subscribe"|get_lang }}</a>
@@ -132,7 +123,25 @@
                                 {% endfor %}
                             </div>
                         </div>
+                        <hr>
                     {% endif %}
+
+                    {% if course_data.tags %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><h4>{{ 'Tags'|get_lang }}</h4></div>
+                            <div class="panel-body">
+                                <ul class="list-inline">
+                                    {% for tag in course_data.tags %}
+                                        <li>
+                                            <span class="label label-info">{{ tag.getTag }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                                <hr>
+                    {% endif %}
+
                     <div class="social-share">
                         <div class="heading"><h4>¡{{ "ShareWithYourFriends"|get_lang }}!</h4></div>
                         <div class="panel-body">

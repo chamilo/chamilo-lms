@@ -118,8 +118,10 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
 }
 
 
-$tpl = new Template($tool_name);
-
+$controller = new IndexManager($tool_name);
+//$tpl = new Template($tool_name);
+$controller->set_login_form();
+$tpl = $controller->tpl;
 $tpl->assign('form', $formToString);
 
 $template = $tpl->get_template('auth/lost_password.tpl');

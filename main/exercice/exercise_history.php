@@ -25,9 +25,9 @@ if (!$is_allowedToEdit){
     exit;
 }
 
-$interbreadcrumb[]= array ('url' => 'exercise_report.php','name' => get_lang('Exercises'));
-$interbreadcrumb[]= array ('url' => 'exercise_report.php'.'?filter=2','name' => get_lang('StudentScore'));
-$interbreadcrumb[]= array ('url' => 'exercise_history.php'.'?exe_id='.intval($_GET['exe_id']), 'name' => get_lang('Details'));
+$interbreadcrumb[]= array ('url' => 'exercise_report.php?'.api_get_cidreq(),'name' => get_lang('Exercises'));
+$interbreadcrumb[]= array ('url' => 'exercise_report.php?filter=2&'.api_get_cidreq(),'name' => get_lang('StudentScore'));
+$interbreadcrumb[]= array ('url' => 'exercise_history.php?exe_id='.intval($_GET['exe_id']).'&'.api_get_cidreq(), 'name' => get_lang('Details'));
 
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCISES			= Database::get_course_table(TABLE_QUIZ_TEST);
@@ -43,7 +43,8 @@ if (isset($_GET['message'])) {
 }
 
 echo '<div class="actions">';
-echo '<a href="exercise_report.php?' . api_get_cidreq() . '&filter=2">' . Display :: return_icon('back.png', get_lang('BackToResultList'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="exercise_report.php?' . api_get_cidreq() . '&filter=2">' .
+    Display :: return_icon('back.png', get_lang('BackToResultList'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 ?>

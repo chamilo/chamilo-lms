@@ -60,10 +60,10 @@ class Template
         $load_plugins = true
     ) {
         // Page title
-        $this->title            = $title;
-        $this->show_learnpath   = $show_learnpath;
+        $this->title = $title;
+        $this->show_learnpath = $show_learnpath;
         $this->hide_global_chat = $hide_global_chat;
-        $this->load_plugins     = $load_plugins;
+        $this->load_plugins = $load_plugins;
 
         $template_paths = array(
             api_get_path(SYS_CODE_PATH) . 'template/overrides', // user defined templates
@@ -83,20 +83,25 @@ class Template
         if (api_get_setting('server_type') == 'test') {
             $options = array(
                 //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
-                'autoescape'       => false,
-                'debug'            => true,
-                'auto_reload'      => true,
-                'optimizations'    => 0, // turn on optimizations with -1
-                'strict_variables' => false, //If set to false, Twig will silently ignore invalid variables
+                'autoescape' => false,
+                'debug' => true,
+                'auto_reload' => true,
+                'optimizations' => 0,
+                // turn on optimizations with -1
+                'strict_variables' => false,
+                //If set to false, Twig will silently ignore invalid variables
             );
         } else {
             $options = array(
-                'cache'            => $cache_folder, //path to the cache folder
-                'autoescape'       => false,
-                'debug'            => false,
-                'auto_reload'      => false,
-                'optimizations'    => -1, // turn on optimizations with -1
-                'strict_variables' => false //If set to false, Twig will silently ignore invalid variables
+                'cache' => $cache_folder,
+                //path to the cache folder
+                'autoescape' => false,
+                'debug' => false,
+                'auto_reload' => false,
+                'optimizations' => -1,
+                // turn on optimizations with -1
+                'strict_variables' => false
+                //If set to false, Twig will silently ignore invalid variables
             );
         }
 
@@ -152,6 +157,8 @@ class Template
 
         $this->assign('css_styles', $this->theme);
         $this->assign('login_class', null);
+
+        $this->setLoginForm();
 
         // Chamilo plugins
         if ($this->show_header) {
@@ -1099,4 +1106,154 @@ class Template
         }
         return $theme;
     }
+
+    /**
+     * @param bool|true $setLoginForm
+     */
+    public function setLoginForm($setLoginForm = true)
+    {
+        global $loginFailed;
+        $userId = api_get_user_id();
+        if (!($userId) || api_is_anonymous($userId)) {
+
+            // Only display if the user isn't logged in.
+            $this->assign(
+                'login_language_form',
+                api_display_language_form(true)
+            );
+            if ($setLoginForm) {
+                $this->assign('login_form', $this->displayLoginForm());
+
+                if ($loginFailed) {
+                    $this->assign('login_failed', $this::handleLoginFailed());
+                }
+            }
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function handleLoginFailed()
+    {
+        $message = get_lang('InvalidId');
+
+        if (!isset($_GET['error'])) {
+            if (api_is_self_registration_allowed()) {
+                $message = get_lang('InvalidForSelfRegistration');
+            }
+        } else {
+            switch ($_GET['error']) {
+                case '':
+                    if (api_is_self_registration_allowed()) {
+                        $message = get_lang('InvalidForSelfRegistration');
+                    }
+                    break;
+                case 'account_expired':
+                    $message = get_lang('AccountExpired');
+                    break;
+                case 'account_inactive':
+                    $message = get_lang('AccountInactive');
+                    break;
+                case 'user_password_incorrect':
+                    $message = get_lang('InvalidId');
+                    break;
+                case 'access_url_inactive':
+                    $message = get_lang('AccountURLInactive');
+                    break;
+                case 'wrong_captcha':
+                    $message = get_lang('TheTextYouEnteredDoesNotMatchThePicture');
+                    break;
+                case 'blocked_by_captcha':
+                    $message = get_lang('AccountBlockedByCaptcha');
+                    break;
+                case 'multiple_connection_not_allowed':
+                    $message = get_lang('MultipleConnectionsAreNotAllow');
+                    break;
+                case 'unrecognize_sso_origin':
+                    //$message = get_lang('SSOError');
+                    break;
+            }
+        }
+        return Display::return_message($message, 'error');
+    }
+
+    /**
+     * @return string
+     */
+    public function displayLoginForm()
+    {
+        $form = new FormValidator(
+            'formLogin',
+            'POST',
+            null,
+            null,
+            null,
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+
+        $form->addText(
+            'login',
+            get_lang('UserName'),
+            true,
+            array('id' => 'login', 'autofocus' => 'autofocus', 'icon' => 'user')
+        );
+
+        $form->addElement(
+            'password',
+            'password',
+            get_lang('Pass'),
+            array('id' => 'password', 'icon' => 'lock')
+        );
+
+        // Captcha
+        $captcha = api_get_setting('allow_captcha');
+        $allowCaptcha = $captcha == 'true';
+
+        if ($allowCaptcha) {
+            $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;
+            if ($useCaptcha) {
+                $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
+                $options = array(
+                    'width' => 250,
+                    'height' => 90,
+                    'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
+                    'sessionVar'   => basename(__FILE__, '.php'),
+                    'imageOptions' => array(
+                        'font_size' => 20,
+                        'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                        'font_file' => 'OpenSans-Regular.ttf',
+                        //'output' => 'gif'
+                    )
+                );
+
+                // Minimum options using all defaults (including defaults for Image_Text):
+                //$options = array('callback' => 'qfcaptcha_image.php');
+
+                $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+                $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
+
+                $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
+                $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
+                $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
+            }
+        }
+
+        $form->addButton('submitAuth', get_lang('LoginEnter'), null, 'primary', null, 'btn-block');
+
+        $html = $form->returnForm();
+        // The validation is located in the local.inc
+        /*if ($form->validate()) {
+            // Prevent re-use of the same CAPTCHA phrase
+            $captcha_question->destroy();
+        }*/
+
+        if (api_get_setting('openid_authentication') == 'true') {
+            include_once 'main/auth/openid/login.php';
+            $html .= '<div>'.openid_form().'</div>';
+        }
+
+        return $html;
+    }
+
 }

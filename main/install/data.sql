@@ -309,6 +309,7 @@ VALUES
 ('meta_description', NULL, 'textfield', 'Tracking', '', 'MetaDescriptionTitle', 'MetaDescriptionComment', NULL, NULL, 1),
 ('meta_image_path', NULL, 'textfield', 'Tracking', '', 'MetaImagePathTitle', 'MetaImagePathComment', NULL, NULL, 1),
 ('allow_teachers_to_create_sessions', NULL, 'radio', 'Session', 'false', 'AllowTeachersToCreateSessionsTitle', 'AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
+('institution_address',NULL,'textfield','Platform','','InstitutionAddressTitle','InstitutionAddressComment',NULL,NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '0', 'DatabaseVersion', '', NULL, NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)

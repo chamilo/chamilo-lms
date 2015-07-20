@@ -2740,7 +2740,7 @@ class DocumentManager
         $course_data = api_get_course_info($course_code);
         $document_data = self::get_document_data_by_id($document_id, $course_code);
         $file_path = api_get_path(SYS_COURSE_PATH) . $course_data['path'] . '/document' . $document_data['path'];
-        $pdf = new PDF();
+        $pdf = new PDF('A4-L', 'L');
         $pdf->html_to_pdf($file_path, $document_data['title'], $course_code);
     }
 

@@ -124,7 +124,8 @@ class Login
      *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
-    public static function handle_encrypted_password($user, $by_username = false) {
+    public static function handle_encrypted_password($user, $by_username = false)
+    {
         $email_subject = "[" . api_get_setting('siteName') . "] " . get_lang('LoginRequest'); // SUBJECT
 
         if ($by_username) { // Show only for lost password
@@ -147,7 +148,7 @@ class Login
             if (CustomPages::enabled()) {
                 return get_lang('YourPasswordHasBeenEmailed');
             } else {
-                Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
+                return Display::return_message(get_lang('YourPasswordHasBeenEmailed'));
             }
         } else {
             $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
@@ -156,7 +157,7 @@ class Login
             if (CustomPages::enabled()) {
                 return $message;
             } else {
-                Display::display_error_message($message, false);
+                return Display::return_message($message, 'error');
             }
         }
     }

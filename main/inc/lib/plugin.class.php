@@ -342,11 +342,14 @@ class Plugin
                 $languageParentInfo = api_get_language_info($languageParentId);
                 $languageParentFolder = $languageParentInfo['dokeos_folder'];
 
-                include "{$root}{$plugin_name}/lang/{$languageParentFolder}.php";
+                $parentPath = "{$root}{$plugin_name}/lang/{$languageParentFolder}.php";
+                if (is_readable($parentPath)) {
+                    include $parentPath;
 
-                if (!empty($strings)) {
-                    foreach ($strings as $key => $string) {
-                        $this->strings[$key] = $string;
+                    if (!empty($strings)) {
+                        foreach ($strings as $key => $string) {
+                            $this->strings[$key] = $string;
+                        }
                     }
                 }
             }

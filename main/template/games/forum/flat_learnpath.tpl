@@ -62,7 +62,7 @@
                         $('[data-post="' + post.parentId +'"] > .post-disqus').append(post.html);
                         $(".timeago").timeago();
                     } else {
-                        $(post.html).insertBefore('#form-reply-to-post-0');
+                        $(post.html).insertBefore($('#more-post-disqus').parent());
                     }
 
                     if (callback) {
@@ -144,13 +144,11 @@
     {{ button_reply_to_thread }}
 </div>
 
-<div class="forum-disqus">
-    <div id="form-reply-to-post-0"></div>
-    {% for post_data in posts %}
-        {% include template ~ '/forum/flat_learnpath_post.tpl' %}
-    {% endfor %}
+<div id="form-reply-to-post-0"></div>
 
-    <div  class="load-more-disqus" data-role="more">
+<div class="forum-disqus">
+
+    <div class="load-more-disqus" data-role="more">
         <a id="more-post-disqus" href="#" data-action="more-posts" class="btn btn-default btn-block">{{ "LoadMoreComments"|get_lang }}</a>
     </div>
 </div>

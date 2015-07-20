@@ -7418,4 +7418,12 @@ $HtmlPurifierWikiComment = "Enable HTML purifier in the wiki tool (will increase
 $ClickOrDropFilesHere = "Click or drop files";
 $RemoveTutorStatus = "Remove tutor status";
 $ImportGradebookInCourse = "Import gradebook from base course";
+$InstitutionAddressTitle = "Institution address";
+$InstitutionAddressComment = "Address";
+$LatestLoginInCourse = "Latest access in course";
+$LatestLoginInPlatform = "Latest login in platform";
+$FirstLoginInPlatform = "First login in platform";
+$FirstLoginInCourse = "First access in in course";
+$QuotingToXUser = "Quoting to %s";
+$LoadMoreComments = "Load more comments";
 ?>

@@ -18,3 +18,7 @@ $strings['Tag'] = 'Etiqueta';
 
 $strings['SeeMore'] = 'Ver más';
 $strings['RecommendedCourses'] = 'Cursos recomendados';
+//courses levels
+$strings['Basic'] = 'Básico';
+$strings['Intermediate'] = 'Intermedio';
+$strings['Advanced'] = 'Avanzado';

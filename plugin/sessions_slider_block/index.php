@@ -50,6 +50,9 @@ if ($showSlider) {
 
         if (!empty($fieldValueData)) {
             $level = $fieldValueData['value'];
+            if (get_lang($level) !== $level) {
+                $level = get_plugin_lang($level, 'SessionsSliderBlockPlugin');
+            }
         }
 
         $sessions[] = [

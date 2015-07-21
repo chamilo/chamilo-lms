@@ -18,3 +18,7 @@ $strings['Tag'] = 'Tag';
 
 $strings['SeeMore'] = 'See more';
 $strings['RecommendedCourses'] = 'Recommended Courses';
+//courses levels
+$strings['Basic'] = 'Basic';
+$strings['Intermediate'] = 'Intermediate';
+$strings['Advanced'] = 'Advanced';

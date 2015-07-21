@@ -10242,7 +10242,7 @@ EOD;
         // Calculate star for final evaluation
         $finalEvaluationItem = $this->getFinalEvaluationItem();
 
-        if (empty($finalEvaluationItem === false)) {
+        if (empty($finalEvaluationItem)) {
             return $stars;
         }
 

@@ -7457,4 +7457,5 @@ $QuotingToXUser = "Citando a %s";
 $LoadMoreComments = "Cargar más comentarios";
 $ShowProgress = "Mostrar progreso";
 $XPercent = "%s %%";
+$CheckRequirements = "Ver requerimientos";
 ?>

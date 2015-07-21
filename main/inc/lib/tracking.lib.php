@@ -2104,80 +2104,113 @@ class Tracking
      * course.
      * @param int|array $studentId
      * @param string    $courseCode
-     * @param array     $lpIds Limit average to listed lp ids
+     * @param array     $lPIds Limit average to listed lp ids
      * @param int       $sessionId     Session id (optional),
      * if parameter $session_id is null(default) it'll return results including
      * sessions, 0 = session is not filtered
      * @param bool      $returnArray Will return an array of the type:
      * [sum_of_progresses, number] if it is set to true
+     * @param boolean $onlySeriousGame Optional. Limit average to lp on seriousgame mode
      * @return double   Average progress of the user in this course
      */
     public static function get_avg_student_progress(
         $studentId,
         $courseCode = null,
-        $lpIds = array(),
+        $lPIds = array(),
         $sessionId = null,
-        $returnArray = false
+        $returnArray = false,
+        $onlySeriousGame = false
     ) {
-        $conditions = array();
-        $sessionId = intval($sessionId);
-
-        // Get the information of the course.
-        $course_info = api_get_course_info($courseCode);
-        if (!empty($course_info)) {
-            $conditions[] = " c_id = {$course_info['real_id']} ";
-        }
-        // table definition
-        $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
-
-        // Compose a filter based on optional learning paths list given
-        $condition_lp = null;
-        if (!empty($lpIds)) {
-            if (count($lpIds) > 0) {
-                $lpIds = array_map('intval', $lpIds);
-                $conditions[] = " lp_view.lp_id IN(" . implode(', ', $lpIds) . ") ";
-            }
-        }
-
         // If there is at least one learning path and one student.
-        if (!empty($studentId)) {
-            if (is_array($studentId)) {
-                $studentId = array_map('intval', $studentId);
-                $conditions[] = " lp_view.user_id IN (" . implode(', ', $studentId) . ")  ";
-                $groupBy = 'GROUP BY lp_id';
-            } else {
-                $studentId = intval($studentId);
-                $conditions[] = " lp_view.user_id = '$studentId' ";
-                $groupBy = 'GROUP BY user_id';
-            }
-            if (!empty($sessionId)) {
-                $conditions[] = " session_id = $sessionId ";
-            }
-            $conditionToString = implode('AND', $conditions);
-
-            // Get last view for each student (in case of multi-attempt)
-            // Also filter on LPs of this session
-            $sql = " SELECT
-                        MAX(view_count),
-                        AVG(COALESCE(progress, 0)) average,
-                        SUM(COALESCE(progress, 0)) sum_progress,
-                        count(progress) count_progress
-                    FROM $lpViewTable lp_view
-                    WHERE
-                        $conditionToString
-                    $groupBy
-                    ";
-
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
-
-            if (!$returnArray) {
-                $avg_progress = round($row['average'], 1);
-                return $avg_progress;
-            } else {
-                return array($row['sum_progress'], $row['count_progress']);
-            }
+        if (empty($studentId)) {
+            return false;
         }
+
+        $sessionId = intval($sessionId);
+        $courseInfo = api_get_course_info($courseCode);
+
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $lPTable = Database::get_course_table(TABLE_LP_MAIN);
+        $lPViewTable = Database::get_course_table(TABLE_LP_VIEW);
+        $lPConditions = [];
+        $lPConditions['c_id = ? '] = $courseInfo['real_id'];
+
+        if ($onlySeriousGame) {
+            $lPConditions['AND (session_id = ? OR session_id = 0)'] = $sessionId;
+        } else {
+            $lPConditions['AND session_id = ?'] = $sessionId;
+        }
+
+        if (is_array($lPIds) && count($lPIds) > 0) {
+            $placeHolders = [];
+            for ($i = 0; $i < count($lPIds); $i++) {
+                $placeHolders[] = '?';
+            }
+            $lPConditions['AND id IN(' . implode(', ', $placeHolders) . ') '] = $lPIds;
+        }
+
+        if ($onlySeriousGame) {
+            $lPConditions['AND seriousgame_mode = ? '] = true;
+        }
+
+        $resultLP = Database::select(
+            'id',
+            $lPTable,
+            ['where' => $lPConditions]
+        );
+        $filteredLP = array_keys($resultLP);
+
+        if (empty($filteredLP)) {
+            return false;
+        }
+
+        $conditions = [
+            " c_id = {$courseInfo['real_id']} ",
+            " lp_view.lp_id IN(" . implode(', ', $filteredLP) . ") "
+        ];
+
+        if (is_array($studentId)) {
+            $studentId = array_map('intval', $studentId);
+            $conditions[] = " lp_view.user_id IN (" . implode(',', $studentId) . ")  ";
+
+            $groupBy = 'GROUP BY lp_id';
+        } else {
+            $studentId = intval($studentId);
+            $conditions[] = " lp_view.user_id = '$studentId' ";
+
+            $groupBy = 'GROUP BY user_id';
+        }
+
+        if (!empty($sessionId)) {
+            $conditions[] = " session_id = $sessionId ";
+        }
+
+        $conditionToString = implode('AND', $conditions);
+        // Get last view for each student (in case of multi-attempt)
+        // Also filter on LPs of this session
+        $sql = " SELECT
+                    MAX(view_count),
+                    AVG(progress) average,
+                    SUM(progress) sum_progress,
+                    count(progress) count_progress
+                FROM $lPViewTable lp_view
+                WHERE
+                  $conditionToString
+                $groupBy";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        if ($returnArray) {
+            return [
+                $row['sum_progress'],
+                $row['count_progress']
+            ];
+        }
+
+        return round($row['average'], 1);
     }
 
     /**

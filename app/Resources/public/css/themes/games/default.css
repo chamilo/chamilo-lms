@@ -843,6 +843,16 @@ hr.separator:after {
   color:#E4C200;
   font-size: 18px;
 }
+.open-forum{
+  background-color: #EDEDF5;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
 	/* .container{

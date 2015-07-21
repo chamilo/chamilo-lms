@@ -7037,4 +7037,17 @@ class SessionManager
         return $array1;
     }
 
+    /**
+     * Get link to the admin page for this session
+     * @param   int $id Session ID
+     * @return mixed    URL to the admin page to manage the session, or false on error
+     */
+    public static function getAdminPath($id) {
+        $id = intval($id);
+        $session = self::fetch($id);
+        if (empty($session)) {
+            return false;
+        }
+        return api_get_path(WEB_CODE_PATH) . 'session/resume_session.php?id_session=' . $id;
+    }
 }

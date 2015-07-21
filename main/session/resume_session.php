@@ -354,12 +354,12 @@ $requirementAndDependencies = $repo->getRequirementAndDependencies($sessionId, S
 $requirements = '';
 if (!empty($requirementAndDependencies['requirements'])) {
     $requirements = Display::page_subheader(get_lang('Requirements'));
-    $requirements .= implode(',', array_column($requirementAndDependencies['requirements'], 'name'));
+    $requirements .= implode(' + ', array_column($requirementAndDependencies['requirements'], 'admin_link'));
 }
 $dependencies = '';
 if (!empty($requirementAndDependencies['dependencies'])) {
     $dependencies = Display::page_subheader(get_lang('Dependencies'));
-    $dependencies .= implode(',', array_column($requirementAndDependencies['dependencies'], 'name'));
+    $dependencies .= implode(', ', array_column($requirementAndDependencies['dependencies'], 'admin_link'));
 }
 
 $tpl = new Template(get_lang('Session'));

@@ -83,6 +83,6 @@
 {{ course_list }}
 {{ user_list }}
 
-{{ dependencies }}
 {{ requirements }}
+{{ dependencies }}
 {% endblock %}

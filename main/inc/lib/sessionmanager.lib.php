@@ -3509,7 +3509,8 @@ class SessionManager
      * @param   int     Session ID
      * @param   bool    Whether to copy the relationship with courses
      * @param   bool    Whether to copy the relationship with users
-     * @param	bool	New courses will be created
+     * @param   bool    New courses will be created
+     * @param   bool    Whether to set exercises and learning paths in the new session to invisible by default
      * @return  int     The new session ID on success, 0 otherwise
      * @todo make sure the extra session fields are copied too
      */
@@ -3594,23 +3595,12 @@ class SessionManager
                                             0,
                                             $sid
                                         );
-                                        api_item_property_update(
-                                            $course_info,
-                                            TOOL_LEARNPATH,
-                                            $lp_id,
-                                            'invisible',
-                                            api_get_user_id(),
-                                            0,
-                                            0,
-                                            0,
-                                            0
-                                        );
                                     }
                                 }
                                 $quiz_table = Database::get_course_table(TABLE_QUIZ_TEST);
                                 $course_id = $course_info['real_id'];
                                 //@todo check this query
-                                $sql = "UPDATE $quiz_table SET active = 0 WHERE c_id = $course_id ";
+                                $sql = "UPDATE $quiz_table SET active = 0 WHERE c_id = $course_id AND session_id = $sid";
                                 $result = Database::query($sql);
                             }
                             $new_short_courses[] = $course_info['real_id'];

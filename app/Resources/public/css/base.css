@@ -6215,14 +6215,14 @@ div#chat-remote-video video {
     font-size:20px;
     text-align:center;
 }
-.my-progress .star-progress{
-    font-size:22px;
-}
 .my-progress .star-progress .fa-star{
     color: #e4c200;
 }
 .my-progress .star-progress .fa-star.in{
     color: #c2c2c2;
+}
+.my-progress .progress {
+    margin-bottom: 0px;
 }
 .my-progress .list-course{
     padding:0;

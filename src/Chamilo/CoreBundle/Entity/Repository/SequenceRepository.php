@@ -51,6 +51,7 @@ class SequenceRepository extends EntityRepository
             foreach ($from as $subVertex) {
                 $vertexId = $subVertex->getId();
                 $sessionInfo = api_get_session_info($vertexId);
+                $sessionInfo['admin_link'] = '<a href="' . \SessionManager::getAdminPath($vertexId) . '">' . $sessionInfo['name'] . '</a>';
                 $result['requirements'][] = $sessionInfo;
             }
 
@@ -58,6 +59,7 @@ class SequenceRepository extends EntityRepository
             foreach ($to as $subVertex) {
                 $vertexId = $subVertex->getId();
                 $sessionInfo = api_get_session_info($vertexId);
+                $sessionInfo['admin_link'] = '<a href="' . \SessionManager::getAdminPath($vertexId) . '">' . $sessionInfo['name'] . '</a>';
                 $result['dependencies'][] = $sessionInfo;
             }
         }

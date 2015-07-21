@@ -2157,6 +2157,7 @@ class Tracking
             $lPConditions['AND id IN(' . implode(', ', $placeHolders) . ') '] = $lPIds;
         }
 
+  
         if ($onlySeriousGame) {
             $lPConditions['AND seriousgame_mode = ? '] = true;
         }
@@ -2195,7 +2196,6 @@ class Tracking
         }
 
         $conditionToString = implode('AND', $conditions);
-
         // Get last view for each student (in case of multi-attempt)
         // Also filter on LPs of this session
         $sql = " SELECT

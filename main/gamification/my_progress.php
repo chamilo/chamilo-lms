@@ -61,7 +61,7 @@ $template->assign(
 );
 $template->assign(
     'gamification_progress',
-     GamificationUtils::getSessionProgress($user->getId(), $user->getStatus())
+     GamificationUtils::getTotalUserProgress($user->getId(), $user->getStatus())
 );
 $template->assign('sessions', $sessionList);
 $template->assign('current_session', $currentSession);

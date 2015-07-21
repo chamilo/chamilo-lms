@@ -7426,4 +7426,6 @@ $FirstLoginInPlatform = "First login in platform";
 $FirstLoginInCourse = "First access in in course";
 $QuotingToXUser = "Quoting to %s";
 $LoadMoreComments = "Load more comments";
+$ShowProgress = "Show progress";
+$XPercent = "%s %%";
 ?>

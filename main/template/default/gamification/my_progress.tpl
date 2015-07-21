@@ -5,15 +5,19 @@
                 <div class="profile-user">
                     {{ user_avatar }}
                     <div class="username">{{ user.getCompleteName() }}</div>
-                    <div class="star-points">{{ 'Stars'|get_lang ~ ' ' ~ gamification_stars }}</div>
                     <div class="star-progress">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star in"></i>
-                        <i class="fa fa-star in"></i>
-                        <i class="fa fa-star in"></i>
+                        <span class="pull-right">{{ 'XPoints'|get_lang|format(gamification_points) }}</span>
+
+                        {% if gamification_stars > 0 %}
+                            {% for i in 1..gamification_stars %}
+                                <i class="fa fa-star"></i>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% for i in 1..(5 - gamification_stars) %}
+                            <i class="fa fa-star in"></i>
+                        {% endfor %}
                     </div>
-                    <!-- <div class="bar">{{ 'XPoints'|get_lang|format(gamification_points) }}</div> -->
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ gamification_progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ gamification_progress }}%">
@@ -21,7 +25,7 @@
                         </div>
                     </div>
 
-                    <div class="progress-percentage">{{ 'GamificationProgress'|get_lang ~ ' ' ~ gamification_progress }} %</div>
+                    <div class="progress-percentage text-right">{{ 'XPercent'|get_lang|format(gamification_progress) }}</div>
                 </div>
             </div>
         </div>

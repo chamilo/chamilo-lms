@@ -446,9 +446,9 @@ if ($is_allowed_to_edit) {
         // hub 26-05-2010 Fullscreen or not fullscreen
         $height = '100%';
         if ($_SESSION['oLP']->mode == 'fullscreen') {
-            echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:'.$height.'" ></iframe>';
+            echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" style="width:100%;height:'.$height.'" ></iframe>';
         } else {
-            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" style="display: block; width:100%;height:'.$height.'"></iframe>';
+            echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" style="display: block; width:100%;height:'.$height.'"></iframe>';
         }
     ?>
     </div>

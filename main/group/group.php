@@ -147,8 +147,11 @@ if (api_is_allowed_to_edit(false, true)) {
 
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false, true)) {
+
     echo '<a href="group_creation.php?'.api_get_cidreq().'">'.
-        Display::return_icon('new_group.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('add.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
+
+    echo GroupManager::getSearchForm();
 
     if (api_get_setting('allow_group_categories') == 'true') {
         echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
@@ -172,8 +175,6 @@ if (api_is_allowed_to_edit(false, true)) {
 
     echo '<a href="group_overview.php?'.api_get_cidreq().'">'.
         Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-
-    echo GroupManager::getSearchForm();
 }
 
 $group_cats = GroupManager::get_categories(api_get_course_id());

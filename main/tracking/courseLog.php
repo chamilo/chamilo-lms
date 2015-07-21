@@ -220,6 +220,10 @@ echo '<div class="actions">';
 
 echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM);
 echo Display::url(
+    Display::return_icon('group.png', get_lang('GroupReporting'), array(), ICON_SIZE_MEDIUM),
+    'course_log_groups.php?'.api_get_cidreq()
+);
+echo Display::url(
     Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
     'course_log_tools.php?'.api_get_cidreq()
 );

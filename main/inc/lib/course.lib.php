@@ -1699,6 +1699,7 @@ class CourseManager
      * @param string $date_from
      * @param string $date_to
      * @param boolean $includeInvitedUsers Whether include the invited users
+     * @param int $groupId
      * @return array with user id
      */
     public static function get_student_list_from_course_code(
@@ -1707,7 +1708,8 @@ class CourseManager
         $session_id = 0,
         $date_from = null,
         $date_to = null,
-        $includeInvitedUsers = true
+        $includeInvitedUsers = true,
+        $groupId = 0
     ) {
 
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
@@ -1715,28 +1717,37 @@ class CourseManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-
         $students = array();
 
         if ($session_id == 0) {
-            // students directly subscribed to the course
-            $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " cu
-                    INNER JOIN $userTable u
-                    ON cu.user_id = u.user_id
-                    WHERE c_id = '$courseId' AND cu.status = " . STUDENT;
+            if (empty($groupId)) {
+                // students directly subscribed to the course
+                $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
+                        INNER JOIN $userTable u
+                        ON cu.user_id = u.user_id
+                        WHERE c_id = '$courseId' AND cu.status = ".STUDENT;
 
-            if (!$includeInvitedUsers) {
-                $sql .= " AND u.status != " . INVITEE;
-            }
-
-            $rs = Database::query($sql);
-            while ($student = Database::fetch_array($rs)) {
-                $students[$student['user_id']] = $student;
+                if (!$includeInvitedUsers) {
+                    $sql .= " AND u.status != ".INVITEE;
+                }
+                $rs = Database::query($sql);
+                while ($student = Database::fetch_array($rs)) {
+                    $students[$student['user_id']] = $student;
+                }
+            } else {
+                $students = GroupManager::get_users(
+                    $groupId,
+                    false,
+                    null,
+                    null,
+                    false,
+                    $courseInfo['real_id']
+                );
+                $students = array_flip($students);
             }
         }
 
         // students subscribed to the course through a session
-
         if ($with_session) {
 
             $joinSession = "";

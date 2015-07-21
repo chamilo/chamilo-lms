@@ -2196,6 +2196,7 @@ class Tracking
         }
 
         $conditionToString = implode('AND', $conditions);
+
         // Get last view for each student (in case of multi-attempt)
         // Also filter on LPs of this session
         $sql = " SELECT

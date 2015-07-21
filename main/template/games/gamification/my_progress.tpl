@@ -7,11 +7,15 @@
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="star-progress">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star in"></i>
-                                    <i class="fa fa-star in"></i>
-                                    <i class="fa fa-star in"></i>
+                                    {% if gamification_stars > 0 %}
+                                        {% for i in 1..gamification_stars %}
+                                            <i class="fa fa-star"></i>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    {% for i in 1..(5 - gamification_stars) %}
+                                        <i class="fa fa-star in"></i>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="col-md-5">
@@ -24,7 +28,7 @@
                             </div>
                         </div>
 
-                        <div class="progress-percentage">{{ 'GamificationProgress'|get_lang ~ ' ' ~ gamification_progress }} %</div>
+                        <div class="progress-percentage text-right">{{ 'XPercent'|get_lang|format(gamification_progress) }}</div>
                     </div>
                 </div>
         <div class="show-progress">

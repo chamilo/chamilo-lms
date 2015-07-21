@@ -23,31 +23,32 @@ class Promotion extends Model
     /**
      * Constructor
      */
-	public function __construct()
+    public function __construct()
     {
-        $this->table =  Database::get_main_table(TABLE_PROMOTION);
-	}
+        $this->table = Database::get_main_table(TABLE_PROMOTION);
+    }
 
-     /**
+    /**
      * Get the count of elements
      */
     public function get_count()
     {
-        $row = Database::select('count(*) as count', $this->table, array(), 'first');
+        $row = Database::select('count(*) as count', $this->table, array(),
+            'first');
         return $row['count'];
     }
 
-	/**
-	* Copies the promotion to a new one
-	* @param   integer     Promotion ID
-	* @param   integer     Career ID, in case we want to change it
-	* @param   boolean     Whether or not to copy the sessions inside
-	* @return  integer     New promotion ID on success, false on failure
-	*/
-	public function copy($id, $career_id = null, $copy_sessions = false)
+    /**
+     * Copies the promotion to a new one
+     * @param   integer     Promotion ID
+     * @param   integer     Career ID, in case we want to change it
+     * @param   boolean     Whether or not to copy the sessions inside
+     * @return  integer     New promotion ID on success, false on failure
+     */
+    public function copy($id, $career_id = null, $copy_sessions = false)
     {
-		$pid = false;
-		$promotion = $this->get($id);
+        $pid = false;
+        $promotion = $this->get($id);
         if (!empty($promotion)) {
             $new = array();
             foreach ($promotion as $key => $val) {
@@ -56,7 +57,7 @@ class Promotion extends Model
                     case 'updated_at':
                         break;
                     case 'name':
-                        $val .= ' '.get_lang('CopyLabelSuffix');
+                        $val .= ' ' . get_lang('CopyLabelSuffix');
                         $new[$key] = $val;
                         break;
                     case 'created_at':
@@ -75,37 +76,39 @@ class Promotion extends Model
                 }
             }
 
-			if ($copy_sessions) {
-				/**
-				 * When copying a session we do:
-				 * 1. Copy a new session from the source
-				 * 2. Copy all courses from the session (no user data, no user list)
-				 * 3. Create the promotion
-				 */
-				$session_list   = SessionManager::get_all_sessions_by_promotion($id);
+            if ($copy_sessions) {
+                /**
+                 * When copying a session we do:
+                 * 1. Copy a new session from the source
+                 * 2. Copy all courses from the session (no user data, no user list)
+                 * 3. Create the promotion
+                 */
+                $session_list = SessionManager::get_all_sessions_by_promotion($id);
 
-				if (!empty($session_list)) {
-					$pid = $this->save($new);
-					if (!empty($pid)) {
+                if (!empty($session_list)) {
+                    $pid = $this->save($new);
+                    if (!empty($pid)) {
                         $new_session_list = array();
 
-						foreach($session_list as $item) {
-							$sid = SessionManager::copy($item['id'], true, false, false, true);
+                        foreach ($session_list as $item) {
+                            $sid = SessionManager::copy($item['id'], true,
+                                false, false, true);
                             $new_session_list[] = $sid;
-						}
+                        }
 
                         if (!empty($new_session_list)) {
-                            SessionManager::suscribe_sessions_to_promotion($pid, $new_session_list);
+                            SessionManager::suscribe_sessions_to_promotion($pid,
+                                $new_session_list);
                         }
-					}
-				}
-			} else {
-				$pid = $this->save($new);
-			}
-		}
+                    }
+                }
+            } else {
+                $pid = $this->save($new);
+            }
+        }
 
-		return $pid;
-	}
+        return $pid;
+    }
 
     /**
      * Gets all promotions by career id
@@ -140,27 +143,32 @@ class Promotion extends Model
      * Displays the title + grid
      * @return  string  html code
      */
-	public function display()
+    public function display()
     {
-		// Action links
-		echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
-		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_promotion.png',get_lang('Add'),'','32').'</a>';
-		echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'','32').'</a>';
-		echo '</div>';
+        // Action links
+        echo '<div class="actions" style="margin-bottom:20px">';
+        echo '<a href="career_dashboard.php">' . Display::return_icon('back.png',
+                get_lang('Back'), '', '32') . '</a>';
+        echo '<a href="' . api_get_self() . '?action=add">' . Display::return_icon('new_promotion.png',
+                get_lang('Add'), '', '32') . '</a>';
+        echo '<a href="' . api_get_path(WEB_CODE_PATH) . 'session/session_add.php">' . Display::return_icon('new_session.png',
+                get_lang('AddSession'), '', '32') . '</a>';
+        echo '</div>';
         echo Display::grid_html('promotions');
-	}
+    }
 
     /**
      * Update all session status by promotion
-     * @param   int  $promotion_id
-     * @param   int  $status (1, 0)
-    */
-    public function update_all_sessions_status_by_promotion_id($promotion_id, $status)
-    {
+     * @param   int $promotion_id
+     * @param   int $status (1, 0)
+     */
+    public function update_all_sessions_status_by_promotion_id(
+        $promotion_id,
+        $status
+    ) {
         $session_list = SessionManager::get_all_sessions_by_promotion($promotion_id);
         if (!empty($session_list)) {
-            foreach($session_list  as $item) {
+            foreach ($session_list as $item) {
                 SessionManager::set_session_status($item['id'], $status);
             }
         }
@@ -169,18 +177,18 @@ class Promotion extends Model
     /**
      * Returns a Form validator Obj
      * @todo the form should be auto generated
-     * @param   string  $url
-     * @param   string  $action
+     * @param   string $url
+     * @param   string $action
      *
      * @return  FormValidator
      */
     public function return_form($url, $action = 'add')
     {
-		$form = new FormValidator('promotion', 'post', $url);
+        $form = new FormValidator('promotion', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
-        	$header = get_lang('Modify');
+            $header = get_lang('Modify');
         }
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
 
@@ -206,10 +214,11 @@ class Promotion extends Model
         $career = new Career();
         $careers = $career->get_all();
         $career_list = array();
-        foreach($careers as $item) {
+        foreach ($careers as $item) {
             $career_list[$item['id']] = $item['name'];
         }
-        $form->addElement('select', 'career_id', get_lang('Career'), $career_list);
+        $form->addElement('select', 'career_id', get_lang('Career'),
+            $career_list);
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
@@ -217,18 +226,18 @@ class Promotion extends Model
             $form->freeze('created_at');
         }
         if ($action == 'edit') {
-            $form->addButtonSave(get_lang('Modify'),'submit');
+            $form->addButtonSave(get_lang('Modify'), 'submit');
         } else {
-            $form->addButtonCreate(get_lang('Add'),'submit');
+            $form->addButtonCreate(get_lang('Add'), 'submit');
         }
 
         // Setting the defaults
         $defaults = $this->get($id);
         if (!empty($defaults['created_at'])) {
-        	$defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
+            $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
         }
         if (!empty($defaults['updated_at'])) {
-        	$defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
+            $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
         }
         $form->setDefaults($defaults);
 
@@ -246,8 +255,8 @@ class Promotion extends Model
      */
     public function save($params, $show_query = false)
     {
-    	$id = parent::save($params, $show_query);
-    	if (!empty($id)) {
+        $id = parent::save($params, $show_query);
+        if (!empty($id)) {
             Event::addEvent(
                 LOG_PROMOTION_CREATE,
                 LOG_PROMOTION_ID,
@@ -255,8 +264,8 @@ class Promotion extends Model
                 api_get_utc_datetime(),
                 api_get_user_id()
             );
-    	}
-    	return $id;
+        }
+        return $id;
     }
 
     /**
@@ -265,8 +274,8 @@ class Promotion extends Model
      */
     public function delete($id)
     {
-    	if (parent::delete($id)) {
-           SessionManager::clear_session_ref_promotion($id);
+        if (parent::delete($id)) {
+            SessionManager::clear_session_ref_promotion($id);
             Event::addEvent(
                 LOG_PROMOTION_DELETE,
                 LOG_PROMOTION_ID,

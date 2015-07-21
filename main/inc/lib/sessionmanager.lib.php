@@ -118,10 +118,10 @@ class SessionManager
         } elseif (empty($coachId)) {
             $msg = get_lang('CoachIsRequired');
             return $msg;
-        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i')) {
+        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') && !api_is_valid_date($startDate, 'Y-m-d H:i:s')) {
             $msg = get_lang('InvalidStartDate');
             return $msg;
-        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i')) {
+        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') && !api_is_valid_date($endDate, 'Y-m-d H:i:s')) {
             $msg = get_lang('InvalidEndDate');
             return $msg;
         } elseif (!empty($startDate) && !empty($endDate) && $startDate >= $endDate) {
@@ -3519,6 +3519,31 @@ class SessionManager
     ) {
         $id = intval($id);
         $s = self::fetch($id);
+        // Check all dates before copying
+        // Get timestamp for now in UTC - see http://php.net/manual/es/function.time.php#117251
+        $now = time() - date('Z');
+        // Timestamp in one month
+        $inOneMonth = $now + (30*24*3600);
+        $inOneMonth = api_get_local_time($inOneMonth);
+        if (api_strtotime($s['access_start_date']) < $now) {
+            $s['access_start_date'] = api_get_local_time($now);
+        }
+        if (api_strtotime($s['display_start_date']) < $now) {
+            $s['display_start_date'] = api_get_local_time($now);
+        }
+        if (api_strtotime($s['coach_access_start_date']) < $now) {
+            $s['coach_access_start_date'] = api_get_local_time($now);
+        }
+        if (api_strtotime($s['access_end_date']) < $now) {
+            $s['access_end_date'] = $inOneMonth;
+        }
+        if (api_strtotime($s['display_end_date']) < $now) {
+            $s['display_end_date'] = $inOneMonth;
+        }
+        if (api_strtotime($s['coach_access_end_date']) < $now) {
+            $s['coach_access_end_date'] = $inOneMonth;
+        }
+        // Now try to create the session
         $sid = self::create_session(
             $s['name'] . ' ' . get_lang('CopyLabelSuffix'),
             $s['access_start_date'],

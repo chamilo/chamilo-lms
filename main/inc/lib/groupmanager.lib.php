@@ -2752,6 +2752,10 @@ class GroupManager
                     $groups = GroupManager::get_group_list($category['id']);
                 }
 
+                if (empty($groups)) {
+                    $groups = GroupManager::get_group_list();
+                }
+
                 $content .= '<ul>';
                 if (!empty($groups)) {
                     foreach ($groups as $group) {
@@ -2764,7 +2768,9 @@ class GroupManager
                             $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
                             foreach ($users as $user) {
                                 $user_info = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$user_info['username'].'">'.$user_info['complete_name_with_username'].'</li>';
+                                $content .= '<li title="'.$user_info['username'].'">'.
+                                    $user_info['complete_name_with_username'].
+                                '</li>';
                             }
                             $content .= '</ul>';
                             $content .= '</ul>';
@@ -2776,7 +2782,9 @@ class GroupManager
                             $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";
                             foreach ($users as $user) {
                                 $user_info = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$user_info['username'].'">'.$user_info['complete_name_with_username'].'</li>';
+                                $content .= '<li title="'.$user_info['username'].'">'.
+                                    $user_info['complete_name_with_username'].
+                                    '</li>';
                             }
                             $content .= '</ul>';
                             $content .= '</ul>';

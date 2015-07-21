@@ -77,7 +77,7 @@ class AccessUrl
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      **/
-    private $sessionCategory;
+    //private $sessionCategory;
 
     /**
      *

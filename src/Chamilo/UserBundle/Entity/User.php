@@ -81,37 +81,37 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=100, nullable=no, unique=true)
+     * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */
-    protected $username;
+    //protected $username;
 
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
      */
-    protected $email;
+    //protected $email;
 
     /**
      * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
      */
-    protected $lastname;
+    //protected $lastname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
      */
-    protected $firstname;
+    //protected $firstname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=50, nullable=false, unique=false)
      */
-    protected $password;
+    //protected $password;
 
     /**
      * @var string

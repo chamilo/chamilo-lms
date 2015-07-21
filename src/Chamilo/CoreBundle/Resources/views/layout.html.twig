@@ -7,9 +7,9 @@
  {% block page_title %}
      {% if course is defined %}
         {# This value is set in the CourseListener #}
-        {% if tool_name is defined %}
-            {{ tool_name | trans }}
-        {% endif %}
+            {% if tool.name is defined %}
+                {{ tool.name | trans }}
+            {% endif %}
      {% else %}
          {% if page is defined %}
              {{ page.name }}

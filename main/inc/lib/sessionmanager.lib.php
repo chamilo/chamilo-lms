@@ -48,19 +48,21 @@ class SessionManager
      * Create a session
      * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code
      * @param   string  $name
-     * @param 	string	$startDate (YYYY-MM-DD hh:mm:ss)
-     * @param 	string	$endDate (YYYY-MM-DD hh:mm:ss)
-     * @param 	integer		If 1, means there are no date limits
-     * @param 	mixed		If integer, this is the session coach id, if string, the coach ID will be looked for from the user table
-     * @param 	integer		ID of the session category in which this session is registered
-     * @param   integer     Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
-     * @param   string      Start limit = true if the start date has to be considered
-     * @param   string    End limit = true if the end date has to be considered
-     * @param   string  $fix_name
+     * @param   string  $startDate (YYYY-MM-DD hh:mm:ss)
+     * @param   string  $endDate (YYYY-MM-DD hh:mm:ss)
+     * @param   string  $displayStartDate (YYYY-MM-DD hh:mm:ss)
+     * @param   string  $displayEndDate (YYYY-MM-DD hh:mm:ss)
+     * @param   string  $coachStartDate (YYYY-MM-DD hh:mm:ss)
+     * @param   string  $coachEndDate (YYYY-MM-DD hh:mm:ss)
+     * @param   mixed   $coachId If integer, this is the session coach id, if string, the coach ID will be looked for from the user table
+     * @param   integer $sessionCategoryId ID of the session category in which this session is registered
+     * @param   integer $visibility Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
+     * @param   bool    $fixSessionNameIfExists
      * @param   string  $duration
      * @param   string  $description Optional. The session description
-     * @param   int $showDescription Optional. Whether show the session description
-     * @param   array $extrafields
+     * @param   int     $showDescription Optional. Whether show the session description
+     * @param   array   $extraFields
+     * @param   int     $sessionAdminId Optional. If this sessions was created by a session admin, assign it to him
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
      * */
@@ -73,9 +75,9 @@ class SessionManager
         $coachStartDate,
         $coachEndDate,
         $coachId,
-        $id_session_category,
-        $id_visibility,
-        $fix_name = false,
+        $sessionCategoryId,
+        $visibility = 1,
+        $fixSessionNameIfExists = false,
         $duration = null,
         $description = null,
         $showDescription = 0,
@@ -103,12 +105,9 @@ class SessionManager
         }
 
         $name = Database::escape_string(trim($name));
-        $id_session_category = intval($id_session_category);
-        $id_visibility = intval($id_visibility);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $sessionCategoryId = intval($sessionCategoryId);
+        $visibility = intval($visibility);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        $id_visibility = 1; // by default session visibility is read only
 
         $startDate = Database::escape_string($startDate);
         $endDate = Database::escape_string($endDate);
@@ -130,7 +129,7 @@ class SessionManager
             return $msg;
         } else {
             $ready_to_create = false;
-            if ($fix_name) {
+            if ($fixSessionNameIfExists) {
                 $name = self::generateNextSessionName($name);
                 if ($name) {
                     $ready_to_create = true;
@@ -153,7 +152,7 @@ class SessionManager
                     'name' => $name,
                     'id_coach' => $coachId,
                     'session_admin_id' => $sessionAdminId,
-                    'visibility' => $id_visibility,
+                    'visibility' => $visibility,
                     'description' => $description,
                     'show_description' => intval($showDescription)
                 );
@@ -181,8 +180,8 @@ class SessionManager
                     $values['coach_access_end_date'] = $coachEndDate;
                 }
 
-                if (!empty($id_session_category)) {
-                    $values['session_category_id'] = $id_session_category;
+                if (!empty($sessionCategoryId)) {
+                    $values['session_category_id'] = $sessionCategoryId;
                 }
 
                 $session_id = Database::insert($tbl_session, $values);
@@ -1294,27 +1293,24 @@ class SessionManager
     /**
      * Edit a session
      * @author Carlos Vargas from existing code
-     * @param integer		id
-     * @param string 		name
-     * @param integer		year_start
-     * @param integer		month_start
-     * @param integer		day_start
-     * @param integer		year_end
-     * @param integer		month_end
-     * @param integer		day_end
-     * @param integer		nb_days_acess_before
-     * @param integer		nb_days_acess_after
-     * @param integer		nolimit
-     * @param integer		id_coach
-     * @param integer		id_session_category
-     * @param int $id_visibility
-     * @param bool
-     * @param bool
-     * @param string $description
-     * @param int  $showDescription
-     * @return $id;
-     * The parameter id is a primary key
-     * */
+     * @param integer   $id Session primary key
+     * @param string    $name
+     * @param string    $startDate
+     * @param string    $endDate
+     * @param string    $displayStartDate
+     * @param string    $displayEndDate
+     * @param string    $coachStartDate
+     * @param string    $coachEndDate
+     * @param integer   $coachId
+     * @param integer   $sessionCategoryId
+     * @param int       $visibility
+     * @param string    $description
+     * @param bool      $showDescription
+     * @param int       $duration
+     * @param array     $extraFields
+     * @param int       $sessionAdminId
+     * @return mixed
+     */
     public static function edit_session(
         $id,
         $name,
@@ -1324,9 +1320,9 @@ class SessionManager
         $displayEndDate,
         $coachStartDate,
         $coachEndDate,
-        $id_coach,
-        $id_session_category,
-        $id_visibility,
+        $coachId,
+        $sessionCategoryId,
+        $visibility,
         $description = null,
         $showDescription = 0,
         $duration = null,
@@ -1334,15 +1330,15 @@ class SessionManager
         $sessionAdminId = 0
     ) {
         $name = trim(stripslashes($name));
-        $id_coach = intval($id_coach);
-        $id_session_category = intval($id_session_category);
-        $id_visibility = intval($id_visibility);
+        $coachId = intval($coachId);
+        $sessionCategoryId = intval($sessionCategoryId);
+        $visibility = intval($visibility);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         if (empty($name)) {
             $msg = get_lang('SessionNameIsRequired');
             return $msg;
-        } elseif (empty($id_coach)) {
+        } elseif (empty($coachId)) {
             $msg = get_lang('CoachIsRequired');
             return $msg;
         } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i')) {
@@ -1371,10 +1367,10 @@ class SessionManager
                 $values = [
                     'name' => $name,
                     'duration' => $duration,
-                    'id_coach' => $id_coach,
+                    'id_coach' => $coachId,
                     'description'=> $description,
                     'show_description' => intval($showDescription),
-                    'visibility' => $id_visibility
+                    'visibility' => $visibility
                 ];
 
                 if (!empty($sessionAdminId)) {
@@ -1404,8 +1400,8 @@ class SessionManager
                     $values['coach_access_end_date'] = $coachEndDate;
                 }
 
-                if (!empty($id_session_category)) {
-                    $values['session_category_id'] = $id_session_category;
+                if (!empty($sessionCategoryId)) {
+                    $values['session_category_id'] = $sessionCategoryId;
                 }
 
                 Database::update($tbl_session, $values, array(

@@ -10,11 +10,11 @@
   display:block;
   clear:both;
 }
-
 #footer{
   width: 100%;
   height: 150px;
   margin: -150px auto 0;
+  position: absolute;
 }
 .title-section{
 	font-size: 18px;

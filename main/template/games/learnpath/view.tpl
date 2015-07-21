@@ -128,6 +128,9 @@
                     <iframe id="content_id" name="content_name" src="{{ iframe_src }}&posts_order=desc" border="0" frameborder="0" style="display: block; width: 100%; height: 100%"></iframe>
                 {% endif %}
 
+                <div class="open-forum">
+                    <i class="fa fa-chevron-down"></i>
+                </div>
                 <div id="forum-container">
                      <div class="panel-body"></div>
                 </div>

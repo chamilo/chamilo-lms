@@ -5,8 +5,8 @@
     <div id="slider-sessions">
         <div class="row">
             <div class="col-md-12">
-                <h4 class="title-section">{{ "RecommendedCourses"|get_lang }}</h4>
-                <a href="{{ _p.web_main ~ 'auth/courses.php' }}" class="more">{{ 'SeeMore'|get_lang }}</a>
+                <h4 class="title-section">{{ "RecommendedCourses"|get_plugin_lang('SessionsSliderBlockPlugin') }}</h4>
+                <a href="{{ _p.web_main ~ 'auth/courses.php' }}" class="more">{{ 'SeeMore' | get_plugin_lang('SessionsSliderBlockPlugin') }}</a>
             </div>
         </div>
         <div class="row">

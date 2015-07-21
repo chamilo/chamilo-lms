@@ -89,9 +89,9 @@
             {# right zone #}
             <div id="learning_path_right_zone" style="height:100%" class="content-scorm">
                 {% if oLP.mode == 'fullscreen' %}
-                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width: 100%; height: 100%" ></iframe>
+                    <iframe id="content_id_blank" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width: 100%; height: 100%" ></iframe>
                 {% else %}
-                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" style="display: block; width: 100%; height: 100%"></iframe>
+                    <iframe id="content_id" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" style="display: block; width: 100%; height: 100%"></iframe>
                 {% endif %}
             </div>
             {# end right Zone #}

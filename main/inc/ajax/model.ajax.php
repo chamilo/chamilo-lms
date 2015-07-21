@@ -186,6 +186,11 @@ if (!$sidx) {
 //@todo rework this
 
 switch ($action) {
+    case 'get_group_reporting':
+        $course_id = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;
+        $group_id = isset($_REQUEST['gidReq']) ? $_REQUEST['gidReq'] : null;
+        $count = Tracking::get_group_reporting($course_id, $group_id, 'count');
+        break;
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
         $userId = api_get_user_id();
@@ -563,6 +568,20 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit
 $columns = array();
 
 switch ($action) {
+    case 'get_group_reporting':
+        $columns = array('name', 'time', 'progress', 'score', 'works', 'messages', 'actions');
+
+        $result = Tracking::get_group_reporting(
+            $course_id,
+            $group_id,
+            'all',
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $whereCondition
+        );
+        break;
     case 'get_course_exercise_medias':
         $columns = array('question');
         $result = Question::get_course_medias(
@@ -1555,7 +1574,8 @@ $allowed_actions = array(
     //'get_course_exercise_medias',
     'get_user_course_report',
     'get_user_course_report_resumed',
-    'get_exercise_grade'
+    'get_exercise_grade',
+    'get_group_reporting'
 );
 
 //5. Creating an obj to return a json

@@ -1001,6 +1001,7 @@ class GroupManager
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
 
         $group_id = intval($group_id);
+
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         } else {
@@ -1028,7 +1029,6 @@ class GroupManager
             $limit = intval($limit);
             $sql .= " LIMIT $start, $limit";
         }
-
         $res = Database::query($sql);
         $users = array();
         while ($obj = Database::fetch_object($res)) {
@@ -2234,7 +2234,7 @@ class GroupManager
                     $groupNameClass = 'muted';
                 }
 
-                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.
+                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?cidReq='.api_get_course_id().'&origin='.$orig.'&gidReq='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');
@@ -2289,9 +2289,9 @@ class GroupManager
             // Self-registration / unregistration
             if (!api_is_allowed_to_edit(false, true)) {
                 if (self :: is_self_registration_allowed($user_id, $this_group['id'])) {
-                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfRegInf').'</a>';
+                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_reg&group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfRegInf').'</a>';
                 } elseif (self :: is_self_unregistration_allowed($user_id, $this_group['id'])) {
-                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&amp;action=self_unreg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfUnRegInf').'</a>';
+                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_unreg&group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfUnRegInf').'</a>';
                 } else {
                     $row[] = '-';
                 }
@@ -2306,10 +2306,10 @@ class GroupManager
                     Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 if ($this_group['status'] == 1) {
-                    $edit_actions .= '<a href="' . api_get_self() . '?' . api_get_cidreq(true,false) . '&category=' . $category_id . '&amp;action=set_invisible&amp;id=' . $this_group['id'] . '" title="' . get_lang('Hide') . '">' .
+                    $edit_actions .= '<a href="' . api_get_self() . '?' . api_get_cidreq(true,false) . '&category=' . $category_id . '&action=set_invisible&id=' . $this_group['id'] . '" title="' . get_lang('Hide') . '">' .
                         Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL) . '</a>&nbsp;';
                 } else {
-                    $edit_actions .= '<a href="' . api_get_self() . '?' . api_get_cidreq(true, false) . '&category=' . $category_id . '&amp;action=set_visible&amp;id=' . $this_group['id'] . '" title="' . get_lang('Show') . '">' .
+                    $edit_actions .= '<a href="' . api_get_self() . '?' . api_get_cidreq(true, false) . '&category=' . $category_id . '&action=set_visible&id=' . $this_group['id'] . '" title="' . get_lang('Show') . '">' .
                         Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL) . '</a>&nbsp;';
                 }
 
@@ -2319,13 +2319,13 @@ class GroupManager
                 $edit_actions .= '<a href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'"  title="'.get_lang('ExportUsers').'">'.
                     Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                /*$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.
+                /*$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=empty_one&id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.
                     Display::return_icon('clean.png',get_lang('EmptyGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';*/
 
-                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('FillGroup').'">'.
+                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=fill_one&id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('FillGroup').'">'.
                     Display::return_icon('fill.png',get_lang('FillGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.
+                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=delete_one&id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.
                     Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 $row[] = $edit_actions;
@@ -2752,6 +2752,10 @@ class GroupManager
                     $groups = GroupManager::get_group_list($category['id']);
                 }
 
+                if (empty($groups)) {
+                    $groups = GroupManager::get_group_list();
+                }
+
                 $content .= '<ul>';
                 if (!empty($groups)) {
                     foreach ($groups as $group) {
@@ -2764,7 +2768,9 @@ class GroupManager
                             $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
                             foreach ($users as $user) {
                                 $user_info = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$user_info['username'].'">'.$user_info['complete_name_with_username'].'</li>';
+                                $content .= '<li title="'.$user_info['username'].'">'.
+                                    $user_info['complete_name_with_username'].
+                                '</li>';
                             }
                             $content .= '</ul>';
                             $content .= '</ul>';
@@ -2776,7 +2782,9 @@ class GroupManager
                             $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";
                             foreach ($users as $user) {
                                 $user_info = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$user_info['username'].'">'.$user_info['complete_name_with_username'].'</li>';
+                                $content .= '<li title="'.$user_info['username'].'">'.
+                                    $user_info['complete_name_with_username'].
+                                    '</li>';
                             }
                             $content .= '</ul>';
                             $content .= '</ul>';

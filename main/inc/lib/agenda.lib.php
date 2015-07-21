@@ -2997,7 +2997,7 @@ class Agenda
 
             // if the student has specified a course we a add a link to that course
             if ($item['course'] <> "") {
-                $url = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+                $url = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($item['course'])."&day=$day&month=$month&year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
                 $course_link = "<a href=\"$url\" title=\"".$item['course']."\">".$item['course']."</a>";
             } else {
                 $course_link = "";
@@ -3008,7 +3008,7 @@ class Agenda
                 // This is the array construction for the WEEK or MONTH view
 
                 //Display events in agenda
-                $agendaitems[$day] .= "<div><i>$time_minute</i> $course_link <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div><br />";
+                $agendaitems[$day] .= "<div><i>$time_minute</i> $course_link <a href=\"myagenda.php?action=view&view=personal&day=$day&month=$month&year=$year&id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div><br />";
 
             } else {
                 // this is the array construction for the DAY view
@@ -3018,7 +3018,7 @@ class Agenda
                 }
 
                 //Display events by list
-                $agendaitems[$halfhour] .= "<div><i>$time_minute</i> $course_link <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
+                $agendaitems[$halfhour] .= "<div><i>$time_minute</i> $course_link <a href=\"myagenda.php?action=view&view=personal&day=$day&month=$month&year=$year&id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
             }
         }
         return $agendaitems;
@@ -3057,8 +3057,8 @@ class Agenda
         $prev_year = ($month == 12 ? $year +1 : $year);
 
         if ($show_content)  {
-            $back_url = Display::url($prev_icon, api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=".$next_month."&amp;year=".$next_year);
-            $next_url = Display::url($next_icon, api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=".$prev_month."&amp;year=".$prev_year);
+            $back_url = Display::url($prev_icon, api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($g_cc)."&action=view&view=month&month=".$next_month."&year=".$next_year);
+            $next_url = Display::url($next_icon, api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($g_cc)."&action=view&view=month&month=".$prev_month."&year=".$prev_year);
         } else {
             $back_url = Display::url($prev_icon, '', array('onclick'=>"load_calendar('".$user_id."','".$next_month."', '".$next_year."'); "));
             $next_url = Display::url($next_icon, '', array('onclick'=>"load_calendar('".$user_id."','".$prev_month."', '".$prev_year."'); "));
@@ -3249,7 +3249,7 @@ class Agenda
                 $agendaday = date("j",strtotime($item['start_date']));
                 $month = date("n",strtotime($item['start_date']));
                 $year = date("Y",strtotime($item['start_date']));
-                $URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($course["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday";
+                $URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($course["code"])."&day=$agendaday&month=$month&year=$year#$agendaday";
                 list($year,$month,$day,$hour,$min,$sec) = split('[-: ]',$item['start_date']);
                 $start_date = $year.$month.$day.$hour.$min;
                 list($year,$month,$day,$hour,$min,$sec) = split('[-: ]',$item['end_date']);

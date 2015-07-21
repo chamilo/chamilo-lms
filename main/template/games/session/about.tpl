@@ -74,28 +74,28 @@
 
                     {% if session_human_text_duration and courses|length == 1 %}
                         <div class="time-course">
-                            <i class="fa fa-clock-o"></i> <span>{{ 'Hours'|get_lang }}</span> <span>{{ session_human_text_duration }}</span>
+                            <i class="fa fa-clock-o"></i> <span class="name">{{ 'Hours'|get_lang }}</span> <span>{{ session_human_text_duration }}</span>
                         </div>
                     {% endif %}
 
                     {% if course_level %}
                         <div class="level-course">
-                            <i class="fa fa-star-o"></i> <span>{{ 'Level'|get_lang }}</span> <span>{{ course_level }}</span>
+                            <i class="fa fa-star-o"></i> <span class="name">{{ 'Level'|get_lang }}</span> <span>{{ course_level }}</span>
                         </div>
                     {% endif %}
 
                     {% if has_requirements and courses|length == 1 %}
-                        <div>
-                            <p><i class="fa fa-check-square-o"></i> {{ 'RequiredSessions'|get_lang }}</p>
+                        <div class="sequence">
+                            <i class="fa fa-check-square-o"></i> <span class="name">{{ 'RequiredSessions'|get_lang }}</span>
                             <div class="row">
                                 {% for sequence in sequences %}
                                     {% if sequence.requirements %}
                                         <div class="col-md-6">
-                                            <p>{{ sequence.name }}</p>
+                                            <p class="title-sequence">{{ sequence.name }}</p>
                                             <ul>
                                                 {% for requirement in sequence.requirements %}
                                                     <li>
-                                                        <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">{{ requirement.getName }}</a>
+                                                        <i class="fa fa-square"></i> <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">{{ requirement.getName }}</a>
                                                     </li>
                                                 {% endfor %}
                                             </ul>
@@ -107,13 +107,9 @@
                     {% endif %}
 
                     <div class="subscribe text-right">
-                        {% if not is_subscribed %}
-                            {{ subscribe_button }}
-                        {% else %}
-                            <a class="btn btn-primary btn-lg btn-block" href="{{ _p.web_course ~ course_data.course.getCode ~ '/index.php?id_session=' ~ session.getId }}">
+                            <a class="btn btn-primary" href="{{ _p.web_course ~ course_data.course.getCode ~ '/index.php?id_session=' ~ session.getId }}">
                                 <i class="fa fa-check-circle"> </i> {{ 'Continue'|get_lang }}
                             </a>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -182,13 +178,13 @@
                     {% endif %}
 
                     {% if course_data.tags %}
-                        <div class="panel panel-default">
-                            <div class="panel-heading"><h4>{{ 'Tags'|get_lang }}</h4></div>
-                            <div class="panel-body">
+                        <div class="categories">
+                            <div class="heading"><h4>{{ 'Tags'|get_lang }}</h4></div>
+                            <div class="cat-body">
                                 <ul class="list-inline">
                                     {% for tag in course_data.tags %}
                                         <li>
-                                            <span class="label label-info">{{ tag.getTag }}</span>
+                                            <span>{{ tag.getTag }}</span>
                                         </li>
                                     {% endfor %}
                                 </ul>

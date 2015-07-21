@@ -28,7 +28,7 @@
   right: 0;
   position: absolute;
   left: auto;
-  top: 40%;
+  top: 50%;
   width: 35px;
   height: 35px;
   font-size: 17px;
@@ -37,7 +37,7 @@
 #top-session .owl-controls .owl-buttons .owl-prev{
   left: 0;
   position: absolute;
-  top: 40%;
+  top: 50%;
   width: 35px;
   height: 35px;
   font-size: 17px;

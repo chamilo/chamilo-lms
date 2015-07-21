@@ -59,6 +59,7 @@
 	color: #35a8c9;
 	text-transform: uppercase;
 	min-height: 40px;
+  text-align: center;
 }
 #slider-sessions .title-course{
   text-align: center;
@@ -197,7 +198,15 @@
 	display: inline-block;
 }
 
-
+.current-block{
+  width: 100%;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+.current-block .card{
+  padding-right: 10px;
+  padding-left: 10px;
+}
 /* Fin de efecto del curso */
 
 header .search-header{
@@ -293,16 +302,43 @@ footer .media{
 #about-session .tags-course{
   background-color: #F8F8F8;
 }
-#about-session .time-course, #about-session .level-course{
+#about-session .time-course, #about-session .level-course, #about-session .sequence{
   padding: 5px 10px;
 }
+#about-session .level-course .name, #about-session .sequence .name{
+  font-weight: normal;
+  color: #E73858;
+  font-size: 16px;
+}
 #about-session .level-course span,
-#about-session .time-course span{
+#about-session .time-course span,
+#about-session .sequence span{
   padding-left: 5px;
   margin-left: 5px;
   color: #666666;
 }
-#about-session .tags-course .fa-check-square-o,
+#about-session .sequence .title-sequence{
+  font-size: 14px;
+  color: #35a8c8;
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+#about-session .sequence ul{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+#about-session .sequence ul li .fa-square{
+  color: #E3C200;
+  font-size: 9px;
+  margin-right: 5px;
+}
+#about-session .sequence ul li a{
+  font-size: 12px;
+  color: #666666;
+}
+#about-session .sequence .fa-check-square-o,
 #about-session .level-course .fa-star-o,
 #about-session .time-course .fa-clock-o{
   font-size: 25px;
@@ -313,10 +349,11 @@ footer .media{
 }
 #about-session .subscribe.text-right{
   text-align: right;
+  padding-top: 25px;
 }
 #about-session .block{
   background-color: #F8F8F8;
-  padding: 10px;
+  padding: 20px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -366,11 +403,35 @@ footer .media{
   color:#666666;
   text-align: justify;
 }
-#about-session .teachers .heading, #about-session .social-share .heading{
+#about-session .teachers .heading,
+#about-session .social-share .heading,
+#about-session .categories .heading{
   color: #42adcc;
 }
 #about-session .block.top{
   margin-top: 65px;
+}
+#about-session .categories .cat-body{
+  padding: 20px;
+}
+#about-session .categories .list-inline li{
+  width: 50%;
+  display: inline-block;
+  float: left;
+  text-align: center;
+  margin-bottom: 5px;
+}
+#about-session .categories .list-inline li span{
+  background-color: #CCCCCC;
+  color: #ffffff;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
 }
 #about-session .btn-social{
   background-color: #e3c200;

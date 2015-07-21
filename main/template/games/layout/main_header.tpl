@@ -126,15 +126,6 @@
 
         </header>
 </div>
-
-        <section id="breadcrumb-bar">
-            <div class="container">
-                {# breadcrumb #}
-                {% block breadcrumb %}
-                {{ breadcrumb }}
-                {% endblock %}
-            </div>
-        </section>
     <!-- Inicia el slider -->
     {# Announcements  #}
     {% if announcements_block %}

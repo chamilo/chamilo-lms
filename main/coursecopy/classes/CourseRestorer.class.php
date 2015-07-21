@@ -2092,7 +2092,7 @@ class CourseRestorer
 				}
 
                 if ($this->add_text_in_items) {
-                    $lp->name = $lp->name.' '.get_lang('Copy');
+                    $lp->name = $lp->name.' '.get_lang('CopyLabelSuffix');
                 }
 
                 if (isset($this->tool_copy_settings['learnpaths'])) {

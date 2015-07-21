@@ -237,13 +237,27 @@ SQL;
 
         foreach ($finishedSessions as $finishedSession) {
             $sessionInfo = api_get_session_info($finishedSession['id']);
+            $courses = \SessionManager::get_course_list_by_session_id($sessionInfo['id']);
+            // Get the first course around - we assume there's only one course
+            // per session - for the next part
+            $link = false;
+            if (is_array($courses) && count($courses) > 0) {
+                foreach ($courses as $course) {
+                    $link = \SessionManager::getPath($sessionInfo['id'], $course['id']);
+                    break;
+                }
+            }
+            if ($link === false) {
+                $link = '#';
+            }
             $session = [
                 'name' => $sessionInfo['name'],
                 'start_date' => null,
                 'end_date' => null,
                 'image' => api_get_path(WEB_IMG_PATH) . 'session_default.png',
                 'progress' => $this->getSessionProgress($sessionInfo['id']),
-                'stars' => $this->getNumberOfStars($sessionInfo['id'])
+                'stars' => $this->getNumberOfStars($sessionInfo['id']),
+                'link' => $link
             ];
 
             if (!empty($sessionInfo['display_start_date'])) {

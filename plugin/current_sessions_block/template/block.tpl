@@ -59,7 +59,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="botton-items">
-                                        <a href="#" class="btn btn-primary">{{ "Continue"|get_lang }}</a>
+                                        <a href="{{ session.link }}" class="btn btn-primary">{{ "Continue"|get_lang }}</a>
                                     </div>
                                 </div>
                             </div>

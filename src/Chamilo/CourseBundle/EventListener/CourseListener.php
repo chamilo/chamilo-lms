@@ -121,14 +121,16 @@ class CourseListener
                     $controllerName = $controllerActionParts[0];
 
                     $toolName = null;
+                    $toolAction = null;
                     if (isset($controllerNameParts[1]) &&
                         $controllerNameParts[1] == 'controller') {
                         $toolName = $this->container->get($controllerName)->getToolName();
                         $action = str_replace('action', '', $controllerActionParts[1]);
-                        $actionLabel = $toolName.'.'.$action;
+                        $toolAction = $toolName.'.'.$action;
                     }
 
-                    $container->get('twig')->addGlobal('tool_name', $toolName);
+                    $container->get('twig')->addGlobal('tool.name', $toolName);
+                    $container->get('twig')->addGlobal('tool.action', $toolAction);
 
                     // Legacy code
 

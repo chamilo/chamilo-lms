@@ -15,11 +15,11 @@
     </li>
     {% endif %}
 
-    {% if tool_name is defined %}
+    {% if tool.name is defined and tool.name != '' %}
         <li>
-            <a href="{{ url('course_home', {'course': course }) }}">
+            <a href="{{ url('chamilo_'~ tool.name ~'_index', {'course': course }) }}">
                 <i class="fa fa-cube"></i>
-                {{ tool_name }}
+                {{ tool.name }}
             </a>
         </li>
     {% endif %}

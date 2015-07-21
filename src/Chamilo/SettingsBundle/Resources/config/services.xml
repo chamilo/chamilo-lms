@@ -23,6 +23,7 @@
             <argument type="service" id="chamilo_settings.repository.parameter" />
             <argument type="service" id="sylius.settings.cache" />
             <argument type="service" id="validator" />
+            <argument type="service" id="event_dispatcher" />
         </service>
 
         <service id="chamilo_settings.templating.helper.settings" class

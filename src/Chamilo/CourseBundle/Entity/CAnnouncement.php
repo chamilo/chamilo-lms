@@ -77,7 +77,7 @@ class CAnnouncement
      */
     private $iid;
 
-/**
+    /**
      * Set cId
      *
      * @param integer $cId

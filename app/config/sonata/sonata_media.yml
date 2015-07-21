@@ -19,6 +19,16 @@ sonata_media:
                 small: { width: 100, quality: 100}
                 big:   { width: 970 , quality: 100}
 
+        course:
+            providers:
+                - sonata.media.provider.dailymotion
+                - sonata.media.provider.youtube
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+                - sonata.media.provider.vimeo
+            formats:
+                  small: { width: 100, quality: 100}
+                  big:   { width: 970 , quality: 100}
         news:
             providers:
                 - sonata.media.provider.dailymotion

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -84,6 +85,12 @@ class CCalendarEvent
      */
     private $allDay;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text", unique=false)
+     */
+    private $comment;
 
     /**
      * Get iid

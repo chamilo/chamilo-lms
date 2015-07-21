@@ -23,7 +23,7 @@ class AppKernel extends Kernel
 
             // Sylius
             new Sylius\Bundle\SettingsBundle\SyliusSettingsBundle(),
-            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
+            //new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
             new Sylius\Bundle\FlowBundle\SyliusFlowBundle(),
 
             // Symfony standard edition

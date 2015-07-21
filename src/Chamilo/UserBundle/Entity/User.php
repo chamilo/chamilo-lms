@@ -1499,4 +1499,14 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
 
         return null;
     }
+
+    /**
+     * Get sessionCourseSubscription
+     * @return ArrayCollection
+     */
+    public function getSessionCourseSubscriptions()
+    {
+        return $this->sessionCourseSubscriptions;
+    }
+
 }

@@ -8,6 +8,7 @@
  */
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use \Chamilo\CoreBundle\Entity\SequenceResource;
 
 $cidReset = true;
 
@@ -115,8 +116,17 @@ $sessionDates = SessionManager::parseSessionDates([
 
 $sessionRequirements = $sequenceResourceRepo->getRequirements(
     $session->getId(),
-    \Chamilo\CoreBundle\Entity\SequenceResource::SESSION_TYPE
+    SequenceResource::SESSION_TYPE
 );
+
+$hasRequirements = false;
+
+foreach ($sessionRequirements as $sequence) {
+    if (!empty($sequence['requirements'])) {
+        $hasRequirements = true;
+        break;
+    }
+}
 
 $courseController = new CoursesController();
 
@@ -138,7 +148,7 @@ $template->assign(
     $courseController->getRegisteredInSessionButton(
         $session->getId(),
         $session->getName(),
-        !empty($sessionRequirements)
+        $hasRequirements
     )
 );
 
@@ -148,14 +158,14 @@ $template->assign(
     'session_extra_fields',
     $sessionValues->getAllValuesForAnItem($session->getId(), true)
 );
+$template->assign('has_requirements', $hasRequirements);
+$template->assign('sequences', $sessionRequirements);
 
 $templateFolder = api_get_configuration_value('default_template');
 
-if (!empty($templateFolder)) {
-    $content = $template->fetch($templateFolder.'/session/about.tpl');
-} else {
-    $content = $template->fetch('default/session/about.tpl');
-}
+$layout = $template->get_template('session/about.tpl');
+
+$content = $template->fetch($layout);
 
 $template->assign('header', $session->getName());
 $template->assign('content', $content);

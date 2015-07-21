@@ -24,8 +24,12 @@ if ($action == 'delete') {
     header('Location: session_list.php');
     exit();
 } elseif ($action == 'copy') {
-    SessionManager::copy($idChecked);
-    Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+    $result = SessionManager::copy($idChecked);
+    if ($result) {
+        Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+    } else {
+        Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
+    }
     header('Location: session_list.php');
     exit();
 }

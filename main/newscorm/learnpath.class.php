@@ -10242,7 +10242,7 @@ EOD;
         // Calculate star for final evaluation
         $finalEvaluationItem = $this->getFinalEvaluationItem();
 
-        if ($finalEvaluationItem === false) {
+        if (empty($finalEvaluationItem)) {
             return $stars;
         }
 
@@ -10328,7 +10328,7 @@ EOD;
             foreach ($exercisesItems as $exerciseItem) {
                 $exerciseResultInfo = Event::getExerciseResultsByUser(
                     $this->user_id,
-                    $exerciseItem->ref,
+                    $exerciseItem->path,
                     $this->course_int_id,
                     $sessionId,
                     $this->lp_id,
@@ -10345,10 +10345,10 @@ EOD;
             }
         }
 
-        if ($finalEvaluationItem !== false) {
+        if (!empty($finalEvaluationItem)) {
             $evaluationResultInfo = Event::getExerciseResultsByUser(
                 $this->user_id,
-                $finalEvaluationItem->ref,
+                $finalEvaluationItem->path,
                 $this->course_int_id,
                 $sessionId,
                 $this->lp_id,

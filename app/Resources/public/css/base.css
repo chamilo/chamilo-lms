@@ -9,9 +9,7 @@
 pre {
     margin-top:50px !important;
 }
-html,body{
-  height: 100%;
-}
+
 #page-wrap{
   margin: auto;
   height: auto;
@@ -59,7 +57,10 @@ select {
   padding-top: 10px;
   margin-top: 5px;
 }
-
+.section-page .page-header h3{
+    font-size:22px;
+    margin-top:5px;
+}
 #announcements-slider .left, #announcements-slider .right{
   position: absolute;
   top: 50%;
@@ -6204,7 +6205,58 @@ div#chat-remote-video video {
   margin-left: 5%;
   text-align: center;
 }
-
+.my-progress .profile-user{
+    padding:10px;
+}
+.my-progress .avatar-profile .img-responsive{
+    margin:auto;
+}
+.my-progress .username{
+    font-size:20px;
+    text-align:center;
+}
+.my-progress .star-progress .fa-star{
+    color: #e4c200;
+}
+.my-progress .star-progress .fa-star.in{
+    color: #c2c2c2;
+}
+.my-progress .progress {
+    margin-bottom: 0px;
+}
+.my-progress .list-course{
+    padding:0;
+    margin:0;
+}
+.my-progress .list-course li{
+    display:block;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+.my-progress .list-course li a{
+    color:#666;
+}
+.my-progress .list-course li a.active{
+    color:#00829C;
+}
+.my-progress .embed-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+.my-progress .embed-container iframe {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border:none;
+}
+.section-status .page-header h2{
+    font-size:22px;
+    margin-top:5px;
+}
 p.bg-primary,
 p.bg-success,
 p.bg-info,

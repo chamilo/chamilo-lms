@@ -3502,7 +3502,6 @@ class Tracking
 
         //protect data
         $last_days   = intval($last_days);
-        $course_code = Database::escape_string($course_code);
         $session_id  = intval($session_id);
         $tbl_stats_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $now = api_get_utc_datetime();
@@ -3863,7 +3862,7 @@ class Tracking
      */
     public static function get_tools_most_used_by_course($courseId, $session_id = null)
     {
-        $course_code = intval($courseId);
+        $courseId = intval($courseId);
         $data = array();
         $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $condition_session     = '';
@@ -3871,7 +3870,10 @@ class Tracking
             $session_id = intval($session_id);
             $condition_session = ' AND access_session_id = '. $session_id;
         }
-        $sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool ) as count_access_tool
+        $sql = "SELECT
+                    access_tool,
+                    COUNT(DISTINCT access_user_id),
+                    count(access_tool) as count_access_tool
                 FROM $TABLETRACK_ACCESS
                 WHERE
                     access_tool IS NOT NULL AND
@@ -4070,8 +4072,8 @@ class Tracking
 
         $data = array();
 
-        $TABLETRACK_LINKS       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
-        $TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
+        $TABLETRACK_LINKS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
+        $TABLECOURSE_LINKS = Database::get_course_table(TABLE_LINK);
 
         $condition_session = '';
         if (isset($session_id)) {

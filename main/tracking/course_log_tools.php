@@ -30,6 +30,22 @@ if (!$is_allowedToTrack) {
     exit;
 }
 
+$showChatReporting = true;
+$showTrackingReporting = true;
+$documentReporting = true;
+$linkReporting = true;
+$exerciseReporting = true;
+$lpReporting = true;
+
+if (!empty($groupId)) {
+    $showChatReporting = false;
+    $showTrackingReporting = false;
+    $documentReporting = false;
+    $linkReporting = false;
+    $exerciseReporting = false;
+    $lpReporting = false;
+}
+
 // Including additional libraries.
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 
@@ -129,110 +145,133 @@ echo '</div>';
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 
-$list = new LearnpathList(null, $course_code, $session_id);
-$flat_list = $list->get_flat_list();
+if ($lpReporting) {
+    $list = new LearnpathList(null, $course_code, $session_id);
+    $flat_list = $list->get_flat_list();
 
-if (count($flat_list) > 0) {
+    if (count($flat_list) > 0) {
 
-    // learning path tracking
+        // learning path tracking
+        echo '<div class="report_section">
+                '.Display::page_subheader(
+                Display::return_icon(
+                    'scorms.gif',
+                    get_lang('AverageProgressInLearnpath')
+                ).get_lang('AverageProgressInLearnpath')
+            ).'
+                <table class="data_table">';
+
+        if ($export_csv) {
+            $temp = array(get_lang('AverageProgressInLearnpath', ''), '');
+            $csv_content[] = array('', '');
+            $csv_content[] = $temp;
+        }
+
+        foreach ($flat_list as $lp_id => $lp) {
+            $lp_avg_progress = 0;
+            foreach ($a_students as $student_id => $student) {
+                // get the progress in learning pathes
+                $lp_avg_progress += Tracking::get_avg_student_progress(
+                    $student_id,
+                    $course_code,
+                    array($lp_id),
+                    $session_id
+                );
+            }
+            if ($studentCount > 0) {
+                $lp_avg_progress = $lp_avg_progress / $studentCount;
+            } else {
+                $lp_avg_progress = null;
+            }
+            // Separated presentation logic.
+            if (is_null($lp_avg_progress)) {
+                $lp_avg_progress = '0%';
+            } else {
+                $lp_avg_progress = round($lp_avg_progress, 1).'%';
+            }
+            echo '<tr><td>'.$lp['lp_name'].'</td><td align="right">'.$lp_avg_progress.'</td></tr>';
+            if ($export_csv) {
+                $temp = array($lp['lp_name'], $lp_avg_progress);
+                $csv_content[] = $temp;
+            }
+        }
+        echo '</table></div>';
+    } else {
+        if ($export_csv) {
+            $temp = array(get_lang('NoLearningPath', ''), '');
+            $csv_content[] = $temp;
+        }
+    }
+}
+
+if ($exerciseReporting) {
+
+    // Exercices tracking.
     echo '<div class="report_section">
-            '.Display::page_subheader(
-            Display::return_icon('scorms.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath')
+               '.Display::page_subheader(
+            Display::return_icon(
+                'quiz.gif',
+                get_lang('AverageResultsToTheExercices')
+            ).get_lang('AverageResultsToTheExercices')
         ).'
             <table class="data_table">';
 
+    $course_id = api_get_course_int_id();
+
+    $sql = "SELECT id, title FROM $TABLEQUIZ
+            WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
+    $rs = Database::query($sql);
+
     if ($export_csv) {
-        $temp = array(get_lang('AverageProgressInLearnpath', ''), '');
+        $temp = array(get_lang('AverageProgressInLearnpath'), '');
         $csv_content[] = array('', '');
         $csv_content[] = $temp;
     }
 
-    foreach ($flat_list as $lp_id => $lp) {
-        $lp_avg_progress = 0;
-        foreach ($a_students as $student_id => $student) {
-            // get the progress in learning pathes
-            $lp_avg_progress += Tracking::get_avg_student_progress(
-                $student_id,
-                $course_code,
-                array($lp_id),
-                $session_id
-            );
-        }
-        if ($studentCount > 0) {
-            $lp_avg_progress = $lp_avg_progress / $studentCount;
-        } else {
-            $lp_avg_progress = null;
-        }
-        // Separated presentation logic.
-        if (is_null($lp_avg_progress)) {
-            $lp_avg_progress = '0%';
-        } else {
-            $lp_avg_progress = round($lp_avg_progress, 1).'%';
-        }
-        echo '<tr><td>'.$lp['lp_name'].'</td><td align="right">'.$lp_avg_progress.'</td></tr>';
-        if ($export_csv) {
-            $temp = array($lp['lp_name'], $lp_avg_progress);
-            $csv_content[] = $temp;
-        }
-    }
-    echo '</table></div>';
-} else {
-    if ($export_csv) {
-        $temp = array(get_lang('NoLearningPath', ''), '');
-        $csv_content[] = $temp;
-    }
-}
+    $course_path_params = '&cidReq='.$course_code.'&id_session='.$session_id;
 
-// Exercices tracking.
-echo '<div class="report_section">
-           '.Display::page_subheader(
-            Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices')
-        ).'
-        <table class="data_table">';
+    if (Database::num_rows($rs) > 0) {
+        while ($quiz = Database::fetch_array($rs)) {
+            $quiz_avg_score = 0;
+            if ($studentCount > 0) {
+                foreach ($student_ids as $student_id) {
+                    $avg_student_score = Tracking::get_avg_student_exercise_score(
+                        $student_id,
+                        $course_code,
+                        $quiz['id'],
+                        $session_id
+                    );
+                    $quiz_avg_score += $avg_student_score;
+                }
+            }
+            $studentCount = ($studentCount == 0 || is_null(
+                    $studentCount
+                ) || $studentCount == '') ? 1 : $studentCount;
+            $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
+            $url = api_get_path(
+                    WEB_CODE_PATH
+                ).'exercice/overview.php?exerciseId='.$quiz['id'].$course_path_params;
 
-$course_id = api_get_course_int_id();
-
-$sql = "SELECT id, title FROM $TABLEQUIZ
-        WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
-$rs = Database::query($sql);
-
-if ($export_csv) {
-    $temp = array(get_lang('AverageProgressInLearnpath'), '');
-    $csv_content[] = array('', '');
-    $csv_content[] = $temp;
-}
-
-$course_path_params = '&cidReq='.$course_code.'&id_session='.$session_id;
-
-if (Database::num_rows($rs) > 0) {
-    while ($quiz = Database::fetch_array($rs)) {
-        $quiz_avg_score = 0;
-        if ($studentCount > 0) {
-            foreach ($student_ids as $student_id) {
-                $avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_code, $quiz['id'], $session_id);
-                $quiz_avg_score += $avg_student_score;
+            echo '<tr><td>'.Display::url(
+                    $quiz['title'],
+                    $url
+                ).'</td><td align="right">'.$quiz_avg_score.'</td></tr>';
+            if ($export_csv) {
+                $temp = array($quiz['title'], $quiz_avg_score);
+                $csv_content[] = $temp;
             }
         }
-        $studentCount = ($studentCount == 0 || is_null($studentCount) || $studentCount == '') ? 1 : $studentCount;
-        $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
-        $url = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$quiz['id'].$course_path_params;
-
-        echo '<tr><td>'.Display::url($quiz['title'], $url).'</td><td align="right">'.$quiz_avg_score.'</td></tr>';
+    } else {
+        echo '<tr><td>'.get_lang('NoExercises').'</td></tr>';
         if ($export_csv) {
-            $temp = array($quiz['title'], $quiz_avg_score);
+            $temp = array(get_lang('NoExercises', ''), '');
             $csv_content[] = $temp;
         }
     }
-} else {
-    echo '<tr><td>'.get_lang('NoExercises').'</td></tr>';
-    if ($export_csv) {
-        $temp = array(get_lang('NoExercises', ''), '');
-        $csv_content[] = $temp;
-    }
-}
 
-echo '</table></div>';
-echo '<div class="clear"></div>';
+    echo '</table></div>';
+    echo '<div class="clear"></div>';
+}
 
 $filterByUsers = array();
 
@@ -259,10 +298,10 @@ $count_number_of_posts_by_course = Tracking:: count_number_of_posts_by_course(
 );
 
 if ($export_csv) {
-    $csv_content[] = array(get_lang('Forum'), '');
-    $csv_content[] = array(get_lang('ForumForumsNumber', ''), $count_number_of_forums_by_course);
-    $csv_content[] = array(get_lang('ForumThreadsNumber', ''), $count_number_of_threads_by_course);
-    $csv_content[] = array(get_lang('ForumPostsNumber', ''), $count_number_of_posts_by_course);
+    $csv_content[] = array(get_lang('Forum'));
+    $csv_content[] = array(get_lang('ForumForumsNumber'), $count_number_of_forums_by_course);
+    $csv_content[] = array(get_lang('ForumThreadsNumber'), $count_number_of_threads_by_course);
+    $csv_content[] = array(get_lang('ForumPostsNumber'), $count_number_of_posts_by_course);
 }
 
 // Forums tracking.
@@ -282,124 +321,197 @@ echo '</table></div>';
 echo '<div class="clear"></div>';
 
 // Chat tracking.
+if ($showChatReporting) {
+    echo '<div class="report_section">
+            '.Display::page_subheader(
+            Display::return_icon('chat.gif', get_lang('Chat')).get_lang('Chat')
+        ).'
+            <table class="data_table">';
+    $chat_connections_during_last_x_days_by_course = Tracking::chat_connections_during_last_x_days_by_course(
+        $course_code,
+        7,
+        $session_id
+    );
+    if ($export_csv) {
+        $csv_content[] = array(get_lang('Chat', ''), '');
+        $csv_content[] = array(
+            sprintf(
+                get_lang('ChatConnectionsDuringLastXDays', ''),
+                '7'
+            ),
+            $chat_connections_during_last_x_days_by_course
+        );
+    }
+    echo '<tr><td>'.sprintf(
+            get_lang('ChatConnectionsDuringLastXDays'),
+            '7'
+        ).'</td><td align="right">'.$chat_connections_during_last_x_days_by_course.'</td></tr>';
 
-echo '<div class="report_section">
-        '.Display::page_subheader(Display::return_icon('chat.gif',get_lang('Chat')).get_lang('Chat')).'
-        <table class="data_table">';
-$chat_connections_during_last_x_days_by_course = Tracking::chat_connections_during_last_x_days_by_course($course_code, 7, $session_id);
-if ($export_csv) {
-    $csv_content[] = array(get_lang('Chat', ''), '');
-    $csv_content[] = array(sprintf(get_lang('ChatConnectionsDuringLastXDays', ''), '7'), $chat_connections_during_last_x_days_by_course);
+    echo '</table></div>';
+    echo '<div class="clear"></div>';
 }
-echo '<tr><td>'.sprintf(get_lang('ChatConnectionsDuringLastXDays'), '7').'</td><td align="right">'.$chat_connections_during_last_x_days_by_course.'</td></tr>';
-
-echo '</table></div>';
-echo '<div class="clear"></div>';
 
 // Tools tracking.
-echo '<div class="report_section">
-            '.Display::page_subheader(Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed')).'
+if ($showTrackingReporting) {
+    echo '<div class="report_section">
+            '.Display::page_subheader(
+            Display::return_icon(
+                'acces_tool.gif',
+                get_lang('ToolsMostUsed')
+            ).get_lang('ToolsMostUsed')
+        ).'
         <table class="data_table">';
 
-$tools_most_used = Tracking::get_tools_most_used_by_course($course_id, $session_id);
+    $tools_most_used = Tracking::get_tools_most_used_by_course(
+        $course_id,
+        $session_id
+    );
 
-if ($export_csv) {
-    $temp = array(get_lang('ToolsMostUsed'), '');
-    $csv_content[] = $temp;
-}
+    if ($export_csv) {
+        $temp = array(get_lang('ToolsMostUsed'), '');
+        $csv_content[] = $temp;
+    }
 
-if (!empty($tools_most_used)) {
-    foreach ($tools_most_used as $row) {
-        echo '	<tr>
+    if (!empty($tools_most_used)) {
+        foreach ($tools_most_used as $row) {
+            echo '	<tr>
                     <td>'.get_lang(ucfirst($row['access_tool'])).'</td>
-                    <td align="right">'.$row['count_access_tool'].' '.get_lang('Clicks').'</td>
+                    <td align="right">'.$row['count_access_tool'].' '.get_lang(
+                    'Clicks'
+                ).'</td>
                 </tr>';
-        if ($export_csv) {
-            $temp = array(get_lang(ucfirst($row['access_tool']), ''), $row['count_access_tool'].' '.get_lang('Clicks', ''));
-            $csv_content[] = $temp;
+            if ($export_csv) {
+                $temp = array(
+                    get_lang(ucfirst($row['access_tool']), ''),
+                    $row['count_access_tool'].' '.get_lang('Clicks', '')
+                );
+                $csv_content[] = $temp;
+            }
         }
     }
+
+    echo '</table></div>';
+    echo '<div class="clear"></div>';
 }
 
-echo '</table></div>';
-echo '<div class="clear"></div>';
-
-// Documents tracking.
-if (!isset($_GET['num']) || empty($_GET['num'])) {
-    $num = 3;
-    $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=1#documents_tracking">'.get_lang('SeeDetail').'</a>';
-} else {
-    $num = 1000;
-    $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=0#documents_tracking">'.get_lang('ViewMinus').'</a>';
-}
-
- echo '<a name="documents_tracking" id="a"></a><div class="report_section">
-            '.Display::page_subheader(Display::return_icon('documents.gif',get_lang('DocumentsMostDownloaded')).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link).'
-        <table class="data_table">';
-
-$documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course($course_code, $session_id, $num);
-
-if ($export_csv) {
-    $temp = array(get_lang('DocumentsMostDownloaded', ''), '');
-    $csv_content[] = array('', '');
-    $csv_content[] = $temp;
-}
-
-if (!empty($documents_most_downloaded)) {
-    foreach ($documents_most_downloaded as $row) {
-        echo '<tr>
-                <td>'.Display::url($row['down_doc_path'], api_get_path(WEB_CODE_PATH).'document/show_content.php?file='.$row['down_doc_path'].$course_path_params).'</td>
-                <td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
-              </tr>';
-        if ($export_csv) {
-            $temp = array($row['down_doc_path'], $row['count_down'].' '.get_lang('Clicks', ''));
-            $csv_content[] = $temp;
-        }
+if ($documentReporting) {
+    // Documents tracking.
+    if (!isset($_GET['num']) || empty($_GET['num'])) {
+        $num = 3;
+        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq(
+            ).'&num=1#documents_tracking">'.get_lang('SeeDetail').'</a>';
+    } else {
+        $num = 1000;
+        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq(
+            ).'&num=0#documents_tracking">'.get_lang('ViewMinus').'</a>';
     }
-} else {
-    echo '<tr><td>'.get_lang('NoDocumentDownloaded').'</td></tr>';
+
+    echo '<a name="documents_tracking" id="a"></a><div class="report_section">
+                '.Display::page_subheader(
+            Display::return_icon(
+                'documents.gif',
+                get_lang('DocumentsMostDownloaded')
+            ).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link
+        ).'
+            <table class="data_table">';
+
+    $documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course(
+        $course_code,
+        $session_id,
+        $num
+    );
+
     if ($export_csv) {
-        $temp = array(get_lang('NoDocumentDownloaded', ''), '');
+        $temp = array(get_lang('DocumentsMostDownloaded', ''), '');
+        $csv_content[] = array('', '');
         $csv_content[] = $temp;
     }
-}
-echo '</table></div>';
 
-echo '<div class="clear"></div>';
-
-// links tracking
- echo '<div class="report_section">
-            '.Display::page_subheader(Display::return_icon('link.gif',get_lang('LinksMostClicked')).'&nbsp;'.get_lang('LinksMostClicked')).'
-        <table class="data_table">';
-
-$links_most_visited = Tracking::get_links_most_visited_by_course($course_code, $session_id);
-
-if ($export_csv) {
-    $temp = array(get_lang('LinksMostClicked'), '');
-    $csv_content[] = array('', '');
-    $csv_content[] = $temp;
-}
-
-if (!empty($links_most_visited)) {
-    foreach ($links_most_visited as $row) {
-        echo '	<tr>
-                    <td>'.Display::url($row['title'].' ('.$row['url'].')', $row['url']).'</td>
-                    <td align="right">'.$row['count_visits'].' '.get_lang('Clicks').'</td>
-                </tr>';
-        if ($export_csv){
-            $temp = array($row['title'], $row['count_visits'].' '.get_lang('Clicks', ''));
+    if (!empty($documents_most_downloaded)) {
+        foreach ($documents_most_downloaded as $row) {
+            echo '<tr>
+                    <td>'.Display::url(
+                    $row['down_doc_path'],
+                    api_get_path(
+                        WEB_CODE_PATH
+                    ).'document/show_content.php?file='.$row['down_doc_path'].$course_path_params
+                ).'</td>
+                    <td align="right">'.$row['count_down'].' '.get_lang(
+                    'Clicks'
+                ).'</td>
+                  </tr>';
+            if ($export_csv) {
+                $temp = array(
+                    $row['down_doc_path'],
+                    $row['count_down'].' '.get_lang('Clicks', '')
+                );
+                $csv_content[] = $temp;
+            }
+        }
+    } else {
+        echo '<tr><td>'.get_lang('NoDocumentDownloaded').'</td></tr>';
+        if ($export_csv) {
+            $temp = array(get_lang('NoDocumentDownloaded', ''), '');
             $csv_content[] = $temp;
         }
     }
-} else {
-    echo '<tr><td>'.get_lang('NoLinkVisited').'</td></tr>';
+    echo '</table></div>';
+
+    echo '<div class="clear"></div>';
+}
+
+if ($linkReporting) {
+
+    // links tracking
+    echo '<div class="report_section">
+                '.Display::page_subheader(
+            Display::return_icon(
+                'link.gif',
+                get_lang('LinksMostClicked')
+            ).'&nbsp;'.get_lang('LinksMostClicked')
+        ).'
+            <table class="data_table">';
+
+    $links_most_visited = Tracking::get_links_most_visited_by_course(
+        $course_code,
+        $session_id
+    );
+
     if ($export_csv) {
-        $temp = array(get_lang('NoLinkVisited'), '');
+        $temp = array(get_lang('LinksMostClicked'), '');
+        $csv_content[] = array('', '');
         $csv_content[] = $temp;
     }
+
+    if (!empty($links_most_visited)) {
+        foreach ($links_most_visited as $row) {
+            echo '	<tr>
+                        <td>'.Display::url(
+                    $row['title'].' ('.$row['url'].')',
+                    $row['url']
+                ).'</td>
+                        <td align="right">'.$row['count_visits'].' '.get_lang(
+                    'Clicks'
+                ).'</td>
+                    </tr>';
+            if ($export_csv) {
+                $temp = array(
+                    $row['title'],
+                    $row['count_visits'].' '.get_lang('Clicks', '')
+                );
+                $csv_content[] = $temp;
+            }
+        }
+    } else {
+        echo '<tr><td>'.get_lang('NoLinkVisited').'</td></tr>';
+        if ($export_csv) {
+            $temp = array(get_lang('NoLinkVisited'), '');
+            $csv_content[] = $temp;
+        }
+    }
+    echo '</table></div>';
+    echo '<div class="clear"></div>';
 }
-echo '</table></div>';
-echo '<div class="clear"></div>';
 
 // send the csv file if asked
 if ($export_csv) {

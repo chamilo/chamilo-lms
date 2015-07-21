@@ -67,7 +67,11 @@ if (!$_user['user_id'] AND $current_forum['allow_anonymous'] == 0) {
 }
 
 if ($current_forum['forum_of_group'] != 0) {
-    $show_forum = GroupManager::user_has_access(api_get_user_id(), $current_forum['forum_of_group'], GroupManager::GROUP_TOOL_FORUM);
+    $show_forum = GroupManager::user_has_access(
+        api_get_user_id(),
+        $current_forum['forum_of_group'],
+        GroupManager::GROUP_TOOL_FORUM
+    );
     if (!$show_forum) {
         api_not_allowed();
     }
@@ -90,25 +94,52 @@ if (!empty($gradebook) && $gradebook == 'view') {
 if ($origin == 'group') {
     $_clean['toolgroup'] = (int)$_SESSION['toolgroup'];
     $group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
-    $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => 'viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']), 'name' => $current_thread['thread_title']);
-    $interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('Reply'));
+    $interbreadcrumb[] = array(
+        'url' => '../group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
+    );
+    $interbreadcrumb[] = array(
+        'url' => '../group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
+        'name' => $current_forum['forum_title'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&'.api_get_cidreq(),
+        'name' => $current_thread['thread_title'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'javascript: void(0);',
+        'name' => get_lang('Reply'),
+    );
 } else {
-    $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook, 'name' => $nameTools);
-    $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => 'viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']), 'name' => $current_thread['thread_title']);
+    $interbreadcrumb[] = array(
+        'url' => 'index.php?gradebook='.$gradebook,
+        'name' => $nameTools,
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
+        'name' => $current_forum_category['cat_title'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
+        'name' => $current_forum['forum_title'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'viewthread.php?origin='.$origin.'&gradebook='.$gradebook.'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']).'&'.api_get_cidreq(),
+        'name' => $current_thread['thread_title'],
+    );
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Reply'));
 }
 
 /* Resource Linker */
 
-if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Resources')) {
-    $_SESSION['formelements']  = $_POST;
-    $_SESSION['origin']        = $_SERVER['REQUEST_URI'];
-    $_SESSION['breadcrumbs']   = $interbreadcrumb;
+if (isset($_POST['add_resources']) && $_POST['add_resources'] == get_lang('Resources')) {
+    $_SESSION['formelements'] = $_POST;
+    $_SESSION['origin'] = $_SERVER['REQUEST_URI'];
+    $_SESSION['breadcrumbs'] = $interbreadcrumb;
     header('Location: ../resourcelinker/resourcelinker.php');
     exit;
 }
@@ -151,7 +182,9 @@ if ($origin != 'learnpath') {
 }
 /*New display forum div*/
 echo '<div class="forum_title">';
-echo '<h1><a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a></h1>';
+echo '<h1><a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.
+    class_visible_invisible($current_forum['visibility']).'>'.
+    prepare4display($current_forum['forum_title']).'</a></h1>';
 echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
 echo '</div>';
 /* End new display forum */
@@ -159,7 +192,13 @@ echo '</div>';
 $my_action   = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $my_post     = isset($_GET['post']) ?   Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
-$values = show_add_post_form($current_forum, $forum_setting, $my_action, $my_post, $my_elements);
+$values = show_add_post_form(
+    $current_forum,
+    $forum_setting,
+    $my_action,
+    $my_post,
+    $my_elements
+);
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
     $result = store_reply($current_forum, $values);
     //@todo split the show_add_post_form function

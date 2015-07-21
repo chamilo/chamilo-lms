@@ -2102,56 +2102,56 @@ class Tracking
     /**
      * Returns the average student progress in the learning paths of the given
      * course.
-     * @param int|array $student_id
-     * @param string    $course_code
-     * @param array     $lp_ids Limit average to listed lp ids
-     * @param int       $session_id     Session id (optional),
+     * @param int|array $studentId
+     * @param string    $courseCode
+     * @param array     $lpIds Limit average to listed lp ids
+     * @param int       $sessionId     Session id (optional),
      * if parameter $session_id is null(default) it'll return results including
      * sessions, 0 = session is not filtered
-     * @param bool      $return_array Will return an array of the type:
+     * @param bool      $returnArray Will return an array of the type:
      * [sum_of_progresses, number] if it is set to true
      * @return double   Average progress of the user in this course
      */
     public static function get_avg_student_progress(
-        $student_id,
-        $course_code = null,
-        $lp_ids = array(),
-        $session_id = null,
-        $return_array = false
+        $studentId,
+        $courseCode = null,
+        $lpIds = array(),
+        $sessionId = null,
+        $returnArray = false
     ) {
         $conditions = array();
-        $session_id = intval($session_id);
+        $sessionId = intval($sessionId);
 
-    	// Get the information of the course.
-    	$course_info = api_get_course_info($course_code);
-    	if (!empty($course_info)) {
+        // Get the information of the course.
+        $course_info = api_get_course_info($courseCode);
+        if (!empty($course_info)) {
             $conditions[] = " c_id = {$course_info['real_id']} ";
         }
         // table definition
-        $tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW);
+        $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
 
         // Compose a filter based on optional learning paths list given
         $condition_lp = null;
-        if (!empty($lp_ids)) {
-            if (count($lp_ids) > 0) {
-                $lp_ids = array_map('intval', $lp_ids);
-                $conditions[] = " lp_view.lp_id IN(".implode(',', $lp_ids).") ";
+        if (!empty($lpIds)) {
+            if (count($lpIds) > 0) {
+                $lpIds = array_map('intval', $lpIds);
+                $conditions[] = " lp_view.lp_id IN(" . implode(', ', $lpIds) . ") ";
             }
         }
 
         // If there is at least one learning path and one student.
-        if (!empty($student_id)) {
-            if (is_array($student_id)) {
-                $student_id = array_map('intval', $student_id);
-                $conditions[] = " lp_view.user_id IN (".implode(',', $student_id).")  ";
+        if (!empty($studentId)) {
+            if (is_array($studentId)) {
+                $studentId = array_map('intval', $studentId);
+                $conditions[] = " lp_view.user_id IN (" . implode(', ', $studentId) . ")  ";
                 $groupBy = 'GROUP BY lp_id';
             } else {
-                $student_id = intval($student_id);
-                $conditions[] = " lp_view.user_id = '$student_id' ";
+                $studentId = intval($studentId);
+                $conditions[] = " lp_view.user_id = '$studentId' ";
                 $groupBy = 'GROUP BY user_id';
             }
-            if (!empty($session_id)) {
-                $conditions[] = " session_id = $session_id ";
+            if (!empty($sessionId)) {
+                $conditions[] = " session_id = $sessionId ";
             }
             $conditionToString = implode('AND', $conditions);
 
@@ -2162,7 +2162,7 @@ class Tracking
                         AVG(COALESCE(progress, 0)) average,
                         SUM(COALESCE(progress, 0)) sum_progress,
                         count(progress) count_progress
-                    FROM $tbl_course_lp_view lp_view
+                    FROM $lpViewTable lp_view
                     WHERE
                         $conditionToString
                     $groupBy
@@ -2171,7 +2171,7 @@ class Tracking
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
 
-            if (!$return_array) {
+            if (!$returnArray) {
                 $avg_progress = round($row['average'], 1);
                 return $avg_progress;
             } else {

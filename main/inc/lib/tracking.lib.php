@@ -2157,6 +2157,7 @@ class Tracking
             $lPConditions['AND id IN(' . implode(', ', $placeHolders) . ') '] = $lPIds;
         }
 
+  
         if ($onlySeriousGame) {
             $lPConditions['AND seriousgame_mode = ? '] = true;
         }

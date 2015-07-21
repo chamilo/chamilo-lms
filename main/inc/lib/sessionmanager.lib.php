@@ -383,7 +383,6 @@ class SessionManager
     public static function get_sessions_admin($options = array(), $get_count = false)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
@@ -1337,8 +1336,6 @@ class SessionManager
         $visibility = intval($visibility);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        
-
         if (empty($name)) {
             $msg = get_lang('SessionNameIsRequired');
             return $msg;
@@ -1408,7 +1405,6 @@ class SessionManager
                 if (!empty($sessionCategoryId)) {
                     $values['session_category_id'] = $sessionCategoryId;
                 }
-                
 
                 Database::update($tbl_session, $values, array(
                     'id = ?' => $id
@@ -3566,7 +3562,6 @@ class SessionManager
             (int)$s['id_coach'],
             $s['session_category_id'],
             (int)$s['visibility'],
-          
             true
         );
 
@@ -5550,7 +5545,6 @@ class SessionManager
         }
 
         return false;
-  
     }
 
     /**
@@ -5920,10 +5914,8 @@ class SessionManager
         if ($sessionCategoryId > 0) {
             // Get table names
             $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-
             $sessionFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
             $sessionFieldValueTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
             $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $userTable = Database::get_main_table(TABLE_MAIN_USER);
             $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -6701,7 +6693,6 @@ class SessionManager
                     get_lang('SessionDisplayEndDate'),
                     //get_lang('Coach'),
                     //get_lang('Status'),
-                    //get_lang('CourseTitle'),
                     get_lang('Visibility'),
                 );
                 $column_model = array (

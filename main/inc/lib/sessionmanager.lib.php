@@ -7050,4 +7050,23 @@ class SessionManager
         }
         return api_get_path(WEB_CODE_PATH) . 'session/resume_session.php?id_session=' . $id;
     }
+    /**
+     * Get link to the user page for this session. If a course is provided, build the link to the course
+     * @param   int $id Session ID
+     * @param   int $courseId Course ID (optional) in case the link has to send straight to the course
+     * @return mixed    URL to the page to use the session, or false on error
+     */
+    public static function getPath($id, $courseId = null) {
+        $id = intval($id);
+        $session = self::fetch($id);
+        if (empty($session)) {
+            return false;
+        }
+        if (empty($courseId)) {
+            return api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . $id;
+        } else {
+            $courseInfo = api_get_course_info_by_id($courseId);
+            return api_get_path(WEB_COURSE_PATH) . $courseInfo['directory']. '/index.php?id_session=' . $id;
+        }
+    }
 }

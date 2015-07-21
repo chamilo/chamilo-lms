@@ -7449,4 +7449,6 @@ $RemoveTutorStatus = "Quitar el status de tutor";
 $ImportGradebookInCourse = "Importar las evaluaciones desde el curso base";
 $QuotingToXUser = "Citando a";
 $LoadMoreComments = "Cargar más comentarios";
+$ShowProgress = "Mostrar progreso";
+$XPercent = "%s %%";
 ?>

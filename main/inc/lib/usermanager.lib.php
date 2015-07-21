@@ -5076,17 +5076,21 @@ SQL;
 
             $headers = [
                 [
-                    'url' => $userPath.'user.php?'.api_get_cidreq(),
-                    'content' => get_lang('Users'),
+                    'url' => $userPath.'user.php?'.api_get_cidreq().'&type='.STUDENT,
+                    'content' => get_lang('Students'),
                 ],
                 [
+                    'url' => $userPath.'user.php?'.api_get_cidreq().'&type='.COURSEMANAGER,
+                    'content' => get_lang('Teachers'),
+                ],
+                /*[
                     'url' => $userPath.'subscribe_user.php?'.api_get_cidreq(),
                     'content' => get_lang('Students'),
                 ],
                 [
                     'url' => $userPath.'subscribe_user.php?type=teacher&'.api_get_cidreq(),
                     'content' => get_lang('Teachers'),
-                ],
+                ],*/
                 [
                     'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
                     'content' => get_lang('Groups'),

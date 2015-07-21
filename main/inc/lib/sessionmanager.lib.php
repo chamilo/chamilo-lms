@@ -423,6 +423,7 @@ class SessionManager
                 " access_start_date, ".
                 " access_end_date, ".
                 " s.visibility, ".
+                " s.session_category_id, ".
                 " $inject_extra_fields ".
                 " s.id ";
         }
@@ -444,6 +445,12 @@ class SessionManager
         $query .= $order;
         $query .= $limit;
         $result = Database::query($query);
+
+        $categories = self::get_all_session_category();
+        $orderedCategories = array();
+        foreach ($categories as $category) {
+            $orderedCategories[$category['id']] = $category['name'];
+        }
 
         $formatted_sessions = array();
 
@@ -503,6 +510,7 @@ class SessionManager
                     }
                 }
                 $formatted_sessions[$session_id] = $session;
+                $formatted_sessions[$session_id]['category_name'] = $orderedCategories[$session['session_category_id']];
             }
         }
         return $formatted_sessions;
@@ -6661,16 +6669,17 @@ class SessionManager
             case 'simple':
                 $columns = array(
                     get_lang('Name'),
+                    get_lang('Category'),
                     get_lang('SessionDisplayStartDate'),
                     get_lang('SessionDisplayEndDate'),
-                    //get_lang('SessionCategoryName'),
                     //get_lang('Coach'),
                     //get_lang('Status'),
-                    get_lang('Visibility'),
                     //get_lang('CourseTitle'),
+                    get_lang('Visibility'),
                 );
                 $column_model = array (
-                    array('name'=>'name', 'index'=>'s.name', 'width'=>'200',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
+                    array('name'=>'name', 'index'=>'s.name', 'width'=>'180',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
+                    array('name'=>'category_name', 'index'=>'category_name', 'width'=>'20',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
                     array('name'=>'display_start_date', 'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
                     array('name'=>'display_end_date', 'index'=>'display_end_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
                     array('name'=>'visibility', 'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),

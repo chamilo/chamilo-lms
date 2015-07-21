@@ -2,7 +2,7 @@
 <div class="my-courses-ranking">
     <div class="row">
         <div class="col-xs-12 col-md-12">
-            <h4 class="title-section">{{ "MyCurrentCourses"|get_lang }}</h4>
+            <h4 class="title-section">{{ "MyCurrentCourses"|get_plugin_lang('CurrentSessionsBlockPlugin') }}</h4>
             <a href="{{ _p.web ~ 'user_portal.php' }}" class="more">{{ 'SeeMore'|get_lang }}</a>
         </div>
     </div>
@@ -23,13 +23,13 @@
                             <div class="row">
                                 <div class="col-xs-6 col-md-6 col-lg-6">
                                     {% if session.start_date %}
-                                    <p class="status">{{ "Start"|get_lang }}</p>
+                                    <p class="status">{{ "Start"|get_plugin_lang('CurrentSessionsBlockPlugin') }}</p>
                                     <p class="date">{{ session.start_date }}</p>
                                     {% endif %}
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     {% if session.end_date %}
-                                    <p class="status">{{ "End"|get_lang }}</p>
+                                    <p class="status">{{ "End"|get_plugin_lang('CurrentSessionsBlockPlugin') }}</p>
                                     <p class="date">{{ session.end_date }}</p>
                                     {% endif %}
                                 </div>
@@ -59,7 +59,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="botton-items">
-                                        <a href="#" class="btn btn-primary">{{ "Continue"|get_lang }}</a>
+                                        <a href="{{ session.link }}" class="btn btn-primary">{{ "Continue"|get_lang }}</a>
                                     </div>
                                 </div>
                             </div>

@@ -186,6 +186,11 @@ $controller->tpl->assign('classes_block', $controller->return_classes_block());
 //if (api_is_platform_admin() || api_is_drh()) {
 $controller->tpl->assign('skills_block', $controller->return_skills_links());
 //}
+$historyClass = '';
+if (!empty($_GET['history'])) {
+    $historyClass = 'courses-history';
+}
+$controller->tpl->assign('course_history_page', $historyClass);
 $controller->tpl->display_two_col_template();
 
 // Deleting the session_id.

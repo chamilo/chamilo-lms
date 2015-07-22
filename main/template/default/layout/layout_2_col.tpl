@@ -101,7 +101,7 @@
 
         {% block content %}
         {% if content is not null %}
-            <section id="page-content">
+            <section id="page-content" class="{{ course_history_page }}">
                 {{ content }}
             </section>
         {% endif %}

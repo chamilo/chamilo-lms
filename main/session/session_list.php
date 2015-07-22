@@ -34,8 +34,6 @@ if ($action == 'delete') {
     exit();
 }
 
-//$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
-
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
 
@@ -49,7 +47,14 @@ if (!empty($courseId)) {
     $courseList[$courseInfo['code']] = $parents . $courseInfo['title'];
 }
 
-$sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
+$sessionFilter = new FormValidator(
+    'course_filter',
+    'get',
+    '',
+    '',
+    array(),
+    FormValidator::LAYOUT_INLINE
+);
 $sessionFilter->addElement(
     'select_ajax',
     'course_name',
@@ -96,10 +101,10 @@ $result = SessionManager::getGridColumns($list_type);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
 
-//Autowidth
+// Autowidth
 $extra_params['autowidth'] = 'true';
 
-//height auto
+// height auto
 $extra_params['height'] = 'auto';
 
 $extra_params['postData'] =array(

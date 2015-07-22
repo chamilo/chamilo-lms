@@ -7,8 +7,8 @@
         var resourceId = 0;
         var sequenceId = 0;
 
-        function useAsReference(type, sequenceId) {
-            var id = $("#item option:selected" ).val();
+        function useAsReference(type, sequenceId, itemId) {
+            var id = itemId || $("#item option:selected" ).val();
 
             sequenceId = $("#sequence_id option:selected" ).val();
 
@@ -20,16 +20,45 @@
                 url: url + '?a=load_resource&load_resource_type=parent&id=' + id + '&type='+type+'&sequence_id='+sequenceId,
                 success: function (data) {
                     if (data) {
-                        var listLoaded = data.split(',');
+                        var loadingResources = new Array(),
+                            listLoaded = data.split(',');
+
                         listLoaded.forEach(function(value) {
-                            $.ajax({
-                                url: url + '?a=get_icon&id='+ value+'&type='+type+'&sequence_id='+sequenceId+'&show_delete=1',
-                                success:function(data){
-                                    $('#parents').append(data);
+                            var loadResource = $.ajax(url, {
+                                data: {
+                                    a: 'get_icon',
+                                    id: value,
+                                    type: type,
+                                    sequence_id: sequenceId,
+                                    show_delete: 1
+                                },
+                                success: function() {
                                     parentList.push(value);
                                 }
                             });
+
+                            loadingResources.push(loadResource);
                         });
+
+                        if (loadingResources.length) {
+                            $.when.apply($, loadingResources).done(function() {
+                                if (loadingResources.length === 1) {
+                                    $('#parents').append(arguments[0]);
+
+                                    return;
+                                }
+
+                                var i;
+
+                                for (i = 0; i < arguments.length; i++) {
+                                    $('#parents').append(arguments[i][0]);
+
+                                    if (i !== arguments.length - 1) {
+                                        $('#parents').append('<i class="fa fa-plus fa-3x sequence-plus-icon"></i>');
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -84,23 +113,44 @@
             sequenceId = $("#sequence_id option:selected" ).val();
 
             // Load parents
-            $('#parents').on('click', 'a', function() {
-                var vertexId = $(this).attr('data-id');
-                var parent = $(this).parent();
+            $('#parents').on('click', 'a.delete_vertex, a.undo_delete', function(e) {
+                e.preventDefault();
 
-                if (vertexId) {
-                    var class_click = $(this).attr('class');
+                var self = $(this),
+                    parent = self.parent(),
+                    vertexId = self.attr('data-id') || 0;
 
-                    if (class_click == 'undo_delete')  {
-                        parent.find('span').css('text-decoration', 'none');
-                        parent.find('.undo_delete').remove();
-                    } else {
-                        parent.parent().find('span').css('text-decoration', 'line-through');
-
-                        var link = "<a href=\"javascript:void(0);\" class=\"undo_delete\" data-id="+vertexId+">{{ 'Undo' | get_lang }}</a>";
-                        parent.parent().append(link);
-                    }
+                if (!vertexId) {
+                    return;
                 }
+
+                if (self.is('.delete_vertex')) {
+                    self.hide();
+                    parent.find('.undo_delete').show();
+
+                    self.parents('.parent').addClass('parent-deleted');
+                } else if (self.is('.undo_delete')) {
+                    self.hide();
+                    parent.find('.delete_vertex').show();
+
+                    self.parents('.parent').removeClass('parent-deleted');
+                }
+            });
+
+            $('#parents, #resource, #children').on('click', '.parent .sequence-id', function(e) {
+                e.preventDefault();
+
+                var itemId = $(this).parents('.parent').data('id') || 0;
+
+                if (!itemId) {
+                    return;
+                }
+
+                $('button[name="set_requirement"]').prop('disabled', false);
+                $('#requirements').prop('disabled', false);
+                $('button[name="save_resource"]').prop('disabled', false);
+
+                useAsReference(type, sequenceId, itemId);
             });
 
             // Button use as reference
@@ -134,36 +184,74 @@
             });
 
             // Button save
-            $('button[name="save_resource"]').click(function() {
+            $('button[name="save_resource"]').click(function(e) {
+                e.preventDefault();
+
+                var self = $(this).prop('disabled', true);
+
+                // parse to integer the parents IDs
+                parentList = parentList.map(function(id) {
+                    return parseInt(id);
+                });
+
+                var deletingVertex = new Array();
 
                 // Delete all vertex confirmed to be deleted.
-                $('#parents .delete_vertex').each( function (index, data) {
-                    var vertexId = $(this).attr('data-id');
-                    var textDecoration = $(this).parent().css('text-decoration');
-                    if (textDecoration == 'line-through') {
-                        $.ajax({
-                            async:false,
-                            url: url + '?a=delete_vertex&id=' + resourceId + '&vertex_id=' + vertexId + '&type=' + type + '&sequence_id=' + sequenceId,
-                            success: function (data) {
-                                parentList.splice( $.inArray(vertexId, parentList), 1 );
-                                /*parent.remove();
-                                useAsReference(type, sequenceId);*/
+                $('#parents .parent.parent-deleted').each(function() {
+                    var self = $(this),
+                        vertexId = self.data('id') || 0,
+                        deleteVertex;
+
+                    deleteVertex = $.ajax(url, {
+                        data: {
+                            a: 'delete_vertex',
+                            id: resourceId,
+                            vertex_id: vertexId,
+                            type: type,
+                            sequence_id: sequenceId
+                        },
+                        success: function() {
+                            parentList.splice($.inArray(vertexId, parentList), 1);
+                        }
+                    });
+
+                    deletingVertex.push(deleteVertex);
+                });
+
+                $.when.apply($, deletingVertex).done(function() {
+                    if (resourceId != 0) {
+                        var params = decodeURIComponent(parentList);
+
+                        var savingResource = $.ajax(url, {
+                            data: {
+                                a: 'save_resource',
+                                id: resourceId,
+                                parents: params,
+                                type: type,
+                                sequence_id: sequenceId
                             }
+                        });
+
+                        $.when(savingResource).done(function(response) {
+                            $('#global-modal')
+                                    .find('.modal-dialog')
+                                    .removeClass('modal-lg')
+                                    .addClass('modal-sm');
+                            $('#global-modal')
+                                    .find('.modal-body')
+                                    .html(response);
+                            $('#global-modal').modal('show');
+
+                            self.prop('disabled', false);
+
+                            useAsReference(type, sequenceId);
                         });
                     }
                 });
+            });
 
-                if (resourceId != 0) {
-                    var params = decodeURIComponent(parentList);
-                    $.ajax({
-                        url: url + '?a=save_resource&id=' + resourceId + '&parents=' + params+'&type='+type+'&sequence_id='+sequenceId,
-                        success: function (data) {
-                            alert('saved');
-                            useAsReference(type, sequenceId);
-                        }
-                    });
-                }
-                return false;
+            $('select#sequence_id').on('change', function() {
+                sequenceId = $(this).val();
             });
         });
     </script>
@@ -201,20 +289,22 @@
                     </h4>
                     <div id="parents">
                     </div>
-
+                    <div class="border-sequence">
+                        <div class="arrow-sequence"></div>
+                    </div>
                     <h4 class="title-sequence">{{ 'Item' | get_lang }}</h4>
                     <div id="resource">
                     </div>
-
+                    <div class="border-sequence">
+                        <div class="arrow-sequence"></div>
+                    </div>
                     <h4 class="title-sequence">{{ 'Dependencies' | get_lang }}</h4>
                     <div id="children">
                     </div>
 
-                    <h4 class="title-sequence">{{ 'Graph' | get_lang }}</h4>
-
-
                 </div>
                 <div class="col-md-3">
+                    <h4 class="title-sequence">{{ 'GraphDependencyTree' | get_lang }}</h4>
                     <div id="show_graph"></div>
                 </div>
 

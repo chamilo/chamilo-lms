@@ -19,6 +19,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 // Access restrictions
 api_protect_admin_script(true);
 $nameTools = get_lang('SpecialExports');
+$export = '';
 
 // include additional libraries
 require_once '../coursecopy/classes/CourseBuilder.class.php';

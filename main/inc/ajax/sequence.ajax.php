@@ -13,9 +13,6 @@ use Fhaculty\Graph\Vertex;
 
 require_once '../global.inc.php';
 
-api_block_anonymous_users();
-api_protect_admin_script();
-
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
@@ -25,6 +22,9 @@ $em = Database::getManager();
 $repository = $em->getRepository('ChamiloCoreBundle:SequenceResource');
 switch ($action) {
     case 'graph':
+        api_block_anonymous_users();
+        api_protect_admin_script();
+
         switch ($type) {
             case 'session':
                 $type = SequenceResource::SESSION_TYPE;
@@ -46,6 +46,9 @@ switch ($action) {
         }
         break;
     case 'get_icon':
+        api_block_anonymous_users();
+        api_protect_admin_script();
+
         $link = '';
         switch ($type) {
             case 'session':
@@ -94,6 +97,9 @@ switch ($action) {
         echo $link;
         break;
     case 'delete_vertex':
+        api_block_anonymous_users();
+        api_protect_admin_script();
+
         $vertexId = isset($_REQUEST['vertex_id']) ? $_REQUEST['vertex_id'] : null;
         $type = SequenceResource::SESSION_TYPE;
 
@@ -137,6 +143,9 @@ switch ($action) {
         }
         break;
     case 'load_resource':
+        api_block_anonymous_users();
+        api_protect_admin_script();
+
         // children or parent
         $loadResourceType = isset($_REQUEST['load_resource_type']) ? $_REQUEST['load_resource_type'] : null;
         $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
@@ -192,6 +201,9 @@ switch ($action) {
         }
         break;
     case 'save_resource':
+        api_block_anonymous_users();
+        api_protect_admin_script();
+
         $parents = isset($_REQUEST['parents']) ? $_REQUEST['parents'] : '';
         $sequenceId = isset($_REQUEST['sequence_id']) ? $_REQUEST['sequence_id'] : 0;
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
@@ -299,8 +311,8 @@ switch ($action) {
                     break;
                 }
 
-                $sequenceList = SecuenceResourceManager::checkRequirementsForUser($sequences, $userId, $type);
-                $allowSubscription = SecuenceResourceManager::checkSequenceAreCompleted($sequenceList);
+                $sequenceList = SequenceResourceManager::checkRequirementsForUser($sequences, $type, $userId);
+                $allowSubscription = SequenceResourceManager::checkSequenceAreCompleted($sequenceList);
 
                 $courseController = new CoursesController();
 

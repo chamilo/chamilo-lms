@@ -296,6 +296,10 @@ if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid']
 }
 $defaults['status'] = STUDENT;
 
+$defaults['extra_mail_notify_invitation'] = 1;
+$defaults['extra_mail_notify_message'] = 1;
+$defaults['extra_mail_notify_group_message'] = 1;
+
 $form->setDefaults($defaults);
 
 $content = null;

@@ -10,6 +10,7 @@ $current_course_tool  = TOOL_GROUP;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
+$currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
 
 /*	Create the groups */
 
@@ -46,8 +47,8 @@ if (isset($_POST['action'])) {
                     $group['places']
                 );
             }
-            $msg = urlencode(count($groups).' '.get_lang('GroupsAdded'));
-            header('Location: group.php?action=show_msg&msg='.$msg);
+            Display::addFlash(Display::return_message(get_lang('GroupsAdded')));
+            header("Location: ".$currentUrl);
             exit;
             break;
         case 'create_subgroups':
@@ -55,14 +56,14 @@ if (isset($_POST['action'])) {
 				$_POST['base_group'],
 				$_POST['number_of_groups']
 			);
-            $msg = urlencode($_POST['number_of_groups'].' '.get_lang('GroupsAdded'));
-            header('Location: group.php?action=show_msg&msg='.$msg);
+            Display::addFlash(Display::return_message(get_lang('GroupsAdded')));
+            header("Location: ".$currentUrl);
             exit;
             break;
         case 'create_class_groups':
             $ids = GroupManager::create_class_groups($_POST['group_category']);
-            $msg = urlencode(count($ids).' '.get_lang('GroupsAdded'));
-            header('Location: group.php?action=show_msg&msg='.$msg);
+            Display::addFlash(Display::return_message(get_lang('GroupsAdded')));
+            header("Location: ".$currentUrl);
             exit;
             break;
     }

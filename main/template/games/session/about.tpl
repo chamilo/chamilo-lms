@@ -107,9 +107,13 @@
                     {% endif %}
 
                     <div class="subscribe text-right">
+                        {% if is_subscribed %}
                             <a class="btn btn-primary" href="{{ _p.web_course ~ course_data.course.getCode ~ '/index.php?id_session=' ~ session.getId }}">
                                 <i class="fa fa-check-circle"> </i> {{ 'Continue'|get_lang }}
                             </a>
+                        {% else %}
+                            {{ subscribe_button }}
+                        {% endif %}
                     </div>
                 </div>
             </div>

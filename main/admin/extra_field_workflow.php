@@ -184,7 +184,7 @@ if (!empty($roleId)) {
 
     $form->setDefaults(array('status' => $roleId));
 } else {
-    $form->addElement('button', 'submit', get_lang('Edit'));
+    $form->addButtonUpdate(get_lang('Edit'));
 }
 
 $form->display();

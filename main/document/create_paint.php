@@ -153,7 +153,7 @@ if ($_SERVER['HTTP_HOST']=="localhost") {
 } else {
 	$credentials="false";
 }
-$pixlr_url = api_get_protocol().'://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials;
+$pixlr_url = api_get_protocol().'://pixlr.com/editor/?title='.$title.'&image='.$image.'&loc='.$loc.'&referrer='.$referrer.'&target='.$target.'&exit='.$exit_path.'&locktarget='.$locktarget.'&locktitle='.$locktitle.'&credentials='.$credentials;
 ?>
 <script type="text/javascript">
 

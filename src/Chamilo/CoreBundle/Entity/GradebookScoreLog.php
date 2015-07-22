@@ -1,5 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * GradebookScoreLog
  *
@@ -11,10 +16,6 @@
  * )
  * @ORM\Entity
  */
-namespace Chamilo\CoreBundle\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
-
 class GradebookScoreLog
 {
 

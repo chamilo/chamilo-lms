@@ -74,6 +74,12 @@ class SessionRelUser
     private $movedAt;
 
     /**
+     * @var type \DateTime
+     * @ORM\Column(name="registered_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $registeredAt;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -81,6 +87,7 @@ class SessionRelUser
         $this->moved_to = null;
         $this->movedStatus = null;
         $this->movedAt = null;
+        $this->registeredAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -236,4 +243,26 @@ class SessionRelUser
     {
         return $this->movedAt;
     }
+
+    /**
+     * Set registeredAt
+     * @param \DateTime $registeredAt
+     * @return \Chamilo\CoreBundle\Entity\SessionRelUser
+     */
+    public function setRegisteredAt(\DateTime $registeredAt)
+    {
+        $this->registeredAt = $registeredAt;
+
+        return $this;
+    }
+
+    /**
+     * Get registeredAt
+     * @return \DateTime
+     */
+    public function getRegisteredAt()
+    {
+        return $this->registeredAt;
+    }
+
 }

@@ -149,31 +149,28 @@
 
 
 //Function heigth frame content document items
+    function updateResizeFrame(){
+        var scorm = $('#content_id');
+        scorm.load(function() {
+            this.style.overflow = 'hidden';
+            this.style.height = this.contentWindow.document.body.offsetHeight + 30 + 'px';
+
+        });
+    }
     $(document).ready(function() {
-        //updateContentHeight();
 
+        updateResizeFrame();
         $('#touch-button').children().click(function(){
-           // updateContentHeight();
+            updateResizeFrame();
         });
-
         $(window).resize(function() {
-            //updateContentHeight();
+            updateResizeFrame();
         });
-
         $('#forum-container').hide();
 
-        $('#content_id').load(function() {
-            this.style.overflow = 'hidden';
-            this.style.height = this.contentWindow.document.body.offsetHeight + 350 + 'px';
-
-        });
-
-        //window.onload = updateContentHeight();
-        //window.onresize = updateContentHeight();
-
         loadForumThead({{ oLP.lp_id }}, {{ oLP.get_current_item_id() }});
-    });
 
+    });
 
 
     $(document).ready(function(){
@@ -183,7 +180,7 @@
             $(this).addClass("hidden");
 
             $('#panel-scorm').slideDown("slow",function(){
-                updateContentHeight();
+                updateResizeFrame();
             });
         });
 
@@ -191,8 +188,12 @@
             $("#icon-down").removeClass("hidden");
             $(this).addClass("hidden");
             $('#panel-scorm').slideUp("slow",function(){
-                updateContentHeight();
+                updateResizeFrame();
             });
+        });
+
+        $(".scorm-items-accordion li").click(function(){
+            updateResizeFrame();
         });
         /* $(".open-forum").click(function(){
             $("#panel-forum").css("display","block");

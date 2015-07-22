@@ -223,8 +223,8 @@ switch ($action) {
             if (count($sequences) > 0) {
                 $requirementsData = SecuenceResourceManager::checkRequirementsForUser(
                     $sequences,
-                    api_get_user_id(),
-                    SequenceResource::SESSION_TYPE
+                    SequenceResource::SESSION_TYPE,
+                    api_get_user_id()
                 );
 
                 $continueWithSubscription = SecuenceResourceManager::checkSequenceAreCompleted($requirementsData);

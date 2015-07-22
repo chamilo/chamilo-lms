@@ -14,11 +14,11 @@ class SecuenceResourceManager
     /**
      * Check if the ser has completed the requirements for the sequences
      * @param array $sequences The sequences
-     * @param int $userId The user ID
      * @param int $type The type of sequence resource
+     * @param int $userId Optional. The user ID
      * @return array
      */
-    public static function checkRequirementsForUser(array $sequences, $userId, $type)
+    public static function checkRequirementsForUser(array $sequences, $type, $userId = 0)
     {
         $sequenceList = [];
 
@@ -34,10 +34,10 @@ class SecuenceResourceManager
     /**
      * Check if the ser has completed the requirements for the session sequences
      * @param array $sequences The sequences
-     * @param int $userId The user ID
+     * @param int $userId Optional. The user ID
      * @return array
      */
-    private static function checkSessionRequirementsForUser(array $sequences, $userId)
+    private static function checkSessionRequirementsForUser(array $sequences, $userId = 0)
     {
         $sequenceList = [];
 
@@ -75,10 +75,12 @@ class SecuenceResourceManager
                             $gradebook
                         );
 
-                        $itemSession['status'] = $itemSession['status'] && Category::userFinishedCourse(
-                            $userId,
-                            $category
-                        );
+                        if (!empty($userId)) {
+                            $itemSession['status'] = $itemSession['status'] && Category::userFinishedCourse(
+                                $userId,
+                                $category
+                            );
+                        }
                     }
                 }
 

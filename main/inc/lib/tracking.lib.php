@@ -5459,7 +5459,12 @@ class Tracking
     {
         global $_configuration;
         $form->addElement('text', 'keyword', get_lang('Keyword'));
-        $form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
+        $form->addElement(
+            'select',
+            'active',
+            get_lang('Status'),
+            array(1 => get_lang('Active'), 0 => get_lang('Inactive'))
+        );
         if (isset($_configuration['save_user_last_login']) &&
             $_configuration['save_user_last_login']
         ) {
@@ -5467,10 +5472,19 @@ class Tracking
                 'select',
                 'sleeping_days',
                 get_lang('InactiveDays'),
-                array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120)
+                array(
+                    '',
+                    1 => 1,
+                    5 => 5,
+                    15 => 15,
+                    30 => 30,
+                    60 => 60,
+                    90 => 90,
+                    120 => 120,
+                )
             );
         }
-        $form->addElement('button', 'submit', get_lang('Search'));
+        $form->addButtonSearch(get_lang('Search'));
 
         return $form;
     }

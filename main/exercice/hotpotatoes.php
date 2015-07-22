@@ -75,7 +75,7 @@ if ($finish == 0) {
 }
 
 $form->addElement('file', 'userFile', $label);
-$form->addElement('button', 'submit', get_lang('SendFile'));
+$form->addButtonSend(get_lang('SendFile'));
 
 // If finish is set; it's because the user came from this script in the first place (displaying hidden "finish" field).
 if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) {

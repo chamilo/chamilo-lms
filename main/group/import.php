@@ -29,7 +29,7 @@ $form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
 $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('checkbox', 'delete_not_in_file', null, get_lang('DeleteItemsNotInFile'));
 $form->addElement('label', null, Display::url(get_lang('ExampleCSVFile'), api_get_path(WEB_CODE_PATH).'group/example.csv'));
-$form->addElement('button', 'submit', get_lang('Import'));
+$form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
     if (isset($_FILES['file']['tmp_name']) &&

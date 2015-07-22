@@ -323,7 +323,7 @@ $table->set_header(9, get_lang('Details'), false);
 
 $form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/course.php');
 $form->addElement('text', 'keyword', get_lang('Keyword'));
-$form->addElement('button', 'submit', get_lang('Search'));
+$form->addButtonSearch(get_lang('Search'));
 $form->addElement('hidden', 'session_id', $sessionId);
 
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;

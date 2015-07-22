@@ -86,7 +86,7 @@ $form = new FormValidator(
 $form->addElement('hidden', 'formSent', 1);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
-$form->addElement('button', 'submit', get_lang('Import'));
+$form->addButtonImport(get_lang('Import'));
 
 $form->display();
 

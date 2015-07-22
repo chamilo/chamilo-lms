@@ -33,8 +33,10 @@
                 {% for field_value in session.extra_fields %}
                     {% if field_value.field.variable == 'image' %}
                         <div class="thumbnail">
-                            <img src="{{ _p.web_upload ~ field_value.value }}">
+                            <img src="{{ _p.web_upload ~ field_value.value }}" class="media-gris">
+                            <div class="trophy"><img src="{{ _p.web_css_theme }}images/trophy.png"></div>
                         </div>
+
                     {% endif %}
                 {% endfor %}
                 {% if session.courses|length > 1 %}

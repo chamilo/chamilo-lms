@@ -205,11 +205,11 @@
         $(".open-forum").click(function(){
             $('.panel-forum').animate({
                 top:"0px",
-                height:"100%",
+                height:"100%"
             },800);
             $('#body-forum').css("display","block");
-            $(".closed-forum").css("display","block");
             $(".open-forum").css("display","none");
+            $(".closed-forum").css("display","block");
             $("#chamilo-disqus").css("height",heightFrame);
         });
         $(".closed-forum").click(function(){

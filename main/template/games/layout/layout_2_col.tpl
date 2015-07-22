@@ -79,7 +79,7 @@
 
         {% block content %}
         {% if content is not null %}
-            <section id="page-content">
+            <section id="page-content" class="{{ course_history_page }}">
                 {% if template == 'games' %}
                     <ul class="games nav nav-tabs" role="tablist">
                         <li role="presentation" {% if not history %} class="active" {% endif %}>

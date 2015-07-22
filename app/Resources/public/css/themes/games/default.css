@@ -659,6 +659,7 @@ footer .media{
 .exercise{
   border: none;
   box-shadow: none;
+  margin-bottom: 10px;
 }
 .exercise .page-header{
   margin: 0px;

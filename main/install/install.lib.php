@@ -1945,11 +1945,8 @@ function migrate($chamiloVersion, EntityManager $manager)
 /**
 * @param Connection $connection
  */
-function fixIds(Connection $connection) {
-
-    // Fix c_lp_item
-    $connection = $this->connection;
-
+function fixIds(Connection $connection)
+{
     $sql = "SELECT * FROM c_lp_item";
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {

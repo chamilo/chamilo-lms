@@ -3,12 +3,12 @@
 use \Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
- * SecuenceResourceManager class
+ * SequenceResourceManager class
  * Helper for SequenceResource
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class SecuenceResourceManager
+class SequenceResourceManager
 {
 
     /**
@@ -16,6 +16,7 @@ class SecuenceResourceManager
      * @param array $sequences The sequences
      * @param int $userId The user ID
      * @param int $type The type of sequence resource
+     *
      * @return array
      */
     public static function checkRequirementsForUser(array $sequences, $userId, $type)
@@ -35,6 +36,7 @@ class SecuenceResourceManager
      * Check if the ser has completed the requirements for the session sequences
      * @param array $sequences The sequences
      * @param int $userId The user ID
+     *
      * @return array
      */
     private static function checkSessionRequirementsForUser(array $sequences, $userId)
@@ -95,6 +97,7 @@ class SecuenceResourceManager
      * Check if at least one sequence are completed
      * @param array $sequences The sequences
      * @param int $type The type of sequence resource
+     *
      * @return boolean
      */
     public static function checkSequenceAreCompleted(array $sequences)
@@ -113,5 +116,4 @@ class SecuenceResourceManager
 
         return false;
     }
-
 }

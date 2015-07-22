@@ -221,13 +221,13 @@ switch ($action) {
             );
 
             if (count($sequences) > 0) {
-                $requirementsData = SecuenceResourceManager::checkRequirementsForUser(
+                $requirementsData = SequenceResourceManager::checkRequirementsForUser(
                     $sequences,
                     api_get_user_id(),
                     SequenceResource::SESSION_TYPE
                 );
 
-                $continueWithSubscription = SecuenceResourceManager::checkSequenceAreCompleted($requirementsData);
+                $continueWithSubscription = SequenceResourceManager::checkSequenceAreCompleted($requirementsData);
 
                 if (!$continueWithSubscription) {
                     header('Location: ' .  api_get_path(WEB_CODE_PATH) . 'auth/courses.php');

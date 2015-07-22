@@ -299,8 +299,8 @@ switch ($action) {
                     break;
                 }
 
-                $sequenceList = SecuenceResourceManager::checkRequirementsForUser($sequences, $userId, $type);
-                $allowSubscription = SecuenceResourceManager::checkSequenceAreCompleted($sequenceList);
+                $sequenceList = SequenceResourceManager::checkRequirementsForUser($sequences, $userId, $type);
+                $allowSubscription = SequenceResourceManager::checkSequenceAreCompleted($sequenceList);
 
                 $courseController = new CoursesController();
 

@@ -210,6 +210,13 @@ switch ($action) {
         $courses_controller->sessionsList($action, $nameTools, $limit);
         break;
     case 'subscribe_to_session':
+        $userId = api_get_user_id();
+
+        if (empty($userId)) {
+            header('Location: ' . api_get_path(WEB_PATH));
+            exit;
+        }
+
         $registrationAllowed = api_get_setting('catalog_allow_session_auto_subscription');
         if ($registrationAllowed === 'true') {
             $entityManager = Database::getManager();
@@ -224,7 +231,7 @@ switch ($action) {
                 $requirementsData = SequenceResourceManager::checkRequirementsForUser(
                     $sequences,
                     SequenceResource::SESSION_TYPE,
-                    api_get_user_id()
+                    $userId
                 );
 
                 $continueWithSubscription = SequenceResourceManager::checkSequenceAreCompleted($requirementsData);
@@ -237,7 +244,7 @@ switch ($action) {
 
             SessionManager::suscribe_users_to_session(
                 $_GET['session_id'],
-                array($_GET['user_id'])
+                array($userId)
             );
 
             $coursesList = SessionManager::get_course_list_by_session_id($_GET['session_id']);

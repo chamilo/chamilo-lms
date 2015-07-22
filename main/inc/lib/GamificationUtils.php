@@ -13,7 +13,7 @@ class GamificationUtils
      * Get the calculated points on session with gamification mode
      * @param int $userId The user ID
      * @param int $userStatus The user Status
-     * @return int
+     * @return float
      */
     public static function getTotalUserPoints($userId, $userStatus)
     {
@@ -32,7 +32,7 @@ class GamificationUtils
             $points += self::getSessionPoints($session['id'], $userId);
         }
 
-        return $points;
+        return round($points / count($sessions), 2);
     }
 
     /**
@@ -77,7 +77,7 @@ class GamificationUtils
             $totalPoints += $score;
         }
 
-        return $totalPoints / count($courses);
+        return round($totalPoints / count($courses), 2);
     }
 
     /**
@@ -112,7 +112,7 @@ class GamificationUtils
             $progress += $courseProgress;
         }
 
-        return $progress / count($courses);
+        return round($progress / count($courses), 2);
     }
 
     /**
@@ -157,7 +157,7 @@ class GamificationUtils
             $totalStars += $stars;
         }
 
-        return $totalStars / count($courses);
+        return round($totalStars / count($courses));
     }
 
     /**
@@ -183,14 +183,14 @@ class GamificationUtils
             $stars += self::getSessionStars($session['id'], $userId);
         }
 
-        return $stars;
+        return round($stars / count($sessions));
     }
 
     /**
      * Get the total progress on sessions with gamification mode
      * @param int $userId The user ID
      * @param int $userStatus The user Status
-     * @return int
+     * @return float
      */
     public static function getTotalUserProgress($userId, $userStatus)
     {
@@ -209,7 +209,7 @@ class GamificationUtils
             $progress += self::getSessionProgress($session['id'], $userId);
         }
 
-        return $progress;
+        return round($progress / count($sessions), 2);
     }
 
 }

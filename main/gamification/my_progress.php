@@ -34,11 +34,15 @@ $sessionList = [];
 foreach ($sessionCourseSubscriptions as $subscription) {
     $session = $subscription->getSession();
 
+    if (array_key_exists($session->getId(), $sessionList)) {
+        continue;
+    }
+
     if ($currentSession && $currentSession->getId() === $session->getId()) {
         $allowAccess = true;
     }
 
-    $sessionList[] = $session;
+    $sessionList[$session->getId()] = $session;
 }
 
 if ($currentSession && !$allowAccess) {
@@ -53,15 +57,15 @@ $template->assign(
 );
 $template->assign(
     'gamification_stars',
-     GamificationUtils::getTotalUserStars($user->getId(), $user->getStatus())
+    GamificationUtils::getTotalUserStars($user->getId(), $user->getStatus())
 );
 $template->assign(
     'gamification_points',
-     GamificationUtils::getTotalUserPoints($user->getId(), $user->getStatus())
+    GamificationUtils::getTotalUserPoints($user->getId(), $user->getStatus())
 );
 $template->assign(
     'gamification_progress',
-     GamificationUtils::getTotalUserProgress($user->getId(), $user->getStatus())
+    GamificationUtils::getTotalUserProgress($user->getId(), $user->getStatus())
 );
 $template->assign('sessions', $sessionList);
 $template->assign('current_session', $currentSession);

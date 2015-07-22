@@ -3,7 +3,7 @@
 
 namespace Application\Migrations\Schema\V111;
 
-use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**

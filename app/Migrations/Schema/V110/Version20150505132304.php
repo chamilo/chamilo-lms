@@ -6,7 +6,7 @@ namespace Application\Migrations\Schema\V110;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Application\Migrations\AbstractMigrationChamilo;
 use Database;
 use Doctrine\DBAL\Schema\Schema;
 

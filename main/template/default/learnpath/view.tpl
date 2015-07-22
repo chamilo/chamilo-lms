@@ -13,21 +13,20 @@
                 {% if gamification_mode == 1 %}
                     <div class="row">
                         <div class="col-xs-8">
-                            {% set lp_stars = oLP.getCalculateStars() %}
-                            {% if lp_stars > 0%}
-                                {% for i in 1..lp_stars %}
+                            {% if gamification_stars > 0 %}
+                                {% for i in 1..gamification_stars %}
                                     <i class="fa fa-star fa-2x"></i>
                                 {% endfor %}
                             {% endif %}
 
-                            {% if lp_stars < 4 %}
-                                {% for i in 1..4 - lp_stars %}
+                            {% if gamification_stars < 4 %}
+                                {% for i in 1..4 - gamification_stars %}
                                     <i class="fa fa-star-o fa-2x"></i>
                                 {% endfor %}
                             {% endif %}
                         </div>
                         <div class="col-xs-4 text-right">
-                            {{ "XPoints"|get_lang|format(oLP.getCalculateScore()) }}
+                            {{ "XPoints"|get_lang|format(gamification_points) }}
                         </div>
                     </div>
                 {% else %}
@@ -44,13 +43,7 @@
                                 <i class="fa fa-home"></i> {{ button_home_text }}
                             </a>
 
-                            <div class="image-avatar">
-                                {% if oLP.get_preview_image() %}
-                                    <img src="{{ oLP.get_preview_image_path() }}" width="104" height="96">
-                                {% else %}
-                                    <img src="{{ "unknown_250_100.jpg"|icon }}" width="104" height="96">
-                                {% endif %}
-                            </div>
+                            <div class="image-avatar">{{ lp_preview_image }}</div>
 
                             <div id="lp_navigation_elem" class="navegation-bar">
                                 {{ navigation_bar }}
@@ -60,9 +53,7 @@
                                 </div>
                             </div>
 
-                            <div class="description-autor">
-                                {{ oLP.get_author() }}
-                            </div>
+                            <div class="description-autor">{{ lp_author }}</div>
 
                             {% if show_audio_player %}
                                 <div id="lp_media_file">
@@ -75,9 +66,7 @@
 
                 {# TOC layout #}
                 <div id="toc_id" name="toc_name">
-                    <div id="learning_path_toc" class="scorm-list">
-                        {{ oLP.get_html_toc(toc_list) }}
-                    </div>
+                    <div id="learning_path_toc" class="scorm-list">{{ lp_html_toc }}</div>
                 </div>
                 {# end TOC layout #}
 
@@ -88,7 +77,7 @@
 
             {# right zone #}
             <div id="learning_path_right_zone" style="height:100%" class="content-scorm">
-                {% if oLP.mode == 'fullscreen' %}
+                {% if lp_mode == 'fullscreen' %}
                     <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width: 100%; height: 100%" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                 {% else %}
                     <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" style="display: block; width: 100%; height: 100%" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>

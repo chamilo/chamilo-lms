@@ -116,28 +116,45 @@ $current_group = GroupManager::get_group_properties($group_id);
 $current_group_name = $current_group['name'];
 
 if (isset($group_id) && $group_id != '') {
-    $req_gid = '&amp;gidReq='.$group_id;
-    $interbreadcrumb[] = array ('url' => '../group/group.php?', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$current_group_name);
+    $interbreadcrumb[] = array(
+        'url' => '../group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
+    );
+    $interbreadcrumb[] = array(
+        'url' => '../group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.$current_group_name,
+    );
     $name_to_show = explode('/', $name_to_show);
     unset ($name_to_show[1]);
     $name_to_show = implode('/', $name_to_show);
 }
 
-$interbreadcrumb[] = array('url' => './document.php?curdirpath='.dirname($header_file).'&'.api_get_cidreq(), 'name' => get_lang('Documents'));
+$interbreadcrumb[] = array(
+    'url' => './document.php?curdirpath='.dirname($header_file).'&'.api_get_cidreq(),
+    'name' => get_lang('Documents'),
+);
 
 if (empty($document_data['parents'])) {
     if (isset($_GET['createdir'])) {
-        $interbreadcrumb[] = array('url' => $document_data['document_url'], 'name' => $document_data['title']);
+        $interbreadcrumb[] = array(
+            'url' => $document_data['document_url'],
+            'name' => $document_data['title'],
+        );
     } else {
-        $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+        $interbreadcrumb[] = array(
+            'url' => '#',
+            'name' => $document_data['title'],
+        );
     }
 } else {
     foreach($document_data['parents'] as $document_sub_data) {
         if (!isset($_GET['createdir']) && $document_sub_data['id'] ==  $document_data['id']) {
             $document_sub_data['document_url'] = '#';
         }
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $interbreadcrumb[] = array(
+            'url' => $document_sub_data['document_url'],
+            'name' => $document_sub_data['title'],
+        );
     }
 }
 
@@ -425,7 +442,7 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
-        echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
+            echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }
 Display::display_footer();

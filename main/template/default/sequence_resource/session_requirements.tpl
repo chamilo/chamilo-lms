@@ -9,13 +9,16 @@
                 <div class="big-icon">
                     <img src="{{ 'item-sequence.png'|icon(48) }}" width="48" height="48">
                     <p class="sequence-course">{{ session.name }}</p>
-                    <span class="label {{ session.status ? 'label-success' : 'label-danger' }}">
-                        {% if session.status %}
-                            <i class="fa fa-check"></i> {{ 'Complete'|get_lang }}
-                        {% else %}
-                            <i class="fa fa-exclamation-triangle"></i> {{ 'Incomplete'|get_lang }}
-                        {% endif %}
-                    </span>
+
+                    {% if _u.logged %}
+                        <span class="label {{ session.status ? 'label-success' : 'label-danger' }}">
+                            {% if session.status %}
+                                <i class="fa fa-check"></i> {{ 'Complete'|get_lang }}
+                            {% else %}
+                                <i class="fa fa-exclamation-triangle"></i> {{ 'Incomplete'|get_lang }}
+                            {% endif %}
+                        </span>
+                    {% endif %}
                 </div>
             </div>
 

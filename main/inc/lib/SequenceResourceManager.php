@@ -3,7 +3,7 @@
 use \Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
- * SecuenceResourceManager class
+ * SequenceResourceManager class
  * Helper for SequenceResource
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -97,6 +97,7 @@ class SequenceResourceManager
      * Check if at least one sequence are completed
      * @param array $sequences The sequences
      * @param int $type The type of sequence resource
+     *
      * @return boolean
      */
     public static function checkSequenceAreCompleted(array $sequences)
@@ -115,5 +116,4 @@ class SequenceResourceManager
 
         return false;
     }
-
 }

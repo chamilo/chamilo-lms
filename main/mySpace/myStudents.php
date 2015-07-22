@@ -313,7 +313,7 @@ $token = Security::get_token();
 if (!empty($student_id)) {
     // Actions bar
     echo '<div class="actions">';
-    echo '<a href="javascript: window.back();" ">'.
+    echo '<a href="javascript: window.history.go(-1);" ">'.
             Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.

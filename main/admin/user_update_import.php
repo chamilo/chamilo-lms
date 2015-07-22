@@ -10,7 +10,7 @@
  */
 
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
@@ -336,7 +336,7 @@ api_protect_admin_script(true, null, 'login');
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 
-if (is_array($extAuthSource)) {
+if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 

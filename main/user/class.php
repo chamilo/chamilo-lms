@@ -20,7 +20,7 @@ $tool_name = get_lang("Classes");
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // Extra entries in breadcrumb
-$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
+$interbreadcrumb[] = array ("url" => "user.php?".api_get_cidreq(), "name" => get_lang("ToolUser"));
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
 $groupFilter = isset($_GET['group_filter']) ? intval($_GET['group_filter']) : 0;
@@ -62,7 +62,7 @@ if (api_is_allowed_to_edit()) {
     echo '</div>';
 }
 
-echo UserManager::getUserSubscriptionTab(5);
+echo UserManager::getUserSubscriptionTab(4);
 
 if (api_is_allowed_to_edit()) {
     $action = isset($_GET['action']) ? $_GET['action'] : null;

@@ -172,10 +172,15 @@ if ($form->validate()) {
         $self_unregistration_allowed,
         $categoryId
     );
-    if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-        header('Location: group.php?'.api_get_cidreq(true, false).'&action=warning_message&msg='.get_lang('GroupTooMuchMembers'));
+    if (isset($_POST['group_members']) &&
+        count($_POST['group_members']) > $max_member &&
+        $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT
+    ) {
+        Display::addFlash(Display::return_message(get_lang('GroupTooMuchMembers'), 'warning'));
+        header('Location: group.php?'.api_get_cidreq(true, false));
     } else {
-        header('Location: group.php?'.api_get_cidreq(true, false).'&action=success_message&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
+        Display::addFlash(Display::return_message(get_lang('GroupSettingsModified'), 'success'));
+        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$cat['id']);
     }
     exit;
 }
@@ -201,15 +206,6 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 }
 
 Display :: display_header($nameTools, 'Group');
-
-//@todo fix this
-if (isset($_GET['show_message_warning'])) {
-    echo Display::display_warning_message($_GET['show_message_warning']);
-}
-
-if (isset($_GET['show_message_sucess'])) {
-    echo Display::display_normal_message($_GET['show_message_sucess']);
-}
 
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('settings');

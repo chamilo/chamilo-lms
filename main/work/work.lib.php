@@ -98,10 +98,10 @@ function settingsForm($defaults)
         $form->createElement('radio', 'student_delete_own_publication', null, get_lang('No'), 0)
     );
     $form->addGroup($group, '', get_lang('StudentAllowedToDeleteOwnPublication'));
-    $form->addElement('button', 'submit', get_lang('Save'));
+    $form->addButtonSave(get_lang('Save'));
     $form->setDefaults($defaults);
 
-    return $form->return_form();
+    return $form->returnForm();
 }
 
 /**

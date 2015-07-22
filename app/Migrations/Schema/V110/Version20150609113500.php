@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Migrations\Schema\V110;
+namespace Application\Migrations\Schema\V110;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Session date changes
  */
-class Version20150625155000 extends AbstractMigrationChamilo
+class Version20150609113500 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
@@ -18,7 +18,7 @@ class Version20150625155000 extends AbstractMigrationChamilo
     {
         $this->addSql("INSERT INTO extra_field
             (extra_field_type, field_type, variable, display_text, visible, changeable)
-            VALUES (1, 1, 'captcha_blocked_until_date', 'Account locked until', 0, 0)");
+            VALUES (2, 10, 'tags', 'Tags', 1, 1)");
     }
 
     /**
@@ -27,9 +27,9 @@ class Version20150625155000 extends AbstractMigrationChamilo
     public function down(Schema $schema)
     {
         $this->addSql("DELETE FROM extra_field
-            WHERE variable = 'captcha_blocked_until_date' AND
-                extra_field_type = 1 AND
-                field_type = 1");
+            WHERE variable = 'tags' AND
+                extra_field_type = 2 AND
+                field_type = 10");
     }
 
 }

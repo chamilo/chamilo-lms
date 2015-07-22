@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Migrations\Schema\V110;
+namespace Application\Migrations\Schema\V110;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
@@ -10,7 +10,7 @@ use Doctrine\DBAL\Types\Type;
 /**
  * Class Version20150505142900
  *
- * @package Chamilo\CoreBundle\Migrations\Schema\v1
+ * @package Application\Migrations\Schema\V110
  */
 class Version20150505142900 extends AbstractMigrationChamilo
 {

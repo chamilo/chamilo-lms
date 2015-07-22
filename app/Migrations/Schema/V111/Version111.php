@@ -1,22 +1,33 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Migrations\Schema\V110;
+namespace Application\Migrations\Schema\V111;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Agenda
+ * Class Version111
+ * Migrate file to updated to Chamilo 1.11
+ *
  */
-class Version20150709083710 extends AbstractMigrationChamilo
+class Version111 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
+     *
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
     {
-        $this->addSql('ALTER TABLE c_calendar_event ADD color VARCHAR(100) DEFAULT NULL');
+        //$this->addSql("");
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    public function postUp(Schema $schema)
+    {
     }
 
     /**
@@ -24,6 +35,5 @@ class Version20150709083710 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
-        $this->addSql('ALTER TABLE c_calendar_event DROP color');
     }
 }

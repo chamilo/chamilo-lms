@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Migrations\Schema\V110;
+namespace Application\Migrations\Schema\V110;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
@@ -11,7 +11,7 @@ use Doctrine\DBAL\Schema\Schema;
  *
  * Migrate file to updated to Chamilo 1.10
  *
- * @package Chamilo\CoreBundle\Migrations\Schema\v1
+ * @package Application\Migrations\Schema\V110
  */
 class Version110 extends AbstractMigrationChamilo
 {

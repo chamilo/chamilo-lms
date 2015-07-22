@@ -148,78 +148,16 @@
 <script>
 
 
-    // Resize right and left pane to full height (HUB 20-05-2010).
-
-    var updateContentHeight = function () {
-        var IE = window.navigator.appName.match(/microsoft/i);
-
-        /* Identified new height */
-        var heightControl = $('#control-bottom').height();
-        var heightBreadcrumb = ($('#learning_path_breadcrumb_zone').height()) ? $('#learning_path_breadcrumb_zone').height() : 0;
-
-        var heightScormInfo = $('#scorm-info').height();
-
-        var heightTop = heightScormInfo + 100;
-
-        //heightTop = (heightTop > 300)? heightTop : 300;
-
-        var innerHeight = $(window).height();
-
-        if (innerHeight <= 640) {
-            $('#inner_lp_toc').css('height', innerHeight - heightTop + "px");
-            //$('#content_id_').css('height', innerHeight - heightControl + "px");
-        } else {
-            $('#inner_lp_toc').css('height', innerHeight - heightBreadcrumb - heightTop + "px");
-            //$('#content_id_').css('height', innerHeight - heightControl + "px");
-        }
-
-        //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
-
-        // Loads the glossary library.
-        {% if glossary_extra_tools in glossary_tool_availables %}
-                {% if show_glossary_in_documents == 'ismanual' %}
-                    $.frameReady(
-                        function(){
-                            //  $("<div>I am a div courses</div>").prependTo("body");
-                        },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
-                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"}
-                            ]
-                        }
-                    );
-                {% elseif show_glossary_in_documents == 'isautomatic' %}
-                    $.frameReady(
-                        function(){
-                            //  $("<div>I am a div courses</div>").prependTo("body");
-                        },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
-                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"}
-                            ]
-                        }
-                    );
-                {% endif %}
-        {% endif %}
-    };
-
+//Function heigth frame content document items
     $(document).ready(function() {
-        updateContentHeight();
+        //updateContentHeight();
 
         $('#touch-button').children().click(function(){
-            updateContentHeight();
+           // updateContentHeight();
         });
 
         $(window).resize(function() {
-            updateContentHeight();
+            //updateContentHeight();
         });
 
         $('#forum-container').hide();
@@ -256,12 +194,12 @@
                 updateContentHeight();
             });
         });
-        $(".open-forum").click(function(){
+        /* $(".open-forum").click(function(){
             $("#panel-forum").css("display","block");
             $("#panel-forum").animate({
                 height: "300px",
                 opacity:0.8
             },500);
-        });
+        }); */
     });
 </script>

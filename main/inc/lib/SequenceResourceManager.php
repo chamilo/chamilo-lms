@@ -8,7 +8,7 @@ use \Chamilo\CoreBundle\Entity\SequenceResource;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class SecuenceResourceManager
+class SequenceResourceManager
 {
 
     /**

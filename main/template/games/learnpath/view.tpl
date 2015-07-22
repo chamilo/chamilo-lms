@@ -123,20 +123,23 @@
             {# right zone #}
             <div id="learning_path_right_zone" style="height:100%" class="content-scorm">
                 {% if oLP.mode == 'fullscreen' %}
-                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width: 100%; height: 100%" ></iframe>
+                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width: 100%; height: 100%; position: absolute;" ></iframe>
                 {% else %}
-                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}&posts_order=desc" border="0" frameborder="0" style="display: block; width: 100%; height: 100%"></iframe>
+                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}&posts_order=desc" border="0" frameborder="0" style="display: block; width: 100%; height: 100%; position: absolute;"></iframe>
                 {% endif %}
-
-                <div class="open-forum">
-                    <i class="fa fa-chevron-down"></i>
-                </div>
-                <div id="panel-forum">
-                    <div id="forum-container">
-                        <div class="panel-body"></div>
+                <div class="panel-forum">
+                    <div class="open-forum">
+                        <i class="fa fa-chevron-up"></i>
+                    </div>
+                    <div class="closed-forum" style="display: none;">
+                        <i class="fa fa-chevron-down"></i>
+                    </div>
+                    <div id="body-forum">
+                        <div id="forum-container">
+                            <div class="panel-body"></div>
+                        </div>
                     </div>
                 </div>
-
             </div>
             {# end right Zone #}
 
@@ -151,11 +154,15 @@
 //Function heigth frame content document items
     function updateResizeFrame(){
         var scorm = $('#content_id');
+
         scorm.load(function() {
             this.style.overflow = 'hidden';
-            this.style.height = this.contentWindow.document.body.offsetHeight + 30 + 'px';
-
+            heightFrame = this.contentWindow.document.body.offsetHeight + 30 + 'px';
+            this.style.height = heightFrame;
+            $('.panel-forum').css("top", heightFrame);
+            $('#body-forum').css("display","none");
         });
+
     }
     $(document).ready(function() {
 
@@ -195,12 +202,24 @@
         $(".scorm-items-accordion li").click(function(){
             updateResizeFrame();
         });
-        /* $(".open-forum").click(function(){
-            $("#panel-forum").css("display","block");
-            $("#panel-forum").animate({
-                height: "300px",
-                opacity:0.8
-            },500);
-        }); */
+        $(".open-forum").click(function(){
+            $('.panel-forum').animate({
+                top:"0px",
+                height:"100%",
+            },800);
+            $('#body-forum').css("display","block");
+            $(".closed-forum").css("display","block");
+            $(".open-forum").css("display","none");
+            $("#chamilo-disqus").css("height",heightFrame);
+        });
+        $(".closed-forum").click(function(){
+            $('.panel-forum').animate({
+                top:heightFrame,
+                height:"100%"
+            },800);
+            $('#body-forum').css("display","none");
+            $(".closed-forum").css("display","none");
+            $(".open-forum").css("display","block");
+        });
     });
 </script>

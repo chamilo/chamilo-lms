@@ -855,6 +855,26 @@ hr.separator:after {
   -webkit-border-radius: 5px;
   cursor: pointer;
 }
+.closed-forum{
+  background-color: #EDEDF5;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  cursor: pointer;
+}
+.panel-forum{
+  position: absolute;
+  width: 98%;
+  background-color: #ffffff;
+  z-index: 1;
+}
+#forum-container .panel-body{
+  background-color: #ffffff;
+}
 /*
 #panel-forum{
   position: absolute;

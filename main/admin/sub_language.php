@@ -78,7 +78,7 @@ if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 	$language_id_exist=false;
 }
 
-$language_name = get_lang('RegisterTermsOfSubLanguageForLanguage').' ( '.strtolower($sub_language_name).' )';
+$intro = sprintf(get_lang('RegisterTermsOfSubLanguageForX'), strtolower($sub_language_name));
 $path_folder = api_get_path(SYS_LANG_PATH).$all_data_of_language['dokeos_folder'];
 
 if (!is_dir($path_folder) || strlen($all_data_of_language['dokeos_folder'])==0) {
@@ -88,7 +88,9 @@ if (!is_dir($path_folder) || strlen($all_data_of_language['dokeos_folder'])==0) 
 Display :: display_header($language_name);
 
 echo '<div class="actions-message" >';
-echo $language_name;
+echo $intro;
+echo '<br />';
+printf(get_lang('ParentLanguageX'), $language_name);
 echo '</div>';
 
 if (!empty($_SESSION['msg'])) {

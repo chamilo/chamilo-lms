@@ -131,9 +131,12 @@
                 <div class="open-forum">
                     <i class="fa fa-chevron-down"></i>
                 </div>
-                <div id="forum-container">
-                     <div class="panel-body"></div>
+                <div id="panel-forum">
+                    <div id="forum-container">
+                        <div class="panel-body"></div>
+                    </div>
                 </div>
+
             </div>
             {# end right Zone #}
 
@@ -252,6 +255,13 @@
             $('#panel-scorm').slideUp("slow",function(){
                 updateContentHeight();
             });
+        });
+        $(".open-forum").click(function(){
+            $("#panel-forum").css("display","block");
+            $("#panel-forum").animate({
+                height: "300px",
+                opacity:0.8
+            },500);
         });
     });
 </script>

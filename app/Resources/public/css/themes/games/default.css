@@ -852,6 +852,14 @@ hr.separator:after {
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  cursor: pointer;
+}
+#panel-forum{
+  position: absolute;
+  height: 0px;
+  width: 100%;
+  display: none;
+  z-index: 2;
 }
 /* Large desktop */
 @media (min-width: 1200px) { 

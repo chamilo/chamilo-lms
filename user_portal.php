@@ -187,6 +187,11 @@ $controller->tpl->assign('classes_block', $controller->return_classes_block());
 $controller->tpl->assign('skills_block', $controller->return_skills_links());
 $controller->tpl->assign('history', isset($_GET['history']));
 //}
+$historyClass = '';
+if (!empty($_GET['history'])) {
+    $historyClass = 'courses-history';
+}
+$controller->tpl->assign('course_history_page', $historyClass);
 $controller->tpl->display_two_col_template();
 
 // Deleting the session_id.

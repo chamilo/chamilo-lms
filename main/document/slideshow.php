@@ -84,7 +84,7 @@ if ($slide_id != 'all') {
 
 		// Previous slide
 		if ($slide > 0) {
-			echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
+			echo '<a href="slideshow.php?slide_id='.$previous_slide.'&curdirpath='.$pathurl.'">';
 		}
 		echo '<img src="'.api_get_path(WEB_IMG_PATH).$imgp.'" title="'.get_lang('Previous').'" alt="'.get_lang('Previous').'">';
 		if ($slide > 0) {
@@ -479,7 +479,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 
             echo '<tr>';
             echo '<td align="center">';
-            echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$row['id'].'&origin=slideshow&amp;origin_opt='.$edit_slide_id.'&amp;">
+            echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$row['id'].'&origin=slideshow&origin_opt='.$edit_slide_id.'&">
 			      <img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
 
 			echo $image_files_only[$slide].' <br />';

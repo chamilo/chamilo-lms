@@ -629,8 +629,8 @@ class Auth
             $form->addElement('hidden', 'sec_token', $_SESSION['sec_token']);
             $form->addElement('hidden', 'subscribe_user_with_password', $all_course_information['code']);
             $form->addElement('text', 'course_registration_code');
-            $form->addElement('button', 'submit', get_lang('SubmitRegistrationCode'));
-            $content = $form->return_form();
+            $form->addButton(get_lang('SubmitRegistrationCode'));
+            $content = $form->returnForm();
             return array('message' => $message, 'content' => $content);
         }
     }

@@ -61,7 +61,7 @@ class ZombieReport implements Countable
                 ),
                 array(
                     'name' => 'submit_button',
-                    'type' => 'style_submit_button',
+                    'type' => 'button',
                     'value' => get_lang('Search'),
                     'attributes' => array('class' => 'search')
                 )

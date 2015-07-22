@@ -447,8 +447,10 @@ class SessionManager
 
         $categories = self::get_all_session_category();
         $orderedCategories = array();
-        foreach ($categories as $category) {
-            $orderedCategories[$category['id']] = $category['name'];
+        if (!empty($categories)) {
+            foreach ($categories as $category) {
+                $orderedCategories[$category['id']] = $category['name'];
+            }
         }
 
         $formatted_sessions = array();
@@ -509,7 +511,8 @@ class SessionManager
                     }
                 }
                 $formatted_sessions[$session_id] = $session;
-                $formatted_sessions[$session_id]['category_name'] = $orderedCategories[$session['session_category_id']];
+                $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
+                $formatted_sessions[$session_id]['category_name'] = $categoryName;
             }
         }
 
@@ -6696,10 +6699,10 @@ class SessionManager
                     get_lang('Visibility'),
                 );
                 $column_model = array (
-                    array('name'=>'name', 'index'=>'s.name', 'width'=>'180',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
-                    array('name'=>'category_name', 'index'=>'category_name', 'width'=>'20',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
-                    array('name'=>'display_start_date', 'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
-                    array('name'=>'display_end_date', 'index'=>'display_end_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
+                    array('name'=>'name', 'index'=>'s.name', 'width'=>'160',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
+                    array('name'=>'category_name', 'index'=>'category_name', 'width'=>'40',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
+                    array('name'=>'display_start_date', 'index'=>'display_start_date', 'width'=>'50',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
+                    array('name'=>'display_end_date', 'index'=>'display_end_date', 'width'=>'50',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
                     array('name'=>'visibility', 'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
                 );
                 break;
@@ -7049,7 +7052,8 @@ class SessionManager
      * @param   int $id Session ID
      * @return mixed    URL to the admin page to manage the session, or false on error
      */
-    public static function getAdminPath($id) {
+    public static function getAdminPath($id)
+    {
         $id = intval($id);
         $session = self::fetch($id);
         if (empty($session)) {
@@ -7057,13 +7061,16 @@ class SessionManager
         }
         return api_get_path(WEB_CODE_PATH) . 'session/resume_session.php?id_session=' . $id;
     }
+
     /**
-     * Get link to the user page for this session. If a course is provided, build the link to the course
+     * Get link to the user page for this session.
+     * If a course is provided, build the link to the course
      * @param   int $id Session ID
      * @param   int $courseId Course ID (optional) in case the link has to send straight to the course
      * @return mixed    URL to the page to use the session, or false on error
      */
-    public static function getPath($id, $courseId = null) {
+    public static function getPath($id, $courseId = 0)
+    {
         $id = intval($id);
         $session = self::fetch($id);
         if (empty($session)) {
@@ -7073,7 +7080,11 @@ class SessionManager
             return api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . $id;
         } else {
             $courseInfo = api_get_course_info_by_id($courseId);
-            return api_get_path(WEB_COURSE_PATH) . $courseInfo['directory']. '/index.php?id_session=' . $id;
+            if ($courseInfo) {
+                return $courseInfo['course_public_url'].'?id_session='.$id;
+            }
         }
+
+        return false;
     }
 }

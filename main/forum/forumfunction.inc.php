@@ -2732,7 +2732,7 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
                 empty($values['weight_calification'])
             ) {
                 Display::display_error_message(
-                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.back()">'.get_lang('Back').'</a>',
+                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>',
                     false
                 );
 
@@ -3330,7 +3330,7 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         if (isset($values['thread_qualify_gradebook']) && $values['thread_qualify_gradebook'] == '1' &&
             empty($values['weight_calification'])
         ) {
-            Display::display_error_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.back()">'.get_lang('Back').'</a>', false);
+            Display::display_error_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.history.go(-1);">'.get_lang('Back').'</a>', false);
             return false;
         }
         return $values;

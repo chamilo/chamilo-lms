@@ -737,7 +737,8 @@ if ($is_allowedToEdit && $locked == false && !api_is_drh() && !api_is_student_bo
 
 //Came from lpstats in a lp
 if ($origin =='student_progress') { ?>
-	<button type="button" class="back" onclick="window.back();" value="<?php echo get_lang('Back'); ?>" ><?php echo get_lang('Back');?></button>
+	<button type="button" class="back" onclick="window.history.go(-1);" value="<?php echo get_lang('Back'); ?>" >
+	<?php echo get_lang('Back');?></button>
 <?php
 } else if($origin=='myprogress') {
 ?>

@@ -969,12 +969,15 @@ class GroupManager
         $res = Database::query($sql);
         $cat1 = Database::fetch_object($res);
         $cat2 = Database::fetch_object($res);
-        $sql = "UPDATE $table_group_cat SET display_order=$cat2->display_order
+        if ($cat1 && $cat2) {
+            $sql = "UPDATE $table_group_cat SET display_order=$cat2->display_order
                 WHERE id = $cat1->id AND c_id = $course_id ";
-        Database::query($sql);
-        $sql = "UPDATE $table_group_cat SET display_order=$cat1->display_order
-                WHERE id = $cat2->id AND c_id = $course_id ";
-        Database::query($sql);
+            Database::query($sql);
+
+            $sql = "UPDATE $table_group_cat SET display_order=$cat1->display_order
+                    WHERE id = $cat2->id AND c_id = $course_id ";
+            Database::query($sql);
+        }
     }
 
     /**

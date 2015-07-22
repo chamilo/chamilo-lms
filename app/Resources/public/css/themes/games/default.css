@@ -908,7 +908,9 @@ img.g1-effect-grayscale:hover {
   -ms-filter: grayscale(0%);
   -o-filter: grayscale(0%);
 }
-
+#lostpassword .help{
+  margin-top: 20px;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
 	/* .container{

@@ -315,7 +315,6 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-//$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), array('disabled' => 'disabled'));
 $form->addButtonSave(get_lang('RegisterUser'));
 
 $defaults['status'] = STUDENT;

@@ -4,6 +4,7 @@
 /**
  *  @package chamilo.admin
  */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -15,8 +16,14 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    'name' => get_lang('PlatformAdmin'),
+);
+$interbreadcrumb[] = array(
+    'url' => 'career_dashboard.php',
+    'name' => get_lang('CareersAndPromotions'),
+);
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -25,12 +32,13 @@ $token = Security::get_token();
 
 if ($action == 'add') {
     $interbreadcrumb[]=array('url' => 'careers.php','name' => get_lang('Careers'));
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+    $tool_name = get_lang('Add');
 } elseif ($action == 'edit') {
     $interbreadcrumb[]=array('url' => 'careers.php','name' => get_lang('Careers'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+    $tool_name = get_lang('Edit');
 } else {
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Careers'));
+    $tool_name = get_lang('Careers');
 }
 
 // The header.
@@ -43,10 +51,28 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';
 $columns = array(get_lang('Name'), get_lang('Description'), get_lang('Actions'));
 
 // Column config
-$column_model   = array(
-    array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
-    array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
-    array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
+$column_model = array(
+    array(
+        'name' => 'name',
+        'index' => 'name',
+        'width' => '80',
+        'align' => 'left',
+    ),
+    array(
+        'name' => 'description',
+        'index' => 'description',
+        'width' => '500',
+        'align' => 'left',
+        'sortable' => 'false',
+    ),
+    array(
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '100',
+        'align' => 'left',
+        'formatter' => 'action_formatter',
+        'sortable' => 'false',
+    ),
 );
 //Autowidth
 $extra_params['autowidth'] = 'true';
@@ -95,7 +121,8 @@ switch ($action) {
             $career->display();
         } else {
             echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="'.api_get_self().'">'.
+                Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));

@@ -1883,10 +1883,6 @@ function installSettings(
  * src/Chamilo/CoreBundle/Migrations/Schema/*
  *
  * @param string $chamiloVersion
- * @param string $dbNameForm
- * @param string $dbUsernameForm
- * @param string $dbPassForm
- * @param string $dbHostForm
  * @param EntityManager $manager
  * @throws \Doctrine\DBAL\DBALException
  */

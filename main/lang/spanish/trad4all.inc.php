@@ -7458,4 +7458,6 @@ $LoadMoreComments = "Cargar más comentarios";
 $ShowProgress = "Mostrar progreso";
 $XPercent = "%s %%";
 $CheckRequirements = "Ver requerimientos";
+$ParentLanguageX = "Idioma padre: %s";
+$RegisterTermsOfSubLanguageForX = "Registre términos del sub-idioma para %s buscando un término y luego dando clic al botón de guardar para cada traducción. Luego tendrá que cambiar su perfil para usar el sub-idioma para ver los nuevos términos.";
 ?>

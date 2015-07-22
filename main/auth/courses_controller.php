@@ -534,8 +534,7 @@ class CoursesController
             $url .= 'auth/courses.php?';
             $url .= http_build_query([
                 'action' => 'subscribe_to_session',
-                'session_id' => intval($sessionId),
-                'user_id' => api_get_user_id()
+                'session_id' => intval($sessionId)
             ]);
         } else {
             $url .= 'inc/email_editor.php?';

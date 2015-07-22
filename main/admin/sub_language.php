@@ -20,8 +20,8 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		file_id=button_array[2];
 		is_variable_language="$"+button_name;
 
-		is_new_language=$("#txtid_"+file_id+"_"+button_name).attr("value");
-   		if (is_new_language=="undefined") {
+		is_new_language = $("#txtid_"+file_id+"_"+button_name).val();
+		if (is_new_language == undefined) {
 			is_new_language="_";
     	}
 		if (is_new_language.length>0 && is_new_language!="_" && file_id!="" && button_name!="") {

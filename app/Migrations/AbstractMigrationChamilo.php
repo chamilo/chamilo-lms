@@ -30,7 +30,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
      */
     public function getEntityManager()
     {
-
         if (empty($this->manager)) {
             $dbParams = array(
                 'driver' => 'pdo_mysql',
@@ -100,7 +99,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             ->setAccessUrlLocked($accessUrlLocked);
 
         $this->getEntityManager()->persist($setting);
-        $this->getEntityManager()->flush();
+        //$this->getEntityManager()->flush();
 
         if (count($options) > 0) {
             foreach ($options as $option) {
@@ -111,14 +110,16 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
                         $option['text'] = 'No';
                     }
                 }
+
                 $settingOption = new SettingsOptions();
                 $settingOption
                     ->setVariable($variable)
                     ->setValue($option['value'])
                     ->setDisplayText($option['text']);
+
                 $this->getEntityManager()->persist($settingOption);
-                $this->getEntityManager()->flush();
             }
         }
+        $this->getEntityManager()->flush();
     }
 }

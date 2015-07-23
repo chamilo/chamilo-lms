@@ -81,8 +81,10 @@ define('TABLE_MAIN_TAG', 'tag');
 define('TABLE_MAIN_USER_REL_TAG', 'user_rel_tag');
 define('TABLE_MAIN_EXTRA_FIELD_REL_TAG', 'extra_field_rel_tag');
 
+define('TABLE_MAIN_GROUP', 'groups');
+
 //User groups
-/*define('TABLE_MAIN_GROUP', 'groups');
+/*
 define('TABLE_MAIN_USER_REL_GROUP', 'group_rel_user');
 define('TABLE_MAIN_GROUP_REL_TAG', 'group_rel_tag');
 define('TABLE_MAIN_GROUP_REL_GROUP', 'group_rel_group');*/

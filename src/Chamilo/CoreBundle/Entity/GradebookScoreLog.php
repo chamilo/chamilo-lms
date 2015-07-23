@@ -18,6 +18,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookScoreLog
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
 
     /**
      * @var integer
@@ -48,17 +56,8 @@ class GradebookScoreLog
     private $registeredAt;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * Get the category id
-     * @return type
+     * @return int
      */
     public function getCategoryId()
     {
@@ -67,7 +66,7 @@ class GradebookScoreLog
 
     /**
      * Get the user id
-     * @return type
+     * @return int
      */
     public function getUserId()
     {
@@ -103,8 +102,9 @@ class GradebookScoreLog
 
     /**
      * Set the category id
-     * @param type $categoryId
-     * @return \Chamilo\CoreBundle\Entity\GradebookUserLog
+     * @param int $categoryId
+     *
+     * @return $this
      */
     public function setCategoryId($categoryId)
     {
@@ -115,8 +115,9 @@ class GradebookScoreLog
 
     /**
      * Set the user id
-     * @param type $userId
-     * @return \Chamilo\CoreBundle\Entity\GradebookUserLog
+     * @param int $userId
+     *
+     * @return $this
      */
     public function setUserId($userId)
     {
@@ -127,8 +128,9 @@ class GradebookScoreLog
 
     /**
      * Set the achieved score
-     * @param type $score
-     * @return \Chamilo\CoreBundle\Entity\GradebookUserLog
+     * @param int $score
+     *
+     * @return $this
      */
     public function setScore($score)
     {
@@ -140,7 +142,8 @@ class GradebookScoreLog
     /**
      * Set the datetime of register
      * @param \DateTime $registeredAt
-     * @return \Chamilo\CoreBundle\Entity\GradebookUserLog
+     *
+     * @return $this
      */
     public function setRegisteredAt(\DateTime $registeredAt)
     {
@@ -151,8 +154,9 @@ class GradebookScoreLog
 
     /**
      * Set the id
-     * @param type $id
-     * @return \Chamilo\CoreBundle\Entity\GradebookUserLog
+     * @param int $id
+     *
+     * @return $this
      */
     public function setId($id)
     {

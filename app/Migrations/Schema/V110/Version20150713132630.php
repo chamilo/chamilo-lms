@@ -18,9 +18,15 @@ class Version20150713132630 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $this->addSql('ALTER TABLE c_student_publication ADD url_correction VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE c_student_publication ADD title_correction VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE c_student_publication ADD document_id INT NOT NULL');
+        if ($schema->hasTable('c_student_publication')) {
+            $this->addSql('ALTER TABLE c_student_publication ADD url_correction VARCHAR(255) DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_student_publication ADD title_correction VARCHAR(255) DEFAULT NULL');
+            if (!$schema->getTable('c_student_publication')->hasColumn('document_id')) {
+                $this->addSql(
+                    'ALTER TABLE c_student_publication ADD document_id INT NOT NULL'
+                );
+            }
+        }
     }
 
     /**

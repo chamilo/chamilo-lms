@@ -18,10 +18,6 @@ class Version20150521113600 extends AbstractMigrationChamilo
     {
         $this->addSql('ALTER TABLE c_forum_thread MODIFY thread_replies int UNSIGNED NOT NULL DEFAULT 0');
         $this->addSql('ALTER TABLE c_forum_thread MODIFY thread_views int UNSIGNED NOT NULL DEFAULT 0');
-
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.40' WHERE variable = 'chamilo_database_version'
-        ");
     }
 
     /**
@@ -31,10 +27,5 @@ class Version20150521113600 extends AbstractMigrationChamilo
     {
         $this->addSql('ALTER TABLE c_forum_thread MODIFY thread_replies int NULL');
         $this->addSql('ALTER TABLE c_forum_thread MODIFY thread_views int NULL');
-
-        $this->addSql("
-            UPDATE settings_current SET selected_value = '1.10.0.39' WHERE variable = 'chamilo_database_version'
-        ");
     }
-
 }

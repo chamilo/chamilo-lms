@@ -29,10 +29,10 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("CREATE TABLE IF NOT EXISTS hook_observer( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, path varchar(255) NOT NULL, plugin_name varchar(255) NULL, PRIMARY KEY PK_hook_management_hook_observer(id))");
         $this->addSql("CREATE TABLE IF NOT EXISTS hook_event( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, description varchar(255), PRIMARY KEY PK_hook_management_hook_event(id))");
         $this->addSql("CREATE TABLE IF NOT EXISTS hook_call( id int UNSIGNED NOT NULL AUTO_INCREMENT, hook_event_id int UNSIGNED NOT NULL, hook_observer_id int UNSIGNED NOT NULL, type tinyint NOT NULL, hook_order int UNSIGNED NOT NULL, enabled tinyint NOT NULL, PRIMARY KEY PK_hook_management_hook_call(id))");
-        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL)");
-        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL)");
-        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL)");
-        $this->addSql("CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL)");
+        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (iid INT PRIMARY KEY NOT NULL AUTO_INCREMENT, id INT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL)");
+        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (iid INT PRIMARY KEY NOT NULL AUTO_INCREMENT, id INT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL)");
+        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_comment (iid INT PRIMARY KEY NOT NULL AUTO_INCREMENT, id INT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL)");
+        $this->addSql("CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (iid int NOT NULL auto_increment PRIMARY KEY, id INT, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL)");
 
         //$this->addSql("ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id");
         //$this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");
@@ -178,7 +178,7 @@ class Version110 extends AbstractMigrationChamilo
             //'c_role_user',
             'c_student_publication',
             'c_student_publication_assignment',
-            //'c_student_publication_comment',
+            'c_student_publication_comment',
             'c_student_publication_rel_document',
             'c_student_publication_rel_user',
             //'c_survey',
@@ -201,20 +201,19 @@ class Version110 extends AbstractMigrationChamilo
         ];
 
         foreach ($tables as $table) {
-            $this->addSql("ALTER TABLE $table MODIFY COLUMN id int unsigned DEFAULT NULL");
-            $this->addSql("ALTER TABLE $table MODIFY COLUMN c_id int unsigned DEFAULT NULL");
-            $this->addSql("ALTER TABLE $table DROP PRIMARY KEY");
-            $this->addSql("ALTER TABLE $table ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+            if ($schema->hasTable($table)) {
+                $this->addSql("ALTER TABLE $table MODIFY COLUMN id int unsigned DEFAULT NULL");
+                $this->addSql("ALTER TABLE $table MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+                $this->addSql("ALTER TABLE $table DROP PRIMARY KEY");
+                $this->addSql("ALTER TABLE $table ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+            }
         }
 
-        $this->addSql("ALTER TABLE c_attendance_calendar_rel_group MODIFY COLUMN id int unsigned DEFAULT NULL");
-        $this->addSql("ALTER TABLE c_attendance_calendar_rel_group DROP PRIMARY KEY");
-        $this->addSql("ALTER TABLE c_attendance_calendar_rel_group ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
-
-        $this->addSql("ALTER TABLE c_student_publication_comment MODIFY COLUMN id int unsigned DEFAULT NULL");
-        $this->addSql("ALTER TABLE c_student_publication_comment DROP PRIMARY KEY");
-        $this->addSql("ALTER TABLE c_student_publication_comment ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
-
+        if ($schema->hasTable('c_attendance_calendar_rel_group')) {
+            $this->addSql("ALTER TABLE c_attendance_calendar_rel_group MODIFY COLUMN id int unsigned DEFAULT NULL");
+            $this->addSql("ALTER TABLE c_attendance_calendar_rel_group DROP PRIMARY KEY");
+            $this->addSql("ALTER TABLE c_attendance_calendar_rel_group ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+        }
 
         $this->addSql("ALTER TABLE c_attendance_sheet MODIFY COLUMN c_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_attendance_sheet DROP PRIMARY KEY");
@@ -334,7 +333,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN c_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_answer DROP PRIMARY KEY");
-        $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+        $this->addSql("ALTER TABLE c_quiz_answer ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN c_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN question_id int unsigned DEFAULT NULL");
@@ -441,6 +440,11 @@ class Version110 extends AbstractMigrationChamilo
 
         $this->addSql("UPDATE access_url_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
+        $this->addSql("ALTER TABLE settings_current DROP INDEX unique_setting");
+        $this->addSql("ALTER TABLE settings_options DROP INDEX unique_setting_option");
+
+        $this->addSql("DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages'");
+
         $this->addSql("DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages'");
         $this->addSql("DELETE FROM settings_options WHERE variable = 'wcag_anysurfer_public_pages'");
         $this->addSql("DELETE FROM settings_current WHERE variable = 'advanced_filemanager'");
@@ -456,10 +460,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1)");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'true', 'Yes')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'false', 'No')");
-        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_mathjax', NULL, 'radio', 'Editor', 'false', 'EnableMathJaxTitle', 'EnableMathJaxComment', NULL, NULL, 0)");
-        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'true', 'Yes')");
-        $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'false', 'No')");
-
         $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_mathjax', NULL, 'radio', 'Editor', 'false', 'EnableMathJaxTitle', 'EnableMathJaxComment', NULL, NULL, 0)");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'true', 'Yes')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'false', 'No')");

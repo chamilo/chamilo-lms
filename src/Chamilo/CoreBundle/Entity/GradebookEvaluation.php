@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -12,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookEvaluation
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
     /**
      * @var string
      *
@@ -88,17 +98,6 @@ class GradebookEvaluation
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     private $locked;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set name

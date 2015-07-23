@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -12,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradeComponents
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
     /**
      * @var string
      *
@@ -39,17 +49,6 @@ class GradeComponents
      * @ORM\Column(name="grade_model_id", type="integer", nullable=false)
      */
     private $gradeModelId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set percentage

@@ -52,5 +52,4 @@ class Version20150527101600 extends AbstractMigrationChamilo
         $this->addSql("DELETE FROM settings_options WHERE variable = 'gamification_mode'");
         $this->addSql("DELETE FROM settings_current WHERE variable = 'gamification_mode'");
     }
-
 }

@@ -7422,4 +7422,11 @@ $QuotingToXUser = "Citation de %s";
 $LoadMoreComments = "Charger plus de commentaires";
 $ShowProgress = "Montrer le progrès";
 $XPercent = "%s %%";
+$CheckRequirements = "Vérifier les pré-requis";
+$ParentLanguageX = "Langue parente: %s";
+$RegisterTermsOfSubLanguageForX = "Définissez de nouveaux termes pour le sous-langage %s en cherchant un terme spécifique pui en sauvegardant chacune des traductions en cliquant sur le bouton correspondant. Pour visualiser les nouveaux termes, il faudra alors changer votre langue d'utilisateur dans votre profil.";
+$SeeSequences = "Voir les séquences";
+$SessionRequirements = "Pré-requis pour la session";
+$IsRequirement = "Obligatoire pour compléter le cours";
+$ConsiderThisGradebookAsRequirementForASessionSequence = "Considérer ce cahier de notes comme un pré-requis pour compléter le cours (ce qui influencera notamment les séquences de sessions)";
 ?>

@@ -7460,4 +7460,8 @@ $XPercent = "%s %%";
 $CheckRequirements = "Ver requerimientos";
 $ParentLanguageX = "Idioma padre: %s";
 $RegisterTermsOfSubLanguageForX = "Registre términos del sub-idioma para %s buscando un término y luego dando clic al botón de guardar para cada traducción. Luego tendrá que cambiar su perfil para usar el sub-idioma para ver los nuevos términos.";
+$SeeSequences = "Ver secuencias";
+$SessionRequirements = "Requerimientos para la sesión";
+$IsRequirement = "Obligatorio para completar el curso";
+$ConsiderThisGradebookAsRequirementForASessionSequence = "Considerar este libro de calificaciones como requisito para una secuencia de sesión";
 ?>

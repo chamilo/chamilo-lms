@@ -316,8 +316,16 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE ||
                 $uData['auth_source'] == CAS_AUTH_SOURCE
             ) {
+                $validPassword = false;
+
                 $user = $userManager->findUserByUsername($login);
-                $validPassword = UserManager::isPasswordValid($password, $user);
+
+                if ($user) {
+                    $validPassword = UserManager::isPasswordValid(
+                        $password,
+                        $user
+                    );
+                }
 
                 // The authentication of this user is managed by Chamilo itself
                 //$password = api_get_encrypted_password(trim(stripslashes($password)));

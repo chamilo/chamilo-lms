@@ -56,6 +56,7 @@ define('TABLE_MAIN_GRADEBOOK_RESULT_LOG', 'gradebook_result_log');
 define('TABLE_MAIN_GRADEBOOK_LINK', 'gradebook_link');
 define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY', 'gradebook_score_display');
 define('TABLE_MAIN_GRADEBOOK_CERTIFICATE', 'gradebook_certificate');
+define('TABLE_MAIN_GRADEBOOK_SCORE_LOG', 'gradebook_score_log');
 
 // Profiling
 
@@ -80,8 +81,10 @@ define('TABLE_MAIN_TAG', 'tag');
 define('TABLE_MAIN_USER_REL_TAG', 'user_rel_tag');
 define('TABLE_MAIN_EXTRA_FIELD_REL_TAG', 'extra_field_rel_tag');
 
+define('TABLE_MAIN_GROUP', 'groups');
+
 //User groups
-/*define('TABLE_MAIN_GROUP', 'groups');
+/*
 define('TABLE_MAIN_USER_REL_GROUP', 'group_rel_user');
 define('TABLE_MAIN_GROUP_REL_TAG', 'group_rel_tag');
 define('TABLE_MAIN_GROUP_REL_GROUP', 'group_rel_group');*/

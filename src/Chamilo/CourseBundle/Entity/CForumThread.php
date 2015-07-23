@@ -149,6 +149,13 @@ class CForumThread
     private $threadPeerQualify;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="lp_item_id", type="integer", options={"unsigned":true})
+     */
+    private $lpItemId;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -224,6 +231,7 @@ class CForumThread
      * Set threadReplies
      *
      * @param integer $threadReplies
+     *
      * @return CForumThread
      */
     public function setThreadReplies($threadReplies)
@@ -247,6 +255,7 @@ class CForumThread
      * Set threadPosterId
      *
      * @param integer $threadPosterId
+     *
      * @return CForumThread
      */
     public function setThreadPosterId($threadPosterId)
@@ -270,6 +279,7 @@ class CForumThread
      * Set threadPosterName
      *
      * @param string $threadPosterName
+     *
      * @return CForumThread
      */
     public function setThreadPosterName($threadPosterName)
@@ -293,6 +303,7 @@ class CForumThread
      * Set threadViews
      *
      * @param integer $threadViews
+     *
      * @return CForumThread
      */
     public function setThreadViews($threadViews)
@@ -316,6 +327,7 @@ class CForumThread
      * Set threadLastPost
      *
      * @param integer $threadLastPost
+     *
      * @return CForumThread
      */
     public function setThreadLastPost($threadLastPost)
@@ -339,6 +351,7 @@ class CForumThread
      * Set threadDate
      *
      * @param \DateTime $threadDate
+     *
      * @return CForumThread
      */
     public function setThreadDate($threadDate)
@@ -362,6 +375,7 @@ class CForumThread
      * Set threadSticky
      *
      * @param boolean $threadSticky
+     *
      * @return CForumThread
      */
     public function setThreadSticky($threadSticky)
@@ -385,6 +399,7 @@ class CForumThread
      * Set locked
      *
      * @param integer $locked
+     *
      * @return CForumThread
      */
     public function setLocked($locked)
@@ -408,6 +423,7 @@ class CForumThread
      * Set sessionId
      *
      * @param integer $sessionId
+     *
      * @return CForumThread
      */
     public function setSessionId($sessionId)
@@ -431,6 +447,7 @@ class CForumThread
      * Set threadTitleQualify
      *
      * @param string $threadTitleQualify
+     *
      * @return CForumThread
      */
     public function setThreadTitleQualify($threadTitleQualify)
@@ -454,6 +471,7 @@ class CForumThread
      * Set threadQualifyMax
      *
      * @param float $threadQualifyMax
+     *
      * @return CForumThread
      */
     public function setThreadQualifyMax($threadQualifyMax)
@@ -477,6 +495,7 @@ class CForumThread
      * Set threadCloseDate
      *
      * @param \DateTime $threadCloseDate
+     *
      * @return CForumThread
      */
     public function setThreadCloseDate($threadCloseDate)
@@ -500,6 +519,7 @@ class CForumThread
      * Set threadWeight
      *
      * @param float $threadWeight
+     *
      * @return CForumThread
      */
     public function setThreadWeight($threadWeight)
@@ -523,6 +543,7 @@ class CForumThread
      * Set threadId
      *
      * @param integer $threadId
+     *
      * @return CForumThread
      */
     public function setThreadId($threadId)
@@ -546,6 +567,7 @@ class CForumThread
      * Set cId
      *
      * @param integer $cId
+     *
      * @return CForumThread
      */
     public function setCId($cId)
@@ -563,5 +585,27 @@ class CForumThread
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Set lpItemId
+     * @param integer $lpItemId
+     *
+     * @return $this
+     */
+    public function setLpItemId($lpItemId)
+    {
+        $this->lpItemId = $lpItemId;
+
+        return $this;
+    }
+
+    /**
+     * Get lpId
+     * @return integer
+     */
+    public function getLpItemId()
+    {
+        return $this->lpItemId;
     }
 }

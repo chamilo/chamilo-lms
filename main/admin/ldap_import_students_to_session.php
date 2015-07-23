@@ -162,13 +162,17 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 		$tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session	  = Database::get_main_table(TABLE_MAIN_SESSION);
 		foreach ($UserList as $user_id) {
-			$sql = 'INSERT INTO '.$tbl_session_user.' SET
-					user_id ="'.intval($user_id).'",
-					session_id = "'.intval($id_session).'"';
-			$res_user = Database::query($sql);
-			if ($res_user) {
-				$num++;
-			}
+                    $res_user = Database::insert(
+                        $tbl_session_user,
+                        [
+                            'session_id' => intval($id_session),
+                            'user_id' => intval($user_id),
+                            'registered_at' => api_get_utc_datetime()
+                        ]
+                    );
+                    if ($res_user !== false) {
+                        $num++;
+                    }
 		}
 
 		if($num>0) {

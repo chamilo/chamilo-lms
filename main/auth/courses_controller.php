@@ -534,23 +534,32 @@ class CoursesController
             $url .= 'auth/courses.php?';
             $url .= http_build_query([
                 'action' => 'subscribe_to_session',
-                'session_id' => intval($sessionId)
+                'session_id' => intval($sessionId),
+                'modal_size' => 'md'
             ]);
+
+            $result = Display::toolbarButton(
+                get_lang('Subscribe'),
+                $url,
+                'check-circle',
+                'primary',
+                ['class' => 'btn-lg btn-block ajax']
+            );
         } else {
             $url .= 'inc/email_editor.php?';
             $url .= http_build_query([
                 'action' => 'subscribe_me_to_session',
                 'session' => Security::remove_XSS($sessionName)
             ]);
-        }
 
-        $result = Display::toolbarButton(
-            get_lang('Subscribe'),
-            $url,
-            'check-circle',
-            'primary',
-            ['class' => 'btn-lg btn-block']
-        );
+            $result = Display::toolbarButton(
+                get_lang('Subscribe'),
+                $url,
+                'check-circle',
+                'primary',
+                ['class' => 'btn-lg btn-block']
+            );
+        }
 
         $hook = HookResubscribe::create();
         if (!empty($hook)) {

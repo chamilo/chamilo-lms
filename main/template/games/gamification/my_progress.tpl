@@ -13,9 +13,11 @@
                                 {% endfor %}
                             {% endif %}
 
-                            {% for i in 1..(5 - gamification_stars) %}
-                                <i class="fa fa-star in"></i>
-                            {% endfor %}
+                            {% if 4 - gamification_stars > 0 %}
+                                {% for i in 1..(4 - gamification_stars) %}
+                                    <i class="fa fa-star in"></i>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-5">

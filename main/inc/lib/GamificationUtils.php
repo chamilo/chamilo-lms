@@ -58,6 +58,10 @@ class GamificationUtils
             );
             $learnPaths = $learnPathListObject->get_flat_list();
 
+            if (empty($learnPaths)) {
+                continue;
+            }
+
             $score = 0;
 
             foreach ($learnPaths as $learnPathId => $learnPathInfo) {
@@ -74,7 +78,7 @@ class GamificationUtils
                 $score += $learnPath->getCalculateScore($sessionId);
             }
 
-            $totalPoints += $score;
+            $totalPoints += round($score / count($learnPaths), 2);
         }
 
         return round($totalPoints / count($courses), 2);
@@ -138,6 +142,10 @@ class GamificationUtils
             );
             $learnPaths = $learnPathListObject->get_flat_list();
 
+            if (empty($learnPaths)) {
+                continue;
+            }
+
             $stars = 0;
 
             foreach ($learnPaths as $learnPathId => $learnPathInfo) {
@@ -154,7 +162,7 @@ class GamificationUtils
                 $stars += $learnPath->getCalculateStars($sessionId);
             }
 
-            $totalStars += $stars;
+            $totalStars += round($stars / count($learnPaths));
         }
 
         return round($totalStars / count($courses));

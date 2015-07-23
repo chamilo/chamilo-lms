@@ -29,6 +29,13 @@
                             {{ "XPoints"|get_lang|format(gamification_points) }}
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12 navegation-bar" id="lp_navigation_elem">
+                            <div id="progress_bar">
+                                {{ progress_bar }}
+                            </div>
+                        </div>
+                    </div>
                 {% else %}
                     <div id="scorm-info" class="panel panel-default">
                         <div class="panel-heading">

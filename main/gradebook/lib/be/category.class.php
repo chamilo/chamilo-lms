@@ -2029,6 +2029,10 @@ class Category implements GradebookItem
                 false
             );
 
+            if (empty($cats_course)) {
+                return false;
+            }
+
             $category = $cats_course[0];
         }
 
@@ -2092,6 +2096,10 @@ class Category implements GradebookItem
             $sessionId,
             false
         );
+
+        if (empty($cats_course)) {
+            return 0;
+        }
 
         $category = $cats_course[0];
 

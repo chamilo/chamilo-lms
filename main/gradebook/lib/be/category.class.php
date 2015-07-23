@@ -2006,17 +2006,28 @@ class Category implements GradebookItem
     /**
      * Check whether a user has finished a course by its gradebook
      * @param int $userId The user ID
-     * @param \Category $category The gradebook category
+     * @param \Category $category Optional. The gradebook category.
+     *         To check by the gradebook category
+     * @param int $categoryId Optional. The gradebook category ID.
+     *         To check by the category ID
+     * @param string $courseCode Optional. The course code
+     * @param int $sessionId Optional. The session ID
      * @return boolean
      */
-    public static function userFinishedCourse($userId, \Category $category = null, $categoryId = 0)
+    public static function userFinishedCourse(
+        $userId,
+        \Category $category = null,
+        $categoryId = 0,
+        $courseCode = null,
+        $sessionId = 0
+    )
     {
         if (is_null($category) && empty($categoryId)) {
             return false;
         }
 
-        $courseCode = api_get_course_id();
-        $sessionId = api_get_session_id();
+        $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
+        $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
 
         if (is_null($category) && !empty($categoryId)) {
             $cats_course = Category::load(

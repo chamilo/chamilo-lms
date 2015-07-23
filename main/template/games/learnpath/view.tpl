@@ -79,7 +79,7 @@
                         <div id="panel-scorm" class="panel-body">
                             <div id="lp_navigation_elem" class="navegation-bar">
                                 <div class="ranking-scorm">
-                                    {% if gamification_stars and gamification_score %}
+                                    {% if gamification_mode == 1 %}
                                     <div class="row">
                                         <div class="col-md-7">
                                             {% if gamification_stars > 0%}
@@ -94,7 +94,7 @@
                                             {% endif %}
                                         </div>
                                         <div class="col-md-5 text-points">
-                                            {{ "XPoints"|get_lang|format(gamification_score) }}
+                                            {{ "XPoints"|get_lang|format(gamification_points) }}
                                         </div>
                                     </div>
                                     {% endif %}
@@ -110,9 +110,7 @@
 
                 {# TOC layout #}
                 <div id="toc_id" name="toc_name">
-                    <div id="learning_path_toc" class="scorm-list">
-                        {{ oLP.get_html_toc(toc_list) }}
-                    </div>
+                    <div id="learning_path_toc" class="scorm-list">{{ lp_html_toc }}</div>
                 </div>
                 {# end TOC layout #}
 
@@ -122,10 +120,10 @@
 
             {# right zone #}
             <div id="learning_path_right_zone" style="height:100%" class="content-scorm">
-                {% if oLP.mode == 'fullscreen' %}
-                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width: 100%; height: 100%; position: absolute;" ></iframe>
+                {% if lp_mode == 'fullscreen' %}
+                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width: 100%; height: 100%" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                 {% else %}
-                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}&posts_order=desc" border="0" frameborder="0" style="display: block; width: 100%; height: 100%; position: absolute;"></iframe>
+                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" style="display: block; width: 100%; height: 100%" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                 {% endif %}
                 <div class="panel-forum">
                     <div class="open-forum">

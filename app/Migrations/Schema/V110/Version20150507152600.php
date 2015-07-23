@@ -28,12 +28,13 @@ class Version20150507152600 extends AbstractMigrationChamilo
 
         // Setting $_configuration['hide_home_top_when_connected'] = true;
         $value = api_get_configuration_value('hide_home_top_when_connected');
+
         $this->addSettingCurrent(
             'hide_home_top_when_connected',
             '',
             'radio',
             'Platform',
-            ($value?'true':'false'),
+            ($value ? 'true' : 'false'),
             'HideHomeTopContentWhenLoggedInText',
             'HideHomeTopContentWhenLoggedInComment',
             null,
@@ -41,7 +42,10 @@ class Version20150507152600 extends AbstractMigrationChamilo
             1,
             true,
             false,
-            [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
+            [
+                0 => ['value' => 'true', 'text' => 'Yes'],
+                1 => ['value' => 'false', 'text' => 'No'],
+            ]
         );
 
         // Hide the global announcements for non-connected users
@@ -60,7 +64,10 @@ class Version20150507152600 extends AbstractMigrationChamilo
             1,
             true,
             false,
-            [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
+            [
+                0 => ['value' => 'true', 'text' => 'Yes'],
+                1 => ['value' => 'false', 'text' => 'No'],
+            ]
         );
 
         // Use this course as template for all new courses (define course real ID as value)
@@ -79,7 +86,10 @@ class Version20150507152600 extends AbstractMigrationChamilo
             1,
             true,
             false,
-            [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
+            [
+                0 => ['value' => 'true', 'text' => 'Yes'],
+                1 => ['value' => 'false', 'text' => 'No'],
+            ]
         );
 
         // Add password strength checker
@@ -98,7 +108,10 @@ class Version20150507152600 extends AbstractMigrationChamilo
             1,
             true,
             false,
-            [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
+            [
+                0 => ['value' => 'true', 'text' => 'Yes'],
+                1 => ['value' => 'false', 'text' => 'No'],
+            ]
         );
 
         // Enable captcha

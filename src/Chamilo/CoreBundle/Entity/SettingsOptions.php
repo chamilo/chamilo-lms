@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -7,11 +8,20 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SettingsOptions
  *
- * @ORM\Table(name="settings_options", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"}), @ORM\UniqueConstraint(name="unique_setting_option", columns={"variable", "value"})})
+ * @ORM\Table(name="settings_options", uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting_option", columns={"variable", "value"})})
  * @ORM\Entity
  */
 class SettingsOptions
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
     /**
      * @var string
      *
@@ -32,17 +42,6 @@ class SettingsOptions
      * @ORM\Column(name="display_text", type="string", length=255, nullable=false)
      */
     private $displayText;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set variable

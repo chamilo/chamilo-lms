@@ -18,7 +18,7 @@ class Version20150511133949 extends AbstractMigrationChamilo
     {
         $this->addSql('ALTER TABLE user ADD salt VARCHAR(255) NOT NULL');
         $this->addSql('ALTER TABLE user ADD username_canonical VARCHAR(100) NOT NULL');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D64992FC23A8 ON user (username_canonical)');
+        //$this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D64992FC23A8 ON user (username_canonical)');
         $this->addSql('ALTER TABLE user CHANGE password password VARCHAR(255) NOT NULL');
 
         $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0)");

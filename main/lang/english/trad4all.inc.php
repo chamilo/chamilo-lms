@@ -7429,4 +7429,6 @@ $LoadMoreComments = "Load more comments";
 $ShowProgress = "Show progress";
 $XPercent = "%s %%";
 $CheckRequirements = "Check requirements";
+$ParentLanguageX = "Parent language: %s";
+$RegisterTermsOfSubLanguageForX = "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear.";
 ?>

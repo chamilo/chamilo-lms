@@ -513,6 +513,7 @@ CREATE TABLE IF NOT EXISTS session_rel_user (
   id_user mediumint unsigned NOT NULL default '0',
   relation_type int default 0,
   duration int,
+  registered_at DATETIME not null,
   PRIMARY KEY (id_session, id_user, relation_type)
 );
 

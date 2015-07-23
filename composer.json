@@ -10,7 +10,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Chamilo\\": "src/Chamilo/"
+            "Chamilo\\": "src/Chamilo/",
+            "Application\\": "app/"
         },
         "classmap": [
             "main/auth",

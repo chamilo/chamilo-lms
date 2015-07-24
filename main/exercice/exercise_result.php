@@ -104,7 +104,7 @@ if ($origin == 'learnpath') {
 <?php
 }
 
-$i = $total_score = $total_weight = 0;
+$i = $total_score = $max_score = 0;
 
 //We check if the user attempts before sending to the exercise_result.php
 if ($objExercise->selectAttempts() > 0) {
@@ -127,6 +127,8 @@ if ($objExercise->selectAttempts() > 0) {
         exit;
     }
 }
+$total_score = $objExercise->get_stat_track_exercise_info_by_exe_id($objExercise->id)['exe_result'];
+$max_score = $objExercise->get_max_score();
 
 Display :: display_normal_message(get_lang('Saved').'<br />',false);
 
@@ -168,7 +170,7 @@ if ($origin != 'learnpath') {
     }
 
 	// Record the results in the learning path, using the SCORM interface (API)
-	echo "<script>window.parent.API.void_save_asset('$total_score', '$total_weight', 0, 'completed');</script>";
+	echo "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
     echo '<script type="text/javascript">'.$href.'</script>';
 	echo '</body></html>';
 }

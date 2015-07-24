@@ -7465,5 +7465,5 @@ $SessionRequirements = "Requerimientos para la sesión";
 $IsRequirement = "Obligatorio para completar el curso";
 $ConsiderThisGradebookAsRequirementForASessionSequence = "Considerar este libro de calificaciones como requisito para una secuencia de sesión";
 $DistinctUsersLogins = "Logins de usuarios distintos";
-$AreYouSureToSubscribe = "Está seguro de suscribirse?";
+$AreYouSureToSubscribe = "¿Está seguro de suscribirse?";
 ?>

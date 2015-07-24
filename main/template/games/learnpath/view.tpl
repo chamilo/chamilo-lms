@@ -173,7 +173,7 @@
         });
         $('#forum-container').hide();
 
-        loadForumThead({{ oLP.lp_id }}, {{ oLP.get_current_item_id() }});
+        loadForumThead({{ lp_id }}, {{ lp_current_item_id }});
 
     });
 

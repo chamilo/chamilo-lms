@@ -102,6 +102,7 @@ switch ($_REQUEST['report']) {
         break;
     case 'recentlogins':
         Statistics::printRecentLoginStats();
+        Statistics::printRecentLoginStats(true);
         break;
     case 'logins':
         Statistics::printLoginStats($_GET['type']);

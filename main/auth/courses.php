@@ -211,9 +211,21 @@ switch ($action) {
         break;
     case 'subscribe_to_session':
         $userId = api_get_user_id();
+        $confirmed = isset($_GET['confirm']);
+        $sessionId = intval($_GET['session_id']);
 
         if (empty($userId)) {
-            header('Location: ' . api_get_path(WEB_PATH));
+            api_not_allowed();
+            exit;
+        }
+
+        if (!$confirmed) {
+            $template = new Template(null, false, false, false, false, false);
+            $template->assign('session_id', $sessionId);
+
+            $layout = $template->get_template('auth/confirm_session_subscription.tpl');
+
+            echo $template->fetch($layout);
             exit;
         }
 
@@ -223,7 +235,7 @@ switch ($action) {
             $repository = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
 
             $sequences = $repository->getRequirements(
-                $_GET['session_id'],
+                $sessionId,
                 SequenceResource::SESSION_TYPE
             );
 

@@ -80,12 +80,6 @@
                 <div class="description-course">
                     {{ course_data.description.getContent }}
                 </div>
-
-                {% if courses|length == 1 and not is_subscribed %}
-                    <div class="subscribe">
-                        {{ subscribe_button }}
-                    </div>
-                {% endif %}
             </div>
         </div>
 
@@ -180,19 +174,9 @@
                 </div>
             </div>
         </div>
-
-        {% if courses|length == 1 and not is_subscribed %}
-            <div class="row">
-                <div class="col-md-4 col-md-offset-4">
-                    <div class="text-center">
-                        {{ subscribe_button }}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
     {% endfor %}
 
-    {% if courses|length > 1 and not is_subscribed %}
+    {% if _u.logged and not is_subscribed %}
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
                 <div class="text-center">

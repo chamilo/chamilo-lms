@@ -1,5 +1,5 @@
 <div class="my-progress row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="profile-user">
             {{ user_avatar }}
             <div class="username">{{ user.getCompleteName() }}</div>
@@ -21,7 +21,7 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <div class="bar">{{ 'XPoints'|get_lang|format(gamification_points) }}</div>
+                        <div class="bar-points">{{ 'XPoints'|get_lang|format(gamification_points) }}</div>
                     </div>
                 </div>
                 <div class="progress">
@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-8">
         {% if current_session %}
             <div class="session">
                 <div class="title"><i class="fa fa-square"></i> {{ current_session.getName() }}</div>

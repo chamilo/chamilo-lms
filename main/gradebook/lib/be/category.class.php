@@ -2047,7 +2047,7 @@ class Category implements GradebookItem
             $category = $cats_course[0];
         }
 
-        $currentScore = self::getCurrentScore($userId, $category->get_id(), $courseCode, $sessionId, true);
+        $currentScore = self::getCurrentScore($userId, $category->get_id(), $courseCode, $sessionId);
 
         $minCertificateScore = $category->get_certificate_min_score();
 

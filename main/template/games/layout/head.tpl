@@ -352,7 +352,7 @@ $(function() {
     });
 
     // Global popup
-    $('a.ajax').on('click', function(e) {
+    $('body').on('click', 'a.ajax', function(e) {
         e.preventDefault();
 
         var contentUrl = this.href,

@@ -17,9 +17,6 @@ class Version20150603181728 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
         $this->addSql('ALTER TABLE c_lp ADD max_attempts INT NOT NULL, ADD subscribe_users INT NOT NULL DEFAULT 0');
-
-        $this->addSql('DELETE FROM c_item_property TABLE c_lp ADD max_attempts INT NOT NULL, ADD subscribe_users INT NOT NULL DEFAULT 0');
-
         $this->addSql('ALTER TABLE c_item_property CHANGE c_id c_id INT DEFAULT NULL, CHANGE insert_user_id insert_user_id INT DEFAULT NULL, CHANGE start_visible start_visible DATETIME DEFAULT NULL, CHANGE end_visible end_visible DATETIME DEFAULT NULL, CHANGE session_id session_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18191D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C181330D47E9 FOREIGN KEY (to_group_id) REFERENCES c_group_info (iid)');

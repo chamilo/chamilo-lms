@@ -391,6 +391,14 @@ if (api_get_course_setting('lp_return_link') == 1) {
     $buttonHomeText = get_lang('LearningPathList');
 }
 
+$lpPreviewImagePath = 'unknown_250_100.jpg';
+
+if ($_SESSION['oLP']->get_preview_image()) {
+    $lpPreviewImagePath = $_SESSION['oLP']->get_preview_image_path();
+}
+
+$gamificationMode = api_get_setting('gamification_mode');
+
 $template = new Template('title', false, false, true, true, false);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
 $template->assign(
@@ -402,30 +410,43 @@ $template->assign('jquery_web_path', api_get_jquery_web_path());
 $template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
 $template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
-
-if (api_get_setting('gamification_mode') == '1') {
-    $template->assign(
-        'gamification_stars',
-        $_SESSION['oLP']->getCalculateStars($sessionId)
-    );
-    $template->assign(
-        'gamification_score',
-        $_SESSION['oLP']->getCalculateScore($sessionId)
-    );
-}
-
+$template->assign('gamification_mode', $gamificationMode);
 $template->assign('breadcrumb', $breadcrumb);
-
 $template->assign('button_home_url', $buttonHomeUrl);
 $template->assign('button_home_text', $buttonHomeText);
 $template->assign('navigation_bar', $navigation_bar);
 $template->assign('progress_bar', $progress_bar);
-$template->assign('oLP', $_SESSION['oLP']);
 $template->assign('show_audio_player', $show_audioplayer);
 $template->assign('media_player', $mediaplayer);
 $template->assign('toc_list', $get_toc_list);
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
+
+if ($gamificationMode == 1) {
+    $template->assign(
+        'gamification_stars',
+        $_SESSION['oLP']->getCalculateStars($sessionId)
+    );
+    $template->assign(
+        'gamification_points',
+        $_SESSION['oLP']->getCalculateScore($sessionId)
+    );
+}
+
+$template->assign(
+    'lp_preview_image',
+    Display::return_icon(
+        $lpPreviewImagePath,
+        null,
+        ['height' => 96, 'width' => 104]
+    )
+);
+$template->assign('lp_author', $_SESSION['oLP']->get_author());
+$template->assign('lp_mode', $_SESSION['oLP']->mode);
+$template->assign(
+    'lp_html_toc',
+    $_SESSION['oLP']->get_html_toc($get_toc_list)
+);
 
 $templateFolder = api_get_configuration_value('default_template');
 if(!empty($templateFolder)){

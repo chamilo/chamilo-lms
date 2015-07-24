@@ -7431,4 +7431,8 @@ $XPercent = "%s %%";
 $CheckRequirements = "Check requirements";
 $ParentLanguageX = "Parent language: %s";
 $RegisterTermsOfSubLanguageForX = "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear.";
+$SeeSequences = "See sequences";
+$SessionRequirements = "Session requirements";
+$IsRequirement = "Is requirement";
+$ConsiderThisGradebookAsRequirementForASessionSequence = "Consider this gradebook as a requirement to complete the course (influences the sessions sequences)";
 ?>

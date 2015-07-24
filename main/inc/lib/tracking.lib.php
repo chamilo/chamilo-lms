@@ -164,7 +164,7 @@ class Tracking
         }
         $output .= '<div class="table-responsive">';
         $output .= '<table class="table">
-            <tr>
+            <tr class="table-header">
                 <th width="16">' . $extend_all_link . '</th>
                 <th colspan="4">
                     ' . get_lang('ScormLessonTitle') .'

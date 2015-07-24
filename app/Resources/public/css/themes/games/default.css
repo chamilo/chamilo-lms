@@ -934,13 +934,13 @@ hr.separator:after {
   display: none;
 }
 .courses-history .trophy{
-  width: 64px;
-  height: 64px;
+  width: 124px;
+  height: 124px;
   display: block;
   position: absolute;
   z-index: 2;
-  top: 70px;
-  left: 40%;
+  top: 40px;
+  left: 33%;
 }
 .courses-history .thumbnail .media-gris{
   z-index: 1;
@@ -948,11 +948,11 @@ hr.separator:after {
 /* =effect-grayscale */
 .courses-history .media-gris {
   filter: url("data:image/svg+xml;utf8,<svg%20xmlns='http://www.w3.org/2000/svg'><filter%20id='grayscale'><feColorMatrix%20type='matrix'%20values='0.3333%200.3333%200.3333%200%200%200.3333%200.3333%200.3333%200%200%200.3333%200.3333%200.3333%200%200%200%200%200%201%200'/></filter></svg>#grayscale");
-  filter: grayscale(100%);
-  -webkit-filter: grayscale(100%);
-  -moz-filter: grayscale(100%);
-  -ms-filter: grayscale(100%);
-  -o-filter: grayscale(100%);
+  filter: grayscale(100%) blur(2px);
+  -webkit-filter: grayscale(100%) blur(1px);
+  -moz-filter: grayscale(100%) blur(1px);
+  -ms-filter: grayscale(100%) blur(1px);
+  -o-filter: grayscale(100%) blur(1px);
   filter: gray;
 }
 img.g1-effect-grayscale:hover {
@@ -993,13 +993,13 @@ img.g1-effect-grayscale:hover {
 }
 @media (min-width : 480px) and (max-width: 767px) {
   .courses-history .trophy{
-    width: 64px;
-    height: 64px;
+    width: 124px;
+    height: 124px;
     display: block;
     position: absolute;
     z-index: 2;
-    top: 70px;
-    left: 45%;
+    top: 40px;
+    left: 40%;
   }
 }
 /* Landscape phones and down */

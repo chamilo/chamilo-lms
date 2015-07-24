@@ -163,8 +163,8 @@ class Tracking
             $actionColumn = ' <th>' . get_lang('Actions') . '</th>';
         }
         $output .= '<div class="table-responsive">';
-        $output .= '<table class="table">
-            <tr>
+        $output .= '<table class="table tracking">
+            <tr class="table-header">
                 <th width="16">' . $extend_all_link . '</th>
                 <th colspan="4">
                     ' . get_lang('ScormLessonTitle') .'

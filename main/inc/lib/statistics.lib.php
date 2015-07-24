@@ -447,8 +447,10 @@ class Statistics
 
     /**
      * Print the number of recent logins
+     * @param   bool    $distinct   Whether to only give distinct users stats, or *all* logins
+     * @return void
      */
-    public static function printRecentLoginStats()
+    public static function printRecentLoginStats($distinct = false)
     {
         $totalLogin = array();
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -462,16 +464,24 @@ class Statistics
             $where_url='';
         }
         $now = api_get_utc_datetime();
-        $sql[get_lang('ThisDay')]    = "SELECT count(login_user_id) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
-        $sql[get_lang('Last7days')]  = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
-        $sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
-        $sql[get_lang('Total')]      = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE 1=1 $where_url";
+        $field = 'login_user_id';
+        if ($distinct) {
+            $field = 'DISTINCT(login_user_id)';
+        }
+        $sql[get_lang('ThisDay')]    = "SELECT count($field) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
+        $sql[get_lang('Last7days')]  = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
+        $sql[get_lang('Last31days')] = "SELECT count($field) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
+        $sql[get_lang('Total')]      = "SELECT count($field) AS number  FROM $table $table_url WHERE 1=1 $where_url";
         foreach ($sql as $index => $query) {
             $res = Database::query($query);
             $obj = Database::fetch_object($res);
             $totalLogin[$index] = $obj->number;
         }
-        Statistics::printStats(get_lang('Logins'), $totalLogin, false);
+        if ($distinct) {
+            Statistics::printStats(get_lang('DistinctUsersLogins'), $totalLogin, false);
+        } else {
+            Statistics::printStats(get_lang('Logins'), $totalLogin, false);
+        }
     }
     /**
      * Show some stats about the accesses to the different course tools

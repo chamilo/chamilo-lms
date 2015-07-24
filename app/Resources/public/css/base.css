@@ -6156,7 +6156,7 @@ div#chat-remote-video video {
  display: none;
 }
 /* Catalog session */
-#session-list .col-md-3:nth-child(3n+1) {
+#session-list .session-col:nth-child(4n+1) {
   clear: left;
 }
 .section-title-catalog{

@@ -1,4 +1,4 @@
-<h2 class="page-header">{{ 'SessionRequirements'|get_lang }}</h2>
+<h2 class="page-header">{{ 'RequiredSessions'|get_lang }}</h2>
 
 {% for item in sequences %}
     <h4>{{ item.name }}</h4>

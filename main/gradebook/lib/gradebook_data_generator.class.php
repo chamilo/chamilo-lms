@@ -11,17 +11,14 @@
 class GradebookDataGenerator
 {
     // Sorting types constants
-    const GDG_SORT_TYPE            = 1;
-    const GDG_SORT_NAME            = 2;
-    const GDG_SORT_DESCRIPTION     = 4;
-    const GDG_SORT_WEIGHT          = 8;
-    const GDG_SORT_DATE            = 16;
-
-    const GDG_SORT_ASC             = 32;
-    const GDG_SORT_DESC            = 64;
-
-    const GDG_SORT_ID              = 128;
-
+    const GDG_SORT_TYPE = 1;
+    const GDG_SORT_NAME = 2;
+    const GDG_SORT_DESCRIPTION = 4;
+    const GDG_SORT_WEIGHT = 8;
+    const GDG_SORT_DATE = 16;
+    const GDG_SORT_ASC = 32;
+    const GDG_SORT_DESC = 64;
+    const GDG_SORT_ID = 128;
 
     private $items;
     private $evals_links;
@@ -148,7 +145,7 @@ class GradebookDataGenerator
             $row[] = $item->get_weight();
             if (count($this->evals_links) > 0) {
                 // Items inside a category.
-                if (!api_is_allowed_to_edit() || $status_user != 1 ) {
+                if (!api_is_allowed_to_edit() || $status_user != 1) {
                     $resultColumn = $this->build_result_column(
                         api_get_user_id(),
                         $item,
@@ -211,7 +208,6 @@ class GradebookDataGenerator
 
                 $score = AbstractLink::getCurrentUserRanking($rankingStudentList);
                 $row['ranking'] = $scoreDisplay->display_score($score, SCORE_DIV);
-
             }
             $data[] = $row;
         }

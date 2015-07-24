@@ -89,7 +89,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
 $form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/session.php');
 $form->addElement('text', 'keyword', get_lang('Keyword'));
-$form->addElement('button', 'submit', get_lang('Search'));
+$form->addButtonSearch(get_lang('Search'));
 $form->addElement('hidden', 'session_id', $sessionId);
 $keyword = '';
 if ($form->validate()) {

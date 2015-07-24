@@ -177,6 +177,13 @@ class CForumForum
     private $endTime;
 
     /**
+     * @var integer
+     * 
+     * @ORM\Column(name="lp_id", type="integer", options={"unsigned":true})
+     */
+    private $lpId;
+
+    /**
      * Set forumTitle
      *
      * @param string $forumTitle
@@ -681,4 +688,26 @@ class CForumForum
     {
         return $this->cId;
     }
+
+    /**
+     * Set lpId
+     * @param integer $lpId
+     * @return \Chamilo\CourseBundle\Entity\CForumForum
+     */
+    public function setLpId($lpId)
+    {
+        $this->lpId = $lpId;
+
+        return $this;
+    }
+
+    /**
+     * Get lpId
+     * @return integer
+     */
+    public function getLpId()
+    {
+        return $this->lpId;
+    }
+
 }

@@ -59,9 +59,9 @@
             <div class="row">
                 <div class="col-md-12">
                     {% if session.subtitle %}
-                        <p class="subtitle-session">
-                            <i class="fa fa-clock-o"></i> <em>{{ session.subtitle }}</em>
-                        </p>
+                        <div class="subtitle-session">
+                            <i class="fa fa-clock-o"></i> {{ session.subtitle }}
+                        </div>
                     {% endif %}
                     {% if session.show_description %}
                         <div class="description-session">

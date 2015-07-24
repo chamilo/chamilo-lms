@@ -28,11 +28,6 @@ class SessionRelUser
      */
     private $iid;
 
-    public $relationTypeList = array(
-        0 => 'student',
-        1 => 'drh'
-    );
-
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
@@ -55,23 +50,34 @@ class SessionRelUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="moved_to", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="moved_to", type="integer", nullable=true, unique=false)
      */
     private $movedTo;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="moved_status", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="moved_status", type="integer", nullable=true, unique=false)
      */
     private $movedStatus;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="moved_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="moved_at", type="datetime", nullable=true, unique=false)
      */
     private $movedAt;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="registered_at", type="datetime", nullable=false, unique=false)
+     */
+    private $registeredAt;
+
+    public $relationTypeList = array(
+        0 => 'student',
+        1 => 'drh'
+    );
 
     /**
      * Constructor
@@ -81,6 +87,7 @@ class SessionRelUser
         $this->moved_to = null;
         $this->movedStatus = null;
         $this->movedAt = null;
+        $this->registeredAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -218,6 +225,7 @@ class SessionRelUser
      * Set movedAt
      *
      * @param \DateTime $movedAt
+     *
      * @return SessionRelUser
      */
     public function setMovedAt($movedAt)
@@ -236,4 +244,27 @@ class SessionRelUser
     {
         return $this->movedAt;
     }
+
+    /**
+     * Set registeredAt
+     * @param \DateTime $registeredAt
+     *
+     * @return $this
+     */
+    public function setRegisteredAt(\DateTime $registeredAt)
+    {
+        $this->registeredAt = $registeredAt;
+
+        return $this;
+    }
+
+    /**
+     * Get registeredAt
+     * @return \DateTime
+     */
+    public function getRegisteredAt()
+    {
+        return $this->registeredAt;
+    }
+
 }

@@ -19,8 +19,6 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-global $_configuration;
-
 if (!api_is_platform_admin(true)) {
     if (!api_is_course_admin() && !api_is_coach()) {
         if (api_get_course_setting('allow_user_view_user_list') == 0) {
@@ -534,14 +532,13 @@ function searchUserKeyword($firstname, $lastname, $username, $official_code, $ke
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {
-    global $origin;
     global $is_western_name_order;
     global $extraFields;
 
+    $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
     $course_info = api_get_course_info();
     $sessionId = api_get_session_id();
     $course_code = $course_info['code'];
-
     $a_users = array();
 
     // limit
@@ -585,12 +582,22 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
     $active = isset($_GET['active']) ? $_GET['active'] : null;
 
+    if (empty($sessionId)) {
+        $status = $type;
+    } else {
+        if ($type == COURSEMANAGER) {
+            $status = 2;
+        } else {
+            $status = 0;
+        }
+    }
+
     $a_course_users = CourseManager :: get_user_list_from_course_code(
         $course_code,
         $sessionId,
         $limit,
         $order_by,
-        null,
+        $status,
         null,
         false,
         false,
@@ -746,17 +753,18 @@ function active_filter($active, $urlParams, $row)
  */
 function modify_filter($user_id, $row, $data)
 {
-    global $origin, $is_allowed_to_track, $charset;
+    global $is_allowed_to_track, $charset;
 
     $user_id = $data[0];
     $course_info = $_course = api_get_course_info();
     $current_user_id = api_get_user_id();
     $sessionId = api_get_session_id();
+    $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
 
     $result = "";
 
     if ($is_allowed_to_track) {
-        $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course&amp;id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'"  >
+        $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$_course['id'].'&origin=user_course&id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'"  >
             <img border="0" alt="'.get_lang('Tracking').'" src="../img/icons/22/stats.png" />
         </a>';
     }
@@ -764,7 +772,7 @@ function modify_filter($user_id, $row, $data)
     // If platform admin, show the login_as icon (this drastically shortens
     // time taken by support to test things out)
     if (api_is_platform_admin()) {
-        $result .= ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.
+        $result .= ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.$_SESSION['sec_token'].'">'.
             Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
     }
 
@@ -774,21 +782,29 @@ function modify_filter($user_id, $row, $data)
             $isTutor = isset($data['is_tutor']) ? intval($data['is_tutor']) : 0;
             $isTutor = empty($isTutor) ? 1 : 0;
 
-            $disabled = '';
-            if ($data['user_status_in_course'] == COURSEMANAGER) {
-                $disabled = 'disabled';
+            $text = get_lang('RemoveTutorStatus');
+            if ($isTutor) {
+                $text = get_lang('SetTutor');
             }
-            $result .= Display::url(
-                    get_lang('SetTutor'),
-                    'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id,
-                    array('class' => 'btn btn-default '.$disabled)
-                ).'&nbsp;';
+
+            $disabled = '';
+
+            if ($data['user_status_in_course'] == STUDENT) {
+
+                $result .= Display::url(
+                        $text,
+                        'user.php?'.api_get_cidreq(
+                        ).'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
+                        array('class' => 'btn btn-default '.$disabled)
+                    ).'&nbsp;';
+            }
         }
         // edit
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
-                $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.get_lang('Unreg').'</a>&nbsp;';
+                $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.
+                    get_lang('Unreg').'</a>&nbsp;';
             } else {
                 //$result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
             }
@@ -797,7 +813,8 @@ function modify_filter($user_id, $row, $data)
         // Show buttons for unsubscribe
         if ($course_info['unsubscribe'] == 1) {
             if ($user_id == $current_user_id) {
-                $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.get_lang('Unreg').'</a>&nbsp;';
+                $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.
+                    get_lang('Unreg').'</a>&nbsp;';
             }
         }
     }
@@ -884,14 +901,16 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 }
 
-
 /*	Header */
 if (isset($origin) && $origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
 
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-        $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
+        $interbreadcrumb[] = array(
+            "url" => "user.php?".api_get_cidreq(),
+            "name" => get_lang("Users"),
+        );
         $tool_name = get_lang('SearchResults');
     } else {
         $tool_name = get_lang('Users');
@@ -906,12 +925,38 @@ $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
 // Tool introduction
 Display::display_introduction_section(TOOL_USER, 'left');
 $actions = '';
+$type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
+
+$selectedTab = 1;
+
 if (api_is_allowed_to_edit(null, true)) {
     echo '<div class="actions">';
 
-    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.
+    switch ($type) {
+        case STUDENT:
+            $selectedTab = 1;
+            $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'';
+            break;
+        case COURSEMANAGER:
+            $selectedTab = 2;
+            $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
+            break;
+    }
+
+    echo Display::url(
+        Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
+        $url
+    );
+
+    // Build search-form
+    $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAYOUT_INLINE);
+    $form->addText('keyword', '', false);
+    $form->addButtonSearch(get_lang('SearchButton'));
+    $form->display();
+
+    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=csv">'.
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
-    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.
+    $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=xls">'.
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
 
     if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' ||
@@ -923,24 +968,19 @@ if (api_is_allowed_to_edit(null, true)) {
 
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.
         Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
-    /*$actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".
-        Display::return_icon('group.png', get_lang("GroupUserManagement"),'',ICON_SIZE_MEDIUM)."</a>";*/
 
     $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
     if (api_is_allowed_to_edit() && $allowTutors == 'true') {
-        $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.get_lang('Sessions').'</a>';
+        $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
+            get_lang('Sessions').'</a>';
     }
 
-    // Build search-form
-    $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAYOUT_INLINE);
-    $form->addText('keyword', '', false);
-    $form->addButtonSearch(get_lang('SearchButton'));
-    $form->display();
     echo $actions;
+
     echo '</div>';
 }
 
-echo UserManager::getUserSubscriptionTab(1);
+echo UserManager::getUserSubscriptionTab($selectedTab);
 
 if (isset($message)) {
     Display::display_confirmation_message($message);

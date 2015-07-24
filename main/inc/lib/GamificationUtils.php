@@ -13,7 +13,7 @@ class GamificationUtils
      * Get the calculated points on session with gamification mode
      * @param int $userId The user ID
      * @param int $userStatus The user Status
-     * @return int
+     * @return float
      */
     public static function getTotalUserPoints($userId, $userStatus)
     {
@@ -32,7 +32,7 @@ class GamificationUtils
             $points += self::getSessionPoints($session['id'], $userId);
         }
 
-        return $points;
+        return round($points / count($sessions), 2);
     }
 
     /**
@@ -58,6 +58,10 @@ class GamificationUtils
             );
             $learnPaths = $learnPathListObject->get_flat_list();
 
+            if (empty($learnPaths)) {
+                continue;
+            }
+
             $score = 0;
 
             foreach ($learnPaths as $learnPathId => $learnPathInfo) {
@@ -74,10 +78,10 @@ class GamificationUtils
                 $score += $learnPath->getCalculateScore($sessionId);
             }
 
-            $totalPoints += $score;
+            $totalPoints += round($score / count($learnPaths), 2);
         }
 
-        return $totalPoints / count($courses);
+        return round($totalPoints / count($courses), 2);
     }
 
     /**
@@ -112,7 +116,7 @@ class GamificationUtils
             $progress += $courseProgress;
         }
 
-        return $progress / count($courses);
+        return round($progress / count($courses), 2);
     }
 
     /**
@@ -138,6 +142,10 @@ class GamificationUtils
             );
             $learnPaths = $learnPathListObject->get_flat_list();
 
+            if (empty($learnPaths)) {
+                continue;
+            }
+
             $stars = 0;
 
             foreach ($learnPaths as $learnPathId => $learnPathInfo) {
@@ -154,10 +162,62 @@ class GamificationUtils
                 $stars += $learnPath->getCalculateStars($sessionId);
             }
 
-            $totalStars += $stars;
+            $totalStars += round($stars / count($learnPaths));
         }
 
-        return $totalStars / count($courses);
+        return round($totalStars / count($courses));
+    }
+
+    /**
+     * Get the stars on sessions with gamification mode
+     * @param int $userId The user ID
+     * @param int $userStatus The user Status
+     * @return int
+     */
+    public static function getTotalUserStars($userId, $userStatus)
+    {
+        $stars = 0;
+
+        $sessions = SessionManager::getSessionsFollowedByUser(
+            $userId,
+            $userStatus
+        );
+
+        if (empty($sessions)) {
+            return 0;
+        }
+
+        foreach ($sessions as $session) {
+            $stars += self::getSessionStars($session['id'], $userId);
+        }
+
+        return round($stars / count($sessions));
+    }
+
+    /**
+     * Get the total progress on sessions with gamification mode
+     * @param int $userId The user ID
+     * @param int $userStatus The user Status
+     * @return float
+     */
+    public static function getTotalUserProgress($userId, $userStatus)
+    {
+        $progress = 0;
+
+        $sessions = SessionManager::getSessionsFollowedByUser(
+            $userId,
+            $userStatus
+        );
+
+        if (empty($sessions)) {
+            return 0;
+        }
+
+        foreach ($sessions as $session) {
+            $progress += self::getSessionProgress($session['id'], $userId);
+        }
+
+        return round($progress / count($sessions), 2);
     }
 
 }

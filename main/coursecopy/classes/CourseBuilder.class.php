@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+require_once 'Resource.class.php';
 require_once 'Course.class.php';
 require_once 'Event.class.php';
 require_once 'Link.class.php';

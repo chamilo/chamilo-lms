@@ -54,11 +54,20 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $isDrhOfCourse
     ) {
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+        $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
+
+        if ($page == 'edit') {
+            $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$my_folder_data['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
+        } else {
+            $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+        }
+
         switch ($action) {
             case 'send_comment':
                 if (isset($_FILES["file"])) {
                     $_POST['file'] = $_FILES["file"];
                 }
+
                 addWorkComment(
                     api_get_course_info(),
                     api_get_user_id(),
@@ -66,7 +75,9 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                     $work,
                     $_POST
                 );
-                $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+
+                Display::addFlash(Display::return_message(get_lang('CommentCreated')));
+
                 header('Location: '.$url);
                 exit;
                 break;
@@ -75,7 +86,8 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                     $_REQUEST['comment_id'],
                     api_get_course_info()
                 );
-                $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+
+                Display::addFlash(Display::return_message(get_lang('DocDeleted')));
                 header('Location: '.$url);
                 exit;
                 break;

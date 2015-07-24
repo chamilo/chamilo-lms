@@ -247,7 +247,7 @@ class Wiki
                 unset($input_array[$key+1]);
             }
         }
-        $output=implode('',$input_array);
+        $output = implode('',$input_array);
         return $output;
     }
 
@@ -301,12 +301,12 @@ class Wiki
         }
 
         if (!empty($values['feedback1']) || !empty($values['feedback2']) || !empty($values['feedback3'])) {
-            $_clean['feedback1']=Database::escape_string($values['feedback1']);
-            $_clean['feedback2']=Database::escape_string($values['feedback2']);
-            $_clean['feedback3']=Database::escape_string($values['feedback3']);
-            $_clean['fprogress1']=Database::escape_string($values['fprogress1']);
-            $_clean['fprogress2']=Database::escape_string($values['fprogress2']);
-            $_clean['fprogress3']=Database::escape_string($values['fprogress3']);
+            $_clean['feedback1'] = Database::escape_string($values['feedback1']);
+            $_clean['feedback2'] = Database::escape_string($values['feedback2']);
+            $_clean['feedback3'] = Database::escape_string($values['feedback3']);
+            $_clean['fprogress1'] = Database::escape_string($values['fprogress1']);
+            $_clean['fprogress2'] = Database::escape_string($values['fprogress2']);
+            $_clean['fprogress3'] = Database::escape_string($values['fprogress3']);
         }
 
         if (isset($values['initstartdate']) && $values['initstartdate'] == 1) {
@@ -322,13 +322,16 @@ class Wiki
         }
 
         if (isset($values['delayedsubmit'])) {
-            $_clean['delayedsubmit']=Database::escape_string($values['delayedsubmit']);
+            $_clean['delayedsubmit'] = Database::escape_string($values['delayedsubmit']);
         }
 
         if (!empty($values['max_text']) || !empty($values['max_version'])) {
-            $_clean['max_text']	=Database::escape_string($values['max_text']);
-            $_clean['max_version']=Database::escape_string($values['max_version']);
+            $_clean['max_text']	= Database::escape_string($values['max_text']);
+            $_clean['max_version'] = Database::escape_string($values['max_version']);
         }
+
+        $values['assignment'] = isset($values['assignment']) ? $values['assignment'] : '';
+        $values['page_id'] = isset($values['page_id']) ? $values['page_id'] : 0;
 
         $params = [
             'c_id' => $course_id,
@@ -350,13 +353,14 @@ class Wiki
             'version' => $version,
             'linksto' => $linkTo,
             'user_ip' => $_SERVER['REMOTE_ADDR'],
-            'session_id' => $session_id
+            'session_id' => $session_id,
+            'page_id' => $values['page_id']
         ];
 
         $id = Database::insert($tbl_wiki, $params);
 
         if ($id > 0) {
-            $sql = "UPDATE $tbl_wiki SET id = iid, page_id = iid WHERE iid = $id";
+            $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
             Database::query($sql);
 
             // insert into item_property
@@ -368,10 +372,16 @@ class Wiki
                 $userId,
                 $groupId
             );
+
+
+            if ($values['page_id']== 0) {
+                $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$id.'" WHERE c_id = '.$course_id.' AND iid ="'.$id.'"';
+                Database::query($sql);
+            }
         }
 
-        //update wiki config
-        if ($values['reflink'] == 'index' && $version == 1 ) {
+        // Update wiki config
+        if ($values['reflink'] == 'index' && $version == 1) {
             $sql = "INSERT INTO ".$tbl_wiki_conf." (c_id, page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit)
                     VALUES ($course_id, '".$id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
             Database::query($sql);
@@ -480,20 +490,22 @@ class Wiki
         $tbl_wiki_discuss = $this->tbl_wiki_discuss;
         $tbl_wiki_mailcue = $this->tbl_wiki_mailcue;
         $tbl_wiki_conf = $this->tbl_wiki_conf;
-        $session_id = $this->session_id;
-        $condition_session = $this->condition_session;
-        $group_id = $this->group_id;
-        $groupfilter = $this->groupfilter;
+        $conditionSession = $this->condition_session;
+        $groupFilter = $this->groupfilter;
         $course_id = $this->course_id;
 
         $sql = "SELECT page_id FROM $tbl_wiki
-                WHERE  c_id = $course_id AND $groupfilter $condition_session
+                WHERE c_id = $course_id AND $groupFilter $conditionSession
                 ORDER BY id DESC";
 
-        Database::query("DELETE FROM $tbl_wiki_conf WHERE c_id = $course_id AND page_id IN ($sql)");
-        Database::query("DELETE FROM $tbl_wiki_discuss WHERE c_id = $course_id AND publication_id IN ($sql)");
-        Database::query("DELETE FROM $tbl_wiki_mailcue WHERE c_id = $course_id AND $groupfilter $condition_session ");
-        Database::query("DELETE FROM $tbl_wiki WHERE c_id = $course_id AND $groupfilter $condition_session ");
+        $deleteSql = "DELETE FROM $tbl_wiki_conf WHERE c_id = $course_id AND page_id IN ($sql)";
+        Database::query($deleteSql);
+        $deleteSql = "DELETE FROM $tbl_wiki_discuss WHERE c_id = $course_id AND publication_id IN ($sql)";
+        Database::query($deleteSql);
+        $deleteSql = "DELETE FROM $tbl_wiki_mailcue WHERE c_id = $course_id AND $groupFilter $conditionSession ";
+        Database::query($deleteSql);
+        $deleteSql = "DELETE FROM $tbl_wiki WHERE c_id = $course_id AND $groupFilter $conditionSession ";
+        Database::query($deleteSql);
 
         return get_lang('WikiDeleted');
     }
@@ -793,16 +805,17 @@ class Wiki
             $filter =' AND w.id="'.$_clean['view'].'"';
         }
 
-        //first, check page visibility in the first page version
+        // First, check page visibility in the first page version
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE
                     c_id = '.$course_id.' AND
                     reflink="'.Database::escape_string($pageMIX).'" AND
                    '.$groupfilter.$condition_session.'
               ORDER BY id ASC';
-        $result=Database::query($sql);
-        $row = Database::fetch_array($result);
-        $KeyVisibility=$row['visibility'];
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+
+        $KeyVisibility = $row['visibility'];
 
         // second, show the last version
         $sql = 'SELECT * FROM '.$tbl_wiki.' w
@@ -816,7 +829,7 @@ class Wiki
                 ORDER BY id DESC';
 
         $result = Database::query($sql);
-        $row = Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
+        $row = Database::fetch_array($result, 'ASSOC'); // we do not need a while loop since we are always displaying the last version
 
         //log users access to wiki (page_id)
         if (!empty($row['page_id'])) {
@@ -4572,7 +4585,9 @@ class Wiki
         // we do not need a while loop since we are always displaying the last version
 
         if ($row['content'] == '' && $row['title'] == '' && $page == '') {
-            self::setMessage(Display::display_error_message(get_lang('MustSelectPage'), false, true));
+            self::setMessage(
+                Display::display_error_message(get_lang('MustSelectPage'), false, true)
+            );
             return;
         } elseif ($row['content']=='' && $row['title']=='' && $page=='index') {
 
@@ -4594,7 +4609,10 @@ class Wiki
         if (($row['reflink'] == 'index' || $row['reflink'] == '' || $row['assignment'] == 1) &&
             (!api_is_allowed_to_edit(false, true) && $groupId == 0)
         ) {
-            self::setMessage(Display::display_error_message(get_lang('OnlyEditPagesCourseManager'), false, true));
+            Display::addFlash(
+                Display::return_message(get_lang('OnlyEditPagesCourseManager')),
+                'error'
+            );
         } else {
             $PassEdit = false;
 
@@ -4607,7 +4625,11 @@ class Wiki
                 ) {
                     $PassEdit = true;
                 } else {
-                    self::setMessage(Display::display_normal_message(get_lang('OnlyEditPagesGroupMembers'), false, true));
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('OnlyEditPagesGroupMembers')
+                        )
+                    );
                 }
             } else {
                 $PassEdit=true;
@@ -4616,7 +4638,10 @@ class Wiki
             $icon_assignment = null;
             // check if is a assignment
             if ($row['assignment'] == 1) {
-                self::setMessage(Display::display_normal_message(get_lang('EditAssignmentWarning'), false, true));
+                Display::addFlash(
+                    Display::return_message(get_lang('EditAssignmentWarning'))
+                );
+
                 $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',ICON_SIZE_SMALL);
             } elseif ($row['assignment'] == 2) {
                 $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',ICON_SIZE_SMALL);
@@ -4624,11 +4649,10 @@ class Wiki
                     if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                         $PassEdit = true;
                     } else {
-                        self::setMessage(
-                            Display::display_warning_message(
+                        Display::addFlash(
+                            Display::return_message(
                                 get_lang('LockByTeacher'),
-                                false,
-                                true
+                                'warning'
                             )
                         );
                         $PassEdit = false;
@@ -4637,12 +4661,17 @@ class Wiki
                     $PassEdit = true;
                 }
             }
+
             if ($PassEdit) {
                 //show editor if edit is allowed
                 if ($row['editlock'] == 1 &&
                     (api_is_allowed_to_edit(false, true) == false || api_is_platform_admin()==false)
                 ) {
-                    self::setMessage(Display::display_normal_message(get_lang('PageLockedExtra'), false, true));
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('PageLockedExtra')
+                        )
+                    );
                 } else {
                     // Check tasks
 
@@ -4651,7 +4680,14 @@ class Wiki
                         time()<strtotime($row['startdate_assig'])
                     ) {
                         $message = get_lang('TheTaskDoesNotBeginUntil').': '.api_get_local_time($row['startdate_assig'], null, date_default_timezone_get());
-                        self::setMessage(Display::display_warning_message($message, false, true));
+
+                        Display::addFlash(
+                            Display::return_message(
+                                $message,
+                                'warning'
+                            )
+                        );
+
                         if (!api_is_allowed_to_edit(false, true)) {
                             $this->redirectHome();
                         }
@@ -4664,7 +4700,12 @@ class Wiki
                         $row['delayedsubmit']==0
                     ) {
                         $message = get_lang('TheDeadlineHasBeenCompleted').': '.api_get_local_time($row['enddate_assig'], null, date_default_timezone_get());
-                        self::setMessage(Display::display_warning_message($message, false, true));
+                        Display::addFlash(
+                            Display::return_message(
+                                $message,
+                                'warning'
+                            )
+                        );
                         if (!api_is_allowed_to_edit(false,true)) {
                             $this->redirectHome();
                         }
@@ -4672,7 +4713,12 @@ class Wiki
 
                     if (!empty($row['max_version']) && $row['version']>=$row['max_version']) {
                         $message=get_lang('HasReachedMaxiNumVersions');
-                        self::setMessage(Display::display_warning_message($message, false, true));
+                        Display::addFlash(
+                            Display::return_message(
+                                $message,
+                                'warning'
+                            )
+                        );
                         if (!api_is_allowed_to_edit(false,true)) {
                             $this->redirectHome();
                         }
@@ -4680,7 +4726,12 @@ class Wiki
 
                     if (!empty($row['max_text']) && $row['max_text']<=self::word_count($row['content'])) {
                         $message = get_lang('HasReachedMaxNumWords');
-                        self::setMessage(Display::display_warning_message($message, false, true));
+                        Display::addFlash(
+                            Display::return_message(
+                                $message,
+                                'warning'
+                            )
+                        );
                         if (!api_is_allowed_to_edit(false,true)) {
                             $this->redirectHome();
                         }
@@ -4726,29 +4777,44 @@ class Wiki
                         $message_task.='<p>'.get_lang('OtherSettings').': '.get_lang('NMaxVersion').': '.$message_task_max_version;
                         $message_task.=' '.get_lang('NMaxWords').': '.$message_task_max_text;
                         // Display message
-                        self::setMessage(Display::display_normal_message($message_task, false, true));
+                        Display::addFlash(
+                            Display::return_message(
+                                $message_task
+                            )
+                        );
                     }
 
+                    $feedback_message = '';
                     if ($row['progress'] == $row['fprogress1'] && !empty($row['fprogress1'])) {
                         $feedback_message='<b>'.get_lang('Feedback').'</b><p>'.api_htmlentities($row['feedback1']).'</p>';
-                        self::setMessage(Display::display_normal_message($feedback_message, false, true));
                     } elseif ($row['progress'] == $row['fprogress2'] && !empty($row['fprogress2'])) {
                         $feedback_message='<b>'.get_lang('Feedback').'</b><p>'.api_htmlentities($row['feedback2']).'</p>';
-                        self::setMessage(Display::display_normal_message($feedback_message, false, true));
                     } elseif ($row['progress'] == $row['fprogress3'] && !empty($row['fprogress3'])) {
                         $feedback_message='<b>'.get_lang('Feedback').'</b><p>'.api_htmlentities($row['feedback3']).'</p>';
-                        self::setMessage(Display::display_normal_message($feedback_message, false, true));
+                    }
+
+                    if (!empty($feedback_message)) {
+                        Display::addFlash(
+                            Display::return_message(
+                                $feedback_message
+                            )
+                        );
                     }
 
                     // Previous checking for concurrent editions
 
+
                     if ($row['is_editing'] == 0) {
-                        self::setMessage(Display::display_normal_message(get_lang('WarningMaxEditingTime'), false, true));
+                        Display::addFlash(
+                            Display::return_message(
+                                get_lang('WarningMaxEditingTime')
+                            )
+                        );
                         $time_edit = api_get_utc_datetime();
                         $sql = 'UPDATE '.$tbl_wiki.' SET
                                 is_editing = "'.$userId.'",
                                 time_edit = "'.$time_edit.'"
-                                WHERE c_id = '.$course_id.' AND  id="'.$row['id'].'"';
+                                WHERE c_id = '.$course_id.' AND id="'.$row['id'].'"';
                         Database::query($sql);
                     } elseif ($row['is_editing'] != $userId) {
                         $timestamp_edit=strtotime($row['time_edit']);
@@ -4757,11 +4823,15 @@ class Wiki
                         $rest_time = $max_edit_time - $time_editing;
 
                         $userinfo = api_get_user_info($row['is_editing']);
-                        $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
-
                         $is_being_edited = get_lang('ThisPageisBeginEditedBy').' '.UserManager::getUserProfileLink($userinfo).'
                             '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
-                        self::setMessage(Display::display_normal_message($is_being_edited, false, true));
+
+                        Display::addFlash(
+                            Display::return_message(
+                                $is_being_edited
+                            )
+                        );
+
                         $this->redirectHome();
                     }
 
@@ -4783,15 +4853,30 @@ class Wiki
                     // Saving a change
                     if ($form->validate()) {
                         if (empty($_POST['title'])) {
-                            self::setMessage(Display::display_error_message(get_lang("NoWikiPageTitle"), false, true));
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang("NoWikiPageTitle"),
+                                    'error'
+                                )
+                            );
                         } elseif (!self::double_post($_POST['wpost_id'])) {
                             //double post
                         } elseif ($_POST['version']!='' && $_SESSION['_version'] !=0 && $_POST['version'] != $_SESSION['_version']) {
                             //prevent concurrent users and double version
-                            self::setMessage(Display::display_error_message(get_lang("EditedByAnotherUser"), false, true));
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang("EditedByAnotherUser"),
+                                    'error'
+                                )
+                            );
                         } else {
-                            $return_message = self::save_wiki($form->exportValues());
-                            self::setMessage(Display::display_confirmation_message($return_message, false, true));
+                            $returnMessage = self::save_wiki($form->exportValues());
+                            Display::addFlash(
+                                Display::return_message(
+                                    $returnMessage,
+                                    'confirmation'
+                                )
+                            );
                         }
                         $wikiData = self::getWikiData();
                         $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'].'&'.api_get_cidreq();
@@ -5178,7 +5263,6 @@ class Wiki
                 break;
             case 'showpage':
                 self::display_wiki_entry($page);
-                //self::setMessage(Display::display_error_message(get_lang('MustSelectPage'));
                 break;
             case 'edit':
                 self::editPage();
@@ -5193,7 +5277,6 @@ class Wiki
                 self::allPages($action);
                 break;
             case 'discuss':
-                //self::setMessage(Display::display_confirmation_message(get_lang('CommentAdded'));
                 self::getDiscuss($page);
                 break;
             case 'export_to_doc_file':

@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CForumThreadQualifyLog
 {
-
     /**
      * @var integer
      *
@@ -83,6 +82,7 @@ class CForumThreadQualifyLog
      * Set userId
      *
      * @param integer $userId
+     *
      * @return CForumThreadQualifyLog
      */
     public function setUserId($userId)
@@ -106,6 +106,7 @@ class CForumThreadQualifyLog
      * Set threadId
      *
      * @param integer $threadId
+     *
      * @return CForumThreadQualifyLog
      */
     public function setThreadId($threadId)
@@ -129,6 +130,7 @@ class CForumThreadQualifyLog
      * Set qualify
      *
      * @param float $qualify
+     *
      * @return CForumThreadQualifyLog
      */
     public function setQualify($qualify)
@@ -152,6 +154,7 @@ class CForumThreadQualifyLog
      * Set qualifyUserId
      *
      * @param integer $qualifyUserId
+     *
      * @return CForumThreadQualifyLog
      */
     public function setQualifyUserId($qualifyUserId)
@@ -175,6 +178,7 @@ class CForumThreadQualifyLog
      * Set qualifyTime
      *
      * @param \DateTime $qualifyTime
+     *
      * @return CForumThreadQualifyLog
      */
     public function setQualifyTime($qualifyTime)
@@ -198,6 +202,7 @@ class CForumThreadQualifyLog
      * Set sessionId
      *
      * @param integer $sessionId
+     *
      * @return CForumThreadQualifyLog
      */
     public function setSessionId($sessionId)
@@ -221,6 +226,7 @@ class CForumThreadQualifyLog
      * Set id
      *
      * @param integer $id
+     *
      * @return CForumThreadQualifyLog
      */
     public function setId($id)
@@ -244,6 +250,7 @@ class CForumThreadQualifyLog
      * Set cId
      *
      * @param integer $cId
+     *
      * @return CForumThreadQualifyLog
      */
     public function setCId($cId)

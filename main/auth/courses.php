@@ -210,24 +210,43 @@ switch ($action) {
         $courses_controller->sessionsList($action, $nameTools, $limit);
         break;
     case 'subscribe_to_session':
+        $userId = api_get_user_id();
+        $confirmed = isset($_GET['confirm']);
+        $sessionId = intval($_GET['session_id']);
+
+        if (empty($userId)) {
+            api_not_allowed();
+            exit;
+        }
+
+        if (!$confirmed) {
+            $template = new Template(null, false, false, false, false, false);
+            $template->assign('session_id', $sessionId);
+
+            $layout = $template->get_template('auth/confirm_session_subscription.tpl');
+
+            echo $template->fetch($layout);
+            exit;
+        }
+
         $registrationAllowed = api_get_setting('catalog_allow_session_auto_subscription');
         if ($registrationAllowed === 'true') {
             $entityManager = Database::getManager();
             $repository = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
 
             $sequences = $repository->getRequirements(
-                $_GET['session_id'],
+                $sessionId,
                 SequenceResource::SESSION_TYPE
             );
 
             if (count($sequences) > 0) {
-                $requirementsData = SecuenceResourceManager::checkRequirementsForUser(
+                $requirementsData = SequenceResourceManager::checkRequirementsForUser(
                     $sequences,
-                    api_get_user_id(),
-                    SequenceResource::SESSION_TYPE
+                    SequenceResource::SESSION_TYPE,
+                    $userId
                 );
 
-                $continueWithSubscription = SecuenceResourceManager::checkSequenceAreCompleted($requirementsData);
+                $continueWithSubscription = SequenceResourceManager::checkSequenceAreCompleted($requirementsData);
 
                 if (!$continueWithSubscription) {
                     header('Location: ' .  api_get_path(WEB_CODE_PATH) . 'auth/courses.php');
@@ -237,7 +256,7 @@ switch ($action) {
 
             SessionManager::suscribe_users_to_session(
                 $_GET['session_id'],
-                array($_GET['user_id'])
+                array($userId)
             );
 
             $coursesList = SessionManager::get_course_list_by_session_id($_GET['session_id']);

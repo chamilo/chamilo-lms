@@ -190,6 +190,14 @@ class CStudentPublication
      */
     private $containsFile;
 
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="document_id", type="integer", nullable=false)
+     */
+    private $documentId;
+
     /**
      * Set url
      *
@@ -726,5 +734,21 @@ class CStudentPublication
     public function setTitleCorrection($titleCorrection)
     {
         $this->titleCorrection = $titleCorrection;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentId()
+    {
+        return $this->documentId;
+    }
+
+    /**
+     * @param int $documentId
+     */
+    public function setDocumentId($documentId)
+    {
+        $this->documentId = $documentId;
     }
 }

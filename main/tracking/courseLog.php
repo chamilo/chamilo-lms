@@ -220,6 +220,10 @@ echo '<div class="actions">';
 
 echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM);
 echo Display::url(
+    Display::return_icon('group.png', get_lang('GroupReporting'), array(), ICON_SIZE_MEDIUM),
+    'course_log_groups.php?'.api_get_cidreq()
+);
+echo Display::url(
     Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
     'course_log_tools.php?'.api_get_cidreq()
 );
@@ -335,7 +339,11 @@ echo Display::page_subheader2(get_lang('StudentList'));
 $is_western_name_order = api_is_western_name_order();
 
 if (count($a_students) > 0) {
-    $form = new FormValidator('reminder_form', 'get', api_get_path(REL_CODE_PATH).'announcements/announcements.php');
+    $form = new FormValidator(
+        'reminder_form',
+        'get',
+        api_get_path(REL_CODE_PATH).'announcements/announcements.php'
+    );
     $renderer = $form->defaultRenderer();
     $renderer->setElementTemplate(
         '<span>{label} {element}</span>&nbsp;<button class="save" type="submit">'.get_lang('SendNotification').'</button>',
@@ -390,9 +398,9 @@ if (count($a_students) > 0) {
         array('TrackingCourseLog', 'get_user_data'),
         (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 
-    $parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);
-    $parameters['id_session'] 	= $session_id;
-    $parameters['from'] 		= isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
+    $parameters['cidReq'] = Security::remove_XSS($_GET['cidReq']);
+    $parameters['id_session'] = $session_id;
+    $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);
     $headers = array();
@@ -413,16 +421,21 @@ if (count($a_students) > 0) {
     $table->set_header(3, get_lang('Login'), false);
     $headers['login'] = get_lang('Login');
 
-    $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.Display::return_icon('info3.gif', get_lang('TrainingTimeInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+    $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('TrainingTimeInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $headers['training_time'] = get_lang('TrainingTime');
-    $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+    $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $headers['course_progress'] = get_lang('CourseProgress');
 
-    $table->set_header(6, get_lang('ExerciseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+    $table->set_header(6, get_lang('ExerciseProgress').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $headers['exercise_progress'] = get_lang('ExerciseProgress');
-    $table->set_header(7, get_lang('ExerciseAverage').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+    $table->set_header(7, get_lang('ExerciseAverage').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $headers['exercise_average'] = get_lang('ExerciseAverage');
-    $table->set_header(8, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+    $table->set_header(8, get_lang('Score').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $headers['score'] = get_lang('Score');
     $table->set_header(9, get_lang('Student_publication'), false);
     $headers['student_publication'] = get_lang('Student_publication');
@@ -432,10 +445,10 @@ if (count($a_students) > 0) {
     if (empty($session_id)) {
         $table->set_header(11, get_lang('Survey'), false);
         $headers['survey'] = get_lang('Survey');
-        $table->set_header(12, get_lang('FirstLogin'), false);
-        $headers['first_login'] = get_lang('FirstLogin');
-        $table->set_header(13, get_lang('LatestLogin'), false);
-        $headers['latest_login'] = get_lang('LatestLogin');
+        $table->set_header(12, get_lang('FirstLoginInCourse'), false);
+        $headers['first_login'] = get_lang('FirstLoginInCourse');
+        $table->set_header(13, get_lang('LatestLoginInCourse'), false);
+        $headers['latest_login'] = get_lang('LatestLoginInCourse');
         if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
             $table->set_header(14, $extra_info['display_text'], false);
             $headers['display_text'] = $extra_info['display_text'];
@@ -446,10 +459,10 @@ if (count($a_students) > 0) {
             $headers['details'] = get_lang('Details');
         }
     } else {
-        $table->set_header(11, get_lang('FirstLogin'), false);
-        $headers['first_login'] = get_lang('FirstLogin');
-        $table->set_header(12, get_lang('LatestLogin'), false);
-        $headers['latest_login'] = get_lang('LatestLogin');
+        $table->set_header(11, get_lang('FirstLoginInCourse'), false);
+        $headers['first_login'] = get_lang('FirstLoginInCourse');
+        $table->set_header(12, get_lang('LatestLoginInCourse'), false);
+        $headers['latest_login'] = get_lang('LatestLoginInCourse');
 
         if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
             $table->set_header(13, $extra_info['display_text'], false);
@@ -508,8 +521,8 @@ if ($export_csv) {
         $csv_headers[] = get_lang('Survey');
     }
 
-    $csv_headers[] = get_lang('FirstLogin', '');
-    $csv_headers[] = get_lang('LatestLogin', '');
+    $csv_headers[] = get_lang('FirstLoginInCourse', '');
+    $csv_headers[] = get_lang('LatestLoginInCourse', '');
 
     if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
         $csv_headers[] = $extra_info['display_text'];

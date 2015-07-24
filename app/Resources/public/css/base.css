@@ -1,47 +1,68 @@
 /*
- * Common CSS for all themes
+    Theme Name: Chamilo Base
+    URI Project: http://www.chamilo.org
+	  Description: Styles main base of Chamilo LMS appearance , works with Bootstrap 3.0.x
+    Author: alex.aragon@beeznest.com
+            angel.quiroz@beeznest.com
+            julio.montoya@beeznest.com
+            yannik.warnier@beeznest.com
+    Version: 1.0
 */
-
-/* some changes to the bootstrap.css */
-
-/* when doing a var_dump*/
-
 pre {
     margin-top:50px !important;
 }
-html,body{
+html,body {
+  margin: 0;
+  padding: 0;
   height: 100%;
 }
 #page-wrap{
-  margin: auto;
-  height: auto;
-  height: auto;
   min-height: 100%;
+  margin-bottom: 0;
 }
 #page-wrap:after{
-  width: 100%;
-  height: 150px;
+  content: "";
   display: block;
   clear: both;
 }
-
-/* chzn-select fix */
+footer {
+  height: 7em;
+  padding-top: 15px;
+}
+footer #footer_right{
+  text-align: right;
+}
 select {
-    width : auto;
+  width : auto;
 }
-
+/*------------------------------*/
+.admin-block-version{
+ font-size: 12px;
+  padding: 5%;
+  background-color: #FCF8E3;
+  border: 1px solid #FAEBCC;
+  color:#8A6D3B;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-align: justify;
+}
+.version-checking{
+  padding: 10px;
+  width: 100%;
+}
+.version-checking .checkbox{
+  margin-left: 20px;
+  text-align: left;
+}
+/*------------------------*/
 .invisible {
-    visibility: visible;
+  visibility: visible;
 }
-
-/* NEW CSS BASE */
 .logo{
   margin-bottom: 10px;
   padding: 5px;
   margin-top: 10px;
-}
-.clear-header{
-  height: 60px;
 }
 .title-tools{
   text-align: left;
@@ -59,7 +80,10 @@ select {
   padding-top: 10px;
   margin-top: 5px;
 }
-
+.section-page .page-header h3{
+    font-size:22px;
+    margin-top:5px;
+}
 #announcements-slider .left, #announcements-slider .right{
   position: absolute;
   top: 50%;
@@ -116,11 +140,9 @@ ul#navigation {
   list-style: none;
   z-index:9999;
 }
-
 ul#navigation li {
   width: 73px;
 }
-
 ul#navigation li a {
   display: block;
   margin-left: 1px;
@@ -148,29 +170,34 @@ ul#navigation .report a {
   width:65px;
   padding: 6px 0 8px 6px;
 }
-
-
 #gradebook_list .centered {
     text-align:center;
     vertical-align:middle;
 }
-
 #gradebook_list .centered .badge-group {
     width: auto;
 }
-
-
-
-/* END CSS BASE */
-
+#breadcrumb-bar #view_as_link{
+  padding-top: 7px;
+  margin-right: 10px;
+}
 .button-load{
   background: url("../../main/img/icons/64/file_upload.png") no-repeat center 20px;
   padding-top: 70px;
 }
-
-/* END COURSE PROGRESS*/
-/* IMPRESS JS */
-  .impress-content{
+#results .file_upload_highlight {
+    background: #F4D364;
+}
+.work_correction_file_upload .button-load {
+    position: absolute;
+    top: -60px;
+    left: -30px;
+    font-size: 10px;
+    width: 100px;
+    padding-top: 0px;
+    background: none;
+}
+.impress-content{
     position: relative;
     width: 100%;
     height:600px;
@@ -185,18 +212,11 @@ ul#navigation .report a {
 .impress-title h1{
     font-size: 35px;
 }
-
-/* END IMPRESS JS*/
-
 /* SESSION CATALOG*/
 .session-group .padding-clear{
     padding-top: 5px;
     padding-bottom: 10px;
 }
-/*.session-group .thumbnail{
-    border: none;
-    box-shadow: none;
-}*/
 .session-group .border-info{
     /*border-bottom: 1px solid #ccc;*/
     padding-bottom: 5px;
@@ -240,44 +260,33 @@ ul#navigation .report a {
 .session-group .items-session li{
     padding-bottom: 5px;
 }
-
-/* SESSION CATALOG END*/
-
 #main .nav .dropdown {
   width:150px;
   text-align: right;
 }
-
 #main .nav .dropdown:nth-child(n) {
   width:auto;
 }
 .course-items .title{
   margin-top: 0px;
 }
-
-/* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
     font-size: inherit;
 }
-
 .badge-group {
     width: 200px;
     position: relative;
 }
-
 .badge-group .badge {
     float:left;
     position:relative;
 }
-
 .badge-group  > :first-child {
     z-index: 1000;
 }
-
 .badge-group  > :nth-child(2) {
     z-index: 900;
 }
-
 .badge-group  > :nth-child(3) {
     z-index: 800;
 }
@@ -287,17 +296,14 @@ label, input, button, select, textarea, p {
 .badge-group  > :nth-child(5) {
     z-index: 600;
 }
-
 .badge-group .badge:not(:first-child) {
     margin-left: -13px;
     padding-left: 15px;
 }
-
 /* fixes the * */
 span.form_required  {
     padding-right:5px;
 }
-
 form .formw {
     margin-left: 170px;
 }
@@ -314,53 +320,6 @@ form .formw input {
 }
 
 /* end chamilo forms fixes */
-
-#top_main_content .span3 {
-  float: left;
-}
-[dir=rtl] #top_main_content .span3 {
-  float: right;
-}
-
-#top_main_content .control-group .span3 {
-  float: none;
-}
-#top_main_content .span9 {
-  float: left;
-}
-[dir=rtl] #top_main_content .span9 {
-  float: right;
-}
-
-/* New changes Chamilo 1.9 */
-
-html {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    min-height: 100%;
-}
-
-footer {
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-
-#footer_left, #footer_center, #footer_right {
-    margin: 20px 0 0 0;
-}
-#footer_right{
- text-align: right;
-}
-/* Sticky footer*/
-.push {
-    height: 9em; /* Very important */
-}
-
-#topbar_push {
-    height: 55px;
-}
 
 .actions {
     background:#ffffff;
@@ -425,15 +384,12 @@ footer {
 #friend-container .thumbnail {
     min-height: 140px;
 }
-
 #friend-container .thumbnail img {
     max-height: 100px;
 }
-
 [dir=rtl] #friends > .thumbnails > li {
     float: right;
 }
-
 .show-grid [class*="span"] {
     background-color: #EEEEEE;
     border-bottom-left-radius: 3px;
@@ -500,7 +456,6 @@ a.tag {
     margin-bottom:15px;
     font-size:135%;
 }
-
 .userportal-course-item {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -2455,6 +2410,11 @@ div.admin_section h4 {
     padding:3px;
     margin:10px;
 }
+
+.ui-jqgrid tr.jqgrow td {
+    height:38px !important;
+}
+
 .exercise_overview_options {
     background-color: #F9F9F9;
     -webkit-border-radius: 10px;
@@ -5347,7 +5307,9 @@ i.size-32.icon-new-work{
 }
 .sessions .subtitle-session{
   font-size: 12px;
-  font-style: italic;
+  color: #666666;
+  padding: 5px;
+  margin-bottom: 10px;
 }
 /**
  * Modal for user avatar preview
@@ -6185,56 +6147,57 @@ div#chat-remote-video video {
   margin-left: 5%;
   text-align: center;
 }
-
-#work-list{
-  padding: 10px;
+.my-progress .profile-user{
+    padding:10px;
 }
-.ui-jqgrid-view .label-success{
-  font-size: 14px;
+.my-progress .avatar-profile .img-responsive{
+    margin:auto;
 }
-.ui-jqgrid-view .ui-widget-content a{
-  color:#666666;
+.my-progress .username{
+    font-size:20px;
+    text-align:center;
 }
-.ui-jqgrid-view .ui-state-default,
-.ui-jqgrid-view .ui-widget-content .ui-state-default,
-.ui-jqgrid-view .ui-widget-header .ui-state-default{
-  background: #EEEEEE;
-  color: #666666;
-  border: none;
+.my-progress .star-progress .fa-star{
+    color: #e4c200;
 }
-.ui-jqgrid-view table{
-  border-collapse: inherit;
+.my-progress .star-progress .fa-star.in{
+    color: #c2c2c2;
 }
-.ui-jqgrid.ui-widget-content{
-  border: none;
+.my-progress .progress {
+    margin-bottom: 0px;
 }
-.ui-jqgrid-view .ui-jqgrid-sortable{
-  font-size: 14px;
+.my-progress .list-course{
+    padding:0;
+    margin:0;
 }
-.ui-jqgrid-view .ui-jqgrid .ui-jqgrid-htable th div{
-  height: auto;
+.my-progress .list-course li{
+    display:block;
+    padding-top:5px;
+    padding-bottom:5px;
 }
-.ui-jqgrid-view .ui-th-ltr, .ui-jqgrid .ui-jqgrid-htable th.ui-th-ltr{
-  padding-bottom: 5px;
-  padding-top: 5px;
- }
-.ui-jqgrid tr.ui-row-ltr td{
-  border: none;
+.my-progress .list-course li a{
+    color:#666;
 }
-.ui-jqgrid tr.jqgrow td{
-  height: 45px;
-  font-size: 13px;
+.my-progress .list-course li a.active{
+    color:#00829C;
 }
-.ui-jqgrid .ui-jqgrid-labels .ui-state-hover{
-  background-color: #E7E7E7;
+.my-progress .embed-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
 }
-.ui-jqgrid .ui-pg-selbox{
-  font-size: 12px;
-  height: 25px;
+.my-progress .embed-container iframe {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border:none;
 }
-.ui-jqgrid .ui-pg-input{
-  font-size: 12px;
-  height: 25px;
+.section-status .page-header h2{
+    font-size:22px;
+    margin-top:5px;
 }
 .ui-jqgrid .ui-pg-table td{
   font-size: 12px;

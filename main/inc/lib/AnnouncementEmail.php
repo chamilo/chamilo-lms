@@ -309,7 +309,8 @@ class AnnouncementEmail
                 $subject,
                 $message,
                 $sender['user_id'],
-                $sendToDrhUsers
+                $sendToDrhUsers,
+                true
             );
         }
 
@@ -329,7 +330,9 @@ class AnnouncementEmail
                                 $user['user_id'],
                                 $subject,
                                 $message,
-                                $sender['user_id']
+                                $sender['user_id'],
+                                false,
+                                true
                             );
                         }
                     }

@@ -757,7 +757,7 @@ class Blog
 			if (Database::num_rows($result) > 0) {
 				echo '<ul>';
 				while ($mytask = Database::fetch_array($result)) {
-					echo '<li><a href="blog.php?action=execute_task&amp;blog_id=' . $mytask['blog_id'] . '&amp;task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: '.stripslashes($mytask['blog_name']) . '] ' . get_lang('ExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';
+					echo '<li><a href="blog.php?action=execute_task&blog_id=' . $mytask['blog_id'] . '&task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: '.stripslashes($mytask['blog_name']) . '] ' . get_lang('ExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';
 				}
 				echo '<ul>';
 			} else {
@@ -873,8 +873,8 @@ class Blog
 				$introduction_text = stripslashes($introduction_text);
 
 				echo '<div class="blogpost">';
-				echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
-				echo '<span class="blogpost_date"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . $blog_post_date . '</a></span>';
+				echo '<span class="blogpost_title"><a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
+				echo '<span class="blogpost_date"><a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . $blog_post_date . '</a></span>';
 				echo '<div class="blogpost_introduction" id="blogpost_introduction_'.$blog_post_id.'">' . $introduction_text.$readMoreLink.'</div>';
 				echo '<div class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</div>';
 
@@ -889,7 +889,7 @@ class Blog
 					echo '</span>';
 				}
 				$username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
-				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . Display::tag('span', api_get_person_name($blog_post['firstname'], $blog_post['lastname']), array('title'=>$username)) .' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>';
+				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . Display::tag('span', api_get_person_name($blog_post['firstname'], $blog_post['lastname']), array('title'=>$username)) .' - <a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>';
 				echo '</div>';
 			}
 		} else {
@@ -987,10 +987,10 @@ class Blog
 		$task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? intval($_GET['task_id']) : 0;
 
 		if (api_is_allowed('BLOG_' . $blog_id, 'article_edit', $task_id))
-			$blog_post_actions .= '<a href="blog.php?action=edit_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;article_id=' . $blog_post['post_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('EditThisPost') . '"><img src="../img/edit.gif" /></a>';
+			$blog_post_actions .= '<a href="blog.php?action=edit_post&blog_id=' . $blog_id . '&post_id=' . $post_id . '&article_id=' . $blog_post['post_id'] . '&task_id=' . $task_id . '" title="' . get_lang('EditThisPost') . '"><img src="../img/edit.gif" /></a>';
 
 		if (api_is_allowed('BLOG_' . $blog_id, 'article_delete', $task_id))
-			$blog_post_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_article&amp;article_id=' . $blog_post['post_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisArticle') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>';
+			$blog_post_actions .= '<a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $post_id . '&do=delete_article&article_id=' . $blog_post['post_id'] . '&task_id=' . $task_id . '" title="' . get_lang('DeleteThisArticle') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>';
 
 		if(api_is_allowed('BLOG_' . $blog_id, 'article_rate'))
 			$rating_select = Blog::display_rating_form('post',$blog_id,$post_id);
@@ -999,7 +999,7 @@ class Blog
 
 		// Display post
 		echo '<div class="blogpost">';
-		echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
+		echo '<span class="blogpost_title"><a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $blog_post['post_id'] . '" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
 		echo '<span class="blogpost_date">' . $blog_post_date . '</span>';
 		echo '<span class="blogpost_text">' . $blog_post_text . '</span><br />';
 
@@ -1206,7 +1206,7 @@ class Blog
 			$comment_text = make_clickable(stripslashes($comment['comment']));
 			$blog_comment_date = api_convert_and_format_date($comment['date_creation'], null, date_default_timezone_get());
 			$blog_comment_actions = "";
-			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
+			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&blog_id=' . $blog_id . '&post_id=' . $post_id . '&do=delete_comment&comment_id=' . $comment['comment_id'] . '&task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
 			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_rate')) { $rating_select = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']); }
 
 			if (!is_null($comment['task_id'])) {
@@ -1349,10 +1349,10 @@ class Blog
 			global $color2;
 
 			echo '<div class="actions">';
-			echo '<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=add"><img src="../img/blog_newtasks.gif" border="0" align="middle" alt="'.get_lang('AddTasks').'" />' . get_lang('AddTasks') . '</a> ';
-			echo '<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=assign"><img src="../img/blog_task.gif" border="0" align="middle" alt="'.get_lang('AssignTasks').'" />' . get_lang('AssignTasks') . '</a>';
+			echo '<a href="' .api_get_self(). '?action=manage_tasks&blog_id=' . $blog_id . '&do=add"><img src="../img/blog_newtasks.gif" border="0" align="middle" alt="'.get_lang('AddTasks').'" />' . get_lang('AddTasks') . '</a> ';
+			echo '<a href="' .api_get_self(). '?action=manage_tasks&blog_id=' . $blog_id . '&do=assign"><img src="../img/blog_task.gif" border="0" align="middle" alt="'.get_lang('AssignTasks').'" />' . get_lang('AssignTasks') . '</a>';
 			?>
-				<a href="<?php echo api_get_self(); ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo Display::return_icon('blog_admin_users.png', get_lang('RightsManager'),'',ICON_SIZE_SMALL). get_lang('RightsManager') ?></a>
+				<a href="<?php echo api_get_self(); ?>?action=manage_rights&blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo Display::return_icon('blog_admin_users.png', get_lang('RightsManager'),'',ICON_SIZE_SMALL). get_lang('RightsManager') ?></a>
 			<?php
 			echo '</div>';
 
@@ -1385,7 +1385,7 @@ class Blog
 				$css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
 				$delete_icon = ($task['system_task'] == '1') ? "delete_na.gif" : "delete.gif";
 				$delete_title = ($task['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-				$delete_link = ($task['system_task'] == '1') ? '#' : api_get_self() . '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=delete&amp;task_id=' . $task['task_id'];
+				$delete_link = ($task['system_task'] == '1') ? '#' : api_get_self() . '?action=manage_tasks&blog_id=' . $task['blog_id'] . '&do=delete&task_id=' . $task['task_id'];
 				$delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"';
 
 				echo	'<tr class="' . $css_class . '" valign="top">',
@@ -1393,7 +1393,7 @@ class Blog
 							 '<td>' . Security::remove_XSS($task['description']) . '</td>',
 							 '<td><span style="background-color: #' . $task['color'] . '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>',
 							 '<td width="50">',
-							 	'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=edit&amp;task_id=' . $task['task_id'] . '">',
+							 	'<a href="' .api_get_self(). '?action=manage_tasks&blog_id=' . $task['blog_id'] . '&do=edit&task_id=' . $task['task_id'] . '">',
 								'<img src="../img/edit.gif" border="0" title="' . get_lang('EditTask') . '" />',
 								"</a>\n",
 								'<a href="' . $delete_link . '"',
@@ -1449,7 +1449,7 @@ class Blog
 			$css_class = (($counter % 2)==0) ? "row_odd" : "row_even";
 			$delete_icon = ($assignment['system_task'] == '1') ? "delete_na.gif" : "delete.gif";
 			$delete_title = ($assignment['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-			$delete_link = ($assignment['system_task'] == '1') ? '#' : api_get_self() . '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=delete&amp;task_id=' . $assignment['task_id'];
+			$delete_link = ($assignment['system_task'] == '1') ? '#' : api_get_self() . '?action=manage_tasks&blog_id=' . $assignment['blog_id'] . '&do=delete&task_id=' . $assignment['task_id'];
 			$delete_confirm = ($assignment['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"';
 
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $assignment['username']), ENT_QUOTES);
@@ -1460,10 +1460,10 @@ class Blog
 						 '<td>'.stripslashes($assignment['description']) . '</td>',
 						 '<td>' . $assignment['target_date'] . '</td>',
 						 '<td width="50">',
-						 	'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=edit_assignment&amp;task_id=' . $assignment['task_id'] . '&amp;user_id=' . $assignment['user_id'] . '">',
+						 	'<a href="' .api_get_self(). '?action=manage_tasks&blog_id=' . $assignment['blog_id'] . '&do=edit_assignment&task_id=' . $assignment['task_id'] . '&user_id=' . $assignment['user_id'] . '">',
 							'<img src="../img/edit.gif" border="0" title="' . get_lang('EditTask') . '" />',
 							"</a>\n",
-							'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $assignment['blog_id'] . '&amp;do=delete_assignment&amp;task_id=' . $assignment['task_id'] . '&amp;user_id=' . $assignment['user_id'] . '" ',
+							'<a href="' .api_get_self(). '?action=manage_tasks&blog_id=' . $assignment['blog_id'] . '&do=delete_assignment&task_id=' . $assignment['task_id'] . '&user_id=' . $assignment['user_id'] . '" ',
 							'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"',
 							'<img src="../img/' . $delete_icon . '" border="0" title="' . $delete_title . '" />',
 							"</a>\n",
@@ -1500,7 +1500,7 @@ class Blog
         );
 
 		// form
-		echo '<form name="add_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">';
+		echo '<form name="add_task" method="post" action="blog.php?action=manage_tasks&blog_id=' . $blog_id . '">';
 
 		// form title
 		echo '<legend>'.get_lang('AddTask').'</legend>';
@@ -1598,7 +1598,7 @@ class Blog
 		$task = Database::fetch_array($result);
 
 		// Display
-		echo '<form name="edit_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">
+		echo '<form name="edit_task" method="post" action="blog.php?action=manage_tasks&blog_id=' . $blog_id . '">
 					<legend>' . get_lang('EditTask') . '</legend>
 					<table width="100%" border="0" cellspacing="2">
 						<tr>
@@ -1922,7 +1922,7 @@ class Blog
 		if (Database::num_rows($result) > 0) {
 			while($blog_post = Database::fetch_array($result)) {
 			    $username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
-				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . stripslashes(Display::tag('span', api_get_person_name($blog_post['firstname'], $blog_post['lastname']), array('title'=>$username))) . '<br />';
+				echo '<a href="blog.php?action=execute_task&blog_id=' . $blog_id . '&task_id=' . $task_id . '&post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . stripslashes(Display::tag('span', api_get_person_name($blog_post['firstname'], $blog_post['lastname']), array('title'=>$username))) . '<br />';
 			}
         } else {
             echo get_lang('NoArticles');
@@ -2072,7 +2072,7 @@ class Blog
 
 				//Link to register users
 				if ($a_infosUser["user_id"] != $_SESSION['_user']['user_id']){
-					$row[] = "<a class=\"btn btn-primary \" href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $a_infosUser["user_id"]."\">" . get_lang('Register')."</a>";
+					$row[] = "<a class=\"btn btn-primary \" href=\"" .api_get_self()."?action=manage_members&blog_id=$blog_id&register=yes&user_id=" . $a_infosUser["user_id"]."\">" . get_lang('Register')."</a>";
 				} else {
 					$row[] = '';
 				}
@@ -2083,11 +2083,11 @@ class Blog
 		// Display
 		$query_vars['action'] = 'manage_members';
 		$query_vars['blog_id'] = $blog_id;
-		echo '<form method="post" action="blog.php?action=manage_members&amp;blog_id=' . $blog_id . '">';
+		echo '<form method="post" action="blog.php?action=manage_members&blog_id=' . $blog_id . '">';
 			Display::display_sortable_table($column_header, $user_data,null,null,$query_vars);
 			$link = '';
-			$link .= isset ($_GET['action']) ? 'action=' . Security::remove_XSS($_GET['action']) . '&amp;' : '';
-			$link .= "blog_id=$blog_id&amp;";
+			$link .= isset ($_GET['action']) ? 'action=' . Security::remove_XSS($_GET['action']) . '&' : '';
+			$link .= "blog_id=$blog_id&";
 
 			echo '<a href="blog.php?' . $link . 'selectall=subscribe">' . get_lang('SelectAll') . '</a> - ';
 			echo '<a href="blog.php?' . $link . '">' . get_lang('UnSelectAll') . '</a> ';
@@ -2181,7 +2181,7 @@ class Blog
 			//Link to register users
 
 			if ($myrow["user_id"] != $_user['user_id']) {
-				$row[] = "<a class=\"btn btn-primary\" href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow['user_id']."\">" . get_lang('UnRegister')."</a>";
+				$row[] = "<a class=\"btn btn-primary\" href=\"" .api_get_self()."?action=manage_members&blog_id=$blog_id&unregister=yes&user_id=" . $myrow['user_id']."\">" . get_lang('UnRegister')."</a>";
 			} else {
 				$row[] = '';
 			}
@@ -2191,11 +2191,11 @@ class Blog
 
 		$query_vars['action'] = 'manage_members';
 		$query_vars['blog_id'] = $blog_id;
-		echo '<form method="post" action="blog.php?action=manage_members&amp;blog_id=' . $blog_id . '">';
+		echo '<form method="post" action="blog.php?action=manage_members&blog_id=' . $blog_id . '">';
 		Display::display_sortable_table($column_header, $user_data,null,null,$query_vars);
 		$link = '';
-		$link .= isset ($_GET['action']) ? 'action=' . Security::remove_XSS($_GET['action']). '&amp;' : '';
-		$link .= "blog_id=$blog_id&amp;";
+		$link .= isset ($_GET['action']) ? 'action=' . Security::remove_XSS($_GET['action']). '&' : '';
+		$link .= "blog_id=$blog_id&";
 
 		echo '<a href="blog.php?' . $link . 'selectall=unsubscribe">' . get_lang('SelectAll') . '</a> - ';
 		echo '<a href="blog.php?' . $link . '">' . get_lang('UnSelectAll') . '</a> ';
@@ -2318,8 +2318,8 @@ class Blog
 		$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
 		$blogId = isset($_GET['blog_id']) ? intval($_GET['blog_id']) : null;
 		$filter = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
-		$backwardsURL = api_get_self()."?blog_id=" . $blogId."&amp;filter=" . $filter."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-		$forewardsURL = api_get_self()."?blog_id=" . $blogId."&amp;filter=" . $filter."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+		$backwardsURL = api_get_self()."?blog_id=" . $blogId."&filter=" . $filter."&month=". ($month == 1 ? 12 : $month -1)."&year=". ($month == 1 ? $year -1 : $year);
+		$forewardsURL = api_get_self()."?blog_id=" . $blogId."&filter=" . $filter."&month=". ($month == 12 ? 1 : $month +1)."&year=". ($month == 12 ? $year +1 : $year);
 
 		// Get posts for this month
 		$sql = "SELECT post.*, DAYOFMONTH(date_creation) as post_day, user.lastname, user.firstname
@@ -2405,7 +2405,7 @@ class Blog
 
 					// If there are posts on this day, create a filter link.
 					if(in_array($curday, $posts))
-						echo '<a href="blog.php?blog_id=' . $blog_id . '&amp;filter=' . $year . '-' . $month . '-' . $curday . '&amp;month=' . $month . '&amp;year=' . $year . '" title="' . get_lang('ViewPostsOfThisDay') . '">' . $curday . '</a>';
+						echo '<a href="blog.php?blog_id=' . $blog_id . '&filter=' . $year . '-' . $month . '-' . $curday . '&month=' . $month . '&year=' . $year . '" title="' . get_lang('ViewPostsOfThisDay') . '">' . $curday . '</a>';
 					else
 						echo $dayheader;
 
@@ -2413,7 +2413,7 @@ class Blog
 						if (isset($tasks[$curday]) && is_array($tasks[$curday])) {
 							// Add tasks to calendar
 							foreach ($tasks[$curday] as $task) {
-								echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="' . $task['title'] . ' : ' . get_lang('InBlog') . ' : ' . $task['blog_name'] . ' - ' . get_lang('ExecuteThisTask') . '">
+								echo '<a href="blog.php?action=execute_task&blog_id=' . $task['blog_id'] . '&task_id='.stripslashes($task['task_id']) . '" title="' . $task['title'] . ' : ' . get_lang('InBlog') . ' : ' . $task['blog_name'] . ' - ' . get_lang('ExecuteThisTask') . '">
 								<img src="../img/blog_task.gif" alt="Task" title="' . get_lang('ExecuteThisTask') . '" /></a>';
 							}
 						}
@@ -2523,7 +2523,7 @@ class Blog
 				// Validation when belongs to a session
 				$session_img = api_get_session_image($info_log[4], $_user['status']);
 
-				$url_start_blog = 'blog.php' ."?". "blog_id=".$info_log[3]. "&amp;".api_get_cidreq();
+				$url_start_blog = 'blog.php' ."?". "blog_id=".$info_log[3]. "&".api_get_cidreq();
 				$title = $info_log[0];
     			$image = '<img src="../img/blog.gif" border="0" align="absmiddle" alt="' . $title . '">';
     			$list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">' . $image . '</a></div><a href="'.$url_start_blog.'">' .$title. '</a>' . $session_img;
@@ -2533,14 +2533,14 @@ class Blog
 
 				$visibility_icon=($info_log[2]==0) ? 'invisible' : 'visible';
 				$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
-			 	$my_image = '<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $info_log[3] . '">';
+			 	$my_image = '<a href="' .api_get_self(). '?action=edit&blog_id=' . $info_log[3] . '">';
 				$my_image.= '<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />';
 				$my_image.= "</a>\n";
-				$my_image.= '<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $info_log[3] . '" ';
+				$my_image.= '<a href="' .api_get_self(). '?action=delete&blog_id=' . $info_log[3] . '" ';
 				$my_image.= 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
 				$my_image.= '<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />';
 				$my_image.= "</a>\n";
-				$my_image.= '<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $info_log[3] . '">';
+				$my_image.= '<a href="' .api_get_self(). '?action=visibility&blog_id=' . $info_log[3] . '">';
 				$my_image.= '<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
 				$my_image.= "</a>\n";
 

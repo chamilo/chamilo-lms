@@ -13,6 +13,21 @@ if (!empty($_POST['language'])) {
     $_GET['language'] = $_POST['language'];
 }
 require_once '../inc/global.inc.php';
+$hideHeaders = isset($_GET['hide_headers']);
+
+$allowedFields = [
+    'official_code',
+    'phone',
+    'status',
+    'language',
+    'extra_fields'
+];
+
+$allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
+
+if ($allowedFieldsConfiguration !== false) {
+    $allowedFields = $allowedFieldsConfiguration;
+}
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 
@@ -86,13 +101,20 @@ if ($user_already_registered_show_terms == false) {
 
     // OFFICIAL CODE
     if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
-        $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
-        if (api_get_setting('registration', 'officialcode') == 'true') {
-            $form->addRule(
+        if (in_array('official_code', $allowedFields)) {
+            $form->addElement(
+                'text',
                 'official_code',
-                get_lang('ThisFieldIsRequired'),
-                'required'
+                get_lang('OfficialCode'),
+                array('size' => 40)
             );
+            if (api_get_setting('registration', 'officialcode') == 'true') {
+                $form->addRule(
+                    'official_code',
+                    get_lang('ThisFieldIsRequired'),
+                    'required'
+                );
+            }
         }
     }
 
@@ -129,19 +151,50 @@ if ($user_already_registered_show_terms == false) {
     }
 
     // PHONE
-    $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
-    if (api_get_setting('registration', 'phone') == 'true') {
-        $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
+    if (in_array('phone', $allowedFields)) {
+        $form->addElement(
+            'text',
+            'phone',
+            get_lang('Phone'),
+            array('size' => 20)
+        );
+        if (api_get_setting('registration', 'phone') == 'true') {
+            $form->addRule(
+                'phone',
+                get_lang('ThisFieldIsRequired'),
+                'required'
+            );
+        }
     }
 
     // LANGUAGE
-    if (api_get_setting('registration', 'language') == 'true') {
-        $form->addElement('select_language', 'language', get_lang('Language'));
+    if (in_array('language', $allowedFields)) {
+        if (api_get_setting('registration', 'language') == 'true') {
+            $form->addElement(
+                'select_language',
+                'language',
+                get_lang('Language')
+            );
+        }
     }
     // STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
-        $form->addElement('radio', 'status', get_lang('Profile'), get_lang('RegStudent'), STUDENT);
-        $form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
+        if (in_array('status', $allowedFields)) {
+            $form->addElement(
+                'radio',
+                'status',
+                get_lang('Profile'),
+                get_lang('RegStudent'),
+                STUDENT
+            );
+            $form->addElement(
+                'radio',
+                'status',
+                null,
+                get_lang('RegAdmin'),
+                COURSEMANAGER
+            );
+        }
     }
 
     $captcha = api_get_setting('allow_captcha');
@@ -216,8 +269,10 @@ if ($user_already_registered_show_terms == false) {
     }
 
     // EXTRA FIELDS
-    $extraField = new ExtraField('user');
-    $returnParams = $extraField->addElements($form);
+    if (in_array('extra_fields', $allowedFields)) {
+        $extraField = new ExtraField('user');
+        $returnParams = $extraField->addElements($form);
+    }
 }
 
 if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
@@ -240,6 +295,10 @@ if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid']
     $defaults['openid'] = Security::remove_XSS($_GET['openid']);
 }
 $defaults['status'] = STUDENT;
+
+$defaults['extra_mail_notify_invitation'] = 1;
+$defaults['extra_mail_notify_message'] = 1;
+$defaults['extra_mail_notify_group_message'] = 1;
 
 $form->setDefaults($defaults);
 
@@ -403,7 +462,7 @@ if ($form->validate()) {
 
         $status = isset($values['status']) ? $values['status'] : STUDENT;
         $phone = isset($values['phone']) ? $values['phone'] : null;
-
+        $values['language'] = isset($values['language']) ? $values['language'] : api_get_interface_language();
         // Creates a new user
         $user_id = UserManager::create_user(
             $values['firstname'],
@@ -683,16 +742,21 @@ if ($form->validate()) {
             array('info' => $text_after_registration)
         );
     } else {
-        Display :: display_header($tool_name);
-        echo Display::page_header($tool_name);
-        echo $content;
-        echo $text_after_registration;
-        Display :: display_footer();
+
+        $tpl = new Template($tool_name);
+
+        $tpl->assign('inscription_content', $content);
+        $tpl->assign('text_after_registration', $text_after_registration);
+        $tpl->assign('hide_header', $hideHeaders);
+        $inscription = $tpl->get_template('auth/inscription.tpl');
+        $tpl->display($inscription);
     }
 } else {
     // Custom pages
     if (CustomPages::enabled()) {
-        CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
+        CustomPages::display(
+            CustomPages::REGISTRATION, array('form' => $form)
+        );
     } else {
 
         if (!api_is_anonymous()) {
@@ -718,11 +782,14 @@ if ($form->validate()) {
             CourseManager::redirectToCourse([]);
         }
 
-        Display :: display_header($tool_name);
-        echo Display::page_header($tool_name);
-        echo $content;
-        $form->display();
+        $tpl = new Template($tool_name);
 
-        Display :: display_footer();
+        $tpl->assign('inscription_header', Display::page_header($tool_name));
+        $tpl->assign('inscription_content', $content);
+        $tpl->assign('form', $form->returnForm());
+        $tpl->assign('hide_header', $hideHeaders);
+
+        $inscription = $tpl->get_template('auth/inscription.tpl');
+        $tpl->display($inscription);
     }
 }

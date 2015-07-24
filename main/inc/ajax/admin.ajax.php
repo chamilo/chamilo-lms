@@ -91,9 +91,9 @@ function version_check()
     $return = '';
     if ($row['selected_value'] == 'false') {
         $return .= get_lang('VersionCheckExplanation');
-        $return .= '<form class="well" action="'.api_get_path(WEB_CODE_PATH).'admin/index.php" id="VersionCheck" name="VersionCheck" method="post">';
+        $return .= '<form class="version-checking" action="'.api_get_path(WEB_CODE_PATH).'admin/index.php" id="VersionCheck" name="VersionCheck" method="post">';
         $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicPlatformsList');
-        $return .= '</label><button type="submit" class="btn btn-primary" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" >'.get_lang('EnableVersionCheck').'</button>';
+        $return .= '</label><button type="submit" class="btn btn-primary btn-block" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" >'.get_lang('EnableVersionCheck').'</button>';
         $return .= '</form>';
         check_system_version();
     } else {

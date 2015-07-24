@@ -34,33 +34,7 @@ class IndexManager
     function set_login_form($setLoginForm = true)
     {
         global $loginFailed;
-
-        $login_form = '';
-
-        if (!($this->user_id) || api_is_anonymous($this->user_id)) {
-
-            // Only display if the user isn't logged in.
-            $this->tpl->assign('login_language_form', api_display_language_form(true));
-            if ($setLoginForm) {
-                $this->tpl->assign('login_form',  self::display_login_form());
-
-                if ($loginFailed) {
-                    $this->tpl->assign('login_failed',  self::handle_login_failed());
-                }
-
-                if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-                    $login_form .= '<ul class="nav nav-pills nav-stacked">';
-                    if (api_get_setting('allow_registration') != 'false') {
-                        $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('SignUp').'</a></li>';
-                    }
-                    if (api_get_setting('allow_lostpassword') == 'true') {
-                        $login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
-                    }
-                    $login_form .= '</ul>';
-                }
-                $this->tpl->assign('login_options',  $login_form);
-            }
-        }
+        $this->tpl->setLoginForm($setLoginForm);
     }
 
     function return_exercise_block($personal_course_list)
@@ -382,47 +356,9 @@ class IndexManager
      *
      * @version 1.0.1
      */
-    function handle_login_failed() {
-        $message = get_lang('InvalidId');
-
-        if (!isset($_GET['error'])) {
-            if (api_is_self_registration_allowed()) {
-                $message = get_lang('InvalidForSelfRegistration');
-            }
-        } else {
-            switch ($_GET['error']) {
-                case '':
-                    if (api_is_self_registration_allowed()) {
-                        $message = get_lang('InvalidForSelfRegistration');
-                    }
-                    break;
-                case 'account_expired':
-                    $message = get_lang('AccountExpired');
-                    break;
-                case 'account_inactive':
-                    $message = get_lang('AccountInactive');
-                    break;
-                case 'user_password_incorrect':
-                    $message = get_lang('InvalidId');
-                    break;
-                case 'access_url_inactive':
-                    $message = get_lang('AccountURLInactive');
-                    break;
-                case 'wrong_captcha':
-                    $message = get_lang('TheTextYouEnteredDoesNotMatchThePicture');
-                    break;
-                case 'blocked_by_captcha':
-                    $message = get_lang('AccountBlockedByCaptcha');
-                    break;
-                case 'multiple_connection_not_allowed':
-                    $message = get_lang('MultipleConnectionsAreNotAllow');
-                    break;
-                case 'unrecognize_sso_origin':
-                    //$message = get_lang('SSOError');
-                    break;
-            }
-        }
-        return Display::return_message($message, 'error');
+    function handle_login_failed()
+    {
+        return $this->tpl->handleLoginFailed();
     }
 
     /**
@@ -761,77 +697,7 @@ class IndexManager
      */
     public function display_login_form()
     {
-        $form = new FormValidator(
-            'formLogin',
-            'POST',
-            null,
-            null,
-            null,
-            FormValidator::LAYOUT_BOX_NO_LABEL
-        );
-
-        $form->addText(
-            'login',
-            get_lang('UserName'),
-            true,
-            array('id' => 'login', 'autofocus' => 'autofocus', 'icon' => 'user')
-        );
-
-        $form->addElement(
-            'password',
-            'password',
-            get_lang('Pass'),
-            array('id' => 'password', 'icon' => 'lock')
-        );
-
-        // Captcha
-        $captcha = api_get_setting('allow_captcha');
-        $allowCaptcha = $captcha == 'true';
-
-        if ($allowCaptcha) {
-            $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;
-            if ($useCaptcha) {
-                $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
-                $options = array(
-                    'width' => 250,
-                    'height' => 90,
-                    'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
-                    'sessionVar'   => basename(__FILE__, '.php'),
-                    'imageOptions' => array(
-                        'font_size' => 20,
-                        'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
-                        'font_file' => 'OpenSans-Regular.ttf',
-                        //'output' => 'gif'
-                    )
-                );
-
-                // Minimum options using all defaults (including defaults for Image_Text):
-                //$options = array('callback' => 'qfcaptcha_image.php');
-
-                $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
-                $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
-
-                $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
-                $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
-                $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
-            }
-        }
-
-        $form->addButton('submitAuth', get_lang('LoginEnter'), null, 'primary', null, 'btn-block');
-
-        $html = $form->returnForm();
-        // The validation is located in the local.inc
-        /*if ($form->validate()) {
-            // Prevent re-use of the same CAPTCHA phrase
-            $captcha_question->destroy();
-        }*/
-
-        if (api_get_setting('openid_authentication') == 'true') {
-            include_once 'main/auth/openid/login.php';
-            $html .= '<div>'.openid_form().'</div>';
-        }
-
-        return $html;
+        return $this->tpl->displayLoginForm();
     }
 
     /**

@@ -340,7 +340,7 @@ api_protect_limit_for_session_admin();
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 
-if (is_array($extAuthSource)) {
+if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 

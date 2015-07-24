@@ -1159,7 +1159,7 @@ function lms_save_asset() {
  * Saving the status will be dealt with by the XAJAX function.
  */
 function chamilo_void_save_asset(score, max, min, status) {
-    logit_lms('chamilo_void_save_asset', 3);
+    logit_lms('chamilo_void_save_asset('+score+','+max+','+min+','+status+')', 3);
     olms.score = score;
     if ((max == null) || (max == '')){
         max = 100;

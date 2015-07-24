@@ -91,14 +91,6 @@ if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group['id'
 }
 echo '&nbsp;</div>';
 
-if (isset($_GET['action'])) {
-    switch ($_GET['action']) {
-        case 'show_msg':
-            Display::display_normal_message(Security::remove_XSS($_GET['msg']));
-            break;
-    }
-}
-
 /*	Main Display Area */
 
 $edit_url = '';

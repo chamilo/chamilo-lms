@@ -61,7 +61,7 @@ class ZombieReport implements Countable
                 ),
                 array(
                     'name' => 'submit_button',
-                    'type' => 'style_submit_button',
+                    'type' => 'button',
                     'value' => get_lang('Search'),
                     'attributes' => array('class' => 'search')
                 )
@@ -209,6 +209,7 @@ class ZombieReport implements Countable
 
         $ceiling = $this->get_ceiling();
         $active_only = $this->get_active_only();
+
         $items = ZombieManager::listZombies($ceiling, $active_only, $count, $from, $column, $direction);
         $result = array();
         foreach ($items as $item) {

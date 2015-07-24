@@ -726,7 +726,7 @@ if (!empty($action)) {
 
 // Create a search-box
 $form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
-$form->addElement('text', 'keyword', get_lang('Keyword'), array('id' => 'user-search-keyword'));
+$form->addElement('text', 'keyword');
 $form->addButtonSearch(get_lang('Search'));
 $form->addElement(
     'static',
@@ -773,28 +773,17 @@ while ($row_admin = Database::fetch_row($res_admin)) {
 }
 
 // Display Advanced search form.
-$form = new FormValidator('advanced_search', 'get');
+$form = new FormValidator('advanced_search', 'get', '', '', array(), FormValidator::LAYOUT_HORIZONTAL);
 
 $form->addElement('html','<div id="advanced_search_form" style="display:none;">');
 $form->addElement('header', get_lang('AdvancedSearch'));
-$form->addElement('html', '<table>');
+$form->addText('keyword_firstname',get_lang('FirstName'),false);
+$form->addText('keyword_lastname',get_lang('LastName'),false);
 
-$form->addElement('html', '<tr><td>');
-$form->addText('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
-$form->addElement('html', '</td><td width="200px;">');
-$form->addText('keyword_lastname',get_lang('LastName'),false,array('style'=>'margin-left:17px'));
-$form->addElement('html', '</td></tr>');
+$form->addText('keyword_username',get_lang('LoginName'),false);
+$form->addText('keyword_email',get_lang('Email'),false);
 
-$form->addElement('html', '<tr><td>');
-$form->addText('keyword_username',get_lang('LoginName'),false,array('style'=>'margin-left:17px'));
-$form->addElement('html', '</td>');
-$form->addElement('html', '<td>');
-$form->addText('keyword_email',get_lang('Email'),false,array('style'=>'margin-left:17px'));
-$form->addElement('html', '</td></tr>');
-
-$form->addElement('html', '<tr><td>');
-$form->addText('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
-$form->addElement('html', '</td><td>');
+$form->addText('keyword_officialcode',get_lang('OfficialCode'),false);
 
 $status_options = array();
 $status_options['%'] = get_lang('All');
@@ -804,24 +793,17 @@ $status_options[DRH] = get_lang('Drh');
 $status_options[SESSIONADMIN] = get_lang('SessionsAdmin');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
 
-$form->addElement('select','keyword_status',get_lang('Profile'), $status_options, array('style'=>'margin-left:17px'));
-$form->addElement('html', '</td></tr>');
-$form->addElement('html', '<tr><td>');
+$form->addElement('select','keyword_status',get_lang('Profile'), $status_options    );
+
 $active_group = array();
 $active_group[] = $form->createElement('checkbox','keyword_active','', get_lang('Active'));
 $active_group[] = $form->createElement('checkbox','keyword_inactive','', get_lang('Inactive'));
-$form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
-$form->addElement('html', '</td><td>');
+$form->addGroup($active_group,'',get_lang('ActiveAccount'), '<br/>',false);
 
 $form->addElement('checkbox', 'check_easy_passwords', null, get_lang('CheckEasyPasswords'));
 
-$form->addElement('html', '</td></tr>');
-
-$form->addElement('html', '<tr><td>');
 $form->addButtonSearch(get_lang('SearchUsers'));
-$form->addElement('html', '</td></tr>');
 
-$form->addElement('html', '</table>');
 
 $defaults = array();
 $defaults['keyword_active'] = 1;
@@ -831,7 +813,12 @@ $form->addElement('html','</div>');
 
 $form = $form->returnForm();
 
-$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+$table = new SortableTable(
+    'users',
+    'get_number_of_users',
+    'get_user_data',
+    (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
+);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');
 $table->set_header(1, get_lang('Photo'), false);

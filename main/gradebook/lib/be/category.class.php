@@ -451,7 +451,9 @@ class Category implements GradebookItem
 
         $categories = array();
         if (Database::num_rows($result) > 0) {
-            $categories = Category::create_category_objects_from_sql_result($result);
+            $categories = Category::create_category_objects_from_sql_result(
+                $result
+            );
         }
 
         return $categories;
@@ -570,7 +572,8 @@ class Category implements GradebookItem
             $em->persist($category);
             $em->flush();
 
-            $id = Database::insert_id();
+            $id = $category->getId();
+
             $this->set_id($id);
 
             if (!empty($id)) {
@@ -591,13 +594,13 @@ class Category implements GradebookItem
                             $gradebook =  new Gradebook();
                             $params = array();
 
-                            $params['name']             = $component['acronym'];
-                            $params['description']      = $component['title'];
-                            $params['user_id']          = api_get_user_id();
-                            $params['parent_id']        = $id;
-                            $params['weight']           = $component['percentage']/100*$default_weight;
-                            $params['session_id']       = api_get_session_id();
-                            $params['course_code']      = $this->get_course_code();
+                            $params['name'] = $component['acronym'];
+                            $params['description'] = $component['title'];
+                            $params['user_id'] = api_get_user_id();
+                            $params['parent_id'] = $id;
+                            $params['weight'] = $component['percentage'] / 100 * $default_weight;
+                            $params['session_id'] = api_get_session_id();
+                            $params['course_code'] = $this->get_course_code();
 
                             $gradebook->save($params);
                         }
@@ -959,7 +962,6 @@ class Category implements GradebookItem
                     return array($ressum, $weightsum);
                     break;
                 case 'ranking':
-                    //var_dump($students);
                     return null;
                     return AbstractLink::getCurrentUserRanking($students);
                     break;
@@ -1487,6 +1489,7 @@ class Category implements GradebookItem
             // All students
             // Course admin
             if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
+
                 // root
                 if ($this->id == 0) {
                     return $this->get_root_categories_for_teacher(api_get_user_id(), $course_code, $session_id, false);
@@ -1501,7 +1504,7 @@ class Category implements GradebookItem
                 }
             } elseif (api_is_platform_admin()) {
                 // platform admin
-                //we explicitly avoid listing subcats from another session
+                // we explicitly avoid listing subcats from another session
                 return Category::load(null, null, $course_code, $this->id, null, $session_id, $order);
             }
         }
@@ -2003,17 +2006,120 @@ class Category implements GradebookItem
     /**
      * Check whether a user has finished a course by its gradebook
      * @param int $userId The user ID
-     * @param \Category $category The gradebook category
+     * @param \Category $category Optional. The gradebook category.
+     *         To check by the gradebook category
+     * @param int $categoryId Optional. The gradebook category ID.
+     *         To check by the category ID
+     * @param string $courseCode Optional. The course code
+     * @param int $sessionId Optional. The session ID
      * @return boolean
      */
-    public static function userFinishedCourse($userId, \Category $category)
+    public static function userFinishedCourse(
+        $userId,
+        \Category $category = null,
+        $categoryId = 0,
+        $courseCode = null,
+        $sessionId = 0
+    )
     {
+        if (is_null($category) && empty($categoryId)) {
+            return false;
+        }
+
+        $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
+        $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
+
+        if (is_null($category) && !empty($categoryId)) {
+            $cats_course = Category::load(
+                $categoryId,
+                null,
+                $courseCode,
+                null,
+                null,
+                $sessionId,
+                false
+            );
+
+            if (empty($cats_course)) {
+                return false;
+            }
+
+            $category = $cats_course[0];
+        }
+
+        $currentScore = self::getCurrentScore($userId, $category->get_id(), $courseCode, $sessionId);
+
+        $minCertificateScore = $category->get_certificate_min_score();
+
+        return !empty($minCertificateScore) && $currentScore >= $minCertificateScore;
+    }
+
+    /**
+     * Get the current score (as percentage) on a gradebook category for a user
+     * @param int $userId The user id
+     * @param int $categoryId The gradebook category
+     * @param int $courseCode The course code
+     * @param int $sessionId Optional. The session id
+     * @return float The score
+     */
+    public static function getCurrentScore($userId, $categoryId, $courseCode, $sessionId = 0, $recalculate = false)
+    {
+        if ($recalculate) {
+            return self::calculateCurrentScore($userId, $categoryId, $courseCode, $sessionId);
+        }
+
+        $resultData = Database::select(
+            '*',
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_LOG),
+            [
+                'where' => [
+                    'category_id = ? AND user_id = ?' => [$categoryId, $userId],
+                ],
+                'order' => 'registered_at DESC',
+                'limit' => '1'
+            ],
+            'fisrt'
+        );
+
+        if (empty($resultData)) {
+            return 0;
+        }
+
+        return $resultData['score'];
+    }
+
+    /**
+     * Calculate the current score on a gradebook category for a user
+     * @param int $userId The user id
+     * @param int $categoryId The gradebook category
+     * @param int $courseCode The course code
+     * @param int $sessionId Optional. The session id
+     * @return float The score
+     */
+    private static function calculateCurrentScore($userId, $categoryId, $courseCode, $sessionId)
+    {
+        $cats_course = Category::load(
+            $categoryId,
+            null,
+            $courseCode,
+            null,
+            null,
+            $sessionId,
+            false
+        );
+
+        if (empty($cats_course)) {
+            return 0;
+        }
+
+        $category = $cats_course[0];
+
         $courseEvaluations = $category->get_evaluations($userId, true);
         $courseLinks = $category->get_links($userId, true);
 
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
 
-        $totalItemValue = 0;
+        $categoryScore = 0;
 
         for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
             $item = $evaluationsAndLinks[$i];
@@ -2025,14 +2131,30 @@ class Category implements GradebookItem
                 $itemValue = $score[0] / $divider * $item->get_weight();
             }
 
-            $totalItemValue += $itemValue;
+            $categoryScore += $itemValue;
         }
 
-        $totalItemValue = floatval($totalItemValue);
+        return floatval($categoryScore);
+    }
 
-        $minCertificateScore = $category->get_certificate_min_score();
-
-        return !empty($minCertificateScore) && $totalItemValue >= $minCertificateScore;
+    /**
+     * Register the current score for a user on a category gradebook
+     * @param float $score The achieved score
+     * @param int $userId The user id
+     * @param int $categoryId The gradebook category
+     * @return int The insert id
+     */
+    public static function registerCurrentScore($score, $userId, $categoryId)
+    {
+        return Database::insert(
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_LOG),
+            [
+                'category_id' => intval($categoryId),
+                'user_id' => intval($userId),
+                'score' => floatval($score),
+                'registered_at' => api_get_utc_datetime()
+            ]
+        );
     }
 
 }

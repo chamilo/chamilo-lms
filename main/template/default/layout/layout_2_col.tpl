@@ -26,9 +26,9 @@
         {% endblock %}
 
 		{# User picture #}
-
-        {{ user_image_block }}
-
+        {% if _u.logged  == 1 %}
+            {{ user_image_block }}
+        {% endif %}
         {# User Profile links #}
 		{{ profile_block }}
 
@@ -101,7 +101,7 @@
 
         {% block content %}
         {% if content is not null %}
-            <section id="page-content">
+            <section id="page-content" class="{{ course_history_page }}">
                 {{ content }}
             </section>
         {% endif %}

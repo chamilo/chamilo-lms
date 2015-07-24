@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+require_once 'Resource.class.php';
 require_once 'Course.class.php';
 require_once 'Event.class.php';
 require_once 'Link.class.php';
@@ -2091,7 +2092,7 @@ class CourseRestorer
 				}
 
                 if ($this->add_text_in_items) {
-                    $lp->name = $lp->name.' '.get_lang('Copy');
+                    $lp->name = $lp->name.' '.get_lang('CopyLabelSuffix');
                 }
 
                 if (isset($this->tool_copy_settings['learnpaths'])) {

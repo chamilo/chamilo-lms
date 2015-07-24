@@ -218,6 +218,8 @@ $form->addElement('html', '<div class="col-md-12">');
 // Submit
 $form->addButtonSave(get_lang('PropModify'), 'submit');
 
+$currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
+
 // If form validates -> save data
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -248,9 +250,9 @@ if ($form->validate()) {
                 $max_member,
                 $values['groups_per_user']
             );
-			$msg = urlencode(get_lang('GroupPropertiesModified'));
-			header('Location: group.php?action=show_msg&msg='.$msg.'&category='.$values['id']);
-			break;
+            Display::addFlash(Display::return_message(get_lang('GroupPropertiesModified')));
+            header("Location: ".$currentUrl."&category=".$values['id']);
+            exit;
 		case 'add_category':
 			GroupManager :: create_category(
                 $values['title'],
@@ -267,8 +269,9 @@ if ($form->validate()) {
                 $max_member,
                 $values['groups_per_user']
             );
-			$msg = urlencode(get_lang('CategoryCreated'));
-			header('Location: group.php?action=show_msg&msg='.$msg);
+            Display::addFlash(Display::return_message(get_lang('CategoryCreated')));
+            header("Location: ".$currentUrl);
+            exit;
 			break;
 	}
 }

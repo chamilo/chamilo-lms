@@ -681,6 +681,8 @@ if (@$_POST['step2']) {
                     $manager
                 );
 
+                fixIds($manager);
+
                 include 'update-files-1.9.0-1.10.0.inc.php';
                 // Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';

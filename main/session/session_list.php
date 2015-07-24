@@ -19,18 +19,20 @@ $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
 $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
 
 if ($action == 'delete') {
-	SessionManager::delete($idChecked);
+    SessionManager::delete($idChecked);
     Display::addFlash(Display::return_message(get_lang('Deleted')));
-	header('Location: session_list.php');
-	exit();
+    header('Location: session_list.php');
+    exit();
 } elseif ($action == 'copy') {
-	SessionManager::copy($idChecked);
-    Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+    $result = SessionManager::copy($idChecked);
+    if ($result) {
+        Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+    } else {
+        Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
+    }
     header('Location: session_list.php');
     exit();
 }
-
-//$interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
@@ -45,7 +47,14 @@ if (!empty($courseId)) {
     $courseList[$courseInfo['code']] = $parents . $courseInfo['title'];
 }
 
-$sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
+$sessionFilter = new FormValidator(
+    'course_filter',
+    'get',
+    '',
+    '',
+    array(),
+    FormValidator::LAYOUT_INLINE
+);
 $sessionFilter->addElement(
     'select_ajax',
     'course_name',
@@ -92,10 +101,10 @@ $result = SessionManager::getGridColumns($list_type);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
 
-//Autowidth
+// Autowidth
 $extra_params['autowidth'] = 'true';
 
-//height auto
+// height auto
 $extra_params['height'] = 'auto';
 
 $extra_params['postData'] =array(
@@ -113,183 +122,183 @@ $extra_params['postData'] =array(
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
      return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-     '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png',get_lang('SubscribeUsersToSession'),'',ICON_SIZE_SMALL).'</a>'.
-     '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png',get_lang('SubscribeCoursesToSession'),'',ICON_SIZE_SMALL).'</a>'.
-     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
-     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
-     '\';
+    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png',get_lang('SubscribeUsersToSession'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png',get_lang('SubscribeCoursesToSession'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+    '\';
 }';
 
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 
 ?>
-<script>
-function setSearchSelect(columnName) {
-    $("#sessions").jqGrid('setColProp', columnName, {
-       /*searchoptions:{
-            dataInit:function(el){
-                $("option[value='1']",el).attr("selected", "selected");
-                setTimeout(function(){
-                    $(el).trigger('change');
-                }, 1000);
-            }
-        }*/
-    });
-}
-var added_cols = [];
-var original_cols = [];
-
-function clean_cols(grid, added_cols) {
-    //Cleaning
-    for (key in added_cols) {
-        //console.log('hide: ' + key);
-        grid.hideCol(key);
-    };
-    grid.showCol('name');
-    grid.showCol('display_start_date');
-    grid.showCol('display_end_date');
-    grid.showCol('course_title');
-}
-
-function show_cols(grid, added_cols) {
-    grid.showCol('name').trigger('reloadGrid');
-    for (key in added_cols) {
-        //console.log('show: ' + key);
-        grid.showCol(key);
-    };
-}
-
-var second_filters = [];
-
-$(function() {
-
-    date_pick_today = function(elem) {
-        $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
-        $(elem).datetimepicker('setDate', (new Date()));
-    }
-    date_pick_one_month = function(elem) {
-        $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
-        next_month = Date.today().next().month();
-        $(elem).datetimepicker('setDate', next_month);
-    }
-
-    //Great hack
-    register_second_select = function(elem) {
-        second_filters[$(elem).val()] = $(elem);
-    }
-
-    fill_second_select = function(elem) {
-        $(elem).on("change", function() {
-            composed_id = $(this).val();
-            field_id = composed_id.split("#")[0];
-            id = composed_id.split("#")[1];
-
-            $.ajax({
-                url: "<?php echo $urlAjaxExtraField; ?>&a=get_second_select_options",
-                dataType: "json",
-                data: "type=session&field_id="+field_id+"&option_value_id="+id,
-                success: function(data) {
-                    my_select = second_filters[field_id];
-                    my_select.empty();
-                    $.each(data, function(index, value) {
-                        my_select.append($("<option/>", {
-                            value: index,
-                            text: value
-                        }));
-                    });
-                }
+    <script>
+        function setSearchSelect(columnName) {
+            $("#sessions").jqGrid('setColProp', columnName, {
+                /*searchoptions:{
+                 dataInit:function(el){
+                 $("option[value='1']",el).attr("selected", "selected");
+                 setTimeout(function(){
+                 $(el).trigger('change');
+                 }, 1000);
+                 }
+                 }*/
             });
-        });
-    }
+        }
+        var added_cols = [];
+        var original_cols = [];
 
-<?php
-echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
-?>
+        function clean_cols(grid, added_cols) {
+            //Cleaning
+            for (key in added_cols) {
+                //console.log('hide: ' + key);
+                grid.hideCol(key);
+            };
+            grid.showCol('name');
+            grid.showCol('display_start_date');
+            grid.showCol('display_end_date');
+            grid.showCol('course_title');
+        }
 
-    setSearchSelect("status");
+        function show_cols(grid, added_cols) {
+            grid.showCol('name').trigger('reloadGrid');
+            for (key in added_cols) {
+                //console.log('show: ' + key);
+                grid.showCol(key);
+            };
+        }
 
-    var grid = $("#sessions"),
-        prmSearch = {
-            multipleSearch : true,
-            overlay : false,
-            width: 'auto',
-            caption: '<?php echo addslashes(get_lang('Search')); ?>',
-            formclass:'data_table',
-            onSearch : function() {
-                var postdata = grid.jqGrid('getGridParam', 'postData');
+        var second_filters = [];
 
-                if (postdata && postdata.filters) {
-                    filters = jQuery.parseJSON(postdata.filters);
-                    clean_cols(grid, added_cols);
-                    added_cols = [];
-                    $.each(filters, function(key, value){
-                        //console.log('key: ' + key );
-                        if (key == 'rules') {
-                            $.each(value, function(subkey, subvalue) {
-                                if (subvalue.data == undefined) {
-                                }
+        $(function() {
 
-                                //if (added_cols[value.field] == undefined) {
-                                    added_cols[subvalue.field] = subvalue.field;
-                                //}
-                                //grid.showCol(value.field);
+            date_pick_today = function(elem) {
+                $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
+                $(elem).datetimepicker('setDate', (new Date()));
+            }
+            date_pick_one_month = function(elem) {
+                $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
+                next_month = Date.today().next().month();
+                $(elem).datetimepicker('setDate', next_month);
+            }
+
+            //Great hack
+            register_second_select = function(elem) {
+                second_filters[$(elem).val()] = $(elem);
+            }
+
+            fill_second_select = function(elem) {
+                $(elem).on("change", function() {
+                    composed_id = $(this).val();
+                    field_id = composed_id.split("#")[0];
+                    id = composed_id.split("#")[1];
+
+                    $.ajax({
+                        url: "<?php echo $urlAjaxExtraField; ?>&a=get_second_select_options",
+                        dataType: "json",
+                        data: "type=session&field_id="+field_id+"&option_value_id="+id,
+                        success: function(data) {
+                            my_select = second_filters[field_id];
+                            my_select.empty();
+                            $.each(data, function(index, value) {
+                                my_select.append($("<option/>", {
+                                    value: index,
+                                    text: value
+                                }));
                             });
                         }
                     });
-                    show_cols(grid, added_cols);
-                }
-           },
-           onReset: function() {
-                clean_cols(grid, added_cols);
-           }
-        };
+                });
+            }
 
-    original_cols = grid.jqGrid('getGridParam', 'colModel');
+            <?php
+            echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+            ?>
 
-    grid.jqGrid('navGrid','#sessions_pager',
-        {edit:false,add:false,del:false},
-        {height:280,reloadAfterSubmit:false}, // edit options
-        {height:280,reloadAfterSubmit:false}, // add options
-        {reloadAfterSubmit:false},// del options
-        prmSearch
-    );
+            setSearchSelect("status");
 
-    // Create the searching dialog.
-    grid.searchGrid(prmSearch);
+            var grid = $("#sessions"),
+                prmSearch = {
+                    multipleSearch : true,
+                    overlay : false,
+                    width: 'auto',
+                    caption: '<?php echo addslashes(get_lang('Search')); ?>',
+                    formclass:'data_table',
+                    onSearch : function() {
+                        var postdata = grid.jqGrid('getGridParam', 'postData');
 
-    // Fixes search table.
-    var searchDialogAll = $("#fbox_"+grid[0].id);
-    searchDialogAll.addClass("table");
-    var searchDialog = $("#searchmodfbox_"+grid[0].id);
-    searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
-    searchDialog.css({position:"relative", "z-index":"auto", "float":"left"})
-    var gbox = $("#gbox_"+grid[0].id);
-    gbox.before(searchDialog);
-    gbox.css({clear:"left"});
+                        if (postdata && postdata.filters) {
+                            filters = jQuery.parseJSON(postdata.filters);
+                            clean_cols(grid, added_cols);
+                            added_cols = [];
+                            $.each(filters, function(key, value){
+                                //console.log('key: ' + key );
+                                if (key == 'rules') {
+                                    $.each(value, function(subkey, subvalue) {
+                                        if (subvalue.data == undefined) {
+                                        }
 
-    //Select first elements by default
-    $('.input-elm').each(function(){
-        $(this).find('option:first').attr('selected', 'selected');
-    });
+                                        //if (added_cols[value.field] == undefined) {
+                                        added_cols[subvalue.field] = subvalue.field;
+                                        //}
+                                        //grid.showCol(value.field);
+                                    });
+                                }
+                            });
+                            show_cols(grid, added_cols);
+                        }
+                    },
+                    onReset: function() {
+                        clean_cols(grid, added_cols);
+                    }
+                };
 
-    $('.delete-rule').each(function(){
-        $(this).click(function(){
-             $('.input-elm').each(function(){
+            original_cols = grid.jqGrid('getGridParam', 'colModel');
+
+            grid.jqGrid('navGrid','#sessions_pager',
+                {edit:false,add:false,del:false},
+                {height:280,reloadAfterSubmit:false}, // edit options
+                {height:280,reloadAfterSubmit:false}, // add options
+                {reloadAfterSubmit:false},// del options
+                prmSearch
+            );
+
+            // Create the searching dialog.
+            grid.searchGrid(prmSearch);
+
+            // Fixes search table.
+            var searchDialogAll = $("#fbox_"+grid[0].id);
+            searchDialogAll.addClass("table");
+            var searchDialog = $("#searchmodfbox_"+grid[0].id);
+            searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
+            searchDialog.css({position:"relative", "z-index":"auto", "float":"left"})
+            var gbox = $("#gbox_"+grid[0].id);
+            gbox.before(searchDialog);
+            gbox.css({clear:"left"});
+
+            //Select first elements by default
+            $('.input-elm').each(function(){
                 $(this).find('option:first').attr('selected', 'selected');
             });
-        });
-    });
 
-    /*
-    $('.delete-rule').on('click', function(){
-        console.log('deleted');
-        $('.input-elm').each(function(){
-            $(this).find('option:first').attr('selected', 'selected');
+            $('.delete-rule').each(function(){
+                $(this).click(function(){
+                    $('.input-elm').each(function(){
+                        $(this).find('option:first').attr('selected', 'selected');
+                    });
+                });
+            });
+
+            /*
+             $('.delete-rule').on('click', function(){
+             console.log('deleted');
+             $('.input-elm').each(function(){
+             $(this).find('option:first').attr('selected', 'selected');
+             });
+             });*/
         });
-    });*/
-});
-</script>
-<div class="actions">
+    </script>
+    <div class="actions">
 <?php
 
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.

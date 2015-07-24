@@ -86,7 +86,9 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
 // Action links
 echo '<div class="actions">';
     echo '<a href="group_creation.php?'.api_get_cidreq().'">'.
-        Display::return_icon('new_group.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('add.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
+
+    echo GroupManager::getSearchForm();
 
     if (api_get_setting('allow_group_categories') == 'true') {
         echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
@@ -114,7 +116,6 @@ echo '<div class="actions">';
     echo '<a href="../user/user.php?'.api_get_cidreq().'">'.
     Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo GroupManager::getSearchForm();
 echo '</div>';
 
 echo GroupManager::getOverview($courseId, $keyword);

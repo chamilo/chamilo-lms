@@ -216,6 +216,7 @@ if (api_is_platform_admin()) {
 
     $items = array();
     $items[] = array('url' => 'settings.php', 'label' => get_lang('PlatformConfigSettings'));
+    $items[] = array('url' => 'languages.php', 'label' => get_lang('Languages'));
     $items[] = array('url' => 'settings.php?category=Plugins', 'label' => get_lang('Plugins'));
     $items[] = array('url' => 'settings.php?category=Regions', 'label' => get_lang('Regions'));
     $items[] = array('url' => 'system_announcements.php', 'label' => get_lang('SystemAnnouncements'));

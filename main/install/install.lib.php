@@ -11,6 +11,9 @@
  */
 
 use Doctrine\ORM\EntityManager;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 
 /*      CONSTANTS */
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
@@ -1883,10 +1886,6 @@ function installSettings(
  * src/Chamilo/CoreBundle/Migrations/Schema/*
  *
  * @param string $chamiloVersion
- * @param string $dbNameForm
- * @param string $dbUsernameForm
- * @param string $dbPassForm
- * @param string $dbHostForm
  * @param EntityManager $manager
  * @throws \Doctrine\DBAL\DBALException
  */
@@ -1901,9 +1900,9 @@ function migrate($chamiloVersion, EntityManager $manager)
     // default name is: doctrine_migration_versions)
     $config->setMigrationsTableName('version');
     // Namespace of your migration classes, do not forget escape slashes, do not add last slash
-    $config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\V'.$chamiloVersion);
+    $config->setMigrationsNamespace('Application\Migrations\Schema\V'.$chamiloVersion);
     // Directory where your migrations are located
-    $config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/V'.$chamiloVersion);
+    $config->setMigrationsDirectory(api_get_path(SYS_PATH).'app/Migrations/Schema/V'.$chamiloVersion);
     // Load your migrations
     $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
 
@@ -1943,6 +1942,442 @@ function migrate($chamiloVersion, EntityManager $manager)
             echo 'ERROR: '.$ex->getMessage().$nl;
         }
     }
+}
+
+function fixIds(EntityManager $em)
+{
+    $connection = $em->getConnection();
+
+    $sql = "SELECT * FROM c_lp_item";
+    $result = $connection->fetchAll($sql);
+    foreach ($result as $item) {
+        $courseId = $item['c_id'];
+        $iid = isset($item['iid']) ? $item['iid'] : 0;
+        $ref = isset($item['ref']) ? $item['ref'] : 0;
+        $sql = null;
+
+        $newId = '';
+
+        switch ($item['item_type']) {
+            case TOOL_LINK:
+                $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case TOOL_STUDENTPUBLICATION:
+                $sql = "SELECT * FROM c_student_publication WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case TOOL_QUIZ:
+                $sql = "SELECT * FROM c_quiz WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case TOOL_DOCUMENT:
+                $sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case TOOL_FORUM:
+                $sql = "SELECT * FROM c_forum_forum WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+            case 'thread':
+                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                $data = $connection->fetchAssoc($sql);
+                if ($data) {
+                    $newId = $data['iid'];
+                }
+                break;
+        }
+
+        if (!empty($sql) && !empty($newId) && !empty($iid)) {
+            $sql = "UPDATE c_lp_item SET ref = $newId WHERE iid = $iid";
+            $connection->executeQuery($sql);
+        }
+    }
+
+    // Set NULL if session = 0
+    $sql = "UPDATE c_item_property SET session_id = NULL WHERE session_id = 0";
+    $connection->executeQuery($sql);
+
+    // Set NULL if group = 0
+    $sql = "UPDATE c_item_property SET to_group_id = NULL WHERE to_group_id = 0";
+    $connection->executeQuery($sql);
+
+    // Set NULL if insert_user_id = 0
+    $sql = "UPDATE c_item_property SET insert_user_id = NULL WHERE insert_user_id = 0";
+    $connection->executeQuery($sql);
+
+    // Delete session data of sessions that don't exist.
+    $sql = "DELETE FROM c_item_property
+            WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)";
+    $connection->executeQuery($sql);
+
+    // Delete group data of groups that don't exist.
+    $sql = "DELETE FROM c_item_property
+            WHERE to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT id FROM c_group_info)";
+    $connection->executeQuery($sql);
+
+    // This updates the group_id with c_group_info.iid instead of c_group_info.id
+
+    $groupTableTofix = [
+        'c_group_rel_user',
+        'c_group_rel_tutor',
+        'c_permission_group',
+        'c_role_group',
+        'c_survey_invitation',
+        'c_attendance_calendar_rel_group'
+    ];
+
+    foreach ($groupTableTofix as $table) {
+        $sql = "SELECT * FROM $table";
+        $result = $connection->fetchAll($sql);
+        foreach ($result as $item) {
+            $iid = $item['iid'];
+            $courseId = $item['c_id'];
+            $groupId = intval($item['group_id']);
+
+            // Fix group id
+            if (!empty($groupId)) {
+                $sql = "SELECT * FROM c_group_info
+                        WHERE c_id = $courseId AND id = $groupId LIMIT 1";
+                $data = $connection->fetchAssoc($sql);
+                if (!empty($data)) {
+                    $newGroupId = $data['iid'];
+                    $sql = "UPDATE $table SET group_id = $newGroupId
+                            WHERE iid = $iid";
+                    $connection->executeQuery($sql);
+                } else {
+                    // The group does not exists clean this record
+                    $sql = "DELETE FROM $table WHERE iid = $iid";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+    }
+
+    // Fix c_item_property
+
+    $sql = "SELECT * FROM c_item_property";
+    $result = $connection->fetchAll($sql);
+    foreach ($result as $item) {
+        $courseId = $item['c_id'];
+        $sessionId = intval($item['session_id']);
+        $groupId = intval($item['to_group_id']);
+        $iid = $item['iid'];
+        $ref = $item['ref'];
+
+        // Fix group id
+
+        if (!empty($groupId)) {
+            $sql = "SELECT * FROM c_group_info WHERE c_id = $courseId AND id = $groupId";
+            $data = $connection->fetchAssoc($sql);
+            if (!empty($data)) {
+                $newGroupId = $data['iid'];
+                $sql = "UPDATE c_item_property SET to_group_id = $newGroupId
+                        WHERE iid = $iid";
+                $connection->executeQuery($sql);
+            } else {
+                // The group does not exists clean this record
+                $sql = "DELETE FROM c_item_property WHERE iid = $iid";
+                $connection->executeQuery($sql);
+            }
+        }
+
+        $sql = '';
+        $newId = '';
+        switch ($item['tool']) {
+            case TOOL_LINK:
+                $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref ";
+                break;
+            case TOOL_STUDENTPUBLICATION:
+                $sql = "SELECT * FROM c_student_publication WHERE c_id = $courseId AND id = $ref";
+                break;
+            case TOOL_QUIZ:
+                $sql = "SELECT * FROM c_quiz WHERE c_id = $courseId AND id = $ref";
+                break;
+            case TOOL_DOCUMENT:
+                $sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $ref";
+                break;
+            case TOOL_FORUM:
+                $sql = "SELECT * FROM c_forum_forum WHERE c_id = $courseId AND id = $ref";
+                break;
+            case 'thread':
+                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                break;
+        }
+
+        if (!empty($sql) && !empty($newId)) {
+            $data = $connection->fetchAssoc($sql);
+            if (isset($data['iid'])) {
+                $newId = $data['iid'];
+            }
+            $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
+            $connection->executeQuery($sql);
+        }
+    }
+
+    // Fix gradebook_link
+    $sql = "SELECT * FROM gradebook_link";
+    $result = $connection->fetchAll($sql);
+    foreach ($result as $item) {
+        $courseCode = $item['course_code'];
+        $courseInfo = api_get_course_info($courseCode);
+
+        if (empty($courseInfo)) {
+            continue;
+        }
+        $courseId = $courseInfo['real_id'];
+        $ref = $item['ref_id'];
+        $iid = $item['id'];
+        $sql = '';
+
+        switch ($item['type']) {
+            case LINK_LEARNPATH:
+                $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref ";
+                break;
+            case LINK_STUDENTPUBLICATION:
+                $sql = "SELECT * FROM c_student_publication WHERE c_id = $courseId AND id = $ref";
+                break;
+            case LINK_EXERCISE:
+                $sql = "SELECT * FROM c_quiz WHERE c_id = $courseId AND id = $ref";
+                break;
+            case LINK_ATTENDANCE:
+                //$sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $ref";
+                break;
+            case LINK_FORUM_THREAD:
+                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                break;
+        }
+
+        if (!empty($sql)) {
+            $data = $connection->fetchAssoc($sql);
+            if (isset($data) && isset($data['iid'])) {
+                $newId = $data['iid'];
+                $sql = "UPDATE gradebook_link SET ref_id = $newId
+                        WHERE id = $iid";
+                $connection->executeQuery($sql);
+            }
+        }
+    }
+
+
+    $sql = "SELECT * FROM groups";
+    $result = $connection->executeQuery($sql);
+    $groups = $result->fetchAll();
+
+    $oldGroups = array();
+
+    if (!empty($groups )) {
+        foreach ($groups as $group) {
+            $sql = "INSERT INTO usergroup (name, group_type, description, picture, url, visibility, updated_at, created_at)
+                    VALUES ('{$group['name']}', '1', '{$group['description']}', '{$group['picture_uri']}', '{$group['url']}', '{$group['visibility']}', '{$group['updated_on']}', '{$group['created_on']}')";
+
+            $connection->executeQuery($sql);
+            $id = $connection->lastInsertId('id');
+            $oldGroups[$group['id']] = $id;
+        }
+    }
+
+    if (!empty($oldGroups)) {
+        foreach ($oldGroups as $oldId => $newId) {
+            $path = \GroupPortalManager::get_group_picture_path_by_id(
+                $oldId,
+                'system'
+            );
+            if (!empty($path)) {
+
+                $newPath = str_replace(
+                    "groups/$oldId/",
+                    "groups/$newId/",
+                    $path['dir']
+                );
+                $command = "mv {$path['dir']} $newPath ";
+                system($command);
+            }
+        }
+
+        $sql = "SELECT * FROM group_rel_user";
+        $result = $connection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
+                if (isset($oldGroups[$data['group_id']])) {
+                    $data['group_id'] = $oldGroups[$data['group_id']];
+                    $sql = "INSERT INTO usergroup_rel_user (usergroup_id, user_id, relation_type)
+                            VALUES ('{$data['group_id']}', '{$data['user_id']}', '{$data['relation_type']}')";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+
+        $sql = "SELECT * FROM group_rel_group";
+        $result = $connection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
+                if (isset($oldGroups[$data['group_id']]) && isset($oldGroups[$data['subgroup_id']])) {
+                    $data['group_id'] = $oldGroups[$data['group_id']];
+                    $data['subgroup_id'] = $oldGroups[$data['subgroup_id']];
+                    $sql = "INSERT INTO usergroup_rel_usergroup (group_id, subgroup_id, relation_type)
+                            VALUES ('{$data['group_id']}', '{$data['subgroup_id']}', '{$data['relation_type']}')";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+
+        $sql = "SELECT * FROM announcement_rel_group";
+        $result = $connection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
+                if (isset($oldGroups[$data['group_id']])) {
+                    //Deleting relation
+                    $sql = "DELETE FROM announcement_rel_group WHERE id = {$data['id']}";
+                    $connection->executeQuery($sql);
+
+                    //Add new relation
+                    $data['group_id'] = $oldGroups[$data['group_id']];
+                    $sql = "INSERT INTO announcement_rel_group(group_id, announcement_id)
+                            VALUES ('{$data['group_id']}', '{$data['announcement_id']}')";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+
+        $sql = "SELECT * FROM group_rel_tag";
+        $result = $connection->executeQuery($sql);
+        $dataList = $result->fetchAll();
+        if (!empty($dataList)) {
+            foreach ($dataList as $data) {
+                if (isset($oldGroups[$data['group_id']])) {
+                    $data['group_id'] = $oldGroups[$data['group_id']];
+                    $sql = "INSERT INTO usergroup_rel_tag (tag_id, usergroup_id)
+                            VALUES ('{$data['tag_id']}', '{$data['group_id']}')";
+                    $connection->executeQuery($sql);
+                }
+            }
+        }
+    }
+
+
+    // Extra fields
+    $extraFieldTables = [
+        ExtraField::USER_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_USER_FIELD),
+        ExtraField::COURSE_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_COURSE_FIELD),
+        //ExtraField::LP_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_LP_FIELD),
+        ExtraField::SESSION_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_SESSION_FIELD),
+        //ExtraField::CALENDAR_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_FIELD),
+        //ExtraField::QUESTION_FIELD_TYPE => Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_FIELD),
+        //ExtraField::USER_FIELD_TYPE => //Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD),
+    ];
+
+    foreach ($extraFieldTables as $type => $table) {
+        //continue;
+        $sql = "SELECT * FROM $table ";
+        $result = $connection->query($sql);
+        $fields = $result->fetchAll();
+
+        foreach ($fields as $field) {
+            $originalId = $field['id'];
+            $extraField = new ExtraField();
+            $extraField
+                ->setExtraFieldType($type)
+                ->setVariable($field['field_variable'])
+                ->setFieldType($field['field_type'])
+                ->setDisplayText($field['field_display_text'])
+                ->setDefaultValue($field['field_default_value'])
+                ->setFieldOrder($field['field_order'])
+                ->setVisible($field['field_visible'])
+                ->setChangeable($field['field_changeable'])
+                ->setFilter($field['field_filter']);
+
+            $em->persist($extraField);
+            $em->flush();
+
+            $values = array();
+            switch ($type) {
+                case ExtraField::USER_FIELD_TYPE:
+                    $optionTable = Database::get_main_table(
+                        TABLE_MAIN_USER_FIELD_OPTIONS
+                    );
+                    $valueTable = Database::get_main_table(
+                        TABLE_MAIN_USER_FIELD_VALUES
+                    );
+                    $handlerId = 'user_id';
+                    break;
+                case ExtraField::COURSE_FIELD_TYPE:
+                    $optionTable = Database::get_main_table(
+                        TABLE_MAIN_COURSE_FIELD_OPTIONS
+                    );
+                    $valueTable = Database::get_main_table(
+                        TABLE_MAIN_COURSE_FIELD_VALUES
+                    );
+                    $handlerId = 'c_id';
+                    break;
+                case ExtraField::SESSION_FIELD_TYPE:
+                    $optionTable = Database::get_main_table(
+                        TABLE_MAIN_SESSION_FIELD_OPTIONS
+                    );
+                    $valueTable = Database::get_main_table(
+                        TABLE_MAIN_SESSION_FIELD_VALUES
+                    );
+                    $handlerId = 'session_id';
+                    break;
+            }
+
+            if (!empty($optionTable)) {
+
+                $sql = "SELECT * FROM $optionTable WHERE field_id = $originalId ";
+                $result = $connection->query($sql);
+                $options = $result->fetchAll();
+
+                foreach ($options as $option) {
+                    $extraFieldOption = new ExtraFieldOptions();
+                    $extraFieldOption
+                        ->setDisplayText($option['option_display_text'])
+                        ->setField($extraField)
+                        ->setOptionOrder($option['option_order'])
+                        ->setValue($option['option_value']);
+                    $em->persist($extraFieldOption);
+                    $em->flush();
+                }
+
+                $sql = "SELECT * FROM $valueTable WHERE field_id = $originalId ";
+                $result = $connection->query($sql);
+                $values = $result->fetchAll();
+            }
+
+            if (!empty($values)) {
+                foreach ($values as $value) {
+                    $extraFieldValue = new ExtraFieldValues();
+                    $extraFieldValue
+                        ->setValue($value['field_value'])
+                        ->setField($extraField)
+                        ->setItemId($value[$handlerId]);
+                    $em->persist($extraFieldValue);
+                    $em->flush();
+                }
+            }
+        }
+    }
+
 }
 
 /**

@@ -10202,69 +10202,67 @@ EOD;
         // Calculate stars chapters evaluation
         $exercisesItems = $this->getExercisesItems();
 
-        if ($exercisesItems === false) {
-            return $stars;
-        }
+        if (!empty($exercisesItems)) {
+            $totalResult = 0;
 
-        $totalResult = 0;
+            foreach ($exercisesItems as $exerciseItem) {
+                $exerciseResultInfo = Event::getExerciseResultsByUser(
+                    $this->user_id,
+                    $exerciseItem->path,
+                    $this->course_int_id,
+                    $sessionId,
+                    $this->lp_id,
+                    $exerciseItem->db_id
+                );
 
-        foreach ($exercisesItems as $exerciseItem) {
-            $exerciseResultInfo = Event::getExerciseResultsByUser(
-                $this->user_id,
-                $exerciseItem->ref,
-                $this->course_int_id,
-                $sessionId,
-                $this->lp_id,
-                $exerciseItem->db_id
-            );
+                $exerciseResult = 0;
 
-            $exerciseResult = 0;
+                foreach ($exerciseResultInfo as $result) {
+                    $exerciseResult += $result['exe_result'] * 100 / $result['exe_weighting'];
+                }
 
-            foreach ($exerciseResultInfo as $result) {
-                $exerciseResult += $result['exe_result'] * 100 / $result['exe_weighting'];
+                $exerciseAverage = $exerciseResult / (count($exerciseResultInfo) > 0 ? count($exerciseResultInfo) : 1);
+
+                $totalResult += $exerciseAverage;
             }
 
-            $exerciseAverage = $exerciseResult / (count($exerciseResultInfo) > 0 ? count($exerciseResultInfo) : 1);
+            $totalExerciseAverage = $totalResult / (count($exercisesItems) > 0 ? count($exercisesItems) : 1);
 
-            $totalResult += $exerciseAverage;
-        }
+            if ($totalExerciseAverage >= 50) {
+                $stars++;
+            }
 
-        $totalExerciseAverage = $totalResult / (count($exercisesItems) > 0 ? count($exercisesItems) : 1);
-
-        if ($totalExerciseAverage >= 50) {
-            $stars++;
-        }
-
-        if ($totalExerciseAverage >= 80) {
-            $stars++;
+            if ($totalExerciseAverage >= 80) {
+                $stars++;
+            }
         }
 
         // Calculate star for final evaluation
         $finalEvaluationItem = $this->getFinalEvaluationItem();
 
-        if ($finalEvaluationItem === false) {
-            return $stars;
-        }
+        if (!empty($finalEvaluationItem)) {
+            $evaluationResultInfo = Event::getExerciseResultsByUser(
+                $this->user_id,
+                $finalEvaluationItem->path,
+                $this->course_int_id,
+                $sessionId,
+                $this->lp_id,
+                $finalEvaluationItem->db_id
+            );
 
-        $evaluationResultInfo = Event::getExerciseResultsByUser(
-            $this->user_id,
-            $finalEvaluationItem->ref,
-            $this->course_int_id,
-            $sessionId,
-            $this->lp_id,
-            $finalEvaluationItem->db_id
-        );
+            $evaluationResult = 0;
 
-        $evaluationResult = 0;
+            foreach ($evaluationResultInfo as $result) {
+                $evaluationResult += $result['exe_result'] * 100 / $result['exe_weighting'];
+            }
 
-        foreach ($evaluationResultInfo as $result) {
-            $evaluationResult += $result['exe_result'] * 100 / $result['exe_weighting'];
-        }
+            $averageDivisor = count($evaluationResultInfo) > 0 ? count($evaluationResultInfo) : 1;
 
-        $evaluationAverage = $evaluationResult / (count($evaluationResultInfo) > 0 ? count($evaluationResultInfo) : 1);
+            $evaluationAverage = $evaluationResult / $averageDivisor;
 
-        if ($evaluationAverage >= 80) {
-            $stars++;
+            if ($evaluationAverage >= 80) {
+                $stars++;
+            }
         }
 
         return $stars;
@@ -10328,7 +10326,7 @@ EOD;
             foreach ($exercisesItems as $exerciseItem) {
                 $exerciseResultInfo = Event::getExerciseResultsByUser(
                     $this->user_id,
-                    $exerciseItem->ref,
+                    $exerciseItem->path,
                     $this->course_int_id,
                     $sessionId,
                     $this->lp_id,
@@ -10345,10 +10343,10 @@ EOD;
             }
         }
 
-        if ($finalEvaluationItem !== false) {
+        if (!empty($finalEvaluationItem)) {
             $evaluationResultInfo = Event::getExerciseResultsByUser(
                 $this->user_id,
-                $finalEvaluationItem->ref,
+                $finalEvaluationItem->path,
                 $this->course_int_id,
                 $sessionId,
                 $this->lp_id,

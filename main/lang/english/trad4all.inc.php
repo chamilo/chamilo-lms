@@ -7435,4 +7435,6 @@ $SeeSequences = "See sequences";
 $SessionRequirements = "Session requirements";
 $IsRequirement = "Is requirement";
 $ConsiderThisGradebookAsRequirementForASessionSequence = "Consider this gradebook as a requirement to complete the course (influences the sessions sequences)";
+$DistinctUsersLogins = "Distinct users logins";
+$AreYouSureToSubscribe = "Are you sure to subscribe?";
 ?>

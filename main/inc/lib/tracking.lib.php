@@ -316,7 +316,7 @@ class Tracking
                     }
 
                     if (in_array($row['item_type'], $chapterTypes)) {
-                        $title = "<h4> $title </h4>";
+                        $title;
                     }
                     $lesson_status = $row['mystatus'];
                     $title = Security::remove_XSS($title);
@@ -706,7 +706,7 @@ class Tracking
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
                                 <td colspan="4">
-                                <h4>'.$title.'</h4>
+                                '.$title.'
                                 </td>
                                 <td colspan="2">'.learnpathitem::humanize_status($lesson_status).'</td>
                                 <td colspan="2"></td>

@@ -1,3 +1,6 @@
+body{
+  background: none;
+}
 #page-wrap{
   margin: auto;
   height: auto;
@@ -858,6 +861,43 @@ hr.separator:after {
 }
 .my-progress .progress-percentage{
   margin-top: 10px;
+}
+.section-status{
+  display: none;
+}
+.table-responsive{
+  border: none;
+}
+.tracking tbody tr td,
+.tracking tbody tr th{
+  border: none;
+}
+.tracking .row_odd{
+  background-color: #F5F5F5;
+}
+.tracking .row_even{
+  background-color: #ffffff;
+}
+.tracking .table-header{
+  background-color: #ffffff;
+}
+.tracking .table-header th{
+  font-weight: normal;
+  color: #35A8C9;
+}
+.tracking .label-info{
+  background-color: #35A8C9;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  font-size: 12px;
+}
+.tracking .label-default{
+  background-color: #BFBFBF;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  font-size: 12px;
 }
 .open-forum{
   background-color: #EDEDF5;

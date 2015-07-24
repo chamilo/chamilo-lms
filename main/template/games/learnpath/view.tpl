@@ -1,73 +1,73 @@
 <div class="container">
-<header>
-    <div class="row">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-bar-top">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <div class="navbar-brand" href="#">
-                        {{ logo }}
+    <header>
+        <div class="row">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-bar-top">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <div class="navbar-brand" href="#">
+                            {{ logo }}
+                        </div>
                     </div>
-                </div>
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="menu-bar-top">
-                    <ul class="nav navbar-nav navbar-right">
-                        {% for item in list %}
-                        {% if item['key'] == 'homepage' or item['key'] == 'my-course' %}
-                        <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
-                        {% endif %}
-                        {% endfor %}
-
-                        {% if _u.logged == 0 %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                Iniciar Sesión<span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li class="login-menu">
-                                    {# if user is not login show the login form #}
-                                    {% block login_form %}
-
-                                    {% include template ~ "/layout/login_form.tpl" %}
-
-                                    {% endblock %}
-                                </li>
-                            </ul>
-                        </li>
-                        {% endif %}
-                        {% if _u.logged == 1 %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ _u.complete_name }}<span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-
-                                {% for item in list %}
-                                {% if item['key'] != 'my-space' and item['key'] != 'dashboard' and item['key'] != 'homepage' and item['key'] != 'my-course' %}
-                                <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
-                                {% endif %}
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="menu-bar-top">
+                        <ul class="nav navbar-nav navbar-right">
+                            {% for item in list %}
+                                {% if item['key'] == 'homepage' or item['key'] == 'my-course' %}
+                                    <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
+                                    {% endif %}
                                 {% endfor %}
-                                <li class="divider"></li>
-                                <li>
-                                    <a title="{{ "Logout"|get_lang }}" href="{{ logout_link }}">
-                                        <i class="fa fa-sign-out"></i>{{ "Logout"|get_lang }}
+
+                            {% if _u.logged == 0 %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        Iniciar Sesión<span class="caret"></span>
                                     </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="login-menu">
+                                            {# if user is not login show the login form #}
+                                            {% block login_form %}
+
+                                                {% include template ~ "/layout/login_form.tpl" %}
+
+                                            {% endblock %}
+                                        </li>
+                                    </ul>
                                 </li>
-                            </ul>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-    </div>
-</header>
+                            {% endif %}
+                            {% if _u.logged == 1 %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        {{ _u.complete_name }}<span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+
+                                        {% for item in list %}
+                                            {% if item['key'] != 'my-space' and item['key'] != 'dashboard' and item['key'] != 'homepage' and item['key'] != 'my-course' %}
+                                                <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a title="{{ "Logout"|get_lang }}" href="{{ logout_link }}">
+                                                <i class="fa fa-sign-out"></i>{{ "Logout"|get_lang }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+        </div>
+    </header>
 </div>
 
 <div id="learning_path_main" style="width:100%; height: 100%;">
@@ -75,11 +75,11 @@
     <div class="container">
         <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">
-                    <div id="scorm-info" class="panel panel-default">
-                        <div id="panel-scorm" class="panel-body">
-                            <div id="lp_navigation_elem" class="navegation-bar">
-                                <div class="ranking-scorm">
-                                    {% if gamification_mode == 1 %}
+                <div id="scorm-info" class="panel panel-default">
+                    <div id="panel-scorm" class="panel-body">
+                        <div id="lp_navigation_elem" class="navegation-bar">
+                            <div class="ranking-scorm">
+                                {% if gamification_mode == 1 %}
                                     <div class="row">
                                         <div class="col-md-7">
                                             {% if gamification_stars > 0%}
@@ -97,15 +97,15 @@
                                             {{ "XPoints"|get_lang|format(gamification_points) }}
                                         </div>
                                     </div>
-                                    {% endif %}
-                                </div>
-                                <div id="progress_bar">
-                                    {{ progress_bar }}
-                                </div>
-
+                                {% endif %}
                             </div>
+                            <div id="progress_bar">
+                                {{ progress_bar }}
+                            </div>
+
                         </div>
                     </div>
+                </div>
 
 
                 {# TOC layout #}
@@ -150,74 +150,70 @@
 
 
 //Function heigth frame content document items
-    function updateResizeFrame(){
+    function updateResizeFrame() {
         var scorm = $('#content_id');
 
-        scorm.load(function() {
+        scorm.load(function () {
             this.style.overflow = 'hidden';
             heightFrame = this.contentWindow.document.body.offsetHeight + 30 + 'px';
             this.style.height = heightFrame;
             $('.panel-forum').css("top", heightFrame);
-            $('#body-forum').css("display","none");
+            $('#body-forum').css("display", "none");
         });
 
     }
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         updateResizeFrame();
-        $('#touch-button').children().click(function(){
+        $('#touch-button').children().click(function () {
             updateResizeFrame();
         });
-        $(window).resize(function() {
+        $(window).resize(function () {
             updateResizeFrame();
         });
         $('#forum-container').hide();
 
         loadForumThead({{ lp_id }}, {{ lp_current_item_id }});
 
-    });
-
-
-    $(document).ready(function(){
-
-        $("#icon-down").click(function(){
+        $("#icon-down").click(function () {
             $("#icon-up").removeClass("hidden");
             $(this).addClass("hidden");
 
-            $('#panel-scorm').slideDown("slow",function(){
+            $('#panel-scorm').slideDown("slow", function () {
                 updateResizeFrame();
             });
         });
 
-        $("#icon-up").click(function(){
+        $("#icon-up").click(function () {
             $("#icon-down").removeClass("hidden");
             $(this).addClass("hidden");
-            $('#panel-scorm').slideUp("slow",function(){
+            $('#panel-scorm').slideUp("slow", function () {
                 updateResizeFrame();
             });
         });
 
-        $(".scorm-items-accordion li").click(function(){
+        $(".scorm-items-accordion li").click(function () {
             updateResizeFrame();
         });
-        $(".open-forum").click(function(){
+
+        $(".open-forum").click(function () {
             $('.panel-forum').animate({
-                top:"0px",
-                height:"100%"
-            },800);
-            $('#body-forum').css("display","block");
-            $(".open-forum").css("display","none");
-            $(".closed-forum").css("display","block");
-            $("#chamilo-disqus").css("height",heightFrame);
+                top: "0px",
+                height: "100%"
+            }, 800);
+            $('#body-forum').css("display", "block");
+            $(".open-forum").css("display", "none");
+            $(".closed-forum").css("display", "block");
+            $("#chamilo-disqus").css("height", heightFrame);
         });
-        $(".closed-forum").click(function(){
+        $(".closed-forum").click(function () {
             $('.panel-forum').animate({
-                top:heightFrame,
-                height:"100%"
-            },800);
-            $('#body-forum').css("display","none");
-            $(".closed-forum").css("display","none");
-            $(".open-forum").css("display","block");
+                top: heightFrame,
+                height: "100%"
+            }, 800);
+            $('#body-forum').css("display", "none");
+            $(".closed-forum").css("display", "none");
+            $(".open-forum").css("display", "block");
         });
     });
 </script>

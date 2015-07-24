@@ -844,6 +844,21 @@ hr.separator:after {
   color:#E4C200;
   font-size: 18px;
 }
+.my-progress .bar-points{
+  color: #35A8C9;
+  text-align: right;
+}
+.my-progress .progress{
+  margin-top: 10px;
+  background-color: #E73858;
+  border-radius: 10px;
+}
+.my-progress .progress-bar-success{
+  background-color: #35A8C9;
+}
+.my-progress .progress-percentage{
+  margin-top: 10px;
+}
 .open-forum{
   background-color: #EDEDF5;
   text-align: center;

@@ -447,6 +447,8 @@ $template->assign(
     'lp_html_toc',
     $_SESSION['oLP']->get_html_toc($get_toc_list)
 );
+$template->assign('lp_id', $_SESSION['oLP']->lp_id);
+$template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
 
 $content = $template->fetch('default/learnpath/view.tpl');
 

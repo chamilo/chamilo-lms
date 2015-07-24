@@ -6156,9 +6156,6 @@ div#chat-remote-video video {
  display: none;
 }
 /* Catalog session */
-#session-list .session-col:nth-child(4n+1) {
-  clear: left;
-}
 .section-title-catalog{
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;

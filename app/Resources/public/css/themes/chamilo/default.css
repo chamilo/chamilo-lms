@@ -77,13 +77,13 @@ a:focus {
   border: 1px solid rgba(0, 0, 0, 0.6);
   text-shadow: none;
 }
-.nav > li > a{
+.nav li a{
    padding: 10px 15px;
 }
-.navbar-nav > li > a{
+.navbar-nav li a{
   font-size: 14px;
-  font-weight: 600;
-  line-height: 21px;
+  font-weight: normal;
+  line-height: 22px;
   padding-top: 12.5px;
   padding-bottom: 12.5px;
 }
@@ -207,12 +207,6 @@ a:focus {
 /* Jquery UI */
 .ui-accordion .ui-accordion-icons{
   padding-left: 0.2em;
-}
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default{
- background: #ECF0F1;
- border-color: #ECF0F1;
 }
 /* End Jquery UI */
 footer{

@@ -970,6 +970,23 @@ img.g1-effect-grayscale:hover {
 #lostpassword .help{
   margin-top: 20px;
 }
+#registration label.error{
+  color: #A94442;
+  background-color: #F2DEDE;
+  border: 1px solid #EBCCD1;
+  padding: 5px;
+  margin-top: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+#registration .password-verdict{
+  display: inline-block;
+  padding: 5px;
+  margin-top: 5px;
+  color: #8A6D3B;
+  width: 100%;
+}
 /* Large desktop */
 @media (min-width: 1200px) { 
 	/* .container{

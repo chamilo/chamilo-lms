@@ -29,10 +29,25 @@
                     <label>Apellidos</label>
                     <input size="40" class="form-control" name="lastname" type="text">
                 </div>
-                <div class="form-group">
+
+
+                <div class="form-group ">
+                    <label> Fecha de nacimiento </label>
+                        <script type="text/javascript">
+                            $(function() {
+                                $('#extra_date_of_birth').datepicker({
+                                    dateFormat: 'yy-mm-dd'
+                                });
+                            });
+                        </script>
+                    <input id="extra_date_of_birth" class="form-control" name="extra_date_of_birth" type="text">
+                </div>
+
+
+                <!-- <div class="form-group">
                     <label>Nombre de usuario</label>
                     <input id="username" size="40" class="form-control" name="username" type="text">
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label>Confirme contraseña</label>
                     <input id="pass2" size="20" autocomplete="off" class="form-control" name="pass2" type="password">

@@ -1,45 +1,68 @@
 /*
- * Common CSS for all themes
+    Theme Name: Chamilo Base
+    URI Project: http://www.chamilo.org
+	  Description: Styles main base of Chamilo LMS appearance , works with Bootstrap 3.0.x
+    Author: alex.aragon@beeznest.com
+            angel.quiroz@beeznest.com
+            julio.montoya@beeznest.com
+            yannik.warnier@beeznest.com
+    Version: 1.0
 */
-
-/* some changes to the bootstrap.css */
-
-/* when doing a var_dump*/
-
 pre {
     margin-top:50px !important;
 }
-
+html,body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 #page-wrap{
-  margin: auto;
-  height: auto;
-  height: auto;
   min-height: 100%;
+  margin-bottom: 0;
 }
 #page-wrap:after{
-  width: 100%;
-  height: 150px;
+  content: "";
   display: block;
   clear: both;
 }
-
-/* chzn-select fix */
+footer {
+  height: 7em;
+  padding-top: 15px;
+}
+footer #footer_right{
+  text-align: right;
+}
 select {
-    width : auto;
+  width : auto;
 }
-
+/*------------------------------*/
+.admin-block-version{
+ font-size: 12px;
+  padding: 5%;
+  background-color: #FCF8E3;
+  border: 1px solid #FAEBCC;
+  color:#8A6D3B;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-align: justify;
+}
+.version-checking{
+  padding: 10px;
+  width: 100%;
+}
+.version-checking .checkbox{
+  margin-left: 20px;
+  text-align: left;
+}
+/*------------------------*/
 .invisible {
-    visibility: visible;
+  visibility: visible;
 }
-
-/* NEW CSS BASE */
 .logo{
   margin-bottom: 10px;
   padding: 5px;
   margin-top: 10px;
-}
-.clear-header{
-  height: 60px;
 }
 .title-tools{
   text-align: left;
@@ -117,11 +140,9 @@ ul#navigation {
   list-style: none;
   z-index:9999;
 }
-
 ul#navigation li {
   width: 73px;
 }
-
 ul#navigation li a {
   display: block;
   margin-left: 1px;
@@ -149,29 +170,24 @@ ul#navigation .report a {
   width:65px;
   padding: 6px 0 8px 6px;
 }
-
-
 #gradebook_list .centered {
     text-align:center;
     vertical-align:middle;
 }
-
 #gradebook_list .centered .badge-group {
     width: auto;
 }
-
-/* END CSS BASE */
-
+#breadcrumb-bar #view_as_link{
+  padding-top: 7px;
+  margin-right: 10px;
+}
 .button-load{
   background: url("../../main/img/icons/64/file_upload.png") no-repeat center 20px;
   padding-top: 70px;
 }
-
-/* work correction upload */
 #results .file_upload_highlight {
     background: #F4D364;
 }
-
 .work_correction_file_upload .button-load {
     position: absolute;
     top: -60px;
@@ -181,11 +197,7 @@ ul#navigation .report a {
     padding-top: 0px;
     background: none;
 }
-
-
-/* END COURSE PROGRESS*/
-/* IMPRESS JS */
-  .impress-content{
+.impress-content{
     position: relative;
     width: 100%;
     height:600px;
@@ -200,18 +212,11 @@ ul#navigation .report a {
 .impress-title h1{
     font-size: 35px;
 }
-
-/* END IMPRESS JS*/
-
 /* SESSION CATALOG*/
 .session-group .padding-clear{
     padding-top: 5px;
     padding-bottom: 10px;
 }
-/*.session-group .thumbnail{
-    border: none;
-    box-shadow: none;
-}*/
 .session-group .border-info{
     /*border-bottom: 1px solid #ccc;*/
     padding-bottom: 5px;
@@ -255,44 +260,33 @@ ul#navigation .report a {
 .session-group .items-session li{
     padding-bottom: 5px;
 }
-
-/* SESSION CATALOG END*/
-
 #main .nav .dropdown {
   width:150px;
   text-align: right;
 }
-
 #main .nav .dropdown:nth-child(n) {
   width:auto;
 }
 .course-items .title{
   margin-top: 0px;
 }
-
-/* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
     font-size: inherit;
 }
-
 .badge-group {
     width: 200px;
     position: relative;
 }
-
 .badge-group .badge {
     float:left;
     position:relative;
 }
-
 .badge-group  > :first-child {
     z-index: 1000;
 }
-
 .badge-group  > :nth-child(2) {
     z-index: 900;
 }
-
 .badge-group  > :nth-child(3) {
     z-index: 800;
 }
@@ -302,17 +296,14 @@ label, input, button, select, textarea, p {
 .badge-group  > :nth-child(5) {
     z-index: 600;
 }
-
 .badge-group .badge:not(:first-child) {
     margin-left: -13px;
     padding-left: 15px;
 }
-
 /* fixes the * */
 span.form_required  {
     padding-right:5px;
 }
-
 form .formw {
     margin-left: 170px;
 }
@@ -329,53 +320,6 @@ form .formw input {
 }
 
 /* end chamilo forms fixes */
-
-#top_main_content .span3 {
-  float: left;
-}
-[dir=rtl] #top_main_content .span3 {
-  float: right;
-}
-
-#top_main_content .control-group .span3 {
-  float: none;
-}
-#top_main_content .span9 {
-  float: left;
-}
-[dir=rtl] #top_main_content .span9 {
-  float: right;
-}
-
-/* New changes Chamilo 1.9 */
-
-html {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    min-height: 100%;
-}
-
-footer {
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-
-#footer_left, #footer_center, #footer_right {
-    margin: 20px 0 0 0;
-}
-#footer_right{
- text-align: right;
-}
-/* Sticky footer*/
-.push {
-    height: 9em; /* Very important */
-}
-
-#topbar_push {
-    height: 55px;
-}
 
 .actions {
     background:#ffffff;
@@ -440,15 +384,12 @@ footer {
 #friend-container .thumbnail {
     min-height: 140px;
 }
-
 #friend-container .thumbnail img {
     max-height: 100px;
 }
-
 [dir=rtl] #friends > .thumbnails > li {
     float: right;
 }
-
 .show-grid [class*="span"] {
     background-color: #EEEEEE;
     border-bottom-left-radius: 3px;
@@ -515,7 +456,6 @@ a.tag {
     margin-bottom:15px;
     font-size:135%;
 }
-
 .userportal-course-item {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -5367,7 +5307,9 @@ i.size-32.icon-new-work{
 }
 .sessions .subtitle-session{
   font-size: 12px;
-  font-style: italic;
+  color: #666666;
+  padding: 5px;
+  margin-bottom: 10px;
 }
 /**
  * Modal for user avatar preview
@@ -6316,12 +6258,71 @@ div#chat-remote-video video {
     font-size:22px;
     margin-top:5px;
 }
-p.bg-primary,
-p.bg-success,
-p.bg-info,
-p.bg-warning,
-p.bg-danger {
-    padding: 10px;
+.ui-jqgrid .ui-pg-table td{
+  font-size: 12px;
+}
+.ui-state-hover,.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus{
+  border:none;
+  background: #ECF0F1;
+  font-weight:normal;
+  color:#212121
+}
+.ui-state-hover a,
+.ui-state-hover a:hover,
+.ui-state-hover a:link,
+.ui-state-hover a:visited,
+.ui-state-focus a,
+.ui-state-focus a:hover,
+.ui-state-focus a:link,
+.ui-state-focus a:visited {
+  color:#212121;text-decoration:none
+}
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active{
+  border:1px solid #aaa;
+  background: #fff;
+  font-weight:normal;
+  color:#212121
+}
+.ui-priority-secondary,
+.ui-widget-content .ui-priority-secondary,
+.ui-widget-header .ui-priority-secondary{
+  opacity: 1;
+}
+.ui-jqgrid .ui-jqgrid-pager{
+  height: 35px;
+}
+.ui-jqgrid .ui-pg-table{
+  background: #fff;
+  color: #666666;
+  height: 35px;
+}
+.ui-jqgrid .ui-jqgrid-htable th div{
+  height: 25px;
+}
+#student-list-work{
+  padding: 10px;
+  background-color: #ffffff;
+  position: absolute;
+  top:0px;
+  right: 10px;
+  border: 1px solid #ccc;
+  width: auto;
+  z-index: 3;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+}
+#student-list-work .toolbar{
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
@@ -6359,7 +6360,7 @@ p.bg-danger {
     padding-right: 15px;
   }
 }
-/* Portrait tablet to landscape and desktop - Escritorio pequeño o Tablet */
+/* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
   #learning_path_right_zone{
     width: 58%;
@@ -6374,7 +6375,7 @@ p.bg-danger {
     visibility: visible;
   }
 }
-/* Landscape phones and down  - Solo Smartphone*/
+/* Landscape phones and down */
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
   #learning_path_breadcrumb_zone {
     display: none;

@@ -684,7 +684,10 @@ footer .media{
 }
 .dl-horizontal dt{
   float: left;
-  width: 25%;
+  width: 40%;
+}
+.dl-horizontal dd{
+  margin-left: 40%;
 }
 .dl-horizontal dt, .dl-horizontal dd{
   padding-top: 5px;

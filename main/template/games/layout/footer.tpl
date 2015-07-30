@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
                     <ul class="links-footer">
-                        <li><a href="#">¿Quienes somos?</a></li>
+                        <li><a href="#">¿Quiénes somos?</a></li>
                         <li><a href="#">FAQ</a></li>
                         <li><a href="#">Cursos</a></li>
                     </ul>
@@ -12,17 +12,17 @@
                 </div>
                 <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
                     <ul class="links-footer">
-                        <li><a href="#">Politicas de privadidad</a></li>
-                        <li><a href="#">Terminos y condiciones</a></li>
+                        <li><a href="#">Políticas de privadidad</a></li>
+                        <li><a href="#">Términos y condiciones</a></li>
                         <li><a href="#">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                     <div class="red-social">
-                        <h3 class="social-footer">¡Siguienos en redes sociales!</h3>
-                        <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/facebook.png"></a>
-                        <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/twitter.png"></a>
-                        <a class="media" href="#"><img src="{{ _p.web_css_theme }}images/youtube.png"></a>
+                        <h3 class="social-footer">¡Síguienos en redes sociales!</h3>
+                        <a class="media" href="https://www.facebook.com/tademiperu?fref=ts"><img src="{{ _p.web_css_theme }}images/facebook.png"></a>
+                        <a class="media" href="https://twitter.com/tademi_pe"><img src="{{ _p.web_css_theme }}images/twitter.png"></a>
+                        <a class="media" href="https://www.youtube.com/channel/UCWPiBeRKzt97-6RMDslP7YQ"><img src="{{ _p.web_css_theme }}images/youtube.png"></a>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">

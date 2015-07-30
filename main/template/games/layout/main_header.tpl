@@ -123,7 +123,11 @@
                     </div>
                 </form>
             </div>
-
+        {% if _u.is_admin == 1 %}
+        {% block breadcrumb %}
+        {{ breadcrumb }}
+        {% endblock %}
+        {% endif %}
         </header>
 </div>
     <!-- Inicia el slider -->

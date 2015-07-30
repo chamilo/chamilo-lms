@@ -36,7 +36,7 @@ body{
 }
 .logo-header{
   display: block;
-  padding-top: 15px;
+  padding-top: 25px;
   padding-left: 15px;
 }
 .page-header{
@@ -55,6 +55,10 @@ body{
 }
 .new-messages .badge{
   background-color: #E73858 !important;
+}
+#view_as_link{
+  padding-top: 5px;
+  padding-right: 5px;
 }
 .my-courses-ranking .title-course,
 #slider-sessions .title-course{

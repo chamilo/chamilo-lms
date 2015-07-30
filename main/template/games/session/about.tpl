@@ -107,12 +107,14 @@
                     {% endif %}
 
                     <div class="subscribe text-right">
-                        {% if is_subscribed %}
-                            <a class="btn btn-primary" href="{{ _p.web_course ~ course_data.course.getCode ~ '/index.php?id_session=' ~ session.getId }}">
-                                <i class="fa fa-check-circle"> </i> {{ 'Continue'|get_lang }}
-                            </a>
-                        {% else %}
-                            {{ subscribe_button }}
+                        {% if _u.logged %}
+                            {% if is_subscribed %}
+                                <a class="btn btn-primary" href="{{ _p.web_course ~ course_data.course.getCode ~ '/index.php?id_session=' ~ session.getId }}">
+                                    <i class="fa fa-check-circle"> </i> {{ 'Continue'|get_lang }}
+                                </a>
+                            {% else %}
+                                {{ subscribe_button }}
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -217,7 +219,7 @@
             </div>
         </div>
 
-        {% if not is_subscribed %}
+        {% if not is_subscribed and _u.logged %}
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
                     <div class="subscribe text-center">

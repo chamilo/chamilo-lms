@@ -12,15 +12,18 @@
 $(document).ready(function() {
 
     $('#touch-button').click(function() {
+
         $('#learning_path_left_zone').toggle("slow", function(){
             $('#learning_path_right_zone').toggleClass('total');
             $(function(){
                 $('#learning_path_right_zone').slideToggle(300);
                 $('#control-bottom').toggle("slow");
+
             });
         });
         $(this).toggleClass('show-touch');
         $('#learning_path_right_zone').slideToggle(300);
+
     });
 
     // effects items scorm content

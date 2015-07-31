@@ -1571,9 +1571,26 @@ class SessionManager
             if (is_array($user_list) && count($user_list) > 0) {
                 foreach ($user_list as $user_id) {
                     if (!in_array($user_id, $existingUsers)) {
-                        $subject = '[' . api_get_setting('siteName') . '] ' . get_lang('YourReg') . ' ' . api_get_setting('siteName');
+                        $tplSubject = new Template(null, false, false, false, false, false);
+                        $tplSubject->assign('mailSiteName', api_get_setting('siteName'));
+                        $layoutSubject = $tplSubject->get_template('mail/subject_subscription_to_session_confirmation.tpl');
+                        $subject = $tplSubject->fetch($layoutSubject);
+
                         $user_info = api_get_user_info($user_id);
-                        $content = get_lang('Dear') . " " . stripslashes($user_info['complete_name']) . ",\n\n" . sprintf(get_lang('YouAreRegisterToSessionX'), $session_name) . " \n\n" . get_lang('Address') . " " . get_setting('siteName') . " " . get_lang('Is') . " : " . api_get_path(WEB_PATH) . "\n\n" . get_lang('Problem') . "\n\n" . get_lang('SignatureFormula') . ",\n\n" . get_setting('administratorName') . " " . get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . get_setting('siteName') . "\nT. " . get_setting('administratorTelephone') . "\n" . get_lang('Email') . " : " . get_setting('emailAdministrator');
+
+                        $tplContent = new Template(null, false, false, false, false, false);
+                        // Variables for default template
+                        $tplContent->assign('mailCompleteName', stripslashes($user_info['complete_name']));
+                        $tplContent->assign('mailSessionName', $session_name);
+                        $tplContent->assign('mailSiteName', api_get_setting('siteName'));
+                        $tplContent->assign('mailWebPath', api_get_path(WEB_PATH));
+                        $tplContent->assign('mailAdministratorName', api_get_setting('administratorName'));
+                        $tplContent->assign('mailAdministratorSurname', api_get_setting('administratorSurname'));
+                        $tplContent->assign('mailAdministratorTelephone', api_get_setting('administratorTelephone'));
+                        $tplContent->assign('mailEmailAdministrator', api_get_setting('emailAdministrator'));
+                        $layoutContent = $tplContent->get_template('mail/content_subscription_to_session_confirmation.tpl');
+                        $content = $tplContent->fetch($layoutContent);
+
                         MessageManager::send_message(
                             $user_id,
                             $subject,

@@ -187,7 +187,6 @@ class HTML_QuickForm_RuleRegistry
     function validate($ruleName, $values, $options = null, $multiple = false)
     {
         $rule =& $this->getRule($ruleName);
-
         if (is_array($values) && !$multiple) {
             $result = 0;
             foreach ($values as $value) {
@@ -195,8 +194,10 @@ class HTML_QuickForm_RuleRegistry
                     $result++;
                 }
             }
+
             return ($result == 0) ? false : $result;
         } else {
+
             return $rule->validate($values, $options);
         }
     } // end func validate

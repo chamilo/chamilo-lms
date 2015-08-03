@@ -9804,7 +9804,9 @@ EOD;
         $cb->set_tools_to_build(array('learnpaths'));
 
         //Setting elements that will be copied
-        $cb->set_tools_specific_id_list(array('learnpaths' => array($this->lp_id)));
+        $cb->set_tools_specific_id_list(
+            array('learnpaths' => array($this->lp_id))
+        );
 
         $course = $cb->build();
 

@@ -1066,9 +1066,6 @@ class HTML_QuickForm extends HTML_Common
         return $el;
     } // end func removeElement
 
-    // }}}
-    // {{{ addRule()
-
     /**
      * Adds a validation rule for the given field
      *
@@ -1159,10 +1156,8 @@ class HTML_QuickForm extends HTML_Common
             'reset'       => $reset,
             'dependent'   => $dependent
         );
-    } // end func addRule
+    }
 
-    // }}}
-    // {{{ addGroupRule()
 
     /**
      * Adds a validation rule for the given group of elements
@@ -1207,12 +1202,13 @@ class HTML_QuickForm extends HTML_Common
                     }
 
                     $this->_rules[$elementName][] = array(
-                                                        'type'        => $type,
-                                                        'format'      => $format,
-                                                        'message'     => $rule[0],
-                                                        'validation'  => $validation,
-                                                        'reset'       => $reset,
-                                                        'group'       => $group);
+                        'type' => $type,
+                        'format' => $format,
+                        'message' => $rule[0],
+                        'validation' => $validation,
+                        'reset' => $reset,
+                        'group' => $group,
+                    );
 
                     if ('required' == $type || 'uploadedfile' == $type) {
                         $groupObj->_required[] = $elementName;
@@ -1224,6 +1220,7 @@ class HTML_QuickForm extends HTML_Common
                     }
                 }
             }
+
             if ($required > 0 && count($groupObj->getElements()) == $required) {
                 $this->_required[] = $group;
             }
@@ -1244,12 +1241,14 @@ class HTML_QuickForm extends HTML_Common
                 }
             }
 
-            $this->_rules[$group][] = array('type'       => $type,
-                                            'format'     => $format,
-                                            'message'    => $arg1,
-                                            'validation' => $validation,
-                                            'howmany'    => $howmany,
-                                            'reset'      => $reset);
+            $this->_rules[$group][] = array(
+                'type' => $type,
+                'format' => $format,
+                'message' => $arg1,
+                'validation' => $validation,
+                'howmany' => $howmany,
+                'reset' => $reset,
+            );
             if ($type == 'required') {
                 $this->_required[] = $group;
             }
@@ -1620,7 +1619,6 @@ class HTML_QuickForm extends HTML_Common
                 } elseif (is_array($submitValue) && !isset($rule['howmany'])) {
                     $result = $registry->validate($rule['type'], $submitValue, $rule['format'], true);
                 } else {
-
                     $result = $registry->validate($rule['type'], $submitValue, $rule['format'], false);
 
                 }

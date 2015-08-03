@@ -27,6 +27,7 @@ $gradebooktable = new GradebookTable(
     array(),
     false
 );
+$gradebooktable->userId = $userId;
 $table = $gradebooktable->return_table();
 
 echo $gradebooktable->getGraph();

@@ -195,8 +195,14 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
 $form->addElement('radio', 'reset_password', null, get_lang('AutoGeneratePassword'), 1);
 $group = array();
 $group[] =$form->createElement('radio', 'reset_password', null, null, 2);
-$group[] =$form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button();'));
+$group[] = $form->createElement(
+    'password',
+    'password',
+    null,
+    array('onkeydown' => 'javascript: password_switch_radio_button();')
+);
 $form->addGroup($group, 'password', null, '', false);
+$form->addGroupRule('password', 'password', 'required', null, 2);
 
 // Status
 $status = array();

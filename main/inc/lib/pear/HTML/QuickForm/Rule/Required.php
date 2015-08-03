@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Required elements validation
@@ -40,7 +39,7 @@ class HTML_QuickForm_Rule_Required extends HTML_QuickForm_Rule
      * @access    public
      * @return    boolean   true if value is not empty
      */
-    function validate($value, $options = null)
+    public function validate($value, $options = null)
     {
         // It seems this is a file.
         if (is_array($value)) {
@@ -51,19 +50,22 @@ class HTML_QuickForm_Rule_Required extends HTML_QuickForm_Rule
                 isset($value['error'])
             ){
                 if (empty($value['tmp_name'])) {
+
                     return false;
                 }
             }
         } else {
             if ((string)$value == '') {
+
                 return false;
             }
         }
+
         return true;
     }
 
 
-    function getValidationScript($options = null)
+    public function getValidationScript($options = null)
     {
         return array('', "{jsVar} == ''");
     }

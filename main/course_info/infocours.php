@@ -142,7 +142,7 @@ $form->applyFilter('department_url', 'html_filter');
 $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-
+$form->addElement('html', '<div class="help-image"></div>');
 $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
 
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {

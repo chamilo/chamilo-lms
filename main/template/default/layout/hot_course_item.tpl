@@ -2,7 +2,7 @@
     {% if hot_course.extra_info.title %}
                     <div class="col-md-4">
                         <div class="thumbnail">
-                            <img src="{{ hot_course.extra_info.course_image }}" alt="{{ hot_course.extra_info.title|e }}"/>
+                            <img src="{{ hot_course.extra_info.course_image_large }}" alt="{{ hot_course.extra_info.title|e }}"/>
                         </div>
                         <div class="categories-course-description">
                             <div class="text-h3">{{ hot_course.extra_info.title}}</div>

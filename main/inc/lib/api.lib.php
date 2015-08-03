@@ -1865,6 +1865,13 @@ function api_format_course_array($course_data)
     }
     $_course['course_image'] = $url_image;
 
+    if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic.png')) {
+        $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic.png';
+    } else {
+        $url_image = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true);
+    }
+    $_course['course_image_large'] = $url_image;
+
     return $_course;
 }
 

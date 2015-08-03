@@ -135,7 +135,7 @@ ul#navigation {
   position: fixed;
   margin: 0px;
   padding: 0px;
-  top: 200px;
+  top: 280px;
   right: -10px;
   list-style: none;
   z-index:9999;
@@ -2934,7 +2934,6 @@ form .formw .freeze {
     margin: 0 10px 5px 0;
     padding: 0.4em 0.6em;
 }
-
 .label_tag {
     padding: 1px 3px 2px;
     margin:2px 3px 2px 0px;
@@ -2949,7 +2948,6 @@ form .formw .freeze {
     text-align: center;
     width: 155px;
 }
-
 .label_tag.personal_event {
     background:#3366CC;
 }
@@ -2965,8 +2963,6 @@ form .formw .freeze {
 .label_tag.session_event {
     background:#00496D;
 }
-
-
 .label_tag.important {
     background-color: #c43c35;
 }
@@ -2979,62 +2975,56 @@ form .formw .freeze {
 .label_tag.notice {
     background-color: #62cffc;
 }
-
 .label_tag.skill {
     background-color: #46a546;
 }
-
-
 .label_tag.course {
     background-color: #62cffc;
 }
-
-
-
-
 .invisible {
     color: #999;
 }
-
 .invisible h2 {
     color: #999;
 }
-
 .requirements td {
     padding:5px;
 }
-
 /* header cell in data table in tools */
 .data_table {
     margin-bottom: 18px;
     width: 100%;
     border: 1px solid #DDDDDD;
 }
-
+.data_table td{
+  font-size: 12px;
+}
 .data_table th, .data_table td {
-    border-top: 1px solid #DDDDDD;
-    line-height: 18px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  border-top: 1px solid #DDDDDD;
+  line-height: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
 }
 
 .data_table th {
-    padding: 8px 10px;
-    font-weight: normal;
-    background-color: #F2F2F2;
-    border-bottom: 1px solid #DDDDDD;
+  padding: 8px 10px;
+  font-weight: normal;
+  background-color: #EEEEEE;
+  border-bottom: 1px solid #DDDDDD;
+  color:#333;
 }
-.data_table td {
+.data_table th a{
+  color: #333;
 }
-
 .data_table_no_border {
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 12px;
-    margin-bottom: 15px;
-    margin-top: 8px;
-    text-align: left;
-    width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 12px;
+  margin-bottom: 15px;
+  margin-top: 8px;
+  text-align: left;
+  width: 100%;
 }
 
 .data_table_no_border td {
@@ -6231,6 +6221,61 @@ div#chat-remote-video video {
     font-size:22px;
     margin-top:5px;
 }
+#work-list{
+  padding: 10px;
+  border:1px solid #dddddd;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  margin-bottom: 10px;
+}
+.ui-jqgrid-view .label-success{
+  font-size: 14px;
+}
+.ui-jqgrid-view .ui-widget-content a{
+  color:#666666;
+}
+.ui-jqgrid-view .ui-state-default,
+.ui-jqgrid-view .ui-widget-content .ui-state-default,
+.ui-jqgrid-view .ui-widget-header .ui-state-default{
+  background: #EEEEEE;
+  color: #666666;
+  border: none;
+}
+.ui-jqgrid-view table{
+  border-collapse: inherit;
+}
+.ui-jqgrid.ui-widget-content{
+  border: none;
+}
+.ui-jqgrid-view .ui-jqgrid-sortable{
+  font-size: 12px;
+}
+.ui-jqgrid-view .ui-jqgrid .ui-jqgrid-htable th div{
+  height: auto;
+}
+.ui-jqgrid-view .ui-th-ltr, .ui-jqgrid .ui-jqgrid-htable th.ui-th-ltr{
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+.ui-jqgrid tr.ui-row-ltr td{
+  border: none;
+}
+.ui-jqgrid tr.jqgrow td{
+  height: 45px;
+  font-size: 13px;
+}
+.ui-jqgrid .ui-jqgrid-labels .ui-state-hover{
+  background-color: #E7E7E7;
+}
+.ui-jqgrid .ui-pg-selbox{
+  font-size: 12px;
+  height: 25px;
+}
+.ui-jqgrid .ui-pg-input{
+  font-size: 12px;
+  height: 25px;
+}
 .ui-jqgrid .ui-pg-table td{
   font-size: 12px;
 }
@@ -6279,7 +6324,6 @@ div#chat-remote-video video {
   height: 25px;
 }
 #student-list-work{
-  padding: 10px;
   background-color: #ffffff;
   position: absolute;
   top:0px;
@@ -6291,6 +6335,9 @@ div#chat-remote-video video {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+}
+.panel-student{
+  width: 550px;
 }
 #student-list-work .toolbar{
   text-align: center;

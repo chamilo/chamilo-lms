@@ -3020,7 +3020,7 @@ form .formw .freeze {
 
 .data_table th {
     padding: 8px 10px;
-    font-weight: bold;
+    font-weight: normal;
     background-color: #F2F2F2;
     border-bottom: 1px solid #DDDDDD;
 }
@@ -3059,10 +3059,25 @@ form .formw .freeze {
 }
 
 .data_table_pagination {
-    width:100%;
-    margin-top: 8px;
+  width:100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-
+.table-well{
+  background:#ffffff;
+  border:1px solid #dddddd;
+  padding: 10px 20px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+.tabs-margin, .btn-toolbar{
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
 .form-stacked .label {
     display: block;
     float: none;
@@ -6281,6 +6296,26 @@ div#chat-remote-video video {
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+#datafiller .fillers{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#datafiller .description{
+  padding: 10px;
+  margin-bottom: 10px;
+}
+#datafiller .fillers li{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-left: 10px;
+}
+.filler-report h3{
+  margin-top: 10px;
+}
+.filler-report .filler-report-data-init{
+  width: 60%;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

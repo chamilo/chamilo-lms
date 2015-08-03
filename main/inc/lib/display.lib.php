@@ -1040,7 +1040,7 @@ class Display
              $lis .= self::tag('li', $item, array('class' => $class));
             $i++;
         }
-        return self::tag('ul', $lis, array('class' => 'nav nav-tabs'));
+        return self::tag('ul', $lis, array('class' => 'nav nav-tabs tabs-margin'));
     }
 
     /**

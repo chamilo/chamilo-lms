@@ -162,28 +162,6 @@ $(window).resize(function() {
 
 $(document).scroll(function() {
 
-    // Top bar scroll effect
-    if ($('body').width() > 959) {
-        if ($('.subnav').length) {
-            if (!$('.subnav').attr('data-top')) {
-                // If already fixed, then do nothing
-                if ($('.subnav').hasClass('subnav-fixed')) return;
-                // Remember top position
-                var offset = $('.subnav').offset();
-                $('.subnav').attr('data-top', offset.top);
-            }
-
-            if ($('.subnav').attr('data-top') - $('.subnav').outerHeight() <= $(this).scrollTop()) {
-                $('.subnav').addClass('subnav-fixed');
-            } else {
-                $('.subnav').removeClass('subnav-fixed');
-            }
-            //$('.subnav .brand').show();
-        }
-    } else {
-        //$('.subnav .brand').hide();
-    }
-
     //Exercise warning fixed at the top
     var fixed =  $("#exercise_clock_warning");
     if (fixed.length) {
@@ -324,6 +302,12 @@ function showConfirmationPopup(obj, urlParam)
 $(function() {
 
     check_brand();
+    //if exists the toolbar admin
+
+    if($('#toolbar').length){
+        var heigthToolBar= $('#toolbar').height();
+        $('header').css('margin-top', heigthToolBar+'px');
+    }
 
     // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
@@ -336,17 +320,6 @@ $(function() {
             });
         });
     }
-
-    // Fixes buttons to the new btn class.
-    /* if (!$('#button').hasClass('btn')) {
-        $("button").addClass('btn');
-    } */
-
-    // Dropdown effect.
-    $('.dropdown-toggle').dropdown();
-
-    // Responsive effect.
-    $(".collapse").collapse();
 
     $(".accordion_jquery").accordion({
         autoHeight: false,

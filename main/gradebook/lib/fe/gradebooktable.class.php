@@ -60,6 +60,10 @@ class GradebookTable extends SortableTable
         $this->cats = $cats;
         $this->datagen = new GradebookDataGenerator($cats, $evals, $links);
 
+        if (!empty($userId)) {
+            $this->datagen->userId = $userId;
+        }
+
         if (isset($addparams)) {
             $this->set_additional_parameters($addparams);
         }
@@ -188,10 +192,14 @@ class GradebookTable extends SortableTable
         }
 
         // Status of user in course.
-        $user_id = api_get_user_id();
+        //$user_id = api_get_user_id();
+        $user_id = $this->userId;
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
-        $status_user = api_get_status_of_user_in_course($user_id, api_get_course_int_id());
+        $status_user = api_get_status_of_user_in_course(
+            api_get_user_id(),
+            api_get_course_int_id()
+        );
 
         if (empty($session_id)) {
             $statusToFilter = STUDENT;
@@ -206,6 +214,8 @@ class GradebookTable extends SortableTable
             null,
             $statusToFilter
         );
+
+        $this->datagen->userId = $this->userId;
 
         $data_array = $this->datagen->get_data(
             $sorting,
@@ -299,7 +309,7 @@ class GradebookTable extends SortableTable
                 $weight_total_links += $data[3];
             } else {
                 $cattotal = Category::load($_GET['selectcat']);
-                $scoretotal = $cattotal[0]->calc_score(api_get_user_id());
+                $scoretotal = $cattotal[0]->calc_score($this->userId);
                 $item_value = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
             }
 
@@ -311,7 +321,7 @@ class GradebookTable extends SortableTable
                     $row[] = $this->build_edit_column($item);
                 }
             } else {
-                $score = $item->calc_score(api_get_user_id());
+                $score = $item->calc_score($this->userId);
 
                 if (!empty($score[1])) {
                     $completeScore = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
@@ -397,6 +407,7 @@ class GradebookTable extends SortableTable
                     $alllink = $cats[0]->get_links($this->userId);
 
                     $sub_cat_info = new GradebookDataGenerator($allcat, $alleval, $alllink);
+                    $sub_cat_info->userId = $user_id;
                     $data_array = $sub_cat_info->get_data($sorting, $from, $this->per_page);
                     $total_weight = 0;
 
@@ -440,12 +451,16 @@ class GradebookTable extends SortableTable
                             //$weight_total_links += intval($data[3]);
                         } else {
                             $cattotal = Category::load($_GET['selectcat']);
-                            $scoretotal = $cattotal[0]->calc_score(api_get_user_id());
+                            $scoretotal = $cattotal[0]->calc_score($this->userId);
                             $item_value = $scoretotal[0];
                         }
 
                         // Admins get an edit column.
-                        if ($this->teacherView) {
+                        if (api_is_allowed_to_edit(null, true) &&
+                            isset($_GET['user_id']) == false &&
+                            (isset($_GET['action']) && $_GET['action'] != 'export_all' || !isset($_GET['action'])
+                            )
+                        ) {
                             $cat = new Category();
                             $show_message = $cat->show_message_resource_delete($item->get_course_code());
                             if ($show_message === false) {
@@ -457,7 +472,7 @@ class GradebookTable extends SortableTable
                             // Students get the results and certificates columns
                             $eval_n_links = array_merge($alleval, $alllink);
 
-                            if (count($eval_n_links)> 0 && $status_user != 1) {
+                            if (count($eval_n_links)> 0) {
                                 $value_data = isset($data[4]) ? $data[4] : null;
 
                                 if (!is_null($value_data)) {
@@ -487,7 +502,10 @@ class GradebookTable extends SortableTable
                                 }
                             }
                         }
-                        $row['child_of'] = $parent_id;
+
+                        if ($this->exportToPdf == false) {
+                            $row['child_of'] = $parent_id;
+                        }
                         $sortable_data[] = $row;
                     }
 
@@ -567,7 +585,7 @@ class GradebookTable extends SortableTable
                     $totalRanking[$student['user_id']] = $score[0];
                 }
 
-                $totalRanking = AbstractLink::getCurrentUserRanking($totalRanking);
+                $totalRanking = AbstractLink::getCurrentUserRanking($user_id, $totalRanking);
 
                 $totalRanking = $scoredisplay->display_score(
                     $totalRanking,

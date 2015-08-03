@@ -1,14 +1,9 @@
-{% for hot_course in hot_courses %}               
-    {% if hot_course.extra_info.title %}        
-
-
-                <div class="row">
-                    <div class="col-md-2">
+{% for hot_course in hot_courses %}
+    {% if hot_course.extra_info.title %}
+                    <div class="col-md-4">
                         <div class="thumbnail">
-                            <img src="{{ hot_course.extra_info.course_image }}" alt="{{ hot_course.extra_info.title|e }}" width="85" height="85" />
+                            <img src="{{ hot_course.extra_info.course_image }}" alt="{{ hot_course.extra_info.title|e }}"/>
                         </div>
-                    </div>
-                    <div class="col-md-10">
                         <div class="categories-course-description">
                             <div class="text-h3">{{ hot_course.extra_info.title}}</div>
                             <div class="text-h5">{{ hot_course.extra_info.teachers }}</div>
@@ -21,8 +16,5 @@
                             {{ hot_course.extra_info.unsubscribe_button }}
                         </p>
                     </div>
-                </div>
-
-
     {% endif %}
 {% endfor %}

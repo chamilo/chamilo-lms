@@ -116,10 +116,11 @@ if ($form->validate() && is_settings_editable()) {
 
 // Display course picture
 $course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
+
 if (file_exists($course_path.'/course-pic85x85.png')) {
     $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository;   // course web path
     $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1, 1000); // redimensioned image 85x85
-    $image_html =  '<div class="row"><div class="formw"><img src="'.$course_medium_image.'" /></div></div>';
+    $image_html =  '<div class="row"><label class="col-md-2 control-label">'.get_lang('Imagen').'</label> <div class="col-md-8"><img src="'.$course_medium_image.'" /></div></div>';
 }
 $form->addElement('html', $image_html);
 

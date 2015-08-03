@@ -75,6 +75,9 @@ select {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+#login_block #formLogin .form-group{
+  display: none;
+}
 #login_block .nav-pills{
   margin-bottom: 5px;
   padding-top: 10px;
@@ -4184,11 +4187,9 @@ a.forum_group_link {
     margin-right: 10px;
     vertical-align:middle;
 }
-
 .exercise_overview_options {
     text-align: center;
 }
-
 .new_actions {
     background-color: #EEEEEE;
     background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
@@ -4197,7 +4198,6 @@ a.forum_group_link {
     border-radius: 4px 4px 4px 4px;
     height: 53px;
 }
-
 .new_actions .nav > li > a {
     border-left: 1px solid #F5F5F5;
     border-radius: 0 0 0 0;
@@ -4206,7 +4206,6 @@ a.forum_group_link {
     padding-bottom: 11px;
     padding-top: 11px;
 }
-
 .new_actions-fixed {
     border-color: #D5D5D5;
     border-radius: 0 0 0 0;
@@ -4217,7 +4216,6 @@ a.forum_group_link {
     top: 0px;
     z-index: 1030;
 }
-
 .new_actions .nav > .active > a, .new_actions .nav > .active > a:hover {
     background-color: #E9E9E9;
     border-left: 0 none;
@@ -4226,43 +4224,34 @@ a.forum_group_link {
     color: #777777;
     padding-left: 13px;
 }
-
 .new_actions .nav-tabs > li > a, .new_actions .nav-pills > li > a {
     padding-left: 6px;
     padding-right: 6px;
 }
-
 .subnav .nav > li > .logout {
     padding-top:8px;
 }
-
-
 .doc_folder {
     margin-right:5px;
     margin-top:5px;
     width: 100%;
     float:left;
 }
-
 .doc_folder_hidden {
     color : grey;
 }
-
 .doc_resource{
     margin: 5px;
     width: 100%;
     float:left;
 }
-
 .lp_resource_element_new {
     border: 2px dotted green;
 }
-
 #course_thing_to_do .thumbnail {
     text-align: center;
     margin-bottom: 5px;
 }
-
 .handle{
     background-image: url('../../main/img/div_show.gif');
     background-repeat: no-repeat;
@@ -4270,7 +4259,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .handle.collapsed{
     background-image:  url('../../main/img/div_show.gif');
     background-repeat: no-repeat;
@@ -6228,6 +6216,9 @@ div#chat-remote-video video {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   margin-bottom: 10px;
+}
+.ui-accordion .ui-accordion-content-active{
+
 }
 .ui-jqgrid-view .label-success{
   font-size: 14px;

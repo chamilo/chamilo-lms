@@ -2100,7 +2100,7 @@ class CourseRestorer
                     }
 				}
 
-				//Adding the author's image
+				// Adding the author's image
 				if (!empty($lp->preview_image)) {
 					$new_filename = uniqid('').substr($lp->preview_image,strlen($lp->preview_image)-7, strlen($lp->preview_image));
 					if (file_exists($origin_path.$lp->preview_image) && !is_dir($origin_path.$lp->preview_image)) {
@@ -2157,8 +2157,13 @@ class CourseRestorer
 				Database::query($sql);
 				$new_lp_id = Database::insert_id();
 
-				if ($lp->visibility) {
-					$sql = "INSERT INTO $table_tool SET
+                if ($new_lp_id) {
+
+                    $sql = "UPDATE $table_main SET id = iid WHERE iid = $new_lp_id";
+                    Database::query($sql);
+
+                    if ($lp->visibility) {
+                        $sql = "INSERT INTO $table_tool SET
 					            c_id = ".$this->destination_course_id.",
 					            name = '".self::DBUTF8escapestring($lp->name)."',
 					            link = 'newscorm/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=$session_id',
@@ -2168,10 +2173,13 @@ class CourseRestorer
 					            address = 'squaregrey.gif',
 					            session_id = $session_id
                             ";
-					Database::query($sql);
-				}
-
-                if ($new_lp_id) {
+                        Database::query($sql);
+                        $insertId = Database::insert_id();
+                        if ($insertId) {
+                            $sql = "UPDATE $table_tool SET id = iid WHERE iid = $insertId";
+                            Database::query($sql);
+                        }
+                    }
 
                     api_item_property_update(
                         $this->destination_course_info,
@@ -2201,13 +2209,13 @@ class CourseRestorer
                     );
                 }
 
-				$new_item_ids 		= array();
-				$parent_item_ids 	= array();
-				$previous_item_ids 	= array();
-				$next_item_ids 		= array();
-				$old_prerequisite 	= array();
-				$old_refs 			= array();
-				$prerequisite_ids 	= array();
+                $new_item_ids = array();
+                $parent_item_ids = array();
+                $previous_item_ids = array();
+                $next_item_ids = array();
+                $old_prerequisite = array();
+                $old_refs = array();
+                $prerequisite_ids = array();
 
 				foreach ($lp->get_items() as $index => $item) {
 					// we set the ref code here and then we update in a for loop
@@ -2245,6 +2253,10 @@ class CourseRestorer
 					Database::query($sql);
 
 					$new_item_id = Database::insert_id();
+
+                    $sql = "UPDATE $table_item SET id = iid WHERE iid = $new_item_id";
+                    Database::query($sql);
+
 					//save a link between old and new item IDs
 					$new_item_ids[$item['id']] = $new_item_id;
 					//save a reference of items that need a parent_item_id refresh

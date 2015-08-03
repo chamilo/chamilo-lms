@@ -26,6 +26,24 @@ $userManager = UserManager::getManager();
 $entityManager = Database::getManager();
 
 $user = $userManager->findUserBy(['id' => $userId]);
+
+if (empty($sessionId)) {
+    $trackCourseAccessRepository = $entityManager->getRepository(
+        'ChamiloCoreBundle:TrackECourseAccess'
+    );
+
+    $lastCourseAccess = $trackCourseAccessRepository->getLastAccessByUser($user);
+
+    if (!empty($lastCourseAccess)) {
+        $urlWithSession = api_get_self() . '?' . http_build_query([
+            'session_id' => $lastCourseAccess->getSessionId()
+        ]);
+
+        header("Location: $urlWithSession");
+        exit;
+    }
+}
+
 $sessionCourseSubscriptions = $user->getSessionCourseSubscriptions();
 $currentSession = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);
 

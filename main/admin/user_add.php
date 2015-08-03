@@ -178,9 +178,20 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
 
 $group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] = $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
-$group[] = $form->createElement('password', 'password', null, array('id'=> 'password', 'autocomplete' => 'off', 'onkeydown' => 'javascript: password_switch_radio_button();'));
+$group[] = $form->createElement(
+    'password',
+    'password',
+    null,
+    array(
+        'id' => 'password',
+        'autocomplete' => 'off',
+        'onkeydown' => 'javascript: password_switch_radio_button();',
+        //'required' => 'required'
+    )
+);
 
 $form->addGroup($group, 'password', get_lang('Password'), '');
+$form->addGroupRule('password', 'password', 'required', null, 2);
 
 if ($checkPass) {
     $form->addElement('label', null, '<div id="password_progress" style="display:none"></div>');
@@ -228,7 +239,6 @@ if (api_is_platform_admin()) {
     $group = array();
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
-    //$display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
     $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
     $form->addElement('html', '</div>');

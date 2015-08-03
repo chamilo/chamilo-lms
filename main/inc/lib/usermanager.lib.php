@@ -275,6 +275,10 @@ class UserManager
             }
         }
 
+        if (empty($password)) {
+            return api_set_failure('ThisFieldIsRequired');
+        }
+
         $firstName = Security::remove_XSS($firstName);
         $lastName = Security::remove_XSS($lastName);
         $loginName = Security::remove_XSS($loginName);

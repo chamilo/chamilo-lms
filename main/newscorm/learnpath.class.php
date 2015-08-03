@@ -596,14 +596,14 @@ class learnpath
 
         $new_item_id = Database::insert($tbl_lp_item, $params);
 
-        $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
-        Database::query($sql);
-
         if ($this->debug > 2) {
             error_log('New LP - Inserting chapter: ' . $new_item_id, 0);
         }
 
         if ($new_item_id) {
+
+            $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
+            Database::query($sql);
 
             // Update the item that should come after the new item.
             $sql = " UPDATE $tbl_lp_item SET
@@ -10087,7 +10087,9 @@ EOD;
         $cb->set_tools_to_build(array('learnpaths'));
 
         //Setting elements that will be copied
-        $cb->set_tools_specific_id_list(array('learnpaths' => array($this->lp_id)));
+        $cb->set_tools_specific_id_list(
+            array('learnpaths' => array($this->lp_id))
+        );
 
         $course = $cb->build();
 

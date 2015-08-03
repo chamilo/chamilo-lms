@@ -19,6 +19,7 @@ class GradebookDataGenerator
     const GDG_SORT_ASC = 32;
     const GDG_SORT_DESC = 64;
     const GDG_SORT_ID = 128;
+    public $userId;
 
     private $items;
     private $evals_links;
@@ -56,6 +57,7 @@ class GradebookDataGenerator
         // merge categories, evaluations and links
         $this->items = array_merge($allcats, $allevals, $tabLinkToDisplay);
         $this->evals_links = array_merge($allevals, $tabLinkToDisplay);
+        $this->userId = api_get_user_id();
     }
 
     /**
@@ -106,13 +108,17 @@ class GradebookDataGenerator
         if ($sorting & self :: GDG_SORT_DESC) {
             $allitems = array_reverse($allitems);
         }
-        // get selected items
+
+        $userId = $this->userId;
+
+        // Get selected items
         $visibleitems = array_slice($allitems, $start, $count);
-        //status de user in course
-        $userId = api_get_user_id();
         $course_code = api_get_course_id();
         $sessionId = api_get_session_id();
-        $status_user = api_get_status_of_user_in_course($userId, api_get_course_int_id());
+        $status_user = api_get_status_of_user_in_course(
+            api_get_user_id(),
+            api_get_course_int_id()
+        );
 
         if (empty($sessionId)) {
             $statusToFilter = STUDENT;
@@ -145,9 +151,9 @@ class GradebookDataGenerator
             $row[] = $item->get_weight();
             if (count($this->evals_links) > 0) {
                 // Items inside a category.
-                if (!api_is_allowed_to_edit() || $status_user != 1) {
+                if (1) {
                     $resultColumn = $this->build_result_column(
-                        api_get_user_id(),
+                        $userId,
                         $item,
                         $ignore_score_color
                     );
@@ -167,7 +173,7 @@ class GradebookDataGenerator
                     $row['average_score'] = $average['score'];
 
                     // Ranking
-                    $ranking = $this->buildRankingColumn($item, $userCount);
+                    $ranking = $this->buildRankingColumn($item, $userId, $userCount);
 
                     $row['ranking'] = $ranking['display'];
                     $row['ranking_score'] = $ranking['score'];
@@ -206,7 +212,7 @@ class GradebookDataGenerator
                 }
                 $scoreDisplay = ScoreDisplay::instance();
 
-                $score = AbstractLink::getCurrentUserRanking($rankingStudentList);
+                $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
                 $row['ranking'] = $scoreDisplay->display_score($score, SCORE_DIV);
             }
             $data[] = $row;
@@ -255,13 +261,14 @@ class GradebookDataGenerator
 
     /**
      * @param GradebookItem $item
+     * @param int $userId
      * @param int $userCount
      *
      * @return string
      */
-    private function buildRankingColumn(GradebookItem $item, $userCount = 0)
+    private function buildRankingColumn(GradebookItem $item, $userId = null, $userCount = 0)
     {
-        $score = $item->calc_score(null, 'ranking');
+        $score = $item->calc_score($userId, 'ranking');
         $score[1] = $userCount;
 
         $scoreDisplay = null;
@@ -328,11 +335,6 @@ class GradebookDataGenerator
                 // evaluation and link
                 case 'E' :
                 case 'L' :
-                    /** @var Category $category */
-                    $category = $item->getCategory();
-                    $parentId = $category->get_parent_id();
-                    $scoreWeight = [];
-
                     //if ($parentId == 0) {
                         $scoreWeight = [
                             $score[0] / $score[1] * $item->get_weight(),

@@ -216,11 +216,8 @@ class Login
                 )
             );
             Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
-            error_log($url);
         //}
     }
-
-
 
     /**
      * Gets the secret word

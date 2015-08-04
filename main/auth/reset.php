@@ -52,12 +52,9 @@ if ($form->validate()) {
         header('Location: '.api_get_path(WEB_PATH));
         exit;
     } else {
-
-        if (empty($user)) {
-            Display::addFlash(
-                Display::return_message(get_lang('LinkExpired'))
-            );
-        }
+        Display::addFlash(
+            Display::return_message(get_lang('LinkExpired'))
+        );
     }
 }
 

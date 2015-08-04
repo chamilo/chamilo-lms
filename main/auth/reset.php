@@ -55,7 +55,7 @@ if ($form->validate()) {
 
         if (empty($user)) {
             Display::addFlash(
-                Display::return_message(get_lang('UserDoesNotExist'))
+                Display::return_message(get_lang('LinkExpired'))
             );
         }
     }

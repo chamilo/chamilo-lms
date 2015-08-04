@@ -41,8 +41,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             $database = new \Database();
             $database->connect(
                 $dbParams,
-                __DIR__.'/../../../../',
-                __DIR__.'/../../../../'
+                __DIR__.'/../../',
+                __DIR__.'/../../'
             );
             $this->manager = $database->getManager();
         }

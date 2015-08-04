@@ -935,7 +935,7 @@ if (api_is_allowed_to_edit(null, true)) {
     switch ($type) {
         case STUDENT:
             $selectedTab = 1;
-            $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'';
+            $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.STUDENT;
             break;
         case COURSEMANAGER:
             $selectedTab = 2;

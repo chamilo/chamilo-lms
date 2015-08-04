@@ -7466,4 +7466,11 @@ $IsRequirement = "Obligatorio para completar el curso";
 $ConsiderThisGradebookAsRequirementForASessionSequence = "Considerar este libro de calificaciones como requisito para una secuencia de sesión";
 $DistinctUsersLogins = "Logins de usuarios distintos";
 $AreYouSureToSubscribe = "¿Está seguro de suscribirse?";
+$CheckYourEmailAndFollowInstructions = "Revise su correo electrónico y siga las instrucciones.";
+$CronRemindCourseExpirationActivateText = "Cron de Recordatorio de Expiración de Curso";
+$CronRemindCourseExpirationActivateComment = "Habilitar el cron de envío de recordatorio de expiración de cursos";
+$CronRemindCourseExpirationFrecuencyText = "Frecuencia del recordatorio de expiración de curso";
+$CronRemindCourseExpirationFrecuencyComment = "Número de días antes de la expiración del curso a considerar para enviar el correo electrónico de recordatorio";
+$CronCourseFinishedActivateText = "Cron de finalización de curso";
+$CronCourseFinishedActivateComment = "Activar el cron de finalización de curso";
 ?>

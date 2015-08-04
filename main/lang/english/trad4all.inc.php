@@ -7447,4 +7447,10 @@ administrator.
 To set a the new password you need to activate it. To do this click the link provided below.
 
 %s";
+$CronRemindCourseExpirationActivateText = "Remind Course Expiration cron";
+$CronRemindCourseExpirationActivateComment = "Enable the Remind Course Expiration cron";
+$CronRemindCourseExpirationFrecuencyText = "Frecuency for the Remind Course Expiration cron";
+$CronRemindCourseExpirationFrecuencyComment = "Number of days before the expiration of the course to consider to send reminder mail";
+$CronCourseFinishedActivateText = "Course Finished cron";
+$CronCourseFinishedActivateComment = "Activate the Course Finished cron";
 ?>

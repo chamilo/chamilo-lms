@@ -574,7 +574,7 @@ $(document).ready(function() {
 </div>
 
 <div id="dialog-form" style="display:none;">
-	<div style="width:500px">
+	<div class="dialog-form-content">
         {{ form_add }}
 	</div>
 </div>

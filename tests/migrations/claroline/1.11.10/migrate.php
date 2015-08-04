@@ -14,5 +14,13 @@ if (!isset($sourceHost)) {
 }
 
 require_once __DIR__.'/../../../../main/inc/global.inc.php';
+require_once __DIR__.'/migrate.class.php';
 
 echo "Working" . PHP_EOL;
+$migrate = new Migrate();
+
+echo "Migrating users..." . PHP_EOL;
+$count = $migrate->migrateUsers();
+echo $count . " users migrated." . PHP_EOL;
+
+echo "Done";

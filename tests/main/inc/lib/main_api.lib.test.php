@@ -139,14 +139,6 @@ class TestMainApi extends UnitTestCase {
         $this->assertTrue($res);
         ob_end_clean();
     }
-
-    function testApiSessionStart(){
-        if (!headers_sent()) {
-            $res = Chamilo::session()->start($already_sintalled=true);
-        }
-        $this->assertTrue(is_null($res));
-    }
-
 //    function testApiSessionRegister(){
 //        $$variable[session_register]=false;
 //        global $$variable;

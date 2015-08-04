@@ -14,10 +14,17 @@ if (php_sapi_name() != 'cli') {
     exit; //do not run from browser
 }
 
+$isActive = api_get_setting('cron_remind_course_expiration_activate') === 'true';
+
+if (!$isActive) {
+    exit;
+}
+
+$frecuency = api_get_setting('cron_remind_course_expiration_frecuency');
+
 // Days before expiration date to send reminders
-define("OFFSET", 2);
 $today = gmdate("Y-m-d");
-$expirationDate = gmdate("Y-m-d", strtotime($today . " + " . OFFSET . " day"));
+$expirationDate = gmdate("Y-m-d", strtotime("$today + $frecuency day"));
 
 $gradebookTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 $certificateTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);

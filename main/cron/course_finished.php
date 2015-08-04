@@ -12,6 +12,12 @@ if (php_sapi_name() != 'cli') {
     exit; //do not run from browser
 }
 
+$isActive = api_get_setting('cron_remind_course_expiration_activate') === 'true';
+
+if (!$isActive) {
+    exit;
+}
+
 $endDate = new DateTime('now', new DateTimeZone('UTC'));
 $endDate = $endDate->format('Y-m-d');
 

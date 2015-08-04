@@ -307,6 +307,7 @@ $(function() {
     if($('#toolbar').length){
         var heigthToolBar= $('#toolbar').height();
         $('header').css('margin-top', heigthToolBar+'px');
+        $('#page-back').css('padding-top', heigthToolBar+20+'px');
     }
 
     // Removes the yellow input in Chrome

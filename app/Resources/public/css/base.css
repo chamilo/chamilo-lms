@@ -280,60 +280,6 @@ ul#navigation .report a {
 .session-group .items-session li{
     padding-bottom: 5px;
 }
-#main .nav .dropdown {
-  width:150px;
-  text-align: right;
-}
-#main .nav .dropdown:nth-child(n) {
-  width:auto;
-}
-.course-items .title{
-  margin-top: 0px;
-}
-label, input, button, select, textarea, p {
-    font-size: inherit;
-}
-.badge-group {
-    width: 200px;
-    position: relative;
-}
-.badge-group .badge {
-    float:left;
-    position:relative;
-}
-.badge-group  > :first-child {
-    z-index: 1000;
-}
-.badge-group  > :nth-child(2) {
-    z-index: 900;
-}
-.badge-group  > :nth-child(3) {
-    z-index: 800;
-}
-.badge-group  > :nth-child(4) {
-    z-index: 700;
-}
-.badge-group  > :nth-child(5) {
-    z-index: 600;
-}
-.badge-group .badge:not(:first-child) {
-    margin-left: -13px;
-    padding-left: 15px;
-}
-/* fixes the * */
-span.form_required  {
-    padding-right:5px;
-}
-form .formw {
-    margin-left: 170px;
-}
-form .form-button-login{
-  margin-top: 5px;
-}
-form .formw input {
-    float:left;
-}
-
 .formw input[type="checkbox"], .formw input[type="radio"] {
     margin-right: 5px;
     margin-top: 2px;
@@ -401,134 +347,6 @@ form .formw input {
 .actions fieldset {
     margin-top:0px;
 }
-#friend-container .thumbnail {
-    min-height: 140px;
-}
-#friend-container .thumbnail img {
-    max-height: 100px;
-}
-[dir=rtl] #friends > .thumbnails > li {
-    float: right;
-}
-.show-grid [class*="span"] {
-    background-color: #EEEEEE;
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    line-height: 30px;
-    min-height: 30px;
-    text-align: center;
-}
-
-a.tag {
-    background-color: #E0EAF1;
-    border-bottom: 1px solid #3E6D8E;
-    border-right: 1px solid #7F9FB6;
-    color: #3E6D8E;
-    font-size: 90%;
-    line-height: 2.4;
-    margin: 2px 2px 2px 0;
-    padding: 3px 4px;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-/* User portal */
-
-#settings h4 {
-    margin-bottom:10px;
-}
-
-/* Admin index.php */
-#settings .span6 {
-    min-height: 340px;
-    width: 47%;
-}
-#settings .span6 .well_border{
-    min-height: 300px;
-}
-#settings .form-search .span3 {
-    float: left;
-}
-
-/* user_portal course status icon */
-.coursestatusicons {
-    border: 0px solid #000;
-    float: left;
-    padding-right: 5px;
-    width: auto;
-}
-/* user_portal course list */
-.courses {
-    list-style-type: none;
-    margin-bottom: 5px;
-    height: 30px;
-}
-/* user_portal session list */
-.session_course_item .courses {
-    margin-bottom: 5px;
-    height:35px;
-}
-.session_course_item {
-    /* padding: 0px; */
-    margin: 0px;
-    margin-bottom:15px;
-    font-size:135%;
-}
-.userportal-course-item {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    background-color:#F9F9F9;
-    /*padding:5px 10px 5px 10px;
-    margin:0px 0px 10px 0px;    */
-}
-#course_category li,
-#hot_courses h5,
-.course_item h5,
-.categories-course-description h5,
-.course-box h5 {
-    font-size: 12px;
-    overflow-y : auto;
-    max-height:70px;
-    padding: 5px;
-}
-
-.session_box_title {
-    margin-bottom: 7px;
-}
-
-.session_course_item .item_closed, .userportal-course-item-title .item_closed {
-    font-size:80%;
-}
-#maincontent .courseslist li {
-    margin-bottom:8px;
-}
-
-.independent_course_item a {
-    font-size:135%;
-}
-
-.userportal-session-item {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    background-color:#F9F9F9;
-    padding:5px 10px 10px 6px;
-    margin:10px 0px;
-}
-
-.userportal-session-category-item {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    background-color:#F9F9F9;
-    padding:5px 10px 10px 16px;
-    /* height:40px; */
-    /*background-color:#f9f9f9; border:1px solid #dddddd; padding:5px 10px 5px 10px; margin-top: 10px; */
-}
-
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/
@@ -3799,11 +3617,7 @@ a:active{
 
 #my_timeline {
     background: url("dot.gif") repeat-x scroll left 45px;
-    height: 350px;
     margin: 0px auto;
-    overflow: hidden;
-    position: relative;
-    width: 600px;
 }
 
 #dates {

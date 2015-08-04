@@ -103,8 +103,6 @@ if (!empty($_POST['submitAuth'])) {
                 Session::write('user_last_login_datetime',$user_last_login_datetime);
             }
         }
-        Database::free_result($result_last_login);
-
         //Event::event_login();
     }
     // End login -- if ($_POST['submitAuth'])

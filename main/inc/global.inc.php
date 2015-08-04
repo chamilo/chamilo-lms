@@ -81,9 +81,6 @@ define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
-// This is for compatibility with MAC computers.
-ini_set('auto_detect_line_endings', '1');
-
 // Include the libraries that are necessary everywhere
 require_once __DIR__.'/../../vendor/autoload.php';
 
@@ -91,7 +88,6 @@ require_once __DIR__.'/../../vendor/autoload.php';
 $libraryPath = api_get_path(LIBRARY_PATH);
 
 // @todo convert this libs in classes
-
 require_once $libraryPath.'database.constants.inc.php';
 require_once $libraryPath.'text.lib.php';
 require_once $libraryPath.'array.lib.php';
@@ -191,7 +187,7 @@ $charset = 'UTF-8';
 \Patchwork\Utf8\Bootup::initAll();
 
 // Start session after the internationalization library has been initialized.
-Chamilo::session()->start($alreadyInstalled);
+ChamiloSession::instance()->start($alreadyInstalled);
 
 // Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
 

@@ -2783,13 +2783,13 @@ class CourseManager
                 $data .= '<div class="sectiontitle">';
                 if (api_is_allowed_to_edit() && $action_show) {
                     //delete
-                    $data .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=delete&amp;description_id=' . $description->id . '" onclick="javascript:if(!confirm(\'' . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),
+                    $data .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=delete&description_id=' . $description->id . '" onclick="javascript:if(!confirm(\'' . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),
                                 ENT_QUOTES, $charset)) . '\')) return false;">';
                     $data .= Display::return_icon('delete.gif', get_lang('Delete'),
                         array('style' => 'vertical-align:middle;float:right;'));
                     $data .= '</a> ';
                     //edit
-                    $data .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;description_id=' . $description->id . '">';
+                    $data .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&description_id=' . $description->id . '">';
                     $data .= Display::return_icon('edit.png', get_lang('Edit'),
                         array('style' => 'vertical-align:middle;float:right; padding-right:4px;'), ICON_SIZE_SMALL);
                     $data .= '</a> ';
@@ -4514,7 +4514,7 @@ class CourseManager
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
                 $my_course['extra_info']['register_button'] = Display::url(get_lang('Subscribe'),
-                    api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&amp;sec_token=' . $stok,
+                    api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&sec_token=' . $stok,
                     array('class' => 'btn btn-primary'));
             }
 
@@ -4528,7 +4528,7 @@ class CourseManager
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
                 $my_course['extra_info']['unsubscribe_button'] = Display::url(get_lang('Unsubscribe'),
-                    api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&amp;unsubscribe=' . $courseCode . '&amp;sec_token=' . $stok . '&amp;category_code=' . $categoryCode,
+                    api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
                     array('class' => 'btn btn-primary'));
             }
 
@@ -4538,14 +4538,14 @@ class CourseManager
                     $my_course_code_list)
             ) {
                 $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'),
-                    api_get_path(WEB_AJAX_PATH) . 'course_home.ajax.php?a=show_course_information&amp;code=' . $course_info['code'],
+                    api_get_path(WEB_AJAX_PATH) . 'course_home.ajax.php?a=show_course_information&code=' . $course_info['code'],
                     array('class' => 'btn btn-default ajax'));
             }
 
             $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
             $my_course['extra_info']['rating_html'] = Display::return_rating_system('star_' . $course_info['real_id'],
-                $ajax_url . '&amp;course_id=' . $course_info['real_id'], $point_info);
+                $ajax_url . '&course_id=' . $course_info['real_id'], $point_info);
 
             $hotCourses[] = $my_course;
         }

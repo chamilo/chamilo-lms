@@ -23,15 +23,19 @@ $categories[ADD_BLOCK] = get_lang('NewBloc');
 
 $i=1;
 echo '<div class="actions" style="margin-bottom:30px">';
-echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ToolCourseDescription'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="index.php?'.api_get_cidreq().'">'.
+		Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ToolCourseDescription'),'',ICON_SIZE_MEDIUM).
+	'</a>';
 
 ksort($categories);
 foreach ($categories as $id => $title) {
 	if ($i==ADD_BLOCK) {
-		echo '<a href="index.php?'.api_get_cidreq().'&action=add">'.Display::return_icon($default_description_icon[$id], $title,'',ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="index.php?'.api_get_cidreq().'&action=add">'.
+			Display::return_icon($default_description_icon[$id], $title,'',ICON_SIZE_MEDIUM).'</a>';
 		break;
 	} else {
-		echo '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.Display::return_icon($default_description_icon[$id], $title,'',ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.
+			Display::return_icon($default_description_icon[$id], $title,'',ICON_SIZE_MEDIUM).'</a>';
 		$i++;
 	}
 }
@@ -50,7 +54,12 @@ if ($description_type >= ADD_BLOCK) {
 }
 
 // display form
-$form = new FormValidator('course_description','POST','index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq());
+$form = new FormValidator(
+	'course_description',
+	'POST',
+	'index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq(
+	)
+);
 
 $form->addElement('header','',$header);
 $form->addElement('hidden', 'id', $original_id);
@@ -58,7 +67,17 @@ $form->addElement('hidden', 'description_type',$description_type);
 $form->addElement('hidden', 'sec_token',$token);
 $form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
-$form->addHtmlEditor('contentDescription', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
+$form->addHtmlEditor(
+	'contentDescription',
+	get_lang('Content'),
+	true,
+	false,
+	array(
+		'ToolbarSet' => 'TrainingDescription',
+		'Width' => '100%',
+		'Height' => '200',
+	)
+);
 $form->addButtonCreate(get_lang('Save'));
 
 // Set some default values

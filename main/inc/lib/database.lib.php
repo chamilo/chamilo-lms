@@ -17,6 +17,7 @@ class Database
      */
     private static $em;
     private static $connection;
+    public static $utcDateTimeClass;
 
     /**
      * @param EntityManager $em
@@ -110,6 +111,15 @@ class Database
     }
 
     /**
+     * @return string
+     */
+    public static function getUTCDateTimeTypeClass()
+    {
+        return isset(self::$utcDateTimeClass) ? self::$utcDateTimeClass :
+        'Chamilo\CoreBundle\DoctrineExtensions\DBAL\Types\UTCDateTimeType';
+    }
+
+    /**
      * Connect to the database sets the entity manager.
      *
      * @param array  $params
@@ -150,7 +160,10 @@ class Database
             $sysPath."vendor/gedmo/doctrine-extensions/lib"
         );
 
-        Type::overrideType('datetime', 'Chamilo\CoreBundle\DoctrineExtensions\DBAL\Types\UTCDateTimeType');
+        Type::overrideType(
+            Type::DATETIME,
+            self::getUTCDateTimeTypeClass()
+        );
 
         $listener = new \Gedmo\Timestampable\TimestampableListener();
         $entityManager->getEventManager()->addEventSubscriber($listener);
@@ -160,40 +173,10 @@ class Database
 
         $listener = new \Gedmo\Sortable\SortableListener();
         $entityManager->getEventManager()->addEventSubscriber($listener);
+        $connection = $entityManager->getConnection();
 
-        $this->setConnection($entityManager->getConnection());
+        $this->setConnection($connection);
         $this->setManager($entityManager);
-
-        // A MySQL-specific implementation.
-        /*if (!isset($parameters['server'])) {
-            $parameters['server'] = @ini_get('mysql.default_host');
-            if (empty($parameters['server'])) {
-                $parameters['server'] = 'localhost:3306';
-            }
-        }
-        if (!isset($parameters['username'])) {
-            $parameters['username'] = @ini_get('mysql.default_user');
-        }
-        if (!isset($parameters['password'])) {
-            $parameters['password'] = @ini_get('mysql.default_password');
-        }
-        if (!isset($parameters['new_link'])) {
-            $parameters['new_link'] = false;
-        }
-        if (!isset($parameters['client_flags']) || empty($parameters['client_flags'])) {
-            $parameters['client_flags'] = 0;
-        }
-
-        $persistent = isset($parameters['persistent']) ? $parameters['persistent'] : null;
-        $server = isset($parameters['server']) ? $parameters['server'] : null;
-        $username = isset($parameters['username']) ? $parameters['username'] : null;
-        $password = isset($parameters['password']) ? $parameters['password'] : null;
-        $client_flag = isset($parameters['client_flags']) ? $parameters['client_flags'] : null;
-        $new_link = isset($parameters['new_link']) ? $parameters['new_link'] : null;
-        $client_flags = isset($parameters['client_flags']) ? $parameters['client_flags'] : null;
-        return $persistent
-            ? mysql_pconnect($server, $username, $password, $client_flags)
-            : mysql_connect($server, $username, $password, $new_link, $client_flags);*/
     }
 
     /**
@@ -223,7 +206,6 @@ class Database
 
         return trim($string, "'");
     }
-
 
     /**
      * Gets the array from a SQL result (as returned by Database::query)
@@ -331,7 +313,7 @@ class Database
     }
 
     /**
-     * @param $query
+     * @param string $query
      *
      * @return Statement
      *
@@ -351,7 +333,7 @@ class Database
      */
     public static function customOptionToDoctrineOption($option)
     {
-        switch($option) {
+        switch ($option) {
             case 'ASSOC':
                 return PDO::FETCH_ASSOC;
                 break;

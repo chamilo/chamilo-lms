@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
+* Template (front controller in MVC pattern) used for distpaching
+ * to the controllers depend on the current action
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.course_description
 */
@@ -59,26 +60,26 @@ $course_description_controller = new CourseDescriptionController();
 // distpacher actions to controller
 switch ($action) {
 	case 'listing':
-    	$course_description_controller->listing();
-    	break;
+		$course_description_controller->listing();
+		break;
 	case 'history':
 		$course_description_controller->listing(true);
 		break;
-	case 'add'	  :
-		if (api_is_allowed_to_edit(null,true)) {
+	case 'add'      :
+		if (api_is_allowed_to_edit(null, true)) {
 			$course_description_controller->add();
 		}
 		break;
-	case 'edit'	  :
-		if (api_is_allowed_to_edit(null,true)) {
+	case 'edit'      :
+		if (api_is_allowed_to_edit(null, true)) {
 			$course_description_controller->edit($id, $description_type);
 		}
 		break;
 	case 'delete' :
-		if (api_is_allowed_to_edit(null,true)) {
+		if (api_is_allowed_to_edit(null, true)) {
 			$course_description_controller->destroy($id);
 		}
 		break;
-	default		  :
+	default          :
 		$course_description_controller->listing();
 }

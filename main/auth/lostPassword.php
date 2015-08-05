@@ -82,7 +82,15 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
 } else {
 	$form = new FormValidator('lost_password');
     $form->addElement('header', $tool_name);
-	$form->addElement('text', 'user', array(get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')), array('size'=>'40'));
+    $form->addElement(
+        'text',
+        'user',
+        array(
+            get_lang('LoginOrEmailAddress'),
+            get_lang('EnterEmailUserAndWellSendYouPassword'),
+        ),
+        array('size' => '40')
+    );
 	$form->addButtonSend(get_lang('Send'));
 
 	// Setting the rules
@@ -90,19 +98,27 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
 
 	if ($form->validate()) {
 		$values = $form->exportValues();
-        $users_related_to_username = Login::get_user_accounts_by_username(
+
+        $usersRelatedToUsername = Login::get_user_accounts_by_username(
             $values['user']
         );
 
-		if ($users_related_to_username) {
+		if ($usersRelatedToUsername) {
             $by_username = true;
-            foreach ($users_related_to_username as $user) {
+            foreach ($usersRelatedToUsername as $user) {
                 if ($_configuration['password_encryption'] != 'none') {
-                    $message = Login::handle_encrypted_password($user, $by_username);
+                    $setting = api_get_configuration_value('user_reset_password');
+                    if ($setting) {
+                        $userObj = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user['uid']);
+                        Login::sendResetEmail($userObj);
+                    } else {
+                        $message = Login::handle_encrypted_password($user, $by_username);
+                        Display::addFlash($message);
+                    }
                 } else {
                     $message = Login::send_password_to_user($user, $by_username);
+                    Display::addFlash($message);
                 }
-                Display::addFlash($message);
             }
 		} else {
             Display::addFlash(
@@ -119,7 +135,6 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
 
 
 $controller = new IndexManager($tool_name);
-//$tpl = new Template($tool_name);
 $controller->set_login_form();
 $tpl = $controller->tpl;
 $tpl->assign('form', $formToString);

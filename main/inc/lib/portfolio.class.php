@@ -287,7 +287,7 @@ class PortfolioController
      */
     function course_code()
     {
-        return Chamilo::session()->course()->code();
+        return ChamiloSession::instance()->course()->code();
     }
 
     /**

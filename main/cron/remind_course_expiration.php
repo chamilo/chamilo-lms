@@ -118,6 +118,7 @@ if ($usersToBeReminded) {
             );
 
             $subjectTemplate = new Template(null, false, false, false, false, false);
+            $subjectTemplate->assign('session_name', $session['name']);
             $subjectTemplate->assign(
                 'session_access_end_date',
                 $session['access_end_date']

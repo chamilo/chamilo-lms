@@ -18,6 +18,7 @@ class Version20150803171220 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        $this->addSql('UPDATE user SET username_canonical = username');
         $this->addSql('ALTER TABLE user ADD confirmation_token VARCHAR(255) NULL');
         $this->addSql('ALTER TABLE user ADD password_requested_at DATETIME DEFAULT NULL');
     }

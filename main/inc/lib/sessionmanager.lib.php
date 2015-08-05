@@ -1,3 +1,4 @@
+
 <?php
 /* For licensing terms, see /license.txt */
 
@@ -1543,12 +1544,12 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $session_info = api_get_session_info($id_session);
-        $session_name = $session_info['name'];
+        $entityManager = Database::getManager();
+        $session = $entityManager->find('ChamiloCoreBundle:Session', $id_session);
 
         // from function parameter
         if (empty($session_visibility)) {
-            $session_visibility = $session_info['visibility']; //loaded from DB
+            $session_visibility = $session->getVisibility();
             //default status loaded if empty
             if (empty($session_visibility))
                 $session_visibility = SESSION_VISIBLE_READ_ONLY; // by default readonly 1
@@ -1596,7 +1597,11 @@ class SessionManager
                         'complete_name',
                         stripslashes($user_info['complete_name'])
                     );
-                    $tplContent->assign('session_name', $session_name);
+                    $tplContent->assign('session_name', $session->getName());
+                    $tplContent->assign(
+                        'session_coach',
+                        $session->getGeneralCoach()->getCompleteName()
+                    );
                     $layoutContent = $tplContent->get_template(
                         'mail/content_subscription_to_session_confirmation.tpl'
                     );

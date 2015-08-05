@@ -123,8 +123,16 @@ class ScriptHandler
             __DIR__.'/../../../../main/course_description/upload_file_form.class.php',
             __DIR__.'/../../../../main/auth/external_login/facebook-php-sdk/src/facebook.php',
             __DIR__.'/../../../../main/auth/external_login/facebook-php-sdk/src/base_facebook.php',
-
-
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/calendar_popup.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/datepicker.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/datepickerdate.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/html_editor.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/select_language.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/select_theme.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/style_button.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/style_reset_button.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/style_submit_button.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/tbl_change.js.php',
         ];
 
         foreach ($paths as $path) {

@@ -68,7 +68,7 @@ foreach ($sessions as $sessionId => $userIds) {
     $query = "
         SELECT sessionUser.session_id, sessionUser.user_id, session.name, session.access_end_date 
         FROM $sessionUserTable AS sessionUser
-        INNER JOIN $sessionUserTable AS session
+        INNER JOIN $sessionTable AS session
         ON sessionUser.session_id = session.id
         WHERE
             session_id = $sessionId$userIds";
@@ -83,15 +83,6 @@ foreach ($sessions as $sessionId => $userIds) {
 
 if ($usersToBeReminded) {
     $today = date_create($today);
-    $platformLanguage = api_get_setting("platformLanguage");
-    $subject = sprintf(
-        get_lang(
-            "MailCronCourseExpirationReminderSubject",
-            null,
-            $platformLanguage
-        ),
-        api_get_setting("Institution")
-    );
     $administrator = array(
         'completeName' => api_get_person_name(
             api_get_setting("administratorName"),
@@ -125,24 +116,42 @@ if ($usersToBeReminded) {
                     'limit' => '1'
                 )
             );
-            $body = sprintf(
-                get_lang(
-                    'MailCronCourseExpirationReminderBody',
-                    null,
-                    $platformLanguage
-                ),
-                $userCompleteName,
-                $session['name'],
-                $session['access_end_date'],
-                $daysRemaining->format("%d"),
-                $result[0]['url'],
-                api_get_setting("siteName")
+
+            $subjectTemplate = new Template(null, false, false, false, false, false);
+            $subjectTemplate->assign(
+                'session_access_end_date',
+                $session['access_end_date']
             );
+            $subjectTemplate->assign(
+                'remaining_days',
+                $daysRemaining->format("%d")
+            );
+
+            $subjectLayout = $subjectTemplate->get_template(
+                'mail/cron_remind_course_expiration_subject.tpl'
+            );
+
+            $bodyTemplate = new Template(null, false, false, false, false, false);
+            $bodyTemplate->assign('complete_user_name', $userCompleteName);
+            $bodyTemplate->assign('session_name', $session['name']);
+            $bodyTemplate->assign(
+                'session_access_end_date',
+                $session['access_end_date']
+            );
+            $bodyTemplate->assign(
+                'remaining_days',
+                $daysRemaining->format("%d")
+            );
+
+            $bodyLayout = $bodyTemplate->get_template(
+                'mail/cron_remind_course_expiration_body.tpl'
+            );
+
             api_mail_html(
                 $userCompleteName,
                 $user['email'],
-                $subject,
-                $body,
+                $subjectTemplate->fetch($subjectLayout),
+                $bodyTemplate->fetch($bodyLayout),
                 $administrator['completeName'],
                 $administrator['email']
             );

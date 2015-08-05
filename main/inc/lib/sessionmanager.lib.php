@@ -1570,40 +1570,42 @@ class SessionManager
             // Sending emails only
             if (is_array($user_list) && count($user_list) > 0) {
                 foreach ($user_list as $user_id) {
-                    if (!in_array($user_id, $existingUsers)) {
-                        $tplSubject = new Template(null, false, false, false, false, false);
-                        $tplSubject->assign('mailSiteName', api_get_setting('siteName'));
-                        $layoutSubject = $tplSubject->get_template('mail/subject_subscription_to_session_confirmation.tpl');
-                        $subject = $tplSubject->fetch($layoutSubject);
-
-                        $user_info = api_get_user_info($user_id);
-
-                        $tplContent = new Template(null, false, false, false, false, false);
-                        // Variables for default template
-                        $tplContent->assign('mailCompleteName', stripslashes($user_info['complete_name']));
-                        $tplContent->assign('mailSessionName', $session_name);
-                        $tplContent->assign('mailSiteName', api_get_setting('siteName'));
-                        $tplContent->assign('mailWebPath', api_get_path(WEB_PATH));
-                        $tplContent->assign('mailAdministratorName', api_get_setting('administratorName'));
-                        $tplContent->assign('mailAdministratorSurname', api_get_setting('administratorSurname'));
-                        $tplContent->assign('mailAdministratorTelephone', api_get_setting('administratorTelephone'));
-                        $tplContent->assign('mailEmailAdministrator', api_get_setting('emailAdministrator'));
-                        $layoutContent = $tplContent->get_template('mail/content_subscription_to_session_confirmation.tpl');
-                        $content = $tplContent->fetch($layoutContent);
-
-                        MessageManager::send_message(
-                            $user_id,
-                            $subject,
-                            $content,
-                            array(),
-                            array(),
-                            null,
-                            null,
-                            null,
-                            null,
-                            null
-                        );
+                    if (in_array($user_id, $existingUsers)) {
+                        continue;
                     }
+
+                    $tplSubject = new Template(null, false, false, false, false, false);
+                    $layoutSubject = $tplSubject->get_template(
+                        'mail/subject_subscription_to_session_confirmation.tpl'
+                    );
+                    $subject = $tplSubject->fetch($layoutSubject);
+
+                    $user_info = api_get_user_info($user_id);
+
+                    $tplContent = new Template(null, false, false, false, false, false);
+                    // Variables for default template
+                    $tplContent->assign(
+                        'complete_name',
+                        stripslashes($user_info['complete_name'])
+                    );
+                    $tplContent->assign('session_name', $session_name);
+                    $layoutContent = $tplContent->get_template(
+                        'mail/content_subscription_to_session_confirmation.tpl'
+                    );
+                    $content = $tplContent->fetch($layoutContent);
+
+                    MessageManager::send_message(
+                        $user_id,
+                        $subject,
+                        $content,
+                        array(),
+                        array(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    );
                 }
             }
         }

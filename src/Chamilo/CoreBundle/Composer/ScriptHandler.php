@@ -48,7 +48,6 @@ class ScriptHandler
         ];
 
         $files = [
-
             __DIR__.'/../../../../main/admin/statistics/statistics.lib.php',
             __DIR__.'/../../../../main/inc/lib/main_api.lib.php',
             __DIR__.'/../../../../main/exercice/export/scorm/scorm_export.php',
@@ -106,10 +105,20 @@ class ScriptHandler
             }
         }
 
-        $fs = new Filesystem();
-        $fs->remove($files);
+        foreach ($files as $file) {
+            if (is_file($file) && is_writable($file)) {
+                unlink($file);
+            }
+        }
     }
 
+    /**
+     * Copied from chamilo rmdirr function
+     * @param string $dirname
+     * @param bool|false $delete_only_content_in_folder
+     * @param bool|false $strict
+     * @return bool
+     */
     private static function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = false)
     {
         $res = true;

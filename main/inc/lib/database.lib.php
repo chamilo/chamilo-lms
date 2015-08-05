@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
-use Chamilo\CoreBundle\DoctrineExtensions\DBAL\Types\UTCDateTimeType;
 
 /**
  * Class Database
@@ -111,6 +110,15 @@ class Database
     }
 
     /**
+     * @return string
+     */
+    public static function getUTCDateTimeTypeClass()
+    {
+        return isset(self::$utcDateTimeClass) ? self::$utcDateTimeClass :
+        'Chamilo\CoreBundle\DoctrineExtensions\DBAL\Types\UTCDateTimeType';
+    }
+
+    /**
      * Connect to the database sets the entity manager.
      *
      * @param array  $params
@@ -153,7 +161,7 @@ class Database
 
         Type::overrideType(
             Type::DATETIME,
-            'Chamilo\CoreBundle\DoctrineExtensions\DBAL\Types\UTCDateTimeType'
+            self::getUTCDateTimeTypeClass()
         );
 
         $listener = new \Gedmo\Timestampable\TimestampableListener();

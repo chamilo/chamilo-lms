@@ -17,6 +17,7 @@ class Database
      */
     private static $em;
     private static $connection;
+    public static $utcDateTimeClass;
 
     /**
      * @param EntityManager $em

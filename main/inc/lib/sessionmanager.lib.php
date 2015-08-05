@@ -63,6 +63,8 @@ class SessionManager
      * @param   int     $showDescription Optional. Whether show the session description
      * @param   array   $extraFields
      * @param   int     $sessionAdminId Optional. If this sessions was created by a session admin, assign it to him
+     * @param boolean $sendSubscritionNotification Optional.
+     *          Whether send a mail notification to users being subscribed
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
      * */
@@ -82,7 +84,8 @@ class SessionManager
         $description = null,
         $showDescription = 0,
         $extraFields = array(),
-        $sessionAdminId = 0
+        $sessionAdminId = 0,
+        $sendSubscritionNotification = false
     ) {
         global $_configuration;
 
@@ -154,7 +157,8 @@ class SessionManager
                     'session_admin_id' => $sessionAdminId,
                     'visibility' => $visibility,
                     'description' => $description,
-                    'show_description' => intval($showDescription)
+                    'show_description' => intval($showDescription),
+                    'send_subscription_notification' => $sendSubscritionNotification
                 );
 
                 if (!empty($startDate)) {
@@ -1313,6 +1317,8 @@ class SessionManager
      * @param int       $duration
      * @param array     $extraFields
      * @param int       $sessionAdminId
+     * @param boolean $sendSubscritionNotification Optional.
+     *          Whether send a mail notification to users being subscribed
      * @return mixed
      */
     public static function edit_session(
@@ -1331,7 +1337,8 @@ class SessionManager
         $showDescription = 0,
         $duration = null,
         $extraFields = array(),
-        $sessionAdminId = 0
+        $sessionAdminId = 0,
+        $sendSubscritionNotification = false
     ) {
         $name = trim(stripslashes($name));
         $coachId = intval($coachId);
@@ -1374,7 +1381,8 @@ class SessionManager
                     'id_coach' => $coachId,
                     'description'=> $description,
                     'show_description' => intval($showDescription),
-                    'visibility' => $visibility
+                    'visibility' => $visibility,
+                    'send_subscription_notification' => $sendSubscritionNotification
                 ];
 
                 if (!empty($sessionAdminId)) {
@@ -6583,6 +6591,14 @@ class SessionManager
         );
 
         $form->addElement('html', '</div>');
+
+        $form->addCheckBox(
+            'send_subscription_notification',
+            [
+                get_lang('SendSubscriptionNotification'),
+                get_lang('SendAnEmailWhenAUserBeingSubscribed')
+            ]
+        );
 
         // Extra fields
         $extra_field = new ExtraField('session');

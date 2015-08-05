@@ -197,6 +197,12 @@ class Session
     protected $currentCourse;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="send_subscription_notification", type="boolean", nullable=false, options={"default":false})
+     */
+    private $sendSubscriptionNotification;
+
+    /**
      * Constructor
      */
     public function __construct()

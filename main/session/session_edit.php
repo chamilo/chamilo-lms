@@ -98,7 +98,6 @@ $(function() {
 
 $form->addButtonUpdate(get_lang('ModifyThisSession'));
 
-
 $formDefaults = $sessionInfo;
 
 $formDefaults['coach_username'] = $sessionInfo['id_coach'];
@@ -129,6 +128,7 @@ if ($form->validate()) {
     $duration = isset($params['duration']) ? $params['duration'] : null;
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;
+    $sendSubscritionNotification = isset($params['send_subscription_notification']);
 
     $extraFields = array();
     foreach ($params as $key => $value) {
@@ -152,7 +152,9 @@ if ($form->validate()) {
         $description,
         $showDescription,
         $duration,
-        $extraFields
+        $extraFields,
+        null,
+        $sendSubscritionNotification
     );
 
     if ($return == strval(intval($return))) {

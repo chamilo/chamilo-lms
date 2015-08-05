@@ -146,7 +146,7 @@ class Version110 extends AbstractMigrationChamilo
             'c_forum_thread_qualify_log',
             //'c_glossary',
             'c_group_category',
-            //'c_group_info',
+            'c_group_info',
             'c_group_rel_tutor',
             'c_group_rel_user',
             'c_item_property',

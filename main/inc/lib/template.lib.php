@@ -140,6 +140,9 @@ class Template
         //Setting course variables
         $this->set_course_parameters();
 
+        //Setting administrator variables
+        $this->setAdministratorParams();
+
         //header and footer are showed by default
         $this->set_footer($show_footer);
         $this->set_header($show_header);
@@ -1261,6 +1264,21 @@ class Template
         }
 
         return $html;
+    }
+
+    /**
+     * Set administrator variables
+     */
+    private function setAdministratorParams()
+    {
+        $_admin = [
+            'email' => api_get_setting('emailAdministrator'),
+            'surname' => api_get_setting('administratorSurname'),
+            'name' => api_get_setting('administratorName'),
+            'telephone' => api_get_setting('administratorTelephone')
+        ];
+
+        $this->assign('_admin', $_admin);
     }
 
 }

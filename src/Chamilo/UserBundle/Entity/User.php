@@ -276,6 +276,21 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     protected $lastLogin;
 
     /**
+     * Random string sent to the user email address in order to verify it
+     *
+     * @var string
+     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
+     */
+    protected $confirmationToken;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
+     */
+    protected $passwordRequestedAt;
+
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
      **/
     protected $courses;
@@ -1508,5 +1523,45 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     {
         return $this->sessionCourseSubscriptions;
     }
+
+    /**
+     * @return string
+     */
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
+    }
+
+    /**
+     * @param string $confirmationToken
+     *
+     * @return User
+     */
+    public function setConfirmationToken($confirmationToken)
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPasswordRequestedAt()
+    {
+        return $this->passwordRequestedAt;
+    }
+
+
+    /**
+     * @param int $ttl
+     * @return bool
+     */
+    public function isPasswordRequestNonExpired($ttl)
+    {
+        return $this->getPasswordRequestedAt() instanceof \DateTime &&
+        $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
+    }
+
 
 }

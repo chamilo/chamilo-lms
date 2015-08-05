@@ -2,7 +2,6 @@
 
 namespace Shibboleth;
 
-use Chamilo;
 use ChamiloSession as Session;
 use Database;
 
@@ -68,7 +67,7 @@ class ShibbolethSession
 
         $this->logout();
 
-        Chamilo::session()->start();
+        Session::instance();
         Session::write('_uid', $_uid);
 
         global $_user;

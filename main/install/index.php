@@ -686,6 +686,26 @@ if (@$_POST['step2']) {
                 include 'update-files-1.9.0-1.10.0.inc.php';
                 // Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';
+
+                $configurationFiles = array(
+                    'mail.conf.php',
+                    'profile.conf.php',
+                    'course_info.conf.php',
+                    'add_course.conf.php',
+                    'events.conf.php',
+                    'auth.conf.php',
+                    'portfolio.conf.php'
+                );
+
+                foreach ($configurationFiles as $file) {
+                    if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
+                        copy(
+                            api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
+                            api_get_path(CONFIGURATION_PATH).$file
+                        );
+                    }
+                }
+
                 break;
             default:
                 break;

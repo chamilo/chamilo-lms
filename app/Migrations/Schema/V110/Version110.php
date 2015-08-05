@@ -146,7 +146,7 @@ class Version110 extends AbstractMigrationChamilo
             'c_forum_thread_qualify_log',
             //'c_glossary',
             'c_group_category',
-            //'c_group_info',
+            'c_group_info',
             'c_group_rel_tutor',
             'c_group_rel_user',
             'c_item_property',
@@ -466,8 +466,6 @@ class Version110 extends AbstractMigrationChamilo
 
         $this->addSql("INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('Føroyskt', 'faroese', 'fo', 'faroese', 0), ('Tagalog', 'tagalog', 'tl', 'tagalog',1), ('Tibetan', 'tibetan', 'bo', 'tibetan', 0), ('isiXhosa', 'xhosa', 'xh', 'xhosa', 0)");
         $this->addSql("DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools'");
-
-        //$schema->renameTable('track_e_exercices', 'track_e_exercises');
 
         $this->addSql("UPDATE c_student_publication SET date_of_qualification = NULL WHERE date_of_qualification = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE c_student_publication SET sent_date = NULL WHERE sent_date = '0000-00-00 00:00:00'");

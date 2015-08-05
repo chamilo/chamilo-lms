@@ -223,3 +223,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
     'language',
     'extra_fields'
 ];*/
+
+// Reset password in portal
+//$_configuration['user_reset_password'] = false;
+// password token expired
+//$_configuration['user_reset_password_token_limit'] = 3600;

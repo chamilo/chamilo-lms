@@ -188,17 +188,17 @@ class NotebookManager
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
             if (api_get_session_id() == 0)
-                echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
+                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
             elseif (api_is_allowed_to_session_edit(false, true)) {
-                echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
+                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
             }
         } else {
             echo '<a href="javascript:void(0)">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
         }
 
-        echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=changeview&amp;view=creation_date&amp;direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_new.png', get_lang('OrderByCreationDate'), '', '32') . '</a>';
-        echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=changeview&amp;view=update_date&amp;direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_mod.png', get_lang('OrderByModificationDate'), '', '32') . '</a>';
-        echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=changeview&amp;view=title&amp;direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32') . '</a>';
+        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=creation_date&direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_new.png', get_lang('OrderByCreationDate'), '', '32') . '</a>';
+        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=update_date&direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_mod.png', get_lang('OrderByModificationDate'), '', '32') . '</a>';
+        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=title&direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32') . '</a>';
         echo '</div>';
 
         if (!in_array($_SESSION['notebook_view'], array('creation_date', 'update_date', 'title'))) {
@@ -238,8 +238,8 @@ class NotebookManager
             echo '</div>';
             echo '<div class="sectioncomment">' . $row['description'] . '</div>';
             echo '<div>';
-            echo '<a href="' . api_get_self() . '?action=editnote&amp;notebook_id=' . $row['notebook_id'] . '">' . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . '</a>';
-            echo '<a href="' . api_get_self() . '?action=deletenote&amp;notebook_id=' . $row['notebook_id'] . '" onclick="return confirmation(\'' . $row['title'] . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
+            echo '<a href="' . api_get_self() . '?action=editnote&notebook_id=' . $row['notebook_id'] . '">' . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . '</a>';
+            echo '<a href="' . api_get_self() . '?action=deletenote&notebook_id=' . $row['notebook_id'] . '" onclick="return confirmation(\'' . $row['title'] . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
             echo '</div>';
         }
     }

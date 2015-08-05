@@ -159,7 +159,7 @@ class LearnpathLink extends AbstractLink
 						return array($sumResult/$rescount, 100);
 						break;
 					case 'ranking':
-						return AbstractLink::getCurrentUserRanking($students);
+						return AbstractLink::getCurrentUserRanking($stud_id, $students);
 						break;
 					default:
 						return array($sum, $rescount);

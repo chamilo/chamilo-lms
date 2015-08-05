@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Chamilo session (i.e. the session that maintains the connection open after usr login)
  *
@@ -18,11 +19,13 @@
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 /**
+ * @todo use session symfony component
+ * @todo replace all $_SESSION calls with this class.
+ * @todo remove System\Session class
  * ChamiloSession class definition
  */
 class ChamiloSession extends System\Session
 {
-
     const NAME = 'ch_sid';
 
     /**
@@ -48,15 +51,6 @@ class ChamiloSession extends System\Session
         return $_configuration['session_lifetime'];
     }
 
-    /**
-     * Returns whether the sessions are stored in the database (or not)
-     * @return bool True if session data are stored in the database, false if they're stored on disk
-     * @assert (null) === false
-     */
-    static function session_stored_in_db()
-    {
-        return self::read('session_stored_in_db', false);
-    }
 
     /**
      * Starts the Chamilo session.

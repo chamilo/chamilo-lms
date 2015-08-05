@@ -13,10 +13,6 @@
  *	@package chamilo.course_home
  */
 
-
-
-/*	MAIN CODE */
-
 /* 	Work with data post askable by admin of course (franglais, clean this) */
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
@@ -47,7 +43,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
   	/*	HIDE */
 
-	elseif ($_GET['hide']) { // visibility 1 -> 0        
+	elseif ($_GET['hide']) { // visibility 1 -> 0
 		Database::query("UPDATE $tool_table SET visibility=0 WHERE c_id = $course_id AND id='".$id."'");
 		$show_message .= Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
 	}
@@ -119,11 +115,10 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 /*	Tools for platform admin only */
 
 if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
-    
-		$content .='<div class="platformadminview">
-		<span class="viewcaption">'.get_lang('PlatformAdminOnly').'</span>
-		<table width="100%">
-			'.CourseHome::show_tool_2column(TOOL_PLATFORM_ADMIN).'
-		</table>
-		</div>';
+	$content .='<div class="platformadminview">
+	<span class="viewcaption">'.get_lang('PlatformAdminOnly').'</span>
+	<table width="100%">
+		'.CourseHome::show_tool_2column(TOOL_PLATFORM_ADMIN).'
+	</table>
+	</div>';
 }

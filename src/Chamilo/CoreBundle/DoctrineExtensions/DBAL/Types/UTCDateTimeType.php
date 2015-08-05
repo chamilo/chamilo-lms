@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\DoctrineExtensions\DBAL\Types;
 
@@ -8,12 +9,16 @@ use Doctrine\DBAL\Types\DateTimeType;
 
 /**
  * Save datetime values in UTC in the database
+ *
  * @package Chamilo\CoreBundle\DoctrineExtensions\DBAL\Types
  */
 class UTCDateTimeType extends DateTimeType
 {
     static private $utc = null;
 
+    /**
+     * {@inheritdoc}
+     */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
@@ -29,6 +34,9 @@ class UTCDateTimeType extends DateTimeType
         return $value->format($platform->getDateTimeFormatString());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {

@@ -12,6 +12,12 @@ if (php_sapi_name() != 'cli') {
     exit; //do not run from browser
 }
 
+$isActive = api_get_setting('cron_remind_course_expiration_activate') === 'true';
+
+if (!$isActive) {
+    exit;
+}
+
 $endDate = new DateTime('now', new DateTimeZone('UTC'));
 $endDate = $endDate->format('Y-m-d');
 
@@ -41,27 +47,6 @@ $administrator = [
 ];
 
 foreach ($sessions as $session) {
-    $mailSubject = sprintf(
-        get_lang('MailCronCourseFinishedSubject'),
-        $session->getName()
-    );
-
-    $accessUrls = $accessUrlRepo->createQueryBuilder('au')
-        ->select('au')
-        ->innerJoin(
-            'ChamiloCoreBundle:AccessUrlRelSession',
-            'aus',
-            Doctrine\ORM\Query\Expr\Join::WITH,
-            'au.id = aus.accessUrlId'
-        )
-        ->where('aus.sessionId = :session')
-        ->setParameter('session', $session)
-        ->setMaxResults(1)
-        ->getQuery()
-        ->getResult();
-
-    $accessUrl = current($accessUrls);
-
     $sessionUsers = $session->getUsers();
 
     if (empty($sessionUsers)) {
@@ -72,21 +57,26 @@ foreach ($sessions as $session) {
     foreach ($sessionUsers as $sessionUser) {
         $user = $sessionUser->getUser();
 
-        $mailBody = vsprintf(
-            get_lang('MailCronCourseFinishedBody'),
-            [
-                $user->getCompleteName(),
-                $session->getName(),
-                $accessUrl->getUrl(),
-                api_get_setting("siteName")
-            ]
+        $subjectTemplate = new Template(null, false, false, false, false, false);
+        $subjectTemplate->assign('session_name', $session->getName());
+
+        $subjectLayout = $subjectTemplate->get_template(
+            'mail/cron_course_finished_subject.tpl'
+        );
+
+        $bodyTemplate = new Template(null, false, false, false, false, false);
+        $bodyTemplate->assign('complete_user_name', $user->getCompleteName());
+        $bodyTemplate->assign('session_name', $session->getName());
+
+        $bodyLayout = $bodyTemplate->get_template(
+            'mail/cron_course_finished_body.tpl'
         );
 
         api_mail_html(
             $user->getCompleteName(),
             $user->getEmail(),
-            $mailSubject,
-            $mailBody,
+            $subjectTemplate->fetch($subjectLayout),
+            $bodyTemplate->fetch($bodyLayout),
             $administrator['complete_name'],
             $administrator['email']
         );

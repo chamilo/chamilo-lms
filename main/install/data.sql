@@ -310,7 +310,10 @@ VALUES
 ('meta_image_path', NULL, 'textfield', 'Tracking', '', 'MetaImagePathTitle', 'MetaImagePathComment', NULL, NULL, 1),
 ('allow_teachers_to_create_sessions', NULL, 'radio', 'Session', 'false', 'AllowTeachersToCreateSessionsTitle', 'AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
 ('institution_address',NULL,'textfield','Platform','','InstitutionAddressTitle','InstitutionAddressComment',NULL,NULL, 1),
-('chamilo_database_version', NULL, 'textfield', NULL, '0', 'DatabaseVersion', '', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield', NULL, '0', 'DatabaseVersion', '', NULL, NULL, 0),
+('cron_remind_course_finished_activate', NULL, 'radio', 'Crons', 'false', 'CronRemingCourseFinishedActivateText', 'CronRemingCourseFinishedActivateComment', NULL, NULL, 1),
+('cron_remind_course_expiration_frecuency', NULL, 'textfield', 'Crons', '2', 'CronRemingCourseExpirationFrecuencyText', 'CronRemingCourseExpirationFrecuencyComment', NULL, NULL, 1),
+('cron_remind_course_expiration_activate', NULL, 'radio', 'Crons', 'false', 'CronRemingCourseExpirationActivateText', 'CronRemingCourseExpirationActivateComment', NULL, NULL, 1);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -634,7 +637,11 @@ VALUES
 ('enabled_mathjax','true','Yes'),
 ('enabled_mathjax','false','No'),
 ('allow_teachers_to_create_sessions', 'true', 'Yes'),
-('allow_teachers_to_create_sessions', 'false', 'No');
+('allow_teachers_to_create_sessions', 'false', 'No'),
+('cron_remind_course_finished_activate', 'false', 'No')
+('cron_remind_course_finished_activate', 'true', 'Yes')
+('cron_remind_course_expiration_activate', 'false', 'No')
+('cron_remind_course_expiration_activate', 'true', 'Yes');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),

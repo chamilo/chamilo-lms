@@ -7473,4 +7473,14 @@ $CronRemindCourseExpirationFrecuencyText = "Frecuencia del recordatorio de expir
 $CronRemindCourseExpirationFrecuencyComment = "Número de días antes de la expiración del curso a considerar para enviar el correo electrónico de recordatorio";
 $CronCourseFinishedActivateText = "Cron de finalización de curso";
 $CronCourseFinishedActivateComment = "Activar el cron de finalización de curso";
+$MailCronCourseFinishedSubject = "Fin del curso %s";
+$MailCronCourseFinishedBody = "Estimado %s,
+
+Gracias por participar en el curso %s. Esperamos que hayas aprendido y disfrutado del curso.
+
+Puedes ver tu rendimiento a lo largo del curso en la sección Mi Avance.
+
+Saludos cordiales,
+
+El equipo de %s";
 ?>

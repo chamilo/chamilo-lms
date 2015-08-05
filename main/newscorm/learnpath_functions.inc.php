@@ -425,14 +425,14 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                     $myaction = 'move_item';
                     if ($i < $num_modules) {
                         // If we are still under the number of chapters in this section, show "move down".
-                        //echo "  <td align=center>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a></td>\n";
+                        //echo "  <td align=center>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=".$myaction."&direction=down&moduleid=".$parent_item_id."&id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a></td>\n";
                         echo "  <td align=center>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=".$myaction."&direction=down&moduleid=".$parent_item_id."&id=".$row['id']."'>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a></td>\n";
                     } else {
                         echo '  <td align="center">&nbsp;</td>'."\n";
                     }
 
                     if ($i > 1) {
-                        //echo '  <td align="center">'."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>"."</td>\n";
+                        //echo '  <td align="center">'."<a href='".api_get_self()."?lp_id=$learnpath_id&action=".$myaction."&direction=up&moduleid=".$parent_item_id."&id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>"."</td>\n";
                         echo '  <td align="center">'."<a href='".api_get_self()."?lp_id=$learnpath_id&action=".$myaction."&direction=up&moduleid=".$parent_item_id."&id=".$row['id']."'>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>"."</td>\n";
                     } else {
                         echo '  <td align="center">&nbsp;</td>'."\n";
@@ -512,23 +512,23 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 
                     // Move
                     if ($i < $num_modules) {
-                        echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a>"."</td>";
+                        echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=moveitem&type=item&direction=down&moduleid=".$parent_item_id."&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a>"."</td>";
                     } else {
                         echo "<td width='30' align='center'>&nbsp;</td>";
                     }
 
                     if ($i > 1) {
-                        echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>";
+                        echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=moveitem&type=item&direction=up&moduleid=".$parent_item_id."&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>";
                     } else {
                         echo "<td width='30' align='center'>&nbsp;</td>";
                     }
                     echo "</td>"."<td align='center'>";
 
                     // Edit prereq
-                    echo "<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=edititemprereq&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lg_add_prereq\">"."</a>"."</td>";
+                    echo "<a href='".api_get_self()."?lp_id=$learnpath_id&action=edititemprereq&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lg_add_prereq\">"."</a>"."</td>";
 
                     // Edit
-                    echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=edititem&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_item\">"."</a>"."</td>";
+                    echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=edititem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_item\">"."</a>"."</td>";
 
                     // Delete
                     echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_item\" onclick=\"javascript: return confirmation('".$row_items['item_type']."');\">"."</a>";

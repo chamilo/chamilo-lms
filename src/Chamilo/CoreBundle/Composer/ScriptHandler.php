@@ -46,15 +46,16 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/javascript/fullcalendar',
             __DIR__.'/../../../../main/inc/lib/javascript/jquery-ui',
             __DIR__.'/../../../../main/inc/lib/fckeditor',
-            //__DIR__.'/../../../../main/inc/lib/htmlpurifier/',
             __DIR__.'/../../../../main/inc/lib/mpdf/',
             __DIR__.'/../../../../main/inc/lib/symfony/',
             __DIR__.'/../../../../main/inc/lib/system/media/renderer',
             __DIR__.'/../../../../main/inc/lib/system/io',
             __DIR__.'/../../../../main/inc/lib/system/net',
             __DIR__.'/../../../../main/inc/lib/system/text/',
+            __DIR__.'/../../../../main/inc/lib/system/portfolio/',
             __DIR__.'/../../../../main/inc/lib/tools/',
             __DIR__.'/../../../../main/inc/lib/pchart/',
+            __DIR__.'/../../../../main/inc/lib/htmlpurifier',
             __DIR__.'/../../../../main/announcements/resources',
         ];
 
@@ -107,6 +108,22 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/page.class.php',
             __DIR__.'/../../../../main/inc/lib/mail.lib.inc.php',
             __DIR__.'/../../../../main/admin/system_management.php',
+            __DIR__.'/../../../../main/auth/external_login/facebook-php-sdk/src/base_facebook.php',
+            __DIR__.'/../../../../main/course_description/ajax_controller.class.php',
+            __DIR__.'/../../../../main/course_description/controller.class.php',
+            __DIR__.'/../../../../main/course_description/course_description.class.php',
+            __DIR__.'/../../../../main/course_description/course_description_form.class.php',
+            __DIR__.'/../../../../main/course_description/course_description_repository.class.php',
+            __DIR__.'/../../../../main/course_description/course_description_type.class.php',
+            __DIR__.'/../../../../main/course_description/course_description_type_repository.class.php',
+            __DIR__.'/../../../../main/course_description/course_import.class.php',
+            __DIR__.'/../../../../main/course_description/csv_reader.class.php',
+            __DIR__.'/../../../../main/course_description/csv_writer.class.php',
+            __DIR__.'/../../../../main/course_description/request.class.php',
+            __DIR__.'/../../../../main/course_description/upload_file_form.class.php',
+            __DIR__.'/../../../../main/auth/external_login/facebook-php-sdk/src/facebook.php',
+            __DIR__.'/../../../../main/auth/external_login/facebook-php-sdk/src/base_facebook.php',
+
 
         ];
 

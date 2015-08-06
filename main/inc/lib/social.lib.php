@@ -869,6 +869,7 @@ class SocialManager extends UserManager
         }
         $column_size = '12';
         $add_row = false;
+        //var_dump(api_set_anonymous());
         if (api_is_anonymous()) {
             $add_row = true;
         }
@@ -883,9 +884,25 @@ class SocialManager extends UserManager
         $html .= '<div class="row">';
 
         foreach ($user_list as $uid) {
-            $user_info = api_get_user_info($uid);
-            $name = $user_info['complete_name'];
+            $user_info = api_get_user_info($uid, $checkIfUserOnline = true);
+            $lastname = $user_info['lastname'];
+            $firstname =  $user_info['firstname'];
+            $completeName = $firstname.', '.$lastname;
 
+            $user_rol = $user_info['status'] == 1 ? Display::return_icon('teacher.png',get_lang('Teacher'),null,ICON_SIZE_TINY) : Display::return_icon('user.png',get_lang('Student'),null,ICON_SIZE_TINY);
+            $status_icon_chat = null;
+            if($user_info['user_is_online_in_chat'] == 1){
+                $status_icon_chat = Display::return_icon('online.png',get_lang('Online'));
+            }else{
+                $status_icon_chat = Display::return_icon('offline.png',get_lang('Offline'));
+            }
+
+            if($user_info)
+
+            $userPicture = $user_info['avatar'];
+            $img = '<img class="img-responsive img-circle" title = "'.$completeName.'" alt="'.$completeName.'" src="'.$userPicture.'">';
+
+            $url =  null;
             // Anonymous users can't have access to the profile
             if (!api_is_anonymous()) {
                 if (api_get_setting('allow_social_tool') == 'true') {
@@ -893,23 +910,20 @@ class SocialManager extends UserManager
                 } else {
                     $url = '?id='.$uid.$course_url;
                 }
+
             } else {
-                $url = '#';
+                $url = null;
+
             }
+            $name = '<a href="'.$url.'">'.$firstname.'<br>'.$lastname.'</a>';
 
-            $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
-            $status_icon = Display::span('', array('class' => 'online_user_in_text'));
-            $userPicture = $user_info['avatar'];
-
-            $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$userPicture.'">';
-            $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a>';
-
-            $html .= '<div class="col-md-4">
-                        <div class="card">
-                            <div class="avatar">'.$img.'</div>
-                            <div class="content">
+            $html .= '<div class="col-xs-6 col-md-2">
+                        <div class="items-user">
+                            <div class="items-user-avatar">'.$img.'</div>
+                            <div class="items-user-name">
                             '.$name.'
                             </div>
+                            <div class="items-user-status">'.$status_icon_chat.' '.$user_rol.'</div>
                         </div>
                       </div>';
 

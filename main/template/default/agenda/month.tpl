@@ -531,7 +531,7 @@ $(document).ready(function() {
 {{ actions_div }}
 
 <div id="simple-dialog-form" style="display:none;">
-    <div style="width:500px">
+    <div style="width:640px">
         <form name="form-simple" class="form-horizontal">
             <span id="calendar_course_info_simple"></span>
             <span id="calendar_session_info"></span>
@@ -574,7 +574,7 @@ $(document).ready(function() {
 </div>
 
 <div id="dialog-form" style="display:none;">
-	<div style="width:500px">
+	<div style="width:640px">
         {{ form_add }}
 	</div>
 </div>

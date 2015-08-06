@@ -150,9 +150,8 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
 $tpl = new Template(get_lang('UsersOnLineList'));
 
 if (api_get_setting('allow_social_tool') == 'true' && !api_is_anonymous()) {
-    $tpl->assign('social_avatar_block', $social_left_content);
     $tpl->assign('social_search_block', $social_right_content);
-    $social_layout = $tpl->get_template('social/home.tpl');
+    $social_layout = $tpl->get_template('social/whoisonline.tpl');
     $tpl->display($social_layout);
 } else {
     $content = $social_right_content;

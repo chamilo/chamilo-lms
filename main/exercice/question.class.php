@@ -876,16 +876,19 @@ abstract class Question
                     $TBL_ANSWERS = Database::get_course_table(
                         TABLE_QUIZ_ANSWER
                     );
-                    $sql = "INSERT INTO $TBL_ANSWERS (
-                            c_id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,
-                            hotspot_type
-                        )
-                        VALUES (
-                            $c_id, " . intval($this->id) . ", '', NULL , '', '10' , '1', '0;0|0|0', 'delineation'
-                        )";
-                    Database::query($sql);
+                    $params = [
+                        'c_id' => $c_id,
+                        'question_id' => $this->id,
+                        'answer' => '',
+                        'correct' => '',
+                        'comment' => '',
+                        'ponderation' => 10,
+                        'position' => 1,
+                        'hotspot_coordinates' => '0;0|0|0',
+                        'hotspot_type' => 'delineation',
+                    ];
+                    $id = Database::insert($TBL_ANSWERS, $params);
 
-                    $id = Database::insert_id();
                     if ($id) {
                         $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE id_auto = $id";
                         Database::query($sql);

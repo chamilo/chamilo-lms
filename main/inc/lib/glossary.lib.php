@@ -111,21 +111,15 @@ class GlossaryManager
                 Display::display_error_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'));
             return false;
         } else {
-            $sql = "INSERT INTO $t_glossary (c_id, name, description, display_order, session_id)
-					VALUES(
-						".api_get_course_int_id().",
-						'".Database::escape_string($values['glossary_title'])."',
-						'".Database::escape_string($values['glossary_comment'])."',
-						'".(int)($max_glossary_item + 1)."',
-						'".Database::escape_string($session_id)."'
-						)";
-            $result = Database::query($sql);
 
-            if ($result === false) {
-                return false;
-            }
-
-            $id = Database::insert_id();
+            $params = [
+                'c_id' => api_get_course_int_id(),
+                'name' => $values['glossary_title'],
+                'description' => $values['glossary_comment'],
+                'display_order' => $max_glossary_item + 1,
+                'session_id' => $session_id,
+            ];
+            $id = Database::insert($t_glossary, $params);
             if ($id) {
 
                 $sql = "UPDATE $t_glossary SET glossary_id = $id WHERE iid = $id";

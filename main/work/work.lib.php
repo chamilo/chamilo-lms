@@ -1017,18 +1017,21 @@ function insert_all_directory_in_course_table($base_work_dir)
     $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
     for($i = 0; $i < count($only_dir); $i++) {
-        $url = Database::escape_string($only_dir[$i]);
-        $sql = "INSERT INTO " . $work_table . " SET
-               c_id         = '$course_id',
-               url          = '".$url."',
-               title        = '',
-               description  = '',
-               author       = '',
-               active       = '1',
-               accepted     = '1',
-               filetype     = 'folder',
-               post_group_id = '".$group_id."'";
-        Database::query($sql);
+        $url = $only_dir[$i];
+
+        $params = [
+            'c_id' => $course_id,
+            'url' => $url,
+            'title' => '',
+            'description' => '',
+            'author' => '',
+            'active' => '1',
+            'accepted' => '1',
+            'filetype' => 'folder',
+            'post_group_id' => $group_id,
+        ];
+
+        Database::insert($work_table, $params);
     }
 }
 
@@ -3638,28 +3641,28 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
 
     if ($saveWork) {
         $active = '1';
-        $sql = "INSERT INTO ".$work_table." SET
-                   c_id         = $courseId ,
-                   url          = '".$url . "',
-                   filetype     = 'file',
-                   title        = '".Database::escape_string($title)."',
-                   description  = '".Database::escape_string($description)."',
-                   contains_file = '".$contains_file."',
-                   active       = '".$active."',
-                   accepted     = '1',
-                   post_group_id = '".$groupId."',
-                   sent_date    =  '".api_get_utc_datetime()."',
-                   parent_id    =  '".$workInfo['id']."' ,
-                   session_id   = '".$sessionId."',
-                   user_id      = '".$userId."'";
-
-        Database::query($sql);
-        $workId = Database::insert_id();
-
-        $sql = "UPDATE $work_table SET id = iid WHERE iid = $workId ";
-        Database::query($sql);
+        $params = [
+            'c_id'         => $courseId,
+            'url'          => $url,
+            'filetype'     => 'file',
+            'title'        => $title,
+            'description'  => $description,
+            'contains_file' => $contains_file,
+            'active'       => $active,
+            'accepted'     => '1',
+            'post_group_id' => $groupId,
+            'sent_date'    =>  api_get_utc_datetime(),
+            'parent_id'    =>  $workInfo['id'],
+            'session_id'   => $sessionId,
+            'user_id'      => $userId
+        ];
+        $workId = Database::insert($work_table, $params);
 
         if ($workId) {
+
+            $sql = "UPDATE $work_table SET id = iid WHERE iid = $workId ";
+            Database::query($sql);
+
             if (array_key_exists('filename', $workInfo) && !empty($filename)) {
                 $filename = Database::escape_string($filename);
                 $sql = "UPDATE $work_table SET
@@ -3730,29 +3733,28 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
     if (!empty($created_dir)) {
         $dirName = '/'.$created_dir;
         $today = api_get_utc_datetime();
-        $sql = "INSERT INTO " . $work_table . " SET
-                c_id = $course_id,
-                url = '".Database::escape_string($dirName)."',
-                title = '".Database::escape_string($params['new_dir'])."',
-                description = '".Database::escape_string($params['description'])."',
-                author = '',
-                active = '1',
-                accepted = '1',
-                filetype = 'folder',
-                post_group_id = '" . $group_id . "',
-                sent_date = '" . $today . "',
-                qualification = '".($params['qualification'] != '' ? Database::escape_string($params['qualification']) : '') ."',
-                parent_id = '',
-                qualificator_id = '',
-                weight = '".Database::escape_string($params['weight'])."',
-                session_id = '".$session_id."',
-                allow_text_assignment = '".Database::escape_string($params['allow_text_assignment'])."',
-                contains_file = 0,
-                user_id = '".$user_id."'";
-        Database::query($sql);
 
-        // Add the directory
-        $id = Database::insert_id();
+        $params = [
+            'c_id' => $course_id,
+            'url' => $dirName,
+            'title' => $params['new_dir'],
+            'description' => $params['description'],
+            'author' => '',
+            'active' => '1',
+            'accepted' => '1',
+            'filetype' => 'folder',
+            'post_group_id' => $group_id,
+            'sent_date' => $today,
+            'qualification' => $params['qualification'] != '' ? $params['qualification'] : '',
+            'parent_id' => '',
+            'qualificator_id' => '',
+            'weight' => $params['weight'],
+            'session_id' => $session_id,
+            'allow_text_assignment' => $params['allow_text_assignment'],
+            'contains_file' => 0,
+            'user_id' => $user_id,
+        ];
+        $id = Database::insert($work_table, $params);
 
         if ($id) {
 
@@ -4247,9 +4249,13 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
                   WHERE variable = 'student_delete_own_publication' AND c_id = $courseId";
         Database::query($query);
     } else {
-        $query = "INSERT INTO " . $table_course_setting . " (c_id, variable, value, category) VALUES
-                ($courseId, 'student_delete_own_publication' , '".Database::escape_string($studentDeleteOwnPublication) . "','work')";
-        Database::query($query);
+        $params = [
+            'c_id' => $courseId,
+            'variable' => 'student_delete_own_publication',
+            'value' => $studentDeleteOwnPublication,
+            'category' => 'work'
+        ];
+        Database::insert($table_course_setting, $params);
     }
 }
 

@@ -447,30 +447,22 @@ class UniqueAnswer extends Question
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
         $position = $row_max->max_position + 1;
-        // Insert a new answer
-        $sql = "INSERT INTO $tbl_quiz_answer (
-                c_id,
-                id,
-                question_id,
-                answer,
-                correct,
-                comment,
-                ponderation,
-                position,
-                destination
-            ) VALUES (
-                $course_id,
-                $id,
-                $question_id,
-                '" . $title . "',
-                $correct,
-                '" . $comment . "',
-                '$score', $position,
-                '0@@0@@0@@0'
-            )";
-        Database::query($sql);
 
-        $id = Database::insert_id();
+        // Insert a new answer
+       $params = [
+            'c_id' => $course_id,
+            'id' => $id,
+            'question_id' => $question_id,
+            'answer' => $title,
+            'correct' => $correct,
+            'comment' => $comment,
+            'ponderation' => $score,
+            'position' => $position,
+            'destination' => '0@@0@@0@@0',
+        ];
+
+        $id = Database::insert($tbl_quiz_answer, $params);
+
         if ($id) {
             $sql = "UPDATE $tbl_quiz_answer SET id = iid WHERE iid = $id";
             Database::query($sql);

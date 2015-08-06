@@ -109,7 +109,11 @@ $form->addText(
         get_lang('OnlyLettersAndNumbers')
     ),
     '',
-    array('maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE)
+    array(
+        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+        'pattern' => '[a-zA-Z0-9]+',
+        'title' => get_lang('OnlyLettersAndNumbers')
+    )
 );
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule(

@@ -7483,4 +7483,8 @@ Puedes ver tu rendimiento a lo largo del curso en la sección Mi Avance.
 Saludos cordiales,
 
 El equipo de %s";
+$GenerateDefaultContent = "Generar contenido por defecto";
+$ThanksForYourSubscription = "¡Gracias por su suscripción!";
+$XTeam = "El equipo de %s";
+$YouCanStartSubscribingToCoursesEnteringToXUrl = "Puede empezar a suscribirse a los cursos ingresando a %s";
 ?>

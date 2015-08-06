@@ -722,13 +722,12 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         $sql_image = '';
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
-            $sql_image = "'".$new_file_name."', ";
         }
 
         $params = [
             'c_id' => $course_id,
             'forum_title'=> $values['forum_title'],
-            'forum_image'=> $sql_image,
+            'forum_image'=> $new_file_name,
             'forum_comment'=> isset($values['forum_comment']) ? $values['forum_comment'] : null,
             'forum_category'=> isset($values['forum_category']) ? $values['forum_category'] : null,
             'allow_anonymous'=> isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null,

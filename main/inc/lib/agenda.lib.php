@@ -1751,7 +1751,7 @@ class Agenda
      */
     public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array())
     {
-        $html = '<select id="users_to_send_id" data-placeholder="'.get_lang('Select').'" name="users_to_send[]" multiple="multiple" style="width:250px" class="chzn-select">';
+        $html = '<select id="users_to_send_id" data-placeholder="'.get_lang('Select').'" name="users_to_send[]" multiple="multiple">';
         if ($to_already_selected == 'everyone') {
             $html .= '<option value="everyone" checked="checked">'.get_lang('Everyone').'</option>';
         } else {
@@ -1813,8 +1813,7 @@ class Agenda
             'id' => 'users_to_send_id',
             'data-placeholder' => get_lang('Select'),
             'multiple' => 'multiple',
-            'style' => 'width:250px',
-            //'class' => 'chzn-select'
+            'class' => 'multiple-select'
         );
 
         if (!empty($attributes)) {

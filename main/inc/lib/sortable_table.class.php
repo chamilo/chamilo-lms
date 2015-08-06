@@ -260,7 +260,8 @@ class SortableTable extends HTML_Table
             // Only show pagination info when there are items to paginate
 
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-                $html  = '<table class="data_table_pagination">';
+                $html  = '<div class="table-well">';
+                $html .= '<table class="data_table_pagination">';
                 $html .= '<tr>';
                 $html .= '<td style="width:25%;">';
                 $html .= $form;
@@ -273,6 +274,7 @@ class SortableTable extends HTML_Table
                 $html .= '</td>';
                 $html .= '</tr>';
                 $html .= '</table>';
+                $html .= '</div>';
             }
 
             if (count($this->form_actions) > 0) {

@@ -75,6 +75,9 @@ select {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+#login_block #formLogin .form-group{
+  display: none;
+}
 #login_block .nav-pills{
   margin-bottom: 5px;
   padding-top: 10px;
@@ -135,7 +138,7 @@ ul#navigation {
   position: fixed;
   margin: 0px;
   padding: 0px;
-  top: 200px;
+  top: 280px;
   right: -10px;
   list-style: none;
   z-index:9999;
@@ -277,60 +280,6 @@ ul#navigation .report a {
 .session-group .items-session li{
     padding-bottom: 5px;
 }
-#main .nav .dropdown {
-  width:150px;
-  text-align: right;
-}
-#main .nav .dropdown:nth-child(n) {
-  width:auto;
-}
-.course-items .title{
-  margin-top: 0px;
-}
-label, input, button, select, textarea, p {
-    font-size: inherit;
-}
-.badge-group {
-    width: 200px;
-    position: relative;
-}
-.badge-group .badge {
-    float:left;
-    position:relative;
-}
-.badge-group  > :first-child {
-    z-index: 1000;
-}
-.badge-group  > :nth-child(2) {
-    z-index: 900;
-}
-.badge-group  > :nth-child(3) {
-    z-index: 800;
-}
-.badge-group  > :nth-child(4) {
-    z-index: 700;
-}
-.badge-group  > :nth-child(5) {
-    z-index: 600;
-}
-.badge-group .badge:not(:first-child) {
-    margin-left: -13px;
-    padding-left: 15px;
-}
-/* fixes the * */
-span.form_required  {
-    padding-right:5px;
-}
-form .formw {
-    margin-left: 170px;
-}
-form .form-button-login{
-  margin-top: 5px;
-}
-form .formw input {
-    float:left;
-}
-
 .formw input[type="checkbox"], .formw input[type="radio"] {
     margin-right: 5px;
     margin-top: 2px;
@@ -398,134 +347,6 @@ form .formw input {
 .actions fieldset {
     margin-top:0px;
 }
-#friend-container .thumbnail {
-    min-height: 140px;
-}
-#friend-container .thumbnail img {
-    max-height: 100px;
-}
-[dir=rtl] #friends > .thumbnails > li {
-    float: right;
-}
-.show-grid [class*="span"] {
-    background-color: #EEEEEE;
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    line-height: 30px;
-    min-height: 30px;
-    text-align: center;
-}
-
-a.tag {
-    background-color: #E0EAF1;
-    border-bottom: 1px solid #3E6D8E;
-    border-right: 1px solid #7F9FB6;
-    color: #3E6D8E;
-    font-size: 90%;
-    line-height: 2.4;
-    margin: 2px 2px 2px 0;
-    padding: 3px 4px;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-/* User portal */
-
-#settings h4 {
-    margin-bottom:10px;
-}
-
-/* Admin index.php */
-#settings .span6 {
-    min-height: 340px;
-    width: 47%;
-}
-#settings .span6 .well_border{
-    min-height: 300px;
-}
-#settings .form-search .span3 {
-    float: left;
-}
-
-/* user_portal course status icon */
-.coursestatusicons {
-    border: 0px solid #000;
-    float: left;
-    padding-right: 5px;
-    width: auto;
-}
-/* user_portal course list */
-.courses {
-    list-style-type: none;
-    margin-bottom: 5px;
-    height: 30px;
-}
-/* user_portal session list */
-.session_course_item .courses {
-    margin-bottom: 5px;
-    height:35px;
-}
-.session_course_item {
-    /* padding: 0px; */
-    margin: 0px;
-    margin-bottom:15px;
-    font-size:135%;
-}
-.userportal-course-item {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    background-color:#F9F9F9;
-    /*padding:5px 10px 5px 10px;
-    margin:0px 0px 10px 0px;    */
-}
-#course_category li,
-#hot_courses h5,
-.course_item h5,
-.categories-course-description h5,
-.course-box h5 {
-    font-size: 12px;
-    overflow-y : auto;
-    max-height:70px;
-    padding: 5px;
-}
-
-.session_box_title {
-    margin-bottom: 7px;
-}
-
-.session_course_item .item_closed, .userportal-course-item-title .item_closed {
-    font-size:80%;
-}
-#maincontent .courseslist li {
-    margin-bottom:8px;
-}
-
-.independent_course_item a {
-    font-size:135%;
-}
-
-.userportal-session-item {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    background-color:#F9F9F9;
-    padding:5px 10px 10px 6px;
-    margin:10px 0px;
-}
-
-.userportal-session-category-item {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    background-color:#F9F9F9;
-    padding:5px 10px 10px 16px;
-    /* height:40px; */
-    /*background-color:#f9f9f9; border:1px solid #dddddd; padding:5px 10px 5px 10px; margin-top: 10px; */
-}
-
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/
@@ -1965,171 +1786,134 @@ input.maininput:focus {
 }
 
 #course_tools .content {
-    text-align:center;
-    margin-bottom: 20px;
+  text-align:center;
+  margin-bottom: 20px;
 }
 
 #course_tools .content a {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .big_icon img {
-    padding:5px;
-    -moz-border-radius:10px;
-    -border-radius:10px;
-    -webkit-border-radius:10px;
-    border-radius:10px;
-    -webkit-box-shadow: 0 4px 8px #C8C8C8;
-    -opera-box-shadow: 0 4px 8px #C8C8C8;
-    -moz-box-shadow: 0 4px 8px #C8C8C8;
-    box-shadow: 0 4px 8px #C8C8C8;
-
+  padding:5px;
+  -moz-border-radius:10px;
+  -border-radius:10px;
+  -webkit-border-radius:10px;
+  border-radius:10px;
+  -webkit-box-shadow: 0 4px 8px #C8C8C8;
+  -opera-box-shadow: 0 4px 8px #C8C8C8;
+  -moz-box-shadow: 0 4px 8px #C8C8C8;
+  box-shadow: 0 4px 8px #C8C8C8;
+  border: 1px solid #e6e6e6;
 }
-
 .big_icon img:hover {
-    -webkit-box-shadow: 0 4px 18px #C8C8C8;
-    -opera-box-shadow: 0 4px 18px #C8C8C8;
-    -moz-box-shadow: 0 4px 18px #C8C8C8;
-    box-shadow: 0 4px 18px #C8C8C8;
+  -webkit-box-shadow: 0 4px 18px #C8C8C8;
+  -opera-box-shadow: 0 4px 18px #C8C8C8;
+  -moz-box-shadow: 0 4px 18px #C8C8C8;
+  box-shadow: 0 4px 18px #C8C8C8;
 }
-
 .courseadminview .big_icon a {
-    font-size:12px;
+  font-size:12px;
 }
-
 /* Fixes the administration block section */
 .admin_section div {
-    margin: 5px 0 14px 25px;
+  margin: 5px 0 14px 25px;
 }
-
 .rounded_div {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #E5E5E5;
-
-    -webkit-border-radius: 11px;
-    -opera-border-radius: 11px;
-    -moz-border-radius: 11px;
-    border-radius: 11px;
-
-    -webkit-box-shadow: 0 4px 18px #C8C8C8;
-    -opera-box-shadow:  0 4px 18px #C8C8C8;
-    -moz-box-shadow:    0 4px 18px #C8C8C8;
-    box-shadow:         0 4px 18px #C8C8C8;
-
-    float: left;
-    height: auto;
-    margin: 10px 8px 15px 15px;
-    padding: 18px;
+  background: none repeat scroll 0 0 #FFFFFF;
+  border: 1px solid #E5E5E5;
+  -webkit-border-radius: 11px;
+  -opera-border-radius: 11px;
+  -moz-border-radius: 11px;
+  border-radius: 11px;
+  -webkit-box-shadow: 0 4px 18px #C8C8C8;
+  -opera-box-shadow:  0 4px 18px #C8C8C8;
+  -moz-box-shadow:    0 4px 18px #C8C8C8;
+  box-shadow:         0 4px 18px #C8C8C8;
+  float: left;
+  height: auto;
+  margin: 10px 8px 15px 15px;
+  padding: 18px;
 }
-
 /* Makes the course elements more readable */
-.userportal-course-item {
-
-}
-
 .session_course_item {
-    padding: 6px 0px 6px 5px ;
+ padding: 6px 0px 6px 5px ;
 }
-
-/* LP tool*/
-
-
 #lp_overview .thumbnail {
-    text-align: center;
+ text-align: center;
 }
-
 .lp_resource {
-    padding:5px 10px;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    float:left;
-    width:100%;
+ padding:5px 10px;
+ list-style-type: none;
+ margin: 0;
+ padding: 0;
+ float:left;
+ width:100%;
 }
-
 .lp_resource_element, .lp_resource_element_no_link {
-    background-image:-moz-linear-gradient(top,#fefefe,#eee);
-    background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fdfdfd),color-stop(1,#eee));
-    border: 1px solid #CCCCCC;
-    color: #444444;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: none;
-    text-shadow: 0 1px 1px #F6F6F6;
-    margin:5px;
-    padding:5px;
-    list-style: none outside none;
+  background-image:-moz-linear-gradient(top,#fefefe,#eee);
+  background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fdfdfd),color-stop(1,#eee));
+  border: 1px solid #CCCCCC;
+  color: #444444;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  text-shadow: 0 1px 1px #F6F6F6;
+  margin:5px;
+  padding:5px;
+  list-style: none outside none;
 }
-
 .lp_resource_element_new a {
-    font-size: 14px;
+  font-size: 14px;
 }
-
 .doc_resource {
-    margin:6px;
+  margin:6px;
 }
-
 table.lp_build td.tree {
-    border:none;
+  border:none;
 }
 #resource_tab {
-    min-height:380px;
+  min-height:380px;
 }
-
 div.system_announcement {
-    background-color: #EEEEEE;
+  background-color: #EEEEEE;
 }
-
 .RequirementHeading, .RequirementText, .RequirementContent  {
   margin-top:12px;
   line-height: 18px;
   margin-bottom: 20px;
 }
-
 #toolshortcuts_horizontal {
-    padding: 0px 20px 2px 0px;
-    clear: right;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: right;
-    width: 98%;
+  padding: 0px 20px 2px 0px;
+  clear: right;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: right;
+  width: 98%;
 }
-
 #toolshortcuts_vertical {
-    padding: 0px 0px 2px 0px;
-    clear: right;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: right;
-    width: 40px;
+  padding: 0px 0px 2px 0px;
+  clear: right;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: right;
+  width: 40px;
 }
-
 div.admin_section {
-    min-height: 260px;
+  min-height: 260px;
 }
 .admin_section li {
-    padding: 2px 0px 2px;
+  padding: 2px 0px 2px;
 }
-
 div.admin_section h4 {
-    font-size:16px;
-    letter-spacing:-1px;
+  font-size:16px;
+  letter-spacing:-1px;
 }
-
-.actions span {
-    /* margin-right:0px; */
-}
-
 #courseintro_empty {
-    float: right;
-    margin: 2px auto;
-    padding: 0;
+  float: right;
+  margin: 2px auto;
+  padding: 0;
 }
-
-
-
-/*PROFILE*/
-
 .profile_grid_container { width:100%;}
 .profile_grid_item {
     border:1px dotted #CCCCCC;
@@ -2918,12 +2702,6 @@ form .formw .freeze {
 .show_element {
     display: block !important;
 }
-
-/* agenda js  */
-#add_event_form fieldset {
-    width:400px;
-}
-
 .tag {
     background-color: #D3E6EF;
     border-radius: 3px 3px 3px 3px;
@@ -2934,7 +2712,6 @@ form .formw .freeze {
     margin: 0 10px 5px 0;
     padding: 0.4em 0.6em;
 }
-
 .label_tag {
     padding: 1px 3px 2px;
     margin:2px 3px 2px 0px;
@@ -2949,7 +2726,6 @@ form .formw .freeze {
     text-align: center;
     width: 155px;
 }
-
 .label_tag.personal_event {
     background:#3366CC;
 }
@@ -2965,8 +2741,6 @@ form .formw .freeze {
 .label_tag.session_event {
     background:#00496D;
 }
-
-
 .label_tag.important {
     background-color: #c43c35;
 }
@@ -2979,62 +2753,56 @@ form .formw .freeze {
 .label_tag.notice {
     background-color: #62cffc;
 }
-
 .label_tag.skill {
     background-color: #46a546;
 }
-
-
 .label_tag.course {
     background-color: #62cffc;
 }
-
-
-
-
 .invisible {
     color: #999;
 }
-
 .invisible h2 {
     color: #999;
 }
-
 .requirements td {
     padding:5px;
 }
-
 /* header cell in data table in tools */
 .data_table {
     margin-bottom: 18px;
     width: 100%;
     border: 1px solid #DDDDDD;
 }
-
+.data_table td{
+  font-size: 12px;
+}
 .data_table th, .data_table td {
-    border-top: 1px solid #DDDDDD;
-    line-height: 18px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  border-top: 1px solid #DDDDDD;
+  line-height: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
 }
 
 .data_table th {
-    padding: 8px 10px;
-    font-weight: bold;
-    background-color: #F2F2F2;
-    border-bottom: 1px solid #DDDDDD;
+  padding: 8px 10px;
+  font-weight: normal;
+  background-color: #EEEEEE;
+  border-bottom: 1px solid #DDDDDD;
+  color:#333;
 }
-.data_table td {
+.data_table th a{
+  color: #333;
 }
-
 .data_table_no_border {
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 12px;
-    margin-bottom: 15px;
-    margin-top: 8px;
-    text-align: left;
-    width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 12px;
+  margin-bottom: 15px;
+  margin-top: 8px;
+  text-align: left;
+  width: 100%;
 }
 
 .data_table_no_border td {
@@ -3059,10 +2827,25 @@ form .formw .freeze {
 }
 
 .data_table_pagination {
-    width:100%;
-    margin-top: 8px;
+  width:100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
-
+.table-well{
+  background:#ffffff;
+  border:1px solid #dddddd;
+  padding: 10px 20px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+.tabs-margin, .btn-toolbar{
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
 .form-stacked .label {
     display: block;
     float: none;
@@ -3834,11 +3617,7 @@ a:active{
 
 #my_timeline {
     background: url("dot.gif") repeat-x scroll left 45px;
-    height: 350px;
     margin: 0px auto;
-    overflow: hidden;
-    position: relative;
-    width: 600px;
 }
 
 #dates {
@@ -4179,11 +3958,9 @@ a.forum_group_link {
     margin-right: 10px;
     vertical-align:middle;
 }
-
 .exercise_overview_options {
     text-align: center;
 }
-
 .new_actions {
     background-color: #EEEEEE;
     background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
@@ -4192,7 +3969,6 @@ a.forum_group_link {
     border-radius: 4px 4px 4px 4px;
     height: 53px;
 }
-
 .new_actions .nav > li > a {
     border-left: 1px solid #F5F5F5;
     border-radius: 0 0 0 0;
@@ -4201,7 +3977,6 @@ a.forum_group_link {
     padding-bottom: 11px;
     padding-top: 11px;
 }
-
 .new_actions-fixed {
     border-color: #D5D5D5;
     border-radius: 0 0 0 0;
@@ -4212,7 +3987,6 @@ a.forum_group_link {
     top: 0px;
     z-index: 1030;
 }
-
 .new_actions .nav > .active > a, .new_actions .nav > .active > a:hover {
     background-color: #E9E9E9;
     border-left: 0 none;
@@ -4221,43 +3995,34 @@ a.forum_group_link {
     color: #777777;
     padding-left: 13px;
 }
-
 .new_actions .nav-tabs > li > a, .new_actions .nav-pills > li > a {
     padding-left: 6px;
     padding-right: 6px;
 }
-
 .subnav .nav > li > .logout {
     padding-top:8px;
 }
-
-
 .doc_folder {
     margin-right:5px;
     margin-top:5px;
     width: 100%;
     float:left;
 }
-
 .doc_folder_hidden {
     color : grey;
 }
-
 .doc_resource{
     margin: 5px;
     width: 100%;
     float:left;
 }
-
 .lp_resource_element_new {
     border: 2px dotted green;
 }
-
 #course_thing_to_do .thumbnail {
     text-align: center;
     margin-bottom: 5px;
 }
-
 .handle{
     background-image: url('../../main/img/div_show.gif');
     background-repeat: no-repeat;
@@ -4265,7 +4030,6 @@ a.forum_group_link {
     padding-left: 25px;
     box-shadow:none;
 }
-
 .handle.collapsed{
     background-image:  url('../../main/img/div_show.gif');
     background-repeat: no-repeat;
@@ -6216,6 +5980,64 @@ div#chat-remote-video video {
     font-size:22px;
     margin-top:5px;
 }
+#work-list{
+  padding: 10px;
+  border:1px solid #dddddd;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  margin-bottom: 10px;
+}
+.ui-accordion .ui-accordion-content-active{
+
+}
+.ui-jqgrid-view .label-success{
+  font-size: 14px;
+}
+.ui-jqgrid-view .ui-widget-content a{
+  color:#666666;
+}
+.ui-jqgrid-view .ui-state-default,
+.ui-jqgrid-view .ui-widget-content .ui-state-default,
+.ui-jqgrid-view .ui-widget-header .ui-state-default{
+  background: #EEEEEE;
+  color: #666666;
+  border: none;
+}
+.ui-jqgrid-view table{
+  border-collapse: inherit;
+}
+.ui-jqgrid.ui-widget-content{
+  border: none;
+}
+.ui-jqgrid-view .ui-jqgrid-sortable{
+  font-size: 12px;
+}
+.ui-jqgrid-view .ui-jqgrid .ui-jqgrid-htable th div{
+  height: auto;
+}
+.ui-jqgrid-view .ui-th-ltr, .ui-jqgrid .ui-jqgrid-htable th.ui-th-ltr{
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+.ui-jqgrid tr.ui-row-ltr td{
+  border: none;
+}
+.ui-jqgrid tr.jqgrow td{
+  height: 45px;
+  font-size: 13px;
+}
+.ui-jqgrid .ui-jqgrid-labels .ui-state-hover{
+  background-color: #E7E7E7;
+}
+.ui-jqgrid .ui-pg-selbox{
+  font-size: 12px;
+  height: 25px;
+}
+.ui-jqgrid .ui-pg-input{
+  font-size: 12px;
+  height: 25px;
+}
 .ui-jqgrid .ui-pg-table td{
   font-size: 12px;
 }
@@ -6263,8 +6085,60 @@ div#chat-remote-video video {
 .ui-jqgrid .ui-jqgrid-htable th div{
   height: 25px;
 }
+/* ui diglog */
+.ui-dialog .ui-widget-header{
+  border:none;
+  background: none;
+}
+.ui-dialog.ui-widget-content{
+  border: 1px solid #DDD;
+  background: #ffffff;
+}
+.ui-dialog .ui-dialog-buttonpane{
+  border-top: 1px solid #DDD;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+  background-color:#f5f5f5;
+  background-image:-moz-linear-gradient(top,#fff,#e6e6e6);
+  background-image:-webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
+  background-image:-webkit-linear-gradient(top,#fff,#e6e6e6);
+  background-image:-o-linear-gradient(top,#fff,#e6e6e6);
+  background-image:linear-gradient(to bottom,#fff,#e6e6e6);
+  background-repeat:repeat-x;
+  border-color:#e6e6e6 #e6e6e6 #bfbfbf;
+  border-color:rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.25);
+  color:#333;
+  text-shadow:0 1px 1px rgba(255,255,255,.75);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05)
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus{
+  border-width: 1px;
+  border-style:solid;
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color:rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.25);
+  background-position: 0px -15px;
+  background-color: #E6E6E6;
+  font-weight:normal;
+  color:#333333;
+}
+#dialog-form .dialog-form-content{
+  font-size: 12px;
+}
+#dialog-form .dialog-form-content .control-label{
+  font-size: 12px;
+  font-weight: normal;
+  padding-top: 0;
+}
+#dialog-form .dialog-form-content .multiple-select{
+  font-size: 12px;
+}
 #student-list-work{
-  padding: 10px;
   background-color: #ffffff;
   position: absolute;
   top:0px;
@@ -6277,10 +6151,33 @@ div#chat-remote-video video {
   -webkit-border-radius: 5px;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
 }
+.panel-student{
+  width: 550px;
+}
 #student-list-work .toolbar{
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+#datafiller .fillers{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#datafiller .description{
+  padding: 10px;
+  margin-bottom: 10px;
+}
+#datafiller .fillers li{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-left: 10px;
+}
+.filler-report h3{
+  margin-top: 10px;
+}
+.filler-report .filler-report-data-init{
+  width: 60%;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

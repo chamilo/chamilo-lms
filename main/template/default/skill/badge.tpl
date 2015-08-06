@@ -23,7 +23,7 @@
                         </p>
                     </div>
                     <div class="col-xs-12 col-md-6">
-                        <img class="img-responsive" src="{{ 'openbadges.png' | icon() }}" width="22" height="22">
+                        <img class="img-responsive" src="{{ 'openbadges.png' | icon() }}">
                     </div>
                 </div>
 

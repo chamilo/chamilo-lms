@@ -965,4 +965,26 @@ class Session
         }
         return $this;
     }
+
+    /**
+     * Set $sendSubscriptionNotification
+     * @param boolean $sendNotification
+     * @return \Chamilo\CoreBundle\Entity\Session
+     */
+    public function setSendSubscriptionNotification($sendNotification)
+    {
+        $this->sendSubscriptionNotification = $sendNotification;
+
+        return $this;
+    }
+
+    /**
+     * Get $sendSubscriptionNotification
+     * @return boolean
+     */
+    public function getSendSubscriptionNotification()
+    {
+        return $this->sendSubscriptionNotification;
+    }
+
 }

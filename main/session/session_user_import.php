@@ -31,7 +31,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         !empty($_FILES['import_file']['tmp_name'])
     ) {
         $form_sent = $_POST['formSent'];
-        $send_mail = $_POST['sendMail'] ? 1 : 0;
 
         // CSV
         $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
@@ -49,8 +48,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 $session_id,
                 $user_list,
                 null,
-                false,
-                $send_mail
+                false
             );
             foreach ($user_list as & $user_id) {
                 $user_info = api_get_user_info($user_id);
@@ -85,7 +83,6 @@ $form = new FormValidator(
 );
 $form->addElement('hidden', 'formSent', 1);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
-$form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
 $form->addButtonImport(get_lang('Import'));
 
 $form->display();

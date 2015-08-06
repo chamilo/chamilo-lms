@@ -528,22 +528,22 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
-    $sql = "SELECT MAX(cat_order) as sort_max FROM ".$table_categories."
+    $sql = "SELECT MAX(cat_order) as sort_max
+            FROM $table_categories
             WHERE c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     $new_max = $row['sort_max'] + 1;
     $session_id = api_get_session_id();
-
-    $clean_cat_title = Database::escape_string($values['forum_category_title']);
+    $clean_cat_title = $values['forum_category_title'];
 
     if (isset($values['forum_category_id'])) {
         // Storing after edition.
-        $sql = "UPDATE ".$table_categories." SET
-                cat_title='".$clean_cat_title."',
-                cat_comment='".Database::escape_string($values['forum_category_comment'])."'
-                WHERE c_id = $course_id AND cat_id= ".intval($values['forum_category_id'])."";
-        Database::query($sql);
+        $params = [
+            'cat_title' => $clean_cat_title,
+            'cat_comment' => $values['forum_category_comment'],
+        ];
+        Database::update($table_categories, $params, ['c_id = ? AND cat_id = ?' => [$course_id, $values['forum_category_id']]]);
 
         api_item_property_update(
             $courseInfo,
@@ -554,15 +554,21 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
         );
         $return_message = get_lang('ForumCategoryEdited');
     } else {
-        $sql = "INSERT INTO ".$table_categories." (c_id, cat_title, cat_comment, cat_order, session_id)
-                VALUES (".$course_id.", '".$clean_cat_title."','".Database::escape_string($values['forum_category_comment'])."','".Database::escape_string($new_max)."','".Database::escape_string($session_id)."')";
-        Database::query($sql);
-        $last_id = Database::insert_id();
 
-        $sql = "UPDATE $table_categories SET cat_id = $last_id WHERE iid = $last_id";
-        Database::query($sql);
+        $params = [
+            'c_id' => $course_id,
+            'cat_title' => $clean_cat_title,
+            'cat_comment' => $values['forum_category_comment'],
+            'cat_order' => $new_max,
+            'session_id' => $session_id
+        ];
+        $last_id = Database::insert($table_categories, $params);
 
         if ($last_id > 0) {
+
+            $sql = "UPDATE $table_categories SET cat_id = $last_id WHERE iid = $last_id";
+            Database::query($sql);
+
             api_item_property_update(
                 $courseInfo,
                 TOOL_FORUM_CATEGORY,

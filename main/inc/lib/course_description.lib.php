@@ -50,7 +50,7 @@ class CourseDescription
         }
         $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $sql = "SELECT * FROM $t_course_desc
-              WHERE c_id = $course_id AND session_id = '0'";
+                WHERE c_id = $course_id AND session_id = '0'";
         $sql_result = Database::query($sql);
         $results = array();
         while ($row = Database::fetch_array($sql_result)) {
@@ -201,16 +201,17 @@ class CourseDescription
             $course_id = $this->course_id;
         }
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $sql = "INSERT IGNORE INTO $table SET
-				c_id 				=  $course_id,
-				description_type	= '" . intval($this->description_type) . "',
-				title 				= '" . Database::escape_string($this->title) . "',
-				content 			= '" . Database::escape_string($this->content) . "',
-				progress 			= '" . intval($this->progress) . "',
-				session_id = '" . intval($this->session_id) . "' ";
-        $result = Database::query($sql);
-        $last_id = Database::insert_id();
-        $affected_rows = Database::affected_rows($result);
+
+        $params = [
+            'c_id' => $course_id,
+            'description_type' => $this->description_type,
+            'title' => $this->title,
+            'content' => $this->content,
+            'progress' => $this->progress,
+            'session_id' => $this->session_id,
+        ];
+
+        $last_id  = Database::insert($table, $params);
 
         if ($last_id > 0) {
             $sql = "UPDATE $table SET id = iid WHERE iid = $last_id";
@@ -226,7 +227,7 @@ class CourseDescription
             );
         }
 
-        return $affected_rows;
+        return 1;
     }
 
     /**
@@ -247,20 +248,22 @@ class CourseDescription
             TOOL_COURSE_DESCRIPTION,
             $description_id
         );
-        $sql = "INSERT IGNORE INTO $tbl_stats_item_property SET
-				c_id				= " . api_get_course_int_id() . ",
-				course_id 			= '$course_id',
-			 	item_property_id 	= '$item_property_id',
-			 	title 				= '" . Database::escape_string($this->title) . "',
-			 	content 			= '" . Database::escape_string($this->content) . "',
-			 	progress 			= '" . intval($this->progress) . "',
-			 	lastedit_date 		= '" . api_get_utc_datetime(). "',
-			 	lastedit_user_id 	= '" . api_get_user_id() . "',
-			 	session_id			= '" . intval($this->session_id) . "'";
-        $result = Database::query($sql);
-        $affected_rows = Database::affected_rows($result);
 
-        return $affected_rows;
+        $params = [
+            'c_id' => api_get_course_int_id(),
+            'course_id' => $course_id,
+            'item_property_id' => $item_property_id,
+            'title' => $this->title,
+            'content' => $this->content,
+            'progress' => $this->progress,
+            'lastedit_date' => api_get_utc_datetime(),
+            'lastedit_user_id' => api_get_user_id(),
+            'session_id' => $this->session_id,
+        ];
+
+        Database::insert($tbl_stats_item_property, $params);
+
+        return 1;
     }
 
     /**
@@ -270,17 +273,25 @@ class CourseDescription
      */
     public function update()
     {
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $sql = "UPDATE $tbl_course_description SET
-                    title       = '" . Database::escape_string($this->title) . "',
-                    content     = '" . Database::escape_string($this->content) . "',
-                    progress    = '" . $this->progress . "'
-                WHERE
-                    id = '" . intval($this->id) . "' AND
-                    session_id = '" . $this->session_id . "' AND
-                    c_id = " . api_get_course_int_id();
-        $result = Database::query($sql);
-        $affected_rows = Database::affected_rows($result);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+
+        $params = [
+            'title' => $this->title,
+            'content' => $this->content,
+            'progress' => $this->progress,
+        ];
+
+        Database::update(
+            $table,
+            $params,
+            [
+                'id = ? AND session_id = ? AND c_id = ?' => [
+                    $this->id,
+                    $this->session_id,
+                    api_get_course_int_id(),
+                ],
+            ]
+        );
 
         if ($this->id > 0) {
             //insert into item_property
@@ -293,7 +304,7 @@ class CourseDescription
             );
         }
 
-        return $affected_rows;
+        return 1;
     }
 
     /**

@@ -51,27 +51,26 @@ class NotebookManager
             return false;
         }
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $table = Database :: get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        $sql = "INSERT INTO $t_notebook (c_id, user_id, course, session_id, title, description, creation_date,update_date,status)
-				VALUES(
-					 $course_id,
-					'" . api_get_user_id() . "',
-					'" . Database::escape_string(api_get_course_id()) . "',
-					'" . $sessionId . "',
-					'" . Database::escape_string($values['note_title']) . "',
-					'" . Database::escape_string($values['note_comment']) . "',
-					'" . Database::escape_string(date('Y-m-d H:i:s')) . "',
-					'" . Database::escape_string(date('Y-m-d H:i:s')) . "',
-					'0')";
-        $result = Database::query($sql);
-        $affected_rows = Database::affected_rows($result);
+        $now = api_get_utc_datetime();
+        $params = [
+            'c_id' => $course_id,
+            'user_id' => api_get_user_id(),
+            'course' => api_get_course_id(),
+            'session_id' => $sessionId,
+            'title' => $values['note_title'],
+            'description' => $values['note_comment'],
+            'creation_date' => $now,
+            'update_date' => $now,
+            'status' => 0
+        ];
+        $id = Database::insert($table, $params);
 
-        $id = Database::insert_id();
         if ($id > 0) {
-            $sql = "UPDATE $t_notebook SET notebook_id = $id WHERE iid = $id";
+            $sql = "UPDATE $table SET notebook_id = $id WHERE iid = $id";
             Database::query($sql);
 
             //insert into item_property
@@ -82,14 +81,12 @@ class NotebookManager
                 'NotebookAdded',
                 api_get_user_id()
             );
-        }
-
-        if (!empty($affected_rows)) {
             return $id;
         }
     }
 
-    static function get_note_information($notebook_id) {
+    static function get_note_information($notebook_id)
+    {
         if (empty($notebook_id)) {
             return array();
         }
@@ -97,16 +94,18 @@ class NotebookManager
         $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT 	notebook_id 		AS notebook_id,
-						title				AS note_title,
-						description 		AS note_comment,
-				   		session_id			AS session_id
-				   FROM $t_notebook
-				   WHERE c_id = $course_id AND notebook_id = '" . Database::escape_string($notebook_id) . "' ";
+        $sql = "SELECT
+                notebook_id 		AS notebook_id,
+                title				AS note_title,
+                description 		AS note_comment,
+                session_id			AS session_id
+               FROM $t_notebook
+               WHERE c_id = $course_id AND notebook_id = '" . intval($notebook_id) . "' ";
         $result = Database::query($sql);
         if (Database::num_rows($result) != 1) {
             return array();
         }
+
         return Database::fetch_array($result);
     }
 

@@ -265,7 +265,13 @@ function lp_upload_quiz_action_handling() {
         if ($quiz_id) {
 
             // insert into the item_property table
-            api_item_property_update($_course, TOOL_QUIZ, $quiz_id, 'QuizAdded', api_get_user_id());
+            api_item_property_update(
+                $_course,
+                TOOL_QUIZ,
+                $quiz_id,
+                'QuizAdded',
+                api_get_user_id()
+            );
 
             // Import questions.
             for ($i = 0; $i < $number_questions; $i++) {

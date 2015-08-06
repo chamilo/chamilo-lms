@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Student report
  * @package chamilo.reporting
  */
-/**
- * Code
- */
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -180,7 +179,7 @@ if ($export_csv) {
 }
 
 $sort_by_first_name = api_sort_by_first_name();
-$actions .= '<div class="actions">';
+$actions = '<div class="actions">&nbsp;';
 
 if (api_is_drh()) {
     $menu_items = array(
@@ -254,10 +253,10 @@ if ($export_csv) {
 $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/users.php');
 
 $form->addElement('select', 'status', get_lang('Status'), array(
-        '' => '',
-        STUDENT => get_lang('Student'),
-        COURSEMANAGER => get_lang('Teacher'),
-        DRH => get_lang('DRH'))
+    '' => '',
+    STUDENT => get_lang('Student'),
+    COURSEMANAGER => get_lang('Teacher'),
+    DRH => get_lang('DRH'))
 );
 $form = Tracking::setUserSearchForm($form);
 $form->setDefaults($params);
@@ -274,7 +273,7 @@ if ($export_csv) {
     Export :: arrayToCsv($csv_content, 'reporting_student_list');
     exit;
 } else {
-    Display::display_header($nameTools);
+    Display::display_header(get_lang('Users'));
     echo $actions;
     $page_title = get_lang('Users');
     echo Display::page_subheader($page_title);

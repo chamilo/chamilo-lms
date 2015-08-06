@@ -1944,6 +1944,11 @@ function migrate($chamiloVersion, EntityManager $manager)
     }
 }
 
+/**
+* @param EntityManager $em
+ *
+* @throws \Doctrine\DBAL\DBALException
+ */
 function fixIds(EntityManager $em)
 {
     $connection = $em->getConnection();
@@ -2174,7 +2179,6 @@ function fixIds(EntityManager $em)
         }
     }
 
-
     $sql = "SELECT * FROM groups";
     $result = $connection->executeQuery($sql);
     $groups = $result->fetchAll();
@@ -2377,7 +2381,6 @@ function fixIds(EntityManager $em)
             }
         }
     }
-
 }
 
 /**
@@ -2469,19 +2472,6 @@ function finishInstallation(
         false,  //$send_mail = false,
         false //$isAdmin = false
     );
-
-/*
-    // Insert admin and Anonymous users.
-    $uniqueAdmin = sha1(uniqid(null, true));
-    $uniqueAnon = sha1(uniqid(null, true));
-    $sql = "INSERT INTO user (user_id, lastname, firstname, username, username_canonical, salt, password, auth_source, email, status, official_code, phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES
-		(1, '$adminLastName','$adminFirstName','$loginForm','$loginForm', '$uniqueAdmin', '$encryptPassword','".PLATFORM_AUTH_SOURCE."','$emailForm',1,'ADMIN','$adminPhoneForm',1,NOW(),NULL,'1',NULL,'$languageForm'),
-		(2, 'Anonymous', 'Joe', 'anon', 'anon', '$uniqueAnon', '', 'platform', 'anonymous@localhost', 6, 'anonymous', NULL, 1, NOW(), NULL, 1,NULL,'$languageForm')";
-    //Database::query($sql);*/
-
-    // Insert user as admin
-    //$sql = "INSERT INTO admin VALUES(1, 1)";
-    //Database::query($sql);
 
     // Set default language
     $sql = "UPDATE language SET available=1 WHERE dokeos_folder = '$languageForm'";

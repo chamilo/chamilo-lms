@@ -93,7 +93,6 @@ if (isset($_REQUEST['register'])) {
 		unset($_SESSION['session_user_name']);
 	}
 
-
     header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
     exit;
 }
@@ -192,7 +191,7 @@ $table = new SortableTable(
 	($is_western_name_order xor $sort_by_first_name) ? 3 : 2
 );
 $parameters['keyword'] = $keyword;
-$parameters['type'] = COURSEMANAGER;
+$parameters['type'] = $type;
 $table->set_additional_parameters($parameters);
 $col = 0;
 $table->set_header($col ++, '', false);
@@ -219,7 +218,6 @@ if (!empty($_POST['keyword'])) {
     $keyword_name = Security::remove_XSS($_POST['keyword']);
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
-
 
 Display :: display_header($tool_name, "User");
 

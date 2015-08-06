@@ -97,7 +97,7 @@ unset($user_data['password']);
 $form = new FormValidator(
     'user_edit',
     'post',
-    '',
+    api_get_self().'?user_id='.$user_id,
     ''
 );
 $form->addElement('header', '', $tool_name);
@@ -202,7 +202,7 @@ $group[] = $form->createElement(
     array('onkeydown' => 'javascript: password_switch_radio_button();')
 );
 $form->addGroup($group, 'password', null, '', false);
-$form->addGroupRule('password', 'password', 'required', null, 2);
+//$form->addGroupRule('password', 'password', 'required', null, 1);
 
 // Status
 $status = array();
@@ -299,6 +299,13 @@ $error_drh = false;
 // Validate form
 if ($form->validate()) {
 	$user = $form->getSubmitValues(1);
+    $reset_password = intval($user['reset_password']);
+    if ($reset_password == 2 && empty($user['password'])) {
+        Display::addFlash(Display::return_message(get_lang('PasswordIsTooShort')));
+        header('Location: '.api_get_self().'?user_id='.$user_id);
+        exit();
+    }
+
 	$is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
 
 	if ($user['status'] == DRH && $is_user_subscribed_in_course) {

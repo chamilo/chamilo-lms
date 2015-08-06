@@ -93,9 +93,6 @@ class CoursesController
     {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();
-
-        global $_configuration;
-
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category($category_code);
         if ($action == 'display_random_courses') {
             // Random value is used instead limit filter
@@ -207,7 +204,6 @@ class CoursesController
             array(COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_REGISTERED, COURSE_VISIBILITY_HIDDEN))
         ) {
             $error = get_lang('SubscribingNotAllowed');
-            //$message = get_lang('SubscribingNotAllowed');
         } else {
             $result = $this->model->subscribe_user($course_code);
             if (!$result) {
@@ -236,14 +232,14 @@ class CoursesController
     public function add_course_category($category_title)
     {
         $result = $this->model->store_course_category($category_title);
-        $message = '';
         if ($result) {
-            $message = get_lang("CourseCategoryStored");
+            Display::addFlash(Display::return_message(get_lang('CourseCategoryStored')));
+
         } else {
-            $error = get_lang('ACourseCategoryWithThisNameAlreadyExists');
+            Display::addFlash(Display::return_message(get_lang('ACourseCategoryWithThisNameAlreadyExists'), 'error'));
         }
         $action = 'sortmycourses';
-        $this->courses_list($action, $message);
+        $this->courses_list($action);
     }
 
     /**
@@ -258,12 +254,11 @@ class CoursesController
         $courseId = $courseInfo['real_id'];
 
         $result = $this->model->updateCourseCategory($courseId, $category_id);
-        $message = '';
         if ($result) {
-            $message = get_lang('EditCourseCategorySucces');
+            Display::addFlash(Display::return_message(get_lang('EditCourseCategorySucces')));
         }
         $action = 'sortmycourses';
-        $this->courses_list($action, $message);
+        $this->courses_list($action);
     }
 
     /**
@@ -276,12 +271,11 @@ class CoursesController
     public function move_course($move, $course_code, $category_id)
     {
         $result = $this->model->move_course($move, $course_code, $category_id);
-        $message = '';
         if ($result) {
-            $message = get_lang('CourseSortingDone');
+            Display::addFlash(Display::return_message(get_lang('CourseSortingDone')));
         }
         $action = 'sortmycourses';
-        $this->courses_list($action, $message);
+        $this->courses_list($action);
     }
 
     /**
@@ -293,12 +287,11 @@ class CoursesController
     public function move_category($move, $category_id)
     {
         $result = $this->model->move_category($move, $category_id);
-        $message = '';
         if ($result) {
-            $message = get_lang('CategorySortingDone');
+            Display::addFlash(Display::return_message(get_lang('CategorySortingDone')));
         }
         $action = 'sortmycourses';
-        $this->courses_list($action, $message);
+        $this->courses_list($action);
     }
 
     /**
@@ -310,12 +303,11 @@ class CoursesController
     public function edit_course_category($title, $category)
     {
         $result = $this->model->store_edit_course_category($title, $category);
-        $message = '';
         if ($result) {
-            $message = get_lang('CourseCategoryEditStored');
+            Display::addFlash(Display::return_message(get_lang('CourseCategoryEditStored')));
         }
         $action = 'sortmycourses';
-        $this->courses_list($action, $message);
+        $this->courses_list($action);
     }
 
     /**
@@ -326,12 +318,11 @@ class CoursesController
     public function delete_course_category($category_id)
     {
         $result = $this->model->delete_course_category($category_id);
-        $message = '';
         if ($result) {
-            $message = get_lang('CourseCategoryDeleted');
+            Display::addFlash(Display::return_message(get_lang('CourseCategoryDeleted')));
         }
         $action = 'sortmycourses';
-        $this->courses_list($action, $message);
+        $this->courses_list($action);
     }
 
     /**
@@ -343,11 +334,13 @@ class CoursesController
     {
         $result = $this->model->remove_user_from_course($course_code);
         $message = '';
+        $error = '';
+
         if ($result) {
-            $message = get_lang('YouAreNowUnsubscribed');
+            Display::addFlash(Display::return_message(get_lang('YouAreNowUnsubscribed')));
         }
         $action = 'sortmycourses';
-        $error = '';
+
         if (!empty($search_term)) {
             $this->search_courses($search_term, $message, $error);
         } else {
@@ -508,7 +501,7 @@ class CoursesController
                 'a' => 'get_requirements',
                 'id' => intval($sessionId),
                 'type' => SequenceResource::SESSION_TYPE,
-                'modal_size' => 'md'
+                'modal_size' => 'md',
             ]);
 
             return Display::toolbarButton(
@@ -535,7 +528,7 @@ class CoursesController
             $url .= http_build_query([
                 'action' => 'subscribe_to_session',
                 'session_id' => intval($sessionId),
-                'modal_size' => 'md'
+                'modal_size' => 'md',
             ]);
 
             $result = Display::toolbarButton(
@@ -549,7 +542,7 @@ class CoursesController
             $url .= 'inc/email_editor.php?';
             $url .= http_build_query([
                 'action' => 'subscribe_me_to_session',
-                'session' => Security::remove_XSS($sessionName)
+                'session' => Security::remove_XSS($sessionName),
             ]);
 
             $result = Display::toolbarButton(
@@ -564,7 +557,7 @@ class CoursesController
         $hook = HookResubscribe::create();
         if (!empty($hook)) {
             $hook->setEventData(array(
-                'session_id' => intval($sessionId)
+                'session_id' => intval($sessionId),
             ));
             try {
                 $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
@@ -631,14 +624,10 @@ class CoursesController
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
         $tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
-
         $tpl->assign('course_url', $courseUrl);
-
         $tpl->assign('catalog_pagination', $cataloguePagination);
-
         $tpl->assign('hidden_links', $hiddenLinks);
         $tpl->assign('search_token', Security::get_token());
-
         $tpl->assign('search_date', $date);
         $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');
         $tpl->assign('sessions', $sessionsBlocks);
@@ -661,21 +650,17 @@ class CoursesController
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
         $sessions = $this->model->browseSessionsByTags($searchTag, $limit);
-
         $sessionsBlocks = $this->getFormatedSessionsBlock($sessions);
 
         $tpl = new Template();
+
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
         $tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
-
         $tpl->assign('course_url', $courseUrl);
-
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
-
         $tpl->assign('hidden_links', $hiddenLinks);
         $tpl->assign('search_token', Security::get_token());
-
         $tpl->assign('search_date', Security::remove_XSS($searchDate));
         $tpl->assign('search_tag', Security::remove_XSS($searchTag));
         $tpl->assign('sessions', $sessionsBlocks);
@@ -703,9 +688,9 @@ class CoursesController
 
         $tagsField = $extraFieldRepo->findOneBy([
             'extraFieldType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
-            'variable' => 'tags'
+            'variable' => 'tags',
         ]);
-
+        /** @var \Chamilo\CoreBundle\Entity\Session $session */
         foreach ($sessions as $session) {
             $sessionDates = SessionManager::parseSessionDates([
                 'display_start_date' => $session->getDisplayStartDate(),
@@ -713,7 +698,7 @@ class CoursesController
                 'access_start_date' => $session->getAccessStartDate(),
                 'access_end_date' => $session->getAccessEndDate(),
                 'coach_access_start_date' => $session->getCoachAccessStartDate(),
-                'coach_access_end_date' => $session->getCoachAccessEndDate()
+                'coach_access_end_date' => $session->getCoachAccessEndDate(),
             ]);
 
             $imageField = $extraFieldValue->get_values_by_handler_and_field_variable($session->getId(), 'image');
@@ -722,7 +707,7 @@ class CoursesController
 
             if (!is_null($tagsField)) {
                 $sessionRelCourses = $sessionRelCourseRepo->findBy([
-                    'session' => $session
+                    'session' => $session,
                 ]);
 
                 foreach ($sessionRelCourses as $sessionRelCourse) {
@@ -774,7 +759,7 @@ class CoursesController
                     $hasRequirements
                 ),
                 'show_description' => $session->getShowDescription(),
-                'tags' => $sessionCourseTags
+                'tags' => $sessionCourseTags,
             );
 
             $sessionsBlock = array_merge($sessionsBlock, $sequences);
@@ -783,5 +768,4 @@ class CoursesController
 
         return $sessionsBlocks;
     }
-
 }

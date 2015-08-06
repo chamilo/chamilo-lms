@@ -963,7 +963,7 @@ class Category implements GradebookItem
                     break;
                 case 'ranking':
                     return null;
-                    return AbstractLink::getCurrentUserRanking($students);
+                    return AbstractLink::getCurrentUserRanking($stud_id, $students);
                     break;
                 default:
                     return array($ressum, $weightsum);

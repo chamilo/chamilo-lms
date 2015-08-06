@@ -1215,27 +1215,29 @@ function add_document(
     }
 
     $readonly = intval($readonly);
-    $comment = Database::escape_string($comment);
-    $path = Database::escape_string($path);
-    $filetype = Database::escape_string($filetype);
-    $filesize = Database::escape_string($filesize);
-    $title = Database::escape_string(htmlspecialchars($title));
     $c_id = $_course['real_id'];
-
     $table_document = Database::get_course_table(TABLE_DOCUMENT);
-    $sql = "INSERT INTO $table_document (id, c_id, path, filetype, size, title, comment, readonly, session_id)
-	        VALUES (null, $c_id, '$path','$filetype','$filesize','$title', '$comment', $readonly, $session_id)";
 
-    if (Database::query($sql)) {
-        $documentId = Database::insert_id();
+    $params = [
+        'id' => '',
+        'c_id' => $c_id,
+        'path' => $path,
+        'filetype' => $filetype,
+        'size' => $filesize,
+        'title' => $title,
+        'comment' => $comment,
+        'readonly' => $readonly,
+        'session_id' => $session_id,
+    ];
+    $documentId = Database::insert($table_document, $params);
+    if ($documentId) {
         $sql = "UPDATE $table_document SET id = iid WHERE iid = $documentId";
         Database::query($sql);
 
-        if ($documentId) {
-            if ($save_visibility) {
-                api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id);
-            }
+        if ($save_visibility) {
+            api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id);
         }
+
         return $documentId;
     } else {
         return false;

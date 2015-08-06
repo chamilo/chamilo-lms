@@ -516,6 +516,7 @@ class Evaluation implements GradebookItem
 	/**
 	 * Calculate the score of this evaluation
 	 * @param int $stud_id (default: all students who have results for this eval - then the average is returned)
+	 * @param string $type (best, average, ranking)
 	 * @return	array (score, max) if student is given
 	 * 			array (sum of scores, number of scores) otherwise
 	 * 			or null if no scores available
@@ -558,7 +559,7 @@ class Evaluation implements GradebookItem
 					return array($sumResult/$rescount, $weight);
 					break;
 				case 'ranking':
-					return AbstractLink::getCurrentUserRanking($students);
+					return AbstractLink::getCurrentUserRanking($stud_id, $students);
 					break;
 				default:
 					return array($sum, $rescount);

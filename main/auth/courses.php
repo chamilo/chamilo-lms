@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 use \Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
@@ -67,10 +68,16 @@ if (empty($nameTools)) {
     $nameTools = get_lang('CourseManagement');
 } else {
     if (!in_array($action, array('sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe'))) {
-        $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'name' => get_lang('CourseManagement'));
+        $interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
+            'name' => get_lang('CourseManagement'),
+        );
     }
     if ($action == 'createcoursecategory') {
-        $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses', 'name' => get_lang('SortMyCourses'));
+        $interbreadcrumb[] = array(
+            'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses',
+            'name' => get_lang('SortMyCourses'),
+        );
     }
     $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
 }
@@ -81,14 +88,14 @@ $courses_controller = new CoursesController();
 // We are moving a course or category of the user up/down the list (=Sort My Courses).
 if (isset($_GET['move'])) {
     if (isset($_GET['course'])) {
-        if ($ctok == $_GET['sec_token']) {
-            $courses_controller->move_course($_GET['move'], $_GET['course'], $_GET['category']);
-        }
+        $courses_controller->move_course(
+            $_GET['move'],
+            $_GET['course'],
+            $_GET['category']
+        );
     }
     if (isset($_GET['category']) && !$_GET['course']) {
-        if ($ctok == $_GET['sec_token']) {
-            $courses_controller->move_category($_GET['move'], $_GET['category']);
-        }
+        $courses_controller->move_category($_GET['move'], $_GET['category']);
     }
 }
 

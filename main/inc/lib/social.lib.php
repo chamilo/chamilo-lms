@@ -183,7 +183,6 @@ class SocialManager extends UserManager
         //Just in case we replace the and \n and \n\r while saving in the DB
         $message_content = str_replace(array("\n", "\n\r"), '<br />', $message_content);
 
-        $clean_message_title = Database::escape_string($message_title);
         $clean_message_content = Database::escape_string($message_content);
 
         $now = api_get_utc_datetime();
@@ -199,9 +198,15 @@ class SocialManager extends UserManager
 
         if ($row_exist['count'] == 0) {
 
-            $sql = 'INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content)
-                    VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$now.'","'.$clean_message_title.'","'.$clean_message_content.'") ';
-            Database::query($sql);
+            $params = [
+                'user_sender_id' => $user_id,
+                'user_receiver_id' => $friend_id,
+                'msg_status' => MESSAGE_STATUS_INVITATION_PENDING,
+                'send_date' => $now,
+                'title' => $message_title,
+                'content'  => $message_content,
+            ];
+            Database::insert($tbl_message, $params);
 
             $sender_info = api_get_user_info($user_id);
             $notification = new Notification();
@@ -221,7 +226,8 @@ class SocialManager extends UserManager
             $res_if_exist = Database::query($sql_if_exist);
             $row_if_exist = Database::fetch_array($res_if_exist, 'ASSOC');
             if ($row_if_exist['count'] == 1) {
-                $sql = 'UPDATE '.$tbl_message.'SET msg_status=5, content = "'.$clean_message_content.'"
+                $sql = 'UPDATE '.$tbl_message.' SET
+                        msg_status=5, content = "'.$clean_message_content.'"
                         WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7 ';
                 Database::query($sql);
                 return true;

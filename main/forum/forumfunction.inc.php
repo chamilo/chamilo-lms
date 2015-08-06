@@ -528,22 +528,22 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
-    $sql = "SELECT MAX(cat_order) as sort_max FROM ".$table_categories."
+    $sql = "SELECT MAX(cat_order) as sort_max
+            FROM $table_categories
             WHERE c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     $new_max = $row['sort_max'] + 1;
     $session_id = api_get_session_id();
-
-    $clean_cat_title = Database::escape_string($values['forum_category_title']);
+    $clean_cat_title = $values['forum_category_title'];
 
     if (isset($values['forum_category_id'])) {
         // Storing after edition.
-        $sql = "UPDATE ".$table_categories." SET
-                cat_title='".$clean_cat_title."',
-                cat_comment='".Database::escape_string($values['forum_category_comment'])."'
-                WHERE c_id = $course_id AND cat_id= ".intval($values['forum_category_id'])."";
-        Database::query($sql);
+        $params = [
+            'cat_title' => $clean_cat_title,
+            'cat_comment' => $values['forum_category_comment'],
+        ];
+        Database::update($table_categories, $params, ['c_id = ? AND cat_id = ?' => [$course_id, $values['forum_category_id']]]);
 
         api_item_property_update(
             $courseInfo,
@@ -554,15 +554,21 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
         );
         $return_message = get_lang('ForumCategoryEdited');
     } else {
-        $sql = "INSERT INTO ".$table_categories." (c_id, cat_title, cat_comment, cat_order, session_id)
-                VALUES (".$course_id.", '".$clean_cat_title."','".Database::escape_string($values['forum_category_comment'])."','".Database::escape_string($new_max)."','".Database::escape_string($session_id)."')";
-        Database::query($sql);
-        $last_id = Database::insert_id();
 
-        $sql = "UPDATE $table_categories SET cat_id = $last_id WHERE iid = $last_id";
-        Database::query($sql);
+        $params = [
+            'c_id' => $course_id,
+            'cat_title' => $clean_cat_title,
+            'cat_comment' => $values['forum_category_comment'],
+            'cat_order' => $new_max,
+            'session_id' => $session_id
+        ];
+        $last_id = Database::insert($table_categories, $params);
 
         if ($last_id > 0) {
+
+            $sql = "UPDATE $table_categories SET cat_id = $last_id WHERE iid = $last_id";
+            Database::query($sql);
+
             api_item_property_update(
                 $courseInfo,
                 TOOL_FORUM_CATEGORY,
@@ -679,21 +685,28 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         }
 
         // Storing after edition.
-        $sql = "UPDATE ".$table_forums." SET
-                forum_title='".$clean_title."',
-                ".$sql_image."
-                forum_comment='".Database::escape_string(stripslashes($values['forum_comment']))."',
-                forum_category='".Database::escape_string(stripslashes($values['forum_category']))."',
-                allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null)."',
-                allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
-                approval_direct_post='".Database::escape_string(isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null)."',
-                allow_attachments='".Database::escape_string(isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null)."',
-                allow_new_threads='".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
-                forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
-                default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
-                forum_of_group='".Database::escape_string($values['group_forum'])."'
-            WHERE c_id = $course_id AND forum_id = ".intval($values['forum_id'])."";
-        Database::query($sql);
+        $params = [
+            'forum_title'=> $values['forum_title'],
+            'forum_image'=> $sql_image,
+            'forum_comment'=> $values['forum_comment'],
+            'forum_category'=> $values['forum_category'],
+            'allow_anonymous'=> $values['allow_anonymous_group']['allow_anonymous'],
+            'allow_edit'=> $values['students_can_edit_group']['students_can_edit'],
+            'approval_direct_post'=> $values['approval_direct_group']['approval_direct'],
+            'allow_attachments'=> $values['allow_attachments_group']['allow_attachments'],
+            'allow_new_threads'=>  $values['allow_new_threads_group']['allow_new_threads'],
+            'default_view'=> $values['default_view_type_group']['default_view_type'],
+            'forum_of_group'=> $values['group_forum'],
+            'forum_group_public_private'=> $values['public_private_group_forum_group']['public_private_group_forum'],
+            'forum_order'=> $new_max,
+            'session_id'=> $session_id,
+        ];
+
+        Database::update(
+            $table_forums,
+            $params,
+            ['c_id = ? AND = forum_id' => [$course_id, $values['forum_id']]]
+        );
 
         api_item_property_update(
             $courseInfo,
@@ -712,25 +725,24 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             $sql_image = "'".$new_file_name."', ";
         }
 
-        $sql = "INSERT INTO ".$table_forums." (c_id, forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
-            VALUES (
-                ".$course_id.",
-                '".$clean_title."',
-                ".$sql_image."
-                '".Database::escape_string(isset($values['forum_comment']) ? $values['forum_comment'] : null)."',
-                '".Database::escape_string(isset($values['forum_category']) ? $values['forum_category'] : null)."',
-                '".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null)."',
-                '".Database::escape_string(isset($values['students_can_edit_group']['students_can_edit']) ? $values['students_can_edit_group']['students_can_edit'] : null)."',
-                '".Database::escape_string(isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null)."',
-                '".Database::escape_string(isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null)."',
-                '".Database::escape_string(isset($values['allow_new_threads_group']['allow_new_threads']) ? $values['allow_new_threads_group']['allow_new_threads'] : null)."',
-                '".Database::escape_string(isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null)."',
-                '".Database::escape_string(isset($values['group_forum']) ? $values['group_forum'] : null)."',
-                '".Database::escape_string(isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null)."',
-                '".Database::escape_string(isset($new_max) ? $new_max : null)."',
-                ".intval($session_id).")";
-        Database::query($sql);
-        $last_id = Database::insert_id();
+        $params = [
+            'c_id' => $course_id,
+            'forum_title'=> $values['forum_title'],
+            'forum_image'=> $sql_image,
+            'forum_comment'=> isset($values['forum_comment']) ? $values['forum_comment'] : null,
+            'forum_category'=> isset($values['forum_category']) ? $values['forum_category'] : null,
+            'allow_anonymous'=> isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null,
+            'allow_edit'=> isset($values['students_can_edit_group']['students_can_edit']) ? $values['students_can_edit_group']['students_can_edit'] : null,
+            'approval_direct_post'=> isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null,
+            'allow_attachments'=> isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null,
+            'allow_new_threads'=> isset($values['allow_new_threads_group']['allow_new_threads']) ? $values['allow_new_threads_group']['allow_new_threads'] : null,
+            'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
+            'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
+            'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
+            'forum_order'=> isset($new_max) ? $new_max : null,
+            'session_id'=> $session_id,
+        ];
+        $last_id = Database::insert($table_forums, $params);
         if ($last_id > 0) {
 
             $sql = "UPDATE $table_forums SET forum_id = $last_id
@@ -2329,7 +2341,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             $visible = 1;
         }
 
-        $clean_post_title = Database::escape_string(stripslashes($values['post_title']));
+        $clean_post_title = $values['post_title'];
 
         // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
         $last_thread_id = Database::insert(
@@ -2425,20 +2437,20 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         }
 
         // We now store the content in the table_post table.
-        $sql = "INSERT INTO $table_posts (c_id, post_title, post_text, thread_id, forum_id, poster_id, poster_name, post_date, post_notification, post_parent_id, visible)
-                VALUES (
-                ".$course_id.",
-                '".$clean_post_title."',
-                '".Database::escape_string($values['post_text'])."',
-                '".Database::escape_string($last_thread_id)."',
-                '".Database::escape_string($values['forum_id'])."',
-                '".Database::escape_string($_user['user_id'])."',
-                '".Database::escape_string(stripslashes(isset($values['poster_name']) ? $values['poster_name'] : null))."',
-                '".Database::escape_string($post_date)."',
-                '".Database::escape_string(isset($values['post_notification']) ? $values['post_notification'] : null)."','0',
-                '".Database::escape_string($visible)."')";
-        Database::query($sql);
-        $last_post_id = Database::insert_id();
+        $params = [
+            'c_id' => $course_id,
+            'post_title' => $clean_post_title,
+            'post_text' => $values['post_text'],
+            'thread_id' => $last_thread_id,
+            'forum_id' => $values['forum_id'],
+            'poster_id' => $_user['user_id'],
+            'poster_name' => isset($values['poster_name']) ? $values['poster_name'] : null,
+            'post_date' => $post_date,
+            'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : null,
+            'post_parent_id' => 0,
+            'visible' => $visible,
+        ];
+        $last_post_id = Database::insert($table_posts, $params);
 
         if ($last_post_id) {
             $sql = "UPDATE $table_posts SET post_id = $last_post_id
@@ -2472,7 +2484,10 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         if ($has_attachment) {
 
             // Try to add an extension to the file if it hasn't one.
-            $new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+            $new_file_name = add_ext_on_mime(
+                stripslashes($_FILES['user_upload']['name']),
+                $_FILES['user_upload']['type']
+            );
 
             if (!filter_extension($new_file_name)) {
                 if ($showMessage) {
@@ -4040,56 +4055,66 @@ function store_move_post($values)
         $current_post = get_post_information($values['post_id']);
 
         // Storing a new thread.
-        $sql = "INSERT INTO $table_threads (c_id, thread_title, forum_id, thread_poster_id, thread_poster_name, thread_last_post, thread_date)
-            VALUES (
-                ".$course_id.",
-                '".Database::escape_string($current_post['post_title'])."',
-                '".Database::escape_string($current_post['forum_id'])."',
-                '".Database::escape_string($current_post['poster_id'])."',
-                '".Database::escape_string($current_post['poster_name'])."',
-                '".Database::escape_string($values['post_id'])."',
-                '".Database::escape_string($current_post['post_date'])."'
-                )";
-        Database::query($sql);
-        $new_thread_id = Database::insert_id();
-        api_item_property_update($_course, TOOL_FORUM_THREAD, $new_thread_id, 'visible', $current_post['poster_id']);
+        $params = [
+            'c_id' => $course_id,
+            'thread_title' => $current_post['post_title'],
+            'forum_id' => $current_post['forum_id'],
+            'thread_poster_id' => $current_post['poster_id'],
+            'thread_poster_name' => $current_post['poster_name'],
+            'thread_last_post' => $values['post_id'],
+            'thread_date' => $current_post['post_date'],
+        ];
+
+        $new_thread_id = Database::insert($table_threads, $params);
+
+        api_item_property_update(
+            $_course,
+            TOOL_FORUM_THREAD,
+            $new_thread_id,
+            'visible',
+            $current_post['poster_id']
+        );
 
         // Moving the post to the newly created thread.
-        $sql = "UPDATE $table_posts SET thread_id='".Database::escape_string($new_thread_id)."', post_parent_id='0' WHERE c_id = $course_id AND post_id='".Database::escape_string($values['post_id'])."'";
+        $sql = "UPDATE $table_posts SET thread_id='".intval($new_thread_id)."', post_parent_id='0'
+                WHERE c_id = $course_id AND post_id='".intval($values['post_id'])."'";
         Database::query($sql);
 
         // Resetting the parent_id of the thread to 0 for all those who had this moved post as parent.
-        $sql = "UPDATE $table_posts SET post_parent_id='0' WHERE c_id = $course_id AND post_parent_id='".Database::escape_string($values['post_id'])."'";
+        $sql = "UPDATE $table_posts SET post_parent_id='0'
+                WHERE c_id = $course_id AND post_parent_id='".intval($values['post_id'])."'";
         Database::query($sql);
 
         // Updating updating the number of threads in the forum.
-        $sql = "UPDATE $table_forums SET forum_threads=forum_threads+1 WHERE c_id = $course_id AND forum_id='".Database::escape_string($current_post['forum_id'])."'";
+        $sql = "UPDATE $table_forums SET forum_threads=forum_threads+1
+                WHERE c_id = $course_id AND forum_id='".intval($current_post['forum_id'])."'";
         Database::query($sql);
 
         // Resetting the last post of the old thread and decreasing the number of replies and the thread.
-        $sql = "SELECT * FROM $table_posts WHERE c_id = $course_id AND thread_id='".Database::escape_string($current_post['thread_id'])."' ORDER BY post_id DESC";
+        $sql = "SELECT * FROM $table_posts
+                WHERE c_id = $course_id AND thread_id='".intval($current_post['thread_id'])."'
+                ORDER BY post_id DESC";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
-        $sql = "UPDATE $table_threads SET thread_last_post='".$row['post_id']."', thread_replies=thread_replies-1 WHERE c_id = $course_id AND thread_id='".Database::escape_string($current_post['thread_id'])."'";
+        $sql = "UPDATE $table_threads SET
+                    thread_last_post='".$row['post_id']."',
+                    thread_replies=thread_replies-1
+                WHERE
+                    c_id = $course_id AND
+                    thread_id='".intval($current_post['thread_id'])."'";
         Database::query($sql);
     } else {
         // Moving to the chosen thread.
-        //Old code
-        //$sql = "UPDATE $table_posts SET thread_id='".Database::escape_string($_POST['thread'])."', post_parent_id='0' WHERE post_id='".Database::escape_string($values['post_id'])."'";
-        //$result = Database::query($sql);
-        // Resetting the parent_id of the thread to 0 for all those who had this moved post as parent.
-        //$sql = "UPDATE $table_posts SET post_parent_id='0' WHERE post_parent_id='".Database::escape_string($values['post_id'])."'";
-        //$result = Database::query($sql);
-        // If this post is the last post of the thread we must update the thread_last_post with a new post_id
-        // Search for the original thread_id
 
-        $sql = "SELECT thread_id FROM ".$table_posts." WHERE c_id = $course_id AND post_id = '".$values['post_id']."' ";
+        $sql = "SELECT thread_id FROM ".$table_posts."
+                WHERE c_id = $course_id AND post_id = '".$values['post_id']."' ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
         $original_thread_id = $row['thread_id'];
 
-        $sql = "SELECT thread_last_post FROM ".$table_threads." WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' ";
+        $sql = "SELECT thread_last_post FROM ".$table_threads."
+                WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' ";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -4097,28 +4122,35 @@ function store_move_post($values)
         // If is this thread, update the thread_last_post with the last one.
 
         if ($thread_is_last_post == $values['post_id']) {
-            $sql = "SELECT post_id FROM ".$table_posts." WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' AND post_id <> '".$values['post_id']."' ORDER BY post_date DESC LIMIT 1";
+            $sql = "SELECT post_id FROM ".$table_posts."
+                    WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' AND post_id <> '".$values['post_id']."'
+                    ORDER BY post_date DESC LIMIT 1";
             $result = Database::query($sql);
 
             $row = Database::fetch_array($result);
             $thread_new_last_post = $row['post_id'];
 
-            $sql = "UPDATE ".$table_threads." SET thread_last_post = '".$thread_new_last_post."' WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' ";
+            $sql = "UPDATE ".$table_threads." SET thread_last_post = '".$thread_new_last_post."'
+                    WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' ";
             Database::query($sql);
         }
 
-        $sql = "UPDATE $table_threads SET thread_replies=thread_replies-1 WHERE c_id = $course_id AND thread_id='".$original_thread_id."'";
+        $sql = "UPDATE $table_threads SET thread_replies=thread_replies-1
+                WHERE c_id = $course_id AND thread_id='".$original_thread_id."'";
         Database::query($sql);
 
         // moving to the chosen thread
-        $sql = "UPDATE $table_posts SET thread_id='".intval($_POST['thread'])."', post_parent_id='0' WHERE c_id = $course_id AND post_id='".intval($values['post_id'])."'";
+        $sql = "UPDATE $table_posts SET thread_id='".intval($_POST['thread'])."', post_parent_id='0'
+                WHERE c_id = $course_id AND post_id='".intval($values['post_id'])."'";
         Database::query($sql);
 
         // resetting the parent_id of the thread to 0 for all those who had this moved post as parent
-        $sql = "UPDATE $table_posts SET post_parent_id='0' WHERE c_id = $course_id AND post_parent_id='".intval($values['post_id'])."'";
+        $sql = "UPDATE $table_posts SET post_parent_id='0'
+                WHERE c_id = $course_id AND post_parent_id='".intval($values['post_id'])."'";
         Database::query($sql);
 
-        $sql = "UPDATE $table_threads SET thread_replies=thread_replies+1 WHERE c_id = $course_id AND thread_id='".intval($_POST['thread'])."'";
+        $sql = "UPDATE $table_threads SET thread_replies=thread_replies+1
+                WHERE c_id = $course_id AND thread_id='".intval($_POST['thread'])."'";
         Database::query($sql);
     }
 

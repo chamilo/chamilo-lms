@@ -7793,8 +7793,8 @@ function api_mail_html(
     $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
 
     // If the parameter is set don't use the admin.
-    $senderName = !empty($senderName) ? $senderName : $defaultEmail;
-    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultName;
+    $senderName = !empty($senderName) ? $senderName : $defaultName;
+    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
 
     // Reply to first
     if (isset($extra_headers['reply_to'])) {

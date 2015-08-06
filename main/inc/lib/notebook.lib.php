@@ -51,27 +51,26 @@ class NotebookManager
             return false;
         }
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $table = Database :: get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        $sql = "INSERT INTO $t_notebook (c_id, user_id, course, session_id, title, description, creation_date,update_date,status)
-				VALUES(
-					 $course_id,
-					'" . api_get_user_id() . "',
-					'" . Database::escape_string(api_get_course_id()) . "',
-					'" . $sessionId . "',
-					'" . Database::escape_string($values['note_title']) . "',
-					'" . Database::escape_string($values['note_comment']) . "',
-					'" . Database::escape_string(date('Y-m-d H:i:s')) . "',
-					'" . Database::escape_string(date('Y-m-d H:i:s')) . "',
-					'0')";
-        $result = Database::query($sql);
-        $affected_rows = Database::affected_rows($result);
+        $now = api_get_utc_datetime();
+        $params = [
+            'c_id' => $course_id,
+            'user_id' => api_get_user_id(),
+            'course' => api_get_course_id(),
+            'session_id' => $sessionId,
+            'title' => $values['note_title'],
+            'description' => $values['note_comment'],
+            'creation_date' => $now,
+            'update_date' => $now,
+            'status' => 0
+        ];
+        $id = Database::insert($table, $params);
 
-        $id = Database::insert_id();
         if ($id > 0) {
-            $sql = "UPDATE $t_notebook SET notebook_id = $id WHERE iid = $id";
+            $sql = "UPDATE $table SET notebook_id = $id WHERE iid = $id";
             Database::query($sql);
 
             //insert into item_property
@@ -82,14 +81,12 @@ class NotebookManager
                 'NotebookAdded',
                 api_get_user_id()
             );
-        }
-
-        if (!empty($affected_rows)) {
             return $id;
         }
     }
 
-    static function get_note_information($notebook_id) {
+    static function get_note_information($notebook_id)
+    {
         if (empty($notebook_id)) {
             return array();
         }
@@ -97,16 +94,18 @@ class NotebookManager
         $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT 	notebook_id 		AS notebook_id,
-						title				AS note_title,
-						description 		AS note_comment,
-				   		session_id			AS session_id
-				   FROM $t_notebook
-				   WHERE c_id = $course_id AND notebook_id = '" . Database::escape_string($notebook_id) . "' ";
+        $sql = "SELECT
+                notebook_id 		AS notebook_id,
+                title				AS note_title,
+                description 		AS note_comment,
+                session_id			AS session_id
+               FROM $t_notebook
+               WHERE c_id = $course_id AND notebook_id = '" . intval($notebook_id) . "' ";
         $result = Database::query($sql);
         if (Database::num_rows($result) != 1) {
             return array();
         }
+
         return Database::fetch_array($result);
     }
 
@@ -188,17 +187,17 @@ class NotebookManager
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
             if (api_get_session_id() == 0)
-                echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
+                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
             elseif (api_is_allowed_to_session_edit(false, true)) {
-                echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
+                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
             }
         } else {
             echo '<a href="javascript:void(0)">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
         }
 
-        echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=changeview&amp;view=creation_date&amp;direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_new.png', get_lang('OrderByCreationDate'), '', '32') . '</a>';
-        echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=changeview&amp;view=update_date&amp;direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_mod.png', get_lang('OrderByModificationDate'), '', '32') . '</a>';
-        echo '<a href="index.php?' . api_get_cidreq() . '&amp;action=changeview&amp;view=title&amp;direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32') . '</a>';
+        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=creation_date&direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_new.png', get_lang('OrderByCreationDate'), '', '32') . '</a>';
+        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=update_date&direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_mod.png', get_lang('OrderByModificationDate'), '', '32') . '</a>';
+        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=title&direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32') . '</a>';
         echo '</div>';
 
         if (!in_array($_SESSION['notebook_view'], array('creation_date', 'update_date', 'title'))) {
@@ -238,8 +237,8 @@ class NotebookManager
             echo '</div>';
             echo '<div class="sectioncomment">' . $row['description'] . '</div>';
             echo '<div>';
-            echo '<a href="' . api_get_self() . '?action=editnote&amp;notebook_id=' . $row['notebook_id'] . '">' . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . '</a>';
-            echo '<a href="' . api_get_self() . '?action=deletenote&amp;notebook_id=' . $row['notebook_id'] . '" onclick="return confirmation(\'' . $row['title'] . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
+            echo '<a href="' . api_get_self() . '?action=editnote&notebook_id=' . $row['notebook_id'] . '">' . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . '</a>';
+            echo '<a href="' . api_get_self() . '?action=deletenote&notebook_id=' . $row['notebook_id'] . '" onclick="return confirmation(\'' . $row['title'] . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
             echo '</div>';
         }
     }

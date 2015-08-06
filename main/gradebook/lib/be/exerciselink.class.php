@@ -284,7 +284,7 @@ class ExerciseLink extends AbstractLink
                         return array($sumResult/$student_count, $weight);
                         break;
                     case 'ranking':
-                        return AbstractLink::getCurrentUserRanking($students);
+                        return AbstractLink::getCurrentUserRanking($stud_id, $students);
                         break;
                     default:
                         return array($sum, $student_count);

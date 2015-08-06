@@ -13,6 +13,7 @@
  * @author Julio Montoya <gugli100@gmail.com> Jquery support + lots of fixes
  * @package chamilo.course_info
  */
+
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;
@@ -35,7 +36,8 @@ $courseId = api_get_course_int_id();
 $course_access_settings = CourseManager:: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
-function is_settings_editable() {
+function is_settings_editable()
+{
     return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
 }
 
@@ -442,9 +444,7 @@ if ($form->validate() && is_settings_editable()) {
             $num = CourseManager::countActiveCourses($urlId);
             if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
-
                 api_set_failure(get_lang('PortalActiveCoursesLimitReached'));
-
                 $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=course_active_warning&cidReq='.$course_code;
                 header("Location: $url");
                 exit;

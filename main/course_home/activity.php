@@ -183,5 +183,6 @@ function return_block($title, $content, $class = null)
                 </div>
             </div>
             <div class="row '.$class.'">'.$content.'</div>';
+
     return $html;
 }

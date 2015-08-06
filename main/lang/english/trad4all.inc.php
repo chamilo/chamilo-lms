@@ -7437,4 +7437,30 @@ $IsRequirement = "Is requirement";
 $ConsiderThisGradebookAsRequirementForASessionSequence = "Consider this gradebook as a requirement to complete the course (influences the sessions sequences)";
 $DistinctUsersLogins = "Distinct users logins";
 $AreYouSureToSubscribe = "Are you sure to subscribe?";
+$CheckYourEmailAndFollowInstructions = "Check your email and follow the instructions.";
+$LinkExpired = "Link expired, please try again.";
+$ResetPasswordInstructions = "Change your password instructions";
+$ResetPasswordCommentWithUrl = "You are receiving this notification because you have (or someone pretending to be you) has requested a new password be sent for your account. If you did not request this notification then
+please ignore it, if you keep receiving it please contact the board
+administrator.
+
+To set a the new password you need to activate it. To do this click the link provided below.
+
+%s";
+$CronRemindCourseExpirationActivateText = "Remind Course Expiration cron";
+$CronRemindCourseExpirationActivateComment = "Enable the Remind Course Expiration cron";
+$CronRemindCourseExpirationFrecuencyText = "Frecuency for the Remind Course Expiration cron";
+$CronRemindCourseExpirationFrecuencyComment = "Number of days before the expiration of the course to consider to send reminder mail";
+$CronCourseFinishedActivateText = "Course Finished cron";
+$CronCourseFinishedActivateComment = "Activate the Course Finished cron";
+$MailCronCourseFinishedSubject = "End of course %s";
+$MailCronCourseFinishedBody = "Dear %s,
+
+Thanks for participating of the course %s. We hope you've learned and enjoyed the course.
+
+You can check your performance over the course in the My Progress section.
+
+Best Regards,
+
+%s Team";
 ?>

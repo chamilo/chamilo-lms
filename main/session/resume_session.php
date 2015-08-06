@@ -220,7 +220,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
             Display::return_icon($downIcon, get_lang('MoveDown')),
             $downUrl
         );
-        
+
         $courseUrl = api_get_course_url($course->getCode(), $sessionId);
 
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
@@ -295,7 +295,7 @@ if (!empty($userList)) {
         $removeLink = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
             api_get_self().'?id_session='.$sessionId.'&action=delete&user='.$user['user_id'],
-            array('onclick' => "javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;")
+            array('onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;")
         );
 
         $addUserToUrlLink= '';

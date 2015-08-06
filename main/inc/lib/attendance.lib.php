@@ -295,35 +295,33 @@ class Attendance
 		$user_id = api_get_user_id();
 		$course_code = $_course['code'];
 		$course_id = $_course['real_id'];
-		$title_gradebook= Database::escape_string($this->attendance_qualify_title);
+		$title_gradebook= $this->attendance_qualify_title;
 		$value_calification  = 0;
 		$weight_calification =	floatval($this->attendance_weight);
-		$sql = "INSERT INTO $tbl_attendance SET
-				c_id =  $course_id,
-				name ='".Database::escape_string($this->name)."',
-				description = '".Database::escape_string($this->description)."',
-				attendance_qualify_title = '$title_gradebook',
-				attendance_weight = '$weight_calification',
-				session_id = '$session_id'";
-		$result = Database::query($sql);
-		$affected_rows = Database::affected_rows($result);
-		$last_id = 0;
-		if (!empty($affected_rows)) {
-			// save inside item property table
-			$last_id = Database::insert_id();
-			if ($last_id) {
 
-				$sql = "UPDATE $tbl_attendance SET id = iid WHERE iid = $last_id";
-				Database::query($sql);
+		$params = [
+			'c_id' => $course_id,
+			'name' => $this->name,
+			'description' => $this->description,
+			'attendance_qualify_title' => $title_gradebook,
+			'attendance_weight' => $weight_calification,
+			'session_id' => $session_id
+		];
+		$last_id = Database::insert($tbl_attendance, $params);
 
-				api_item_property_update(
-					$_course,
-					TOOL_ATTENDANCE,
-					$last_id,
-					"AttendanceAdded",
-					$user_id
-				);
-			}
+		if (!empty($last_id)) {
+
+			$sql = "UPDATE $tbl_attendance SET id = iid WHERE iid = $last_id";
+			Database::query($sql);
+
+			api_item_property_update(
+				$_course,
+				TOOL_ATTENDANCE,
+				$last_id,
+				"AttendanceAdded",
+				$user_id
+			);
+
 		}
 		// add link to gradebook
 		if ($link_to_gradebook && !empty($this->category_id)) {
@@ -716,11 +714,6 @@ class Attendance
 						presence 				= 1";
 				$result = Database::query($sql);
 
-				$insertId = Database::insert_id();
-                                //The table attendance_sheet do not have id field
-                                //$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
-				//Database::query($sql);
-
 				$affected_rows += Database::affected_rows($result);
 			} else {
 				$sql = "UPDATE $tbl_attendance_sheet SET presence = 1
@@ -749,10 +742,7 @@ class Attendance
 						presence = 0";
 				$result = Database::query($sql);
 
-				$insertId = Database::insert_id();
-                                //The table attendance_sheet do not hace id field
-                                //$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
-                                //Database::query($sql);
+				Database::insert_id();
 
 				$affected_rows += Database::affected_rows($result);
 			} else {
@@ -859,8 +849,10 @@ class Attendance
 					Database::query($sql);
 
 					$insertId = Database::insert_id();
-					$sql = "UPDATE $tbl_attendance_result SET id = iid WHERE iid = $insertId";
-					Database::query($sql);
+                    if ($insertId) {
+                        $sql = "UPDATE $tbl_attendance_result SET id = iid WHERE iid = $insertId";
+                        Database::query($sql);
+                    }
 				}
 			}
 		}

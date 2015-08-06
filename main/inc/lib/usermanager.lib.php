@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
  */
 class UserManager
 {
-    // This contants are deprecated use the constants located in ExtraField
+    // This constants are deprecated use the constants located in ExtraField
     const USER_FIELD_TYPE_TEXT = 1;
     const USER_FIELD_TYPE_TEXTAREA = 2;
     const USER_FIELD_TYPE_RADIO = 3;
@@ -278,11 +278,6 @@ class UserManager
         if (empty($password)) {
             return api_set_failure('ThisFieldIsRequired');
         }
-
-        $firstName = Security::remove_XSS($firstName);
-        $lastName = Security::remove_XSS($lastName);
-        $loginName = Security::remove_XSS($loginName);
-        $phone = Security::remove_XSS($phone);
 
         // database table definition
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -3674,21 +3669,6 @@ class UserManager
         </script>';
 
         return $js.$form->returnForm();
-
-        return '
-        <form method="GET" class="form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">
-                <input placeholder="'.get_lang('UsersGroups').'" type="text" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
-                ' . get_lang('Type') .'
-
-                <option value="0">--'.get_lang('Select').'--</option>
-                <option value="1"' . (($searchType=='1')?'selected="selected"':"") . '>--' . get_lang('User') .'--</option>
-                <option value="2"' . (($searchType=='2')?'selected="selected"':"") . '>--' . get_lang('Group') . '--</option>
-                </select>
-                '.$extraFields.'
-                <button class="btn btn-primary" type="submit" value="search">'.get_lang('Search').'</button>
-        </form>
-
-        ';
     }
 
     /**

@@ -47,7 +47,13 @@ while ($row = Database :: fetch_array($result)) {
 $form->addElement('select', 'exercise', get_lang('Exercise'), $exercises);
 
 // generate default content
-$form->addElement('checkbox', 'is_content', null, get_lang('DefaultContent'), array('checked' => true));
+$form->addElement(
+	'checkbox',
+	'is_content',
+	null,
+	get_lang('GenerateDefaultContent'),
+	array('checked' => true)
+);
 
 // the submit button
 $form->addButtonCreate(get_lang('CreateQuestion'), 'SubmitCreateQuestion');

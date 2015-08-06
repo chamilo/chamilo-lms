@@ -792,10 +792,27 @@ class learnpath
                     $dsp = $row[0] + 1;
                 }
 
-                $sql = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on, category_id)
-                        VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."', $categoryId)";
-                Database::query($sql);
-                $id = Database :: insert_id();
+                $params = [
+                    'c_id' => $course_id,
+                    'lp_type' => $type,
+                    'name' => $name,
+                    'description' => $description,
+                    'path' => '',
+                    'default_view_mod' => 'embedded',
+                    'default_encoding' => 'UTF-8',
+                    'display_order' => $dsp,
+                    'content_maker' => 'Chamilo',
+                    'content_local' => 'local',
+                    'js_lib' => '',
+                    'session_id' => $session_id,
+                    'created_on' => api_get_utc_datetime(),
+                    'publicated_on' => $publicated_on,
+                    'expired_on' => $expired_on,
+                    'category_id' => $categoryId
+                ];
+
+                $id = Database::insert($tbl_lp, $params);
+
                 if ($id > 0) {
                     $sql = "UPDATE $tbl_lp SET id = iid WHERE iid = $id";
                     Database::query($sql);

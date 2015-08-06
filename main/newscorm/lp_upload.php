@@ -109,6 +109,10 @@ if (isset($_POST) && $is_error) {
     // Directory creation.
     $stopping_error = false;
 
+    if (!isset($_POST['file_name'])) {
+        return false;
+    }
+
     // Escape path with basename so it can only be directly into the archive/ directory.
     $s = api_get_path(SYS_ARCHIVE_PATH).basename($_POST['file_name']);
     // Get name of the zip file without the extension

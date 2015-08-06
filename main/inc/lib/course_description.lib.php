@@ -9,7 +9,8 @@
  */
 
 /**
- * Class CourseDescription Lanage course descriptions
+ * Class CourseDescription course descriptions
+ *
  * @package chamilo.course_description
  */
 class CourseDescription
@@ -34,7 +35,8 @@ class CourseDescription
      * Returns an array of objects of type CourseDescription corresponding to
      * a specific course, without session ids (session id = 0)
      *
-     * @param int Course id
+     * @param int $course_id
+     *
      * @return array Array of CourseDescriptions
      */
     public static function get_descriptions($course_id)
@@ -48,7 +50,7 @@ class CourseDescription
         }
         $t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $sql = "SELECT * FROM $t_course_desc
-              WHERE c_id = $course_id AND session_id = '0'";
+                WHERE c_id = $course_id AND session_id = '0'";
         $sql_result = Database::query($sql);
         $results = array();
         while ($row = Database::fetch_array($sql_result)) {
@@ -61,6 +63,7 @@ class CourseDescription
             $desc_tmp->set_progress($row['progress']);
             $results[] = $desc_tmp;
         }
+
         return $results;
     }
 
@@ -82,9 +85,8 @@ class CourseDescription
         $data = array();
         while ($description = Database::fetch_array($rs)) {
             $data['descriptions'][$description['id']] = Security::remove_XSS($description, STUDENT);
-            //reload titles to ensure we have the last version (after edition)
-            //$data['default_description_titles'][$description['id']] = Security::remove_XSS($description['title'], STUDENT);
         }
+
         return $data;
     }
 
@@ -122,6 +124,7 @@ class CourseDescription
             $data['description_content'] = $description['content'];
             $data['progress'] = $description['progress'];
         }
+
         return $data;
     }
 
@@ -129,6 +132,7 @@ class CourseDescription
      * @param int $id
      * @param string $course_code
      * @param int $session_id
+     *
      * @return array
      */
     public function get_data_by_id($id, $course_code = '', $session_id = null)
@@ -170,7 +174,8 @@ class CourseDescription
         $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT MAX(description_type) as MAX FROM $tbl_course_description
+        $sql = "SELECT MAX(description_type) as MAX
+                FROM $tbl_course_description
 		        WHERE c_id = $course_id AND session_id='" . $this->session_id . "'";
         $rs = Database::query($sql);
         $max = Database::fetch_array($rs);
@@ -178,6 +183,7 @@ class CourseDescription
         if ($description_type < ADD_BLOCK) {
             $description_type = ADD_BLOCK;
         }
+
         return $description_type;
     }
 
@@ -194,22 +200,24 @@ class CourseDescription
         } else {
             $course_id = $this->course_id;
         }
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $sql = "INSERT IGNORE INTO $tbl_course_description SET
-				c_id 				=  $course_id,
-				description_type	= '" . intval($this->description_type) . "',
-				title 				= '" . Database::escape_string($this->title) . "',
-				content 			= '" . Database::escape_string($this->content) . "',
-				progress 			= '" . intval($this->progress) . "',
-				session_id = '" . intval($this->session_id) . "' ";
-        $result = Database::query($sql);
-        $last_id = Database::insert_id();
-        $affected_rows = Database::affected_rows($result);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+
+        $params = [
+            'c_id' => $course_id,
+            'description_type' => $this->description_type,
+            'title' => $this->title,
+            'content' => $this->content,
+            'progress' => $this->progress,
+            'session_id' => $this->session_id,
+        ];
+
+        $last_id  = Database::insert($table, $params);
+
         if ($last_id > 0) {
-            $sql = "UPDATE $tbl_course_description SET id = iid WHERE iid = $last_id";
+            $sql = "UPDATE $table SET id = iid WHERE iid = $last_id";
             Database::query($sql);
 
-            //insert into item_property
+            // insert into item_property
             api_item_property_update(
                 api_get_course_info(),
                 TOOL_COURSE_DESCRIPTION,
@@ -219,7 +227,7 @@ class CourseDescription
             );
         }
 
-        return $affected_rows;
+        return 1;
     }
 
     /**
@@ -235,22 +243,27 @@ class CourseDescription
         $description_id = $this->get_id_by_description_type($description_type);
         $course_id = api_get_real_course_id();
         $course_code = api_get_course_id();
-        $item_property_id = api_get_item_property_id($course_code,
-            TOOL_COURSE_DESCRIPTION, $description_id);
-        $sql = "INSERT IGNORE INTO $tbl_stats_item_property SET
-				c_id				= " . api_get_course_int_id() . ",
-				course_id 			= '$course_id',
-			 	item_property_id 	= '$item_property_id',
-			 	title 				= '" . Database::escape_string($this->title) . "',
-			 	content 			= '" . Database::escape_string($this->content) . "',
-			 	progress 			= '" . intval($this->progress) . "',
-			 	lastedit_date 		= '" . date('Y-m-d H:i:s') . "',
-			 	lastedit_user_id 	= '" . api_get_user_id() . "',
-			 	session_id			= '" . intval($this->session_id) . "'";
-        $result = Database::query($sql);
-        $affected_rows = Database::affected_rows($result);
+        $item_property_id = api_get_item_property_id(
+            $course_code,
+            TOOL_COURSE_DESCRIPTION,
+            $description_id
+        );
 
-        return $affected_rows;
+        $params = [
+            'c_id' => api_get_course_int_id(),
+            'course_id' => $course_id,
+            'item_property_id' => $item_property_id,
+            'title' => $this->title,
+            'content' => $this->content,
+            'progress' => $this->progress,
+            'lastedit_date' => api_get_utc_datetime(),
+            'lastedit_user_id' => api_get_user_id(),
+            'session_id' => $this->session_id,
+        ];
+
+        Database::insert($tbl_stats_item_property, $params);
+
+        return 1;
     }
 
     /**
@@ -260,17 +273,25 @@ class CourseDescription
      */
     public function update()
     {
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $sql = "UPDATE $tbl_course_description SET
-                    title       = '" . Database::escape_string($this->title) . "',
-                    content     = '" . Database::escape_string($this->content) . "',
-                    progress    = '" . $this->progress . "'
-                WHERE
-                    id = '" . intval($this->id) . "' AND
-                    session_id = '" . $this->session_id . "' AND
-                    c_id = " . api_get_course_int_id();
-        $result = Database::query($sql);
-        $affected_rows = Database::affected_rows($result);
+        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+
+        $params = [
+            'title' => $this->title,
+            'content' => $this->content,
+            'progress' => $this->progress,
+        ];
+
+        Database::update(
+            $table,
+            $params,
+            [
+                'id = ? AND session_id = ? AND c_id = ?' => [
+                    $this->id,
+                    $this->session_id,
+                    api_get_course_int_id(),
+                ],
+            ]
+        );
 
         if ($this->id > 0) {
             //insert into item_property
@@ -282,7 +303,8 @@ class CourseDescription
                 api_get_user_id()
             );
         }
-        return $affected_rows;
+
+        return 1;
     }
 
     /**
@@ -331,44 +353,6 @@ class CourseDescription
         $row = Database::fetch_array($rs);
         $description_id = $row['id'];
         return $description_id;
-    }
-
-    /**
-     * get thematic progress in porcent for a course,
-     * first you must set session_id property with the object CourseDescription
-     * @param bool        true for showing a icon about the progress, false otherwise (optional)
-     * @param int        Description type (optional)
-     * @return string   img html
-     */
-    public function get_progress_porcent(
-        $with_icon = false,
-        $description_type = THEMATIC_ADVANCE
-    ) {
-        $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $session_id = api_get_session_id();
-        $course_id = api_get_course_int_id();
-
-        $sql = "SELECT progress FROM $tbl_course_description
-		        WHERE
-		            c_id = $course_id AND
-		            description_type = '" . intval($description_type) . "' AND
-		            session_id = '" . intval($this->session_id) . "' ";
-        $rs = Database::query($sql);
-        $progress = '';
-        $img = '';
-        $title = '0%';
-        $image = 'level_0.png';
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs);
-            $progress = $row['progress'] . '%';
-            $image = 'level_' . $row['progress'] . '.png';
-        }
-        if ($with_icon) {
-            $img = Display::return_icon($image, get_lang('ThematicAdvance'),
-                array('style' => 'vertical-align:middle'));
-        }
-        $progress = $img . $progress;
-        return $progress;
     }
 
     /**

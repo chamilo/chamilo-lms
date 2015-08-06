@@ -215,11 +215,10 @@ class Auth
     public function move_course($direction, $course2move, $category)
     {
         // definition of tables
-        $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $current_user_id = api_get_user_id();
         $all_user_courses = $this->get_courses_of_user($current_user_id);
-        $result = false;
 
         // we need only the courses of the category we are moving in
         $user_courses = array();
@@ -244,23 +243,29 @@ class Auth
             }
         }
 
+        $result = false;
         if (count($target_course) > 0 && count($source_course) > 0) {
             $courseInfo = api_get_course_info($source_course['code']);
             $courseId = $courseInfo['real_id'];
 
-            $sql = "UPDATE $TABLECOURSUSER
+            $targetCourseInfo = api_get_course_info($target_course['code']);
+            $targetCourseId = $targetCourseInfo['real_id'];
+
+            $sql = "UPDATE $table
                     SET sort='" . $target_course['sort'] . "'
                     WHERE
                         c_id = '" . $courseId . "' AND
                         user_id = '" . $current_user_id . "' AND
                         relation_type<>" . COURSE_RELATION_TYPE_RRHH;
+
             $result1 = Database::query($sql);
 
-            $sql = "UPDATE $TABLECOURSUSER SET sort='" . $source_course['sort'] . "'
+            $sql = "UPDATE $table SET sort='" . $source_course['sort'] . "'
                     WHERE
-                        c_id ='" . $courseId . "' AND
+                        c_id ='" . $targetCourseId . "' AND
                         user_id='" . $current_user_id . "' AND
                         relation_type<>" . COURSE_RELATION_TYPE_RRHH;
+
             $result2 = Database::query($sql);
 
             if (Database::affected_rows($result1) && Database::affected_rows($result2)) {

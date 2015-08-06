@@ -134,7 +134,7 @@ class Blog
                 $sql = "UPDATE $tbl_blogs SET blog_id = iid WHERE iid = $this_blog_id";
                 Database::query($sql);
 
-				//insert into item_property
+				// insert into item_property
                 api_item_property_update(
                     api_get_course_info(),
                     TOOL_BLOGS,

@@ -81,11 +81,7 @@ class CourseDescriptionController
                 $check = Security::check_token();
                 if ($check) {
                     $title = $_POST['title'];
-                    if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-                        $content = WCAG_Rendering::prepareXHTML();
-                    } else {
-                        $content = $_POST['contentDescription'];
-                    }
+                    $content = $_POST['contentDescription'];
                     $description_type = $_POST['description_type'];
                     $id = $_POST['id'];
                     $progress = isset($_POST['progress']) ? $_POST['progress'] : '';
@@ -140,7 +136,7 @@ class CourseDescriptionController
                 if (isset($_GET['id_session'])) {
                     $session_id = intval($_GET['id_session']);
                 }
-		$course_description_data = $course_description->get_data_by_id(
+		        $course_description_data = $course_description->get_data_by_id(
                     $id,
                     null,
                     $session_id
@@ -149,7 +145,7 @@ class CourseDescriptionController
                 $data['description_title'] = $course_description_data['description_title'];
                 $data['description_content'] = $course_description_data['description_content'];
                 $data['progress'] = $course_description_data['progress'];
-		$data['descriptions'] = $course_description->get_data_by_description_type(
+		        $data['descriptions'] = $course_description->get_data_by_description_type(
                     $description_type,
                     null,
                     $session_id
@@ -181,11 +177,7 @@ class CourseDescriptionController
                 $check = Security::check_token();
                 if ($check) {
                     $title = $_POST['title'];
-                    if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-                        $content = WCAG_Rendering::prepareXHTML();
-                    } else {
-                        $content = $_POST['contentDescription'];
-                    }
+                    $content = $_POST['contentDescription'];
                     $description_type = $_POST['description_type'];
                     if ($description_type >= ADD_BLOCK) {
                         $course_description->set_description_type($description_type);

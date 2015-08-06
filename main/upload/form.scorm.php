@@ -44,7 +44,8 @@ require_once '../newscorm/content_makers.inc.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 echo '<div class="actions">';
-echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('back.png', get_lang('ReturnToLearningPaths'), '', ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.
+    Display::return_icon('back.png', get_lang('ReturnToLearningPaths'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $form = new FormValidator(
@@ -54,11 +55,11 @@ $form = new FormValidator(
     '',
     array(
         'id' => "upload_form",
-        'enctype' => "multipart/form-data",
-        'style' => "background-image:url(\'../img/scorm.jpg\');background-repeat:no-repeat;background-position:620px;"
+        'enctype' => "multipart/form-data"
     )
 );
-$form->addElement('header', '', $nameTools);
+$form->addElement('header', $nameTools);
+$form->addLabel(null, Display::img(api_get_path(WEB_IMG_PATH).'scorm_logo.jpg'));
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);
 $form->addElement('file', 'user_file', get_lang('FileToUpload'));

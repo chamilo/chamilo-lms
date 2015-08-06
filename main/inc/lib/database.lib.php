@@ -374,22 +374,74 @@ class Database
         if (empty($attributes) || empty($table_name)) {
             return false;
         }
-        $filtred_attributes = array();
-        foreach ($attributes as $key => $value) {
-            $filtred_attributes[$key] = "'".self::escape_string($value)."'";
-        }
-        //@todo check if the field exists in the table we should use a describe of that table
-        $params = array_keys($filtred_attributes);
-        $values = array_values($filtred_attributes);
-        if (!empty($params) && !empty($values)) {
-            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
-            self::query($sql);
+
+        $params = array_keys($attributes);
+
+        if (!empty($params)) {
+            $sql = 'INSERT INTO '.$table_name.' ('.implode(',', $params).')
+                    VALUES (:'.implode(', :' ,$params).')';
+
+            $statement = self::getManager()->getConnection()->prepare($sql);
+            $result = $statement->execute($attributes);
+
             if ($show_query) {
                 var_dump($sql);
                 error_log($sql);
             }
 
-            return self::insert_id();
+            if ($result) {
+                return self::getManager()->getConnection()->lastInsertId();
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $table_name use Database::get_main_table
+     * @param array $attributes Values to updates
+     * Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
+     * @param array $where_conditions where conditions i.e array('id = ?' =>'4')
+     * @param bool $show_query
+     *
+     * @return bool|int
+     */
+    public static function update(
+        $table_name,
+        $attributes,
+        $where_conditions = array(),
+        $show_query = false
+    ) {
+        if (!empty($table_name) && !empty($attributes)) {
+            $update_sql = '';
+            //Cleaning attributes
+            $count = 1;
+
+            foreach ($attributes as $key => $value) {
+                $update_sql .= "$key = :$key ";
+                if ($count < count($attributes)) {
+                    $update_sql.=', ';
+                }
+                $count++;
+            }
+
+            if (!empty($update_sql)) {
+                //Parsing and cleaning the where conditions
+                $where_return = self::parse_where_conditions($where_conditions);
+                $sql = "UPDATE $table_name SET $update_sql $where_return ";
+
+                $statement = self::getManager()->getConnection()->prepare($sql);
+                $result = $statement->execute($attributes);
+
+                if ($show_query) {
+                    var_dump($sql);
+                }
+
+                if ($result) {
+
+                    return $statement->rowCount();
+                }
+            }
         }
 
         return false;
@@ -563,50 +615,6 @@ class Database
         $affected_rows = self::affected_rows($result);
         //@todo should return affected_rows for
         return $affected_rows;
-    }
-
-    /**
-     * @param string $table_name use Database::get_main_table
-     * @param array $attributes Values to updates
-     * Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
-     * @param array $where_conditions where conditions i.e array('id = ?' =>'4')
-     * @param bool $show_query
-     *
-     * @return bool|int
-     */
-    public static function update(
-        $table_name,
-        $attributes,
-        $where_conditions = array(),
-        $show_query = false
-    ) {
-        if (!empty($table_name) && !empty($attributes)) {
-            $update_sql = '';
-            //Cleaning attributes
-            $count = 1;
-            foreach ($attributes as $key=>$value) {
-                if (!is_array($value)) {
-                    $value = self::escape_string($value);
-                }
-                $update_sql .= "$key = '$value' ";
-                if ($count < count($attributes)) {
-                    $update_sql.=', ';
-                }
-                $count++;
-            }
-            if (!empty($update_sql)) {
-                //Parsing and cleaning the where conditions
-                $where_return = self::parse_where_conditions($where_conditions);
-                $sql    = "UPDATE $table_name SET $update_sql $where_return ";
-                if ($show_query) {
-                    var_dump($sql);
-                }
-                $result = self::query($sql);
-                $affected_rows = self::affected_rows($result);
-                return $affected_rows;
-            }
-        }
-        return false;
     }
 
     /**

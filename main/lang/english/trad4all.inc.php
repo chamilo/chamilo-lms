@@ -7439,14 +7439,14 @@ $DistinctUsersLogins = "Distinct users logins";
 $AreYouSureToSubscribe = "Are you sure to subscribe?";
 $CheckYourEmailAndFollowInstructions = "Check your email and follow the instructions.";
 $LinkExpired = "Link expired, please try again.";
-$ResetPasswordInstructions = "Change your password instructions";
-$ResetPasswordCommentWithUrl = "You are receiving this notification because you have (or someone pretending to be you) has requested a new password be sent for your account. If you did not request this notification then
-please ignore it, if you keep receiving it please contact the board
-administrator.
+$ResetPasswordInstructions = "Instructions for the password change procedure";
+$ResetPasswordCommentWithUrl = "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.
 
-To set a the new password you need to activate it. To do this click the link provided below.
+To set a the new password you need to activate it. To do this, please click this link:
 
-%s";
+%s
+
+If you did not request this procedure, then please ignore this message. If you keep receiving it, please contact the portal administrator.";
 $CronRemindCourseExpirationActivateText = "Remind Course Expiration cron";
 $CronRemindCourseExpirationActivateComment = "Enable the Remind Course Expiration cron";
 $CronRemindCourseExpirationFrecuencyText = "Frecuency for the Remind Course Expiration cron";
@@ -7456,15 +7456,17 @@ $CronCourseFinishedActivateComment = "Activate the Course Finished cron";
 $MailCronCourseFinishedSubject = "End of course %s";
 $MailCronCourseFinishedBody = "Dear %s,
 
-Thanks for participating of the course %s. We hope you've learned and enjoyed the course.
+Thank you for your participation to course %s. We hope you've acquired new relevant knowledge and enjoyed the course.
 
-You can check your performance over the course in the My Progress section.
+You can check your performance in the course through the My Progress section.
 
-Best Regards,
+Best regards,
 
 %s Team";
 $GenerateDefaultContent = "Generate default content";
 $ThanksForYourSubscription = "Thanks for your subscription";
 $XTeam = "%s team.";
 $YouCanStartSubscribingToCoursesEnteringToXUrl = "You can start subscribing to courses entering to %s";
+$VideoUrl = "Video URL";
+$AddAttachment = "Add attachment";
 ?>

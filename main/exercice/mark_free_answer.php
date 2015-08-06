@@ -1,5 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
+/** @deprecated seems not to be used*/
+exit;
 
 /**
 *	Free answer marking script
@@ -10,38 +12,37 @@
 *
 * 	@todo respect coding guidelines
 */
-// name of the language file that needs to be included
-include('../inc/global.inc.php');
 
-//debug param. 0: no display - 1: debug display
-$debug=0;
-if($debug>0){echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);}
+require_once '../inc/global.inc.php';
+
+// debug param. 0: no display - 1: debug display
+$debug = 0;
 
 // general parameters passed via POST/GET
 $my_course_code = $_GET['cid'];
-if(!empty($_REQUEST['exe'])){
+if (!empty($_REQUEST['exe'])) {
 	$my_exe = $_REQUEST['exe'];
-}else{
+} else {
 	$my_exe = null;
 }
-if(!empty($_REQUEST['qst'])){
+if (!empty($_REQUEST['qst'])) {
 	$my_qst = $_REQUEST['qst'];
-}else{
+} else {
 	$my_qst = null;
 }
-if(!empty($_REQUEST['usr'])){
+if (!empty($_REQUEST['usr'])) {
 	$my_usr = $_REQUEST['usr'];
-}else{
+} else {
 	$my_usr = null;
 }
-if(!empty($_REQUEST['cidReq'])){
+if (!empty($_REQUEST['cidReq'])) {
 	$my_cid = $_REQUEST['cidReq'];
-}else{
+} else {
 	$my_cid = null;
 }
-if(!empty($_POST['action'])){
+if (!empty($_POST['action'])) {
 	$action = $_POST['action'];
-}else{
+} else {
 	$action = '';
 }
 
@@ -55,27 +56,30 @@ if(!$is_courseTutor)
 	api_not_allowed();
 }
 
-$obj_question = Question :: read($my_qst);
+$obj_question = Question:: read($my_qst);
 
-if (isset($_SESSION['gradebook'])){
-	$gradebook=	$_SESSION['gradebook'];
+if (isset($_SESSION['gradebook'])) {
+	$gradebook = $_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+if (!empty($gradebook) && $gradebook == 'view') {
+	$interbreadcrumb[] = array(
+		'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+		'name' => get_lang('ToolGradebook'),
+	);
 }
 
-$nameTools=get_lang('Exercises');
+$nameTools = get_lang('Exercises');
 
-$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php",
+    "name" => get_lang('Exercises'),
+);
 
 $my_msg = 'No change.';
 
 if ($action == 'mark') {
-	if (!empty($_POST['score']) AND $_POST['score'] < $obj_question->selectWeighting() AND $_POST['score'] >= 0) {
+	if (!empty($_POST['score']) && $_POST['score'] < $obj_question->selectWeighting() && $_POST['score'] >= 0) {
 		//mark the user mark into the database using something similar to the following function:
 		$my_int_cid = api_get_course_int_id($my_cid);
 		$exercise_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
@@ -92,7 +96,6 @@ if ($action == 'mark') {
 			$my_score = $row['exe_result'] + $_POST['score'];
 			$sql = "UPDATE $exercise_table SET exe_result = '$my_score'
 				    WHERE exe_id = '".$row['exe_id']."'";
-			#echo $sql;
 			$res = Database::query($sql);
 			$my_msg = get_lang('MarkIsUpdated');
 		} else {
@@ -113,15 +116,6 @@ if ($action == 'mark') {
 					   '".Database::escape_string($obj_question->selectWeighting())."',
 					   FROM_UNIXTIME(".$reallyNow.")
 					  )";
-			#if ($origin == 'learnpath')
-			#{
-			#	if ($user_id == "NULL")
-			#	{
-			#		$user_id = '0';
-			#	}
-			#	$sql2 = "update $tbl_learnpath_user set score='$score' WHERE (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
-			#	$res2 = Database::query($sql2);
-			#}
 			$res = Database::query($sql);
 			$my_msg = get_lang('MarkInserted');
 		}

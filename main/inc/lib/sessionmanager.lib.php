@@ -1,3 +1,4 @@
+
 <?php
 /* For licensing terms, see /license.txt */
 
@@ -63,6 +64,8 @@ class SessionManager
      * @param   int     $showDescription Optional. Whether show the session description
      * @param   array   $extraFields
      * @param   int     $sessionAdminId Optional. If this sessions was created by a session admin, assign it to him
+     * @param boolean $sendSubscritionNotification Optional.
+     *          Whether send a mail notification to users being subscribed
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
      * */
@@ -82,7 +85,8 @@ class SessionManager
         $description = null,
         $showDescription = 0,
         $extraFields = array(),
-        $sessionAdminId = 0
+        $sessionAdminId = 0,
+        $sendSubscritionNotification = false
     ) {
         global $_configuration;
 
@@ -154,7 +158,8 @@ class SessionManager
                     'session_admin_id' => $sessionAdminId,
                     'visibility' => $visibility,
                     'description' => $description,
-                    'show_description' => intval($showDescription)
+                    'show_description' => intval($showDescription),
+                    'send_subscription_notification' => $sendSubscritionNotification
                 );
 
                 if (!empty($startDate)) {
@@ -1312,6 +1317,8 @@ class SessionManager
      * @param int       $duration
      * @param array     $extraFields
      * @param int       $sessionAdminId
+     * @param boolean $sendSubscritionNotification Optional.
+     *          Whether send a mail notification to users being subscribed
      * @return mixed
      */
     public static function edit_session(
@@ -1330,7 +1337,8 @@ class SessionManager
         $showDescription = 0,
         $duration = null,
         $extraFields = array(),
-        $sessionAdminId = 0
+        $sessionAdminId = 0,
+        $sendSubscritionNotification = false
     ) {
         $name = trim(stripslashes($name));
         $coachId = intval($coachId);
@@ -1373,7 +1381,8 @@ class SessionManager
                     'id_coach' => $coachId,
                     'description'=> $description,
                     'show_description' => intval($showDescription),
-                    'visibility' => $visibility
+                    'visibility' => $visibility,
+                    'send_subscription_notification' => $sendSubscritionNotification
                 ];
 
                 if (!empty($sessionAdminId)) {
@@ -1508,15 +1517,13 @@ class SessionManager
      * @param array $user_list
      * @param int $session_visibility
      * @param bool $empty_users
-     * @param bool $send_email
      * @return bool
      */
     public static function suscribe_users_to_session(
         $id_session,
         $user_list,
         $session_visibility = SESSION_VISIBLE_READ_ONLY,
-        $empty_users = true,
-        $send_email = false
+        $empty_users = true
     ) {
         if ($id_session != strval(intval($id_session))) {
             return false;
@@ -1533,12 +1540,12 @@ class SessionManager
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $session_info = api_get_session_info($id_session);
-        $session_name = $session_info['name'];
+        $entityManager = Database::getManager();
+        $session = $entityManager->find('ChamiloCoreBundle:Session', $id_session);
 
         // from function parameter
         if (empty($session_visibility)) {
-            $session_visibility = $session_info['visibility']; //loaded from DB
+            $session_visibility = $session->getVisibility();
             //default status loaded if empty
             if (empty($session_visibility))
                 $session_visibility = SESSION_VISIBLE_READ_ONLY; // by default readonly 1
@@ -1564,45 +1571,52 @@ class SessionManager
             $course_list[] = $row['c_id'];
         }
 
-        if ($send_email) {
+        if (
+            $session->getSendSubscriptionNotification() &&
+            is_array($user_list)
+        ) {
             // Sending emails only
-            if (is_array($user_list) && count($user_list) > 0) {
-                foreach ($user_list as $user_id) {
-                    if (!in_array($user_id, $existingUsers)) {
-                        $tplSubject = new Template(null, false, false, false, false, false);
-                        $tplSubject->assign('mailSiteName', api_get_setting('siteName'));
-                        $layoutSubject = $tplSubject->get_template('mail/subject_subscription_to_session_confirmation.tpl');
-                        $subject = $tplSubject->fetch($layoutSubject);
-
-                        $user_info = api_get_user_info($user_id);
-
-                        $tplContent = new Template(null, false, false, false, false, false);
-                        // Variables for default template
-                        $tplContent->assign('mailCompleteName', stripslashes($user_info['complete_name']));
-                        $tplContent->assign('mailSessionName', $session_name);
-                        $tplContent->assign('mailSiteName', api_get_setting('siteName'));
-                        $tplContent->assign('mailWebPath', api_get_path(WEB_PATH));
-                        $tplContent->assign('mailAdministratorName', api_get_setting('administratorName'));
-                        $tplContent->assign('mailAdministratorSurname', api_get_setting('administratorSurname'));
-                        $tplContent->assign('mailAdministratorTelephone', api_get_setting('administratorTelephone'));
-                        $tplContent->assign('mailEmailAdministrator', api_get_setting('emailAdministrator'));
-                        $layoutContent = $tplContent->get_template('mail/content_subscription_to_session_confirmation.tpl');
-                        $content = $tplContent->fetch($layoutContent);
-
-                        MessageManager::send_message(
-                            $user_id,
-                            $subject,
-                            $content,
-                            array(),
-                            array(),
-                            null,
-                            null,
-                            null,
-                            null,
-                            null
-                        );
-                    }
+            foreach ($user_list as $user_id) {
+                if (in_array($user_id, $existingUsers)) {
+                    continue;
                 }
+
+                $tplSubject = new Template(null, false, false, false, false, false);
+                $layoutSubject = $tplSubject->get_template(
+                    'mail/subject_subscription_to_session_confirmation.tpl'
+                );
+                $subject = $tplSubject->fetch($layoutSubject);
+
+                $user_info = api_get_user_info($user_id);
+
+                $tplContent = new Template(null, false, false, false, false, false);
+                // Variables for default template
+                $tplContent->assign(
+                    'complete_name',
+                    stripslashes($user_info['complete_name'])
+                );
+                $tplContent->assign('session_name', $session->getName());
+                $tplContent->assign(
+                    'session_coach',
+                    $session->getGeneralCoach()->getCompleteName()
+                );
+                $layoutContent = $tplContent->get_template(
+                    'mail/content_subscription_to_session_confirmation.tpl'
+                );
+                $content = $tplContent->fetch($layoutContent);
+
+                MessageManager::send_message(
+                    $user_id,
+                    $subject,
+                    $content,
+                    array(),
+                    array(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                );
             }
         }
 
@@ -3674,7 +3688,7 @@ class SessionManager
             }
             $users = null;
             //Subscribing in read only mode
-            self::suscribe_users_to_session($sid, $short_users, SESSION_VISIBLE_READ_ONLY, true, false);
+            self::suscribe_users_to_session($sid, $short_users, SESSION_VISIBLE_READ_ONLY, true);
             $short_users = null;
         }
         return $sid;
@@ -6579,6 +6593,14 @@ class SessionManager
         );
 
         $form->addElement('html', '</div>');
+
+        $form->addCheckBox(
+            'send_subscription_notification',
+            [
+                get_lang('SendSubscriptionNotification'),
+                get_lang('SendAnEmailWhenAUserBeingSubscribed')
+            ]
+        );
 
         // Extra fields
         $extra_field = new ExtraField('session');

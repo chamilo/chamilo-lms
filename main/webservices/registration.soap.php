@@ -4915,7 +4915,6 @@ function WSSubscribeUserToSessionSimple($params) {
                 $session_id,
                 array($user_id),
                 SESSION_VISIBLE_READ_ONLY,
-                false,
                 false
             );
             if ($debug) error_log('User registered to the course: '.$session_id);

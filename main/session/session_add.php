@@ -173,6 +173,7 @@ if ($form->validate()) {
     $duration = isset($params['duration']) ? $params['duration'] : null;
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;
+    $sendSubscritionNotification = isset($params['send_subscription_notification']);
 
     $extraFields = array();
     foreach ($params as $key => $value) {
@@ -196,7 +197,9 @@ if ($form->validate()) {
         $duration,
         $description,
         $showDescription,
-        $extraFields
+        $extraFields,
+        null,
+        $sendSubscritionNotification
     );
 
     if ($return == strval(intval($return))) {

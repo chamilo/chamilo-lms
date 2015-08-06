@@ -197,6 +197,12 @@ class Session
     protected $currentCourse;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="send_subscription_notification", type="boolean", nullable=false, options={"default":false})
+     */
+    private $sendSubscriptionNotification;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -959,4 +965,26 @@ class Session
         }
         return $this;
     }
+
+    /**
+     * Set $sendSubscriptionNotification
+     * @param boolean $sendNotification
+     * @return \Chamilo\CoreBundle\Entity\Session
+     */
+    public function setSendSubscriptionNotification($sendNotification)
+    {
+        $this->sendSubscriptionNotification = $sendNotification;
+
+        return $this;
+    }
+
+    /**
+     * Get $sendSubscriptionNotification
+     * @return boolean
+     */
+    public function getSendSubscriptionNotification()
+    {
+        return $this->sendSubscriptionNotification;
+    }
+
 }

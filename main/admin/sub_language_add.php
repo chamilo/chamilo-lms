@@ -38,7 +38,8 @@ function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_av
     $sublanguage_available  = Database::escape_string($sublanguage_available);
     $parent_id              = intval($parent_id);
 
-    $sql='INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id) VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
+    $sql = 'INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id)
+    	  VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
     $res = Database::query($sql);
     if ($res === false) {
         return false;

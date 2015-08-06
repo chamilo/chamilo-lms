@@ -1,0 +1,1 @@
+{{ 'Welcome'|get_lang }}

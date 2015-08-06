@@ -1,0 +1,1 @@
+{{ 'ThanksForYourSubscription'|get_lang }}

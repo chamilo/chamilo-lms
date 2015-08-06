@@ -7463,4 +7463,8 @@ You can check your performance over the course in the My Progress section.
 Best Regards,
 
 %s Team";
+$GenerateDefaultContent = "Generate default content";
+$ThanksForYourSubscription = "Thanks for your subscription";
+$XTeam = "%s team.";
+$YouCanStartSubscribingToCoursesEnteringToXUrl = "You can start subscribing to courses entering to %s";
 ?>

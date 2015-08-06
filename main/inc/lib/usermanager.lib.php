@@ -364,8 +364,9 @@ class UserManager
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
                 $tplSubject = new Template(null, false, false, false, false, false);
-                $tplSubject->assign('mailSiteName', api_get_setting('siteName'));
-                $layoutSubject = $tplSubject->get_template('mail/subject_registration_platform.tpl');
+                $layoutSubject = $tplSubject->get_template(
+                    'mail/subject_registration_platform.tpl'
+                );
                 $emailSubject = $tplSubject->fetch($layoutSubject);
                 $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
                 $email_admin = api_get_setting('emailAdministrator');
@@ -380,17 +381,10 @@ class UserManager
                 }
                 $tplContent = new Template(null, false, false, false, false, false);
                 // variables for the default template
-                $tplContent->assign('mailCompleteName', stripslashes(api_get_person_name($firstName, $lastName)));
-                $tplContent->assign('mailSiteName', api_get_setting('siteName'));
-                $tplContent->assign('mailLoginName', $loginName);
-                $tplContent->assign('mailOriginalPassword', stripslashes($original_password));
+                $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
+                $tplContent->assign('login_name', $loginName);
+                $tplContent->assign('original_password', stripslashes($original_password));
                 $tplContent->assign('mailWebPath', $url);
-                $tplContent->assign('mailAdministratorName', api_get_setting('administratorName'));
-                $tplContent->assign('mailAdministratorSurname', api_get_setting('administratorSurname'));
-                $tplContent->assign('mailAdministratorTelephone', api_get_setting('administratorTelephone'));
-                $tplContent->assign('mailEmailAdministrator', api_get_setting('emailAdministrator'));
-                // variables for others templates
-                $tplContent->assign('mailEmailAdministrator', api_get_setting('emailAdministrator'));
 
                 $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);

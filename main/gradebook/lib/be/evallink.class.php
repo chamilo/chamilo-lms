@@ -31,14 +31,15 @@ abstract class EvalLink extends AbstractLink
 
     /**
      * @param int $userId
+     * @param string $type
      *
      * @return array
      */
-    public function calc_score($userId = null)
+    public function calc_score($userId = null, $type = null)
     {
         $eval = $this->get_evaluation();
 
-        return $eval->calc_score($userId);
+        return $eval->calc_score($userId, $type);
     }
 
     public function get_link()

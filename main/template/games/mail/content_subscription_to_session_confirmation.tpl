@@ -3,6 +3,6 @@
 
 {{ session_coach }}
 
-{{ 'XTeam'|get_lang }}
+{{ 'XTeam'|get_lang|format(_s.site_name) }}
 
 {{ _admin.telephone ? 'T. ' ~ _admin.telephone }}

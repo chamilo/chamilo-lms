@@ -38,15 +38,16 @@ $coordinates = substr($coordinates,0,-1);
 
 $TBL_TRACK_E_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 // Save into db
-$sql = "INSERT INTO $TBL_TRACK_E_HOTSPOT (user_id , course_id , quiz_id , question_id , answer_id , correct , coordinate ) VALUES (
-			".intval($_user['user_id']).",
-			'".Database::escape_string($courseCode)."',
-			".intval($exerciseId).",
-			".intval($questionId).",
-			".intval($answerId).",
-			".intval($hit)."',
-			'".Database::escape_string($coordinates)."')";
-$result = Database::query($sql);
+$params = [
+    'user_id' => api_get_user_id(),
+    'course_id' => $courseCode,
+    'quiz_id' => $exerciseId,
+    'question_id' => $questionId,
+    'answer_id' =>  $answerId,
+    'correct' => $hit ,
+    'coordinate' => $coordinates
+];
 // Save insert id into session if users changes answer.
-$insert_id = Database::insert_id();
+$insert_id = Database::insert($TBL_TRACK_E_HOTSPOT, $params);
+
 $_SESSION['exerciseResult'][$questionId]['ids'][$answerOrderId] = $insert_id;

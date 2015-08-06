@@ -75,9 +75,12 @@ class TestCategory
 		// lets add in BDD if not the same name
 		if ($data_verif['nb'] <= 0) {
 			$c_id = api_get_course_int_id();
-			$sql = "INSERT INTO $t_cattable (c_id, title, description) VALUES ('$c_id','$v_name', '$v_description')";
-			Database::query($sql);
-            $new_id = Database::insert_id();
+			$params = [
+				'c_id' => $c_id,
+				'title' => $v_name,
+				'description' => $v_description,
+			];
+			$new_id = Database::insert($t_cattable, $params);
 
 			if ($new_id) {
 
@@ -663,8 +666,12 @@ class TestCategory
         $tbl_reltable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         // if question doesn't have a category
         // @todo change for 1.10 when a question can have several categories
-        if (TestCategory::getCategoryForQuestion($in_question_id, $in_course_c_id) == 0 && $in_question_id > 0 && $in_course_c_id > 0) {
-            $sql = "INSERT INTO $tbl_reltable VALUES (".intval($in_course_c_id).", ".intval($in_question_id).", ".intval($in_category_id).")";
+        if (TestCategory::getCategoryForQuestion($in_question_id, $in_course_c_id) == 0 &&
+            $in_question_id > 0 &&
+            $in_course_c_id > 0
+        ) {
+            $sql = "INSERT INTO $tbl_reltable
+                    VALUES (".intval($in_course_c_id).", ".intval($in_question_id).", ".intval($in_category_id).")";
             Database::query($sql);
         }
     }

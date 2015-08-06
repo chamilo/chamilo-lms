@@ -96,11 +96,11 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     $sql = "SELECT * FROM $table_survey
             WHERE c_id = $course_id AND code = '".$surveyCode."'";
     $result = Database::query($sql);
-    if (Database :: num_rows($result) > 0) { // Ok
+    if (Database :: num_rows($result) > 0) {
         // Check availability
         $row = Database :: fetch_array($result, 'ASSOC');
         $tempdata = SurveyManager :: get_survey($row['survey_id']);
-        //exit if survey not available anymore
+
         check_time_availability($tempdata);
         // Check for double invitation records (insert should be done once)
         $sql = "SELECT user from $table_survey_invitation
@@ -108,9 +108,10 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
                     c_id = $course_id AND
                     invitation_code = '".Database::escape_string($autoInvitationcode)."'";
         $result = Database::query($sql);
-        if (Database :: num_rows($result) == 0) { // Ok
+        $now = api_get_utc_datetime();
+        if (Database :: num_rows($result) == 0) {
             $sql = "INSERT INTO $table_survey_invitation (c_id, survey_code,user, invitation_code, invitation_date) ";
-            $sql .= " VALUES ($course_id, \"$surveyCode\", \"$userid\", \"$autoInvitationcode\", now())";
+            $sql .= " VALUES ($course_id, \"$surveyCode\", \"$userid\", \"$autoInvitationcode\", '".$now."')";
             Database::query($sql);
         }
         // From here we use the new invitationcode auto-userid-surveycode string

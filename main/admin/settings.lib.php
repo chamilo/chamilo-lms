@@ -1044,8 +1044,12 @@ function add_edit_template() {
             $table_system_template = Database :: get_main_table('system_template');
             if ($_GET['action'] == 'add') {
                 $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
-                $sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".$content_template."','".Database::escape_string($new_file_name)."')";
-                Database::query($sql);
+                $params = [
+                    'title' =>  $values['title'],
+                    'content' => $content_template,
+                    'image' => $new_file_name
+                ];
+                Database::insert($table_system_template, $params);
 
                 // Display a feedback message.
                 Display::display_confirmation_message(get_lang('TemplateAdded'));

@@ -172,23 +172,30 @@ if (isset($_REQUEST['comments']) &&
     }
 
     for ($i = 0; $i < $loop_in_track; $i++) {
-        $my_marks = Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
-        $contain_comments = Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
+        $my_marks = $_POST['marks_'.$array_content_id_exe[$i]];
+        $contain_comments = $_POST['comments_'.$array_content_id_exe[$i]];
         if (isset($contain_comments)) {
-            $my_comments = Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
+            $my_comments = $_POST['comments_'.$array_content_id_exe[$i]];
         } else {
             $my_comments = '';
         }
         $my_questionid = intval($array_content_id_exe[$i]);
 
-        $sql = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments'
-                WHERE question_id = ".$my_questionid." AND exe_id=".$id;
-        Database::query($sql);
+        $params = [
+            'marks' => $my_marks,
+            'teacher_comment' => $my_comments
+        ];
+        Database::update($TBL_TRACK_ATTEMPT, $params, ['question_id = ? AND exe_id = ?' => [$my_questionid, $id]]);
 
-        //Saving results in the track recording table
-        $sql = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment)
-                VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
-        Database::query($sql);
+        $params = [
+            'exe_id' => $id,
+            'question_id' => $my_questionid,
+            'marks' => $my_marks,
+            'insert_date' => api_get_utc_datetime(),
+            'author' => api_get_user_id(),
+            'teacher_comment' => $my_comments
+        ];
+        Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);
     }
 
     $qry = 'SELECT DISTINCT question_id, marks
@@ -200,7 +207,8 @@ if (isset($_REQUEST['comments']) &&
         $tot += $row['marks'];
     }
 
-    $sql = "UPDATE $TBL_TRACK_EXERCISES SET exe_result = '".floatval($tot)."'
+    $sql = "UPDATE $TBL_TRACK_EXERCISES
+            SET exe_result = '".floatval($tot)."'
             WHERE exe_id = ".$id;
     Database::query($sql);
 

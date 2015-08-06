@@ -456,21 +456,19 @@ class AnnouncementManager
         $course_id = api_get_course_int_id();
 
         // store in the table announcement
-        $sql = "INSERT INTO $tbl_announcement SET
-                c_id 			= '$course_id',
-                content 		= '$newContent',
-                title 			= '$emailTitle',
-                end_date 		= '$now',
-                display_order 	= '$order',
-                session_id		= " . api_get_session_id();
-        $result = Database::query($sql);
 
-        if ($result === false) {
-            return false;
-        }
+        $params = [
+            'c_id' => $course_id,
+            'content' => $newContent,
+            'title' => $emailTitle,
+            'end_date' => $now,
+            'display_order' => $order,
+            'session_id' => api_get_session_id(),
+        ];
 
-        //store the attach file
-        $last_id = Database::insert_id();
+        $last_id = Database::insert($tbl_announcement, $params);
+
+        // Store the attach file
         if ($last_id) {
             $sql = "UPDATE $tbl_announcement SET id = iid WHERE iid = $last_id";
             Database::query($sql);
@@ -1242,18 +1240,22 @@ class AnnouncementManager
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir . '/' . $new_file_name;
-                $result = @move_uploaded_file($file['tmp_name'], $new_path);
-                $safe_file_comment = Database::escape_string($file_comment);
-                $safe_file_name = Database::escape_string($file_name);
-                $safe_new_file_name = Database::escape_string($new_file_name);
-                // Storing the attachments if any
-                $sql = 'INSERT INTO ' . $tbl_announcement_attachment . ' (c_id, filename, comment, path, announcement_id, size) ' .
-                        "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '" . intval($file['size']) . "' )";
-                $result = Database::query($sql);
+                move_uploaded_file($file['tmp_name'], $new_path);
 
-                $insertId = Database::insert_id();
-                $sql = "UPDATE $tbl_announcement_attachment SET id = iid WHERE iid = $insertId";
-                Database::query($sql);
+                $params = [
+                    'c_id' => $course_id,
+                    'filename' => $file_name,
+                    'comment' => $file_comment,
+                    'path' => $new_file_name,
+                    'announcement_id' => $announcement_id,
+                    'size' => intval($file['size']),
+                ];
+
+                $insertId = Database::insert($tbl_announcement_attachment, $params);
+                if ($insertId) {
+                    $sql = "UPDATE $tbl_announcement_attachment SET id = iid WHERE iid = $insertId";
+                    Database::query($sql);
+                }
 
                 $return = 1;
             }

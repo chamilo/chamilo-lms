@@ -4,10 +4,9 @@
 </br>
 {{ 'Address'|get_lang }}  {{ _s.site_name }} {{ 'Is'|get_lang }} : {{ _p.web }}
 </br>
-{{ 'Problem'|get_lang}}</br>
+{{ 'Problem'|get_lang }}</br>
 {{ 'SignatureFormula'|get_lang }}</br>
 {{ _admin.name }} {{ _admin.surname }}
 {{ 'Manager'|get_lang }} {{ _s.site_name }}
-T. {{ _admin.telephone }}
-</br>
-{{ 'Email'|get_lang }} : {{ _admin.email }}
+{{ _admin.telephone ? 'T. ' ~ _admin.telephone ~ '<br>' }}
+{{ _admin.email ? 'Email'|get_lang ~ ': ' ~ _admin.email }}

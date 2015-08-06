@@ -47,7 +47,7 @@ $recommendedNumberOfParticipants->save(array(
 
 $place = new ExtraField('session');
 $place->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'field_type' => ExtraField::FIELD_TYPE_ALPHANUMERIC,
     'variable' => 'place',
     'display_text' => get_lang('Place'),
     'visible' => 1,
@@ -108,7 +108,7 @@ $isOpenSession->save(array(
 
 $duration = new ExtraField('session');
 $duration->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'field_type' => ExtraField::FIELD_TYPE_LETTERS_ONLY,
     'variable' => 'human_text_duration',
     'display_text' => get_lang('DurationInWords'),
     'visible' => 1,

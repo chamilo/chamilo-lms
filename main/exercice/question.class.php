@@ -380,10 +380,7 @@ abstract class Question
                 $res = Database::query($sql);
                 $row = Database::fetch_array($res);
                 if ($row['nb'] > 0) {
-                    //DO nothing
-                    //$sql = "UPDATE $TBL_QUESTION_REL_CATEGORY SET category_id = $category_id
-                    //WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
-                    //$res = Database::query($sql);
+                    // DO nothing
                 } else {
                     $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id)
                             VALUES (" . api_get_course_int_id() . ", $question_id, $category_id)";
@@ -910,13 +907,6 @@ abstract class Question
 
         // if the question is created in an exercise
         if ($exerciseId) {
-            /*
-            $sql = 'UPDATE '.Database::get_course_table(TABLE_LP_ITEM).'
-                    SET max_score = '.intval($weighting).'
-                    WHERE item_type = "'.TOOL_QUIZ.'"
-                    AND path='.intval($exerciseId);
-            Database::query($sql);
-            */
             // adds the exercise into the exercise list of this question
             $this->addToList($exerciseId, TRUE);
         }

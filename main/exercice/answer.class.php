@@ -622,19 +622,6 @@ class Answer
             }
         }
 
-        /*if (!empty($answerList)) {
-            foreach ($answerList as $autoId => $counterId) {
-                $sql = "UPDATE $answerTable SET answer = $autoId
-                        WHERE
-                            answer = $counterId AND
-                            c_id = $c_id AND
-                            question_id = $questionId
-                        ";
-
-                Database::query($sql);
-            }
-        }*/
-
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers + 1;
             while ($this->position[$i]) {

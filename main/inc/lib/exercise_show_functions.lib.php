@@ -25,7 +25,7 @@ class ExerciseShowFunctions
      * @param int $resultsDisabled
 	 * @return void
 	 */
-	static function display_fill_in_blanks_answer($feedbackType, $answer, $id, $questionId, $resultsDisabled)
+	public static function display_fill_in_blanks_answer($feedbackType, $answer, $id, $questionId, $resultsDisabled)
     {
         $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $resultsDisabled);
         if (empty($id)) {
@@ -154,7 +154,8 @@ class ExerciseShowFunctions
 	 * @param string $studentChoice
 	 * @param string $answerComment
 	 */
-	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment, $in_results_disabled) {
+	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment, $in_results_disabled)
+	 {
         $hide_expected_answer = false;
         if ($feedback_type == 0 && $in_results_disabled == 2) {
             $hide_expected_answer = true;

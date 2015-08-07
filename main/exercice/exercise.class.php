@@ -3140,7 +3140,7 @@ class Exercise
                             //}
                         } elseif ($answerType == FILL_IN_BLANKS) {
                             //if ($origin!='learnpath') {
-                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,0,0);
+                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,0,0, $results_disabled);
                             //	}
                         } elseif ($answerType == CALCULATED_ANSWER) {
                             //if ($origin!='learnpath') {
@@ -3460,7 +3460,8 @@ class Exercise
                                 $feedback_type,
                                 $answer,
                                 $exeId,
-                                $questionId
+                                $questionId,
+                                $results_disabled
                             );
                             break;
                         case CALCULATED_ANSWER:

@@ -772,18 +772,23 @@ abstract class Question
 
         // question already exists
         if(!empty($id)) {
-            $sql = "UPDATE $TBL_QUESTIONS
-                    SET
-                        question = '" . Database::escape_string($question) . "',
-                        description = '" . Database::escape_string($description) . "',
-                        ponderation = '" . Database::escape_string($weighting) . "',
-                        position = '" . Database::escape_string($position) . "',
-                        type = '" . Database::escape_string($type) . "',
-                        picture = '" . Database::escape_string($picture) . "',
-                        extra = '" . Database::escape_string($extra) . "',
-                        level = '" . Database::escape_string($level) . "'
-                    WHERE c_id = $c_id  AND id = " . intval($id);
-            Database::query($sql);
+
+            $params = [
+                'question' => $question,
+                'description' => $description,
+                'ponderation' => $weighting,
+                'position' => $position,
+                'type' => $type,
+                'picture' => $picture,
+                'extra' => $extra,
+                'level' => $level,
+            ];
+
+            Database::update(
+                $TBL_QUESTIONS,
+                $params,
+                ['c_id = ? AND id = ?' => [$c_id, $id]]
+            );
             $this->saveCategory($category);
 
             if (!empty($exerciseId)) {
@@ -831,6 +836,7 @@ abstract class Question
                 'extra' => $extra,
                 'level' => $level
             ];
+
             $this->id = Database::insert($TBL_QUESTIONS, $params);
 
             if ($this->id) {

@@ -578,7 +578,7 @@ class Answer
                 ];
                 $autoId = Database::insert($answerTable, $params);
                 if ($autoId) {
-                    $sql = "UPDATE $answerTable SET id = id_auto WHERE id_auto = $autoId";
+                    $sql = "UPDATE $answerTable SET id = iid, id_auto = iid WHERE iid = $autoId";
                     Database::query($sql);
                 }
             } else {

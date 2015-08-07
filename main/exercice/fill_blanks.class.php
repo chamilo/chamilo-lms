@@ -23,22 +23,22 @@ class FillBlanks extends Question
     public function __construct()
     {
         parent::__construct();
-        $this -> type = FILL_IN_BLANKS;
-        $this -> isContent = $this-> getIsContent();
+        $this->type = FILL_IN_BLANKS;
+        $this->isContent = $this->getIsContent();
     }
 
     /**
      * function which redefines Question::createAnswersForm
-     * @param the formvalidator instance
+     * @param FormValidator $form
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         $fillBlanksAllowedSeparator = self::getAllowedSeparator();
 
         $defaults = array();
 
         if (!empty($this->id)) {
-            $objectAnswer = new answer($this->id);
+            $objectAnswer = new Answer($this->id);
             $answer = $objectAnswer->selectAnswer(1);
             $listAnswersInfo = FillBlanks::getAnswerInfo($answer);
 
@@ -69,7 +69,6 @@ class FillBlanks extends Question
                 $setValues .= 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
             }
         }
-
         // javascript
         echo '<script>
 
@@ -78,23 +77,21 @@ class FillBlanks extends Question
             var blankSeparatortStartRegexp = getBlankSeparatorRegexp(blankSeparatortStart);
             var blankSeparatortEndRegexp = getBlankSeparatorRegexp(blankSeparatortEnd);
 
-            function FCKeditor_OnComplete( editorInstance ) {
-                if (window.attachEvent) {
-                    editorInstance.EditorDocument.attachEvent("onkeyup", updateBlanks) ;
-                } else {
-                    editorInstance.EditorDocument.addEventListener("keyup",updateBlanks,true);
+            CKEDITOR.on("instanceCreated", function(e) {
+                if (e.editor.name === "answer") {
+                    e.editor.on("change", updateBlanks);
                 }
-            }
+            });
 
             var firstTime = true;
 
-            function updateBlanks() {
+            function updateBlanks()
+            {
                 if (firstTime) {
                     var field = document.getElementById("answer");
                     var answer = field.value;
                 } else {
-                    var oEditor = FCKeditorAPI.GetInstance("answer");
-                    var answer = oEditor.EditorDocument.body.innerHTML;
+                    var answer = CKEDITOR.instances["answer"].getData();
                 }
 
                 // disable the save button, if not blanks have been created
@@ -104,12 +101,11 @@ class FillBlanks extends Question
                 var blanksRegexp = "/"+blankSeparatortStartRegexp+"[^"+blankSeparatortStartRegexp+"]*"+blankSeparatortEndRegexp+"/g";
 
                 var blanks = answer.match(eval(blanksRegexp));
-                var fields = "<div class=\"control-group\">";
-                fields += "<label class=\"control-label\">'.get_lang('Weighting').'</label>";
-                fields += "<div class=\"controls\">";
+                var fields = "<div class=\"form-group \">";
+                fields += "<label class=\"col-sm-2 control-label\">'.get_lang('Weighting').'</label>";
+                fields += "<div class=\"col-sm-8\">";
                 fields += "<table>";
                 fields += "<tr><th style=\"padding:0 20px\">'.get_lang("WordTofind").'</th><th style=\"padding:0 20px\">'.get_lang("QuestionWeighting").'</th><th style=\"padding:0 20px\">'.get_lang("BlankInputSize").'</th></tr>";
-
 
                 if (blanks != null) {
                     for (var i=0 ; i < blanks.length ; i++){
@@ -135,7 +131,7 @@ class FillBlanks extends Question
                         }
                         fields += "<tr>";
                         fields += "<td>"+blanks[i]+"</td>";
-                        fields += "<td><input style=\"width:20px\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td>";
+                        fields += "<td><input style=\"width:35px\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td>";
                         fields += "<td>";
                         fields += "<input type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">";
                         fields += "<input type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">";
@@ -151,21 +147,24 @@ class FillBlanks extends Question
                 document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";
                 if (firstTime) {
                     firstTime = false;
-            ';
+                ';
 
-        if (count($listAnswersInfo["tabweighting"]) > 0) {
+        if (isset($listAnswersInfo) && count($listAnswersInfo["tabweighting"]) > 0) {
+
             foreach ($listAnswersInfo["tabweighting"] as $i => $weighting) {
-                echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
+                if (!empty($i)) {
+                    echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
+                }
             }
             foreach ($listAnswersInfo["tabinputsize"] as $i => $sizeOfInput) {
-                echo 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
-                echo '$("#samplesize\\\['.$i.'\\\]").width('.$sizeOfInput.');';
+                if (!empty($i)) {
+                    echo 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
+                    echo '$("#samplesize\\\['.$i.'\\\]").width('.$sizeOfInput.');';
+                }
             }
         }
-        echo '}
-            ';
 
-        echo '
+        echo '}
             }
             window.onload = updateBlanks;
 
@@ -257,26 +256,32 @@ class FillBlanks extends Question
         </script>';
 
         // answer
-        $form->addElement ('label', null, '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'));
-        $form->addElement ('html_editor', 'answer', '<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
-        $form -> addRule ('answer',get_lang('GiveText'),'required');
+        $form->addElement('label', null, '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'));
+        $form->addElement(
+            'html_editor',
+            'answer',
+            '<img src="../img/fill_field.png">',
+            ['id' => 'answer', 'onkeyup' => "javascript: updateBlanks(this);"],
+            array('ToolbarSet' => 'TestQuestionDescription')
+        );
+        $form->addRule('answer',get_lang('GiveText'),'required');
 
         //added multiple answers
-        $form->addElement ('checkbox','multiple_answer','', get_lang('FillInBlankSwitchable'));
+        $form->addElement('checkbox','multiple_answer','', get_lang('FillInBlankSwitchable'));
         $form->addElement('select', 'select_separator', get_lang("SelectFillTheBlankSeparator"), self::getAllowedSeparatorForSelect(), ' id="select_separator"   style="width:150px" onchange="changeBlankSeparator()" ');
-        $form->addElement ('label', null, '<input type="button" onclick="updateBlanks()" value="'.get_lang('RefreshBlanks').'" class="btn" />');
+        $form->addElement('label', null, '<input type="button" onclick="updateBlanks()" value="'.get_lang('RefreshBlanks').'" class="btn" />');
         $form->addElement('html','<div id="blanks_weighting"></div>');
 
-        global $text, $class;
+        global $text;
         // setting the save button here and not in the question class.php
         $form->addElement('html','<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
-        $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+        $form->addButtonSave($text, 'submitQuestion');
 
-        if (!empty($this -> id)) {
-            $form -> setDefaults($defaults);
+        if (!empty($this->id)) {
+            $form->setDefaults($defaults);
         } else {
-            if ($this -> isContent == 1) {
-                $form -> setDefaults($defaults);
+            if ($this->isContent == 1) {
+                $form->setDefaults($defaults);
             }
         }
     }
@@ -318,15 +323,20 @@ class FillBlanks extends Question
                 // remove forbidden chars
                 $matchingResult = str_replace("/\\/", "", $matchingResult);
                 $matchingResult = str_replace('/"/', "", $matchingResult);
+
                 return $blankStartSeparator.$matchingResult.$blankEndSeparator;
             },
             $answer
         );
 
         // get the blanks weightings
-        $nb = preg_match_all('/'.$blankStartSeparatorRegexp.'[^'.$blankStartSeparatorRegexp.']*'.$blankEndSeparatorRegexp.'/', $answer, $blanks);
+        $nb = preg_match_all(
+            '/'.$blankStartSeparatorRegexp.'[^'.$blankStartSeparatorRegexp.']*'.$blankEndSeparatorRegexp.'/',
+            $answer,
+            $blanks
+        );
         if (isset($_GET['editQuestion'])) {
-            $this -> weighting = 0;
+            $this->weighting = 0;
         }
 
         /* if we have some [tobefound] in the text
@@ -356,7 +366,7 @@ class FillBlanks extends Question
                 if ($i != $nb - 1) {
                     $answer .= ",";
                 }
-                // calculate the global weightning for the question
+                // calculate the global weighting for the question
                 $this -> weighting += $form->getSubmitValue('weighting['.$i.']');
             }
 
@@ -387,10 +397,10 @@ class FillBlanks extends Question
 
         // Allow answers order switches
         $is_multiple = $form -> getSubmitValue('multiple_answer');
-        $answer.='@'.$is_multiple;
+        $answer.= '@'.$is_multiple;
 
-        $this -> save();
-        $objAnswer = new answer($this->id);
+        $this->save();
+        $objAnswer = new Answer($this->id);
         $objAnswer->createAnswer($answer, 0, '', 0, 1);
         $objAnswer->save();
     }
@@ -423,8 +433,18 @@ class FillBlanks extends Question
      * @param $displayForStudent
      * @return string
      */
-    public static function getFillTheBlankHtml($separatorStartRegexp, $separatorEndRegexp, $correctItemRegexp, $questionId, $correctItem, $attributes, $answer, $listAnswersInfo, $displayForStudent, $inBlankNumber)
-    {
+    public static function getFillTheBlankHtml(
+        $separatorStartRegexp,
+        $separatorEndRegexp,
+        $correctItemRegexp,
+        $questionId,
+        $correctItem,
+        $attributes,
+        $answer,
+        $listAnswersInfo,
+        $displayForStudent,
+        $inBlankNumber
+    ) {
         $result = "";
         $inTabTeacherSolution = $listAnswersInfo['tabwords'];
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
@@ -554,8 +574,9 @@ class FillBlanks extends Question
 
     /**
      * Return information about the answer
-     * @param string $answer : the text of the answer of the question
-     * @param bool $inIsStudentAnswer : true if it is a student answer and not the empty question model
+     * @param string $userAnswer : the text of the answer of the question
+     * @param bool $isStudentAnswer : true if it is a student answer and not the empty question model
+     *
      * @return array of information about the answer
      */
     public static function getAnswerInfo($userAnswer = "", $isStudentAnswer = false)
@@ -571,12 +592,13 @@ class FillBlanks extends Question
         $listAnswerResults['studentanswer'] = array();
         $listAnswerResults['studentscore'] = array();
         $listAnswerResults['blankseparatornumber'] = 0;
+        $listDoubleColon = array();
 
         api_preg_match("/(.*)::(.*)$/s", $userAnswer, $listResult);
 
         if (count($listResult) < 2) {
-            $listDoubleColon[] = $listResult;
-            $listDoubleColon[] = "";
+            $listDoubleColon[] = '';
+            $listDoubleColon[] = '';
         } else {
             $listDoubleColon[] = $listResult[1];
             $listDoubleColon[] = $listResult[2];
@@ -586,11 +608,12 @@ class FillBlanks extends Question
 
         //make sure we only take the last bit to find special marks
         $listArobaseSplit = explode('@', $listDoubleColon[1]);
+
         if (count($listArobaseSplit) < 2) {
             $listArobaseSplit[1] = "";
         }
 
-        //take the complete string except after the last '::'
+        // take the complete string except after the last '::'
         $listDetails = explode(":", $listArobaseSplit[0]);
 
         // < number of item after the ::[score]:[size]:[separator_id]@ , here there are 3
@@ -621,7 +644,12 @@ class FillBlanks extends Question
         $blankCharEndForRegexp = self::escapeForRegexp($blankCharEnd);
 
         // get all blanks words
-        $listAnswerResults['wordsCount'] = preg_match_all('/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/', $listDoubleColon[0], $listWords);
+        $listAnswerResults['wordsCount'] = preg_match_all(
+            '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
+            $listDoubleColon[0],
+            $listWords
+        );
+
         if ($listAnswerResults['wordsCount'] > 0) {
             $listAnswerResults['tabwordsbracket'] = $listWords[0];
             // remove [ and ] in string
@@ -640,7 +668,11 @@ class FillBlanks extends Question
         }
 
         // get all common words
-        $commonWords = preg_replace('/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/', "::", $listDoubleColon[0]);
+        $commonWords = preg_replace(
+            '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
+            "::",
+            $listDoubleColon[0]
+        );
 
         // if student answer, the second [] is the student answer, the third is if student scored or not
         $listBrackets = array();
@@ -649,11 +681,13 @@ class FillBlanks extends Question
             for ($i=0; $i < count($listAnswerResults['tabwords']); $i++) {
                 $listBrackets[] = $listAnswerResults['tabwordsbracket'][$i];
                 $listWords[] = $listAnswerResults['tabwords'][$i];
-                if ($i+1 < count($listAnswerResults['tabwords'])) {    // should always be
+                if ($i+1 < count($listAnswerResults['tabwords'])) {
+                    // should always be
                     $i++;
                 }
                 $listAnswerResults['studentanswer'][] = $listAnswerResults['tabwords'][$i];
-                if ($i+1 < count($listAnswerResults['tabwords'])) {    // should always be
+                if ($i+1 < count($listAnswerResults['tabwords'])) {
+                    // should always be
                     $i++;
                 }
                 $listAnswerResults['studentscore'][] = $listAnswerResults['tabwords'][$i];
@@ -820,12 +854,12 @@ class FillBlanks extends Question
 
         // rebuild the sentence with student answer inserted
         for ($i=0; $i < count($listStudentAnswerInfo['commonwords']); $i++) {
-            $result .= $listStudentAnswerInfo['commonwords'][$i];
-            $result .= $listStudentAnswerInfo['studentanswer'][$i];
+            $result .= isset($listStudentAnswerInfo['commonwords'][$i]) ? $listStudentAnswerInfo['commonwords'][$i] : '';
+            $result .= isset($listStudentAnswerInfo['studentanswer'][$i]) ? $listStudentAnswerInfo['studentanswer'][$i] : '';
         }
 
         // the last common word (should be </p>)
-        $result .= $listStudentAnswerInfo['commonwords'][$i];
+        $result .= isset($listStudentAnswerInfo['commonwords'][$i]) ? $listStudentAnswerInfo['commonwords'][$i] : '';
         return $result;
     }
 

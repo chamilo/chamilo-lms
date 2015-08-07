@@ -4459,10 +4459,12 @@ class CourseManager
 
         $result = Database::query($sql);
         $courses = array();
+
         if (Database::num_rows($result)) {
             $courses = Database::store_result($result, 'ASSOC');
             $courses = self::process_hot_course_item($courses, $my_course_code_list);
         }
+
         return $courses;
     }
 

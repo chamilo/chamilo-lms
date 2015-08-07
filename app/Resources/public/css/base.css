@@ -6138,9 +6138,30 @@ div#chat-remote-video video {
 .filler-report .filler-report-data-init{
   width: 60%;
 }
+#hot-course .items-course{
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  min-height: 350px;
+  margin-bottom: 10px;
+}
+#hot-course .items-course .items-course-info .title{
+  font-size: 14px;
+  min-height: 32px;
+}
+#hot-course .items-course .items-course-info .teachers{
+  font-size: 12px;
+  color: #666666;
+}
+#hot-course .items-course .items-course-info .ranking{
+  font-size: 10px;
+  color: #666666;
+}
 #whoisonline .items-user{
   text-align: center;
-  //border:1px solid #dddddd;
+  /*border:1px solid #dddddd; */
   padding: 15px;
   border-radius: 4px;
   -moz-border-radius: 4px;

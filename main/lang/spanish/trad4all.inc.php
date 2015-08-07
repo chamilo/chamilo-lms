@@ -7494,4 +7494,7 @@ $XTeam = "El equipo de %s";
 $YouCanStartSubscribingToCoursesEnteringToXUrl = "Puede empezar a suscribirse a los cursos ingresando a %s";
 $VideoUrl = "URL de vídeo";
 $AddAttachment = "Añadir archivo adjunto";
+$FieldTypeOnlyLetters = "Texto de letras solamente";
+$FieldTypeAlphanumeric = "Texto de caracteres alfanuméricos";
+$OnlyLetters = "Sólo letras";
 ?>

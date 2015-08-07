@@ -1741,7 +1741,13 @@ class Agenda
      */
     private function formatEventDate($utcTime)
     {
-        return date(DateTime::ISO8601, api_strtotime($utcTime));
+        $utcTimeZone = new DateTimeZone('UTC');
+        $platformTimeZone = new DateTimeZone(_api_get_timezone());
+        
+        $eventDate = new DateTime($utcTime, $utcTimeZone);
+        $eventDate->setTimezone($platformTimeZone);
+
+        return $eventDate->format(DateTime::ISO8601);
     }
 
     /**

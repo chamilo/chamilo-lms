@@ -802,31 +802,41 @@ class Exercise
                 $end_time = '0000-00-00 00:00:00';
             }
 
-            $sql = "UPDATE $TBL_EXERCISES SET
-				    title='".Database::escape_string($exercise)."',
-					description='".Database::escape_string($description)."'";
+            $params = [
+                'title' => $exercise,
+                'description' => $description,
+            ];
 
+            $paramsExtra = [];
             if ($type_e != 'simple') {
-                $sql .= ",sound='".Database::escape_string($sound)."',
-					type           = ".intval($type).",
-					random         = ".intval($random).",
-					random_answers = ".intval($random_answers).",
-					active         = ".intval($active).",
-					feedback_type  = ".intval($feedback_type).",
-					start_time     = '$start_time',
-					end_time       = '$end_time',
-					max_attempt    = ".intval($attempts).",
-     			    expired_time   = ".intval($expired_time).",
-         			propagate_neg  = ".intval($propagate_neg).",
-         			review_answers = ".intval($review_answers).",
-        	        random_by_category= ".intval($randomByCat).",
-        	        text_when_finished = '".Database::escape_string($text_when_finished)."',
-        	        display_category_name = ".intval($display_category_name).",
-                    pass_percentage = ".intval($pass_percentage).",
-					results_disabled= ".intval($results_disabled)."";
+                $paramsExtra = [
+                    'sound' => $sound,
+                    'type' => $type,
+                    'random' => $random,
+                    'random_answers' => $random_answers,
+                    'active' => $active,
+                    'feedback_type' => $feedback_type,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'max_attempt' => $attempts,
+                    'expired_time' => $expired_time,
+                    'propagate_neg' => $propagate_neg,
+                    'review_answers' => $review_answers,
+                    'random_by_category' => $randomByCat,
+                    'text_when_finished' => $text_when_finished,
+                    'display_category_name' => $display_category_name,
+                    'pass_percentage' => $pass_percentage,
+                    'results_disabled' => $results_disabled,
+                ];
             }
-            $sql .= " WHERE c_id = ".$this->course_id." AND id = ".intval($id)."";
-            Database::query($sql);
+
+            $params = array_merge($params, $paramsExtra);
+
+            Database::update(
+                $TBL_EXERCISES,
+                $params,
+                ['c_id = ? AND id = ?' => [$this->course_id, $id]]
+            );
 
             // update into the item_property table
             api_item_property_update(
@@ -849,13 +859,13 @@ class Exercise
             // the Quiz is saved too, with an $id and api_get_utc_datetime() is done.
             // If we do it now, it will be done twice (cf. https://support.chamilo.org/issues/6586)
             if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
-                $start_time = Database::escape_string($this->start_time);
+                $start_time = $this->start_time;
             } else {
                 $start_time = '0000-00-00 00:00:00';
             }
 
             if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
-                $end_time 	= Database::escape_string(($this->end_time));
+                $end_time = $this->end_time;
             } else {
                 $end_time = '0000-00-00 00:00:00';
             }

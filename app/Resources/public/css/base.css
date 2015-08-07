@@ -6159,6 +6159,15 @@ div#chat-remote-video video {
   font-size: 10px;
   color: #666666;
 }
+.hot-course-head{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.hot-course-head .hot-course-title{
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E5E5E5;
+  font-size: 21px;
+}
 #whoisonline .items-user{
   text-align: center;
   /*border:1px solid #dddddd; */

@@ -120,31 +120,38 @@ class Dropbox_Work
 		if ($this->isOldWork) {
 			$this->id = $res['id'];
 			$this->upload_date = $res['upload_date'];
-		    $sql = "UPDATE ".$dropbox_cnf["tbl_file"]." SET
-					filesize			= '".intval($this->filesize)."' ,
-					title 				= '".Database::escape_string($this->title)."',
-					description 		= '".Database::escape_string($this->description)."',
-					author 				= '".Database::escape_string($this->author)."',
-					last_upload_date 	= '".Database::escape_string($this->last_upload_date)."'
-					WHERE c_id = $course_id AND id = ".intval($this->id)."";
-			Database::query($sql);
+
+            $params = [
+                'filesize' => $this->filesize,
+                'title' => $this->title,
+                'description' => $this->description,
+                'author' => $this->author,
+                'last_upload_date' => $this->last_upload_date,
+                'session_id' => api_get_session_id(),
+            ];
+
+            Database::update(
+                $dropbox_cnf['tbl_file'],
+                $params,
+                ['c_id = ? AND id = ?' => [$course_id, $this->id]]
+            );
+
 		} else {
 			$this->upload_date = $this->last_upload_date;
-			$sql = "INSERT INTO ".$dropbox_cnf['tbl_file']." (c_id, uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, session_id)
-				VALUES ( $course_id,
-						'".intval($this->uploader_id)."'
-						, '".Database::escape_string($this->filename)."'
-						, '".intval($this->filesize)."'
-						, '".Database::escape_string($this->title)."'
-						, '".Database::escape_string($this->description)."'
-						, '".Database::escape_string($this->author)."'
-						, '".Database::escape_string($this->upload_date)."'
-						, '".Database::escape_string($this->last_upload_date)."'
-						, ".api_get_session_id()."
-						)";
+			$params = [
+                'c_id' => $course_id,
+                'uploader_id' => $this->uploader_id,
+                'filename' => $this->filename,
+                'filesize' => $this->filesize,
+                'title' => $this->title,
+                'description' => $this->description,
+                'author' => $this->author,
+                'upload_date' => $this->upload_date,
+                'last_upload_date' => $this->last_upload_date,
+                'session_id' => api_get_session_id(),
+			];
+			$this->id = Database::insert($dropbox_cnf['tbl_file'], $params);
 
-        	Database::query($sql);
-			$this->id = Database::insert_id(); // Get automatically inserted id
 			if ($this->id) {
 				$sql = "UPDATE ".$dropbox_cnf['tbl_file']." SET id = iid WHERE iid = {$this->id}";
 				Database::query($sql);
@@ -162,11 +169,6 @@ class Dropbox_Work
             $sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (c_id, file_id, user_id)
                     VALUES ($course_id, ".intval($this->id)." , ".intval($this->uploader_id).")";
             Database::query($sql);
-			/*$id = Database::insert_id();
-			if ($id) {
-				$sql = "UPDATE ".$dropbox_cnf['tbl_person']." SET id = iid WHERE iid = {$this->id}";
-				Database::query($sql);
-			}*/
         }
 	}
 
@@ -312,7 +314,7 @@ class Dropbox_SentWork extends Dropbox_Work
             $user_id = (int)$rec['id'];
 			$sql = "INSERT INTO $table_post (c_id, file_id, dest_user_id, session_id)
                     VALUES ($course_id, $file_id, $user_id, $session_id)";
-	        $result = Database::query($sql);
+	        Database::query($sql);
             // If work already exists no error is generated
 
             /**
@@ -325,7 +327,7 @@ class Dropbox_SentWork extends Dropbox_Work
 
                 // Do not add recipient in person table if mailing zip or just upload.
                 if (!$justSubmit) {
-                    $result = Database::query($sql);	// If work already exists no error is generated
+                    Database::query($sql);	// If work already exists no error is generated
                 }
             }
 
@@ -336,7 +338,15 @@ class Dropbox_SentWork extends Dropbox_Work
 			if (($recipid = $rec["id"]) > $dropbox_cnf['mailingIdBase']) {
 			    $recipid = $ownerid;  // mailing file recipient = mailing id, not a person
 			}
-			api_item_property_update($_course, TOOL_DROPBOX, $this->id, 'DropboxFileAdded', $ownerid, null, $recipid) ;
+            api_item_property_update(
+                $_course,
+                TOOL_DROPBOX,
+                $this->id,
+                'DropboxFileAdded',
+                $ownerid,
+                null,
+                $recipid
+            );
 		}
 	}
 
@@ -660,7 +670,8 @@ class Dropbox_Person
 		}
 		//$file_id = $this->sentWork[$index]->id;
 		// Delete entries in person table concerning sent works
-        $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$id."'";
+        $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']."
+                WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$id."'";
 		Database::query($sql);
 		removeMoreIfMailing($id);
 		removeUnusedFiles();	// Check for unused files
@@ -694,13 +705,25 @@ class Dropbox_Person
 			die(get_lang('GeneralError').' (code 221)');
 		}
 
-		$feedback_date = date('Y-m-d H:i:s', time());
+		$feedback_date = api_get_utc_datetime();
 		$this->receivedWork[$wi]->feedback_date = $feedback_date;
 		$this->receivedWork[$wi]->feedback = $text;
 
-		Database::query("UPDATE ".$dropbox_cnf['tbl_post']." SET feedback_date='".
-		    Database::escape_string($feedback_date)."', feedback='".Database::escape_string($text).
-		    "' WHERE c_id = $course_id AND dest_user_id='".$this->userId."' AND file_id='".$id."'");
+        $params = [
+            'feedback_date' => $feedback_date,
+            'feedback' => $text,
+        ];
+        Database::update(
+            $dropbox_cnf['tbl_post'],
+            $params,
+            [
+                'c_id = ? AND dest_user_id = ? AND file_id = ?' => [
+                    $course_id,
+                    $this->userId,
+                    $id,
+                ],
+            ]
+        );
 
 		// Update item_property table
 

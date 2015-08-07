@@ -1741,7 +1741,7 @@ class Agenda
      */
     private function formatEventDate($utcTime)
     {
-        return date(DateTime::ISO8601, api_strtotime(api_get_local_time($utcTime)));
+        return date(DateTime::ISO8601, api_strtotime($utcTime));
     }
 
     /**

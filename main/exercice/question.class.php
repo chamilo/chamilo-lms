@@ -1707,7 +1707,7 @@ abstract class Question
 
         $header .= Display::page_subheader2($counter_label . ". " . $question_title);
         $header .= Display::div(
-            "<div class=\"rib rib-$class\"><h3>$score_label'</h3></div> <h4>{$score['result']}</h4>",
+            "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4>{$score['result']}</h4>",
             array('class' => 'ribbon')
         );
         $header .= Display::div($this->description, array('id' => 'question_description'));

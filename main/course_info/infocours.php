@@ -479,27 +479,24 @@ if ($form->validate() && is_settings_editable()) {
         'activate_legal'
     );
 
-    foreach ($updateValues as $index =>$value) {
-        $updateValues[$index] = Database::escape_string($value);
-    }
-
     $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : '';
-
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $sql = "UPDATE $table_course SET
-        title 				    = '".$updateValues['title']."',
-        course_language 	    = '".$updateValues['course_language']."',
-        category_code 		    = '".$updateValues['category_code']."',
-        department_name  	    = '".$updateValues['department_name']."',
-        department_url  	    = '".$updateValues['department_url']."',
-        visibility  		    = '".$updateValues['visibility']."',
-        subscribe  			    = '".$updateValues['subscribe']."',
-        unsubscribe  		    = '".$updateValues['unsubscribe']."',
-        legal                   = '".$updateValues['legal']."',
-        activate_legal          = '".$activeLegal."',
-        registration_code 	    = '".$updateValues['course_registration_password']."'
-        WHERE id = $courseId";
-    Database::query($sql);
+
+    $params = [
+        'title' => $updateValues['title'],
+        'course_language' => $updateValues['course_language'],
+        'category_code' => $updateValues['category_code'],
+        'department_name' => $updateValues['department_name'],
+        'department_url' => $updateValues['department_url'],
+        'visibility' => $updateValues['visibility'],
+        'subscribe' => $updateValues['subscribe'],
+        'unsubscribe' => $updateValues['unsubscribe'],
+        'legal' => $updateValues['legal'],
+        'activate_legal' => $activeLegal,
+        'registration_code' => $updateValues['course_registration_password'],
+    ];
+
+    Database::update($table_course, $params, ['id = ?' => $courseId]);
 
     // Insert/Updates course_settings table
     foreach ($courseSettings as $setting) {

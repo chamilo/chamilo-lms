@@ -24,6 +24,6 @@ class Number extends HTML_QuickForm_text
 
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
-        $this->_type = 'number';
+        $this->setType('number');
     }
 }

@@ -380,10 +380,7 @@ abstract class Question
                 $res = Database::query($sql);
                 $row = Database::fetch_array($res);
                 if ($row['nb'] > 0) {
-                    //DO nothing
-                    //$sql = "UPDATE $TBL_QUESTION_REL_CATEGORY SET category_id = $category_id
-                    //WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
-                    //$res = Database::query($sql);
+                    // DO nothing
                 } else {
                     $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id)
                             VALUES (" . api_get_course_int_id() . ", $question_id, $category_id)";
@@ -775,18 +772,23 @@ abstract class Question
 
         // question already exists
         if(!empty($id)) {
-            $sql = "UPDATE $TBL_QUESTIONS
-                    SET
-                        question = '" . Database::escape_string($question) . "',
-                        description = '" . Database::escape_string($description) . "',
-                        ponderation = '" . Database::escape_string($weighting) . "',
-                        position = '" . Database::escape_string($position) . "',
-                        type = '" . Database::escape_string($type) . "',
-                        picture = '" . Database::escape_string($picture) . "',
-                        extra = '" . Database::escape_string($extra) . "',
-                        level = '" . Database::escape_string($level) . "'
-                    WHERE c_id = $c_id  AND id = " . intval($id);
-            Database::query($sql);
+
+            $params = [
+                'question' => $question,
+                'description' => $description,
+                'ponderation' => $weighting,
+                'position' => $position,
+                'type' => $type,
+                'picture' => $picture,
+                'extra' => $extra,
+                'level' => $level,
+            ];
+
+            Database::update(
+                $TBL_QUESTIONS,
+                $params,
+                ['c_id = ? AND id = ?' => [$c_id, $id]]
+            );
             $this->saveCategory($category);
 
             if (!empty($exerciseId)) {
@@ -834,6 +836,7 @@ abstract class Question
                 'extra' => $extra,
                 'level' => $level
             ];
+
             $this->id = Database::insert($TBL_QUESTIONS, $params);
 
             if ($this->id) {
@@ -910,13 +913,6 @@ abstract class Question
 
         // if the question is created in an exercise
         if ($exerciseId) {
-            /*
-            $sql = 'UPDATE '.Database::get_course_table(TABLE_LP_ITEM).'
-                    SET max_score = '.intval($weighting).'
-                    WHERE item_type = "'.TOOL_QUIZ.'"
-                    AND path='.intval($exerciseId);
-            Database::query($sql);
-            */
             // adds the exercise into the exercise list of this question
             $this->addToList($exerciseId, TRUE);
         }
@@ -1711,7 +1707,7 @@ abstract class Question
 
         $header .= Display::page_subheader2($counter_label . ". " . $question_title);
         $header .= Display::div(
-            "<div class=\"rib rib-$class\"><h3>$score_label'</h3></div> <h4>{$score['result']}</h4>",
+            "<div class=\"rib rib-$class\"><h3>$score_label</h3></div> <h4>{$score['result']}</h4>",
             array('class' => 'ribbon')
         );
         $header .= Display::div($this->description, array('id' => 'question_description'));

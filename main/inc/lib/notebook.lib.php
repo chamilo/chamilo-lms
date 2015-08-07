@@ -118,32 +118,48 @@ class NotebookManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    static function update_note($values) {
+    static function update_note($values)
+    {
         if (!is_array($values) or empty($values['note_title'])) {
             return false;
         }
         // Database table definition
-        $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
+        $table = Database :: get_course_table(TABLE_NOTEBOOK);
 
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        $sql = "UPDATE $t_notebook SET
-					user_id = '" . api_get_user_id() . "',
-					course = '" . Database::escape_string(api_get_course_id()) . "',
-					session_id = '" . $sessionId . "',
-					title = '" . Database::escape_string($values['note_title']) . "',
-					description = '" . Database::escape_string($values['note_comment']) . "',
-					update_date = '" . Database::escape_string(date('Y-m-d H:i:s')) . "'
-				WHERE c_id = $course_id AND notebook_id = '" . Database::escape_string($values['notebook_id']) . "'";
-        $result = Database::query($sql);
-        $affected_rows = Database::affected_rows($result);
+        $params = [
+            'user_id' => api_get_user_id(),
+            'course' => api_get_course_id(),
+            'session_id' => $sessionId,
+            'title' => $values['note_title'],
+            'description' => $values['note_comment'],
+            'update_date' => api_get_utc_datetime(),
+        ];
 
-        //update item_property (update)
-        api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, $values['notebook_id'], 'NotebookUpdated', api_get_user_id());
-        if (!empty($affected_rows)) {
-            return true;
-        }
+        Database::update(
+            $table,
+            $params,
+            [
+                'c_id = ? AND notebook_id = ?' => [
+                    $course_id,
+                    $values['notebook_id'],
+                ],
+            ]
+        );
+
+        // update item_property (update)
+        api_item_property_update(
+            api_get_course_info(),
+            TOOL_NOTEBOOK,
+            $values['notebook_id'],
+            'NotebookUpdated',
+            api_get_user_id()
+        );
+
+        return true;
+
     }
 
     static function delete_note($notebook_id)
@@ -170,7 +186,6 @@ class NotebookManager
 
     static function display_notes()
     {
-
         global $_user;
         if (!isset($_GET['direction'])) {
             $sort_direction = 'ASC';

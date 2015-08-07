@@ -16,16 +16,18 @@ $id_session = intval($_GET['id_session']);
 SessionManager::protectSession($id_session);
 
 // setting breadcrumbs
-//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
-$interbreadcrumb[] = array('url' => 'resume_session.php?id_session='.Security::remove_XSS($_GET['id_session']),'name' => get_lang('SessionOverview'));
+$interbreadcrumb[] = array(
+    'url' => 'resume_session.php?id_session='.$id_session,
+    'name' => get_lang('SessionOverview'),
+);
 
 // Database Table Definitions
-$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
 $tool_name = get_lang('EditSessionCoursesByUser');
@@ -47,17 +49,16 @@ if (!api_is_platform_admin()) {
 }
 
 $formSent = 0;
-$errorMsg = $firstLetterCourse = $firstLetterSession = '';
 $CourseList = $SessionList = array();
 $courses = $sessions = array();
 $noPHP_SELF = true;
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
-    $CourseList = $_POST['SessionCoursesList'];
+    $CourseList = isset($_POST['SessionCoursesList']) ? ($_POST['SessionCoursesList']) : null;
 
     if (!is_array($CourseList)) {
-        $CourseList=array();
+        $CourseList = array();
     }
 
     $sql = "SELECT DISTINCT course.id
@@ -72,8 +73,16 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
     $rs = Database::query($sql);
     $existingCourses = Database::store_result($rs);
+
+    if (empty($CourseList) && empty($existingCourses)) {
+        Display::addFlash(Display::return_message(get_lang('NoCoursesForThisSession'), 'warning'));
+        header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user);
+        exit;
+    }
+
     if (count($CourseList) == count($existingCourses)) {
-        header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user.'&msg='.get_lang('MaybeYouWantToDeleteThisUserFromSession'));
+        Display::addFlash(Display::return_message(get_lang('MaybeYouWantToDeleteThisUserFromSession')));
+        header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user);
         exit;
     }
 
@@ -85,16 +94,17 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             }
         }
 
-        if(!$exists) {
+        if (!$exists) {
             $enreg_course = Database::escape_string($enreg_course);
-            $sql_delete = "DELETE FROM $tbl_session_rel_course_rel_user
-						   WHERE user_id = '".$id_user."' AND c_id='".$enreg_course."' AND session_id=$id_session";
-            $result = Database::query($sql_delete);
+            $sql = "DELETE FROM $tbl_session_rel_course_rel_user
+                    WHERE user_id = '".$id_user."' AND c_id='".$enreg_course."' AND session_id=$id_session";
+            $result = Database::query($sql);
             if (Database::affected_rows($result)) {
                 //update session rel course table
-                $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1
-                                WHERE session_id='$id_session' AND c_id = '$enreg_course'";
-                Database::query($sql_update);
+                $sql = "UPDATE $tbl_session_rel_course
+                        SET nbr_users= nbr_users - 1
+                        WHERE session_id='$id_session' AND c_id = '$enreg_course'";
+                Database::query($sql);
             }
         }
     }
@@ -102,27 +112,25 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     foreach ($existingCourses as $existingCourse) {
         if (!in_array($existingCourse['id'], $CourseList)){
             $existingCourse = Database::escape_string($existingCourse['id']);
-            $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id,c_id,user_id)
+            $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id,c_id,user_id)
                     VALUES ('$id_session','$existingCourse','$id_user')";
             $result = Database::query($sql);
             if (Database::affected_rows($result)) {
                 //update session rel course table
-                $sql  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users + 1
-                         WHERE session_id='$id_session' AND c_id = '$existingCourse'";
+                $sql = "UPDATE $tbl_session_rel_course
+                        SET nbr_users= nbr_users + 1
+                        WHERE session_id='$id_session' AND c_id = '$existingCourse'";
                 Database::query($sql);
             }
         }
     }
-    header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user.'&msg='.get_lang('CoursesUpdated'));
+    Display::addFlash(Display::return_message(get_lang('CoursesUpdated')));
+
+    header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user);
     exit;
 }
 
-// display the dokeos header
 Display::display_header($tool_name);
-
-if (!empty($_GET['msg'])) {
-    Display::display_normal_message(urldecode($_GET['msg']));
-}
 
 // the form header
 $session_info = SessionManager::fetch($id_session);
@@ -142,8 +150,8 @@ $sql_all="SELECT course.id, code, title, visual_code, src.session_id
         FROM $tbl_course course
         INNER JOIN $tbl_session_rel_course  as src
         ON course.id = src.c_id AND session_id = $id_session";
-$result=Database::query($sql);
-$Courses=Database::store_result($result);
+$result = Database::query($sql);
+$Courses = Database::store_result($result);
 
 $result = Database::query($sql_all);
 $CoursesAll = Database::store_result($result);
@@ -153,25 +161,18 @@ foreach ($Courses as $course) {
     $course_temp[] = $course['id'];
 }
 
-foreach($CoursesAll as $course) {
+foreach ($CoursesAll as $course) {
     if (in_array($course['id'], $course_temp)) {
         $nosessionCourses[$course['id']] = $course ;
     } else {
         $sessionCourses[$course['id']] = $course ;
     }
 }
-
 unset($Courses);
 ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id_user=<?php echo $id_user; ?>&id_session=<?php echo $id_session; ?>" style="margin:0px;">
     <input type="hidden" name="formSent" value="1" />
-
-    <?php
-    if(!empty($errorMsg)) {
-        Display::display_normal_message($errorMsg); //main API
-    }
-    ?>
     <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
         <tr>
             <td width="45%" align="center"><b><?php echo get_lang('CurrentCourses') ?> :</b></td>
@@ -188,7 +189,7 @@ unset($Courses);
                             <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
                         <?php
                         }
-                        ?>  </select></div> <?php
+                        ?> </select></div> <?php
                 unset($nosessionCourses);
                 ?>
 
@@ -203,7 +204,8 @@ unset($Courses);
                 </button>
                 <br /><br /><br /><br /><br /><br />
                 <?php
-                echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('EditSessionCourses').'</button>';
+                echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.
+                    get_lang('EditSessionCourses').'</button>';
                 ?>
             </td>
             <td width="45%" align="center">

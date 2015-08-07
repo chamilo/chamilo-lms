@@ -1087,43 +1087,11 @@ class AddCourse
                 'calification_notebook_title' => '',
                 'numeric_calification' => '',
                 'weight_calification' => '',
-                'forum_category' => $forumCategoryId
+                'forum_category' => $forumCategoryId,
+                'thread_peer_qualify' => 0,
             ];
 
             store_thread($forumInfo, $params, $courseInfo, false);
-
-
-            /*Database::query(
-                "INSERT INTO $TABLEFORUMS (c_id, forum_title, forum_comment, forum_threads,forum_posts,forum_last_post,forum_category, allow_anonymous, allow_edit,allow_attachments, allow_new_threads,default_view,forum_of_group,forum_group_public_private, forum_order,locked,session_id )
-                 VALUES ($course_id, '" . self::lang2db(
-                    get_lang('ExampleForum')
-                ) . "', '', 0, 0, 0, 1, 0, 1, '0', 1, 'flat','0', 'public', 1, 0,0)"
-            );
-            $insert_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                             VALUES ($course_id, '" . TOOL_FORUM . "', 1,'$now','$now',$insert_id,'ForumAdded',1,0,NULL,1)"
-            );*/
-/*
-            Database::query(
-                "INSERT INTO $TABLEFORUMTHREADS (c_id, thread_id, thread_title, forum_id, thread_replies, thread_poster_id, thread_poster_name, thread_views, thread_last_post, thread_date, locked, thread_qualify_max, session_id)
-                            VALUES ($course_id, 1, '" . self::lang2db(
-                    get_lang('ExampleThread')
-                ) . "', 1, 0, 1, '', 0, 1, '$now', 0, 10, 0)"
-            );
-            $insert_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                            VALUES ($course_id, 'forum_thread',1,'$now','$now',$insert_id,'ForumThreadAdded',1,0,NULL,1)"
-            );
-
-            Database::query(
-                "INSERT INTO $TABLEFORUMPOSTS VALUES ($course_id, 1, '" . self::lang2db(
-                    get_lang('ExampleThread')
-                ) . "', '" . self::lang2db(
-                    get_lang('ExampleThreadContent')
-                ) . "', 1, 1, 1, '', '$now', 0, 0, 1)"
-            );*/
 
             /* Gradebook tool */
             $course_code = $courseInfo['code'];

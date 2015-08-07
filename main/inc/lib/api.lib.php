@@ -3018,15 +3018,15 @@ function api_display_tool_view_option() {
             // We have to remove the isStudentView=true from the $sourceurl
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-success btn-xs" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
+            $output_string .= '<a class="btn btn-success btn-xs" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('SwitchToTeacherView').'</a>';
         } elseif ($_SESSION['studentview'] == 'teacherview') {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-primary btn-xs" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+            $output_string .= '<a class="btn btn-primary btn-xs" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('SwitchToStudentView').'</a>';
         }
     } else {
-        $output_string .= '<a class="btn btn-primary btn-xs" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+        $output_string .= '<a class="btn btn-primary btn-xs" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('SwitchToStudentView').'</a>';
     }
     return $output_string;
 }

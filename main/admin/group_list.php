@@ -249,7 +249,8 @@ function lock_unlock_user($status, $user_id) {
     }
 
     if (($status_db == '1' OR $status_db == '0') AND is_numeric($user_id)) {
-        $sql = "UPDATE $user_table SET active=".intval($status_db)." WHERE user_id=".intval($user_id)."";
+        $sql = "UPDATE $user_table SET active=".intval($status_db)."
+                WHERE user_id=".intval($user_id)."";
         $result = Database::query($sql);
     }
 

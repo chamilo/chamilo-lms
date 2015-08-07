@@ -221,16 +221,20 @@ function store_move($id, $target, $part)
     if ((isset($id) AND $id != '') AND (isset($target) AND $target != '') AND (isset($part) AND $part != '')) {
 
         if ($part == 'received') {
-            $sql = "UPDATE ".$dropbox_cnf["tbl_post"]." SET cat_id = ".intval($target)."
-                        WHERE c_id = $course_id AND dest_user_id = ".intval($_user['user_id'])."
-                        AND file_id = ".intval($id)."";
+            $sql = "UPDATE ".$dropbox_cnf["tbl_post"]."
+                    SET cat_id = ".intval($target)."
+                    WHERE c_id = $course_id AND dest_user_id = ".intval($_user['user_id'])."
+                    AND file_id = ".intval($id)."";
             Database::query($sql);
             $return_message = get_lang('ReceivedFileMoved');
         }
         if ($part == 'sent') {
-            $sql = "UPDATE ".$dropbox_cnf["tbl_file"]." SET cat_id = ".intval($target)."
-                        WHERE c_id = $course_id AND uploader_id = ".intval($_user['user_id'])."
-                        AND id = ".intval($id)."";
+            $sql = "UPDATE ".$dropbox_cnf["tbl_file"]."
+                    SET cat_id = ".intval($target)."
+                    WHERE
+                        c_id = $course_id AND
+                        uploader_id = ".intval($_user['user_id'])." AND
+                        id = ".intval($id)."";
             Database::query($sql);
             $return_message = get_lang('SentFileMoved');
         }
@@ -380,23 +384,56 @@ function store_addcategory()
     if (!$_POST['edit_id']) {
         $session_id = api_get_session_id();
         // step 3a, we check if the category doesn't already exist
-        $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND user_id='".$_user['user_id']."' AND cat_name='".Database::escape_string($_POST['category_name'])."' AND received='".$received."' AND sent='$sent' AND session_id='$session_id'";
+        $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
+                WHERE
+                    c_id = $course_id AND
+                    user_id='".$_user['user_id']."' AND
+                    cat_name='".Database::escape_string($_POST['category_name'])."' AND
+                    received='".$received."' AND
+                    sent='$sent' AND
+                    session_id='$session_id'";
         $result = Database::query($sql);
 
         // step 3b, we add the category if it does not exist yet.
         if (Database::num_rows($result) == 0) {
-            $sql = "INSERT INTO ".$dropbox_cnf['tbl_category']." (c_id, cat_name, received, sent, user_id, session_id)
-                    VALUES ($course_id, '".Database::escape_string($_POST['category_name'])."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', ".intval($_user['user_id']).", $session_id)";
-            Database::query($sql);
+            $params = [
+                'c_id' => $course_id,
+                'cat_name' => $_POST['category_name'],
+                'received' => $received,
+                'sent' => $sent,
+                'user_id' => $_user['user_id'],
+                'session_id' => $session_id,
+            ];
+            $id = Database::insert($dropbox_cnf['tbl_category'], $params);
+            if ($id) {
+                $sql = "UPDATE ".$dropbox_cnf['tbl_category']." SET cat_id = iid WHERE iid = $id";
+                Database::query($sql);
+            }
+
             return array('type' => 'confirmation', 'message' => get_lang('CategoryStored'));
         } else {
             return array('type' => 'error', 'message' => get_lang('CategoryAlreadyExistsEditIt'));
         }
     } else {
-        $sql = "UPDATE ".$dropbox_cnf['tbl_category']." SET cat_name='".Database::escape_string($_POST['category_name'])."', received='".Database::escape_string($received)."' , sent='".Database::escape_string($sent)."'
-                WHERE c_id = $course_id AND user_id = ".intval($_user['user_id'])."
-                AND cat_id = ".intval($_POST['edit_id'])."";
-        Database::query($sql);
+
+        $params = [
+            'cat_name' => $_POST['category_name'],
+            'received' => $received,
+            'sent' => $sent
+        ];
+
+        Database::update(
+            $dropbox_cnf['tbl_category'],
+            $params,
+            [
+                'c_id = ? AND user_id = ? AND cat_id = ?' => [
+                    $course_id,
+                    $_user['user_id'],
+                    $_POST['edit_id'],
+                ],
+            ]
+        );
+
         return array('type' => 'confirmation', 'message' => get_lang('CategoryModified'));
     }
 }
@@ -420,11 +457,15 @@ function display_addcategory_form($category_name = '', $id = '', $action)
 
     if (isset($id) AND $id != '') {
         // retrieve the category we are editing
-        $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id = ".intval($id)."";
+        $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
+                WHERE c_id = $course_id AND cat_id = ".intval($id)."";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
-        if (empty($category_name)) { // after an edit with an error we do not want to return to the original name but the name we already modified. (happens when createinrecievedfiles AND createinsentfiles are not checked)
+        if (empty($category_name)) {
+            // after an edit with an error we do not want to return to the
+            // original name but the name we already modified.
+            // (happens when createinrecievedfiles AND createinsentfiles are not checked)
             $category_name = $row['cat_name'];
         }
         if ($row['received'] == '1') {
@@ -445,10 +486,8 @@ function display_addcategory_form($category_name = '', $id = '', $action)
 
     if ($action == 'editcategory') {
         $text = get_lang('ModifyCategory');
-        $class = 'save';
-    } elseif ($action == 'addreceivedcategory' or $action == 'addsentcategory') {
+    } elseif ($action == 'addreceivedcategory' || $action == 'addsentcategory') {
         $text = get_lang('CreateCategory');
-        $class = 'add';
     }
 
     $form = new FormValidator('add_new_category', 'post', api_get_self().'?view='.Security::remove_XSS($_GET['view']));
@@ -462,7 +501,7 @@ function display_addcategory_form($category_name = '', $id = '', $action)
 
     $form->addElement('text', 'category_name', get_lang('CategoryName'));
     $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('button', 'StoreCategory', $text);
+    $form->addButtonSave($text, 'StoreCategory');
 
     $defaults = array();
     $defaults['category_name'] = $category_name;
@@ -755,11 +794,13 @@ function removeMoreIfMailing($file_id)
     if ($res = Database::fetch_array($result)) {
         $mailingPseudoId = $res['dest_user_id'];
         if ($mailingPseudoId > dropbox_cnf('mailingIdBase')) {
-            $sql = "DELETE FROM " . dropbox_cnf('tbl_person') . " WHERE c_id = $course_id AND user_id='" . $mailingPseudoId . "'";
+            $sql = "DELETE FROM " . dropbox_cnf('tbl_person') . "
+                    WHERE c_id = $course_id AND user_id='" . $mailingPseudoId . "'";
             Database::query($sql);
 
-            $sql = "UPDATE " . dropbox_cnf('tbl_file') .
-                " SET uploader_id='" . api_get_user_id() . "' WHERE c_id = $course_id AND uploader_id='" . $mailingPseudoId . "'";
+            $sql = "UPDATE " . dropbox_cnf('tbl_file') ."
+                    SET uploader_id='" . api_get_user_id() . "'
+                    WHERE c_id = $course_id AND uploader_id='" . $mailingPseudoId . "'";
             Database::query($sql);
         }
     }
@@ -1073,9 +1114,20 @@ function store_feedback()
     if (empty($_POST['feedback'])) {
         return get_lang('PleaseTypeText');
     } else {
-        $sql="INSERT INTO ".$dropbox_cnf['tbl_feedback']." (c_id, file_id, author_user_id, feedback, feedback_date) VALUES
-              ($course_id, '".intval($_GET['id'])."','".api_get_user_id()."','".Database::escape_string($_POST['feedback'])."', '".api_get_utc_datetime()."')";
-        Database::query($sql);
+        $params = [
+            'c_id' => $course_id,
+            'file_id' => $_GET['id'],
+            'author_user_id' => api_get_user_id(),
+            'feedback' => $_POST['feedback'],
+            'feedback_date' => api_get_utc_datetime(),
+        ];
+
+        $id = Database::insert($dropbox_cnf['tbl_feedback'], $params);
+        if ($id) {
+            $sql = "UPDATE ".$dropbox_cnf['tbl_feedback']." SET feedback_id = iid WHERE iid = $id";
+            Database::query($sql);
+        }
+
         return get_lang('DropboxFeedbackStored');
     }
 }

@@ -396,44 +396,6 @@ if ($form->validate()) {
         $extraFieldValue = new ExtraFieldValue('user');
         $extraFieldValue->saveFieldValues($user);
 
-		/*foreach ($user as $key => $value) {
-			if (substr($key, 0, 6) == 'extra_') {
-                //an extra field
-                //@todo remove this as well as in the profile.php ad put it in a function
-                if (is_array($value) && isset($value['Y']) && isset($value['F']) && isset($value['d'])) {
-                    if (isset($value['H']) && isset($value['i'])) {
-                        // extra field date time
-                        $time = mktime($value['H'],$value['i'],0,$value['F'],$value['d'],$value['Y']);
-                        $value = date('Y-m-d H:i:s',$time);
-                    } else {
-                        // extra field date
-                        $time = mktime(0,0,0,$value['F'],$value['d'],$value['Y']);
-                        $value = date('Y-m-d',$time);
-                    }
-                }
-                // For array $value -> if exists key 'tmp_name' then must not be empty
-                // This avoid delete from user field value table when doesn't upload a file
-                if (is_array($value)) {
-                    if (array_key_exists('tmp_name', $value) && empty($value['tmp_name'])) {
-                        //Nothing to do
-                    } else {
-                        if (array_key_exists('tmp_name', $value)) {
-                            $value['tmp_name'] = Security::filter_filename($value['tmp_name']);
-                        }
-                        if (array_key_exists('name', $value)) {
-                            $value['name'] = Security::filter_filename($value['name']);
-                        }
-                        UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
-                    }
-                } else {
-                    UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
-                }
-            } elseif (strpos($key, 'remove_extra') !== false) {
-                $extra_value = Security::filter_filename(urldecode(key($value)));
-                // To remove from user_field_value and folder
-                UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);
-            }
-		}*/
 		$tok = Security::get_token();
 		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
 		exit();

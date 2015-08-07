@@ -1017,10 +1017,6 @@ class SequenceManager
 
         if ($row_entity_id_prev !== 0 || $row_entity_id_next !== 0) {
             $seq_table = Database::get_main_table(TABLE_MAIN_SEQUENCE);
-            // Old code
-
-            /*$sql = "UPDATE $seq_table SET sequence_row_entity_id = $row_entity_id_prev WHERE sequence_row_entity_id_next = $row_entity_id_next";
-            Database::query($sql);*/
 
             // Check if exists.
             $sql = "SELECT count(*) as count FROM $seq_table

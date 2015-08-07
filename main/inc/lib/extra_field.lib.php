@@ -337,7 +337,7 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_FLOAT] = get_lang('FieldTypeFloat');
         $types[self::FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
         $types[self::FIELD_TYPE_VIDEO_URL] = get_lang('FieldTypeVideoUrl');
-        $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('FieldTypeAlphabetic');
+        $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('FieldTypeOnlyLetters');
         $types[self::FIELD_TYPE_ALPHANUMERIC] = get_lang('FieldTypeAlphanumeric');
 
         switch ($handler) {
@@ -1449,17 +1449,17 @@ EOF;
                     case ExtraField::FIELD_TYPE_LETTERS_ONLY:
                         $form->addElement(
                             'text',
-                            'extra_'.$field_details['variable'],
+                            'extra_' . $field_details['variable'],
                             $field_details['display_text'],
                             [
                                 'pattern' => '[a-zA-Z]+',
                                 'title' => get_lang('OnlyLetters')
                             ]
                         );
-                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_' . $field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_' . $field_details['variable'], 'trim');
                         $form->addRule(
-                            'extra_'.$field_details['variable'],
+                            'extra_' . $field_details['variable'],
                             get_lang('OnlyLetters'),
                             'lettersonly'
                         );
@@ -1467,7 +1467,7 @@ EOF;
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {
                                 $form->freeze(
-                                    'extra_'.$field_details['variable']
+                                    'extra_' . $field_details['variable']
                                 );
                             }
                         }
@@ -1475,24 +1475,30 @@ EOF;
                     case ExtraField::FIELD_TYPE_ALPHANUMERIC:
                         $form->addElement(
                             'text',
-                            'extra_'.$field_details['variable'],
+                            'extra_' . $field_details['variable'],
                             $field_details['display_text'],
                             [
                                 'pattern' => '[a-zA-Z0-9]+',
                                 'title' => get_lang('OnlyLettersAndNumbers')
                             ]
                         );
-                        $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
-                        $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter(
+                            'extra_' . $field_details['variable'],
+                            'stripslashes'
+                        );
+                        $form->applyFilter(
+                            'extra_' . $field_details['variable'],
+                            'trim'
+                        );
                         $form->addRule(
-                            'extra_'.$field_details['variable'],
+                            'extra_' . $field_details['variable'],
                             get_lang('OnlyLettersAndNumbers'),
                             'alphanumeric'
                         );
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {
                                 $form->freeze(
-                                    'extra_'.$field_details['variable']
+                                    'extra_' . $field_details['variable']
                                 );
                             }
                         }

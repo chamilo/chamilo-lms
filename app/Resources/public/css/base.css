@@ -6098,9 +6098,20 @@ div#chat-remote-video video {
   border-bottom: 1px solid #E5E5E5;
   font-size: 21px;
 }
+.create-groups .separate td{
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-right: 10px;
+}
+.create-groups .separate .btn-primary{
+  margin-top: 20px;
+}
 #session-properties td, #session-user-list td, #session-user-list th{
   text-align: left;
   padding-left: 15px;
+}
+form input.form-control{
+  margin-top: 10px;
 }
 #whoisonline .items-user{
   text-align: center;

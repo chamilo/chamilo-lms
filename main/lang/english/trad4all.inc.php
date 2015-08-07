@@ -7469,4 +7469,7 @@ $XTeam = "%s team.";
 $YouCanStartSubscribingToCoursesEnteringToXUrl = "You can start subscribing to courses entering to %s";
 $VideoUrl = "Video URL";
 $AddAttachment = "Add attachment";
+$FieldTypeOnlyLetters = "Text only letters";
+$FieldTypeAlphanumeric = "Text only alphanumeric characters";
+$OnlyLetters = "Only letters";
 ?>

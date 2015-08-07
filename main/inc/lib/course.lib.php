@@ -4464,7 +4464,7 @@ class CourseManager
             $courses = Database::store_result($result, 'ASSOC');
             $courses = self::process_hot_course_item($courses, $my_course_code_list);
         }
-        
+
         return $courses;
     }
 
@@ -4523,7 +4523,7 @@ class CourseManager
             ) {
                 $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'),
                     api_get_path(WEB_AJAX_PATH) . 'course_home.ajax.php?a=show_course_information&code=' . $course_info['code'],
-                    array('class' => 'btn btn-default ajax'));
+                    array('class' => 'btn btn-default btn-sm btn-block ajax'));
             }
 
             $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);

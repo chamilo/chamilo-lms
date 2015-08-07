@@ -4464,7 +4464,7 @@ class CourseManager
             $courses = Database::store_result($result, 'ASSOC');
             $courses = self::process_hot_course_item($courses, $my_course_code_list);
         }
-        var_dump($courses);
+        
         return $courses;
     }
 

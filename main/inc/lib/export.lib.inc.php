@@ -46,12 +46,12 @@ class Export
         $writer = new CsvWriter();
         $writer->setStream(fopen($filePath, 'w'));
 
-        foreach($data as $item) {
+        foreach ($data as $item) {
             $writer->writeItem($item);
         }
         $writer->finish();
 
-        DocumentManager::file_send_for_download($filePath, false, $filename.'.csv');
+        DocumentManager::file_send_for_download($filePath, true, $filename.'.csv');
         exit;
 	}
 
@@ -74,7 +74,7 @@ class Export
 
         $writer->finish();
 
-        DocumentManager::file_send_for_download($filePath, false, $filename.'.xls');
+        DocumentManager::file_send_for_download($filePath, true, $filename.'.xls');
         exit;
 	}
 
@@ -104,7 +104,7 @@ class Export
         }
         fwrite($handle, '</table></body></html>');
         fclose($handle);
-        DocumentManager::file_send_for_download($file, false, $filename.'.xls');
+        DocumentManager::file_send_for_download($file, true, $filename.'.xls');
     }
 
     /**

@@ -520,22 +520,19 @@ class Answer
         $hotspot_type
     ) {
         $answerTable = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-        //$id = $this->getQuestionType() == FILL_IN_BLANKS ? $idAnswer[0] : Database::escape_string($position);
         $autoId = intval($autoId);
 
-        $sql = "UPDATE $answerTable SET
-                    answer = '".Database::escape_string($answer)."',
-                    comment = '".Database::escape_string($comment)."',
-                    correct = '".Database::escape_string($correct)."',
-                    ponderation = '".Database::escape_string($weighting)."',
-                    position = '".Database::escape_string($position)."',
-                    destination = '".Database::escape_string($destination)."',
-                    hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
-                    hotspot_type = '".Database::escape_string($hotspot_type)."'
-                WHERE
-                    id_auto = $autoId";
-
-        Database::query($sql);
+        $params = [
+            'answer' => $answer,
+            'comment' => $comment,
+            'correct' => $correct,
+            'ponderation' => $weighting,
+            'position' => $position,
+            'destination' => $destination,
+            'hotspot_coordinates' => $hotspot_coordinates,
+            'hotspot_type' => $hotspot_type,
+        ];
+        Database::update($answerTable, $params, ['id_auto= ?' => $autoId]);
 	}
 
 	/**

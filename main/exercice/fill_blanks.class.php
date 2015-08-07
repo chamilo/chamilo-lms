@@ -295,7 +295,7 @@ class FillBlanks extends Question
         global $charset;
 
         $answer = $form->getSubmitValue('answer');
-
+        //var_dump($answer);
         // Due the fckeditor transform the elements to their HTML value
         $answer = api_html_entity_decode($answer, ENT_QUOTES, $charset);
 
@@ -303,6 +303,7 @@ class FillBlanks extends Question
         $answer = str_replace('::', '', $answer);
 
         // remove starting and ending space and &nbsp;
+
         $answer = api_preg_replace("/\xc2\xa0/", " ", $answer);
 
         // start and end separator
@@ -335,6 +336,7 @@ class FillBlanks extends Question
             $answer,
             $blanks
         );
+
         if (isset($_GET['editQuestion'])) {
             $this->weighting = 0;
         }
@@ -644,7 +646,7 @@ class FillBlanks extends Question
         $blankCharEndForRegexp = self::escapeForRegexp($blankCharEnd);
 
         // get all blanks words
-        $listAnswerResults['wordsCount'] = preg_match_all(
+        $listAnswerResults['wordsCount'] = api_preg_match_all(
             '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
             $listDoubleColon[0],
             $listWords
@@ -668,7 +670,7 @@ class FillBlanks extends Question
         }
 
         // get all common words
-        $commonWords = preg_replace(
+        $commonWords = api_preg_replace(
             '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
             "::",
             $listDoubleColon[0]
@@ -696,7 +698,7 @@ class FillBlanks extends Question
             $listAnswerResults['tabwordsbracket'] = $listBrackets;
 
             // if we are in student view, we've got 3 times :::::: for common words
-            $commonWords = preg_replace("/::::::/", "::", $commonWords);
+            $commonWords = api_preg_replace("/::::::/", "::", $commonWords);
         }
         $listAnswerResults['commonwords'] = explode("::", $commonWords);
 
@@ -711,7 +713,6 @@ class FillBlanks extends Question
      */
     public static function getAnswerInStudentAttempt($listWithStudentAnswer)
     {
-
         $separatorStart = $listWithStudentAnswer['blankseparatorstart'];
         $separatorEnd = $listWithStudentAnswer['blankseparatorend'];
         // lets rebuild the sentence with [correct answer][student answer][answer is correct]
@@ -726,12 +727,14 @@ class FillBlanks extends Question
         $result .= "::";
         // add the system string
         $result .= $listWithStudentAnswer['systemstring'];
+
         return $result;
     }
 
     /**
      * This function is the same than the js one above getBlankSeparatorRegexp
      * @param $inChar
+     *
      * @return string
      */
     public static function escapeForRegexp($inChar)
@@ -746,6 +749,7 @@ class FillBlanks extends Question
     /**
      * return $text protected for use in regexp
      * @param $text
+     *
      * @return mixed
      */
     public static function getRegexpProtected($text)
@@ -755,6 +759,7 @@ class FillBlanks extends Question
         for ($i=0; $i < count($listRegexpCharacters); $i++) {
             $result = str_replace($listRegexpCharacters[$i], "\\".$listRegexpCharacters[$i], $result);
         }
+
         return $result;
     }
 
@@ -774,6 +779,7 @@ class FillBlanks extends Question
             array('%', '%'),
             array('$', '$'),
         );
+
         return $fillBlanksAllowedSeparator;
     }
 
@@ -785,6 +791,7 @@ class FillBlanks extends Question
     public static function getStartSeparator($number)
     {
         $listSeparators = self::getAllowedSeparator();
+
         return $listSeparators[$number][0];
     }
 
@@ -796,11 +803,13 @@ class FillBlanks extends Question
     public static function getEndSeparator($number)
     {
         $listSeparators = self::getAllowedSeparator();
+
         return $listSeparators[$number][1];
     }
 
     /**
-     * return as a desciption text, array of allowed separtors for question eg: array("[...]", "(...)")
+     * Return as a description text, array of allowed separators for question
+     * eg: array("[...]", "(...)")
      * @return array
      */
     public static function getAllowedSeparatorForSelect()
@@ -810,13 +819,15 @@ class FillBlanks extends Question
         for ($i=0; $i < count($fillBlanksAllowedSeparator); $i++) {
             $listResults[] = $fillBlanksAllowedSeparator[$i][0]."...".$fillBlanksAllowedSeparator[$i][1];
         }
+
         return $listResults;
     }
 
     /**
      * return the code number of the separator for the question
-     * @param $startSeparator
-     * @param $endSeparator
+     * @param string $startSeparator
+     * @param string $endSeparator
+     *
      * @return int
      */
     public function getDefaultSeparatorNumber($startSeparator, $endSeparator)
@@ -824,16 +835,21 @@ class FillBlanks extends Question
         $listSeparators = self::getAllowedSeparator();
         $result = 0;
         for ($i=0; $i < count($listSeparators); $i++) {
-            if ($listSeparators[$i][0] == $startSeparator && $listSeparators[$i][1] == $endSeparator) {
+            if ($listSeparators[$i][0] == $startSeparator &&
+                $listSeparators[$i][1] == $endSeparator
+            ) {
                 $result = $i;
             }
         }
+
         return $result;
     }
 
     /**
      * return the HTML display of the answer
-     * @param $answer
+     * @param string $answer
+     * @param bool   $resultsDisabled
+     *
      * @return string
      */
     public static function getHtmlDisplayForAnswer($answer, $resultsDisabled = false)
@@ -841,13 +857,21 @@ class FillBlanks extends Question
         $result = "";
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
-        // rebluid the answer with good HTML style
+        // rebuild the answer with good HTML style
         // this is the student answer, right or wrong
         for ($i=0; $i < count($listStudentAnswerInfo['studentanswer']); $i++) {
             if ($listStudentAnswerInfo['studentscore'][$i] == 1) {
-                $listStudentAnswerInfo['studentanswer'][$i] = self::getHtmlRightAnswer($listStudentAnswerInfo['studentanswer'][$i], $listStudentAnswerInfo['tabwords'][$i], $resultsDisabled);
+                $listStudentAnswerInfo['studentanswer'][$i] = self::getHtmlRightAnswer(
+                    $listStudentAnswerInfo['studentanswer'][$i],
+                    $listStudentAnswerInfo['tabwords'][$i],
+                    $resultsDisabled
+                );
             } else {
-                $listStudentAnswerInfo['studentanswer'][$i] = self::getHtmlWrongAnswer($listStudentAnswerInfo['studentanswer'][$i], $listStudentAnswerInfo['tabwords'][$i], $resultsDisabled);
+                $listStudentAnswerInfo['studentanswer'][$i] = self::getHtmlWrongAnswer(
+                    $listStudentAnswerInfo['studentanswer'][$i],
+                    $listStudentAnswerInfo['tabwords'][$i],
+                    $resultsDisabled
+                );
             }
         }
 
@@ -860,16 +884,17 @@ class FillBlanks extends Question
 
         // the last common word (should be </p>)
         $result .= isset($listStudentAnswerInfo['commonwords'][$i]) ? $listStudentAnswerInfo['commonwords'][$i] : '';
+
         return $result;
     }
 
-
     /**
      * return the HTML code of answer for correct and wrong answer
-     * @param $answer
-     * @param $correct
-     * @param $right
-     * @param $resultsDisabled
+     * @param string $answer
+     * @param string $correct
+     * @param string $right
+     * @param bool   $resultsDisabled
+     *
      * @return string
      */
     public static function getHtmlAnswer($answer, $correct, $right, $resultsDisabled = false)
@@ -915,13 +940,16 @@ class FillBlanks extends Question
         $result .= "&nbsp;<span style='font-size:120%;'>/</span>&nbsp;";
         $result .= $correctAnswerHtml;
         $result .= "</span>";
+
         return $result;
     }
 
     /**
      * return HTML code for correct answer
-     * @param $answer
-     * @param $correct
+     * @param string $answer
+     * @param string $correct
+     * @param bool   $resultsDisabled
+     *
      * @return string
      */
     public static function getHtmlRightAnswer($answer, $correct, $resultsDisabled = false)
@@ -931,8 +959,10 @@ class FillBlanks extends Question
 
     /**
      * return HTML code for wrong answer
-     * @param $answer
-     * @param $correct
+     * @param string $answer
+     * @param string $correct
+     * @param bool   $resultsDisabled
+     *
      * @return string
      */
     public static function getHtmlWrongAnswer($answer, $correct, $resultsDisabled = false)

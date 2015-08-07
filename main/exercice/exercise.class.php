@@ -2524,7 +2524,16 @@ class Exercise
                     if (!$switchableAnswerSet) {
                         // not switchable answer, must be in the same place than teacher order
                         for ($i=0; $i < count($listCorrectAnswers['tabwords']); $i++) {
-                            $studentAnswer = trim($choice[$i]);
+                            $studentAnswer = isset($choice[$i]) ? trim($choice[$i]) : '';
+
+                            // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                            // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
+                            if (!$from_database) {
+                                $studentAnswer = htmlentities(
+                                    api_utf8_encode($studentAnswer)
+                                );
+                            }
+
                             $correctAnswer = $listCorrectAnswers['tabwords'][$i];
                             $isAnswerCorrect = 0;
                             if (FillBlanks::isGoodStudentAnswer($studentAnswer, $correctAnswer)) {
@@ -2539,12 +2548,13 @@ class Exercise
                         }
                     } else {
                         // switchable answer
-                        $listStudentAsnwerTemp = $choice;
+                        $listStudentAnswerTemp = $choice;
+
                         $listTeacherAnswerTemp = $listCorrectAnswers['tabwords'];
                         $listBadAnswerIndice = array();
                         // for every teacher answer, check if there is a student answer
-                        for ($i=0; $i < count($listStudentAsnwerTemp); $i++) {
-                            $studentAnswer = trim($listStudentAsnwerTemp[$i]);
+                        for ($i=0; $i < count($listStudentAnswerTemp); $i++) {
+                            $studentAnswer = trim($listStudentAnswerTemp[$i]);
                             $found = false;
                             for ($j=0; $j < count($listTeacherAnswerTemp); $j++) {
                                 $correctAnswer = $listTeacherAnswerTemp[$j];

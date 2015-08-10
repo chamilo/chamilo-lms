@@ -4,9 +4,6 @@
  * Exams script
  * @package chamilo.tracking
  */
-/**
- * Code
- */
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
@@ -92,7 +89,12 @@ if (!$exportToXLS) {
 
         echo '<span style="float:right">';
 
-        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'&'.api_get_cidreq().'">'.
+        $courseLink = '';
+        if (!empty(api_get_course_info())) {
+            $courseLink = api_get_cidreq();
+        }
+
+        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'&'.$courseLink.'">'.
             Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
             Display::return_icon('printer.png',get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -124,19 +126,19 @@ if (!$exportToXLS) {
     } else {
         echo Display::url(
             Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32),
-            'courseLog.php?'.api_get_cidreq().'&amp;studentlist=true'
+            'courseLog.php?'.api_get_cidreq().'&studentlist=true'
         );
         echo Display::url(
             Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32),
-            'courseLog.php?'.api_get_cidreq().'&amp;studentlist=false'
+            'courseLog.php?'.api_get_cidreq().'&studentlist=false'
         );
         echo Display::url(
             Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32),
-            'courseLog.php?'.api_get_cidreq().'&amp;studentlist=resouces'
+            'courseLog.php?'.api_get_cidreq().'&studentlist=resouces'
         );
         echo Display::url(
             Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), array(), 32),
-            api_get_self().'?'.api_get_cidreq().'&amp;export=1&amp;score='.$filter_score.'&amp;exercise_id='.$exerciseId
+            api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId
         );
 
     }
@@ -216,7 +218,7 @@ if (!empty($courseList) && is_array($courseList)) {
         $result = Database::query($sql);
 
         // If main tool is visible.
-        if (Database::result($result, 0 ,'visibility') == 1) {
+        if (Database::result($result, 0, 'visibility') == 1) {
             // Getting the exam list.
             if ($global) {
                 $sql = "SELECT quiz.title, id, session_id
@@ -321,7 +323,6 @@ if (!empty($courseList) && is_array($courseList)) {
                                 );
                             }
                         }
-
                     } else {
                         // If the exercise only exists in this session.
 
@@ -335,7 +336,10 @@ if (!empty($courseList) && is_array($courseList)) {
                         );
 
                         $html .= $result['html'];
-                        $export_array_global = array_merge($export_array_global, $result['export_array_global']);
+                        $export_array_global = array_merge(
+                            $export_array_global,
+                            $result['export_array_global']
+                        );
                     }
                 }
             } else {
@@ -363,7 +367,8 @@ if (!$exportToXLS) {
     echo $html;
 }
 
-$filename = 'exam-reporting-'.date('Y-m-d-h:i:s').'.xls';
+$filename = 'exam-reporting-'.api_get_local_time().'.xls';
+
 if ($exportToXLS) {
     if ($global) {
         export_complete_report_xls($filename, $export_array_global);

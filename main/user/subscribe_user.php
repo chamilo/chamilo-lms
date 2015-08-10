@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt*/
+
 /**
 * This script allows teachers to subscribe existing users
 * to their course.
 * @package chamilo.user
 */
+
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_USER;
 
@@ -152,18 +154,18 @@ if (isset($_POST['action'])) {
             }
 
 			if (!empty($list_register_user)) {
-				if ($is_suscribe_counter==1) {
-					$register_user_message=$temp_unique_user.' '.get_lang('AddedToCourse');
+                if ($is_suscribe_counter == 1) {
+					$register_user_message = $temp_unique_user.' '.get_lang('AddedToCourse');
 					Display::addFlash(Display::return_message($register_user_message));
 				} else {
-					$register_user_message='<br />'.get_lang('UsersRegistered').'<br/><br />'.$list_register_user;
-                    Display::addFlash(Display::return_message($register_user_message, false));
+					$register_user_message = get_lang('UsersRegistered').'<br/><br />'.$list_register_user;
+                    Display::addFlash(Display::return_message($register_user_message, 'normal', false));
 				}
 			}
 
 			if (!empty($list_not_register_user)) {
-				$not_register_user_message='<br />'.get_lang('UsersNotRegistered').'<br/><br /><br />'.$list_not_register_user;
-                Display::addFlash(Display::return_message($not_register_user_message, 'error'));
+				$not_register_user_message = get_lang('UsersNotRegistered').'<br/><br /><br />'.$list_not_register_user;
+                Display::addFlash(Display::return_message($not_register_user_message, 'error', false));
 			}
 
             header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);

@@ -802,31 +802,41 @@ class Exercise
                 $end_time = '0000-00-00 00:00:00';
             }
 
-            $sql = "UPDATE $TBL_EXERCISES SET
-				    title='".Database::escape_string($exercise)."',
-					description='".Database::escape_string($description)."'";
+            $params = [
+                'title' => $exercise,
+                'description' => $description,
+            ];
 
+            $paramsExtra = [];
             if ($type_e != 'simple') {
-                $sql .= ",sound='".Database::escape_string($sound)."',
-					type           = ".intval($type).",
-					random         = ".intval($random).",
-					random_answers = ".intval($random_answers).",
-					active         = ".intval($active).",
-					feedback_type  = ".intval($feedback_type).",
-					start_time     = '$start_time',
-					end_time       = '$end_time',
-					max_attempt    = ".intval($attempts).",
-     			    expired_time   = ".intval($expired_time).",
-         			propagate_neg  = ".intval($propagate_neg).",
-         			review_answers = ".intval($review_answers).",
-        	        random_by_category= ".intval($randomByCat).",
-        	        text_when_finished = '".Database::escape_string($text_when_finished)."',
-        	        display_category_name = ".intval($display_category_name).",
-                    pass_percentage = ".intval($pass_percentage).",
-					results_disabled= ".intval($results_disabled)."";
+                $paramsExtra = [
+                    'sound' => $sound,
+                    'type' => $type,
+                    'random' => $random,
+                    'random_answers' => $random_answers,
+                    'active' => $active,
+                    'feedback_type' => $feedback_type,
+                    'start_time' => $start_time,
+                    'end_time' => $end_time,
+                    'max_attempt' => $attempts,
+                    'expired_time' => $expired_time,
+                    'propagate_neg' => $propagate_neg,
+                    'review_answers' => $review_answers,
+                    'random_by_category' => $randomByCat,
+                    'text_when_finished' => $text_when_finished,
+                    'display_category_name' => $display_category_name,
+                    'pass_percentage' => $pass_percentage,
+                    'results_disabled' => $results_disabled,
+                ];
             }
-            $sql .= " WHERE c_id = ".$this->course_id." AND id = ".intval($id)."";
-            Database::query($sql);
+
+            $params = array_merge($params, $paramsExtra);
+
+            Database::update(
+                $TBL_EXERCISES,
+                $params,
+                ['c_id = ? AND id = ?' => [$this->course_id, $id]]
+            );
 
             // update into the item_property table
             api_item_property_update(
@@ -849,13 +859,13 @@ class Exercise
             // the Quiz is saved too, with an $id and api_get_utc_datetime() is done.
             // If we do it now, it will be done twice (cf. https://support.chamilo.org/issues/6586)
             if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
-                $start_time = Database::escape_string($this->start_time);
+                $start_time = $this->start_time;
             } else {
                 $start_time = '0000-00-00 00:00:00';
             }
 
             if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
-                $end_time 	= Database::escape_string(($this->end_time));
+                $end_time = $this->end_time;
             } else {
                 $end_time = '0000-00-00 00:00:00';
             }
@@ -2485,15 +2495,94 @@ class Exercise
                         }
                     }
                     break;
-                // for fill in the blanks
                 case FILL_IN_BLANKS:
+
+                    // insert the student result in the track_e_attempt table, field answer
+                    // $answer is the answer like in the c_quiz_answer table for the question
+                    // student data are choice[]
+
+                    $listCorrectAnswers = FillBlanks::getAnswerInfo($answer);
+                    $switchableAnswerSet = $listCorrectAnswers["switchable"];
+                    $answerWeighting = $listCorrectAnswers["tabweighting"];
+                    // user choices is an array $choice
+
+                    // get existing user data in n the BDD
+                    if ($from_database) {
+                        $sql = "SELECT answer
+                                FROM $TBL_TRACK_ATTEMPT
+                                WHERE
+                                    exe_id = $exeId AND
+                                    question_id= ".intval($questionId);
+                        $result = Database::query($sql);
+                        $str = Database::result($result, 0, 'answer');
+
+                        $listStudentResults = FillBlanks::getAnswerInfo($str, true);
+                        $choice = $listStudentResults['studentanswer'];
+                    }
+
+                    // loop other all blanks words
+                    if (!$switchableAnswerSet) {
+                        // not switchable answer, must be in the same place than teacher order
+                        for ($i=0; $i < count($listCorrectAnswers['tabwords']); $i++) {
+                            $studentAnswer = isset($choice[$i]) ? trim($choice[$i]) : '';
+
+                            // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                            // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
+                            if (!$from_database) {
+                                $studentAnswer = htmlentities(
+                                    api_utf8_encode($studentAnswer)
+                                );
+                            }
+
+                            $correctAnswer = $listCorrectAnswers['tabwords'][$i];
+                            $isAnswerCorrect = 0;
+                            if (FillBlanks::isGoodStudentAnswer($studentAnswer, $correctAnswer)) {
+                                // gives the related weighting to the student
+                                $questionScore += $answerWeighting[$i];
+                                // increments total score
+                                $totalScore += $answerWeighting[$i];
+                                $isAnswerCorrect = 1;
+                            }
+                            $listCorrectAnswers['studentanswer'][$i] = $studentAnswer;
+                            $listCorrectAnswers['studentscore'][$i] = $isAnswerCorrect;
+                        }
+                    } else {
+                        // switchable answer
+                        $listStudentAnswerTemp = $choice;
+                        $listTeacherAnswerTemp = $listCorrectAnswers['tabwords'];
+                        // for every teacher answer, check if there is a student answer
+                        for ($i=0; $i < count($listStudentAnswerTemp); $i++) {
+                            $studentAnswer = trim($listStudentAnswerTemp[$i]);
+                            $found = false;
+                            for ($j=0; $j < count($listTeacherAnswerTemp); $j++) {
+                                $correctAnswer = $listTeacherAnswerTemp[$j];
+                                if (!$found) {
+                                    if (FillBlanks::isGoodStudentAnswer($studentAnswer, $correctAnswer)) {
+                                        $questionScore += $answerWeighting[$i];
+                                        $totalScore += $answerWeighting[$i];
+                                        $listTeacherAnswerTemp[$j] = "";
+                                        $found = true;
+                                    }
+                                }
+                            }
+                            $listCorrectAnswers['studentanswer'][$i] = $studentAnswer;
+                            if (!$found) {
+                                $listCorrectAnswers['studentscore'][$i] = 0;
+                            } else {
+                                $listCorrectAnswers['studentscore'][$i] = 1;
+                            }
+                        }
+                    }
+
+                    $answer = FillBlanks::getAnswerInStudentAttempt($listCorrectAnswers);
+
                     // the question is encoded like this
                     // [A] B [C] D [E] F::10,10,10@1
                     // number 1 before the "@" means that is a switchable fill in blank question
                     // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
                     // means that is a normal fill blank question
                     // first we explode the "::"
-
+                    /*
                     $pre_array = explode('::', $answer);
                     // is switchable fill blank or not
                     $last = count($pre_array) - 1;
@@ -2634,7 +2723,7 @@ class Exercise
                         if (isset($real_text[$i +1])) {
                             $answer .= $real_text[$i + 1];
                         }
-                    }
+                    }*/
                     break;
                 // for calculated answer
                 case CALCULATED_ANSWER:
@@ -3060,7 +3149,7 @@ class Exercise
                             //}
                         } elseif ($answerType == FILL_IN_BLANKS) {
                             //if ($origin!='learnpath') {
-                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,0,0);
+                            ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,0,0, $results_disabled);
                             //	}
                         } elseif ($answerType == CALCULATED_ANSWER) {
                             //if ($origin!='learnpath') {
@@ -3380,7 +3469,8 @@ class Exercise
                                 $feedback_type,
                                 $answer,
                                 $exeId,
-                                $questionId
+                                $questionId,
+                                $results_disabled
                             );
                             break;
                         case CALCULATED_ANSWER:

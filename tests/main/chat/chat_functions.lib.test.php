@@ -43,9 +43,11 @@ class TestChatFunctions extends UnitTestCase {
 		//The user_id exists so we must do an UPDATE and not a INSERT
 		$current_time = date('Y-m-d H:i:s');
 		if (Database::num_rows($result)==0) {
-			$query="INSERT INTO $tbl_chat_connected(user_id,last_connection,session_id) VALUES(1,'$current_time','$session_id')";
+			$query="INSERT INTO $tbl_chat_connected(user_id,last_connection,session_id)
+					VALUES(1,'$current_time','$session_id')";
 		} else {
-			$query="UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE user_id=1 AND session_id='$session_id'";
+			$query="UPDATE $tbl_chat_connected set last_connection='".$current_time."'
+					WHERE user_id=1 AND session_id='$session_id'";
 		}
 		Database::query($query);
 	}

@@ -4,11 +4,8 @@
  * Exams script
  * @package chamilo.tracking
  */
-/**
- * Code
- */
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
+//require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
 $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -92,7 +89,12 @@ if (!$exportToXLS) {
 
         echo '<span style="float:right">';
 
-        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'&'.api_get_cidreq().'">'.
+        $courseLink = '';
+        if (!empty(api_get_course_info())) {
+            $courseLink = api_get_cidreq();
+        }
+
+        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'&'.$courseLink.'">'.
             Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
             Display::return_icon('printer.png',get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -124,19 +126,19 @@ if (!$exportToXLS) {
     } else {
         echo Display::url(
             Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32),
-            'courseLog.php?'.api_get_cidreq().'&amp;studentlist=true'
+            'courseLog.php?'.api_get_cidreq().'&studentlist=true'
         );
         echo Display::url(
             Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32),
-            'courseLog.php?'.api_get_cidreq().'&amp;studentlist=false'
+            'courseLog.php?'.api_get_cidreq().'&studentlist=false'
         );
         echo Display::url(
             Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32),
-            'courseLog.php?'.api_get_cidreq().'&amp;studentlist=resouces'
+            'courseLog.php?'.api_get_cidreq().'&studentlist=resouces'
         );
         echo Display::url(
             Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), array(), 32),
-            api_get_self().'?'.api_get_cidreq().'&amp;export=1&amp;score='.$filter_score.'&amp;exercise_id='.$exerciseId
+            api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId
         );
 
     }
@@ -216,7 +218,7 @@ if (!empty($courseList) && is_array($courseList)) {
         $result = Database::query($sql);
 
         // If main tool is visible.
-        if (Database::result($result, 0 ,'visibility') == 1) {
+        if (Database::result($result, 0, 'visibility') == 1) {
             // Getting the exam list.
             if ($global) {
                 $sql = "SELECT quiz.title, id, session_id
@@ -321,7 +323,6 @@ if (!empty($courseList) && is_array($courseList)) {
                                 );
                             }
                         }
-
                     } else {
                         // If the exercise only exists in this session.
 
@@ -335,7 +336,10 @@ if (!empty($courseList) && is_array($courseList)) {
                         );
 
                         $html .= $result['html'];
-                        $export_array_global = array_merge($export_array_global, $result['export_array_global']);
+                        $export_array_global = array_merge(
+                            $export_array_global,
+                            $result['export_array_global']
+                        );
                     }
                 }
             } else {
@@ -363,7 +367,8 @@ if (!$exportToXLS) {
     echo $html;
 }
 
-$filename = 'exam-reporting-'.date('Y-m-d-h:i:s').'.xls';
+$filename = 'exam-reporting-'.api_get_local_time().'.xlsx';
+
 if ($exportToXLS) {
     if ($global) {
         export_complete_report_xls($filename, $export_array_global);
@@ -393,66 +398,75 @@ function sort_user($a, $b) {
  */
 function export_complete_report_xls($filename, $array)
 {
-    global $charset, $global, $filter_score;
-    $workbook = new Spreadsheet_Excel_Writer();
-    $workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-    $workbook->send($filename);
-    $workbook->setVersion(8); // BIFF8
-    $worksheet =& $workbook->addWorksheet('Report');
-    //$worksheet->setInputEncoding(api_get_system_encoding());
-    $worksheet->setInputEncoding($charset);
+    global $global, $filter_score;
 
+    $spreadsheet = new PHPExcel();
+    $spreadsheet->setActiveSheetIndex(0);
+
+    $worksheet = $spreadsheet->getActiveSheet();
     $line = 0;
     $column = 0; //skip the first column (row titles)
 
     if ($global) {
-        $worksheet->write($line, $column, get_lang('Courses'));
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Courses'));
         $column++;
-        $worksheet->write($line, $column, get_lang('Exercises'));
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('Exercises'));
         $column++;
-        $worksheet->write($line, $column, get_lang('ExamTaken'));
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('ExamTaken'));
         $column++;
-        $worksheet->write($line, $column, get_lang('ExamNotTaken'));
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('ExamNotTaken'));
         $column++;
-        $worksheet->write($line, $column, sprintf(get_lang('ExamPassX'), $filter_score) . '%');
+        $worksheet->SetCellValueByColumnAndRow($line, $column, sprintf(get_lang('ExamPassX'), $filter_score) . '%');
         $column++;
-        $worksheet->write($line, $column, get_lang('ExamFail'));
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('ExamFail'));
         $column++;
-        $worksheet->write($line, $column, get_lang('TotalStudents'));
+        $worksheet->SetCellValueByColumnAndRow($line, $column, get_lang('TotalStudents'));
         $column++;
 
         $line++;
         foreach ($array as $row) {
             $column = 0;
             foreach ($row as $item) {
-                $worksheet->write($line,$column,html_entity_decode(strip_tags($item)));
+                $worksheet->SetCellValueByColumnAndRow($line, $column, html_entity_decode(strip_tags($item)));
                 $column++;
             }
             $line++;
         }
         $line++;
     } else {
-        $worksheet->write($line,$column,get_lang('Exercises'));
+        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('Exercises'));
         $column++;
-        $worksheet->write($line,$column,get_lang('User'));
+        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('User'));
         $column++;
-        $worksheet->write($line,$column,get_lang('Percentage'));
+        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('Percentage'));
         $column++;
-        $worksheet->write($line,$column,get_lang('Status'));
+        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('Status'));
         $column++;
-        $worksheet->write($line,$column,get_lang('Attempts'));
+        $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('Attempts'));
         $column++;
         $line++;
         foreach ($array as $row) {
             $column = 0;
-            $worksheet->write($line,$column,html_entity_decode(strip_tags($row['exercise'])));
+            $worksheet->SetCellValueByColumnAndRow(
+                $line,
+                $column,
+                html_entity_decode(strip_tags($row['exercise']))
+            );
             $column++;
             foreach ($row['users'] as $key=>$user) {
                 $column = 1;
-                $worksheet->write($line,$column,html_entity_decode(strip_tags($user)));
+                $worksheet->SetCellValueByColumnAndRow(
+                    $line,
+                    $column,
+                    html_entity_decode(strip_tags($user))
+                );
                 $column++;
                 foreach ($row['results'][$key] as $result_item) {
-                    $worksheet->write($line,$column,html_entity_decode(strip_tags($result_item)));
+                    $worksheet->SetCellValueByColumnAndRow(
+                        $line,
+                        $column,
+                        html_entity_decode(strip_tags($result_item))
+                    );
                     $column++;
                 }
                 $line++;
@@ -460,7 +474,11 @@ function export_complete_report_xls($filename, $array)
         }
         $line++;
     }
-    $workbook->close();
+
+    $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
+    $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+    $writer->save($file);
+    DocumentManager::file_send_for_download($file, false, $filename);
     exit;
 }
 

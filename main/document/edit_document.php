@@ -195,8 +195,8 @@ if (!api_is_allowed_to_edit()) {
 
 if (isset($_POST['comment'])) {
 	// Fixing the path if it is wrong
-	$comment = Database::escape_string(trim($_POST['comment']));
-	$title = Database::escape_string(trim($_POST['title']));
+	$comment = trim($_POST['comment']);
+	$title = trim($_POST['title']);
 
     // Just in case see BT#3525
     if (empty($title)) {
@@ -208,10 +208,16 @@ if (isset($_POST['comment'])) {
 	}
 
     if (!empty($document_id)) {
-        $query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."'
-        		WHERE c_id = $course_id AND id = ".$document_id;
-        Database::query($query);
-        $info_message = get_lang('fileModified');
+        $params = [
+            'comment' => $comment,
+            'title' => $title,
+        ];
+        Database::update(
+            $dbTable,
+            $params,
+            ['c_id = ? AND id = ?' => [$course_id, $document_id]]
+        );
+		Display::addFlash(Display::return_message(get_lang('fileModified')));
     }
 }
 
@@ -224,10 +230,6 @@ if ($is_allowed_to_edit) {
 		$content = isset($_POST['content']) ? trim(str_replace(array("\r", "\n"), '', stripslashes($_POST['content']))) : null;
 		$content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
 
-		/*if (!strstr($content, '/css/frames.css')) {
-			$content = str_replace('</title></head>', '</title><link rel="stylesheet" href="../css/frames.css" type="text/css" /></head>', $content);
-		}*/
-
         if ($dir == '/') {
             $dir = '';
         }
@@ -237,7 +239,7 @@ if ($is_allowed_to_edit) {
 		$read_only_flag = empty($read_only_flag) ? 0 : 1;
 
 		if (empty($filename)) {
-			$msgError = get_lang('NoFileName');
+            Display::addFlash(Display::return_message(get_lang('NoFileName'), 'warning'));
 		} else {
 
 		    $file_size = filesize($document_data['absolute_path']);
@@ -350,10 +352,10 @@ if ($is_allowed_to_edit) {
 							header('Location: document.php?id=' . $document_data['parent_id'] . '&' . api_get_cidreq() . ($is_certificate_mode?'&curdirpath=/certificates&selectcat=1':''));
 							exit;
 						} else {
-							$msgError = get_lang('Impossible');
+                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
 						}
 					} else {
-						$msgError = get_lang('Impossible');
+                        Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
 					}
 				} else {
 					if ($document_id) {
@@ -392,20 +394,6 @@ if (file_exists($document_data['absolute_path'])) {
 // Display the header
 $nameTools = get_lang('EditDocument') . ': '.Security::remove_XSS($document_data['title']);
 Display::display_header($nameTools, 'Doc');
-
-if (isset($msgError)) {
-	Display::display_error_message($msgError);
-}
-
-if (isset($info_message)) {
-	Display::display_confirmation_message($info_message);
-	if (isset($_POST['origin'])) {
-		$slide_id = $_POST['origin_opt'];
-		$call_from_tool = $_POST['origin'];
-	}
-}
-
-// Owner
 
 $document_info = api_get_item_property_info(
     api_get_course_int_id(),
@@ -573,19 +561,14 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
 		}
 
 		update_db_info('update', $source_file, $new_full_file_name); // fileManage API
-		$name_changed = get_lang('ElRen');
-		$info_message = get_lang('fileModified');
+        Display::addFlash(Display::return_message(get_lang('fileModified')));
 
 		$GLOBALS['file_name'] = $rename_to;
 		$GLOBALS['doc'] = $rename_to;
 
-		return $info_message;
+		return true;
 	} else {
-		$dialogBox = get_lang('FileExists'); // TODO: This variable is not used.
-
-		/* Return to step 1 */
-		$rename = $source_file;
-		unset($source_file);
+        Display::addFlash(Display::return_message(get_lang('FileExists')));
 	}
 }
 

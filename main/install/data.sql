@@ -638,9 +638,9 @@ VALUES
 ('enabled_mathjax','false','No'),
 ('allow_teachers_to_create_sessions', 'true', 'Yes'),
 ('allow_teachers_to_create_sessions', 'false', 'No'),
-('cron_remind_course_finished_activate', 'false', 'No')
-('cron_remind_course_finished_activate', 'true', 'Yes')
-('cron_remind_course_expiration_activate', 'false', 'No')
+('cron_remind_course_finished_activate', 'false', 'No'),
+('cron_remind_course_finished_activate', 'true', 'Yes'),
+('cron_remind_course_expiration_activate', 'false', 'No'),
 ('cron_remind_course_expiration_activate', 'true', 'Yes');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES

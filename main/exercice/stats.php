@@ -52,7 +52,8 @@ if (!empty($question_list)) {
             $question_id,
             $exercise_id,
             $courseCode,
-            $sessionId
+            $sessionId,
+            $question_obj->type
         );
 
         $data[$question_id]['name'] = cut($question_obj->question, 100);

@@ -118,10 +118,11 @@ if ($form->validate() && is_settings_editable()) {
 
 // Display course picture
 $course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
+
 if (file_exists($course_path.'/course-pic85x85.png')) {
     $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository;   // course web path
     $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1, 1000); // redimensioned image 85x85
-    $image_html =  '<div class="row"><div class="formw"><img src="'.$course_medium_image.'" /></div></div>';
+    $image_html =  '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> <div class="col-md-8"><img src="'.$course_medium_image.'" /></div></div>';
 }
 $form->addElement('html', $image_html);
 
@@ -143,7 +144,7 @@ $form->applyFilter('department_url', 'html_filter');
 $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-
+$form->addElement('html', '<div class="form-group "><div class="col-md-2"></div> <div class="col-md-8 help-image">'.get_lang('UniqueAnswerImagePreferredSize200x150').'</div></div>');
 $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
 
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
@@ -478,27 +479,24 @@ if ($form->validate() && is_settings_editable()) {
         'activate_legal'
     );
 
-    foreach ($updateValues as $index =>$value) {
-        $updateValues[$index] = Database::escape_string($value);
-    }
-
     $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : '';
-
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $sql = "UPDATE $table_course SET
-        title 				    = '".$updateValues['title']."',
-        course_language 	    = '".$updateValues['course_language']."',
-        category_code 		    = '".$updateValues['category_code']."',
-        department_name  	    = '".$updateValues['department_name']."',
-        department_url  	    = '".$updateValues['department_url']."',
-        visibility  		    = '".$updateValues['visibility']."',
-        subscribe  			    = '".$updateValues['subscribe']."',
-        unsubscribe  		    = '".$updateValues['unsubscribe']."',
-        legal                   = '".$updateValues['legal']."',
-        activate_legal          = '".$activeLegal."',
-        registration_code 	    = '".$updateValues['course_registration_password']."'
-        WHERE id = $courseId";
-    Database::query($sql);
+
+    $params = [
+        'title' => $updateValues['title'],
+        'course_language' => $updateValues['course_language'],
+        'category_code' => $updateValues['category_code'],
+        'department_name' => $updateValues['department_name'],
+        'department_url' => $updateValues['department_url'],
+        'visibility' => $updateValues['visibility'],
+        'subscribe' => $updateValues['subscribe'],
+        'unsubscribe' => $updateValues['unsubscribe'],
+        'legal' => $updateValues['legal'],
+        'activate_legal' => $activeLegal,
+        'registration_code' => $updateValues['course_registration_password'],
+    ];
+
+    Database::update($table_course, $params, ['id = ?' => $courseId]);
 
     // Insert/Updates course_settings table
     foreach ($courseSettings as $setting) {

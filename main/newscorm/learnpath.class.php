@@ -998,22 +998,6 @@ class learnpath
             return false;
         }
         $this->current_time_stop = time();
-        if ($this->save) {
-            /*
-            $learnpath_view_table = Database :: get_course_table(TABLE_LP_VIEW);
-            $sql = "UPDATE $learnpath_view_table " .
-                    "SET " .
-                    "stop_time = ".$this->current_time_stop.", " .
-                    "score = ".$this->current_score.", ".
-                    "WHERE learnpath_id = '".$this->lp_id."'";
-            //$res = Database::query($sql);
-            $res = Database::query($res);
-            if (Database::affected_rows($res) < 1) {
-                $this->error = 'Could not update learnpath_view table while closing learnpath';
-                return false;
-            }
-            */
-        }
         $this->ordered_items = array();
         $this->index = 0;
         unset ($this->lp_id);

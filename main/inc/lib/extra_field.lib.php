@@ -63,6 +63,8 @@ class ExtraField extends Model
     const FIELD_TYPE_VIDEO_URL = 19;
     const FIELD_TYPE_LETTERS_ONLY = 20;
     const FIELD_TYPE_ALPHANUMERIC = 21;
+    const FIELD_TYPE_LETTERS_SPACE = 22;
+    const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;
 
     public $type = 'user';
     public $pageName;
@@ -339,6 +341,12 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_VIDEO_URL] = get_lang('FieldTypeVideoUrl');
         $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('FieldTypeOnlyLetters');
         $types[self::FIELD_TYPE_ALPHANUMERIC] = get_lang('FieldTypeAlphanumeric');
+        $types[self::FIELD_TYPE_LETTERS_SPACE] = get_lang(
+            'FieldTypeLettersSpace'
+        );
+        $types[self::FIELD_TYPE_ALPHANUMERIC_SPACE] = get_lang(
+            'FieldTypeNoPunctuation'
+        );
 
         switch ($handler) {
             case 'course':
@@ -1450,7 +1458,10 @@ EOF;
                         $form->addElement(
                             'text',
                             'extra_' . $field_details['variable'],
-                            $field_details['display_text'],
+                            [
+                                $field_details['display_text'],
+                                get_lang('OnlyLetters')
+                            ],
                             [
                                 'pattern' => '[a-zA-Z]+',
                                 'title' => get_lang('OnlyLetters')
@@ -1476,7 +1487,10 @@ EOF;
                         $form->addElement(
                             'text',
                             'extra_' . $field_details['variable'],
-                            $field_details['display_text'],
+                            [
+                                $field_details['display_text'],
+                                get_lang('OnlyLettersAndNumbers')
+                            ],
                             [
                                 'pattern' => '[a-zA-Z0-9]+',
                                 'title' => get_lang('OnlyLettersAndNumbers')
@@ -1494,6 +1508,71 @@ EOF;
                             'extra_' . $field_details['variable'],
                             get_lang('OnlyLettersAndNumbers'),
                             'alphanumeric'
+                        );
+                        if (!$admin_permissions) {
+                            if ($field_details['visible'] == 0) {
+                                $form->freeze(
+                                    'extra_' . $field_details['variable']
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_LETTERS_SPACE:
+                        $form->addElement(
+                            'text',
+                            'extra_' . $field_details['variable'],
+                            [
+                                $field_details['display_text'],
+                                get_lang('OnlyLettersAndSpace')
+                            ],
+                            [
+                                'pattern' => '[a-zA-Z\s]+',
+                                'title' => get_lang('OnlyLetters')
+                            ]
+                        );
+                        $form->applyFilter('extra_' . $field_details['variable'], 'stripslashes');
+                        $form->applyFilter('extra_' . $field_details['variable'], 'trim');
+                        $form->addRule(
+                            'extra_' . $field_details['variable'],
+                            get_lang('OnlyLettersAndSpace'),
+                            'regex',
+                            '/^[a-zA-Z\s]+$/'
+                        );
+
+                        if (!$admin_permissions) {
+                            if ($field_details['visible'] == 0) {
+                                $form->freeze(
+                                    'extra_' . $field_details['variable']
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_ALPHANUMERIC_SPACE:
+                        $form->addElement(
+                            'text',
+                            'extra_' . $field_details['variable'],
+                            [
+                                $field_details['display_text'],
+                                get_lang('OnlyLettersAndNumbersAndSpaces')
+                            ],
+                            [
+                                'pattern' => '[a-zA-Z0-9ñÑ\s]+',
+                                'title' => get_lang('OnlyLettersAndNumbersAndSpaces')
+                            ]
+                        );
+                        $form->applyFilter(
+                            'extra_' . $field_details['variable'],
+                            'stripslashes'
+                        );
+                        $form->applyFilter(
+                            'extra_' . $field_details['variable'],
+                            'trim'
+                        );
+                        $form->addRule(
+                            'extra_' . $field_details['variable'],
+                            get_lang('OnlyLettersAndNumbers'),
+                            'regex',
+                            '/^[a-zA-Z0-9ñÑ\s]+$/'
                         );
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {

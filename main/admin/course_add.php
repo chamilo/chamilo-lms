@@ -52,7 +52,11 @@ $form->addText(
         get_lang('OnlyLettersAndNumbers')
     ),
     false,
-    array('maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE)
+    [
+        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+        'pattern' => '[a-zA-Z0-9]+',
+        'title' => get_lang('OnlyLettersAndNumbers')
+    ]
 );
 
 $form->applyFilter('visual_code', 'api_strtoupper');

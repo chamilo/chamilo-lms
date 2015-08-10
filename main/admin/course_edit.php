@@ -115,7 +115,12 @@ $form->addText(
         get_lang('OnlyLettersAndNumbers'),
         get_lang('ThisValueIsUsedInTheCourseURL')
     ),
-    true
+    true,
+    [
+        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+        'pattern' => '[a-zA-Z0-9]+',
+        'title' => get_lang('OnlyLettersAndNumbers')
+    ]
 );
 
 $form->applyFilter('visual_code', 'strtoupper');

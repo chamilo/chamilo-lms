@@ -94,9 +94,9 @@ $nameTools = get_lang('MyCourses');
     Include the HTTP, HTML headers plus the top banner.
 */
 if ($load_dirs) {
-	$url 			= api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
-	$folder_icon 	= api_get_path(WEB_IMG_PATH).'icons/22/folder.png';
-	$close_icon 	= api_get_path(WEB_IMG_PATH).'loading1.gif';
+	$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
+	$folder_icon = api_get_path(WEB_IMG_PATH).'icons/22/folder.png';
+	$close_icon = api_get_path(WEB_IMG_PATH).'loading1.gif';
 
 	$htmlHeadXtra[] =  '<script>
 	$(document).ready(function() {
@@ -121,7 +121,6 @@ if ($load_dirs) {
 	            success: function(return_value) {
 	            	image.attr("src", "'.$folder_icon.'");
 	            	$("#document_result_" +course_id+"_" + session_id).html(return_value);
-
 	            }
 	        });
 
@@ -129,8 +128,6 @@ if ($load_dirs) {
 	});
 	</script>';
 }
-
-
 
 //Show the chamilo mascot
 if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {

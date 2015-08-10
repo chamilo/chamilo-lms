@@ -941,7 +941,11 @@ class IndexManager
         $my_account_content .= '</ul>';
 
         if (!empty($my_account_content)) {
-            $html =  self::show_right_block(get_lang('Courses'), $my_account_content, 'course_block');
+            $html = self::show_right_block(
+                get_lang('Courses'),
+                $my_account_content,
+                'course_block'
+            );
         }
         return $html;
     }
@@ -967,9 +971,7 @@ class IndexManager
         }
 
         $html = '';
-
         // Showing history title
-
         if ($load_history) {
             $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
             if (empty($session_categories)) {
@@ -1294,7 +1296,7 @@ class IndexManager
         }
 
         return [
-            'html' => $sessions_with_category . $sessions_with_no_category . $courses_html . $special_courses,
+            'html' => $sessions_with_category.$sessions_with_no_category.$courses_html.$special_courses,
             'session_count' => $sessionCount,
             'course_count' => $courseCount
         ];

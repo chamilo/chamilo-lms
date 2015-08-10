@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -12,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PersonalAgenda
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
     /**
      * @var integer
      *
@@ -69,20 +79,17 @@ class PersonalAgenda
     private $allDay;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="color", type="string", length=255, nullable=true)
      */
-    private $id;
-
-
+    private $color;
 
     /**
      * Set user
      *
      * @param integer $user
+     *
      * @return PersonalAgenda
      */
     public function setUser($user)
@@ -272,4 +279,25 @@ class PersonalAgenda
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     *
+     * @return PersonalAgenda
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
 }

@@ -1078,7 +1078,7 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8
  * This function is aimed at replacing the function html_entity_decode() for human-language strings.
  * @link http://php.net/html_entity_decode
  */
-function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = null) {
+function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8') {
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }

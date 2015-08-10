@@ -33,8 +33,6 @@ class FillBlanks extends Question
      */
     public function createAnswersForm($form)
     {
-        $fillBlanksAllowedSeparator = self::getAllowedSeparator();
-
         $defaults = array();
 
         if (!empty($this->id)) {
@@ -57,10 +55,8 @@ class FillBlanks extends Question
             $blanksepartornumber = 0;
         }
 
-        $blankSeparatortStart = self::getStartSeparator($blanksepartornumber);
-        $blankSeparatortEnd = self::getEndSeparator($blanksepartornumber);
-        $blankSeparatortStartRegexp = self::escapeForRegexp($blankSeparatortStart);
-        $blankSeparatortEndRegexp = self::escapeForRegexp($blankSeparatortEnd);
+        $blankSeparatorStart = self::getStartSeparator($blanksepartornumber);
+        $blankSeparatorEnd = self::getEndSeparator($blanksepartornumber);
 
         $setValues = null;
 
@@ -72,8 +68,8 @@ class FillBlanks extends Question
         // javascript
         echo '<script>
 
-            var blankSeparatortStart = "'.$blankSeparatortStart.'";
-            var blankSeparatortEnd = "'.$blankSeparatortEnd.'";
+            var blankSeparatortStart = "'.$blankSeparatorStart.'";
+            var blankSeparatortEnd = "'.$blankSeparatorEnd.'";
             var blankSeparatortStartRegexp = getBlankSeparatorRegexp(blankSeparatortStart);
             var blankSeparatortEndRegexp = getBlankSeparatorRegexp(blankSeparatortEnd);
 
@@ -287,7 +283,7 @@ class FillBlanks extends Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
+     * Function which creates the form to create/edit the answers of the question
      * @param FormValidator $form
      */
     public function processAnswersCreation($form)
@@ -295,15 +291,15 @@ class FillBlanks extends Question
         global $charset;
 
         $answer = $form->getSubmitValue('answer');
-        //var_dump($answer);
-        // Due the fckeditor transform the elements to their HTML value
-        $answer = api_html_entity_decode($answer, ENT_QUOTES, $charset);
+        // Due the ckeditor transform the elements to their HTML value
+
+        //$answer = api_html_entity_decode($answer, ENT_QUOTES, $charset);
+        //$answer = htmlentities(api_utf8_encode($answer));
 
         // remove the :: eventually written by the user
         $answer = str_replace('::', '', $answer);
 
         // remove starting and ending space and &nbsp;
-
         $answer = api_preg_replace("/\xc2\xa0/", " ", $answer);
 
         // start and end separator
@@ -420,6 +416,7 @@ class FillBlanks extends Question
             <tr>
                 <th>'.get_lang("Answer").'</th>
             </tr>';
+
         return $header;
     }
 
@@ -485,14 +482,16 @@ class FillBlanks extends Question
                 $result = Display::input('text', "choice[$questionId][]", $correctItem, $attributes);
                 break;
         }
+
         return $result;
     }
 
-
     /**
-     * Return an array with the different choices available when the answers between bracket show as a menu
-     * @param $correctAnswer
-     * @param $displayForStudent  true if we want to shuffle the choices of the menu for students
+     * Return an array with the different choices available
+     * when the answers between bracket show as a menu
+     * @param string $correctAnswer
+     * @param bool $displayForStudent true if we want to shuffle the choices of the menu for students
+     *
      * @return array
      */
     public static function getFillTheBlankMenuAnswers($correctAnswer, $displayForStudent)
@@ -502,15 +501,16 @@ class FillBlanks extends Question
         if ($displayForStudent) {
             shuffle($listChoises);
         }
+
         return $listChoises;
     }
 
-
     /**
      * Return the array index of the student answer
-     * @param $correctAnswer  the menu Choice1|Choice2|Choice3
-     * @param $studentAnswer  the student answer must be Choice1 or Choice2 or Choice3
-     * @return int  in the exemple 0 1 or 2 depending of the choice of the student
+     * @param string $correctAnswer the menu Choice1|Choice2|Choice3
+     * @param string $studentAnswer the student answer must be Choice1 or Choice2 or Choice3
+     *
+     * @return int  in the example 0 1 or 2 depending of the choice of the student
      */
     public static function getFillTheBlankMenuAnswerNum($correctAnswer, $studentAnswer)
     {
@@ -520,19 +520,23 @@ class FillBlanks extends Question
                 return $num;
             }
         }
-        return -1; // should not happened, because student choose the answer in a menu of possible answers
+
+        // should not happened, because student choose the answer in a menu of possible answers
+        return -1;
     }
 
 
     /**
      * Return the possible answer if the answer between brackets is a multiple choice menu
-     * @param $correctAnswer
+     * @param string $correctAnswer
+     *
      * @return array
      */
     public static function getFillTheBlankSeveralAnswers($correctAnswer)
     {
         // is answer||Answer||response||Response , mean answer or Answer ...
         $listSeveral = api_preg_split("/\|\|/", $correctAnswer);
+
         return $listSeveral;
     }
 
@@ -540,8 +544,9 @@ class FillBlanks extends Question
      * Return true if student answer is right according to the correctAnswer
      * it is not as simple as equality, because of the type of Fill The Blank question
      * eg : studentAnswer = 'Un' and correctAnswer = 'Un||1||un'
-     * @param $studentAnswer the [studentanswer] of the info array of the answer field
-     * @param $correctAnswer the [tabwords] of the info array of the answer field
+     * @param string $studentAnswer [studentanswer] of the info array of the answer field
+     * @param string $correctAnswer [tabwords] of the info array of the answer field
+     *
      * @return bool
      */
     public static function isGoodStudentAnswer($studentAnswer, $correctAnswer)
@@ -549,20 +554,27 @@ class FillBlanks extends Question
         switch (self::getFillTheBlankAnswerType($correctAnswer)) {
             case self::FILL_THE_BLANK_MENU:
                 $listMenu = self::getFillTheBlankMenuAnswers($correctAnswer, false);
-                return ($listMenu[0] == $studentAnswer);
+                $result = $listMenu[0] == $studentAnswer;
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
                 // the answer must be one of the choice made
                 $listSeveral = self::getFillTheBlankSeveralAnswers($correctAnswer);
-                return (in_array($studentAnswer, $listSeveral));
+                $result = in_array($studentAnswer, $listSeveral);
                 break;
             case self::FILL_THE_BLANK_STANDARD:
             default:
-                return ($studentAnswer == $correctAnswer);
+                $result = $studentAnswer == $correctAnswer;
+                break;
         }
+
+        return $result;
     }
 
-
+    /**
+     * @param string $correctAnswer
+     *
+     * @return int
+     */
     public static function getFillTheBlankAnswerType($correctAnswer)
     {
         if (api_strpos($correctAnswer, "|") && !api_strpos($correctAnswer, "||")) {
@@ -576,8 +588,8 @@ class FillBlanks extends Question
 
     /**
      * Return information about the answer
-     * @param string $userAnswer : the text of the answer of the question
-     * @param bool $isStudentAnswer : true if it is a student answer and not the empty question model
+     * @param string $userAnswer the text of the answer of the question
+     * @param bool   $isStudentAnswer true if it's a student answer false the empty question model
      *
      * @return array of information about the answer
      */
@@ -608,7 +620,7 @@ class FillBlanks extends Question
 
         $listAnswerResults['systemstring'] = $listDoubleColon[1];
 
-        //make sure we only take the last bit to find special marks
+        // make sure we only take the last bit to find special marks
         $listArobaseSplit = explode('@', $listDoubleColon[1]);
 
         if (count($listArobaseSplit) < 2) {
@@ -676,9 +688,11 @@ class FillBlanks extends Question
             $listDoubleColon[0]
         );
 
-        // if student answer, the second [] is the student answer, the third is if student scored or not
+        // if student answer, the second [] is the student answer,
+        // the third is if student scored or not
         $listBrackets = array();
         $listWords =  array();
+
         if ($isStudentAnswer) {
             for ($i=0; $i < count($listAnswerResults['tabwords']); $i++) {
                 $listBrackets[] = $listAnswerResults['tabwordsbracket'][$i];
@@ -700,15 +714,16 @@ class FillBlanks extends Question
             // if we are in student view, we've got 3 times :::::: for common words
             $commonWords = api_preg_replace("/::::::/", "::", $commonWords);
         }
+
         $listAnswerResults['commonwords'] = explode("::", $commonWords);
 
         return $listAnswerResults;
     }
 
-
     /**
-     * Replace the occurence of blank word with [correct answer][student answer][answer is correct]
+     * Replace the occurrence of blank word with [correct answer][student answer][answer is correct]
      * @param array $listWithStudentAnswer
+     *
      * @return string
      */
     public static function getAnswerInStudentAttempt($listWithStudentAnswer)
@@ -733,13 +748,35 @@ class FillBlanks extends Question
 
     /**
      * This function is the same than the js one above getBlankSeparatorRegexp
-     * @param $inChar
+     * @param string $inChar
      *
      * @return string
      */
     public static function escapeForRegexp($inChar)
     {
-        if (in_array($inChar, array(".", "+", "*", "?", "[", "^", "]", "$", "(", ")", "{", "}", "=", "!", ">", "|", ":", "-", ")"))) {
+        $listChars = [
+            ".",
+            "+",
+            "*",
+            "?",
+            "[",
+            "^",
+            "]",
+            "$",
+            "(",
+            ")",
+            "{",
+            "}",
+            "=",
+            "!",
+            ">",
+            "|",
+            ":",
+            "-",
+            ")",
+        ];
+
+        if (in_array($inChar, $listChars)) {
             return "\\".$inChar;
         } else {
             return $inChar;
@@ -748,13 +785,34 @@ class FillBlanks extends Question
 
     /**
      * return $text protected for use in regexp
-     * @param $text
+     * @param string $text
      *
      * @return mixed
      */
     public static function getRegexpProtected($text)
     {
-        $listRegexpCharacters = array("/", ".", "+", "*", "?", "[", "^", "]", "$", "(", ")", "{", "}", "=", "!", ">", "|", ":", "-", ")");
+        $listRegexpCharacters = [
+            "/",
+            ".",
+            "+",
+            "*",
+            "?",
+            "[",
+            "^",
+            "]",
+            "$",
+            "(",
+            ")",
+            "{",
+            "}",
+            "=",
+            "!",
+            ">",
+            "|",
+            ":",
+            "-",
+            ")",
+        ];
         $result = $text;
         for ($i=0; $i < count($listRegexpCharacters); $i++) {
             $result = str_replace($listRegexpCharacters[$i], "\\".$listRegexpCharacters[$i], $result);
@@ -785,7 +843,8 @@ class FillBlanks extends Question
 
     /**
      * return the start separator for answer
-     * @param $number
+     * @param string $number
+     *
      * @return mixed
      */
     public static function getStartSeparator($number)
@@ -797,7 +856,8 @@ class FillBlanks extends Question
 
     /**
      * return the end separator for answer
-     * @param $number
+     * @param string $number
+     *
      * @return mixed
      */
     public static function getEndSeparator($number)

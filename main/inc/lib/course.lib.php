@@ -3133,6 +3133,9 @@ class CourseManager
     /**
      * Builds the course block in user_portal.php
      * @todo use Twig
+     *
+     * @param array $params
+     * @return string
      */
     public static function course_item_html_no_icon($params)
     {
@@ -3167,6 +3170,11 @@ class CourseManager
         return $html;
     }
 
+    /**
+     * @param $params
+     * @param bool|false $is_sub_content
+     * @return string
+     */
     public static function session_items_html($params, $is_sub_content = false)
     {
         $html = '';
@@ -3192,6 +3200,9 @@ class CourseManager
     /**
      * Builds the course block in user_portal.php
      * @todo use Twig
+     * @param array $params
+     * @param bool|false $is_sub_content
+     * @return string
      */
     public static function course_item_html($params, $is_sub_content = false)
     {
@@ -3216,9 +3227,9 @@ class CourseManager
         }
 
         $html .= '</div>';
-        $notifications = isset($params['notifications']) ? $params['notifications'] : null;
-        $param_class = isset($params['class']) ? $params['class'] : null;
-        $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
+        $notifications = isset($params['notifications']) ? $params['notifications'] : '';
+        $param_class = isset($params['class']) ? $params['class'] : '';
+        $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : '';
 
         $html .= '<div class="col-md-10 ' . $param_class . '">';
         $html .= '<div class="pull-right">' . $params['right_actions'] . '</div>';
@@ -3231,12 +3242,14 @@ class CourseManager
             $html .= '<div class="subtitle-session">' . $params['subtitle'] . '</div>';
         }
         if (!empty($params['teachers'])) {
-            $html .= '<h5>' . Display::return_icon('teacher.png', get_lang('Teacher'), array(),
-                    ICON_SIZE_TINY) . $params['teachers'] . '</h5>';
+            $html .= '<h5>' .
+                    Display::return_icon('teacher.png', get_lang('Teacher'), array(), ICON_SIZE_TINY) .
+                $params['teachers'] . '</h5>';
         }
         if (!empty($params['coaches'])) {
-            $html .= '<h5>' . Display::return_icon('teacher.png', get_lang('Coach'), array(),
-                    ICON_SIZE_TINY) . $params['coaches'] . '</h5>';
+            $html .= '<h5>' .
+                Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY) .
+                $params['coaches'] . '</h5>';
         }
 
         $html .= '</div>';
@@ -3520,7 +3533,6 @@ class CourseManager
         $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
 
         $result = Database::query($sql);
-        $status_icon = '';
         $html = '';
 
         $course_list = array();
@@ -3605,8 +3617,6 @@ class CourseManager
                 }
             }
 
-            $course_title = $course_info['title'];
-
             $course_title_url = '';
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
                 $course_title_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?id_session=0';
@@ -3638,11 +3648,11 @@ class CourseManager
                 $params['notifications'] = $show_notification;
             }
 
-            $isSubcontent = true;
+            $isSubContent = true;
             if (empty($user_category_id)) {
-                $isSubcontent = false;
+                $isSubContent = false;
             }
-            $html .= self::course_item_html($params, $isSubcontent);
+            $html .= self::course_item_html($params, $isSubContent);
         }
 
         return [

@@ -2495,12 +2495,11 @@ class Exercise
                         }
                     }
                     break;
-                // for fill in the blanks
                 case FILL_IN_BLANKS:
 
                     // insert the student result in the track_e_attempt table, field answer
                     // $answer is the answer like in the c_quiz_answer table for the question
-                    // student datas are choice[]
+                    // student data are choice[]
 
                     $listCorrectAnswers = FillBlanks::getAnswerInfo($answer);
                     $switchableAnswerSet = $listCorrectAnswers["switchable"];
@@ -2509,12 +2508,13 @@ class Exercise
 
                     // get existing user data in n the BDD
                     if ($from_database) {
-                        $queryfill = "SELECT answer
-                                      FROM $TBL_TRACK_ATTEMPT
-                                      WHERE exe_id = $exeId
-                                      AND question_id= ".intval($questionId);
-                        $resfill = Database::query($queryfill);
-                        $str = Database::result($resfill, 0, 'answer');
+                        $sql = "SELECT answer
+                                FROM $TBL_TRACK_ATTEMPT
+                                WHERE
+                                    exe_id = $exeId AND
+                                    question_id= ".intval($questionId);
+                        $result = Database::query($sql);
+                        $str = Database::result($result, 0, 'answer');
 
                         $listStudentResults = FillBlanks::getAnswerInfo($str, true);
                         $choice = $listStudentResults['studentanswer'];
@@ -2549,9 +2549,7 @@ class Exercise
                     } else {
                         // switchable answer
                         $listStudentAnswerTemp = $choice;
-
                         $listTeacherAnswerTemp = $listCorrectAnswers['tabwords'];
-                        $listBadAnswerIndice = array();
                         // for every teacher answer, check if there is a student answer
                         for ($i=0; $i < count($listStudentAnswerTemp); $i++) {
                             $studentAnswer = trim($listStudentAnswerTemp[$i]);
@@ -2575,6 +2573,7 @@ class Exercise
                             }
                         }
                     }
+
                     $answer = FillBlanks::getAnswerInStudentAttempt($listCorrectAnswers);
 
                     // the question is encoded like this

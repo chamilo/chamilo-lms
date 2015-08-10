@@ -1290,6 +1290,10 @@ class Display
      */
     public static function show_notification($course_info)
     {
+        if (empty($course_info)) {
+            return '';
+        }
+
         $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
         $tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -1297,7 +1301,7 @@ class Display
 
         $user_id = api_get_user_id();
         $course_id = intval($course_info['real_id']);
-        $course_info['id_session'] = intval($course_info['id_session']);
+        $sessionId = intval($course_info['id_session']);
 
         // Get the user's last access dates to all tools of this course
         $sql = "SELECT *
@@ -1305,7 +1309,7 @@ class Display
                 WHERE
                     c_id = $course_id AND
                     access_user_id = '$user_id' AND
-                    access_session_id ='".$course_info['id_session']."'";
+                    access_session_id ='".$sessionId."'";
         $resLastTrackInCourse = Database::query($sql);
 
         $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
@@ -1322,6 +1326,13 @@ class Display
             $oldestTrackDate = $course_info['creation_date'];
         }
 
+        $sessionCondition = api_get_session_condition(
+            $sessionId,
+            true,
+            false,
+            'tet.session_id'
+        );
+
         // Get the last edits of all tools of this course.
         $sql = "SELECT
                     tet.*,
@@ -1332,15 +1343,15 @@ class Display
                     tet.to_group_id group_id,
                     ctt.image image,
                     ctt.link link
-                FROM $tool_edit_table tet, $course_tool_table ctt
+                FROM $tool_edit_table tet INNER JOIN $course_tool_table ctt
+                ON  tet.c_id = ctt.c_id
                 WHERE
                     tet.c_id = $course_id AND
-                    ctt.c_id = $course_id AND
                     tet.lastedit_date > '$oldestTrackDate' ".
                     // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
-                    " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) ".
-                    " AND ctt.visibility = '1' ".
-                    " AND tet.lastedit_user_id != $user_id AND tet.session_id = '".$course_info['id_session']."'
+                    " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work'))
+                    AND ctt.visibility = '1'
+                    AND tet.lastedit_user_id != $user_id $sessionCondition
                  ORDER BY tet.lastedit_date";
 
         $res = Database::query($sql);
@@ -1412,13 +1423,8 @@ class Display
         while (list($key, $notification) = each($notifications)) {
             $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
             $type = $notification['lastedit_type'];
-            if (empty($course_info['id_session'])) {
-                $my_course['id_session'] = 0;
-            } else {
-                $my_course['id_session'] = $course_info['id_session'];
-            }
             $label = get_lang('TitleNotification').": ".get_lang($type)." ($lastDate)";
-            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&ref='.$notification['ref'].'&gidReq='.$notification['to_group_id'].'&id_session='.$my_course['id_session'].'">'.
+            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&ref='.$notification['ref'].'&gidReq='.$notification['to_group_id'].'&id_session='.$sessionId.'">'.
                             Display::return_icon($notification['image'], $label).'</a>&nbsp;';
         }
 
@@ -1854,6 +1860,9 @@ class Display
 
     /**
      * Prints a tooltip
+     * @param string $text
+     * @param string $tip
+     * @return string
      */
     public static function tip($text, $tip)
     {
@@ -1863,6 +1872,12 @@ class Display
         return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
     }
 
+    /**
+     * @param array $items
+     * @param string $type
+     * @param null $id
+     * @return null|string
+     */
     public static function generate_accordion($items, $type = 'jquery', $id = null)
     {
         $html = null;

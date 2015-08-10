@@ -1455,25 +1455,11 @@ EOF;
                         );
                         break;
                     case ExtraField::FIELD_TYPE_LETTERS_ONLY:
-                        $form->addElement(
-                            'text',
-                            'extra_' . $field_details['variable'],
-                            [
-                                $field_details['display_text'],
-                                get_lang('OnlyLetters')
-                            ],
-                            [
-                                'pattern' => '[a-zA-Z]+',
-                                'title' => get_lang('OnlyLetters')
-                            ]
+                        $form->addLettersOnly(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text']
                         );
                         $form->applyFilter('extra_' . $field_details['variable'], 'stripslashes');
-                        $form->applyFilter('extra_' . $field_details['variable'], 'trim');
-                        $form->addRule(
-                            'extra_' . $field_details['variable'],
-                            get_lang('OnlyLetters'),
-                            'lettersonly'
-                        );
 
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {
@@ -1484,30 +1470,13 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_ALPHANUMERIC:
-                        $form->addElement(
-                            'text',
-                            'extra_' . $field_details['variable'],
-                            [
-                                $field_details['display_text'],
-                                get_lang('OnlyLettersAndNumbers')
-                            ],
-                            [
-                                'pattern' => '[a-zA-Z0-9]+',
-                                'title' => get_lang('OnlyLettersAndNumbers')
-                            ]
+                        $form->addAlphanumeric(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text']
                         );
                         $form->applyFilter(
                             'extra_' . $field_details['variable'],
                             'stripslashes'
-                        );
-                        $form->applyFilter(
-                            'extra_' . $field_details['variable'],
-                            'trim'
-                        );
-                        $form->addRule(
-                            'extra_' . $field_details['variable'],
-                            get_lang('OnlyLettersAndNumbers'),
-                            'alphanumeric'
                         );
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {
@@ -1518,26 +1487,11 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_LETTERS_SPACE:
-                        $form->addElement(
-                            'text',
-                            'extra_' . $field_details['variable'],
-                            [
-                                $field_details['display_text'],
-                                get_lang('OnlyLettersAndSpace')
-                            ],
-                            [
-                                'pattern' => '[a-zA-Z\s]+',
-                                'title' => get_lang('OnlyLetters')
-                            ]
+                        $form->addLettersAndSpaces(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text']
                         );
                         $form->applyFilter('extra_' . $field_details['variable'], 'stripslashes');
-                        $form->applyFilter('extra_' . $field_details['variable'], 'trim');
-                        $form->addRule(
-                            'extra_' . $field_details['variable'],
-                            get_lang('OnlyLettersAndSpace'),
-                            'regex',
-                            '/^[a-zA-Z\s]+$/'
-                        );
 
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {
@@ -1548,31 +1502,13 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_ALPHANUMERIC_SPACE:
-                        $form->addElement(
-                            'text',
-                            'extra_' . $field_details['variable'],
-                            [
-                                $field_details['display_text'],
-                                get_lang('OnlyLettersAndNumbersAndSpaces')
-                            ],
-                            [
-                                'pattern' => '[a-zA-Z0-9ñÑ\s]+',
-                                'title' => get_lang('OnlyLettersAndNumbersAndSpaces')
-                            ]
+                        $form->addAlphanumericAndSpaces(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text']
                         );
                         $form->applyFilter(
                             'extra_' . $field_details['variable'],
                             'stripslashes'
-                        );
-                        $form->applyFilter(
-                            'extra_' . $field_details['variable'],
-                            'trim'
-                        );
-                        $form->addRule(
-                            'extra_' . $field_details['variable'],
-                            get_lang('OnlyLettersAndNumbers'),
-                            'regex',
-                            '/^[a-zA-Z0-9ñÑ\s]+$/'
                         );
                         if (!$admin_permissions) {
                             if ($field_details['visible'] == 0) {

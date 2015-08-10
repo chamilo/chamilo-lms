@@ -151,6 +151,7 @@ function lp_upload_quiz_action_handling() {
     $feedback_false_index = array();
     $number_questions = 0;
     $question_description_index = array();
+    $noNegativeScoreIndex = array();
     // Reading all the first column items sequentially to create breakpoints
     for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
         if ($data->sheets[0]['cells'][$i][1] == 'Quiz' && $i == 1) {
@@ -168,6 +169,8 @@ function lp_upload_quiz_action_handling() {
             $feedback_false_index[] = $i; // FeedbackFalse position (line)
         } elseif ($data->sheets[0]['cells'][$i][1] == 'EnrichQuestion') {
             $question_description_index[] = $i;
+        } elseif ($data->sheets[0]['cells'][$i][1] == 'NoNegativeScore') {
+            $noNegativeScoreIndex[] = $i;
         }
     }
 
@@ -179,6 +182,7 @@ function lp_upload_quiz_action_handling() {
     $feedback_true_list = array();
     $feedback_false_list = array();
     $question_description = array();
+    $noNegativeScoreList = array();
 
     // Getting questions.
     $k = $z = $q = $l = $m = 0;
@@ -220,6 +224,9 @@ function lp_upload_quiz_action_handling() {
             //a complete line where 1st column is 'EnrichQuestion'
             $question_description[$m] = $column_data;
             $m++;
+        } elseif (in_array($i, $noNegativeScoreIndex)) {
+            //a complete line where 1st column is 'NoNegativeScore'
+            $noNegativeScoreList[$z-1] = $column_data;
         }
     }
 
@@ -367,6 +374,7 @@ function lp_upload_quiz_action_handling() {
                         // Fixing scores:
                         switch ($detectQuestionType) {
                             case GLOBAL_MULTIPLE_ANSWER:
+                                if (!strtolower($noNegativeScoreList[$i][3]) == 'x' && !$correct) $score = $score_list[$i][3] * -1;
                                 $score /= $numberRightAnswers;
                                 break;
                             case UNIQUE_ANSWER:

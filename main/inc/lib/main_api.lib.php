@@ -184,6 +184,11 @@ define('LOG_USER_FIELD_CREATE',                 'user_field_created');
 define('LOG_USER_FIELD_DELETE',                 'user_field_deleted');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
+define('LOG_SESSION_ADD_USER_COURSE', 'session_add_user_course');
+define('LOG_SESSION_DELETE_USER_COURSE', 'session_delete_user_course');
+define('LOG_SESSION_DELETE_USER', 'session_delete_user');
+define('LOG_SESSION_ADD_COURSE', 'session_add_course');
+define('LOG_SESSION_DELETE_COURSE', 'session_delete_course');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_cat_created'); //changed in 1.9.8
 define('LOG_SESSION_CATEGORY_DELETE',           'session_cat_deleted'); //changed in 1.9.8
 define('LOG_CONFIGURATION_SETTINGS_CHANGE',     'settings_changed');

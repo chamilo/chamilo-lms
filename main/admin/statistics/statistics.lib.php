@@ -32,7 +32,8 @@ class Statistics
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'";
+            $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u
+                    WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'";
             if (isset ($category_code)) {
                 $sql .= " AND category_code = '".Database::escape_string($category_code)."'";
             }
@@ -98,15 +99,18 @@ class Statistics
         $status_filter = isset($status)?' AND status = '.intval($status):'';
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url WHERE u.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
+            $sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url
+                    WHERE u.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
             if (isset ($category_code)) {
-                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
+                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url
+                        WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
             }
         } else {
             $sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE 1=1 $status_filter $active_filter";
             if (isset ($category_code)) {
                 $status_filter = isset($status)?' AND status = '.intval($status):'';
-                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' $status_filter $active_filter";
+                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c
+                        WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' $status_filter $active_filter";
             }
         }
 
@@ -125,7 +129,8 @@ class Statistics
         $access_url_rel_session_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         if (api_is_multiple_url_enabled()) {
             $current_url_id = api_get_current_access_url_id();
-            $sql = "SELECT COUNT(id) AS number FROM ".$session_table." as s, ".$access_url_rel_session_table." as u WHERE u.session_id=s.id AND access_url_id='".$current_url_id."'";
+            $sql = "SELECT COUNT(id) AS number FROM ".$session_table." as s, ".$access_url_rel_session_table." as u
+                    WHERE u.session_id=s.id AND access_url_id='".$current_url_id."'";
         } else {
             $sql = "SELECT COUNT(id) AS number FROM ".$session_table." ";
         }
@@ -141,15 +146,17 @@ class Statistics
     static function get_number_of_activities()
     {
         // Database table definitions
-        global $_configuration;
         $track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
-        if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user, $access_url_rel_user_table url WHERE default_user_id = user.user_id AND user.user_id=url.user_id AND access_url_id='".$current_url_id."'";
+        if (api_get_multiple_access_url()) {
+            $sql = "SELECT count(default_id) AS total_number_of_items
+                    FROM $track_e_default, $table_user user, $access_url_rel_user_table url
+                    WHERE default_user_id = user.user_id AND user.user_id=url.user_id AND access_url_id='".$current_url_id."'";
         } else {
-            $sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";
+            $sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user
+                    WHERE default_user_id = user.user_id ";
         }
 
         if (isset($_GET['keyword'])) {
@@ -172,7 +179,6 @@ class Statistics
      */
     static function get_activities_data($from, $number_of_items, $column, $direction)
     {
-        global $dateTimeFormatLong;
         $track_e_default    		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user 				= Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table	= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -228,20 +234,48 @@ class Statistics
         $res = Database::query($sql);
         $activities = array ();
         while ($row = Database::fetch_row($res)) {
-
-            if (strpos($row[1], '_object') === false && strpos($row[1], '_array') === false) {
-                $row[2] = $row[2];
-            } else {
+            if (
+                strpos(LOG_SESSION_ADD_USER_COURSE, $row[0]) !== false ||
+                strpos(LOG_SESSION_DELETE_USER_COURSE, $row[0]) !== false ||
+                strpos(LOG_SESSION_DELETE_USER, $row[0]) !== false ||
+                strpos(LOG_SESSION_ADD_COURSE, $row[0]) !== false ||
+                strpos(LOG_SESSION_DELETE_COURSE, $row[0]) !== false
+            ) {
                 if (!empty($row[2])) {
                     $originalData = $row[2];
-                    $row[2] = unserialize($originalData);
-                    if (is_array($row[2]) && !empty($row[2])) {
-                        $row[2] = implode_with_key(', ', $row[2]);
-                    } else {
-                        $row[2] = $originalData;
+                    if (!empty($originalData)) {
+                        $row[2] = @unserialize($originalData);
+                        if (is_array($row[2]) && !empty($row[2])) {
+                            $row[2] = implode_with_key(', ', $row[2]);
+                        } else {
+                            $row[2] = $originalData;
+                        }
+                    }
+                }
+            } else {
+
+                if (strpos($row[1], '_object') === false && strpos(
+                        $row[1],
+                        '_array'
+                    ) === false
+                ) {
+                    $row[2] = $row[2];
+                } else {
+                    if (!empty($row[2])) {
+                        $originalData = $row[2];
+                        $row[2] = unserialize($originalData);
+                        if (is_array($row[2]) && !empty($row[2])) {
+                            $row[2] = implode_with_key(', ', $row[2]);
+                        } else {
+                            $row[2] = $originalData;
+                        }
                     }
                 }
             }
+
+
+
+
             if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {
                 $row['default_date'] = api_get_local_time($row['default_date']);
             } else {

@@ -563,6 +563,7 @@ if (!empty($exercise_list)) {
                 $time_limits = true;
             }
 
+            $is_actived_time = false;
             if ($time_limits) {
                 // check if start time
                 $start_time = false;
@@ -574,7 +575,6 @@ if (!empty($exercise_list)) {
                     $end_time = api_strtotime($row['end_time'], 'UTC');
                 }
                 $now = time();
-                $is_actived_time = false;
 
                 //If both "clocks" are enable
                 if ($start_time && $end_time) {
@@ -822,29 +822,9 @@ if (!empty($exercise_list)) {
                             $attempt_text = get_lang('CantShowResults');
                         }
                     } else {
-                        //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
-                        //@todo use the is_visible function
-                        if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
-                            $today = time();
-                            $start_time = api_strtotime($row['start_time'], 'UTC');
-                            $end_time = api_strtotime($row['end_time'], 'UTC');
-                            if ($today < $start_time) {
-                                $attempt_text = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
-                            } else {
-                                if ($today > $end_time) {
-                                    $attempt_text = sprintf(get_lang('ExerciseWasActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
-                                }
-                            }
-
-                        } else {
-                            //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
-                            if ($row['start_time'] != '0000-00-00 00:00:00') {
-                                $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
-                            }
-                            if ($row['end_time'] != '0000-00-00 00:00:00') {
-                                $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));
-                            }
-                        }
+                        // Display visibility message for test in exercise page
+                        $visibleReturn = $exercise_obj->is_visible(0, 0, 0, false);
+                        $attempt_text = $visibleReturn['rawMessage'];
                     }
                 } else {
                     // Normal behaviour.

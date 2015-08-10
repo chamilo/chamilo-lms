@@ -1714,7 +1714,7 @@ class CourseManager
      */
     public static function get_coach_list_from_course_code($course_code, $session_id)
     {
-        if (empty($course_code) OR empty($session_id)) {
+        if (empty($course_code) || empty($session_id)) {
             return array();
         }
 
@@ -1862,7 +1862,7 @@ class CourseManager
                     $teacher['lastname']
                 );
                 if ($add_link_to_profile) {
-                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=300&user_id='.$teacher['user_id'];
+                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=500&user_id='.$teacher['user_id'];
                     $teacher_name = Display::url(
                         $teacher_name,
                         $url,
@@ -1937,7 +1937,7 @@ class CourseManager
             foreach ($coachs_course as $coach_course) {
                 $coach_name = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
                 if ($add_link_to_profile) {
-                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=300&user_id='.$coach_course['user_id'];
+                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=500&user_id='.$coach_course['user_id'];
                     $coach_name = Display::url($coach_name, $url, array('class' => 'ajax'));
                 }
                 $course_coachs[] = $coach_name;

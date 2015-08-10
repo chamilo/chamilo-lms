@@ -234,14 +234,13 @@ if ($agenda->type == 'course') {
 }
 
 $tpl->assign('form_add', $form->return_form());
+$tpl->assign('allow_agenda_event_comment', $allowEventComment);
 
 // Loading Agenda template.
 $content = $tpl->fetch('default/agenda/month.tpl');
 
 $message = Session::read('message');
 $tpl->assign('message', $message);
-$tpl->assign('allow_agenda_event_comment', $allowEventComment);
-
 Session::erase('message');
 
 $tpl->assign('content', $content);

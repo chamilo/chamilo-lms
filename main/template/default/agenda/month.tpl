@@ -452,7 +452,7 @@ $(document).ready(function() {
 					}
 				});
 			} else {
-			    //Simple form
+			    // Simple form
                 my_start_month = calEvent.start.getMonth() +1;
                 $('#simple_start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear());
 

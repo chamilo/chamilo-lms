@@ -650,28 +650,6 @@ class ImportCsv
     {
         $data = Import::csv_to_array($file);
 
-        if ($this->getDumpValues()) {
-            // Remove all calendar items
-            $truncateTables = array(
-                Database::get_course_table(TABLE_AGENDA),
-                Database::get_course_table(TABLE_AGENDA_ATTACHMENT),
-                Database::get_course_table(TABLE_AGENDA_REPEAT),
-                Database::get_course_table(TABLE_AGENDA_REPEAT_NOT),
-                Database::get_main_table(TABLE_PERSONAL_AGENDA),
-                Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT_NOT),
-                Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT)
-            );
-
-            foreach ($truncateTables as $table) {
-                $sql = "TRUNCATE $table";
-                Database::query($sql);
-            }
-
-            $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-            $sql = "DELETE FROM $table WHERE tool = 'calendar_event'";
-            Database::query($sql);
-        }
-
         if (!empty($data)) {
             $this->logger->addInfo(count($data) . " records found.");
             $eventsToCreate = array();
@@ -744,6 +722,8 @@ class ImportCsv
                 $startTime  = $row['time_start'];
                 $endTime = $row['time_end'];
                 $title = $row['title'];
+                $comment = $row['comment'];
+                $color = isset($row['color']) ? $row['color'] : '';
 
                 $startDateYear = substr($date, 0, 4);
                 $startDateMonth = substr($date, 4, 2);
@@ -752,12 +732,17 @@ class ImportCsv
                 $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.":00";
                 $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.":00";
 
-                if (!api_is_valid_date($startDate) OR !api_is_valid_date($endDate)) {
+                if (!api_is_valid_date($startDate) || !api_is_valid_date($endDate)) {
                     $this->logger->addInfo(
                         "Verify your dates:  '$startDate' : '$endDate' "
                     );
                     $errorFound = true;
                 }
+
+                // If old events do nothing.
+                /*if (api_strtotime($startDate) < time()) {
+                    continue;
+                }*/
 
                 if ($errorFound == false) {
                     $eventsToCreate[] = array(
@@ -767,6 +752,8 @@ class ImportCsv
                         'sender_id' => $teacherId,
                         'course_id' => $courseInfo['real_id'],
                         'session_id' => $sessionId,
+                        'comment' => $comment,
+                        'color' => $color,
                         $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID']
                     );
                 }
@@ -784,7 +771,6 @@ class ImportCsv
                 "Ready to insert events"
             );
 
-            $content = null;
             $agenda = new Agenda();
 
             $extraFieldValue = new ExtraFieldValue('calendar_event');
@@ -818,10 +804,21 @@ class ImportCsv
                         );
                         continue;
                     }
-                    $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+
+                    $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                         $extraFieldName,
-                        $externalEventId
+                        $externalEventId,
+                        false,
+                        false,
+                        true
                     );
+
+                    $item = null;
+                    foreach ($items as $tempItem) {
+                        if ($tempItem['c_id'] == $event['course_id']) {
+                            $item = $tempItem;
+                        }
+                    }
 
                     if (!empty($item)) {
                         $this->logger->addInfo(
@@ -837,8 +834,10 @@ class ImportCsv
                 $agenda->setType('course');
                 $agenda->setSessionId($event['session_id']);
                 $agenda->setSenderId($event['sender_id']);
+                $agenda->setIsAllowedToEdit(true);
 
                 $eventComment = $event['comment'];
+                $color = $event['color'];
 
                 // To use the event comment you need
                 // ALTER TABLE c_calendar_event ADD COLUMN comment TEXT;
@@ -858,9 +857,12 @@ class ImportCsv
                     continue;
                 }
 
-                if ($update) { //the event already exists, just update
+                $content = '';
+
+                if ($update && isset($item['calendar_event_id'])) {
+                    //the event already exists, just update
                     $eventId = $agenda->edit_event(
-                        $item,
+                        $item['calendar_event_id'],
                         $event['start'],
                         $event['end'],
                         false,
@@ -869,7 +871,8 @@ class ImportCsv
                         array('everyone'), // send to
                         array(), //$attachmentArray = array(),
                         null, //$attachmentComment = null,
-                        $eventComment
+                        $eventComment,
+                        $color
                     );
                     if ($eventId !== false) {
                         $this->logger->addInfo(
@@ -880,7 +883,8 @@ class ImportCsv
                             "Error while updating event."
                         );
                     }
-                } else { //New event. Create it.
+                } else {
+                    // New event. Create it.
                     $eventId = $agenda->add_event(
                         $event['start'],
                         $event['end'],
@@ -892,14 +896,17 @@ class ImportCsv
                         null, //  $parentEventId
                         array(), //$attachmentArray = array(),
                         null, //$attachmentComment = null,
-                        $eventComment
+                        $eventComment,
+                        $color
                     );
                     if (!empty($eventId)) {
+                        $extraFieldValue->is_course_model = true;
                         $extraFieldValue->save(
                             array(
                                 'field_value' => $externalEventId,
                                 'field_id' => $extraFieldInfo['id'],
-                                'calendar_event_id' => $eventId
+                                'calendar_event_id' => $eventId,
+                                'c_id' => $event['course_id']
                             )
                         );
                         $this->logger->addInfo(
@@ -1383,64 +1390,92 @@ class ImportCsv
 
         // Course
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         // Sessions
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         // Extra fields
         $table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
         Database::query($sql);
         echo $sql.PHP_EOL;
 
         $table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $sql = "DELETE FROM $table";
+        $sql = "TRUNCATE $table";
+        Database::query($sql);
+        echo $sql.PHP_EOL;
+
+        // Remove all calendar items
+        $truncateTables = array(
+            Database::get_course_table(TABLE_AGENDA),
+            Database::get_course_table(TABLE_AGENDA_ATTACHMENT),
+            Database::get_course_table(TABLE_AGENDA_REPEAT),
+            Database::get_course_table(TABLE_AGENDA_REPEAT_NOT),
+            Database::get_main_table(TABLE_PERSONAL_AGENDA),
+            Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT_NOT),
+            Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT),
+            Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_VALUES),
+        );
+
+        foreach ($truncateTables as $table) {
+            $sql = "TRUNCATE $table";
+            Database::query($sql);
+            echo $sql.PHP_EOL;
+        }
+
+        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $sql = "DELETE FROM $table WHERE tool = 'calendar_event'";
         Database::query($sql);
         echo $sql.PHP_EOL;
     }

@@ -8,7 +8,4 @@
 <p>¡Que tengas un buen día!</p>
 <p>Atte.</p>
 <p>{{ 'XTeam'|get_lang|format(_s.site_name) }}</p>
-<p>{{ _admin.telephone ? 'T. ' ~ _admin.telephone }}</p>
-<p>
-    {{ 'ResetPasswordCommentWithUrl'|get_lang|format(link) }}
-</p>
+<p>{{ _admin.telephone }}</p>

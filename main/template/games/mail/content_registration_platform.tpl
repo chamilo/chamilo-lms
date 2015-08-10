@@ -3,4 +3,4 @@
 <p>{{ 'YouCanStartSubscribingToCoursesEnteringToXUrl'|get_lang|format(_p.web_main ~ 'auth/courses.php') }}</p>
 <p>¡Disfruta!</p>
 <p>{{ 'XTeam'|get_lang|format(_s.site_name) }}</p>
-<p>{{ _admin.telephone ? 'T. ' ~ _admin.telephone }}</p>
+<p>{{ _admin.telephone }}</p>

@@ -3154,11 +3154,11 @@ class CourseManager
             $html .= '<small>' . $params['subtitle'] . '</small>';
         }
         if (!empty($params['teachers'])) {
-            $html .= '<h5>' . Display::return_icon('teacher.png', get_lang('Teacher'), array(),
+            $html .= '<h5 class="teacher">' . Display::return_icon('teacher.png', get_lang('Teacher'), array(),
                     ICON_SIZE_TINY) . $params['teachers'] . '</h5>';
         }
         if (!empty($params['coaches'])) {
-            $html .= '<h5>' . Display::return_icon('teacher.png', get_lang('Coach'), array(),
+            $html .= '<h5 class="teacher">' . Display::return_icon('teacher.png', get_lang('Coach'), array(),
                     ICON_SIZE_TINY) . $params['coaches'] . '</h5>';
         }
 
@@ -3233,7 +3233,7 @@ class CourseManager
 
         $html .= '<div class="col-md-10 ' . $param_class . '">';
         $html .= '<div class="pull-right">' . $params['right_actions'] . '</div>';
-        $html .= '<h4 class="title">' . $params['title'] . $notifications . '</h4> ';
+        $html .= '<h4 class="course-items-title">' . $params['title'] . $notifications . '</h4> ';
 
         if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
             $html .= '<p class="description-session">' . $params['description'] . '</p>';
@@ -3242,12 +3242,12 @@ class CourseManager
             $html .= '<div class="subtitle-session">' . $params['subtitle'] . '</div>';
         }
         if (!empty($params['teachers'])) {
-            $html .= '<h5>' .
+            $html .= '<h5 class="course-items-session">' .
                     Display::return_icon('teacher.png', get_lang('Teacher'), array(), ICON_SIZE_TINY) .
                 $params['teachers'] . '</h5>';
         }
         if (!empty($params['coaches'])) {
-            $html .= '<h5>' .
+            $html .= '<h5 class="course-items-session">' .
                 Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY) .
                 $params['coaches'] . '</h5>';
         }

@@ -4765,25 +4765,42 @@ i.size-32.icon-new-work{
 
 .social-avatar{
   text-align: center;
+}
+.social-avatar .img-profile{
+  margin-bottom: 5px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 20px;
+}
+.social-avatar .social-profile{
+  text-align: center;
   padding-top: 10px;
 }
-.social-avatar .avatar-profile{
-  margin-bottom: 5px;
-}
-.social-avatar .avatar-profile .img-responsive{
+.social-avatar .social-profile .img-responsive{
   display: inline-block;
   margin: auto;
 }
 .social-avatar .lastname{
-  font-size: 18px;
-  font-weight: bold;
-  color: #4d4d4d;
-}
-.social-avatar .firstname{
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   color: #4d4d4d;
   margin-bottom: 5px;
+}
+.social-avatar .firstname{
+  font-size: 14px;
+  font-weight: bold;
+  color: #4d4d4d;
+  margin-bottom: 0px;
+}
+.social-avatar .social-avatar-email,
+.social-avatar .social-avatar-chat{
+  font-size: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  color: #666666;
+}
+.social-avatar .social-avatar-chat{
+  margin-bottom: 15px;
 }
 .social-avatar .edit-profile{
   margin-top: 15px;
@@ -4796,6 +4813,14 @@ i.size-32.icon-new-work{
   color: #456176;
   font-weight: bold;
   font-size: 14px;
+}
+.social-profile .group-description{
+  font-size: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #666666;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .social-skill .list-badges{
   list-style: none;
@@ -4893,7 +4918,7 @@ i.size-32.icon-new-work{
 }
 .top-mediapost .user-image .avatar-thumb,
 .sub-mediapost .user-image .avatar-thumb{
-  padding: 5px;
+  padding: 2px;
   border: 1px solid #dddddd;
   margin-bottom: 5px;
   margin-right: 5px;
@@ -6110,9 +6135,9 @@ div#chat-remote-video video {
   text-align: left;
   padding-left: 15px;
 }
-form input.form-control{
+/*form input.form-control{
   margin-top: 10px;
-}
+}*/
 #whoisonline .items-user{
   text-align: center;
   /*border:1px solid #dddddd; */
@@ -6134,6 +6159,15 @@ form input.form-control{
   font-weight: normal;
   padding-left: 10px;
   padding-right: 10px;
+}
+.course-items .course-items-session{
+  font-size: 12px;
+}
+.course-items .course-items-title{
+  font-size:16px;
+}
+.report_section .table{
+  font-size: 12px;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

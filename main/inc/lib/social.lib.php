@@ -559,6 +559,7 @@ class SocialManager extends UserManager
         if (in_array($show, $show_groups) && !empty($group_id)) {
             // Group image
             $userGroup = new UserGroup();
+
             $group_info = $userGroup->get($group_id);
 
             $userGroupImage = $userGroup->get_picture_group(
@@ -571,6 +572,7 @@ class SocialManager extends UserManager
             $template->assign('show_group', true);
             $template->assign('group_id', $group_id);
             $template->assign('user_group_image', $userGroupImage);
+            $template->assign('user_group', $group_info);
             $template->assign(
                 'user_is_group_admin',
                 $userGroup->is_group_admin(
@@ -1520,6 +1522,7 @@ class SocialManager extends UserManager
         }
 
         $userInfo = api_get_user_info($userId, true, false, true);
+
         $template->assign('user', $userInfo);
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
@@ -1536,6 +1539,7 @@ class SocialManager extends UserManager
         $templateName = $template->get_template('social/user_block.tpl');
 
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
+
             $templateName = $template->get_template('social/group_block.tpl');
         }
 

@@ -108,7 +108,20 @@ $element = $form->addElement('text', 'real_code', array(get_lang('CourseCode'), 
 $element->freeze();
 
 // Visual code
-$form->addText('visual_code', array(get_lang('VisualCode'), get_lang('OnlyLettersAndNumbers'), get_lang('ThisValueIsUsedInTheCourseURL')), true, array('class' => 'span4'));
+$form->addText(
+    'visual_code',
+    array(
+        get_lang('VisualCode'),
+        get_lang('OnlyLettersAndNumbers'),
+        get_lang('ThisValueIsUsedInTheCourseURL')
+    ),
+    true,
+    [
+        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+        'pattern' => '[a-zA-Z0-9]+',
+        'title' => get_lang('OnlyLettersAndNumbers')
+    ]
+);
 
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');

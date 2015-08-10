@@ -61,12 +61,12 @@ if (count($output)>0) {
     Display::display_normal_message($result,false);
 }
 ?>
-<div class="well_border">
-  <h4><?php Display::display_icon('bug.gif', 'DataFiller'); echo ' '.api_ucfirst(get_lang('DataFiller'));?></h4>
-  <div><?php echo get_lang('ThisSectionIsOnlyVisibleOnSourceInstalls');?></div>
-  <ul>
-    <li><a href="filler.php?fill=users"><?php echo get_lang('FillUsers');?></a></li>
-    <li><a href="filler.php?fill=courses"><?php echo get_lang('FillCourses');?></a></li>
+<div id="datafiller" class="actions">
+  <h4><?php echo Display::return_icon('bug.png',get_lang('DataFiller'),null,ICON_SIZE_MEDIUM).' '.get_lang('DataFiller')?></h4>
+  <div class="description"><?php echo get_lang('ThisSectionIsOnlyVisibleOnSourceInstalls');?></div>
+  <ul class="fillers">
+    <li><a href="filler.php?fill=users"><?php echo Display::return_icon('user.png',get_lang('FillUsers'),null,ICON_SIZE_SMALL).' '.get_lang('FillUsers');?></a></li>
+    <li><a href="filler.php?fill=courses"><?php echo Display::return_icon('new-course.png',get_lang('FillCourses'),null,ICON_SIZE_SMALL).' '.get_lang('FillCourses');?></a></li>
   </ul>
 </div>
 <?php

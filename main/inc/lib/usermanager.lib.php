@@ -1461,28 +1461,28 @@ class UserManager
         $pictureWebFile = $imageWebPath['file'];
         $pictureWebDir = $imageWebPath['dir'];
 
-        $pictureAnonymous = 'unknown.jpg';
+        $pictureAnonymous = 'icons/128/unknown.png';
         $gravatarSize = 22;
         $realSizeName = 'small_';
 
         switch ($size) {
             case USER_IMAGE_SIZE_SMALL:
-                $pictureAnonymous = 'unknown_22.jpg';
+                $pictureAnonymous = 'icons/22/unknown.png';
                 $realSizeName = 'small_';
                 $gravatarSize = 22;
                 break;
             case USER_IMAGE_SIZE_MEDIUM:
-                $pictureAnonymous = 'unknown_50_50.jpg';
+                $pictureAnonymous = 'icons/64/unknown.png';
                 $realSizeName = 'medium_';
                 $gravatarSize = 50;
                 break;
             case USER_IMAGE_SIZE_ORIGINAL:
-                $pictureAnonymous = 'unknown.jpg';
+                $pictureAnonymous = 'icons/128/unknown.png';
                 $realSizeName = '';
                 $gravatarSize = 108;
                 break;
             case USER_IMAGE_SIZE_BIG:
-                $pictureAnonymous = 'unknown.jpg';
+                $pictureAnonymous = 'icons/128/unknown.png';
                 $realSizeName = 'big_';
                 $gravatarSize = 200;
                 break;

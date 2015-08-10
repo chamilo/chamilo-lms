@@ -19,3 +19,24 @@ $courses[] = array(
     'expiration_date' => '2020-09-01 00:00:00',
     'exemplary_content' => true,
 );
+$courses[] = array(
+    'code' => 'SPANISH101',
+    'title' => 'Español para iniciantes',
+    'description' => 'Curso de español',
+    'category_code' => 'PROJ',
+    'course_language' => 'spanish',
+    'user_id' => 1,
+    'expiration_date' => '2020-09-01 00:00:00',
+    'exemplary_content' => true,
+);
+$courses[] = array(
+    'code' => 'FRENCH101',
+    'title' => 'Français pour débutants',
+    'description' => 'Cours de français',
+    'category_code' => 'PROJ',
+    'course_language' => 'french',
+    'user_id' => 1,
+    'expiration_date' => '2020-09-01 00:00:00',
+    'exemplary_content' => true,
+);
+

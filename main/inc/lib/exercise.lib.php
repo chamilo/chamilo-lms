@@ -548,170 +548,73 @@ HTML;
                     $s .= '</tr>';
 
                 } elseif ($answerType == FILL_IN_BLANKS) {
-                    /*
-                     * In the FILL_IN_BLANKS test
-                     * you mustn't have [ and ] in the textarea
-                     * you mustn't have :: in the textarea
-                     * the text to find mustn't be empty or contains only spaces
-                     * the text to find mustn't contains HTML tags
-                     * the text to find mustn't contains char "
-                     */
+                    // display the question, with field empty, for student to fill it,
+                    // or filled to display the answer in the Question preview of the exercice/admin.php page
+                    $displayForStudent = true;
+                    $listAnswerInformations = FillBlanks::getAnswerInfo($answer);
+                    $separatorStartRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorstart']);
+                    $separatorEndRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorend']);
 
                     list($answer) = explode('::', $answer);
 
-                    // $correct_answer_list array of array with correct anwsers 0=> [0=>[\p] 1=>[plop]]
-                    api_preg_match_all(
-                        '/\[[^]]+\]/',
-                        $answer,
-                        $correct_answer_list
-                    );
+                    //Correct answers
+                    $correctAnswerList = $listAnswerInformations['tabwords'];
 
-                    // get student answer to display it if student go back to previous fillBlank answer question in a test
+                    //Student's answer
+                    $studentAnswerList = array();
                     if (isset($user_choice[0]['answer'])) {
-                        api_preg_match_all(
-                            '/\[[^]]+\]/',
-                            $user_choice[0]['answer'],
-                            $student_answer_list
-                        );
-                        $student_answer_list_tobecleaned = $student_answer_list[0];
-                        $student_answer_list = array();
-                        // here we got the student answer in a test
-                        // let's clean up the results
-                        /*
-                        Array
-                        (
-                            [0] => Array
-                            (
-                                [0] => [<font color="red"><s>yer</s></font> / <font color="green"><b>ici</b></font>]
-                                [1] => [<font color="red"><s>plop</s></font> / <font color="green"><b>/p</b></font>]
-                            )
-                        )
-                        */
-                        for ($i = 0; $i < count(
-                            $student_answer_list_tobecleaned
-                        ); $i++) {
-                            $answer_corrected = $student_answer_list_tobecleaned[$i];
-                            /*
-                             * we got if student answer is wrong
-                             * [<font color="red"><s>rrr</s></font> / <font color="green"><b>/p</b></font>]
-                             * or if student answer is good
-                             * [plop / <font color="green"><b>plop</b></font>]
-                             * or if student didn't answer []
-                             */
-                            $answer_corrected = api_preg_replace(
-                                '| / <font color="green"><b>.*$|',
-                                '',
-                                $answer_corrected
-                            );
-                            /*
-                             * we got [<font color="red"><s>rrr</s></font> or [plop or [
-                             */
-                            $answer_corrected = api_preg_replace(
-                                '/^\[/',
-                                '',
-                                $answer_corrected
-                            );
-                            /*
-                             * we got <font color="red"><s>rrr</s></font> or plop
-                             * non breakable spaces &nbsp;&nbsp;&nbsp; from /main/exercice/exercise.class.php have been removed l 2391 and l 2370
-                             */
-                            $answer_corrected = api_preg_replace(
-                                '|^<font color="red"><s>|',
-                                '',
-                                $answer_corrected
-                            );
-                            $answer_corrected = api_preg_replace(
-                                '|</s></font>$|',
-                                '',
-                                $answer_corrected
-                            );
-                            $answer_corrected = '[' . $answer_corrected . ']';
-                            /*
-                             * we got [rrr] or [plop] or []
-                             */
-                            $student_answer_list[] = $answer_corrected;
-                        }
+                        $arrayStudentAnswer = FillBlanks::getAnswerInfo($user_choice[0]['answer'], true);
+                        $studentAnswerList = $arrayStudentAnswer['studentanswer'];
                     }
 
-                    // If display preview of answer in test view for exemple, set the student answer to the correct answers
+                    // If the question must be shown with the answer (in page exercice/admin.php) for teacher preview
+                    // set the student-answer to the correct answer
                     if ($debug_mark_answer) {
-                        // contain the rights answers surronded with brackets
-                        $student_answer_list = $correct_answer_list[0];
+                        $studentAnswerList = $correctAnswerList;
+                        $displayForStudent = false;
                     }
 
-                    /*
-                    Split the response by bracket
-                    tab_comments is an array with text surrounding the text to find
-                    we add a space before and after the answer_question to be sure to
-                    have a block of text before and after [xxx] patterns
-                    so we have n text to find ([xxx]) and n+1 block of texts before,
-                    between and after the text to find
-                    */
-                    $tab_comments = api_preg_split(
-                        '/\[[^]]+\]/',
-                        ' ' . $answer . ' '
-                    );
-
-                    if (!empty($correct_answer_list) && !empty($student_answer_list)) {
+                    if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
                         $answer = "";
-
-                        $i = 0;
-                        foreach ($student_answer_list as $student_item) {
-                            // remove surronding brackets
-                            $student_response = api_substr(
-                                $student_item,
-                                1,
-                                api_strlen($student_item) - 2
-                            );
-
-                            $size = strlen($student_item);
-                            $attributes['class'] = self::detectInputAppropriateClass(
-                                $size
-                            );
-
-                            $answer .= $tab_comments[$i] .
-                                Display::input(
-                                    'text',
-                                    "choice[$questionId][]",
-                                    $student_response,
-                                    $attributes
-                                );
-                            $i++;
+                        for ($i = 0; $i < count($listAnswerInformations["commonwords"]) - 1; $i++) {
+                            // display the common word
+                            $answer .= $listAnswerInformations["commonwords"][$i];
+                            // display the blank word
+                            $correctItem = $listAnswerInformations["tabwords"][$i];
+                            $correctItemRegexp = $correctItem;
+                            // replace / with \/ to allow the preg_replace bellow and all the regexp char
+                            $correctItemRegexp = FillBlanks::getRegexpProtected($correctItemRegexp);
+                            if (isset($studentAnswerList[$i])) {
+                                // If student already started this test and answered this question,
+                                // fill the blank with his previous answers
+                                // may be "" if student viewed the question, but did not fill the blanks
+                                $correctItem = $studentAnswerList[$i];
+                            }
+                            $attributes["style"] = "width:".$listAnswerInformations["tabinputsize"][$i]."px";
+                            $answer .= FillBlanks::getFillTheBlankHtml($separatorStartRegexp, $separatorEndRegexp, $correctItemRegexp, $questionId, $correctItem, $attributes, $answer, $listAnswerInformations, $displayForStudent, $i);
                         }
-                        $answer .= $tab_comments[$i];
+                        // display the last common word
+                        $answer .= $listAnswerInformations["commonwords"][$i];
                     } else {
-                        // display exercise with empty input fields
-                        // every [xxx] are replaced with an empty input field
-                        foreach ($correct_answer_list[0] as $item) {
-                            $size = strlen($item);
-                            $attributes['class'] = self::detectInputAppropriateClass(
-                                $size
-                            );
-
-                            $attributes['class'] .= ' block_on_enter';
-
-                            $answer = str_replace(
-                                $item,
-                                Display::input(
-                                    'text',
-                                    "choice[$questionId][]",
-                                    '',
-                                    $attributes
-                                ),
-                                $answer
-                            );
+                        // display empty [input] with the right width for student to fill it
+                        $separatorStartRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorstart']);
+                        $separatorEndRegexp = FillBlanks::escapeForRegexp($listAnswerInformations['blankseparatorend']);
+                        $answer = "";
+                        for ($i = 0; $i < count($listAnswerInformations["commonwords"]) - 1; $i++) {
+                            // display the common words
+                            $answer .= $listAnswerInformations["commonwords"][$i];
+                            // display the blank word
+                            $attributes["style"] = "width:".$listAnswerInformations["tabinputsize"][$i]."px";
+                            $correctItem = $listAnswerInformations["tabwords"][$i];
+                            $correctItemRegexp = $correctItem;
+                            // replace / with \/ to allow the preg_replace bellow and all the regexp char
+                            $correctItemRegexp = FillBlanks::getRegexpProtected($correctItemRegexp);
+                            $answer .= FillBlanks::getFillTheBlankHtml($separatorStartRegexp, $separatorEndRegexp, $correctItemRegexp, $questionId, '', $attributes, $answer, $listAnswerInformations, $displayForStudent, $i);
                         }
-                        /*$answer = api_preg_replace(
-                            '/\[[^]]+\]/',
-                            Display::input(
-                                'text',
-                                "choice[$questionId][]",
-                                '',
-                                $attributes
-                            ), $answer);*/
+                        // display the last common word
+                        $answer .= $listAnswerInformations["commonwords"][$i];
                     }
-                    $html = '<div class="fill_blanks col-md-12">'.$answer.'</div>';
-                    $s .= $html ;
+                    $s .= $answer;
 
                 } elseif ($answerType == CALCULATED_ANSWER) {
                     /*
@@ -3047,13 +2950,15 @@ HTML;
      * @param int $exercise_id
      * @param string $course_code
      * @param int $session_id
+     * @param string $questionType
      * @return int
      */
     public static function get_number_students_question_with_answer_count(
         $question_id,
         $exercise_id,
         $course_code,
-        $session_id
+        $session_id,
+        $questionType = ''
     ) {
         $track_exercises = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_EXERCISES
@@ -3071,6 +2976,27 @@ HTML;
         $exercise_id = intval($exercise_id);
         $courseId = api_get_course_int_id($course_code);
         $session_id = intval($session_id);
+
+        if ($questionType == FILL_IN_BLANKS) {
+            $listStudentsId = array();
+            $listAllStudentInfo = CourseManager::get_student_list_from_course_code(
+                api_get_course_id(),
+                true
+            );
+            foreach ($listAllStudentInfo as $i => $listStudentInfo) {
+                $listStudentsId[] = $listStudentInfo['user_id'];
+            }
+
+            $listFillTheBlankResult = getFillTheBlankTabResult(
+                $exercise_id,
+                $question_id,
+                $listStudentsId,
+                '1970-01-01',
+                '3000-01-01'
+            );
+
+            return getNbResultFillBlankAll($listFillTheBlankResult);
+        }
 
         if (empty($session_id)) {
             $courseCondition = "

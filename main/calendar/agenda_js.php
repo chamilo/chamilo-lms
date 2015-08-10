@@ -224,7 +224,7 @@ $agenda->showToForm($form, $sendTo, array(), $addOnlyItemsInSendTo);
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div id="visible_to_read_only" style="display: none">');
-$form->addElement('label', get_lang('To'), '<div id="visible_to_read_only_users"></div>');
+$form->addElement('label', get_lang('To'),'<div id="visible_to_read_only_users"></div>');
 $form->addElement('html', '</div>');
 
 $form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');

@@ -67,6 +67,15 @@ if ($passwordEncryption == 'bcrypt') {
 // Check the PHP version
 api_check_php_version($includePath.'/');
 
+// Error reporting settings.
+if (api_get_setting('server_type') == 'test') {
+    ini_set('display_errors', '1');
+    ini_set('log_errors', '1');
+    error_reporting(-1);
+} else {
+    error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
+}
+
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
@@ -276,12 +285,9 @@ require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
 // which will then be usable from the banner and header scripts
 $this_section = SECTION_GLOBAL;
 
-// include the local (contextual) parameters of this course or section
-require $includePath.'/local.inc.php';
+// Include Chamilo Mail conf this is added here because the api_get_setting works
 
-//Include Chamilo Mail conf this is added here because the api_get_setting works
-
-//Fixes bug in Chamilo 1.8.7.1 array was not set
+// Fixes bug in Chamilo 1.8.7.1 array was not set
 $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
 $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
@@ -303,14 +309,6 @@ foreach ($configurationFiles as $file) {
     }
 }
 
-// Error reporting settings.
-if (api_get_setting('server_type') == 'test') {
-    ini_set('display_errors', '1');
-    ini_set('log_errors', '1');
-    error_reporting(-1);
-} else {
-    error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-}
 
 /*  LOAD LANGUAGE FILES SECTION */
 
@@ -456,6 +454,8 @@ if (!empty($valid_languages)) {
 // to use it within the function get_lang(...).
 $language_interface_initial_value = $language_interface;
 
+
+
 /**
  * Include the trad4all language file
  */
@@ -487,8 +487,12 @@ if (!empty($parent_path)) {
     }
 }
 
+// include the local (contextual) parameters of this course or section
+require $includePath.'/local.inc.php';
+
 // The global variable $text_dir has been defined in the language file trad4all.inc.php.
-// For determing text direction correspondent to the current language we use now information from the internationalization library.
+// For determining text direction correspondent to the current language
+// we use now information from the internationalization library.
 $text_dir = api_get_text_direction();
 
 // ===== "who is logged in?" module section =====
@@ -553,7 +557,9 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 // The langstat object will then be used in the get_lang() function.
 // This block can be removed to speed things up a bit as it should only ever
 // be used in development versions.
-if (isset($_configuration['language_measure_frequency']) && $_configuration['language_measure_frequency'] == 1) {
+if (isset($_configuration['language_measure_frequency']) &&
+    $_configuration['language_measure_frequency'] == 1
+) {
     require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
     $langstats = new langstats();
 }

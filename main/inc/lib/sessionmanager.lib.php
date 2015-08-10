@@ -6509,7 +6509,7 @@ class SessionManager
         $form->addElement('html', '<div id="duration" style="display:none">');
 
         $form->addElement(
-            'text',
+            'number',
             'duration',
             array(
                 get_lang('SessionDurationTitle'),

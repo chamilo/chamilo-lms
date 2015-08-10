@@ -3096,8 +3096,8 @@ $MyStats = "Mon parcours";
 $Logout = "Quitter";
 $MyAgenda = "Agenda perso";
 $CourseHomepage = "Sommaire du cours";
-$CourseManagerview = "Vue prof";
-$StudentView = "Vue apprenant";
+$SwitchToTeacherView = "Passer en vue prof";
+$SwitchToStudentView = "Passer en vue apprenant";
 $AddResource = "Ajouter une ressource";
 $AddedResources = "Ressources ajoutées";
 $TimeReportForTeacherX = "Rapport de temps pour l'enseignant %s";
@@ -7429,4 +7429,31 @@ $SeeSequences = "Voir les séquences";
 $SessionRequirements = "Pré-requis pour la session";
 $IsRequirement = "Obligatoire pour compléter le cours";
 $ConsiderThisGradebookAsRequirementForASessionSequence = "Considérer ce cahier de notes comme un pré-requis pour compléter le cours (ce qui influencera notamment les séquences de sessions)";
+$DistinctUsersLogins = "Connexions d'utilisateurs distincts";
+$AreYouSureToSubscribe = "Êtes-vous certain de vouloir vous inscrire?";
+$CheckYourEmailAndFollowInstructions = "Veuillez vérifier votre e-mail et suivre les instructions.";
+$LinkExpired = "Lien expiré, merci de recommencer la procédure.";
+$ResetPasswordInstructions = "Instructions de changement de mot de passe";
+$ResetPasswordCommentWithUrl = "Ce message vous est envoyé parce que vous (ou quelqu'un qui tente d'usurper votre identité) a demandé qu'un nouveau mot de passe soit généré pour votre compte. Pour configurer votre nouveau mot de passe, veuillez suivre le lien suivant: %s 
+Si vous n'avez rien demandé, vous pouvez ignorer ce message en toute tranquilité. Si vous n'avez rien demandé et que vous continuez de recevoir ces messages, merci de bien vouloir contacter l'administrateur du portail.";
+$CronRemindCourseExpirationActivateText = "Cron de rappel de fin de cours";
+$CronRemindCourseExpirationActivateComment = "Activez cette option pour envoyer un e-mail de rappel quand la fin du cours (session) approche (requiert la configuration d'un processus cron sur le serveur).";
+$CronRemindCourseExpirationFrecuencyText = "Fréquence du rappel de fin de cours";
+$CronRemindCourseExpirationFrecuencyComment = "Quantité de jours avant la fin du cours (session) pour envoyer le rappel par e-mail. Par exemple, indiquez 7 pour envoyer un e-mail 7 jours avant la fin du cours.";
+$CronCourseFinishedActivateText = "Cron de fin du cours";
+$CronCourseFinishedActivateComment = "Activez pour envoyer un e-mail lorsque le cours est terminé";
+$MailCronCourseFinishedSubject = "Fin du cours: %s";
+$MailCronCourseFinishedBody = "Cher/Chère %s,
+
+Merci d'avoir participé au cours %s. Nous espérons que vous avez acquis de nouvelles connaissances et que vous avez pleinement profité du cours. Vous pouvez réviser votre progrès et votre développement personnel au sein du cours dans la section Mon Suivi.
+
+Cordialement,
+
+%s";
+$GenerateDefaultContent = "Générer du contenu par défaut";
+$ThanksForYourSubscription = "Merci pour votre inscription";
+$XTeam = "Équipe %s";
+$YouCanStartSubscribingToCoursesEnteringToXUrl = "Vous pouvez vous inscrire à des cours en allant sur %s";
+$VideoUrl = "URL de vidéo";
+$AddAttachment = "Ajouter une pièce jointe";
 ?>

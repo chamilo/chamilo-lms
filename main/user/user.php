@@ -52,7 +52,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     $user_ids = array_diff($_POST['user'], array($user_id));
                     if (count($user_ids) > 0) {
                         CourseManager::unsubscribe_user($user_ids, $courseCode);
-                        $message = get_lang('UsersUnsubscribed');
+                        Display::addFlash(Display::return_message(get_lang('UsersUnsubscribed')));
                     }
                 }
         }
@@ -421,9 +421,9 @@ if (api_is_allowed_to_edit(null, true)) {
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row['user_id'] == $user_id || $row['user_id'] == "") {
                 CourseManager::unsubscribe_user($_GET['user_id'], $courseCode);
-                $message = get_lang('UserUnsubscribed');
+                Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
             } else {
-                $message = get_lang('ThisStudentIsSubscribeThroughASession');
+                Display::addFlash(Display::return_message(get_lang('ThisStudentIsSubscribeThroughASession')));
             }
         }
     }
@@ -981,10 +981,6 @@ if (api_is_allowed_to_edit(null, true)) {
 }
 
 echo UserManager::getUserSubscriptionTab($selectedTab);
-
-if (isset($message)) {
-    Display::display_confirmation_message($message);
-}
 
 $table->display();
 

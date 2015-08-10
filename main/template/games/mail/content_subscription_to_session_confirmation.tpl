@@ -3,4 +3,4 @@
 <p>Para potenciar la experiencia, te invitamos a participar activamente de los cursos compartiendo tus experiencias y trabajos con el resto de participantes.</p>
 <p>{{ session_coach }}</p>
 <p>{{ 'XTeam'|get_lang|format(_s.site_name) }}</p>
-<p>{{ _admin.telephone ? 'T. ' ~ _admin.telephone }}</p>
+<p>{{ _admin.telephone }}</p>

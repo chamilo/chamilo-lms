@@ -22,31 +22,33 @@ class ExerciseShowFunctions
 	 * @param string    Answer text
 	 * @param int       Exercise ID
 	 * @param int       Question ID
+     * @param int $resultsDisabled
 	 * @return void
 	 */
-	static function display_fill_in_blanks_answer($feedback_type, $answer, $id, $questionId)
+	public static function display_fill_in_blanks_answer($feedbackType, $answer, $id, $questionId, $resultsDisabled)
     {
+        $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $resultsDisabled);
         if (empty($id)) {
-            echo '<tr><td>'. Security::remove_XSS($answer).'</td></tr>';
+            echo '<tr><td>';
+            echo Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY);
+            echo '</td></tr>';
         } else {
-		?>
-			<tr>
+            ?>
+            <tr>
                 <td>
-                    <?php
-                    echo Security::remove_XSS($answer);
-                    ?>
+                    <?php echo nl2br(Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY)); ?>
                 </td>
 
-			<?php
-			if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-				<td>
-                    <?php
-                    $comm = Event::get_comments($id,$questionId);
-                    ?>
-				</td>
-			<?php } ?>
+                <?php
+                if (!api_is_allowed_to_edit(null,true) && $feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+                    <td>
+                        <?php
+                        $comm = Event::get_comments($id, $questionId);
+                        ?>
+                    </td>
+                <?php } ?>
             </tr>
-		<?php
+        <?php
         }
 	}
 
@@ -152,7 +154,8 @@ class ExerciseShowFunctions
 	 * @param string $studentChoice
 	 * @param string $answerComment
 	 */
-	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment, $in_results_disabled) {
+	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment, $in_results_disabled)
+	 {
         $hide_expected_answer = false;
         if ($feedback_type == 0 && $in_results_disabled == 2) {
             $hide_expected_answer = true;

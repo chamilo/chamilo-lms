@@ -323,19 +323,21 @@ if ($form->validate()) {
         $department_url = 'http://' . $department_url;
     }
 
-    $sql = "UPDATE $course_table SET
-                course_language='" . Database::escape_string($course_language) . "',
-                title='" . Database::escape_string($title) . "',
-                category_code='" . Database::escape_string($category_code) . "',
-                visual_code='" . Database::escape_string($visual_code) . "',
-                department_name='" . Database::escape_string($department_name) . "',
-                department_url='" . Database::escape_string($department_url) . "',
-                disk_quota='" . Database::escape_string($disk_quota) . "',
-                visibility = '" . Database::escape_string($visibility) . "',
-                subscribe = '" . Database::escape_string($subscribe) . "',
-                unsubscribe='" . Database::escape_string($unsubscribe) . "'
-            WHERE id = $courseId ";
     Database::query($sql);
+
+    $params = [
+        'course_language' => $course_language,
+        'title' => $title,
+        'category_code' => $category_code,
+        'visual_code' => $visual_code,
+        'department_name' => $department_name,
+        'department_url' => $department_url,
+        'disk_quota' => $disk_quota,
+        'visibility' => $visibility,
+        'subscribe' => $subscribe,
+        'unsubscribe' => $unsubscribe,
+    ];
+    Database::update($course_table, $params, ['id = ?' => $courseId]);
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
@@ -377,17 +379,6 @@ if ($form->validate()) {
         }
     }
 
-    // No need to register me as a teacher.
-    /*
-    $sql = "INSERT IGNORE INTO " . $course_user_table . " SET
-            c_id = " . $courseInfo['real_id'] . ",
-            user_id = '" . $tutor_id . "',
-            status = '1',
-            is_tutor ='0',
-            sort = '0',
-            user_course_cat='0'";
-    Database::query($sql);
-    */
     if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
         $sql = "UPDATE $course_table SET
                 add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
@@ -396,8 +387,6 @@ if ($form->validate()) {
     }
 
     $course_id = $courseInfo['real_id'];
-    /* $forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
-      $sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id "; */
 
     Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
 

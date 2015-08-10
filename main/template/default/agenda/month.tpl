@@ -121,7 +121,7 @@ $(document).ready(function() {
 			//$("#users_to_send_id").trigger("chosen:updated");
 
 			if ({{ can_add_events }} == 1) {
-				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.unix()+'&end='+end.unix()+'&all_day='+allDay+'&view='+view.name;
+				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.format('YYYY-MM-DD 00:00:00')+'&end='+end.format('YYYY-MM-DD 00:00:00')+'&all_day='+allDay+'&view='+view.name;
                 var start_date_value = start.format('{{ js_format_date }}');
                 var end_date_value = end.format('{{ js_format_date }}');
 
@@ -531,7 +531,7 @@ $(document).ready(function() {
 {{ actions_div }}
 
 <div id="simple-dialog-form" style="display:none;">
-    <div style="width:640px">
+    <div style="width:500px">
         <form name="form-simple" class="form-horizontal">
             <span id="calendar_course_info_simple"></span>
             <span id="calendar_session_info"></span>
@@ -574,7 +574,7 @@ $(document).ready(function() {
 </div>
 
 <div id="dialog-form" style="display:none;">
-	<div style="width:640px">
+	<div class="dialog-form-content">
         {{ form_add }}
 	</div>
 </div>

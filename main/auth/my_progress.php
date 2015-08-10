@@ -69,9 +69,9 @@ if (!empty($course_user_list)) {
         $dates .= '<li><a href="#'.$login.'">'.api_get_utc_datetime($login).'</a></li>';
         $issues .= '<li id ="'.$login.'">
                         <div class="row">
-                            <div class="span2"><div class="thumbnail">'.$course_image.'</div>
+                            <div class="col-md-12"><div class="thumbnail">'.$course_image.'</div>
                         </div>
-                        <div class="span3">'.sprintf(
+                        <div class="col-md-3">'.sprintf(
                             get_lang('YouHaveEnteredTheCourseXInY'),
                             $courseInfo['code'],
                             api_convert_and_format_date($login, DATE_FORMAT_LONG)
@@ -88,7 +88,7 @@ if (!empty($dates)) {
     if (!empty($content)) {
         $content .= '<br /><br />';
     }
-    $content .= '<div class="row"><div class="span12">'.Display::page_subheader(get_lang('Timeline')).'</div>';
+    $content .= '<div class="row"><div class="col-md-12">'.Display::page_subheader(get_lang('Timeline')).'</div>';
     $content .= '<div id="my_timeline">
         <div class="actions">
             <a href="#" id="prev"></a> <!-- optional -->

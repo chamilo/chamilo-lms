@@ -3105,8 +3105,8 @@ $MyStats = "Ver mis estadísticas";
 $Logout = "Salir";
 $MyAgenda = "Mi agenda";
 $CourseHomepage = "Página principal del curso";
-$CourseManagerview = "Cambiar a \"Vista de profesor\"";
-$StudentView = "Cambiar a \"Vista de estudiante\"";
+$SwitchToTeacherView = "Cambiar a vista profesor";
+$SwitchToStudentView = "Cambiar a \"Vista de estudiante\"";
 $AddResource = "Añadir recurso";
 $AddedResources = "Recursos añadidos";
 $TimeReportForTeacherX = "Reporte de tiempo profesor %s";
@@ -7467,6 +7467,11 @@ $ConsiderThisGradebookAsRequirementForASessionSequence = "Considerar este libro 
 $DistinctUsersLogins = "Logins de usuarios distintos";
 $AreYouSureToSubscribe = "¿Está seguro de suscribirse?";
 $CheckYourEmailAndFollowInstructions = "Revise su correo electrónico y siga las instrucciones.";
+$LinkExpired = "Enlace expirado, por favor vuelva a iniciar el proceso.";
+$ResetPasswordInstructions = "Instrucciones para el procedimiento de cambio de contraseña";
+$ResetPasswordCommentWithUrl = "Ha recibido este mensaje porque Usted (o alguien que intenta hacerse pasar por Ud) ha pedido que su contraseña sea generada nuevamente. Para configurar una nueva contraseña, necesita activarla. Para ello, por favor de clic en el siguiente enlace: %s.
+
+Si no ha pedido un cambio de contraseña, puede ignorar este mensaje. No obstante, si vuelve a recibirlo repetidamente, por favor comuníquese con el administrador de su portal.";
 $CronRemindCourseExpirationActivateText = "Cron de Recordatorio de Expiración de Curso";
 $CronRemindCourseExpirationActivateComment = "Habilitar el cron de envío de recordatorio de expiración de cursos";
 $CronRemindCourseExpirationFrecuencyText = "Frecuencia del recordatorio de expiración de curso";
@@ -7487,4 +7492,9 @@ $GenerateDefaultContent = "Generar contenido por defecto";
 $ThanksForYourSubscription = "¡Gracias por su suscripción!";
 $XTeam = "El equipo de %s";
 $YouCanStartSubscribingToCoursesEnteringToXUrl = "Puede empezar a suscribirse a los cursos ingresando a %s";
+$VideoUrl = "URL de vídeo";
+$AddAttachment = "Añadir archivo adjunto";
+$FieldTypeOnlyLetters = "Texto de letras solamente";
+$FieldTypeAlphanumeric = "Texto de caracteres alfanuméricos";
+$OnlyLetters = "Sólo letras";
 ?>

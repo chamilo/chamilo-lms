@@ -1485,7 +1485,7 @@ class MySpace
             $csv_row[] = $last_login_date;
             $csv_content[] = $csv_row;
         }
-        Export :: export_table_csv($csv_content, 'reporting_course_overview');
+        Export :: arrayToCsv($csv_content, 'reporting_course_overview');
         exit;
     }
 
@@ -1888,7 +1888,7 @@ class MySpace
                 $csv_content[] = $csv_row;
             }
         }
-        Export :: export_table_csv($csv_content, 'reporting_session_overview');
+        Export :: arrayToCsv($csv_content, 'reporting_session_overview');
         exit;
     }
 
@@ -2069,7 +2069,7 @@ class MySpace
                 $csv_content[] = $csv_row;
             }
         }
-        Export :: export_table_csv($csv_content, 'reporting_user_overview');
+        Export :: arrayToCsv($csv_content, 'reporting_user_overview');
         exit;
     }
 

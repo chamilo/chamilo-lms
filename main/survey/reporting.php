@@ -20,7 +20,7 @@ $survey_data = SurveyManager::get_survey($survey_id);
 
 // Export
 /**
- * @todo use export_table_csv($data, $filename = 'export')
+ * @todo use Export::arrayToCsv($data, $filename = 'export')
  */
 if (isset($_POST['export_report']) && $_POST['export_report']) {
     switch ($_POST['export_format']) {

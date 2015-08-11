@@ -1,11 +1,12 @@
 /*
     Theme Name: Chamilo Base
     URI Project: http://www.chamilo.org
-	  Description: Styles main base of Chamilo LMS appearance , works with Bootstrap 3.0.x
-    Author: alex.aragon@beeznest.com
-            angel.quiroz@beeznest.com
-            julio.montoya@beeznest.com
-            yannik.warnier@beeznest.com
+    Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 3.0.x
+    Author:
+        alex.aragon@beeznest.com
+        angel.quiroz@beeznest.com
+        julio.montoya@beeznest.com
+        yannik.warnier@beeznest.com
     Version: 1.0
 */
 pre {
@@ -35,6 +36,10 @@ footer #footer_right{
 select {
   width : auto;
 }
+a.thumbnail:hover{
+  border:1px solid #dddddd;
+  box-shadow: 0 4px 8px #C8C8C8;
+}
 /*------------------------------*/
 .admin-block-version{
  font-size: 12px;
@@ -56,6 +61,9 @@ select {
   text-align: left;
 }
 /*------------------------*/
+.cursor-pointer {
+    cursor: pointer;
+}
 .invisible {
   visibility: visible;
 }
@@ -3457,12 +3465,10 @@ div#no-data-view div.controls {
     text-indent: -9000px;
     z-index: 1;
 }
-
 /* remove halo effect in firefox   */
 a:active{
     outline: none;
 }
-
 .skills-profiles, .skills-users, .skills-skills {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -3475,30 +3481,6 @@ a:active{
 {
     margin-bottom: 8px;
     border: 0px;
-}
-
-.offline_user {
-    display: block;
-    height: 20px;
-    width: 20px;
-    position:absolute;
-    background: url("../../main/img/offline.png") no-repeat scroll right center transparent;
-}
-
-.online_user {
-    display: block;
-    height: 20px;
-    width: 20px;
-    position:absolute;
-    background: url("../../main/img/online.png") no-repeat scroll right center transparent;
-}
-
-.online_user_in_text {
-    background: url("../../main/img/online.png") no-repeat scroll right center transparent;
-    height: 16px;
-    width: 17px;
-    display: inline-block;
-    margin-right: 4px;
 }
 .send_msg_in_text {
     background: url("../../main/img/mail_send.png") no-repeat scroll right center transparent;
@@ -3514,60 +3496,21 @@ a:active{
     display: inline-block;
     margin-right: 4px;
 }
-.teacher_online {
-    background: url("../../main/img/icons/16/teacher.png") no-repeat scroll right center transparent;
-    height: 16px;
-    width: 17px;
-    display: inline-block;
-    margin-right: 4px;
-}
-
-.student_online {
-    background: url("../../main/img/icons/16/user.png") no-repeat scroll right center transparent;
-    height: 16px;
-    width: 17px;
-    display: inline-block;
-    margin-right: 4px;
-}
-
-#online_grid_container .thumbnail .caption {
-    text-align:center;
-}
-
-.offline_user_in_text {
-    background: url("../../main/img/offline.png") no-repeat scroll right center transparent;
-    height: 16px;
-    width: 17px;
-    display: inline-block;
-    margin-right: 4px;
-}
-
-.subnav .nav .hide_menu {
-    display:none;
-}
-
-.homepage_notice {
-
-}
-
 .welcome_course li {
     float:left;
     list-style-type: none;
     width: 175px
 }
-
 .welcome_course li p {
     margin-left: auto;
     margin-right: auto;
     width: 88px;
 }
-
 .welcome_course li a {
     margin-left: auto;
     margin-right: auto;
     width: 120px;
 }
-
 /* Nanogong - exercise player*/
 
 .nanogong_player_container {
@@ -4561,14 +4504,6 @@ i.size-32.icon-new-work{
     z-index: 1010;
 }
 
-/* Balances ".thumbnail > img" from bootstrap */
-.thumbnail > a > img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 100%;
-}
-
 /* display the cookie usage warning validation */
 .cookieUsageValidation {
     padding: 5px;
@@ -4834,25 +4769,42 @@ i.size-32.icon-new-work{
 
 .social-avatar{
   text-align: center;
+}
+.social-avatar .img-profile{
+  margin-bottom: 5px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 20px;
+}
+.social-avatar .social-profile{
+  text-align: center;
   padding-top: 10px;
 }
-.social-avatar .avatar-profile{
-  margin-bottom: 5px;
-}
-.social-avatar .avatar-profile .img-responsive{
+.social-avatar .social-profile .img-responsive{
   display: inline-block;
   margin: auto;
 }
 .social-avatar .lastname{
-  font-size: 18px;
-  font-weight: bold;
-  color: #4d4d4d;
-}
-.social-avatar .firstname{
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   color: #4d4d4d;
   margin-bottom: 5px;
+}
+.social-avatar .firstname{
+  font-size: 14px;
+  font-weight: bold;
+  color: #4d4d4d;
+  margin-bottom: 0px;
+}
+.social-avatar .social-avatar-email,
+.social-avatar .social-avatar-chat{
+  font-size: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  color: #666666;
+}
+.social-avatar .social-avatar-chat{
+  margin-bottom: 15px;
 }
 .social-avatar .edit-profile{
   margin-top: 15px;
@@ -4865,6 +4817,14 @@ i.size-32.icon-new-work{
   color: #456176;
   font-weight: bold;
   font-size: 14px;
+}
+.social-profile .group-description{
+  font-size: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #666666;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .social-skill .list-badges{
   list-style: none;
@@ -4962,7 +4922,7 @@ i.size-32.icon-new-work{
 }
 .top-mediapost .user-image .avatar-thumb,
 .sub-mediapost .user-image .avatar-thumb{
-  padding: 5px;
+  padding: 2px;
   border: 1px solid #dddddd;
   margin-bottom: 5px;
   margin-right: 5px;
@@ -5195,48 +5155,6 @@ ul.holder li.bit-box{
 }
 #panel-thematic .views ul li{
   font-size: 12px;
-}
-/* end thematic progress*/
-.card-social {
-  overflow: hidden;
-  position: relative;
-  border: 1px solid #CCC;
-  border-radius: 8px;
-  text-align: center;
-  padding: 0;
-  /* background-color: #284c79; */
-  color: rgb(136, 172, 217);
-  margin-bottom: 20px;
-}
-.card-social .header-bg {
-  /* This stretches the canvas across the entire hero unit */
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  border-bottom: 1px #FFF solid;
-  /* This positions the canvas under the text */
-  z-index: 1;
-}
-
-.card-social .avatar {
-  position: relative;
-  margin-top: 15px;
-  z-index: 100;
-}
-
-.card-social .content {
-  margin-bottom: 15px;
-}
-
-.card-social .avatar img {
-  width: 100px;
-  height: 100px;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-  border: 5px solid rgba(0,0,30,0.8);
 }
 
 .question_options .exercise-unique-answer-image .radio{
@@ -6237,6 +6155,185 @@ div#chat-remote-video video {
 }
 .filler-report .filler-report-data-init{
   width: 60%;
+}
+#hot-course .items-course{
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  min-height: 350px;
+  margin-bottom: 10px;
+}
+#hot-course .items-course .items-course-info .title{
+  font-size: 14px;
+  min-height: 32px;
+}
+#hot-course .items-course .items-course-info .teachers{
+  font-size: 12px;
+  color: #666666;
+}
+#hot-course .items-course .items-course-info .ranking{
+  font-size: 10px;
+  color: #666666;
+}
+.hot-course-head{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.hot-course-head .hot-course-title{
+  padding-bottom: 10px;
+  border-bottom: 1px solid #E5E5E5;
+  font-size: 21px;
+}
+.create-groups .separate td{
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-right: 10px;
+}
+.create-groups .separate .btn-primary{
+  margin-top: 20px;
+}
+#session-properties td, #session-user-list td, #session-user-list th{
+  text-align: left;
+  padding-left: 15px;
+}
+/*form input.form-control{
+  margin-top: 10px;
+}*/
+#whoisonline .items-user{
+  text-align: center;
+  /*border:1px solid #dddddd; */
+  padding: 15px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  box-shadow: 0 2px 3px #C8C8C8;
+  border: 1px solid #e6e6e6;
+  margin-bottom: 20px;
+  min-height: 240px;
+}
+#whoisonline .items-user-name{
+  font-size: 12px;
+  padding-top: 10px;
+  line-height: 15px;
+}
+.search-user label{
+  font-weight: normal;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.course-items .course-items-session{
+  font-size: 12px;
+}
+.course-items .course-items-title{
+  font-size:16px;
+}
+.report_section .table{
+  font-size: 12px;
+}
+/* CSS for the view by session My Course tab */
+.session-view-block {
+  font-size : 14px;
+  font-weight : normal;
+}
+
+.session-view-row {
+  padding: 8px 0;
+}
+
+.session-view-lvl-2 {
+  margin-left : 66px;
+}
+
+.session-view-lvl-3 {
+  padding-left : 92px;
+}
+
+.session-view-lvl-4 {
+  padding-left : 102px;
+}
+
+.session-view-lvl-5 {
+  padding-left : 128px;
+  font-weight : normal;
+}
+
+.session-view-lvl-6 {
+  padding-left : 20px;
+}
+
+.session-view-lvl-7 {
+  padding-left : 48px;
+}
+
+img.sessionView {
+  padding-right: 10px;
+}
+
+a.sessionView {
+  font-weight : bold;
+}
+
+.session-view-user-category {
+  font-weight : bold;
+  padding-bottom : 10px;
+}
+
+.session-view-session-category {
+  font-weight : bold;
+  padding-bottom : 10px;
+}
+
+.session-view-session {
+  font-weight : bold;
+}
+
+/* Like the well class */
+.session-view-well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #F5F5F5;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05) inset;
+}
+
+.session-view-button {
+  border : none;
+  min-width : 28px;
+}
+
+.view-by-session-link {
+  min-height: 38px;
+}
+
+.view-by-session-teachers {
+  display : none; /* change this if you want to display teachers name in this view */
+  font-size : 10px;
+  overflow-x : auto;
+  overflow-y: auto;
+  max-height:50px;
+}
+
+.view-by-session-right-actions {
+  float : right;
+}
+
+.view-by-session-right-actions img {
+  width : 12px;
+}
+
+.session-view-session-go-to-course-in-session {
+  font-size : 12px;
+}
+#gradebook_list .centered {
+    text-align:center;
+    vertical-align:middle;
+}
+#gradebook_list .centered .badge-group {
+    width: auto;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

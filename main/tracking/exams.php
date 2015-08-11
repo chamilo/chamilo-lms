@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Exams script
  * @package chamilo.tracking
  */
+
 require_once '../inc/global.inc.php';
-//require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
 $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -189,7 +190,7 @@ if (!empty($courseList) && is_array($courseList)) {
         if ($global) {
             $sql = "SELECT count(id) as count
                     FROM $quizTable AS quiz
-                    WHERE active='1' AND c_id = $courseId AND session_id = 0";
+                    WHERE active='1' AND c_id = $courseId AND (session_id = 0 OR session_id IS NULL)";
             $result = Database::query($sql);
             $countExercises = Database::store_result($result);
             $exerciseCount = $countExercises[0]['count'];
@@ -201,7 +202,7 @@ if (!empty($courseList) && is_array($courseList)) {
             $countExercises = Database::store_result($result);
             $exerciseSessionCount = $countExercises[0]['count'];
 
-            $exerciseCount =  $exerciseCount + $exerciseCount *count($newSessionList) + $exerciseSessionCount;
+            $exerciseCount =  $exerciseCount + $exerciseCount * count($newSessionList) + $exerciseSessionCount;
 
             // Add course and session list.
             if ($exerciseCount == 0) {
@@ -238,7 +239,6 @@ if (!empty($courseList) && is_array($courseList)) {
 
                             ORDER BY session_id, quiz.title ASC";
                 } else {
-
                     $sql = "SELECT quiz.title, id, session_id
                             FROM $quizTable AS quiz
                             WHERE
@@ -254,7 +254,8 @@ if (!empty($courseList) && is_array($courseList)) {
             if (Database::num_rows($resultExercises) > 0) {
                 $export_array_global = array();
 
-                while ($exercise = Database::fetch_array($resultExercises)) {
+                while ($exercise = Database::fetch_array($resultExercises, 'ASSOC')) {
+
                     $exerciseSessionId = $exercise['session_id'];
 
                     if (empty($exerciseSessionId)) {
@@ -387,8 +388,10 @@ function sort_user($a, $b) {
         if ($a['score'] < $b['score']) {
             return 1;
         }
+
         return 0;
     }
+
     return 1;
 }
 
@@ -402,8 +405,8 @@ function export_complete_report_xls($filename, $array)
 
     $spreadsheet = new PHPExcel();
     $spreadsheet->setActiveSheetIndex(0);
-
     $worksheet = $spreadsheet->getActiveSheet();
+
     $line = 0;
     $column = 0; //skip the first column (row titles)
 
@@ -478,12 +481,32 @@ function export_complete_report_xls($filename, $array)
     $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
     $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
     $writer->save($file);
-    DocumentManager::file_send_for_download($file, false, $filename);
+    DocumentManager::file_send_for_download($file, true, $filename);
     exit;
 }
 
+/**
+ * @param $filter_score
+ * @param $global
+ * @param $exercise
+ * @param $courseInfo
+ * @param $sessionId
+ * @param $newSessionList
+ * @return array
+ */
 function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
 {
+    if (
+        (isset($exercise['id']) && empty($exercise['id'])) ||
+        !isset($exercise['id'])
+    ) {
+        return array(
+            'html' => '',
+            'export_array_global' =>  [],
+            'total_students' => 0
+        );
+    }
+
     $exerciseStatsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $courseId = api_get_course_int_id($courseInfo['code']);
 
@@ -547,7 +570,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 WHERE
                     ex.c_id = $courseId AND
                     ex.exe_exo_id = ".$exercise['id']." AND
-                    exe_user_id='".$studentId."' AND
+                    exe_user_id= $studentId AND
                     session_id = $sessionId
                 ";
         $result = Database::query($sql);
@@ -556,7 +579,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         $sql = "SELECT exe_id, exe_result, exe_weighting
                 FROM $exerciseStatsTable
                 WHERE
-                    exe_user_id = ".$studentId." AND
+                    exe_user_id = $studentId AND
                     c_id = $courseId AND
                     exe_exo_id = ".$exercise['id']." AND
                     session_id = $sessionId
@@ -669,7 +692,6 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         }
     }
 
-
     if ($global) {
         // Exam taken
         $html .= '<td>';
@@ -710,7 +732,6 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         $html .= '</tr>';
         $export_array_global[] = $globalRow;
     }
-
     return array(
         'html' => $html,
         'export_array_global' => $export_array_global,

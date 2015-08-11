@@ -20,7 +20,7 @@
 // $Id: Root.php,v 1.9 2005/04/23 21:53:49 dufuz Exp $
 
 
-require_once 'OLE/PPS.php';
+require_once __DIR__.'/../PPS.php';
 
 /**
 * Class for creating Root PPS's for OLE containers

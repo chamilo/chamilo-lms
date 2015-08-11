@@ -136,7 +136,7 @@ See https://support.chamilo.org/issues/6976
 }
 
 .inner_lp_toc .scorm_item_section .scorm_item:before {
-    content : url('../../img/lp_section.png');  /* path from main/newscorm/lp_controller.php file */
+    content : url('../../main/img/lp_section.png');  /* path from main/newscorm/lp_controller.php file */
     vertical-align: text-top;
     margin-right : 5px;
 }
@@ -316,7 +316,7 @@ See https://support.chamilo.org/issues/6976
 }
 /* for section */
 .scorm_item_section.scorm_completed{
-  background:url("../img/icon_completed_section.png")no-repeat 98% center #606c88;
+  background:url("../../main/img/icon_completed_section.png")no-repeat 98% center #606c88;
   padding-right: 1.5em;
 }
 .scorm_item_section{

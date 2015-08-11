@@ -140,7 +140,7 @@ function ReadFileCont($full_file_path)
 function WriteFileCont($full_file_path, $content)
 {
     // Check if this is not an attack, trying to get into other directories or something like that.
-    global $_course;
+    $_course = api_get_course_info();
     if (Security::check_abs_path(dirname($full_file_path).'/', api_get_path(SYS_COURSE_PATH).$_course['path'].'/')) {
         // Check if this is not an attack, trying to upload a php file or something like that.
         if (basename($full_file_path) != Security::filter_filename(basename($full_file_path))) {

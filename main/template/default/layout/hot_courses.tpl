@@ -33,7 +33,7 @@ $(document).ready( function() {
             {% endif %}
         </h4>
     </div>
-    <div class="hot-course-body">
+    <div id="hot-course">
         <div class="row">
             {% include template ~ '/layout/hot_course_item.tpl' %}
         </div>

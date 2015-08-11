@@ -51,15 +51,17 @@ function save_scores($file, $score)
         // anonymous
         $user_id = "NULL";
     }
-    $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, c_id, exe_result, exe_weighting) VALUES (
-			'".Database::escape_string($file)."',
-			".intval($user_id).",
-			'".Database::escape_string($date)."',
-			$c_id,
-			'".Database::escape_string($score)."',
-			'".Database::escape_string($weighting)."')";
 
-    Database::query($sql);
+    $params = [
+        'exe_name' => $file,
+        'exe_user_id' => $user_id,
+        'exe_date' => $date,
+        'c_id' => $c_id,
+        'exe_result' => $score,
+        'exe_weighting' => $weighting,
+    ];
+    Database::insert($TABLETRACK_HOTPOTATOES, $params);
+
 
     if ($origin == 'learnpath') {
         //if we are in a learning path, save the score in the corresponding

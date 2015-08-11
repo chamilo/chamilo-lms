@@ -353,63 +353,71 @@ class SystemAnnouncementManager
 		$start = api_get_utc_datetime($date_start);
         $end = api_get_utc_datetime($date_end);
 
-		$title = Database::escape_string($title);
-		$content = Database::escape_string($content);
-
 		//Fixing urls that are sent by email
 		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
 		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
 
-		$langsql = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
+        $lang = is_null($lang) ? 'NULL' : $lang;
 
 		$current_access_url_id = 1;
 		if (api_is_multiple_url_enabled()) {
 			$current_access_url_id = api_get_current_access_url_id();
 		}
 
-		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang, access_url_id)
-				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$langsql.", ".$current_access_url_id.")";
+		$params = [
+			'title' => $title,
+			'content' => $content,
+			'date_start' => $start,
+			'date_end' => $end,
+			'visible_teacher' => $visible_teacher,
+			'visible_student' => $visible_student,
+			'visible_guest' => $visible_guest,
+			'lang' => $lang,
+			'access_url_id' => $current_access_url_id,
+		];
 
-        if ($sendEmailTest) {
-            SystemAnnouncementManager::send_system_announcement_by_email(
-                $title,
-                $content,
-                $visible_teacher,
-                $visible_student,
-                $lang,
-                true
-            );
-        } else {
-            if ($send_mail == 1) {
-                SystemAnnouncementManager::send_system_announcement_by_email(
-                    $title,
-                    $content,
-                    $visible_teacher,
-                    $visible_student,
-                    $lang
-                );
-            }
-        }
+		$resultId = Database::insert($db_table, $params);
 
-		$res = Database::query($sql);
-		if ($res === false) {
-			return false;
+		if ($resultId) {
+
+			if ($sendEmailTest) {
+				SystemAnnouncementManager::send_system_announcement_by_email(
+					$title,
+					$content,
+					$visible_teacher,
+					$visible_student,
+					$lang,
+					true
+				);
+			} else {
+				if ($send_mail == 1) {
+					SystemAnnouncementManager::send_system_announcement_by_email(
+						$title,
+						$content,
+						$visible_teacher,
+						$visible_student,
+						$lang
+					);
+				}
+			}
+
+			if ($add_to_calendar) {
+				$agenda = new Agenda();
+				$agenda->setType('admin');
+				$agenda->addEvent(
+					$date_start,
+					$date_end,
+					false,
+					$title,
+					$original_content
+				);
+			}
+
+			return $resultId;
+
 		}
 
-		$id = null;
-		if ($add_to_calendar) {
-			$agenda = new Agenda();
-			$agenda->setType('admin');
-			$id = $agenda->addEvent(
-				$date_start,
-				$date_end,
-				false,
-				$title,
-				$original_content
-			);
-		}
-
-		return $id;
+		return false;
 	}
 
     /**

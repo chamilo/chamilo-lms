@@ -1,0 +1,21 @@
+{
+    "id": 1,
+    "name": "Production",
+    "params": [
+        {
+            "variable": "show_link_bug_notification",
+            "subkey": "",
+            "selected_value": "false"
+        },
+        {
+            "variable": "default_document_quotum",
+            "subkey": "",
+            "selected_value": "524288000"
+        },
+        {
+            "variable": "show_admin_toolbar",
+            "subkey": "",
+            "selected_value": "do_not_show"
+        }
+    ]
+}

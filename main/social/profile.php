@@ -145,7 +145,7 @@ $locale = api_get_language_isocode();
 // Add Jquery scroll pagination plugin
 $htmlHeadXtra[] = api_get_js('jscroll/jquery.jscroll.js');
 // Add Jquery Time ago plugin
-$htmlHeadXtra[] = api_get_js('jquery-timeago/jquery.timeago.js');
+$htmlHeadXtra[] = api_get_asset('jquery-timeago/jquery.timeago.js');
 $timeAgoLocaleDir = $javascriptDir . 'jquery-timeago/locales/jquery.timeago.' . $locale . '.js';
 if (file_exists($timeAgoLocaleDir)) {
     $htmlHeadXtra[] = api_get_js('jquery-timeago/locales/jquery.timeago.' . $locale . '.js');
@@ -255,23 +255,20 @@ foreach ($sessionList as $session) {
 }
 
 // My friends
-$friend_html = SocialManager::listMyFriends($user_id, $link_shared ,$show_full_profile);
+$friend_html = SocialManager::listMyFriends(
+    $user_id,
+    $link_shared,
+    $show_full_profile
+);
 
 $wallSocialAddPost = SocialManager::getWallForm();
 $social_wall_block = $wallSocialAddPost;
 
 // Social Post Wall
-$post_wall = SocialManager::getWallMessagesByUser($my_user_id, $friendId) ;
+$posts = SocialManager::getWallMessagesByUser($my_user_id, $friendId) ;
 
-$social_post_wall_block  = '<div class="panel panel-default social-post">';
-$social_post_wall_block .= '<div class="panel-heading">Mis publicaciones</div>';
-$social_post_wall_block .='<div class="panel-body">';
-if(empty($post_wall)){
-    $social_post_wall_block .= '<p>'.get_lang("NoPosts").'</p>';
-}else{
-    $social_post_wall_block .= $post_wall;
-}
-$social_post_wall_block .= '</div></div>';
+$posts = empty($posts) ? '<p>'.get_lang("NoPosts").'</p>' : $posts;
+$social_post_wall_block = Display::panel($posts, get_lang('Posts'));
 
 $socialAutoExtendLink = Display::url(
     get_lang('SeeMore'),
@@ -293,10 +290,6 @@ if ($show_full_profile) {
 
     $extra_information = '';
     if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
-
-        $extra_information .= '<div class="panel panel-default">';
-        $extra_information .= '<div class="panel-heading">'.get_lang('ExtraInformation').'</div>';
-        $extra_information .='<div class="panel-body">';
         $extra_information_value = '';
         $extraField = new ExtraField('user');
         foreach ($extra_user_data as $key => $data) {
@@ -377,19 +370,21 @@ if ($show_full_profile) {
                     break;
                 }
             }
-
         }
+
         // if there are information to show
         if (!empty($extra_information_value)) {
-            $extra_information .= $extra_information_value;
+            $extra_information .= Display::panel(
+                $extra_information_value,
+                get_lang('ExtraInformation')
+            );
         }
-        $extra_information .= '</div></div>'; //social-profile-info
     }
 
     // If there are information to show Block Extra Information
 
     if (!empty($extra_information_value)) {
-        $social_extra_info_block =  $extra_information;
+        $social_extra_info_block = $extra_information;
     }
 
     // MY GROUPS
@@ -400,13 +395,14 @@ if ($show_full_profile) {
     if (is_array($results) && count($results) > 0) {
         $i = 1;
         foreach ($results as $result) {
-
-            if ($i > $max_numbers_of_group) break;
+            if ($i > $max_numbers_of_group) {
+                break;
+            }
             $id = $result['id'];
             $url_open  = '<a href="group_view.php?id='.$id.'">';
             $url_close = '</a>';
             $icon = '';
-            $name = cut($result['name'],CUT_GROUP_NAME,true);
+            $name = cut($result['name'], CUT_GROUP_NAME, true);
             if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
                 $icon = Display::return_icon(
                     'social_group_admin.png',
@@ -428,7 +424,11 @@ if ($show_full_profile) {
             }
             $item_name = $url_open.$name.$icon.$url_close;
             $item_actions = '';
-            $grid_my_groups[]= array($item_name,$url_open.$result['picture'].$url_close, $item_actions);
+            $grid_my_groups[] = array(
+                $item_name,
+                $url_open.$result['picture'].$url_close,
+                $item_actions,
+            );
             $i++;
         }
     }
@@ -442,6 +442,7 @@ if ($show_full_profile) {
         } else {
             $count_groups = count($results);
         }
+
         $my_groups .= '<div class="panel panel-default">';
         $my_groups .= '<div class="panel-heading">'.get_lang('MyGroups').' ('.$count_groups.') </div>';
 
@@ -515,7 +516,9 @@ if ($show_full_profile) {
     }
 
     $count_pending_invitations = 0;
-    if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
+    if (!isset($_GET['u']) ||
+        (isset($_GET['u']) && $_GET['u']==api_get_user_id())
+    ) {
         $pending_invitations = SocialManager::get_list_invitation_of_friends_by_user_id(api_get_user_id());
         $list_get_path_web = SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
         $count_pending_invitations = count($pending_invitations);
@@ -563,7 +566,7 @@ if ($show_full_profile) {
             }
         }
 
-        //--Productions
+        // Productions
         $production_list =  UserManager::build_production_list($user_id);
 
         $product_content  = '';

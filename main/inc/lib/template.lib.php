@@ -610,8 +610,10 @@ class Template
             'chosen/chosen.jquery.min.js',
         );
 
-        if (api_is_global_chat_enabled()) {
-            //Do not include the global chat in LP
+        $viewBySession = api_get_configuration_value('my_courses_view_by_session');
+
+        if (api_is_global_chat_enabled() || $viewBySession) {
+            // Do not include the global chat in LP
             if ($this->show_learnpath == false &&
                 $this->show_footer == true &&
                 $this->hide_global_chat == false

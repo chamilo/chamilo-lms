@@ -45,7 +45,19 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->addText('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
+$form->addText(
+    'visual_code',
+    array(
+        get_lang('CourseCode'),
+        get_lang('OnlyLettersAndNumbers')
+    ),
+    false,
+    [
+        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+        'pattern' => '[a-zA-Z0-9]+',
+        'title' => get_lang('OnlyLettersAndNumbers')
+    ]
+);
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');

@@ -7436,10 +7436,10 @@ $LinkExpired = "Lien expiré, merci de recommencer la procédure.";
 $ResetPasswordInstructions = "Instructions de changement de mot de passe";
 $ResetPasswordCommentWithUrl = "Ce message vous est envoyé parce que vous (ou quelqu'un qui tente d'usurper votre identité) a demandé qu'un nouveau mot de passe soit généré pour votre compte. Pour configurer votre nouveau mot de passe, veuillez suivre le lien suivant: %s 
 Si vous n'avez rien demandé, vous pouvez ignorer ce message en toute tranquilité. Si vous n'avez rien demandé et que vous continuez de recevoir ces messages, merci de bien vouloir contacter l'administrateur du portail.";
-$CronRemindCourseExpirationActivateText = "Cron de rappel de fin de cours";
+$CronRemindCourseExpirationActivateTitle = "Cron de rappel de fin de cours";
 $CronRemindCourseExpirationActivateComment = "Activez cette option pour envoyer un e-mail de rappel quand la fin du cours (session) approche (requiert la configuration d'un processus cron sur le serveur).";
-$CronRemindCourseExpirationFrecuencyText = "Fréquence du rappel de fin de cours";
-$CronRemindCourseExpirationFrecuencyComment = "Quantité de jours avant la fin du cours (session) pour envoyer le rappel par e-mail. Par exemple, indiquez 7 pour envoyer un e-mail 7 jours avant la fin du cours.";
+$CronRemindCourseExpirationFrequencyTitle = "Fréquence du rappel de fin de cours";
+$CronRemindCourseExpirationFrequencyComment = "Quantité de jours avant la fin du cours (session) pour envoyer le rappel par e-mail. Par exemple, indiquez 7 pour envoyer un e-mail 7 jours avant la fin du cours.";
 $CronCourseFinishedActivateText = "Cron de fin du cours";
 $CronCourseFinishedActivateComment = "Activez pour envoyer un e-mail lorsque le cours est terminé";
 $MailCronCourseFinishedSubject = "Fin du cours: %s";
@@ -7456,4 +7456,11 @@ $XTeam = "Équipe %s";
 $YouCanStartSubscribingToCoursesEnteringToXUrl = "Vous pouvez vous inscrire à des cours en allant sur %s";
 $VideoUrl = "URL de vidéo";
 $AddAttachment = "Ajouter une pièce jointe";
+$FieldTypeOnlyLetters = "Texte de lettres exclusivement";
+$FieldTypeAlphanumeric = "Caractères alphanumériques (a-z,0-9,A-Z)";
+$OnlyLetters = "Lettres uniquement";
+$SelectFillTheBlankSeparator = "Marqueur pour les trous";
+$RefreshBlanks = "Rafraîchir les termes";
+$WordTofind = "Mot à trouver";
+$BlankInputSize = "Taille de la zone à remplir";
 ?>

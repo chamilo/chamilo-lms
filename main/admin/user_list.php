@@ -602,7 +602,7 @@ function modify_filter($user_id, $url_params, $row) {
  */
 function active_filter($active, $params, $row)
 {
-	global $_user;
+    $_user = api_get_user_info();
 
     if ($active == '1') {
         $action = 'Lock';

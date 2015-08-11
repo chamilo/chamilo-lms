@@ -1455,19 +1455,15 @@ class DocumentManager
     {
         // Database table definition
         $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-
-        // creating the sql statement
-        $sql = "INSERT INTO $table_template
-                (title, description, course_code, user_id, ref_doc, image)
-                VALUES (
-                    '" . Database::escape_string($title) . "',
-                    '" . Database::escape_string($description) . "',
-                    '" . Database::escape_string($course_code) . "',
-                    '" . intval($user_id) . "',
-                    '" . Database::escape_string($document_id_for_template) . "',
-                    '" . Database::escape_string($image) . "')";
-        Database::query($sql);
-
+        $params = [
+            'title' => $title,
+            'description' => $description,
+            'course_code' => $course_code,
+            'user_id' => $user_id,
+            'ref_doc' => $document_id_for_template,
+            'image' => $image,
+        ];
+        Database::insert($table_template, $params);
         return true;
     }
 

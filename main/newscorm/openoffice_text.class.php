@@ -44,9 +44,9 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	array	The files that will compose the generated learning path. Unused so far.
      * @return	boolean	False if file does not exit. Nothing otherwise.
      */
-    function make_lp($files = array()) {
-
-        global $_course;
+    function make_lp($files = array())
+    {
+        $_course = api_get_course_info();
         // We get a content where ||page_break|| indicates where the page is broken.
         if (!file_exists($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html')) { return false; }
         $content = file_get_contents($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html');
@@ -77,7 +77,7 @@ class OpenofficeText extends OpenofficeDocument {
         $my_style = api_get_setting('stylesheets');
         if (empty($my_style)) { $my_style = 'chamilo'; }
         $style_to_import = "<style type=\"text/css\">\r\n";
-        $style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";        
+        $style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";
         $style_to_import .= "</style>\r\n";
         $header = preg_replace("|</head>|i", "\r\n$style_to_import\r\n\\0", $header);
 
@@ -98,10 +98,9 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	string	Content
      * @return	void
      */
-    function dealPerChapter($header, $content) {
-
-        global $_course;
-
+    function dealPerChapter($header, $content)
+    {
+        $_course = api_get_course_info();
         $content = str_replace('||page_break||', '', $content);
 
         // Get all the h1.
@@ -116,13 +115,11 @@ class OpenofficeText extends OpenofficeDocument {
                 $matches[1][$new_index] = $matches_temp[1][$i];
                 $new_index++;
             }
-
         }
 
         // Add intro item.
         $intro_content = substr($content, 0, strpos($content, $matches[0][0]));
         $items_to_create[get_lang('Introduction')] = $intro_content;
-
 
         for ($i = 0; $i < count($matches[0]); $i++) {
 
@@ -154,13 +151,31 @@ class OpenofficeText extends OpenofficeDocument {
             if ($document_id){
 
                 // Put the document in item_property update.
-                api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_SESSION['_uid'], 0, 0, null, null, api_get_session_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $document_id,
+                    'DocumentAdded',
+                    $_SESSION['_uid'],
+                    0,
+                    0,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
 
                 $infos = pathinfo($this->filepath);
                 $slide_name = strip_tags(nl2br($item_title));
                 $slide_name = str_replace(array("\r\n", "\r", "\n"), '', $slide_name);
                 $slide_name = html_entity_decode($slide_name);
-                $previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
+                $previous = learnpath::add_item(
+                    0,
+                    $previous,
+                    'document',
+                    $document_id,
+                    $slide_name,
+                    ''
+                );
                 if ($this->first_item == 0) {
                     $this->first_item = $previous;
                 }
@@ -174,8 +189,9 @@ class OpenofficeText extends OpenofficeDocument {
      * @param	string	Page body
      * @return	void
      */
-    function dealPerPage($header, $body) {
-        global $_course;
+    function dealPerPage($header, $body)
+    {
+        $_course = api_get_course_info();
         // Split document to pages.
         $pages = explode('||page_break||', $body);
 
@@ -192,14 +208,31 @@ class OpenofficeText extends OpenofficeDocument {
             fwrite($handle, $page_content);
             fclose($handle);
 
-            $document_id = add_document($_course, $this->created_dir.$html_file, 'file', filesize($this->base_work_dir.$this->created_dir.$html_file), $html_file);
+            $document_id = add_document(
+                $_course,
+                $this->created_dir.$html_file,
+                'file',
+                filesize($this->base_work_dir.$this->created_dir.$html_file),
+                $html_file
+            );
 
             $slide_name = '';
 
             if ($document_id) {
 
                 // Put the document in item_property update.
-                api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_SESSION['_uid'], 0, 0, null, null, api_get_session_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $document_id,
+                    'DocumentAdded',
+                    $_SESSION['_uid'],
+                    0,
+                    0,
+                    null,
+                    null,
+                    api_get_session_id()
+                );
 
                 $infos = pathinfo($this->filepath);
                 $slide_name = 'Page '.str_repeat('0', 2 - strlen($key)).$key;

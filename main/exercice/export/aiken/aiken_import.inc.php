@@ -58,7 +58,8 @@ function aiken_display_form($msg = '') {
  * @return bool True on success, false on failure
  */
 function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
-    global $_course, $_user;
+    $_course = api_get_course_info();
+    $_user = api_get_user_info();
     //Check if the file is valid (not to big and exists)
     if (!isset ($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
         // upload failed

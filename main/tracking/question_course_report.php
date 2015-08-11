@@ -215,45 +215,4 @@ if (!$export_to_xls) {
 	echo $html_result;
 }
 
-$filename = 'exam-reporting-'.date('Y-m-d-h:i:s').'.xls';
-if ($export_to_xls) {
-	echo $html_result;
-	export_complete_report_xls($filename, $export_array);
-	exit;
-}
-
-function sort_user($a, $b)
-{
-	if (is_numeric($a['score']) && is_numeric($b['score'])) {
-		echo $a['score'].' : '.$b['score'];
-		echo '<br />';
-		if ($a['score'] < $b['score']) {
-			return 1;
-		}
-		return 0;
-	}
-	return 1;
-}
-
-function export_complete_report_xls($filename, $array)
-{
-	global $charset;
-	$workbook = new Spreadsheet_Excel_Writer();
-	$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-	$workbook->send($filename);
-	$workbook->setVersion(8); // BIFF8
-	$worksheet =& $workbook->addWorksheet('Report');
-	//$worksheet->setInputEncoding(api_get_system_encoding());
-	$worksheet->setInputEncoding($charset);
-	/*
-    $line = 0;
-    $column = 1; // Skip the first column (row titles)
-    foreach ($array as $elem) {
-        $worksheet->write($line, $column, $elem);
-        $column++;
-    }
-    $workbook->close();*/
-	exit;
-}
-
 Display :: display_footer();

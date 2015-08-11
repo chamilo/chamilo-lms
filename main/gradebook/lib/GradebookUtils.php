@@ -585,15 +585,20 @@ class GradebookUtils
      */
     public static function register_user_info_about_certificate($cat_id, $user_id, $score_certificate, $date_certificate)
     {
-        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT COUNT(*) as count FROM ' . $table_certificate . ' gc
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $sql = 'SELECT COUNT(*) as count
+                FROM ' . $table . ' gc
                 WHERE gc.cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '" ';
         $rs_exist = Database::query($sql);
         $row = Database::fetch_array($rs_exist);
         if ($row['count'] == 0) {
-            $sql = 'INSERT INTO ' . $table_certificate . ' (cat_id,user_id,score_certificate,created_at)
-                    VALUES ("' . intval($cat_id) . '","' . intval($user_id) . '","' . Database::escape_string($score_certificate) . '","' . Database::escape_string($date_certificate) . '")';
-            Database::query($sql);
+            $params = [
+                'cat_id' => $cat_id,
+                'user_id' => $user_id,
+                'score_certificate' => $score_certificate,
+                'created_at' => $date_certificate
+            ];
+            Database::insert($table, $params);
         }
     }
 

@@ -39,11 +39,11 @@
                     {% endif %}
 
                     {% if session.teachers %}
-                        <h5>{{ "teacher.png"|icon(16) ~ session.teachers }}</h5>
+                        <h5 class="teacher-name">{{ "teacher.png"|icon(16) ~ session.teachers }}</h5>
                     {% endif %}
 
                     {% if session.coaches %}
-                        <h5>{{ "teacher.png"|icon(16) ~ session.coaches }}</h5>
+                        <h5 class="teacher-name">{{ "teacher.png"|icon(16) ~ session.coaches }}</h5>
                     {% endif %}
                 </div>
 

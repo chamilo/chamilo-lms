@@ -5,7 +5,7 @@
 {{ session_header }}
 {{ title }}
 
-<table class="data_table">
+<table id="session-properties" class="data_table">
     <tr>
         <td>{{ 'GeneralCoach' | get_lang}} :</td>
         <td>{{ general_coach.complete_name }}</td>

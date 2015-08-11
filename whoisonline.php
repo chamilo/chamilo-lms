@@ -17,79 +17,20 @@ if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 
 $_SESSION['who_is_online_counter'] = 2;
 
-$htmlHeadXtra[] = api_get_js('jquery.endless-scroll.js');
+//$htmlHeadXtra[] = api_get_js('jquery.endless-scroll.js');
 //social tab
 $this_section = SECTION_SOCIAL;
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 $htmlHeadXtra[] = '<script>
 
-function show_image(image,width,height) {
-    width = parseInt(width) + 20;
-    height = parseInt(height) + 20;
-    window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
-}
 
-$(document).ready(function (){
-    $("input#id_btn_send_invitation").bind("click", function(){
-        if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
-            $("#form_register_friend").submit();
-        }
-    });
-});
-
-function display_hide () {
-    setTimeout("hide_display_message()",3000);
-}
-function hide_display_message () {
-    $("div#display_response_id").html("");
-    try {
-        $("#txt_subject_id").val("");
-        $("#txt_area_invite").val("");
-    }catch(e) {
-        $("#txt_area_invite").val("");
-    }
-}
-
-function show_icon_edit(element_html) {
-    ident="#edit_image";
-    $(ident).show();
-}
-
-function hide_icon_edit(element_html)  {
-    ident="#edit_image";
-    $(ident).hide();
-}
-
-$(document).ready(function() {
-
-    $("#link_load_more_items").click(function() {
-        page = $("#link_load_more_items").attr("data_link");
-        $.ajax({
-            beforeSend: function(objeto) {
-                $("#display_response_id").html("'.addslashes(get_lang('Loading')).'");
-            },
-            type: "GET",
-            url: "main/inc/ajax/online.ajax.php?a=load_online_user",
-            data: "online_page_nr="+page,
-            success: function(data) {
-                $("#display_response_id").html("");
-                if (data != "end") {
-                    $("#link_load_more_items").remove();
-                    var last = $("#online_grid_container li:last");
-                    last.after(data);
-                } else {
-                    $("#link_load_more_items").remove();
-                }
-            }
-        });
-    });
-});
 </script>';
 
 $social_right_content = null;
+$whoisonline_list = null;
 
-if (isset($_GET['chatid'])) {
+/* if (isset($_GET['chatid'])) {
     //send out call request
     $time = time();
     $time = date("Y-m-d H:i:s", $time);
@@ -102,7 +43,7 @@ if (isset($_GET['chatid'])) {
         exit;
     }
 }
-
+*/
 // This if statement prevents users accessing the who's online feature when it has been disabled.
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
     ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])
@@ -113,7 +54,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
     } else {
         $user_list = who_is_online(0, 9);
     }
-    if (!isset($_GET['id'])) {
+    /* if (!isset($_GET['id'])) {
         if (api_get_setting('allow_social_tool') == 'true') {
             if (!api_is_anonymous()) {
                 //this include the social menu div
@@ -121,18 +62,21 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
             }
         }
     }
-
+*/
     if ($user_list) {
         if (!isset($_GET['id'])) {
             if (api_get_setting('allow_social_tool') == 'true') {
                 if (!api_is_anonymous()) {
                     $query = isset($_GET['q']) ? $_GET['q']: null;
-                    $social_right_content .= UserManager::get_search_form($query);
+                    $social_search .= UserManager::get_search_form($query);
                 }
             }
-            $social_right_content .= SocialManager::display_user_list($user_list);
+            //$social_right_content .= SocialManager::display_user_list($user_list);
         }
     }
+
+    $whoisonline_list .= SocialManager::display_user_list($user_list);
+
 
     if (isset($_GET['id'])) {
         if (api_get_setting('allow_social_tool') == 'true' && api_user_is_login()) {
@@ -150,9 +94,9 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
 $tpl = new Template(get_lang('UsersOnLineList'));
 
 if (api_get_setting('allow_social_tool') == 'true' && !api_is_anonymous()) {
-    $tpl->assign('social_avatar_block', $social_left_content);
-    $tpl->assign('social_search_block', $social_right_content);
-    $social_layout = $tpl->get_template('social/home.tpl');
+    $tpl->assign('whoisonline', $whoisonline_list);
+    $tpl->assign('social_search', $social_search);
+    $social_layout = $tpl->get_template('social/whoisonline.tpl');
     $tpl->display($social_layout);
 } else {
     $content = $social_right_content;

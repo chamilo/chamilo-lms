@@ -132,10 +132,10 @@ if (isset($_POST['number_of_groups'])) {
 
 		// Modify the default templates
 		$renderer = $form->defaultRenderer();
-		$form_template = "<form {attributes}>\n<div>\n<table>\n{content}\n</table>\n</div>\n</form>";
+		$form_template = "<form {attributes}>\n<div class='create-groups'>\n<table>\n{content}\n</table>\n</div>\n</form>";
 		$renderer->setFormTemplate($form_template);
 		$element_template = <<<EOT
-	<tr>
+        <tr class="separate">
 		<td>
 			<!-- BEGIN required -->
 			<span class="form_required">*</span> <!-- END required -->{label}
@@ -208,10 +208,13 @@ EOT;
 
 	$create_groups_form = new FormValidator('create_groups', 'post', api_get_self().'?'.api_get_cidreq());
 	$create_groups_form->addElement('header', $nameTools);
-	$group_el = array ();
+	/* $group_el = array ();
 	$group_el[] = $create_groups_form->createElement('text', 'number_of_groups', array(get_lang('Create'), '1'));
 	$group_el[] = $create_groups_form->addButtonCreate(get_lang('ProceedToCreateGroup'), 'submit', true);
 	$create_groups_form->addGroup($group_el, 'create_groups', get_lang('NumberOfGroupsToCreate'), ' ', false);
+	*/
+    $create_groups_form->addText('number_of_groups',get_lang('NumberOfGroupsToCreate'),null,array('value'=>'1'));
+    $create_groups_form->addButton('submit', get_lang('ProceedToCreateGroup'),'plus','primary');
 	$defaults = array();
 	$defaults['number_of_groups'] = 1;
 	$create_groups_form->setDefaults($defaults);

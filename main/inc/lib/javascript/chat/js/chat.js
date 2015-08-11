@@ -110,7 +110,7 @@ function showChatConnect() {
     }
     $("<div />" ).attr("id","chatmain")
 	.addClass("chatboxmain")
-	.html('<div class="chatboxheadmain"><div class="user_status_main">'+button+'</div><div id="chatboxtitlemain">'+label+'</div><div class="chatboxoptions"></div><br clear="all"/></div></div>')
+	.html('<div class="chatboxheadmain"><div class="user_status_main">'+button+'</div><div id="chatboxtitlemain">'+label+'</div><div class="chatboxoptions"></div></div>')
 	.appendTo($( "body" ));
 }
 

@@ -206,14 +206,21 @@ class Login
             Database::getManager()->flush();
 
             $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+
+            $mailTemplate = new Template(null, false, false, false, false, false);
+            $mailTemplate->assign('complete_user_name', $user->getCompleteName());
+            $mailTemplate->assign('link', $url);
+
+            $mailLayout = $mailTemplate->get_template('mail/reset_password.tpl');
+
+            $mailSubject = get_lang('ResetPasswordInstructions');
+            $mailBody = $mailTemplate->fetch($mailLayout);
+
             api_mail_html(
-                '',
+                $user->getCompleteName(),
                 $user->getEmail(),
-                get_lang('ResetPasswordInstructions'),
-                sprintf(
-                    get_lang('ResetPasswordCommentWithUrl'),
-                    $url
-                )
+                $mailSubject,
+                $mailBody
             );
             Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
         //}

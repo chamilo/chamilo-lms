@@ -84,7 +84,7 @@ class learnpath
      * @param	string	$course Course code
      * @param	integer	$lp_id
      * @param	integer	$user_id
-     * @return	boolean	True on success, false on error
+     * @return mixed True on success, false on error
      */
     public function __construct($course, $lp_id, $user_id)
     {
@@ -418,6 +418,7 @@ class learnpath
         if ($this->debug > 2) {
             error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
         }
+        return true;
     }
 
     /**
@@ -553,15 +554,15 @@ class learnpath
         $typeCleaned = Database::escape_string($type);
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
-					FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
+                    FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
                     INNER JOIN  ' . Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION) . ' as quiz_rel_question
                     ON
                         quiz_question.id = quiz_rel_question.question_id AND
                         quiz_question.c_id = quiz_rel_question.c_id
                     WHERE
                         quiz_rel_question.exercice_id = '.$id." AND
-	            		quiz_question.c_id = $course_id AND
-	            		quiz_rel_question.c_id = $course_id ";
+                        quiz_question.c_id = $course_id AND
+                        quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database :: result($rsQuiz, 0, 0);
 
@@ -1224,15 +1225,16 @@ class learnpath
 
     /**
      * Updates an item's content in place
-     * @param	integer	Element ID
-     * @param	integer	Parent item ID
-     * @param	integer Previous item ID
-     * @param   string	Item title
-     * @param   string  Item description
-     * @param   string  Prerequisites (optional)
-     * @param   string  Indexing terms (optional)
-     * @param   array   The array resulting of the $_FILES[mp3] element
-     * @return	boolean	True on success, false on error
+     * @param   integer $id Element ID
+     * @param   integer $parent Parent item ID
+     * @param   integer $previous Previous item ID
+     * @param   string  $title Item title
+     * @param   string  $description Item description
+     * @param   string  $prerequisites Prerequisites (optional)
+     * @param   array   $audio The array resulting of the $_FILES[mp3] element
+     * @param   int     $max_time_allowed
+     * @param   string  $url
+     * @return  boolean True on success, false on error
      */
     public function edit_item(
         $id,
@@ -1240,8 +1242,8 @@ class learnpath
         $previous,
         $title,
         $description,
-        $prerequisites = 0,
-        $audio = null,
+        $prerequisites = '0',
+        $audio = array(),
         $max_time_allowed = 0,
         $url = ''
     ) {
@@ -1467,8 +1469,8 @@ class learnpath
      * Updates an item's prereq in place
      * @param	integer	$id Element ID
      * @param	string	$prerequisite_id Prerequisite Element ID
-     * @param	string	$mastery_score Prerequisite min score
-     * @param	string	$max_score Prerequisite max score
+     * @param	int 	$mastery_score Prerequisite min score
+     * @param	int 	$max_score Prerequisite max score
      *
      * @return	boolean	True on success, false on error
      */

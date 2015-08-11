@@ -4,14 +4,10 @@
  * Report for current courses followed by the user
  * @package chamilo.reporting
  */
-/**
- * Code
- */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
-
-require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
 $filename = 'reporting.xls';
 
@@ -38,9 +34,7 @@ if (!empty($my_courses)) {
 		}
 
 		$teachers = CourseManager::get_teacher_list_from_course_code($course_code);
-        $teacher_list =  array();
-
-		//$teacher_list = array($course_info['titular']);
+		$teacher_list =  array();
 
 		if (!empty($teachers)) {
 			foreach($teachers as $teacher) {
@@ -66,7 +60,10 @@ if (!empty($my_courses)) {
 		$t_lpi 	= Database :: get_course_table(TABLE_LP_ITEM);
 		$t_news = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 
-		$total_tools_list = Tracking::get_tools_most_used_by_course($course_id, $session_id);
+		$total_tools_list = Tracking::get_tools_most_used_by_course(
+			$course_id,
+			$session_id
+		);
 
 		$total_tools = 0;
 		foreach($total_tools_list as $tool) {
@@ -192,7 +189,6 @@ if (!empty($my_courses)) {
 	}
 }
 
-
 $headers = array(
 	get_lang('LearningPath'),
 	get_lang('Teachers'),
@@ -215,42 +211,38 @@ $headers = array(
 
 if (isset($_GET['export'])) {
 	global $charset;
-	$workbook = new Spreadsheet_Excel_Writer();
-	$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-	$workbook->send($filename);
-	$workbook->setVersion(8); // BIFF8
-	$worksheet =& $workbook->addWorksheet('Report');
-	//$worksheet->setInputEncoding(api_get_system_encoding());
-	$worksheet->setInputEncoding($charset);
+    $spreadsheet = new PHPExcel();
+    $spreadsheet->setActiveSheetIndex(0);
+    $worksheet = $spreadsheet->getActiveSheet();
 
 	$line = 0;
 	$column = 0; //skip the first column (row titles)
 
-	foreach($headers as $header) {
-		$worksheet->write($line,$column, $header);
+	foreach ($headers as $header) {
+		$worksheet->SetCellValueByColumnAndRow($line, $column, $header);
 		$column++;
 	}
 	$line++;
 	foreach ($array as $row) {
 		$column = 0;
 		foreach ($row as $item) {
-			$worksheet->write($line,$column,html_entity_decode(strip_tags($item)));
+			$worksheet->SetCellValueByColumnAndRow($line, $column, html_entity_decode(strip_tags($item)));
 			$column++;
 		}
 		$line++;
 	}
 	$line++;
-	$workbook->close();
+
+    $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
+    $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+    $writer->save($file);
+    DocumentManager::file_send_for_download($file, true, $filename);
 	exit;
 }
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
 
 Display::display_header(get_lang('CurrentCourses'));
-
-if (!class_exists('HTML_Table')) {
-	require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
-}
 
 $table = new HTML_Table(array('class' => 'data_table'));
 $row = 0;
@@ -271,7 +263,6 @@ foreach ($array as $row_table) {
 	$table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
 	$row++;
 }
-
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';

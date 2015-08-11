@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Exams script
  * @package chamilo.tracking
  */
+
 require_once '../inc/global.inc.php';
 
 $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
@@ -403,8 +405,8 @@ function export_complete_report_xls($filename, $array)
 
     $spreadsheet = new PHPExcel();
     $spreadsheet->setActiveSheetIndex(0);
-
     $worksheet = $spreadsheet->getActiveSheet();
+
     $line = 0;
     $column = 0; //skip the first column (row titles)
 
@@ -479,7 +481,7 @@ function export_complete_report_xls($filename, $array)
     $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
     $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
     $writer->save($file);
-    DocumentManager::file_send_for_download($file, false, $filename);
+    DocumentManager::file_send_for_download($file, true, $filename);
     exit;
 }
 
@@ -730,7 +732,6 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         $html .= '</tr>';
         $export_array_global[] = $globalRow;
     }
-
     return array(
         'html' => $html,
         'export_array_global' => $export_array_global,

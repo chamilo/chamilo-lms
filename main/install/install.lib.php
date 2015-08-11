@@ -2567,6 +2567,9 @@ function installProfileSettings(
         return false;
     }
     $settings = $params->params;
+    if (!empty($params->parent)) {
+        $res = installProfileSettings($params->parent);
+    }
     foreach ($settings as $id => $param) {
         $sql = "UPDATE settings_current
                 SET selected_value = '".$param->selected_value."'
@@ -2576,4 +2579,5 @@ function installProfileSettings(
         }
         Database::query($sql);
     }
+    return true;
 }

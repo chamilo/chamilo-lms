@@ -1145,7 +1145,7 @@ EOT;
             $attributes,
             [
                 'pattern' => '[a-zA-ZñÑ\s]+',
-                'title' => get_lang('OnlyLettersAndSpace')
+                'title' => get_lang('OnlyLettersAndSpaces')
             ]
         );
 
@@ -1154,7 +1154,7 @@ EOT;
             $name,
             [
                 $label,
-                get_lang('OnlyLettersAndSpace')
+                get_lang('OnlyLettersAndSpaces')
             ],
             $attributes
         );
@@ -1167,7 +1167,7 @@ EOT;
 
         $this->addRule(
             $name,
-            get_lang('OnlyLettersAndSpace'),
+            get_lang('OnlyLettersAndSpaces'),
             'regex',
             '/^[a-zA-ZñÑ\s]+$/'
         );

@@ -6273,6 +6273,63 @@ a.sessionView {
 #gradebook_list .centered .badge-group {
     width: auto;
 }
+/* video chat */
+#chat-local-video video,
+#chat-remote-video video{
+  border-radius: 5px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  box-shadow: 0 2px 3px #C8C8C8;
+  border: 1px solid #e6e6e6;
+  background-color:#fff;
+  padding: 5px;
+}
+#chat-local-video video,
+#chat-remote-video video{
+  width: 100%;
+  min-width: 100%;
+  display: block;
+}
+#chat-video-panel .username-local{
+  text-align: center;
+  padding-bottom: 5px;
+  padding-top:5px;
+  margin-top:10px;
+  margin-bottom:10px;
+  color: #666666;
+}
+#chat-video-panel .chat-user-remote{
+  text-align: center;
+  padding-bottom: 5px;
+  padding-top:5px;
+  color: #666666;
+}
+#chat-video-panel .title{
+  display: block;
+  color: #52606F;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  font-size: 20px;
+  border-bottom: 1px solid #E5E5E5;
+}
+#chat-video-panel #listFriends .list-group-item{
+  border: none;
+  padding: 6px;
+  font-size: 12px;
+}
+#chat-video-panel #listFriends a{
+  display: block;
+}
+#chat-video-panel #listFriends .status{
+  float: right;
+}
+#chat-video-panel #listFriends .user-image{
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

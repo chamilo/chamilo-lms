@@ -1616,6 +1616,63 @@ class SocialManager extends UserManager
     }
 
     /**
+     * @param int $user_id
+     * @param $link_shared
+     * @param $show_full_profile
+     * @return string
+     */
+    public static function listMyFriendsBlock($user_id, $link_shared, $show_full_profile)
+    {
+        //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
+        $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
+        $number_of_images = 30;
+        $number_friends = count($friends);
+        $friendHtml = '';
+
+        if ($number_friends != 0) {
+
+            $friendHtml.= '<ul class="list-group">';
+            $j = 1;
+            for ($k=0; $k < $number_friends; $k++) {
+                if ($j > $number_of_images) break;
+
+                if (isset($friends[$k])) {
+                    $friend = $friends[$k];
+                    $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
+                    $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
+
+                    if ($user_info_friend['user_is_online']) {
+                        $statusIcon = Display::return_icon('statusonline.png',get_lang('Online'));
+                        $status=1;
+                    } else {
+                        $statusIcon = Display::return_icon('statusoffline.png',get_lang('Offline'));
+                        $status=0;
+                    }
+
+                    $friendHtml.= '<li class="list-group-item">';
+                    $friendAvatarMedium = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_MEDIUM);
+                    $friendAvatarSmall = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_SMALL);
+                    $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" class="user-image"/>';
+                    error_log($friendAvatarSmall);
+                    $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);">';
+                    $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
+                    $friendHtml .=  $friend_avatar.' '.$name_user;
+                    $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
+                    $friendHtml .= '</a>';
+                    $friendHtml.= '</li>';
+                }
+                $j++;
+            }
+            $friendHtml.='</ul>';
+        } else {
+            $friendHtml.= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
+                .'<a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php"><i class="fa fa-search"></i> '. get_lang('TryAndFindSomeFriends').'</a></div>';
+        }
+
+        return $friendHtml;
+    }
+
+    /**
      * @return string
      */
     public static function getWallForm()

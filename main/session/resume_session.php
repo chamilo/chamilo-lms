@@ -108,7 +108,9 @@ switch ($action) {
 }
 
 $sessionHeader = Display::page_header(
-    Display::return_icon('session.png', get_lang('Session')).' '.$sessionInfo['name'],null, 'h3'
+    Display::return_icon('session.png', get_lang('Session')).' '.$sessionInfo['name'],
+    null,
+    'h3'
 );
 
 $url = Display::url(
@@ -277,7 +279,7 @@ $userListToShow = Display::page_subheader(get_lang('UserList').$url);
 $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
-    $table = new HTML_Table(array('class' => 'data_table','id'=>'session-user-list'));
+    $table = new HTML_Table(array('class' => 'data_table', 'id'=>'session-user-list'));
 
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));

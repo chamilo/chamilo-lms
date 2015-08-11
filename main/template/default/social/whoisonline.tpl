@@ -14,7 +14,6 @@
                 </div>
             </div>
             <div id="whoisonline">
-
                 {{ whoisonline }}
             </div>
         </div>

@@ -503,10 +503,6 @@ function get_config_param($param, $updatePath = '')
 
 /**
  * Gets a configuration parameter from the database. Returns returns null on failure.
- * @param   string  $host DB Host
- * @param   string  $login DB login
- * @param   string  $pass DB pass
- * @param   string  $dbName DB name
  * @param   string  $param Name of param we want
  * @return  mixed   The parameter value or null if not found
  */
@@ -663,7 +659,7 @@ function display_language_selection()
  * @param string $installType
  * @param boolean $badUpdatePath
  * @param boolean $badUpdatePath
- * @param string The updatePath given (if given)
+ * @param string $updatePath The updatePath given (if given)
  * @param array $update_from_version_8 The different subversions from version 1.9
  *
  * @author unknow
@@ -1295,13 +1291,20 @@ function displayDatabaseParameter(
  * Displays step 3 - a form where the user can enter the installation settings
  * regarding the databases - login and password, names, prefixes, single
  * or multiple databases, tracking or not...
+ * @param string $installType
+ * @param string $dbHostForm
+ * @param string $dbUsernameForm
+ * @param string $dbPassForm
+ * @param string $dbNameForm
+ * @param string $installationProfile
  */
 function display_database_settings_form(
     $installType,
     $dbHostForm,
     $dbUsernameForm,
     $dbPassForm,
-    $dbNameForm
+    $dbNameForm,
+    $installationProfile = ''
 ) {
     if ($installType == 'update') {
         global $_configuration;
@@ -1450,6 +1453,11 @@ function display_database_settings_form(
 /**
  * Displays a parameter in a table row.
  * Used by the display_configuration_settings_form function.
+ * @param string $installType
+ * @param string $parameterName
+ * @param string $formFieldName
+ * @param string $parameterValue
+ * @param string $displayWhenUpdate
  */
 function display_configuration_parameter(
     $installType,
@@ -1470,6 +1478,21 @@ function display_configuration_parameter(
 
 /**
  * Displays step 4 of the installation - configuration settings about Chamilo itself.
+ * @param string $installType
+ * @param string $urlForm
+ * @param string $languageForm
+ * @param string $emailForm
+ * @param string $adminFirstName
+ * @param string $adminLastName
+ * @param string $adminPhoneForm
+ * @param string $campusForm
+ * @param string $institutionForm
+ * @param string $institutionUrlForm
+ * @param string $encryptPassForm
+ * @param bool $allowSelfReg
+ * @param bool $allowSelfRegProf
+ * @param string $loginForm
+ * @param string $passForm
  */
 function display_configuration_settings_form(
     $installType,
@@ -1644,6 +1667,7 @@ function display_configuration_settings_form(
 
 /**
  * After installation is completed (step 6), this message is displayed.
+ * @param string $installType
  */
 function display_after_install_message($installType)
 {
@@ -1663,7 +1687,7 @@ function display_after_install_message($installType)
 
 /**
  * This function return countries list from array (hardcoded)
- * @param   bool    (Optional) True for returning countries list with select html
+ * @param   bool  $combo  (Optional) True for returning countries list with select html
  * @return  array|string countries list
  */
 function get_countries_list_from_array($combo = false)
@@ -1747,6 +1771,11 @@ function updateDirAndFilesPermissions()
     }
 }
 
+/**
+ * @param $current_value
+ * @param $wanted_value
+ * @return string
+ */
 function compare_setting_values($current_value, $wanted_value)
 {
     $current_value_string = $current_value;
@@ -1760,6 +1789,12 @@ function compare_setting_values($current_value, $wanted_value)
     }
 }
 
+/**
+ * @param $course_dir
+ * @param $course_attempt_name
+ * @param string $file
+ * @return bool
+ */
 function check_course_script_interpretation($course_dir, $course_attempt_name, $file = 'test.php')
 {
     $output = false;
@@ -1845,6 +1880,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
  * @param string $language
  * @param string $allowRegistration
  * @param string $allowTeacherSelfRegistration
+ * @param string $installationProfile The name of an installation profile file in main/install/profiles/
  */
 function installSettings(
     $organizationName,
@@ -1855,7 +1891,8 @@ function installSettings(
     $adminFirstName,
     $language,
     $allowRegistration,
-    $allowTeacherSelfRegistration
+    $allowTeacherSelfRegistration,
+    $installationProfile = ''
 ) {
     $allowRegistration = $allowRegistration ? 'true' : 'false';
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
@@ -1879,6 +1916,7 @@ function installSettings(
                 WHERE variable = '$variable'";
         Database::query($sql);
     }
+    $res = installProfileSettings($installationProfile);
 }
 
 /**
@@ -2403,6 +2441,7 @@ function fixIds(EntityManager $em)
  * @param string $siteName
  * @param string $allowSelfReg
  * @param string $allowSelfRegProf
+ * @param string $installationProfile Installation profile, if any was provided
  */
 function finishInstallation(
     $manager,
@@ -2419,7 +2458,8 @@ function finishInstallation(
     $institutionUrlForm,
     $siteName,
     $allowSelfReg,
-    $allowSelfRegProf
+    $allowSelfRegProf,
+    $installationProfile = ''
 ) {
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
 
@@ -2487,9 +2527,53 @@ function finishInstallation(
         $adminFirstName,
         $languageForm,
         $allowSelfReg,
-        $allowSelfRegProf
+        $allowSelfRegProf,
+        $installationProfile
     );
 
     lockSettings();
     updateDirAndFilesPermissions();
+}
+
+/**
+ * Update settings based on installation profile defined in a JSON file
+ * @param string $installationProfile The name of the JSON file in main/install/profiles/ folder
+ * @return bool false on failure (no bad consequences anyway, just ignoring profile)
+ */
+function installProfileSettings(
+    $installationProfile = ''
+) {
+    if (empty($installationProfile)) {
+        return false;
+    }
+    $jsonPath = api_get_path(SYS_PATH).'main/install/profiles/'.$installationProfile.'.json';
+    // Make sure the path to the profile is not hacked
+    if (!Security::check_abs_path($jsonPath, api_get_path(SYS_PATH).'main/install/profiles/')) {
+        return false;
+    }
+    if (!is_file($jsonPath)) {
+        return false;
+    }
+    if (!is_readable($jsonPath)) {
+        return false;
+    }
+    if (!function_exists('json_decode')) {
+        // The php-json extension is not available. Ignore profile.
+        return false;
+    }
+    $json = file_get_contents($jsonPath);
+    $params = json_decode($json);
+    if ($params === false or $params === null) {
+        return false;
+    }
+    $settings = $params->params;
+    foreach ($settings as $id => $param) {
+        $sql = "UPDATE settings_current
+                SET selected_value = '".$param->selected_value."'
+                WHERE variable = '".$param->variable."'";
+        if (!empty($param->subkey)) {
+            $sql .= " AND subkey='" . $param->subkey . "'";
+        }
+        Database::query($sql);
+    }
 }

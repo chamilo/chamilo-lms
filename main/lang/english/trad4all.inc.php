@@ -7449,8 +7449,8 @@ To set a the new password you need to activate it. To do this, please click this
 If you did not request this procedure, then please ignore this message. If you keep receiving it, please contact the portal administrator.";
 $CronRemindCourseExpirationActivateText = "Remind Course Expiration cron";
 $CronRemindCourseExpirationActivateComment = "Enable the Remind Course Expiration cron";
-$CronRemindCourseExpirationFrecuencyText = "Frecuency for the Remind Course Expiration cron";
-$CronRemindCourseExpirationFrecuencyComment = "Number of days before the expiration of the course to consider to send reminder mail";
+$CronRemindCourseExpirationFrequencyText = "Frecuency for the Remind Course Expiration cron";
+$CronRemindCourseExpirationFrequencyComment = "Number of days before the expiration of the course to consider to send reminder mail";
 $CronCourseFinishedActivateText = "Course Finished cron";
 $CronCourseFinishedActivateComment = "Activate the Course Finished cron";
 $MailCronCourseFinishedSubject = "End of course %s";
@@ -7482,4 +7482,9 @@ $AtTime = " at";
 $SendSubscriptionNotification = "Send mail notification for subscription";
 $SendAnEmailWhenAUserBeingSubscribed = "Send an email when a user being subscribed to session";
 $SelectDate = "Select date";
+$OnlyLettersAndSpaces = "Only letters and spaces";
+$OnlyLettersAndNumbersAndSpaces = "Only letters, numbers and spaces";
+$FieldTypeLettersSpaces = "Text letters and spaces";
+$CronRemindCourseFinishedActivateText = "Send course finished notification";
+$FieldTypeAlphanumericSpaces = "Text alphanumeric characters and spaces";
 ?>

@@ -4,9 +4,9 @@
     "parent": "prod",
     "params": [
         {
-          "variable": "allow_skills_tool",
-          "subkey": "",
-          "selected_value": "true"
+            "variable": "allow_skills_tool",
+            "subkey": "",
+            "selected_value": "true"
         }
     ]
 }

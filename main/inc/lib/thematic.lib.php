@@ -292,32 +292,53 @@ class Thematic
 
         if (empty($id)) {
             // insert
-            $sql = "INSERT INTO $tbl_thematic (c_id, title, content, active, display_order, session_id)
-					VALUES ($this->course_int_id, '$title', '$content', 1, ".(intval($max_thematic_item)+1).", $session_id) ";
-            $result = Database::query($sql);
-            $last_id = Database::insert_id();
+            $params = [
+                'c_id' => $this->course_int_id,
+                'title' => $title,
+                'content' => $content,
+                'active' => 1,
+                'display_order' => intval($max_thematic_item) + 1,
+                'session_id' => $session_id
+            ];
+            $last_id = Database::insert($tbl_thematic, $params);
             if ($last_id) {
                 $sql = "UPDATE $tbl_thematic SET id = iid WHERE iid = $last_id";
                 Database::query($sql);
-                api_item_property_update($_course, 'thematic', $last_id,"ThematicAdded", $user_id);
-            }
-        } else {
-            // update
-            $sql = "UPDATE $tbl_thematic SET title = '$title', content = '$content', session_id = $session_id
-                    WHERE id = $id AND c_id = {$this->course_int_id}";
-            $result = Database::query($sql);
-            $last_id = $id;
-            if (Database::affected_rows($result)) {
-                // save inside item property table
                 api_item_property_update(
                     $_course,
                     'thematic',
                     $last_id,
-                    "ThematicUpdated",
+                    "ThematicAdded",
                     $user_id
                 );
             }
+        } else {
+            // Update
+            $params = [
+                'title' => $title,
+                'content' => $content,
+                'session_id' => $session_id
+            ];
+
+            Database::update(
+                $tbl_thematic,
+                $params,
+                ['id  = ? AND c_id = ?' => [$id, $this->course_int_id]]
+            );
+
+            $last_id = $id;
+
+            // save inside item property table
+            api_item_property_update(
+                $_course,
+                'thematic',
+                $last_id,
+                "ThematicUpdated",
+                $user_id
+            );
+
         }
+
         return $last_id;
     }
 
@@ -328,7 +349,7 @@ class Thematic
      */
     public function thematic_destroy($thematic_id)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
         $affected_rows = 0;
         $user_id = api_get_user_id();

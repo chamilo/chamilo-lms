@@ -4828,12 +4828,12 @@ class CourseManager
                             WHERE c_id = "' . $courseId . '" AND user_id = "' . $userId . '"  ';
                 } else {
                     $sql = "INSERT INTO " . $course_user_table . " SET
-                        c_id = '" . $courseId . "',
-                        user_id = '" . $userId . "',
-                        status = '1',
-                        is_tutor = '0',
-                        sort = '0',
-                        user_course_cat='0'";
+                            c_id = " . $courseId . ",
+                            user_id = " . $userId . ",
+                            status = '1',
+                            is_tutor = '0',
+                            sort = '0',
+                            user_course_cat='0'";
                 }
                 Database::query($sql);
             }

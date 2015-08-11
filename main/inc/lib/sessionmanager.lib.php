@@ -2408,11 +2408,16 @@ class SessionManager
             $msg = get_lang('StartDateShouldBeBeforeEndDate');
             return $msg;
         }
+
         $access_url_id = api_get_current_access_url_id();
-        $sql = "INSERT INTO $tbl_session_category (name, date_start, date_end, access_url_id)
-        		VALUES('" . Database::escape_string($name) . "','$date_start','$date_end', '$access_url_id')";
-        Database::query($sql);
-        $id_session = Database::insert_id();
+        $params = [
+            'name' => $name,
+            'date_start' => $date_start,
+            'date_end' => $date_end,
+            'access_url_id' => $access_url_id
+        ];
+        $id_session = Database::insert($tbl_session_category, $params);
+
         // Add event to system log
         $user_id = api_get_user_id();
         Event::addEvent(

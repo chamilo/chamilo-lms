@@ -335,18 +335,17 @@ abstract class AbstractLink implements GradebookItem
             $row_testing = Database::fetch_array($result);
 
             if ($row_testing[0] == 0) {
-                $sql = 'INSERT INTO '.$tbl_grade_links.' (type, ref_id, user_id, course_code, category_id, weight, visible, created_at) VALUES ('
-                    .intval($this->get_type())
-                    .','.intval($this->get_ref_id())
-                    .','.intval($this->get_user_id())
-                    .",'".Database::escape_string($this->get_course_code())."'"
-                    .','.intval($this->get_category_id())
-                    .",'".Database::escape_string($this->get_weight())."'"
-                    .','.intval($this->is_visible());
-                $sql .= ','.'"'.$date_current = api_get_local_time().'"';
-                $sql .= ")";
-                Database::query($sql);
-                $inserted_id = Database::insert_id();
+                $params = [
+                    'type' => $this->get_type(),
+                    'ref_id' => $this->get_ref_id(),
+                    'user_id' => $this->get_user_id(),
+                    'course_code' => $this->get_course_code(),
+                    'category_id' => $this->get_category_id(),
+                    'weight' => $this->get_weight(),
+                    'visible' => $this->is_visible(),
+                    'created_at' => api_get_utc_datetime(),
+                ];
+                $inserted_id = Database::insert($tbl_grade_links, $params);
                 $this->set_id($inserted_id);
                 return $inserted_id;
             }
@@ -363,20 +362,21 @@ abstract class AbstractLink implements GradebookItem
     public function save()
     {
         $this->save_linked_data();
-        $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = "UPDATE $tbl_grade_links SET
-                    type        = ".intval($this->get_type()).",
-                    ref_id      = ".intval($this->get_ref_id()).",
-                    user_id     = ".intval($this->get_user_id()).",
-                    course_code = '".Database::escape_string($this->get_course_code())."',
-                    category_id = ".intval($this->get_category_id()).",
-                    weight      = '".Database::escape_string($this->get_weight())."',
-                    visible     = ".intval($this->is_visible())."
-                 WHERE id = ".intval($this->id);
+        $table = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+
+        $params = [
+            'type' => $this->get_type(),
+            'ref_id' => $this->get_ref_id(),
+            'user_id' => $this->get_user_id(),
+            'course_code' => $this->get_course_code(),
+            'category_id' => $this->get_category_id(),
+            'weight' => $this->get_weight(),
+            'visible' => $this->is_visible(),
+        ];
+        Database::insert($table, $params, ['id = ?' => $this->id]);
 
         AbstractLink::add_link_log($this->id);
 
-        Database::query($sql);
     }
 
     /**
@@ -384,14 +384,14 @@ abstract class AbstractLink implements GradebookItem
      */
     public static function add_link_log($idevaluation, $nameLog = null)
     {
-        $tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-        $dateobject=AbstractLink::load ($idevaluation,null,null,null,null);
-        $current_date_server=api_get_utc_datetime();
+        $table = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
+        $dateobject = AbstractLink::load($idevaluation, null, null, null, null);
+        $current_date_server = api_get_utc_datetime();
         $arreval = get_object_vars($dateobject[0]);
         $description_log = isset($arreval['description']) ? $arreval['description']:'';
         if (empty($nameLog)) {
             if (isset($_POST['name_link'])) {
-                $name_log = isset($_POST['name_link']) ? Security::remove_XSS($_POST['name_link']) : $arreval['course_code'];
+                $name_log = isset($_POST['name_link']) ? $_POST['name_link'] : $arreval['course_code'];
             } elseif (isset($_POST['link_' . $idevaluation]) && $_POST['link_' . $idevaluation]) {
                 $name_log = $_POST['link_' . $idevaluation];
             } else {
@@ -400,10 +400,18 @@ abstract class AbstractLink implements GradebookItem
         } else {
             $name_log = $nameLog;
         }
-        $sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log, name,description,created_at,weight,visible,type,user_id_log)
-              VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($name_log)."','".Database::escape_string($description_log)."','".Database::escape_string($current_date_server)."','".Database::escape_string($arreval['weight'])."','".Database::escape_string($arreval['visible'])."','Link',".api_get_user_id().")";
 
-        Database::query($sql);
+        $params = [
+            'id_linkeval_log' => $arreval['id'],
+            'name' => $name_log,
+            'description' => $description_log,
+            'created_at' => $current_date_server,
+            'weight' => $arreval['weight'],
+            'visible' => $arreval['visible'],
+            'type' => 'Link',
+            'user_id_log' => api_get_user_id(),
+        ];
+        Database::insert($table, $params);
     }
 
     /**

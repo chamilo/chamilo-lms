@@ -5832,7 +5832,7 @@ $Item = "Item";
 $ConfigureDashboardPlugin = "Configure Dashboard Plugin";
 $EditBlocks = "Edit blocks";
 $Never = "Never";
-$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user,
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user, 
 
 Your account has now been activated on the platform. Please login and enjoy your courses.";
 $SessionFields = "Session fields";
@@ -7472,4 +7472,8 @@ $AddAttachment = "Add attachment";
 $FieldTypeOnlyLetters = "Text only letters";
 $FieldTypeAlphanumeric = "Text only alphanumeric characters";
 $OnlyLetters = "Only letters";
+$SelectFillTheBlankSeparator = "Select a blanks marker";
+$RefreshBlanks = "Refresh terms";
+$WordTofind = "Word to find";
+$BlankInputSize = "Input size of box to fill";
 ?>

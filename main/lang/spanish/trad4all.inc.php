@@ -7497,4 +7497,8 @@ $AddAttachment = "Añadir archivo adjunto";
 $FieldTypeOnlyLetters = "Texto de letras solamente";
 $FieldTypeAlphanumeric = "Texto de caracteres alfanuméricos";
 $OnlyLetters = "Sólo letras";
+$SelectFillTheBlankSeparator = "Marcador para los espacios en blanco";
+$RefreshBlanks = "Refrescar los blancos";
+$WordTofind = "Palabras por encontrar";
+$BlankInputSize = "Tamaño del espacio en blanco";
 ?>

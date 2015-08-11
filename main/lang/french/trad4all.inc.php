@@ -7456,4 +7456,11 @@ $XTeam = "Équipe %s";
 $YouCanStartSubscribingToCoursesEnteringToXUrl = "Vous pouvez vous inscrire à des cours en allant sur %s";
 $VideoUrl = "URL de vidéo";
 $AddAttachment = "Ajouter une pièce jointe";
+$FieldTypeOnlyLetters = "Texte de lettres exclusivement";
+$FieldTypeAlphanumeric = "Caractères alphanumériques (a-z,0-9,A-Z)";
+$OnlyLetters = "Lettres uniquement";
+$SelectFillTheBlankSeparator = "Marqueur pour les trous";
+$RefreshBlanks = "Rafraîchir les termes";
+$WordTofind = "Mot à trouver";
+$BlankInputSize = "Taille de la zone à remplir";
 ?>

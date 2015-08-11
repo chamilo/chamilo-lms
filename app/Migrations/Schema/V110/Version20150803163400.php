@@ -25,7 +25,7 @@ class Version20150803163400 extends AbstractMigrationChamilo
             'radio',
             'Crons',
             'false',
-            'CronRemindCourseExpirationActivateText',
+            'CronRemindCourseExpirationActivateTitle',
             'CronRemindCourseExpirationActivateComment',
             null,
             null,
@@ -39,13 +39,13 @@ class Version20150803163400 extends AbstractMigrationChamilo
         );
 
         $this->addSettingCurrent(
-            'cron_remind_course_expiration_frecuency',
+            'cron_remind_course_expiration_frequency',
             null,
             'textfield',
             'Crons',
             '2',
-            'CronRemindCourseExpirationFrecuencyText',
-            'CronRemindCourseExpirationFrecuencyComment',
+            'CronRemindCourseExpirationFrecuenqyTitle',
+            'CronRemindCourseExpirationFrecuenqyComment',
             null,
             null,
             1,
@@ -59,7 +59,7 @@ class Version20150803163400 extends AbstractMigrationChamilo
             'radio',
             'Crons',
             'false',
-            'CronCourseFinishedActivateText',
+            'CronCourseFinishedActivateTitle',
             'CronCourseFinishedActivateComment',
             null,
             null,
@@ -101,7 +101,7 @@ class Version20150803163400 extends AbstractMigrationChamilo
                     's.variable',
                     [
                         'cron_remind_course_expiration_activate',
-                        'cron_remind_course_expiration_frecuency',
+                        'cron_remind_course_expiration_frequency',
                         'cron_course_finished_activate'
                     ]
                 )

@@ -55,8 +55,8 @@ class ThematicController
                             if (api_is_allowed_to_edit(null, true)) {
 
                                 $id = isset($_POST['thematic_id']) ? $_POST['thematic_id'] : null;
-                                $title = $_POST['title'];
-                                $content = $_POST['content'];
+                                $title = trim($_POST['title']);
+                                $content = trim($_POST['content']);
                                 $session_id = api_get_session_id();
                                 $thematic->set_thematic_attributes($id, $title, $content, $session_id);
                                 $last_id = $thematic->thematic_save();

@@ -148,6 +148,7 @@ $is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable
 $badUpdatePath = false;
 $emptyUpdatePath = true;
 $proposedUpdatePath = '';
+
 if (!empty($_POST['updatePath'])) {
     $proposedUpdatePath = $_POST['updatePath'];
 }
@@ -229,6 +230,9 @@ if (!isset($_GET['running'])) {
     $allowSelfRegProf = 1;
     $encryptPassForm = 'sha1';
     $session_lifetime = 360000;
+    if (!empty($_GET['profile'])) {
+        $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
+    }
 } else {
     foreach ($_POST as $key => $val) {
         $magic_quotes_gpc = ini_get('magic_quotes_gpc');
@@ -406,6 +410,12 @@ if ($installType == 'new') {
 if (!empty($instalation_type_label) && empty($_POST['step6'])) {
     echo '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
 }
+if (empty($installationProfile)) {
+    $installationProfile = '';
+    if (!empty($_POST['installationProfile'])) {
+        $installationProfile = api_htmlentities($_POST['installationProfile']);
+    }
+}
     ?>
     <input type="hidden" name="updatePath"         value="<?php if (!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES); ?>" />
     <input type="hidden" name="urlAppendPath"      value="<?php echo api_htmlentities($urlAppendPath, ENT_QUOTES); ?>" />
@@ -435,6 +445,7 @@ if (!empty($instalation_type_label) && empty($_POST['step6'])) {
     <input type="hidden" name="session_lifetime"   value="<?php echo api_htmlentities($session_lifetime, ENT_QUOTES); ?>" />
     <input type="hidden" name="old_version"        value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
     <input type="hidden" name="new_version"        value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
+    <input type="hidden" name="installationProfile" value="<?php echo api_htmlentities($installationProfile, ENT_QUOTES); ?>" />
 <?php
 
 if (@$_POST['step2']) {
@@ -447,7 +458,8 @@ if (@$_POST['step2']) {
         $dbHostForm,
         $dbUsernameForm,
         $dbPassForm,
-        $dbNameForm
+        $dbNameForm,
+        $installationProfile
     );
 } elseif (@$_POST['step4']) {
     //STEP 5 : CONFIGURATION SETTINGS
@@ -617,8 +629,11 @@ if (@$_POST['step2']) {
         $msg = get_lang('UpdateExecution');
     }
     echo '<div class="RequirementHeading">
-          <h2>'.display_step_sequence().$msg.'</h2>
-          <div id="pleasewait" class="alert alert-success">'.get_lang('PleaseWaitThisCouldTakeAWhile').'
+          <h2>'.display_step_sequence().$msg.'</h2>';
+    if (!empty($installationProfile)) {
+        echo '    <h3>('.$installationProfile.')</h3>';
+    }
+    echo '    <div id="pleasewait" class="alert alert-success">'.get_lang('PleaseWaitThisCouldTakeAWhile').'
 
           <div class="progress">
           <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
@@ -756,7 +771,8 @@ if (@$_POST['step2']) {
             $institutionUrlForm,
             $campusForm,
             $allowSelfReg,
-            $allowSelfRegProf
+            $allowSelfRegProf,
+            $installationProfile
         );
 
         include 'install_files.inc.php';
@@ -776,6 +792,10 @@ if (@$_POST['step2']) {
 } else {
     // This is the start screen.
     display_language_selection();
+    if (!empty($_GET['profile'])) {
+        $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
+    }
+    echo '<input type="hidden" name="installationProfile" value="'.api_htmlentities($installationProfile, ENT_QUOTES).'" />';
 }
 
 $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');

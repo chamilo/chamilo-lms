@@ -1,0 +1,12 @@
+{
+    "id": 1,
+    "name": "HR",
+    "parent": "prod",
+    "params": [
+        {
+            "variable": "allow_skills_tool",
+            "subkey": "",
+            "selected_value": "true"
+        }
+    ]
+}

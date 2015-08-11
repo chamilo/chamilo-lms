@@ -893,16 +893,14 @@ class SocialManager extends UserManager
 
             $user_rol = $user_info['status'] == 1 ? Display::return_icon('teacher.png',get_lang('Teacher'),null,ICON_SIZE_TINY) : Display::return_icon('user.png',get_lang('Student'),null,ICON_SIZE_TINY);
             $status_icon_chat = null;
-            if($user_info['user_is_online_in_chat'] == 1){
-                $status_icon_chat = Display::return_icon('online.png',get_lang('Online'));
-            }else{
-                $status_icon_chat = Display::return_icon('offline.png',get_lang('Offline'));
+            if ($user_info['user_is_online_in_chat'] == 1) {
+                $status_icon_chat = Display::return_icon('online.png', get_lang('Online'));
+            } else {
+                $status_icon_chat = Display::return_icon('offline.png', get_lang('Offline'));
             }
 
-            if($user_info)
-
             $userPicture = $user_info['avatar'];
-            $img = '<img class="img-responsive img-circle" title = "'.$completeName.'" alt="'.$completeName.'" src="'.$userPicture.'">';
+            $img = '<img class="img-responsive img-circle" title="'.$completeName.'" alt="'.$completeName.'" src="'.$userPicture.'">';
 
             $url =  null;
             // Anonymous users can't have access to the profile

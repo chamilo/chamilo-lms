@@ -1514,7 +1514,11 @@ class SocialManager extends UserManager
             return '';
         }
 
-        $socialAvatarBlock = SocialManager::show_social_avatar_block($groupBlock, $groupId, $userId);
+        $socialAvatarBlock = SocialManager::show_social_avatar_block(
+            $groupBlock,
+            $groupId,
+            $userId
+        );
 
         $profileEditionLink = null;
         if (api_get_user_id() == $userId) {

@@ -123,9 +123,9 @@ $sessionField = new ExtraField('session');
 $extraFieldData = $sessionField->getDataAndFormattedValues($sessionId);
 
 $multiple_url_is_on = api_get_multiple_access_url();
-$url_list = [];
+$urlList = [];
 if ($multiple_url_is_on) {
-    $url_list = UrlManager::get_access_url_from_session($sessionId);
+    $urlList = UrlManager::get_access_url_from_session($sessionId);
 }
 
 $url = Display::url(
@@ -149,24 +149,24 @@ if ($sessionInfo['nbr_courses'] == 0) {
 } else {
     $count = 0;
     $courseItem = '';
-
+    /** @var \Chamilo\CoreBundle\Entity\Repository\SessionRepository $sessionRepository */
     $sessionRepository = Database::getManager()->getRepository('ChamiloCoreBundle:Session');
     $courses = $sessionRepository->getCoursesOrderedByPosition($session);
 
 	foreach ($courses as $course) {
-                //select the number of users
-                $sql = "SELECT count(*)
+        //select the number of users
+        $sql = "SELECT count(*)
                 FROM $tbl_session_rel_user sru,
                 $tbl_session_rel_course_rel_user srcru
-				WHERE
-				    srcru.user_id = sru.user_id AND
-				    srcru.session_id = sru.session_id AND
-				    srcru.c_id = '".intval($course->getId())."' AND
-				    sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
-				    srcru.session_id = '".intval($sessionId)."'";
+                WHERE
+                    srcru.user_id = sru.user_id AND
+                    srcru.session_id = sru.session_id AND
+                    srcru.c_id = '".intval($course->getId())."' AND
+                    sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
+                    srcru.session_id = '".intval($sessionId)."'";
 
 		$rs = Database::query($sql);
-                $numberOfUsers = Database::result($rs, 0, 0);
+        $numberOfUsers = Database::result($rs, 0, 0);
 
 		// Get coachs of the courses in session
 
@@ -182,7 +182,10 @@ if ($sessionInfo['nbr_courses'] == 0) {
 		$coachs = array();
 		if (Database::num_rows($rs) > 0) {
 			while($info_coach = Database::fetch_array($rs)) {
-				$coachs[] = api_get_person_name($info_coach['firstname'], $info_coach['lastname']).' ('.$info_coach['username'].')';
+                $coachs[] = api_get_person_name(
+                        $info_coach['firstname'],
+                        $info_coach['lastname']
+                    ).' ('.$info_coach['username'].')';
 			}
 		} else {
 			$coach = get_lang('None');
@@ -222,9 +225,14 @@ if ($sessionInfo['nbr_courses'] == 0) {
             $downUrl
         );
 
+        if (!SessionManager::orderCourseIsEnabled()) {
+            $orderButtons = '';
+        }
+
         $courseUrl = api_get_course_url($course->getCode(), $sessionId);
 
-		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
+		// hide_course_breadcrumb the parameter has been added to hide the name
+		// of the course, that appeared in the default $interbreadcrumb
         $courseItem .= '
 		<tr>
 			<td>'.Display::url(
@@ -371,7 +379,7 @@ $tpl->assign('session', $sessionInfo);
 $tpl->assign('session_category', is_null($sessionCategory) ? null : $sessionCategory->getName());
 $tpl->assign('session_dates', SessionManager::parseSessionDates($sessionInfo));
 $tpl->assign('session_visibility', SessionManager::getSessionVisibility($sessionInfo));
-$tpl->assign('url_list', $url_list);
+$tpl->assign('url_list', $urlList);
 $tpl->assign('extra_fields', $extraFieldData);
 $tpl->assign('course_list', $courseListToShow);
 $tpl->assign('user_list', $userListToShow);

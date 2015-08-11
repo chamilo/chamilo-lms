@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *
  * Exercise results from Learning paths
@@ -7,12 +8,8 @@
  * @todo implement pagination
  * @package chamilo.tracking
  */
-/**
- * Code
- */
+
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
 $this_section = SECTION_TRACKING;
 
@@ -105,17 +102,16 @@ if (!$export_to_csv) {
 			echo '<br />';
 		}
 	} else {
-	   echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|
+	    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|
 		     <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;|&nbsp';
-       echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
+        echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
 		echo ' | '.get_lang('ExamTracking').'';
-         echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a><br /><br />';
+        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a><br /><br />';
 
 	}
     echo '</div>';
 	echo '<br /><br />';
 	$form->display();
-	//echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
 }
 $main_result = array();
 $session_id = 0;
@@ -124,7 +120,6 @@ $user_list = array();
 foreach($course_list  as $current_course ) {
 	$course_info = api_get_course_info($current_course['code']);
 	$_course = $course_info;
-
 
 	//Getting LP list
 	$list = new LearnpathList('', $current_course['code'], $session_id);
@@ -142,9 +137,8 @@ foreach($course_list  as $current_course ) {
 				$course_info['real_id'],
 				$session_id
 			);
-			//Looping Exercise Attempts
-			foreach($exercise_stats as $stats) {
-				//$attempt_result[$exercise['id']]['users'][$stats['exe_user_id']][$stats['exe_id']] = array('exe_result' =>$stats['exe_result'],'exe_weighting' =>$stats['exe_weighting']);
+			// Looping Exercise Attempts
+			foreach ($exercise_stats as $stats) {
 				$attempt_result[$exercise['id']]['users'][$stats['exe_user_id']][$stats['exe_id']] = $stats;
 				$user_list[$stats['exe_user_id']] = $stats['exe_user_id'];
 			}
@@ -155,11 +149,14 @@ foreach($course_list  as $current_course ) {
 	}
 	$main_result[$current_course['code']] = $lps;
 }
-//echo '<pre>';print_r($main_result);
+
 if (!empty($user_list)) {
     foreach($user_list as $user_id) {
         $user_data = api_get_user_info($user_id);
-        $user_list_name[$user_id] = api_get_person_name($user_data['firstname'],$user_data['lastname']);
+		$user_list_name[$user_id] = api_get_person_name(
+			$user_data['firstname'],
+			$user_data['lastname']
+		);
     }
 }
 $export_array =  array();
@@ -180,10 +177,10 @@ if (!empty($main_result)) {
             continue;
         }
 
-        foreach($lps as $lp_id => $lp_data) {
+        foreach ($lps as $lp_id => $lp_data) {
             $exercises = $lp_data['exercises'];
 
-            foreach($exercises as $exercise_id => $exercise_data) {
+            foreach ($exercises as $exercise_id => $exercise_data) {
                 $users = $exercise_data['users'];
                 foreach($users as $user_id => $attempts) {
                     $attempt = 1;
@@ -199,7 +196,15 @@ if (!empty($main_result)) {
                         $html_result .= Display::tag('td', $result);
 
                         $html_result .= '</tr>';
-                        $export_array[]= array($course_code, $lp_list_name[$lp_id], $exercise_list_name[$exercise_id], $user_list_name[$user_id], $attempt, api_get_local_time($attempt_data['exe_date']), $result);
+						$export_array[] = array(
+							$course_code,
+							$lp_list_name[$lp_id],
+							$exercise_list_name[$exercise_id],
+							$user_list_name[$user_id],
+							$attempt,
+							api_get_local_time($attempt_data['exe_date']),
+							$result,
+						);
                         $attempt++;
                     }
                 }
@@ -217,55 +222,23 @@ if ($export_to_csv) {
     export_complete_report_csv($filename, $export_array);
 	exit;
 }
-function export_complete_report_csv($filename, $array) {
-        require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-        $header[] = array(get_lang('Course'),get_lang('LearningPath'), get_lang('Exercise'), get_lang('User'),get_lang('Attempt'), get_lang('Date'),get_lang('Results'));
-        if (!empty($array)) {
-            $array = array_merge($header, $array);
-            Export :: arrayToCsv($array, $filename);
-        }
-        exit;
-        /*
-         * Too much encoding problems while exporting to XLS, keep it simple
-         *
-         *
-		global $global, $filter_score;
-		$workbook = new Spreadsheet_Excel_Writer();
-		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-		$workbook->send($filename);
-		$workbook->setVersion(8); // BIFF8
-		$worksheet =& $workbook->addWorksheet('Report');
-		$worksheet->setInputEncoding(api_get_system_encoding());
 
-		$line = 0;
-		$column = 0; //skip the first column (row titles)
+function export_complete_report_csv($filename, $array)
+{
+	$header[] = array(
+		get_lang('Course'),
+		get_lang('LearningPath'),
+		get_lang('Exercise'),
+		get_lang('User'),
+		get_lang('Attempt'),
+		get_lang('Date'),
+		get_lang('Results'),
+	);
+	if (!empty($array)) {
+		$array = array_merge($header, $array);
+		Export :: arrayToCsv($array, $filename);
+	}
+	exit;
 
-		$worksheet->write($line,$column,get_lang('Course'));
-		$column++;
-		$worksheet->write($line,$column,get_lang('LearningPath'));
-		$column++;
-		$worksheet->write($line,$column,get_lang('Exercise'));
-		$column++;
-		$worksheet->write($line,$column,get_lang('User'));
-		$column++;
-		$worksheet->write($line,$column,get_lang('Attempt'));
-		$column++;
-		$worksheet->write($line,$column,get_lang('Date'));
-		$column++;
-		$worksheet->write($line,$column,get_lang('Results'));
-		$column++;
-		$line++;
-		foreach ($array as $row) {
-			$column = 0;
-			foreach ($row as $item) {
-				$worksheet->write($line,$column,html_entity_decode(strip_tags($item)));
-				$column++;
-			}
-			$line++;
-		}
-		$line++;
-
-		$workbook->close();
-		exit;*/
 }
 Display :: display_footer();

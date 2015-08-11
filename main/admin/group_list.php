@@ -208,8 +208,9 @@ function modify_filter($group_id, $url_params, $row) {
  * @param string $url_params
  * @return string Some HTML-code with the lock/unlock button
  */
-function active_filter($active, $url_params, $row) {
-    global $_user;
+function active_filter($active, $url_params, $row)
+{
+    $_user = api_get_user_info();
 
     if ($active == '1') {
         $action = 'lock';

@@ -15,10 +15,10 @@ class TestExport extends UnitTestCase {
     }
 
     /**
-     * Checks the export_table_csv method.
+     * Checks the arrayToCsv method.
      * @todo check that a new file is created in api_get_path(SYS_ARCHIVE_PATH)
      */
-    function testExportTableCsv() {
+    function testArrayToCsv() {
         $data = array();
         // can only be tested if headers were not sent
         ob_start();

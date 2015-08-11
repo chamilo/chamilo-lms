@@ -34,19 +34,19 @@ class Event
         if ($pos === false && $referer != '') {
             $ip = api_get_real_ip();
             $remhost = @ getHostByAddr($ip);
-            if ($remhost == $ip)
-                $remhost = "Unknown"; // don't change this
+            if ($remhost == $ip) {
+                $remhost = "Unknown";
+            } // don't change this
             $reallyNow = api_get_utc_datetime();
-            $sql = "INSERT INTO ".$TABLETRACK_OPEN."
-        		(open_remote_host,
-        		 open_agent,
-        		 open_referer,
-        		 open_date)
-        		VALUES
-        		('".$remhost."',
-        		 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".Database::escape_string($referer)."', '$reallyNow')";
-            $res = Database::query($sql);
+            $params = [
+                'open_remote_host' => $remhost,
+                'open_agent' => $_SERVER['HTTP_USER_AGENT'],
+                'open_referer' => $referer,
+                'open_date' => $reallyNow,
+            ];
+            Database::insert($TABLETRACK_OPEN, $params);
         }
+
         return 1;
     }
 

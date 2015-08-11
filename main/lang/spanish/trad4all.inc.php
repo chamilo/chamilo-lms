@@ -7507,4 +7507,6 @@ $AtTime = "a las";
 $SendSubscriptionNotification = "Enviar notificación de suscripción por correo electrónico";
 $SendAnEmailWhenAUserBeingSubscribed = "Enviar un correo electrónico cuando un usuario está suscrito a la sesión";
 $SelectDate = "Seleccionar fecha";
+$OnlyLettersAndSpaces = "Sólo letras y espacios";
+$OnlyLettersAndNumbersAndSpaces = "Sólo letras, números y espacios";
 ?>

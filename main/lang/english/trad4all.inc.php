@@ -7482,4 +7482,6 @@ $AtTime = " at";
 $SendSubscriptionNotification = "Send mail notification for subscription";
 $SendAnEmailWhenAUserBeingSubscribed = "Send an email when a user being subscribed to session";
 $SelectDate = "Select date";
+$OnlyLettersAndSpaces = "Only letters and spaces";
+$OnlyLettersAndNumbersAndSpaces = "Only letters, numbers and spaces";
 ?>

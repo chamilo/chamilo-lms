@@ -81,7 +81,7 @@ if (is_array($results) && count($results) > 0) {
         }
 
         $picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
-        $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
+        $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
         $item_0  = Display::div($result['picture'], array('class'=>'box_description_group_image'));
         $members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
         $item_1  = Display::div(Display::tag('h4', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
@@ -118,7 +118,7 @@ foreach ($results as $result) {
 
     $name = cut($result['name'],GROUP_TITLE_LENGTH,true);
     $picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
-    $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
+    $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
 
     $item_0 = Display::div($result['picture'], array('class'=>'box_description_group_image'));
     $members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
@@ -163,7 +163,7 @@ if (is_array($results) && count($results) > 0) {
 
         $name = cut($result['name'],GROUP_TITLE_LENGTH,true);
         $picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
-        $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
+        $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" />';
 
         $item_0 = Display::div($result['picture'], array('class'=>'box_description_group_image'));
         $members = Display::span($count_users_group, array('class'=>'box_description_group_member'));

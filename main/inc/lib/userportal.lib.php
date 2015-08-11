@@ -766,10 +766,10 @@ class IndexManager
 
             if (api_get_setting('allow_social_tool') == 'true') {
                 $content .= '<a style="text-align:center" href="' . api_get_path(WEB_PATH) . 'main/social/home.php">
-                <img src="' . $userPicture . '" ></a>';
+                <img class="img-circle" src="' . $userPicture . '" ></a>';
             } else {
                 $content .= '<a style="text-align:center" href="' . api_get_path(WEB_PATH) . 'main/auth/profile.php">
-                <img title="' . get_lang('EditProfile') . '" src="' . $userPicture. '" ></a>';
+                <img class="img-circle" title="' . get_lang('EditProfile') . '" src="' . $userPicture. '" ></a>';
             }
 
             $html = self::show_right_block(

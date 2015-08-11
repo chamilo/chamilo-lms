@@ -108,7 +108,9 @@ switch ($action) {
 }
 
 $sessionHeader = Display::page_header(
-    Display::return_icon('session.png', get_lang('Session')).' '.$sessionInfo['name']
+    Display::return_icon('session.png', get_lang('Session')).' '.$sessionInfo['name'],
+    null,
+    'h3'
 );
 
 $url = Display::url(
@@ -121,6 +123,7 @@ $generalCoach = api_get_user_info($sessionInfo['id_coach']);
 
 $sessionField = new ExtraField('session');
 $extraFieldData = $sessionField->getDataAndFormattedValues($sessionId);
+
 $multiple_url_is_on = api_get_multiple_access_url();
 $urlList = [];
 if ($multiple_url_is_on) {
@@ -133,7 +136,7 @@ $url = Display::url(
 );
 $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 
-$courseListToShow .= '<table class="data_table">
+$courseListToShow .= '<table id="session-list-course" class="data_table">
 <tr>
   <th width="35%">'.get_lang('CourseTitle').'</th>
   <th width="30%">'.get_lang('CourseCoach').'</th>
@@ -276,7 +279,7 @@ $userListToShow = Display::page_subheader(get_lang('UserList').$url);
 $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
-    $table = new HTML_Table(array('class' => 'data_table'));
+    $table = new HTML_Table(array('class' => 'data_table', 'id'=>'session-user-list'));
 
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));

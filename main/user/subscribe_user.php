@@ -778,7 +778,7 @@ function reg_filter($user_id) {
  */
 
 function active_filter($active, $url_params, $row) {
-	global $_user;
+	$_user = api_get_user_info();
 	if ($active=='1') {
 		$action='AccountActive';
 		$image='accept';

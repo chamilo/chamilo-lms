@@ -342,10 +342,10 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('FieldTypeOnlyLetters');
         $types[self::FIELD_TYPE_ALPHANUMERIC] = get_lang('FieldTypeAlphanumeric');
         $types[self::FIELD_TYPE_LETTERS_SPACE] = get_lang(
-            'FieldTypeLettersSpace'
+            'FieldTypeLettersSpaces'
         );
         $types[self::FIELD_TYPE_ALPHANUMERIC_SPACE] = get_lang(
-            'FieldTypeNoPunctuation'
+            'FieldTypeAlphanumericSpaces'
         );
 
         switch ($handler) {

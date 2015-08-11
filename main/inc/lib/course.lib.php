@@ -3907,9 +3907,8 @@ class CourseManager
         return $html;
     }
 
-
     /**
-     * return html code for diaplaying a course title in the standart view (not the Session view)
+     * return html code for displaying a course title in the standard view (not the Session view)
      * @param $courseId
      * @param bool $loadDirs
      * @return string
@@ -3924,7 +3923,7 @@ class CourseManager
 
     /**
      * Return tab of params to display a course title in the My Courses tab
-     * Check visibility, right, and notification icones, and load_dirs option
+     * Check visibility, right, and notification icons, and load_dirs option
      * @param $courseId
      * @param bool $loadDirs
      * @return array
@@ -4036,7 +4035,6 @@ class CourseManager
         return $params;
     }
 
-
     /**
      * Retrieves the user defined course categories
      * @param string $userId
@@ -4088,8 +4086,6 @@ class CourseManager
         }
         return $result;
     }
-
-
 
     /**
      * Get the course id based on the original id and field name in the extra fields.

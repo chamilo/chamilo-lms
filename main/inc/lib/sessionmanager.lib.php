@@ -5649,6 +5649,8 @@ class SessionManager
      * for a session category (or woth no session category if empty)
      *
      * @param $userId
+     *
+     * @return array
      */
     public static function getSessionCourseForUser($userId)
     {
@@ -5708,7 +5710,7 @@ class SessionManager
         foreach ($listCourseSession as $courseId => $listSessionId) {
 
             // course info
-            $courseInfo = CourseManager::get_course_information_by_id($courseId);
+            $courseInfo = api_get_course_int_id($courseId);
             $listOneCourse = array();
             $listOneCourse['courseId'] = $courseId;
             $listOneCourse['title'] = $courseInfo['title'];
@@ -5904,6 +5906,7 @@ class SessionManager
      * Return an associative array 'id_course' => [id_session1, id_session2...]
      * where course id_course is in sessions id_session1, id_session2
      * @param $userId
+     *
      * @return array
      */
     public static function getCoursesForCourseSessionCoach($userId)
@@ -5911,7 +5914,6 @@ class SessionManager
         $listResCourseSession = array();
         $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $sql = "SELECT id_session, course_code, c.id
                 FROM $tblSessionRelCourseRelUser srcru
@@ -5937,8 +5939,7 @@ class SessionManager
 
     /**
      * Return true if coach is allowed to access this session
-     * @param $inSessionId
-     * @param $inCoachId
+     * @param int $sessionId
      * @return bool
      */
     public static function isSessionDateOkForCoach($sessionId)

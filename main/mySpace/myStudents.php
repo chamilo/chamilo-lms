@@ -931,8 +931,6 @@ if (!empty($student_id)) {
                 $data_learnpath[$i][] = $lp_name;
                 $data_learnpath[$i][] = $progress . '%';
             }
-        } else {
-            //echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
         }
         ?>
         </table>

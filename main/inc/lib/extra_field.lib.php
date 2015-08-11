@@ -1455,7 +1455,7 @@ EOF;
                         );
                         break;
                     case ExtraField::FIELD_TYPE_LETTERS_ONLY:
-                        $form->addLettersOnly(
+                        $form->addTextLettersOnly(
                             "extra_{$field_details['variable']}",
                             $field_details['display_text']
                         );
@@ -1470,7 +1470,7 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_ALPHANUMERIC:
-                        $form->addAlphanumeric(
+                        $form->addTextAlphanumeric(
                             "extra_{$field_details['variable']}",
                             $field_details['display_text']
                         );
@@ -1487,7 +1487,7 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_LETTERS_SPACE:
-                        $form->addLettersAndSpaces(
+                        $form->addTextLettersAndSpaces(
                             "extra_{$field_details['variable']}",
                             $field_details['display_text']
                         );
@@ -1502,7 +1502,7 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_ALPHANUMERIC_SPACE:
-                        $form->addAlphanumericAndSpaces(
+                        $form->addTextAlphanumericAndSpaces(
                             "extra_{$field_details['variable']}",
                             $field_details['display_text']
                         );

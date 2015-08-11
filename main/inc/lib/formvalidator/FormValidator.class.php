@@ -1040,7 +1040,7 @@ EOT;
      * @param bool $required	Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
-    public function addLettersOnly(
+    public function addTextLettersOnly(
         $name,
         $label,
         $required = false,
@@ -1087,7 +1087,7 @@ EOT;
      * @param bool $required	Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
-    public function addAlphanumeric(
+    public function addTextAlphanumeric(
         $name,
         $label,
         $required = false,
@@ -1134,7 +1134,7 @@ EOT;
      * @param bool $required	Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
-    public function addLettersAndSpaces(
+    public function addTextLettersAndSpaces(
         $name,
         $label,
         $required = false,
@@ -1181,7 +1181,7 @@ EOT;
      * @param bool $required	Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
-    public function addAlphanumericAndSpaces(
+    public function addTextAlphanumericAndSpaces(
         $name,
         $label,
         $required = false,

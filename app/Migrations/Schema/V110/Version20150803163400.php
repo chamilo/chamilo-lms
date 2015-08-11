@@ -39,7 +39,7 @@ class Version20150803163400 extends AbstractMigrationChamilo
         );
 
         $this->addSettingCurrent(
-            'cron_remind_course_expiration_frecuency',
+            'cron_remind_course_expiration_frequency',
             null,
             'textfield',
             'Crons',
@@ -101,7 +101,7 @@ class Version20150803163400 extends AbstractMigrationChamilo
                     's.variable',
                     [
                         'cron_remind_course_expiration_activate',
-                        'cron_remind_course_expiration_frecuency',
+                        'cron_remind_course_expiration_frequency',
                         'cron_course_finished_activate'
                     ]
                 )

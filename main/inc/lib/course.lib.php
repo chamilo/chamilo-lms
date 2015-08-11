@@ -3333,8 +3333,12 @@ class CourseManager
                         $course['status'] = STUDENT;
                     }
 
-                    $params['icon'] = Display::return_icon('blackboard.png', api_htmlentities($course_info['title']),
-                        array(), ICON_SIZE_LARGE);
+                    $params['icon'] = Display::return_icon(
+                        'blackboard.png',
+                        api_htmlentities($course_info['title']),
+                        array(),
+                        ICON_SIZE_LARGE
+                    );
 
                     $params['right_actions'] = '';
                     if (api_is_platform_admin()) {
@@ -3663,20 +3667,56 @@ class CourseManager
 
     /**
      * Retrieves the user defined course categories
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @param string $userId
      * @return array containing all the titles of the user defined courses with the id as key of the array
      */
-    public static function get_user_course_categories()
+    public static function get_user_course_categories($userId = '')
     {
-        global $_user;
+        if ($userId == '') {
+            $realUserId = api_get_user_id();
+        } else {
+            $realUserId = $userId;
+        }
+
         $output = array();
         $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT * FROM " . $table_category . " WHERE user_id='" . intval($_user['user_id']) . "'";
+        $sql = "SELECT * FROM $table_category WHERE user_id = '".intval($realUserId)."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $output[$row['id']] = $row['title'];
         }
         return $output;
+    }
+
+    /**
+     * Return an array the user_category id and title for the course $courseId for user $userId
+     * @param $userId
+     * @param $courseId
+     * @return array
+     */
+    public static function getUserCourseCategoryForCourse($userId, $courseId)
+    {
+        $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tblUserCategory = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
+        $courseId = intval($courseId);
+        $userId = intval($userId);
+
+        $sql = "SELECT user_course_cat, title
+                FROM $tblCourseRelUser cru
+                LEFT JOIN $tblUserCategory ucc
+                ON cru.user_course_cat = ucc.id
+                WHERE
+                    cru.user_id = $userId AND c_id= $courseId ";
+
+        $res = Database::query($sql);
+
+        $result = array();
+        if (Database::num_rows($res) > 0) {
+            $data = Database::fetch_assoc($res);
+            $result[] = $data['user_course_cat'];
+            $result[] = $data['title'];
+        }
+        return $result;
     }
 
     /**
@@ -4788,12 +4828,12 @@ class CourseManager
                             WHERE c_id = "' . $courseId . '" AND user_id = "' . $userId . '"  ';
                 } else {
                     $sql = "INSERT INTO " . $course_user_table . " SET
-                        c_id = '" . $courseId . "',
-                        user_id = '" . $userId . "',
-                        status = '1',
-                        is_tutor = '0',
-                        sort = '0',
-                        user_course_cat='0'";
+                            c_id = " . $courseId . ",
+                            user_id = " . $userId . ",
+                            status = '1',
+                            is_tutor = '0',
+                            sort = '0',
+                            user_course_cat='0'";
                 }
                 Database::query($sql);
             }
@@ -5510,4 +5550,133 @@ class CourseManager
 
         return $form_data;
     }
+
+    /**
+     * return html code for displaying a course title in the standard view (not the Session view)
+     * @param $courseId
+     * @param bool $loadDirs
+     * @return string
+     */
+    public static function displayCourseHtml($courseId, $loadDirs = false)
+    {
+        $params = self::getCourseParamsForDisplay($courseId, $loadDirs);
+        $html = self::course_item_html($params, false);
+        return $html;
+    }
+
+    /**
+     * Return tab of params to display a course title in the My Courses tab
+     * Check visibility, right, and notification icons, and load_dirs option
+     * @param $courseId
+     * @param bool $loadDirs
+     * @return array
+     */
+    public static function getCourseParamsForDisplay($courseId, $loadDirs = false)
+    {
+        $user_id = api_get_user_id();
+        // Table definitions
+        $TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        $TABLE_ACCESS_URL_REL_COURSE = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $current_url_id = api_get_current_access_url_id();
+
+        // Get course list auto-register
+        $special_course_list            = self::get_special_course_list();
+
+        $without_special_courses = '';
+        if (!empty($special_course_list)) {
+            $without_special_courses = ' AND course.code NOT IN ("'.implode('","',$special_course_list).'")';
+        }
+
+        //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+        $sql = "SELECT course.id, course.title, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
+                course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+                FROM    $TABLECOURS      course,
+                        $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
+                WHERE   course.id=".intval($courseId)."
+                        AND course.id = course_rel_user.c_id
+                        AND url.c_id = course.id
+                        AND course_rel_user.user_id = ".intval($user_id)."
+                        $without_special_courses ";
+
+        // If multiple URL access mode is enabled, only fetch courses
+        // corresponding to the current URL.
+        if (api_get_multiple_access_url() && $current_url_id != -1) {
+            $sql .= " AND url.course_code=course.code AND access_url_id=".intval($current_url_id);
+        }
+        // Use user's classification for courses (if any).
+        $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+
+        $result = Database::query($sql);
+
+        // Browse through all courses. We can only have one course because of the  course.id=".intval($courseId) in sql query
+        $course = Database::fetch_array($result);
+        $course_info = api_get_course_info($course['code']);
+        //$course['id_session'] = null;
+        $course_info['id_session'] = null;
+        $course_info['status'] = $course['status'];
+
+        // For each course, get if there is any notification icon to show
+        // (something that would have changed since the user's last visit).
+        $show_notification = Display :: show_notification($course_info);
+
+        // New code displaying the user's status in respect to this course.
+        $status_icon = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
+
+        $params = array();
+        $params['right_actions'] = '';
+
+        if (api_is_platform_admin()) {
+            if ($loadDirs) {
+                $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
+                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
+                $params['right_actions'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_0', 'class'=>'document_preview_container'));
+            } else {
+                $params['right_actions'].= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
+            }
+
+            if ($course_info['status'] == COURSEMANAGER) {
+                //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style'=>'width: 11px; height: 11px;'));
+            }
+        } else {
+            if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
+                if ($loadDirs) {
+                    $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
+                    $params['right_actions'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_0', 'class'=>'document_preview_container'));
+                } else {
+                    if ($course_info['status'] == COURSEMANAGER) {
+                        $params['right_actions'].= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
+                    }
+                }
+            }
+        }
+
+        $course_title_url = '';
+        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
+            $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0';
+            $course_title = Display::url($course_info['title'], $course_title_url);
+        } else {
+            $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
+        }
+
+        // Start displaying the course block itself
+        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+            $course_title .= ' ('.$course_info['visual_code'].') ';
+        }
+        $teachers = '';
+        if (api_get_setting('display_teacher_in_courselist') == 'true') {
+            $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], self::USER_SEPARATOR, true);
+        }
+        $params['link'] = $course_title_url;
+        $params['icon'] = $status_icon;
+        $params['title'] = $course_title;
+        $params['teachers'] = $teachers;
+        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
+            $params['notifications'] = $show_notification;
+        }
+
+        return $params;
+    }
+
+
 }

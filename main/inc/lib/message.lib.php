@@ -264,10 +264,19 @@ class MessageManager
                 Database::query($query);
                 $inbox_last_id = $edit_message_id;
             } else {
-                $query = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
-                         "VALUES ('$user_sender_id', '$receiver_user_id', '1', '".$now."','$clean_subject','$clean_content','$group_id','$parent_id', '".$now."')";
-                Database::query($query);
-                $inbox_last_id = Database::insert_id();
+
+                $params = [
+                    'user_sender_id' => $user_sender_id,
+                    'user_receiver_id' => $receiver_user_id,
+                    'msg_status' => '1',
+                    'send_date' => $now,
+                    'title' => $subject,
+                    'content' => $content,
+                    'group_id' => $group_id,
+                    'parent_id' => $parent_id,
+                    'update_date' => $now
+                ];
+                $inbox_last_id = Database::insert($table_message, $params);
             }
 
             // Save attachment file for inbox messages
@@ -289,11 +298,19 @@ class MessageManager
             }
 
             if (empty($group_id)) {
-                //message in outbox for user friend or group
-                $sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date )
-                        VALUES ('$user_sender_id', '$receiver_user_id', '4', '".$now."','$clean_subject','$clean_content', '$group_id', '$parent_id', '".$now."')";
-                Database::query($sql);
-                $outbox_last_id = Database::insert_id();
+                // message in outbox for user friend or group
+                $params = [
+                    'user_sender_id' => $user_sender_id,
+                    'user_receiver_id' => $receiver_user_id,
+                    'msg_status' => '4',
+                    'send_date' => $now,
+                    'title' => $subject,
+                    'content' => $content,
+                    'group_id' => $group_id,
+                    'parent_id' => $parent_id,
+                    'update_date' => $now
+                ];
+                $outbox_last_id = Database::insert($table_message, $params);
 
                 // save attachment file for outbox messages
                 if (is_array($file_attachments)) {
@@ -574,13 +591,16 @@ class MessageManager
             if (is_uploaded_file($file_attach['tmp_name'])) {
                 @copy($file_attach['tmp_name'], $new_path);
             }
-            $safe_file_comment = Database::escape_string($file_comment);
-            $safe_file_name = Database::escape_string($file_name);
-            $safe_new_file_name = Database::escape_string($new_file_name);
+
             // Storing the attachments if any
-            $sql = "INSERT INTO $tbl_message_attach(filename,comment, path,message_id,size)
-				    VALUES ('$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$message_id', '".$file_attach['size']."' )";
-            Database::query($sql);
+            $params = [
+                'filename' => $file_name,
+                'comment' => $file_comment,
+                'path' => $new_file_name,
+                'message_id' => $message_id,
+                'size' => $file_attach['size']
+            ];
+            Database::insert($tbl_message_attach, $params);
         }
     }
 

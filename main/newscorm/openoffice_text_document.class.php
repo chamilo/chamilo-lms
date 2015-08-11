@@ -40,9 +40,9 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
      * @param	array	The files that will compose the generated learning path. Unused so far.
      * @return	boolean	False if file does not exit. Nothing otherwise.
      */
-    public function make_lp($files = array()) {
-
-        global $_course;
+    public function make_lp($files = array())
+    {
+        $_course = api_get_course_info();
         // We get a content where ||page_break|| indicates where the page is broken.
         if (!file_exists($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html')) { return false; }
         $content = file_get_contents($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html');
@@ -73,7 +73,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
         $my_style = api_get_setting('stylesheets');
         if (empty($my_style)) { $my_style = 'chamilo'; }
         $style_to_import = "<style type=\"text/css\">\r\n";
-        $style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";        
+        $style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";
         $style_to_import .= "</style>\r\n";
         $header = preg_replace("|</head>|i", "\r\n$style_to_import\r\n\\0", $header);
 
@@ -94,9 +94,9 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
      * @param	string	Content
      * @return	void
      */
-    function dealPerChapter($header, $content) {
-
-        global $_course;
+    function dealPerChapter($header, $content)
+    {
+        $_course = api_get_course_info();
 
         $content = str_replace('||page_break||', '', $content);
 
@@ -166,8 +166,9 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
      * @param	string	Page body
      * @return	void
      */
-    function dealPerPage($header, $body) {
-        global $_course;
+    function dealPerPage($header, $body)
+    {
+        $_course = api_get_course_info();
         // Split document to pages.
         $pages = explode('||page_break||', $body);
 
@@ -293,7 +294,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
             if (!$defined_width) {
 
                 $image_size = api_getimagesize($this->base_work_dir.$this->created_dir.'/'.$image);
-                $img_width  = $image_size['width']; 
+                $img_width  = $image_size['width'];
                 $img_height = $image_size['height'];
 
                 $new_width = $max_width - 10;

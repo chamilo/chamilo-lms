@@ -35,11 +35,110 @@ $userId = api_get_user_id();
 
 /* Constants and CONFIGURATION parameters */
 $load_dirs = api_get_setting('show_documents_preview');
+$displayMyCourseViewBySessionLink = api_get_configuration_value('my_courses_view_by_session');
+
+
+$nameTools = get_lang('MyCourses');
+
+/*
+    Header
+    Include the HTTP, HTML headers plus the top banner.
+*/
+if ($load_dirs) {
+    $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
+    $folder_icon = api_get_path(WEB_IMG_PATH).'icons/22/folder.png';
+    $close_icon = api_get_path(WEB_IMG_PATH).'loading1.gif';
+
+    $htmlHeadXtra[] =  '<script>
+	$(document).ready(function() {
+		$(".document_preview_container").hide();
+		$(".document_preview").click(function() {
+			var my_id = this.id;
+			var course_id  = my_id.split("_")[2];
+			var session_id = my_id.split("_")[3];
+
+			//showing div
+			$(".document_preview_container").hide();
+
+			$("#document_result_" +course_id+"_" + session_id).show();
+
+			//Loading
+			var image = $("img", this);
+			image.attr("src", "'.$close_icon.'");
+
+			$.ajax({
+				url: "'.$url.'",
+				data: "course_id="+course_id+"&session_id="+session_id,
+	            success: function(return_value) {
+	            	image.attr("src", "'.$folder_icon.'");
+	            	$("#document_result_" +course_id+"_" + session_id).html(return_value);
+	            }
+	        });
+
+		});
+	});
+	</script>';
+}
+if ($displayMyCourseViewBySessionLink) {
+    $htmlHeadXtra[] = '
+    <script type="text/javascript">
+        userId = ' . $userId . '
+        $(document).ready(function() {
+            changeMyCoursesView($.cookie("defaultMyCourseView"+userId));
+        });
+
+        /**
+        * Keep in cookie the last teacher view for the My Courses Tab. default view, or view by session
+        * @param inView
+        */
+        function changeMyCoursesView(inView)
+        {
+            $.cookie("defaultMyCourseView"+userId, inView, { expires: 365 });
+            if (inView == ' . IndexManager::VIEW_BY_SESSION . ') {
+                $("#viewBySession").addClass("btn-primary");
+                $("#viewByDefault").removeClass("btn-primary");
+            } else {
+                $("#viewByDefault").addClass("btn-primary");
+                $("#viewBySession").removeClass("btn-primary");
+            }
+        }
+	</script>
+';
+}
 
 $controller = new IndexManager(get_lang('MyCourses'));
 
 // Main courses and session list
-$courseAndSessions = $controller->returnCoursesAndSessions($userId);
+//$courseAndSessions = $controller->returnCoursesAndSessions($userId);
+
+// Main courses and session list
+if (isset($_COOKIE['defaultMyCourseView'.$userId]) &&
+    $_COOKIE['defaultMyCourseView'.$userId] == IndexManager::VIEW_BY_SESSION && $displayMyCourseViewBySessionLink
+) {
+    $courseAndSessions = $controller->returnCoursesAndSessionsViewBySession($userId);
+    IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_SESSION, $userId);
+} else {
+    $courseAndSessions = $controller->returnCoursesAndSessions($userId);
+    IndexManager::setDefaultMyCourseView(IndexManager::VIEW_BY_DEFAULT, $userId);
+}
+
+// if teacher, session coach or admin, display the button to change te course view
+
+if ($displayMyCourseViewBySessionLink &&
+    (api_is_drh() || api_is_course_coach() || api_is_platform_admin() || api_is_session_admin() || api_is_teacher())
+) {
+    $courseAndSessions['html'] = "<div class='view-by-session-link'>
+		<div class='btn-group pull-right'>
+		<a class='btn btn-default' id='viewByDefault' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_DEFAULT."\")'>
+		".get_lang('MyCoursesDefaultView')."
+		</a>
+		<a class='btn btn-default' id='viewBySession' href='user_portal.php' onclick='changeMyCoursesView(\"".IndexManager::VIEW_BY_SESSION."\")'>
+		".get_lang('MyCoursesSessionView')."
+		</a>
+		</div>
+	</div><br /><br />
+	".$courseAndSessions['html'];
+}
 
 // Check if a user is enrolled only in one course for going directly to the course after the login.
 if (api_get_setting('go_to_course_after_login') == 'true') {
@@ -87,47 +186,6 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
     }
 }
 
-$nameTools = get_lang('MyCourses');
-
-/*
-    Header
-    Include the HTTP, HTML headers plus the top banner.
-*/
-if ($load_dirs) {
-	$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=document_preview';
-	$folder_icon = api_get_path(WEB_IMG_PATH).'icons/22/folder.png';
-	$close_icon = api_get_path(WEB_IMG_PATH).'loading1.gif';
-
-	$htmlHeadXtra[] =  '<script>
-	$(document).ready(function() {
-		$(".document_preview_container").hide();
-		$(".document_preview").click(function() {
-			var my_id = this.id;
-			var course_id  = my_id.split("_")[2];
-			var session_id = my_id.split("_")[3];
-
-			//showing div
-			$(".document_preview_container").hide();
-
-			$("#document_result_" +course_id+"_" + session_id).show();
-
-			//Loading
-			var image = $("img", this);
-			image.attr("src", "'.$close_icon.'");
-
-			$.ajax({
-				url: "'.$url.'",
-				data: "course_id="+course_id+"&session_id="+session_id,
-	            success: function(return_value) {
-	            	image.attr("src", "'.$folder_icon.'");
-	            	$("#document_result_" +course_id+"_" + session_id).html(return_value);
-	            }
-	        });
-
-		});
-	});
-	</script>';
-}
 
 //Show the chamilo mascot
 if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {

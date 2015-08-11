@@ -244,37 +244,37 @@ class GradeBookResult
      */
     public function exportCompleteReportXLS($data)
     {
-        $filename = 'gradebook-results-'.date('Y-m-d-h:i:s').'.xls';
-        include api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
-        $workbook = new Spreadsheet_Excel_Writer();
-        $workbook->setVersion(8); // BIFF8
-        $workbook->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-        $workbook->send($filename);
+        $filename = 'gradebook-results-'.api_get_local_time().'.xls';
 
-        $worksheet =& $workbook->addWorksheet('Report');
-        $worksheet->setInputEncoding(api_get_system_encoding());
+        $spreadsheet = new PHPExcel();
+        $spreadsheet->setActiveSheetIndex(0);
+        $worksheet = $spreadsheet->getActiveSheet();
 
         $line = 0;
         $column = 0; //skip the first column (row titles)
 
         //headers
         foreach ($data[0] as $header_col) {
-            $worksheet->write($line, $column, $header_col);
+            $worksheet->SetCellValueByColumnAndRow($line, $column, $header_col);
             $column++;
         }
         $line++;
 
         $cant_students = count($data[1]);
 
-        for ($i=0;$i<$cant_students;$i++) {
+        for ($i = 0; $i < $cant_students; $i++) {
             $column = 0;
             foreach ($data[1][$i] as $col_name) {
-                $worksheet->write($line,$column, html_entity_decode(strip_tags($col_name)));
+                $worksheet->SetCellValueByColumnAndRow($line,$column, html_entity_decode(strip_tags($col_name)));
                 $column++;
             }
             $line++;
         }
-        $workbook->close();
+
+        $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
+        $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+        $writer->save($file);
+        DocumentManager::file_send_for_download($file, true, $filename);
         exit;
     }
 
@@ -284,7 +284,7 @@ class GradeBookResult
      */
     public function exportCompleteReportDOC($data)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $filename = 'gb_results_'.$_course['code'].'_'.gmdate('YmdGis');
         $filepath = api_get_path(SYS_ARCHIVE_PATH).$filename;
         //build the results

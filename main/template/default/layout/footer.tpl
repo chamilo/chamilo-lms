@@ -206,6 +206,25 @@
             });
         });
     };
+
+    /**
+     * Generic function to replace the deprecated jQuery toggle function
+     * @param inId          : id of block to hide / unhide
+     * @param inIdTxt       : id of the button
+     * @param inTxtHide     : text one of the button
+     * @param inTxtUnhide   : text two of the button
+     * @todo : allow to detect if text is from a button or from a <a>
+     */
+    function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide)
+    {
+        if ($('#'+inId).css("display") == "none") {
+            $('#'+inId).show(400);
+            $('#'+inIdTxt).attr("value", inTxtUnhide);
+        } else {
+            $('#'+inId).hide(400);
+            $('#'+inIdTxt).attr("value", inTxtHide);
+        }
+    }
 </script>
 
 {{ execution_stats }}

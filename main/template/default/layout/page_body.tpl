@@ -6,6 +6,7 @@
 {% endif %}
 
 {{ flash_messages }}
+<span id="js_alerts"></span>
 
 {#  Page header #}
 {% if header != '' %}

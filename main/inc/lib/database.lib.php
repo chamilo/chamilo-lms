@@ -321,7 +321,19 @@ class Database
      */
     public static function query($query)
     {
-        $result = self::getManager()->getConnection()->executeQuery($query);
+        $connection = self::getManager()->getConnection();
+
+        $result = false;
+
+        if (api_get_setting('server_type') == 'test') {
+            $result = $connection->executeQuery($query);
+        } else {
+            try {
+                $result = $connection->executeQuery($query);
+            } catch (Exception $e) {
+                api_not_allowed(true, get_lang('GeneralError'));
+            }
+        }
 
         return $result;
     }

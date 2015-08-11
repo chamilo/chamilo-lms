@@ -226,17 +226,16 @@ class HotpotatoesExerciseResult
     ) {
 		global $charset;
 		$this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
-		$filename = 'exercise_results_'.date('YmdGis').'.xls';
+		$filename = 'exercise_results_'.api_get_local_time().'.xls';
 		if (!empty($user_id)) {
-			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.xls';
+			$filename = 'exercise_results_user_'.$user_id.'_'.api_get_local_time().'.xls';
 		}
-		$workbook = new Spreadsheet_Excel_Writer();
-		$workbook->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-		$workbook->setVersion(8); // BIFF8
 
-		$workbook->send($filename);
-		$worksheet =& $workbook->addWorksheet('Report '.date('YmdGis'));
-		$worksheet->setInputEncoding(api_get_system_encoding());
+        $spreadsheet = new PHPExcel();
+        $spreadsheet->setActiveSheetIndex(0);
+        $worksheet = $spreadsheet->getActiveSheet();
+
+
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
 
@@ -250,18 +249,18 @@ class HotpotatoesExerciseResult
 		}
 
 		if ($with_column_user) {
-		    $worksheet->write($line,$column,get_lang('Email'));
+		    $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('Email'));
 		    $column++;
 
             if (api_is_western_name_order()) {
-    			$worksheet->write($line,$column,get_lang('FirstName'));
+    			$worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('FirstName'));
     			$column++;
-                $worksheet->write($line,$column,get_lang('LastName'));
+                $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('LastName'));
                 $column++;
             } else {
-                $worksheet->write($line,$column,get_lang('LastName'));
+                $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('LastName'));
                 $column++;
-                $worksheet->write($line,$column,get_lang('FirstName'));
+                $worksheet->SetCellValueByColumnAndRow($line,$column,get_lang('FirstName'));
                 $column++;
             }
 		}
@@ -272,42 +271,42 @@ class HotpotatoesExerciseResult
 
 			//show the fields names for user fields
 			foreach ($extra_user_fields as $field) {
-				$worksheet->write($line, $column, api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset));
+				$worksheet->SetCellValueByColumnAndRow($line, $column, api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset));
 				$column++;
 			}
 		}
 
-		$worksheet->write($line,$column, get_lang('Title'));
+		$worksheet->SetCellValueByColumnAndRow($line,$column, get_lang('Title'));
 		$column++;
-		$worksheet->write($line,$column, get_lang('StartDate'));
+		$worksheet->SetCellValueByColumnAndRow($line,$column, get_lang('StartDate'));
         $column++;
-        $worksheet->write($line,$column, get_lang('EndDate'));
+        $worksheet->SetCellValueByColumnAndRow($line,$column, get_lang('EndDate'));
         $column++;
-        $worksheet->write($line,$column, get_lang('Duration').' ('.get_lang('MinMinutes').')');
+        $worksheet->SetCellValueByColumnAndRow($line,$column, get_lang('Duration').' ('.get_lang('MinMinutes').')');
 		$column++;
-		$worksheet->write($line,$column, get_lang('Score'));
+		$worksheet->SetCellValueByColumnAndRow($line,$column, get_lang('Score'));
 		$column++;
-		$worksheet->write($line,$column, get_lang('Total'));
+		$worksheet->SetCellValueByColumnAndRow($line,$column, get_lang('Total'));
 		$column++;
-        $worksheet->write($line,$column, get_lang('Status'));
+        $worksheet->SetCellValueByColumnAndRow($line,$column, get_lang('Status'));
 		$line++;
 
 		foreach ($this->results as $row) {
 			$column = 0;
 
             if ($with_column_user) {
-                $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset));
+                $worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset));
                 $column++;
 
                 if (api_is_western_name_order()) {
-                    $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
+                    $worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
                     $column++;
-                    $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset));
+                    $worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset));
                     $column++;
                 } else {
-                    $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset));
+                    $worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset));
                     $column++;
-                    $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
+                    $worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
                     $column++;
                 }
 			}
@@ -316,28 +315,32 @@ class HotpotatoesExerciseResult
 				//show user fields data, if any, for this user
 				$user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
 				foreach($user_fields_values as $value) {
-					$worksheet->write($line,$column, api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset));
+					$worksheet->SetCellValueByColumnAndRow($line,$column, api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset));
 					$column++;
 				}
 			}
 
-			$worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset));
+			$worksheet->SetCellValueByColumnAndRow($line,$column,api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset));
 			$column++;
-			$worksheet->write($line,$column,$row['start_date']);
+			$worksheet->SetCellValueByColumnAndRow($line,$column,$row['start_date']);
             $column++;
-			$worksheet->write($line,$column,$row['end_date']);
+			$worksheet->SetCellValueByColumnAndRow($line,$column,$row['end_date']);
             $column++;
-			$worksheet->write($line,$column,$row['duration']);
+			$worksheet->SetCellValueByColumnAndRow($line,$column,$row['duration']);
 			$column++;
-			$worksheet->write($line,$column,$row['result']);
+			$worksheet->SetCellValueByColumnAndRow($line,$column,$row['result']);
 			$column++;
-			$worksheet->write($line,$column,$row['max']);
+			$worksheet->SetCellValueByColumnAndRow($line,$column,$row['max']);
 			$column++;
-            $worksheet->write($line,$column,$row['status']);
+            $worksheet->SetCellValueByColumnAndRow($line,$column,$row['status']);
 			$line++;
 		}
 
-		$workbook->close();
+        $file = api_get_path(SYS_ARCHIVE_PATH).api_replace_dangerous_char($filename);
+        $writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+        $writer->save($file);
+        DocumentManager::file_send_for_download($file, true, $filename);
+
 		return true;
 	}
 }

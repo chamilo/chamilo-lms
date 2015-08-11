@@ -494,6 +494,17 @@ function export_complete_report_xls($filename, $array)
  */
 function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
 {
+    if (
+        (isset($exercise['id']) && empty($exercise['id'])) ||
+        !isset($exercise['id'])
+    ) {
+        return array(
+            'html' => '',
+            'export_array_global' =>  [],
+            'total_students' => 0
+        );
+    }
+
     $exerciseStatsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $courseId = api_get_course_int_id($courseInfo['code']);
 
@@ -678,7 +689,6 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
             $export_array[] = $row_not_global;
         }
     }
-
 
     if ($global) {
         // Exam taken

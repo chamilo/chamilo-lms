@@ -7472,10 +7472,10 @@ $ResetPasswordInstructions = "Instrucciones para el procedimiento de cambio de c
 $ResetPasswordCommentWithUrl = "Ha recibido este mensaje porque Usted (o alguien que intenta hacerse pasar por Ud) ha pedido que su contraseña sea generada nuevamente. Para configurar una nueva contraseña, necesita activarla. Para ello, por favor de clic en el siguiente enlace: %s.
 
 Si no ha pedido un cambio de contraseña, puede ignorar este mensaje. No obstante, si vuelve a recibirlo repetidamente, por favor comuníquese con el administrador de su portal.";
-$CronRemindCourseExpirationActivateText = "Cron de Recordatorio de Expiración de Curso";
+$CronRemindCourseExpirationActivateTitle = "Cron de Recordatorio de Expiración de Curso";
 $CronRemindCourseExpirationActivateComment = "Habilitar el cron de envío de recordatorio de expiración de cursos";
-$CronRemindCourseExpirationFrecuencyText = "Frecuencia del recordatorio de expiración de curso";
-$CronRemindCourseExpirationFrecuencyComment = "Número de días antes de la expiración del curso a considerar para enviar el correo electrónico de recordatorio";
+$CronRemindCourseExpirationFrequencyTitle = "Frecuencia del recordatorio de expiración de curso";
+$CronRemindCourseExpirationFrequencyComment = "Número de días antes de la expiración del curso a considerar para enviar el correo electrónico de recordatorio";
 $CronCourseFinishedActivateText = "Cron de finalización de curso";
 $CronCourseFinishedActivateComment = "Activar el cron de finalización de curso";
 $MailCronCourseFinishedSubject = "Fin del curso %s";
@@ -7507,4 +7507,8 @@ $AtTime = "a las";
 $SendSubscriptionNotification = "Enviar notificación de suscripción por correo electrónico";
 $SendAnEmailWhenAUserBeingSubscribed = "Enviar un correo electrónico cuando un usuario está suscrito a la sesión";
 $SelectDate = "Seleccionar fecha";
+$OnlyLettersAndSpaces = "Sólo letras y espacios";
+$OnlyLettersAndNumbersAndSpaces = "Sólo letras, números y espacios";
+$FieldTypeLettersSpaces = "Texto de letras y espacios";
+$FieldTypeAlphanumericSpaces = "Texto de caracteres alfanuméricos y espacios";
 ?>

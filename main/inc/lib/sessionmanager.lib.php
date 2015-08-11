@@ -5420,11 +5420,11 @@ class SessionManager
         }
 
         $sql1 = "UPDATE $table SET position = '".intval($nextOrder)."'
-                 WHERE session_id = $sessionId AND c_id =  '".$thisCourseCode."'";
+                 WHERE session_id = $sessionId AND c_id =  $thisCourseCode";
         Database::query($sql1);
 
         $sql2 = "UPDATE $table SET position = '".intval($thisOrder)."'
-                 WHERE session_id = $sessionId AND c_id =  '".$nextId."'";
+                 WHERE session_id = $sessionId AND c_id = $nextId";
         Database::query($sql2);
 
         return true;

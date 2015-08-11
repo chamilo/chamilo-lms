@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Repository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Doctrine\ORM\EntityRepository;
 use Fhaculty\Graph\Vertex;
+use Fhaculty\Graph\Set\Vertices;
 
 /**
  * Class SequenceRepository
@@ -40,8 +41,8 @@ class SequenceRepository extends EntityRepository
      * @return array
      */
     public function getRequirementAndDependencies($resourceId, $type)
-    {        $sequence = $this->findRequirementForResource($resourceId, $type);
-
+    {
+        $sequence = $this->findRequirementForResource($resourceId, $type);
         $result = ['requirements' => '', 'dependencies' => ''];
         if ($sequence && $sequence->hasGraph()) {
             $graph = $sequence->getSequence()->getUnSerializeGraph();
@@ -109,6 +110,7 @@ class SequenceRepository extends EntityRepository
      * Get the requirements for a resource only
      * @param int $resourceId The resource ID
      * @param int $type The type of sequence resource
+     *
      * @return array
      */
     public function getRequirements($resourceId, $type)
@@ -164,6 +166,7 @@ class SequenceRepository extends EntityRepository
      * Get the requirements and dependencies within a sequence for a resource
      * @param int $resourceId The resource ID
      * @param int $type The type of sequence resource
+     *
      * @return array
      */
     public function getRequirementsAndDependenciesWithinSequences($resourceId, $type)
@@ -209,11 +212,12 @@ class SequenceRepository extends EntityRepository
     }
 
     /**
-     * Get sessiones from vertices
-     * @param \Fhaculty\Graph\Set\Vertices $verticesEdges The vertices
+     * Get sessions from vertices
+     * @param Vertices $verticesEdges The vertices
+     *
      * @return array
      */
-    private function findSessionFromVerticesEdges(\Fhaculty\Graph\Set\Vertices $verticesEdges)
+    private function findSessionFromVerticesEdges(Vertices $verticesEdges)
     {
         $sessionVertices = [];
 

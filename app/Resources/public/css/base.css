@@ -57,6 +57,9 @@ select {
   text-align: left;
 }
 /*------------------------*/
+.cursor-pointer {
+    cursor: pointer;
+}
 .invisible {
   visibility: visible;
 }

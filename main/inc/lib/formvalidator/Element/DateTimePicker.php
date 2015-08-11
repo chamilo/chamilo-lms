@@ -139,7 +139,7 @@ class DateTimePicker extends HTML_QuickForm_text
                         {icon}
 
                         <div class="input-group">
-                            <span class="input-group-addon">
+                            <span class="input-group-addon cursor-pointer">
                                 {element}
                             </span>
                             <input class="form-control" type="text" readonly id="' . $id . '_alt" value="' . $value . '">

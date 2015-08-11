@@ -816,29 +816,31 @@ class GroupManager
         if (!isset ($obj->new_order)) {
             $obj->new_order = 1;
         }
-        $sql = "INSERT INTO ".$table_group_category." SET
-                    c_id =  $course_id ,
-                    title='".Database::escape_string($title)."',
-                    display_order ='".$obj->new_order."',
-                    description='".Database::escape_string($description)."',
-                    doc_state = '".Database::escape_string($doc_state)."',
-                    work_state = '".Database::escape_string($work_state)."',
-                    calendar_state = '".Database::escape_string($calendar_state)."',
-                    announcements_state = '".Database::escape_string($announcements_state)."',
-                    forum_state = '".Database::escape_string($forum_state)."',
-                    wiki_state = '".Database::escape_string($wiki_state)."',
-                    chat_state = '".Database::escape_string($chat_state)."',
-                    groups_per_user   = '".Database::escape_string($groups_per_user)."',
-                    self_reg_allowed = '".Database::escape_string($self_registration_allowed)."',
-                    self_unreg_allowed = '".Database::escape_string($self_unregistration_allowed)."',
-                    max_student = '".Database::escape_string($maximum_number_of_students)."' ";
-        Database::query($sql);
-        $categoryId = Database::insert_id();
-        if ($categoryId) {
 
+        $params = [
+            'c_id' => $course_id,
+            'title' => $title,
+            'display_order' => $obj->new_order,
+            'description' => $description,
+            'doc_state' => $doc_state,
+            'work_state' => $work_state,
+            'calendar_state' => $calendar_state,
+            'announcements_state' => $announcements_state,
+            'forum_state' => $forum_state,
+            'wiki_state' => $wiki_state,
+            'chat_state' => $chat_state,
+            'groups_per_user' => $groups_per_user,
+            'self_reg_allowed' => $self_registration_allowed,
+            'self_unreg_allowed' => $self_unregistration_allowed,
+            'max_student' => $maximum_number_of_students
+        ];
+
+        $categoryId = Database::insert($table_group_category, $params);
+        if ($categoryId) {
             $sql = "UPDATE $table_group_category SET id = iid
                     WHERE iid = $categoryId";
             Database::query($sql);
+
             return $categoryId;
         }
 

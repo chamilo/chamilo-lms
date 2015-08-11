@@ -1225,8 +1225,10 @@ function api_protect_teacher_script($allow_sessions_admins = false)
 
 /**
  * Function used to prevent anonymous users from accessing a script.
- *
+ * @param bool|true $printHeaders
  * @author Roan Embrechts
+ *
+ * @return bool
  */
 function api_block_anonymous_users($printHeaders = true)
 {
@@ -1279,9 +1281,10 @@ function api_get_navigator() {
 }
 
 /**
- * @return True if user selfregistration is allowed, false otherwise.
+ * @return True if user self registration is allowed, false otherwise.
  */
-function api_is_self_registration_allowed() {
+function api_is_self_registration_allowed()
+{
     return isset($GLOBALS['allowSelfReg']) ? $GLOBALS['allowSelfReg'] : false;
 }
 
@@ -1292,14 +1295,15 @@ function api_is_self_registration_allowed() {
  *          if (api_get_user_id())
  * @return integer the id of the current user, 0 if is empty
  */
-function api_get_user_id() {
+function api_get_user_id()
+{
     return empty($GLOBALS['_user']['user_id']) ? 0 : intval($GLOBALS['_user']['user_id']);
 }
 
 /**
  * Gets the list of courses a specific user is subscribed to
  * @param int       User ID
- * @param boolean   Whether to get session courses or not - NOT YET IMPLEMENTED
+ * @param boolean   $fetch_session Whether to get session courses or not - NOT YET IMPLEMENTED
  * @return array    Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx,'status'=>d)
  */
 function api_get_user_courses($userid, $fetch_session = true)
@@ -1338,6 +1342,8 @@ function api_get_user_courses($userid, $fetch_session = true)
  * This function should be only used inside api_get_user_info()
  *
  * @param array Non-standard user array
+ * @param bool $add_password
+ *
  * @return array Standard user array
  */
 function _api_format_user($user, $add_password = false)
@@ -1626,7 +1632,7 @@ function api_get_course_path($course_code = null)
 function api_get_course_setting($setting_name, $course_code = null)
 {
     $course_info = api_get_course_info($course_code);
-    $table       = Database::get_course_table(TABLE_COURSE_SETTING);
+    $table = Database::get_course_table(TABLE_COURSE_SETTING);
     $setting_name = Database::escape_string($setting_name);
     if (!empty($course_info['real_id']) && !empty($setting_name)) {
         $sql = "SELECT value FROM $table
@@ -1649,9 +1655,10 @@ function api_get_course_setting($setting_name, $course_code = null)
  * status of "6" (anonymous).
  * @return int  User ID of the anonymous user, or O if no anonymous user found
  */
-function api_get_anonymous_id() {
+function api_get_anonymous_id()
+{
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT user_id FROM $table WHERE status =".ANONYMOUS;
+    $sql = "SELECT user_id FROM $table WHERE status = ".ANONYMOUS;
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_array($res);
@@ -1868,7 +1875,7 @@ function api_format_course_array($course_data)
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic.png';
     } else {
-        $url_image = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true);
+        $url_image = Display::return_icon('session_default.png',null,null,null,null,true);
     }
     $_course['course_image_large'] = $url_image;
 
@@ -2138,16 +2145,18 @@ class api_failure {
  * Gets the current Chamilo (not PHP/cookie) session ID
  * @return  int     O if no active session, the session ID otherwise
  */
-function api_get_session_id() {
-    return empty($_SESSION['id_session']) ? 0 : intval($_SESSION['id_session']);
+function api_get_session_id()
+{
+    return Session::read('id_session', 0);
 }
 
 /**
  * Gets the current Chamilo (not social network) group ID
  * @return  int     O if no active session, the session ID otherwise
  */
-function api_get_group_id() {
-    return empty($_SESSION['_gid']) ? 0 : intval($_SESSION['_gid']);
+function api_get_group_id()
+{
+    return Session::read('_gid', 0);
 }
 
 
@@ -2834,7 +2843,8 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
  * Checks whether the current user is a session administrator
  * @return boolean True if current user is a course administrator
  */
-function api_is_session_admin() {
+function api_is_session_admin()
+{
     $user = api_get_user_info();
     return isset($user['status']) && $user['status'] == SESSIONADMIN;
 }
@@ -2873,7 +2883,8 @@ function api_is_teacher()
  * Checks whether the current user is a invited user
  * @return boolean
  */
-function api_is_invitee() {
+function api_is_invitee()
+{
     $user = api_get_user_info();
 
     return isset($user['status']) && $user['status'] == INVITEE;
@@ -4241,37 +4252,39 @@ function api_get_language_id($language)
  * user_select_lang : language selected by user at login
  * course_lang : language of the current course
  * platform_lang : default platform language
- * @param string lang_type
- * @param return language of the requested type or false if the language is not available
+ * @param string $lang_type
+ * @return string
  **/
 function api_get_language_from_type($lang_type)
 {
-    global $_user;
-    global $_course;
-    $toreturn = false;
+    $_user = api_get_user_info();
+    $_course = api_get_course_info();
+    $return = false;
+
     switch ($lang_type) {
-        case 'platform_lang' :
+        case 'platform_lang':
             $temp_lang = api_get_setting('platformLanguage');
             if (!empty($temp_lang))
-                $toreturn = $temp_lang;
+                $return = $temp_lang;
             break;
-        case 'user_profil_lang' :
-            if (isset($_user['language']) && !empty($_user['language']) )
-                $toreturn = $_user['language'];
+        case 'user_profil_lang':
+            if (isset($_user['language']) && !empty($_user['language']))
+                $return = $_user['language'];
             break;
-        case 'user_selected_lang' :
-            if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice']) )
-                $toreturn = ($_SESSION['user_language_choice']);
+        case 'user_selected_lang':
+            if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice']))
+                $return = $_SESSION['user_language_choice'];
             break;
-        case 'course_lang' :
-            if (isset($_course['language']) && !empty($_course['language']) )
-                $toreturn = $_course['language'];
+        case 'course_lang':
+            if (isset($_course['language']) && !empty($_course['language']))
+                $return = $_course['language'];
             break;
-        default :
-            $toreturn = false;
+        default:
+            $return = false;
         break;
     }
-    return $toreturn;
+
+    return $return;
 }
 
 function api_get_language_info($language_id) {

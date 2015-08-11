@@ -1032,6 +1032,194 @@ EOT;
         }
     }
 
+    /**
+     * Adds a text field for letters to the form.
+     * A trim-filter is attached to the field.
+     * @param string $name The element name
+     * @param string $label The label for the form-element
+     * @param bool $required	Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
+     */
+    public function addTextLettersOnly(
+        $name,
+        $label,
+        $required = false,
+        $attributes = []
+    )
+    {
+        $attributes = array_merge(
+            $attributes,
+            [
+                'pattern' => '[a-zA-ZñÑ]+',
+                'title' => get_lang('OnlyLetters')
+            ]
+        );
+
+        $this->addElement(
+            'text',
+            $name,
+            [
+                $label,
+                get_lang('OnlyLetters')
+            ],
+            $attributes
+        );
+
+        $this->applyFilter($name, 'trim');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        $this->addRule(
+            $name,
+            get_lang('OnlyLetters'),
+            'regex',
+            '/^[a-zA-ZñÑ]+$/'
+        );
+    }
+
+    /**
+     * Adds a text field for alphanumeric characters to the form.
+     * A trim-filter is attached to the field.
+     * @param string $name The element name
+     * @param string $label The label for the form-element
+     * @param bool $required	Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
+     */
+    public function addTextAlphanumeric(
+        $name,
+        $label,
+        $required = false,
+        $attributes = []
+    )
+    {
+        $attributes = array_merge(
+            $attributes,
+            [
+                'pattern' => '[a-zA-Z0-9ñÑ]+',
+                'title' => get_lang('OnlyLettersAndNumbers')
+            ]
+        );
+
+        $this->addElement(
+            'text',
+            $name,
+            [
+                $label,
+                get_lang('OnlyLettersAndNumbers')
+            ],
+            $attributes
+        );
+
+        $this->applyFilter($name, 'trim');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        $this->addRule(
+            $name,
+            get_lang('OnlyLettersAndNumbers'),
+            'regex',
+            '/^[a-zA-Z0-9ÑÑ]+$/'
+        );
+    }
+
+    /**
+     * Adds a text field for letters and spaces to the form.
+     * A trim-filter is attached to the field.
+     * @param string $name The element name
+     * @param string $label The label for the form-element
+     * @param bool $required	Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
+     */
+    public function addTextLettersAndSpaces(
+        $name,
+        $label,
+        $required = false,
+        $attributes = []
+    )
+    {
+        $attributes = array_merge(
+            $attributes,
+            [
+                'pattern' => '[a-zA-ZñÑ\s]+',
+                'title' => get_lang('OnlyLettersAndSpaces')
+            ]
+        );
+
+        $this->addElement(
+            'text',
+            $name,
+            [
+                $label,
+                get_lang('OnlyLettersAndSpaces')
+            ],
+            $attributes
+        );
+
+        $this->applyFilter($name, 'trim');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        $this->addRule(
+            $name,
+            get_lang('OnlyLettersAndSpaces'),
+            'regex',
+            '/^[a-zA-ZñÑ\s]+$/'
+        );
+    }
+
+    /**
+     * Adds a text field for alphanumeric and spaces characters to the form.
+     * A trim-filter is attached to the field.
+     * @param string $name The element name
+     * @param string $label The label for the form-element
+     * @param bool $required	Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
+     */
+    public function addTextAlphanumericAndSpaces(
+        $name,
+        $label,
+        $required = false,
+        $attributes = []
+    )
+    {
+        $attributes = array_merge(
+            $attributes,
+            [
+                'pattern' => '[a-zA-Z0-9ñÑ\s]+',
+                'title' => get_lang('OnlyLettersAndNumbersAndSpaces')
+            ]
+        );
+
+        $this->addElement(
+            'text',
+            $name,
+            [
+                $label,
+                get_lang('OnlyLettersAndNumbersAndSpaces')
+            ],
+            $attributes
+        );
+
+        $this->applyFilter($name, 'trim');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        $this->addRule(
+            $name,
+            get_lang('OnlyLettersAndNumbersAndSpaces'),
+            'regex',
+            '/^[a-zA-Z0-9ñÑ\s]+$/'
+        );
+    }
+
 }
 
 /**

@@ -84,7 +84,7 @@ class learnpath
      * @param	string	$course Course code
      * @param	integer	$lp_id
      * @param	integer	$user_id
-     * @return	boolean	True on success, false on error
+     * @return mixed True on success, false on error
      */
     public function __construct($course, $lp_id, $user_id)
     {
@@ -418,6 +418,7 @@ class learnpath
         if ($this->debug > 2) {
             error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
         }
+        return true;
     }
 
     /**
@@ -492,6 +493,7 @@ class learnpath
             error_log('New LP - In learnpath::add_item(' . $parent . ',' . $previous . ',' . $type . ',' . $id . ',' . $title . ')', 0);
         }
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $_course = api_get_course_info();
         $parent = intval($parent);
         $previous = intval($previous);
         $id = intval($id);
@@ -552,15 +554,15 @@ class learnpath
         $typeCleaned = Database::escape_string($type);
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
-					FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
+                    FROM ' . Database :: get_course_table(TABLE_QUIZ_QUESTION) . ' as quiz_question
                     INNER JOIN  ' . Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION) . ' as quiz_rel_question
                     ON
                         quiz_question.id = quiz_rel_question.question_id AND
                         quiz_question.c_id = quiz_rel_question.c_id
                     WHERE
                         quiz_rel_question.exercice_id = '.$id." AND
-	            		quiz_question.c_id = $course_id AND
-	            		quiz_rel_question.c_id = $course_id ";
+                        quiz_question.c_id = $course_id AND
+                        quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database :: result($rsQuiz, 0, 0);
 
@@ -633,7 +635,6 @@ class learnpath
             // Upload audio.
             if (!empty($_FILES['mp3']['name'])) {
                 // Create the audio folder if it does not exist yet.
-                global $_course;
                 $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
                 if (!is_dir($filepath . 'audio')) {
                     mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
@@ -1224,15 +1225,16 @@ class learnpath
 
     /**
      * Updates an item's content in place
-     * @param	integer	Element ID
-     * @param	integer	Parent item ID
-     * @param	integer Previous item ID
-     * @param   string	Item title
-     * @param   string  Item description
-     * @param   string  Prerequisites (optional)
-     * @param   string  Indexing terms (optional)
-     * @param   array   The array resulting of the $_FILES[mp3] element
-     * @return	boolean	True on success, false on error
+     * @param   integer $id Element ID
+     * @param   integer $parent Parent item ID
+     * @param   integer $previous Previous item ID
+     * @param   string  $title Item title
+     * @param   string  $description Item description
+     * @param   string  $prerequisites Prerequisites (optional)
+     * @param   array   $audio The array resulting of the $_FILES[mp3] element
+     * @param   int     $max_time_allowed
+     * @param   string  $url
+     * @return  boolean True on success, false on error
      */
     public function edit_item(
         $id,
@@ -1240,12 +1242,14 @@ class learnpath
         $previous,
         $title,
         $description,
-        $prerequisites = 0,
-        $audio = null,
+        $prerequisites = '0',
+        $audio = array(),
         $max_time_allowed = 0,
         $url = ''
     ) {
         $course_id = api_get_course_int_id();
+        $_course = api_get_course_info();
+
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::edit_item()', 0);
         }
@@ -1263,7 +1267,6 @@ class learnpath
         $audio_update_sql = '';
         if (is_array($audio) && !empty ($audio['tmp_name']) && $audio['error'] === 0) {
             // Create the audio folder if it does not exist yet.
-            global $_course;
             $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
             if (!is_dir($filepath . 'audio')) {
                 mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
@@ -1466,8 +1469,8 @@ class learnpath
      * Updates an item's prereq in place
      * @param	integer	$id Element ID
      * @param	string	$prerequisite_id Prerequisite Element ID
-     * @param	string	$mastery_score Prerequisite min score
-     * @param	string	$max_score Prerequisite max score
+     * @param	int 	$mastery_score Prerequisite min score
+     * @param	int 	$max_score Prerequisite max score
      *
      * @return	boolean	True on success, false on error
      */
@@ -2172,7 +2175,7 @@ class learnpath
     public function get_mediaplayer($autostart = 'true')
     {
         $course_id = api_get_course_int_id();
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
@@ -5648,10 +5651,12 @@ class learnpath
     public function overview()
     {
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+        $_course = api_get_course_info();
+
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::overview()', 0);
         }
-        global $_course;
+
         $_SESSION['gradebook'] = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         $return = '';
 
@@ -6546,7 +6551,7 @@ class learnpath
      */
     public function display_document($id, $show_title = false, $iframe = true, $edit_link = false)
     {
-        global $_course; // It is temporary.
+        $_course = api_get_course_info();
         $course_id = api_get_course_int_id();
         $return = '';
         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
@@ -7583,8 +7588,9 @@ class learnpath
     public function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
     {
         $course_id = api_get_course_int_id();
+        $_course = api_get_course_info();
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_doc 	 = Database :: get_course_table(TABLE_DOCUMENT);
+        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
 
         $no_display_edit_textarea = false;
 
@@ -7839,7 +7845,6 @@ class learnpath
                                 $relative_path = $relative_path . '/';
                             }
                         } else {
-                            global $_course;
                             $result = $this->generate_lp_folder($_course);
                             $relative_path = api_substr($result['dir'], 1, strlen($result['dir']));
                             $relative_prefix = '../../';

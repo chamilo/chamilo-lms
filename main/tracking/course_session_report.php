@@ -5,9 +5,9 @@
  * Report
  * @package chamilo.tracking
  */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
 $this_section = "session_my_space";
 
@@ -96,22 +96,22 @@ foreach ($course_list  as $current_course ) {
 	$lp_list = $list->get_flat_list();
 
 	// Looping LPs
-	foreach ($lp_list as $lp_id =>$lp) {
-		$exercise_list = Event::get_all_exercises_from_lp($lp_id, $course_info['real_id']);
-		// Looping Chamilo Exercises in LP
-		foreach ($exercise_list as $exercise) {
-			$exercise_stats = Event::get_all_exercise_event_from_lp(
-				$exercise['path'],
-				$course_info['real_id'],
-				$session_id
-			);
-			// Looping Exercise Attempts
-			foreach ($exercise_stats as $stats) {
-				$attempt_result[$stats['exe_user_id']]['result'] += $stats['exe_result'] / $stats['exe_weighting'];
-				$attempt_result[$stats['exe_user_id']]['attempts']++;
-			}
-		}
-	}
+    foreach ($lp_list as $lp_id =>$lp) {
+        $exercise_list = Event::get_all_exercises_from_lp($lp_id, $course_info['real_id']);
+        // Looping Chamilo Exercises in LP
+        foreach ($exercise_list as $exercise) {
+            $exercise_stats = Event::get_all_exercise_event_from_lp(
+                $exercise['path'],
+                $course_info['real_id'],
+                $session_id
+            );
+            // Looping Exercise Attempts
+            foreach ($exercise_stats as $stats) {
+                $attempt_result[$stats['exe_user_id']]['result'] += $stats['exe_result'] / $stats['exe_weighting'];
+                $attempt_result[$stats['exe_user_id']]['attempts']++;
+            }
+        }
+    }
 	$main_result[$current_course['code']] = $attempt_result;
 }
 
@@ -212,48 +212,8 @@ if (!empty($users) && is_array($users)) {
 	Display::display_warning_message(get_lang('NoResults'));
 }
 
-
 if (!$export_to_xls) {
 	echo $html_result;
-}
-
-$filename = 'exam-reporting-'.date('Y-m-d-h:i:s').'.xls';
-if ($export_to_xls) {
-	echo $html_result;
-	export_complete_report_xls($filename, $export_array);
-	exit;
-}
-
-function sort_user($a, $b) {
-	if (is_numeric($a['score']) && is_numeric($b['score'])) {
-		echo $a['score'].' : '.$b['score'];
-		echo '<br />';
-		if ($a['score'] < $b['score']) {
-			return 1;
-		}
-		return 0;
-	}
-	return 1;
-}
-
-function export_complete_report_xls($filename, $array) {
-	global $charset;
-	$workbook = new Spreadsheet_Excel_Writer();
-	$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-	$workbook->send($filename);
-	$workbook->setVersion(8); // BIFF8
-	$worksheet =& $workbook->addWorksheet('Report');
-	//$worksheet->setInputEncoding(api_get_system_encoding());
-	$worksheet->setInputEncoding($charset);
-	/*
-    $line = 0;
-    $column = 1; // Skip the first column (row titles)
-    foreach ($array as $elem) {
-        $worksheet->write($line, $column, $elem);
-        $column++;
-    }
-    $workbook->close();*/
-	exit;
 }
 
 Display :: display_footer();

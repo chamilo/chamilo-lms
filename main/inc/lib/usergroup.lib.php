@@ -2018,16 +2018,13 @@ class UserGroup extends Model
         }
 
         if (!empty($links)) {
-            $html .= '<div class="well sidebar-nav"><ul class="nav nav-list">';
-            if (!empty($group_info['description'])) {
-                $html .= Display::tag(
-                    'li',
-                    Security::remove_XSS($group_info['description'], STUDENT, true),
-                    array('class'=>'group_description')
-                );
-            }
+            $html .= '<div class="panel panel-default">';
+            $html .= '<div class="panel-body">';
+            $html .= '<ul class="nav nav-pills nav-stacked">';
             $html .= $links;
-            $html .= '</ul></div>';
+            $html .= '</ul>';
+            $html .= '</div>';
+            $html .= '</div>';
         }
 
         return $html;

@@ -352,7 +352,7 @@ class Evaluation implements GradebookItem
 	}
 
 	/**
-	 * @param $idevaluation
+	 * @param int $idevaluation
 	 */
 	public function add_evaluation_log($idevaluation)
 	{
@@ -363,13 +363,22 @@ class Evaluation implements GradebookItem
 			$dateobject = $eval->load($idevaluation,null,null,null,null);
 			$arreval = get_object_vars($dateobject[0]);
 			if (!empty($arreval['id'])) {
-				$sql_eval='SELECT weight from '.$tbl_grade_evaluations.' WHERE id='.$arreval['id'];
-				$rs=Database::query($sql_eval);
-				$row_old_weight=Database::fetch_array($rs,'ASSOC');
-				$current_date=api_get_utc_datetime();
-				$sql = "INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,created_at,weight,visible,type,user_id_log)
-					  VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($arreval['name'])."','".Database::escape_string($arreval['description'])."','".$current_date."','".Database::escape_string($row_old_weight['weight'])."','".Database::escape_string($arreval['visible'])."','evaluation',".api_get_user_id().")";
-				Database::query($sql);
+				$sql = 'SELECT weight from '.$tbl_grade_evaluations.'
+                        WHERE id='.$arreval['id'];
+                $rs = Database::query($sql);
+                $row_old_weight = Database::fetch_array($rs, 'ASSOC');
+                $current_date = api_get_utc_datetime();
+                $params = [
+                    'id_linkeval_log' => $arreval['id'],
+                    'name' => $arreval['name'],
+                    'description' => $arreval['description'],
+                    'created_at' => $current_date,
+                    'weight' => $row_old_weight['weight'],
+                    'visible' => $arreval['visible'],
+                    'type' => 'evaluation',
+                    'user_id_log' => api_get_user_id()
+                ];
+                Database::insert($tbl_grade_linkeval_log, $params);
 			}
 		}
 	}
@@ -478,8 +487,9 @@ class Evaluation implements GradebookItem
 	public function has_results()
 	{
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-		$sql='SELECT count(id) AS number FROM '.$tbl_grade_results
-			.' WHERE evaluation_id = '.intval($this->id);
+		$sql = 'SELECT count(id) AS number
+				FROM '.$tbl_grade_results.'
+				WHERE evaluation_id = '.intval($this->id);
 		$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 
@@ -492,7 +502,8 @@ class Evaluation implements GradebookItem
 	public function delete_results()
 	{
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE evaluation_id = '.intval($this->id);
+		$sql = 'DELETE FROM '.$tbl_grade_results.'
+				WHERE evaluation_id = '.intval($this->id);
 		Database::query($sql);
 	}
 

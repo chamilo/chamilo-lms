@@ -195,10 +195,10 @@ class ScoreDisplay
      * @param int   score color percent (optional)
      * @param int   gradebook category id (optional)
      */
-    public function update_custom_score_display_settings ($displays, $scorecolpercent = 0, $category_id = null)
+    public function update_custom_score_display_settings($displays, $scorecolpercent = 0, $category_id = null)
     {
         $this->custom_display = $displays;
-           $this->custom_display_conv = $this->convert_displays($this->custom_display);
+        $this->custom_display_conv = $this->convert_displays($this->custom_display);
 
         if (isset($category_id)) {
             $category_id = intval($category_id);
@@ -207,21 +207,23 @@ class ScoreDisplay
         }
 
         // remove previous settings
-        $tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
-        $sql = 'DELETE FROM '.$tbl_display.' WHERE category_id = '.$category_id;
+        $table = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+        $sql = 'DELETE FROM '.$table.' WHERE category_id = '.$category_id;
         Database::query($sql);
 
         // add new settings
-        $sql = 'INSERT INTO '.$tbl_display.' (id, score, display, category_id, score_color_percent) VALUES ';
         $count = 0;
         foreach ($displays as $display) {
-            if ($count > 0) {
-                $sql .= ',';
-            }
-            $sql .= "(NULL, '".$display['score']."', '".Database::escape_string($display['display'])."', ".$category_id.", ".intval($scorecolpercent).")";
+            $params = [
+                'score' => $display['score'],
+                'display' => $display['display'],
+                'category_id' => $category_id,
+                'score_color_percent' => $scorecolpercent,
+            ];
+            Database::insert($table, $params);
+
             $count++;
         }
-        Database::query($sql);
     }
 
     /**

@@ -181,10 +181,10 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     $content = MessageManager::display_messages_for_group($group_id);
     if ($is_group_member) {
         if (empty($content)) {
-            $create_thread_link =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=800&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn" title="'.get_lang('ComposeMessage').'">'.
+            $create_thread_link =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=800&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn btn-default" title="'.get_lang('ComposeMessage').'">'.
                 get_lang('YouShouldCreateATopic').'</a></li>';
         } else {
-            $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn" title="'.get_lang('ComposeMessage').'">'.
+            $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn btn-default" title="'.get_lang('ComposeMessage').'">'.
                 get_lang('NewTopic').'</a>';
         }
     }
@@ -216,14 +216,14 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 
                 $member_content .= '<div class="">';
                 $member_name = Display::url(api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon, $member['user_info']['profile_url']);
-                $member_content .= Display::div('<img height="44" border="2" align="middle" vspace="10" class="social-groups-image" src="'.$userPicture.'"/>&nbsp'.$member_name);
+                $member_content .= Display::div('<img class="social-groups-image" src="'.$userPicture.'"/>&nbsp'.$member_name);
                 $member_content .= '</div>';
             }
         }
     }
 
     if (!empty($create_thread_link)) {
-        $create_thread_link =  Display::div($create_thread_link, array('style'=>'padding-top:2px;height:40px'));
+        $create_thread_link =  Display::div($create_thread_link, array('class'=>'pull-right'));
     }
     $headers = array(get_lang('Discussions'), get_lang('Members'));
     $social_right_content .= Display::tabs($headers, array($content, $member_content),'tabs');

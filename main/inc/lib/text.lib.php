@@ -732,7 +732,7 @@ function _text_parse_tool($input) {
  * @author Patrick Cool <patrick.cool@UGent.be> Ghent University
  */
 function latex_gif_renderer($latex_code) {
-    global $_course;
+    $_course = api_get_course_info();
 
     // Setting the paths and filenames
     $mimetex_path = api_get_path(LIBRARY_PATH).'mimetex/';

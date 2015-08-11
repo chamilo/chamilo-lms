@@ -117,7 +117,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                 }
 
                 $result['picture_uri'] = '<div class="box_shared_profile_group_image">
-                                          <img class="social-groups-image" src="' . $picture['file'] . '" hspace="4" height="50" border="2" align="left" width="50" /></div>';
+                                          <img class="social-groups-image" src="' . $picture['file'] . '" /></div>';
                 $item_actions = '';
                 if (api_get_user_id() == $user_id) {
                     $item_actions = '<div class="box_shared_profile_group_actions"><a href="group_view.php?id=' . $id . '">' .

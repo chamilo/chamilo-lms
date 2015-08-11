@@ -1088,7 +1088,7 @@ class Tracking
             );
             $csv_content[] = $temp;
             ob_end_clean();
-            Export :: export_table_csv($csv_content, 'reporting_learning_path_details');
+            Export :: arrayToCsv($csv_content, 'reporting_learning_path_details');
             exit;
         }
         return $output;

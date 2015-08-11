@@ -276,7 +276,7 @@ class Thematic
      */
     public function thematic_save()
     {
-        global $_course;
+        $_course = api_get_course_info();
         // definition database table
         $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
 
@@ -676,7 +676,7 @@ class Thematic
      */
     public function thematic_advance_save()
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         // definition database table
         $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
@@ -724,7 +724,7 @@ class Thematic
      */
     public function thematic_advance_destroy($thematic_advance_id)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $course_id = api_get_course_int_id();
 
         // definition database table
@@ -836,7 +836,7 @@ class Thematic
      */
     public function thematic_plan_save()
     {
-        global $_course;
+        $_course = api_get_course_info();
         // definition database table
         $tbl_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
 
@@ -923,7 +923,7 @@ class Thematic
      */
     public function thematic_plan_destroy($thematic_id, $description_type)
     {
-        global $_course;
+        $_course = api_get_course_info();
         // definition database table
         $tbl_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
 
@@ -940,7 +940,10 @@ class Thematic
 
         // delete
         $sql = "DELETE FROM $tbl_thematic_plan
-                WHERE c_id = $course_id AND thematic_id = $thematic_id AND description_type = $description_type ";
+                WHERE
+                    c_id = $course_id AND
+                    thematic_id = $thematic_id AND
+                    description_type = $description_type ";
         $result = Database::query($sql);
         $affected_rows = Database::affected_rows($result);
         if ($affected_rows) {
@@ -996,10 +999,10 @@ class Thematic
      */
     public function update_done_thematic_advances($thematic_advance_id)
     {
-        global $_course;
-        $thematic_data         = $this->get_thematic_list(null, api_get_course_id());
+        $_course = api_get_course_info();
+        $thematic_data = $this->get_thematic_list(null, api_get_course_id());
         $thematic_advance_data = $this->get_thematic_advance_list(null, api_get_course_id(), true);
-        $tbl_thematic_advance  = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
 
         $affected_rows = 0;
         $user_id       = api_get_user_id();

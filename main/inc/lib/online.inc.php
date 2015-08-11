@@ -20,7 +20,7 @@
 use ChamiloSession as Session;
 
 function LoginCheck($uid) {
-	global $_course, $_configuration;
+	$_course = api_get_course_info();
 	$uid = (int) $uid;
 	$online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     if (!empty($uid)) {

@@ -284,7 +284,7 @@ class GradeBookResult
      */
     public function exportCompleteReportDOC($data)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $filename = 'gb_results_'.$_course['code'].'_'.gmdate('YmdGis');
         $filepath = api_get_path(SYS_ARCHIVE_PATH).$filename;
         //build the results

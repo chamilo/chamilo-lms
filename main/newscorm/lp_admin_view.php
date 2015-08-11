@@ -34,6 +34,7 @@ $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $isStudentView  = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
 $learnpath_id   = (int) $_REQUEST['lp_id'];
 $submit			= isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
+$_course = api_get_course_info();
 
 /* MAIN CODE */
 
@@ -110,7 +111,6 @@ if (isset($_POST['save_audio'])) {
             $lp_item_id = str_ireplace('mp3file', '', $key);
 
             // Create the audio folder if it does not exist yet.
-            global $_course;
             DocumentManager::createDefaultAudioFolder($_course);
 
             // Check if file already exits into document/audio/

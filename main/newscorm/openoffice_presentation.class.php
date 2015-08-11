@@ -33,7 +33,7 @@ class OpenofficePresentation extends OpenofficeDocument
 
     public function make_lp($files = array())
     {
-        global $_course;
+        $_course = api_get_course_info();
         $previous = 0;
         $i = 0;
 
@@ -217,9 +217,10 @@ class OpenofficePresentation extends OpenofficeDocument
 
     function add_docs_to_visio($files = array())
     {
-        global $_course;
+        $_course = api_get_course_info();
         foreach ($files as $file) {
-            list($slide_name,$file_name) = explode('||',$file); // '||' is used as separator between slide name (with accents) and file name (without accents).
+            // '||' is used as separator between slide name (with accents) and file name (without accents).
+            list($slide_name,$file_name) = explode('||',$file);
             $slide_name = api_htmlentities($slide_name, ENT_COMPAT, $this->original_charset);
             $slide_name = str_replace('&rsquo;', '\'', $slide_name);
             $slide_name = api_convert_encoding($slide_name, api_get_system_encoding(), $this->original_charset);

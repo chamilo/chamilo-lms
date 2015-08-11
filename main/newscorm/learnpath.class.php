@@ -492,6 +492,7 @@ class learnpath
             error_log('New LP - In learnpath::add_item(' . $parent . ',' . $previous . ',' . $type . ',' . $id . ',' . $title . ')', 0);
         }
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $_course = api_get_course_info();
         $parent = intval($parent);
         $previous = intval($previous);
         $id = intval($id);
@@ -633,7 +634,6 @@ class learnpath
             // Upload audio.
             if (!empty($_FILES['mp3']['name'])) {
                 // Create the audio folder if it does not exist yet.
-                global $_course;
                 $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
                 if (!is_dir($filepath . 'audio')) {
                     mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
@@ -1246,6 +1246,8 @@ class learnpath
         $url = ''
     ) {
         $course_id = api_get_course_int_id();
+        $_course = api_get_course_info();
+
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::edit_item()', 0);
         }
@@ -1263,7 +1265,6 @@ class learnpath
         $audio_update_sql = '';
         if (is_array($audio) && !empty ($audio['tmp_name']) && $audio['error'] === 0) {
             // Create the audio folder if it does not exist yet.
-            global $_course;
             $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
             if (!is_dir($filepath . 'audio')) {
                 mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
@@ -2172,7 +2173,7 @@ class learnpath
     public function get_mediaplayer($autostart = 'true')
     {
         $course_id = api_get_course_int_id();
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
@@ -5441,10 +5442,12 @@ class learnpath
     public function overview()
     {
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+        $_course = api_get_course_info();
+
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::overview()', 0);
         }
-        global $_course;
+
         $_SESSION['gradebook'] = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         $return = '';
 
@@ -6265,7 +6268,7 @@ class learnpath
      */
     public function display_document($id, $show_title = false, $iframe = true, $edit_link = false)
     {
-        global $_course; // It is temporary.
+        $_course = api_get_course_info();
         $course_id = api_get_course_int_id();
         $return = '';
         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
@@ -7302,8 +7305,9 @@ class learnpath
     public function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
     {
         $course_id = api_get_course_int_id();
+        $_course = api_get_course_info();
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $tbl_doc 	 = Database :: get_course_table(TABLE_DOCUMENT);
+        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
 
         $no_display_edit_textarea = false;
 
@@ -7556,7 +7560,6 @@ class learnpath
                                 $relative_path = $relative_path . '/';
                             }
                         } else {
-                            global $_course;
                             $result = $this->generate_lp_folder($_course);
                             $relative_path = api_substr($result['dir'], 1, strlen($result['dir']));
                             $relative_prefix = '../../';

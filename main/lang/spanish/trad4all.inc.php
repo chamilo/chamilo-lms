@@ -7501,4 +7501,10 @@ $SelectFillTheBlankSeparator = "Marcador para los espacios en blanco";
 $RefreshBlanks = "Refrescar los blancos";
 $WordTofind = "Palabras por encontrar";
 $BlankInputSize = "Tamaño del espacio en blanco";
+$DateFormatLongNoDayJS = "dd 'de' MM 'de' yy";
+$TimeFormatNoSecJS = "HH:mm";
+$AtTime = "a las";
+$SendSubscriptionNotification = "Enviar notificación de suscripción por correo electrónico";
+$SendAnEmailWhenAUserBeingSubscribed = "Enviar un correo electrónico cuando un usuario está suscrito a la sesión";
+$SelectDate = "Seleccionar fecha";
 ?>

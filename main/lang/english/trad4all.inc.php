@@ -7476,4 +7476,10 @@ $SelectFillTheBlankSeparator = "Select a blanks marker";
 $RefreshBlanks = "Refresh terms";
 $WordTofind = "Word to find";
 $BlankInputSize = "Input size of box to fill";
+$DateFormatLongNoDayJS = "dd MM yy";
+$TimeFormatNoSecJS = "HH:mm";
+$AtTime = " at";
+$SendSubscriptionNotification = "Send mail notification for subscription";
+$SendAnEmailWhenAUserBeingSubscribed = "Send an email when a user being subscribed to session";
+$SelectDate = "Select date";
 ?>

@@ -20,11 +20,11 @@ if (!$isActive) {
     exit;
 }
 
-$frecuency = api_get_setting('cron_remind_course_expiration_frecuency');
+$frequency = api_get_setting('cron_remind_course_expiration_frequency');
 
 // Days before expiration date to send reminders
 $today = gmdate("Y-m-d");
-$expirationDate = gmdate("Y-m-d", strtotime("$today + $frecuency day"));
+$expirationDate = gmdate("Y-m-d", strtotime("$today + $frequency day"));
 
 $gradebookTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 $certificateTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);

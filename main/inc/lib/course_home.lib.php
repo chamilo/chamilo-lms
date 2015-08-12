@@ -858,7 +858,8 @@ class CourseHome
                         $tool_name = $plugin_info['title'];
                     }
 
-                    if (!file_exists(api_get_path(SYS_CODE_PATH).'img/'.$tool['image'])) {
+                    if (!file_exists(api_get_path(SYS_CODE_PATH).'img/'.$tool['image']) &&
+                        !file_exists(api_get_path(SYS_CODE_PATH).'img/icons/22/'.$tool['image'])) {
                         $tool['image'] = 'plugins.png';
                     }
                     $tool_link_params['href'] = api_get_path(WEB_PLUGIN_PATH).$tool['original_link'].'?'.api_get_cidreq();

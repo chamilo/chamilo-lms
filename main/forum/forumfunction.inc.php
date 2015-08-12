@@ -543,7 +543,16 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
             'cat_title' => $clean_cat_title,
             'cat_comment' => $values['forum_category_comment'],
         ];
-        Database::update($table_categories, $params, ['c_id = ? AND cat_id = ?' => [$course_id, $values['forum_category_id']]]);
+        Database::update(
+            $table_categories,
+            $params,
+            [
+                'c_id = ? AND cat_id = ?' => [
+                    $course_id,
+                    $values['forum_category_id'],
+                ],
+            ]
+        );
 
         api_item_property_update(
             $courseInfo,
@@ -3393,13 +3402,14 @@ function store_edit_post($values)
     }
 
     // Update the post_title and the post_text.
-    $sql = "UPDATE $table_posts SET
-            post_title          ='".Database::escape_string($values['post_title'])."',
-            post_text           ='".Database::escape_string($values['post_text'])."',
-            post_notification   ='".Database::escape_string(isset($values['post_notification']) ? $values['post_notification'] : null)."'
-            WHERE c_id = $course_id AND post_id = '".intval($values['post_id'])."'";
+    $params = [
+        'post_title' => $values['post_title'],
+        'post_text' => $values['post_text'],
+        'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : ''
+    ];
+    $where = ['c_id = ? AND post_id = ?' => [$course_id, $values['post_id']]];
 
-    Database::query($sql);
+    Database::update($table_posts, $params, $where);
 
     // Update attached files
     if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {

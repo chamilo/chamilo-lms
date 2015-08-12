@@ -251,6 +251,7 @@ class Plugin
         }
         $result->setDefaults($defaults);
         $result->addButtonSave($this->get_lang('Save'), 'submit_button');
+
         return $result;
     }
 
@@ -365,6 +366,7 @@ class Plugin
     /**
      * Caller for the install_course_fields() function
      * @param int $courseId
+     *
      * @param boolean $addToolLink Whether to add a tool link on the course homepage
      *
      * @return void
@@ -379,6 +381,7 @@ class Plugin
      * @param int $courseId Course integer ID
      * @param boolean $add_tool_link Whether to add a tool link or not
      * (some tools might just offer a configuration section and act on the backend)
+     *
      * @return boolean  False on error, null otherwise
      */
     public function install_course_fields($courseId, $add_tool_link = true)
@@ -435,25 +438,25 @@ class Plugin
         }
 
         //Add an icon in the table tool list
-        $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-        $sql = "SELECT name FROM $t_tool
+        $table = Database::get_course_table(TABLE_TOOL_LIST);
+        $sql = "SELECT name FROM $table
                 WHERE c_id = $courseId AND name = '$plugin_name' ";
         $result = Database::query($sql);
         if (!Database::num_rows($result)) {
             $tool_link = "$plugin_name/start.php";
-            $visibility = AddCourse::string2binary(api_get_setting('course_create_active_tools', $plugin_name));
+            //$visibility = AddCourse::string2binary(api_get_setting('course_create_active_tools', $plugin_name));
 
             $cToolId = AddCourse::generateToolId($courseId);
 
             Database::insert(
-                $t_tool,
+                $table,
                 [
                     'id' => $cToolId,
                     'c_id' => $courseId,
                     'name' => $plugin_name,
                     'link' => $tool_link,
                     'image' => "$plugin_name.png",
-                    'visibility' => $visibility,
+                    'visibility' => 1,
                     'admin' => 0,
                     'address' => 'squaregrey.gif',
                     'added_tool' => 'NO',

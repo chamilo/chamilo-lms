@@ -16,16 +16,23 @@ class CQuizAnswer
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_auto", type="integer")
+     * @ORM\Column(name="iid", type="integer", options={"unsigned": true})
      * @ORM\Id
      * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_auto", type="integer", options={"unsigned": true, "default": null})
      */
     private $idAuto;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\Column(name="c_id", type="integer", options={"unsigned": true, "default": null})
      */
     private $cId;
 

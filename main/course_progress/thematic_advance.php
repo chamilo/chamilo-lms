@@ -18,13 +18,13 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         $header_form = get_lang('EditThematicAdvance');
     }
 
-    /*if (!$start_date_error && !$duration_error) {
-        $token = md5(uniqid(rand(),TRUE));
-        $_SESSION['thematic_advance_token'] = $token;
-    }*/
-
     // display form
-    $form = new FormValidator('thematic_advance','POST','index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq());
+    $form = new FormValidator(
+        'thematic_advance',
+        'POST',
+        'index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq(
+        )
+    );
     $form->addElement('header',  $header_form);
     //$form->addElement('hidden', 'thematic_advance_token',$token);
     $form->addElement('hidden', 'action', $action);
@@ -73,8 +73,27 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
     $form->addElement('html', '</div>');
 
-    $form->addText('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3','id'=>'duration_in_hours_element', 'autofocus' => 'autofocus'));
-    $form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Height' => '150'));
+    $form->addText(
+        'duration_in_hours',
+        get_lang('DurationInHours'),
+        false,
+        array(
+            'size' => '3',
+            'id' => 'duration_in_hours_element',
+            'autofocus' => 'autofocus',
+        )
+    );
+    $form->addHtmlEditor(
+        'content',
+        get_lang('Content'),
+        false,
+        false,
+        array(
+            'ToolbarStartExpanded' => 'false',
+            'ToolbarSet' => 'TrainingDescription',
+            'Height' => '150',
+        )
+    );
 
     if ($action == 'thematic_advance_add') {
         $form->addButtonSave(get_lang('Save'));
@@ -131,30 +150,23 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         }
     }
     $form->setDefaults($default);
-
-    // error messages
-    $msg_error = '';
-    /*if ($start_date_error) {
-        $msg_error .= get_lang('YouMustSelectAtleastAStartDate').'<br />';
-    }
-    if ($duration_error) {
-        $msg_error .= get_lang('DurationInHoursMustBeNumeric');
-    }*/
-
-    if (!empty($msg_error)) {
-        Display::display_error_message($msg_error,false);
-    }
     $form->display();
 
 } else if ($action == 'thematic_advance_list') {
     // thematic advance list
     echo '<div class="actions">';
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=thematic_details">'.Display::return_icon('back.png', get_lang("BackTo"),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=thematic_details">'.
+            Display::return_icon('back.png', get_lang("BackTo"),'',ICON_SIZE_MEDIUM).'</a>';
     if (api_is_allowed_to_edit(false, true)) {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=thematic_advance_add&amp;thematic_id='.$thematic_id.'"> '.Display::return_icon('add.png', get_lang('NewThematicAdvance'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=thematic_advance_add&amp;thematic_id='.$thematic_id.'"> '.
+            Display::return_icon('add.png', get_lang('NewThematicAdvance'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     echo '</div>';
-    $table = new SortableTable('thematic_advance_list', array('Thematic', 'get_number_of_thematic_advances'), array('Thematic', 'get_thematic_advance_data'));
+    $table = new SortableTable(
+        'thematic_advance_list',
+        array('Thematic', 'get_number_of_thematic_advances'),
+        array('Thematic', 'get_thematic_advance_data')
+    );
     //$table->set_additional_parameters($parameters);
     $table->set_header(0, '', false, array('style'=>'width:20px;'));
     $table->set_header(1, get_lang('StartDate'), false);
@@ -162,7 +174,12 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     $table->set_header(3, get_lang('Content'), false);
 
     if (api_is_allowed_to_edit(null, true)) {
-        $table->set_header(4, get_lang('Actions'), false,array('style'=>'text-align:center'));
+        $table->set_header(
+            4,
+            get_lang('Actions'),
+            false,
+            array('style' => 'text-align:center')
+        );
     }
     $table->display();
 }

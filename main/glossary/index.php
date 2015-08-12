@@ -98,7 +98,13 @@ if (api_is_allowed_to_edit(null, true)) {
 
     switch ($action) {
         case 'addglossary':
-            $form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
+            $form = new FormValidator(
+                'glossary',
+                'post',
+                api_get_self().'?action='.Security::remove_XSS(
+                    $_GET['action']
+                ).'&'.api_get_cidreq()
+            );
             // Setting the form elements
             $form->addElement('header', '', get_lang('TermAddNew'));
             $form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'80', 'id'=>'glossary_title'));
@@ -106,7 +112,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Height' => '300'));
             $form->addButtonCreate(get_lang('TermAddButton'), 'SubmitGlossary');
             // setting the rules
-            $form->addRule('glossary_title',get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('glossary_title', get_lang('ThisFieldIsRequired'), 'required');
             // The validation or display
             if ($form->validate()) {
                 $check = Security::check_token('post');
@@ -118,7 +124,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 GlossaryManager::display_glossary();
             } else {
                 $token = Security::get_token();
-                $form->addElement('hidden','sec_token');
+                $form->addElement('hidden', 'sec_token');
                 $form->setConstants(array('sec_token' => $token));
                 $form->display();
             }
@@ -126,7 +132,11 @@ if (api_is_allowed_to_edit(null, true)) {
         case 'edit_glossary':
             if (is_numeric($_GET['glossary_id'])) {
                 // initiate the object
-                $form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.Security::remove_XSS($_GET['glossary_id']));
+                $form = new FormValidator(
+                    'glossary',
+                    'post',
+                    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.intval($_GET['glossary_id']).'&'.api_get_cidreq()
+                );
                 // Setting the form elements
                 $form->addElement('header', '', get_lang('TermEdit'));
                 $form->addElement('hidden', 'glossary_id');

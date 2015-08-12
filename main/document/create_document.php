@@ -506,17 +506,24 @@ if ($form->validate()) {
 			// Update parent folders
 			item_property_update_on_folder($_course, $dir, $userId);
 			$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
-            $new_comment = Database::escape_string($new_comment);
 			$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
             $new_title = htmlspecialchars($new_title);
-            $new_title = Database::escape_string($new_title);
 			if ($new_comment || $new_title) {
 				$ct = '';
-				if ($new_comment)
-					$ct .= ", comment='$new_comment'";
-				if ($new_title)
-					$ct .= ", title='$new_title'";
-				Database::query("UPDATE $doc_table SET".substr($ct, 1)." WHERE c_id = $course_id AND id = '$document_id'");
+                $params = [];
+                if ($new_comment) {
+                    $params['comment'] = $new_comment;
+                }
+                if ($new_title) {
+                    $params['title'] = $new_title;
+                }
+                if (!empty($params)) {
+                    Database::update(
+                        $doc_table,
+                        $params,
+                        ['c_id = ? AND id = ?' => [$course_id, $document_id]]
+                    );
+                }
 			}
 			$dir= substr($dir,0,-1);
 			$selectcat = '';

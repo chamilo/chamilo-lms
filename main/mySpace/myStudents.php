@@ -168,7 +168,7 @@ $check = Security::check_token('get');
 
 if ($check) {
     switch ($_GET['action']) {
-        case 'reset_lp' :
+        case 'reset_lp':
             $course = isset($_GET['course']) ? $_GET['course'] : "";
             $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : "";
 
@@ -329,11 +329,11 @@ if (!empty($student_id)) {
     echo $send_mail;
     if (!empty($student_id) && !empty($_GET['course'])) {
         // Only show link to connection details if course and student were defined in the URL
-        echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$sessionId.'">'.
+        echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&origin=' . Security :: remove_XSS($_GET['origin']) . '&cidReq='.Security::remove_XSS($_GET['course']).'&id_session='.$sessionId.'">'.
             Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     if (api_can_login_as($student_id)) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$student_id.'&amp;sec_token='.$token.'">'.
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$student_id.'&sec_token='.$token.'">'.
             Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
     }
 
@@ -1159,7 +1159,7 @@ if (!empty($student_id)) {
 }
 if ($export_csv) {
     ob_end_clean();
-    Export :: arrayToCsv($csv_content, 'reporting_student');
+    Export::arrayToCsv($csv_content, 'reporting_student');
     exit;
 }
 

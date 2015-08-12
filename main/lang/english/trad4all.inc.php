@@ -7488,5 +7488,5 @@ $FieldTypeLettersSpaces = "Text letters and spaces";
 $CronRemindCourseFinishedActivateTitle = "Send course finished notification";
 $FieldTypeAlphanumericSpaces = "Text alphanumeric characters and spaces";
 $CronRemindCourseFinishedActivateComment = "Whether to send an e-mail to students when their course (session) is finished. This requires cron tasks to be configured (see main/cron/ directory).";
-$ThanksForRegisteringToSite = "Thanks for registering to %s";
+$ThanksForRegisteringToSite = "Thanks for registering to %s.";
 ?>

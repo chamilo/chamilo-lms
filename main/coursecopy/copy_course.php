@@ -30,7 +30,10 @@ if (function_exists('ini_set')) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => '../course_info/maintenance.php', 'name' => get_lang('Maintenance'));
+$interbreadcrumb[] = array(
+    'url' => '../course_info/maintenance.php?'.api_get_cidreq(),
+    'name' => get_lang('Maintenance'),
+);
 
 // The section (for the tabs)
 $this_section = SECTION_COURSES;

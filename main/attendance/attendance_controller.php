@@ -379,7 +379,7 @@ class AttendanceController
 
                         $repeat_type = $_POST['repeat_type'];
                         if (($end_datetime > $start_datetime) && $checkdate) {
-                            $affected_rows = $attendance->attendance_repeat_calendar_add(
+                            $attendance->attendance_repeat_calendar_add(
                                 $attendance_id,
                                 $start_datetime,
                                 $end_datetime,
@@ -401,7 +401,7 @@ class AttendanceController
                         $datetimezone = api_get_utc_datetime($datetime);
                         if (!empty($datetime)) {
                             $attendance->set_date_time($datetimezone);
-                            $affected_rows = $attendance->attendance_calendar_add($attendance_id, $groupList);
+                            $attendance->attendance_calendar_add($attendance_id, $groupList);
                             $action = 'calendar_list';
                         } else {
                             $data['error_date'] = true;
@@ -416,10 +416,10 @@ class AttendanceController
             $data['calendar_id'] = $calendar_id;
             if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
                 if (!isset($_POST['cancel'])) {
-                    $datetime = $attendance->build_datetime_from_array($_POST['date_time']);
+                    $datetime = $_POST['date_time'];
                     $datetimezone = api_get_utc_datetime($datetime);
                     $attendance->set_date_time($datetimezone);
-                    $affected_rows = $attendance->attendance_calendar_edit($calendar_id, $attendance_id);
+                    $attendance->attendance_calendar_edit($calendar_id, $attendance_id);
                     $data['calendar_id'] = 0;
                     $action = 'calendar_list';
                 } else {

@@ -1482,15 +1482,4 @@ class Thematic
 
         return $question;
     }
-
-    /**
-     * buid a string datetime from array
-     * @param	array	array containing data
-     * e.g: $array('Y'=>'2010',  'F' => '02', 'd' => '10', 'H' => '12', 'i' => '30')
-     * @return	string	date and time e.g: '2010-02-10 12:30:00'
-     */
-    public function build_datetime_from_array($array)
-    {
-        return return_datetime_from_array($array);
-    }
 }

@@ -331,7 +331,8 @@ class Database
             try {
                 $result = $connection->executeQuery($query);
             } catch (Exception $e) {
-                api_not_allowed(true, get_lang('GeneralError'));
+                api_not_allowed(false, get_lang('GeneralError'));
+                exit;
             }
         }
 

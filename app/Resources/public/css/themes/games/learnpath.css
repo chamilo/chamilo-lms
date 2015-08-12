@@ -101,7 +101,12 @@
 .scorm-items-accordion a:hover{
   text-decoration: none;
 }
-
+#touch-button.btn-touch{
+  background-color: #009AB8;
+}
+#touch-button.btn-touch:hover{
+  background-color: #666264;
+}
 .scorm-list .panel-default .panel-title a.collapsed{
   background:url("images/arrow-buttom.png") no-repeat 95% center !important;
 }

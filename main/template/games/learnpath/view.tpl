@@ -71,7 +71,7 @@
 </div>
 
 <div id="learning_path_main" style="width:100%; height: 100%;">
-    <button id="touch-button" class="btn btn-primary"><i class="fa fa-bars"></i></button>
+    <button id="touch-button" class="btn-touch"></button>
     <div class="container">
         <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">

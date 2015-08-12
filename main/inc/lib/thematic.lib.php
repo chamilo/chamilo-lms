@@ -768,10 +768,11 @@ class Thematic
                 'start_date' => api_get_utc_datetime($start_date),
                 'duration' => $duration
             ];
+
             Database::update(
                 $tbl_thematic_advance,
                 $params,
-                [['id = ? AND c_id = ?'] => [$id, $this->course_int_id]]
+                ['id = ? AND c_id = ?' => [$id, $this->course_int_id]]
             );
 
             api_item_property_update(
@@ -781,7 +782,6 @@ class Thematic
                 "ThematicAdvanceUpdated",
                 $user_id
             );
-
         }
 
         return $last_id;

@@ -521,7 +521,7 @@ if ($form->validate()) {
                     Database::update(
                         $doc_table,
                         $params,
-                        [' c_id = ? AND id = ?' => [$course_id, $document_id]]
+                        ['c_id = ? AND id = ?' => [$course_id, $document_id]]
                     );
                 }
 			}

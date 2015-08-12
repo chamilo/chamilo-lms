@@ -185,7 +185,11 @@ if (isset($_REQUEST['comments']) &&
             'marks' => $my_marks,
             'teacher_comment' => $my_comments
         ];
-        Database::update($TBL_TRACK_ATTEMPT, $params, ['question_id = ? AND exe_id = ?' => [$my_questionid, $id]]);
+        Database::update(
+            $TBL_TRACK_ATTEMPT,
+            $params,
+            ['question_id = ? AND exe_id = ?' => [$my_questionid, $id]]
+        );
 
         $params = [
             'exe_id' => $id,

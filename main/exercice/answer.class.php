@@ -532,7 +532,7 @@ class Answer
             'hotspot_coordinates' => $hotspot_coordinates,
             'hotspot_type' => $hotspot_type,
         ];
-        Database::update($answerTable, $params, ['id_auto= ?' => $autoId]);
+        Database::update($answerTable, $params, ['id_auto = ?' => $autoId]);
 	}
 
 	/**

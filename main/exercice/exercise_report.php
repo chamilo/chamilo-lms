@@ -42,6 +42,10 @@ $TBL_TRACK_ATTEMPT = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT)
 $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
+$allowCoachFeedbackExercises = api_get_setting(
+    'allow_coach_feedback_exercises'
+) == 'true';
+
 $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
 $filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
@@ -52,7 +56,7 @@ if (empty($exercise_id)) {
     api_not_allowed(true);
 }
 
-if (!$is_allowedToEdit) {
+if (!$is_allowedToEdit && !$allowCoachFeedbackExercises) {
     api_not_allowed(true);
 }
 
@@ -123,7 +127,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] == 'update' &&
-    ($is_allowedToEdit || $is_tutor)
+    ($is_allowedToEdit || $is_tutor || $allowCoachFeedbackExercises)
 ) {
     //filtered by post-condition
     $id = intval($_GET['exeid']);
@@ -239,6 +243,14 @@ if (isset($_REQUEST['comments']) &&
             $message,
             api_get_user_id()
         );
+
+        if ($allowCoachFeedbackExercises) {
+            Display::addFlash(
+                Display::return_message(get_lang('MessageSent'))
+            );
+            header('Location: ' . api_get_path(WEB_PATH));
+            exit;
+        }
     }
 
     //Updating LP score here

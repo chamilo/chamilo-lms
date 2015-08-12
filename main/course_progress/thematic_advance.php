@@ -18,11 +18,6 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         $header_form = get_lang('EditThematicAdvance');
     }
 
-    /*if (!$start_date_error && !$duration_error) {
-        $token = md5(uniqid(rand(),TRUE));
-        $_SESSION['thematic_advance_token'] = $token;
-    }*/
-
     // display form
     $form = new FormValidator('thematic_advance','POST','index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq());
     $form->addElement('header',  $header_form);
@@ -131,19 +126,6 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         }
     }
     $form->setDefaults($default);
-
-    // error messages
-    $msg_error = '';
-    /*if ($start_date_error) {
-        $msg_error .= get_lang('YouMustSelectAtleastAStartDate').'<br />';
-    }
-    if ($duration_error) {
-        $msg_error .= get_lang('DurationInHoursMustBeNumeric');
-    }*/
-
-    if (!empty($msg_error)) {
-        Display::display_error_message($msg_error,false);
-    }
     $form->display();
 
 } else if ($action == 'thematic_advance_list') {

@@ -153,7 +153,7 @@ class CourseBuilder
                             source_type = '".$resource->get_type()."' AND
                             source_id = '".$resource->get_id()."'";
                 $res = Database::query($sql);
-                error_log($sql);
+
                 while ($link = Database::fetch_object($res)) {
                     $this->course->resources[$type][$id]->add_linked_resource(
                         $link->resource_type,

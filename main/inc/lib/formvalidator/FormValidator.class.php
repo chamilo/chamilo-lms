@@ -303,6 +303,7 @@ EOT;
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonSave($label, $name = 'submit', $createElement = false)
@@ -312,6 +313,28 @@ EOT;
             $label,
             'check',
             'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
+    }
+
+    /**
+     * Returns a cancel button
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     *
+     * @return HTML_QuickForm_button
+     */
+    public function addButtonCancel($label, $name = 'submit', $createElement = false)
+    {
+        return $this->addButton(
+            $name,
+            $label,
+            'times',
+            'btn',
             null,
             null,
             array(),

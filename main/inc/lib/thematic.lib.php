@@ -26,6 +26,9 @@ class Thematic
     private $duration;
     private $course_int_id;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->course_int_id = api_get_course_int_id();
@@ -35,7 +38,8 @@ class Thematic
      * Get the total number of thematic inside current course and current session
      * @see SortableTable#get_total_number_of_items()
      */
-    public function get_number_of_thematics() {
+    public function get_number_of_thematics()
+    {
         $tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
         $condition_session = '';
         if (!api_get_session_id()) {
@@ -75,7 +79,8 @@ class Thematic
 
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT id AS col0, title AS col1, display_order AS col2, session_id  FROM $tbl_thematic
+        $sql = "SELECT id AS col0, title AS col1, display_order AS col2, session_id
+                FROM $tbl_thematic
 				WHERE c_id = $course_id AND active = 1 $condition_session
 				ORDER BY col2 LIMIT $from,$number_of_items ";
         $res = Database::query($sql);
@@ -99,38 +104,49 @@ class Thematic
 
                 if (api_get_session_id()) {
                     if (api_get_session_id() == $thematic[3]) {
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                            Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                            Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a>';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                            Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                            Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $actions .= Display::return_icon('lesson_plan_na.png',get_lang('ThematicPlan'),'',22).'&nbsp;';
-                        $actions .= Display::return_icon('lesson_plan_calendar_na.png',get_lang('ThematicAdvance'),'',22).'&nbsp;';
-                        $actions .= Display::return_icon('edit_na.png',get_lang('Edit'),'',22);
-                        $actions .= Display::return_icon('delete_na.png',get_lang('Delete'),'',22).'&nbsp;';
+                        $actions .= Display::return_icon('lesson_plan_na.png',get_lang('ThematicPlan'),'',ICON_SIZE_SMALL).'&nbsp;';
+                        $actions .= Display::return_icon('lesson_plan_calendar_na.png',get_lang('ThematicAdvance'),'',ICON_SIZE_SMALL).'&nbsp;';
+                        $actions .= Display::return_icon('edit_na.png',get_lang('Edit'),'',ICON_SIZE_SMALL);
+                        $actions .= Display::return_icon('delete_na.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'&nbsp;';
                         $actions .= Display::url(Display::return_icon('cd.gif', get_lang('Copy')), 'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$thematic[0].$param_gradebook);
                     }
                 } else {
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 
                     if ($thematic[2] > 1) {
-                        $actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('up.png', get_lang('Up'),'',22).'</a>';
+                        $actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                            Display::return_icon('up.png', get_lang('Up'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $actions .= Display::return_icon('up_na.png','&nbsp;','',22);
+                        $actions .= Display::return_icon('up_na.png','&nbsp;','',ICON_SIZE_SMALL);
                     }
                     if ($thematic[2] < self::get_max_thematic_item()) {
-                        $actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('down.png',get_lang('Down'),'',22).'</a>';
+                        $actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                            Display::return_icon('down.png',get_lang('Down'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $actions .= Display::return_icon('down_na.png','&nbsp;','',22);
+                        $actions .= Display::return_icon('down_na.png','&nbsp;','',ICON_SIZE_SMALL);
                     }
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
-                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a>';
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
+                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                 }
                 $thematics[] = array($thematic[0], $thematic[1], $actions);
             }
         }
+
         return $thematics;
     }
 
@@ -153,14 +169,15 @@ class Thematic
 		        WHERE c_id = $course_id AND active = 1 $condition_session";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
+
         return $row[0];
     }
 
     /**
      * Move a thematic
      *
-     * @param string	Direction (up, down)
-     * @param int		Thematic id
+     * @param string	$direction (up, down)
+     * @param int		$thematic_id
      */
     public function move_thematic($direction, $thematic_id)
     {
@@ -178,15 +195,16 @@ class Thematic
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
-        $sql = "SELECT id, display_order FROM $tbl_thematic
+        $sql = "SELECT id, display_order
+                FROM $tbl_thematic
 		        WHERE c_id = $course_id AND active = 1 $condition_session
 		        ORDER BY display_order $sortorder";
         $res = Database::query($sql);
         $found = false;
 
-        //Variable definition
+        // Variable definition
         $current_id = 0;
-        $next_id 	= 0;
+        $next_id = 0;
 
         while ($row = Database::fetch_array($res)) {
             if ($found && empty($next_id)) {
@@ -210,7 +228,8 @@ class Thematic
             Database::query($sql);
         }
         if (!empty($current_display_order) && !empty($next_id)) {
-            $sql = "UPDATE $tbl_thematic SET display_order = $current_display_order
+            $sql = "UPDATE $tbl_thematic SET
+                    display_order = $current_display_order
 			        WHERE c_id = $course_id AND id = $next_id ";
             Database::query($sql);
         }
@@ -230,9 +249,9 @@ class Thematic
         $session_id = null
     ) {
         // set current course and session
-        $tbl_thematic   = Database :: get_course_table(TABLE_THEMATIC);
-        $course_info    = api_get_course_info($course_code);
-        $course_id      = $course_info['real_id'];
+        $tbl_thematic = Database:: get_course_table(TABLE_THEMATIC);
+        $course_info = api_get_course_info($course_code);
+        $course_id = $course_info['real_id'];
 
         if (isset($session_id)) {
             $session_id = intval($session_id);
@@ -254,7 +273,8 @@ class Thematic
             }
             $condition = " WHERE active = 1 $condition_session ";
         }
-        $sql = "SELECT * FROM $tbl_thematic $condition AND c_id = $course_id ORDER BY display_order ";
+        $sql = "SELECT * FROM $tbl_thematic $condition AND c_id = $course_id
+                ORDER BY display_order ";
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
@@ -282,8 +302,8 @@ class Thematic
 
         // protect data
         $id = intval($this->thematic_id);
-        $title = Database::escape_string($this->thematic_title);
-        $content = Database::escape_string($this->thematic_content);
+        $title = $this->thematic_title;
+        $content = $this->thematic_content;
         $session_id = intval($this->session_id);
         $user_id = api_get_user_id();
 
@@ -364,17 +384,30 @@ class Thematic
                 $affected_rows += Database::affected_rows($result);
                 if (!empty($affected_rows)) {
                     // update row item property table
-                    api_item_property_update($_course, 'thematic', $id,"ThematicDeleted", $user_id);
+                    api_item_property_update(
+                        $_course,
+                        'thematic',
+                        $id,
+                        "ThematicDeleted",
+                        $user_id
+                    );
                 }
             }
         } else  {
             $thematic_id	= intval($thematic_id);
-            $sql = "UPDATE $tbl_thematic SET active = 0 WHERE c_id = $course_id AND id = $thematic_id";
+            $sql = "UPDATE $tbl_thematic SET active = 0
+                    WHERE c_id = $course_id AND id = $thematic_id";
             $result = Database::query($sql);
             $affected_rows = Database::affected_rows($result);
             if (!empty($affected_rows)) {
                 // update row item property table
-                api_item_property_update($_course, 'thematic', $thematic_id,"ThematicDeleted", $user_id);
+                api_item_property_update(
+                    $_course,
+                    'thematic',
+                    $thematic_id,
+                    "ThematicDeleted",
+                    $user_id
+                );
             }
         }
         return $affected_rows;
@@ -395,7 +428,14 @@ class Thematic
             if(!empty($thematic_advanced)) {
                 foreach($thematic_advanced as $item) {
                     $thematic = new Thematic();
-                    $thematic->set_thematic_advance_attributes(0, $new_thematic_id,  0, $item['content'], $item['start_date'], $item['duration']);
+                    $thematic->set_thematic_advance_attributes(
+                        0,
+                        $new_thematic_id,
+                        0,
+                        $item['content'],
+                        $item['start_date'],
+                        $item['duration']
+                    );
                     $thematic->thematic_advance_save();
                 }
             }
@@ -403,7 +443,12 @@ class Thematic
             if (!empty($thematic_plan)) {
                 foreach ($thematic_plan as $item) {
                     $thematic = new Thematic();
-                    $thematic->set_thematic_plan_attributes($new_thematic_id, $item['title'], $item['description'], $item['description_type']);
+                    $thematic->set_thematic_plan_attributes(
+                        $new_thematic_id,
+                        $item['title'],
+                        $item['description'],
+                        $item['description_type']
+                    );
                     $thematic->thematic_plan_save();
                 }
             }
@@ -424,6 +469,7 @@ class Thematic
                 WHERE c_id = $course_id AND thematic_id = $thematic_id ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->total_number_of_items;
     }
 
@@ -440,7 +486,6 @@ class Thematic
     {
         global $thematic_id;
         $tbl_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
-        $thematic_data = self::get_thematic_list($thematic_id);
         $column = intval($column);
         $from   = intval($from);
         $number_of_items = intval($number_of_items);
@@ -484,8 +529,8 @@ class Thematic
     }
 
     /**
-     * get thematic advance data by tematic id
-     * @param	int		Thematic id
+     * get thematic advance data by thematic id
+     * @param	int		$thematic_id
      * @param	string	Course code (optional)
      * @return	array	data
      */
@@ -541,7 +586,7 @@ class Thematic
                         $session_star = api_get_session_image(api_get_session_id(), $uinfo['status']);
                     }
                 }
-                //DATE_TIME_FORMAT_LONG
+                // DATE_TIME_FORMAT_LONG
                 $thematic_advance_item  = '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG).$session_star.'</strong></div>';
 //				$thematic_advance_item .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
                 $thematic_advance_item .= '<div>'.$thematic_advance['duration'].' '.get_lang('HourShort').'</div>';
@@ -568,13 +613,9 @@ class Thematic
                 $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;
             }
 
-            $new_id = ADD_THEMATIC_PLAN;
             if (!empty($thematic_simple_list)) {
                 foreach($thematic_simple_list as $item) {
-                    //if ($item >= ADD_THEMATIC_PLAN) {
-                    //$new_id = $item + 1;
                     $default_thematic_plan_title[$item] = $new_thematic_plan_data[$item]['title'];
-                    //}
                 }
             }
 
@@ -583,7 +624,6 @@ class Thematic
             $return = '<div id="thematic_plan_'.$thematic_id.'">';
             if (!empty($default_thematic_plan_title)) {
                 foreach ($default_thematic_plan_title as $id=>$title) {
-                    $thematic_plan_data_item = '';
                     //avoid others
                     if ($title == 'Others' && empty($data[$thematic_id][$id]['description'])) {
                         continue;
@@ -632,11 +672,16 @@ class Thematic
         $course_id = $course_info['real_id'];
 
         $sql = "SELECT * FROM $tbl_thematic_advance a
-                WHERE c_id = $course_id $condition  ORDER BY start_date ";
+                WHERE c_id = $course_id $condition
+                ORDER BY start_date ";
 
         $elements = array();
         if ($force_session_id) {
-            $list = api_get_item_property_by_tool('thematic_advance', $course_info['code'], api_get_session_id());
+            $list = api_get_item_property_by_tool(
+                'thematic_advance',
+                $course_info['code'],
+                api_get_session_id()
+            );
             foreach ($list as $value) {
                 $elements[$value['ref']]= $value;
             }
@@ -685,33 +730,58 @@ class Thematic
         $id = intval($this->thematic_advance_id);
         $thematic_id = intval($this->thematic_id);
         $attendance_id = intval($this->attendance_id);
-        $content = Database::escape_string($this->thematic_advance_content);
-        $start_date = Database::escape_string($this->start_date);
+        $content = $this->thematic_advance_content;
+        $start_date = $this->start_date;
         $duration = intval($this->duration);
         $user_id = api_get_user_id();
 
         $last_id = null;
         if (empty($id)) {
             // Insert
-            $sql = "INSERT INTO $tbl_thematic_advance (c_id, thematic_id, attendance_id, content, start_date, duration)
-                    VALUES ($this->course_int_id, $thematic_id, $attendance_id, '$content', '".api_get_utc_datetime($start_date)."', '$duration') ";
-            $result = Database::query($sql);
-            $last_id = Database::insert_id();
+            $params = [
+                'c_id' => $this->course_int_id,
+                'thematic_id' => $thematic_id,
+                'attendance_id' => $attendance_id,
+                'content' => $content,
+                'start_date' => api_get_utc_datetime($start_date),
+                'duration' => $duration
+            ];
+            $last_id = Database::insert($tbl_thematic_advance, $params);
 
             if ($last_id) {
                 $sql = "UPDATE $tbl_thematic_advance SET id = iid WHERE iid = $last_id";
                 Database::query($sql);
 
-                api_item_property_update($_course, 'thematic_advance', $last_id,"ThematicAdvanceAdded", $user_id);
+                api_item_property_update(
+                    $_course,
+                    'thematic_advance',
+                    $last_id,
+                    "ThematicAdvanceAdded",
+                    $user_id
+                );
             }
         } else {
-            // update
-            $sql = "UPDATE $tbl_thematic_advance SET thematic_id = $thematic_id, attendance_id = $attendance_id, content = '$content', start_date = '".api_get_utc_datetime($start_date)."', duration = '$duration'
-                    WHERE c_id = {$this->course_int_id} AND id = $id ";
-            $result = Database::query($sql);
-            if (Database::affected_rows($result)) {
-                api_item_property_update($_course, 'thematic_advance', $id, "ThematicAdvanceUpdated", $user_id);
-            }
+            $params = [
+                'thematic_id' => $thematic_id,
+                'attendance_id' => $attendance_id,
+                'content' => $content,
+                'start_date' => api_get_utc_datetime($start_date),
+                'duration' => $duration
+            ];
+
+            Database::update(
+                $tbl_thematic_advance,
+                $params,
+                ['id = ? AND c_id = ?' => [$id, $this->course_int_id]]
+            );
+
+            api_item_property_update(
+                $_course,
+                'thematic_advance',
+                $id,
+                "ThematicAdvanceUpdated",
+                $user_id
+            );
         }
 
         return $last_id;
@@ -776,8 +846,16 @@ class Thematic
             $condition .= " AND description_type = $description_type ";
         }
 
-        $items_from_course  = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), 0);
-        $items_from_session = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), api_get_session_id());
+        $items_from_course = api_get_item_property_by_tool(
+            'thematic_plan',
+            api_get_course_id(),
+            0
+        );
+        $items_from_session = api_get_item_property_by_tool(
+            'thematic_plan',
+            api_get_course_id(),
+            api_get_session_id()
+        );
 
         $thematic_plan_complete_list  = array();
         $thematic_plan_id_list = array();
@@ -827,6 +905,7 @@ class Thematic
                 }
             }
         }
+
         return $data;
     }
 
@@ -842,11 +921,11 @@ class Thematic
 
         // protect data
         $thematic_id = intval($this->thematic_id);
-        $title 		 = Database::escape_string($this->thematic_plan_title);
-        $description = Database::escape_string($this->thematic_plan_description);
+        $title = $this->thematic_plan_title;
+        $description = $this->thematic_plan_description;
         $description_type = intval($this->thematic_plan_description_type);
-        $user_id     = api_get_user_id();
-        $course_id   = api_get_course_int_id();
+        $user_id = api_get_user_id();
+        $course_id = api_get_course_int_id();
         $list = api_get_item_property_by_tool(
             'thematic_plan',
             api_get_course_id(),
@@ -863,16 +942,16 @@ class Thematic
         }
         // check thematic plan type already exists
         $sql = "SELECT id FROM $tbl_thematic_plan
-                WHERE c_id = $course_id AND thematic_id = $thematic_id AND description_type = '$description_type'";
+                WHERE
+                    c_id = $course_id AND
+                    thematic_id = $thematic_id AND
+                    description_type = '$description_type'";
         $rs	 = Database::query($sql);
 
         $affected_rows = 0;
         if (Database::num_rows($rs) > 0) {
             $row_thematic_plan = Database::fetch_array($rs);
             $thematic_plan_id = $row_thematic_plan['id'];
-
-            //Checking the session
-            $thematic_plan_data = api_get_item_property_info(api_get_course_int_id(), 'thematic_plan', $thematic_plan_id);
 
             $update = false;
             if (in_array($thematic_plan_id, $elements_to_show)) {
@@ -881,34 +960,67 @@ class Thematic
 
             if ($update) {
                 // update
-                $upd = "UPDATE $tbl_thematic_plan SET title = '$title', description = '$description' WHERE c_id = $course_id AND id = $thematic_plan_id";
-                $result = Database::query($upd);
-                $affected_rows = Database::affected_rows($result);
-                if ($affected_rows) {
-                    api_item_property_update($_course, 'thematic_plan', $thematic_plan_id, "ThematicPlanUpdated", $user_id);
-                }
+                $params = [
+                    'title' => $title,
+                    'description' => $description
+                ];
+                Database::update(
+                    $tbl_thematic_plan,
+                    $params,
+                    ['c_id = ? AND id = ?' => [$course_id, $thematic_plan_id]]
+                );
+
+                api_item_property_update(
+                    $_course,
+                    'thematic_plan',
+                    $thematic_plan_id,
+                    "ThematicPlanUpdated",
+                    $user_id
+                );
+
             } else {
                 // insert
-                $ins = "INSERT INTO $tbl_thematic_plan (c_id, thematic_id, title, description, description_type)
-    					VALUES ($this->course_int_id, $thematic_id, '$title', '$description', $description_type) ";
-                $result = Database::query($ins);
-                $last_id = Database::insert_id();
+                $params = [
+                    'c_id' => $this->course_int_id,
+                    'thematic_id' => $thematic_id,
+                    'title' => $title,
+                    'description' => $description,
+                    'description_type' => $description_type
+                ];
+                $last_id = Database::insert($tbl_thematic_plan, $params);
                 if ($last_id) {
                     $sql = "UPDATE $tbl_thematic_plan SET id = iid WHERE iid = $last_id";
                     Database::query($sql);
-                    api_item_property_update($_course, 'thematic_plan', $last_id,"ThematicPlanAdded", $user_id);
+                    api_item_property_update(
+                        $_course,
+                        'thematic_plan',
+                        $last_id,
+                        "ThematicPlanAdded",
+                        $user_id
+                    );
                 }
             }
         } else {
             // insert
-            $ins = "INSERT INTO $tbl_thematic_plan (c_id, thematic_id, title, description, description_type)
-					VALUES($this->course_int_id, $thematic_id, '$title', '$description', $description_type) ";
-            $result = Database::query($ins);
-            $last_id = Database::insert_id();
+            $params = [
+                'c_id' => $this->course_int_id,
+                'thematic_id' => $thematic_id,
+                'title' => $title,
+                'description' => $description,
+                'description_type' => $description_type
+            ];
+            $last_id = Database::insert($tbl_thematic_plan, $params);
+
             if ($last_id) {
                 $sql = "UPDATE $tbl_thematic_plan SET id = iid WHERE iid = $last_id";
                 Database::query($sql);
-                api_item_property_update($_course, 'thematic_plan', $last_id,"ThematicPlanAdded", $user_id);
+                api_item_property_update(
+                    $_course,
+                    'thematic_plan',
+                    $last_id,
+                    "ThematicPlanAdded",
+                    $user_id
+                );
             }
         }
 
@@ -1030,19 +1142,32 @@ class Thematic
                 if (!empty($thematic_advance_data[$thematic['id']])) {
                     foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
 
-                        $item_info = api_get_item_property_info(api_get_course_int_id(), 'thematic_advance', $thematic_advance['id'], $sessionId);
+                        $item_info = api_get_item_property_info(
+                            api_get_course_int_id(),
+                            'thematic_advance',
+                            $thematic_advance['id'],
+                            $sessionId
+                        );
 
                         if ($item_info['id_session'] == $sessionId) {
 
                             $a_thematic_advance_ids[] = $thematic_advance['id'];
 
                             // update done thematic for previous advances ((done_advance = 1))
-                            $upd = "UPDATE $tbl_thematic_advance SET done_advance = 1 WHERE c_id = $course_id AND id = ".$thematic_advance['id']." ";
+                            $upd = "UPDATE $tbl_thematic_advance SET
+                                    done_advance = 1
+                                    WHERE c_id = $course_id AND id = ".$thematic_advance['id']." ";
                             $result = Database::query($upd);
                             $my_affected_rows = Database::affected_rows($result);
                             $affected_rows += $my_affected_rows;
                             //if ($my_affected_rows) {
-                            api_item_property_update($_course, 'thematic_advance', $thematic_advance['id'], "ThematicAdvanceDone", $user_id);
+                            api_item_property_update(
+                                $_course,
+                                'thematic_advance',
+                                $thematic_advance['id'],
+                                "ThematicAdvanceDone",
+                                $user_id
+                            );
                             //}
                             if ($thematic_advance['id'] == $thematic_advance_id) {
                                 break 2;
@@ -1064,10 +1189,14 @@ class Thematic
 
             // update item_property
             $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
+            $sql = "SELECT ref FROM $tbl_item_property
+                    WHERE
+                        c_id = $course_id AND
+                        tool='thematic_advance' AND
+                        lastedit_type='ThematicAdvanceDone' AND
+                        session_id = $sessionId ";
             // get all thematic advance done
-            $rs_thematic_done = Database::query("SELECT ref FROM $tbl_item_property
-                                WHERE c_id = $course_id AND tool='thematic_advance' AND lastedit_type='ThematicAdvanceDone' AND session_id = $sessionId ");
+            $rs_thematic_done = Database::query($sql);
             if (Database::num_rows($rs_thematic_done) > 0) {
                 while ($row_thematic_done = Database::fetch_array($rs_thematic_done)) {
                     $ref = $row_thematic_done['ref'];
@@ -1095,7 +1224,7 @@ class Thematic
      */
     public function get_last_done_thematic_advance()
     {
-        $thematic_data          = $this->get_thematic_list();
+        $thematic_data = $this->get_thematic_list();
         $thematic_advance_data = $this->get_thematic_advance_list(
             null,
             api_get_course_id(),
@@ -1106,7 +1235,6 @@ class Thematic
         $last_done_advance_id = 0;
         if (!empty($thematic_data)) {
             foreach ($thematic_data as $thematic) {
-                $thematic_id = $thematic['id'];
                 if (!empty($thematic_advance_data[$thematic['id']])) {
                     foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
                         if ($thematic_advance['done_advance'] == 1) {
@@ -1120,6 +1248,7 @@ class Thematic
             $last_done_advance_id = array_pop($a_thematic_advance_ids);
             $last_done_advance_id = intval($last_done_advance_id);
         }
+
         return $last_done_advance_id;
     }
 
@@ -1180,7 +1309,6 @@ class Thematic
             $thematic_data = $new_thematic_data;
         }
 
-        $thematic_advance_data = $this->get_thematic_advance_list(null, $course_code, true);
         $a_average_of_advances_by_thematic = array();
         $total_average = 0;
         if (!empty($thematic_data)) {
@@ -1193,8 +1321,8 @@ class Thematic
         // calculate total average
         if (!empty($a_average_of_advances_by_thematic)) {
             $count_tematics = count($thematic_data);
-            $score          = array_sum($a_average_of_advances_by_thematic);
-            $total_average  = round(($score*100)/($count_tematics*100));
+            $score = array_sum($a_average_of_advances_by_thematic);
+            $total_average = round(($score * 100) / ($count_tematics * 100));
         }
         return $total_average;
     }
@@ -1238,10 +1366,10 @@ class Thematic
      */
     public function set_thematic_attributes($id = null, $title = '', $content = '', $session_id = 0)
     {
-        $this->thematic_id         = $id;
-        $this->thematic_title      = $title;
-        $this->thematic_content    = $content;
-        $this->session_id          = $session_id;
+        $this->thematic_id = $id;
+        $this->thematic_title = $title;
+        $this->thematic_content = $content;
+        $this->session_id = $session_id;
     }
 
     /**
@@ -1270,8 +1398,14 @@ class Thematic
      * @param	int		Duration in hours
      * @return void
      */
-    public function set_thematic_advance_attributes($id = null, $thematic_id = 0,  $attendance_id = 0, $content = '', $start_date = '0000-00-00 00:00:00', $duration = 0)
-    {
+    public function set_thematic_advance_attributes(
+        $id = null,
+        $thematic_id = 0,
+        $attendance_id = 0,
+        $content = '',
+        $start_date = '0000-00-00 00:00:00',
+        $duration = 0
+    ) {
         $this->thematic_advance_id = $id;
         $this->thematic_id = $thematic_id;
         $this->attendance_id = $attendance_id;
@@ -1312,6 +1446,7 @@ class Thematic
         $default_thematic_plan_titles[4]= get_lang('Infrastructure');
         $default_thematic_plan_titles[5]= get_lang('Assessment');
         $default_thematic_plan_titles[6]= get_lang('Others');
+
         return $default_thematic_plan_titles;
     }
 
@@ -1328,6 +1463,7 @@ class Thematic
         $default_thematic_plan_icon[4]= 'icons/32/laptop.png';
         $default_thematic_plan_icon[5]= 'icons/32/assessment.png';
         $default_thematic_plan_icon[6]= 'icons/32/wizard.png';
+
         return $default_thematic_plan_icon;
     }
 
@@ -1343,16 +1479,7 @@ class Thematic
         $question[3]= get_lang('MethodologyQuestions');
         $question[4]= get_lang('InfrastructureQuestions');
         $question[5]= get_lang('AssessmentQuestions');
-        return $question;
-    }
 
-    /**
-     * buid a string datetime from array
-     * @param	array	array containing data e.g: $array('Y'=>'2010',  'F' => '02', 'd' => '10', 'H' => '12', 'i' => '30')
-     * @return	string	date and time e.g: '2010-02-10 12:30:00'
-     */
-    public function build_datetime_from_array($array)
-    {
-        return return_datetime_from_array($array);
+        return $question;
     }
 }

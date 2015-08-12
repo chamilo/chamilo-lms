@@ -26,6 +26,9 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class Export
 {
+    /**
+     * Constructor
+     */
 	private function __construct()
     {
 	}
@@ -62,7 +65,7 @@ class Export
      */
     public static function arrayToXls($data, $filename = 'export', $encoding = 'utf-8')
     {
-        $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
+        $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
 
         $file = new \SplFileObject($filePath, 'w');
         $writer = new ExcelWriter($file);
@@ -74,7 +77,7 @@ class Export
 
         $writer->finish();
 
-        DocumentManager::file_send_for_download($filePath, true, $filename.'.xls');
+        DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
         exit;
 	}
 

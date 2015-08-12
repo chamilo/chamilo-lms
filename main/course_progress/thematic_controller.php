@@ -19,7 +19,6 @@
  */
 class ThematicController
 {
-
     /**
      * Constructor
      */
@@ -104,7 +103,7 @@ class ThematicController
                     // Delete a thematic
                     if (isset($thematic_id)) {
                         if (api_is_allowed_to_edit(null, true)) {
-                            $affected_rows = $thematic->thematic_destroy($thematic_id);
+                            $thematic->thematic_destroy($thematic_id);
                         }
                         $thematic_id = null;
                         $action = 'thematic_details';
@@ -130,7 +129,12 @@ class ThematicController
                         $key = $item['type'];
                         switch ($key) {
                             case 'title':
-                                $thematic->set_thematic_attributes(null, $item['data1'], $item['data2'], api_get_session_id());
+                                $thematic->set_thematic_attributes(
+                                    null,
+                                    $item['data1'],
+                                    $item['data2'],
+                                    api_get_session_id()
+                                );
                                 $current_thematic = $thematic->thematic_save();
                                 $description_type = 0;
                                 break;
@@ -174,7 +178,12 @@ class ThematicController
                         $data = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
                         if (!empty($data)) {
                             foreach ($data as $advance) {
-                                $csv[] = array('progress', $advance['start_date'], $advance['duration'], $advance['content']);
+                                $csv[] = array(
+                                    'progress',
+                                    $advance['start_date'],
+                                    $advance['duration'],
+                                    $advance['content'],
+                                );
                             }
                         }
                     }
@@ -251,10 +260,10 @@ class ThematicController
                 $data['total_average_of_advances'] = $thematic->get_total_average_of_thematic_advances();
             }
 
-            //Second column
+            // Second column
             $thematic_plan_data = $thematic->get_thematic_plan_data();
 
-            //Third column
+            // Third column
             $thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);
 
             $data['thematic_plan_div'] = $thematic->get_thematic_plan_div($thematic_plan_data);
@@ -285,7 +294,6 @@ class ThematicController
     {
         $thematic = new Thematic();
         $data = array();
-        $error = false;
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (isset($_POST['action']) && ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')) {
                 if (isset($_POST['title'])) {
@@ -348,7 +356,7 @@ class ThematicController
         if (!empty($thematic_id) && !empty($description_type)) {
             if ($action == 'thematic_plan_delete') {
                 if (api_is_allowed_to_edit(null, true)) {
-                    $affected_rows = $thematic->thematic_plan_destroy($thematic_id, $description_type);
+                    $thematic->thematic_plan_destroy($thematic_id, $description_type);
                 }
                 $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
                 $action = 'thematic_plan_list';

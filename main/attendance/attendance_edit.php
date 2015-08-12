@@ -66,7 +66,12 @@ $default['description'] = Security::remove_XSS($description,STUDENT);
 $default['attendance_qualify_title'] = $attendance_qualify_title;
 $default['attendance_weight'] = $attendance_weight;
 
-$link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 7, $attendance_id, api_get_session_id());
+$link_info = GradebookUtils::is_resource_in_course_gradebook(
+    api_get_course_id(),
+    7,
+    $attendance_id,
+    api_get_session_id()
+);
 $default['category_id'] = $link_info['category_id'];
 $form->setDefaults($default);
 $form->display();

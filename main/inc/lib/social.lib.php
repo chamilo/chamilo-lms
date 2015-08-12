@@ -596,8 +596,9 @@ class SocialManager extends UserManager
                 ]
             );
         }
-
+        
         $skillBlock = $template->get_template('social/avatar_block.tpl');
+        
 
         return $template->fetch($skillBlock);
     }
@@ -753,7 +754,7 @@ class SocialManager extends UserManager
 
             // Chat
             //@todo check if user is online and if it's a friend to show the chat link
-            if (api_is_global_chat_enabled()) {
+            /*if (api_is_global_chat_enabled()) {
                 $user_name = $user_info['complete_name'];
 
                 if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
@@ -787,7 +788,7 @@ class SocialManager extends UserManager
                         }
                     }
                 }
-            }
+            }*/
 
             $html .= '</ul></div></div>';
 
@@ -1524,7 +1525,7 @@ class SocialManager extends UserManager
         }
 
         $userInfo = api_get_user_info($userId, true, false, true);
-
+        
         $template->assign('user', $userInfo);
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
@@ -1537,7 +1538,9 @@ class SocialManager extends UserManager
 
             $template->assign('gamification_points', $gamificationPoints);
         }
-
+        $chatEnabled = api_is_global_chat_enabled();
+        $templateName = $template->assign('chat_enabled', $chatEnabled);
+        
         $templateName = $template->get_template('social/user_block.tpl');
 
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {

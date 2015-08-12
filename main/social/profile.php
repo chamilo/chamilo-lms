@@ -255,7 +255,7 @@ foreach ($sessionList as $session) {
 }
 
 // My friends
-$friend_html = SocialManager::listMyFriends(
+$friend_html = SocialManager::listMyFriendsBlock(
     $user_id,
     $link_shared,
     $show_full_profile

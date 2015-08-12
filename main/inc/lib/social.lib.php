@@ -1649,16 +1649,21 @@ class SocialManager extends UserManager
                         $statusIcon = Display::return_icon('statusoffline.png',get_lang('Offline'));
                         $status=0;
                     }
-
+                    
                     $friendHtml.= '<li class="list-group-item">';
                     $friendAvatarMedium = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_MEDIUM);
                     $friendAvatarSmall = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_SMALL);
                     $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" class="user-image"/>';
-                    error_log($friendAvatarSmall);
-                    $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);">';
-                    $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
-                    $friendHtml .=  $friend_avatar.' '.$name_user;
-                    $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
+                    if (api_is_global_chat_enabled()){
+                        $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);">';
+                        $friendHtml .=  $friend_avatar.' <span class="username">' . $name_user . '</span>';
+                        $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
+                    }else{
+                        $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
+                        $friendHtml .= '<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">';
+                        $friendHtml .=  $friend_avatar.' <span class="username-all">' . $name_user . '</span>';
+                    }
+                    
                     $friendHtml .= '</a>';
                     $friendHtml.= '</li>';
                 }

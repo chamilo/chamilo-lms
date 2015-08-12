@@ -6317,18 +6317,34 @@ a.sessionView {
   font-size: 20px;
   border-bottom: 1px solid #E5E5E5;
 }
-#chat-video-panel #listFriends .list-group-item{
+#listFriends .list-group-item{
   border: none;
   padding: 6px;
   font-size: 12px;
 }
-#chat-video-panel #listFriends a{
+
+#listFriends a{
   display: block;
+  text-overflow: ellipsis;
 }
-#chat-video-panel #listFriends .status{
+#listFriends a .username{
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 120px;
+}
+#chat-video-panel #listFriends a .username{
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 180px;
+}
+#listFriends .status{
   float: right;
 }
-#chat-video-panel #listFriends .user-image{
+#listFriends .user-image{
   width: 32px;
   height: 32px;
   margin-right: 5px;

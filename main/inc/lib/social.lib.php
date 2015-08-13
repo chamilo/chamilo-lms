@@ -457,30 +457,48 @@ class SocialManager extends UserManager
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
         $course_code = $my_course['code'];
+        $course_directory = $my_course['course_info']['directory'];
         $course_title = $my_course['course_info']['title'];
         $course_access_settings = CourseManager :: get_access_settings($course_code);
 
         $course_visibility = $course_access_settings['visibility'];
 
         $user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_code);
-
-        $s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course'));
+        
+        //$valor = api_get_settings_params();
+        $course_path = api_get_path(SYS_COURSE_PATH).$course_directory;   // course path
+        if (api_get_setting('course_images_in_courses_list') === 'true') {
+            if (file_exists($course_path.'/course-pic85x85.png')) {
+                $image = $my_course['course_info']['course_image']; 
+                $imageCourse = Display::img($image, $course_title, array('class'=>'img-course'));
+            }else{
+                $imageCourse = Display::return_icon('session_default_small.png', $course_title, array('class' => 'img-course'));
+            
+        }        
+            }else{
+                $imageCourse = Display::return_icon('course.png', get_lang('Course'), array('class' => 'img-default'));
+        }       
+        //$imageCourse = Display::return_icon('course.png', get_lang('Course'));
 
         //display course entry
-        $result .= '<div id="div_'.$count.'">';
-        $result .= $s_htlm_status_icon;
+        if (api_get_setting('course_images_in_courses_list') === 'true') {
+            $result .= '<li id="course_'.$count.'" class="list-group-item" style="min-height:65px;">';
+        }else{
+            $result .= '<li id="course_'.$count.'" class="list-group-item" style="min-height:44px;">';
+        }
+        $result .= $imageCourse;
 
         //show a hyperlink to the course, unless the course is closed and user is not course admin
         if ($course_visibility != COURSE_VISIBILITY_HIDDEN &&
             ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)
         ) {
-           $result .= $course_title;
+           $result .= '<span class="title">' . $course_title . '<span>';
         } else {
             $result .= $course_title." "." ".get_lang('CourseClosed')."";
         }
-        $result .= '</h3>';
+       
         $result .= '</li>';
-        $result .= '</div>';
+        
 
         $session = '';
         $active = false;
@@ -591,7 +609,7 @@ class SocialManager extends UserManager
                     ),
                     'normal' => UserManager::getUserPicture(
                         $user_id,
-                        USER_IMAGE_SIZE_ORIGINAL
+                        USER_IMAGE_SIZE_MEDIUM
                     )
                 ]
             );

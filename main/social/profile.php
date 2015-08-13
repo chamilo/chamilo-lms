@@ -478,15 +478,15 @@ if ($show_full_profile) {
         // Courses without sessions
         $my_course = '';
         $i = 1;
+       
         foreach ($list as $key => $value) {
             if ( empty($value[2]) ) { //if out of any session
                 $my_courses .=  $value[1];
-                $my_courses .=  '<div id="social_content'.$i.'" class="course_social_content" style="display:none" >s</div>';
                 $i++;
             }
         }
         $social_course_block .=  $my_courses;
-        $social_course_block = Display::panel($my_courses, get_lang('MyCourses'));
+        //$social_course_block = Display::panel($my_courses, get_lang('MyCourses'));
     }
 
     //Block Social Sessions

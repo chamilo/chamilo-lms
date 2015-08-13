@@ -4778,7 +4778,7 @@ i.size-32.icon-new-work{
 }
 .social-avatar .social-profile{
   text-align: center;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 .social-avatar .social-profile .img-responsive{
   display: inline-block;
@@ -4922,7 +4922,6 @@ i.size-32.icon-new-work{
 }
 .top-mediapost .user-image .avatar-thumb,
 .sub-mediapost .user-image .avatar-thumb{
-  padding: 2px;
   border: 1px solid #dddddd;
   margin-bottom: 5px;
   margin-right: 5px;
@@ -6348,6 +6347,25 @@ a.sessionView {
   width: 32px;
   height: 32px;
   margin-right: 5px;
+}
+#course-block .list-group .list-group-item{
+  padding: 5px;
+  border:none;
+  font-size: 12px;
+  line-height: 17px;
+  color:#666666;
+}
+#course-block .list-group .img-default{
+  float: left;
+  margin-right: 5px;
+}
+#course-block .list-group .list-group-item .img-course{
+  width: 70px;
+  float: left;
+  margin-right: 5px; 
+}
+#course-block .list-group .list-group-item .title{
+  display: block;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

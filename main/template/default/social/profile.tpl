@@ -35,7 +35,25 @@
         </div>
         {{ social_skill_block }}
         {{ social_group_info_block }}
-        {{ social_course_block }}
+         <div class="panel-group" id="course-block" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#course-block" href="#courseList" aria-expanded="true" aria-controls="courseList">
+                                    {{ "MyCourses" | get_lang }}
+                                </a>
+                            </h4>
+                        </div>
+                    <div id="courseList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                {{ social_course_block }}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>       
+        
         {{ social_session_block }}
         {{ social_rss_block }}
         {{ social_right_information }}

@@ -7514,4 +7514,6 @@ $CronRemindCourseFinishedActivateTitle = "Enviar notificación de finalización 
 $FieldTypeAlphanumericSpaces = "Texto de caracteres alfanuméricos y espacios";
 $CronRemindCourseFinishedActivateComment = "Enviar un correo electrónico a los estudiantes cuando su curso (o sesión) ha finalizado. Esto requiere tareas cron para ser configurado (ver directorio main/cron/).";
 $ThanksForRegisteringToSite = "Gracias por registrarse en %s.";
+$AllowCoachFeedbackExercisesTitle = "Permitir a los tutores comentar la revisión de ejercicios";
+$AllowCoachFeedbackExercisesComment = "Permitir a los tutores editar comentarios durante la revisión de ejercicios";
 ?>

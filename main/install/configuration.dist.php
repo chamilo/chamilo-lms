@@ -50,10 +50,6 @@ $_configuration['root_sys'] = '{ROOT_SYS}';
 // example: chamilo (this means chamilo is installed in /var/www/chamilo/
 $_configuration['url_append'] = '{URL_APPEND_PATH}';
 
-// URL to your phpMyAdmin installation.
-// If not empty, a link will be available in the Platform Administration
-$_configuration['db_admin_path'] = '';
-
 /**
  * Login modules settings
  */

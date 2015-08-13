@@ -339,12 +339,6 @@ if (api_is_platform_admin()) {
 
     $items = array();
     $items[] = array('url' => 'special_exports.php', 'label' => get_lang('SpecialExports'));
-    if (!empty($_configuration['db_admin_path'])) {
-        $items[] = array(
-            'url' => $_configuration['db_admin_path'],
-            'label' => get_lang('AdminDatabases') . ' (' . get_lang('DBManagementOnlyForServerAdmin') . ') '
-        );
-    }
     $items[] = array('url' => 'system_status.php', 'label' => get_lang('SystemStatus'));
     if (is_dir(api_get_path(SYS_TEST_PATH) . 'datafiller/')) {
         $items[] = array('url' => 'filler.php', 'label' => get_lang('DataFiller'));

@@ -1605,17 +1605,16 @@ class SessionManager
                 );
                 $content = $tplContent->fetch($layoutContent);
 
-                MessageManager::send_message(
-                    $user_id,
+                api_mail_html(
+                    $user_info['complete_name'],
+                    $user_info['mail'],
                     $subject,
                     $content,
-                    array(),
-                    array(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
+                    api_get_person_name(
+                        api_get_setting('administratorName'),
+                        api_get_setting('administratorSurname')
+                    ),
+                    api_get_setting('emailAdministrator')
                 );
             }
         }

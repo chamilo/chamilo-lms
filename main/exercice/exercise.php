@@ -495,9 +495,6 @@ if (isset($list_ordered) && !empty($list_ordered)) {
     $exercise_list = $new_question_list;
 }
 
-echo '<div class="table-responsive">';
-echo '<table class="'.Display::return_default_table_class().'">';
-
 /*  Listing exercises  */
 if (!empty($exercise_list)) {
     if ($origin != 'learnpath') {
@@ -510,32 +507,6 @@ if (!empty($exercise_list)) {
 
         $i = 1;
 
-        if ($is_allowedToEdit) {
-            $headers = array(
-                array('name' => get_lang('ExerciseName')),
-                array('name' => get_lang('QuantityQuestions'), 'params' => array('width' => '170px')),
-                array('name' => get_lang('Actions'), 'params' => array('width' => '180px')));
-        } else {
-            $headers = array(
-                array('name' => get_lang('ExerciseName')),
-                array('name' => get_lang('Status')),
-            );
-            if ($isDrhOfCourse) {
-                $headers[] = array(
-                    'name' => get_lang('Actions'),
-                    'params' => array('width' => '180px')
-                );
-            }
-        }
-
-        $header_list = '';
-        foreach ($headers as $header) {
-            $params = isset($header['params']) ? $header['params'] : null;
-            $header_list .= Display::tag('th', $header['name'], $params);
-        }
-        echo Display::tag('tr', $header_list);
-
-        $count = 0;
         foreach ($exercise_list as $row) {
             $my_exercise_id = $row['id'];
 
@@ -896,11 +867,6 @@ if (!empty($exercise_list)) {
                 $item .= Display::tag('td', $attempt_text);
             }
 
-            $class = 'row_even';
-            if ($count % 2) {
-                $class = 'row_odd';
-            }
-
             if ($is_allowedToEdit) {
                 $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
             } else {
@@ -911,16 +877,14 @@ if (!empty($exercise_list)) {
                 }
             }
 
-            echo Display::tag(
+            $tableRows[] = Display::tag(
                 'tr',
                 $item,
                 array(
                     'id' => 'exercise_list_' . $my_exercise_id,
-                    'class' => $class
                 )
             );
 
-            $count++;
         } // end foreach()
     }
 }
@@ -978,11 +942,6 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
             $title = basename($path);
         }
 
-        $class = 'row_even';
-        if ($count % 2) {
-            $class = 'row_odd';
-        }
-
         // prof only
         if ($is_allowedToEdit) {
             $item = Display::tag('td', '<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.api_get_course_id().'&uid='.$userId.'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a> ');
@@ -1008,7 +967,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
             $actions .= '<a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=delete&file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset).' '.$title."?").'\')) return false;">'.
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
             $item .= Display::tag('td', $actions);
-            echo Display::tag('tr', $item, array('class' => $class));
+            $tableRows[] = Display::tag('tr', $item);
         } else {
             // Student only
             if ($active == 1) {
@@ -1041,18 +1000,11 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                     $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
                 }
 
-                echo Display::tag(
-                    'tr',
-                    $item,
-                    array('class' => $class)
-                );
+                $tableRows[] = Display::tag('tr', $item);
             }
         }
-        $count++;
     }
 }
-echo '</table>';
-echo '</div>';
 
 if (empty($exercise_list) && $hotpotatoes_exist == false) {
     if ($is_allowedToEdit && $origin != 'learnpath') {
@@ -1064,6 +1016,45 @@ if (empty($exercise_list) && $hotpotatoes_exist == false) {
         echo '</div>';
         echo '</div>';
     }
+} else {
+    if ($is_allowedToEdit) {
+        $headers = [
+            get_lang('ExerciseName'),
+            get_lang('QuantityQuestions'),
+            get_lang('Actions')
+        ];
+    } else {
+        $headers = [
+            get_lang('ExerciseName'),
+            get_lang('Status')
+        ];
+
+        if ($isDrhOfCourse) {
+            $headers[] = get_lang('Actions');
+        }
+    }
+
+    $headerList = '';
+
+    foreach ($headers as $header) {
+        $headerList .= Display::tag('th', $header);
+    }
+
+    echo '<div class="table-responsive">';
+    echo '<table class="table table-striped table-hover">';
+    echo Display::tag(
+        'thead',
+        Display::tag('tr', $headerList)
+    );
+    echo '<tbody>';
+
+    foreach ($tableRows as $row) {
+        echo $row;
+    }
+
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
 }
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_footer();

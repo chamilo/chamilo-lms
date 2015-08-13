@@ -45,6 +45,12 @@ $uploadPath = '/HotPotatoes_files';
 $finish         = (!empty($_POST['finish']) ? $_POST['finish'] : 0);
 $imgcount       = (!empty($_POST['imgcount']) ? $_POST['imgcount'] : null);
 $fld            = (!empty($_POST['fld']) ? $_POST['fld'] : null);
+$imgparams = [];
+$dialogBox = '';
+
+if ($finish == 2 && isset($_POST['imgparams'])) {
+    $imgparams = $_POST['imgparams'];
+}
 
 // If user is allowed to edit...
 if (api_is_allowed_to_edit(null, true)) {

@@ -1602,8 +1602,10 @@ class Agenda
 
                 if (api_is_allowed_to_edit() && $this->type == 'course') {
                     $event['editable'] = true;
-                    if ($coachCanEdit == false) {
-                        $event['editable'] = false;
+                    if (!empty($session_id)) {
+                        if ($coachCanEdit == false) {
+                            $event['editable'] = false;
+                        }
                     }
                 }
 

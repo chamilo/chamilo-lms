@@ -57,9 +57,7 @@ function preventMultipleLogin($userId)
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $userId = intval($userId);
 
-    if (isset($_configuration['prevent_multiple_simultaneous_login']) &&
-        $_configuration['prevent_multiple_simultaneous_login']
-    ) {
+    if (api_get_settings('prevent_multiple_simultaneous_login') === 'true') {
         if (!empty($userId) && !api_is_anonymous()) {
 
             $isFirstLogin = Session::read('first_user_login');

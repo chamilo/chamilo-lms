@@ -176,8 +176,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //);
 // Define the frequency to which the data must be stored in the database
 //$_configuration['session_stored_after_n_times'] = 10;
-// One connection per user
-//$_configuration['prevent_multiple_simultaneous_login'] = false;
 // If the database is down this css style will be used to show the errors.
 //$_configuration['theme_fallback'] = 'chamilo'; // (chamilo theme)
 // The default template that will be use in the system.

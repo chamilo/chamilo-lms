@@ -1800,4 +1800,4 @@ VALUES
 ('prevent_multiple_simultaneous_login', '1', 'Yes'),
 ('prevent_multiple_simultaneous_login', '0', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.43' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.45' WHERE variable = 'chamilo_database_version';

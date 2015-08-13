@@ -46,7 +46,7 @@
                         </div>
                         {# Author image preview #}
                         <div id="panel-scorm" class="panel-body">
-                            <a href="{{ button_home_url }}" class="btn btn-success btn-block" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                            <a href="{{ button_home_url }}" class="btn btn-primary btn-block" target="_self" onclick="javascript: window.parent.API.save_asset();">
                                 <i class="fa fa-home"></i> {{ button_home_text }}
                             </a>
                             <div class="image-avatar">

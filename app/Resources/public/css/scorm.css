@@ -305,7 +305,7 @@ See https://support.chamilo.org/issues/6976
 }
 /* for section */
 .scorm_item_section.scorm_completed{
-  background:url("../../main/img/icon_completed_section.png")no-repeat 98% center #606c88;
+  color: red;
   padding-right: 1.5em;
 }
 .scorm_item_section{
@@ -353,12 +353,6 @@ See https://support.chamilo.org/issues/6976
 .scorm_item_normal a:hover{
    text-decoration: none;
 }
-.scorm_highlight{
-  background-color: #2B3D50 !important;
-}
-.scorm_highlight a{
-  color: #ffffff !important;
-}
 #scorm-info .panel-heading{
   padding: 5px;
 }
@@ -373,5 +367,20 @@ See https://support.chamilo.org/issues/6976
 }
 .scorm-body .scorm-title .fa-book{
     color: #00829C;
+}
+
+
+/* items scorm*/
+.scorm_item_normal.scorm_completed {
+  background:url("../../main/img/scorm/scorm_completed.png") no-repeat left center;
+}
+.scorm_item_normal.scorm_failed{
+  background:url("../../main/img/scorm/scorm_failed.png") no-repeat left center;
+}
+.scorm_item_normal.scorm_not_attempted{
+  background:url("../../main/img/scorm/scorm_not_attempted.png") no-repeat left center;	
+}
+.scorm_item_normal.scorm_highlight{
+  background:url("../../main/img/scorm/scorm_highlight.png") no-repeat left center;	
 }
 /* END SCORM CSS BASE*/

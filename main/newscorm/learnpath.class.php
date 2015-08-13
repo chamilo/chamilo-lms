@@ -3204,7 +3204,7 @@ class learnpath
                 $style_item = '';
             }
             if ($item['id'] == $this->current) {
-                $scorm_color_background = 'scorm_item_normal scorm_highlight '.$scorm_color_background.' ';
+                $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' scorm_highlight';
             } elseif (!in_array($item['type'], $dirTypes)) {
                 $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' ';
             }

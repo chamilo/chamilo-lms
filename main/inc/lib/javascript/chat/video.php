@@ -33,7 +33,7 @@ if ($isSender) {
     $chatUser = api_get_user_info($room['from_user']);
 }
 $idUserLocal = api_get_user_id();
-$userLocal = api_get_user_info($idUserLocal,true);
+$userLocal = api_get_user_info($idUserLocal, true);
 $htmlHeadXtra[] = '<script type="text/javascript" src="'
     . api_get_path(WEB_PATH) . 'web/assets/simplewebrtc/latest.js'
     . '"></script>' . "\n";

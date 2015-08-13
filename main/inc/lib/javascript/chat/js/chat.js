@@ -515,7 +515,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
  * @param int       user id
  * @param int       status  1 or 0
  */
-function return_online_user(user_id, status,userImage) {
+function return_online_user(user_id, status, userImage) {
 	var div_wrapper = $("<div />" );
 	var new_div = $("<div />" );
 

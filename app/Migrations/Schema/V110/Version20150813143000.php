@@ -34,6 +34,24 @@ class Version20150813143000 extends AbstractMigrationChamilo
                 1 => ['value' => 'false', 'text' => 'No']
             ]
         );
+        $this->addSettingCurrent(
+            'gradebook_detailed_admin_view',
+            null,
+            'radio',
+            'Gradebook',
+            'false',
+            'ShowAdditionalColumnsInStudentResultsPageTitle',
+            'ShowAdditionalColumnsInStudentResultsPageComment',
+            null,
+            null,
+            1,
+            true,
+            false,
+            [
+                0 => ['value' => 'true', 'text' => 'Yes'],
+                1 => ['value' => 'false', 'text' => 'No']
+            ]
+        );
     }
 
     /**
@@ -44,25 +62,27 @@ class Version20150813143000 extends AbstractMigrationChamilo
         $entityManage = $this->getEntityManager();
 
         $deleteOptions = $entityManage->createQueryBuilder();
+        $deleteSettings = $entityManage->createQueryBuilder();
 
         $deleteOptions->delete('ChamiloCoreBundle:SettingsOptions', 'o')
             ->andWhere(
                 $deleteOptions->expr()->in(
                     'o.variable',
                     [
-                        'prevent_multiple_simultaneous_login'
+                        'prevent_multiple_simultaneous_login',
+                        'gradebook_detailed_admin_view'
                     ]
                 )
             );
         $deleteOptions->getQuery()->execute();
 
-        $deleteSettings = $entityManage->createQueryBuilder();
         $deleteSettings->delete('ChamiloCoreBundle:SettingsCurrent', 's')
             ->andWhere(
                 $deleteSettings->expr()->in(
                     's.variable',
                     [
-                        'prevent_multiple_simultaneous_login'
+                        'prevent_multiple_simultaneous_login',
+                        'gradebook_detailed_admin_view'
                     ]
                 )
             );

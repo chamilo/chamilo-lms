@@ -1720,7 +1720,8 @@ VALUES
 ('sso_force_redirect', NULL, 'radio', 'Security', 'false', 'SSOForceRedirectTitle', 'SSOForceRedirectComment', NULL, NULL, 1),
 ('session_course_ordering', NULL, 'radio', 'Session', 'false', 'SessionCourseOrderingTitle', 'SessionCourseOrderingComment', NULL, NULL, 1),
 ('gamification_mode', NULL, 'radio', 'Platform', '0', 'GamificationModeTitle', 'GamificationModeComment', NULL, NULL, 1),
-('prevent_multiple_simultaneous_login', NULL, 'radio', 'Security', 'false', 'PreventMultipleSimultaneousLoginTitle', 'PreventMultipleSimultaneousLoginComment', NULL, NULL, 1);
+('prevent_multiple_simultaneous_login', NULL, 'radio', 'Security', 'false', 'PreventMultipleSimultaneousLoginTitle', 'PreventMultipleSimultaneousLoginComment', NULL, NULL, 1),
+('gradebook_detailed_admin_view', NULL, 'radio', 'Gradebook', 'false', 'ShowAdditionalColumnsInStudentResultsPageTitle', 'ShowAdditionalColumnsInStudentResultsPageComment', NULL, NULL, 1);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -1798,6 +1799,8 @@ VALUES
 ('gamification_mode', '1', 'Yes'),
 ('gamification_mode', '0', 'No'),
 ('prevent_multiple_simultaneous_login', '1', 'Yes'),
-('prevent_multiple_simultaneous_login', '0', 'No');
+('prevent_multiple_simultaneous_login', '0', 'No'),
+('gradebook_detailed_admin_view', '1', 'Yes'),
+('gradebook_detailed_admin_view', '0', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.45' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.46' WHERE variable = 'chamilo_database_version';

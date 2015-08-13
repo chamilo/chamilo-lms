@@ -1,15 +1,46 @@
-<p class="lead">{{ "ChatWithXUser"|get_lang|format(chat_user.complete_name) }}</p>
-<div class="row" id="chat-video-panel">
-    <div class="col-sm-3">
-        <div class="thumbnail">
-            <video id="chat-local-video" class="skip"></video>
+<div id="chat-video-panel">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="title"><i class="fa fa-video-camera"></i> {{ room.room_name }} </h3>
         </div>
     </div>
-    <div class="col-sm-9">
-        <div class="thumbnail" id="chat-remote-video"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <div id="chat-local-video"></div>
+            <div class="username-local">
+                {% if user_local.user_is_online_in_chat == 1 %}
+                    <img src="{{ 'online.png' | icon(16) }}" />
+                {% else %}
+                <img src="{{ 'offline.png' | icon(16) }}" />
+                {% endif %}
+                {{ user_local.complete_name }} ( {{ user_local.username }} )
+            </div>
+
+            <div class="chat-friends">
+                <div class="panel-group" id="blocklistFriends" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#blocklistFriends" href="#listFriends" aria-expanded="true" aria-controls="listFriends">
+                                    {{ "SocialFriend" | get_lang }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="listFriends" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                {{ block_friends }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="user-from" id="chat-remote-video"></div>
+            <div class="chat-user-remote">{{ "ChatWithXUser"|get_lang|format(chat_user.complete_name) }}</div>
+        </div>
     </div>
 </div>
-
 <script>
     (function() {
         var VideoChat = {

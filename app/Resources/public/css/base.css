@@ -394,8 +394,12 @@ ul#navigation .report a {
     margin: 30px 0 0 0;
     padding: 0 0 0 10px;
 }
-
-
+#simple-dialog-form{
+    font-size: 12px;
+}
+#simple-dialog-form .control-label{
+    padding-top: 0;
+}
 /* ---------------------------------------------------
     styles for the agenda (day, week, month view)
 -----------------------------------------------------*/
@@ -4778,7 +4782,7 @@ i.size-32.icon-new-work{
 }
 .social-avatar .social-profile{
   text-align: center;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 .social-avatar .social-profile .img-responsive{
   display: inline-block;
@@ -4922,7 +4926,6 @@ i.size-32.icon-new-work{
 }
 .top-mediapost .user-image .avatar-thumb,
 .sub-mediapost .user-image .avatar-thumb{
-  padding: 2px;
   border: 1px solid #dddddd;
   margin-bottom: 5px;
   margin-right: 5px;
@@ -6275,6 +6278,98 @@ a.sessionView {
 }
 #gradebook_list .centered .badge-group {
     width: auto;
+}
+/* video chat */
+#chat-local-video video,
+#chat-remote-video video{
+  border-radius: 5px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  box-shadow: 0 2px 3px #C8C8C8;
+  border: 1px solid #e6e6e6;
+  background-color:#fff;
+  padding: 5px;
+}
+#chat-local-video video,
+#chat-remote-video video{
+  width: 100%;
+  min-width: 100%;
+  display: block;
+}
+#chat-video-panel .username-local{
+  text-align: center;
+  padding-bottom: 5px;
+  padding-top:5px;
+  margin-top:10px;
+  margin-bottom:10px;
+  color: #666666;
+}
+#chat-video-panel .chat-user-remote{
+  text-align: center;
+  padding-bottom: 5px;
+  padding-top:5px;
+  color: #666666;
+}
+#chat-video-panel .title{
+  display: block;
+  color: #52606F;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  font-size: 20px;
+  border-bottom: 1px solid #E5E5E5;
+}
+#listFriends .list-group-item{
+  border: none;
+  padding: 6px;
+  font-size: 12px;
+}
+
+#listFriends a{
+  display: block;
+  text-overflow: ellipsis;
+}
+#listFriends a .username{
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 120px;
+}
+#chat-video-panel #listFriends a .username{
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 180px;
+}
+#listFriends .status{
+  float: right;
+}
+#listFriends .user-image{
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
+}
+#course-block .list-group .list-group-item{
+  padding: 5px;
+  border:none;
+  font-size: 12px;
+  line-height: 17px;
+  color:#666666;
+}
+#course-block .list-group .img-default{
+  float: left;
+  margin-right: 5px;
+}
+#course-block .list-group .list-group-item .img-course{
+  width: 70px;
+  float: left;
+  margin-right: 5px; 
+}
+#course-block .list-group .list-group-item .title{
+  display: block;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

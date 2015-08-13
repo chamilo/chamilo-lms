@@ -457,30 +457,48 @@ class SocialManager extends UserManager
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
         $course_code = $my_course['code'];
+        $course_directory = $my_course['course_info']['directory'];
         $course_title = $my_course['course_info']['title'];
         $course_access_settings = CourseManager :: get_access_settings($course_code);
 
         $course_visibility = $course_access_settings['visibility'];
 
         $user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_code);
-
-        $s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course'));
+        
+        //$valor = api_get_settings_params();
+        $course_path = api_get_path(SYS_COURSE_PATH).$course_directory;   // course path
+        if (api_get_setting('course_images_in_courses_list') === 'true') {
+            if (file_exists($course_path.'/course-pic85x85.png')) {
+                $image = $my_course['course_info']['course_image']; 
+                $imageCourse = Display::img($image, $course_title, array('class'=>'img-course'));
+            } else {
+                $imageCourse = Display::return_icon('session_default_small.png', $course_title, array('class' => 'img-course'));
+            
+            }        
+        } else {
+                $imageCourse = Display::return_icon('course.png', get_lang('Course'), array('class' => 'img-default'));
+        }       
+        //$imageCourse = Display::return_icon('course.png', get_lang('Course'));
 
         //display course entry
-        $result .= '<div id="div_'.$count.'">';
-        $result .= $s_htlm_status_icon;
+        if (api_get_setting('course_images_in_courses_list') === 'true') {
+            $result .= '<li id="course_'.$count.'" class="list-group-item" style="min-height:65px;">';
+        } else {
+            $result .= '<li id="course_'.$count.'" class="list-group-item" style="min-height:44px;">';
+        }
+        $result .= $imageCourse;
 
         //show a hyperlink to the course, unless the course is closed and user is not course admin
         if ($course_visibility != COURSE_VISIBILITY_HIDDEN &&
             ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)
         ) {
-           $result .= $course_title;
+           $result .= '<span class="title">' . $course_title . '<span>';
         } else {
             $result .= $course_title." "." ".get_lang('CourseClosed')."";
         }
-        $result .= '</h3>';
+       
         $result .= '</li>';
-        $result .= '</div>';
+        
 
         $session = '';
         $active = false;
@@ -591,13 +609,14 @@ class SocialManager extends UserManager
                     ),
                     'normal' => UserManager::getUserPicture(
                         $user_id,
-                        USER_IMAGE_SIZE_ORIGINAL
+                        USER_IMAGE_SIZE_MEDIUM
                     )
                 ]
             );
         }
-
+        
         $skillBlock = $template->get_template('social/avatar_block.tpl');
+        
 
         return $template->fetch($skillBlock);
     }
@@ -753,7 +772,7 @@ class SocialManager extends UserManager
 
             // Chat
             //@todo check if user is online and if it's a friend to show the chat link
-            if (api_is_global_chat_enabled()) {
+            /*if (api_is_global_chat_enabled()) {
                 $user_name = $user_info['complete_name'];
 
                 if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
@@ -787,7 +806,7 @@ class SocialManager extends UserManager
                         }
                     }
                 }
-            }
+            }*/
 
             $html .= '</ul></div></div>';
 
@@ -1524,7 +1543,7 @@ class SocialManager extends UserManager
         }
 
         $userInfo = api_get_user_info($userId, true, false, true);
-
+        
         $template->assign('user', $userInfo);
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
@@ -1537,7 +1556,9 @@ class SocialManager extends UserManager
 
             $template->assign('gamification_points', $gamificationPoints);
         }
-
+        $chatEnabled = api_is_global_chat_enabled();
+        $templateName = $template->assign('chat_enabled', $chatEnabled);
+        
         $templateName = $template->get_template('social/user_block.tpl');
 
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
@@ -1609,6 +1630,68 @@ class SocialManager extends UserManager
         }
 
         $friendHtml = Display::panel($friendHtml, get_lang('SocialFriend').' (' . $number_friends . ')' );
+
+        return $friendHtml;
+    }
+
+    /**
+     * @param int $user_id
+     * @param $link_shared
+     * @param $show_full_profile
+     * @return string
+     */
+    public static function listMyFriendsBlock($user_id, $link_shared, $show_full_profile)
+    {
+        //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
+        $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
+        $number_of_images = 30;
+        $number_friends = count($friends);
+        $friendHtml = '';
+
+        if ($number_friends != 0) {
+
+            $friendHtml.= '<ul class="list-group">';
+            $j = 1;
+            for ($k=0; $k < $number_friends; $k++) {
+                if ($j > $number_of_images) break;
+
+                if (isset($friends[$k])) {
+                    $friend = $friends[$k];
+                    $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
+                    $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
+
+                    if ($user_info_friend['user_is_online']) {
+                        $statusIcon = Display::return_icon('statusonline.png',get_lang('Online'));
+                        $status=1;
+                    } else {
+                        $statusIcon = Display::return_icon('statusoffline.png',get_lang('Offline'));
+                        $status=0;
+                    }
+                    
+                    $friendHtml.= '<li class="list-group-item">';
+                    $friendAvatarMedium = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_MEDIUM);
+                    $friendAvatarSmall = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_SMALL);
+                    $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" class="user-image"/>';
+                    if (api_is_global_chat_enabled()){
+                        $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);">';
+                        $friendHtml .=  $friend_avatar.' <span class="username">' . $name_user . '</span>';
+                        $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
+                    } else {
+                        $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
+                        $friendHtml .= '<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">';
+                        $friendHtml .=  $friend_avatar.' <span class="username-all">' . $name_user . '</span>';
+                    }
+                    
+                    $friendHtml .= '</a>';
+                    $friendHtml.= '</li>';
+                }
+                $j++;
+            }
+            $friendHtml.='</ul>';
+        } else {
+            $friendHtml.= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
+                .'<a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php"><i class="fa fa-search"></i> '. get_lang('TryAndFindSomeFriends').'</a></div>';
+        }
 
         return $friendHtml;
     }

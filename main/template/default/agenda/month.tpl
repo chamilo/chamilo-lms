@@ -455,8 +455,8 @@ $(document).ready(function() {
                 }
                 if (calEvent.course_name) {
                     $("#calendar_course_info_simple").html(
-                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Course' | get_lang }}</label>' +
-                        '<div class="col-sm-8">' + calEvent.course_name+"</div></div>"
+                        '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Course' | get_lang }}</label>' +
+                        '<div class="col-sm-9">' + calEvent.course_name+"</div></div>"
                     );
                 } else {
                     $("#calendar_course_info_simple").html('');
@@ -464,8 +464,8 @@ $(document).ready(function() {
 
                 if (calEvent.session_name) {
                     $("#calendar_session_info").html(
-                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Session' | get_lang }}</label>' +
-                        '<div class="col-sm-8">' + calEvent.session_name+"</div></div>"
+                        '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Session' | get_lang }}</label>' +
+                        '<div class="col-sm-9">' + calEvent.session_name+"</div></div>"
                     );
 
                 } else {
@@ -536,36 +536,36 @@ $(document).ready(function() {
             <span id="calendar_course_info_simple"></span>
             <span id="calendar_session_info"></span>
             <div class="form-group">
-                <label class="col-sm-2 control-label">
+                <label class="col-sm-3 control-label">
                     <b>{{ "Date" |get_lang}}</b>
                 </label>
-                <div class="col-sm-8">
+                <div class="col-sm-9">
                     <span id="simple_start_date"></span>
                     <span id="simple_end_date"></span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">
+                <label class="col-sm-3 control-label">
                     <b>{{ "Title" |get_lang}}</b>
                 </label>
-                <div class="col-sm-8">
+                <div class="col-sm-9">
                     <div id="simple_title"></div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label">
+                <label class="col-sm-3 control-label">
                     <b>{{ "Description" |get_lang}}</b>
                 </label>
-                <div class="col-sm-8">
+                <div class="col-sm-9">
                     <div id="simple_content"></div>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">
+                <label class="col-sm-3 control-label">
                     <b>{{ "Comment" |get_lang}}</b>
                 </label>
-                <div class="col-sm-8">
+                <div class="col-sm-9">
                     <div id="simple_comment"></div>
                 </div>
             </div>

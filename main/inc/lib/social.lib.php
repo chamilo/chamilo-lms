@@ -471,11 +471,11 @@ class SocialManager extends UserManager
             if (file_exists($course_path.'/course-pic85x85.png')) {
                 $image = $my_course['course_info']['course_image']; 
                 $imageCourse = Display::img($image, $course_title, array('class'=>'img-course'));
-            }else{
+            } else {
                 $imageCourse = Display::return_icon('session_default_small.png', $course_title, array('class' => 'img-course'));
             
-        }        
-            }else{
+            }        
+        } else {
                 $imageCourse = Display::return_icon('course.png', get_lang('Course'), array('class' => 'img-default'));
         }       
         //$imageCourse = Display::return_icon('course.png', get_lang('Course'));
@@ -483,7 +483,7 @@ class SocialManager extends UserManager
         //display course entry
         if (api_get_setting('course_images_in_courses_list') === 'true') {
             $result .= '<li id="course_'.$count.'" class="list-group-item" style="min-height:65px;">';
-        }else{
+        } else {
             $result .= '<li id="course_'.$count.'" class="list-group-item" style="min-height:44px;">';
         }
         $result .= $imageCourse;
@@ -1676,7 +1676,7 @@ class SocialManager extends UserManager
                         $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);">';
                         $friendHtml .=  $friend_avatar.' <span class="username">' . $name_user . '</span>';
                         $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
-                    }else{
+                    } else {
                         $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
                         $friendHtml .= '<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">';
                         $friendHtml .=  $friend_avatar.' <span class="username-all">' . $name_user . '</span>';

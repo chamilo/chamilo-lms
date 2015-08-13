@@ -223,11 +223,13 @@ function editNode($code, $name, $canHaveCourses, $old_code)
     return true;
 }
 
+
 /**
  * Move a node up on display
  * @param string $code
- * @param string $tree_pos
- * @param int $parent_id
+ * @param int $tree_pos
+ * @param string $parent_id
+ *
  * @return bool
  */
 function moveNodeUp($code, $tree_pos, $parent_id)
@@ -235,28 +237,47 @@ function moveNodeUp($code, $tree_pos, $parent_id)
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $code = Database::escape_string($code);
     $tree_pos = intval($tree_pos);
-    $parent_id = intval($parent_id);
+    $parent_id = Database::escape_string($parent_id);
+
+    $parentIdCondition = " AND (parent_id IS NULL OR parent_id = '' )";
+    if (!empty($parent_id)) {
+        $parentIdCondition = " AND parent_id = '$parent_id' ";
+    }
+
     $sql = "SELECT code,tree_pos
-        FROM $tbl_category
-        WHERE parent_id " . (empty($parent_id) ? "IS NULL" : " = $parent_id") . " AND tree_pos < $tree_pos
-        ORDER BY tree_pos DESC LIMIT 0,1";
+            FROM $tbl_category
+            WHERE
+                tree_pos < $tree_pos
+                $parentIdCondition
+            ORDER BY tree_pos DESC
+            LIMIT 0,1";
+
     $result = Database::query($sql);
     if (!$row = Database::fetch_array($result)) {
-
-        $sql = "SELECT code,tree_pos FROM $tbl_category
-            WHERE parent_id " . (empty($parent_id) ? "IS NULL" : " = $parent_id") . " AND tree_pos > $tree_pos
-            ORDER BY tree_pos DESC LIMIT 0,1";
+        $sql = "SELECT code, tree_pos
+                FROM $tbl_category
+                WHERE
+                    tree_pos > $tree_pos
+                    $parentIdCondition
+                ORDER BY tree_pos DESC
+                LIMIT 0,1";
         $result2 = Database::query($sql);
-        if (!$row2 = Database::fetch_array($result2)) {
+        if (!$row = Database::fetch_array($result2)) {
             return false;
         }
     }
 
-    Database::query("UPDATE $tbl_category SET tree_pos='" . $row['tree_pos'] . "' WHERE code='$code'");
-    Database::query("UPDATE $tbl_category SET tree_pos='$tree_pos' WHERE code='" . $code . "'");
+    $sql = "UPDATE $tbl_category
+            SET tree_pos ='" . $row['tree_pos'] . "'
+            WHERE code='$code'";
+    Database::query($sql);
+
+    $sql = "UPDATE $tbl_category
+            SET tree_pos = '$tree_pos'
+            WHERE code= '" . $row['code'] . "'";
+    Database::query($sql);
 
     return true;
-
 }
 
 /**

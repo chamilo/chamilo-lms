@@ -626,10 +626,6 @@ class Template
             $js_files[] = 'fontresize.js';
         }
 
-        if (api_get_setting('include_asciimathml_script') == 'true') {
-            $js_files[] = 'asciimath/ASCIIMathML.js';
-        }
-
         $js_files[] = 'tag/jquery.fcbkcomplete.js';
 
         $js_file_to_string = null;
@@ -648,6 +644,10 @@ class Template
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
             'imagemap-resizer/js/imageMapResizer.min.js'
         ];
+
+        if (api_get_setting('include_asciimathml_script') == 'true') {
+            $bowerJsFiles[] = 'MathJax/MathJax.js?config=AM_HTMLorMML';
+        }
 
         if ($isoCode != 'en') {
             $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-' . $isoCode . '.js';

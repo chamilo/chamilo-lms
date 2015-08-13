@@ -895,6 +895,7 @@ class Agenda
      * @param int $groupId
      * @param int $user_id
      * @param string $format
+     *
      * @return array|string
      */
     public function getEvents(
@@ -1034,15 +1035,14 @@ class Agenda
                             api_get_user_id(),
                             $this->eventOtherSessionColor
                         );
-
                     }
                 }
 
                 if (!empty($my_course_list) && $sessionFilterActive == false) {
-                    foreach ($my_course_list as $course_info_item) {
-                        $courseInfo = api_get_course_info_by_id($course_item['real_id']);
+                    foreach ($my_course_list as $courseInfoItem) {
+                        $courseInfo = api_get_course_info_by_id($courseInfoItem['real_id']);
                         if (isset($course_id) && !empty($course_id)) {
-                            if ($course_info_item['real_id'] == $course_id) {
+                            if ($courseInfo['real_id'] == $course_id) {
                                 $this->getCourseEvents($start, $end, $courseInfo);
                             }
                         } else {
@@ -1541,23 +1541,25 @@ class Agenda
         }
 
         if (Database::num_rows($result)) {
-
-            $events_added = array_column($this->events, 'id');
-
+            $eventsAdded = array_column($this->events, 'id');
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $eventId = $row['ref'];
-                $items = $this->getUsersAndGroupSubscribedToEvent($eventId, $course_id, $this->sessionId);
+                $items = $this->getUsersAndGroupSubscribedToEvent(
+                    $eventId,
+                    $course_id,
+                    $this->sessionId
+                );
                 $group_to_array = $items['groups'];
                 $user_to_array = $items['users'];
                 $event = array();
                 $event['id'] = 'course_'.$row['id'];
 
                 // To avoid doubles
-                if (in_array($event['id'], $events_added)) {
+                if (in_array($event['id'], $eventsAdded)) {
                     continue;
                 }
 
-                $events_added[] = $row['id'];
+                $eventsAdded[] = $row['id'];
                 $attachment = $this->getAttachment($row['id'], $courseInfo);
 
                 if (!empty($attachment)) {
@@ -1573,7 +1575,6 @@ class Agenda
                 $event['className'] = 'course';
                 $event['allDay'] = 'false';
                 $event['course_id'] = $course_id;
-
                 $event['borderColor'] = $event['backgroundColor'] = $this->event_course_color;
 
                 $sessionInfo = [];
@@ -1678,22 +1679,29 @@ class Agenda
      */
     public function getPlatformEvents($start, $end)
     {
-        $start = intval($start);
-        $end = intval($end);
+        $start = isset($start) && !empty($start) ? api_get_utc_datetime(intval($start)) : null;
+        $end = isset($end) && !empty($end) ? api_get_utc_datetime(intval($end)) : null;
 
-        $condition = null;
-        if ($start !== 0) {
-            $start = api_get_utc_datetime($start);
-            $condition = " AND (start_date >= '".$start."' OR end_date >= '".$start."')";
+        $dateCondition = '';
+
+        if (!empty($start) && !empty($end)) {
+            $dateCondition .= "AND (
+                 start_date BETWEEN '".$start."' AND '".$end."' OR
+                 end_date BETWEEN '".$start."' AND '".$end."' OR
+                 (
+                     start_date IS NOT NULL AND end_date IS NOT NULL AND
+                     YEAR(start_date) = YEAR(end_date) AND
+                     MONTH('$start') BETWEEN MONTH(start_date) AND MONTH(end_date)
+                 )
+            )";
         }
-        if ($end !== 0) {
-            $end = api_get_utc_datetime($end);
-            $condition .= " AND (start_date <= '".$end."' OR end_date <= '".$end."')";
-        }
+
         $access_url_id = api_get_current_access_url_id();
 
-        $sql = "SELECT * FROM ".$this->tbl_global_agenda."
-                       WHERE access_url_id = $access_url_id$condition";
+        $sql = "SELECT *
+                FROM ".$this->tbl_global_agenda."
+                WHERE access_url_id = $access_url_id
+                $dateCondition";
         $result = Database::query($sql);
         $my_events = array();
         if (Database::num_rows($result)) {
@@ -1730,6 +1738,7 @@ class Agenda
                 $this->events[] = $event;
             }
         }
+
         return $my_events;
     }
 
@@ -1743,7 +1752,7 @@ class Agenda
     {
         $utcTimeZone = new DateTimeZone('UTC');
         $platformTimeZone = new DateTimeZone(_api_get_timezone());
-        
+
         $eventDate = new DateTime($utcTime, $utcTimeZone);
         $eventDate->setTimezone($platformTimeZone);
 
@@ -1871,7 +1880,6 @@ class Agenda
             }
             $select->addOptGroup($options, get_lang('Groups'));
         }
-
 
         // adding the individual users to the select form
         if (is_array($userList)) {

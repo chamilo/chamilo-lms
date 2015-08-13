@@ -49,31 +49,44 @@
                             <a href="{{ button_home_url }}" class="btn btn-success btn-block" target="_self" onclick="javascript: window.parent.API.save_asset();">
                                 <i class="fa fa-home"></i> {{ button_home_text }}
                             </a>
-
-                            <div class="image-avatar">{{ lp_preview_image }}</div>
-
-                            <div id="lp_navigation_elem" class="navegation-bar">
-                                {{ navigation_bar }}
-
-                                <div id="progress_bar">
-                                    {{ progress_bar }}
+                            <div class="image-avatar">
+                                <div class="row">
+                                    {% if lp_author == '' %}
+                                       <div class="col-md-12">
+                                            {{ lp_preview_image }}
+                                        </div> 
+                                    {% else %}
+                                        <div class="col-md-4">
+                                            {{ lp_preview_image }}
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="description-autor"> {{ lp_author }} </div>
+                                        </div>
+                                    {% endif %}
+                                    
                                 </div>
                             </div>
-
-                            <div class="description-autor">{{ lp_author }}</div>
-
+                            <div id="progress_bar">
+                                {{ progress_bar }}
+                            </div>
+                            <div id="lp_navigation_elem" class="navegation-bar">
+                                {{ navigation_bar }}
+                            </div>
                             {% if show_audio_player %}
                                 <div id="lp_media_file">
                                     {{ media_player }}
                                 </div>
                             {% endif %}
-                        </div>
+                       </div>
                     </div>
                 {% endif %}
 
                 {# TOC layout #}
-                <div id="toc_id" name="toc_name">
-                    <div id="learning_path_toc" class="scorm-list">{{ lp_html_toc }}</div>
+                <div id="toc_id" class="scorm-body" name="toc_name">
+                    <div class="scorm-title"> <i class="fa fa-book"></i> {{ lp_title_scorm }}</div>
+                    <div id="learning_path_toc" class="scorm-list">
+                        {{ lp_html_toc }}
+                    </div>
                 </div>
                 {# end TOC layout #}
 

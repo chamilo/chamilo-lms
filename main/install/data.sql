@@ -1800,4 +1800,4 @@ VALUES
 ('gamification_mode', '1', 'Yes'),
 ('gamification_mode', '0', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.43' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.44' WHERE variable = 'chamilo_database_version';

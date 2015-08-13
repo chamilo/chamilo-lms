@@ -2202,7 +2202,6 @@ class CourseRestorer
 				} else {
                     // No existing survey with the same language and the same code, we just copy the survey
                     $new_id = Database::insert($table_sur, $params);
-                    var_dump($new_id);
 
                     if ($new_id) {
                         $sql = "UPDATE $table_sur SET survey_id = iid WHERE iid = $new_id";

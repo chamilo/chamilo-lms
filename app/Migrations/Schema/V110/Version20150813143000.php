@@ -27,8 +27,8 @@ class Version20150813143000 extends AbstractMigrationChamilo
             null,
             null,
             1,
-            true,
             false,
+            true,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
                 1 => ['value' => 'false', 'text' => 'No']
@@ -52,6 +52,24 @@ class Version20150813143000 extends AbstractMigrationChamilo
                 1 => ['value' => 'false', 'text' => 'No']
             ]
         );
+        $this->addSettingCurrent(
+            'course_catalog_published',
+            null,
+            'radio',
+            'Course',
+            'false',
+            'CourseCatalogIsPublicTitle',
+            'CourseCatalogIsPublicComment',
+            null,
+            null,
+            1,
+            false,
+            true,
+            [
+                0 => ['value' => 'true', 'text' => 'Yes'],
+                1 => ['value' => 'false', 'text' => 'No']
+            ]
+        );
     }
 
     /**
@@ -70,7 +88,8 @@ class Version20150813143000 extends AbstractMigrationChamilo
                     'o.variable',
                     [
                         'prevent_multiple_simultaneous_login',
-                        'gradebook_detailed_admin_view'
+                        'gradebook_detailed_admin_view',
+                        'course_catalog_published'
                     ]
                 )
             );
@@ -82,7 +101,8 @@ class Version20150813143000 extends AbstractMigrationChamilo
                     's.variable',
                     [
                         'prevent_multiple_simultaneous_login',
-                        'gradebook_detailed_admin_view'
+                        'gradebook_detailed_admin_view',
+                        'course_catalog_published'
                     ]
                 )
             );

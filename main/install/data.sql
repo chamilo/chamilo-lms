@@ -1720,8 +1720,9 @@ VALUES
 ('sso_force_redirect', NULL, 'radio', 'Security', 'false', 'SSOForceRedirectTitle', 'SSOForceRedirectComment', NULL, NULL, 1),
 ('session_course_ordering', NULL, 'radio', 'Session', 'false', 'SessionCourseOrderingTitle', 'SessionCourseOrderingComment', NULL, NULL, 1),
 ('gamification_mode', NULL, 'radio', 'Platform', '0', 'GamificationModeTitle', 'GamificationModeComment', NULL, NULL, 1),
-('prevent_multiple_simultaneous_login', NULL, 'radio', 'Security', 'false', 'PreventMultipleSimultaneousLoginTitle', 'PreventMultipleSimultaneousLoginComment', NULL, NULL, 1),
-('gradebook_detailed_admin_view', NULL, 'radio', 'Gradebook', 'false', 'ShowAdditionalColumnsInStudentResultsPageTitle', 'ShowAdditionalColumnsInStudentResultsPageComment', NULL, NULL, 1);
+('prevent_multiple_simultaneous_login', NULL, 'radio', 'Security', 'false', 'PreventMultipleSimultaneousLoginTitle', 'PreventMultipleSimultaneousLoginComment', NULL, NULL, 0),
+('gradebook_detailed_admin_view', NULL, 'radio', 'Gradebook', 'false', 'ShowAdditionalColumnsInStudentResultsPageTitle', 'ShowAdditionalColumnsInStudentResultsPageComment', NULL, NULL, 1),
+('course_catalog_published', NULL, 'radio', 'Course', 'false', 'CourseCatalogIsPublicTitle', 'CourseCatalogIsPublicComment', NULL, NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -1798,9 +1799,11 @@ VALUES
 ('session_course_ordering', 'false', 'No'),
 ('gamification_mode', '1', 'Yes'),
 ('gamification_mode', '0', 'No'),
-('prevent_multiple_simultaneous_login', '1', 'Yes'),
-('prevent_multiple_simultaneous_login', '0', 'No'),
-('gradebook_detailed_admin_view', '1', 'Yes'),
-('gradebook_detailed_admin_view', '0', 'No');
+('prevent_multiple_simultaneous_login', 'true', 'Yes'),
+('prevent_multiple_simultaneous_login', 'false', 'No'),
+('gradebook_detailed_admin_view', 'true', 'Yes'),
+('gradebook_detailed_admin_view', 'false', 'No'),
+('course_catalog_published', 'true', 'Yes'),
+('course_catalog_published', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.46' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.47' WHERE variable = 'chamilo_database_version';

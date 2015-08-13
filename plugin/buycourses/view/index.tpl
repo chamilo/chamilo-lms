@@ -1,7 +1,6 @@
 <link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
 <div class="row">
     <div class="col-md-12">
-
         {% if isAdmin == 'true' %}
             <div class="help-bycourse">
                 <div class="row">
@@ -32,9 +31,7 @@
             </div>
         {% endif %}
 
-
         <div class="row">
-
             <div class="col-md-3">
                 <div class="thumbnail">
                     <a href="src/list.php">
@@ -45,37 +42,38 @@
                     </div>
                 </div>
             </div>
+
             {% if isAdmin == 'true' %}
-            <div class="col-md-3">
-                <div class="thumbnail">
-                    <a href="src/configuration.php">
-                        <img src="resources/img/128/settings.png">
-                    </a>
-                    <div class="caption">
-                        <a class="btn btn-default btn-sm" href="src/configuration.php">{{ ConfigurationOfCoursesAndPrices }}</a>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="src/configuration.php">
+                            <img src="resources/img/128/settings.png">
+                        </a>
+                        <div class="caption">
+                            <a class="btn btn-default btn-sm" href="src/configuration.php">{{ ConfigurationOfCoursesAndPrices }}</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="thumbnail">
-                    <a href="src/paymentsetup.php">
-                        <img src="resources/img/128/paymentsettings.png">
-                    </a>
-                    <div class="caption">
-                        <a class="btn btn-default btn-sm" href="src/paymentsetup.php">{{ ConfigurationOfPayments }} </a>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="src/paymentsetup.php">
+                            <img src="resources/img/128/paymentsettings.png">
+                        </a>
+                        <div class="caption">
+                            <a class="btn btn-default btn-sm" href="src/paymentsetup.php">{{ ConfigurationOfPayments }} </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="thumbnail">
-                    <a href="src/pending_orders.php">
-                        <img src="resources/img/128/backlogs.png">
-                    </a>
-                    <div class="caption">
-                        <a class="btn btn-default btn-sm" href="src/pending_orders.php"> {{ OrdersPendingOfPayment }} </a>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="src/pending_orders.php">
+                            <img src="resources/img/128/backlogs.png">
+                        </a>
+                        <div class="caption">
+                            <a class="btn btn-default btn-sm" href="src/pending_orders.php"> {{ OrdersPendingOfPayment }} </a>
+                        </div>
                     </div>
                 </div>
-            </div>
             {% endif %}
         </div>
     </div>

@@ -112,10 +112,11 @@ See https://support.chamilo.org/issues/6976
 }
 
 .inner_lp_toc .scorm_item_section {
-    background:#ECF0F1;
+    background:#E8ECEF;
     color:#666;
     padding: 5px 0px 5px 0px;
     font-size: 12px;
+    font-weight: bold;
 }
 
 .inner_lp_toc .scorm_item {
@@ -305,8 +306,9 @@ See https://support.chamilo.org/issues/6976
 }
 /* for section */
 .scorm_item_section.scorm_completed{
-  color: red;
+  color: #ffffff;
   padding-right: 1.5em;
+  background-color: #AAB3B8;
 }
 .scorm_item_section{
   background: #2b3d53; /* Old browsers */
@@ -346,6 +348,7 @@ See https://support.chamilo.org/issues/6976
 }
 .scorm_item_normal{
   padding:5px;
+  margin-left: 10px;
 }
 .scorm_item_normal a.items-list{
   color: #666666;
@@ -368,9 +371,6 @@ See https://support.chamilo.org/issues/6976
 .scorm-body .scorm-title .fa-book{
     color: #00829C;
 }
-
-
-/* items scorm*/
 .scorm_item_normal.scorm_completed {
   background:url("../../main/img/scorm/scorm_completed.png") no-repeat left center;
 }
@@ -381,6 +381,15 @@ See https://support.chamilo.org/issues/6976
   background:url("../../main/img/scorm/scorm_not_attempted.png") no-repeat left center;	
 }
 .scorm_item_normal.scorm_highlight{
-  background:url("../../main/img/scorm/scorm_highlight.png") no-repeat left center;	
+  background:url("../../main/img/scorm/scorm_highlight.png") no-repeat left center !important;
+  color: #009AB8;
 }
+.scorm_item_normal.scorm_highlight.scorm_completed{
+  background:url("../../main/img/scorm/scorm_current.png") no-repeat left center !important;
+  color: #009AB8;
+}
+.scorm_item_normal.scorm_highlight a{
+  color: #009AB8 !important;
+}
+
 /* END SCORM CSS BASE*/

@@ -38,5 +38,6 @@ $(document).ready(function() {
 
         $('#learning_path_right_zone iframe').on('load', loadLearningPathRigthZone);
     });
+    
 
 });

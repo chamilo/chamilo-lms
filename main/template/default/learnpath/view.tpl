@@ -100,7 +100,7 @@
                 {% if lp_mode == 'fullscreen' %}
                     <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width: 100%; height: 100%" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                 {% else %}
-                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" style="display: block; width: 100%; height: 100%" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" style="display: block; width: 100%; height: 100%" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                 {% endif %}
             </div>
             {# end right Zone #}
@@ -173,7 +173,7 @@
                 {% endif %}
         {% endif %}
     };
-
+    
     $(document).ready(function() {
         updateContentHeight();
 
@@ -184,8 +184,11 @@
         $(window).resize(function() {
             updateContentHeight();
         });
+        
+        
     });
-
+    
+    
     window.onload = updateContentHeight();
     window.onresize = updateContentHeight();
 
@@ -207,4 +210,5 @@
             });
         });
     });
+     
 </script>

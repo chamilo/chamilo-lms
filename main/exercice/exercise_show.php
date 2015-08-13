@@ -64,14 +64,12 @@ if (api_is_course_session_coach(
     }
 }
 
-$allowCoachFeedbackExercises = api_get_setting(
-    'allow_coach_feedback_exercises'
-) == 'true';
+$allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
 
 $maxEditors = intval(api_get_setting('exercise_max_ckeditors_in_page'));
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh() || api_is_student_boss();
-$isAllowedCoachToEdit = api_is_allowed_to_edit(false, true);
-$isAllowedFeedback = false;
+$isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);
+$isFeedbackAllowed = false;
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
@@ -520,16 +518,16 @@ foreach ($questionList as $questionId) {
             $locked == false &&
             !api_is_drh() &&
             !api_is_student_boss() &&
-            $isAllowedCoachToEdit
+            $isCoachAllowedToEdit
         ) {
-            $isAllowedFeedback = true;
-        } else if (!$isAllowedCoachToEdit && $allowCoachFeedbackExercises) {
-            $isAllowedFeedback = true;
+            $isFeedbackAllowed = true;
+        } else if (!$isCoachAllowedToEdit && $allowCoachFeedbackExercises) {
+            $isFeedbackAllowed = true;
         }
 
         $marksname = '';
 
-		if ($isAllowedFeedback) {
+		if ($isFeedbackAllowed) {
 			$name = "fckdiv".$questionId;
 			$marksname = "marksName".$questionId;
 			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
@@ -593,7 +591,7 @@ foreach ($questionList as $questionId) {
 			}
 		}
 
-		if ($is_allowedToEdit && $isAllowedFeedback) {
+		if ($is_allowedToEdit && $isFeedbackAllowed) {
 			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
 				$marksname = "marksName".$questionId;
                 echo '<div id="'.$marksname.'" style="display:none">';
@@ -728,14 +726,14 @@ echo $total_score_text;
 echo $exercise_content;
 echo $total_score_text;
 
-if ($isAllowedFeedback) {
+if ($isFeedbackAllowed) {
     if (is_array($arrid) && is_array($arrmarks)) {
         $strids = implode(",",$arrid);
         $marksid = implode(",",$arrmarks);
     }
 }
 
-if ($isAllowedFeedback) {
+if ($isFeedbackAllowed) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
 		echo '<form name="myform" id="myform" action="'.api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$learnpath_id.'">';

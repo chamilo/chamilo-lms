@@ -2276,18 +2276,22 @@ class Agenda
                 $new_file_name = uniqid('');
                 $new_path = $uploadDir.'/'.$new_file_name;
                 $result = @move_uploaded_file($fileUserUpload['tmp_name'], $new_path);
-                $comment = Database::escape_string($comment);
-                $file_name = Database::escape_string($file_name);
                 $course_id = api_get_course_int_id();
                 $size = intval($fileUserUpload['size']);
                 // Storing the attachments if any
                 if ($result) {
-                    $sql = 'INSERT INTO '.$agenda_table_attachment.'(c_id, filename, comment, path, agenda_id, size) '.
-                        "VALUES ($course_id, '".$file_name."', '".$comment."', '".$new_file_name."' , '".$eventId."', '".$size."' )";
-                    Database::query($sql);
-                    $id = Database::insert_id();
+                    $params = [
+                        'c_id' => $course_id,
+                        'filename' => $file_name,
+                        'comment' => $comment,
+                        'path' => $new_file_name,
+                        'agenda_id' => $eventId,
+                        'size' => $size
+                    ];
+                    $id = Database::insert($agenda_table_attachment, $params);
                     if ($id) {
-                        $sql = "UPDATE $agenda_table_attachment SET id = iid WHERE iid = $id";
+                        $sql = "UPDATE $agenda_table_attachment
+                                SET id = iid WHERE iid = $id";
                         Database::query($sql);
 
                         api_item_property_update(

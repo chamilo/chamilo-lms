@@ -397,36 +397,53 @@ class Plugin
         // Adding course settings.
         if (!empty($this->course_settings)) {
             foreach ($this->course_settings as $setting) {
-                $variable = Database::escape_string($setting['name']);
+                $variable = $setting['name'];
                 $value ='';
-
                 if (isset($setting['init_value'])) {
-                    $value = Database::escape_string($setting['init_value']);
+                    $value = ($setting['init_value']);
                 }
 
                 $type = 'textfield';
                 if (isset($setting['type'])) {
-                    $type = Database::escape_string($setting['type']);
+                    $type = $setting['type'];
                 }
 
                 if (isset($setting['group'])) {
-                    $group = Database::escape_string($setting['group']);
-                    $sql = "SELECT value FROM $t_course
-                            WHERE c_id = $courseId AND variable = '$group' AND subkey = '$variable' ";
+                    $group = $setting['group'];
+                    $sql = "SELECT value
+                            FROM $t_course
+                            WHERE
+                                c_id = $courseId AND
+                                variable = '".Database::escape_string($group)."' AND
+                                subkey = '".Database::escape_string($variable)."'
+                            ";
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
-                        $sql = "INSERT INTO $t_course (c_id, variable, subkey, value, category, type) VALUES
-                                ($courseId, '$group', '$variable', '$value', 'plugins', '$type')";
-                        Database::query($sql);
+                        $params = [
+                            'c_id' => $courseId,
+                            'variable' => $group,
+                            'subkey' => $variable,
+                            'value' => $value,
+                            'category' => 'plugins',
+                            'type' => $type
+                        ];
+                        Database::insert($t_course, $params);
                     }
                 } else {
                     $sql = "SELECT value FROM $t_course
                             WHERE c_id = $courseId AND variable = '$variable' ";
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
-                        $sql = "INSERT INTO $t_course (c_id, variable, value, category, subkey, type) VALUES
-                                ($courseId, '$variable','$value', 'plugins', '$plugin_name', '$type')";
-                        Database::query($sql);
+
+                        $params = [
+                            'c_id' => $courseId,
+                            'variable' => $variable,
+                            'subkey' => $plugin_name,
+                            'value' => $value,
+                            'category' => 'plugins',
+                            'type' => $type
+                        ];
+                        Database::insert($t_course, $params);
                     }
                 }
             }

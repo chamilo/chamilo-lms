@@ -350,20 +350,21 @@ class Link extends Model
                 $order = $orderMax + 1;
                 $order = intval($order);
                 $session_id = api_get_session_id();
-                $sql = "INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order, session_id)
-                        VALUES ($course_id,
-                        '" . Database::escape_string($category_title) . "',
-                        '" . Database::escape_string($description) . "',
-                        '$order',
-                        $session_id
-                        )";
-                Database:: query($sql);
-                $linkId = Database:: insert_id();
-                // iid
-                $sql = "UPDATE $tbl_categories SET id = iid WHERE iid = $linkId";
-                Database:: query($sql);
+
+                $params = [
+                    'c_id' => $course_id,
+                    'category_title' => $category_title,
+                    'description' => $description,
+                    'display_order' => $order,
+                    'session_id' => $session_id
+                ];
+                $linkId = Database::insert($tbl_categories, $params);
 
                 if ($linkId) {
+                    // iid
+                    $sql = "UPDATE $tbl_categories SET id = iid WHERE iid = $linkId";
+                    Database:: query($sql);
+
                     // add link_category visibility
                     // course ID is taken from context in api_set_default_visibility
                     api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
@@ -1243,13 +1244,16 @@ class Link extends Model
             "SELECT MAX(display_order) FROM " . $tbl_categories . " WHERE c_id = $course_id "
         );
         list ($max_order) = Database:: fetch_row($result);
-        Database:: query(
-            "INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order)
-            VALUES (" . $course_id . ", '" . Database::escape_string(
-                $catname
-            ) . "','','" . ($max_order + 1) . "')"
-        );
-        return Database:: insert_id();
+
+        $params = [
+            'c_id' => $course_id,
+            'category_title' => $catname,
+            'description' => '',
+            'display_order' => $max_order + 1
+        ];
+        $id = Database::insert($tbl_categories, $params);
+
+        return $id;
     }
 
     /**

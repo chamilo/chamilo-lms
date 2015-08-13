@@ -1225,6 +1225,7 @@ class CourseRestorer
             $sessionId
         );
 		$this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
+
 		return $new_id;
 	}
 
@@ -1239,26 +1240,26 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_LINK] as $id => $link) {
 				$cat_id = $this->restore_link_category($link->category_id, $session_id);
 				$sql = "SELECT MAX(display_order) FROM  $link_table
-				        WHERE c_id = ".$this->destination_course_id." AND category_id='" . self::DBUTF8escapestring($cat_id). "'";
+				        WHERE
+				            c_id = ".$this->destination_course_id." AND
+				            category_id='" . intval($cat_id). "'";
 				$result = Database::query($sql);
     			list($max_order) = Database::fetch_array($result);
 
-    			$condition_session = "";
+                $params = [];
     			if (!empty($session_id)) {
-    				$condition_session = " , session_id = '$session_id' ";
+                    $params['session_id'] = $session_id;
     			}
 
-				$sql = "INSERT INTO $link_table SET
-                        c_id            = ".$this->destination_course_id." ,
-                        url             = '".self::DBUTF8escapestring($link->url)."',
-                        title           = '".self::DBUTF8escapestring($link->title)."',
-                        description     = '".self::DBUTF8escapestring($link->description)."',
-                        category_id     = '".$cat_id."',
-                        on_homepage     = '".$link->on_homepage."',
-                        display_order   = '".($max_order+1)."' $condition_session";
-				Database::query($sql);
+                $params['c_id'] = $this->destination_course_id;
+                $params['url'] = self::DBUTF8($link->url);
+                $params['title'] = self::DBUTF8($link->title);
+                $params['description'] = self::DBUTF8($link->description);
+                $params['category_id'] = $cat_id;
+                $params['on_homepage'] = $link->on_homepage;
+                $params['display_order'] = $max_order+1;
 
-                $id = Database::insert_id();
+                $id = Database::insert($link_table, $params);
 
                 if ($id) {
                     $sql = "UPDATE $link_table SET id = iid WHERE iid = $id";
@@ -1275,9 +1276,9 @@ class CourseRestorer
      */
     public function restore_link_category($id, $session_id = 0)
     {
-        $condition_session = "";
+        $params = [];
         if (!empty($session_id)) {
-            $condition_session = " , session_id = '$session_id' ";
+            $params['session_id'] = $session_id;
         }
 
         if ($id == 0) {
@@ -1292,20 +1293,18 @@ class CourseRestorer
             $result=Database::query($sql);
             list($orderMax)=Database::fetch_array($result,'NUM');
             $display_order=$orderMax+1;
-            $sql = "INSERT INTO $link_cat_table SET
-			            c_id = ".$this->destination_course_id.",
-			            category_title = '".self::DBUTF8escapestring($link_cat->title)."',
-			            description = '".self::DBUTF8escapestring($link_cat->description)."',
-			            display_order = '".$display_order."'
-			            $condition_session ";
-            Database::query($sql);
-            $new_id = Database::insert_id();
+
+            $params['c_id'] = $this->destination_course_id;
+            $params['category_title'] = self::DBUTF8($link_cat->title);
+            $params['description'] = self::DBUTF8($link_cat->description);
+            $params['display_order'] = $display_order;
+
+            $new_id = Database::insert($link_cat_table, $params);
 
             if ($new_id) {
                 $sql = "UPDATE $link_cat_table SET id = iid WHERE iid = $new_id";
                 Database::query($sql);
             }
-
 
             $this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id = $new_id;
             return $new_id;
@@ -1324,8 +1323,11 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
 				$sql = "DELETE FROM ".$tool_intro_table."
-				        WHERE c_id = ".$this->destination_course_id."  AND id='".self::DBUTF8escapestring($tool_intro->id)."'";
+				        WHERE
+				            c_id = ".$this->destination_course_id." AND
+				            id='".self::DBUTF8escapestring($tool_intro->id)."'";
 				Database::query($sql);
+
                 $tool_intro->intro_text = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $tool_intro->intro_text,
                     $this->course->code,
@@ -1334,14 +1336,14 @@ class CourseRestorer
                     $this->course->info['path']
                 );
 
-				$sql = "INSERT INTO ".$tool_intro_table." SET
-                        c_id = ".$this->destination_course_id.",
-                        id='".self::DBUTF8escapestring($tool_intro->id)."',
-                        intro_text = '".self::DBUTF8escapestring($tool_intro->intro_text)."'
-                        session_id = $sessionId";
-                Database::query($sql);
+                $params = [
+                    'c_id' => $this->destination_course_id,
+                    'id' => self::DBUTF8($tool_intro->id),
+                    'intro_text' => self::DBUTF8($tool_intro->intro_text),
+                    'session_id' => $sessionId
+                ];
 
-                $id = Database::insert_id();
+                $id = Database::insert($tool_intro_table, $params);
                 if ($id) {
                     $sql = "UPDATE $tool_intro_table SET id = iid WHERE iid = $id";
                     Database::query($sql);
@@ -1371,17 +1373,16 @@ class CourseRestorer
                     $this->course->info['path']
                 );
 
-				$sql = "INSERT INTO ".$table." SET
-        				c_id = ".$this->destination_course_id." ,
-        				title = '".self::DBUTF8escapestring($event->title)."',
-        				content = '".self::DBUTF8escapestring($event->content)."',
-                        all_day = '".$event->all_day."',
-        				start_date = '".$event->start_date."',
-        				end_date = '".$event->end_date."',
-        				session_id = $sessionId";
-
-				Database::query($sql);
-				$new_event_id = Database::insert_id();
+                $params = [
+                    'c_id' => $this->destination_course_id,
+                    'title' => self::DBUTF8($event->title),
+                    'content' => self::DBUTF8($event->content),
+                    'all_day' => $event->all_day,
+                    'start_date' => $event->start_date,
+                    'end_date' => $event->end_date,
+                    'session_id' => $sessionId
+                ];
+				$new_event_id = Database::insert($table, $params);
 
                 if ($new_event_id) {
                     $sql = "UPDATE $table SET id = iid WHERE iid = $new_event_id";
@@ -1404,21 +1405,24 @@ class CourseRestorer
 					$attachment_event = Database::query($sql);
 					$attachment_event = Database::fetch_object($attachment_event);
 
-					if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
+					if (file_exists($origin_path.$attachment_event->path) &&
+                        !is_dir($origin_path.$attachment_event->path)
+                    ) {
 						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
 						$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
 						//$copy_result = true;
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
-							$sql = "INSERT INTO ".$table_attachment." SET
-                                        c_id = ".$this->destination_course_id.",
-                                        path = '".self::DBUTF8escapestring($new_filename)."',
-                                        comment = '".self::DBUTF8escapestring($attachment_event->comment)."',
-                                        size = '".$attachment_event->size."',
-                                        filename = '".$attachment_event->filename."',
-                                        agenda_id = '".$new_event_id."' ";
-							Database::query($sql);
-                            $id = Database::insert_id();
+
+							$params = [
+                                'c_id' => $this->destination_course_id,
+                                'path' => self::DBUTF8($new_filename),
+                                'comment' => self::DBUTF8($attachment_event->comment),
+                                'size' => $attachment_event->size,
+                                'filename' => $attachment_event->filename,
+                                'agenda_id' => $new_event_id
+                            ];
+                            $id = Database::insert($table_attachment, $params);
                             if ($id) {
                                 $sql = "UPDATE $table_attachment SET id = iid WHERE iid = $id";
                                 Database::query($sql);
@@ -1435,16 +1439,17 @@ class CourseRestorer
 						$copy_result = copy($origin_path.$event->attachment_path, $destination_path.$new_filename);
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
-							$sql = "INSERT INTO ".$table_attachment." SET
-                                c_id = ".$this->destination_course_id.",
-                                path = '".self::DBUTF8escapestring($new_filename)."',
-                                comment = '".self::DBUTF8escapestring($event->attachment_comment)."',
-                                size = '".$event->attachment_size."',
-                                filename = '".$event->attachment_filename."',
-                                agenda_id = '".$new_event_id."' ";
-							Database::query($sql);
 
-                            $id = Database::insert_id();
+                            $params = [
+                                'c_id' => $this->destination_course_id,
+                                'path' => self::DBUTF8($new_filename),
+                                'comment' => self::DBUTF8($event->attachment_comment),
+                                'size' => $event->size,
+                                'filename' => $event->filename,
+                                'agenda_id' => $new_event_id
+                            ];
+                            $id = Database::insert($table_attachment, $params);
+
                             if ($id) {
                                 $sql = "UPDATE $table_attachment SET id = iid WHERE iid = $id";
                                 Database::query($sql);
@@ -1474,20 +1479,17 @@ class CourseRestorer
                     $this->course->info['path']
                 );
 
-				$condition_session = "";
+                $params = [];
 				if (!empty($session_id)) {
 					$session_id = intval($session_id);
-					$condition_session = " , session_id = '$session_id' ";
+                    $params['session_id'] = $session_id;
 				}
-				$sql = "INSERT INTO $table SET
-				        c_id = ".$this->destination_course_id." ,
-				        description_type = '".self::DBUTF8escapestring($cd->description_type)."',
-				        title = '".self::DBUTF8escapestring($cd->title)."',
-				        content = '".self::DBUTF8escapestring($description_content)."'
-				        $condition_session";
-				Database::query($sql);
+                $params['c_id'] = $this->destination_course_id;
+                $params['description_type'] = self::DBUTF8($cd->description_type);
+                $params['title'] = self::DBUTF8($cd->title);
+                $params['content'] = self::DBUTF8($description_content);
 
-                $id = Database::insert_id();
+                $id = Database::insert($table, $params);
                 if ($id) {
                     $sql = "UPDATE $table SET id = iid WHERE iid = $id";
                     Database::query($sql);
@@ -2419,18 +2421,17 @@ class CourseRestorer
                     Database::query($sql);
 
                     if ($lp->visibility) {
-                        $sql = "INSERT INTO $table_tool SET
-					            c_id = ".$this->destination_course_id.",
-					            name = '".self::DBUTF8escapestring($lp->name)."',
-					            link = 'newscorm/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=$session_id',
-					            image = 'scormbuilder.gif',
-					            visibility = '0',
-					            admin = '0',
-					            address = 'squaregrey.gif',
-					            session_id = $session_id
-                            ";
-                        Database::query($sql);
-                        $insertId = Database::insert_id();
+                        $params = [
+                            'c_id' => $this->destination_course_id,
+                            'name' => self::DBUTF8($lp->name),
+                            'link' => 'newscorm/lp_controller.php?action=view&lp_id=$new_lp_id&id_session='.$session_id,
+                            'image' => 'scormbuilder.gif',
+                            'visibility' => '0',
+                            'admin' => '0',
+                            'address' => 'squaregrey.gif',
+                            'session_id' => $session_id
+                        ];
+                        $insertId = Database::insert($table_tool, $params);
                         if ($insertId) {
                             $sql = "UPDATE $table_tool SET id = iid WHERE iid = $insertId";
                             Database::query($sql);

@@ -4701,16 +4701,16 @@ function copy_folder_course_session(
                 mkdir($new_pathname, api_get_permissions_for_new_directories());
 
                 // Insert new folder with destination session_id.
-                $sql = "INSERT INTO ".$table." SET
-                        c_id = $course_id,
-                        path = '$path',
-                        comment = '".Database::escape_string($document->comment)."',
-                        title = '".Database::escape_string(basename($new_pathname))."' ,
-                        filetype='folder',
-                        size= '0',
-                        session_id = '$session_id'";
-                Database::query($sql);
-                $document_id = Database::insert_id();
+                $params = [
+                    'c_id' => $course_id,
+                    'path' => $path,
+                    'comment' => $document->comment,
+                    'title' => basename($new_pathname),
+                    'filetype' => 'folder',
+                    'size' => '0',
+                    'session_id' => $session_id
+                ];
+                $document_id = Database::insert($table, $params);
                 if ($document_id) {
 
                     $sql = "UPDATE $table SET id = iid WHERE iid = $document_id";

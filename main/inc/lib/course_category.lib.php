@@ -104,13 +104,15 @@ function getCategories($category)
 function addNode($code, $name, $canHaveCourses, $parent_id)
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $code = trim(Database::escape_string($code));
-    $name = trim(Database::escape_string($name));
-    $parent_id = trim(Database::escape_string($parent_id));
-    $canHaveCourses = Database::escape_string($canHaveCourses);
-    $code = CourseManager::generate_course_code($code);
+    $code = trim($code);
+    $name = trim($name);
+    $parent_id = trim($parent_id);
+    $canHaveCourses = $canHaveCourses;
 
-    $result = Database::query("SELECT 1 FROM $tbl_category WHERE code='$code'");
+    $code = CourseManager::generate_course_code($code);
+    $sql = "SELECT 1 FROM $tbl_category
+            WHERE code = '".Database::escape_string($code)."'";
+    $result = Database::query($sql);
     if (Database::num_rows($result)) {
         return false;
     }
@@ -118,10 +120,16 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $row = Database::fetch_array($result);
     $tree_pos = $row['maxTreePos'] + 1;
 
-    $sql = "INSERT INTO $tbl_category(name, code, parent_id, tree_pos, children_count, auth_course_child)
-            VALUES('$name', '$code', " .(empty($parent_id) ? "NULL" : "'$parent_id'") . ", '$tree_pos', '0', '$canHaveCourses')";
-    Database::query($sql);
-    $categoryId = Database::insert_id();
+    $params = [
+        'name' => $name,
+        'code' => $code,
+        'parent_id' => empty($parent_id) ? "NULL" : $parent_id,
+        'tree_pos' => $tree_pos,
+        'children_count' => 0,
+        'auth_course_child' => $canHaveCourses
+    ];
+
+    $categoryId = Database::insert($tbl_category, $params);
 
     updateParentCategoryChildrenCount($parent_id, 1);
 

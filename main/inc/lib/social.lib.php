@@ -464,20 +464,20 @@ class SocialManager extends UserManager
         $course_visibility = $course_access_settings['visibility'];
 
         $user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_code);
-        
+
         //$valor = api_get_settings_params();
         $course_path = api_get_path(SYS_COURSE_PATH).$course_directory;   // course path
         if (api_get_setting('course_images_in_courses_list') === 'true') {
             if (file_exists($course_path.'/course-pic85x85.png')) {
-                $image = $my_course['course_info']['course_image']; 
+                $image = $my_course['course_info']['course_image'];
                 $imageCourse = Display::img($image, $course_title, array('class'=>'img-course'));
             } else {
                 $imageCourse = Display::return_icon('session_default_small.png', $course_title, array('class' => 'img-course'));
-            
-            }        
+
+            }
         } else {
                 $imageCourse = Display::return_icon('course.png', get_lang('Course'), array('class' => 'img-default'));
-        }       
+        }
         //$imageCourse = Display::return_icon('course.png', get_lang('Course'));
 
         //display course entry
@@ -496,9 +496,9 @@ class SocialManager extends UserManager
         } else {
             $result .= $course_title." "." ".get_lang('CourseClosed')."";
         }
-       
+
         $result .= '</li>';
-        
+
 
         $session = '';
         $active = false;
@@ -614,9 +614,9 @@ class SocialManager extends UserManager
                 ]
             );
         }
-        
+
         $skillBlock = $template->get_template('social/avatar_block.tpl');
-        
+
 
         return $template->fetch($skillBlock);
     }
@@ -1189,9 +1189,15 @@ class SocialManager extends UserManager
 
             // Insert
             $newFileName = $social.$newFileName;
-            $sql = "INSERT INTO $tbl_message_attach(filename, comment, path, message_id, size)
-				  VALUES ( '$safeFileName', '$safeFileComment', '$newFileName' , '$messageId', '".$fileAttach['size']."' )";
-            Database::query($sql);
+
+            $params = [
+                'filename' => $safeFileName,
+                'comment' => $safeFileComment,
+                'path' => $newFileName,
+                'message_id' => $messageId,
+                'size' => $fileAttach['size'],
+            ];
+            Database::insert($tbl_message_attach, $params);
             $flag = true;
         }
 
@@ -1543,7 +1549,7 @@ class SocialManager extends UserManager
         }
 
         $userInfo = api_get_user_info($userId, true, false, true);
-        
+
         $template->assign('user', $userInfo);
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
@@ -1558,7 +1564,7 @@ class SocialManager extends UserManager
         }
         $chatEnabled = api_is_global_chat_enabled();
         $templateName = $template->assign('chat_enabled', $chatEnabled);
-        
+
         $templateName = $template->get_template('social/user_block.tpl');
 
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
@@ -1667,7 +1673,7 @@ class SocialManager extends UserManager
                         $statusIcon = Display::return_icon('statusoffline.png',get_lang('Offline'));
                         $status=0;
                     }
-                    
+
                     $friendHtml.= '<li class="list-group-item">';
                     $friendAvatarMedium = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_MEDIUM);
                     $friendAvatarSmall = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_SMALL);
@@ -1681,7 +1687,7 @@ class SocialManager extends UserManager
                         $friendHtml .= '<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">';
                         $friendHtml .=  $friend_avatar.' <span class="username-all">' . $name_user . '</span>';
                     }
-                    
+
                     $friendHtml .= '</a>';
                     $friendHtml.= '</li>';
                 }

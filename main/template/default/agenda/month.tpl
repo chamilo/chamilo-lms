@@ -44,7 +44,7 @@ $(document).ready(function() {
         zIndex: 20000 // added because of qtip2
    	});
 
-	var title = $( "#title" ),
+	var title = $("#title"),
 	content = $( "#content" ),
 	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
 
@@ -114,8 +114,8 @@ $(document).ready(function() {
 			// Cleans the selected attr
 		    clean_user_select();
 
-            //Sets the 1st item selected by default
-            //$('#users_to_send_id option').eq(0).attr('selected', 'selected');
+            // Sets the 1st item selected by default
+            $('#users_to_send_id option').eq(0).attr('selected', 'selected');
 
 			// Update chz-select
 			//$("#users_to_send_id").trigger("chosen:updated");
@@ -167,7 +167,7 @@ $(document).ready(function() {
                                             var user_id = String(user).substring(5,user_length);
                                         }
                                         var temp = "&user_id="+user_id;
-                                        var position =String(window.location).indexOf("&user");
+                                        var position = String(window.location).indexOf("&user");
                                         var url_length = String(window.location).length;
                                         var url = String(window.location).substring(0, position)+temp;
                                         /*if (position > 0) {
@@ -181,6 +181,10 @@ $(document).ready(function() {
 									    calendar.fullCalendar("rerenderEvents");*/
                                     }
 
+                                    $("#title").val('');
+                                    $("#content").val('');
+                                    $("#comment").val('');
+
                                     calendar.fullCalendar("refetchEvents");
                                     calendar.fullCalendar("rerenderEvents");
 
@@ -190,9 +194,9 @@ $(document).ready(function() {
 						}
 					},
 					close: function() {
-						$("#title").attr('value', '');
-						$("#content").attr('value', '');
-                        $("#comment").attr('value', '');
+                        $("#title").val('');
+                        $("#content").val('');
+                        $("#comment").val('');
 					}
 				});
 
@@ -440,9 +444,9 @@ $(document).ready(function() {
 						$("#content_edit").html('');
                         $("#comment_edit").html('');
 
-                        $("#title").attr('value', '');
-                        $("#content").attr('value', '');
-                        $("#comment").attr('value', '');
+                        $("#title").val('');
+                        $("#content").val('');
+                        $("#comment").val('');
 					}
 				});
 			} else {
@@ -552,7 +556,6 @@ $(document).ready(function() {
                     <div id="simple_title"></div>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-3 control-label">
                     <b>{{ "Description" |get_lang}}</b>

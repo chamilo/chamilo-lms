@@ -84,7 +84,7 @@ $invitationcode = $_GET['invitationcode'];
 if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     $userid = api_get_user_id();
     // Survey_code of the survey
-    $surveyCode = Database::escape_string($_GET['scode']);
+    $surveyCode = $_GET['scode'];
     if ($isAnonymous) {
         $autoInvitationcode = "auto-ANONY_".md5(time())."-$surveyCode";
     } else {
@@ -94,7 +94,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
 
     // The survey code must exist in this course, or the URL is invalid
     $sql = "SELECT * FROM $table_survey
-            WHERE c_id = $course_id AND code = '".$surveyCode."'";
+            WHERE c_id = $course_id AND code = '".Database::escape_string($surveyCode)."'";
     $result = Database::query($sql);
     if (Database :: num_rows($result) > 0) {
         // Check availability
@@ -103,16 +103,22 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
 
         check_time_availability($tempdata);
         // Check for double invitation records (insert should be done once)
-        $sql = "SELECT user from $table_survey_invitation
+        $sql = "SELECT user
+                FROM $table_survey_invitation
                 WHERE
                     c_id = $course_id AND
                     invitation_code = '".Database::escape_string($autoInvitationcode)."'";
         $result = Database::query($sql);
         $now = api_get_utc_datetime();
         if (Database :: num_rows($result) == 0) {
-            $sql = "INSERT INTO $table_survey_invitation (c_id, survey_code,user, invitation_code, invitation_date) ";
-            $sql .= " VALUES ($course_id, \"$surveyCode\", \"$userid\", \"$autoInvitationcode\", '".$now."')";
-            Database::query($sql);
+            $params = [
+                'c_id' => $course_id ,
+                'survey_code' => $surveyCode,
+                'user' => $userid,
+                'invitation_code' => $autoInvitationcode,
+                'invitation_date' => $now,
+            ];
+            Database::insert($table_survey_invitation, $params);
         }
         // From here we use the new invitationcode auto-userid-surveycode string
         $_GET['invitationcode'] = $autoInvitationcode;
@@ -147,9 +153,6 @@ $sql = "SELECT * FROM $table_survey
             c_id = $course_id AND
             code='".Database::escape_string($survey_invitation['survey_code'])."'";
 $result = Database::query($sql);
-
-
-
 
 if (Database::num_rows($result) > 1) {
     if ($_POST['language']) {
@@ -354,7 +357,7 @@ if ($survey_data['form_fields'] != '' &&
     $form = new FormValidator(
         'profile',
         'post',
-        api_get_self()."?".str_replace('&show_form=1', '&show_form=1', $_SERVER['QUERY_STRING'])
+        api_get_self()."?".str_replace('&show_form=1', '&show_form=1', Security::remove_XSS($_SERVER['QUERY_STRING']))
     );
 
     if (api_is_western_name_order()) {
@@ -468,7 +471,6 @@ if ($survey_data['form_fields'] != '' &&
         '.$jquery_ready_content.'
     });
     </script>';
-
 
     $form->addButtonNext(get_lang('Next'));
     $form->setDefaults($user_data);
@@ -1096,9 +1098,9 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                             ON survey_question.question_id = survey_question_option.question_id AND
                             survey_question_option.c_id = $course_id
                             WHERE
-                                survey_question.survey_id = '".Database :: escape_string($survey_invitation['survey_id'])."' AND
-                                 survey_question.c_id = $course_id  AND
-                                 survey_question.question_id IN (".$imploded.")
+                                survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
+                                survey_question.c_id = $course_id  AND
+                                survey_question.question_id IN (".$imploded.")
                             ORDER $order_sql ";
                     $result = Database::query($sql);
                     $question_counter_max = Database :: num_rows($result);
@@ -1221,11 +1223,8 @@ if ($survey_data['survey_type'] === '0') {
 } elseif ($survey_data['survey_type'] === '1') { //conditional/personality-test type survey
     if (isset($_GET['show']) || isset($_POST['personality'])) {
         $numberofpages = count($paged_questions);
-        //echo '<br />'; echo 'num pages norma:'.$numberofpages; echo '<br />';
-        //echo '<pre>'; print_r($paged_questions_sec);
         if (!empty($paged_questions_sec) && count($paged_questions_sec) > 0) {
             // In case we're in the second phase, also sum the second group questions
-            //echo 'pagesec :'.count($paged_questions_sec);
             $numberofpages += count($paged_questions_sec);
             //echo 'pagesec :';
         } else {
@@ -1237,53 +1236,42 @@ if ($survey_data['survey_type'] === '0') {
         if ($personality == 0) {
             if (($show <= $numberofpages) || !$_GET['show']) {
                 $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
-                //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
                 if ($survey_data['one_question_per_page'] == 0) {
                     if ($personality >= 0) {
                         $form->addHidden('personality', $personality);
-                        //echo '<input type="hidden" name="personality" value="'.$personality.'">';
                     }
                 } else {
                     if ($personality > 0) {
                         $form->addHidden('personality', $personality);
-                        //echo '<input type="hidden" name="personality" value="'.$personality.'">';
                     }
                 }
 
                 if ($numberofpages == $show) {
-                    //echo '<input type="hidden" name="personality" value="'.$personality.'">';
                     $form->addHidden('personality', $personality);
                 }
             }
         }
 
         if ($show > $numberofpages && $_GET['show'] && $personality == 0) {
-            //echo '<input type="hidden" name="personality" value="'.$personality.'">';
             $form->addHidden('personality', $personality);
         } elseif ($personality > 0) {
             if ($survey_data['one_question_per_page'] == 1) {
                 if ($show >= $numberofpages) {
                     $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
-                    //echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
                 } else {
-                    //echo '<input type="hidden" name="personality" value="'.$personality.'">';
                     $form->addHidden('personality', $personality);
-                    //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
                     $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
                 }
             } else {
                 // if the personality test hidden input was set.
-                //echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
                 $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
             }
         }
     } elseif ($survey_data['form_fields'] == '') {
         // This is the case when the show_profile_form is true but there are not form_fields
-        //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
         $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
     } elseif (!is_array($user_data)) {
         // If the user is not registered in the platform we do not show the form to update his information
-        //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
         $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
     }
 }

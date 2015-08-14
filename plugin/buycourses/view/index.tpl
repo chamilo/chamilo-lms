@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
 <div class="row">
     <div class="col-md-12">
-        {% if isAdmin == 'true' %}
+        {% if _u.is_admin %}
             <div class="help-bycourse">
                 <div class="row">
                     <div class="col-md-7">
@@ -38,19 +38,19 @@
                         <img src="resources/img/128/buycourses.png">
                     </a>
                     <div class="caption">
-                        <a class="btn btn-default btn-sm" href="src/list.php">{{ BuyCourses }}</a>
+                        <a class="btn btn-default btn-sm" href="src/list.php">{{ 'BuyCourses'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                     </div>
                 </div>
             </div>
 
-            {% if isAdmin == 'true' %}
+            {% if _u.is_admin %}
                 <div class="col-md-3">
                     <div class="thumbnail">
                         <a href="src/configuration.php">
                             <img src="resources/img/128/settings.png">
                         </a>
                         <div class="caption">
-                            <a class="btn btn-default btn-sm" href="src/configuration.php">{{ ConfigurationOfCoursesAndPrices }}</a>
+                            <a class="btn btn-default btn-sm" href="src/configuration.php">{{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                             <img src="resources/img/128/paymentsettings.png">
                         </a>
                         <div class="caption">
-                            <a class="btn btn-default btn-sm" href="src/paymentsetup.php">{{ ConfigurationOfPayments }} </a>
+                            <a class="btn btn-default btn-sm" href="src/paymentsetup.php">{{ 'ConfigurationOfPayments'|get_plugin_lang('BuyCoursesPlugin') }} </a>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                             <img src="resources/img/128/backlogs.png">
                         </a>
                         <div class="caption">
-                            <a class="btn btn-default btn-sm" href="src/pending_orders.php"> {{ OrdersPendingOfPayment }} </a>
+                            <a class="btn btn-default btn-sm" href="src/pending_orders.php"> {{ 'OrdersPendingOfPayment'|get_plugin_lang('BuyCoursesPlugin') }} </a>
                         </div>
                     </div>
                 </div>

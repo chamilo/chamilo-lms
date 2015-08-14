@@ -4667,9 +4667,6 @@ $AddTimeLimit = "Pievienot laika ierobežojumus";
 $EditTimeLimit = "Rediģēt laika limitu";
 $SendEmailToAdminTitle = "E-pasta brīdinājums, par jauna Kursa izveidi platformā.";
 $SendEmailToAdminComment = "Nosūtīt e-pastu platformas administratoram, katru reizi kad Lektors reģistrē jaunu kursu.";
-$MathMimetexTitle = "mime TEX matemātiskais redaktors";
-$MathMimetexComment = "Ieslēgt mimeTeX matemātisko redaktoru.
-The activation is not fully realized if not previously installed on the server the executable MimeTex file. See the Chamilo installation guide";
 $MathASCIImathMLTitle = "ASCIIMathML matemātiskais redaktors";
 $MathASCIImathMLComment = "Ieslēgt ASCIIMathML matemātisko redaktoru";
 $YoutubeForStudentsTitle = "Ļaut Kursantiem ievietot video no YouTube";

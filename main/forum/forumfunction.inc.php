@@ -686,9 +686,9 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         $new_file_name = isset($new_file_name) ? $new_file_name : '';
         if ($image_moved) {
             if (empty($_FILES['picture']['name'])) {
-                $sql_image = " ";
+                $sql_image = "";
             } else {
-                $sql_image = " forum_image='".Database::escape_string($new_file_name)."', ";
+                $sql_image = $new_file_name;
                 delete_forum_image($values['forum_id']);
             }
         }
@@ -714,7 +714,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         Database::update(
             $table_forums,
             $params,
-            ['c_id = ? AND = forum_id' => [$course_id, $values['forum_id']]]
+            ['c_id = ? AND forum_id = ?' => [$course_id, $values['forum_id']]]
         );
 
         api_item_property_update(
@@ -728,7 +728,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
 
         $return_message = get_lang('ForumEdited');
     } else {
-        $sql_image = '';
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
         }
@@ -753,8 +752,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         $last_id = Database::insert($table_forums, $params);
         if ($last_id > 0) {
 
-            $sql = "UPDATE $table_forums SET forum_id = $last_id
-                    WHERE iid = $last_id";
+            $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $last_id";
             Database::query($sql);
 
             api_item_property_update(
@@ -1802,7 +1800,8 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 
         return $return_array;
     } else {
-        // We have to loop through the results to find the first one that is actually visible to students (forum_category, forum, thread AND post are visible).
+        // We have to loop through the results to find the first one that is
+        // actually visible to students (forum_category, forum, thread AND post are visible).
         while ($row = Database::fetch_array($result)) {
             if ($row['visible'] == '1' && $row['thread_visibility'] == '1' && $row['forum_visibility'] == '1') {
                 $return_array['last_post_id'] = $row['post_id'];

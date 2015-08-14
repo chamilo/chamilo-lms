@@ -2380,7 +2380,6 @@ class CourseRestorer
                         $lp->publicated_on  = null;
                     }
                 }
-                //$condition_session
 
                 $params = [
                     'c_id' => $this->destination_course_id,
@@ -2404,7 +2403,7 @@ class CourseRestorer
                     'autolaunch' => self::DBUTF8($lp->autolaunch),
                     'created_on' => self::DBUTF8($lp->created_on),
                     'modified_on' => self::DBUTF8($lp->modified_on),
-                    'publicated_on' => self::DBUTF8($lp->publicated_on),
+                    'publicated_on' => empty($lp->publicated_on) ? api_get_utc_datetime() : self::DBUTF8($lp->publicated_on),
                     'expired_on' => self::DBUTF8($lp->expired_on),
                     'debug' => self::DBUTF8($lp->debug),
                 ];

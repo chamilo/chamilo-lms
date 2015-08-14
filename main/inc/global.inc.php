@@ -67,15 +67,6 @@ if ($passwordEncryption == 'bcrypt') {
 // Check the PHP version
 api_check_php_version($includePath.'/');
 
-// Error reporting settings.
-if (api_get_setting('server_type') == 'test') {
-    ini_set('display_errors', '1');
-    ini_set('log_errors', '1');
-    error_reporting(-1);
-} else {
-    error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-}
-
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
@@ -276,6 +267,15 @@ foreach ($result as & $row) {
     }
     $_setting[$key][] = $row['selected_value'];
     $_plugins[$key][] = $row['selected_value'];
+}
+
+// Error reporting settings.
+if (api_get_setting('server_type') == 'test') {
+    ini_set('display_errors', '1');
+    ini_set('log_errors', '1');
+    error_reporting(-1);
+} else {
+    error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 }
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.

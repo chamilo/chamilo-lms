@@ -38,14 +38,16 @@ class CkEditor extends Editor
      */
     public function createHtml()
     {
-        $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/frames.css';
-        if (!is_file($cssFile)) {
-            $cssFile = api_get_path(WEB_CSS_PATH).'frames.css';
-        } else {
-            $cssFile = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/frames.css';
+        $style = '';
+        if (trim($this->value) == '<html><head><title></title></head><body></body></html>') {
+            $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/frames.css';
+            if (!is_file($cssFile)) {
+                $cssFile = api_get_path(WEB_CSS_PATH).'frames.css';
+            } else {
+                $cssFile = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/frames.css';
+            }
+            $style = '<link href="'.$cssFile.'" rel="stylesheet" media="screen" type="text/css" />';
         }
-        
-        $style = '<link href="'.$cssFile.'" rel="stylesheet" media="screen" type="text/css" />';
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
                  '.$style.$this->value.'
                  </textarea>';

@@ -46,7 +46,7 @@ $web_path  = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document/image
 
 $style = '<style>';
 $style .= '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
-$style .= '@import "'.api_get_path(WEB_CSS_PATH).api_get_visual_theme().'/default.css";';
+$style .= '@import "'.api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/default.css";';
 $style .='</style>';
 
 ?>

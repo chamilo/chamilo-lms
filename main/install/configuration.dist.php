@@ -214,9 +214,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
     'extra_fields'
 ];*/
 
-// Reset password in portal
-//$_configuration['user_reset_password'] = false;
-// password token expired
-//$_configuration['user_reset_password_token_limit'] = 3600;
 // Show Default view and Session view link in My Courses tab
 //$_configuration['my_courses_view_by_session'] = false;

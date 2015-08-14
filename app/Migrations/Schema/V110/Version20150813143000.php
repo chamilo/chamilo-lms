@@ -70,6 +70,42 @@ class Version20150813143000 extends AbstractMigrationChamilo
                 1 => ['value' => 'false', 'text' => 'No']
             ]
         );
+        $this->addSettingCurrent(
+            'user_reset_password',
+            null,
+            'radio',
+            'Security',
+            'false',
+            'ResetPasswordTokenTitle',
+            'ResetPasswordTokenComment',
+            null,
+            null,
+            1,
+            false,
+            true,
+            [
+                0 => ['value' => 'true', 'text' => 'Yes'],
+                1 => ['value' => 'false', 'text' => 'No']
+            ]
+        );
+        $this->addSettingCurrent(
+            'user_reset_password_token_limit',
+            null,
+            'text',
+            'Security',
+            '3600',
+            'ResetPasswordTokenLimitTitle',
+            'ResetPasswordTokenLimitComment',
+            null,
+            null,
+            1,
+            false,
+            true,
+            [
+                0 => ['value' => 'true', 'text' => 'Yes'],
+                1 => ['value' => 'false', 'text' => 'No']
+            ]
+        );
     }
 
     /**
@@ -89,7 +125,9 @@ class Version20150813143000 extends AbstractMigrationChamilo
                     [
                         'prevent_multiple_simultaneous_login',
                         'gradebook_detailed_admin_view',
-                        'course_catalog_published'
+                        'course_catalog_published',
+                        'user_reset_password',
+                        'user_reset_password_token_limit'
                     ]
                 )
             );
@@ -102,7 +140,8 @@ class Version20150813143000 extends AbstractMigrationChamilo
                     [
                         'prevent_multiple_simultaneous_login',
                         'gradebook_detailed_admin_view',
-                        'course_catalog_published'
+                        'course_catalog_published',
+                        'user_reset_password'
                     ]
                 )
             );

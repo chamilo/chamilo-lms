@@ -1722,7 +1722,10 @@ VALUES
 ('gamification_mode', NULL, 'radio', 'Platform', '0', 'GamificationModeTitle', 'GamificationModeComment', NULL, NULL, 1),
 ('prevent_multiple_simultaneous_login', NULL, 'radio', 'Security', 'false', 'PreventMultipleSimultaneousLoginTitle', 'PreventMultipleSimultaneousLoginComment', NULL, NULL, 0),
 ('gradebook_detailed_admin_view', NULL, 'radio', 'Gradebook', 'false', 'ShowAdditionalColumnsInStudentResultsPageTitle', 'ShowAdditionalColumnsInStudentResultsPageComment', NULL, NULL, 1),
-('course_catalog_published', NULL, 'radio', 'Course', 'false', 'CourseCatalogIsPublicTitle', 'CourseCatalogIsPublicComment', NULL, NULL, 0);
+('course_catalog_published', NULL, 'radio', 'Course', 'false', 'CourseCatalogIsPublicTitle', 'CourseCatalogIsPublicComment', NULL, NULL, 0),
+('user_reset_password', NULL, 'radio', 'Security', 'false', 'ResetPasswordTokenTitle', 'ResetPasswordTokenComment', NULL, NULL, 0),
+('user_reset_password_token_limit', NULL, 'text', 'Security', '3600', 'ResetPasswordTokenLimitTitle', 'ResetPasswordTokenLimitComment', NULL, NULL, 0);
+
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -1804,6 +1807,8 @@ VALUES
 ('gradebook_detailed_admin_view', 'true', 'Yes'),
 ('gradebook_detailed_admin_view', 'false', 'No'),
 ('course_catalog_published', 'true', 'Yes'),
-('course_catalog_published', 'false', 'No');
+('course_catalog_published', 'false', 'No'),
+('user_reset_password', 'true', 'Yes'),
+('user_reset_password', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.47' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.48' WHERE variable = 'chamilo_database_version';

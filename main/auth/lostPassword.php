@@ -107,8 +107,8 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
             $by_username = true;
             foreach ($usersRelatedToUsername as $user) {
                 if ($_configuration['password_encryption'] != 'none') {
-                    $setting = api_get_configuration_value('user_reset_password');
-                    if ($setting) {
+                    $setting = api_get_setting('user_reset_password');
+                    if ($setting === 'true') {
                         $userObj = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user['uid']);
                         Login::sendResetEmail($userObj);
                     } else {

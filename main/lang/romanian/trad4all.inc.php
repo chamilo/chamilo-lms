@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$OpenBadgesBannerText = "Puteți genera insigne să recunoască abilitățile învățate de la utilizatorii sai, oferind recunoaștere pentru realizarea lor, pe care le pot prezenta aptitudinile și competențele dobândite prin embleme lor, care va fi afișate în profilul dvs. de utilizator. Pentru mai multe informații despre insigne deschise <a href=\";
+$OpenBadgesBannerText = "Puteți genera insigne să recunoască abilitățile învățate de la utilizatorii sai, oferind recunoaștere pentru realizarea lor, pe care le pot prezenta aptitudinile și competențele dobândite prin embleme lor, care va fi afișate în profilul dvs. de utilizator. Pentru mai multe informații despre insigne deschise http://openbadges.org/.";
 $OpenBadgesIntroduction = "Acum puteți seta recunoaștere a competențelor de a învăța în orice curs de acest campus virtual.";
 $DesignANewBadgeComment = "Proiectarea unui nou logo, download și upload pe platforma.";
 $TheBadgesWillBeSentToThatBackpack = "Aceste logo sunt trimise la acest rucsac";
@@ -5175,8 +5175,6 @@ $SendEmailToAdminComment = "Trimite un email la administratorul platformei, ori 
 $UserTag = "Eticheta de uzuar";
 $SelectSession = "Seleccionati sesiunea";
 $SpecialCourse = "Curs special";
-$MathMimetexTitle = "Editor matematic mimeTEX";
-$MathMimetexComment = "Activați editorul matematic mimetex. Activarea nu este pe deplin realizat, dacă nu este instalat pe fișierul executabil serverul mimetex. Consultați ghidul de instalare Chamilo.";
 $MathASCIImathMLTitle = "Editor matematic ASCIIMathML";
 $MathASCIImathMLComment = "Activați editorul matematic ASCIIMathML";
 $YoutubeForStudentsTitle = "Permiteți elevilor pentru a introduce clipuri video de pe YouTube";

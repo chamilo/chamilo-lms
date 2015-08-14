@@ -78,7 +78,7 @@ class BuyCoursesPlugin extends Plugin
      * Get the currency for sales
      * @return array The selected currency. Otherwise return false
      */
-    public function getCurrency()
+    public function getSelectedCurrency()
     {
         return Database::select(
             '*',
@@ -194,6 +194,50 @@ class BuyCoursesPlugin extends Plugin
             Database::get_main_table(BuyCoursesUtils::TABLE_TRANSFER),
             ['id = ?' => intval($id)]
         );
+    }
+
+    /**
+     * List courses details from the buy-course table and the course table
+     * @return array The courses. Otherwise return false
+     */
+    public function getCourses()
+    {
+        $buyCourseTable = Database::get_main_table(TABLE_BUY_COURSE);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        $courses = Database::select(
+            ['a.course_id', 'a.visible', 'a.price', 'b.*'],
+            "$buyCourseTable a, $courseTable b",
+            [
+                'where' => [
+                    'a.course_id = b.id AND a.session_id = ?' => [0]
+                ]
+            ]
+        );
+
+        return $courses;
+    }
+
+    /**
+     * List sessions details from the buy-session table and the session table
+     * @return array The sessions. Otherwise return false
+     */
+    public function getSessions()
+    {
+        $buySessionTable = Database::get_main_table(TABLE_BUY_SESSION);
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        $sessions = Database::select(
+            ['a.session_id', 'a.visible', 'a.price', 'b.*'],
+            "$buySessionTable a, $sessionTable b",
+            [
+                'where' => [
+                    'a.session_id = b.id'
+                ]
+            ]
+        );
+
+        return $sessions;
     }
 
 }

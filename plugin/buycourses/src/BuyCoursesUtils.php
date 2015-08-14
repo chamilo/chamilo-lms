@@ -183,4 +183,150 @@ class BuyCoursesUtils
         return $form;
     }
 
+    /**
+     * Sync the courses and sessions
+     */
+    public static function sync()
+    {
+        $buySessionCourseTable = Database::get_main_table(TABLE_BUY_SESSION_COURSE);
+        $sessionCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tableBuySession = Database::get_main_table(TABLE_BUY_SESSION);
+        $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        Database::update(
+            $buySessionCourseTable,
+            ['sync' => 0]
+        );
+
+        $sql = "
+            SELECT session_id, c_id, nbr_users
+            FROM $sessionCourseTable";
+        $res = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($res)) {
+            $sql = "
+                SELECT 1 FROM $buySessionCourseTable
+                WHERE session_id=" . $row['session_id'];
+            $result = Database::query($sql);
+
+            if (Database::affected_rows($result) > 0) {
+                Database::update(
+                    $buySessionCourseTable,
+                    ['sync' => 1],
+                    ['session_id = ?' => $row['session_id']]
+                );
+            } else {
+                $courseCode = api_get_course_info_by_id($row['c_id'])['code'];
+                Database::insert(
+                    $buySessionCourseTable,
+                    [
+                        'session_id' => $row['session_id'],
+                        'course_code' => $courseCode,
+                        'nbr_users' => $row['nbr_users'],
+                        'sync' => 1
+                    ]
+                );
+            }
+        }
+        
+        Database::delete(
+            $buySessionCourseTable,
+            ['sync = ?' => 0]
+        );
+
+        Database::update(
+            $tableBuyCourse,
+            ['sync' => 0]
+        );
+
+        $sql = "SELECT id, code, title FROM $tableCourse";
+        $res = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($res)) {
+            $sql = "
+                SELECT session_id FROM $buySessionCourseTable
+                WHERE course_code = '" . $row['code'] . "' LIMIT 1";
+            $courseIdSession = Database::fetch_assoc(Database::query($sql))['session_id'];
+
+            if (!is_numeric($courseIdSession)) {
+                $courseIdSession = 0;
+            }
+
+            $sql = "
+                SELECT 1 FROM $tableBuyCourse
+                WHERE course_id='" . $row['id'] . "'";
+            $result = Database::query($sql);
+
+            if (Database::affected_rows($result) > 0) {
+                Database::update(
+                    $tableBuyCourse,
+                    [
+                        'sync' => 1,
+                        'session_id' => $courseIdSession
+                    ],
+                    ['course_id = ?' => $row['id']]
+                );
+            } else {
+                Database::insert(
+                    $tableBuyCourse,
+                    [
+                        'session_id' => $courseIdSession,
+                        'course_id' => $row['id'],
+                        'code' => $row['code'],
+                        'title' => $row['title'],
+                        'visible' => 0,
+                        'sync' => 1
+                    ]
+                );
+            }
+        }
+
+        Database::delete(
+            $tableBuyCourse,
+            ['sync = ?' => 0]
+        );
+
+        Database::update(
+            $tableBuySession,
+            ['sync' => 0]
+        );
+
+        $sql = "
+            SELECT id, name, access_start_date, access_end_date
+            FROM $tableSession";
+        $res = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($res)) {
+            $sql = "SELECT 1 FROM $tableBuySession WHERE session_id='" . $row['id'] . "';";
+            $result = Database::query($sql);
+
+            if (Database::affected_rows($result) > 0) {
+                Database::update(
+                    $tableBuySession,
+                    ['sync' => 1],
+                    ['session_id = ?' => $row['id']]
+                );
+            } else {
+                Database::insert(
+                    $tableBuySession,
+                    [
+                        'session_id' => $row['id'],
+                        'name' => $row['name'],
+                        'date_start' => $row['access_start_date'],
+                        'date_end' => $row['access_end_date'],
+                        'visible' => 0,
+                        'sync' => 1
+                    ]
+                );
+            }
+        }
+
+        Database::delete(
+            $tableBuySession,
+            ['sync = ?' => 0]
+        );
+    }
+
 }

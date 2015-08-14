@@ -32,15 +32,14 @@ function show_image(image,width,height) {
 }
 </script>';
 
-$export_csv = isset ($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$sessionId = isset($_GET['id_session']) ? $_GET['id_session'] : 0;
+$export = isset($_GET['export']) ? $_GET['export'] : false;
+$sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
 
 if (empty($sessionId)) {
     $sessionId = api_get_session_id();
 }
 
-
-if ($export_csv) {
+if ($export) {
     ob_start();
 }
 $csv_content = array();
@@ -318,8 +317,13 @@ if (!empty($student_id)) {
 
     echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
             Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+
     echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv">'.
             Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
+
+    echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=xls">'.
+    Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
+
     if (!empty ($user_info['email'])) {
         $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
             Display :: return_icon('mail_send.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -400,7 +404,7 @@ if (!empty($student_id)) {
 
     // cvs information
     $csv_content[] = array(
-        get_lang('Informations', '')
+        get_lang('Information', '')
     );
     $csv_content[] = array (
         get_lang('Name', ''),
@@ -1157,9 +1161,17 @@ if (!empty($student_id)) {
     <?php
     } //end details
 }
-if ($export_csv) {
+
+if ($export) {
     ob_end_clean();
-    Export::arrayToCsv($csv_content, 'reporting_student');
+    switch ($export) {
+        case 'csv':
+            Export::arrayToCsv($csv_content, 'reporting_student');
+            break;
+        case 'xls':
+            Export::arrayToXls($csv_content, 'reporting_student');
+        break;
+    }
     exit;
 }
 

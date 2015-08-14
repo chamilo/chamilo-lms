@@ -169,9 +169,7 @@ VALUES
 ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
 ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
 ('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
-('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
 ('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0),
-('enabled_asciisvg',NULL,'radio','Editor','false','AsciiSvgTitle','AsciiSvgComment',NULL,NULL, 0),
 ('include_asciimathml_script',NULL,'radio','Editor','false','IncludeAsciiMathMlTitle','IncludeAsciiMathMlComment',NULL,NULL, 0),
 ('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0),
 ('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0),
@@ -477,12 +475,8 @@ VALUES
 ('send_email_to_admin_when_create_course','false','No'),
 ('go_to_course_after_login','true','Yes'),
 ('go_to_course_after_login','false','No'),
-('math_mimetex','true','Yes'),
-('math_mimetex','false','No'),
 ('math_asciimathML','true','Yes'),
 ('math_asciimathML','false','No'),
-('enabled_asciisvg','true','Yes'),
-('enabled_asciisvg','false','No'),
 ('include_asciimathml_script','true','Yes'),
 ('include_asciimathml_script','false','No'),
 ('youtube_for_students','true','Yes'),
@@ -1816,4 +1810,4 @@ VALUES
 ('my_courses_view_by_session', 'true', 'Yes'),
 ('my_courses_view_by_session', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.49' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.50' WHERE variable = 'chamilo_database_version';

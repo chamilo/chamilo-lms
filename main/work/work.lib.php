@@ -686,23 +686,21 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $course_id = api_get_course_int_id();
     $move_file = intval($move_file);
     $tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sql = "SELECT title, url FROM $tbl_work WHERE c_id = $course_id AND id ='".$move_file."'";
+    $sql = "SELECT title, url FROM $tbl_work
+            WHERE c_id = $course_id AND id ='".$move_file."'";
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');
     $title = empty($row['title']) ? basename($row['url']) : $row['title'];
 
-    global $gradebook;
-    //@todo use formvalidator please!
-    $form = '<form class="form-horizontal" name="move_to_form" action="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
-    $form .= '<legend>'.get_lang('MoveFile').' - '.Security::remove_XSS($title).'</legend>';
-    $form .= '<input type="hidden" name="item_id" value="'.$move_file.'" />';
-    $form .= '<input type="hidden" name="action" value="move_to" />';
-    $form .= '<div class="control-group">
-                <label>
-                    <span class="form_required">*</span>'.get_lang('Select').'
-                </label>
-                <div class="controls">';
-    $form .= ' <select name="move_to_id">';
+    $form = new FormValidator(
+        'move_to_form',
+        'post',
+        api_get_self().'?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($curdirpath)
+    );
+
+    $form->addHeader(get_lang('MoveFile').' - '.Security::remove_XSS($title));
+    $form->addHidden('item_id', $move_file);
+    $form->addHidden('action', 'move_to');
 
     //group documents cannot be uploaded in the root
     if ($group_dir == '') {
@@ -716,7 +714,8 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
                 //2. inside the folder you want to move
                 //3. inside a subfolder of the folder you want to move
                 if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
-                    $form .= '<option value="'.$fid.'">'.$folder.'</option>';
+                    //$form .= '<option value="'.$fid.'">'.$folder.'</option>';
+                    $options[$fid] = $folder;
                 }
             }
         }
@@ -729,22 +728,16 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
                 //cannot copy dir into his own subdir
                 $display_folder = substr($folder, strlen($group_dir));
                 $display_folder = ($display_folder == '') ? '/ ('.get_lang('Root').')' : $display_folder;
-                $form .= '<option value="'.$fid.'">'.$display_folder.'</option>'."\n";
+                //$form .= '<option value="'.$fid.'">'.$display_folder.'</option>'."\n";
+                $options[$fid] = $display_folder;
             }
         }
     }
 
-    $form .= '</select>';
-    $form .= '  </div>
-            </div>';
-    $form .= '<div class="control-group">
-                    <div class="controls">
-                        <button type="submit" class="save" name="move_file_submit">'.get_lang('MoveFile').'</button>
-                    </div>
-                </div>';
-    $form .= '</form>';
-    $form .= '<div style="clear: both; margin-bottom: 10px;"></div>';
-    return $form;
+    $form->addSelect('move_to_id', get_lang('Select'), $options);
+    $form->addButtonSend(get_lang('MoveFile'), 'move_file_submit');
+
+    return $form->returnForm();
 }
 
 /**
@@ -880,20 +873,24 @@ function get_work_path($id)
 
 /**
  * Update the url of a work in the student_publication table
- * @param   integer $id of the work to update
- * @param   string  $new_path Destination directory where the work has been moved (must end with a '/')
+ * @param integer $id of the work to update
+ * @param string  $new_path Destination directory where the work has been moved (must end with a '/')
  * @param int $parent_id
+ *
  * @return  -1 on error, sql query result on success
  */
 function updateWorkUrl($id, $new_path, $parent_id)
 {
-    if (empty($id)) return -1;
+    if (empty($id)) {
+        return -1;
+    }
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = api_get_course_int_id();
     $id = intval($id);
     $parent_id = intval($parent_id);
 
-    $sql = "SELECT * FROM $table WHERE c_id = $course_id AND id = $id";
+    $sql = "SELECT * FROM $table
+            WHERE c_id = $course_id AND id = $id";
     $res = Database::query($sql);
     if (Database::num_rows($res) != 1) {
         return -1;
@@ -902,12 +899,14 @@ function updateWorkUrl($id, $new_path, $parent_id)
         $filename = basename($row['url']);
         $new_url = $new_path.$filename;
         $new_url = Database::escape_string($new_url);
-        $sql2 = "UPDATE $table SET
-                    url = '$new_url',
-                    parent_id = '$parent_id'
-                 WHERE c_id = $course_id AND id = $id";
-        $res2 = Database::query($sql2);
-        return $res2;
+
+        $sql = "UPDATE $table SET
+                   url = '$new_url',
+                   parent_id = '$parent_id'
+                WHERE c_id = $course_id AND id = $id";
+        $res = Database::query($sql);
+
+        return $res;
     }
 }
 
@@ -2120,7 +2119,7 @@ function get_work_user_list(
                         if ($locked) {
                             $action .= Display::return_icon('move_na.png', get_lang('Move'),array(), ICON_SIZE_SMALL);
                         } else {
-                            $action .= '<a href="'.$url.'work.php?'.api_get_cidreq().'&action=move&item_id='.$item_id.'" title="'.get_lang('Move').'">'.
+                            $action .= '<a href="'.$url.'work.php?'.api_get_cidreq().'&action=move&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Move').'">'.
                                 Display::return_icon('move.png', get_lang('Move'),array(), ICON_SIZE_SMALL).'</a>';
                         }
                     }
@@ -4312,7 +4311,7 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
     $folders = array();
     $session_id = intval($sessionId);
     $groupId = intval($groupId);
-    $sessionCondition = empty($sessionId) ? " AND session_id = 0 " : " AND session_id='".$session_id."'";
+    $sessionCondition = empty($sessionId) ? " AND (session_id = 0 OR session_id IS NULL) " : " AND session_id='".$session_id."'";
     $sql = "SELECT id, url, title
             FROM $work_table
             WHERE

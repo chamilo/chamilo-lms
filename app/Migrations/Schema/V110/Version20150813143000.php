@@ -91,7 +91,7 @@ class Version20150813143000 extends AbstractMigrationChamilo
         $this->addSettingCurrent(
             'user_reset_password_token_limit',
             null,
-            'text',
+            'textfield',
             'Security',
             '3600',
             'ResetPasswordTokenLimitTitle',

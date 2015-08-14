@@ -1727,7 +1727,7 @@ VALUES
 ('gradebook_detailed_admin_view', NULL, 'radio', 'Gradebook', 'false', 'ShowAdditionalColumnsInStudentResultsPageTitle', 'ShowAdditionalColumnsInStudentResultsPageComment', NULL, NULL, 1),
 ('course_catalog_published', NULL, 'radio', 'Course', 'false', 'CourseCatalogIsPublicTitle', 'CourseCatalogIsPublicComment', NULL, NULL, 0),
 ('user_reset_password', NULL, 'radio', 'Security', 'false', 'ResetPasswordTokenTitle', 'ResetPasswordTokenComment', NULL, NULL, 0),
-('user_reset_password_token_limit', NULL, 'text', 'Security', '3600', 'ResetPasswordTokenLimitTitle', 'ResetPasswordTokenLimitComment', NULL, NULL, 0),
+('user_reset_password_token_limit', NULL, 'textfield', 'Security', '3600', 'ResetPasswordTokenLimitTitle', 'ResetPasswordTokenLimitComment', NULL, NULL, 0),
 ('my_courses_view_by_session', NULL, 'radio', 'Session', 'false', 'ViewMyCoursesListBySessionTitle', 'ViewMyCoursesListBySessionComment', NULL, NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)

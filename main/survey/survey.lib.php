@@ -149,24 +149,25 @@ class SurveyManager
             }
             // We do this (temporarily) to have the array match the quickform elements immediately
             // idealiter the fields in the db match the quickform fields
-            $return['survey_code'] 			= $return['code'];
-            $return['survey_title'] 		= $return['title'];
-            $return['survey_subtitle'] 		= $return['subtitle'];
-            $return['survey_language'] 		= $return['lang'];
-            $return['start_date'] 			= $return['avail_from'];
-            $return['end_date'] 			= $return['avail_till'];
-            $return['survey_share'] 		= $return['is_shared'];
-            $return['survey_introduction'] 	= $return['intro'];
-            $return['survey_thanks'] 		= $return['surveythanks'];
-            $return['survey_type'] 		    = $return['survey_type'];
-            $return['one_question_per_page']= $return['one_question_per_page'];
-            $return['show_form_profile']	= $return['show_form_profile'];
+            $return['survey_code'] = $return['code'];
+            $return['survey_title'] = $return['title'];
+            $return['survey_subtitle'] = $return['subtitle'];
+            $return['survey_language'] = $return['lang'];
+            $return['start_date'] = $return['avail_from'];
+            $return['end_date'] = $return['avail_till'];
+            $return['survey_share'] = $return['is_shared'];
+            $return['survey_introduction'] = $return['intro'];
+            $return['survey_thanks'] = $return['surveythanks'];
+            $return['survey_type'] = $return['survey_type'];
+            $return['one_question_per_page'] = $return['one_question_per_page'];
+            $return['show_form_profile'] = $return['show_form_profile'];
             $return['input_name_list']		= isset($return['input_name_list']) ? $return['input_name_list'] : null;
-            $return['shuffle']				= $return['shuffle'];
-            $return['parent_id']			= $return['parent_id'];
-            $return['survey_version']		= $return['survey_version'];
-            $return['anonymous']		        = $return['anonymous'];
+            $return['shuffle'] = $return['shuffle'];
+            $return['parent_id'] = $return['parent_id'];
+            $return['survey_version'] = $return['survey_version'];
+            $return['anonymous'] = $return['anonymous'];
         }
+
         return $return;
     }
 
@@ -213,7 +214,7 @@ class SurveyManager
 
             if ($values['anonymous'] == 0) {
                 // Input_name_list
-                $values['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : null;
+                $values['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : 0;
                 $extraParams['show_form_profile'] = $values['show_form_profile'];
 
                 if ($values['show_form_profile'] == 1) {
@@ -307,7 +308,7 @@ class SurveyManager
                 'creation_date' => api_get_utc_datetime(),
                 'anonymous' => $values['anonymous'],
                 'session_id' => api_get_session_id(),
-                'visible_results' => $values['visible_results'],
+                'visible_results' => $values['visible_results']
             ];
 
             $params = array_merge($params, $extraParams);

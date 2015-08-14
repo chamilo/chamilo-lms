@@ -247,7 +247,6 @@ $social_menu_block = SocialManager::show_social_menu('shared_profile', null, $us
 $user_info = api_get_user_info($my_user_id);
 $sessionList = SessionManager::getSessionsFollowedByUser($my_user_id, $user_info['status']);
 
-
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(
     $user_id,

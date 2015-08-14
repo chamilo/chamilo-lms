@@ -1432,7 +1432,7 @@ class learnpath
 
             if ($old_prerequisite != $prerequisites) {
                 $sql = "UPDATE " . $tbl_lp_item . "
-                        SET prerequisite = " . $prerequisites . "
+                        SET prerequisite = '" . $prerequisites . "'
                         WHERE c_id = ".$course_id." AND id = " . $id;
                 Database::query($sql);
             }
@@ -2588,10 +2588,12 @@ class learnpath
      */
     public function get_preview_image_path($size = null, $path_type = 'web')
     {
+        
         $preview_image = $this->get_preview_image();
         if (isset($preview_image) && !empty($preview_image)) {
             $image_sys_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
             $image_path = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
+            
             if (isset($size)) {
                 $info = pathinfo($preview_image);
                 $image_custom_size = $info['filename'].'.'.$size.'.'.$info['extension'];
@@ -3139,7 +3141,7 @@ class learnpath
         if (empty($toc_list)) {
             $toc_list = $this->get_toc();
         }
-        $html = '<div id="scorm_title" class="scorm-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
+        //$html = '<div id="scorm_title" class="scorm-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
         $html .= '<div class="scorm-body">';
         $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
 
@@ -3155,6 +3157,7 @@ class learnpath
                 $html .= '</div>';
             }
         }
+        
         $html .= '<div id="inner_lp_toc" class="inner_lp_toc">';
         require_once 'resourcelinker.inc.php';
 
@@ -3187,11 +3190,11 @@ class learnpath
                 'browsed'       => 'scorm_completed',
             );
 
-            $scorm_color_background = 'scorm_item_2';
+            $scorm_color_background = 'row_odd';
             $style_item = '';
 
             if ($color_counter % 2 == 0) {
-                $scorm_color_background = 'scorm_item_1';
+                $scorm_color_background = 'row_even';
             }
 
             $dirTypes = self::getChapterTypes();
@@ -3201,7 +3204,7 @@ class learnpath
                 $style_item = '';
             }
             if ($item['id'] == $this->current) {
-                $scorm_color_background = 'scorm_item_normal scorm_highlight '.$scorm_color_background.' ';
+                $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' scorm_highlight';
             } elseif (!in_array($item['type'], $dirTypes)) {
                 $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' ';
             }

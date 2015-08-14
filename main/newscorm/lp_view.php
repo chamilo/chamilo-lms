@@ -391,7 +391,7 @@ if (api_get_course_setting('lp_return_link') == 1) {
     $buttonHomeText = get_lang('LearningPathList');
 }
 
-$lpPreviewImagePath = 'unknown_250_100.jpg';
+$lpPreviewImagePath = 'unknown.png';
 
 if ($_SESSION['oLP']->get_preview_image()) {
     $lpPreviewImagePath = $_SESSION['oLP']->get_preview_image_path();
@@ -435,14 +435,17 @@ if ($gamificationMode == 1) {
 
 $template->assign(
     'lp_preview_image',
-    Display::return_icon(
+    Display::img(
         $lpPreviewImagePath,
-        null,
-        ['height' => 96, 'width' => 104]
+        $_SESSION['oLP']->name,
+        array('class' => 'img-circle'),
+        ICON_SIZE_BIG
     )
 );
+
 $template->assign('lp_author', $_SESSION['oLP']->get_author());
 $template->assign('lp_mode', $_SESSION['oLP']->mode);
+$template->assign('lp_title_scorm',$_SESSION['oLP']->name);
 $template->assign(
     'lp_html_toc',
     $_SESSION['oLP']->get_html_toc($get_toc_list)

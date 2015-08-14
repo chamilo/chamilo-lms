@@ -2248,8 +2248,8 @@ class learnpath
      * Checks if the learning path is visible for student after the progress
      * of its prerequisite is completed, considering the time availability and
      * the LP visibility.
-     * @param int		Learnpath id
-     * @param int		Student id
+     * @param int $lp_id
+     * @param int $student_id
      * @param string Course code (optional)
      * @param int $sessionId
      * @return	bool
@@ -2588,12 +2588,12 @@ class learnpath
      */
     public function get_preview_image_path($size = null, $path_type = 'web')
     {
-        
+
         $preview_image = $this->get_preview_image();
         if (isset($preview_image) && !empty($preview_image)) {
             $image_sys_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
             $image_path = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
-            
+
             if (isset($size)) {
                 $info = pathinfo($preview_image);
                 $image_custom_size = $info['filename'].'.'.$size.'.'.$info['extension'];
@@ -3157,7 +3157,7 @@ class learnpath
                 $html .= '</div>';
             }
         }
-        
+
         $html .= '<div id="inner_lp_toc" class="inner_lp_toc">';
         require_once 'resourcelinker.inc.php';
 

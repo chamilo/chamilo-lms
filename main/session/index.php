@@ -180,7 +180,7 @@ if (!empty($course_list)) {
 
         $last_date = Tracking::get_last_connection_date_on_the_course(
             api_get_user_id(),
-            $course_info['real_id'],
+            $course_info,
             $session_id,
             false
         );

@@ -1531,19 +1531,19 @@ class Tracking
     /**
      * Get last user's connection date on the course
      * @param     int         User id
-     * @param    string        Course code
+     * @param    array        $courseInfo real_id and code are used
      * @param    int            Session id (optional, default=0)
      * @return    string|bool    Date with format long without day or false if there is no date
      */
     public static function get_last_connection_date_on_the_course(
         $student_id,
-        $courseId,
+        $courseInfo,
         $session_id = 0,
         $convert_date = true
     ) {
     	// protect data
     	$student_id  = intval($student_id);
-        $courseId = intval($courseId);
+        $courseId = $courseInfo['real_id'];
     	$session_id  = intval($session_id);
 
     	$tbl_track_e_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
@@ -1561,7 +1561,6 @@ class Tracking
                 if (empty($last_login_date) || $last_login_date == '0000-00-00 00:00:00') {
                     return false;
                 }
-                //$last_login_date_timestamp = api_strtotime($last_login_date, 'UTC');
                 //see #5736
                 $last_login_date_timestamp = api_strtotime($last_login_date);
     			$now = time();
@@ -1570,7 +1569,10 @@ class Tracking
     			if ($now - $last_login_date_timestamp > 604800) {
     				if ($convert_date) {
                         $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        $icon = api_is_allowed_to_edit() ? '<a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /> </a>': null;
+                        $icon = api_is_allowed_to_edit() ?
+                            '<a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
+                             <img src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /> </a>'
+                            : null;
     					return $icon. Display::label($last_login_date, 'warning');
     				} else {
     					return $last_login_date;
@@ -4304,7 +4306,7 @@ class Tracking
                     );
                     $last_connection = Tracking :: get_last_connection_date_on_the_course(
                         $user_id,
-                        $courseId
+                        $courseInfo
                     );
 
                     if (is_null($progress)) {
@@ -4619,11 +4621,32 @@ class Tracking
                     );
 
                     $weighting = 0;
-                    $last_connection = Tracking :: get_last_connection_date_on_the_course($user_id, $courseId, $session_id_from_get);
-                    $progress = Tracking :: get_avg_student_progress($user_id, $course_code, array(), $session_id_from_get);
-                    $total_time_login = Tracking :: get_time_spent_on_the_course($user_id, $courseId, $session_id_from_get);
+                    $last_connection = Tracking:: get_last_connection_date_on_the_course(
+                        $user_id,
+                        $courseInfo,
+                        $session_id_from_get
+                    );
+
+                    $progress = Tracking::get_avg_student_progress(
+                        $user_id,
+                        $course_code,
+                        array(),
+                        $session_id_from_get
+                    );
+
+                    $total_time_login = Tracking:: get_time_spent_on_the_course(
+                        $user_id,
+                        $courseId,
+                        $session_id_from_get
+                    );
                     $time = api_time_to_hms($total_time_login);
-                    $percentage_score = Tracking :: get_avg_student_score($user_id, $course_code, array(), $session_id_from_get);
+
+                    $percentage_score = Tracking::get_avg_student_score(
+                        $user_id,
+                        $course_code,
+                        array(),
+                        $session_id_from_get
+                    );
                     $courseCodeFromGet = isset($_GET['course']) ? $_GET['course'] : null;
 
                     if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
@@ -6442,7 +6465,7 @@ class TrackingCourseLog
     		$user['count_assignments'] = Tracking::count_student_assignments($user['user_id'], $course_code, $session_id);
     		$user['count_messages'] = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
     		$user['first_connection'] = Tracking::get_first_connection_date_on_the_course($user['user_id'], $courseId, $session_id);
-    		$user['last_connection'] = Tracking::get_last_connection_date_on_the_course($user['user_id'], $courseId, $session_id);
+    		$user['last_connection'] = Tracking::get_last_connection_date_on_the_course($user['user_id'], $courseInfo, $session_id);
 
     		// we need to display an additional profile field
     		$user['additional'] = '';

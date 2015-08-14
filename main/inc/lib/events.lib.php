@@ -1557,7 +1557,8 @@ class Event
 
     /**
      * @param int $lp_id
-     * @param $course_id
+     * @param int $course_id
+     *
      * @return array
      */
     public static function get_all_exercises_from_lp($lp_id, $course_id)
@@ -1566,15 +1567,18 @@ class Event
         $course_id = intval($course_id);
         $lp_id = intval($lp_id);
         $sql = "SELECT * FROM $lp_item_table
-                WHERE c_id = $course_id AND lp_id = '".$lp_id."'
+                WHERE
+                    c_id = $course_id AND
+                    lp_id = '".$lp_id."' AND
+                    item_type = 'quiz'
                 ORDER BY parent_item_id, display_order";
         $res = Database::query($sql);
+
         $my_exercise_list = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            if ($row['item_type'] == 'quiz') {
-                $my_exercise_list[] = $row;
-            }
+            $my_exercise_list[] = $row;
         }
+
         return $my_exercise_list;
     }
 

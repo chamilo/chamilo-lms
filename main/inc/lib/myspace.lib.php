@@ -236,7 +236,7 @@ class MySpace
             $return .= '    <td width="105px"><div>'.(is_null($exercises_results['percentage']) ? '' : $exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].' ( '.$exercises_results['percentage'].'% )').'</div></td>';
             //$return .= '  <td><div>'.$exercises_results['score_possible'].'</div></td>';
             $return .= '    <td><div>'.$exercises_results['questions_answered'].'</div></td>';
-            $return .= '    <td><div>'.Tracking :: get_last_connection_date_on_the_course ($user_id, $courseId).'</div></td>';
+            $return .= '    <td><div>'.Tracking :: get_last_connection_date_on_the_course($user_id, $courseInfo).'</div></td>';
             $return .= '<tr>';
         }
         $return .= '</table>';
@@ -1281,7 +1281,7 @@ class MySpace
             }
             $nb_messages += Tracking::count_student_messages($row->user_id, $course_code);
             $nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
-            $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row->user_id, $courseInfo['real_id'], null, false);
+            $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course($row->user_id, $courseInfo, null, false);
             if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned
                 $last_login_date = $last_login_date_tmp;
             } else if($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
@@ -1431,7 +1431,7 @@ class MySpace
                 $nb_messages += Tracking::count_student_messages($row->user_id, $course_code);
                 $nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
 
-                $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row->user_id, $courseId, null, false);
+                $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course($row->user_id, $courseInfo, null, false);
                 if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
                 } else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
@@ -1619,8 +1619,8 @@ class MySpace
                 WHERE sc.session_id = '".$session_id."';";
         $result = Database::query($sql);
         while ($row = Database::fetch_object($result)) {
-            $courseCode = $row->code;
             $courseId = $row->c_id;
+            $courseInfo = api_get_course_info_by_id($courseId);
             $return .= '<tr>';
             // course code
             $return .= '    <td width="157px" >'.$row->title.'</td>';
@@ -1642,23 +1642,25 @@ class MySpace
             $total_score_obtained = 0;
             $total_score_possible = 0;
             $total_questions_answered = 0;
-            while($row_user = Database::fetch_object($result_users)) {
+            while ($row_user = Database::fetch_object($result_users)) {
                 // get time spent in the course and session
                 $time_spent += Tracking::get_time_spent_on_the_course($row_user->user_id, $courseId, $session_id);
                 $progress_tmp = Tracking::get_avg_student_progress($row_user->user_id, $row->code, array(), $session_id, true);
                 $progress += $progress_tmp[0];
                 $nb_progress_lp += $progress_tmp[1];
                 $score_tmp = Tracking :: get_avg_student_score($row_user->user_id, $row->code, array(), $session_id, true);
-                if(is_array($score_tmp)) {
+                if (is_array($score_tmp)) {
                     $score += $score_tmp[0];
                     $nb_score_lp += $score_tmp[1];
                 }
                 $nb_messages += Tracking::count_student_messages($row_user->user_id, $row->code, $session_id);
                 $nb_assignments += Tracking::count_student_assignments($row_user->user_id, $row->code, $session_id);
-                $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row_user->user_id, $courseId, $session_id, false);
-                if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
+                $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course($row_user->user_id, $courseInfo, $session_id, false);
+                if ($last_login_date_tmp != false && $last_login_date == false) {
+                    // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
-                } else if($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition! To be cleaned.
+                } else if($last_login_date_tmp != false && $last_login_date != false) {
+                    // TODO: Repeated previous condition! To be cleaned.
                     // Find the max and assign it to first_login_date
                     if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                         $last_login_date = $last_login_date_tmp;
@@ -1779,6 +1781,7 @@ class MySpace
             $result = Database::query($sql);
             while ($row = Database::fetch_object($result)) {
                 $courseId = $row->c_id;
+                $courseInfo = api_get_course_info_by_id($courseId);
                 $csv_row = array();
                 $csv_row[] = $session_title;
                 $csv_row[] = $row->title;
@@ -1825,7 +1828,7 @@ class MySpace
 
                     $last_login_date_tmp = Tracking:: get_last_connection_date_on_the_course(
                         $row_user->user_id,
-                        $courseId,
+                        $courseInfo,
                         $session_id,
                         false
                     );
@@ -2044,17 +2047,17 @@ class MySpace
                     }
                 }
                 // time spent in the course
-                $csv_row[] = api_time_to_hms(Tracking :: get_time_spent_on_the_course ($user[4], $courseId));
+                $csv_row[] = api_time_to_hms(Tracking::get_time_spent_on_the_course ($user[4], $courseId));
                 // student progress in course
-                $csv_row[] = round(Tracking :: get_avg_student_progress ($user[4], $row[0]), 2);
+                $csv_row[] = round(Tracking::get_avg_student_progress ($user[4], $row[0]), 2);
                 // student score
-                $csv_row[] = round(Tracking :: get_avg_student_score ($user[4], $row[0]), 2);
+                $csv_row[] = round(Tracking::get_avg_student_score($user[4], $row[0]), 2);
                 // student tes score
-                $csv_row[] = round(Tracking :: get_avg_student_exercise_score ($user[4], $row[0]), 2);
+                $csv_row[] = round(Tracking::get_avg_student_exercise_score($user[4], $row[0]), 2);
                 // student messages
-                $csv_row[] = Tracking :: count_student_messages ($user[4], $row[0]);
+                $csv_row[] = Tracking::count_student_messages($user[4], $row[0]);
                 // student assignments
-                $csv_row[] = Tracking :: count_student_assignments ($user[4], $row[0]);
+                $csv_row[] = Tracking::count_student_assignments ($user[4], $row[0]);
                 // student exercises results
                 $exercises_results = MySpace::exercises_results($user[4], $row[0]);
                 $csv_row[] = $exercises_results['score_obtained'];
@@ -2062,9 +2065,9 @@ class MySpace
                 $csv_row[] = $exercises_results['questions_answered'];
                 $csv_row[] = $exercises_results['percentage'];
                 // first connection
-                $csv_row[] = Tracking :: get_first_connection_date_on_the_course ($user[4], $courseId);
+                $csv_row[] = Tracking::get_first_connection_date_on_the_course ($user[4], $courseId);
                 // last connection
-                $csv_row[] = strip_tags(Tracking :: get_last_connection_date_on_the_course ($user[4], $courseId));
+                $csv_row[] = strip_tags(Tracking::get_last_connection_date_on_the_course($user[4], $courseInfo));
 
                 $csv_content[] = $csv_row;
             }

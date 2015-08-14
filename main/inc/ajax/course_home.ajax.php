@@ -152,7 +152,7 @@ switch ($action) {
 
                 $last_date = Tracking::get_last_connection_date_on_the_course(
                     api_get_user_id(),
-                    $item['id'],
+                    $item,
                     $session_id,
                     false
                 );
@@ -263,7 +263,7 @@ switch ($action) {
         }
 
         $start = $limit*$page - $limit;
-        $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+        $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
         $count = 0;
         $temp = array();
@@ -285,19 +285,21 @@ switch ($action) {
 
                 $last_date = Tracking::get_last_connection_date_on_the_course(
                     api_get_user_id(),
-                    $item['id'],
+                    $item,
                     $session_id,
                     false
                 );
+
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
-                    $label      = get_lang('LearnpathAdded');
+                    $label = get_lang('LearnpathAdded');
                 } else {
-                    $lp_date    = api_get_local_time($lp_item['modified_on']);
-                    $image      = 'moderator_star.png';
-                    $label      = get_lang('LearnpathUpdated');
+                    $lp_date = api_get_local_time($lp_item['modified_on']);
+                    $image = 'moderator_star.png';
+                    $label = get_lang('LearnpathUpdated');
                 }
+
                 if (strtotime($last_date) < strtotime($lp_date)) {
                     $icons = Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date);
                 }
@@ -404,7 +406,7 @@ switch ($action) {
             $list = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
-            $item['title']      = Display::url(
+            $item['title'] = Display::url(
                 $item['title'],
                 api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, array('target'=>SESSION_LINK_TARGET)
             );
@@ -413,7 +415,7 @@ switch ($action) {
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
                 $last_date = Tracking::get_last_connection_date_on_the_course(
                     api_get_user_id(),
-                    $item['id'],
+                    $item,
                     $session_id,
                     false
                 );

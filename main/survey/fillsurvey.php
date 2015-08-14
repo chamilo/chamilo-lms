@@ -1187,18 +1187,15 @@ if (isset($questions) && is_array($questions)) {
 if ($survey_data['survey_type'] === '0') {
     if ($survey_data['show_form_profile'] == 0) {
         // The normal survey as always
-        if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
+        if (($show < $numberofpages) || !$_GET['show']) {
             if ($show == 0) {
                 $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
-//                echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('StartSurvey').'</button>';
             } else {
                 $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
-                //echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('Next').'</button>';
             }
         }
         if ($show >= $numberofpages && $_GET['show']) {
             $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
-            //echo '<button type="submit" name="finish_survey" class="survey-next">'.get_lang('FinishSurvey').'</button>';
         }
     } else {
         // The normal survey as always but with the form profile
@@ -1207,16 +1204,13 @@ if ($survey_data['survey_type'] === '0') {
             if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
                 if ($show == 0) {
                     $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
-                    //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'</button>';
                 } else {
                     $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
-                    //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
                 }
             }
 
             if ($show >= $numberofpages && $_GET['show']) {
                 $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
-                //echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
             }
         }
     }

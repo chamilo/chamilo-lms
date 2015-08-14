@@ -1432,7 +1432,7 @@ class learnpath
 
             if ($old_prerequisite != $prerequisites) {
                 $sql = "UPDATE " . $tbl_lp_item . "
-                        SET prerequisite = " . $prerequisites . "
+                        SET prerequisite = '" . $prerequisites . "'
                         WHERE c_id = ".$course_id." AND id = " . $id;
                 Database::query($sql);
             }

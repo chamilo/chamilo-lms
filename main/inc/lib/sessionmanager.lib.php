@@ -3083,9 +3083,23 @@ class SessionManager
         }
 
         $sessions = array();
+        $imagenSession = '';
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
+                
+                array_push ($row['image']);
+                $row['image'] =  null;
+                $imagenSession = api_get_path(SYS_UPLOAD_PATH). 'sessions/'.'16_' .$row['id']. '.png';
+                
+                if (is_file($imagenSession)) {
+                    $imagenSession = api_get_path(WEB_UPLOAD_PATH). 'sessions/'.'16_' .$row['id']. '.png';
+                    $row['image'] = $imagenSession;
+                } else {
+                    $row['image'] =  api_get_path(WEB_IMG_PATH). 'session_default_small.png';
+                }
+                
                 $sessions[$row['id']] = $row;
+                
             }
         }
 

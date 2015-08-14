@@ -35,6 +35,8 @@
         </div>
         {{ social_skill_block }}
         {{ social_group_info_block }}
+        <!-- Block course list -->
+         {% if social_course_block != null %}
          <div class="panel-group" id="course-block" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingOne">
@@ -52,9 +54,36 @@
                         </div>
                     </div>
                 </div>
-            </div>       
+            </div>
+         {% endif %}                   
+        <!-- Block session list -->
+        {% if sessionList != null %}
+        <div class="panel-group" id="session-block" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#session-block" href="#sessionList" aria-expanded="true" aria-controls="sessionList">
+                           {{ "MySessions" | get_lang }}
+                        </a>
+                    </h4>
+                </div>
+                <div id="sessionList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            {% for session in sessionList %}
+                            <li id="session_{{ session.id }}" class="list-group-item" style="min-height:65px;">
+                                <img class="img-session" src="{{ session.image }}"/>
+                                <span class="title">{{ session.name }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+         </div>
+         {% endif %}              
         
-        {{ social_session_block }}
+        
         {{ social_rss_block }}
         {{ social_right_information }}
     </div>

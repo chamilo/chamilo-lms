@@ -26,8 +26,7 @@ class Version20150813200000 extends AbstractMigrationChamilo
                 $deleteOptions->expr()->in(
                     'o.variable',
                     [
-                        'math_mimetex',
-                        'enabled_asciisvg'
+                        'math_mimetex'
                     ]
                 )
             );
@@ -38,8 +37,7 @@ class Version20150813200000 extends AbstractMigrationChamilo
                 $deleteSettings->expr()->in(
                     's.variable',
                     [
-                        'math_mimetex',
-                        'enabled_asciisvg'
+                        'math_mimetex'
                     ]
                 )
             );
@@ -59,24 +57,6 @@ class Version20150813200000 extends AbstractMigrationChamilo
             'false',
             'MathMimetexTitle',
             'MathMimetexComment',
-            null,
-            null,
-            1,
-            false,
-            true,
-            [
-                0 => ['value' => 'true', 'text' => 'Yes'],
-                1 => ['value' => 'false', 'text' => 'No']
-            ]
-        );
-        $this->addSettingCurrent(
-            'enabled_asciisvg',
-            null,
-            'radio',
-            'Editor',
-            'false',
-            'AsciiSvgTitle',
-            'AsciiSvgComment',
             null,
             null,
             1,

@@ -1724,8 +1724,8 @@ VALUES
 ('gradebook_detailed_admin_view', NULL, 'radio', 'Gradebook', 'false', 'ShowAdditionalColumnsInStudentResultsPageTitle', 'ShowAdditionalColumnsInStudentResultsPageComment', NULL, NULL, 1),
 ('course_catalog_published', NULL, 'radio', 'Course', 'false', 'CourseCatalogIsPublicTitle', 'CourseCatalogIsPublicComment', NULL, NULL, 0),
 ('user_reset_password', NULL, 'radio', 'Security', 'false', 'ResetPasswordTokenTitle', 'ResetPasswordTokenComment', NULL, NULL, 0),
-('user_reset_password_token_limit', NULL, 'text', 'Security', '3600', 'ResetPasswordTokenLimitTitle', 'ResetPasswordTokenLimitComment', NULL, NULL, 0);
-
+('user_reset_password_token_limit', NULL, 'text', 'Security', '3600', 'ResetPasswordTokenLimitTitle', 'ResetPasswordTokenLimitComment', NULL, NULL, 0),
+('my_courses_view_by_session', NULL, 'radio', 'Session', 'false', 'ViewMyCoursesListBySessionTitle', 'ViewMyCoursesListBySessionComment', NULL, NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -1809,6 +1809,8 @@ VALUES
 ('course_catalog_published', 'true', 'Yes'),
 ('course_catalog_published', 'false', 'No'),
 ('user_reset_password', 'true', 'Yes'),
-('user_reset_password', 'false', 'No');
+('user_reset_password', 'false', 'No'),
+('my_courses_view_by_session', 'true', 'Yes'),
+('my_courses_view_by_session', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.48' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.49' WHERE variable = 'chamilo_database_version';

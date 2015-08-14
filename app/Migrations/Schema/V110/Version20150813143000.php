@@ -100,7 +100,21 @@ class Version20150813143000 extends AbstractMigrationChamilo
             null,
             1,
             false,
+            true
+        );
+        $this->addSettingCurrent(
+            'my_courses_view_by_session',
+            null,
+            'radio',
+            'Session',
+            'false',
+            'ViewMyCoursesListBySessionTitle',
+            'ViewMyCoursesListBySessionComment',
+            null,
+            null,
+            1,
             true,
+            false,
             [
                 0 => ['value' => 'true', 'text' => 'Yes'],
                 1 => ['value' => 'false', 'text' => 'No']
@@ -127,7 +141,8 @@ class Version20150813143000 extends AbstractMigrationChamilo
                         'gradebook_detailed_admin_view',
                         'course_catalog_published',
                         'user_reset_password',
-                        'user_reset_password_token_limit'
+                        'user_reset_password_token_limit',
+                        'my_courses_view_by_session'
                     ]
                 )
             );
@@ -141,7 +156,8 @@ class Version20150813143000 extends AbstractMigrationChamilo
                         'prevent_multiple_simultaneous_login',
                         'gradebook_detailed_admin_view',
                         'course_catalog_published',
-                        'user_reset_password'
+                        'user_reset_password',
+                        'my_courses_view_by_session'
                     ]
                 )
             );

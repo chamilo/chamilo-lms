@@ -610,7 +610,7 @@ class Template
             'chosen/chosen.jquery.min.js',
         );
 
-        $viewBySession = api_get_configuration_value('my_courses_view_by_session');
+        $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
 
         if (api_is_global_chat_enabled() || $viewBySession) {
             // Do not include the global chat in LP

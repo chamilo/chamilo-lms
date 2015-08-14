@@ -47,7 +47,7 @@ if (is_array($all_files) && count($all_files) > 0) {
 
 $style = '<style>';
 $style .= '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
-$style .= '@import "'.api_get_path(WEB_CSS_PATH).api_get_visual_theme().'/default.css";';
+$style .= '@import "'.api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/default.css";';
 $style .='</style>';
 
 ?>

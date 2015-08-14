@@ -83,11 +83,11 @@ class PDF
         Display::$global_template->assign('pdf_content', $content);
 
         $organization = api_get_setting('Institution');
-        $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+        $img = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
 
         // Search for classic logo
         if (file_exists($img)) {
-            $img = api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+            $img = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
             $organization = "<img src='$img'>";
         } else {
             // Just use the platform title.
@@ -100,9 +100,9 @@ class PDF
         $pdfLogo = api_get_setting('pdf_logo_header');
         if ($pdfLogo === 'true') {
             $visualTheme = api_get_visual_theme();
-            $img = api_get_path(SYS_CODE_PATH).'css/'.$visualTheme.'/images/pdf_logo_header.png';
+            $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
             if (file_exists($img)) {
-                $img = api_get_path(WEB_CODE_PATH) . 'css/' . $visualTheme . '/images/pdf_logo_header.png';
+                $img = api_get_path(WEB_CSS_PATH) . 'themes/' . $visualTheme . '/images/pdf_logo_header.png';
                 $organization = "<img src='$img'>";
             }
         }

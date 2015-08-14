@@ -73,4 +73,127 @@ class BuyCoursesPlugin extends Plugin
         }
         $this->manageTab(false);
     }
+
+    /**
+     * Get the currency for sales
+     * @return array The selected currency. Otherwise return false
+     */
+    public function getCurrency()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesUtils::TABLE_COUNTRY),
+            [
+                'where' => ['status = ?' => true]
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Get a list of currencies
+     * @return array The currencies. Otherwise return false
+     */
+    public function getCurrencies()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesUtils::TABLE_COUNTRY)
+        );
+    }
+
+    /**
+     * Save the selected currency
+     * @param int $selectedId The currency Id
+     */
+    public function selectCurrency($selectedId)
+    {
+        $countryTable = Database::get_main_table(BuyCoursesUtils::TABLE_COUNTRY);
+
+        Database::update(
+            $countryTable,
+            ['status' => 0]
+        );
+        Database::update(
+            $countryTable,
+            ['status' => 1],
+            ['country_id = ?' => intval($selectedId)]
+        );
+    }
+
+    /**
+     * Save the PayPal configuration params
+     * @param array $params
+     * @return int Rows affected. Otherwise return false
+     */
+    public function savePaypalParams($params)
+    {
+        return Database::update(
+            Database::get_main_table(BuyCoursesUtils::TABLE_PAYPAL),
+            [
+                'username' => $params['username'],
+                'password' => $params['password'],
+                'signature' => $params['signature'],
+                'sandbox' => isset($params['sandbox'])
+            ],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
+     * Gets the stored PayPal params
+     * @return array
+     */
+    public function getPaypalParams()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesUtils::TABLE_PAYPAL),
+            ['id = ?' => 1],
+            'first'
+        );
+    }
+
+    /**
+     * Save a transfer account information
+     * @param array $params The transfer account
+     * @return int Rows affected. Otherwise return false
+     */
+    public function saveTransferAccount($params)
+    {
+        return Database::insert(
+            Database::get_main_table(BuyCoursesUtils::TABLE_TRANSFER),
+            [
+                'name' => $params['tname'],
+                'account' => $params['taccount'],
+                'swift' => $params['tswift']
+            ]
+        );
+    }
+
+    /**
+     * Get a list of transfer accounts
+     * @return array
+     */
+    public function getTransferAccounts()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesUtils::TABLE_TRANSFER)
+        );
+    }
+
+    /**
+     * Remove a transfer account
+     * @param int $id The transfer account ID
+     * @return int Rows affected. Otherwise return false
+     */
+    public function deleteTransferAccount($id)
+    {
+        return Database::delete(
+            Database::get_main_table(BuyCoursesUtils::TABLE_TRANSFER),
+            ['id = ?' => intval($id)]
+        );
+    }
+
 }

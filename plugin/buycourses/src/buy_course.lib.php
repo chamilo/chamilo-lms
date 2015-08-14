@@ -388,56 +388,10 @@ function getCourseVisibilityIcon($option)
     }
 }
 /**
- * List the available currencies
- * @result array The list of currencies
- */
-function listCurrency()
-{
-    $tableBuyCourseCountry = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
-    $sql = "SELECT * FROM $tableBuyCourseCountry
-        ORDER BY country_name ASC";
-    $res = Database::query($sql);
-    $aux = array();
-    while ($row = Database::fetch_assoc($res)) {
-        $aux[] = $row;
-    }
-
-    return $aux;
-}
-/**
  * Gets the list of accounts from the buy_course_transfer table
  * @return array The list of accounts
  */
 function listAccounts()
-{
-    $tableBuyCourseTransfer = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
-    $sql = "SELECT * FROM $tableBuyCourseTransfer";
-    $res = Database::query($sql);
-    $aux = array();
-    while ($row = Database::fetch_assoc($res)) {
-        $aux[] = $row;
-    }
-
-    return $aux;
-}
-/**
- * Gets the stored PayPal params
- * @return array The stored PayPal params
- */
-function paypalParameters()
-{
-    $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
-    $sql = "SELECT * FROM $tableBuyCoursePaypal";
-    $res = Database::query($sql);
-    $row = Database::fetch_assoc($res);
-
-    return $row;
-}
-/**
- * Gets the parameters for the bank transfers payment method
- * @result array Bank transfer payment parameters stored
- */
-function transferParameters()
 {
     $tableBuyCourseTransfer = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
     $sql = "SELECT * FROM $tableBuyCourseTransfer";

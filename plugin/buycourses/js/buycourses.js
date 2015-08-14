@@ -97,63 +97,6 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
-    $("#save_currency").click(function (e) {
-        var currency_type = $("#currency_type").val();
-        $.post("function.php", {tab: "save_currency", currency: currency_type},
-            function (data) {
-                alert(data.content);
-            }, "json");
-
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
-    $("#save_paypal").click(function (e) {
-        var name = $("#username").val();
-        var clave = $("#password").val();
-        var firma = $("#signature").val();
-        if ($("#sandbox").attr("checked") == "checked") {
-            var vsandbox = "YES";
-        } else {
-            var vsandbox = "NO";
-        }
-        $.post("function.php", {tab: "save_paypal", username: name, password: clave, signature: firma, sandbox: vsandbox},
-            function (data) {
-                alert(data.content);
-            }, "json");
-
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
-    $("#add_account").click(function (e) {
-        var tname = $("#tname").val();
-        var taccount = $("#taccount").val();
-        var tswift = $("#tswift").val();
-        if (tname == '' || taccount == '') {
-            alert("Complete los campos antes de insertar");
-        } else {
-            $.post("function.php", {tab: "add_account", name: tname, account: taccount, swift: tswift},
-                function (data) {
-                    location.reload();
-                }, "json");
-        }
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
-    $(".delete_account").click(function (e) {
-        var fieldName = $(this).parent().attr("id");
-        var id = $("#id_" + fieldName).val();
-        $.post("function.php", {tab: "delete_account", id: id},
-            function (data) {
-                location.reload();
-            }, "json");
-
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
     $("#cancel_order").click(function (e) {
         $.post("function.php", {tab: "unset_variables"});
         window.location.replace("list.php");

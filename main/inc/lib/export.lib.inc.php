@@ -108,6 +108,7 @@ class Export
         fwrite($handle, '</table></body></html>');
         fclose($handle);
         DocumentManager::file_send_for_download($file, true, $filename.'.xls');
+        exit;
     }
 
     /**
@@ -146,7 +147,7 @@ class Export
 		}
 		fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
-		return false;
+        exit;
 	}
 
     /**

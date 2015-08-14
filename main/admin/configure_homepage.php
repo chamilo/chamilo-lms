@@ -794,7 +794,7 @@ switch ($action) {
 	case 'edit_notice':
 		// Display for edit_notice case
 		?>
-		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
+		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" class="form-horizontal">
 			<legend><?php echo $tool_name; ?></legend>
 			<input type="hidden" name="formSent" value="1"/>
 			<?php
@@ -802,25 +802,41 @@ switch ($action) {
 				Display::display_normal_message($errorMsg);
 			}
 			?>
-			<table border="0" cellpadding="5" cellspacing="0">
-				<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
-				<tr>
-					<td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
-					<td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo $notice_title; ?>" style="width: 350px;"/></td>
-				</tr>
-				<tr>
-					<td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
-					<td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo $notice_text; ?></textarea></td>
-				</tr>
-				<tr>
-					<td><label><?php echo get_lang('ApplyAllLanguages'); ?></label>
-					<td><input type="checkbox" name="all_langs" value="<?php echo get_lang('ApplyAllLanguages'); ?>"/></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td><button class="save" type="submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button></td>
-				</tr>
-			</table>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><?php echo get_lang('LetThoseFieldsEmptyToHideTheNotice'); ?></p>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"> <?php echo get_lang('NoticeTitle'); ?> </label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo $notice_title; ?>" class="form-control"/>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"><?php echo get_lang('NoticeText'); ?></label>
+                                    <div class="col-sm-6">
+                                        <textarea name="notice_text" cols="30" rows="5" wrap="virtual" class="form-control"><?php echo $notice_text; ?></textarea>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="all_langs" value="<?php echo get_lang('ApplyAllLanguages'); ?>"/> <?php echo get_lang('ApplyAllLanguages'); ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-9">
+                                        <button class="btn btn-primary" type="submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 		</form>
 		<?php
 		break;
@@ -1099,7 +1115,7 @@ switch ($action) {
         <div class="col-md-9">
             <div class="actions">
 		<a href="<?php echo api_get_self(); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
-                    <?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?>
+                    <?php echo Display::return_icon('edit.png', get_lang('EditHomePage'),null,ICON_SIZE_SMALL); ?>
                     <?php echo get_lang('EditHomePage'); ?>
 		</a>
             </div>
@@ -1126,8 +1142,7 @@ switch ($action) {
                
                 if ($access_url_id == 1) {
                     echo '<div class="actions">';
-                    echo '<a href="course_category.php">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a>
-                        <a href="course_category.php">'.get_lang('EditCategories').'</a>';
+                    echo '<a href="course_category.php">'.Display::return_icon('edit.png', get_lang('Edit')).get_lang('EditCategories').'</a>';
                     echo '</div>';
 		}
                 echo '<ul class="list-group">';
@@ -1194,7 +1209,9 @@ switch ($action) {
 		}
             ?>
             <div class="actions">
-		<a href="<?php echo api_get_self(); ?>?action=insert_tabs"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); echo get_lang('InsertLink'); ?></a>
+		<a href="<?php echo api_get_self(); ?>?action=insert_tabs">
+                    <?php Display::display_icon('addd.gif', get_lang('InsertLink')); echo get_lang('InsertLink'); ?>
+                </a>
             </div>
             <?php
 		echo '<ul id="list-hiperlink" class="list-group">';

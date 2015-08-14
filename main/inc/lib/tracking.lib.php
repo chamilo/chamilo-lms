@@ -4827,16 +4827,25 @@ class Tracking
                                 $position = ExerciseLib::get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
 
                                 $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
-                                $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
+                                $normal_graph = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
                             }
                         }
-
-                        $html .= Display::div($normal_graph, array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none') );
+                        $html .= Display::div(
+                            $normal_graph,
+                            array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none')
+                        );
 
                         if (empty($graph)) {
                             $graph = '-';
                         } else {
-                            $graph = Display::url($graph, '#', array('id'=>$exercices['id'], 'class'=>'opener'));
+                            $graph = Display::url(
+                                '<img src="' . $graph . '" >',
+                                $normal_graph,
+                                array(
+                                    'id' => $exercices['id'],
+                                    'class' => 'expand-image',
+                                )
+                            );
                         }
 
                         $html .= Display::tag('td', $attempts, array('align'=>'center'));
@@ -5100,8 +5109,8 @@ class Tracking
      */
     static function generate_exercise_result_thumbnail_graph($attempts)
     {
-        $exercise_title = $attempts['title'];
-        $attempts       = $attempts['data'];
+        //$exercise_title = $attempts['title'];
+        $attempts = $attempts['data'];
         $my_exercise_result_array = $exercise_result = array();
         if (empty($attempts)) {
             return null;
@@ -5266,9 +5275,8 @@ class Tracking
             $myCache->saveFromCache($chartHash, $imgPath);
             $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         }
-        $html = '<img src="' . $imgPath . '" >';
 
-        return $html;
+        return $imgPath;
     }
 
     /**
@@ -5320,13 +5328,10 @@ class Tracking
             $count = 0;
             foreach($exercise_result as $result) {
                 $percentage = $result*100;
-                //echo $percentage.' - '.$min.' - '.$max."<br />";
                 if ($percentage >= $min && $percentage <= $max) {
-                    //echo ' is > ';
                     $count++;
                 }
             }
-            //echo '<br />';
             $final_array[]= $count;
 
             if ($my_exercise_result >= $min && $my_exercise_result <= $max) {
@@ -5364,6 +5369,7 @@ class Tracking
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
         $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
         $chartHash = $myCache->getHash($dataSet);
+
         if ($myCache->isInCache($chartHash)) {
             $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
             $myCache->saveFromCache($chartHash, $imgPath);
@@ -5446,9 +5452,8 @@ class Tracking
             $myCache->saveFromCache($chartHash, $imgPath);
             $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         }
-        $html = '<img src="' . $imgPath . '" >';
 
-        return $html;
+        return $imgPath;
     }
 
     /**

@@ -240,7 +240,6 @@ if (isset($current_thread['thread_id'])) {
 
             $html .= '<div class="col-md-10">';
 
-
             $titlePost = Display::tag(
                 'h3', $row['post_title'],
                 array('class' => 'forum_post_title')
@@ -258,7 +257,6 @@ if (isset($current_thread['thread_id'])) {
             );
             $html .= '</div>';
             $html .= '</div>';
-
 
             $html .= '<div class="row">';
             $html .= '<div class="col-md-7">';

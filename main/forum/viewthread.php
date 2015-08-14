@@ -6,11 +6,9 @@
  * @package chamilo.forum
  */
 
-// Including the global initialization file.
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_FORUM;
 
-// The section (tabs.)
 $this_section = SECTION_COURSES;
 
 // Notification for unauthorized people.
@@ -69,13 +67,12 @@ if ($origin == 'group') {
         'name' => get_lang('GroupSpace') . ' ' . $group_properties['name']
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewforum.php?forum=' . Security::remove_XSS($_GET['forum']) . '&' . api_get_cidreq()
+        'url' => 'viewforum.php?forum=' . intval($_GET['forum']) . '&' . api_get_cidreq()
             . "&origin=$origin&search=" . Security::remove_XSS(urlencode($my_search)),
         'name' => Security::remove_XSS($current_forum['forum_title'])
     );
     $interbreadcrumb[] = array(
-        'url' => 'viewthread.php?forum=' . Security::remove_XSS($_GET['forum']) . '&' . api_get_cidreq()
-            . '&thread=' . Security::remove_XSS($_GET['thread']),
+        'url' => 'viewthread.php?forum=' . intval($_GET['forum']) . '&' . api_get_cidreq(). '&thread=' . intval($_GET['thread']),
         'name' => Security::remove_XSS($current_thread['thread_title'])
     );
 
@@ -99,7 +96,7 @@ if ($origin == 'group') {
             'name' => Security::remove_XSS($current_forum_category['cat_title'])
         );
         $interbreadcrumb[] = array(
-            'url' => 'viewforum.php?forum=' . Security::remove_XSS($_GET['forum'])
+            'url' => 'viewforum.php?forum=' . intval($_GET['forum'])
                 . "&origin=$origin&search="
                 . Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($current_forum['forum_title'])

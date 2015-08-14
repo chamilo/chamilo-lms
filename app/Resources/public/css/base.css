@@ -4852,8 +4852,7 @@ i.size-32.icon-new-work{
 .top-mediapost .user-data .username a,
 .sub-mediapost .user-data .username a{
   font-size: 14px;
-  font-weight: bold;
-  color: #4D4D4D;
+  font-weight: normal;
 }
 .top-mediapost .user-data .time,
 .sub-mediapost .user-data .time
@@ -4866,18 +4865,19 @@ i.size-32.icon-new-work{
 }
 .top-mediapost .msg-content p,
 .sub-mediapost .rep-post .msg-content p{
-  border-top:1px solid #dddddd;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  border-top:1px solid #ECF0F1;
+  padding-top: 10px;
+  padding-bottom: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
-  line-height: 18px;
+  line-height: 22px;
   padding-left: 10px;
   padding-right: 10px;
+  color: #666666;
 }
-.top-mediapost .user-data .username a:hover,
-.sub-mediapost .user-data .username a:hover{
-  text-decoration: underline;
+.mediapost-form{
+  margin-bottom: 10px;
+  padding-bottom: 5px;
 }
 .top-mediapost .user-image, .top-mediapost .user-data,
 .sub-mediapost .rep-post .user-image, .sub-mediapost .rep-post .user-data{

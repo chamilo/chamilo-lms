@@ -408,7 +408,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
         $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data_by_session', 2);
     } else {
         // Create a sortable table with the course data
-        $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data', 2);
+        $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data', 2, 20, 'ASC', 'course-list');
     }
 
     $parameters=array();
@@ -428,7 +428,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $table->set_additional_parameters($parameters);
 
     $table->set_header(0, '', false, 'width="8px"');
-    $table->set_header(1, get_lang('Title'), true, 'width="360px"');
+    $table->set_header(1, get_lang('Title'), true, null, array('class' => 'title'));
     $table->set_header(2, get_lang('Code'));
     $table->set_header(3, get_lang('Language'), false, 'width="70px"');
     $table->set_header(4, get_lang('Category'));
@@ -436,7 +436,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $table->set_header(6, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
 
     //$table->set_header(7, get_lang('Teacher'));
-    $table->set_header(7, get_lang('Action'), false, 'width="160px"', array('class'=>'td_actions'));
+    $table->set_header(7, get_lang('Action'), false, null, array('class'=>'td_actions'));
     $table->set_column_filter(7, 'modify_filter');
     $table->set_form_actions(array('delete_courses' => get_lang('DeleteCourse')), 'course');
     $content .= $table->return_table();

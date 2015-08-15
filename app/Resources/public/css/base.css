@@ -4063,7 +4063,6 @@ a.forum_group_link {
 }
 
 .announcement {
-    /*    background: none repeat scroll 0 0 #F2F2F2;*/
     border: 1px solid #D3D3D3;
     color: #555555;
     font-weight: normal;
@@ -4239,67 +4238,9 @@ i.size-32.icon-new-glossary-term{
     background-image:  url('../../main/img/icons/32/new_glossary_term.png');
 }
 
-/*
- * Notebook
-*/
-
 i.size-32.icon-new-note{
     background-image:  url('../../main/img/icons/32/new_note.png');
 }
-
-.notebook.entries li{
-    vertical-align: text-top;
-}
-
-.notebook.note{
-    display:inline-block;
-    width:49%;
-    margin-left:0px;
-    margin-right:1px;
-    padding:0;
-}
-
-.notebook.note{
-    background-color: #D2ECF5;
-}
-
-.notebook.note .title{
-    padding:1;
-    display:block;
-    margin-top:0;
-    margin-right:0;
-    margin-left:0;
-    padding-top:5px;
-    padding-bottom:12px;
-    vertical-align: baseline;
-    background-color: #028DC2 ;
-    color:#ffffff;
-}
-
-.notebook.note .footer{
-    text-align: right;
-    font-style:italic
-}
-
-#learning_path_main #control {
-    text-align: center;
-    background-image:-webkit-gradient(linear,left top,left bottom,from(#ececec),to(#fff));
-    background-image:-webkit-linear-gradient(top,#ececec,#fff);
-    background-image:-moz-linear-gradient(top,#ececec,#fff);
-    background-image:-ms-linear-gradient(top,#ececec,#fff);
-    background-image:-o-linear-gradient(top,#ececec,#fff);
-    background-image:linear-gradient(top,#ececec,#fff);
-
-    height:32px;
-    padding:8px 0px 8px 0px;
-    opacity:0.9;
-    bottom: 0px;
-    margin: auto;
-    width: 100%;
-    height: 34px;
-    position: absolute
-}
-
 /* Data table */
 
 .dataTables_wrapper{
@@ -4478,28 +4419,6 @@ i.size-32.icon-new-work{
 .jqgrid_whitespace {
     white-space: normal !important;
 }
-
-.text-h1 {
-    font-size: 24px;
-}
-
-.text-h2 {
-    font-size: 21px;
-}
-
-.text-h3 {
-    font-size: 16px;
-}
-
-.text-h4 {
-    font-size: 15px;
-}
-
-.text-h5 {
-    font-size: 12px;
-    font-weight: normal;
-}
-
 .chosen-container {
     min-width: 100%;
 }
@@ -4933,8 +4852,7 @@ i.size-32.icon-new-work{
 .top-mediapost .user-data .username a,
 .sub-mediapost .user-data .username a{
   font-size: 14px;
-  font-weight: bold;
-  color: #4D4D4D;
+  font-weight: normal;
 }
 .top-mediapost .user-data .time,
 .sub-mediapost .user-data .time
@@ -4947,18 +4865,19 @@ i.size-32.icon-new-work{
 }
 .top-mediapost .msg-content p,
 .sub-mediapost .rep-post .msg-content p{
-  border-top:1px solid #dddddd;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  border-top:1px solid #ECF0F1;
+  padding-top: 10px;
+  padding-bottom: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
-  line-height: 18px;
+  line-height: 22px;
   padding-left: 10px;
   padding-right: 10px;
+  color: #666666;
 }
-.top-mediapost .user-data .username a:hover,
-.sub-mediapost .user-data .username a:hover{
-  text-decoration: underline;
+.mediapost-form{
+  margin-bottom: 10px;
+  padding-bottom: 5px;
 }
 .top-mediapost .user-image, .top-mediapost .user-data,
 .sub-mediapost .rep-post .user-image, .sub-mediapost .rep-post .user-data{
@@ -6352,7 +6271,9 @@ a.sessionView {
   height: 32px;
   margin-right: 5px;
 }
-#course-block .list-group .list-group-item{
+#course-block .list-group .list-group-item,
+#session-block .list-group .list-group-item
+{
   padding: 5px;
   border:none;
   font-size: 12px;
@@ -6363,13 +6284,24 @@ a.sessionView {
   float: left;
   margin-right: 5px;
 }
-#course-block .list-group .list-group-item .img-course{
+#course-block .list-group .list-group-item .img-course,
+#session-block .list-group .list-group-item .img-session
+{
   width: 70px;
   float: left;
   margin-right: 5px; 
 }
-#course-block .list-group .list-group-item .title{
+#course-block .list-group .list-group-item .title,
+#session-block .list-group .list-group-item .title{
   display: block;
+}
+.data_table .title{
+  text-align: left;
+  padding-left: 10px;
+}
+#course-list.data_table .title{
+    width: 360px;
+    padding-left: 0;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

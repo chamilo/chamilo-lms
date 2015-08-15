@@ -3084,8 +3084,30 @@ class SessionManager
 
         $sessions = array();
         if (Database::num_rows($result) > 0) {
+            $sessionImage = '';
+            $sysUploadPath = api_get_path(SYS_UPLOAD_PATH). 'sessions/';
+            $webUploadPath = api_get_path(WEB_UPLOAD_PATH). 'sessions/';
+            $imgPath = api_get_path(WEB_IMG_PATH) . 'session_default_small.png';
+
+            $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
+            $sql = "SELECT id FROM " . $tableExtraFields . " WHERE extra_field_type = 3 AND variable='image'";
+            $resultField = Database::query($sql);
+            $imageFieldId = Database::fetch_assoc($resultField);
+
             while ($row = Database::fetch_array($result)) {
+                
+                $row['image'] =  null;
+                $sessionImage = $sysUploadPath . $imageFieldId['id'] . '_' . $row['id'] . '.png';
+                
+                if (is_file($sessionImage)) {
+                    $sessionImage = $webUploadPath . $imageFieldId['id'] . '_' . $row['id'] . '.png';
+                    $row['image'] = $sessionImage;
+                } else {
+                    $row['image'] =  $imgPath;
+                }
+                
                 $sessions[$row['id']] = $row;
+                
             }
         }
 

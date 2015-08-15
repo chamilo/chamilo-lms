@@ -1121,42 +1121,42 @@ switch ($action) {
             </div>
             <section id="homepage-home">
                 <?php
-		//print home_top contents
+                //print home_top contents
                 if (file_exists($homep.$topf.'_'.$lang.$ext)) {
                     $home_top_temp = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
-		} else {
+                } else {
                     $home_top_temp = @(string)file_get_contents($homep.$topf.$ext);
-		}
-                    $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-                    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-                    echo $open;
-		?>
+                }
+                $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+                $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+                echo $open;
+                ?>
             </section>
             
             <?php
                 $access_url_id = 1;
-		// we only show the category options for the main chamilo installation
-		if (api_is_multiple_url_enabled()) {
+                // we only show the category options for the main chamilo installation
+                if (api_is_multiple_url_enabled()) {
                     $access_url_id = api_get_current_access_url_id();
-		}
+                }
                
                 if ($access_url_id == 1) {
                     echo '<div class="actions">';
                     echo '<a href="course_category.php">'.Display::return_icon('edit.png', get_lang('Edit')).get_lang('EditCategories').'</a>';
                     echo '</div>';
-		}
+                }
                 echo '<ul class="list-group">';
-                    if ($access_url_id == 1) {
-			if (sizeof($Categories)) {
-                            foreach ($Categories as $enreg) {
-                                echo '<li class="list-group-item">'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</li>';
-                            }
-                            unset($Categories);
-			} else {
-                            echo get_lang('NoCategories');
-			}
+                if ($access_url_id == 1) {
+                    if (sizeof($Categories)) {
+                        foreach ($Categories as $enreg) {
+                            echo '<li class="list-group-item">'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</li>';
+                        }
+                        unset($Categories);
+                    } else {
+                        echo get_lang('NoCategories');
                     }
-		echo '</ul>';
+                }
+                echo '</ul>';
             ?>
             
             <?php

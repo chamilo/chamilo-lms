@@ -2,7 +2,7 @@
 <div class="my-courses-ranking">
     <div class="row">
         <div class="col-xs-12 col-md-12">
-            <h4 class="title-section">{{ "MyCurrentCourses"|get_plugin_lang('CurrentSessionsBlockPlugin') }}</h4>
+            <h4 class="title-section"><a href="{{ _p.web ~ 'user_portal.php' }}">{{ "MyCurrentCourses"|get_plugin_lang('CurrentSessionsBlockPlugin') }}</a></h4>
             <a href="{{ _p.web ~ 'user_portal.php' }}" class="more">{{ 'SeeMore'|get_lang }}</a>
         </div>
     </div>
@@ -10,7 +10,7 @@
         <div class="row">
             {% for session in current_sessions_block.sessions %}
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                <h2 class="title-course">{{ session.name }}</h2>
+                <h2 class="title-course"><a href="{{ session.link }}">{{ session.name }}</a></h2>
                 <div class="card">
                     <div class="front">
                         <div id="items-img-1" class="img-items-course">

@@ -209,7 +209,7 @@
         $(".card").flip({
             axis: "y", // y or x
             trigger: "hover", // click or hover
-
+         
         });
     });
 </script>

@@ -13,6 +13,9 @@
   border: none;
   margin-bottom: 5px;
 }
+#top-session .item .thumbnail img{
+  border-radius: 10px;
+}
 #top-session .owl-controls{
   margin-top: 0px;
   margin-bottom: 10px;

@@ -53,7 +53,7 @@
         {% if current_session %}
             <div class="session">
                 <div class="title"><i class="fa fa-square"></i> {{ current_session.getName() }}</div>
-                <div class="panel-body">
+                <div id="panel-frame" class="panel-body">
                     {% for course_id, course in session_data %}
                         {% if session_data|length > 1 %}
                             <h3 class="title-course"><img src="{{ 'blackboard_blue.png'|icon(32) }}"/> {{ course.title }}</h3>
@@ -73,11 +73,22 @@
                                             </h4>
                                         </div>
                                         <div id="collapse-{{ panel_id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-{{ panel_id }}">
-                                            <div class="panel-body">
+                                            <div  class="panel-body">
                                 {% endif %}
-
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe src="{{ _p.web_main ~ stats_url.1 }}"></iframe>
+        <script language="JavaScript">
+            
+            function autofitIframe(id){
+                if (!window.opera && document.all && document.getElementById){
+                    id.style.height=id.contentWindow.document.body.scrollHeight;
+                } else if(document.getElementById) {
+                    id.style.height=id.contentDocument.body.scrollHeight+50+"px";
+                }
+            }
+        
+        </script>
+                                <div class="iframe-progress">
+                                    <iframe id="ifprogress" src="{{ _p.web_main ~ stats_url.1 }}" width="100%" onload="autofitIframe(this)" scrolling="no"></iframe>
+       
                                 </div>
 
                                 {% if course.stats|length > 1 %}

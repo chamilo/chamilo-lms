@@ -20,15 +20,20 @@ body{
   position: absolute;
 }
 .title-section{
-	font-size: 18px;
-	text-transform: uppercase;
-	color: #e73858;
-	display: inline-block;
+    display: inline-block;
+}
+.title-section a{
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #e73858;
+}
+.title-section a:hover{
+    text-decoration: none;
 }
 .more{
-	display: inline-block;
-	margin-left: 20px;
-	color: #a1a1a1;
+    display: inline-block;
+    margin-left: 20px;
+    color: #a1a1a1;
 }
 .more:hover{
 	color: #a1a1a1;
@@ -63,7 +68,6 @@ body{
 .my-courses-ranking .title-course,
 #slider-sessions .title-course{
 	font-size: 14px;
-	color: #35a8c9;
 	text-transform: uppercase;
 	min-height: 40px;
   text-align: center;
@@ -71,12 +75,23 @@ body{
 #slider-sessions .title-course{
   text-align: center;
 }
+#slider-sessions .title-course a,
+.my-courses-ranking .title-course a{
+  color: #35a8c9;
+  text-decoration: none;
+}
+#slider-sessions .title-course a:hover,
+.my-courses-ranking .title-course a:hover{
+    text-decoration: underline;
+}
 #slider-sessions .card{
   border: none;
 }
-#slider-sessions .card .back{
-  padding-left: 20px;
-  padding-right: 20px;
+#slider-sessions .card .back .frame{
+  background-color: #efefef;
+  padding-top: 10px;
+  border-radius: 10px;
+  padding: 10px;
 }
 #slider-sessions .session-description {
   font-size: 12px;
@@ -207,12 +222,16 @@ body{
 
 .current-block{
   width: 100%;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 2%;
+  padding-right: 2%;
+  text-align: center;
+}
+.current-block .start-progress{
+    text-align: left;
 }
 .current-block .card{
-  padding-right: 10px;
-  padding-left: 10px;
+  width: 282px;
+  margin: auto;
 }
 /* Fin de efecto del curso */
 
@@ -229,7 +248,7 @@ header .search-header{
 	min-height: 75px;
 }
 .navbar-right{
-	padding-top: 20px;
+	padding-top: 29px;
 }
 .navbar-nav > li > a{
 	font-size: 18px;
@@ -266,7 +285,25 @@ header .search-header{
 	border: 3px solid #009ab8;
 	border-radius: 50%;
 }
-
+.modal-content .modal-header{
+    background-color: #35A8C9;
+}
+.modal-header .close{
+    color: #fff;
+    opacity: 1;
+    font-size: 25px;
+}
+#ifprogress{
+    border: none;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+#panel-frame.panel-body{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
 .login-menu{
   width: 300px;
   padding: 10px;

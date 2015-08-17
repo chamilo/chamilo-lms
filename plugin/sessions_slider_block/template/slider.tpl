@@ -5,7 +5,7 @@
     <div id="slider-sessions">
         <div class="row">
             <div class="col-md-12">
-                <h4 class="title-section">{{ "RecommendedCourses"|get_plugin_lang('SessionsSliderBlockPlugin') }}</h4>
+                <h4 class="title-section"><a href="{{ _p.web_main ~ 'auth/courses.php' }}">{{ "RecommendedCourses"|get_plugin_lang('SessionsSliderBlockPlugin') }}</a></h4>
                 <a href="{{ _p.web_main ~ 'auth/courses.php' }}" class="more">{{ 'SeeMore' | get_plugin_lang('SessionsSliderBlockPlugin') }}</a>
             </div>
         </div>
@@ -16,7 +16,7 @@
                         <div class="item">
                             <div class="slider-block">
                                 <div class="caption">
-                                    <h2 class="title-course">{{ session.name }}</h2>
+                                    <h2 class="title-course"><a href="{{ session.url }}" title="{{ session.name }}">{{ session.name }}</a></h2>
                                 </div>
                                 <div class="card">
                                     <div class="front">
@@ -25,16 +25,18 @@
                                         </div>
                                     </div>
                                     <div class="back">
-                                        <div class="session-description">
-                                            {{ session.course_description }}
-                                        </div>
-                                        <div class="row">
+                                        <div class="frame">
+                                            <div class="session-description">
+                                                {{ session.course_description }}
+                                            </div>
+                                            <div class="row">
                                             <div class="col-xs-7">
                                                 <p class="level">{{ "LevelX"|get_lang|format(session.course_level) }}</p>
                                             </div>
                                             <div class="col-xs-5 text-right">
                                                 <a href="{{ session.url }}" class="btn btn-primary">{{ "SeeCourse"|get_lang }}</a>
                                             </div>
+                                        </div>
                                         </div>
                                     </div>
                                 </div>

@@ -552,8 +552,34 @@ if (!empty($error_message)) {
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
 $form->addElement('hidden', 'formSent', 1);
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$form->addElement('radio', 'file_type', array(get_lang('FileType'), '<a href="example_session.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>'), 'CSV', 'csv');
-$form->addElement('radio', 'file_type', array(null, '<a href="example_session.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>'), 'XML', 'xml');
+$form->addElement(
+    'radio',
+    'file_type',
+    [
+        get_lang('FileType'),
+        Display::url(
+            get_lang('ExampleCSVFile'),
+            api_get_path(WEB_CODE_PATH) . 'admin/example_session.csv',
+            ['target' => '_blank']
+        )
+    ],
+    'CSV',
+    'csv'
+);
+$form->addElement(
+    'radio',
+    'file_type',
+    [
+        null,
+        Display::url(
+            get_lang('ExampleXMLFile'),
+            api_get_path(WEB_CODE_PATH) . 'admin/example_session.xml',
+            ['target' => '_blank']
+        )
+    ],
+    'XML',
+    'xml'
+);
 
 $form->addElement('checkbox', 'overwrite', null, get_lang('IfSessionExistsUpdate'));
 $form->addElement('checkbox', 'delete_users_not_in_list', null, get_lang('DeleteUsersNotInList'));

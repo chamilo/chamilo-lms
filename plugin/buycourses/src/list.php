@@ -8,13 +8,10 @@
  */
 
 require_once '../../../main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
-require_once 'buy_course_plugin.class.php';
 require_once 'buy_course.lib.php';
 
-$course_plugin = 'buycourses';
 $plugin = BuyCoursesPlugin::create();
-$_cid = 0;
+$includeSessions = $plugin->get('include_sessions') === 'true';
 
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = array("url" => "configuration.php", "name" => $plugin->get_lang('AvailableCoursesConfiguration'));
@@ -23,6 +20,7 @@ if (api_is_platform_admin()) {
 
 $templateName = $plugin->get_lang('CourseListOnSale');
 $tpl = new Template($templateName);
+
 if (isset($_SESSION['bc_success'])) {
     $tpl->assign('rmessage', 'YES');
     if ($_SESSION['bc_success'] == true) {
@@ -41,28 +39,25 @@ if (isset($_SESSION['bc_success'])) {
     $tpl->assign('rmessage', 'NO');
 }
 
-$courseList = userCourseList();
-$categoryList = buyCourseListCategories();
-$currencyType = findCurrency();
+$courseList = $plugin->getUserCourseList();
+$sessionList = [];
+$currency = $plugin->getSelectedCurrency();
+$currencyCode = null;
 
-$tpl->assign('server', $_configuration['root_web']);
-$tpl->assign('courses', $courseList);
-$tpl->assign('category', $categoryList);
-$tpl->assign('currency', $currencyType);
-
-$selectedValue = Database::select(
-    'selected_value',
-    Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT),
-    array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
-);
-$result = array_shift($selectedValue);
-
-if ($result['selected_value'] === 'true') {
-    $tpl->assign('sessionsAreIncluded', 'YES');
-    $tpl->assign('sessions', userSessionList());
+if (isset($currency['currency_code'])) {
+    $currencyCode = $currency['currency_code'];
 }
 
-$listing_tpl = 'buycourses/view/list.tpl';
-$content = $tpl->fetch($listing_tpl);
+$tpl->assign('courses', $courseList);
+$tpl->assign('currency', $currencyCode);
+$tpl->assign('sessions_are_included', $includeSessions);
+
+if ($includeSessions) {
+    $sessionList = $plugin->getUserSessionList();
+    $tpl->assign('sessions', $sessionList);
+}
+
+$content = $tpl->fetch('buycourses/view/list.tpl');
+
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

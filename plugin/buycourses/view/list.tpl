@@ -2,19 +2,9 @@
 
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 
-<script>
-    $(function () {
-        $('#buy-courses-tabs nav-tabs a').click(function (e) {
-            e.preventDefault();
-
-            $(this).tab('show');
-        });
-    });
-</script>
-
 <div id="buy-courses-tabs">
-    {% if sessionsAreIncluded == "YES" %}
-        <ul class="nav nav-tabs" role="tablist">
+    {% if sessions_are_included %}
+        <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
             <li id="buy-courses-tab" class="active" role="presentation">
                 <a href="#buy-courses" aria-controls="buy-courses" role="tab" data-toggle="tab">{{ 'Courses'|get_lang }}</a>
             </li>
@@ -69,18 +59,20 @@
                     <div class="col-md-3">
                         <div class="items-course">
                             <div class="items-imagen">
-                                <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
-                                    <img alt="" class="img-responsive" src="{{ server }}{{ course.course_img }}">
+                                <a class="ajax" rel="gb_page_center[778]" href="{{ _p.web_plugin ~ 'buycourses/src/ajax.php?' ~ {'code': course.code}|url_encode() }}">
+                                    <img alt="{{ course.title }}" class="img-responsive" src="{{ course.course_img }}">
                                 </a>
                             </div>
                             <div class="items-title">
-                                <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
+                                <a class="ajax" rel="gb_page_center[778]" href="{{ _p.web_plugin ~ 'buycourses/src/ajax.php?' ~ {'code': course.code}|url_encode() }}">
                                     {{ course.title }}
                                 </a>
                             </div>
-                            <div class="items-teacher">
-                                <i class="fa fa-user"></i> {{ 'Teacher'|get_lang }}: {{ course.teacher }}
-                            </div>
+                            <ul class="items-teacher list-unstyled">
+                                {% for teacher in course.teachers %}
+                                    <li><i class="fa fa-user"></i> {{ teacher }}</li>
+                                {% endfor %}
+                            </ul>
                             <div class="items-status">
                                 {% if course.enrolled == "YES" %}
                                     {{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -94,11 +86,11 @@
                             </div>
                             <div class="items-button">
                                 <div class="btn-group btn-group-sm">
-                                    <a class="ajax btn btn-primary" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
+                                    <a class="ajax btn btn-primary" title="" href="{{ _p.web_plugin ~ 'buycourses/src/ajax.php?' ~ {'code': course.code}|url_encode() }}">
                                         <i class="fa fa-file-text"></i> {{ 'Description'|get_lang }}
                                     </a>
                                     {% if course.enrolled == "NO" %}
-                                        <a class="btn btn-success" title="" href="{{ server }}plugin/buycourses/src/process.php?code={{ course.id }}">
+                                        <a class="btn btn-success" title="" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'code': course.id}|url_encode() }}">
                                             <i class="fa fa-shopping-cart"></i> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                         </a>
                                     {% endif %}
@@ -112,7 +104,7 @@
             </div>
         </div>
 
-        {% if sessionsAreIncluded == "YES" %}
+        {% if sessions_are_included %}
             <div id="buy-sessions" class="tab-pane fade" aria-labelledby="buy-sessions-tab" role="tabpanel">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -157,15 +149,15 @@
                                     <div class="thumbnail">
                                         <div class="caption">
                                             <h3>{{ session.name }}</h3>
-                                            <p>{{ 'From'|get_lang }} {{ session.access_start_date }} {{ 'Until'|get_lang }} {{ session.access_end_date }}</p>
+                                            <p>{{ session.dates.display }}</p>
                                             <p class="lead">{{ session.price }} {{ currency }}</p>
 
                                             <dl>
                                                 {% for course in session.courses %}
                                                     <dt>{{ course.title }}</dt>
-                                                    <dd>
-                                                        <i class="fa fa-user"></i> {{ 'Teacher'|get_lang }}: {{ course.teacher }}
-                                                    </dd>
+                                                    {% for coach in course.coaches %}
+                                                        <dd><i class="fa fa-user"></i> {{ coach }}</dd>
+                                                    {% endfor %}
                                                 {% endfor %}
                                             </dl>
 
@@ -173,7 +165,7 @@
                                                 {% if session.enrolled == "YES" %}
                                                     <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                                                 {% elseif session.enrolled == "NO" %}
-                                                    <a class="btn btn-success btn-sm" title="" href="{{ server }}plugin/buycourses/src/process.php?scode={{ session.session_id }}">
+                                                    <a class="btn btn-success btn-sm" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'scode': session.id}|url_encode() }}">
                                                         <i class="fa fa-shopping-cart"></i> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 {% elseif session.enrolled == "TMP" %}

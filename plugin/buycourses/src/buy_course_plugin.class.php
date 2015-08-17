@@ -240,4 +240,200 @@ class BuyCoursesPlugin extends Plugin
         return $sessions;
     }
 
+    /**
+     * Lists current user session details, including each session course details
+     * @return array
+     */
+    public function getUserSessionList()
+    {
+        $buySessionTable = Database::get_main_table(TABLE_BUY_SESSION);
+        $buySessionTemporaryTable = Database::get_main_table(
+            TABLE_BUY_SESSION_TEMPORARY
+        );
+        $entityManager = Database::getManager();
+        $scRepo = $entityManager->getRepository(
+            'ChamiloCoreBundle:SessionRelCourse'
+        );
+        $scuRepo = $entityManager->getRepository(
+            'ChamiloCoreBundle:SessionRelCourseRelUser'
+        );
+        $currentUserId = api_get_user_id();
+
+        // get existing sessions
+        $sql = "
+            SELECT a.session_id, a.visible, a.price
+            FROM $buySessionTable a
+            WHERE a.visible = 1";
+        $resSessions = Database::query($sql);
+        $sessions = array();
+        // loop through all sessions
+        while ($rowSession = Database::fetch_assoc($resSessions)) {
+            $session = $entityManager->find(
+                'ChamiloCoreBundle:Session',
+                $rowSession['session_id']
+            );
+
+            $sessionData = [
+                'id' => $session->getId(),
+                'name' => $session->getName(),
+                'dates' => SessionManager::parseSessionDates([
+                    'display_start_date' => $session->getDisplayStartDate(),
+                    'display_end_date' => $session->getDisplayEndDate(),
+                    'access_start_date' => $session->getAccessStartDate(),
+                    'access_end_date' => $session->getAccessEndDate(),
+                    'coach_access_start_date' => $session->getCoachAccessStartDate(),
+                    'coach_access_end_date' => $session->getCoachAccessEndDate()
+                ]),
+                'price' => number_format($rowSession['price'], 2),
+                'courses' => [],
+                'enrolled' => 'NO'
+            ];
+
+            $userCourseSubscription = $scuRepo->findBy([
+                'session' => $session,
+                'status' => Chamilo\CoreBundle\Entity\Session::COACH
+            ]);
+            if (!empty($userCourseSubscription)) {
+                $sessionCourseUser = $userCourseSubscription[0];
+                $course = $sessionCourseUser->getCourse();
+                $coaches = [];
+
+                foreach ($userCourseSubscription as $sessionCourseUser) {
+                    $coach = $sessionCourseUser->getUser();
+                    $coaches[] = $coach->getCompleteName();
+                }
+
+                $sessionData['courses'][] = [
+                    'title' => $course->getTitle(),
+                    'coaches' => $coaches
+                ];
+            } else {
+                $sessionCourses =  $scRepo->findBy([
+                    'session' => $session
+                ]);
+
+                foreach ($sessionCourses as $sessionCourse) {
+                    $course = $sessionCourse->getCourse();
+
+                    $sessionData['courses'][] = ['title' => $course->getTitle()];
+                }
+            }
+
+            if ($currentUserId > 0) {
+                $sql = "
+                    SELECT 1 FROM $buySessionTemporaryTable
+                    WHERE session_id ='{$session->getId()}' AND
+                    user_id='{$currentUserId}'";
+
+                $result = Database::query($sql);
+
+                if (Database::affected_rows($result) > 0) {
+                    $sessionData['enrolled'] = "TMP";
+                }
+
+                $userSubscription = $scuRepo->findBy([
+                    'session' => $session,
+                    'user' => $currentUserId
+                ]);
+
+                if (!empty($userSubscription)) {
+                    $sessionData['enrolled'] = "YES";
+                }
+            }
+
+            $sessions[] = $sessionData;
+        }
+        return $sessions;
+    }
+
+    /**
+     * Lists current user course details
+     * @return array
+     */
+    public function getUserCourseList()
+    {
+        $buyCourseTable = Database::get_main_table(TABLE_BUY_COURSE);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $buyCourseTemporalTable = Database::get_main_table(
+            TABLE_BUY_COURSE_TEMPORAL
+        );
+        $entityManager = Database::getManager();
+        $cuRepo = $entityManager->getRepository(
+            'ChamiloCoreBundle:CourseRelUser'
+        );
+        $currentUserId = api_get_user_id();
+
+        $sql = "
+            SELECT a.course_id, a.visible, a.price, b.*
+            FROM $buyCourseTable a, $courseTable b
+            WHERE a.course_id = b.id AND a.session_id = 0 AND a.visible = 1;";
+        $res = Database::query($sql);
+        $courses = array();
+        while ($row = Database::fetch_assoc($res)) {
+            $course = $entityManager->find(
+                'ChamiloCoreBundle:Course',
+                $row['course_id']
+            );
+            $courseData = [
+                'id' => $course->getId(),
+                'title' => $course->getTitle(),
+                'code' => $course->getCode(),
+                'course_img' => Display::return_icon(
+                    'session_default.png',
+                    null,
+                    null,
+                    null,
+                    null,
+                    true
+                ),
+                'price' => number_format($row['price'], 2),
+                'teachers' => [],
+                'enrolled' => 'NO',
+            ];
+
+            foreach ($course->getTeachers() as $courseUser) {
+                $teacher = $courseUser->getUser();
+                $courseData['teachers'][] = $teacher->getCompleteName();
+            }
+
+            //check if the user is enrolled
+            if ($currentUserId > 0) {
+                $sql = "
+                    SELECT 1 FROM $buyCourseTemporalTable
+                    WHERE course_code='{$course->getCode()}'
+                    AND user_id = {$currentUserId}";
+                $result = Database::query($sql);
+
+                if (Database::affected_rows($result) > 0) {
+                    $courseData['enrolled'] = "TMP";
+                }
+
+                $userSubscription = $cuRepo->findBy([
+                    'course' => $course,
+                    'user' => $currentUserId
+                ]);
+                
+                if (!empty($userSubscription)) {
+                    $courseData['enrolled'] = 'YES';
+                }
+            }
+
+            //check images
+            $possiblePath = api_get_path(SYS_COURSE_PATH);
+            $possiblePath .= $course->getDirectory();
+            $possiblePath .= '/course-pic.png';
+
+            if (file_exists($possiblePath)) {
+                $courseData['course_img'] = api_get_path(WEB_COURSE_PATH);
+                $courseData['course_img'] .= $course->getDirectory();
+                $courseData['course_img'] .= '/course-pic.png';
+            }
+
+            $courses[] = $courseData;
+        }
+
+        return $courses;
+    }
+
 }

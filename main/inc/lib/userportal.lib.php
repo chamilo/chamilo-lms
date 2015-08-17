@@ -269,7 +269,7 @@ class IndexManager
 
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-            $home_notice = Display::div($home_notice, array('class'  => 'homepage_notice'));
+            //$home_notice = Display::div($home_notice, array('class'  => 'homepage_notice'));
             $html = self::show_right_block(get_lang('Notice'), $home_notice, 'notice_block', null, 'notices', 'noticesCollapse');
         }
         return $html;

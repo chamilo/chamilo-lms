@@ -130,6 +130,11 @@ a.thumbnail:hover{
     height: auto;
     width: 100%;
 }
+#notice_block p, #notice-block p{
+    color: #666;
+    font-size: 12px;
+    line-height: 20px;
+}
 .carousel-indicators{
   bottom: 0px !important;
 }

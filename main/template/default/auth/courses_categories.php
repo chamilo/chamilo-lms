@@ -105,6 +105,118 @@ $code = isset($code) ? $code : null;
     });
 </script>
 
+
+<div class="row">
+    
+
+ <?php if ($showCourses && $action != 'display_sessions') { 
+            
+
+            if (!empty($message)) {
+                Display::display_confirmation_message($message, false);
+            }
+            if (!empty($error)) {
+                Display::display_error_message($error, false);
+            }
+
+            if (!empty($content)) {
+                echo $content;
+            }
+
+            if (!empty($search_term)) {
+                echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
+            }
+
+            $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+            $user_id = api_get_user_id();
+
+            if (!empty($browse_courses_in_category)) {
+                foreach ($browse_courses_in_category as $course) {
+                    $course_hidden = ($course['visibility'] == COURSE_VISIBILITY_HIDDEN);
+
+                    if ($course_hidden) {
+                        continue;
+                    }
+
+                    $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
+                    $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $course['code']);
+                    $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);
+                    $course_public = ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD);
+                    $course_open = ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM);
+                    $course_private = ($course['visibility'] == COURSE_VISIBILITY_REGISTERED);
+                    $course_closed = ($course['visibility'] == COURSE_VISIBILITY_CLOSED);
+                    $course_subscribe_allowed = ($course['subscribe'] == 1);
+                    $course_unsubscribe_allowed = ($course['unsubscribe'] == 1);
+                    $count_connections = $course['count_connections'];
+                    $creation_date = substr($course['creation_date'],0,10);
+
+                    $icon_title = null;
+
+                    // display the course bloc
+                    echo '<div class="col-md-3"><div class="items-course">';
+
+                    // display thumbnail
+                    display_thumbnail($course, $icon_title);
+
+                    // display course title and button bloc
+                    echo '<div class="item-info">';
+                    display_title($course);
+                    // display button line
+                    echo '<div class="btn-toolbar">';
+                    // if user registered as student
+                    if ($user_registerd_in_course_as_student) {
+                        if (!$course_closed) {
+                            display_goto_button($course);
+                            display_description_button($course, $icon_title);
+                            if ($course_unsubscribe_allowed) {
+                                display_unregister_button($course, $stok, $search_term, $code);
+                            }
+                            display_already_registered_label('student');
+                        }
+                    } elseif ($user_registerd_in_course_as_teacher) {
+                        // if user registered as teacher
+                        display_goto_button($course);
+                        display_description_button($course, $icon_title);
+                        if ($course_unsubscribe_allowed) {
+                            display_unregister_button($course, $stok, $search_term, $code);
+                        }
+                        display_already_registered_label('teacher');
+                    } else {
+                        // if user not registered in the course
+                        if (!$course_closed) {
+                            if (!$course_private) {
+                                display_goto_button($course);
+                                if ($course_subscribe_allowed) {
+                                    display_register_button($course, $stok, $code, $search_term);
+                                }
+                            }
+                            display_description_button($course, $icon_title);
+                        }
+                    }
+                    echo '</div>'; // btn-toolbar
+                    echo '</div>'; // span4
+
+                    // display counter
+                    echo '<div class="col-md-2">';
+                    echo '<div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
+                    echo '</div>';
+
+                    // end of course bloc
+                    echo '</div></div>'; // well_border row
+                }
+            } else {
+                if (!isset($_REQUEST['subscribe_user_with_password']) &&
+                    !isset($_REQUEST['subscribe_course'])
+                ) {
+                    Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
+                }
+            } 
+        }
+    echo $cataloguePagination;
+?>   
+</div>
+
+
 <div class="row">
     <div class="col-md-3">
         <div class="panel panel-default">
@@ -280,112 +392,6 @@ $code = isset($code) ? $code : null;
     <div class="col-md-9">
         <h2><?php echo get_lang('CourseCatalog')?></h2>
 
-        <?php if ($showCourses && $action != 'display_sessions') { ?>
-            <?php
-
-            if (!empty($message)) {
-                Display::display_confirmation_message($message, false);
-            }
-            if (!empty($error)) {
-                Display::display_error_message($error, false);
-            }
-
-            if (!empty($content)) {
-                echo $content;
-            }
-
-            if (!empty($search_term)) {
-                echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
-            }
-
-            $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-            $user_id = api_get_user_id();
-
-            if (!empty($browse_courses_in_category)) {
-                foreach ($browse_courses_in_category as $course) {
-                    $course_hidden = ($course['visibility'] == COURSE_VISIBILITY_HIDDEN);
-
-                    if ($course_hidden) {
-                        continue;
-                    }
-
-                    $user_registerd_in_course = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
-                    $user_registerd_in_course_as_teacher = CourseManager::is_course_teacher($user_id, $course['code']);
-                    $user_registerd_in_course_as_student = ($user_registerd_in_course && !$user_registerd_in_course_as_teacher);
-                    $course_public = ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD);
-                    $course_open = ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM);
-                    $course_private = ($course['visibility'] == COURSE_VISIBILITY_REGISTERED);
-                    $course_closed = ($course['visibility'] == COURSE_VISIBILITY_CLOSED);
-                    $course_subscribe_allowed = ($course['subscribe'] == 1);
-                    $course_unsubscribe_allowed = ($course['unsubscribe'] == 1);
-                    $count_connections = $course['count_connections'];
-                    $creation_date = substr($course['creation_date'],0,10);
-
-                    $icon_title = null;
-
-                    // display the course bloc
-                    echo '<div class="well_border"><div class="row">';
-
-                    // display thumbnail
-                    display_thumbnail($course, $icon_title);
-
-                    // display course title and button bloc
-                    echo '<div class="col-md-8">';
-                    display_title($course);
-                    // display button line
-                    echo '<div class="btn-toolbar">';
-                    // if user registered as student
-                    if ($user_registerd_in_course_as_student) {
-                        if (!$course_closed) {
-                            display_goto_button($course);
-                            display_description_button($course, $icon_title);
-                            if ($course_unsubscribe_allowed) {
-                                display_unregister_button($course, $stok, $search_term, $code);
-                            }
-                            display_already_registered_label('student');
-                        }
-                    } elseif ($user_registerd_in_course_as_teacher) {
-                        // if user registered as teacher
-                        display_goto_button($course);
-                        display_description_button($course, $icon_title);
-                        if ($course_unsubscribe_allowed) {
-                            display_unregister_button($course, $stok, $search_term, $code);
-                        }
-                        display_already_registered_label('teacher');
-                    } else {
-                        // if user not registered in the course
-                        if (!$course_closed) {
-                            if (!$course_private) {
-                                display_goto_button($course);
-                                if ($course_subscribe_allowed) {
-                                    display_register_button($course, $stok, $code, $search_term);
-                                }
-                            }
-                            display_description_button($course, $icon_title);
-                        }
-                    }
-                    echo '</div>'; // btn-toolbar
-                    echo '</div>'; // span4
-
-                    // display counter
-                    echo '<div class="col-md-2">';
-                    echo '<div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
-                    echo '</div>';
-
-                    // end of course bloc
-                    echo '</div></div>'; // well_border row
-                }
-            } else {
-                if (!isset($_REQUEST['subscribe_user_with_password']) &&
-                    !isset($_REQUEST['subscribe_course'])
-                ) {
-                    Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
-                }
-            } ?>
-        <?php } ?>
-        <?php
-        echo $cataloguePagination;
-        ?>
     </div>
 </div>
 <?php
@@ -401,24 +407,24 @@ function display_thumbnail($course, $icon_title)
     // course path
     $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
-    if (file_exists($course_path.'/course-pic85x85.png')) {
-        $course_medium_image = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic85x85.png'; // redimensioned image 85x85
+    if (file_exists($course_path.'/course-pic.png')) {
+        $course_medium_image = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png'; // redimensioned image 85x85
     } else {
         $course_medium_image = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true); // without picture
     }
 
     // course image
-    echo '<div class="col-md-2">';
-    echo '<div class="thumbnail">';
+    
+    echo '<div class="course-image">';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
         echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';
-        echo '<img src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'" />';
+        echo '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'" />';
         echo '</a>';
     } else {
-        echo '<img src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
+        echo '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
     }
     echo '</div>';  // thumbail
-    echo '</div>';  // span2
+   
 }
 
 /**
@@ -432,12 +438,12 @@ function display_title($course)
     $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
     $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);
 
-    $teachers = '<h5>'.$teachers.'</h5>';
-    echo '<div class="categories-course-description">';
-    echo '<h3>'.cut($title, 60).'</h3>';
+    $teachers = '<div class="teachers">'.$teachers.'</div>';
+    
+    echo '<h4 class="title">'.cut($title, 60).'</h4>';
     echo $teachers;
     echo $rating;
-    echo '</div>';  // categories-course-description
+    
 }
 
 /**
@@ -497,5 +503,3 @@ function display_unregister_button($course, $stok, $search_term, $code)
 {
     echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&amp;sec_token='.$stok.'&amp;unsubscribe='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
 }
-
-

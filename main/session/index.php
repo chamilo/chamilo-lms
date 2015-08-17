@@ -11,6 +11,11 @@ use ChamiloSession as Session;
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
+
+if (empty($_GET['session_id'])) {
+    api_not_allowed();
+}
+
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
 
 $sessionField = new ExtraFieldValue('session');
@@ -25,10 +30,6 @@ if (!$allowVisitors) {
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
-
-if (empty($_GET['session_id'])) {
-    api_not_allowed();
-}
 
 $course_id  = isset($_GET['course_id'])  ? intval($_GET['course_id']) : null;
 
@@ -233,6 +234,25 @@ if (!empty($course_list)) {
 //If session is not active we stop de script
 if (!api_is_allowed_to_session_edit()) {
 	api_not_allowed();
+}
+
+$entityManager = Database::getManager();
+$session = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
+
+if (!empty($session)) {
+    $sessionCourses = $session->getCourses();
+
+    if (count($sessionCourses) === 1) {
+        $sessionCourse = $sessionCourses[0]->getCourse();
+
+        $courseUrl = $sessionCourse->getDirectory() . '/index.php?';
+        $courseUrl .= http_build_query([
+            'session_id' => $session->getId()
+        ]);
+
+        header('Location: ' . api_get_path(WEB_COURSE_PATH) . $courseUrl);
+        exit;
+    }
 }
 
 Display::display_header(get_lang('Session'));

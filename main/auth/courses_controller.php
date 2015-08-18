@@ -540,7 +540,7 @@ class CoursesController
                 'primary',
                 [
                     'class' => 'btn-lg btn-block ajax',
-                    'data-title' => get_lang('Subscribe'),
+                    'data-title' => get_lang('AreYouSureToSubscribe'),
                     'data-size' => 'md'
                 ]
             );

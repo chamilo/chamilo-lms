@@ -20,6 +20,9 @@
     background-color:#88aa00 ;
     font-size: 20px;
 }
+.badge-info {
+    font-size: 20px;
+}
 .separate-badge{
     margin-bottom: 20px;
     margin-top: 20px;

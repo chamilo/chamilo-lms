@@ -794,7 +794,7 @@ switch ($action) {
 	case 'edit_notice':
 		// Display for edit_notice case
 		?>
-		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
+		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" class="form-horizontal">
 			<legend><?php echo $tool_name; ?></legend>
 			<input type="hidden" name="formSent" value="1"/>
 			<?php
@@ -802,25 +802,41 @@ switch ($action) {
 				Display::display_normal_message($errorMsg);
 			}
 			?>
-			<table border="0" cellpadding="5" cellspacing="0">
-				<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
-				<tr>
-					<td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
-					<td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo $notice_title; ?>" style="width: 350px;"/></td>
-				</tr>
-				<tr>
-					<td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
-					<td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo $notice_text; ?></textarea></td>
-				</tr>
-				<tr>
-					<td><label><?php echo get_lang('ApplyAllLanguages'); ?></label>
-					<td><input type="checkbox" name="all_langs" value="<?php echo get_lang('ApplyAllLanguages'); ?>"/></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td><button class="save" type="submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button></td>
-				</tr>
-			</table>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><?php echo get_lang('LetThoseFieldsEmptyToHideTheNotice'); ?></p>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"> <?php echo get_lang('NoticeTitle'); ?> </label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo $notice_title; ?>" class="form-control"/>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"><?php echo get_lang('NoticeText'); ?></label>
+                                    <div class="col-sm-6">
+                                        <textarea name="notice_text" cols="30" rows="5" wrap="virtual" class="form-control"><?php echo $notice_text; ?></textarea>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-6">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="all_langs" value="<?php echo get_lang('ApplyAllLanguages'); ?>"/> <?php echo get_lang('ApplyAllLanguages'); ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-9">
+                                        <button class="btn btn-primary" type="submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 		</form>
 		<?php
 		break;
@@ -987,214 +1003,224 @@ switch ($action) {
 		break;
 	default: // When no action applies, default page to update campus homepage
 		?>
-		<table border="0" cellpadding="5" cellspacing="0" width="100%">
-			<tr>
-				<td width="70%" valign="top">
-					<div class="actions">
-						<a href="<?php echo api_get_self(); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
-							<?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?>
-						</a>
-						<a href="<?php echo api_get_self(); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
-							<?php echo get_lang('EditHomePage'); ?>
-						</a>
-					</div>
 
-					<table border="0" cellpadding="5" cellspacing="0" width="100%">
-						<tr>
-							<td colspan="2">
-								<?php
-								//print home_top contents
-								if (file_exists($homep.$topf.'_'.$lang.$ext)) {
-									$home_top_temp = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
-								} else {
-									$home_top_temp = @(string)file_get_contents($homep.$topf.$ext);
-								}
-								$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-								$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-								echo $open;
-								?>
-							</td>
-						</tr>
-						<tr>
-							<?php
-
-							$access_url_id = 1;
-							// we only show the category options for the main chamilo installation
-							if (api_is_multiple_url_enabled()) {
-								$access_url_id = api_get_current_access_url_id();
-							}
-							echo '<td width="50%">';
-							if ($access_url_id == 1) {
-								echo '<div class="actions">';
-								echo '<a href="course_category.php">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a>
-					  <a href="course_category.php">'.get_lang('EditCategories').'</a>';
-								echo '</div>';
-							}
-							echo '</td>
-				  <td width="50%">
-				  <br />';
-							/* <!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>--> */
-							echo '</td></tr>
-				<tr>
-				<td width="50%" valign="top">
-				<table border="0" cellpadding="5" cellspacing="0" width="100%">';
-							if ($access_url_id == 1) {
-								if (sizeof($Categories)) {
-									foreach ($Categories as $enreg) {
-										echo '<tr><td>'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</td></tr>';
-									}
-									unset($Categories);
-								} else {
-									echo get_lang('NoCategories');
-								}
-							}
-
-							echo '</table>';
-							?>
-							</td>
-							<!--<td width="50%" valign="top">
-				<?php
-							if (file_exists($homep.$newsf.'_'.$lang.$ext)) {
-								$open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
-								$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-								echo $open;
-							} else {
-								$open = @(string)file_get_contents($homep.$newsf.$ext);
-								$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-								echo $open;
-							}
-							?>
-			  </td>-->
-						</tr>
-					</table>
-					<?php
-
-					// Add new page
-
-					$home_menu = '';
-
-					if (file_exists($homep.$mtloggedin.'_'.$lang.$ext)) {
-						$home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
-					} else {
-						$home_menu = @file($homep.$mtloggedin.$ext);
-					}
-
-					if (empty($home_menu)) {
-						if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
-							$home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
-						}
-					}
-
-					if (empty($home_menu)) {
-						$home_menu = array();
-					}
-
-					if (!empty($home_menu)) {
-						$home_menu = implode("\n", $home_menu);
-						$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-						$home_menu = explode("\n", $home_menu);
-					}
-					$link_list = '';
-					$tab_counter = 0;
-					foreach ($home_menu as $enreg) {
-						$enreg = trim($enreg);
-						if (!empty($enreg)) {
-							$edit_link   = ' <a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
-							$delete_link = ' <a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
-							$tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'),
-								array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'),
-								$enreg);
-							$tab_string = str_replace(array('<li>', '</li>','class="hide_menu"', 'hide_menu'), '', $tab_string);
-
-							$link_list .= Display::tag('tr', Display::tag('td', $tab_string));
-							$tab_counter++;
-						}
-					}
-					?>
-					<div class="actions">
-						<a href="<?php echo api_get_self(); ?>?action=insert_tabs"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); echo get_lang('InsertLink'); ?></a>
-					</div>
-					<?php
-					echo '<table class="data_table">';
-					echo $link_list;
-					echo '</table>';
-					?>
-				</td>
-				<td width="10%" valign="top"></td>
-				<td width="20%" rowspan="3" valign="top">
-					<div id="login_block" class="well sidebar-nav">
-						<?php echo api_display_language_form(); ?>
-						<form id="formLogin">
-							<div><label><?php echo get_lang('LoginName'); ?></label></div>
-							<div><input type="text" id="login" size="15" value="" disabled="disabled" /></div>
-							<div><label><?php echo get_lang('UserPassword'); ?></label></div>
-							<div><input type="password" id="password" size="15" value="" disabled="disabled" /></div>
-							<div><button class="btn btn-default" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
-						</form>
-					</div>
-
-					<div id="profile_block" class="well sidebar-nav">
-						<h4><?php echo get_lang('MenuUser'); ?></h4>
-						<ul class="nav nav-list">
-							<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('Registration')); ?></span></li>
-							<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('LostPassword')); ?></span></li>
-						</ul>
-					</div>
-
-					<div id="notice_block" class="well sidebar-nav">
-						<h4><?php echo get_lang('Notice'); ?>
-							<a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>
-						</h4>
-						<?php
-						$home_notice = '';
-						if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
-							$home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
-						} else {
-							$home_notice = @(string)file_get_contents($homep.$noticef.$ext);
-						}
-						$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-						echo '<div class="homepage_notice">';
-						echo $home_notice;
-						echo '</div>';
-						?>
-					</div>
-					<div class="well sidebar-nav">
-						<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?></a>
-						<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php echo get_lang('InsertLink'); ?></a>
-						<h4><?php echo api_ucfirst(get_lang('General')); ?></h4>
-						<ul class="menulist">
-							<?php
-							$home_menu = '';
-							if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
-								$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
-							} else {
-								$home_menu = @file($homep.$menuf.$ext);
-							}
-							if (empty($home_menu)) {
-								$home_menu = array();
-							}
-							if (!empty($home_menu)) {
-								$home_menu = implode("\n", $home_menu);
-								$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-								$home_menu = explode("\n", $home_menu);
-							}
-							$i = 0;
-							foreach ($home_menu as $enreg) {
-								$enreg = trim($enreg);
-								if (!empty($enreg)) {
-									$edit_link = '<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-									$delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-									echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', '<br />'.$edit_link.' '.$delete_link.'</li>'), $enreg);
-									$i++;
-								}
-							}
-							?>
-						</ul>
-					</div>
-				</td>
-			</tr>
-		</table>
-		<?php
-		break;
-}
+<section id="page-home">
+    <div class="row">
+        <div class="col-md-3">
+            
+            <!-- login block -->
+            <div id="login_block" class="panel panel-default">
+                <div class="panel-body">
+                    <?php echo api_display_language_form(); ?>
+                    <form id="formLogin" class="form-horizontal">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                            <input class="form-control" type="text" id="login" value="" disabled="disabled" />
+                        </div>
+                    	<div class="input-group">
+                            <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                            <input type="password" id="password"class="form-control" value="" disabled="disabled" />
+                        </div>
+			<button class="btn btn-primary btn-block" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button>
+                    </form>
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><?php echo api_ucfirst(get_lang('Registration')); ?></li>
+                        <li><?php echo api_ucfirst(get_lang('LostPassword')); ?></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- notice block -->
+            
+            
+                <div class="panel-group" id="notice-block" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#notice-block" href="#notice-list" aria-expanded="true" aria-controls="notice-list">
+                                    <?php echo get_lang('Notice'); ?>
+                                    <a class="pull-right" href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="notice-list" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <?php
+                                    $home_notice = '';
+                                    if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
+                                        $home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
+                                    } else {
+                                        $home_notice = @(string)file_get_contents($homep.$noticef.$ext);
+                                    }
+                                    $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
+                                    echo '<div class="homepage_notice">';
+                                    echo $home_notice;
+                                    echo '</div>';
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- insert link block -->
+            
+        
+            <div class="panel-group" id="links-block" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#links-block" href="#links-list" aria-expanded="true" aria-controls="links-list">
+                                <?php echo api_ucfirst(get_lang('General')); ?>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="links-list" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?>
+                                <?php echo get_lang('InsertLink'); ?>
+                            </a> 
+                            <ul class="menulist">
+                                <?php
+                                    $home_menu = '';
+                                    if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
+                                        $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
+                                    } else {
+                                        $home_menu = @file($homep.$menuf.$ext);
+                                    }
+                                    if (empty($home_menu)) {
+                                        $home_menu = array();
+                                    }
+                                    if (!empty($home_menu)) {
+                                        $home_menu = implode("\n", $home_menu);
+                                        $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+                                        $home_menu = explode("\n", $home_menu);
+                                    }
+                                    $i = 0;
+                                    foreach ($home_menu as $enreg) {
+                                        $enreg = trim($enreg);
+                                        if (!empty($enreg)) {
+                                            $edit_link = '<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+                                            $delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+                                            echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', '<br />'.$edit_link.' '.$delete_link.'</li>'), $enreg);
+                                            $i++;
+                                        }
+                                    }
+                                ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+        </div>
+        <div class="col-md-9">
+            <div class="actions">
+		<a href="<?php echo api_get_self(); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
+                    <?php echo Display::return_icon('edit.png', get_lang('EditHomePage'),null,ICON_SIZE_SMALL); ?>
+                    <?php echo get_lang('EditHomePage'); ?>
+		</a>
+            </div>
+            <section id="homepage-home">
+                <?php
+                //print home_top contents
+                if (file_exists($homep.$topf.'_'.$lang.$ext)) {
+                    $home_top_temp = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
+                } else {
+                    $home_top_temp = @(string)file_get_contents($homep.$topf.$ext);
+                }
+                $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+                $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+                echo $open;
+                ?>
+            </section>
+            
+            <?php
+                $access_url_id = 1;
+                // we only show the category options for the main chamilo installation
+                if (api_is_multiple_url_enabled()) {
+                    $access_url_id = api_get_current_access_url_id();
+                }
+               
+                if ($access_url_id == 1) {
+                    echo '<div class="actions">';
+                    echo '<a href="course_category.php">'.Display::return_icon('edit.png', get_lang('Edit')).get_lang('EditCategories').'</a>';
+                    echo '</div>';
+                }
+                echo '<ul class="list-group">';
+                if ($access_url_id == 1) {
+                    if (sizeof($Categories)) {
+                        foreach ($Categories as $enreg) {
+                            echo '<li class="list-group-item">'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</li>';
+                        }
+                        unset($Categories);
+                    } else {
+                        echo get_lang('NoCategories');
+                    }
+                }
+                echo '</ul>';
+            ?>
+            
+            <?php
+		if (file_exists($homep.$newsf.'_'.$lang.$ext)) {
+                    $open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
+                    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+                    echo $open;
+		} else {
+                    $open = @(string)file_get_contents($homep.$newsf.$ext);
+                    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+                    echo $open;
+		}
+            ?>
+            
+            <?php
+                // Add new page
+		$home_menu = '';
+		if (file_exists($homep.$mtloggedin.'_'.$lang.$ext)) {
+                    $home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
+		} else {
+                    $home_menu = @file($homep.$mtloggedin.$ext);
+		}
+		if (empty($home_menu)) {
+                    if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
+			$home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
+                    }
+		}
+		if (empty($home_menu)) {
+                    $home_menu = array();
+		}
+		if (!empty($home_menu)) {
+                    $home_menu = implode("\n", $home_menu);
+                    $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+                    $home_menu = explode("\n", $home_menu);
+		}
+		$link_list = '';
+		$tab_counter = 0;
+                    foreach ($home_menu as $enreg) {
+                    $enreg = trim($enreg);
+			if (!empty($enreg)) {
+                            $edit_link   = ' <a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
+                            $delete_link = ' <a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
+                            $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'),
+                                array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'),
+				$enreg);
+                            $tab_string = str_replace(array('<li>', '</li>','class="hide_menu"', 'hide_menu'), '', $tab_string);
+				$link_list .= Display::tag('li', $tab_string, array('class' => 'list-group-item'));
+				$tab_counter++;
+			}
+		}
+            ?>
+            <div class="actions">
+		<a href="<?php echo api_get_self(); ?>?action=insert_tabs">
+                    <?php Display::display_icon('addd.gif', get_lang('InsertLink')); echo get_lang('InsertLink'); ?>
+                </a>
+            </div>
+            <?php
+		echo '<ul id="list-hiperlink" class="list-group">';
+		echo $link_list;
+		echo '</ul>';
+            ?>
+        </div>
+    </div>
+</section>
+<?php break;
+    }
 Display::display_footer();

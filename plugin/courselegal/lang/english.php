@@ -21,7 +21,3 @@ $strings['SendOnlyWarning'] = 'Send only notification';
 $strings['SendAgreementFile'] = 'Send notification and attach the agreement';
 $strings['NoSendWarning'] = 'Do not send notification';
 $strings['TheAgreementIsAttachedInThisEmail'] = 'A copy of the agreement document is attached to this email';
-
-
-
-

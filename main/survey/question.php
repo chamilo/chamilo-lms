@@ -7,7 +7,7 @@
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 * 	@version $Id: question.php 21734 2009-07-02 17:12:41Z cvargas1 $
 */
-// Including the global initialization file
+
 require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
@@ -102,7 +102,7 @@ $possible_types = array(
 
 // Actions
 $actions = '<div class="actions">';
-$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.
+$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'">'.
 	Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type
@@ -161,7 +161,6 @@ if ($surveyQuestion->getForm()->validate()) {
 
 Display::display_header($tool_name, 'Survey');
 
-echo $surveyQuestion->getForm()->return_form();
-// Footer
+echo $surveyQuestion->getForm()->returnForm();
 
 Display :: display_footer();

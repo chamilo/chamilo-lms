@@ -1531,19 +1531,19 @@ class Tracking
     /**
      * Get last user's connection date on the course
      * @param     int         User id
-     * @param    string        Course code
+     * @param    array        $courseInfo real_id and code are used
      * @param    int            Session id (optional, default=0)
      * @return    string|bool    Date with format long without day or false if there is no date
      */
     public static function get_last_connection_date_on_the_course(
         $student_id,
-        $courseId,
+        $courseInfo,
         $session_id = 0,
         $convert_date = true
     ) {
     	// protect data
     	$student_id  = intval($student_id);
-        $courseId = intval($courseId);
+        $courseId = $courseInfo['real_id'];
     	$session_id  = intval($session_id);
 
     	$tbl_track_e_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
@@ -1561,7 +1561,6 @@ class Tracking
                 if (empty($last_login_date) || $last_login_date == '0000-00-00 00:00:00') {
                     return false;
                 }
-                //$last_login_date_timestamp = api_strtotime($last_login_date, 'UTC');
                 //see #5736
                 $last_login_date_timestamp = api_strtotime($last_login_date);
     			$now = time();
@@ -1570,7 +1569,10 @@ class Tracking
     			if ($now - $last_login_date_timestamp > 604800) {
     				if ($convert_date) {
                         $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        $icon = api_is_allowed_to_edit() ? '<a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /> </a>': null;
+                        $icon = api_is_allowed_to_edit() ?
+                            '<a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
+                             <img src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /> </a>'
+                            : null;
     					return $icon. Display::label($last_login_date, 'warning');
     				} else {
     					return $last_login_date;
@@ -4309,7 +4311,7 @@ class Tracking
                     );
                     $last_connection = Tracking :: get_last_connection_date_on_the_course(
                         $user_id,
-                        $courseId
+                        $courseInfo
                     );
 
                     if (is_null($progress)) {
@@ -4624,11 +4626,32 @@ class Tracking
                     );
 
                     $weighting = 0;
-                    $last_connection = Tracking :: get_last_connection_date_on_the_course($user_id, $courseId, $session_id_from_get);
-                    $progress = Tracking :: get_avg_student_progress($user_id, $course_code, array(), $session_id_from_get);
-                    $total_time_login = Tracking :: get_time_spent_on_the_course($user_id, $courseId, $session_id_from_get);
+                    $last_connection = Tracking:: get_last_connection_date_on_the_course(
+                        $user_id,
+                        $courseInfo,
+                        $session_id_from_get
+                    );
+
+                    $progress = Tracking::get_avg_student_progress(
+                        $user_id,
+                        $course_code,
+                        array(),
+                        $session_id_from_get
+                    );
+
+                    $total_time_login = Tracking:: get_time_spent_on_the_course(
+                        $user_id,
+                        $courseId,
+                        $session_id_from_get
+                    );
                     $time = api_time_to_hms($total_time_login);
-                    $percentage_score = Tracking :: get_avg_student_score($user_id, $course_code, array(), $session_id_from_get);
+
+                    $percentage_score = Tracking::get_avg_student_score(
+                        $user_id,
+                        $course_code,
+                        array(),
+                        $session_id_from_get
+                    );
                     $courseCodeFromGet = isset($_GET['course']) ? $_GET['course'] : null;
 
                     if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
@@ -4832,16 +4855,25 @@ class Tracking
                                 $position = ExerciseLib::get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
 
                                 $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
-                                $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
+                                $normal_graph = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
                             }
                         }
-
-                        $html .= Display::div($normal_graph, array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none') );
+                        $html .= Display::div(
+                            $normal_graph,
+                            array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none')
+                        );
 
                         if (empty($graph)) {
                             $graph = '-';
                         } else {
-                            $graph = Display::url($graph, '#', array('id'=>$exercices['id'], 'class'=>'opener'));
+                            $graph = Display::url(
+                                '<img src="' . $graph . '" >',
+                                $normal_graph,
+                                array(
+                                    'id' => $exercices['id'],
+                                    'class' => 'expand-image',
+                                )
+                            );
                         }
 
                         $html .= Display::tag('td', $attempts, array('align'=>'center'));
@@ -5105,8 +5137,8 @@ class Tracking
      */
     static function generate_exercise_result_thumbnail_graph($attempts)
     {
-        $exercise_title = $attempts['title'];
-        $attempts       = $attempts['data'];
+        //$exercise_title = $attempts['title'];
+        $attempts = $attempts['data'];
         $my_exercise_result_array = $exercise_result = array();
         if (empty($attempts)) {
             return null;
@@ -5271,9 +5303,8 @@ class Tracking
             $myCache->saveFromCache($chartHash, $imgPath);
             $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         }
-        $html = '<img src="' . $imgPath . '" >';
 
-        return $html;
+        return $imgPath;
     }
 
     /**
@@ -5325,13 +5356,10 @@ class Tracking
             $count = 0;
             foreach($exercise_result as $result) {
                 $percentage = $result*100;
-                //echo $percentage.' - '.$min.' - '.$max."<br />";
                 if ($percentage >= $min && $percentage <= $max) {
-                    //echo ' is > ';
                     $count++;
                 }
             }
-            //echo '<br />';
             $final_array[]= $count;
 
             if ($my_exercise_result >= $min && $my_exercise_result <= $max) {
@@ -5369,6 +5397,7 @@ class Tracking
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
         $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
         $chartHash = $myCache->getHash($dataSet);
+
         if ($myCache->isInCache($chartHash)) {
             $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
             $myCache->saveFromCache($chartHash, $imgPath);
@@ -5451,9 +5480,8 @@ class Tracking
             $myCache->saveFromCache($chartHash, $imgPath);
             $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         }
-        $html = '<img src="' . $imgPath . '" >';
 
-        return $html;
+        return $imgPath;
     }
 
     /**
@@ -6442,7 +6470,7 @@ class TrackingCourseLog
     		$user['count_assignments'] = Tracking::count_student_assignments($user['user_id'], $course_code, $session_id);
     		$user['count_messages'] = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
     		$user['first_connection'] = Tracking::get_first_connection_date_on_the_course($user['user_id'], $courseId, $session_id);
-    		$user['last_connection'] = Tracking::get_last_connection_date_on_the_course($user['user_id'], $courseId, $session_id);
+    		$user['last_connection'] = Tracking::get_last_connection_date_on_the_course($user['user_id'], $courseInfo, $session_id);
 
     		// we need to display an additional profile field
     		$user['additional'] = '';

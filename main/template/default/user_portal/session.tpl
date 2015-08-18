@@ -87,7 +87,7 @@
                                         {% for coach in item.coaches %}
                                             {{ loop.index > 1 ? ' | ' }}
 
-                                            <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}" class="ajax">
+                                            <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}" data-title="{{ coach.full_name }}" class="ajax">
                                                 {{ coach.full_name }}
                                             </a>
                                         {% endfor %}

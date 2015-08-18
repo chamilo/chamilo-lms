@@ -23,9 +23,13 @@ $limit = getLimitArray();
 // Section for the tabs.
 $this_section = SECTION_COURSES;
 
-if (api_get_configuration_value('course_catalog_published') !== 'true') {
+if (api_get_setting('course_catalog_published') !== 'true') {
     // Access rights: anonymous users can't do anything useful here.
     api_block_anonymous_users();
+}
+
+if (api_get_setting('catalog_show_courses_sessions') === '3') {
+    api_not_allowed(true);
 }
 
 $user_can_view_page = false;

@@ -185,6 +185,7 @@ $js_glossary_in_documents =	'
   {
     load: [
         { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
+        { type:"script", id:"_fr7", src:"'.api_get_path(WEB_PATH).'web/assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
         { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/jquery-ui.min.js"},
         { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
         { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/themes/smoothness/theme.css"},

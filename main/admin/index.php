@@ -278,8 +278,9 @@ if (file_exists($sessionsBlockExtraFile)) {
 if (api_is_platform_admin()) {
     $blocks['sessions']['editable'] = true;
 }
+$sessionPath = api_get_path(WEB_CODE_PATH).'session/';
 
-$search_form = ' <form method="GET" class="form-inline" action="session_list.php">
+$search_form = ' <form method="GET" class="form-inline" action="'.$sessionPath.'session_list.php">
                     <div class="form-group">
                         <input class="form-control" type="text" name="keyword" value="">
                         <button class="btn btn-default" type="submit">
@@ -289,8 +290,6 @@ $search_form = ' <form method="GET" class="form-inline" action="session_list.php
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;
 $items = array();
-$sessionPath = api_get_path(WEB_CODE_PATH).'session/';
-
 $items[] = array('url' => $sessionPath.'session_list.php', 'label' => get_lang('ListSession'));
 $items[] = array('url' => $sessionPath.'session_add.php', 'label' => get_lang('AddSession'));
 $items[] = array('url' => $sessionPath.'session_category_list.php', 'label' => get_lang('ListSessionCategory'));
@@ -339,12 +338,6 @@ if (api_is_platform_admin()) {
 
     $items = array();
     $items[] = array('url' => 'special_exports.php', 'label' => get_lang('SpecialExports'));
-    if (!empty($_configuration['db_admin_path'])) {
-        $items[] = array(
-            'url' => $_configuration['db_admin_path'],
-            'label' => get_lang('AdminDatabases') . ' (' . get_lang('DBManagementOnlyForServerAdmin') . ') '
-        );
-    }
     $items[] = array('url' => 'system_status.php', 'label' => get_lang('SystemStatus'));
     if (is_dir(api_get_path(SYS_TEST_PATH) . 'datafiller/')) {
         $items[] = array('url' => 'filler.php', 'label' => get_lang('DataFiller'));

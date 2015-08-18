@@ -237,7 +237,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
 		// of the course, that appeared in the default $interbreadcrumb
         $courseItem .= '
 		<tr>
-			<td>'.Display::url(
+			<td class="title">'.Display::url(
                 $course->getTitle().' ('.$course->getVisualCode().')',
                 $courseUrl
             ).'</td>

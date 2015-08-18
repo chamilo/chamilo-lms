@@ -235,6 +235,7 @@ switch ($action) {
                         'work' . $move_to_path,
                         $_REQUEST['move_to_id']
                     );
+
                     api_item_property_update(
                         $_course,
                         'work',
@@ -250,7 +251,7 @@ switch ($action) {
             } else {
                 $message = Display::return_message(get_lang('Impossible'), 'error');
             }
-            Session::write('message', $message);
+            Display::addFlash($message);
             header('Location: '.$currentUrl);
             exit;
         }

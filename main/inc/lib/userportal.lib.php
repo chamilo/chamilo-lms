@@ -184,7 +184,18 @@ class IndexManager
 
             if ($show_course_link) {
                 if (!api_is_drh() && !api_is_session_admin()) {
-                    $html .=  '<li class="list-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'auth/courses.php">'.get_lang('CourseCatalog').'</a></li>';
+                    if (
+                        api_get_setting('catalog_show_courses_sessions') !== '3'
+                    ) {
+                        $html .= Display::tag(
+                            'li',
+                            Display::url(
+                                get_lang('CourseCatalog'),
+                                api_get_path(WEB_CODE_PATH) . 'auth/courses.php'
+                            ),
+                            ['class' => 'list-course']
+                        );
+                    }
                 } else {
                     $html .= '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
                 }
@@ -935,7 +946,23 @@ class IndexManager
 
         if ($show_course_link) {
             if (!api_is_drh()) {
-                $my_account_content .= '<li class="list-course"><a href="main/auth/courses.php" >'.Display::return_icon('catalog-course.png',get_lang('CourseCatalog'),null,ICON_SIZE_SMALL).get_lang('CourseCatalog').'</a></li>';
+                if (
+                    api_get_setting('catalog_show_courses_sessions') !== '3'
+                ) {
+                    $my_account_content .= Display::tag(
+                        'li',
+                        Display::url(
+                            Display::return_icon(
+                                'catalog-course.png',
+                                get_lang('CourseCatalog'),
+                                null,
+                                ICON_SIZE_SMALL
+                            ) . get_lang('CourseCatalog'),
+                            api_get_path(WEB_CODE_PATH) . 'auth/courses.php'
+                        ),
+                        ['class' => 'list-course']
+                    );
+                }
             } else {
                 $my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
             }
@@ -1363,8 +1390,7 @@ class IndexManager
             }
         }
 
-        $special_courses = '';
-
+        $specialCourses = '';
         $loadDirs = $this->load_directories_preview;
 
         // If we're not in the history view...
@@ -1387,6 +1413,7 @@ class IndexManager
                 );
                 $listCourse = api_get_course_info_by_id($listCourseCodeId['real_id']);
                 $listCoursesInfo[] = array(
+                    'course' => $listCourse,
                     'code' => $listCourseCodeId['code'],
                     'id' => $listCourseCodeId['real_id'],
                     'title' => $listCourse['title'],
@@ -1432,17 +1459,16 @@ class IndexManager
                     } else {
                         $htmlCategory .= '<div class="session-view-row" >';
                     }
+                    $coursesInfo =  $listCourse['course'];
 
                     $htmlCategory .= self::getHtmlForCourse(
-                        $listCourse['courseId'],
-                        $listCourse['title'],
-                        $listCourse['courseCode'],
+                        $coursesInfo,
                         $userCategoryId,
                         1,
                         $loadDirs
                     );
                     // list of session category
-                    $htmlSessionCategory = '<div class="session-view-row" style="display:none;" id="courseblock-'.$listCourse['courseId'].'">';
+                    $htmlSessionCategory = '<div class="session-view-row" style="display:none;" id="courseblock-'.$coursesInfo['real_id'].'">';
                     foreach ($listCourse['sessionCatList'] as $j => $listCategorySession) {
                         // add session category
                         $htmlSessionCategory .= self::getHtmlSessionCategory(
@@ -1458,7 +1484,7 @@ class IndexManager
                                 $listSession['sessionId'],
                                 $listSession['sessionName'],
                                 $listCategorySession['catSessionId'],
-                                $listCourse['courseCode']
+                                $coursesInfo
                             );
                             $htmlSession .= '</div>';
                             $sessionCount++;
@@ -1484,9 +1510,7 @@ class IndexManager
                         $htmlCategory .= '<div class="session-view-well well">';
                     }
                     $htmlCategory .= self::getHtmlForCourse(
-                        $listCourse['id'],
-                        $listCourse['title'],
-                        $listCourse['code'],
+                        $listCourse['course'],
                         $userCategoryId,
                         0,
                         $loadDirs
@@ -1524,7 +1548,7 @@ class IndexManager
         $icon = Display::return_icon(
             'folder_yellow.png',
             $title,
-            array('class' => 'sessionView', 'width' => 24),
+            array('class' => 'sessionView'),
             ICON_SIZE_LARGE
         );
         return "<div class='session-view-user-category'>$icon<span>$title</span></div>";
@@ -1532,16 +1556,26 @@ class IndexManager
 
     /**
      * return HTML code for course display in session view
-     * @param $id
-     * @param $title
-     * @param $code
+     * @param array $courseInfo
      * @param $userCategoryId
      * @param bool $displayButton
      * @param $loadDirs
      * @return string
      */
-    private static function getHtmlForCourse($id, $title, $code, $userCategoryId, $displayButton = false, $loadDirs)
-    {
+    private static function getHtmlForCourse(
+        $courseInfo,
+        $userCategoryId,
+        $displayButton = false,
+        $loadDirs
+    ) {
+        if (empty($courseInfo)) {
+            return '';
+        }
+
+        $id = $courseInfo['real_id'];
+        $title = $courseInfo['title'];
+        $code = $courseInfo['code'];
+
         $class = 'session-view-lvl-6';
         if ($userCategoryId != 0 && !$displayButton) {
             $class = 'session-view-lvl-7';
@@ -1560,11 +1594,11 @@ class IndexManager
         $icon = Display::return_icon(
             'blackboard.png',
             $title,
-            array('class' => 'sessionView', 'width' => 24),
+            array('class' => 'sessionView'),
             ICON_SIZE_LARGE
         );
 
-        $courseLink = api_get_path(WEB_COURSE_PATH).$code.'/index.php?id_session=0';
+        $courseLink = $courseInfo['course_public_url'].'?id_session=0';
 
         // get html course params
         // ['right_actions'] ['teachers'] ['notifications']
@@ -1603,7 +1637,7 @@ class IndexManager
         $icon = Display::return_icon(
             'folder_blue.png',
             $title,
-            array('class' => 'sessionView', 'width' => 24),
+            array('class' => 'sessionView'),
             ICON_SIZE_LARGE
         );
 
@@ -1617,17 +1651,18 @@ class IndexManager
 
     /**
      * return HTML code for session
-     * @param $id
-     * @param $title
-     * @param $categotySessionId
-     * @param $courseCode
+     * @param int $id session id
+     * @param string $title session title
+     * @param int $categorySessionId
+     * @param array $courseInfo
+     *
      * @return string
      */
-    private static function getHtmlForSession($id, $title, $categotySessionId, $courseCode)
+    private static function getHtmlForSession($id, $title, $categorySessionId, $courseInfo)
     {
         $html = '';
 
-        if ($categotySessionId == 0) {
+        if ($categorySessionId == 0) {
             $class1 = 'session-view-lvl-2';    // session
             $class2 = 'session-view-lvl-4';    // got to course in session link
         } else {
@@ -1638,14 +1673,14 @@ class IndexManager
         $icon = Display::return_icon(
             'blackboard_blue.png',
             $title,
-            array('class' => 'sessionView', 'width' => 24),
+            array('class' => 'sessionView'),
             ICON_SIZE_LARGE
         );
-        $courseLink = api_get_path(WEB_COURSE_PATH).$courseCode.'/index.php?id_session='.intval($id);
+        $courseLink = $courseInfo['course_public_url'].'?id_session='.intval($id);
 
         $html .= "<span class='$class1 session-view-session'>$icon$title</span>";
         $html .= '<div class="'.$class2.' session-view-session-go-to-course-in-session">
-                <a class="" href="'.$courseLink.'">'.get_lang('GoToCourseInsideSession').'</a></div>';
+                  <a class="" href="'.$courseLink.'">'.get_lang('GoToCourseInsideSession').'</a></div>';
 
         return '<div>'.$html.'</div>';
     }

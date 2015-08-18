@@ -3051,8 +3051,6 @@ class UserManager
         return $temp;
     }
 
-
-
     /**
      * @author Isaac flores <isaac.flores@dokeos.com>
      * @param string The email administrator
@@ -3079,9 +3077,9 @@ class UserManager
         for ($i = 0; $i < count($array_users_administrator); $i++) {
             $sql_insert_outbox = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
                 " VALUES (".
-                "'".(int) $user_id."', '".(int) ($array_users_administrator[$i])."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
+                "'".(int) $user_id."', '".(int) ($array_users_administrator[$i])."', '4', '".api_get_utc_datetime()."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
                 ")";
-            $rs = Database::query($sql_insert_outbox);
+            Database::query($sql_insert_outbox);
         }
     }
 

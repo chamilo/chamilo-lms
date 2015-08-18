@@ -9,7 +9,7 @@
  * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
  *
  */
-// Including the global initialization file
+
 require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -34,9 +34,9 @@ $sql = "SELECT survey_invitation.user
         LEFT JOIN $table_survey survey
         ON survey_invitation.survey_code = survey.code
         WHERE
-          survey_invitation.c_id = $course_id AND
-          survey.survey_id = $surveyId AND
-          survey_invitation.user = $userId";
+            survey_invitation.c_id = $course_id AND
+            survey.survey_id = $surveyId AND
+            survey_invitation.user = $userId";
 $result = Database::query($sql);
 if (Database::num_rows($result) > 0) {
     $userInvited = 1;
@@ -221,10 +221,8 @@ if (api_is_course_admin() ||
 	if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
         if ($show == 0) {
 			$form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
-            //echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'   </button>';
         } else {
 			$form->addButton('next_survey_page', get_lang('NextQuestion'), 'arrow-right');
-		    //echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'   </button>';
         }
 	}
 	if ($show >= $numberofpages && $_GET['show'] || (isset($_GET['show']) && count($questions) == 0)) {
@@ -232,7 +230,6 @@ if (api_is_course_admin() ||
 			echo '<p>'.get_lang('ThereAreNotQuestionsForthisSurvey').'</p>';
 		}
 		$form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
-		//echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'  </button>';
 	}
 	$form->display();
 } else {

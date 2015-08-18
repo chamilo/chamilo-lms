@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 require_once '../inc/global.inc.php';
 
 if (!api_is_allowed_to_edit(false, true)) {
@@ -23,7 +24,12 @@ if (!SurveyManager::survey_generation_hash_available()) {
     api_not_allowed(true);
 }
 
-$link = SurveyManager::generate_survey_link($survey_id, api_get_course_int_id(), api_get_session_id(), api_get_group_id());
+$link = SurveyManager::generate_survey_link(
+    $survey_id,
+    api_get_course_int_id(),
+    api_get_session_id(),
+    api_get_group_id()
+);
 echo '<div class="row">';
     echo '<div class="span12" style="text-align:center">';
     echo Display::url(get_lang('GenerateSurveyAccessLink'), $link, array('class' => 'btn btn-primary btn-large'));

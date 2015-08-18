@@ -23,42 +23,40 @@ class LegalManager
 	 */
 	public static function add($language, $content, $type, $changes)
     {
-		$legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-		$last = self::get_last_condition($language);
-		$language = Database::escape_string($language);
-		$content  = Database::escape_string($content);
-		$type     = intval($type);
-		$changes  = Database::escape_string($changes);
-		$time = time();
+        $legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
+        $last = self::get_last_condition($language);
+        $type     = intval($type);
+        $time = time();
 
-		if ($last['content'] != $content) {
-			$version = intval(LegalManager::get_last_condition_version($language));
-			$version++;
-			 $sql = "INSERT INTO $legal_table SET
-			            language_id = '".$language."',
-                        content = '".$content."',
-                        changes= '".$changes."',
-                        type = '".$type."',
-                        version = '".intval($version)."',
-                        date = '".$time."'";
-			Database::query($sql);
+        if ($last['content'] != $content) {
+            $version = intval(LegalManager::get_last_condition_version($language));
+            $version++;
+            $params = [
+                'language_id' => $language,
+                'content' => $content,
+                'changes' => $changes,
+                'type' => $type,
+                'version' => intval($version),
+                'date' => $time
+            ];
+            Database::insert($legal_table, $params);
 
-			return true;
-		} elseif($last['type'] != $type && $language==$last['language_id']) {
-			//update
-			$id = $last['legal_id'];
-			$sql = "UPDATE $legal_table SET
-                        changes= '".$changes."',
-                        type = '".$type."',
-                        date = '".$time."'
-					WHERE legal_id= $id  ";
-			Database::query($sql);
+            return true;
+        } elseif($last['type'] != $type && $language==$last['language_id']) {
+            //update
+            $id = $last['legal_id'];
+            $params = [
+                'changes' => $changes,
+                'type' => $type,
+                'date' => $time
+            ];
+            Database::update($legal_table, $params, ['legal_id => ?' => $id]);
 
-			return true;
-		} else {
-			return false;
-		}
-	}
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 	public static function delete($id)
     {

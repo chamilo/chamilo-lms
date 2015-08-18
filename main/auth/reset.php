@@ -24,7 +24,7 @@ $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
 $form->addButtonSave(get_lang('Update'));
 
-$ttl = api_get_configuration_value('user_reset_password_token_limit');
+$ttl = api_get_setting('user_reset_password_token_limit');
 if (empty($ttl)) {
     $ttl = 3600;
 }

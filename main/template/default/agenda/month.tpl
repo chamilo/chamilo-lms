@@ -44,7 +44,7 @@ $(document).ready(function() {
         zIndex: 20000 // added because of qtip2
    	});
 
-	var title = $( "#title" ),
+	var title = $("#title"),
 	content = $( "#content" ),
 	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
 
@@ -114,8 +114,8 @@ $(document).ready(function() {
 			// Cleans the selected attr
 		    clean_user_select();
 
-            //Sets the 1st item selected by default
-            //$('#users_to_send_id option').eq(0).attr('selected', 'selected');
+            // Sets the 1st item selected by default
+            $('#users_to_send_id option').eq(0).attr('selected', 'selected');
 
 			// Update chz-select
 			//$("#users_to_send_id").trigger("chosen:updated");
@@ -167,7 +167,7 @@ $(document).ready(function() {
                                             var user_id = String(user).substring(5,user_length);
                                         }
                                         var temp = "&user_id="+user_id;
-                                        var position =String(window.location).indexOf("&user");
+                                        var position = String(window.location).indexOf("&user");
                                         var url_length = String(window.location).length;
                                         var url = String(window.location).substring(0, position)+temp;
                                         /*if (position > 0) {
@@ -181,6 +181,10 @@ $(document).ready(function() {
 									    calendar.fullCalendar("rerenderEvents");*/
                                     }
 
+                                    $("#title").val('');
+                                    $("#content").val('');
+                                    $("#comment").val('');
+
                                     calendar.fullCalendar("refetchEvents");
                                     calendar.fullCalendar("rerenderEvents");
 
@@ -190,9 +194,9 @@ $(document).ready(function() {
 						}
 					},
 					close: function() {
-						$("#title").attr('value', '');
-						$("#content").attr('value', '');
-                        $("#comment").attr('value', '');
+                        $("#title").val('');
+                        $("#content").val('');
+                        $("#comment").val('');
 					}
 				});
 
@@ -440,9 +444,9 @@ $(document).ready(function() {
 						$("#content_edit").html('');
                         $("#comment_edit").html('');
 
-                        $("#title").attr('value', '');
-                        $("#content").attr('value', '');
-                        $("#comment").attr('value', '');
+                        $("#title").val('');
+                        $("#content").val('');
+                        $("#comment").val('');
 					}
 				});
 			} else {
@@ -455,8 +459,8 @@ $(document).ready(function() {
                 }
                 if (calEvent.course_name) {
                     $("#calendar_course_info_simple").html(
-                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Course' | get_lang }}</label>' +
-                        '<div class="col-sm-8">' + calEvent.course_name+"</div></div>"
+                        '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Course' | get_lang }}</label>' +
+                        '<div class="col-sm-9">' + calEvent.course_name+"</div></div>"
                     );
                 } else {
                     $("#calendar_course_info_simple").html('');
@@ -464,8 +468,8 @@ $(document).ready(function() {
 
                 if (calEvent.session_name) {
                     $("#calendar_session_info").html(
-                        '<div class="form-group"><label class="col-sm-2 control-label">{{ 'Session' | get_lang }}</label>' +
-                        '<div class="col-sm-8">' + calEvent.session_name+"</div></div>"
+                        '<div class="form-group"><label class="col-sm-3 control-label">{{ 'Session' | get_lang }}</label>' +
+                        '<div class="col-sm-9">' + calEvent.session_name+"</div></div>"
                     );
 
                 } else {
@@ -536,36 +540,35 @@ $(document).ready(function() {
             <span id="calendar_course_info_simple"></span>
             <span id="calendar_session_info"></span>
             <div class="form-group">
-                <label class="col-sm-2 control-label">
+                <label class="col-sm-3 control-label">
                     <b>{{ "Date" |get_lang}}</b>
                 </label>
-                <div class="col-sm-8">
+                <div class="col-sm-9">
                     <span id="simple_start_date"></span>
                     <span id="simple_end_date"></span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">
+                <label class="col-sm-3 control-label">
                     <b>{{ "Title" |get_lang}}</b>
                 </label>
-                <div class="col-sm-8">
+                <div class="col-sm-9">
                     <div id="simple_title"></div>
                 </div>
             </div>
-
             <div class="form-group">
-                <label class="col-sm-2 control-label">
+                <label class="col-sm-3 control-label">
                     <b>{{ "Description" |get_lang}}</b>
                 </label>
-                <div class="col-sm-8">
+                <div class="col-sm-9">
                     <div id="simple_content"></div>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">
+                <label class="col-sm-3 control-label">
                     <b>{{ "Comment" |get_lang}}</b>
                 </label>
-                <div class="col-sm-8">
+                <div class="col-sm-9">
                     <div id="simple_comment"></div>
                 </div>
             </div>

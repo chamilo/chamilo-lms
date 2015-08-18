@@ -1432,7 +1432,7 @@ class learnpath
 
             if ($old_prerequisite != $prerequisites) {
                 $sql = "UPDATE " . $tbl_lp_item . "
-                        SET prerequisite = " . $prerequisites . "
+                        SET prerequisite = '" . $prerequisites . "'
                         WHERE c_id = ".$course_id." AND id = " . $id;
                 Database::query($sql);
             }
@@ -2248,8 +2248,8 @@ class learnpath
      * Checks if the learning path is visible for student after the progress
      * of its prerequisite is completed, considering the time availability and
      * the LP visibility.
-     * @param int		Learnpath id
-     * @param int		Student id
+     * @param int $lp_id
+     * @param int $student_id
      * @param string Course code (optional)
      * @param int $sessionId
      * @return	bool
@@ -2588,10 +2588,12 @@ class learnpath
      */
     public function get_preview_image_path($size = null, $path_type = 'web')
     {
+
         $preview_image = $this->get_preview_image();
         if (isset($preview_image) && !empty($preview_image)) {
             $image_sys_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
             $image_path = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
+
             if (isset($size)) {
                 $info = pathinfo($preview_image);
                 $image_custom_size = $info['filename'].'.'.$size.'.'.$info['extension'];
@@ -3345,7 +3347,7 @@ class learnpath
             $html .= '</div>';
 
         } else {
-            $html = '<div id="scorm_title" class="scorm-heading">' . Security::remove_XSS($this->get_name()) . '</div>';
+            //$html = '<div id="scorm_title" class="scorm-heading">' . Security::remove_XSS($this->get_name()) . '</div>';
             $html .= '<div class="scorm-body">';
             $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
 
@@ -3382,7 +3384,6 @@ class learnpath
                 );
 
                 // Style Status
-
                 $class_name = array(
                     'not attempted' => 'scorm_not_attempted',
                     'incomplete' => 'scorm_not_attempted',
@@ -3393,11 +3394,11 @@ class learnpath
                     'browsed' => 'scorm_completed',
                 );
 
-                $scorm_color_background = 'scorm_item_2';
+                $scorm_color_background = 'row_odd';
                 $style_item = '';
 
                 if ($color_counter % 2 == 0) {
-                    $scorm_color_background = 'scorm_item_1';
+                    $scorm_color_background = 'row_even';
                 }
 
                 $dirTypes = self::getChapterTypes();
@@ -5759,7 +5760,14 @@ class learnpath
             //Link for the documents
             if ($arrLP[$i]['item_type'] == 'document') {
                 $url = api_get_self() . '?'.api_get_cidreq().'&action=view_item&mode=preview_document&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id;
-                $title_cut = Display::url($title_cut, $url, array('class' => 'ajax'));
+                $title_cut = Display::url(
+                    $title_cut,
+                    $url,
+                    array(
+                        'class' => 'ajax',
+                        'data-title' => $title_cut
+                    )
+                );
             }
 
             if (($i % 2) == 0) {

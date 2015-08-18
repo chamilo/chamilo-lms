@@ -23,7 +23,13 @@ $form = new FormValidator('plugin', 'post', $url);
 $form->addElement('header', $legal->get_lang('CourseLegal'));
 $form->addElement('hidden', 'session_id', $sessionId);
 $form->addElement('hidden', 'c_id', $courseId);
-$form->addElement('textarea', 'content', get_lang('Text'));
+$form->addHtmlEditor(
+    'content',
+    get_lang('Text'),
+    true,
+    false,
+    ['ToolbarSet' => 'TermsAndConditions']
+);
 $form->addElement('file', 'uploaded_file', get_lang('File'));
 $file = $legal->getCurrentFile($courseId, $sessionId);
 

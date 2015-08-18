@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	This is the tracking library for Chamilo.
 *
@@ -12,9 +13,7 @@
 * @author Jorge Frisancho Jibaja - select between dates
 *
 */
-/**
- * Code
- */
+
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -35,7 +34,13 @@ $quote_simple = "'";
 $form = new FormValidator('myform', 'get', api_get_self(), null, array('id' => 'myform'));
 $form->addElement('text', 'from', get_lang('From'), array('id' => 'date_from'));
 $form->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to'));
-$form->addElement('select', 'type', get_lang('Type'), array('day' => get_lang('Day'), 'month' => get_lang('Month')), array('id' => 'type'));
+$form->addElement(
+    'select',
+    'type',
+    get_lang('Type'),
+    array('day' => get_lang('Day'), 'month' => get_lang('Month')),
+    array('id' => 'type')
+);
 $form->addElement('hidden', 'student', $user_id);
 $form->addElement('hidden', 'course', $course_code);
 $form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
@@ -44,9 +49,8 @@ $group = array(
     $form->createElement(
         'label',
         null,
-        Display::url(get_lang('Send'), 'javascript://', array('onclick'=> 'loadGraph();', 'class' => 'btn'))
+        Display::url(get_lang('Search'), 'javascript://', array('onclick'=> 'loadGraph();', 'class' => 'btn btn-default'))
     )
-    //$form->createElement('label', null, Display::url(get_lang('Reset'), 'javascript:void()', array('id' => "reset_button", 'class' => 'btn')))
 );
 $form->addGroup($group);
 $from = null;

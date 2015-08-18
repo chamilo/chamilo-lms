@@ -246,16 +246,9 @@ $social_menu_block = SocialManager::show_social_menu('shared_profile', null, $us
 //Setting some session info
 $user_info = api_get_user_info($my_user_id);
 $sessionList = SessionManager::getSessionsFollowedByUser($my_user_id, $user_info['status']);
-$htmlSessionList = null;
-foreach ($sessionList as $session) {
-    $htmlSessionList .= '<div>';
-    $htmlSessionList .= Display::return_icon('session.png', get_lang('Session'));
-    $htmlSessionList .= $session['name'];
-    $htmlSessionList .= '</div>';
-}
 
 // My friends
-$friend_html = SocialManager::listMyFriends(
+$friend_html = SocialManager::listMyFriendsBlock(
     $user_id,
     $link_shared,
     $show_full_profile
@@ -480,23 +473,24 @@ if ($show_full_profile) {
         // Courses without sessions
         $my_course = '';
         $i = 1;
+       
         foreach ($list as $key => $value) {
             if ( empty($value[2]) ) { //if out of any session
                 $my_courses .=  $value[1];
-                $my_courses .=  '<div id="social_content'.$i.'" class="course_social_content" style="display:none" >s</div>';
                 $i++;
             }
         }
         $social_course_block .=  $my_courses;
-        $social_course_block = Display::panel($my_courses, get_lang('MyCourses'));
+        //$social_course_block = Display::panel($my_courses, get_lang('MyCourses'));
     }
 
     //Block Social Sessions
 
     if (count($sessionList) > 0) {
-        $social_session_block = Display::panel($htmlSessionList, get_lang('MySessions'));
+        //$social_session_block = $htmlSessionList;
+        $social_session_block = $sessionList;
     }
-
+    
     // Block Social User Feeds
     $user_feeds = SocialManager::get_user_feeds($user_id);
 
@@ -629,7 +623,7 @@ $tpl->assign('social_course_block', $social_course_block);
 $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($my_user_id));
-$tpl->assign('social_session_block', $social_session_block);
+$tpl->assign('sessionList', $social_session_block);
 $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 

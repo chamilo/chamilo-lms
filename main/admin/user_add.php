@@ -177,7 +177,13 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
 }
 
 $group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
-$group[] = $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
+$group[] = $form->createElement(
+    'radio',
+    'password_auto',
+    'id="radio_user_password"',
+    get_lang('EnterPassword'),
+    0
+);
 $group[] = $form->createElement(
     'password',
     'password',

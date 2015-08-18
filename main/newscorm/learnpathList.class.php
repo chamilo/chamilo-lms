@@ -53,6 +53,7 @@ class LearnpathList
         $course_id = $course_info['real_id'];
 
         if (empty($course_id)) {
+
             return false;
         }
 
@@ -67,7 +68,7 @@ class LearnpathList
 
         $order = "ORDER BY display_order ASC, name ASC";
         if (isset($order_by)) {
-            $order = Database::parse_conditions(array('order'=>$order_by));
+            $order = Database::parse_conditions(array('order' => $order_by));
         }
 
         $now = api_get_utc_datetime();
@@ -82,11 +83,11 @@ class LearnpathList
             ";
         }
 
-        $categoryFilter = '';
-
-        if (!is_null($categoryId) && is_numeric($categoryId)) {
+        if (!empty($categoryId)) {
             $categoryId = intval($categoryId);
             $categoryFilter = " AND category_id = $categoryId";
+        } else {
+            $categoryFilter = " AND (category_id = 0 OR category_id IS NULL) ";
         }
 
         $sql = "SELECT * FROM $lp_table
@@ -97,7 +98,6 @@ class LearnpathList
                     $categoryFilter
                 $order
                     ";
-
         $res = Database::query($sql);
         $names = array();
         while ($row = Database::fetch_array($res,'ASSOC')) {
@@ -157,34 +157,35 @@ class LearnpathList
             }
 
             $this->list[$row['id']] = array(
-                'lp_type'           => $row['lp_type'],
-                'lp_session'        => $row['session_id'],
-                'lp_name'           => stripslashes($row['name']),
-                'lp_desc'           => stripslashes($row['description']),
-                'lp_path'           => $row['path'],
-                'lp_view_mode'      => $row['default_view_mod'],
-                'lp_force_commit'   => $row['force_commit'],
-                'lp_maker'	        => stripslashes($row['content_maker']),
-                'lp_proximity'      => $row['content_local'],
-                'lp_encoding'       => api_get_system_encoding(),
-                'lp_visibility'     => $vis,
-                'lp_published'	    => $pub,
+                'lp_type' => $row['lp_type'],
+                'lp_session' => $row['session_id'],
+                'lp_name' => stripslashes($row['name']),
+                'lp_desc' => stripslashes($row['description']),
+                'lp_path' => $row['path'],
+                'lp_view_mode' => $row['default_view_mod'],
+                'lp_force_commit' => $row['force_commit'],
+                'lp_maker' => stripslashes($row['content_maker']),
+                'lp_proximity' => $row['content_local'],
+                'lp_encoding' => api_get_system_encoding(),
+                'lp_visibility' => $vis,
+                'lp_published' => $pub,
                 'lp_prevent_reinit' => $row['prevent_reinit'],
-                'seriousgame_mode'  => $row['seriousgame_mode'],
-                'lp_scorm_debug'    => $row['debug'],
-                'lp_display_order'  => $row['display_order'],
-                'lp_preview_image'  => stripslashes($row['preview_image']),
-                'autolaunch'        => $row['autolaunch'],
-                'session_id'        => $row['session_id'],
-                'created_on'        => $row['created_on'],
-                'modified_on'       => $row['modified_on'],
-                'publicated_on'     => $row['publicated_on'],
-                'expired_on'        => $row['expired_on'],
+                'seriousgame_mode' => $row['seriousgame_mode'],
+                'lp_scorm_debug' => $row['debug'],
+                'lp_display_order' => $row['display_order'],
+                'lp_preview_image' => stripslashes($row['preview_image']),
+                'autolaunch' => $row['autolaunch'],
+                'session_id' => $row['session_id'],
+                'created_on' => $row['created_on'],
+                'modified_on' => $row['modified_on'],
+                'publicated_on' => $row['publicated_on'],
+                'expired_on' => $row['expired_on'],
                 //'category_id'       => $row['category_id'],
-                'subscribe_users'   => $row['subscribe_users']
+                'subscribe_users' => $row['subscribe_users'],
             );
             $names[$row['name']] = $row['id'];
         }
+
         $this->alpha_list = asort($names);
     }
 

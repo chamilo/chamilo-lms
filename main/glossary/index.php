@@ -66,7 +66,12 @@ switch ($action) {
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'export') {
-	$data = GlossaryManager::get_glossary_data(0, GlossaryManager::get_number_glossary_terms (api_get_session_id()), 0, 'ASC');
+    $data = GlossaryManager::get_glossary_data(
+        0,
+        GlossaryManager::get_number_glossary_terms(api_get_session_id()),
+        0,
+        'ASC'
+    );
 
     usort($data, "sorter");
     $list = array();
@@ -86,7 +91,7 @@ Display::display_header($tool_name);
 // Tool introduction
 Display::display_introduction_section(TOOL_GLOSSARY);
 
-if (isset($_GET['action']) && $_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table'))) {
+if (isset($_GET['action']) && $_GET['action'] == 'changeview' && in_array($_GET['view'], array('list','table'))) {
     $_SESSION['glossary_view'] = $_GET['view'];
 } else {
     if (!isset($_SESSION['glossary_view'])) {
@@ -101,9 +106,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $form = new FormValidator(
                 'glossary',
                 'post',
-                api_get_self().'?action='.Security::remove_XSS(
-                    $_GET['action']
-                ).'&'.api_get_cidreq()
+                api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq()
             );
             // Setting the form elements
             $form->addElement('header', '', get_lang('TermAddNew'));
@@ -200,7 +203,11 @@ if (api_is_allowed_to_edit(null, true)) {
             GlossaryManager::display_glossary();
             break;
         case 'import':
-            $form = new FormValidator('glossary','post', api_get_self().'?action=import');
+            $form = new FormValidator(
+                'glossary',
+                'post',
+                api_get_self().'?action=import&'.api_get_cidreq()
+            );
             $form->addElement('header', '', get_lang('ImportGlossary'));
             $form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
             $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllGlossaryTerms'));
@@ -218,7 +225,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 if (isset($_POST['replace']) && $_POST['replace']) {
                     foreach (GlossaryManager::get_glossary_terms() as $term) {
                         if (!GlossaryManager::delete_glossary($term['id'], false)) {
-                            Display::display_error_message (get_lang ("CannotDeleteGlossary") . ':' . $term['id']);
+                            Display::display_error_message(get_lang ("CannotDeleteGlossary") . ':' . $term['id']);
                         }
                     }
                 }
@@ -227,16 +234,25 @@ if (api_is_allowed_to_edit(null, true)) {
                 $good = 0;
                 $bad = 0;
                 foreach ($data as $item) {
-                    if (GlossaryManager::save_glossary(array('glossary_title' => $item['term'], 'glossary_comment' => $item['definition']), false))
+                    $result = GlossaryManager::save_glossary(
+                        array(
+                            'glossary_title' => $item['term'],
+                            'glossary_comment' => $item['definition'],
+                        ),
+                        false
+                    );
+
+                    if ($result)
                         $good++;
                     else
                         $bad++;
                 }
 
-                Display::display_confirmation_message (get_lang ("TermsImported") . ':' . $good);
+                Display::display_confirmation_message(get_lang ("TermsImported") . ':' . $good);
 
-                if ($bad)
+                if ($bad) {
                     Display::display_error_message (get_lang ("TermsNotImported") . ':' . $bad);
+                }
 
                 GlossaryManager::display_glossary();
             }

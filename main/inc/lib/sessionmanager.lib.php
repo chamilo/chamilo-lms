@@ -1607,17 +1607,16 @@ class SessionManager
                 );
                 $content = $tplContent->fetch($layoutContent);
 
-                MessageManager::send_message(
-                    $user_id,
+                api_mail_html(
+                    $user_info['complete_name'],
+                    $user_info['mail'],
                     $subject,
                     $content,
-                    array(),
-                    array(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
+                    api_get_person_name(
+                        api_get_setting('administratorName'),
+                        api_get_setting('administratorSurname')
+                    ),
+                    api_get_setting('emailAdministrator')
                 );
             }
         }
@@ -3087,8 +3086,30 @@ class SessionManager
 
         $sessions = array();
         if (Database::num_rows($result) > 0) {
+            $sessionImage = '';
+            $sysUploadPath = api_get_path(SYS_UPLOAD_PATH). 'sessions/';
+            $webUploadPath = api_get_path(WEB_UPLOAD_PATH). 'sessions/';
+            $imgPath = api_get_path(WEB_IMG_PATH) . 'session_default_small.png';
+
+            $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
+            $sql = "SELECT id FROM " . $tableExtraFields . " WHERE extra_field_type = 3 AND variable='image'";
+            $resultField = Database::query($sql);
+            $imageFieldId = Database::fetch_assoc($resultField);
+
             while ($row = Database::fetch_array($result)) {
+                
+                $row['image'] =  null;
+                $sessionImage = $sysUploadPath . $imageFieldId['id'] . '_' . $row['id'] . '.png';
+                
+                if (is_file($sessionImage)) {
+                    $sessionImage = $webUploadPath . $imageFieldId['id'] . '_' . $row['id'] . '.png';
+                    $row['image'] = $sessionImage;
+                } else {
+                    $row['image'] =  $imgPath;
+                }
+                
                 $sessions[$row['id']] = $row;
+                
             }
         }
 
@@ -7340,7 +7361,8 @@ class SessionManager
             $listOneCourse = array();
             $listOneCourse['courseId'] = $courseId;
             $listOneCourse['title'] = $courseInfo['title'];
-            $listOneCourse['courseCode'] = $courseInfo['code'];
+            //$listOneCourse['courseCode'] = $courseInfo['code'];
+            $listOneCourse['course'] = $courseInfo;
             $listOneCourse['sessionCatList'] = array();
             $listCat = array();
             foreach ($listSessionId as $i => $sessionId) {
@@ -7476,17 +7498,18 @@ class SessionManager
         $htmlRes = '';
 
         $listInfo = self::getNamedSessionCourseForCoach($userId);
-        foreach($listInfo as $i => $listCoursesInfo) {
-            $courseCode = $listCoursesInfo['courseCode'];
-            $courseTitle = $listCoursesInfo['title'];
+        foreach ($listInfo as $i => $listCoursesInfo) {
+            $courseInfo = $listCoursesInfo['course'];
+            $courseCode = $listCoursesInfo['course']['code'];
+
             $listParamsCourse = array();
             $listParamsCourse['icon'] = '<div style="float:left">
                 <input style="border:none;" type="button" onclick="$(\'#course-'.$courseCode.'\').toggle(\'fast\')" value="+" /></div>'.
-                Display::return_icon('blackboard.png', $listCoursesInfo['title'], array(), ICON_SIZE_LARGE);
+                Display::return_icon('blackboard.png', $courseInfo['title'], array(), ICON_SIZE_LARGE);
             $listParamsCourse['link'] = '';
             $listParamsCourse['title'] = Display::tag(
                 'a',
-                $listCoursesInfo['title'],
+                $courseInfo['title'],
                 array('href' => $listParamsCourse['link'])
             );
             $htmlCourse = '<div class="well" style="border-color:#27587D">'.
@@ -7519,10 +7542,11 @@ class SessionManager
 
                     $listParamsSession['icon'] = Display::return_icon('blackboard_blue.png', $sessionName, array(), ICON_SIZE_LARGE);
                     $listParamsSession['link'] = '';
-                    $linkToCourseSession = api_get_path(WEB_PATH).'courses/'.$courseCode.'/?id_session='.$sessionId;
-                    $listParamsSession['title'] = $sessionName.'<div style="font-weight:normal; font-style:italic">
-                    <a href="'.$linkToCourseSession.'">
-                    '.get_lang('GoToCourseInsideSession').'</a></div>';
+                    $linkToCourseSession = $courseInfo['course_public_url'].'?id_session='.$sessionId;
+                    $listParamsSession['title'] =
+                        $sessionName.'<div style="font-weight:normal; font-style:italic">
+                            <a href="'.$linkToCourseSession.'">'.get_lang('GoToCourseInsideSession').'</a>
+                            </div>';
                     $htmlSession .= '<div style="margin-left:'.$marginShift.'px;">'.
                         CourseManager::course_item_html($listParamsSession, true).'</div>';
                 }
@@ -7533,6 +7557,4 @@ class SessionManager
 
         return $htmlRes;
     }
-
-
 }

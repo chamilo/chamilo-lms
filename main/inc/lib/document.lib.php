@@ -323,11 +323,11 @@ class DocumentManager
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);
+        global $_configuration;
 
         if ($forced) {
             // Force the browser to save the file instead of opening it
 
-            global $_configuration;
             if (isset($_configuration['enable_x_sendfile_headers']) &&
                 !empty($_configuration['enable_x_sendfile_headers'])) {
                 header("X-Sendfile: $filename");
@@ -364,15 +364,23 @@ class DocumentManager
             //header('Pragma: no-cache');
             switch ($content_type) {
                 case 'text/html':
-                    $encoding = @api_detect_encoding_html(file_get_contents($full_file_name));
-                    if (!empty($encoding)) {
-                        $content_type .= '; charset=' . $encoding;
+                    if (isset($_configuration['lp_fixed_encoding']) && $_configuration['lp_fixed_encoding'] === 'true') {
+                        $content_type .= '; charset=UTF-8';
+                    } else {
+                        $encoding = @api_detect_encoding_html(file_get_contents($full_file_name));
+                        if (!empty($encoding)) {
+                            $content_type .= '; charset=' . $encoding;
+                        }
                     }
                     break;
                 case 'text/plain':
-                    $encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
-                    if (!empty($encoding)) {
-                        $content_type .= '; charset=' . $encoding;
+                    if (isset($_configuration['lp_fixed_encoding']) && $_configuration['lp_fixed_encoding'] === 'true') {
+                        $content_type .= '; charset=UTF-8';
+                    } else {
+                        $encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
+                        if (!empty($encoding)) {
+                            $content_type .= '; charset=' . $encoding;
+                        }
                     }
                     break;
                 case 'application/vnd.dwg':

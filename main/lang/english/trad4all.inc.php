@@ -7288,7 +7288,7 @@ $ShowOfficialCodeInExerciseResultListComment = "Whether to show the students' of
 $HidePrivateCoursesFromCourseCatalogTitle = "Hide private courses from catalogue";
 $HidePrivateCoursesFromCourseCatalogComment = "Whether to hide the private courses from the courses catalogue. This makes sense when you use the course catalogue mainly to allow students to auto-subscribe to the courses.";
 $CoursesCatalogueShowSessionsTitle = "Sessions and courses catalogue";
-$CoursesCatalogueShowSessionsComment = "Whether you want to show only courses, only sessions or both courses *and* sessions in the courses catalogue. Or hide the catalogue.";
+$CoursesCatalogueShowSessionsComment = "Whether you want to show only courses, only sessions or both courses *and* sessions in the courses catalogue.";
 $AutoDetectLanguageCustomPagesTitle = "Enable language auto-detect in custom pages";
 $AutoDetectLanguageCustomPagesComment = "If you use custom pages, enable this if you want to have a language detector there present the page in the user's browser language, or disable to force the language to be the default platform language.";
 $LearningPathShowReducedReportTitle = "Learning paths: show reduced report";
@@ -7501,6 +7501,5 @@ $ResetPasswordTokenLimitTitle = "Time limit for password reset token";
 $ResetPasswordTokenLimitComment = "The number of seconds before the generated token automatically expires and cannot be used anymore (a new token needs to be generated).";
 $ViewMyCoursesListBySessionTitle = "View my courses by session";
 $ViewMyCoursesListBySessionComment = "Enable an additional 'My courses' page where sessions appear as part of courses, rather than the opposite.";
-$CatalogueShowNone = "Hide catalogue";
 $EnterPassword = "Enter password";
 ?>

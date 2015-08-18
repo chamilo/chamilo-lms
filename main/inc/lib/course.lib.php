@@ -1841,11 +1841,14 @@ class CourseManager
                     $teacher['lastname']
                 );
                 if ($add_link_to_profile) {
-                    $url = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&resizable=0&height=500&user_id=' . $teacher['user_id'];
+                    $url = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $teacher['user_id'];
                     $teacher_name = Display::url(
                         $teacher_name,
                         $url,
-                        array('class' => 'ajax')
+                        [
+                            'class' => 'ajax',
+                            'data-title' => $teacher_name
+                        ]
                     );
                 }
                 $list[] = $teacher_name;
@@ -1925,8 +1928,15 @@ class CourseManager
             foreach ($coachs_course as $coach_course) {
                 $coach_name = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
                 if ($add_link_to_profile) {
-                    $url = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&resizable=0&height=300&user_id=' . $coach_course['user_id'];
-                    $coach_name = Display::url($coach_name, $url, array('class' => 'ajax'));
+                    $url = api_get_path(WEB_AJAX_PATH) . 'user_manager.ajax.php?a=get_user_popup&user_id=' . $coach_course['user_id'];
+                    $coach_name = Display::url(
+                        $coach_name,
+                        $url,
+                        [
+                            'class' => 'ajax',
+                            'data-title' => $coach_name
+                        ]
+                    );
                 }
                 $course_coachs[] = $coach_name;
             }
@@ -4571,9 +4581,14 @@ class CourseManager
             if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'],
                     $my_course_code_list)
             ) {
-                $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'),
+                $my_course['extra_info']['description_button'] = Display::url(
+                    get_lang('Description'),
                     api_get_path(WEB_AJAX_PATH) . 'course_home.ajax.php?a=show_course_information&code=' . $course_info['code'],
-                    array('class' => 'btn btn-default btn-sm btn-block ajax'));
+                    [
+                        'class' => 'btn btn-default btn-sm btn-block ajax',
+                        'data-title' => get_lang('Description')
+                    ]
+                );
             }
 
             $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);

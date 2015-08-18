@@ -411,7 +411,7 @@ function display_thumbnail($course, $icon_title)
     echo '<div class="col-md-2">';
     echo '<div class="thumbnail">';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';
+        echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" data-title="'.$icon_title.'" title="'.$icon_title.'" rel="gb_page_center[778]">';
         echo '<img src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'" />';
         echo '</a>';
     } else {
@@ -448,7 +448,7 @@ function display_title($course)
 function display_description_button($course, $icon_title)
 {
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        echo '<a class="ajax btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
+        echo '<a class="ajax btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" data-title="'.get_lang('Description').'">'.get_lang('Description').'</a>';
     }
 }
 

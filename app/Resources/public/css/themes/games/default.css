@@ -547,6 +547,22 @@ footer .media{
   color: #666;
   font-size: 12px;
 }
+#session-list .date-session, #session-list .tags-session{
+    font-size: 12px;
+    color:#666;
+    text-indent: -12px;
+    margin-left: 24px;
+}
+#session-list .tags-session .fa-tags{
+    color: #00829C;
+    margin-right: 8px;
+}
+#session-list .title-session{
+    min-height: 35px;
+}
+#session-list .item{
+    min-height: 390px;
+}
 /* Profile */
 #page-profile .section-profile{
   color: #e73858;

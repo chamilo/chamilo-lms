@@ -1750,7 +1750,6 @@ VALUES
 ('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
 ('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
 ('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
-('catalog_show_courses_sessions', '3', 'CatalogueShowNone'),
 ('auto_detect_language_custom_pages', 'true', 'Yes'),
 ('auto_detect_language_custom_pages', 'false', 'No'),
 ('lp_show_reduced_report', 'true', 'Yes'),

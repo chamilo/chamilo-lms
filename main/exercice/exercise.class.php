@@ -1851,15 +1851,31 @@ class Exercise
         $hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;
 
         if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {
-            $html .='<a
-                href="exercise_submit_modal.php?learnpath_id='.$safe_lp_id.'&learnpath_item_id='.$safe_lp_item_id.'&learnpath_item_view_id='.$safe_lp_item_view_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&num='.$questionNum.'&exerciseType='.$this->type.'&exerciseId='.$this->id.'&height=480&width=640&modal=true"
-                title=""
-                class="ajax btn btn-default">';
+            $urlTitle = get_lang('ContinueTest');
+
             if ($questionNum == count($this->questionList)) {
-                $html .= get_lang('EndTest').'</a>';
-            } else {
-                $html .= get_lang('ContinueTest').'</a>';
+                $urlTitle = get_lang('EndTest');
             }
+
+            $html .= Display::url(
+                $urlTitle,
+                'exercise_submit_modal.php?' . http_build_query([
+                    'learnpath_id' => $safe_lp_id,
+                    'learnpath_item_id' => $safe_lp_item_id,
+                    'learnpath_item_view_id' => $safe_lp_item_view_id,
+                    'origin' => $origin,
+                    'hotspot' => $hotspot_get,
+                    'nbrQuestions' => $nbrQuestions,
+                    'num' => $questionNum,
+                    'exerciseType' => $this->type,
+                    'exerciseId' => $this->id
+                ]),
+                [
+                    'class' => 'ajax btn btn-default',
+                    'data-title' => $urlTitle,
+                    'data-size' => 'md'
+                ]
+            );
             $html .='<br />';
         } else {
             // User

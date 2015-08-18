@@ -334,12 +334,14 @@ $(function() {
         e.preventDefault();
 
         var contentUrl = this.href,
-            loadModalContent = $.get(contentUrl);
+            loadModalContent = $.get(contentUrl),
+            self = $(this);
 
         $.when(loadModalContent).done(function(modalContent) {
             var modalDialog = $('#global-modal').find('.modal-dialog'),
-                modalSize = get_url_params(contentUrl, 'modal_size'),
-                modalWidth = get_url_params(contentUrl, 'width');
+                modalSize = self.data('size') || get_url_params(contentUrl, 'modal_size'),
+                modalWidth = self.data('width') || get_url_params(contentUrl, 'width'),
+                modalTitle = self.data('title') || ' ';
 
             modalDialog.removeClass('modal-lg modal-sm').css('width', '');
 
@@ -356,6 +358,7 @@ $(function() {
                 modalDialog.css('width', modalWidth + 'px');
             }
 
+            $('#global-modal').find('.modal-title').text(modalTitle);
             $('#global-modal').find('.modal-body').html(modalContent);
 
             $('#global-modal').modal('show');

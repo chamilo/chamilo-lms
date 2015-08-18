@@ -183,6 +183,8 @@ function handle_plugins()
                     api_get_path(WEB_PLUGIN_PATH) . $plugin . "/readme.txt",
                     [
                         'class' => 'btn btn-default ajax',
+                        'data-title' => $plugin_info['title'],
+                        'data-size' => 'lg',
                         '_target' => '_blank'
                     ]
                 );

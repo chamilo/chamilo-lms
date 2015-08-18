@@ -7502,4 +7502,5 @@ $ResetPasswordTokenLimitComment = "The number of seconds before the generated to
 $ViewMyCoursesListBySessionTitle = "View my courses by session";
 $ViewMyCoursesListBySessionComment = "Enable an additional 'My courses' page where sessions appear as part of courses, rather than the opposite.";
 $CatalogueShowNone = "Hide catalogue";
+$EnterPassword = "Enter password";
 ?>

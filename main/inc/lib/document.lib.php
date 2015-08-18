@@ -5261,13 +5261,23 @@ class DocumentManager
                     )
                 ) {
                     // Simpler version of showinframesmin.php with no headers
-                    $url = 'show_content.php?' . api_get_cidreq() . '&id=' . $document_data['id']. '&width=700&height=500';
+                    $url = 'show_content.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
                     $class = 'ajax';
                     if ($visibility == false) {
                         $class = "ajax invisible";
                     }
-                    return '<a href="' . $url . '" class="' . $class . '" title="' . $tooltip_title_alt . '" style="float:left">' . $title . '</a>' .
-                    $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
+                    return Display::url(
+                        $title,
+                        $url,
+                        [
+                            'class' => $class,
+                            'title' => $tooltip_title_alt,
+                            'data-title' => $title,
+                            'style' => 'float: left;'
+                        ]
+                    )
+                        . $force_download_html . $send_to . $copy_to_myfiles
+                        . $open_in_new_window_link . $pdf_icon;
                 } else {
                     // For PDF Download the file.
                     $pdfPreview = null;

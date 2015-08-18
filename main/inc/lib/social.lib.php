@@ -1596,7 +1596,7 @@ class SocialManager extends UserManager
                     $friendHtml.= ' <span>'
                         .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
                         .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
-                        .'class="ajax" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
+                        .'class="ajax" data-title="'.get_lang('SeeAll').'" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
                 }
             }
 

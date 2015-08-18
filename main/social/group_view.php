@@ -181,11 +181,41 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     $content = MessageManager::display_messages_for_group($group_id);
     if ($is_group_member) {
         if (empty($content)) {
-            $create_thread_link =  '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=800&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn btn-default" title="'.get_lang('ComposeMessage').'">'.
-                get_lang('YouShouldCreateATopic').'</a></li>';
+            $createThreadUrl = api_get_path(WEB_CODE_PATH)
+                . 'social/message_for_group_form.inc.php?'
+                . http_build_query([
+                    'view_panel' => 1,
+                    'user_friend' => api_get_user_id(),
+                    'group_id' => $group_id,
+                    'action' => 'add_message_group'
+                ]);
+            $create_thread_link = Display::url(
+                get_lang('YouShouldCreateATopic'),
+                $createThreadUrl,
+                [
+                    'class' => 'ajax btn btn-default',
+                    'title' => get_lang('ComposeMessage'),
+                    'data-title' => get_lang('ComposeMessage')
+                ]
+            );
         } else {
-            $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn btn-default" title="'.get_lang('ComposeMessage').'">'.
-                get_lang('NewTopic').'</a>';
+            $createThreadUrl = api_get_path(WEB_CODE_PATH)
+                . 'social/message_for_group_form.inc.php?'
+                . http_build_query([
+                    'view_panel' => 1,
+                    'user_friend' => api_get_user_id(),
+                    'group_id' => $group_id,
+                    'action' => add_message_group,
+                ]);
+            $create_thread_link = Display::url(
+                get_lang('NewTopic'),
+                $createThreadUrl,
+                [
+                    'class' => 'ajax btn btn-default',
+                    'title' => get_lang('ComposeMessage'),
+                    'data-title' => get_lang('ComposeMessage')
+                ]
+            );
         }
     }
     $members = $usergroup->get_users_by_group($group_id, true);

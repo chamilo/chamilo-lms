@@ -659,12 +659,20 @@ class Nanogong
     public function show_button()
     {
 		$params_string = $this->get_params(true);
-        $html = '<br />'.Display::url(
+
+        $url = api_get_path(WEB_AJAX_PATH)
+            . 'nanogong.ajax.php?a=show_form&'
+            . $params_string
+            . '&TB_iframe=true';
+
+        $html = '<br />';
+        $html = Display::url(
             get_lang('RecordAnswer'),
-            api_get_path(
-                WEB_AJAX_PATH
-            ).'nanogong.ajax.php?a=show_form&'.$params_string.'&TB_iframe=true&height=400&width=500',
-            array('class' => 'btn btn-default ajax')
+            $url,
+            [
+                'class' => 'btn btn-default ajax',
+                'data-title' => get_lang('RecordAnswer')
+            ]
         );
 		$html .= '<br /><br />'.Display::return_message(get_lang('UseTheMessageBelowToAddSomeComments'));
 		return $html;

@@ -248,7 +248,12 @@ class Template
                 $content = '<li class="help">';
                 $content .= Display::url(
                     Display::return_icon('help.large.png', get_lang('Help')),
-                    api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600', array('class' => 'ajax'));
+                    api_get_path(WEB_CODE_PATH) . 'help/help.php?open=' . $help,
+                    [
+                        'class' => 'ajax',
+                        'data-title' => get_lang('Help')
+                    ]
+                );
                 $content .= '</li>';
             }
         }

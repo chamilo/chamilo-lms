@@ -7526,4 +7526,5 @@ $ResetPasswordTokenLimitComment = "El número de segundos antes de que la llave 
 $ViewMyCoursesListBySessionTitle = "Ver las sesiones por curso";
 $ViewMyCoursesListBySessionComment = "Activa una página \"Mis cursos\" adicional en la cual las sesiones aparecen como partes del curso, en vez de lo contrario.";
 $CatalogueShowNone = "Ocultar catálogo";
+$EnterPassword = "Ingresar contraseña";
 ?>

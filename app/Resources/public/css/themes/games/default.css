@@ -253,6 +253,20 @@ header .search-header{
 .navbar-nav > li > a{
 	font-size: 18px;
 }
+.navbar-nav li::after{
+    content: "";
+    position: absolute;
+    top: 18px;
+    right: 0px;
+    display: block;
+    height: 20px;
+    width: 1px;
+    opacity: 0.5;
+    background-color: #666;
+}
+.navbar-nav .dropdown::after{
+    background-color: #fff;
+}
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover{
 	background: none !important;
 }

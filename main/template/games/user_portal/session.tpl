@@ -102,7 +102,7 @@
                                     <i class="fa fa-pencil-square"></i>
 
                                     {% for coach in course.coaches %}
-                                        <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}" class="ajax">
+                                        <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id}|url_encode() }}" data-title="{{ coach.full_name }}" class="ajax">
                                             <span><i class="fa fa-square"></i> {{ coach.full_name }}</span>
                                         </a>
                                     {% endfor %}

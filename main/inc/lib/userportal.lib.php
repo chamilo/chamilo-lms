@@ -184,7 +184,18 @@ class IndexManager
 
             if ($show_course_link) {
                 if (!api_is_drh() && !api_is_session_admin()) {
-                    $html .=  '<li class="list-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'auth/courses.php">'.get_lang('CourseCatalog').'</a></li>';
+                    if (
+                        api_get_setting('catalog_show_courses_sessions') !== '3'
+                    ) {
+                        $html .= Display::tag(
+                            'li',
+                            Display::url(
+                                get_lang('CourseCatalog'),
+                                api_get_path(WEB_CODE_PATH) . 'auth/courses.php'
+                            ),
+                            ['class' => 'list-course']
+                        );
+                    }
                 } else {
                     $html .= '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
                 }
@@ -935,7 +946,23 @@ class IndexManager
 
         if ($show_course_link) {
             if (!api_is_drh()) {
-                $my_account_content .= '<li class="list-course"><a href="main/auth/courses.php" >'.Display::return_icon('catalog-course.png',get_lang('CourseCatalog'),null,ICON_SIZE_SMALL).get_lang('CourseCatalog').'</a></li>';
+                if (
+                    api_get_setting('catalog_show_courses_sessions') !== '3'
+                ) {
+                    $my_account_content .= Display::tag(
+                        'li',
+                        Display::url(
+                            Display::return_icon(
+                                'catalog-course.png',
+                                get_lang('CourseCatalog'),
+                                null,
+                                ICON_SIZE_SMALL
+                            ) . get_lang('CourseCatalog'),
+                            api_get_path(WEB_CODE_PATH) . 'auth/courses.php'
+                        ),
+                        ['class' => 'list-course']
+                    );
+                }
             } else {
                 $my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
             }

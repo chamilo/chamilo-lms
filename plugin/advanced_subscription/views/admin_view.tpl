@@ -26,6 +26,10 @@
             <p class="separate-badge">
                 <span class="badge badge-recom">{{ session.recommended_number_of_participants }}</span>
                 {{ "RecommendedNumberOfParticipants" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
+            <p class="separate-badge">
+                <span class="badge badge-info">{{ session.nbr_users }}</span>
+                {{ 'UsersNumber'|get_lang }}
+            </p>
             <h4>{{ "PublicationEndDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4> <p>{{ session.publication_end_date }}</p>
             <h4>{{ "Mode" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4> <p>{{ session.mode }}</p>
         </div>
@@ -77,6 +81,12 @@
                             >
                                 {{ 'RejectInfinitive' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
+                            {% else %}
+                                {% if student.status == approveAdmin%}
+                                    <span class="label label-success">{{ 'Accepted'|get_lang }}</span>
+                                {% elseif student.status == disapproveAdmin %}
+                                    <span class="label label-danger">{{ 'Rejected'|get_lang }}</span>
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>

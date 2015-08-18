@@ -187,6 +187,10 @@ switch ($action) {
         $courses_controller->courses_list($action);
         break;
     case 'subscribe':
+        if (!$user_can_view_page) {
+            api_not_allowed(true);
+        }
+
         $courses_controller->courses_categories(
             $action,
             $categoryCode,
@@ -197,13 +201,17 @@ switch ($action) {
         );
         break;
     case 'display_random_courses':
-        if ($user_can_view_page) {
-            $courses_controller->courses_categories($action);
-        } else {
-            api_not_allowed();
+        if (!$user_can_view_page) {
+            api_not_allowed(true);
         }
+
+        $courses_controller->courses_categories($action);
         break;
     case 'display_courses':
+        if (!$user_can_view_page) {
+            api_not_allowed(true);
+        }
+
         $courses_controller->courses_categories(
             $action,
             $categoryCode,
@@ -214,9 +222,17 @@ switch ($action) {
         );
         break;
     case 'display_sessions':
+        if (!$user_can_view_page) {
+            api_not_allowed(true);
+        }
+
         $courses_controller->sessionsList($action, $nameTools, $limit);
         break;
     case 'subscribe_to_session':
+        if (!$user_can_view_page) {
+            api_not_allowed(true);
+        }
+
         $userId = api_get_user_id();
         $confirmed = isset($_GET['confirm']);
         $sessionId = intval($_GET['session_id']);
@@ -287,6 +303,10 @@ switch ($action) {
         //else show error message?
         break;
     case 'search_tag':
+        if (!$user_can_view_page) {
+            api_not_allowed(true);
+        }
+
         $courses_controller->sessionsListByCoursesTag($limit);
         break;
 }

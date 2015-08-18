@@ -958,25 +958,39 @@ hr.separator:after {
   font-size: 12px;
 }
 .open-forum{
-  background-color: #EDEDF5;
-  text-align: center;
+  text-align: left;
   padding-top: 5px;
   padding-bottom: 5px;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
   cursor: pointer;
+  width: 100%;
 }
+.open-forum .comments-title,
+.closed-forum .comments-title{
+  color: #666;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ccc;
+}
+.open-forum .fa, .closed-forum .fa{
+    float: right;
+    position: absolute;
+    right: 0px;
+    top: 23px;
+    background-color: #fff;
+    padding: 10px;
+    color: #666;
+}
+/*.open-forum::after{
+    content: "";
+    font-family: FontAwesome;
+    float: right;
+    clear: both;
+    right: 0px;
+    position: absolute;
+}*/
 .closed-forum{
-  background-color: #EDEDF5;
-  text-align: center;
+  text-align: left;
   padding-top: 5px;
   padding-bottom: 5px;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
   cursor: pointer;
 }
 .panel-forum{

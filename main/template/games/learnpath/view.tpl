@@ -127,9 +127,12 @@
                 {% endif %}
                 <div class="panel-forum">
                     <div class="open-forum">
+                        <h4 class="comments-title">{{ "Comments"|get_lang }}</h4>
                         <i class="fa fa-chevron-up"></i>
                     </div>
                     <div class="closed-forum" style="display: none;">
+                        <h4 class="comments-title">{{ "Comments"|get_lang }}</h4>
+                        
                         <i class="fa fa-chevron-down"></i>
                     </div>
                     <div id="body-forum">
@@ -150,18 +153,24 @@
 
 
 //Function heigth frame content document items
-    function updateResizeFrame() {
+    function updateResizeFrame(x) {
         var scorm = $('#content_id');
 
         scorm.load(function () {
             this.style.overflow = 'hidden';
-            heightFrame = this.contentWindow.document.body.offsetHeight + 30 + 'px';
-            this.style.height = heightFrame;
+            if(x==null){
+                heightFrame = this.contentWindow.document.body.scrollHeight + 30;
+            }else{
+                heightFrame = this.contentWindow.document.body.scrollHeight + x;
+            }
+            
+            this.style.height = heightFrame.toString() + 'px';
             $('.panel-forum').css("top", heightFrame);
             $('#body-forum').css("display", "none");
         });
 
     }
+    
     $(document).ready(function () {
 
         updateResizeFrame();
@@ -192,7 +201,10 @@
             });
         });
 
-        $(".scorm-items-accordion li").click(function () {
+        $(".scorm-items-accordion .scorm_type_document").click(function () {
+            updateResizeFrame();
+        });
+        $(".scorm-items-accordion .scorm_type_quiz").click(function () {
             updateResizeFrame();
         });
 

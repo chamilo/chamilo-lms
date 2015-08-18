@@ -301,11 +301,33 @@ header .search-header{
 }
 .modal-content .modal-header{
     background-color: #35A8C9;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 .modal-header .close{
     color: #fff;
     opacity: 1;
     font-size: 25px;
+}
+.modal-title{
+    color: #fff;
+    padding-left: 15px;
+}
+.modal-body .btn-success{
+    background: #E63858;
+    color: #fff;
+    border-color: #E63858;
+}
+.modal-body .btn-success:hover{
+    background: #E52044;
+}
+.modal-body .btn-danger:hover{
+    background: #D8D8D8;
+}
+.modal-body .btn-danger{
+    background: #EEEEEE;
+    color: #666666;
+    border-color: #EEEEEE;
 }
 #ifprogress{
     border: none;

@@ -77,6 +77,12 @@
                             >
                                 {{ 'RejectInfinitive' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
+                            {% else %}
+                                {% if student.status == approveAdmin%}
+                                    <span class="label label-success">{{ 'Accepted'|get_lang }}</span>
+                                {% elseif student.status == disapproveAdmin %}
+                                    <span class="label label-danger">{{ 'Rejected'|get_lang }}</span>
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>

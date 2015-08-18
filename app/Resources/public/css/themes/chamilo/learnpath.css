@@ -1,17 +1,3 @@
-/* items scorm*/
-.scorm_item_normal.scorm_completed {
-  background:url("images/scorm_completed.png") no-repeat left center;
-}
-.scorm_item_normal.scorm_failed{
-  background:url("images/scorm_failed.png") no-repeat left center;
-}
-.scorm_item_normal.scorm_not_attempted{
-  background:url("images/scorm_not_attempted.png") no-repeat left center;	
-}
-.scorm_item_normal.scorm_highlight{
-  background:url("images/scorm_highlight.png") no-repeat left center;	
-}
-
 div.text {
 	margin-left : 6;
 	margin-right : 6;

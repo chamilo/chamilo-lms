@@ -703,7 +703,10 @@ if ($form->validate()) {
                     Display::span(get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')).'</a>';
             }
         } else {
-            if (api_get_setting('allow_students_to_browse_courses') == 'true') {
+            if (
+                api_get_setting('allow_students_to_browse_courses') == 'true' &&
+                api_get_setting('catalog_show_courses_sessions') !== '3'
+            ) {
                 $form_data['action'] = 'courses.php?action=subscribe';
                 $form_data['message'] = '<p>'. get_lang('NowGoChooseYourCourses', null, $_user['language']). ".</p>";
             } else {

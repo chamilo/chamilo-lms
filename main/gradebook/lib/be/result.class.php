@@ -131,7 +131,6 @@ class Result
                         Database::query($sql_insert);
                     }
                 }
-                $list_user_course_list = array();
             }
         }
 

@@ -169,7 +169,6 @@ VALUES
 ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
 ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
 ('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
-('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
 ('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0),
 ('enabled_asciisvg',NULL,'radio','Editor','false','AsciiSvgTitle','AsciiSvgComment',NULL,NULL, 0),
 ('include_asciimathml_script',NULL,'radio','Editor','false','IncludeAsciiMathMlTitle','IncludeAsciiMathMlComment',NULL,NULL, 0),
@@ -313,7 +312,8 @@ VALUES
 ('chamilo_database_version', NULL, 'textfield', NULL, '0', 'DatabaseVersion', '', NULL, NULL, 0),
 ('cron_remind_course_finished_activate', NULL, 'radio', 'Crons', 'false', 'CronRemindCourseFinishedActivateTitle', 'CronRemindCourseFinishedActivateComment', NULL, NULL, 1),
 ('cron_remind_course_expiration_frequency', NULL, 'textfield', 'Crons', '2', 'CronRemindCourseExpirationFrequencyTitle', 'CronRemindCourseExpirationFrequencyComment', NULL, NULL, 1),
-('cron_remind_course_expiration_activate', NULL, 'radio', 'Crons', 'false', 'CronRemindCourseExpirationActivateTitle', 'CronRemindCourseExpirationActivateComment', NULL, NULL, 1);
+('cron_remind_course_expiration_activate', NULL, 'radio', 'Crons', 'false', 'CronRemindCourseExpirationActivateTitle', 'CronRemindCourseExpirationActivateComment', NULL, NULL, 1),
+('allow_coach_feedback_exercises',NULL,'radio','Session','true','AllowCoachFeedbackExercisesTitle','AllowCoachFeedbackExercisesComment',NULL,NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -476,8 +476,6 @@ VALUES
 ('send_email_to_admin_when_create_course','false','No'),
 ('go_to_course_after_login','true','Yes'),
 ('go_to_course_after_login','false','No'),
-('math_mimetex','true','Yes'),
-('math_mimetex','false','No'),
 ('math_asciimathML','true','Yes'),
 ('math_asciimathML','false','No'),
 ('enabled_asciisvg','true','Yes'),
@@ -641,7 +639,9 @@ VALUES
 ('cron_remind_course_finished_activate', 'false', 'No'),
 ('cron_remind_course_finished_activate', 'true', 'Yes'),
 ('cron_remind_course_expiration_activate', 'false', 'No'),
-('cron_remind_course_expiration_activate', 'true', 'Yes');
+('cron_remind_course_expiration_activate', 'true', 'Yes'),
+('allow_coach_feedback_exercises','true','Yes'),
+('allow_coach_feedback_exercises','false','No');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),
@@ -1719,7 +1719,13 @@ VALUES
 ('dropbox_hide_course_coach', NULL, 'radio', 'Tools', 'false', 'DropboxHideCourseCoachTitle', 'DropboxHideCourseCoachComment', NULL, NULL, 1),
 ('sso_force_redirect', NULL, 'radio', 'Security', 'false', 'SSOForceRedirectTitle', 'SSOForceRedirectComment', NULL, NULL, 1),
 ('session_course_ordering', NULL, 'radio', 'Session', 'false', 'SessionCourseOrderingTitle', 'SessionCourseOrderingComment', NULL, NULL, 1),
-('gamification_mode', NULL, 'radio', 'Platform', '0', 'GamificationModeTitle', 'GamificationModeComment', NULL, NULL, 1);
+('gamification_mode', NULL, 'radio', 'Platform', '0', 'GamificationModeTitle', 'GamificationModeComment', NULL, NULL, 1),
+('prevent_multiple_simultaneous_login', NULL, 'radio', 'Security', 'false', 'PreventMultipleSimultaneousLoginTitle', 'PreventMultipleSimultaneousLoginComment', NULL, NULL, 0),
+('gradebook_detailed_admin_view', NULL, 'radio', 'Gradebook', 'false', 'ShowAdditionalColumnsInStudentResultsPageTitle', 'ShowAdditionalColumnsInStudentResultsPageComment', NULL, NULL, 1),
+('course_catalog_published', NULL, 'radio', 'Course', 'false', 'CourseCatalogIsPublicTitle', 'CourseCatalogIsPublicComment', NULL, NULL, 0),
+('user_reset_password', NULL, 'radio', 'Security', 'false', 'ResetPasswordTokenTitle', 'ResetPasswordTokenComment', NULL, NULL, 0),
+('user_reset_password_token_limit', NULL, 'textfield', 'Security', '3600', 'ResetPasswordTokenLimitTitle', 'ResetPasswordTokenLimitComment', NULL, NULL, 0),
+('my_courses_view_by_session', NULL, 'radio', 'Session', 'false', 'ViewMyCoursesListBySessionTitle', 'ViewMyCoursesListBySessionComment', NULL, NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -1744,6 +1750,7 @@ VALUES
 ('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
 ('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
 ('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
+('catalog_show_courses_sessions', '3', 'CatalogueShowNone'),
 ('auto_detect_language_custom_pages', 'true', 'Yes'),
 ('auto_detect_language_custom_pages', 'false', 'No'),
 ('lp_show_reduced_report', 'true', 'Yes'),
@@ -1795,6 +1802,16 @@ VALUES
 ('session_course_ordering', 'true', 'Yes'),
 ('session_course_ordering', 'false', 'No'),
 ('gamification_mode', '1', 'Yes'),
-('gamification_mode', '0', 'No');
+('gamification_mode', '0', 'No'),
+('prevent_multiple_simultaneous_login', 'true', 'Yes'),
+('prevent_multiple_simultaneous_login', 'false', 'No'),
+('gradebook_detailed_admin_view', 'true', 'Yes'),
+('gradebook_detailed_admin_view', 'false', 'No'),
+('course_catalog_published', 'true', 'Yes'),
+('course_catalog_published', 'false', 'No'),
+('user_reset_password', 'true', 'Yes'),
+('user_reset_password', 'false', 'No'),
+('my_courses_view_by_session', 'true', 'Yes'),
+('my_courses_view_by_session', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.43' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.50' WHERE variable = 'chamilo_database_version';

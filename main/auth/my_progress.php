@@ -20,22 +20,6 @@ $htmlHeadXtra[] = '
 <script language="javascript">
 $(function() {
     $().timelinr();
-    $(".dialog").dialog("destroy");
-    $(".dialog").dialog({
-            autoOpen: false,
-            show: "blind",
-            resizable: false,
-            height:300,
-            width:550,
-            modal: true
-     });
-
-    $(".opener").click(function() {
-        var my_id = $(this).attr(\'id\');
-        var big_image = \'#main_graph_\' + my_id;
-        $( big_image ).dialog("open");
-        return false;
-    });
 });
 </script>';
 

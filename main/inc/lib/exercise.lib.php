@@ -2048,11 +2048,14 @@ HTML;
                             $attempt_url = api_get_path(
                                     WEB_CODE_PATH
                                 ) . 'exercice/result.php?' . api_get_cidreq(
-                                ) . '&id=' . $results[$i]['exe_id'] . '&id_session=' . $sessionId . '&height=500&width=750';
+                                ) . '&id=' . $results[$i]['exe_id'] . '&id_session=' . $sessionId;
                             $attempt_link = Display::url(
                                 get_lang('Show'),
                                 $attempt_url,
-                                array('class' => 'ajax btn')
+                                [
+                                    'class' => 'ajax btn btn-default',
+                                    'data-title' => get_lang('Show')
+                                ]
                             );
                             $actions .= $attempt_link;
                         }

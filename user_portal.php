@@ -35,7 +35,7 @@ $userId = api_get_user_id();
 
 /* Constants and CONFIGURATION parameters */
 $load_dirs = api_get_setting('show_documents_preview');
-$displayMyCourseViewBySessionLink = api_get_configuration_value('my_courses_view_by_session');
+$displayMyCourseViewBySessionLink = api_get_setting('my_courses_view_by_session') === 'true';
 
 
 $nameTools = get_lang('MyCourses');

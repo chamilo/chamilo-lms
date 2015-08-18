@@ -2076,7 +2076,7 @@ function fixIds(EntityManager $em)
 
     // This updates the group_id with c_group_info.iid instead of c_group_info.id
 
-    $groupTableTofix = [
+    $groupTableToFix = [
         'c_group_rel_user',
         'c_group_rel_tutor',
         'c_permission_group',
@@ -2085,7 +2085,7 @@ function fixIds(EntityManager $em)
         'c_attendance_calendar_rel_group'
     ];
 
-    foreach ($groupTableTofix as $table) {
+    foreach ($groupTableToFix as $table) {
         $sql = "SELECT * FROM $table";
         $result = $connection->fetchAll($sql);
         foreach ($result as $item) {
@@ -2096,7 +2096,8 @@ function fixIds(EntityManager $em)
             // Fix group id
             if (!empty($groupId)) {
                 $sql = "SELECT * FROM c_group_info
-                        WHERE c_id = $courseId AND id = $groupId LIMIT 1";
+                        WHERE c_id = $courseId AND id = $groupId
+                        LIMIT 1";
                 $data = $connection->fetchAssoc($sql);
                 if (!empty($data)) {
                     $newGroupId = $data['iid'];
@@ -2126,7 +2127,8 @@ function fixIds(EntityManager $em)
         // Fix group id
 
         if (!empty($groupId)) {
-            $sql = "SELECT * FROM c_group_info WHERE c_id = $courseId AND id = $groupId";
+            $sql = "SELECT * FROM c_group_info
+                    WHERE c_id = $courseId AND id = $groupId";
             $data = $connection->fetchAssoc($sql);
             if (!empty($data)) {
                 $newGroupId = $data['iid'];

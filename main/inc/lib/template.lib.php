@@ -248,7 +248,12 @@ class Template
                 $content = '<li class="help">';
                 $content .= Display::url(
                     Display::return_icon('help.large.png', get_lang('Help')),
-                    api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600', array('class' => 'ajax'));
+                    api_get_path(WEB_CODE_PATH) . 'help/help.php?open=' . $help,
+                    [
+                        'class' => 'ajax',
+                        'data-title' => get_lang('Help')
+                    ]
+                );
                 $content .= '</li>';
             }
         }
@@ -610,7 +615,7 @@ class Template
             'chosen/chosen.jquery.min.js',
         );
 
-        $viewBySession = api_get_configuration_value('my_courses_view_by_session');
+        $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
 
         if (api_is_global_chat_enabled() || $viewBySession) {
             // Do not include the global chat in LP
@@ -624,10 +629,6 @@ class Template
 
         if (api_get_setting('accessibility_font_resize') == 'true') {
             $js_files[] = 'fontresize.js';
-        }
-
-        if (api_get_setting('include_asciimathml_script') == 'true') {
-            $js_files[] = 'asciimath/ASCIIMathML.js';
         }
 
         $js_files[] = 'tag/jquery.fcbkcomplete.js';
@@ -648,6 +649,10 @@ class Template
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
             'imagemap-resizer/js/imageMapResizer.min.js'
         ];
+
+        if (api_get_setting('include_asciimathml_script') == 'true') {
+            $bowerJsFiles[] = 'MathJax/MathJax.js?config=AM_HTMLorMML';
+        }
 
         if ($isoCode != 'en') {
             $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-' . $isoCode . '.js';
@@ -729,8 +734,8 @@ class Template
             }
         }
 
-        $this->assign('online_button', Display::return_icon('online.png'));
-        $this->assign('offline_button',Display::return_icon('offline.png'));
+        $this->assign('online_button', Display::return_icon('statusonline.png'));
+        $this->assign('offline_button',Display::return_icon('statusoffline.png'));
 
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());

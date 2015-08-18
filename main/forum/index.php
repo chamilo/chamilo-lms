@@ -421,7 +421,6 @@ if (is_array($forumCategories)) {
                         $html = '<div class="panel panel-default forum">';
                         $html .= '<div class="panel-body">';
 
-
                         $forum_image = '';
                         $imgForum = '';
                         // Showing the image
@@ -497,8 +496,7 @@ if (is_array($forumCategories)) {
                         $html .= '<div class="row">';
                         $html .= '<div class="col-md-6">';
                         $html .= '<div class="col-md-3">';
-                        $html .= '<div class="number-post">'
-                            . $forum_image . '<p>' . $number_posts . ' ' . get_lang('Posts') . '</p>'
+                        $html .= '<div class="number-post">'.$forum_image.'<p>'.$number_posts.' ' . get_lang('Posts') . '</p>'
                             . '</div>';
                         $html .= '</div>';
 

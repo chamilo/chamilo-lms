@@ -199,13 +199,21 @@ class GradebookUtils
                 Display::return_icon('view_more_stats.gif', get_lang('Show'), '', ICON_SIZE_SMALL) . '</a>';
 
             if (!api_is_allowed_to_edit(null, true)) {
-                $modify_icons .= '  <a class="ajax" href="personal_stats.php?selectcat='.$cat->get_id().'&'.api_get_cidreq().'">'.
+                $modify_icons .= Display::url(
                     Display::return_icon(
                         'stats.png',
                         get_lang('FlatView'),
                         '',
                         ICON_SIZE_SMALL
-                    ).'</a>';
+                    ),
+                    'personal_stats.php?' . http_build_query([
+                        'selectcat' => $cat->get_id()
+                    ]) . '&' . api_get_cidreq(),
+                    [
+                        'class' => 'ajax',
+                        'data-title' => get_lang('FlatView')
+                    ]
+                );
             }
 
             if (api_is_allowed_to_edit(null, true)) {

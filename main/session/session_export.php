@@ -34,14 +34,13 @@ $tool_name = get_lang('ExportSessionListXMLCSV');
 
 global $_configuration;
 
-//$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 set_time_limit(0);
 
 if (isset($_POST['formSent'])) {
 	$formSent = $_POST['formSent'];
-	$file_type = ($_POST['file_type'] == 'csv')?'csv':'xml';
+	$file_type = isset($_POST['file_type']) ? $_POST['file_type'] : 'csv';
 	$session_id = $_POST['session_id'];
 	if (empty($session_id)) {
 		$sql = "SELECT
@@ -83,53 +82,58 @@ if (isset($_POST['formSent'])) {
 	}
 
 	if (Database::num_rows($result)) {
-		if (!file_exists($archivePath)) {
-			mkdir($archivePath, api_get_permissions_for_new_directories(), true);
-		}
 
-		if (!file_exists($archivePath.'index.html')) {
-			$fp = fopen($archivePath.'index.html','w');
-			fputs($fp,'<html><head></head><body></body></html>');
-			fclose($fp);
-		}
 
-		$archiveFile='export_sessions_'.$session_id.'_'.date('Y-m-d_H-i-s').'.'.$file_type;
 
-		while( file_exists($archivePath.$archiveFile)) {
-			$archiveFile='export_users_'.$session_id.'_'.date('Y-m-d_H-i-s').'_'.uniqid('').'.'.$file_type;
-		}
+		$sessionListToExport = [];
 
-		$fp = fopen($archivePath.$archiveFile, 'w');
+		if (in_array($file_type, ['csv', 'xls'])) {
 
-		if ($file_type == 'csv') {
+			$archiveFile = 'export_sessions_'.$session_id.'_'.api_get_local_time();
+
 			$cvs = true;
-			fputs($fp,"SessionName;Coach;DateStart;DateEnd;Visibility;SessionCategory;Users;Courses;\n");
+			$sessionListToExport[] = [
+				'SessionName',
+				'Coach',
+				'DateStart',
+				'DateEnd',
+				'Visibility',
+				'SessionCategory',
+				'Users',
+				'Courses'
+			];
 		} else {
+			if (!file_exists($archivePath)) {
+				mkdir($archivePath, api_get_permissions_for_new_directories(), true);
+			}
+
+			if (!file_exists($archivePath.'index.html')) {
+				$fp = fopen($archivePath.'index.html', 'w');
+				fputs($fp, '<html><head></head><body></body></html>');
+				fclose($fp);
+			}
+
+			$archiveFile = 'export_sessions_'.$session_id.'_'.api_get_local_time().'.'.$file_type;
+			while (file_exists($archivePath.$archiveFile)) {
+				$archiveFile ='export_users_'.$session_id.'_'.api_get_local_time().'_'.uniqid('').'.'.$file_type;
+			}
+
 			$cvs = false;
+			$fp = fopen($archivePath.$archiveFile, 'w');
 			fputs($fp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Sessions>\n");
 		}
 
-		while($row=Database::fetch_array($result)) {
-			$add = '';
+
+		while ($row = Database::fetch_array($result)) {
 			$row['name'] = str_replace(';',',',$row['name']);
 			$row['username'] = str_replace(';',',',$row['username']);
 			$row['access_start_date'] = str_replace(';',',',$row['access_start_date']);
 			$row['access_end_date'] = str_replace(';',',',$row['access_end_date']);
 			$row['visibility'] = str_replace(';',',',$row['visibility']);
 			$row['session_category'] = str_replace(';',',',$row['session_category_id']);
-			if ($cvs) {
-				$add.= $row['name'].';'.$row['username'].';'.$row['access_start_date'].';'.$row['access_end_date'].';'.$row['visibility'].';'.$row['session_category'].';';
-			} else {
-				$add = "\t<Session>\n"
-						 ."\t\t<SessionName>$row[name]</SessionName>\n"
-						 ."\t\t<Coach>$row[username]</Coach>\n"
-						 ."\t\t<DateStart>$row[access_start_date]</DateStart>\n"
-						 ."\t\t<DateEnd>$row[access_end_date]</DateEnd>\n"
-						 ."\t\t<Visibility>$row[visibility]</Visibility>\n"
-						 ."\t\t<SessionCategory>$row[session_category]</SessionCategory>\n";
-			}
 
-			//users
+
+			// users
 			$sql = "SELECT DISTINCT $tbl_user.username
 					FROM $tbl_user
 					INNER JOIN $tbl_session_user
@@ -143,21 +147,16 @@ if (isset($_POST['formSent'])) {
 			while ($rowUsers = Database::fetch_array($rsUsers)){
 				if($cvs){
 					$users .= str_replace(';',',',$rowUsers['username']).'|';
-				}
-				else {
+				} else {
 					$users .= "\t\t<User>$rowUsers[username]</User>\n";
 				}
 			}
 
-			if (!empty($users) && $cvs)
-				$users = api_substr($users , 0, api_strlen($users)-1);
+			if (!empty($users) && $cvs) {
+				$users = api_substr($users, 0, api_strlen($users) - 1);
+			}
 
-			if($cvs)
-				$users .= ';';
-
-			$add .= $users;
-
-			//courses
+			// Courses
 			$sql = "SELECT DISTINCT c.code, sc.id, c_id
 					FROM $tbl_course c
 					INNER JOIN $tbl_session_course_user sc
@@ -170,13 +169,13 @@ if (isset($_POST['formSent'])) {
 			while ($rowCourses = Database::fetch_array($rsCourses)) {
 				// get coachs from a course
 				$sql = "SELECT u.username
-					FROM $tbl_session_course_user scu
-					INNER JOIN $tbl_user u
-					ON u.user_id = scu.user_id
-					WHERE
-						scu.c_id = '{$rowCourses['c_id']}' AND
-						scu.session_id = '".$row['id']."' AND
-						scu.status = 2 ";
+						FROM $tbl_session_course_user scu
+						INNER JOIN $tbl_user u
+						ON u.user_id = scu.user_id
+						WHERE
+							scu.c_id = '{$rowCourses['c_id']}' AND
+							scu.session_id = '".$row['id']."' AND
+							scu.status = 2 ";
 
 				$rs_coachs = Database::query($sql);
 				$coachs = array();
@@ -184,7 +183,7 @@ if (isset($_POST['formSent'])) {
 					$coachs[] = $row_coachs['username'];
 				}
 
-				$coachs = implode(",",$coachs);
+				$coachs = implode(",", $coachs);
 
 				if ($cvs) {
 					$courses .= str_replace(';',',',$rowCourses['code']);
@@ -229,31 +228,59 @@ if (isset($_POST['formSent'])) {
 					}
 
 					$courses .= $userscourse.']|';
-				}
-				else {
+				} else {
 					$courses .= "\t\t</Course>\n";
 				}
 			}
 
-			if(!empty($courses) && $cvs)
-				$courses = api_substr($courses , 0, api_strlen($courses)-1);
+			if (!empty($courses) && $cvs) {
+				$courses = api_substr($courses, 0, api_strlen($courses) - 1);
+			}
 			$add .= $courses;
 
-		 	if ($cvs) {
-				$breakline = api_is_windows_os()?"\r\n":"\n";
-				$add .= ";$breakline";
+
+			if (in_array($file_type, ['csv', 'xls'])) {
+				$sessionListToExport[] = [
+					$row['name'],
+					$row['username'],
+					$row['access_start_date'],
+					$row['access_end_date'],
+					$row['visibility'],
+					$row['session_category'],
+					$users,
+					$courses
+				];
 			} else {
-				$add .= "\t</Session>\n";
+				$add = "\t<Session>\n"
+						 ."\t\t<SessionName>$row[name]</SessionName>\n"
+						 ."\t\t<Coach>$row[username]</Coach>\n"
+						 ."\t\t<DateStart>$row[access_start_date]</DateStart>\n"
+						 ."\t\t<DateEnd>$row[access_end_date]</DateEnd>\n"
+						 ."\t\t<Visibility>$row[visibility]</Visibility>\n"
+						 ."\t\t<SessionCategory>$row[session_category]</SessionCategory>\n";
 			}
 
-			fputs($fp, $add);
+		 	if (!$cvs) {
+				$add .= "\t</Session>\n";
+				fputs($fp, $add);
+			}
 		}
 
-		if(!$cvs)
-			fputs($fp,"</Sessions>\n");
-		fclose($fp);
-
-		$errorMsg=get_lang('UserListHasBeenExported').'<br/><a class="btn btn-default" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+		switch ($file_type) {
+			case 'xml':
+				fputs($fp, "</Sessions>\n");
+				fclose($fp);
+				$errorMsg = get_lang('UserListHasBeenExported').'<br/>
+				<a class="btn btn-default" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+				break;
+			case 'csv':
+				Export::arrayToCsv($sessionListToExport, $archiveFile);
+				exit;
+			case 'xls':
+				Export::arrayToXls($sessionListToExport, $archiveFile);
+				exit;
+				break;
+		}
 	}
 }
 
@@ -278,7 +305,8 @@ $result = Database::query($sql);
 $Sessions = Database::store_result($result);
 
 echo '<div class="actions">';
-echo '<a href="../session/session_list.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="../session/session_list.php">'.
+		Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('SessionList'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($errorMsg)) {
@@ -287,7 +315,8 @@ if (!empty($errorMsg)) {
 
 $form = new FormValidator('session_export', 'post', api_get_self());
 $form->addElement('hidden', 'formSent', 1);
-$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV' , 'csv', null, array('id' => 'file_type_csv'));
+$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV' , 'csv', null);
+$form->addElement('radio', 'file_type', '', 'XLS' , 'xls', null);
 $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, array('id' => 'file_type_xml'));
 
 $options = array();

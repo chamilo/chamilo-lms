@@ -325,8 +325,8 @@ function restructureChatBoxes() {
  * @param status
  *
  **/
-function chatWith(user_id, user_name, status) {
-	createChatBox(user_id, user_name, 0, status);
+function chatWith(user_id, user_name, status, userImage) {
+	createChatBox(user_id, user_name, 0, status, userImage);
 	$("#chatbox_"+user_id+" .chatboxtextarea").focus();
 }
 
@@ -340,7 +340,7 @@ function chatNotYetWith(message) {
 /**
  * Creates a div
  */
-function createChatBox(user_id, chatboxtitle, minimizeChatBox, online) {
+function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage) {
 	if ($("#chatbox_"+user_id).length > 0) {
 		if ($("#chatbox_"+user_id).css('display') == 'none') {
 			$("#chatbox_"+user_id).css('display','block');
@@ -350,7 +350,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online) {
 		return;
 	}
 
-	user_is_online = return_online_user(user_id, online);
+	user_is_online = return_online_user(user_id, online, userImage);
 
 	var chatbox = $('<div>')
 		.attr({
@@ -363,10 +363,17 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online) {
 		.addClass('chatboxhead')
 		.append(user_is_online);
 
+    $('<div>')
+        .addClass('chatimage')
+        .append('<img src="'+userImage+'"/>')
+        .appendTo(chatboxHead);
+
 	$('<div>')
 		.addClass('chatboxtitle')
 		.append(chatboxtitle)
 		.appendTo(chatboxHead);
+
+
 
 	var chatboxoptions = $('<div>')
 		.addClass('chatboxoptions')
@@ -508,7 +515,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online) {
  * @param int       user id
  * @param int       status  1 or 0
  */
-function return_online_user(user_id, status) {
+function return_online_user(user_id, status, userImage) {
 	var div_wrapper = $("<div />" );
 	var new_div = $("<div />" );
 

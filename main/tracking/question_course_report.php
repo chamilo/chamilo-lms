@@ -5,10 +5,9 @@
  * Report
  * @package chamilo.tracking
  */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
-
-require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
 $this_section = "session_my_space";
 
@@ -78,7 +77,12 @@ $form->addElement(
     $my_session_list,
     array('id'=>'session_id', 'onchange'=>'load_courses();')
 );
-$form->addElement('select', 'course_code', get_lang('Courses'), $course_select_list);
+$form->addElement(
+    'select',
+    'course_code',
+    get_lang('Courses'),
+    $course_select_list
+);
 $form->addButtonFilter(get_lang('Filter'), 'submit_form');
 
 if (!empty($_REQUEST['course_code'])) {
@@ -86,22 +90,29 @@ if (!empty($_REQUEST['course_code'])) {
 } else {
     $course_code = '';
 }
+
 if (empty($course_code)) {
     $course_code = 0;
 }
 
 $form->setDefaults(array('course_code'=>(string)$course_code));
+
 $course_info = api_get_course_info($course_code);
-//var_dump($session_id);
+
 if (!empty($course_info)) {
 	$list = new LearnpathList('', $course_code);
 	$lp_list = $list->get_flat_list();
-	$_course = $course_info;
+
 	$main_question_list = array();
-	foreach ($lp_list as $lp_id =>$lp) {
-		$exercise_list = Event:: get_all_exercises_from_lp($lp_id, $course_info['real_id']);
+
+	foreach ($lp_list as $lp_id => $lp) {
+        $exercise_list = Event::get_all_exercises_from_lp(
+            $lp_id,
+            $course_info['real_id']
+        );
+
 		foreach ($exercise_list as $exercise) {
-			$my_exercise = new Exercise();
+			$my_exercise = new Exercise($course_info['real_id']);
 			$my_exercise->read($exercise['path']);
 			$question_list = $my_exercise->selectQuestionList();
 
@@ -111,12 +122,13 @@ if (!empty($course_info)) {
 				$session_id
 			);
 
-			foreach ($question_list  as $question_id) {
+			foreach ($question_list as $question_id) {
 				$question_data = Question::read($question_id);
 				$main_question_list[$question_id] = $question_data;
 				$quantity_exercises = 0;
 				$question_result = 0;
-				foreach($exercise_stats as $stats) {
+
+				foreach ($exercise_stats as $stats) {
 					if (!empty($stats['question_list'])) {
 						foreach($stats['question_list'] as $my_question_stat) {
 							if ($question_id == $my_question_stat['question_id']) {
@@ -126,30 +138,31 @@ if (!empty($course_info)) {
 						}
 					}
 				}
+
 				if (!empty($quantity_exercises)) {
 					// Score % average
-					$main_question_list[$question_id]->results =(($question_result / ($quantity_exercises)) ) ;
+					$main_question_list[$question_id]->results = ($question_result / ($quantity_exercises));
 				} else {
 					$main_question_list[$question_id]->results = 0;
 				}
-				$main_question_list[$question_id]->quantity = $quantity_exercises;
 
+				$main_question_list[$question_id]->quantity = $quantity_exercises;
 			}
 		}
 	}
 }
 
 if (!$export_to_xls) {
-
 	Display :: display_header(get_lang("MySpace"));
 	echo '<div class="actions">';
 	if ($global) {
 		echo MySpace::getTopMenu();
 	} else {
 		echo '<div style="float:left; clear:left">
-				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|
-				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;';
-
+				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.
+                    get_lang('StudentsTracking').'</a>&nbsp;|
+				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.
+                    get_lang('CourseTracking').'</a>&nbsp;';
 		echo '</div>';
 	}
 	echo '</div>';
@@ -172,11 +185,12 @@ $counter = 0;
 
 if (!empty($main_question_list) && is_array($main_question_list)) {
 	$html_result .= '<table  class="data_table">';
-	$html_result .= '<tr><th>'.get_lang('Question').Display :: return_icon('info3.gif', get_lang('QuestionsAreTakenFromLPExercises'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>';
+	$html_result .= '<tr><th>'.get_lang('Question').
+                    Display :: return_icon('info3.gif', get_lang('QuestionsAreTakenFromLPExercises'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>';
 	$html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('AverageScore').Display :: return_icon('info3.gif', get_lang('AllStudentsAttemptsAreConsidered'), array('align' => 'absmiddle', 'hspace' => '3px')).' </th>';
 	$html_result .= '<th>'.get_lang('Quantity').'</th>';
 
-	foreach($main_question_list  as $question) {
+	foreach ($main_question_list as $question) {
 		$total_student = 0;
 		$counter ++;
 		$s_css_class = 'row_even';
@@ -193,7 +207,6 @@ if (!empty($main_question_list) && is_array($main_question_list)) {
 		}
 
 		$html_result .= "</td>";
-
 		$html_result .= "<td>";
 		$html_result .= round($question->results, 2).' / '.$question->weighting;
 		$html_result .= "</td>";
@@ -201,8 +214,8 @@ if (!empty($main_question_list) && is_array($main_question_list)) {
 		$html_result .= "<td>";
 		$html_result .= $question->quantity;
 		$html_result .= "</td>";
-
 	}
+
 	$html_result .="</tr>";
 	$html_result .= '</table>';
 } else {

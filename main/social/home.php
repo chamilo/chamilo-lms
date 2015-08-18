@@ -188,13 +188,29 @@ if ($list > 0) {
     }
     $social_group_block.= "</div>";
 }
+// My friends
+$friend_html = SocialManager::listMyFriendsBlock(
+    $user_id,
+    $link_shared,
+    $show_full_profile
+);
+//Block Social Sessions
+$social_session_block = null;
+$user_info = api_get_user_info($user_id);
+$sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['status']);
 
+if (count($sessionList) > 0) {
+    $social_session_block = $sessionList;
+}
+    
 $social_group_block = Display::panel($social_group_block, get_lang('Group'));
 
 $tpl = new Template(get_lang('SocialNetwork'));
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
 
 $tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_friend_block', $friend_html);
+$tpl->assign('sessionList', $social_session_block);
 $tpl->assign('social_search_block', $social_search_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
 $tpl->assign('social_group_block', $social_group_block);

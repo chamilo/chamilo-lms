@@ -36,13 +36,11 @@
 	cursor:pointer;
 }
 .user_status_main {
-	width:30px;
+	width:18px;
 	display:inline;
 	float:left;
 	padding: 0px 4px 0px 4px;	
 }
-
-
 .chatbox {
 	position: fixed;
 	position:expression("absolute");
@@ -50,23 +48,27 @@
 	display:none;
 	z-index: 9000;
 }
-
 .user_status {
-	width:16px;
-	display:inline;
-	float:left;
+	width:8px;
+	display:inline-block;
+  margin-right: 5px;
+}
+.chatimage{
+  display: inline-block;
+  margin-right: 5px;
 }
 
 .chatboxtitle {
 	font-weight: normal;
-	float: left;
-	font-size: 12px;
-	width: 130px;
+	display: inline-block;
+	font-size: 10px;
+	width: 100px;
 	cursor:pointer;
   overflow: hidden;
   padding-left: 2px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 10px;
 }
 
 .chatboxhead {

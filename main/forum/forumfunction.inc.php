@@ -23,6 +23,7 @@
  */
 
 use ChamiloSession as Session;
+use Doctrine\Common\Collections\Criteria;
 
 define('FORUM_NEW_POST', 0);
 
@@ -686,7 +687,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         $new_file_name = isset($new_file_name) ? $new_file_name : '';
         if ($image_moved) {
             if (empty($_FILES['picture']['name'])) {
-                $sql_image = " ";
+                $sql_image = "";
             } else {
                 $sql_image = $new_file_name;
                 delete_forum_image($values['forum_id']);
@@ -714,7 +715,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         Database::update(
             $table_forums,
             $params,
-            ['c_id = ? AND = forum_id' => [$course_id, $values['forum_id']]]
+            ['c_id = ? AND forum_id = ?' => [$course_id, $values['forum_id']]]
         );
 
         api_item_property_update(
@@ -728,7 +729,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
 
         $return_message = get_lang('ForumEdited');
     } else {
-        $sql_image = '';
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
             $sql_image = $new_file_name;
@@ -754,8 +754,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         $last_id = Database::insert($table_forums, $params);
         if ($last_id > 0) {
 
-            $sql = "UPDATE $table_forums SET forum_id = $last_id
-                    WHERE iid = $last_id";
+            $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $last_id";
             Database::query($sql);
 
             api_item_property_update(
@@ -903,8 +902,9 @@ function delete_post($post_id)
 
     // Get parent_post_id of deleted post.
     $tab_post_info = get_post_information($post_id);
+
     if ($tab_post_info) {
-        $post_parent_id_of_deleted_post = $tab_post_info['post_parent_id'];
+        $post_parent_id_of_deleted_post = intval($tab_post_info['post_parent_id']);
         $thread_id_of_deleted_post = $tab_post_info['thread_id'];
         $forum_if_of_deleted_post = $tab_post_info['forum_id'];
         $sql = "UPDATE $table_posts
@@ -913,7 +913,8 @@ function delete_post($post_id)
                     c_id = $course_id AND
                     post_parent_id=$post_id AND
                     thread_id=$thread_id_of_deleted_post AND
-                    forum_id=$forum_if_of_deleted_post;";
+                    forum_id=$forum_if_of_deleted_post";
+
         Database::query($sql);
 
         // Note: This has to be a recursive function that deletes all of the posts in this block.
@@ -934,6 +935,7 @@ function delete_post($post_id)
                     thread_date='".Database::escape_string($last_post_of_thread['post_date'])."'
             WHERE c_id = $course_id AND thread_id = ".intval($_GET['thread'])."";
         Database::query($sql);
+
         return 'PostDeleted';
     }
     if (!$last_post_of_thread) {
@@ -941,6 +943,7 @@ function delete_post($post_id)
         $sql = "DELETE FROM $table_threads
                 WHERE c_id = $course_id AND thread_id = ".intval($_GET['thread'])."";
         Database::query($sql);
+
         return 'PostDeletedSpecial';
     }
 }
@@ -1803,7 +1806,8 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 
         return $return_array;
     } else {
-        // We have to loop through the results to find the first one that is actually visible to students (forum_category, forum, thread AND post are visible).
+        // We have to loop through the results to find the first one that is
+        // actually visible to students (forum_category, forum, thread AND post are visible).
         while ($row = Database::fetch_array($result)) {
             if ($row['visible'] == '1' && $row['thread_visibility'] == '1' && $row['forum_visibility'] == '1') {
                 $return_array['last_post_id'] = $row['post_id'];
@@ -1908,6 +1912,8 @@ function get_threads($forum_id, $course_code = null)
  * @param boolean $recursive Optional. If the list is recursive
  * @param int $postId Optional. The post ID for recursive list
  * @param int $depth Optional. The depth to indicate the indent
+ * @todo move to a repository
+ *
  * @return array containing all the information about the posts of a given thread
  */
 function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postId = 0, $depth = -1)
@@ -1916,20 +1922,29 @@ function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postI
 
     $em = Database::getManager();
 
-    $whereCondition = [
-        'threadId' => $threadId,
-        'cId' => api_get_course_int_id(),
-        'visible' => 1
-    ];
-
-    if ($recursive) {
-        $whereCondition['postParentId'] = $postId;
+    if (api_is_allowed_to_edit(false, true)) {
+        $visibleCriteria = Criteria::expr()->neq('visible', 2);
+    } else {
+        $visibleCriteria = Criteria::expr()->eq('visible', 1);
     }
 
-    $posts = $em->getRepository('ChamiloCourseBundle:CForumPost')->findBy(
-        $whereCondition,
-        ['postId' => $orderDirection]
-    );
+    $criteria = Criteria::create();
+    $criteria
+        ->where(Criteria::expr()->eq('threadId', $threadId))
+        ->andWhere(Criteria::expr()->eq('cId', api_get_course_int_id()))
+        ->andWhere($visibleCriteria)
+    ;
+
+    if ($recursive) {
+        $criteria->andWhere(Criteria::expr()->eq('postParentId', $postId));
+    }
+
+    $qb = $em->getRepository('ChamiloCourseBundle:CForumPost')->createQueryBuilder('p');
+    $qb->select('p')
+        ->addCriteria($criteria)
+        ->addOrderBy('p.postId', $orderDirection);
+
+    $posts = $qb->getQuery()->getResult();
 
     $depth++;
 
@@ -1961,7 +1976,16 @@ function getPosts($threadId, $orderDirection = 'ASC', $recursive = false, $postI
             continue;
         }
 
-        $list += getPosts($threadId, $orderDirection, $recursive, $post->getPostId(), $depth);
+        $list = array_merge(
+            $list,
+            getPosts(
+                $threadId,
+                $orderDirection,
+                $recursive,
+                $post->getPostId(),
+                $depth
+            )
+        );
     }
 
     return $list;

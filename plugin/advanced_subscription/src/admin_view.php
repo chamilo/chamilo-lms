@@ -69,7 +69,7 @@ if (!empty($sessionId)) {
         $data['studentUserId'] = $studentId;
 
         $fieldValue = new ExtraFieldValue('user');
-        $areaField = $foo->get_values_by_handler_and_field_variable($studentId, 'area', true);
+        $areaField = $fieldValue->get_values_by_handler_and_field_variable($studentId, 'area', true);
 
         $student['area'] = $areaField['value'];
         $student['userLink'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$studentId;

@@ -12,7 +12,7 @@
  * 	@todo check if the mailtext contains the **link** part, if not, add the link to the end
  * 	@todo add rules: title and text cannot be empty
  */
-// Including the global initialization file
+
 require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -25,11 +25,11 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 // Database table definitions
-$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
-$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database:: get_course_table(TABLE_SURVEY);
+$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
 $course_id = api_get_course_int_id();
 
@@ -51,9 +51,15 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 // Breadcrumbs
 $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
 if (api_is_course_admin()) {
-	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+        'name' => $urlname,
+    );
 } else {
-	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?survey_id='.$survey_id, 'name' => $urlname);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+        'name' => $urlname,
+    );
 }
 $tool_name = get_lang('SurveyPublication');
 
@@ -79,9 +85,9 @@ if (Database::num_rows($result) > 1) {
 
 // Invited / answered message
 if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
-	$message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
+	$message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
 	$message .= get_lang('HaveAnswered').' ';
-	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
+	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
 	$message .= get_lang('WereInvited');
 	Display::display_normal_message($message, false);
 }
@@ -243,10 +249,10 @@ if ($form->validate()) {
 	$row = Database::fetch_array($result);
 	$total_invited = $row['invited'];
     if ($total_invited > 0) {
-    	$message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.
+    	$message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'">'.
 			$survey_data['answered'].'</a> ';
     	$message .= get_lang('HaveAnswered').' ';
-    	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.
+    	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'">'.
 			$total_invited.'</a> ';
     	$message .= get_lang('WereInvited');
     	Display::display_normal_message($message, false);

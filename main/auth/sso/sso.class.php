@@ -22,6 +22,12 @@ class sso {
     public $deauth_uri; //    '/?q=logout',
     public $referer; // http://my.chamilo.com/main/auth/profile.php
 
+    /*
+     * referrer_uri: [some/path/inside/Chamilo], might be used by module to
+     * redirect the user to where he wanted to go initially in Chamilo
+     */
+    public $referrer_uri;
+
     /**
      * Instanciates the object, initializing all relevant URL strings
      */
@@ -38,6 +44,7 @@ class sso {
         $this->referer    = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'],0,strpos($_SERVER['REQUEST_URI'],'sso'));
         $this->deauth_url = $this->protocol.$this->domain.$this->deauth_uri;
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
+        $this->referrer_uri = base64_encode($_SERVER['REQUEST_URI']);
         $this->target     = api_get_path(WEB_PATH);
     }
 
@@ -58,7 +65,8 @@ class sso {
         $tempKey = api_generate_password(32);
         $params = 'sso_referer='.urlencode($this->referer).
             '&sso_target='.urlencode($this->target).
-            '&sso_challenge='.$tempKey;
+            '&sso_challenge='.$tempKey.
+            '&sso_ruri='.urlencode($this->referrer_uri);
         Session::write('tempkey', $tempKey);
         if (strpos($this->master_url, "?") === false) {
             $params = "?$params";
@@ -152,7 +160,16 @@ class sso {
                                         Session::write('_user', $_user);
                                         Event::event_login($_user['user_id']);
                                         // Redirect to homepage
-                                        $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
+                                        $sso_target = '';
+                                        if (!empty($sso['ruri'])) {
+                                            //The referrer URI is *only* used if
+                                            // the user credentials are OK, which
+                                            // should be protection enough
+                                            // against evil URL spoofing...
+                                            $sso_target = api_get_path(WEB_PATH) . base64_decode($sso['ruri']);
+                                        } else {
+                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) . 'index.php';
+                                        }
                                         header('Location: '. $sso_target);
                                         exit;
                                     } else {

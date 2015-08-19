@@ -27,15 +27,25 @@
                     <td class="text-center">{{ skill.short_code }}</td>
                     <td width="300">{{ skill.description }}</td>
                     <td class="text-right">
-                        <a href="{{ _p.web_main }}admin/skill_edit.php?id={{ skill.id }}" class="btn btn-default btn-sm">
+                        <a href="{{ _p.web_main }}admin/skill_edit.php?id={{ skill.id }}" class="btn btn-primary btn-sm">
                             <i class="fa fa-edit"></i> {{ "Edit" | get_lang }}
                         </a>
-                        <a href="{{ _p.web_main }}admin/skill_create.php?parent={{ skill.id }}" class="btn btn-default btn-sm">
+                        <a href="{{ _p.web_main }}admin/skill_create.php?parent={{ skill.id }}" class="btn btn-primary btn-sm">
                             <i class="fa fa-plus"></i> {{ "CreateChildSkill" | get_lang }}
                         </a>
-                        <a href="{{ _p.web_main }}admin/skill_badge_create.php?id={{ skill.id }}" class="btn btn-default btn-sm">
+                        <a href="{{ _p.web_main }}admin/skill_badge_create.php?id={{ skill.id }}" class="btn btn-primary btn-sm">
                             <i class="fa fa-shield"></i> {{ "CreateBadge" | get_lang }}
                         </a>
+
+                        {% if skill.status == 0 %}
+                            <a href="{{ _p.web_self ~ '?' ~ {"action": "enable", "id": skill.id}|url_encode() }}" class="btn btn-success btn-sm">
+                                <i class="fa fa-shield"></i> {{ 'Enable' }}
+                            </a>
+                        {% else %}
+                            <a href="{{ _p.web_self ~ '?' ~ {"action": "disable", "id": skill.id}|url_encode() }}" class="btn btn-danger btn-sm">
+                                <i class="fa fa-shield"></i> {{ 'Disable' }}
+                            </a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

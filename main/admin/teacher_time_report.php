@@ -24,21 +24,55 @@ $toolName = get_lang('TeacherTimeReport');
 // Access restrictions.
 api_protect_admin_script();
 
+$form = new FormValidator('teacher_time_report');
+
 $startDate = new DateTime(api_get_local_time());
 $startDate->modify('first day of this month');
 
 $limitDate = new DateTime(api_get_local_time());
 
-$selectedCourse = isset($_REQUEST['course']) ? $_REQUEST['course'] : null;
-$selectedSession = isset($_REQUEST['session']) ? $_REQUEST['session'] : 0;
-$selectedTeacher = isset($_REQUEST['teacher']) ? $_REQUEST['teacher'] : 0;
-$selectedFrom = isset($_REQUEST['from']) && !empty($_REQUEST['from']) ? $_REQUEST['from'] : $startDate->format('Y-m-d');
-$selectedUntil = isset($_REQUEST['from']) && !empty($_REQUEST['until']) ? $_REQUEST['until'] : $limitDate->format('Y-m-d');
+$selectedCourse = null;
+$selectedSession = 0;
+$selectedTeacher = 0;
+$selectedFrom = $startDate->format('Y-m-d');
+$selectedUntil = $limitDate->format('Y-m-d');
+
+if ($form->validate()) {
+    $formValues = $form->getSubmitValues();
+
+    $selectedCourse = $formValues['course'];
+    $selectedSession = $formValues['session'];
+    $selectedTeacher = $formValues['teacher'];
+
+    if (!empty($formValues['from'])) {
+        $selectedFrom = $formValues['from'];
+    }
+
+    if (!empty($formValues['until'])) {
+        $selectedUntil = $formValues['until'];
+    }
+}
+
+$optionsCourses = [0 => get_lang('None')];
+$optionsSessions = [0 => get_lang('None')];
+$optionsTeachers = [0 => get_lang('None')];
 
 $courseList = CourseManager::get_courses_list(0, 0, 'title');
 $sessionsList = SessionManager::get_sessions_list(array(), array('name'));
 
 $teacherList = UserManager::getTeachersList();
+
+foreach ($courseList as $courseItem) {
+    $optionsCourses[$courseItem['code']] = $courseItem['title'];
+}
+
+foreach ($sessionsList as $sessionItem) {
+    $optionsSessions[$sessionItem['id']] = $sessionItem['name'];
+}
+
+foreach ($teacherList as $teacherItem) {
+    $optionsTeachers[$teacherItem['user_id']] = $teacherItem['completeName'];
+}
 
 $withFilter = false;
 
@@ -212,29 +246,27 @@ if (!empty($selectedTeacher)) {
 
     $coursesInSession = SessionManager::getCoursesListByCourseCoach($selectedTeacher);
 
-    foreach ($coursesInSession as $course) {
-        $session = api_get_session_info($course['id_session']);
-        $sessionData = array(
-            'id' => $session['id'],
-            'name' => $session['name']
-        );
-
-        $courseInfo = api_get_course_info_by_id($course['c_id']);
+    foreach ($coursesInSession as $userCourseSubscription) {
+        $course = $userCourseSubscription->getCourse();
+        $session = $userCourseSubscription->getSession();
 
         $totalTime = UserManager::getTimeSpentInCourses(
             $selectedTeacher,
-            $course['c_id'],
-            $session['id'],
+            $course->getId(),
+            $session->getId(),
             $selectedFrom,
             $selectedUntil
         );
         $formattedTime = api_format_time($totalTime);
 
         $timeReport->data[] = array(
-            'session' => $sessionData,
+            'session' => [
+                'id' => $session->getId(),
+                'name' => $session->getName()
+            ],
             'course' => array(
-                'id' => $course['c_id'],
-                'name' => $courseInfo['title']
+                'id' => $course->getId(),
+                'name' => $course->getTitle()
             ),
             'coach' => $teacherData,
             'totalTime' => $formattedTime
@@ -294,18 +326,51 @@ if (isset($_GET['export'])) {
     die;
 }
 
-// view
-//hack for daterangepicker
-$startDate->modify('+1 day');
-$limitDate->modify('+1 day');
+$form->addSelect(
+    'course',
+    get_lang('Course'),
+    $optionsCourses,
+    ['id' => 'courses']
+);
+$form->addSelect(
+    'session',
+    get_lang('Session'),
+    $optionsSessions,
+    ['id' => 'session']
+);
+$form->addSelect(
+    'teacher',
+    get_lang('Teacher'),
+    $optionsTeachers,
+    ['id' => 'teacher']
+);
+$form->addDateRangePicker(
+    'daterange',
+    get_lang('Date'),
+    false,
+    [
+        'id' => 'daterange',
+        'maxDate' => $limitDate->format('Y-m-d'),
+        'format' => 'YYYY-MM-DD',
+        'timePicker' => 'false',
+        'value' => "$selectedFrom / $selectedUntil"
+    ]
+);
+$form->addButtonFilter(get_lang('Filter'));
+$form->addHidden('from', '');
+$form->addHidden('until', '');
+$form->setDefaults([
+    'course' => $selectedCourse,
+    'session' => $selectedSession,
+    'teacher' => $selectedTeacher,
+    'date_range' => "$selectedFrom / $selectedUntil",
+    'from' => $selectedFrom,
+    'until' => $selectedUntil
+]);
 
 $tpl = new Template($toolName);
 $tpl->assign('reportTitle', $reportTitle);
 $tpl->assign('reportSubTitle', $reportSubTitle);
-
-$tpl->assign('filterStartDate', $startDate->format('Y-m-d'));
-$tpl->assign('filterEndDate', $limitDate->format('Y-m-d'));
-$tpl->assign('filterMaxDate', $limitDate->format('Y-m-d'));
 
 $tpl->assign('selectedCourse', $selectedCourse);
 $tpl->assign('selectedSession', $selectedSession);
@@ -318,6 +383,8 @@ $tpl->assign('withFilter', $withFilter);
 $tpl->assign('courses', $courseList);
 $tpl->assign('sessions', $sessionsList);
 $tpl->assign('courseCoaches', $teacherList);
+
+$tpl->assign('form', $form->returnForm());
 
 $tpl->assign('rows', $timeReport->data);
 

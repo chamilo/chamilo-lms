@@ -753,7 +753,7 @@ EOT;
     {
         $config['rows'] = isset($config['rows']) ? $config['rows'] : 15;
         $config['cols'] = isset($config['cols']) ? $config['cols'] : 80;
-        $this->addElement('html_editor', $name, $label, $config);
+        $this->addElement('html_editor', $name, $label, $config, $style);
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');

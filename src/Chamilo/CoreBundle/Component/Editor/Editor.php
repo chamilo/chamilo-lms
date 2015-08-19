@@ -241,6 +241,6 @@ class Editor
      */
     public function getLocale()
     {
-        return 'en';
+        return api_get_language_isocode();
     }
 }

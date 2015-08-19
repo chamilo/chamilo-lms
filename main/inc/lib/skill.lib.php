@@ -612,7 +612,8 @@ class Skill extends Model
                     ss.parent_id,
                     ss.relation_type,
                     s.icon,
-                    s.short_code
+                    s.short_code,
+                    s.status
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_skill} ss
                 ON (s.id = ss.skill_id) $id_condition

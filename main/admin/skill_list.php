@@ -135,7 +135,7 @@ switch ($action) {
         $toolbar .= Display::toolbarButton(
             get_lang('BadgesManagement'),
             api_get_path(WEB_CODE_PATH) . 'admin/skill_badge_list.php',
-            'certificate',
+            'shield',
             'warning',
             ['title' => get_lang('BadgesManagement')]
         );

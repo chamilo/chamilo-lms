@@ -24,12 +24,12 @@
                 <span class="badge badge-dis">{{ session.vacancies }}</span>
                 {{ "Vacancies" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
             <p class="separate-badge">
-                <span class="badge badge-recom">{{ session.recommended_number_of_participants }}</span>
-                {{ "RecommendedNumberOfParticipants" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
-            <p class="separate-badge">
                 <span class="badge badge-info">{{ session.nbr_users }}</span>
                 {{ 'UsersNumber'|get_lang }}
             </p>
+            <p class="separate-badge">
+                <span class="badge badge-recom">{{ session.recommended_number_of_participants }}</span>
+                {{ "RecommendedNumberOfParticipants" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
             <h4>{{ "PublicationEndDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4> <p>{{ session.publication_end_date }}</p>
             <h4>{{ "Mode" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4> <p>{{ session.mode }}</p>
         </div>

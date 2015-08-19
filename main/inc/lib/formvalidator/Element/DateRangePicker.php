@@ -61,15 +61,41 @@ class DateRangePicker extends HTML_QuickForm_text
                     endDate: '".$dates['end']."', ";
         }
 
+        $minDate = null;
+        if (!empty($this->getAttribute('minDate'))) {
+            $minDate = "
+                minDate: '{$this->getAttribute('minDate')}',
+            ";
+        }
+
+        $maxDate = null;
+        if (!empty($this->getAttribute('maxDate'))) {
+            $maxDate = "
+                maxDate: '{$this->getAttribute('maxDate')}',
+            ";
+        }
+
+        $format = 'YYYY-MM-DD HH:mm';
+        if (!empty($this->getAttribute('format'))) {
+            $format = $this->getAttribute('format');
+        }
+
+        $timePicker = 'true';
+        if (!empty($this->getAttribute('timePicker'))) {
+            $timePicker = $this->getAttribute('timePicker');
+        }
+
         //timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
                 $('#$id').daterangepicker({
-                    format: 'YYYY-MM-DD HH:mm',
-                    timePicker: true,
+                    format: '$format',
+                    timePicker: $timePicker,
                     timePickerIncrement: 30,
                     timePicker12Hour: false,
                     $defaultDates
+                    $maxDate
+                    $minDate
                     ranges: {
                          '".addslashes(get_lang('Today'))."': [moment(), moment()],
                          '".addslashes(get_lang('ThisWeek'))."': [moment().weekday(1), moment().weekday(5)],

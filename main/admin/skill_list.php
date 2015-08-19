@@ -78,6 +78,26 @@ switch ($action) {
             $skill->setUpdatedAt($updatedAt);
 
             $entityManager->persist($skill);
+
+            $skillObj = new Skill();
+            $childrens = $skillObj->get_children($skill->getId());
+            
+            foreach ($childrens as $children) {
+                $skill = $entityManager->find(
+                    'ChamiloCoreBundle:Skill',
+                    $children['id']
+                );
+
+                if (empty($skill)) {
+                    continue;
+                }
+
+                $skill->setStatus(0);
+                $skill->setUpdatedAt($updatedAt);
+
+                $entityManager->persist($skill);
+            }
+
             $entityManager->flush();
 
             Display::addFlash(

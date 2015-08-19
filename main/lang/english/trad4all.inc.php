@@ -7501,5 +7501,7 @@ $ResetPasswordTokenLimitTitle = "Time limit for password reset token";
 $ResetPasswordTokenLimitComment = "The number of seconds before the generated token automatically expires and cannot be used anymore (a new token needs to be generated).";
 $ViewMyCoursesListBySessionTitle = "View my courses by session";
 $ViewMyCoursesListBySessionComment = "Enable an additional 'My courses' page where sessions appear as part of courses, rather than the opposite.";
+$DownloadCertificatePdf = "Download certificate in PDF";
 $EnterPassword = "Enter password";
+$DownloadReportPdf = "Download report in PDF";
 ?>

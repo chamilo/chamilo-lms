@@ -7525,5 +7525,7 @@ $ResetPasswordTokenLimitTitle = "Clave de reinicio de contraseña: límite de ti
 $ResetPasswordTokenLimitComment = "El número de segundos antes de que la llave generada se venza automáticamente y no pueda ser usada por nadie. En este caso, una nueva llave tiene que ser generada.";
 $ViewMyCoursesListBySessionTitle = "Ver las sesiones por curso";
 $ViewMyCoursesListBySessionComment = "Activa una página \"Mis cursos\" adicional en la cual las sesiones aparecen como partes del curso, en vez de lo contrario.";
+$DownloadCertificatePdf = "Descargar certificado en PDF";
 $EnterPassword = "Ingresar contraseña";
+$DownloadReportPdf = "Descargar reporte en PDF";
 ?>

@@ -151,48 +151,49 @@ $code = isset($code) ? $code : null;
                     $creation_date = substr($course['creation_date'],0,10);
 
                     $icon_title = null;
-
+                    $html = null;
                     // display the course bloc
-                    echo '<div class="col-md-3"><div class="items-course">';
+                    $html .= '<div class="col-md-3"><div class="items-course">';
 
                     // display thumbnail
-                    display_thumbnail($course, $icon_title);
+                    $html .= return_thumbnail($course, $icon_title);
 
                     // display course title and button bloc
-                    echo '<div class="item-info">';
-                    display_title($course);
+                    $html .= '<div class="item-info">';
+                    $html .= return_title($course);
                     // display button line
-                    echo '<div class="btn-toolbar">';
+                    $html .= '<div class="btn-toolbar">';
                     // if user registered as student
                     if ($user_registerd_in_course_as_student) {
                         if (!$course_closed) {
-                            display_goto_button($course);
-                            display_description_button($course, $icon_title);
+                            $html .= return_goto_button($course);
+                            $html .= return_description_button($course, $icon_title);
                             if ($course_unsubscribe_allowed) {
-                                display_unregister_button($course, $stok, $search_term, $code);
+                                $html .= return_unregister_button($course, $stok, $search_term, $code);
                             }
-                            display_already_registered_label('student');
+                            $html .= return_already_registered_label('student');
                         }
                     } elseif ($user_registerd_in_course_as_teacher) {
                         // if user registered as teacher
-                        display_goto_button($course);
-                        display_description_button($course, $icon_title);
+                        $html .= return_goto_button($course);
+                        $html .= return_description_button($course, $icon_title);
                         if ($course_unsubscribe_allowed) {
-                            display_unregister_button($course, $stok, $search_term, $code);
+                            $html .= return_unregister_button($course, $stok, $search_term, $code);
                         }
-                        display_already_registered_label('teacher');
+                        $html .= return_already_registered_label('teacher');
                     } else {
                         // if user not registered in the course
                         if (!$course_closed) {
                             if (!$course_private) {
-                                display_goto_button($course);
+                                $html .= return_goto_button($course);
                                 if ($course_subscribe_allowed) {
-                                    display_register_button($course, $stok, $code, $search_term);
+                                    $html .= return_register_button($course, $stok, $code, $search_term);
                                 }
                             }
-                            display_description_button($course, $icon_title);
+                            $html .= return_description_button($course, $icon_title);
                         }
                     }
+                    echo $html;
                     echo '</div>'; // btn-toolbar
                     echo '</div>'; // span4
 
@@ -401,8 +402,9 @@ $code = isset($code) ? $code : null;
  * @param $course
  * @param $icon_title
  */
-function display_thumbnail($course, $icon_title)
+function return_thumbnail($course, $icon_title)
 {
+    $html = '';
     $title = cut($course['title'], 70);
     // course path
     $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
@@ -415,35 +417,33 @@ function display_thumbnail($course, $icon_title)
 
     // course image
     
-    echo '<div class="course-image">';
+    $html .= '<div class="course-image">';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';
-        echo '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'" />';
-        echo '</a>';
+        $html .= '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';
+        $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'" />';
+        $html .= '</a>';
     } else {
-        echo '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
+        $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
     }
-    echo '</div>';  // thumbail
-   
+    $html .= '</div>';  // thumbail
+    return $html;
 }
 
 /**
  * Display the title of a course in course catalog
  * @param $course
  */
-function display_title($course)
-{
+function return_title($course)
+{   $html = '';
+    $linkCourse = api_get_course_url($course['code']);
     $title = cut($course['title'], 70);
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
-    $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);
-
-    $teachers = '<div class="teachers">'.$teachers.'</div>';
-    
-    echo '<h4 class="title">'.cut($title, 60).'</h4>';
-    echo $teachers;
-    echo $rating;
-    
+    $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);    
+    $html .=  '<h4 class="title"><a href="' . $linkCourse . '">' . cut($title, 60) . '</a></h4>';
+    $html .= '<div class="teachers">'.$teachers.'</div>';
+    $html .= $rating;
+    return $html;
 }
 
 /**
@@ -451,33 +451,36 @@ function display_title($course)
  * @param $course
  * @param $icon_title
  */
-function display_description_button($course, $icon_title)
+function return_description_button($course, $icon_title)
 {
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        echo '<a class="ajax btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
+        $html = '<a class="ajax btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
     }
+    return $html;
 }
 
 /**
  * Display the goto course button of a course in the course catalog
  * @param $course
  */
-function display_goto_button($course)
+function return_goto_button($course)
 {
-    echo ' <a class="btn btn-primary" href="'.api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
+    $html = ' <a class="btn btn-primary" href="'.api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
+    return $html;
 }
 
 /**
  * Display the already registerd text in a course in the course catalog
  * @param $in_status
  */
-function display_already_registered_label($in_status)
+function return_already_registered_label($in_status)
 {
     $icon = Display::return_icon('teachers.gif', get_lang('Teacher'));
     if ($in_status == 'student') {
         $icon = Display::return_icon('students.gif', get_lang('Student'));
     }
-    echo Display::label($icon.' '.get_lang("AlreadyRegisteredToCourse"), "info");
+    $html = Display::label($icon.' '.get_lang("AlreadyRegisteredToCourse"), "info");
+    return $html;
 }
 
 /**
@@ -487,9 +490,11 @@ function display_already_registered_label($in_status)
  * @param $code
  * @param $search_term
  */
-function display_register_button($course, $stok, $code, $search_term)
+function return_register_button($course, $stok, $code, $search_term)
 {
-    echo ' <a class="btn btn-primary" href="'.api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
+    $html = ' <a class="btn btn-primary" href="'.api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
+    return $html;
+    
 }
 
 /**
@@ -499,7 +504,9 @@ function display_register_button($course, $stok, $code, $search_term)
  * @param $search_term
  * @param $code
  */
-function display_unregister_button($course, $stok, $search_term, $code)
+function return_unregister_button($course, $stok, $search_term, $code)
 {
-    echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&amp;sec_token='.$stok.'&amp;unsubscribe='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
+    $html = ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&amp;sec_token='.$stok.'&amp;unsubscribe='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
+    return $html;
+    
 }

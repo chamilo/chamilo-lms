@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+
 /**
  * Class SessionManager
  *
@@ -5620,8 +5622,11 @@ class SessionManager
         $courseSessionList = self::getCoursesListByCourseCoach($coachId);
         $sessionsByCoach = array();
         if (!empty($courseSessionList)) {
-            foreach ($courseSessionList as $courseSession) {
-                $sessionsByCoach[$courseSession['id_session']] = api_get_session_info($courseSession['id_session']);
+            foreach ($courseSessionList as $userCourseSubscription) {
+                $session = $userCourseSubscription->getSession();
+                $sessionsByCoach[$session->getId()] = api_get_session_info(
+                    $session->getId()
+                );
             }
         }
 
@@ -5777,13 +5782,15 @@ class SessionManager
      */
     public static function getCoursesListByCourseCoach($coachId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        return  Database::select('*', $table, array(
-            'where' => array(
-                'user_id = ? AND ' => $coachId,
-                'status = ?' => 2,
-            ),
-        ));
+        $entityManager = Database::getManager();
+        $scuRepo = $entityManager->getRepository(
+            'ChamiloCoreBundle:SessionRelCourseRelUser'
+        );
+
+        return $scuRepo->findBy([
+            'user' => $coachId,
+            'status' => SessionRelCourseRelUser::STATUS_COURSE_COACH
+        ]);
     }
 
 	/**

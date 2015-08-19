@@ -212,29 +212,27 @@ if (!empty($selectedTeacher)) {
 
     $coursesInSession = SessionManager::getCoursesListByCourseCoach($selectedTeacher);
 
-    foreach ($coursesInSession as $course) {
-        $session = api_get_session_info($course['id_session']);
-        $sessionData = array(
-            'id' => $session['id'],
-            'name' => $session['name']
-        );
-
-        $courseInfo = api_get_course_info_by_id($course['c_id']);
+    foreach ($coursesInSession as $userCourseSubscription) {
+        $course = $userCourseSubscription->getCourse();
+        $session = $userCourseSubscription->getSession();
 
         $totalTime = UserManager::getTimeSpentInCourses(
             $selectedTeacher,
-            $course['c_id'],
-            $session['id'],
+            $course->getId(),
+            $session->getId(),
             $selectedFrom,
             $selectedUntil
         );
         $formattedTime = api_format_time($totalTime);
 
         $timeReport->data[] = array(
-            'session' => $sessionData,
+            'session' => [
+                'id' => $session->getId(),
+                'name' => $session->getName()
+            ],
             'course' => array(
-                'id' => $course['c_id'],
-                'name' => $courseInfo['title']
+                'id' => $course->getId(),
+                'name' => $course->getTitle()
             ),
             'coach' => $teacherData,
             'totalTime' => $formattedTime

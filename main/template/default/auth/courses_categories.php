@@ -106,8 +106,7 @@ $code = isset($code) ? $code : null;
 </script>
 
 
-<div class="row">
-    
+<div class="row"> 
 
  <?php if ($showCourses && $action != 'display_sessions') { 
             
@@ -159,14 +158,14 @@ $code = isset($code) ? $code : null;
                     $html .= return_thumbnail($course, $icon_title);
 
                     // display course title and button bloc
-                    $html .= '<div class="item-info">';
+                    $html .= '<div class="items-course-info">';
                     $html .= return_title($course);
                     // display button line
                     $html .= '<div class="btn-toolbar">';
                     // if user registered as student
                     if ($user_registerd_in_course_as_student) {
                         if (!$course_closed) {
-                            $html .= return_goto_button($course);
+                            //$html .= return_goto_button($course);
                             $html .= return_description_button($course, $icon_title);
                             if ($course_unsubscribe_allowed) {
                                 $html .= return_unregister_button($course, $stok, $search_term, $code);
@@ -175,7 +174,7 @@ $code = isset($code) ? $code : null;
                         }
                     } elseif ($user_registerd_in_course_as_teacher) {
                         // if user registered as teacher
-                        $html .= return_goto_button($course);
+                        //$html .= return_goto_button($course);
                         $html .= return_description_button($course, $icon_title);
                         if ($course_unsubscribe_allowed) {
                             $html .= return_unregister_button($course, $stok, $search_term, $code);
@@ -193,17 +192,13 @@ $code = isset($code) ? $code : null;
                             $html .= return_description_button($course, $icon_title);
                         }
                     }
+                    
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '</div>';
                     echo $html;
-                    echo '</div>'; // btn-toolbar
-                    echo '</div>'; // span4
-
-                    // display counter
-                    echo '<div class="col-md-2">';
-                    echo '<div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
-                    echo '</div>';
-
-                    // end of course bloc
-                    echo '</div></div>'; // well_border row
+                
                 }
             } else {
                 if (!isset($_REQUEST['subscribe_user_with_password']) &&
@@ -390,10 +385,7 @@ $code = isset($code) ? $code : null;
         <?php } ?>
     </div>
 
-    <div class="col-md-9">
-        <h2><?php echo get_lang('CourseCatalog')?></h2>
-
-    </div>
+    
 </div>
 <?php
 
@@ -408,16 +400,16 @@ function return_thumbnail($course, $icon_title)
     $title = cut($course['title'], 70);
     // course path
     $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
-
+    
     if (file_exists($course_path.'/course-pic.png')) {
         $course_medium_image = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png'; // redimensioned image 85x85
     } else {
-        $course_medium_image = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true); // without picture
+        $course_medium_image = api_get_path(WEB_IMG_PATH).'session_default.png'; // without picture
     }
 
     // course image
     
-    $html .= '<div class="course-image">';
+    $html .= '<div class="items-course-image">';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
         $html .= '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';
         $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'" />';
@@ -442,7 +434,7 @@ function return_title($course)
     $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);    
     $html .=  '<h4 class="title"><a href="' . $linkCourse . '">' . cut($title, 60) . '</a></h4>';
     $html .= '<div class="teachers">'.$teachers.'</div>';
-    $html .= $rating;
+    $html .= '<div class="ranking">'. $rating . '</div>';
     return $html;
 }
 
@@ -452,9 +444,10 @@ function return_title($course)
  * @param $icon_title
  */
 function return_description_button($course, $icon_title)
-{
+{   
+    $title = $course['title'];
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        $html = '<a class="ajax btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
+        $html = '<a data-title="' . $title . '" class="ajax btn btn-default btn-sm btn-block" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
     }
     return $html;
 }
@@ -475,11 +468,11 @@ function return_goto_button($course)
  */
 function return_already_registered_label($in_status)
 {
-    $icon = Display::return_icon('teachers.gif', get_lang('Teacher'));
+    $icon = Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY);
     if ($in_status == 'student') {
-        $icon = Display::return_icon('students.gif', get_lang('Student'));
+        $icon = Display::return_icon('user.png', get_lang('Student'), null, ICON_SIZE_TINY);
     }
-    $html = Display::label($icon.' '.get_lang("AlreadyRegisteredToCourse"), "info");
+    $html = Display::div($icon.' '.get_lang("AlreadyRegisteredToCourse"), array('id' => 'register', 'class' => 'user-register'));
     return $html;
 }
 

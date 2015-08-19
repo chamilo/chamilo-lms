@@ -956,7 +956,7 @@ class Skill extends Model
                     // 2nd node
                     $skills[$skill_id] = $skill_info;
                     // Uncomment code below to hide the searched skill
-                    $skills[$skill_id]['data']['parent_id'] =  $skill_info['parent_id'];
+                    $skills[$skill_id]['data']['parent_id'] =  $skill_info['extra']['parent_id'];
                     $skills[$skill_id]['parent_id'] =  1;
                 }
             }

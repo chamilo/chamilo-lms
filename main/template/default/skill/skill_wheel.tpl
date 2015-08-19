@@ -228,7 +228,9 @@ $(document).ready(function() {
     });
 
      /* URL link when searching skills */
-    $("#skill_holder").on("click", "a.load_wheel", function() {
+    $("#skill_holder").on("click", "a.load_wheel", function(e) {
+        e.preventDefault();
+
         skill_id = $(this).attr('rel');
         skill_to_load_from_get = 0;
         load_nodes(skill_id, main_depth);

@@ -163,11 +163,21 @@ if (!empty($attempts)) {
             $attempt_result['exe_result'],
             $attempt_result['exe_weighting']
         );
-        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?' . api_get_cidreq() . '&id=' . $attempt_result['exe_id'] . '&modal_size=lg' . $url_suffix;
+        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?';
+        $attempt_url .= api_get_cidreq() . '&';
+        $attempt_url .= http_build_query([
+            'id' => $attempt_result['exe_id']
+        ]);
+        $attempt_url .= $url_suffix;
+
         $attempt_link = Display::url(
             get_lang('Show'),
             $attempt_url,
-            array('class' => $btn_class . 'btn btn-default')
+            [
+                'class' => $btn_class . 'btn btn-default',
+                'data-title' => get_lang('Show'),
+                'data-size' => 'lg'
+            ]
         );
 
         $teacher_revised = Display::label(get_lang('Validated'), 'success');

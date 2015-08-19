@@ -30,6 +30,7 @@ RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir
 
 # Course upload files
 RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]
+RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
 
 RewriteRule ^courses/([^/]+)/course-pic85x85.png$ app/courses/$1/course-pic85x85.png [QSA,L]
 RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]

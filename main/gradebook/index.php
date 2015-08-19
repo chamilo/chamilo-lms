@@ -772,7 +772,7 @@ if ($category != '0') {
             );
             if (!empty($certificate)) {
                 echo Display::url(
-                    get_lang('CertificateToPdf'),
+                    get_lang('DownloadCertificatePdf'),
                     $certificate['pdf_url'],
                     ['class' => 'btn btn-default']
                 );
@@ -786,7 +786,7 @@ if ($category != '0') {
 
 if (!api_is_allowed_to_edit(null, true)) {
     echo Display::url(
-        get_lang('ReportToPdf'),
+        get_lang('DownloadReportPdf'),
         api_get_self()."?".api_get_self()."&action=export_table",
         ['class' => 'btn btn-default']
     );

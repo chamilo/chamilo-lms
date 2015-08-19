@@ -213,4 +213,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
     'language',
     'extra_fields'
 ];*/
-
+// Boost option to ignore encoding check for learning paths
+//$_configuration['lp_fixed_encoding'] = 'false';

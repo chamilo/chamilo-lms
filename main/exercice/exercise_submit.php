@@ -55,7 +55,7 @@ $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
 //This library is necessary for the time control feature
 //tmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
-//$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
 $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');

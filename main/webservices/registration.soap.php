@@ -1797,7 +1797,7 @@ function WSEditUserWithPicture($params)
     $official_code = '';
     $phone = $params['phone'];
     $picture_url = $params['picture_url'];
-    $picture_uri = '';
+    $pictureUri = '';
 
     $active = 1;
     $creator_id = null;
@@ -1825,7 +1825,7 @@ function WSEditUserWithPicture($params)
     // Make sure the file download was OK by checking the HTTP headers for OK
     if (strpos(get_headers($picture_url)[0], "OK")) {
         file_put_contents($tempDir . $filename, file_get_contents($picture_url));
-        $picture_uri = UserManager::update_user_picture($user_id, $filename, $tempDir . $filename);
+        $pictureUri = UserManager::update_user_picture($user_id, $filename, $tempDir . $filename);
     }
 
     if ($user_id == 0) {
@@ -1878,7 +1878,7 @@ function WSEditUserWithPicture($params)
     $is_admin = Database::num_rows($resadmin);
 
     if (empty($status)) {
-        $status = 5;
+        $status = $user->getStatus();
     }
 
     if ($is_admin) {
@@ -1896,7 +1896,8 @@ function WSEditUserWithPicture($params)
         ->setPhone($phone)
         ->setExpirationDate($expiration_date)
         ->setHrDeptId($hr_dept_id)
-        ->setActive(true);
+        ->setActive(true)
+        ->setPictureUri($pictureUri);;
 
     if (!is_null($creator_id)) {
         $user->setCreatorId($creator_id);

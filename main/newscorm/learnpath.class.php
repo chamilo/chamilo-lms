@@ -5555,7 +5555,14 @@ class learnpath
             //Link for the documents
             if ($arrLP[$i]['item_type'] == 'document') {
                 $url = api_get_self() . '?'.api_get_cidreq().'&action=view_item&mode=preview_document&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id;
-                $title_cut = Display::url($title_cut, $url, array('class' => 'ajax'));
+                $title_cut = Display::url(
+                    $title_cut,
+                    $url,
+                    array(
+                        'class' => 'ajax',
+                        'data-title' => $title_cut
+                    )
+                );
             }
 
             if (($i % 2) == 0) {

@@ -501,7 +501,6 @@ class CoursesController
                 'a' => 'get_requirements',
                 'id' => intval($sessionId),
                 'type' => SequenceResource::SESSION_TYPE,
-                'modal_size' => 'md',
             ]);
 
             return Display::toolbarButton(
@@ -509,7 +508,11 @@ class CoursesController
                 $url,
                 'check-circle',
                 'primary',
-                ['class' => 'btn-lg btn-block ajax']
+                [
+                    'class' => 'btn-lg btn-block ajax',
+                    'data-title' => get_lang('CheckRequirements'),
+                    'data-size' => 'md'
+                ]
             );
         }
 
@@ -527,8 +530,7 @@ class CoursesController
             $url .= 'auth/courses.php?';
             $url .= http_build_query([
                 'action' => 'subscribe_to_session',
-                'session_id' => intval($sessionId),
-                'modal_size' => 'md',
+                'session_id' => intval($sessionId)
             ]);
 
             $result = Display::toolbarButton(
@@ -536,7 +538,11 @@ class CoursesController
                 $url,
                 'check-circle',
                 'primary',
-                ['class' => 'btn-lg btn-block ajax']
+                [
+                    'class' => 'btn-lg btn-block ajax',
+                    'data-title' => get_lang('AreYouSureToSubscribe'),
+                    'data-size' => 'md'
+                ]
             );
         } else {
             $url .= 'inc/email_editor.php?';

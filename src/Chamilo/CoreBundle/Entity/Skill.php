@@ -57,6 +57,20 @@ class Skill
     /**
      * @var integer
      *
+     * @ORM\Column(name="status", type="integer", nullable=false, options={"default": 1})
+     */
+    private $status;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
+     */
+    private $updatedAt;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -201,6 +215,48 @@ class Skill
     public function getCriteria()
     {
         return $this->criteria;
+    }
+
+    /**
+     * Set status
+     * @param integer $status
+     * @return \Chamilo\CoreBundle\Entity\Skill
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set updatedAt
+     * @param \DateTime $updatedAt The update datetime
+     * @return \Chamilo\CoreBundle\Entity\Skill
+     */
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**

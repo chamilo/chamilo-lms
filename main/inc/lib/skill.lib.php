@@ -612,7 +612,8 @@ class Skill extends Model
                     ss.parent_id,
                     ss.relation_type,
                     s.icon,
-                    s.short_code
+                    s.short_code,
+                    s.status
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_skill} ss
                 ON (s.id = ss.skill_id) $id_condition
@@ -955,7 +956,7 @@ class Skill extends Model
                     // 2nd node
                     $skills[$skill_id] = $skill_info;
                     // Uncomment code below to hide the searched skill
-                    $skills[$skill_id]['data']['parent_id'] =  $skill_info['parent_id'];
+                    $skills[$skill_id]['data']['parent_id'] =  $skill_info['extra']['parent_id'];
                     $skills[$skill_id]['parent_id'] =  1;
                 }
             }

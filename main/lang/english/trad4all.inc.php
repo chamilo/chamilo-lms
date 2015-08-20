@@ -7504,4 +7504,6 @@ $ViewMyCoursesListBySessionComment = "Enable an additional 'My courses' page whe
 $DownloadCertificatePdf = "Download certificate in PDF";
 $EnterPassword = "Enter password";
 $DownloadReportPdf = "Download report in PDF";
+$SkillXEnabled = "Skill \"%s\" enabled";
+$SkillXDisabled = "Skill \"%s\" disabled";
 ?>

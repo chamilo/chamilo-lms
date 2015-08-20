@@ -7528,4 +7528,6 @@ $ViewMyCoursesListBySessionComment = "Activa una página \"Mis cursos\" adiciona
 $DownloadCertificatePdf = "Descargar certificado en PDF";
 $EnterPassword = "Ingresar contraseña";
 $DownloadReportPdf = "Descargar reporte en PDF";
+$SkillXEnabled = "Competencia \"%s\" habilitada";
+$SkillXDisabled = "Competencia \"%s\" deshabilitada";
 ?>

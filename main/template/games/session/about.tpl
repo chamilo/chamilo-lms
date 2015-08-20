@@ -74,7 +74,7 @@
 
                     {% if session_human_text_duration and courses|length == 1 %}
                         <div class="time-course">
-                            <i class="fa fa-clock-o"></i> <span class="name">{{ 'Hours'|get_lang }}</span> <span>{{ session_human_text_duration }}</span>
+                            <i class="fa fa-clock-o"></i> <span class="name">{{ 'MinHours'|get_lang }}</span> <span>{{ session_human_text_duration }}</span>
                         </div>
                     {% endif %}
 

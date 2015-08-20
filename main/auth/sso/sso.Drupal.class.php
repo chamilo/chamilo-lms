@@ -145,6 +145,7 @@ class ssoDrupal
                                         // the user has permission to enter at this site
                                         $_user['user_id'] = $uData['id'];
                                         $_user = api_get_user_info($_user['user_id']);
+                                        $_user['uidReset'] = true;
                                         Session::write('_user', $_user);
                                         Event::event_login($_user['user_id']);
                                         // Redirect to homepage

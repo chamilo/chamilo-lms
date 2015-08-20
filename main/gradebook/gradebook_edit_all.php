@@ -78,11 +78,10 @@ foreach ($links as &$row) {
     $resource_name = Database ::fetch_array($result);
 
     if (isset($resource_name['lp_type'])) {
-        $resource_name = $resource_name[2];
+        $resource_name = $resource_name[4];
     } else {
-        $resource_name = $resource_name[1];
+        $resource_name = $resource_name[3];
     }
-
     $row['resource_name'] = $resource_name;
 
     // Update only if value changed

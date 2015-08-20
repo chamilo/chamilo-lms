@@ -605,18 +605,20 @@ function display_language_selection_box($name = 'language_list', $default_langua
     }
 
     // Displaying the box.
-    echo "\t\t<select name=\"$name\">\n";
+    $html = '';
+    $html .= "\t\t<select class='form-control' name=\"$name\">\n";
     foreach ($language_list as $key => $value) {
         if ($key == $default_language) {
             $option_end = ' selected="selected">';
         } else {
             $option_end = '>';
         }
-        echo "\t\t\t<option value=\"$key\"$option_end";
-        echo $value;
-        echo "</option>\n";
+        $html .= "\t\t\t<option value=\"$key\"$option_end";
+        $html .= $value;
+        $html .= "</option>\n";
     }
-    echo "\t\t</select>\n";
+    $html .= "\t\t</select>\n";
+    return $html;
 }
 
 /**
@@ -633,10 +635,10 @@ function display_language_selection()
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
         <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
         <div class="form-group">
-            <div class="col-sm-2">
-                <?php display_language_selection_box('language_list', api_get_interface_language()); ?>
+            <div class="col-sm-4">
+                <?php echo display_language_selection_box('language_list', api_get_interface_language()); ?>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-6">
                 <button type="submit" name="step1" class="btn btn-success" value="<?php echo get_lang('Next'); ?>">
                     <i class="fa fa-forward"> </i>
                     <?php echo get_lang('Next'); ?></button>
@@ -683,7 +685,7 @@ function display_requirements(
     echo '</div>';
 
     //  SERVER REQUIREMENTS
-    echo '<div class="RequirementHeading"><h2>'.get_lang('ServerRequirements').'</h2>';
+    echo '<div class="RequirementHeading"><h4>'.get_lang('ServerRequirements').'</h4>';
 
     $timezone = checkPhpSettingExists("date.timezone");
     if (!$timezone) {
@@ -768,7 +770,7 @@ function display_requirements(
     // RECOMMENDED SETTINGS
     // Note: these are the settings for Joomla, does this also apply for Chamilo?
     // Note: also add upload_max_filesize here so that large uploads are possible
-    echo '<div class="RequirementHeading"><h2>'.get_lang('RecommendedSettings').'</h2>';
+    echo '<div class="RequirementHeading"><h4>'.get_lang('RecommendedSettings').'</h4>';
     echo '<div class="RequirementText">'.get_lang('RecommendedSettingsInfo').'</div>';
     echo '<div class="RequirementContent">';
     echo '<table class="table">
@@ -842,7 +844,7 @@ function display_requirements(
     echo '</div>';
 
     // DIRECTORY AND FILE PERMISSIONS
-    echo '<div class="RequirementHeading"><h2>'.get_lang('DirectoryAndFilePermissions').'</h2>';
+    echo '<div class="RequirementHeading"><h4>'.get_lang('DirectoryAndFilePermissions').'</h4>';
     echo '<div class="RequirementText">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
     echo '<div class="RequirementContent">';
 
@@ -1449,7 +1451,22 @@ function display_database_settings_form(
 
     <?php
 }
-
+function panel($content = null, $title = null, $id = null, $style = null) {
+    $html = '';
+    if (empty($style)) {
+        $style = 'default';
+    }
+    if (!empty($title)) {
+        $panelTitle = Display::div($title, array('class' => 'panel-heading'));
+        $panelBody = Display::div($content, array('class' => 'panel-body'));
+        $panelParent = Display::div($panelTitle . $panelBody, array('id' => $id, 'class' => 'panel panel-'.$style));
+    } else {
+        $panelBody = Display::div($html, array('class' => 'panel-body'));
+        $panelParent = Display::div($panelBody, array('id' => $id, 'class' => 'panel panel-'.$style));
+    }
+    $html .= $panelParent;
+    return $html;
+}
 /**
  * Displays a parameter in a table row.
  * Used by the display_configuration_settings_form function.
@@ -1466,14 +1483,15 @@ function display_configuration_parameter(
     $parameterValue,
     $displayWhenUpdate = 'true'
 ) {
-    echo "<tr>";
-    echo "<td>$parameterName</td>";
+    $html = '<div class="form-group">';
+    $html .= '<label class="col-sm-6 control-label">' . $parameterName . '</label>';
     if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
-        echo '<td><input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue."</td>";
+        $html .= '<input type="hidden" name="' . $formFieldName . '" value="'. api_htmlentities($parameterValue, ENT_QUOTES). '" />' . $parameterValue;
     } else {
-        echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</td>";
+        $html .= '<div class="col-sm-6"><input class="form-control" type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</div>";
     }
-    echo "</tr>";
+    $html .= "</div>";
+    return $html;
 }
 
 /**
@@ -1520,148 +1538,151 @@ function display_configuration_settings_form(
 
     echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>main/inc/conf/configuration.php</strong></p>';
 
-    echo '<fieldset>';
-    echo '<legend>'.get_lang('Administrator').'</legend>';
-    echo '<table class="table">';
-
     // Parameter 1: administrator's login
+    
+    $html = '';
 
-    display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
+    $html .= display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
 
     // Parameter 2: administrator's password
     if ($installType != 'update') {
-        display_configuration_parameter($installType, get_lang('AdminPass'), 'passForm', $passForm, false);
+        $html .= display_configuration_parameter($installType, get_lang('AdminPass'), 'passForm', $passForm, false);
     }
 
     // Parameters 3 and 4: administrator's names
 
-    display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
-    display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
+    $html .=  display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+    $html .=  display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
 
     //Parameter 3: administrator's email
-    display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
+    $html .=  display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
 
     //Parameter 6: administrator's telephone
-    display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
+    $html .=  display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
 
-    echo '</table>';
-    echo '</fieldset>';
+        
+    echo panel($html, get_lang('Administrator'), 'administrator');
 
-    echo '<fieldset>';
-    echo '<legend>'.get_lang('Platform').'</legend>';
-
-    echo '<table class="table">';
+   
+    //echo '<table class="table">';
 
     //First parameter: language
-    echo "<tr>";
-    echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>";
+    $html = '<div class="form-group">';
+    $html .= '<label class="col-sm-6 control-label">'.get_lang('MainLang')."</label>";
     if ($installType == 'update') {
-        echo '<td><input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm."</td>";
+        $html .= '<input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm;
 
     } else { // new installation
-        echo '<td>';
-        display_language_selection_box('languageForm', $languageForm);
-        echo "</td>\n";
+        $html .= '<div class="col-sm-6">';
+        $html .= display_language_selection_box('languageForm', $languageForm);
+        $html .= '</div>';
     }
-    echo "</tr>\n";
+    $html.= "</div>";
 
-
+    
     //Second parameter: Chamilo URL
-    echo "<tr>";
-    echo '<td>'.get_lang('ChamiloURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>";
+    $html .= '<div class="form-group">';
+    $html .= '<label class="col-sm-6 control-label">'.get_lang('ChamiloURL') .get_lang('ThisFieldIsRequired').'</label>';
+    
+    
 
     if ($installType == 'update') {
-        echo '<td>'.api_htmlentities($urlForm, ENT_QUOTES)."</td>\n";
+        $html .= api_htmlentities($urlForm, ENT_QUOTES)."\n";
     } else {
-        echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES).'" />'."</td>";
+        $html .= '<div class="col-sm-6">';
+        $html .= '<input class="form-control" type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES).'" />';
+        $html .= '</div>';
     }
-    echo "</tr>";
-
+    $html .= '</div>';
+    
     //Parameter 9: campus name
-    display_configuration_parameter($installType, get_lang('CampusName'), 'campusForm', $campusForm);
+    $html .= display_configuration_parameter($installType, get_lang('CampusName'), 'campusForm', $campusForm);
 
     //Parameter 10: institute (short) name
-    display_configuration_parameter($installType, get_lang('InstituteShortName'), 'institutionForm', $institutionForm);
+    $html .= display_configuration_parameter($installType, get_lang('InstituteShortName'), 'institutionForm', $institutionForm);
 
     //Parameter 11: institute (short) name
-    display_configuration_parameter($installType, get_lang('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
+    $html .= display_configuration_parameter($installType, get_lang('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
+    
+    
+    $html .= '<div class="form-group">
+            <label class="col-sm-6 control-label">' . get_lang("EncryptMethodUserPass") . '</label>
+        <div class="col-sm-6">';
+    if ($installType == 'update') { 
+        $html .= '<input type="hidden" name="encryptPassForm" value="'. $encryptPassForm .'" />'. $encryptPassForm;
+    } else {
+            
+        $html .= '<div class="checkbox">
+                    <label>
+                        <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '. ($encryptPassForm == 'bcrypt' ? 'checked="checked" ':'') .'/> bcrypt
+                    </label>';       
+            
+        $html .= '<label>
+                        <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" '. ($encryptPassForm == 'sha1' ? 'checked="checked" ':'') .'/> sha1
+                    </label>';
 
-    ?>
-    <tr>
-      <td><?php echo get_lang("EncryptMethodUserPass"); ?> :</td>
-      <?php if ($installType == 'update') { ?>
-      <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm; ?></td>
-      <?php } else { ?>
-      <td>
-          <div class="control-group">
-              <label class="radio inline">
-                  <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" <?php echo ($encryptPassForm == 'bcrypt') ? 'checked="checked" ': ''; ?>/><?php echo 'bcrypt'; ?>
-              </label>
-              <label class="radio inline">
-                  <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/><?php echo 'sha1'; ?>
-              </label>
+        $html .= '<label>
+                        <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" '. ($encryptPassForm == 'md5' ? 'checked="checked" ':'') .'/> md5
+                    </label>';
 
-              <label class="radio inline">
-                  <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/><?php echo 'md5'; ?>
-              </label>
-
-              <label class="radio inline">
-                  <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ':''; ?>/><?php echo get_lang('None'); ?>
-              </label>
-          </div>
-          </td>
-      <?php } ?>
-    </tr>
-    <tr>
-      <td><?php echo get_lang('AllowSelfReg'); ?> :</td>
-
-      <?php if ($installType == 'update'): ?>
-      <td><input type="hidden" name="allowSelfReg" value="<?php echo $allowSelfReg; ?>" /><?php echo $allowSelfReg ? get_lang('Yes') : get_lang('No'); ?></td>
-      <?php else: ?>
-      <td>
-          <div class="control-group">
-            <label class="radio inline">
-                <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <?php echo get_lang('Yes'); ?>
-            </label>
-            <label class="radio inline">
-                <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/><?php echo get_lang('No'); ?>
-            </label>
-          </div>
-      </td>
-      <?php endif; ?>
-
-    </tr>
-    <tr>
-      <td><?php echo get_lang('AllowSelfRegProf'); ?> :</td>
-
-      <?php if ($installType == 'update'): ?>
-      <td><input type="hidden" name="allowSelfRegProf" value="<?php echo $allowSelfRegProf; ?>" /><?php echo $allowSelfRegProf? get_lang('Yes') : get_lang('No'); ?></td>
-      <?php else: ?>
-      <td>
-          <div class="control-group">
-            <label class="radio inline">
-                <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf ? 'checked="checked" ' : ''; ?>/>
-            <?php echo get_lang('Yes'); ?>
-            </label>
-            <label class="radio inline">
-                <input type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf ? '' : 'checked="checked" '; ?>/>
-            <?php echo get_lang('No'); ?>
-            </label>
-          </div>
-      </td>
-      <?php endif; ?>
-
-    </tr>
-    <tr>
-        <td>
-            <button type="submit" class="btn btn-default" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" ><i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?></button>
-        </td>
-        <td align="right">
+        $html .= '<label>
+                        <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '. ($encryptPassForm == 'none' ? 'checked="checked" ':'') .'/>'. get_lang('None').'
+                    </label>'; 
+        $html .= '</div>';
+    }
+    $html .= '</div></div>';
+  
+   
+    $html .= '<div class="form-group">
+            <label class="col-sm-6 control-label">' . get_lang('AllowSelfReg') . '</label>
+            <div class="col-sm-6">';
+    if ($installType == 'update') { 
+        $html .= '<input type="hidden" name="allowSelfReg" value="'. $allowSelfReg .'" />'. $allowSelfReg ? get_lang('Yes') : get_lang('No');
+    } else {
+        $html .= '<div class="control-group">';
+        $html .= '<label class="checkbox-inline">
+                        <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" '. ($allowSelfReg ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
+                    </label>';
+        $html .= '<label class="checkbox-inline">
+                        <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
+                    </label>';
+        $html .= '</div>';
+    }
+    $html .= '</div>';
+    $html .= '</div>';    
+    
+    $html .= '<div class="form-group">';
+    $html .= '<label class="col-sm-6 control-label">'. get_lang('AllowSelfRegProf') .'</label>
+        <div class="col-sm-6">';
+    if ($installType == 'update'){
+        $html .= '<input type="hidden" name="allowSelfRegProf" value="'. $allowSelfRegProf.'" />'. $allowSelfRegProf? get_lang('Yes') : get_lang('No');
+    } else { 
+        $html .= '<div class="control-group">
+                <label class="checkbox-inline">
+                    <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" '. ($allowSelfRegProf ? 'checked="checked" ' : '') .'/>
+                ' . get_lang('Yes') .'
+                </label>';
+        $html .= '<label class="checkbox-inline">
+                    <input type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" '. ($allowSelfRegProf ? '' : 'checked="checked" ') .' />
+                   '. get_lang('No') .'
+                </label>';
+        $html .= '</div>';
+    }    
+    $html .= '</div>
+    </div>';    
+      
+    echo panel($html, get_lang('Platform'), 'platform'); 
+ ?> 
+    <div class='form-group'>
+        <div class="col-sm-6">
+            <button type="submit" class="btn btn-default pull-right" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" ><i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?></button>
             <input type="hidden" name="is_executable" id="is_executable" value="-" />
-            <button class="btn btn-success" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" ><i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?></button></td>
-    </tr>
-    </table>
-    </fieldset>
+        </div>
+        <div class="col-sm-6">
+            <button class="btn btn-success" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" ><i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?></button>
+        </div>   
+    </div>
+    
     <?php
 }
 

@@ -179,12 +179,12 @@ class IndexManager
         if ($show_menu) {
             $html .= '<ul class="nav nav-pills nav-stacked">';
             if ($show_create_link) {
-                $html .= '<li class="add-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+                $html .= '<li class="add-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'create_course/add_course.php">'.Display::return_icon('new-course.png',  get_lang('CourseCreate')).(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
             }
 
             if ($show_course_link) {
                 if (!api_is_drh() && !api_is_session_admin()) {
-                    $html .=  '<li class="list-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'auth/courses.php">'.get_lang('CourseCatalog').'</a></li>';
+                    $html .=  '<li class="list-course"><a href="'. api_get_path(WEB_CODE_PATH) . 'auth/courses.php">'. Display::return_icon('catalog-course.png', get_lang('CourseCatalog')) .get_lang('CourseCatalog').'</a></li>';
                 } else {
                     $html .= '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
                 }
@@ -193,7 +193,7 @@ class IndexManager
         }
 
         if (!empty($html)) {
-            $html = self::show_right_block(get_lang('Courses'), $html, 'teacher_block');
+            $html = self::show_right_block(get_lang('Courses'), $html, 'teacher_block', null, 'teachers', 'teachersCollapse');
         }
 
         return $html;
@@ -269,8 +269,8 @@ class IndexManager
 
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-            $home_notice = Display::div($home_notice, array('class'  => 'homepage_notice'));
-            $html = self::show_right_block(get_lang('Notice'), $home_notice, 'notice_block');
+            //$home_notice = Display::div($home_notice, array('class'  => 'homepage_notice'));
+            $html = self::show_right_block(get_lang('Notice'), $home_notice, 'notice_block', null, 'notices', 'noticesCollapse');
         }
         return $html;
     }
@@ -293,7 +293,7 @@ class IndexManager
             $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
             $home_menu_content .= '</ul>';
-            $html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block');
+            $html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block', null, 'helps', 'helpsCollapse');
         }
         return $html;
     }
@@ -349,7 +349,7 @@ class IndexManager
             }
         }
         $content .= '</ul>';
-        $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block');
+        $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block',null, 'skills', 'skillsCollapse');
         return $html;
     }
 
@@ -680,17 +680,30 @@ class IndexManager
     /**
      * @todo use the template system
      */
-    function show_right_block($title, $content, $id = null, $params = null) {
-        if (!empty($id)) {
-            $params['id'] = $id;
+    function show_right_block($title, $content, $id = null, $params = null, $idAccordion = null, $idCollpase = null) {
+        if (!empty($idAccordion)) {
+            $html = null;
+            $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;
+            $html .= '<div class="panel panel-default" id="'.$id.'">' . PHP_EOL;
+            $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">' . PHP_EOL;
+            $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollpase.'" aria-expanded="true" aria-controls="'.$idCollpase.'">'.$title.'</a>' . PHP_EOL;
+            $html .= '</h4></div>' . PHP_EOL;
+            $html .= '<div id="'.$idCollpase.'" class="panel-collapse collapse in" role="tabpanel">' . PHP_EOL;
+            $html .= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
+            $html .= '</div></div></div>' . PHP_EOL;
+            
+        } else {
+            if (!empty($id)) {
+                $params['id'] = $id;
+            }
+            $params['class'] = 'panel panel-default';
+            $html = null;
+            if (!empty($title)) {
+                $html .= '<div class="panel-heading">'.$title.'</div>' . PHP_EOL;
+            }
+            $html.= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
+            $html = Display::div($html, $params);
         }
-        $params['class'] = 'panel panel-default';
-        $html = null;
-        if (!empty($title)) {
-            $html.= '<div class="panel-heading">'.$title.'</div>';
-        }
-        $html.= '<div class="panel-body">'.$content.'</div>';
-        $html = Display::div($html, $params);
         return $html;
     }
 
@@ -838,7 +851,14 @@ class IndexManager
 
         $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.Display::return_icon('edit-profile.png',get_lang('EditProfile'),null,ICON_SIZE_SMALL).get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';
-        $html = self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
+        $html = self::show_right_block(
+            get_lang('Profile'),
+            $profile_content,
+            'profile_block',
+            null,
+            'profile',
+            'profileCollapse'
+        );
         return $html;
     }
 
@@ -947,7 +967,10 @@ class IndexManager
             $html = self::show_right_block(
                 get_lang('Courses'),
                 $my_account_content,
-                'course_block'
+                'course_block',
+                null,
+                'course',
+                'courseCollapse'
             );
         }
         return $html;

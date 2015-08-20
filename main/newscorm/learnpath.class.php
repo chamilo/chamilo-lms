@@ -7599,9 +7599,9 @@ class learnpath
 
                         $form->addButtonSave($text, 'submit_button');
                         $renderer = $form->defaultRenderer();
-                        $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
-                        $form->addElement('html', '<div>');
-                        $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
+                        $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
+                        $form->addElement('html', '<div class="editor-lp">');
+                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config, true);
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;
                     }

@@ -560,11 +560,11 @@ if (@$_POST['step2']) {
     //STEP 6 : LAST CHECK BEFORE INSTALL
 ?>
     <div class="RequirementHeading">
-       <h2><?php echo display_step_sequence().get_lang('LastCheck'); ?></h2>
+       <h3><?php echo display_step_sequence().get_lang('LastCheck'); ?></h3>
     </div>
     <div class="RequirementContent">
        <?php echo get_lang('HereAreTheValuesYouEntered'); ?>
-    </div><br />
+    </div>
 
     <?php
     if ($installType == 'new') {
@@ -629,7 +629,7 @@ if (@$_POST['step2']) {
         $msg = get_lang('UpdateExecution');
     }
     echo '<div class="RequirementHeading">
-          <h2>'.display_step_sequence().$msg.'</h2>';
+          <h3>'.display_step_sequence().$msg.'</h3>';
     if (!empty($installationProfile)) {
         echo '    <h3>('.$installationProfile.')</h3>';
     }

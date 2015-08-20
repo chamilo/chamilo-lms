@@ -130,6 +130,11 @@ a.thumbnail:hover{
     height: auto;
     width: 100%;
 }
+#notice_block p, #notice-block p{
+    color: #666;
+    font-size: 12px;
+    line-height: 20px;
+}
 .carousel-indicators{
   bottom: 0px !important;
 }
@@ -6019,7 +6024,7 @@ div#chat-remote-video video {
 .filler-report .filler-report-data-init{
   width: 60%;
 }
-#hot-course .items-course{
+.items-course{
   padding: 10px;
   border: 1px solid #e6e6e6;
   border-radius: 5px;
@@ -6028,15 +6033,15 @@ div#chat-remote-video video {
   min-height: 350px;
   margin-bottom: 10px;
 }
-#hot-course .items-course .items-course-info .title{
+.items-course .items-course-info .title{
   font-size: 14px;
   min-height: 32px;
 }
-#hot-course .items-course .items-course-info .teachers{
+.items-course .items-course-info .teachers{
   font-size: 12px;
   color: #666666;
 }
-#hot-course .items-course .items-course-info .ranking{
+.items-course .items-course-info .ranking{
   font-size: 10px;
   color: #666666;
 }

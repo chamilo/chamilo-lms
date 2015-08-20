@@ -30,13 +30,28 @@ class CkEditor extends Editor
         //$jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
         //$this->template->addResource($jsFolder.'ckeditor/ckeditor.js', 'js');
     }
+    
+    /**
+     * Return the HTML code required to run editor.
+     *
+     * @return string
+     */
+    
+    public function createHtml()
+    {
+        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
+                 '.$this->value.'
+                 </textarea>';
+        $html .= $this->editorReplace();
+        return $html;
+    }
 
     /**
      * Return the HTML code required to run editor.
      *
      * @return string
      */
-    public function createHtml()
+    public function createHtmlStyle()
     {
         $style = '';
         if (trim($this->value) == '<html><head><title></title></head><body></body></html>') {

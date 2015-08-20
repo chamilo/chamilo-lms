@@ -107,7 +107,7 @@ $code = isset($code) ? $code : null;
 
 <div class="row">
     <div class="col-md-6">
-        <h2><?php echo get_lang('Search'); ?></h2>
+        <h4><?php echo get_lang('Search'); ?></h4>
         <?php if ($showCourses) { ?>
         <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
             <form class="form-search" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
@@ -250,11 +250,18 @@ $code = isset($code) ? $code : null;
 
 <div class="row">
     <div class="col-md-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div id="category-courses">
+            
+                <?php
+                    $form = new FormValidator('select-category');
+                    $form -> addElement('select','status',get_lang('Profile'), $status, array('id' => 'category-items', 'class' => 'chzn-select', 'onchange' => 'javascript: display_drh_list();'));
+                    $category = $form->returnForm();
+                    echo $category;
+                ?>
+                
+                
                 <?php
                 echo get_lang('CourseCategories').'</div>';
-
                 $action = 'display_courses';
                 // level 1
                 foreach ($browse_course_categories[0] as $category) {

@@ -109,7 +109,7 @@ $code = isset($code) ? $code : null;
     <div class="col-md-6">
         <h2><?php echo get_lang('Search'); ?></h2>
         <?php if ($showCourses) { ?>
-        <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
+          <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
             <form class="form-search" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                 <input type="hidden" name="search_course" value="1" />
@@ -122,7 +122,7 @@ $code = isset($code) ? $code : null;
                                         <i class="fa fa-search"></i> <?php echo get_lang('Search'); ?>
                                     </button>
                                         <?php
-                                        $hidden_links = 0;
+                                            $hidden_links = 0;
                                         } else {
                                             $hidden_links = 1;
                                         }
@@ -132,7 +132,7 @@ $code = isset($code) ? $code : null;
                                          * it, as this can considerably slow down your system
                                          */
                                         if (!empty($browse_course_categories)) {
-                                        echo '<a class="btn btn-default btn-sm" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a>';
+                                            echo '<a class="btn btn-default btn-sm" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a>';
                                         ?>
                                 </div>
                             </div>
@@ -423,13 +423,14 @@ function return_thumbnail($course, $icon_title)
  * @param $course
  */
 function return_title($course)
-{   $html = '';
+{
+    $html = '';
     $linkCourse = api_get_course_url($course['code']);
     $title = cut($course['title'], 70);
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
     $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);    
-    $html .=  '<h4 class="title"><a href="' . $linkCourse . '">' . cut($title, 60) . '</a></h4>';
+    $html .= ' <h4 class="title"><a href="' . $linkCourse . '">' . cut($title, 60) . '</a></h4>';
     $html .= '<div class="teachers">'.$teachers.'</div>';
     $html .= '<div class="ranking">'. $rating . '</div>';
     return $html;

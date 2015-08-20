@@ -72,7 +72,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
         } else {
             $styleCss = $this->editor->getConfigAttribute('style');
             
-            if ($styleCss){
+            if ($styleCss) {
                $style = true;
             } else {
                $style = false;
@@ -93,13 +93,13 @@ class HtmlEditor extends HTML_QuickForm_textarea
     /**
      * @return string
      */
-    public function buildEditor($style=false)
+    public function buildEditor($style = false)
     {
         $result = '';
         if ($this->editor) {
             $this->editor->value = $this->getValue();
             $this->editor->setName($this->getName());
-            if($style==true){
+            if ($style == true) {
                 $result = $this->editor->createHtmlStyle();
             }  else {
                 $result = $this->editor->createHtml();

@@ -681,29 +681,29 @@ class IndexManager
      * @todo use the template system
      */
     function show_right_block($title, $content, $id = null, $params = null, $idAccordion = null, $idCollpase = null) {
-        if (!empty($idAccordion)){
+        if (!empty($idAccordion)) {
             $html = null;
-            $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">';
-            $html .= '<div class="panel panel-default" id="'.$id.'">';
-            $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">';
-            $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollpase.'" aria-expanded="true" aria-controls="'.$idCollpase.'">';
-            $html .= $title.'</a></h4></div>';
-            $html .= '<div id="'.$idCollpase.'" class="panel-collapse collapse in" role="tabpanel">';
-            $html .= '<div class="panel-body">'.$content.'</div>';
-            $html .= '</div></div></div>';
+            $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;
+            $html .= '<div class="panel panel-default" id="'.$id.'">' . PHP_EOL;
+            $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">' . PHP_EOL;
+            $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollpase.'" aria-expanded="true" aria-controls="'.$idCollpase.'">'.$title.'</a>' . PHP_EOL;
+            $html .= '</h4></div>' . PHP_EOL;
+            $html .= '<div id="'.$idCollpase.'" class="panel-collapse collapse in" role="tabpanel">' . PHP_EOL;
+            $html .= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
+            $html .= '</div></div></div>' . PHP_EOL;
             
-        }else{
+        } else {
             if (!empty($id)) {
                 $params['id'] = $id;
             }
             $params['class'] = 'panel panel-default';
             $html = null;
             if (!empty($title)) {
-                $html.= '<div class="panel-heading">'.$title.'</div>';
+                $html .= '<div class="panel-heading">'.$title.'</div>' . PHP_EOL;
             }
-            $html.= '<div class="panel-body">'.$content.'</div>';
+            $html.= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
             $html = Display::div($html, $params);
-            }
+        }
         return $html;
     }
 
@@ -851,13 +851,14 @@ class IndexManager
 
         $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.Display::return_icon('edit-profile.png',get_lang('EditProfile'),null,ICON_SIZE_SMALL).get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';
-        $html = self::show_right_block(get_lang('Profile'),
-                $profile_content,
-                'profile_block',
-                null,
-                'profile',
-                'profileCollapse'
-                );
+        $html = self::show_right_block(
+            get_lang('Profile'),
+            $profile_content,
+            'profile_block',
+            null,
+            'profile',
+            'profileCollapse'
+        );
         return $html;
     }
 

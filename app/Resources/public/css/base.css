@@ -5606,6 +5606,10 @@ div#chat-remote-video video {
   font-size: 12px;
   color: #666666;
 }
+.install-steps-menu li.current-step{
+    font-weight: bold;
+}
+
 #about-session .description-course{
   padding: 10px;
   color: #666666;

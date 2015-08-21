@@ -553,7 +553,7 @@ function step_active($param)
 {
     global $current_step;
     if ($param == $current_step) {
-        echo 'class="current_step" ';
+        echo 'class="current-step" ';
     }
 }
 

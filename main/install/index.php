@@ -376,7 +376,7 @@ if ($encryptPassForm == '1') {
     <div class="panel-body">
     <div class="row">
         <div class="col-md-4">
-            <div class="well">
+            <div class="well install-steps-menu">
                 <ol>
                     <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
                     <li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>

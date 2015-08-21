@@ -1451,12 +1451,12 @@ function display_database_settings_form(
 
     <?php
 }
-function panel($content=null, $title=null, $id=null, $style=null){
+function panel($content = null, $title = null, $id = null, $style = null) {
     $html = '';
-    if(empty($style)){
+    if (empty($style)) {
         $style = 'default';
     }
-    if (!empty($title)){
+    if (!empty($title)) {
         $panelTitle = Display::div($title, array('class' => 'panel-heading'));
         $panelBody = Display::div($content, array('class' => 'panel-body'));
         $panelParent = Display::div($panelTitle . $panelBody, array('id' => $id, 'class' => 'panel panel-'.$style));
@@ -1484,13 +1484,13 @@ function display_configuration_parameter(
     $displayWhenUpdate = 'true'
 ) {
     $html = '<div class="form-group">';
-    $html.= '<label class="col-sm-6 control-label">' . $parameterName . '</label>';
+    $html .= '<label class="col-sm-6 control-label">' . $parameterName . '</label>';
     if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
-        $html.= '<input type="hidden" name="' . $formFieldName . '" value="'. api_htmlentities($parameterValue, ENT_QUOTES). '" />' . $parameterValue;
+        $html .= '<input type="hidden" name="' . $formFieldName . '" value="'. api_htmlentities($parameterValue, ENT_QUOTES). '" />' . $parameterValue;
     } else {
-        $html.= '<div class="col-sm-6"><input class="form-control" type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</div>";
+        $html .= '<div class="col-sm-6"><input class="form-control" type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</div>";
     }
-    $html.= "</div>";
+    $html .= "</div>";
     return $html;
 }
 
@@ -1606,72 +1606,72 @@ function display_configuration_settings_form(
     
     
     $html .= '<div class="form-group">
-            <label class="col-sm-6 control-label">'. get_lang("EncryptMethodUserPass").'</label>
-            <div class="col-sm-6">';
-            if ($installType == 'update') { 
-                $html .= '<input type="hidden" name="encryptPassForm" value="'. $encryptPassForm .'" />'. $encryptPassForm;
-            } else {
+            <label class="col-sm-6 control-label">' . get_lang("EncryptMethodUserPass") . '</label>
+        <div class="col-sm-6">';
+    if ($installType == 'update') { 
+        $html .= '<input type="hidden" name="encryptPassForm" value="'. $encryptPassForm .'" />'. $encryptPassForm;
+    } else {
             
-            $html .= '<div class="checkbox">
+        $html .= '<div class="checkbox">
                     <label>
                         <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '. ($encryptPassForm == 'bcrypt' ? 'checked="checked" ':'') .'/> bcrypt
                     </label>';       
             
-            $html .= '<label>
+        $html .= '<label>
                         <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" '. ($encryptPassForm == 'sha1' ? 'checked="checked" ':'') .'/> sha1
                     </label>';
 
-            $html .= '<label>
+        $html .= '<label>
                         <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" '. ($encryptPassForm == 'md5' ? 'checked="checked" ':'') .'/> md5
                     </label>';
 
-            $html .= '<label>
+        $html .= '<label>
                         <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '. ($encryptPassForm == 'none' ? 'checked="checked" ':'') .'/>'. get_lang('None').'
                     </label>'; 
-            $html .= '</div>';
-             }
- $html .= '</div></div>';
+        $html .= '</div>';
+    }
+    $html .= '</div></div>';
   
    
     $html .= '<div class="form-group">
-            <label class="col-sm-6 control-label">'. get_lang('AllowSelfReg') .'</label>
+            <label class="col-sm-6 control-label">' . get_lang('AllowSelfReg') . '</label>
             <div class="col-sm-6">';
-            if ($installType == 'update'){ 
-                $html .= '<input type="hidden" name="allowSelfReg" value="'. $allowSelfReg .'" />'. $allowSelfReg ? get_lang('Yes') : get_lang('No');
-            } else {
-            $html .= '<div class="control-group">';
-            $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" '. ($allowSelfReg ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
-                </label>';
-            $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
-                </label>';
-            $html .= '</div>';
-            }
+    if ($installType == 'update') { 
+        $html .= '<input type="hidden" name="allowSelfReg" value="'. $allowSelfReg .'" />'. $allowSelfReg ? get_lang('Yes') : get_lang('No');
+    } else {
+        $html .= '<div class="control-group">';
+        $html .= '<label class="checkbox-inline">
+                        <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" '. ($allowSelfReg ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
+                    </label>';
+        $html .= '<label class="checkbox-inline">
+                        <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
+                    </label>';
         $html .= '</div>';
-   $html .= '</div>';    
+    }
+    $html .= '</div>';
+    $html .= '</div>';    
     
     $html .= '<div class="form-group">';
     $html .= '<label class="col-sm-6 control-label">'. get_lang('AllowSelfRegProf') .'</label>
         <div class="col-sm-6">';
-        if ($installType == 'update'){
-               $html .= '<input type="hidden" name="allowSelfRegProf" value="'. $allowSelfRegProf.'" />'. $allowSelfRegProf? get_lang('Yes') : get_lang('No');
-        } else { 
-            $html .= '<div class="control-group">
+    if ($installType == 'update'){
+        $html .= '<input type="hidden" name="allowSelfRegProf" value="'. $allowSelfRegProf.'" />'. $allowSelfRegProf? get_lang('Yes') : get_lang('No');
+    } else { 
+        $html .= '<div class="control-group">
                 <label class="checkbox-inline">
                     <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" '. ($allowSelfRegProf ? 'checked="checked" ' : '') .'/>
                 ' . get_lang('Yes') .'
                 </label>';
-            $html .= '<label class="checkbox-inline">
+        $html .= '<label class="checkbox-inline">
                     <input type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" '. ($allowSelfRegProf ? '' : 'checked="checked" ') .' />
                    '. get_lang('No') .'
                 </label>';
-            $html .= '</div>';
-        }    
-$html .= '</div>
+        $html .= '</div>';
+    }    
+    $html .= '</div>
     </div>';    
       
- echo panel($html, get_lang('Platform'), 'platform'); 
+    echo panel($html, get_lang('Platform'), 'platform'); 
  ?> 
     <div class='form-group'>
         <div class="col-sm-6">

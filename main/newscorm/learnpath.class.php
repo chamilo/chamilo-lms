@@ -7601,8 +7601,7 @@ class learnpath
                         $renderer = $form->defaultRenderer();
                         $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
                         $form->addElement('html', '<div class="editor-lp">');
-                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config, $style=true);
-                        //$form->addElement('html_editor', 'content_lp', '', null, $editor_config);
+                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config, true);
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;
                     }

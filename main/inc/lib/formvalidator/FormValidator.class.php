@@ -761,7 +761,7 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-        if ($style){
+        if ($style) {
             $config['style'] = true;
         }
         if ($fullPage) {

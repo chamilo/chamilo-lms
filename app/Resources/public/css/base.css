@@ -4424,13 +4424,6 @@ i.size-32.icon-new-work{
 .jqgrid_whitespace {
     white-space: normal !important;
 }
-.chosen-container {
-    min-width: 100%;
-}
-
-.chzn-container-single .chzn-search {
-    z-index: 1010;
-}
 
 /* display the cookie usage warning validation */
 .cookieUsageValidation {

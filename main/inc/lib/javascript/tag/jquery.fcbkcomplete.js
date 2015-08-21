@@ -94,7 +94,7 @@ jQuery(
 	               complete.prepend(feed);
 	               holder.after(complete);
 				   feed.css("width","300px");
-		        }
+		       }
 	        	
 		        function preSet()
 		        {										

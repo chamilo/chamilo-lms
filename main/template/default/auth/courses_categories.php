@@ -107,41 +107,65 @@ $code = isset($code) ? $code : null;
 
 <div class="row">
     <div class="col-md-6">
-        <h4><?php echo get_lang('Search'); ?></h4>
-        <?php if ($showCourses) { ?>
-        <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
-            <form class="form-search" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
+        <h5><?php echo get_lang('Search'); ?></h5>
+        <?php 
+        if ($showCourses) {
+            if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
+            <form class="form-horizontal" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                 <input type="hidden" name="search_course" value="1" />
-                    <div class="control-group">
-                        <div class="controls">
-                            <div class="input-append">
-                                <input type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
-                                <div class="btn-group">
-                                    <button class="btn btn-default btn-sm" type="submit">
-                                        <i class="fa fa-search"></i> <?php echo get_lang('Search'); ?>
-                                    </button>
-                                        <?php
-                                        $hidden_links = 0;
-                                        } else {
-                                            $hidden_links = 1;
-                                        }
-
-                                        /* Categories will only show down to 4 levels, if you want more,
-                                         * you will have to patch the following code. We don't recommend
-                                         * it, as this can considerably slow down your system
-                                         */
-                                        if (!empty($browse_course_categories)) {
-                                        echo '<a class="btn btn-default btn-sm" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a>';
-                                        ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>       
+                <div class="form-group">
+                    <div class="col-sm-7">
+                        <input class="form-control" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
+                    </div>
+                    <div class="col-sm-5">
+                        <button class="btn btn-default" type="submit">
+                            <i class="fa fa-search"></i> <?php echo get_lang('Search'); ?>
+                        </button>
+                    </div>
+                </div>
             </form>
+            <?php } ?>
     </div>
-    <div class="col-md-6"></div>
-</div>
+    <div class="col-md-6">
+        <h5><?php echo get_lang('CourseCategories'); ?></h5>
+        <?php      
+                   
+            $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
+            $action = 'display_courses';
+            $pageLength = 10;
+            $pageCurrent = 1;
+                   
+                $form = '<form action="'.$webAction.'" method="GET" class="form-horizontal">';
+                $form .= '<input type="hidden" name="action" value="' . $action . '">';
+                $form .= '<input type="hidden" name="pageCurrent" value="' . $pageCurrent . '">';
+                $form .= '<input type="hidden" name="pageLength" value="' . $pageLength . '">';
+                $form .= '<div class="form-group">';
+                $form .= '<div class="col-sm-7">';
+                $form .= '<select name="category_code" class="chzn-select form-control">';
+                    
+                foreach ($browse_course_categories[0] as $category) {
+                    $categoryCode = $category[code];
+                    $countCourse = $category[count_courses];
+                        
+                    $form .= '<option value="' . $category[code] . '">' . $category[name] . ' ( '. $countCourse .' ) </option>';
+                    if(!empty($browse_course_categories[$categoryCode])){
+                        foreach($browse_course_categories[$categoryCode] as $subCategory){                  
+                            $form .= '<option value="' . $subCategory[code] . '"> ---' . $subCategory[name] . ' ( '. $subCategory[count_courses] .' ) </option>';
+                        }
+                    }
+                }
+                $form .= '</select>';
+                $form .= '</div>';
+                $form .= '<div class="col-sm-5">';
+                $form .= '<input class="btn btn-default btn-block" type="submit" value="Enviar">';
+                $form .= '</div>';
+                $from .= '</form>';
+                echo $form;
+?>
+        </div>
+    </div></div>
+ <?php  } ?>
 <div class="row"> 
  <?php if ($showCourses && $action != 'display_sessions') { 
             
@@ -244,122 +268,13 @@ $code = isset($code) ? $code : null;
             } 
         }
     echo $cataloguePagination;
+
 ?>   
 </div>
 
-
-<div class="row">
-    <div class="col-md-3">
-        <div id="category-courses">
-            
-                <?php
-                    $form = new FormValidator('select-category');
-                    $form -> addElement('select','status',get_lang('Profile'), $status, array('id' => 'category-items', 'class' => 'chzn-select', 'onchange' => 'javascript: display_drh_list();'));
-                    $category = $form->returnForm();
-                    echo $category;
-                ?>
-                
-                
-                <?php
-                echo get_lang('CourseCategories').'</div>';
-                $action = 'display_courses';
-                // level 1
-                foreach ($browse_course_categories[0] as $category) {
-                    $category_name = $category['name'];
-                    $category_code = $category['code'];
-                    $count_courses_lv1 = $category['count_courses'];
-
-                    if ($code == $category_code) {
-                        $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';
-                    } else {
-                        if (!empty($count_courses_lv1)) {
-                            $category_link = '<a href="' .
-                                getCourseCategoryUrl(
-                                    1,
-                                    $pageLength,
-                                    $category_code,
-                                    $hidden_links,
-                                    $action
-                                ) .'">'.$category_name.' ('.$count_courses_lv1.') </a>';
-                        } else {
-                            $category_link = ''.$category_name.' ('.$count_courses_lv1.')';
-                        }
-                    }
-                    echo '<div class="panel-body">';
-                    echo '<ul class="nav nav-pills nav-stacked">';
-                    echo '<li>'.$category_link.'</li>';
-                    echo '</ul></div>';
-                    // level 2
-                    if (!empty($browse_course_categories[$category_code])) {
-                        foreach ($browse_course_categories[$category_code] as $subcategory1) {
-                            $subcategory1_name = $subcategory1['name'];
-                            $subcategory1_code = $subcategory1['code'];
-                            $count_courses_lv2 = $subcategory1['count_courses'];
-                            if ($code == $subcategory1_code) {
-                                $subcategory1_link = '<strong>'.$subcategory1_name.' ('.$count_courses_lv2.')</strong>';
-                            } else {
-                                $subcategory1_link = '<a href="' .
-                                    getCourseCategoryUrl(
-                                        1,
-                                        $pageLength,
-                                        $subcategory1_code,
-                                        $hidden_links,
-                                        $action
-                                    ) . '">'.$subcategory1_name.' ('.$count_courses_lv2.') </a> ';
-                            }
-                            echo '<li style="margin-left:20px;">'.$subcategory1_link.'</li>';
-
-                            // level 3
-                            if (!empty($browse_course_categories[$subcategory1_code])) {
-                                foreach ($browse_course_categories[$subcategory1_code] as $subcategory2) {
-                                    $subcategory2_name = $subcategory2['name'];
-                                    $subcategory2_code = $subcategory2['code'];
-                                    $count_courses_lv3 = $subcategory2['count_courses'];
-                                    if ($code == $subcategory2_code) {
-                                        $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
-                                    } else {
-                                        $subcategory2_link = '<a href="' .
-                                            getCourseCategoryUrl(
-                                                1,
-                                                $pageLength,
-                                                $subcategory2_code,
-                                                $hidden_links,
-                                                $action
-                                            ) . '">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
-                                    }
-                                    echo '<li style="margin-left:40px;">'.$subcategory2_link.'</li>';
-
-                                    // level 4
-                                    if (!empty($browse_course_categories[$subcategory2_code])) {
-                                        foreach ($browse_course_categories[$subcategory2_code] as $subcategory3) {
-                                            $subcategory3_name = $subcategory3['name'];
-                                            $subcategory3_code = $subcategory3['code'];
-                                            $count_courses_lv4 = $subcategory3['count_courses'];
-                                            if ($code == $subcategory3_code) {
-                                                $subcategory3_link = '<strong>'.$subcategory3_name.' ('.$count_courses_lv4.')</strong>';
-                                            } else {
-                                                $subcategory3_link = '<a href="' .
-                                                    getCourseCategoryUrl(
-                                                        1,
-                                                        $pageLength,
-                                                        $subcategory3_code,
-                                                        $hidden_links,
-                                                        $action
-                                                    ) . '">'.$subcategory3_name.' ('.$count_courses_lv4.') </a>';
-                                            }
-                                            echo '<li style="margin-left:60px;">'.$subcategory3_link.'</li>';
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } ?>
-            </ul>
-        </div>
+      
         <?php
-        }
-        }
+        
         if ($showSessions) { ?>
             <div class="panel panel-default">
                 <div class="panel-heading"><?php echo get_lang('Sessions'); ?></div>
@@ -387,10 +302,7 @@ $code = isset($code) ? $code : null;
                 </div>
             </div>
         <?php } ?>
-    </div>
-
-    
-</div>
+   
 <?php
 
 /**

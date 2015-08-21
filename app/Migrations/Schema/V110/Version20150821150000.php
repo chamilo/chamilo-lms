@@ -76,6 +76,28 @@ class Version20150819095300 extends AbstractMigrationChamilo
                 )
             );
         $deleteSettings->getQuery()->execute();
+
+        $deleteOptions->delete('ChamiloCoreBundle:SettingsOptions', 'o')
+            ->andWhere(
+                $deleteOptions->expr()->in(
+                    'o.variable',
+                    [
+                        'allow_reservation'
+                    ]
+                )
+            );
+        $deleteOptions->getQuery()->execute();
+
+        $deleteSettings->delete('ChamiloCoreBundle:SettingsCurrent', 's')
+            ->andWhere(
+                $deleteSettings->expr()->in(
+                    's.variable',
+                    [
+                        'allow_reservation'
+                    ]
+                )
+            );
+        $deleteSettings->getQuery()->execute();
     }
 
     /**
@@ -132,6 +154,24 @@ class Version20150819095300 extends AbstractMigrationChamilo
             1,
             false,
             false
+        );
+        $this->addSettingCurrent(
+            'allow_reservation',
+            null,
+            'radio',
+            'Tools',
+            'false',
+            'AllowReservationTitle',
+            'AllowReservationComment',
+            null,
+            null,
+            1,
+            true,
+            false,
+            [
+                0 => ['value' => 'true', 'text' => 'Yes'],
+                1 => ['value' => 'false', 'text' => 'No']
+            ]
         );
     }
 

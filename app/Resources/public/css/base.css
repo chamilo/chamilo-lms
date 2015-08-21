@@ -6038,6 +6038,20 @@ div#chat-remote-video video {
   font-size: 10px;
   color: #666666;
 }
+.items-course .items-course-info .user-register{
+  font-size: 11px;
+  background-color: #FCF8E3;
+  border: 1px solid #FAEBCC;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  margin-left: 5px;
+  margin-bottom: 3px;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  border-radius: 5px;
+  
+}
 .hot-course-head{
   padding-top: 10px;
   padding-bottom: 10px;

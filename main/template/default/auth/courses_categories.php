@@ -106,7 +106,7 @@ $code = isset($code) ? $code : null;
 </script>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <h5><?php echo get_lang('Search'); ?></h5>
         <?php 
         if ($showCourses) {
@@ -114,11 +114,9 @@ $code = isset($code) ? $code : null;
             <form class="form-horizontal" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                 <input type="hidden" name="search_course" value="1" />
-                <div class="form-group">
-                    <div class="col-sm-7">
-                        <input class="form-control" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
-                    </div>
-                    <div class="col-sm-5">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
+                    <div class="input-group-btn">
                         <button class="btn btn-default" type="submit">
                             <i class="fa fa-search"></i> <?php echo get_lang('Search'); ?>
                         </button>
@@ -127,7 +125,7 @@ $code = isset($code) ? $code : null;
             </form>
             <?php } ?>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <h5><?php echo get_lang('CourseCategories'); ?></h5>
         <?php      
                    
@@ -141,30 +139,37 @@ $code = isset($code) ? $code : null;
                 $form .= '<input type="hidden" name="pageCurrent" value="' . $pageCurrent . '">';
                 $form .= '<input type="hidden" name="pageLength" value="' . $pageLength . '">';
                 $form .= '<div class="form-group">';
-                $form .= '<div class="col-sm-7">';
-                $form .= '<select name="category_code" class="chzn-select form-control">';
-                    
+                $form .= '<div class="col-sm-12">';
+                $form .= '<select name="category_code" onchange="submit();" class="chzn-select form-control">';
+                $codeType = $_GET[category_code];    
                 foreach ($browse_course_categories[0] as $category) {
                     $categoryCode = $category[code];
                     $countCourse = $category[count_courses];
                         
-                    $form .= '<option value="' . $category[code] . '">' . $category[name] . ' ( '. $countCourse .' ) </option>';
+                    $form .= '<option '. ($categoryCode == $codeType? 'selected="selected" ':'') .' value="' . $category[code] . '">' . $category[name] . ' ( '. $countCourse .' ) </option>';
                     if(!empty($browse_course_categories[$categoryCode])){
-                        foreach($browse_course_categories[$categoryCode] as $subCategory){                  
-                            $form .= '<option value="' . $subCategory[code] . '"> ---' . $subCategory[name] . ' ( '. $subCategory[count_courses] .' ) </option>';
+                        foreach($browse_course_categories[$categoryCode] as $subCategory){
+                            $subCategoryCode = $subCategory[code];
+                            $form .= '<option '. ($subCategoryCode == $codeType ? 'selected="selected" ':'') .' value="' . $subCategory[code] . '"> ---' . $subCategory[name] . ' ( '. $subCategory[count_courses] .' ) </option>';
                         }
                     }
                 }
                 $form .= '</select>';
                 $form .= '</div>';
-                $form .= '<div class="col-sm-5">';
-                $form .= '<input class="btn btn-default btn-block" type="submit" value="Enviar">';
-                $form .= '</div>';
                 $from .= '</form>';
                 echo $form;
-?>
-        </div>
-    </div></div>
+        ?>
+    </div>
+    </div>
+<?php
+        
+        if ($showSessions) { ?>
+            <div class="col-md-4">
+                <h5><?php echo get_lang('Sessions'); ?></h5>
+                <a class="btn btn-default btn-block" href="<?php echo getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>"><?php echo get_lang('SessionList'); ?></a>
+            </div>
+        <?php } ?>
+</div>
  <?php  } ?>
 <div class="row"> 
  <?php if ($showCourses && $action != 'display_sessions') { 
@@ -225,11 +230,12 @@ $code = isset($code) ? $code : null;
                     if ($user_registerd_in_course_as_student) {
                         if (!$course_closed) {
                             //$html .= return_goto_button($course);
-                            $html .= return_description_button($course, $icon_title);
+                            
                             if ($course_unsubscribe_allowed) {
                                 $html .= return_unregister_button($course, $stok, $search_term, $code);
                             }
                             $html .= return_already_registered_label('student');
+                            $html .= return_description_button($course, $icon_title);
                         }
                     } elseif ($user_registerd_in_course_as_teacher) {
                         // if user registered as teacher
@@ -243,7 +249,7 @@ $code = isset($code) ? $code : null;
                         // if user not registered in the course
                         if (!$course_closed) {
                             if (!$course_private) {
-                                $html .= return_goto_button($course);
+                                //$html .= return_goto_button($course);
                                 if ($course_subscribe_allowed) {
                                     $html .= return_register_button($course, $stok, $code, $search_term);
                                 }
@@ -271,37 +277,6 @@ $code = isset($code) ? $code : null;
 
 ?>   
 </div>
-
-      
-        <?php
-        
-        if ($showSessions) { ?>
-            <div class="panel panel-default">
-                <div class="panel-heading"><?php echo get_lang('Sessions'); ?></div>
-                <div class="panel-body">
-                <?php if ($action == 'display_sessions' && $_SERVER['REQUEST_METHOD'] != 'POST') { ?>
-                    <strong><?php echo get_lang('Sessions'); ?></strong>
-                <?php } else { ?>
-                    <a href="<?php echo getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>"><?php echo get_lang('SessionList'); ?></a>
-                <?php } ?>
-
-                <p><?php echo get_lang('SearchActiveSessions') ?></p>
-                <form class="form-search" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
-                    <div class="input-append">
-                        <?php echo Display::input('date', 'date', $date, array(
-                            'class' => 'span2',
-                            'id' => 'date',
-                            'readonly' => ''
-                        )); ?>
-
-                        <button class="btn btn-default" type="submit">
-                            <?php echo get_lang('Search'); ?>
-                        </button>
-                    </div>
-                </form>
-                </div>
-            </div>
-        <?php } ?>
    
 <?php
 
@@ -401,7 +376,7 @@ function return_already_registered_label($in_status)
  */
 function return_register_button($course, $stok, $code, $search_term)
 {
-    $html = ' <a class="btn btn-primary" href="'.api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
+    $html = ' <a class="btn btn-success btn-block btn-sm" href="'.api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
     return $html;
     
 }

@@ -192,7 +192,7 @@ $code = isset($code) ? $code : null;
 
             $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
             $user_id = api_get_user_id();
-
+            
             if (!empty($browse_courses_in_category)) {
                 foreach ($browse_courses_in_category as $course) {
                     $course_hidden = ($course['visibility'] == COURSE_VISIBILITY_HIDDEN);
@@ -208,6 +208,7 @@ $code = isset($code) ? $code : null;
                     $course_open = ($course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM);
                     $course_private = ($course['visibility'] == COURSE_VISIBILITY_REGISTERED);
                     $course_closed = ($course['visibility'] == COURSE_VISIBILITY_CLOSED);
+                  
                     $course_subscribe_allowed = ($course['subscribe'] == 1);
                     $course_unsubscribe_allowed = ($course['unsubscribe'] == 1);
                     $count_connections = $course['count_connections'];
@@ -228,15 +229,13 @@ $code = isset($code) ? $code : null;
                     $html .= '<div class="btn-toolbar">';
                     // if user registered as student
                     if ($user_registerd_in_course_as_student) {
-                        if (!$course_closed) {
-                            //$html .= return_goto_button($course);
-                            
+                        if (!$course_closed) {                        
                             if ($course_unsubscribe_allowed) {
                                 $html .= return_unregister_button($course, $stok, $search_term, $code);
                             }
                             $html .= return_already_registered_label('student');
-                            $html .= return_description_button($course, $icon_title);
                         }
+                        $html .= return_description_button($course, $icon_title);
                     } elseif ($user_registerd_in_course_as_teacher) {
                         // if user registered as teacher
                         //$html .= return_goto_button($course);
@@ -255,8 +254,8 @@ $code = isset($code) ? $code : null;
                                     $html .= return_register_button($course, $stok, $code, $search_term);
                                 }
                             }
-                            $html .= return_description_button($course, $icon_title);
                         }
+                        $html .= return_description_button($course, $icon_title);
                     }
                     
                     $html .= '</div>';

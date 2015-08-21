@@ -1676,7 +1676,7 @@ class Display
         return self::page_subheader($title, $second_title);
     }
 
-    public static function page_subheader($title, $second_title = null, $size = 'h4')
+    public static function page_subheader($title, $second_title = null, $size = 'h3')
     {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
@@ -1687,12 +1687,12 @@ class Display
 
     public static function page_subheader2($title, $second_title = null)
     {
-        return self::page_header($title, $second_title, 'h3');
+        return self::page_header($title, $second_title, 'h4');
     }
 
     public static function page_subheader3($title, $second_title = null)
     {
-        return self::page_header($title, $second_title, 'h4');
+        return self::page_header($title, $second_title, 'h5');
     }
 
     /**

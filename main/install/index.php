@@ -589,13 +589,13 @@ if (@$_POST['step2']) {
     <?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
     <?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
     <?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
-    <?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br />
+    <?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br /><br />
     <?php
     if ($installType == 'new') {
         echo Display::display_warning_message(
-            '<h3 style="text-align: center">'.get_lang(
+            '<h4 style="text-align: center">'.get_lang(
                 'Warning'
-            ).'</h3><br />'.get_lang('TheInstallScriptWillEraseAllTables'),
+            ).'</h4>'.get_lang('TheInstallScriptWillEraseAllTables'),
             false
         );
     }

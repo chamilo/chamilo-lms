@@ -47,6 +47,16 @@
             "variable": "enabled_text2audio",
             "subkey": "",
             "selected_value": "true"
+        },
+        {
+            "variable": "gradebook_score_display_coloring",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "gradebook_score_display_custom",
+            "subkey": "",
+            "selected_value": "true"
         }
     ]
 }

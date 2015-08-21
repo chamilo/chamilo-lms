@@ -103,6 +103,21 @@
             "variable": "course_create_active_tools",
             "subkey": "notebook",
             "selected_value": "false"
+        },
+        {
+            "variable": "allow_captcha",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "prevent_multiple_simultaneous_login",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "user_reset_password",
+            "subkey": "",
+            "selected_value": "true"
         }
     ]
 }

@@ -240,11 +240,12 @@ $code = isset($code) ? $code : null;
                     } elseif ($user_registerd_in_course_as_teacher) {
                         // if user registered as teacher
                         //$html .= return_goto_button($course);
-                        $html .= return_description_button($course, $icon_title);
+                        
                         if ($course_unsubscribe_allowed) {
                             $html .= return_unregister_button($course, $stok, $search_term, $code);
                         }
                         $html .= return_already_registered_label('teacher');
+                        $html .= return_description_button($course, $icon_title);
                     } else {
                         // if user not registered in the course
                         if (!$course_closed) {

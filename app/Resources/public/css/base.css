@@ -948,6 +948,7 @@ button.next.disabled {
     border-radius: 10px;
     border-width: 1px;
     border-style: solid;
+    border-color: #999;
     padding:6px;
 }
 .confirmation-message img, .error-message img, .normal-message img, .warning-message img {

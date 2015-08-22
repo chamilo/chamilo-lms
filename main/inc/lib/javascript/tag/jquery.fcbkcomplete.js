@@ -78,6 +78,7 @@ jQuery(
 	               
 	               complete = $(document.createElement("div"));
 	               complete.addClass("facebook-auto");
+                       
 	               complete.append('<div class="default">'+ options.complete_text +"</div>");
 	               
 				   if (browser_msie)
@@ -92,8 +93,8 @@ jQuery(
 	               
 	               complete.prepend(feed);
 	               holder.after(complete);
-				   feed.css("width",complete.width());
-		        }
+				   feed.css("width","300px");
+		       }
 	        	
 		        function preSet()
 		        {										
@@ -201,13 +202,14 @@ jQuery(
 	                var input = $(document.createElement("input"));
 	                
 	                li.attr({"class": "bit-input","id": elemid + "_annoninput"});        
-	                input.attr({"type": "text","class": "maininput","size": "1"});
+	                input.attr({"type": "text","class": "maininput","size": "1", "id":"text_fcbk"});
 	                holder.append(li.append(input));
 	                
 	                input.focus(
 	                    function()
 	                    {
 	                        complete.fadeIn("fast");
+                                
 	                    }
 	                );
 	                

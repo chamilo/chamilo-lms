@@ -4559,7 +4559,7 @@ class CourseManager
             if ($access_link && in_array('register', $access_link)) {
                 $my_course['extra_info']['register_button'] = Display::url(get_lang('Subscribe'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&sec_token=' . $stok,
-                    array('class' => 'btn btn-primary'));
+                    array('class' => 'btn btn-success btn-block btn-sm'));
             }
 
             if ($access_link && in_array('enter',

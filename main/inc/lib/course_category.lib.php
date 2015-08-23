@@ -714,6 +714,9 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
                 $id_in = "$id";
             }
         }
+        if ($id_in === null) {
+            return array();
+        }
         $sql = "SELECT * FROM $tbl_course WHERE id IN($id_in)";
     } else {
         $limitFilter = getLimitFilterFromArray($limit);

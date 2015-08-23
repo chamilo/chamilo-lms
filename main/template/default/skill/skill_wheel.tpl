@@ -35,7 +35,9 @@ function check_skills_sidebar() {
                                 $(this).remove();
                             }
                         });
-
+                        
+                        
+                       
                         if ($('#skill_to_select_id_'+skill_id).length == 0) {
                             skill_info = get_skill_info(skill_id);
                             li = fill_skill_search_li(skill_id, skill_info.name);
@@ -213,8 +215,9 @@ function toogle_save_profile_form() {
 
 $(document).ready(function() {
     /* Skill search */
-
-        //Tool tip (in exercises)
+    
+    //Tool tip (in exercises)
+    
     var tip_options = {
         placement : 'right'
     }

@@ -139,7 +139,8 @@
             disable_search_threshold: 10,
             no_results_text: '{{ 'SearchNoResultsFound' | get_lang }}',
             placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang }}',
-            placeholder_text_single: '{{ 'SelectAnOption' | get_lang }}'
+            placeholder_text_single: '{{ 'SelectAnOption' | get_lang }}',
+            width: "100%"
         });
 
         // Adv multi-select search input.

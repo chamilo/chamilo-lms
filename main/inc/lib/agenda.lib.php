@@ -2460,8 +2460,10 @@ class Agenda
     public function displayActions($view, $filter = 0)
     {
         $courseInfo = api_get_course_info();
-
-        $actions = "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
+        
+        $actions = '<div class="row">';
+        $actions .= '<div class="col-md-3">';
+        $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
             Display::return_icon('calendar.png', get_lang('Calendar'), '', ICON_SIZE_MEDIUM)."</a>";
 
         $courseCondition = '';
@@ -2470,7 +2472,8 @@ class Agenda
         }
         $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
             Display::return_icon('week.png', get_lang('AgendaList'), '', ICON_SIZE_MEDIUM)."</a>";
-
+        $actions .= '</div>';
+       
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) ||
             GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
@@ -2501,9 +2504,12 @@ class Agenda
                 $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=course'>".
                     Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";
                 if ($view == 'calendar') {
+                    $actions .= '<div class="col-md-9">';
                     $actions .= $form;
+                    $actions .= '</div>';
                 }
             }
+            
         }
 
         if (api_is_platform_admin() ||
@@ -2543,10 +2549,13 @@ class Agenda
                 }
 
                 if ($view == 'calendar') {
+                    $actions .= '<div class="col-md-9">';
                     $actions .= $form;
+                    $actions .= '</div>';
                 }
             }
         }
+        $actions .= '</div>';
 
         return $actions;
     }

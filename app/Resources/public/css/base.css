@@ -341,9 +341,8 @@ ul#navigation .report a {
 .muted {
   color: #999999 !important;
 }
-.actions a {
-    display: inline-block;
-    margin-right: 10px;
+.actions a img{
+  margin-right: 5px;
 }
 .actions .btn-toolbar {
     margin : 0px;
@@ -4991,7 +4990,8 @@ i.size-32.icon-new-work{
   display: inline-block;
 }
 .actions .form-inline {
-    display:inline-block;
+    display:block;
+    width: 100%;
 }
 ul.holder{
   list-style: none;
@@ -6314,6 +6314,9 @@ a.sessionView {
 #course-list.data_table .title{
     width: 360px;
     padding-left: 0;
+}
+.actions label{
+    display: none;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

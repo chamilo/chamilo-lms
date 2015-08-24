@@ -55,6 +55,12 @@ $strings['MailRemindSuperior'] = 'Solicitudes de inscripción estan pendientes d
 $strings['MailRemindAdmin'] = 'Inscripciones de cursos estan pendientes de tu aprobación';
 
 // TPL translations
+$strings['SessionXWithoutVacancies'] = "El curso \"%s\" no tiene cupos disponibles.";
+$strings['SuccessSubscriptionToSessionX'] = "<h4>¡Felicitaciones!</h4> Tu inscripción al curso \"%s\" se realizó correctamente.";
+$strings['SubscriptionToOpenSession'] = "Inscripcion a curso abierto";
+$strings['GoToSessionX'] = "Ir al curso \"%s\"";
+$strings['YouAreAlreadySubscribedToSessionX'] = "Usted ya está inscrito al curso \"%s\".";
+
 // Admin view
 $strings['SelectASession'] = 'Elija una sesión de formación';
 $strings['SessionName'] = 'Nombre de la sesión';

@@ -72,10 +72,10 @@ class BuyCoursesUtils
                 ' => ',
                 [
                     $currency['country_name'],
-                    $currency['currency_code']
+                    $currency['iso_code']
                 ]
             );
-            $currencyValue = $currency['country_id'];
+            $currencyValue = $currency['id'];
 
             $currencySelect->addOption($currencyText, $currencyValue);
 

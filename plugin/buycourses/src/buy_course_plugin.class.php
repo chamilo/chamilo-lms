@@ -85,7 +85,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesUtils::TABLE_COUNTRY),
+            Database::get_main_table(BuyCoursesUtils::TABLE_CURRENCY),
             [
                 'where' => ['status = ?' => true]
             ],
@@ -101,7 +101,7 @@ class BuyCoursesPlugin extends Plugin
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesUtils::TABLE_COUNTRY)
+            Database::get_main_table(BuyCoursesUtils::TABLE_CURRENCY)
         );
     }
 
@@ -111,16 +111,18 @@ class BuyCoursesPlugin extends Plugin
      */
     public function selectCurrency($selectedId)
     {
-        $countryTable = Database::get_main_table(BuyCoursesUtils::TABLE_COUNTRY);
+        $currencyTable = Database::get_main_table(
+            BuyCoursesUtils::TABLE_CURRENCY
+        );
 
         Database::update(
-            $countryTable,
+            $currencyTable,
             ['status' => 0]
         );
         Database::update(
-            $countryTable,
+            $currencyTable,
             ['status' => 1],
-            ['country_id = ?' => intval($selectedId)]
+            ['id = ?' => intval($selectedId)]
         );
     }
 

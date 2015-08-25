@@ -984,8 +984,10 @@ class Skill extends Model
                     !empty($skill['short_code']) &&
                     api_get_setting('show_full_skill_name_on_skill_wheel') === 'false'
                 ) {
-                    $skill['data']['name'] = $skill['short_code'];
+                    $skill['data']['short_code'] = $skill['short_code'];
                 }
+
+                $skill['data']['name'] = $skill['name'];
 
                 // In order to paint all members of a family with the same color
                 if (empty($skill_id)) {

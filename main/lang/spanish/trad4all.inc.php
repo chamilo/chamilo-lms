@@ -5874,9 +5874,9 @@ $SkillRoot = "Raíz";
 $SkillInfo = "Info competencia";
 $GetNewSkills = "Obtener nuevas competencias";
 $ViewSkillsWheel = "Ver la rueda de competencias";
-$MissingOneStepToMatch = "Falta <b>una</b> etapa para corresponder";
+$MissingOneStepToMatch = "Falta <b>una</b> competencia para corresponder";
 $CompleteMatch = "Correspondencia perfecta";
-$MissingXStepsToMatch = "Faltando %s etapas";
+$MissingXStepsToMatch = "Faltando %s competencias";
 $Rank = "Rango";
 $CurrentlyLearning = "Aprendiendo";
 $SkillsAcquired = "Competencias adquiridas";
@@ -5892,7 +5892,7 @@ $CourseSettingsRegisterDirectLink = "Si su curso es público o abierto, puede us
 $DirectLink = "Enlace directo";
 $here = "aqui";
 $GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Adelante, pulsa %s para acceder al catálogo de cursos e inscribirte en un curso que te interese. Una vez inscrito/a, el curso aparecerá en esta pantalla en lugar de este mensaje.";
-$HelloXAsYouCanSeeYourCourseListIsEmpty = "<h3> Hola %s, te damos la bienvenida,</h3>
+$HelloXAsYouCanSeeYourCourseListIsEmpty = "Hola %s, te damos la bienvenida,<br />
 Como puedes ver, tu lista de cursos todavía está vacía. Esto es porque todavía no estás inscrito/a en ningún curso.";
 $UnsubscribeUsersAlreadyAddedInCourse = "Desinscribir todos los alumnos ya inscritos";
 $ImportUsers = "Importar usuarios";
@@ -7530,4 +7530,6 @@ $EnterPassword = "Ingresar contraseña";
 $DownloadReportPdf = "Descargar reporte en PDF";
 $SkillXEnabled = "Competencia \"%s\" habilitada";
 $SkillXDisabled = "Competencia \"%s\" deshabilitada";
+$ShowFullSkillNameOnSkillWheelTitle = "Mostrar nombre completo de la competencias en rueda de competencias";
+$ShowFullSkillNameOnSkillWheelComment = "En la rueda de competencias, permite mostrar el nombre de la competencia cuando ésta tiene código corto.";
 ?>

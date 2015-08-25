@@ -12,6 +12,9 @@
  */
 class BuyCoursesPlugin extends Plugin
 {
+    const PRODUCT_TYPE_COURSE = 1;
+    const PRODUCT_TYPE_SESSION = 2;
+
     /**
      *
      * @return StaticPlugin

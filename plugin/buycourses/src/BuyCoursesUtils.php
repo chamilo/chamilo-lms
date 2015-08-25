@@ -9,16 +9,19 @@ use \Doctrine\DBAL\Types\Type;
 class BuyCoursesUtils
 {
 
+    const TABLE_PAYPAL = 'plugin_buycourses_paypal_account';
+    const TABLE_CURRENCY = 'plugin_buycourses_currency';
+    const TABLE_ITEM = 'plugin_buycourses_item';
+    const TABLE_SALE = 'plugin_buycourses_sale';
+    const TABLE_TRANSFER = 'plugin_buycourses_transfer';
+
     const TABLE_SESSION = 'plugin_buy_session';
     const TABLE_SESSION_COURSE = 'plugin_buy_session_course';
     const TABLE_SESSION_TEMPORARY = 'plugin_buy_session_temporary';
     const TABLE_SESSION_SALE = 'plugin_buy_session_sale';
     const TABLE_COURSE = 'plugin_buy_course';
     const TABLE_COUNTRY = 'plugin_buy_course_country';
-    const TABLE_PAYPAL = 'plugin_buy_course_paypal';
-    const TABLE_TRANSFER = 'plugin_buy_course_transfer';
     const TABLE_TEMPORAL = 'plugin_buy_course_temporal';
-    const TABLE_SALE = 'plugin_buy_course_sale';
 
     private static $plugin;
 

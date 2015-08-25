@@ -23,43 +23,53 @@
                         <th class="text-center">{{ 'OfficialCode'|get_lang }}</th>
                         <th class="text-center">{{ 'Visible'|get_lang }}</th>
                         <th class="text-right" width="200">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                        <th class="text-center">{{ 'Option'|get_lang }}</th>
+                        <th class="text-right">{{ 'Option'|get_lang }}</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {% for course in courses %}
-                        <tr>
+                    {% for item in courses %}
+                        <tr data-item="{{ item.course_id }}" data-type="course">
                             <td>
-                                {{ visibility[course.visibility] }}
-                                <a href="{{ _p.web_course ~ course.code ~ '/index.php' }}">{{course.title}}</a>
-                                <span class="label label-info">{{ course.visual_code }}</span>
+                                {% if item.course_visibility == 0 %}
+                                    <img src="{{ 'bullet_red.gif'|icon() }}" alt="{{ 'CourseVisibilityClosed'|get_lang }}" title="{{ 'CourseVisibilityClosed'|get_lang }}">
+                                {% elseif item.course_visibility == 1 %}
+                                    <img src="{{ 'bullet_orange.gif'|icon() }}" alt="{{ 'Private'|get_lang }}" title="{{ 'Private'|get_lang }}">
+                                {% elseif item.course_visibility == 2 %}
+                                    <img src="{{ 'bullet_green.gif'|icon() }}" alt="{{ 'OpenToThePlatform'|get_lang }}" title="{{ 'OpenToThePlatform'|get_lang }}">
+                                {% elseif item.course_visibility == 3 %}
+                                    <img src="{{ 'bullet_blue.gif'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}" title="{{ 'OpenToTheWorld'|get_lang }}">
+                                {% elseif item.course_visibility == 4 %}
+                                    <img src="{{ 'bullet_gray.gif'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
+                                {% endif %}
+
+                                <a href="{{ _p.web_course ~ item.course_code ~ '/index.php' }}">{{ item.course_title }}</a>
+                                <span class="label label-info">{{ item.course_visual_code }}</span>
                             </td>
                             <td class="text-center">
-                                {{course.code}}
+                                {{ item.course_code }}
                             </td>
                             <td class="text-center">
-                                {% if course.visible == 1 %}
+                                {% if item.visible == 1 %}
                                     <input type="checkbox" name="visible" value="1" checked="checked" size="6">
                                 {% else %}
                                     <input type="checkbox" name="visible" value="1" size="6">
                                 {% endif %}
                             </td>
                             <td width="200">
-                                {% if currency %}
+                                {% if item.currency %}
                                     <div class="input-group">
-                                        <span class="input-group-addon" id="price-{{ course.course_id }}">{{ currency }}</span>
-                                        <input type="number" name="price" value="{{course.price}}" step="0.01" class="text-right form-control" aria-describedby="price-{{ course.course_id }}">
+                                        <span class="input-group-addon" id="price-{{ item.course_id }}">{{ item.currency }}</span>
+                                        <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" class="text-right form-control" aria-describedby="price-{{ item.course_id }}">
                                     </div>
                                 {% else %}
-                                    <input type="number" name="price" value="{{course.price}}" step="0.01" class="text-right form-control">
+                                    <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" class="text-right form-control">
                                 {% endif %}
                             </td>
-                            <td class=" text-center" id="course{{ course.id }}">
-                                <div class="confirmed"><img src="{{ _p.web_plugin ~ 'buycourses/resources/img/32/accept.png' }}" alt="ok"/></div>
-                                <div class="modified" style="display:none">
-                                    <img id="{{course.course_id}}" src="{{ _p.web_plugin ~ 'buycourses/resources/img/32/save.png' }}" alt="save" class="cursor save"/>
-                                </div>
+                            <td class="text-right">
+                                <button class="btn btn-success btn-sm bc-button-save" type="button">
+                                    <i class="fa fa-save"></i> {{ 'Save'|get_lang }}
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -79,46 +89,54 @@
                             <th class="text-center">{{ 'EndDate'|get_lang }}</th>
                             <th class="text-center">{{ 'Visible'|get_lang }}</th>
                             <th class="text-right">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="text-center">{{ 'Option'|get_lang }}</th>
+                            <th class="text-right">{{ 'Option'|get_lang }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for session in sessions %}
-                            <tr>
+                        {% for item in sessions %}
+                            <tr data-item="{{ item.session_id }}" data-type="session">
                                 <td>
-                                    {{ visibility[session.visibility] }}
-                                    <a href="{{ _p.web_main ~ 'session/index.php?' ~ {'session_id': session.id}|url_encode() }}">{{session.name}}</a>
+                                    {% if item.session_visibility == 0 %}
+                                        <img src="{{ 'bullet_red.gif'|icon() }}" alt="{{ 'CourseVisibilityClosed'|get_lang }}" title="{{ 'CourseVisibilityClosed'|get_lang }}">
+                                    {% elseif item.session_visibility == 1 %}
+                                        <img src="{{ 'bullet_orange.gif'|icon() }}" alt="{{ 'Private'|get_lang }}" title="{{ 'Private'|get_lang }}">
+                                    {% elseif item.session_visibility == 2 %}
+                                        <img src="{{ 'bullet_green.gif'|icon() }}" alt="{{ 'OpenToThePlatform'|get_lang }}" title="{{ 'OpenToThePlatform'|get_lang }}">
+                                    {% elseif item.session_visibility == 3 %}
+                                        <img src="{{ 'bullet_blue.gif'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}" title="{{ 'OpenToTheWorld'|get_lang }}">
+                                    {% elseif item.session_visibility == 4 %}
+                                        <img src="{{ 'bullet_gray.gif'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
+                                    {% endif %}
+
+                                    <a href="{{ _p.web_main ~ 'session/index.php?' ~ {'session_id': item.session_id}|url_encode() }}">{{ item.session_name }}</a>
                                 </td>
                                 <td class="text-center">
-                                    {{ session.access_start_date }}
+                                    {{ item.session_display_start_date }}
                                 </td>
                                 <td class="text-center">
-                                    {{ session.access_end_date }}
+                                    {{ item.session_display_end_date }}
                                 </td>
                                 <td class="text-center">
-                                    {% if session.visible == 1 %}
+                                    {% if item.visible %}
                                         <input type="checkbox" name="visible" value="1" checked="checked" size="6" />
                                     {% else %}
                                         <input type="checkbox" name="visible" value="1" size="6" />
                                     {% endif %}
                                 </td>
                                 <td class="text-right" width="200">
-                                    {% if currency %}
+                                    {% if item.currency %}
                                         <div class="input-group">
-                                            <span class="input-group-addon" id="price-{{ session.id }}">{{ currency }}</span>
-                                            <input type="number" name="price" value="{{session.price}}" step="0.01" class="text-right form-control" aria-describedby="price-{{ session.id }}">
+                                            <span class="input-group-addon" id="price-{{ item.session_id }}">{{ item.currency }}</span>
+                                            <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" class="text-right form-control" aria-describedby="price-{{ item.session_id }}">
                                         </div>
                                     {% else %}
-                                        <input type="number" name="price" value="{{session.price}}" step="0.01" class="text-right form-control">
+                                        <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" class="text-right form-control">
                                     {% endif %}
                                 </td>
-                                <td class=" text-center" id="session{{ session.id }}">
-                                    <div class="confirmed">
-                                        <img src="{{ _p.web_plugin ~ 'buycourses/resources/img/32/accept.png' }}" alt="ok"/>
-                                    </div>
-                                    <div class="modified" style="display:none">
-                                        <img id="{{session.id}}" src="{{ _p.web_plugin ~ 'buycourses/resources/img/32/save.png' }}" alt="save" class="cursor save"/>
-                                    </div>
+                                <td class=" text-center" id="session{{ item.session_id }}">
+                                    <button class="btn btn-success btn-sm bc-button-save" type="button">
+                                        <i class="fa fa-save"></i> {{ 'Save'|get_lang }}
+                                    </button>
                                 </td>
                             </tr>
                         {% endfor %}

@@ -207,20 +207,64 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getCourses()
     {
-        $buyCourseTable = Database::get_main_table(TABLE_BUY_COURSE);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sessionCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $buyItemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
+        $buyCurrencyTable = Database::get_main_table(BuyCoursesUtils::TABLE_CURRENCY);
 
-        $courses = Database::select(
-            ['a.course_id', 'a.visible', 'a.price', 'b.*'],
-            "$buyCourseTable a, $courseTable b",
-            [
-                'where' => [
-                    'a.course_id = b.id AND a.session_id = ?' => [0]
-                ]
-            ]
-        );
+        $currency = $this->getSelectedCurrency();
 
-        return $courses;
+        $items = [];
+
+        $fakeCourseFrom = "
+            $courseTable c
+            LEFT JOIN $sessionCourseTable sc
+                ON c.id = sc.c_id
+            WHERE sc.c_id IS NULL
+        ";
+
+        $courses = Database::select('c.*', $fakeCourseFrom);
+
+        $fakeItemFrom = "
+            $buyItemTable i
+            INNER JOIN $buyCurrencyTable c
+                ON i.currency_id = c.id
+        ";
+
+        foreach ($courses as $course) {
+            $courseItem = [
+                'course_id' => $course['id'],
+                'course_visual_code' => $course['visual_code'],
+                'course_code' => $course['code'],
+                'course_title' => $course['title'],
+                'course_visibility' => $course['visibility'],
+                'visible' => false,
+                'currency' =>  empty($currency) ? null : $currency['iso_code'],
+                'price' => 0.00
+            ];
+
+            $item = Database::select(
+                ['i.*', 'c.iso_code'],
+                $fakeItemFrom,
+                [
+                    'where' => [
+                        'i.product_id = ? AND ' => $course['id'],
+                        'i.product_type = ?' => self::PRODUCT_TYPE_COURSE
+                    ]
+                ],
+                'first'
+            );
+
+            if ($item !== false) {
+                $courseItem['visible'] = true;
+                $courseItem['currency'] = $item['iso_code'];
+                $courseItem['price'] = $item['price'];
+            }
+
+            $items[] = $courseItem;
+        }
+
+        return $items;
     }
 
     /**
@@ -229,20 +273,68 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSessions()
     {
-        $buySessionTable = Database::get_main_table(TABLE_BUY_SESSION);
-        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $buyItemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
+        $buyCurrencyTable = Database::get_main_table(BuyCoursesUtils::TABLE_CURRENCY);
 
-        $sessions = Database::select(
-            ['a.session_id', 'a.visible', 'a.price', 'b.*'],
-            "$buySessionTable a, $sessionTable b",
-            [
-                'where' => [
-                    'a.session_id = b.id'
-                ]
-            ]
-        );
+        $auth = new Auth();
+        $sessions = $auth->browseSessions();
 
-        return $sessions;
+        $currency = $this->getSelectedCurrency();
+
+        $items = [];
+
+        $fakeItemFrom = "
+            $buyItemTable i
+            INNER JOIN $buyCurrencyTable c
+                ON i.currency_id = c.id
+        ";
+
+        foreach ($sessions as $session) {
+            $sessionItem = [
+                'session_id' => $session->getId(),
+                'session_name' => $session->getName(),
+                'session_visibility' => $session->getVisibility(),
+                'session_display_start_date' => null,
+                'session_display_end_date' => null,
+                'visible' => false,
+                'currency' =>  empty($currency) ? null : $currency['iso_code'],
+                'price' => 0.00
+            ];
+
+            if (!empty($session->getDisplayStartDate())) {
+                $sessionItem['session_display_start_date'] = api_format_date(
+                    $session->getDisplayStartDate()->format('Y-m-d h:i:s')
+                );
+            }
+
+            if (!empty($session->getDisplayEndDate())) {
+                $sessionItem['session_display_end_date'] = api_format_date(
+                    $session->getDisplayEndDate()->format('Y-m-d h:i:s')
+                );
+            }
+
+            $item = Database::select(
+                ['i.*', 'c.iso_code'],
+                $fakeItemFrom,
+                [
+                    'where' => [
+                        'i.product_id = ? AND ' => $session->getId(),
+                        'i.product_type = ?' => self::PRODUCT_TYPE_SESSION
+                    ]
+                ],
+                'first'
+            );
+
+            if ($item !== false) {
+                $sessionItem['visible'] = true;
+                $sessionItem['currency'] = $item['iso_code'];
+                $sessionItem['price'] = $item['price'];
+            }
+
+            $items[] = $sessionItem;
+        }
+
+        return $items;
     }
 
     /**

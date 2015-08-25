@@ -72,31 +72,6 @@ function buyCourseListCategories()
 }
 
 /**
- * Return an icon representing the visibility of the course
- * @param int $option The course visibility
- * @return string HTML string of the visibility icon
- */
-function getCourseVisibilityIcon($option)
-{
-    $style = 'margin-bottom:-5px;margin-right:5px;';
-    switch ($option) {
-        case 0:
-            return Display::return_icon('bullet_red.gif', get_plugin_lang('CourseVisibilityClosed', 'BuyCoursesPlugin'), array('style' => $style));
-            break;
-        case 1:
-            return Display::return_icon('bullet_orange.gif', get_plugin_lang('Private', 'BuyCoursesPlugin'), array('style' => $style));
-            break;
-        case 2:
-            return Display::return_icon('bullet_green.gif', get_plugin_lang('OpenToThePlatform', 'BuyCoursesPlugin'), array('style' => $style));
-            break;
-        case 3:
-            return Display::return_icon('bullet_blue.gif', get_plugin_lang('OpenToTheWorld', 'BuyCoursesPlugin'), array('style' => $style));
-            break;
-        default:
-            return Display::return_icon('bullet_grey.gif', get_plugin_lang('CourseVisibilityHidden', 'BuyCoursesPlugin'), array('style' => $style));
-    }
-}
-/**
  * Gets the list of accounts from the buy_course_transfer table
  * @return array The list of accounts
  */

@@ -25,8 +25,11 @@ $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
+$itemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
+
 $plugin = BuyCoursesPlugin::create();
 $buy_name = $plugin->get_lang('Buy');
+$currency = $plugin->getSelectedCurrency();
 
 if ($_REQUEST['tab'] == 'sync') {
     $sql = "SELECT code, title FROM $tableCourse;";
@@ -358,36 +361,73 @@ if ($_REQUEST['tab'] == 'courses_filter') {
 }
 
 if ($_REQUEST['tab'] == 'save_mod') {
-
-    $id;
-    $tableBuy;
-    $tableField;
-
     if (isset($_REQUEST['course_id'])) {
-        $id = intval($_REQUEST['course_id']);
-        $tableBuy = $tableBuyCourse;
-        $tableField = 'course_id';
+        $productId = $_REQUEST['course_id'];
+        $productType = BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
     } else {
-        $id = intval($_REQUEST['session_id']);
-        $tableBuy = $tableBuySession;
-        $tableField = 'session_id';
+        $productId = $_REQUEST['session_id'];
+        $productType = BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
     }
 
-    $visible = intval($_REQUEST['visible']);
-    $price = Database::escape_string($_REQUEST['price']);
+    $affectedRows = false;
 
-    $sql = "UPDATE $tableBuy
-        SET visible = " . $visible . ",
-        price = '" . $price . "'
-        WHERE " . $tableField . " = '" . $id . "';";
+    if ($_POST['visible'] == 1) {
+        $item = Database::select(
+            'COUNT(1) AS qty',
+            $itemTable,
+            [
+                'where' => [
+                    'product_id = ? AND ' => intval($productId),
+                    'product_type = ?' => $productType
+                ]
+            ],
+            'first'
+        );
 
-    $res = Database::query($sql);
-    if (!$res) {
-        $content = $plugin->get_lang('ProblemToSaveTheMessage');
-        echo json_encode(array("status" => "false", "content" => $content));
+        if ($item['qty'] > 0) {
+            $affectedRows = Database::update(
+                $itemTable,
+                ['price' => floatval($_POST['price'])],
+                [
+                    'product_id = ? AND ' => intval($productId),
+                    'product_type' => $productType
+                ]
+            );
+        } else {
+            $affectedRows = Database::insert(
+                $itemTable,
+                [
+                    'currency_id' => $currency['id'],
+                    'product_type' => $productType,
+                    'product_id' => intval($productId),
+                    'price' => floatval($_POST['price'])
+                ]
+            );
+        }
     } else {
-        echo json_encode(array("status" => "true", "course_id" => $id));
+        $affectedRows = Database::delete(
+            $itemTable,
+            [
+                'product_id = ? AND ' => intval($productId),
+                'product_type = ?' => $productType
+            ]
+        );
     }
+
+    if ($affectedRows > 0) {
+        $jsonResult = [
+            "status" => true,
+            "itemId" => $productId
+        ];
+    } else {
+        $jsonResult = [
+            "status" => false,
+            "content" => $plugin->get_lang('ProblemToSaveTheMessage')
+        ];
+    }
+
+    echo json_encode($jsonResult);
+    exit;
 }
 
 if ($_REQUEST['tab'] == 'unset_variables') {

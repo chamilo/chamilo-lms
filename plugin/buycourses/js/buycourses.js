@@ -22,42 +22,34 @@ $(document).ready(function () {
         });
     });
 
-    $("input[name='visible']").change(function () {
-        $(this).parent().next().next().children().attr("style", "display:none");
-        $(this).parent().next().next().children().next().attr("style", "display:''");
-        $(this).parent().parent().addClass("fmod");
-        $(this).parent().parent().children().each(function () {
-            $(this).addClass("btop");
-        });
-    });
-
-    $(".save").click(function () {
+    $(".bc-button-save").click(function () {
         var currentRow = $(this).closest("tr");
-        var courseOrSessionObject ={
+        var courseOrSessionObject = {
             tab: "save_mod",
             visible: currentRow.find("[name='visible']").is(':checked') ? 1 : 0,
             price: currentRow.find("[name='price']").val()
         };
 
-        var course_id = $(this).attr('id');
-        var courseOrSession = ($(this).closest("td").attr('id')).indexOf("session") > -1 ? "session_id" : "course_id";
+        var itemField = currentRow.data('type') + '_id';
 
-        courseOrSessionObject[courseOrSession] = course_id;
+        courseOrSessionObject[itemField] = currentRow.data('item') || 0;
 
-        $.post("function.php", courseOrSessionObject,
+        $.post(
+            "function.php",
+            courseOrSessionObject,
             function (data) {
-                if (data.status == "false") {
-                    alert("Database Error");
-                } else {
-                    courseOrSession = courseOrSession.replace("_id", "");
-                    $("#" + courseOrSession + data.course_id).children().attr("style", "display:''");
-                    $("#" + courseOrSession + data.course_id).children().next().attr("style", "display:none");
-                    $("#" + courseOrSession + data.course_id).parent().removeClass("fmod")
-                    $("#" + courseOrSession + data.course_id).parent().children().each(function () {
-                        $(this).removeClass("btop");
-                    });
+                if (!data.status) {
+                    return;
                 }
-            }, "json");
+
+                currentRow.addClass('success');
+
+                window.setTimeout(function () {
+                    currentRow.removeClass('success');
+                }, 3000);
+            },
+            "json"
+        );
     });
 
     $('#sync').click(function (e) {

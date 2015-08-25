@@ -309,8 +309,7 @@ VALUES
 ('cron_remind_course_finished_activate', NULL, 'radio', 'Crons', 'false', 'CronRemindCourseFinishedActivateTitle', 'CronRemindCourseFinishedActivateComment', NULL, NULL, 1),
 ('cron_remind_course_expiration_frequency', NULL, 'textfield', 'Crons', '2', 'CronRemindCourseExpirationFrequencyTitle', 'CronRemindCourseExpirationFrequencyComment', NULL, NULL, 1),
 ('cron_remind_course_expiration_activate', NULL, 'radio', 'Crons', 'false', 'CronRemindCourseExpirationActivateTitle', 'CronRemindCourseExpirationActivateComment', NULL, NULL, 1),
-('allow_coach_feedback_exercises',NULL,'radio','Session','true','AllowCoachFeedbackExercisesTitle','AllowCoachFeedbackExercisesComment',NULL,NULL, 0),
-('show_full_skill_name_on_skill_wheel', NULL, 'radio', 'Platform', 'false', 'ShowFullSkillNameOnSkillWheelTitle', 'ShowFullSkillNameOnSkillWheelComment', NULL, NULL, 1);
+('allow_coach_feedback_exercises',NULL,'radio','Session','true','AllowCoachFeedbackExercisesTitle','AllowCoachFeedbackExercisesComment',NULL,NULL, 0);
 
 INSERT INTO settings_options (variable, value, display_text)
 VALUES
@@ -632,9 +631,7 @@ VALUES
 ('cron_remind_course_expiration_activate', 'false', 'No'),
 ('cron_remind_course_expiration_activate', 'true', 'Yes'),
 ('allow_coach_feedback_exercises','true','Yes'),
-('allow_coach_feedback_exercises','false','No'),
-('show_full_skill_name_on_skill_wheel', 'true', 'Yes'),
-('show_full_skill_name_on_skill_wheel', 'false', 'No');
+('allow_coach_feedback_exercises','false','No');
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),
@@ -1805,5 +1802,17 @@ VALUES
 ('user_reset_password', 'false', 'No'),
 ('my_courses_view_by_session', 'true', 'Yes'),
 ('my_courses_view_by_session', 'false', 'No');
+
+-- Version 1.10.0.51
+
+INSERT INTO settings_current
+(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
+VALUES
+('show_full_skill_name_on_skill_wheel', NULL, 'radio', 'Platform', 'false', 'ShowFullSkillNameOnSkillWheelTitle', 'ShowFullSkillNameOnSkillWheelComment', NULL, NULL, 1);
+
+INSERT INTO settings_options (variable, value, display_text)
+VALUES
+('show_full_skill_name_on_skill_wheel', 'true', 'Yes'),
+('show_full_skill_name_on_skill_wheel', 'false', 'No');
 
 UPDATE settings_current SET selected_value = '1.10.0.51' WHERE variable = 'chamilo_database_version';

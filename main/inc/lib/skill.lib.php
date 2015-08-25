@@ -980,7 +980,10 @@ class Skill extends Model
 
                 // If a short code was defined, send the short code to replace
                 // skill name (to shorten the text in the wheel)
-                if (!empty($skill['short_code'])) {
+                if (
+                    !empty($skill['short_code']) &&
+                    api_get_setting('show_full_skill_name_on_skill_wheel') === 'false'
+                ) {
                     $skill['data']['name'] = $skill['short_code'];
                 }
 

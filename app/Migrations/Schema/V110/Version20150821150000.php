@@ -7,11 +7,11 @@ use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20150819095300
+ * Class Version20150821150000
  *
  * @package Application\Migrations\Schema\V11010
  */
-class Version20150819095300 extends AbstractMigrationChamilo
+class Version20150821150000 extends AbstractMigrationChamilo
 {
 
     /**

@@ -126,7 +126,7 @@ function reg_filter($class_id) {
 // Build search-form
 $form = new FormValidator('search_class', 'get', '', '', null, false);
 $form->addText('keyword', '', false);
-$form->addElement('button', 'submit', get_lang('SearchButton'));
+$form->addButtonSearch(get_lang('SearchButton'));
 
 // Build table
 $table = new SortableTable('users', 'get_number_of_classes', 'get_class_data', 1);

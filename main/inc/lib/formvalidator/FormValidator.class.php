@@ -444,6 +444,7 @@ EOT;
         if (empty($label)) {
             $label = get_lang('Search');
         }
+
         return $this->addButton($name, $label, 'search', 'default');
     }
 

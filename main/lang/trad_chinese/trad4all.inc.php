@@ -2957,7 +2957,6 @@ $FirstUseTip = "當你首次進入的學園時，瞭解它的最佳辦法是選�
 $Version_ = "版本";
 $UpdateFromLMSVersion = "由 Chamilo 更新";
 $PleaseSelectInstallationProcessLanguage = "請選擇你在安裝時想使用的語言";
-$ReadTheInstallGuide = "閱讀安裝說明";
 $HereAreTheValuesYouEntered = "這是你輸入的數據";
 $PrintThisPageToRememberPassAndOthers = "列印本頁以記下你的密碼及設定";
 $TheInstallScriptWillEraseAllTables = "安裝程式會把指定數據庫中的原有資料表刪除。我們強烈建議你在確認最後的安裝步驟前進行完整的備份。";

@@ -2840,7 +2840,6 @@ $FirstUseTip = "Кога ќе влезете првпат во Вашиот ка
 $Version_ = "Верзија";
 $UpdateFromLMSVersion = "Надгради од Chamilo";
 $PleaseSelectInstallationProcessLanguage = "Ве молиме изберете кој јазик сакате да го користите додека инсталирате";
-$ReadTheInstallGuide = "прочитајте го упатството за инсталирање";
 $HereAreTheValuesYouEntered = "Ова се вредностите што ги внесовте";
 $PrintThisPageToRememberPassAndOthers = "Испечатете ја оваа страница за да ја запомните Вашата лозинка и другите поставки";
 $TheInstallScriptWillEraseAllTables = "Инсталацијата ќе ги избрише сите табели на селектираната база на податоци. Строго препорачуваме да им направите целосна резервна_копија пред да го потврдите последниот чекор на инсталацијата.";

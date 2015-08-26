@@ -591,17 +591,15 @@ class UserManager
 
         if ($reset_password == 0) {
             $password = null;
-            $auth_source = $user_info['auth_source'];
         } elseif ($reset_password == 1) {
             $original_password = $password = api_generate_password();
-            $auth_source = PLATFORM_AUTH_SOURCE;
         } elseif ($reset_password == 2) {
             $password = $password;
-            $auth_source = PLATFORM_AUTH_SOURCE;
         } elseif ($reset_password == 3) {
             $password = $password;
-            $auth_source = $auth_source;
         }
+
+        $auth_source = !empty($auth_source) ? $auth_source : PLATFORM_AUTH_SOURCE;
 
         if ($user_id != strval(intval($user_id)))
             return false;
@@ -2768,7 +2766,9 @@ class UserManager
         to our user or not*/
 
         $sql = "SELECT DISTINCT
-                    scu.course_code as code, c.visibility, c.id as real_id
+                    scu.course_code as code,
+                    c.visibility,
+                    c.id as real_id
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
                 ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)

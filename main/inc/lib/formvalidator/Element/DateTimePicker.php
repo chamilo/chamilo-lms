@@ -26,9 +26,29 @@ class DateTimePicker extends HTML_QuickForm_text
      */
     public function toHtml()
     {
-        $js = $this->getElementJS();
+        if ($this->_flagFrozen) {
+            return $this->getFrozenHtml();
+        }
 
-        return $js.parent::toHtml();
+        $id = $this->getAttribute('id');
+        $value = $this->getValue();
+
+        if (!empty($value)) {
+            $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
+        }
+
+        if (empty($this->getLabel())) {
+            return $this->getElementJS() . '
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <input ' . $this->_getAttrString($this->_attributes) . '>
+                    </span>
+                    <input class="form-control" type="text" readonly id="' . $id . '_alt" value="' . $value . '">
+                </div>
+            ';
+        }
+
+        return $this->getElementJS() . parent::toHtml();
     }
 
     /**

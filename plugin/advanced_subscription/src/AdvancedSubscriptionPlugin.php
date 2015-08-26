@@ -1087,6 +1087,17 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getOpenSessionUrl($userId, $params)
     {
+        $userIsSubscribed = SessionManager::isUserSubscribedAsStudent(
+            $params['session_id'],
+            $userId
+        );
+
+        if ($userIsSubscribed) {
+            return api_get_path(WEB_CODE_PATH)
+                . 'session/index.php?session_id='
+                . intval($params['session_id']);
+        }
+
         $params['secret_key'] = null;
         $params['user_id'] = null;
         $params['user_field'] = null;

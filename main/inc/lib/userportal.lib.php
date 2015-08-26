@@ -96,8 +96,9 @@ class IndexManager
 
     /**
      * Alias for the online_logout() function
+     * @param   bool    $redirect   Whether to ask online_logout to redirect to index.php or not
      */
-    function logout() {
+    function logout($redirect = true) {
         online_logout($this->user_id, true);
     }
 

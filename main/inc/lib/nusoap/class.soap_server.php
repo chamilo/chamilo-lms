@@ -777,7 +777,7 @@ class nusoap_server extends nusoap_base {
 		//begin code to compress payload - by John
 		// NOTE: there is no way to know whether the Web server will also compress
 		// this data.
-		if (strlen($payload) > 1024 && isset($this->headers) && isset($this->headers['accept-encoding'])) {	
+		if (strlen($payload) > 1024 && isset($this->headers) && isset($this->headers['accept-encoding'])) {
 			if (strstr($this->headers['accept-encoding'], 'gzip')) {
 				if (function_exists('gzencode')) {
 					if (isset($this->debug_flag) && $this->debug_flag) {
@@ -871,6 +871,7 @@ class nusoap_server extends nusoap_base {
 		$this->debug('Use encoding: ' . $this->xml_encoding . ' when creating nusoap_parser');
 		// parse response, get soap parser obj
 		$parser = new nusoap_parser($data,$this->xml_encoding,'',$this->decode_utf8);
+
 		// parser debug
 		$this->debug("parser debug: \n".$parser->getDebug());
 		// if fault occurred during message parsing
@@ -904,7 +905,7 @@ class nusoap_server extends nusoap_base {
 	function getHTTPBody($soapmsg) {
 		return $soapmsg;
 	}
-	
+
 	/**
 	* gets the HTTP content type for the current response.
 	*
@@ -916,7 +917,7 @@ class nusoap_server extends nusoap_base {
 	function getHTTPContentType() {
 		return 'text/xml';
 	}
-	
+
 	/**
 	* gets the HTTP content type charset for the current response.
 	* returns false for non-text content types.
@@ -1075,7 +1076,7 @@ class nusoap_server extends nusoap_base {
         if(false == $namespace) {
             $namespace = "http://$SERVER_NAME/soap/$serviceName";
         }
-        
+
         if(false == $endpoint) {
         	if ($HTTPS == '1' || $HTTPS == 'on') {
         		$SCHEME = 'https';
@@ -1084,11 +1085,11 @@ class nusoap_server extends nusoap_base {
         	}
             $endpoint = "$SCHEME://$SERVER_NAME$SERVER_PORT$SCRIPT_NAME";
         }
-        
+
         if(false == $schemaTargetNamespace) {
             $schemaTargetNamespace = $namespace;
         }
-        
+
 		$this->wsdl = new wsdl;
 		$this->wsdl->serviceName = $serviceName;
         $this->wsdl->endpoint = $endpoint;

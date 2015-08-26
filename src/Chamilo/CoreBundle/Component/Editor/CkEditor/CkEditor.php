@@ -30,19 +30,20 @@ class CkEditor extends Editor
         //$jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
         //$this->template->addResource($jsFolder.'ckeditor/ckeditor.js', 'js');
     }
-    
+
     /**
      * Return the HTML code required to run editor.
      *
      * @return string
      */
-    
+
     public function createHtml()
     {
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
                  '.$this->value.'
                  </textarea>';
         $html .= $this->editorReplace();
+
         return $html;
     }
 
@@ -116,11 +117,11 @@ class CkEditor extends Editor
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
 
-            $image = $this->urlGenerator->generate(
+            /*$image = $this->urlGenerator->generate(
                 'get_document_template_action',
                 array('file' => $image),
                 UrlGenerator::ABSOLUTE_URL
-            );
+            );*/
 
             $content = str_replace($search, $replace, $template->getContent());
 

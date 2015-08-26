@@ -3764,7 +3764,6 @@ $FirstUseTip = "Könnyen megértheti a portál működését, ha az első belép
 $Version_ = "Verzió";
 $UpdateFromLMSVersion = "Frissítés Chamilo-ról";
 $PleaseSelectInstallationProcessLanguage = "Kérjük válassza ki azt a nyelvet, amit telepítéskor használni szeretne.";
-$ReadTheInstallGuide = "a telepítési kézikönyv olvasása";
 $HereAreTheValuesYouEntered = "Ezeket az adatokat adta meg";
 $PrintThisPageToRememberPassAndOthers = "Nyomtassa ki az oldalt, így könnyen felhasználhatja a jelszavakat és egyéb információkat";
 $TheInstallScriptWillEraseAllTables = "A telepítőprogram minden táblát (és adatot) törölni fog a megadott adatbázisokból. Nyomtatékosan javasoljuk, hogy végezzen el egy teljes biztonsági mentést, mielőtt elindítaná a telepítés utolsó fázisát.";

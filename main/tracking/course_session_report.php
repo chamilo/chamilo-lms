@@ -115,9 +115,9 @@ foreach ($course_list  as $current_course ) {
 	$main_result[$current_course['code']] = $attempt_result;
 }
 
-//var_dump($main_result);
 $total_average_score = 0;
 $total_average_score_count = 0;
+$html_result = '';
 if (!empty($users) && is_array($users)) {
 
 	$html_result .= '<table  class="data_table">';
@@ -188,7 +188,10 @@ if (!empty($users) && is_array($users)) {
 	$counter = 0;
 	foreach($course_list as $course_item) {
 		if (!empty($course_average_counter[$course_item['code']])) {
-			$average_per_course = round($course_average[$course_item['code']]/($course_average_counter[$course_item['code']]*100)*100,2);
+			$average_per_course = round(
+				$course_average[$course_item['code']]/($course_average_counter[$course_item['code']]*100)*100,
+				2
+			);
 		} else {
 			$average_per_course = '-';
 		}

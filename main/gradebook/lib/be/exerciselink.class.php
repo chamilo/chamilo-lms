@@ -194,7 +194,7 @@ class ExerciseLink extends AbstractLink
         in exercice/exercice.php, look for note-query-exe-results marker*/
         $session_id = api_get_session_id();
         $courseId = $this->getCourseId();
-	    $exercise = new Exercise();
+	    $exercise = new Exercise($courseId);
         $exercise->read($this->get_ref_id());
 
         if (!$this->is_hp) {

@@ -36,6 +36,10 @@ function return_error($code) {
     return $fault;
 }
 
+/**
+ * @param array $params
+ * @return bool
+ */
 function WSHelperVerifyKey($params)
 {
     global $_configuration, $debug;
@@ -51,7 +55,7 @@ function WSHelperVerifyKey($params)
     // if we are behind a reverse proxy, assume it will send the
     // HTTP_X_FORWARDED_FOR header and use this IP instead
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        list($ip1, $ip2) = split(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        list($ip1, $ip2) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
     if ($debug)
@@ -455,9 +459,6 @@ function WSCreateUser($params) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    // database table definition
-    $table_user = Database::get_main_table(TABLE_MAIN_USER);
-
     $firstName = $params['firstname'];
     $lastName = $params['lastname'];
     $status = $params['status'];
@@ -750,7 +751,7 @@ function WSCreateUsersPasswordCrypted($params)
         $phone = '';
         $picture_uri = '';
         $auth_source = PLATFORM_AUTH_SOURCE;
-        $expiration_date = '0000-00-00 00:00:00';
+        $expiration_date = '';
         $active = 1;
         $hr_dept_id = 0;
         $extra = null;
@@ -838,6 +839,7 @@ function WSCreateUsersPasswordCrypted($params)
                         expiration_date='".Database::escape_string($expiration_date)."',
                         active='1',
                         hr_dept_id=".intval($hr_dept_id);
+
                 $sql .=  " WHERE user_id='".$r_check_user[0]."'";
                 Database::query($sql);
 
@@ -874,7 +876,7 @@ function WSCreateUsersPasswordCrypted($params)
         }
         // First check wether the login already exists
         if (!UserManager::is_username_available($loginName)) {
-            if(api_set_failure('login-pass already taken')) {
+            if (api_set_failure('login-pass already taken')) {
                 $results[] = 0;
                 continue;
             }
@@ -901,6 +903,10 @@ function WSCreateUsersPasswordCrypted($params)
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
+
+            $sql = "UPDATE $table_user SET user_id = id WHERE id = $return";
+            Database::query($sql);
+
             if (api_is_multiple_url_enabled()) {
                 if (api_get_current_access_url_id() != -1) {
                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
@@ -919,7 +925,7 @@ function WSCreateUsersPasswordCrypted($params)
                 ''
             );
             // Save the remote system's id into user_field_value table.
-            $res = UserManager::update_extra_field_value(
+            UserManager::update_extra_field_value(
                 $return,
                 $original_user_id_name,
                 $original_user_id_value
@@ -937,7 +943,7 @@ function WSCreateUsersPasswordCrypted($params)
                         ''
                     );
                     // Save the external system's id into user_field_value table.
-                    $res = UserManager::update_extra_field_value(
+                    UserManager::update_extra_field_value(
                         $return,
                         $extra_field_name,
                         $extra_field_value
@@ -1007,8 +1013,10 @@ $server->register('WSCreateUserPasswordCrypted',                            // m
 );
 
 // Define the method WSCreateUserPasswordCrypted
-function WSCreateUserPasswordCrypted($params) {
+function WSCreateUserPasswordCrypted($params)
+{
     global $_user, $_configuration, $debug;
+    $debug = 1;
     if ($debug) error_log('WSCreateUserPasswordCrypted');
     if ($debug) error_log(print_r($params,1));
 
@@ -1019,26 +1027,28 @@ function WSCreateUserPasswordCrypted($params) {
     // Database table definition.
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
-    $result = array();
     $orig_user_id_value = array();
 
-    $password               = $params['password'];
-    $encrypt_method         = $params['encrypt_method'];
-    $firstName              = $params['firstname'];
-    $lastName               = $params['lastname'];
-    $status                 = $params['status'];
-    $email                  = $params['email'];
-    $loginName              = $params['loginname'];
-    $official_code          = $params['official_code'];
-    $language               = '';
-    $phone                  = $params['phone'];
-    $picture_uri            = '';
-    $auth_source            = PLATFORM_AUTH_SOURCE;
-    $expiration_date        = '0000-00-00 00:00:00'; $active = 1; $hr_dept_id = 0; $extra = null;
-    $original_user_id_name  = $params['original_user_id_name'];
+    $password = $params['password'];
+    $encrypt_method = $params['encrypt_method'];
+    $firstName = $params['firstname'];
+    $lastName = $params['lastname'];
+    $status = $params['status'];
+    $email = $params['email'];
+    $loginName = $params['loginname'];
+    $official_code = isset($params['official_code']) ? $params['official_code'] : '';
+    $language = '';
+    $phone = $params['phone'];
+    $picture_uri = '';
+    $auth_source = PLATFORM_AUTH_SOURCE;
+    $expiration_date = '';
+    $active = 1;
+    $hr_dept_id = 0;
+    $extra = null;
+    $original_user_id_name = $params['original_user_id_name'];
     $original_user_id_value = $params['original_user_id_value'];
-    $orig_user_id_value[]   = $params['original_user_id_value'];
-    $extra_list             = $params['extra'];
+    $orig_user_id_value[] = $params['original_user_id_value'];
+    $extra_list = isset($params['extra']) ? $params['extra'] : '';
 
     if (!empty($_configuration['password_encryption'])) {
         if ($_configuration['password_encryption'] === $encrypt_method ) {
@@ -1074,7 +1084,10 @@ function WSCreateUserPasswordCrypted($params) {
     }
 
     // Check whether x_user_id exists into user_field_values table.
-    $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
 
     if ($debug) error_log('Ready to create user');
 
@@ -1098,7 +1111,7 @@ function WSCreateUserPasswordCrypted($params) {
                     username='".Database::escape_string($loginName)."',";
 
             if (!is_null($auth_source)) {
-                $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+                $sql .= " auth_source='".Database::escape_string($auth_source)."',";
             }
             $sql .=    "
                     password='".Database::escape_string($password)."',
@@ -1118,7 +1131,11 @@ function WSCreateUserPasswordCrypted($params) {
                     $extra_field_name = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save the external system's id into user_field_value table.
-                    $res = UserManager::update_extra_field_value($r_check_user[0], $extra_field_name, $extra_field_value);
+                    UserManager::update_extra_field_value(
+                        $r_check_user[0],
+                        $extra_field_name,
+                        $extra_field_value
+                    );
                 }
             }
             return $r_check_user[0];
@@ -1154,7 +1171,7 @@ function WSCreateUserPasswordCrypted($params) {
             status              = '".Database::escape_string($status)."',
             password            = '".Database::escape_string($password)."',
             email               = '".Database::escape_string($email)."',
-            official_code        = '".Database::escape_string($official_code)."',
+            official_code       = '".Database::escape_string($official_code)."',
             picture_uri         = '".Database::escape_string($picture_uri)."',
             creator_id          = '".Database::escape_string($creator_id)."',
             auth_source         = '".Database::escape_string($auth_source)."',
@@ -1170,6 +1187,8 @@ function WSCreateUserPasswordCrypted($params) {
 
     if ($result) {
         $return = Database::insert_id();
+        $sql = "UPDATE $table_user SET user_id = id WHERE id = $return";
+        Database::query($sql);
 
         $url_id = api_get_current_access_url_id();
         UrlManager::add_user_to_url($return, $url_id);
@@ -1183,7 +1202,7 @@ function WSCreateUserPasswordCrypted($params) {
             ''
         );
         // Save the remote system's id into user_field_value table.
-        $res = UserManager::update_extra_field_value(
+        UserManager::update_extra_field_value(
             $return,
             $original_user_id_name,
             $original_user_id_value
@@ -1201,7 +1220,7 @@ function WSCreateUserPasswordCrypted($params) {
                     ''
                 );
                 // save the external system's id into user_field_value table'
-                $res = UserManager::update_extra_field_value(
+                UserManager::update_extra_field_value(
                     $return,
                     $extra_field_name,
                     $extra_field_value
@@ -5698,27 +5717,30 @@ $server->register('WSListCourses',                                              
 );
 
 // define the method WSListCourses
-function WSListCourses($params) {
-    if(!WSHelperVerifyKey($params)) {
+function WSListCourses($params)
+{
+    if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $course_field_name = $params['original_course_id_name'];
+    $course_field_name = isset($params['original_course_id_name']) ? $params['original_course_id_name'] : '';
 
     $courses_result = array();
     $category_names = array();
 
     $courses = CourseManager::get_courses_list();
-    foreach($courses as $course) {
+    foreach ($courses as $course) {
         $course_tmp = array();
         $course_tmp['id'] = $course['id'];
         $course_tmp['code'] = $course['code'];
         $course_tmp['title'] = $course['title'];
-        $course_tmp['language'] = $course['language'];
+        $course_tmp['language'] = $course['course_language'];
         $course_tmp['visibility'] = $course['visibility'];
 
         // Determining category name
-        if($category_names[$course['category_code']]) {
+        if (!empty($course['category_code']) &&
+            $category_names[$course['category_code']]
+        ) {
             $course_tmp['category_name'] = $category_names[$course['category_code']];
         } else {
             $category = CourseManager::get_course_category($course['category_code']);
@@ -5727,12 +5749,20 @@ function WSListCourses($params) {
         }
 
         // Determining number of students registered in course
-        $course_tmp['number_students'] = CourseManager::get_users_count_in_course($course['code']);
+        $course_tmp['number_students'] = CourseManager::get_users_count_in_course(
+            $course['code']
+        );
 
         // Determining external course id
-        $course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
+        $externalCourseId = '';
+        if ($course_field_name) {
+            $externalCourseId = CourseManager::get_course_extra_field_value(
+                $course_field_name,
+                $course['code']
+            );
+        }
 
-
+        $course_tmp['external_course_id'] = $externalCourseId;
         $courses_result[] = $course_tmp;
     }
 
@@ -6599,7 +6629,9 @@ if (!empty($hook)) {
 }
 
 // Use the request to (try to) invoke the service
+$GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents('php://input');
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
+
 // If you send your data in utf8 then this value must be false.
 $decodeUTF8 = api_get_setting('registration.soap.php.decode_utf8');
 if ($decodeUTF8 === 'true') {

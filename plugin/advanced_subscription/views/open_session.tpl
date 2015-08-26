@@ -40,7 +40,7 @@
     </div>
 {% else %}
     <div class="alert alert-success legal-terms-popup">
-        {{ 'SuccessSubscriptionToSessionX'|get_plugin_lang('AdvancedSubscriptionPlugin') }}
+        {{ 'SuccessSubscriptionToSessionX'|get_plugin_lang('AdvancedSubscriptionPlugin')|format(session.name) }}
     </div>
 
     <div class="text-right legal-terms-popup">

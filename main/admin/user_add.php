@@ -260,7 +260,7 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
 // Expiration Date
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
-$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
+$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
 $group[] = $form->createElement(
     'DateTimePicker',
     'expiration_date',

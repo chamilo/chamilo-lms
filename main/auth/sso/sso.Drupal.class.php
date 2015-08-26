@@ -53,8 +53,11 @@ class ssoDrupal
      */
     public function logout()
     {
+        // no_redirect means Drupal sent the signal to logout. When redirecting to Drupal, the $_GET['stop'] param is
+        // set to 1, to allow Drupal to know that this is it, the logout is already done in Chamilo and there's no
+        // need to do it again
         if (empty($_GET['no_redirect'])) {
-            header('Location: '.$this->deauth_url);
+            header('Location: '.$this->deauth_url.'&stop=1');
         } else {
             header('Location: '.$this->protocol.$this->domain);
         }

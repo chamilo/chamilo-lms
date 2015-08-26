@@ -262,7 +262,7 @@ class ImportCsv
         $row['email'] = $row['Email'];
         $row['username'] = $row['UserName'];
         $row['password'] = $row['Password'];
-        $row['auth_source'] = $row['AuthSource'];
+        $row['auth_source'] = isset($row['AuthSource']) ? $row['AuthSource'] : PLATFORM_AUTH_SOURCE;
         $row['official_code'] = $row['OfficialCode'];
         $row['phone'] = $row['PhoneNumber'];
 
@@ -371,7 +371,7 @@ class ImportCsv
                         $language, //$row['language'],
                         $row['phone'],
                         null, //$row['picture'], //picture
-                        PLATFORM_AUTH_SOURCE, // ?
+                        $row['auth_source'], // ?
                         $expirationDate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
                         1, //active
                         0,
@@ -406,7 +406,7 @@ class ImportCsv
                         $row['lastname'],  // <<-- changed
                         $userInfo['username'],
                         null, //$password = null,
-                        PLATFORM_AUTH_SOURCE,
+                        $row['auth_source'],
                         $userInfo['email'],
                         COURSEMANAGER,
                         $userInfo['official_code'],
@@ -506,7 +506,7 @@ class ImportCsv
                         $language, //$row['language'],
                         $row['phone'],
                         null, //$row['picture'], //picture
-                        PLATFORM_AUTH_SOURCE, // ?
+                        $row['auth_source'], // ?
                         $expirationDate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
                         1, //active
                         0,
@@ -587,7 +587,7 @@ class ImportCsv
                         $row['lastname'],  // <<-- changed
                         $row['username'],  // <<-- changed
                         $password, //$password = null,
-                        PLATFORM_AUTH_SOURCE,
+                        $row['auth_source'],
                         $email,
                         STUDENT,
                         $userInfo['official_code'],

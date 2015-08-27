@@ -185,8 +185,11 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
 $nb_ext_auth_source_added = 0;
+
 if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
     $auth_sources = array();
+    $auth_sources[] = PLATFORM_AUTH_SOURCE;
+
     foreach ($extAuthSource as $key => $info) {
         // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS

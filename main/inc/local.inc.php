@@ -310,7 +310,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
             }
 
-
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE || $uData['auth_source'] == CAS_AUTH_SOURCE) {
                 //The authentification of this user is managed by Chamilo itself
                 $password = api_get_encrypted_password(trim(stripslashes($password)));
@@ -494,6 +493,33 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 );
             }
         } else {
+            // Try using OrganisationEmail
+
+            $extraFieldValue = new ExtraFieldValue('user');
+            $uData = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                'OrganisationEmail',
+                $login
+            );
+            if (!empty($uData)) {
+                $uData = api_get_user_info($uData['user_id']);
+
+                if (!empty($extAuthSource[$uData['auth_source']]['login'])
+                    && file_exists($extAuthSource[$uData['auth_source']]['login'])
+                ) {
+                    /*
+                     * Process external authentication
+                     * on the basis of the given login name
+                     */
+                    $loginFailed = true;  // Default initialisation. It could
+                    // change after the external authentication
+                    $key = $uData['auth_source']; //'ldap','shibboleth'...
+
+                    /* >>>>>>>> External authentication modules <<<<<<<<< */
+                    // see configuration.php to define these
+                    include_once($extAuthSource[$key]['login']);
+                }
+            }
+
             // login failed, Database::num_rows($result) <= 0
             $loginFailed = true;  // Default initialisation. It could
             // change after the external authentication
@@ -517,6 +543,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
             if (isset($extAuthSource) && is_array($extAuthSource)) {
                 foreach ($extAuthSource as $thisAuthSource) {
+
+                    if (!empty($thisAuthSource['login']) && file_exists($thisAuthSource['login'])) {
+                        include_once($thisAuthSource['login']);
+                        break;
+                    }
+
                     if (!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
                         include_once($thisAuthSource['newUser']);
                     } else {
@@ -529,6 +561,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     }
                 }
             } //end if is_array($extAuthSource)
+
             if ($loginFailed) { //If we are here username given is wrong
                 Session::write('loginFailed', '1');
                 header(

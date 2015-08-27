@@ -2092,6 +2092,12 @@ div.admin_section h4 {
     padding:5px 0px 5px 0px;
     /* float:left;*/
 }
+#lp_item_list .item_data .button_actions {
+    display: none;
+}
+#lp_item_list .item_data:hover .button_actions {
+    display: block;
+}
 
 #lp_item_list .item {
     border:none;

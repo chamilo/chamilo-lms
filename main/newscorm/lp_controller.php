@@ -133,17 +133,6 @@ $htmlHeadXtra[] = '
     }
 
     $(function() {
-
-        $(".item_data").on("mouseover", function(event) {
-            $(".button_actions", this).show();
-        });
-
-        $(".item_data").on("mouseout", function() {
-            $(".button_actions",this).hide();
-        });
-
-        $(".button_actions").hide();
-
         $(".lp_resource").sortable({
             items: ".lp_resource_element ",
             handle: ".moved", //only the class "moved"

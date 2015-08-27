@@ -130,6 +130,11 @@ a.thumbnail:hover{
     height: auto;
     width: 100%;
 }
+#notice_block p, #notice-block p{
+    color: #666;
+    font-size: 12px;
+    line-height: 20px;
+}
 .carousel-indicators{
   bottom: 0px !important;
 }
@@ -943,6 +948,7 @@ button.next.disabled {
     border-radius: 10px;
     border-width: 1px;
     border-style: solid;
+    border-color: #999;
     padding:6px;
 }
 .confirmation-message img, .error-message img, .normal-message img, .warning-message img {
@@ -4425,13 +4431,6 @@ i.size-32.icon-new-work{
 .jqgrid_whitespace {
     white-space: normal !important;
 }
-.chosen-container {
-    min-width: 100%;
-}
-
-.chzn-container-single .chzn-search {
-    z-index: 1010;
-}
 
 /* display the cookie usage warning validation */
 .cookieUsageValidation {
@@ -5610,6 +5609,10 @@ div#chat-remote-video video {
   font-size: 12px;
   color: #666666;
 }
+.install-steps-menu li.current-step{
+    font-weight: bold;
+}
+
 #about-session .description-course{
   padding: 10px;
   color: #666666;
@@ -5946,7 +5949,7 @@ div#chat-remote-video video {
 .ui-jqgrid .ui-pg-table td{
   font-size: 12px;
 }
-.ui-state-hover,.ui-widget-content .ui-state-hover,
+/* .ui-state-hover,.ui-widget-content .ui-state-hover,
 .ui-widget-header .ui-state-hover,
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
@@ -5973,7 +5976,7 @@ div#chat-remote-video video {
   background: #fff;
   font-weight:normal;
   color:#212121
-}
+}*/
 .ui-priority-secondary,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary{
@@ -6002,7 +6005,7 @@ div#chat-remote-video video {
 .ui-dialog .ui-dialog-buttonpane{
   border-top: 1px solid #DDD;
 }
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+/*.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
   background-color:#f5f5f5;
   background-image:-moz-linear-gradient(top,#fff,#e6e6e6);
   background-image:-webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
@@ -6031,7 +6034,7 @@ div#chat-remote-video video {
   background-color: #E6E6E6;
   font-weight:normal;
   color:#333333;
-}
+}*/
 #dialog-form .dialog-form-content{
   font-size: 12px;
 }
@@ -6084,7 +6087,7 @@ div#chat-remote-video video {
 .filler-report .filler-report-data-init{
   width: 60%;
 }
-#hot-course .items-course{
+.items-course{
   padding: 10px;
   border: 1px solid #e6e6e6;
   border-radius: 5px;
@@ -6093,17 +6096,31 @@ div#chat-remote-video video {
   min-height: 350px;
   margin-bottom: 10px;
 }
-#hot-course .items-course .items-course-info .title{
+.items-course .items-course-info .title{
   font-size: 14px;
   min-height: 32px;
 }
-#hot-course .items-course .items-course-info .teachers{
+.items-course .items-course-info .teachers{
   font-size: 12px;
   color: #666666;
 }
-#hot-course .items-course .items-course-info .ranking{
+.items-course .items-course-info .ranking{
   font-size: 10px;
   color: #666666;
+}
+.items-course .items-course-info .user-register{
+  font-size: 11px;
+  background-color: #FCF8E3;
+  border: 1px solid #FAEBCC;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  margin-left: 5px;
+  margin-bottom: 3px;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  border-radius: 5px;
+  
 }
 .hot-course-head{
   padding-top: 10px;

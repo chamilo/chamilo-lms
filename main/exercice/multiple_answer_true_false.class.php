@@ -213,7 +213,7 @@ class MultipleAnswerTrueFalse extends Question
             }
         }
 
-        global $text, $class;
+        global $text;
 
         if ($obj_ex->edit_exercise_in_lp == true) {
             // setting the save button here and not in the question class.php
@@ -289,7 +289,8 @@ class MultipleAnswerTrueFalse extends Question
             $comment    = trim($form -> getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
             if (empty($options)) {
-                //If this is the first time that the question is created when change the default values from the form 1 and 2 by the correct "option id" registered
+                //If this is the first time that the question is created when
+                // change the default values from the form 1 and 2 by the correct "option id" registered
                 $goodAnswer = $sorted_by_position[$goodAnswer]['id'];
             }
     	    $questionWeighting += $extra_values[0]; //By default 0 has the correct answers

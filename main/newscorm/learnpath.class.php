@@ -7899,9 +7899,9 @@ class learnpath
 
                         $form->addButtonSave($text, 'submit_button');
                         $renderer = $form->defaultRenderer();
-                        $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
-                        $form->addElement('html', '<div>');
-                        $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
+                        $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
+                        $form->addElement('html', '<div class="editor-lp">');
+                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config, true);
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;
                     }
@@ -8575,7 +8575,7 @@ class learnpath
         $form = new FormValidator('small_form', 'post', $url);
         $form->addElement('header', $title);
         $form->addElement('text', 'title', get_lang('Title'));
-        $form->addElement('button', 'submit_button', get_lang('Save'));
+        $form->addButtonSave(get_lang('Save'), 'submit_button');
         $form->addElement('hidden', 'id', $data['id']);
         $form->addElement('hidden', 'parent', $data['parent_item_id']);
         $form->addElement('hidden', 'previous', $data['previous_item_id']);

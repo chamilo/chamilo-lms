@@ -195,16 +195,22 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
             $language_id = api_get_language_id($language_interface);
             $language_info = api_get_language_info($language_id);
 
-            if (!empty($language_id) &&
-                !empty($language_info) &&
-                !empty($language_info['parent_id'])) {
+            if (
+                !empty($language_id) &&
+                !empty($language_info)
+            ) {
+                if (!empty($language_info['parent_id'])) {
+                    $language_info = api_get_language_info($language_info['parent_id']);
+                    $parent_language_name = $language_info['english_name'];
 
-                $language_info = api_get_language_info($language_info['parent_id']);
-                $parent_language_name = $language_info['english_name'];
-                if (!empty($parent_language_name)) {
-                    return $parent_language_name;
+                    if (!empty($parent_language_name)) {
+                        return $parent_language_name;
+                    }
                 }
+
+                return $language_info['english_name'];
             }
+
             return 'english';
         } else {
             return $parent_language_name;

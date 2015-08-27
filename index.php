@@ -35,8 +35,10 @@ $controller = new IndexManager($header_title);
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
 
 if (!empty($_GET['logout'])) {
-    $controller->logout();
+    $redirect = !empty($_GET['no_redirect']) ? false : true;
+    $controller->logout($redirect);
 }
+
 
 /* Table definitions */
 

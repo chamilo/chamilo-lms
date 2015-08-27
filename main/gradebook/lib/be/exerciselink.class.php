@@ -194,7 +194,7 @@ class ExerciseLink extends AbstractLink
         in exercice/exercice.php, look for note-query-exe-results marker*/
         $session_id = api_get_session_id();
         $courseId = $this->getCourseId();
-	$exercise = new Exercise();
+	    $exercise = new Exercise($courseId);
         $exercise->read($this->get_ref_id());
 
         if (!$this->is_hp) {
@@ -202,10 +202,10 @@ class ExerciseLink extends AbstractLink
 		if ($exercise->exercise_was_added_in_lp == false) {
 			$sql = "SELECT * FROM $tblStats
 			        WHERE
-			            exe_exo_id      = ".intval($this->get_ref_id())." AND
-			            orig_lp_id      = 0 AND
+			            exe_exo_id = ".intval($this->get_ref_id())." AND
+			            orig_lp_id = 0 AND
 			            orig_lp_item_id = 0 AND
-			            status      <> 'incomplete' AND
+			            status <> 'incomplete' AND
 			            session_id = $session_id";
 		    } else {
 		        $lpId = null;
@@ -217,9 +217,9 @@ class ExerciseLink extends AbstractLink
 
 		        $sql = "SELECT * FROM $tblStats
 		                WHERE
-		                    exe_exo_id      = ".intval($this->get_ref_id())." AND
-		                    orig_lp_id      = $lpId AND
-		                    status      <> 'incomplete' AND
+		                    exe_exo_id = ".intval($this->get_ref_id())." AND
+		                    orig_lp_id = $lpId AND
+		                    status <> 'incomplete' AND
 		                    session_id = $session_id";
 		    }
 
@@ -314,6 +314,7 @@ class ExerciseLink extends AbstractLink
         if ((!api_is_allowed_to_edit() && $this->calc_score(api_get_user_id()) == null) || $status_user!=1) {
             $url .= '&amp;doexercise='.$this->get_ref_id();
         }
+
         return $url;
     }
 
@@ -358,6 +359,7 @@ class ExerciseLink extends AbstractLink
                 WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' ';
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
+
         return ($number[0] != 0);
     }
 
@@ -398,6 +400,7 @@ class ExerciseLink extends AbstractLink
     private function get_exercise_table()
     {
         $this->exercise_table = Database :: get_course_table(TABLE_QUIZ_TEST);
+
         return $this->exercise_table;
     }
 

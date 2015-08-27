@@ -17,7 +17,7 @@
         <td valign="top"><table width="700" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td width="50">&nbsp;</td>
-                    <td width="394"><img src="{{ _p.web_css }}{{ "stylesheets" | get_setting }}/images/header-logo.png" width="230" height="60" alt="Ministerio de Educación"></td>
+                    <td width="394"><img src="{{ _p.web_css }}/themes/{{ "stylesheets" | get_setting }}/images/header-logo.png" width="230" height="60" alt="Ministerio de Educación"></td>
                     <td width="50">&nbsp;</td>
                 </tr>
                 <tr>

@@ -4,17 +4,17 @@
  * Teacher report
  * @package chamilo.reporting
  */
-/**
- * Code
- */
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
+$sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+
+$nameTools = get_lang('Teachers');
 
 api_block_anonymous_users();
 
@@ -178,7 +178,7 @@ if ($export_csv) {
 }
 
 $sort_by_first_name = api_sort_by_first_name();
-$actions .= '<div class="actions">';
+$actions = '<div class="actions">';
 
 if (api_is_drh()) {
     $menu_items = array(
@@ -197,9 +197,16 @@ if (api_is_drh()) {
     }
 }
 
-$actions .= '<span style="float:right">';
-$actions .= Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
-$actions .= Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
+$actions .= '&nbsp;<span style="float:right">';
+$actions .= Display::url(
+    Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM),
+    'javascript: void(0);',
+    array('onclick'=>'javascript: window.print();')
+);
+$actions .= Display::url(
+    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
+    api_get_self().'?export=csv&keyword='.$keyword
+);
 $actions .= '</span>';
 $actions .= '</div>';
 

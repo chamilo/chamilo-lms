@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -61,7 +60,7 @@ class Draggable extends Question
 
             if (count($answer->nbrAnswers) > 0) {
                 $nb_matches = $nb_options = 0;
-                
+
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
                         $nb_matches++;
@@ -134,7 +133,6 @@ class Draggable extends Question
         }
 
         $form->addHtml('</tbody></table>');
-        $group = array();
 
         $renderer->setElementTemplate(
             '<div class="form-group"><div class="col-sm-offset-2">{element}',
@@ -220,5 +218,4 @@ class Draggable extends Question
 
         return $header;
     }
-
 }

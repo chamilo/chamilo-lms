@@ -1,6 +1,7 @@
 {
     "id": 1,
     "name": "Production",
+    "description": "The basis of all production platforms",
     "params": [
         {
             "variable": "show_link_bug_notification",
@@ -16,6 +17,46 @@
             "variable": "show_admin_toolbar",
             "subkey": "",
             "selected_value": "do_not_show"
+        },
+        {
+            "variable": "allow_registration",
+            "subkey": "",
+            "selected_value": "false"
+        },
+        {
+            "variable": "allow_registration_as_teacher",
+            "subkey": "",
+            "selected_value": "false"
+        },
+        {
+            "variable": "course_images_in_courses_list",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "allow_use_sub_language",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "allow_email_editor",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "enabled_text2audio",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "gradebook_score_display_coloring",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "gradebook_score_display_custom",
+            "subkey": "",
+            "selected_value": "true"
         }
     ]
 }

@@ -261,7 +261,6 @@ foreach ($filters as $param) {
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
 }
 $searchForm->addButtonSearch(get_lang('Search'));
-//$searchForm->addElement('button', 'submit', get_lang('Search'));
 
 $filterData = array();
 if ($searchForm->validate()) {

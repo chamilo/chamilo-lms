@@ -336,6 +336,13 @@ function multiple_answer_true_false_onchange(variable) {
 
 </script>';
 
+$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
+
+$template = new Template();
+
+$htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
+$htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
+
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
 <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
 <script language=\"JavaScript\" type=\"text/javascript\">

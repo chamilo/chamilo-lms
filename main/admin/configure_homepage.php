@@ -286,7 +286,7 @@ if (!empty($action)) {
 					if (is_writable($homep.$noticef.'_'.$lang.$ext)) {
 						$fp = fopen($homep.$noticef.'_'.$lang.$ext, 'w');
 						if ($errorMsg == '') {
-							fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
+							fputs($fp, "<h5>$notice_title</h5><p>\n$notice_text");
 
 							foreach ($_languages['name'] as $key => $value) {
 								$lang_name = $_languages['folder'][$key];
@@ -294,7 +294,7 @@ if (!empty($action)) {
 									if (file_exists($homep.$noticef.'_'.$lang_name.$ext)) {
 										if (is_writable($homep.$noticef.'_'.$lang_name.$ext)) {
 											$fp = fopen($homep.$noticef.'_'.$lang_name.$ext, 'w');
-											fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
+											fputs($fp, "<h5>$notice_title</h5><p>\n$notice_text");
 											fclose($fp);
 										}
 									}
@@ -321,7 +321,7 @@ if (!empty($action)) {
 				} else {
 					//File does not exist
 					$fp = fopen($homep.$noticef.'_'.$lang.$ext, 'w');
-					fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
+					fputs($fp, "<h5>$notice_title</h5><p>\n$notice_text");
 					fclose($fp);
 				}
 				Event::addEvent(

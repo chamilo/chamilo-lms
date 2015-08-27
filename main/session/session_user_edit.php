@@ -64,7 +64,7 @@ $form->addElement('html', '<br>');
 $form->addElement('html', $msg);
 
 $form->addElement('text', 'duration', array(get_lang('ExtraDurationForUser'), null, get_lang('Days')));
-$form->addElement('button', 'submit', get_lang('Send'));
+$form->addButtonSave(get_lang('Save'));
 
 if (empty($data['duration'])) {
     $data['duration'] = 0;

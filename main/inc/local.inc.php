@@ -647,7 +647,13 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     exit;
                 }
             }
-        }//end logout ... else ... login
+            //end logout ... else ... login
+        } elseif ($logout) {
+            //if there was an attempted logout without a previous login, log
+            // this anonymous user out as well but avoid redirect
+            online_logout(null, false);
+            $osso->logout(); //redirects and exits
+        }
     } elseif (api_get_setting('openid_authentication')=='true') {
         if (!empty($_POST['openid_url'])) {
             include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';

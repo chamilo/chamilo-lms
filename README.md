@@ -53,7 +53,7 @@ git config --global push.default current
 From the Chamilo folder (in which you should be now if you followed the previous steps), launch:
 
 ```
-composer global require "fxp/composer-asset-plugin:1.0.0"
+composer global require "fxp/composer-asset-plugin:1.0.3"
 composer update
 ```
 

@@ -202,28 +202,42 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * List courses details from the buy-course table and the course table
-     * @return array The courses. Otherwise return false
+     * Filter the registered courses for show in plugin catalog
+     * @return array
      */
-    public function getCourses()
+    private function getCourses()
     {
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sessionCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $entityManager = Database::getManager();
+        $query = $entityManager->createQueryBuilder();
+        
+        $courses = $query
+            ->select('c')
+            ->from('ChamiloCoreBundle:Course', 'c')
+            ->leftJoin(
+                'ChamiloCoreBundle:SessionRelCourse',
+                'sc',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'c = sc.course'
+            )
+            ->where(
+                $query->expr()->isNull('sc.course')
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $courses;
+    }
+
+    /**
+     * Get the item data
+     * @param int $itemId The item ID
+     * @param int $itemType The item type
+     * @return array
+     */
+    private function getItem($itemId, $itemType)
+    {
         $buyItemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
         $buyCurrencyTable = Database::get_main_table(BuyCoursesUtils::TABLE_CURRENCY);
-
-        $currency = $this->getSelectedCurrency();
-
-        $items = [];
-
-        $fakeCourseFrom = "
-            $courseTable c
-            LEFT JOIN $sessionCourseTable sc
-                ON c.id = sc.c_id
-            WHERE sc.c_id IS NULL
-        ";
-
-        $courses = Database::select('c.*', $fakeCourseFrom);
 
         $fakeItemFrom = "
             $buyItemTable i
@@ -231,29 +245,46 @@ class BuyCoursesPlugin extends Plugin
                 ON i.currency_id = c.id
         ";
 
+        return Database::select(
+            ['i.*', 'c.iso_code'],
+            $fakeItemFrom,
+            [
+                'where' => [
+                    'i.product_id = ? AND i.product_type = ?' => [$itemId, $itemType]
+                ]
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * List courses details from the configuration page
+     * @return array
+     */
+    public function getCoursesForConfiguration()
+    {
+        $courses = $this->getCourses();
+
+        if (empty($courses)) {
+            return[];
+        }
+
+        $configurationCourses = [];
+        $currency = $this->getSelectedCurrency();
+
         foreach ($courses as $course) {
             $courseItem = [
-                'course_id' => $course['id'],
-                'course_visual_code' => $course['visual_code'],
-                'course_code' => $course['code'],
-                'course_title' => $course['title'],
-                'course_visibility' => $course['visibility'],
+                'course_id' => $course->getId(),
+                'course_visual_code' => $course->getVisualCode(),
+                'course_code' => $course->getCode(),
+                'course_title' => $course->getTitle(),
+                'course_visibility' => $course->getVisibility(),
                 'visible' => false,
                 'currency' =>  empty($currency) ? null : $currency['iso_code'],
                 'price' => 0.00
             ];
 
-            $item = Database::select(
-                ['i.*', 'c.iso_code'],
-                $fakeItemFrom,
-                [
-                    'where' => [
-                        'i.product_id = ? AND ' => $course['id'],
-                        'i.product_type = ?' => self::PRODUCT_TYPE_COURSE
-                    ]
-                ],
-                'first'
-            );
+            $item = $this->getItem($course->getId(), self::PRODUCT_TYPE_COURSE);
 
             if ($item !== false) {
                 $courseItem['visible'] = true;
@@ -261,10 +292,10 @@ class BuyCoursesPlugin extends Plugin
                 $courseItem['price'] = $item['price'];
             }
 
-            $items[] = $courseItem;
+            $configurationCourses[] = $courseItem;
         }
 
-        return $items;
+        return $configurationCourses;
     }
 
     /**
@@ -444,76 +475,90 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Get the user status for the course
+     * @param int $userId The user Id
+     * @param \Chamilo\CoreBundle\Entity\Course $course The course
+     * @return string
+     */
+    private function getUserStatusForCourse($userId, \Chamilo\CoreBundle\Entity\Course $course)
+    {
+        if (empty($userId)) {
+            return 'NO';
+        }
+
+        $entityManager = Database::getManager();
+        $cuRepo = $entityManager->getRepository('ChamiloCoreBundle:CourseRelUser');
+
+        $buySaleTable = Database::get_main_table(BuyCoursesUtils::TABLE_SALE);
+
+        // Check if user bought the course
+        $sale = Database::select(
+            'COUNT(1) as qty',
+            $buySaleTable,
+            [
+                'where' => [
+                    'user_id = ? AND product_type = ? AND product_id = ?' => [
+                        $userId,
+                        self::PRODUCT_TYPE_COURSE,
+                        $course->getId()
+                    ]
+                ]
+            ],
+            'first'
+        );
+
+        if ($sale['qty'] > 0) {
+            return "TMP";
+        }
+
+        // Check if user is already subscribe to course
+        $userSubscription = $cuRepo->findBy([
+            'course' => $course,
+            'user' => $userId
+        ]);
+
+        if (!empty($userSubscription)) {
+            return 'YES';
+        }
+
+        return 'NO';
+    }
+
+    /**
      * Lists current user course details
      * @return array
      */
-    public function getUserCourseList()
+    public function getCatalogCourseList()
     {
-        $buyCourseTable = Database::get_main_table(TABLE_BUY_COURSE);
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $buyCourseTemporalTable = Database::get_main_table(
-            TABLE_BUY_COURSE_TEMPORAL
-        );
-        $entityManager = Database::getManager();
-        $cuRepo = $entityManager->getRepository(
-            'ChamiloCoreBundle:CourseRelUser'
-        );
-        $currentUserId = api_get_user_id();
+        $courses = $this->getCourses();
 
-        $sql = "
-            SELECT a.course_id, a.visible, a.price, b.*
-            FROM $buyCourseTable a, $courseTable b
-            WHERE a.course_id = b.id AND a.session_id = 0 AND a.visible = 1;";
-        $res = Database::query($sql);
-        $courses = array();
-        while ($row = Database::fetch_assoc($res)) {
-            $course = $entityManager->find(
-                'ChamiloCoreBundle:Course',
-                $row['course_id']
-            );
-            $courseData = [
+        if (empty($courses)) {
+            return [];
+        }
+
+        $courseCatalog = [];
+
+        foreach ($courses as $course) {
+            $item = $this->getItem($course->getId(), self::PRODUCT_TYPE_COURSE);
+
+            if (empty($item)) {
+                continue;
+            }
+
+            $courseItem = [
                 'id' => $course->getId(),
                 'title' => $course->getTitle(),
                 'code' => $course->getCode(),
-                'course_img' => Display::return_icon(
-                    'session_default.png',
-                    null,
-                    null,
-                    null,
-                    null,
-                    true
-                ),
-                'price' => number_format($row['price'], 2),
+                'course_img' => null,
+                'price' => $item['price'],
+                'currency' => $item['iso_code'],
                 'teachers' => [],
-                'enrolled' => 'NO',
+                'enrolled' => $this->getUserStatusForCourse(api_get_user_id(), $course)
             ];
 
             foreach ($course->getTeachers() as $courseUser) {
                 $teacher = $courseUser->getUser();
-                $courseData['teachers'][] = $teacher->getCompleteName();
-            }
-
-            //check if the user is enrolled
-            if ($currentUserId > 0) {
-                $sql = "
-                    SELECT 1 FROM $buyCourseTemporalTable
-                    WHERE course_code='{$course->getCode()}'
-                    AND user_id = {$currentUserId}";
-                $result = Database::query($sql);
-
-                if (Database::affected_rows($result) > 0) {
-                    $courseData['enrolled'] = "TMP";
-                }
-
-                $userSubscription = $cuRepo->findBy([
-                    'course' => $course,
-                    'user' => $currentUserId
-                ]);
-                
-                if (!empty($userSubscription)) {
-                    $courseData['enrolled'] = 'YES';
-                }
+                $courseItem['teachers'][] = $teacher->getCompleteName();
             }
 
             //check images
@@ -522,15 +567,15 @@ class BuyCoursesPlugin extends Plugin
             $possiblePath .= '/course-pic.png';
 
             if (file_exists($possiblePath)) {
-                $courseData['course_img'] = api_get_path(WEB_COURSE_PATH);
-                $courseData['course_img'] .= $course->getDirectory();
-                $courseData['course_img'] .= '/course-pic.png';
+                $courseItem['course_img'] = api_get_path(WEB_COURSE_PATH)
+                    . $course->getDirectory()
+                    . '/course-pic.png';
             }
 
-            $courses[] = $courseData;
+            $courseCatalog[] = $courseItem;
         }
 
-        return $courses;
+        return $courseCatalog;
     }
 
 }

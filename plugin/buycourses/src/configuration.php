@@ -15,7 +15,7 @@ $includeSession = $plugin->get('include_sessions') === 'true';
 
 api_protect_admin_script(true);
 
-$courses = $plugin->getCourses();
+$courses = $plugin->getCoursesForConfiguration();
 
 //view
 $interbreadcrumb[] = [

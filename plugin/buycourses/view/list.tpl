@@ -60,7 +60,7 @@
                         <div class="items-course">
                             <div class="items-imagen">
                                 <a class="ajax" rel="gb_page_center[778]" href="{{ _p.web_plugin ~ 'buycourses/src/ajax.php?' ~ {'code': course.code}|url_encode() }}">
-                                    <img alt="{{ course.title }}" class="img-responsive" src="{{ course.course_img }}">
+                                    <img alt="{{ course.title }}" class="img-responsive" src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                                 </a>
                             </div>
                             <div class="items-title">
@@ -73,17 +73,17 @@
                                     <li><i class="fa fa-user"></i> {{ teacher }}</li>
                                 {% endfor %}
                             </ul>
-                            <div class="items-status">
+                            <p class="items-status">
                                 {% if course.enrolled == "YES" %}
                                     {{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}
                                 {% endif %}
                                 {% if course.enrolled == "TMP" %}
                                     {{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}
                                 {% endif %}
-                            </div>
-                            <div class="items-price">
-                                {{ course.price }} {{ currency }}
-                            </div>
+                            </p>
+                            <p class="items-price">
+                                {{ course.currency }} {{ course.price }} 
+                            </p>
                             <div class="items-button">
                                 <div class="btn-group btn-group-sm">
                                     <a class="ajax btn btn-primary" title="" href="{{ _p.web_plugin ~ 'buycourses/src/ajax.php?' ~ {'code': course.code}|url_encode() }}">

@@ -39,7 +39,7 @@ if (isset($_SESSION['bc_success'])) {
     $tpl->assign('rmessage', 'NO');
 }
 
-$courseList = $plugin->getUserCourseList();
+$courseList = $plugin->getCatalogCourseList();
 $sessionList = [];
 $currency = $plugin->getSelectedCurrency();
 $currencyCode = null;

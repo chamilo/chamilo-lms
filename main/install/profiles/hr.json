@@ -118,6 +118,11 @@
             "variable": "user_reset_password",
             "subkey": "",
             "selected_value": "true"
+        },
+        {
+            "variable": "courses_default_creation_visibility",
+            "subkey": "",
+            "selected_value": "1"
         }
     ]
 }

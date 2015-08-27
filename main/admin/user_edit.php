@@ -171,11 +171,17 @@ if (api_get_setting('login_is_email') != 'true') {
     $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
 
+if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
+    $form->addLabel(
+        get_lang('ExternalAuthentication'),
+        $userInfo['auth_source']
+    );
+}
+
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
 $nb_ext_auth_source_added = 0;
 if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
-    $form->addLabel(get_lang('ExternalAuthentication'), $userInfo['auth_source']);
     $auth_sources = array();
     foreach ($extAuthSource as $key => $info) {
         // @todo : make uniform external authentication configuration (ex : cas and external_login ldap)

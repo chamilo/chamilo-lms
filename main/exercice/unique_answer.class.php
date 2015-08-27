@@ -259,9 +259,7 @@ class UniqueAnswer extends Question
         $form->addHtml('</tbody>');
         $form->addHtml('</table>');
 
-        $navigator_info = api_get_navigator();
-
-        global $text, $class;
+        global $text;
 
         $buttonGroup = [];
         //ie6 fix

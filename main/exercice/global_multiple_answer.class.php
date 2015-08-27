@@ -21,7 +21,7 @@ class GlobalMultipleAnswer extends Question
 
     /**
      * function which redefines Question::createAnswersForm
-     * @param the FormValidator
+     * @param FormValidator $form
      */
     public function createAnswersForm($form)
     {
@@ -81,7 +81,7 @@ class GlobalMultipleAnswer extends Question
                 $defaults['comment[' . $i . ']'] = $answer->comment[$i];
                 $defaults['correct[' . $i . ']'] = $answer->correct[$i];
 
-                //------------- D�but
+                // start
                 $scoreA = $answer->weighting[$i];
             }
             if ($scoreA > 0) {
@@ -162,7 +162,7 @@ class GlobalMultipleAnswer extends Question
 
     /**
      * abstract function which creates the form to create / edit the answers of the question
-     * @param the FormValidator instance
+     * @param FormValidator $form
      */
     function processAnswersCreation($form)
     {

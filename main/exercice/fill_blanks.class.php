@@ -288,8 +288,6 @@ class FillBlanks extends Question
      */
     public function processAnswersCreation($form)
     {
-        global $charset;
-
         $answer = $form->getSubmitValue('answer');
         // Due the ckeditor transform the elements to their HTML value
 
@@ -342,9 +340,9 @@ class FillBlanks extends Question
         <p>I use a [computer] and a [pen].</p>
         becomes
         <p>I use a [computer] and a [pen].</p>::100,50:100,50@1
-                                              ++++++++-------**
-                                                --- -- --- -- -
-                                                  A B  (C) (D)(E)
+            ++++++++-------**
+            --- -- --- -- -
+            A B  (C) (D)(E)
         +++++++ : required, weighting of each words
         ------- : optional, input width to display, 200 if not present
         ** : equal @1 if "Allow answers order switches" has been checked, @ otherwise

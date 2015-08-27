@@ -5860,17 +5860,36 @@ class learnpath
                             ['title' => get_lang('LearnpathEditModule')]
                         );
 
-                        $forumIcon .= Display::toolbarButton(
-                            null,
-                            api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
-                                'action' => 'create_forum',
-                                'id' => $arrLP[$i]['id'],
-                                'lp_id' => $this->lp_id
-                            ]),
-                            'comments-o',
-                            'default',
-                            ['title' => get_lang('CreateForum')]
-                        );
+                        if ($this->items[$arrLP[$i]['id']]->getForumThread(
+                            $this->course_int_id,
+                            $this->lp_session_id
+                        )) {
+                            $forumIcon .= Display::toolbarButton(
+                                null,
+                                '#',
+                                'comments-o',
+                                'default',
+                                [
+                                    'title' => get_lang('CreateForum'),
+                                    'class' => 'disabled'
+                                ]
+                            );
+                        } else {
+                            $forumIconUrl = api_get_self() . '?'
+                                . api_get_cidreq() . '&'
+                                . http_build_query([
+                                    'action' => 'create_forum',
+                                    'id' => $arrLP[$i]['id'],
+                                    'lp_id' => $this->lp_id
+                                ]);
+                            $forumIcon .= Display::toolbarButton(
+                                null,
+                                $forumIconUrl,
+                                'comments-o',
+                                'default',
+                                ['title' => get_lang('CreateForum')]
+                            );
+                        }
                     } else {
                         $edit_icon .= Display::toolbarButton(
                             null,

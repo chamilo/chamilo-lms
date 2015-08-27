@@ -352,7 +352,7 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
         );
     } else {
         if ($update_if_exists) {
-            $user    = UserManager::get_user_info($username);
+            $user = UserManager::get_user_info($username);
             $user_id = $user['user_id'];
             //echo "$username\n";
             UserManager::update_user(
@@ -361,7 +361,7 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
                 $lastname,
                 $username,
                 null,
-                null,
+                $auth_source,
                 $email,
                 $status,
                 $official_code,

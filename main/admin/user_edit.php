@@ -19,6 +19,8 @@ api_protect_super_admin($user_id, null, true);
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
+$userInfo = api_get_user_info($user_id);
+
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = '
@@ -180,6 +182,7 @@ if (api_get_setting('login_is_email') != 'true') {
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
 $nb_ext_auth_source_added = 0;
 if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
+	$form->addLabel(get_lang('ExternalAuthentication'), $userInfo['auth_source']);
     $auth_sources = array();
     foreach ($extAuthSource as $key => $info) {
         // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
@@ -320,7 +323,6 @@ if ($form->validate()) {
 	if ($user['status'] == DRH && $is_user_subscribed_in_course) {
 		$error_drh = true;
 	} else {
-        $userInfo = api_get_user_info($user_id);
 		$picture_element = $form->getElement('picture');
 		$picture = $picture_element->getValue();
 

@@ -5868,7 +5868,7 @@ class learnpath
                                 null,
                                 '#',
                                 'comments-o',
-                                'default',
+                                'success',
                                 [
                                     'title' => get_lang('CreateForum'),
                                     'class' => 'disabled'

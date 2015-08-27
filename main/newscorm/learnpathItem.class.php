@@ -4480,8 +4480,8 @@ class learnpathItem
                 'post_title' => $this->name,
                 'post_text' => $this->description,
                 'category_id' => 1,
-                'numeric_calification' => null,
-                'calification_notebook_title' => null,
+                'numeric_calification' => 0,
+                'calification_notebook_title' => 0,
                 'weight_calification' => 0.00,
                 'thread_peer_qualify' => 0,
                 'lp_item_id' => $this->db_id

@@ -748,7 +748,8 @@ class Answer
      * Get the necessary JavaScript for some answers
      * @return string
      */
-    public function getJs() {
+    public function getJs()
+    {
         //if ($this->questionId == 2)
         return "<script>
                 jsPlumb.ready(function() {

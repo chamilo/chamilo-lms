@@ -3142,7 +3142,7 @@ class learnpath
             $toc_list = $this->get_toc();
         }
         //$html = '<div id="scorm_title" class="scorm-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
-        $html .= '<div class="scorm-body">';
+        $html = '<div class="scorm-body">';
         $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
 
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {

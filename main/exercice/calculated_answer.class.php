@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *  Class CalculatedAnswer
  *  This class contains calculated answer form and answer processing functions
@@ -24,7 +25,7 @@ class CalculatedAnswer extends Question
 
     /**
      * function which redefines Question::createAnswersForm
-     * @param the formvalidator instance
+     * @param FormValidator $form
      */
     function createAnswersForm($form)
     {
@@ -161,7 +162,7 @@ class CalculatedAnswer extends Question
         $form->addRule('answerVariations', get_lang('GiveAnswerVariations'),'required');
         $form->setDefaults(array('answerVariations' => '1'));
 
-        global $text, $class;
+        global $text;
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
 
@@ -273,6 +274,7 @@ class CalculatedAnswer extends Question
                 )
             )
         );
+
         return empty($result) ? false : true;
     }
 }

@@ -66,9 +66,9 @@ class Template
         $this->load_plugins = $load_plugins;
 
         $template_paths = array(
-            api_get_path(SYS_CODE_PATH) . 'template/overrides', // user defined templates
+            api_get_path(SYS_CODE_PATH).'template/overrides', // user defined templates
             api_get_path(SYS_CODE_PATH).'template', //template folder
-            api_get_path(SYS_PLUGIN_PATH) //plugin folder
+            api_get_path(SYS_PLUGIN_PATH) // plugin folder
         );
 
         $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig';
@@ -185,11 +185,23 @@ class Template
         }
     }
 
+    /**
+     * @param string $image
+     * @param int $size
+     *
+     * @return string
+     */
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
     {
-        return Display:: return_icon($image, '', array(), $size, false, true);
+        return Display::return_icon($image, '', array(), $size, false, true);
     }
 
+    /**
+     * @param string $timestamp
+     * @param string $format
+     *
+     * @return string
+     */
     public static function format_date($timestamp, $format = null)
     {
         return api_format_date($timestamp, $format);

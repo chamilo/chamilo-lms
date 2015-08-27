@@ -959,7 +959,10 @@ HTML;
                         );
 
                         if (!empty($answerCorrect) && !empty($selectedValue)) {
-                            $s .= <<<JAVASCRIPT
+                            // Show connect if is not freeze (question preview)
+
+                            if (!$freeze) {
+                                $s .= <<<JAVASCRIPT
                                 <script>
                                     jsPlumb.ready(function() {
                                         jsPlumb.connect({
@@ -976,6 +979,8 @@ HTML;
                                     });
                                 </script>
 JAVASCRIPT;
+                            }
+
                         }
 
                         $s .= <<<HTML

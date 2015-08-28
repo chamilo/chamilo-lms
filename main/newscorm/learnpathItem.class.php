@@ -2164,6 +2164,8 @@ class learnpathItem
         }
 
         $course_id = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
         // Deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order.
         $this->prereq_alert = '';
         // First parse all parenthesis by using a sequential loop
@@ -2627,7 +2629,8 @@ class learnpathItem
                                                     WHERE
                                                         c_id = ' . $course_id . ' AND
                                                         user_id = ' . $user_id . '  AND
-                                                        lp_id = ' . $this->lp_id . '
+                                                        lp_id = ' . $this->lp_id . ' AND
+                                                        session_id = '.$sessionId.'
                                                      LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
                                             $lp_id = Database::fetch_row(

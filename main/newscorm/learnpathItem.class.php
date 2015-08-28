@@ -2382,7 +2382,7 @@ class learnpathItem
                                         foreach ($list as $cond) {
                                             if (isset($items[$refs_list[$cond]])) {
                                                 $status = $items[$refs_list[$cond]]->get_status(true);
-                                                if ($status == $this->possible_status[2] OR
+                                                if ($status == $this->possible_status[2] ||
                                                     $status == $this->possible_status[3]
                                                 ) {
                                                     $mytrue++;

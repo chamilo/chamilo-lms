@@ -33,7 +33,7 @@ $tpl->assign('courses', $courses);
 $tpl->assign('sessions_are_included', $includeSession);
 
 if ($includeSession) {
-    $sessions = $plugin->getSessions();
+    $sessions = $plugin->getSessionsForConfiguration();
 
     $tpl->assign('sessions', $sessions);
 }

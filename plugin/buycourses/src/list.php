@@ -53,7 +53,7 @@ $tpl->assign('currency', $currencyCode);
 $tpl->assign('sessions_are_included', $includeSessions);
 
 if ($includeSessions) {
-    $sessionList = $plugin->getUserSessionList();
+    $sessionList = $plugin->getCatalogSessionList();
     $tpl->assign('sessions', $sessionList);
 }
 

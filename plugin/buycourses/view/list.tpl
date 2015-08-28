@@ -150,7 +150,7 @@
                                         <div class="caption">
                                             <h3>{{ session.name }}</h3>
                                             <p>{{ session.dates.display }}</p>
-                                            <p class="lead">{{ session.price }} {{ currency }}</p>
+                                            <p class="lead">{{ session.currency }} {{ session.price }}</p>
 
                                             <dl>
                                                 {% for course in session.courses %}

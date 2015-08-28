@@ -600,6 +600,10 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         textEnter.append("tspan")
         .attr("x", 0)
         .text(function(d) {
+            if (d.short_code) {
+                return d.short_code;
+            }
+
             if (d.depth && d.name) {
                 var nameParts = d.name.split(' ');
 
@@ -617,6 +621,10 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         .attr("x", 0)
         .attr("dy", "1em")
         .text(function(d) {
+            if (d.short_code) {
+                return null;
+            }
+
             if (d.depth && d.name) {
                 var nameParts = d.name.split(' ');
 

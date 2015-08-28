@@ -34,6 +34,7 @@ function show_image(image,width,height) {
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
+$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 
 if (empty($sessionId)) {
     $sessionId = api_get_session_id();
@@ -57,7 +58,7 @@ $nameTools = get_lang('StudentDetails');
 $get_course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : '';
 
 if (isset($_GET['details'])) {
-    if (!empty ($_GET['origin']) && $_GET['origin'] == 'user_course') {
+    if ($origin == 'user_course') {
         $course_info = CourseManager :: get_course_information($get_course_code);
         if (empty ($cidReq)) {
             $interbreadcrumb[] = array (
@@ -70,14 +71,14 @@ if (isset($_GET['details'])) {
             "name" => get_lang("Users")
         );
     } else
-        if (!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
+        if ($origin == 'tracking_course') {
             $course_info = CourseManager :: get_course_information($get_course_code);
             $interbreadcrumb[] = array (
                 "url" => "../tracking/courseLog.php?cidReq=".$get_course_code.'&id_session=' . api_get_session_id(),
                 "name" => get_lang("Tracking")
             );
         } else
-            if (!empty ($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+            if ($origin == 'resume_session') {
                 $interbreadcrumb[] = array (
                     'url' => "../session/session_list.php",
                     "name" => get_lang('SessionList')
@@ -113,7 +114,7 @@ if (isset($_GET['details'])) {
             }
     $nameTools = get_lang("DetailsStudentInCourse");
 } else {
-    if (!empty ($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+    if ($origin == 'resume_session') {
         $interbreadcrumb[] = array (
             'url' => "../session/session_list.php",
             "name" => get_lang('SessionList')
@@ -333,7 +334,7 @@ if (!empty($student_id)) {
     echo $send_mail;
     if (!empty($student_id) && !empty($_GET['course'])) {
         // Only show link to connection details if course and student were defined in the URL
-        echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&origin=' . Security :: remove_XSS($_GET['origin']) . '&cidReq='.Security::remove_XSS($_GET['course']).'&id_session='.$sessionId.'">'.
+        echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&origin=' . $origin. '&cidReq='.Security::remove_XSS($_GET['course']).'&id_session='.$sessionId.'">'.
             Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     if (api_can_login_as($student_id)) {
@@ -713,10 +714,10 @@ if (!empty($student_id)) {
                         <td >'.$scoretotal_display.'</td>';
 
                         if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$sessionId.'#infosStudent">
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.$origin.'&id_session='.$sessionId.'#infosStudent">
                             <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
                         } else {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$sessionId.'#infosStudent">
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&origin='.$origin.'&id_session='.$sessionId.'#infosStudent">
                             <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
                         }
                         echo '</tr>';
@@ -903,7 +904,7 @@ if (!empty($student_id)) {
                         }
                         $link = Display::url(
                             '<img src="../img/2rightarrow.gif" border="0" />',
-                            'lp_tracking.php?cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).$from.'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
+                            'lp_tracking.php?cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).$from.'&origin='.$origin.'&lp_id='.$learnpath['id'].'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
                         );
                         echo Display::tag('td', $link);
                     }
@@ -911,7 +912,7 @@ if (!empty($student_id)) {
                     if (api_is_allowed_to_edit()) {
                         echo '<td>';
                         if ($any_result === true) {
-                            echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
+                            echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.$origin.'&lp_id='.$learnpath['id'].'&student='.$user_info['user_id'].'&details=true&id_session='.$sessionId.'">';
                             echo Display::return_icon('clean.png',get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
                             echo '</a>';
                         }
@@ -1015,7 +1016,8 @@ if (!empty($student_id)) {
                 if (Database :: num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database :: result($result_last_attempt, 0, 0);
                     if ($count_attempts > 0)
-                        echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
+                        echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$sessionId.'&student='.$student_id.'&origin='.(empty($origin)?'tracking':$origin).'">
+                        <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
                 }
                 echo '</td>';
 

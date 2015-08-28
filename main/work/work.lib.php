@@ -3714,7 +3714,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
  *       'allow_text_assignment' => 0/1/2,
  * @todo Rename createAssignment or createWork, or something like that
  */
-function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
+function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
 {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -3725,7 +3725,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
     $course_id = $courseInfo['real_id'];
 
-    $directory = api_replace_dangerous_char($params['new_dir']);
+    $directory = api_replace_dangerous_char($formValues['new_dir']);
     $directory = disable_dangerous_file($directory);
     $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
 
@@ -3736,20 +3736,20 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
         $params = [
             'c_id' => $course_id,
             'url' => $dirName,
-            'title' => $params['new_dir'],
-            'description' => $params['description'],
+            'title' => $formValues['new_dir'],
+            'description' => $formValues['description'],
             'author' => '',
             'active' => '1',
             'accepted' => '1',
             'filetype' => 'folder',
             'post_group_id' => $group_id,
             'sent_date' => $today,
-            'qualification' => $params['qualification'] != '' ? $params['qualification'] : '',
+            'qualification' => $formValues['qualification'] != '' ? $formValues['qualification'] : '',
             'parent_id' => '',
             'qualificator_id' => '',
-            'weight' => $params['weight'],
+            'weight' => $formValues['weight'],
             'session_id' => $session_id,
-            'allow_text_assignment' => $params['allow_text_assignment'],
+            'allow_text_assignment' => $formValues['allow_text_assignment'],
             'contains_file' => 0,
             'user_id' => $user_id,
         ];
@@ -3770,7 +3770,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
                 $group_id
             );
 
-            updatePublicationAssignment($id, $params, $courseInfo, $group_id);
+            updatePublicationAssignment($id, $formValues, $courseInfo, $group_id);
 
             if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
                 send_email_on_homework_creation(api_get_course_id());
@@ -3974,7 +3974,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                     $courseInfo['code'],
                     LINK_STUDENTPUBLICATION,
                     $workId,
-                    $params['dir_name'],
+                    $params['new_dir'],
                     (float)$params['weight'],
                     (float)$params['qualification'],
                     $params['description'],

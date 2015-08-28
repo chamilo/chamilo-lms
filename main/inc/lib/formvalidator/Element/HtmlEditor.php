@@ -18,11 +18,11 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
     /**
      * Class Constructor
-     * @param string  $name
-     * @param string  $elementLabel HTML editor  label
+     * @param string $name
+     * @param string $elementLabel HTML editor  label
      * @param array  $attributes Attributes for the textarea
-     * @param array $config Optional configuration settings for the online editor.
-     * @return bool
+     * @param array  $config Optional configuration settings for the online editor.
+     *
      */
     public function __construct(
         $name = null,
@@ -57,8 +57,10 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
+
                 if (strlen(trim($value)) == 0) {
-                    // TODO: To be considered whether here to be added DOCTYPE, language and character set declarations.
+                    // TODO: To be considered whether here to be added DOCTYPE,
+                    // language and character set declarations.
                     $value = '<html><head><title></title></head><body></body></html>';
                     $this->setValue($value);
                 }
@@ -69,7 +71,15 @@ class HtmlEditor extends HTML_QuickForm_textarea
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
         } else {
-            return $this->buildEditor();
+            $styleCss = $this->editor->getConfigAttribute('style');
+
+            if ($styleCss) {
+               $style = true;
+            } else {
+               $style = false;
+            }
+
+            return $this->buildEditor($style);
         }
     }
 
@@ -83,15 +93,23 @@ class HtmlEditor extends HTML_QuickForm_textarea
     }
 
     /**
+     * @param bool $style
+     *
      * @return string
      */
-    public function buildEditor()
+    public function buildEditor($style = false)
     {
         $result = '';
         if ($this->editor) {
             $this->editor->value = $this->getValue();
             $this->editor->setName($this->getName());
-            $result = $this->editor->createHtml();
+
+            if ($style == true) {
+                $result = $this->editor->createHtmlStyle();
+            } else {
+                $result = $this->editor->createHtml();
+            }
+
         }
 
         return $result;

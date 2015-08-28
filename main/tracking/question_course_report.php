@@ -13,7 +13,7 @@ $this_section = "session_my_space";
 
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
-if(!$is_allowedToTrack) {
+if (!$is_allowedToTrack) {
 	Display :: display_header(null);
 	api_not_allowed();
 	Display :: display_footer();
@@ -32,6 +32,7 @@ if (api_is_platform_admin() ) {
 $global = true;
 
 $course_list = $course_select_list = array();
+$html_result = '';
 $course_select_list[0] = get_lang('None');
 
 $htmlHeadXtra[] = '
@@ -39,7 +40,7 @@ $htmlHeadXtra[] = '
 function load_courses() {
 	document.search_simple.submit();
 }
-</script>	';
+</script>';
 
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : null;
 
@@ -51,12 +52,6 @@ if (empty($session_id)) {
 
 foreach ($temp_course_list  as $temp_course_item) {
 	$course_item = CourseManager ::get_course_information($temp_course_item['code']);
-	$course_list[] = array(
-		'db_name' => $course_item['db_name'],
-		'code' => $course_item['code'],
-		'title' => $course_item['title'],
-		'visual_code' => $course_item['visual_code']
-	);
 	$course_select_list[$temp_course_item['code']]	= $course_item['title'];
 }
 

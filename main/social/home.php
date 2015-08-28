@@ -1,13 +1,12 @@
 <?php
 /* For licensing terms, see /chamilo_license.txt */
+
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  * @autor Alex Aragon <alex.aragon@beeznest.com> CSS Design and Template
  */
-/**
- * Initialization
- */
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -16,7 +15,7 @@ $user_id = api_get_user_id();
 $show_full_profile = true;
 // social tab
 $this_section = SECTION_SOCIAL;
-unset($_SESSION['this_section']); //for hmtl editor repository
+unset($_SESSION['this_section']);
 
 api_block_anonymous_users();
 
@@ -78,7 +77,10 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 //Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
-$social_search_block = Display::panel(UserManager::get_search_form(''), get_lang("SearchUsers"));
+$social_search_block = Display::panel(
+    UserManager::get_search_form(''),
+    get_lang("SearchUsers")
+);
 
 $results = $userGroup->get_groups_by_age(1, false);
 
@@ -87,7 +89,7 @@ $groups_newest = array();
 if (!empty($results)) {
     foreach ($results as $result) {
         $id = $result['id'];
-        $result['description'] = Security::remove_XSS( $result['description'], STUDENT, true );
+        $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
         $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
 
         if ($result['count'] == 1) {
@@ -191,7 +193,7 @@ if ($list > 0) {
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(
     $user_id,
-    $link_shared,
+    '',
     $show_full_profile
 );
 //Block Social Sessions
@@ -202,7 +204,7 @@ $sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['s
 if (count($sessionList) > 0) {
     $social_session_block = $sessionList;
 }
-    
+
 $social_group_block = Display::panel($social_group_block, get_lang('Group'));
 
 $tpl = new Template(get_lang('SocialNetwork'));

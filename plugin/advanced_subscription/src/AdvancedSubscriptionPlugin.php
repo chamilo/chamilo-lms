@@ -146,6 +146,60 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * Check if is allowed subscribe to open session
+     * @param array $params WS params
+     * @return boolean
+     */
+    public function isAllowedSubscribeToOpenSession($params)
+    {
+        $self = self::create();
+        $wsUrl = $self->get('ws_url');
+
+        if (!empty($wsUrl)) {
+            $client = new SoapClient(
+                null,
+                ['location' => $wsUrl, 'uri' => $wsUrl]
+            );
+            $userInfo = api_get_user_info($params['user_id'], false, false, true);
+
+            try {
+                $profileCompleted = $client->__soapCall(
+                    'getProfileCompletionPercentage',
+                    $userInfo['extra']['drupal_user_id']
+                );
+            } catch (\Exception $e) {
+                $profileCompleted = 0;
+            }
+        } elseif (isset($params['profile_completed'])) {
+            $profileCompleted = (float) $params['profile_completed'];
+        } else {
+            $profileCompleted = 0;
+        }
+
+        $profileCompletedMin = (float) $self->get('min_profile_percentage');
+
+        if ($profileCompleted < $profileCompletedMin) {
+            $this->errorMessages[] = sprintf(
+                $this->get_lang('AdvancedSubscriptionProfileIncomplete'),
+                $profileCompletedMin,
+                $profileCompleted
+            );
+        }
+
+        $vacancy = $self->getVacancy($params['session_id']);
+        $sessionInfo = api_get_session_info($params['session_id']);
+
+        if ($sessionInfo['nbr_users'] >= $vacancy) {
+            $this->errorMessages[] = sprintf(
+                $this->get_lang('SessionXWithoutVacancies'),
+                $sessionInfo['name']
+            );
+        }
+
+        return empty($this->errorMessages);
+    }
+
+    /**
      * Return true if user is allowed to be added to queue for session subscription
      * @param int $userId
      * @param array $params MUST have keys:
@@ -1023,6 +1077,43 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $url = api_get_path(WEB_CODE_PATH) . 'session/?session_id=' . intval($sessionId);
 
         return $url;
+    }
+
+    /**
+     * Get a url for subscribe a user in session
+     * @param int $userId The user ID
+     * @param array $params Params from WS
+     * @return string
+     */
+    public function getOpenSessionUrl($userId, $params)
+    {
+        $userIsSubscribed = SessionManager::isUserSubscribedAsStudent(
+            $params['session_id'],
+            $userId
+        );
+
+        if ($userIsSubscribed) {
+            return api_get_path(WEB_CODE_PATH)
+                . 'session/index.php?session_id='
+                . intval($params['session_id']);
+        }
+
+        $params['secret_key'] = null;
+        $params['user_id'] = null;
+        $params['user_field'] = null;
+        $params['is_connected'] = null;
+
+        $urlParams = array_merge($params, ['user_id' => $userId]);
+
+        $url = api_get_path(WEB_PLUGIN_PATH);
+        $url .= 'advanced_subscription/src/open_session.php?';
+        $url .= http_build_query($urlParams);
+
+        return 'javascript:void(window.open(\''
+            . $url
+            .'\',\'AdvancedSubscriptionTerms\', \'toolbar=no,location=no,'
+            . 'status=no,menubar=no,scrollbars=yes,resizable=yes,width=700px,'
+            . 'height=600px\', \'100\' ))';
     }
 
     /**

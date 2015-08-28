@@ -494,7 +494,10 @@ class HookAdvancedSubscription extends HookObserver implements
                     // Vacancy and queue status cases:
                     if ($isOpen) {
                         // Go to Course session
-                        $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
+                        $data['action_url'] = self::$plugin->getOpenSessionUrl($userId, $params);
+                        if (SessionManager::isUserSubscribedAsStudent($sessionId, $userId)) {
+                            $data['status'] = 10;
+                        }
                     } else {
                         try {
                             $isAllowed = self::$plugin->isAllowedToDoRequest($userId, $params);

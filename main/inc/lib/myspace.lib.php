@@ -202,11 +202,17 @@ class MySpace
 
         // getting all the courses of the user
         $sql = "SELECT * FROM $tbl_course_user
-                WHERE user_id = '".intval($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+                WHERE
+                    user_id = '".intval($user_id)."' AND
+                    relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
         $result = Database::query($sql);
-        while ($row = Database::fetch_row($result)) {
-            $courseCode = $row[0];
-            $courseInfo = api_get_course_info($courseCode);
+        while ($row = Database::fetch_array($result)) {
+            $courseInfo = api_get_course_info_by_id($row['c_id']);
+            if (empty($courseInfo)) {
+                continue;
+            }
+
+            $courseCode = $courseInfo['code'];
             $courseId = $courseInfo['real_id'];
 
             $return .= '<tr>';

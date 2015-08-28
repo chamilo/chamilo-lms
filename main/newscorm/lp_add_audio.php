@@ -135,7 +135,7 @@ if (!empty($file)) {
 } else {
     $form->addElement('file', 'file');
     $form->addElement('hidden', 'id', $lp_item_id);
-    $form->addElement('button', 'submit', get_lang('Ok'));
+    $form->addButtonSave(get_lang('Save'));
 }
 $form->addElement('header', get_lang('Or'));
 

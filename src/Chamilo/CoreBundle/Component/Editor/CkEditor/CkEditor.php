@@ -36,7 +36,23 @@ class CkEditor extends Editor
      *
      * @return string
      */
+
     public function createHtml()
+    {
+        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
+                 '.$this->value.'
+                 </textarea>';
+        $html .= $this->editorReplace();
+
+        return $html;
+    }
+
+    /**
+     * Return the HTML code required to run editor.
+     *
+     * @return string
+     */
+    public function createHtmlStyle()
     {
         $style = '';
         if (trim($this->value) == '<html><head><title></title></head><body></body></html>') {
@@ -101,11 +117,11 @@ class CkEditor extends Editor
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
 
-            $image = $this->urlGenerator->generate(
+            /*$image = $this->urlGenerator->generate(
                 'get_document_template_action',
                 array('file' => $image),
                 UrlGenerator::ABSOLUTE_URL
-            );
+            );*/
 
             $content = str_replace($search, $replace, $template->getContent());
 

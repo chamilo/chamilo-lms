@@ -5860,17 +5860,36 @@ class learnpath
                             ['title' => get_lang('LearnpathEditModule')]
                         );
 
-                        $forumIcon .= Display::toolbarButton(
-                            null,
-                            api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
-                                'action' => 'create_forum',
-                                'id' => $arrLP[$i]['id'],
-                                'lp_id' => $this->lp_id
-                            ]),
-                            'comments-o',
-                            'default',
-                            ['title' => get_lang('CreateForum')]
-                        );
+                        if ($this->items[$arrLP[$i]['id']]->getForumThread(
+                            $this->course_int_id,
+                            $this->lp_session_id
+                        )) {
+                            $forumIcon .= Display::toolbarButton(
+                                null,
+                                '#',
+                                'comments-o',
+                                'success',
+                                [
+                                    'title' => get_lang('CreateForum'),
+                                    'class' => 'disabled'
+                                ]
+                            );
+                        } else {
+                            $forumIconUrl = api_get_self() . '?'
+                                . api_get_cidreq() . '&'
+                                . http_build_query([
+                                    'action' => 'create_forum',
+                                    'id' => $arrLP[$i]['id'],
+                                    'lp_id' => $this->lp_id
+                                ]);
+                            $forumIcon .= Display::toolbarButton(
+                                null,
+                                $forumIconUrl,
+                                'comments-o',
+                                'default',
+                                ['title' => get_lang('CreateForum')]
+                            );
+                        }
                     } else {
                         $edit_icon .= Display::toolbarButton(
                             null,
@@ -7880,9 +7899,9 @@ class learnpath
 
                         $form->addButtonSave($text, 'submit_button');
                         $renderer = $form->defaultRenderer();
-                        $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
-                        $form->addElement('html', '<div>');
-                        $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
+                        $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
+                        $form->addElement('html', '<div class="editor-lp">');
+                        $form->addHtmlEditor('content_lp', null, null, true, $editor_config, true);
                         $form->addElement('html', '</div>');
                         $defaults['content_lp'] = $content;
                     }
@@ -8556,7 +8575,7 @@ class learnpath
         $form = new FormValidator('small_form', 'post', $url);
         $form->addElement('header', $title);
         $form->addElement('text', 'title', get_lang('Title'));
-        $form->addElement('button', 'submit_button', get_lang('Save'));
+        $form->addButtonSave(get_lang('Save'), 'submit_button');
         $form->addElement('hidden', 'id', $data['id']);
         $form->addElement('hidden', 'parent', $data['parent_item_id']);
         $form->addElement('hidden', 'previous', $data['previous_item_id']);

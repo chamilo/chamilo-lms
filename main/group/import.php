@@ -13,12 +13,6 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 $nameTools = get_lang('Import');
-
-/*	Libraries */
-
-include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-
 $interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 
 Display::display_header($nameTools, 'Group');

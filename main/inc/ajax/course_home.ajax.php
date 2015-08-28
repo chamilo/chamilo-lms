@@ -75,8 +75,8 @@ switch ($action) {
 				exit;
 			}
 		}
-		echo Display::tag('h2', $course_info['name']);
-		echo '<br />';
+		//echo Display::tag('h2', $course_info['name']);
+		//echo '<br />';
 
 		$sql = "SELECT * FROM $tbl_course_description
 		        WHERE c_id = ".$course_info['real_id']." AND session_id = 0

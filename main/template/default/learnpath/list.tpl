@@ -15,7 +15,7 @@
         {{ lp_data.category.getName() }}
 
         {% if lp_data.category.getId() > 0 and is_allowed_to_edit %}
-            <a href="{{ 'lp_controller.php?' ~ web_cid_query ~ '&action=add_lp_category&id=' ~ lp_data.category.getId() }}" title="{{ "Edit"|get_lang }}">
+            <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=add_lp_category&id=' ~ lp_data.category.getId() }}" title="{{ "Edit"|get_lang }}">
                 <img src="{{ "edit.png"|icon }}" alt="{{ "Edit"|get_lang }}">
             </a>
 
@@ -24,7 +24,7 @@
                     <img src="{{ "up_na.png"|icon }}" alt="{{ "Move"|get_lang }}">
                 </a>
             {% else %}
-                <a href="{{ 'lp_controller.php?' ~ web_cid_query ~ '&action=move_up_category&id=' ~ lp_data.category.getId() }}" title="{{ "Move"|get_lang }}">
+                <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_up_category&id=' ~ lp_data.category.getId() }}" title="{{ "Move"|get_lang }}">
                     <img src="{{ "up.png"|icon }}" alt="{{ "Move"|get_lang }}">
                 </a>
             {% endif %}
@@ -34,12 +34,12 @@
                     <img src="{{ "down_na.png"|icon }}" alt="{{ "Move"|get_lang }}">
                 </a>
             {% else %}
-                <a href="{{ 'lp_controller.php?' ~ web_cid_query ~ '&action=move_down_category&id=' ~ lp_data.category.getId() }}" title="{{ "Move"|get_lang }}">
+                <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query ~ '&action=move_down_category&id=' ~ lp_data.category.getId() }}" title="{{ "Move"|get_lang }}">
                     <img src="{{ "down.png"|icon }}" alt="{{ "Move"|get_lang }}">
                 </a>
             {% endif %}
 
-            <a href="{{ 'lp_controller.php?' ~ web_cid_query  ~ '&action=delete_lp_category&id=' ~ lp_data.category.getId() }}" title="{{ "Delete"|get_lang }}">
+            <a href="{{ 'lp_controller.php?' ~ _p.web_cid_query  ~ '&action=delete_lp_category&id=' ~ lp_data.category.getId() }}" title="{{ "Delete"|get_lang }}">
                 <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|get_lang }}">
             </a>
         {% endif %}
@@ -126,7 +126,7 @@
         <h2>{{ "LearningPaths"|get_lang }}</h2>
         <img src="{{ "scorms.png"|icon(64) }}" width="64" height="64">
         <div class="controls">
-            <a href="{{ web_self ~ "?" ~ web_cid_query ~ "&action=add_lp" }}" class="btn btn-default">
+            <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=add_lp" }}" class="btn btn-default">
                 {{ "LearnpathAddLearnpath"|get_lang }}
             </a>
         </div>

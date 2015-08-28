@@ -3453,7 +3453,6 @@ $FirstUseTip = "Kad pristupite vašem portalu po prvi put, najbolji način da ga
 $Version_ = "Verzija";
 $UpdateFromLMSVersion = "Nadogradnja od Chamilo-a";
 $PleaseSelectInstallationProcessLanguage = "Molim odaberite jezik koji želite upotrebljavati prilikom instalacije";
-$ReadTheInstallGuide = "pročitaj upute za instalaciju";
 $HereAreTheValuesYouEntered = "Ovo su vrijednosti koje ste upisali";
 $PrintThisPageToRememberPassAndOthers = "Ispiši ovu stranicu da zapamtite vašu lozinku i ostale postavke";
 $TheInstallScriptWillEraseAllTables = "Instalacijska skripta će obrisati sva polja odabrane baze podataka. Preporučavamo vam da napravite cjelovitu sigurnosnu kopiju vašeg sustava prije potvrde ovog zadnjeg instalacijskog koraka.";

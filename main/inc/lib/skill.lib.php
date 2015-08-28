@@ -612,7 +612,8 @@ class Skill extends Model
                     ss.parent_id,
                     ss.relation_type,
                     s.icon,
-                    s.short_code
+                    s.short_code,
+                    s.status
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_skill} ss
                 ON (s.id = ss.skill_id) $id_condition
@@ -955,7 +956,7 @@ class Skill extends Model
                     // 2nd node
                     $skills[$skill_id] = $skill_info;
                     // Uncomment code below to hide the searched skill
-                    $skills[$skill_id]['data']['parent_id'] =  $skill_info['parent_id'];
+                    $skills[$skill_id]['data']['parent_id'] =  $skill_info['extra']['parent_id'];
                     $skills[$skill_id]['parent_id'] =  1;
                 }
             }
@@ -979,9 +980,14 @@ class Skill extends Model
 
                 // If a short code was defined, send the short code to replace
                 // skill name (to shorten the text in the wheel)
-                if (!empty($skill['short_code'])) {
-                    $skill['data']['name'] = $skill['short_code'];
+                if (
+                    !empty($skill['short_code']) &&
+                    api_get_setting('show_full_skill_name_on_skill_wheel') === 'false'
+                ) {
+                    $skill['data']['short_code'] = $skill['short_code'];
                 }
+
+                $skill['data']['name'] = $skill['name'];
 
                 // In order to paint all members of a family with the same color
                 if (empty($skill_id)) {

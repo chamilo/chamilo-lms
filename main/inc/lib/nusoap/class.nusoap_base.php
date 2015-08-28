@@ -141,7 +141,7 @@ class nusoap_base {
 	* @access   public
 	*/
 	var $XMLSchemaVersion = 'http://www.w3.org/2001/XMLSchema';
-	
+
     /**
 	* charset encoding for outgoing messages
 	*
@@ -408,7 +408,7 @@ class nusoap_base {
 		$this->debug("in serialize_val: name=$name, type=$type, name_ns=$name_ns, type_ns=$type_ns, use=$use, soapval=$soapval");
 		$this->appendDebug('value=' . $this->varDump($val));
 		$this->appendDebug('attributes=' . $this->varDump($attributes));
-		
+
     	if (is_object($val) && get_class($val) == 'soapval' && (! $soapval)) {
     		$this->debug("serialize_val: serialize soapval");
         	$xml = $val->serialize($use);
@@ -982,7 +982,7 @@ function iso8601_to_timestamp($datestr){
 function usleepWindows($usec)
 {
 	$start = gettimeofday();
-	
+
 	do
 	{
 		$stop = gettimeofday();

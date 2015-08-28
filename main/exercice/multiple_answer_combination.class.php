@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Class MultipleAnswer
  *
@@ -11,7 +12,6 @@
  **/
 class MultipleAnswerCombination extends Question
 {
-
 	static $typePicture = 'mcmac.png';
 	static $explanationLangVar = 'MultipleSelectCombination';
 
@@ -27,7 +27,7 @@ class MultipleAnswerCombination extends Question
 
 	/**
      * function which redifines Question::createAnswersForm
-     * @param $form FormValidator
+     * @param FormValidator $form
      * @param the answers number to display
      */
     function createAnswersForm($form)

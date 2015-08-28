@@ -4333,7 +4333,6 @@ $FirstUseTip = "Cuando entra en su plataforma por primera vez, la mejor manera d
 $Version_ = "Versión";
 $UpdateFromLMSVersion = "Actualización de Chamilo";
 $PleaseSelectInstallationProcessLanguage = "Por favor, seleccione el idioma que desea utilizar durante la instalación";
-$ReadTheInstallGuide = "leer la guía de instalación";
 $HereAreTheValuesYouEntered = "Éstos son los valores que ha introducido";
 $PrintThisPageToRememberPassAndOthers = "Imprima esta página para recordar su contraseña y otras configuraciones";
 $TheInstallScriptWillEraseAllTables = "El programa de instalación borrará todas las tablas de las bases de datos seleccionadas. Le recomendamos encarecidamente que realice una copia de seguridad completa de todas ellas antes de confirmar este último paso de la instalación.";

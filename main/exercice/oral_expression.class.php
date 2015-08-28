@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *  Class OralExpression
  *	This class allows to instantiate an object of type FREE_ANSWER,

@@ -103,7 +103,7 @@ $renderer =& $form->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span> ');
 $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addElement('button', 'submit', get_lang('Search'));
-$content .= $form->return_form();
+$content .= $form->returnForm();
 
 // Create the sortable table with class information
 $table = new SortableTable('classes', 'get_number_of_classes', 'get_class_data', 1);

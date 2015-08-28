@@ -1,0 +1,47 @@
+{
+    "id": 1,
+    "name": "Development",
+    "description": "Platform ready for development and testing",
+    "params": [
+        {
+            "variable": "default_document_quotum",
+            "subkey": "",
+            "selected_value": "524288000"
+        },
+        {
+            "variable": "server_type",
+            "subkey": "",
+            "selected_value": "test"
+        },
+        {
+            "variable": "send_email_to_admin_when_create_course",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "allow_use_sub_language",
+            "subkey": "",
+            "selected_value": "true"
+        },
+        {
+            "variable": "hide_dltt_markup",
+            "subkey": "",
+            "selected_value": "false"
+        },
+        {
+            "variable": "profile",
+            "subkey": "email",
+            "selected_value": "true"
+        },
+        {
+            "variable": "profile",
+            "subkey": "name",
+            "selected_value": "true"
+        },
+        {
+            "variable": "profile",
+            "subkey": "phone",
+            "selected_value": "true"
+        }
+    ]
+}

@@ -314,7 +314,7 @@ class UserManager
             }
         } else {
             $expirationDate = api_get_utc_datetime($expirationDate);
-            $expirationDate = new \DateTime($expirationDate);
+            $expirationDate = new \DateTime($expirationDate, new DateTimeZone('UTC'));
         }
 
         $userManager = self::getManager();
@@ -848,7 +848,10 @@ class UserManager
 
         if (!empty($expiration_date)) {
             $expiration_date = api_get_utc_datetime($expiration_date);
-            $expiration_date = new \DateTime($expiration_date);
+            $expiration_date = new \DateTime(
+                $expiration_date,
+                new DateTimeZone('UTC')
+            );
         }
 
         $user

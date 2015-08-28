@@ -9,7 +9,7 @@
 ob_start();
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+
 api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
@@ -87,10 +87,13 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     $a_sessions = Tracking::get_sessions_coached_by_user($id_coach);
 }
 
-$form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/session.php');
+$form = new FormValidator(
+    'search_course',
+    'get',
+    api_get_path(WEB_CODE_PATH).'mySpace/session.php'
+);
 $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addButtonSearch(get_lang('Search'));
-$form->addElement('hidden', 'session_id', $sessionId);
 $keyword = '';
 if ($form->validate()) {
     $keyword = $form->getSubmitValue('keyword');

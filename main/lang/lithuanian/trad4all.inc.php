@@ -2858,7 +2858,6 @@ $FirstUseTip = "When you enter your campus for the first time, the best way to u
 $Version_ = "Version";
 $UpdateFromLMSVersion = "Update from Chamilo";
 $PleaseSelectInstallationProcessLanguage = "Please select the language you'd like to use when installing";
-$ReadTheInstallGuide = "read the installation guide";
 $HereAreTheValuesYouEntered = "Here are the values you entered";
 $PrintThisPageToRememberPassAndOthers = "Print this page to remember your password and other settings";
 $TheInstallScriptWillEraseAllTables = "The install script will erase all tables of the selected databases. We heavily recommend you do a full backup of them before confirming this last install step.";

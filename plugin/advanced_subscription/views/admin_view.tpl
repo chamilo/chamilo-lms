@@ -25,7 +25,7 @@
                 {{ "Vacancies" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
             <p class="separate-badge">
                 <span class="badge badge-info">{{ session.nbr_users }}</span>
-                {{ 'UsersNumber'|get_lang }}
+                {{ 'CountOfSubscribedUsers'|get_lang }}
             </p>
             <p class="separate-badge">
                 <span class="badge badge-recom">{{ session.recommended_number_of_participants }}</span>

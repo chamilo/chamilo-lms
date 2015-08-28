@@ -3058,7 +3058,6 @@ $FirstUseTip = "När du kommer till din kursplats första gången är det enklas
 $Version_ = "Version";
 $UpdateFromLMSVersion = "Uppdatera från Chamilo";
 $PleaseSelectInstallationProcessLanguage = "Välj det språk du vill använda under installationen";
-$ReadTheInstallGuide = "Läs installationsguiden";
 $HereAreTheValuesYouEntered = "Här är värdena du skrev in";
 $PrintThisPageToRememberPassAndOthers = "Skriv ut den här sidan och spara den med ditt lösenord och andra inställningar";
 $TheInstallScriptWillEraseAllTables = "Installationsprogrammet kommer ta bort alla tabeller i den valda databasen. Vi rekommenderar verkligen att du gör en fullständig säkerhetskopia av dem innan du bekräftar detta sista installationssteg, annars förlorar du alla data i tabellerna.";

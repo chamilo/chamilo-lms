@@ -34,7 +34,7 @@ class MultipleAnswerTrueFalse extends Question
     {
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
         // The previous default value was 2. See task #1759.
-        $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
+        $nb_answers += isset($_POST['lessAnswers']) ? -1 : isset($_POST['moreAnswers']) ? 1 : 0;
 
         $course_id = api_get_course_int_id();
         $obj_ex = $_SESSION['objExercise'];
@@ -104,14 +104,18 @@ class MultipleAnswerTrueFalse extends Question
                 'comment[' . $i . ']'
             );
 
-            $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
+            $answer_number = $form->addElement(
+                'text',
+                'counter['.$i.']',
+                null,
+                'value="'.$i.'"'
+            );
+
             $answer_number->freeze();
 
             if (is_object($answer)) {
                 $defaults['answer[' . $i . ']'] = $answer->answer[$i];
                 $defaults['comment[' . $i . ']'] = $answer->comment[$i];
-                //$defaults['weighting['.$i.']']  = float_format($answer -> weighting[$i], 1);
-
                 $correct = $answer->correct[$i];
                 $defaults['correct[' . $i . ']'] = $correct;
 
@@ -119,9 +123,7 @@ class MultipleAnswerTrueFalse extends Question
                 if (!empty($option_data)) {
                     foreach ($option_data as $id => $data) {
                         $form->addElement('radio', 'correct[' . $i . ']', null, null, $id);
-
                         $j++;
-
                         if ($j == 3) {
                             break;
                         }
@@ -153,7 +155,11 @@ class MultipleAnswerTrueFalse extends Question
                     'comment[' . $i . ']',
                     null,
                     array(),
-                    array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
+                    array(
+                        'ToolbarSet' => 'TestProposedAnswer',
+                        'Width' => '100%',
+                        'Height' => '100',
+                    )
                 );
             }
 
@@ -179,17 +185,17 @@ class MultipleAnswerTrueFalse extends Question
         $wrongInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
         $wrongInputTemplate .= '</td>';
 
-        $doubtScoreInputTempalte = '<td>' . get_lang('DoubtScore') . '<br>{element}';
-        $doubtScoreInputTempalte .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
-        $doubtScoreInputTempalte .= '</td>';
-        $doubtScoreInputTempalte .= '</tr>';
-        $doubtScoreInputTempalte .= '</table>';
-        $doubtScoreInputTempalte .= '</div>';
-        $doubtScoreInputTempalte .= '</div>';
+        $doubtScoreInputTemplate = '<td>' . get_lang('DoubtScore') . '<br>{element}';
+        $doubtScoreInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
+        $doubtScoreInputTemplate .= '</td>';
+        $doubtScoreInputTemplate .= '</tr>';
+        $doubtScoreInputTemplate .= '</table>';
+        $doubtScoreInputTemplate .= '</div>';
+        $doubtScoreInputTemplate .= '</div>';
 
         $renderer->setElementTemplate($correctInputTemplate, 'option[1]');
         $renderer->setElementTemplate($wrongInputTemplate, 'option[2]');
-        $renderer->setElementTemplate($doubtScoreInputTempalte, 'option[3]');
+        $renderer->setElementTemplate($doubtScoreInputTemplate, 'option[3]');
 
         // 3 scores
         $form->addElement('text', 'option[1]', get_lang('Correct'), array('class' => 'span1', 'value' => '1'));
@@ -202,9 +208,10 @@ class MultipleAnswerTrueFalse extends Question
 
         $form->addElement('hidden', 'options_count', 3);
 
-        //Extra values True, false,  Dont known
+        // Extra values True, false,  Dont known
         if (!empty($this->extra)) {
             $scores = explode(':', $this->extra);
+
 
             if (!empty($scores)) {
                 for ($i = 1; $i <= 3; $i++) {
@@ -213,7 +220,7 @@ class MultipleAnswerTrueFalse extends Question
             }
         }
 
-        global $text, $class;
+        global $text;
 
         if ($obj_ex->edit_exercise_in_lp == true) {
             // setting the save button here and not in the question class.php
@@ -259,7 +266,12 @@ class MultipleAnswerTrueFalse extends Question
             }
         } else {
             for ($i=1 ; $i <= 3 ; $i++) {
-        	   $last_id = Question::saveQuestionOption($this->id, $this->options[$i], $course_id, $i);
+                $last_id = Question::saveQuestionOption(
+                    $this->id,
+                    $this->options[$i],
+                    $course_id,
+                    $i
+                );
                $correct[$i] = $last_id;
             }
         }
@@ -289,7 +301,8 @@ class MultipleAnswerTrueFalse extends Question
             $comment    = trim($form -> getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
             if (empty($options)) {
-                //If this is the first time that the question is created when change the default values from the form 1 and 2 by the correct "option id" registered
+                //If this is the first time that the question is created when
+                // change the default values from the form 1 and 2 by the correct "option id" registered
                 $goodAnswer = $sorted_by_position[$goodAnswer]['id'];
             }
     	    $questionWeighting += $extra_values[0]; //By default 0 has the correct answers

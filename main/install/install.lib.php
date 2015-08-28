@@ -553,7 +553,7 @@ function step_active($param)
 {
     global $current_step;
     if ($param == $current_step) {
-        echo 'class="current_step" ';
+        echo 'class="current-step" ';
     }
 }
 
@@ -677,7 +677,7 @@ function display_requirements(
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
-    echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
+    echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallationGuide').'</a>.<br />'."\n";
 
     if ($installType == 'update') {
         echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';

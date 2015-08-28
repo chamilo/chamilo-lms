@@ -1,4 +1,5 @@
-{{ "HelloXAsYouCanSeeYourCourseListIsEmpty"|get_lang | format(_u.complete_name) }}
+<div class="normal-message">
+  {{ "HelloXAsYouCanSeeYourCourseListIsEmpty"|get_lang | format(_u.complete_name) }}
 
 {% if count_courses  == 0 %}
     {{ "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"|get_lang }}
@@ -16,3 +17,4 @@
     {% endif %}
 
 {% endif %}
+</div>

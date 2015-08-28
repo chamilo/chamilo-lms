@@ -25,11 +25,11 @@ class FreeAnswer extends Question
 
     /**
      * function which redifines Question::createAnswersForm
-     * @param the formvalidator instance
+     * @param formvalidator $form
      */
     function createAnswersForm($form)
     {
-        $form->addElement('text', 'weighting', get_lang('Weighting'), array('class' => 'span1'));
+        $form->addElement('text', 'weighting', get_lang('Weighting'));
         global $text, $class;
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
@@ -43,8 +43,8 @@ class FreeAnswer extends Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question
-     * @param FormValidator
+     * abstract function which creates the form to create/edit the answers of the question
+     * @param FormValidator $form
      */
     function processAnswersCreation($form)
     {

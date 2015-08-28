@@ -221,7 +221,7 @@ function save_item(
              *   the LMS will leave the cmi.core.lesson_status as "completed"
              */
             $masteryScore = $myLPI->get_mastery_score();
-            if ($masteryScore == -1 or empty($masteryScore)) {
+            if ($masteryScore == -1 || empty($masteryScore)) {
                 $masteryScore = false;
             }
             $credit = $myLPI->get_credit();

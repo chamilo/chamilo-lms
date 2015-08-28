@@ -714,7 +714,6 @@ class Display
 
         $image = trim($image);
         $theme = 'themes/' . api_get_visual_theme() . '/icons/';
-        $icon = '';
         $size_extra = '';
 
         if (isset($size)) {
@@ -768,6 +767,7 @@ class Display
                 $img = "$img $alt_text";
             }
         }
+
         return $img;
     }
 
@@ -776,7 +776,7 @@ class Display
      *
      * @param string $image the filename of the file (in the main/img/ folder
      * @param string $alt_text the alt text (probably a language variable)
-     * @param array additional attributes (for instance height, width, onclick, ...)
+     * @param array  $additional_attributes (for instance height, width, onclick, ...)
      * @author Julio Montoya 2010
      */
     public static function img($image_path, $alt_text = '', $additional_attributes = array())
@@ -909,8 +909,7 @@ class Display
         $extra_attributes = array(),
         $show_blank_item = true,
         $blank_item_text = null
-    )
-    {
+    ) {
         $html = '';
         $extra = '';
         $default_id = 'id="' . $name . '" ';
@@ -1676,7 +1675,7 @@ class Display
         return self::page_subheader($title, $second_title);
     }
 
-    public static function page_subheader($title, $second_title = null, $size = 'h4')
+    public static function page_subheader($title, $second_title = null, $size = 'h3')
     {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
@@ -1687,12 +1686,12 @@ class Display
 
     public static function page_subheader2($title, $second_title = null)
     {
-        return self::page_header($title, $second_title, 'h3');
+        return self::page_header($title, $second_title, 'h4');
     }
 
     public static function page_subheader3($title, $second_title = null)
     {
-        return self::page_header($title, $second_title, 'h4');
+        return self::page_header($title, $second_title, 'h5');
     }
 
     /**

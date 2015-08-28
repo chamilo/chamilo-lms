@@ -3142,7 +3142,7 @@ class learnpath
             $toc_list = $this->get_toc();
         }
         //$html = '<div id="scorm_title" class="scorm-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
-        $html .= '<div class="scorm-body">';
+        $html = '<div class="scorm-body">';
         $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
 
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
@@ -8275,7 +8275,7 @@ class learnpath
         $form = new FormValidator('small_form', 'post', $url);
         $form->addElement('header', $title);
         $form->addElement('text', 'title', get_lang('Title'));
-        $form->addElement('button', 'submit_button', get_lang('Save'));
+        $form->addButtonSave(get_lang('Save'), 'submit_button');
         $form->addElement('hidden', 'id', $data['id']);
         $form->addElement('hidden', 'parent', $data['parent_item_id']);
         $form->addElement('hidden', 'previous', $data['previous_item_id']);

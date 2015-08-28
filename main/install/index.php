@@ -66,10 +66,25 @@ if (!array_key_exists($install_language, get_language_folder_list())) {
     $install_language = 'english';
 }
 
+$installationGuideLink = '../../documentation/installation_guide.html';
+
 // Loading language files.
 require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
 if ($install_language != 'english') {
     include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
+    switch ($install_language) {
+        case 'french':
+            $installationGuideLink = '../../documentation/installation_guide_fr_FR.html';
+            break;
+        case 'spanish':
+            $installationGuideLink = '../../documentation/installation_guide_es_ES.html';
+            break;
+        case 'italian':
+            $installationGuideLink = '../../documentation/installation_guide_it_IT.html';
+            break;
+        default:
+            break;
+    }
 }
 
 // These global variables must be set for proper working of the function get_lang(...) during the installation.
@@ -270,6 +285,8 @@ if (!$_POST) {
     $current_step = 5;
 } elseif (!empty($_POST['step5'])) {
     $current_step = 6;
+} elseif (@$_POST['step6']) {
+    $current_step = 7;
 }
 
 // Managing the $encryptPassForm
@@ -376,7 +393,7 @@ if ($encryptPassForm == '1') {
     <div class="panel-body">
     <div class="row">
         <div class="col-md-4">
-            <div class="well">
+            <div class="well install-steps-menu">
                 <ol>
                     <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
                     <li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
@@ -388,7 +405,7 @@ if ($encryptPassForm == '1') {
                 </ol>
             </div>
             <div id="note">
-                <a class="btn btn-default" href="../../documentation/installation_guide.html" target="_blank">
+                <a class="btn btn-default" href="<?php echo $installationGuideLink; ?>" target="_blank">
                     <i class="fa fa-file-text-o"></i> <?php echo get_lang('ReadTheInstallationGuide'); ?>
                 </a>
             </div>
@@ -589,13 +606,13 @@ if (@$_POST['step2']) {
     <?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
     <?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
     <?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
-    <?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br />
+    <?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br /><br />
     <?php
     if ($installType == 'new') {
         echo Display::display_warning_message(
-            '<h3 style="text-align: center">'.get_lang(
+            '<h4 style="text-align: center">'.get_lang(
                 'Warning'
-            ).'</h3><br />'.get_lang('TheInstallScriptWillEraseAllTables'),
+            ).'</h4>'.get_lang('TheInstallScriptWillEraseAllTables'),
             false
         );
     }

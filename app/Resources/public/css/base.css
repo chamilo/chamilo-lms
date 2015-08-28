@@ -947,6 +947,7 @@ button.next.disabled {
     border-radius: 10px;
     border-width: 1px;
     border-style: solid;
+    border-color: #999;
     padding:6px;
 }
 .confirmation-message img, .error-message img, .normal-message img, .warning-message img {
@@ -5675,6 +5676,10 @@ div#chat-remote-video video {
   font-size: 12px;
   color: #666666;
 }
+.install-steps-menu li.current-step{
+    font-weight: bold;
+}
+
 #about-session .description-course{
   padding: 10px;
   color: #666666;

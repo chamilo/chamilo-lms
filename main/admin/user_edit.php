@@ -17,6 +17,8 @@ api_protect_super_admin($user_id, null, true);
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
+$userInfo = api_get_user_info($user_id);
+
 $htmlHeadXtra[] = '
 <script>
 var is_platform_id = "'.$is_platform_admin.'";
@@ -169,6 +171,13 @@ if (api_get_setting('login_is_email') != 'true') {
     $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
 
+if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
+    $form->addLabel(
+        get_lang('ExternalAuthentication'),
+        $userInfo['auth_source']
+    );
+}
+
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
 $nb_ext_auth_source_added = 0;
@@ -202,7 +211,6 @@ $group[] = $form->createElement(
     array('onkeydown' => 'javascript: password_switch_radio_button();')
 );
 $form->addGroup($group, 'password', null, '', false);
-//$form->addGroupRule('password', 'password', 'required', null, 1);
 
 // Status
 $status = array();
@@ -258,7 +266,7 @@ if (!$user_data['platform_admin']) {
 	// Expiration Date
 	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 	$group = array ();
-	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
+	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
 	$group[] = $form->createElement('DateTimePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
 	$form->addGroup($group, 'max_member_group', null, '', false);
 
@@ -311,7 +319,6 @@ if ($form->validate()) {
 	if ($user['status'] == DRH && $is_user_subscribed_in_course) {
 		$error_drh = true;
 	} else {
-        $userInfo = api_get_user_info($user_id);
 		$picture_element = $form->getElement('picture');
 		$picture = $picture_element->getValue();
 
@@ -413,7 +420,6 @@ $content = null;
 $bigImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);
 $normalImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
 $content .= '<a class="expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
-
 
 // Display form
 $content .= $form->returnForm();

@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -205,7 +204,7 @@ class MatchingDraggable extends Question
 
     /**
      * Process the creation of answers
-     * @param type $form
+     * @param FormValidator $form
      */
     public function processAnswersCreation($form)
     {
@@ -258,5 +257,4 @@ class MatchingDraggable extends Question
 
         return $header;
     }
-
 }

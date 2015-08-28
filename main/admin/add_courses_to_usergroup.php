@@ -102,7 +102,7 @@ $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
 }
-$searchForm->addElement('button', 'submit', get_lang('Search'));
+$searchForm->addButtonSearch();
 
 $filterData = array();
 if ($searchForm->validate()) {

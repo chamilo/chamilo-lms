@@ -128,7 +128,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
                     <div class="office">
                     <h2 class="title">Welcome to the Chamilo installation wizard</h2>
-                    <p class="text">Let\'s start hunting knowledge down with Chamilo LMS. The installation wizard will guide you through the Chamilo installation and configuration process.</p>
+                    <p class="text">Let\'s start hunting skills down with Chamilo LMS! This wizard will guide you through the Chamilo installation and configuration process.</p>
                           <p class="download-info">
                               <button class="btn btn-primary btn-lg" type="submit" value="INSTALL Chamilo" ><i class="fa fa-download"></i> Install Chamilo</button>
                               <a class="btn btn-success btn-lg" href="'.$installation_guide_url.'" target="_blank"> <i class="fa fa-file-text-o"></i> '.$read_installation_guide.'</a>

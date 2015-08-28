@@ -213,6 +213,7 @@ EOT;
      * @param string $name
      * @param string $label
      * @param array $attributes
+     *
      * @return mixed
      */
     public function addDatePicker($name, $label, $attributes = [])
@@ -224,6 +225,7 @@ EOT;
      * @param string $name
      * @param string $label
      * @param array $attributes
+     *
      * @return mixed
      */
     public function addDateTimePicker($name, $label, $attributes = [])
@@ -348,6 +350,7 @@ EOT;
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
      * @param array $attributes Additional attributes
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonCreate($label, $name = 'submit', $createElement = false, $attributes = array())
@@ -390,6 +393,7 @@ EOT;
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonDelete($label, $name = 'submit', $createElement = false)
@@ -411,6 +415,7 @@ EOT;
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonSend($label, $name = 'submit', $createElement = false)
@@ -439,6 +444,7 @@ EOT;
         if (empty($label)) {
             $label = get_lang('Search');
         }
+
         return $this->addButton($name, $label, 'search', 'default');
     }
 
@@ -562,6 +568,7 @@ EOT;
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonUpload($label, $name = 'submit', $createElement = false)
@@ -583,6 +590,7 @@ EOT;
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonDownload($label, $name = 'submit', $createElement = false)
@@ -604,6 +612,7 @@ EOT;
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonPreview($label, $name = 'submit', $createElement = false)
@@ -625,6 +634,7 @@ EOT;
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonCopy($label, $name = 'submit', $createElement = false)
@@ -745,9 +755,10 @@ EOT;
      * Adds a HTML-editor to the form
      * @param string $name
      * @param string $label The label for the form-element
-     * @param bool   $required	(optional) Is the form-element required (default=true)
+     * @param bool   $required (optional) Is the form-element required (default=true)
      * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page.
      * @param array  $config (optional) Configuration settings for the online editor.
+     * @param bool   $style
      */
     public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = array(), $style = false)
     {
@@ -767,7 +778,7 @@ EOT;
         if ($fullPage) {
             $config['fullPage'] = true;
         }
-        
+
         if ($element->editor) {
             $element->editor->processConfig($config);
         }

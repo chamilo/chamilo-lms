@@ -130,34 +130,33 @@ $code = isset($code) ? $code : null;
         <?php      
                    
             $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-            $action = 'display_courses';
-            $pageLength = 10;
-            $pageCurrent = 1;
-                   
-                $form = '<form action="'.$webAction.'" method="GET" class="form-horizontal">';
-                $form .= '<input type="hidden" name="action" value="' . $action . '">';
-                $form .= '<input type="hidden" name="pageCurrent" value="' . $pageCurrent . '">';
-                $form .= '<input type="hidden" name="pageLength" value="' . $pageLength . '">';
-                $form .= '<div class="form-group">';
-                $form .= '<div class="col-sm-12">';
-                $form .= '<select name="category_code" onchange="submit();" class="chzn-select form-control">';
-                $codeType = $_GET[category_code];    
-                foreach ($browse_course_categories[0] as $category) {
-                    $categoryCode = $category[code];
-                    $countCourse = $category[count_courses];
-                        
-                    $form .= '<option '. ($categoryCode == $codeType? 'selected="selected" ':'') .' value="' . $category[code] . '">' . $category[name] . ' ( '. $countCourse .' ) </option>';
-                    if(!empty($browse_course_categories[$categoryCode])){
-                        foreach($browse_course_categories[$categoryCode] as $subCategory){
-                            $subCategoryCode = $subCategory[code];
-                            $form .= '<option '. ($subCategoryCode == $codeType ? 'selected="selected" ':'') .' value="' . $subCategory[code] . '"> ---' . $subCategory[name] . ' ( '. $subCategory[count_courses] .' ) </option>';
-                        }
+            $action = (!empty($_REQUEST['action'])?Security::remove_XSS($_REQUEST['action']):'display_courses');
+            $pageLength = (!empty($_REQUEST['pageLength'])?intval($_REQUEST['pageLength']):10);
+            $pageCurrent = (!empty($_REQUEST['pageCurrent'])?intval($_REQUEST['pageCurrent']):1);
+            $form = '<form action="'.$webAction.'" method="GET" class="form-horizontal">';
+            $form .= '<input type="hidden" name="action" value="' . $action . '">';
+            $form .= '<input type="hidden" name="pageCurrent" value="' . $pageCurrent . '">';
+            $form .= '<input type="hidden" name="pageLength" value="' . $pageLength . '">';
+            $form .= '<div class="form-group">';
+            $form .= '<div class="col-sm-12">';
+            $form .= '<select name="category_code" onchange="submit();" class="chzn-select form-control">';
+            $codeType = Security::remove_XSS($_REQUEST['category_code']);    
+            foreach ($browse_course_categories[0] as $category) {
+                $categoryCode = $category['code'];
+                $countCourse = $category['count_courses'];
+                       
+                $form .= '<option '. ($categoryCode == $codeType? 'selected="selected" ':'') .' value="' . $category['code'] . '">' . $category['name'] . ' ( '. $countCourse .' ) </option>';
+                if (!empty($browse_course_categories[$categoryCode])) {
+                    foreach ($browse_course_categories[$categoryCode] as $subCategory){
+                        $subCategoryCode = $subCategory['code'];
+                        $form .= '<option '. ($subCategoryCode == $codeType ? 'selected="selected" ':'') .' value="' . $subCategory['code'] . '"> ---' . $subCategory['name'] . ' ( '. $subCategory['count_courses'] .' ) </option>';
                     }
                 }
-                $form .= '</select>';
-                $form .= '</div>';
-                $from .= '</form>';
-                echo $form;
+            }
+            $form .= '</select>';
+            $form .= '</div>';
+            $from .= '</form>';
+            echo $form;
         ?>
     </div>
     </div>

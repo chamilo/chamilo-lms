@@ -55,12 +55,18 @@ $strings['MailRemindSuperior'] = 'Subscription request are pending your approval
 $strings['MailRemindAdmin'] = 'Course subscription are pending your approval';
 
 // TPL langs
+$strings['SessionXWithoutVacancies'] = "The course \"%s\" has no vacancies.";
+$strings['SuccessSubscriptionToSessionX'] = "<h4>¡Congratulations!</h4>Your subscription to \"%s\" course has been completed successfully.";
+$strings['SubscriptionToOpenSession'] = "Subscription to open course";
+$strings['GoToSessionX'] = "Go to \"%s\" course";
+$strings['YouAreAlreadySubscribedToSessionX'] = "You are already subscribed to \"%s\" course.";
+
 // Admin view
 $strings['SelectASession'] = 'Select a training session';
 $strings['SessionName'] = 'Session name';
 $strings['Target'] = 'Target audience';
 $strings['Vacancies'] = 'Vacancies';
-$strings['RecommendedNumberOfParticipants'] = 'Recommended number of participants';
+$strings['RecommendedNumberOfParticipants'] = 'Recommended number of participants by area';
 $strings['PublicationEndDate'] = 'Publication end date';
 $strings['Mode'] = 'Mode';
 $strings['Postulant'] = 'Postulant';

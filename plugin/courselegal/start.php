@@ -42,7 +42,7 @@ $form->addElement('checkbox', 'remove_previous_agreements', null, $legal->get_la
 $form->addElement('radio', 'warn_users_by_email', null, $legal->get_lang('NoSendWarning'), 1);
 $form->addElement('radio', 'warn_users_by_email', $legal->get_lang('WarnAllUsersByEmail'), $legal->get_lang('SendOnlyWarning'), 2);
 $form->addElement('radio', 'warn_users_by_email', null, $legal->get_lang('SendAgreementFile'), 3);
-$form->addElement('button', 'submit', get_lang('Send'));
+$form->addButtonSave(get_lang('Save'));
 $defaults = $legal->getData($courseId, $sessionId);
 $defaults['warn_users_by_email'] = 1;
 $form->setDefaults($defaults);

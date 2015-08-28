@@ -125,9 +125,6 @@ VALUES
 ('user_selected_theme',NULL,'radio','Platform','false','UserThemeSelection','UserThemeSelectionComment',NULL,NULL, 0),
 ('profile','theme','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'UserTheme', 0),
 ('allow_course_theme',NULL,'radio','Course','true','AllowCourseThemeTitle','AllowCourseThemeComment',NULL,NULL, 0),
-('display_mini_month_calendar',NULL,'radio','Tools', 'true', 'DisplayMiniMonthCalendarTitle', 'DisplayMiniMonthCalendarComment', NULL, NULL, 0),
-('display_upcoming_events',NULL,'radio','Tools','true','DisplayUpcomingEventsTitle','DisplayUpcomingEventsComment',NULL,NULL, 0),
-('number_of_upcoming_events',NULL,'textfield','Tools','1','NumberOfUpcomingEventsTitle','NumberOfUpcomingEventsComment',NULL,NULL, 0),
 ('show_closed_courses',NULL,'radio','Platform','false','ShowClosedCoursesTitle','ShowClosedCoursesComment',NULL,NULL, 0),
 ('service_visio', 'visio_use_rtmpt', 'radio',null,'false', 'VisioUseRtmptTitle','VisioUseRtmptComment', NULL, NULL, 0),
 ('extendedprofile_registration', 'mycomptetences', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyCompetences', 0),
@@ -151,7 +148,6 @@ VALUES
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
 ('course_create_active_tools','attendances','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0),
 ('course_create_active_tools','course_progress','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'CourseProgress', 0),
-('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
 ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),
 ('allow_message_tool', NULL, 'radio', 'Tools', 'true', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,1),
 ('allow_social_tool', NULL, 'radio', 'Tools', 'true', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL,1),
@@ -420,10 +416,6 @@ VALUES
 ('user_selected_theme','false','No'),
 ('allow_course_theme','true','Yes'),
 ('allow_course_theme','false','No'),
-('display_mini_month_calendar', 'true', 'Yes'),
-('display_mini_month_calendar', 'false', 'No'),
-('display_upcoming_events', 'true', 'Yes'),
-('display_upcoming_events', 'false', 'No'),
 ('show_closed_courses', 'true', 'Yes'),
 ('show_closed_courses', 'false', 'No'),
 ('ldap_version', '2', 'LDAPVersion2'),
@@ -441,8 +433,6 @@ VALUES
 ('allow_users_to_create_courses','true','Yes'),
 ('allow_users_to_create_courses','false','No'),
 ('breadcrumbs_course_homepage', 'session_name_and_course_title', 'SessionNameAndCourseTitle'),
-('allow_reservation', 'true', 'Yes'),
-('allow_reservation', 'false', 'No'),
 ('allow_message_tool', 'true', 'Yes'),
 ('allow_message_tool', 'false', 'No'),
 ('allow_social_tool', 'true', 'Yes'),
@@ -1813,4 +1803,16 @@ VALUES
 ('my_courses_view_by_session', 'true', 'Yes'),
 ('my_courses_view_by_session', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.10.0.50' WHERE variable = 'chamilo_database_version';
+-- Version 1.10.0.51
+
+INSERT INTO settings_current
+(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
+VALUES
+('show_full_skill_name_on_skill_wheel', NULL, 'radio', 'Platform', 'false', 'ShowFullSkillNameOnSkillWheelTitle', 'ShowFullSkillNameOnSkillWheelComment', NULL, NULL, 1);
+
+INSERT INTO settings_options (variable, value, display_text)
+VALUES
+('show_full_skill_name_on_skill_wheel', 'true', 'Yes'),
+('show_full_skill_name_on_skill_wheel', 'false', 'No');
+
+UPDATE settings_current SET selected_value = '1.10.0.51' WHERE variable = 'chamilo_database_version';

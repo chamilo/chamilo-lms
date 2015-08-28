@@ -106,9 +106,9 @@ class AppPlugin
         $pluginList = array();
         if (!empty($pluginListName)) {
             foreach ($pluginListName as $pluginName) {
-                $plugin_info = $this->getPluginInfo($pluginName);
-                if (isset($plugin_info['plugin_class'])) {
-                    $pluginList[] = $plugin_info['plugin_class']::create();
+                $pluginInfo = $this->getPluginInfo($pluginName);
+                if (isset($pluginInfo['plugin_class'])) {
+                    $pluginList[] = $pluginInfo['plugin_class']::create();
                 }
             }
         }
@@ -560,11 +560,19 @@ class AppPlugin
                     if ($setting['type'] != 'checkbox') {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {
-                        $element = & $form->createElement($setting['type'], $setting['name'], '', $obj->get_lang($setting['name']));
-                        if ($setting['init_value'] == 1) {
+                        $element = & $form->createElement(
+                            $setting['type'],
+                            $setting['name'],
+                            '',
+                            $obj->get_lang($setting['name'])
+                        );
+                        if (isset($setting['init_value']) && $setting['init_value'] == 1) {
                             $element->setChecked(true);
                         }
-                        $groups[$setting['group']][] = $element;
+
+                        if (isset($setting['group'])) {
+                            $groups[$setting['group']][] = $element;
+                        }
                     }
                 }
                 foreach ($groups as $k => $v) {

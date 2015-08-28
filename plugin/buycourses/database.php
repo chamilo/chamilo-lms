@@ -39,6 +39,7 @@ $transferTable->addColumn(
 $transferTable->addColumn('name', \Doctrine\DBAL\Types\Type::STRING);
 $transferTable->addColumn('account', \Doctrine\DBAL\Types\Type::STRING);
 $transferTable->addColumn('swift', \Doctrine\DBAL\Types\Type::STRING);
+$transferTable->setPrimaryKey(['id']);
 
 $currencyTable = $pluginSchema->createTable(BuyCoursesUtils::TABLE_CURRENCY);
 $currencyTable->addColumn(

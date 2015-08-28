@@ -2,9 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class MultipleAnswer
+ * Class MultipleAnswerCombination
  *
- *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
+ *	This class allows to instantiate an object of type
+ *  MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
  *	extending the class question
  *
  *	@author Eric Marguin
@@ -26,9 +27,8 @@ class MultipleAnswerCombination extends Question
 	}
 
 	/**
-     * function which redifines Question::createAnswersForm
+     * function which redefines Question::createAnswersForm
      * @param FormValidator $form
-     * @param the answers number to display
      */
     function createAnswersForm($form)
     {
@@ -135,20 +135,22 @@ class MultipleAnswerCombination extends Question
                 array(),
                 array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
             );
-            //only 1 answer the all deal ...
-            //$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 
             $form->addHtml('</tr>');
         }
 
         $form->addElement('html', '</tbody></table>');
 
-        $form->add_multiple_required_rule($boxes_names, get_lang('ChooseAtLeastOneCheckbox'), 'multiple_required');
+        $form->add_multiple_required_rule(
+            $boxes_names,
+            get_lang('ChooseAtLeastOneCheckbox'),
+            'multiple_required'
+        );
 
         //only 1 answer the all deal ...
         $form->addText('weighting[1]', get_lang('Score'), false, ['value' => 10]);
 
-        global $text, $class;
+        global $text;
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
 
@@ -176,60 +178,62 @@ class MultipleAnswerCombination extends Question
     }
 
     /**
-	 * abstract function which creates the form to create / edit the answers of the question
-	 * @param the formvalidator instance
-	 * @param the answers number to display
+	 * abstract function which creates the form to create/edit the answers of the question
+	 * @param FormValidator $form
 	 */
-	function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
-		$questionWeighting = $nbrGoodAnswers = 0;
+        $questionWeighting = $nbrGoodAnswers = 0;
+        $objAnswer = new Answer($this->id);
+        $nb_answers = $form->getSubmitValue('nb_answers');
 
-		$objAnswer = new Answer($this->id);
-
-		$nb_answers = $form -> getSubmitValue('nb_answers');
-
-		for($i=1 ; $i <= $nb_answers ; $i++)
-        {
-        	$answer = trim($form -> getSubmitValue('answer['.$i.']'));
-            $comment = trim($form -> getSubmitValue('comment['.$i.']'));
-            if ($i == 1)
-            	$weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
-            else {
-            	$weighting = 0;
+        for ($i = 1; $i <= $nb_answers; $i++) {
+            $answer = trim($form->getSubmitValue('answer['.$i.']'));
+            $comment = trim($form->getSubmitValue('comment['.$i.']'));
+            if ($i == 1) {
+                $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
+            } else {
+                $weighting = 0;
             }
-            $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
+            $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
 
-			if($goodAnswer){
-    			$weighting = abs($weighting);
-			} else {
-				$weighting = abs($weighting);
-			//	$weighting = -$weighting;
-			}
-    		if($weighting > 0)
-            {
+            if ($goodAnswer) {
+                $weighting = abs($weighting);
+            } else {
+                $weighting = abs($weighting);
+                //	$weighting = -$weighting;
+            }
+            if ($weighting > 0) {
                 $questionWeighting += $weighting;
             }
-        	$objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i);
+            $objAnswer->createAnswer(
+                $answer,
+                $goodAnswer,
+                $comment,
+                $weighting,
+                $i
+            );
         }
 
-    	// saves the answers into the data base
-        $objAnswer -> save();
+        // saves the answers into the data base
+        $objAnswer->save();
 
         // sets the total weighting of the question
-        $this -> updateWeighting($questionWeighting);
-        $this -> save();
+        $this->updateWeighting($questionWeighting);
+        $this->save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null)
+    function return_header($feedback_type = null, $counter = null, $score = null)
     {
-	    $header = parent::return_header($feedback_type, $counter, $score);
-	    $header .= '<table class="'.$this->question_table_class .'">
-			<tr>
-				<th>'.get_lang("Choice").'</th>
-				<th>'. get_lang("ExpectedChoice").'</th>
-				<th>'. get_lang("Answer").'</i></th>';
+        $header = parent::return_header($feedback_type, $counter, $score);
+        $header .= '<table class="'.$this->question_table_class .'">
+            <tr>
+                <th>'.get_lang("Choice").'</th>
+                <th>'. get_lang("ExpectedChoice").'</th>
+                <th>'. get_lang("Answer").'</i></th>';
         $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
+
         return $header;
-	}
+    }
 }

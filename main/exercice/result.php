@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  Shows the exercise results
+ * Shows the exercise results
  *
  * @author Julio Montoya - Simple exercise result page
  *
@@ -26,7 +26,7 @@ if (empty($id)) {
 	api_not_allowed($show_headers);
 }
 
-$is_allowedToEdit   = api_is_allowed_to_edit(null,true) || $is_courseTutor;
+$is_allowedToEdit = api_is_allowed_to_edit(null,true) || $is_courseTutor;
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);

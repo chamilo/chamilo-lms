@@ -22,9 +22,9 @@
 {% endif %}
 
 
-{% if type.question %}	
+{% if type.question %}
     <div class="normal-message">
-        <div>            
+        <div>
             <strong>{{'QuestionPlan'|get_lang}}</strong>
         </div>
         {{type.question}}

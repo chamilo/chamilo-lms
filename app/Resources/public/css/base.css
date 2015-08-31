@@ -5957,6 +5957,12 @@ div#chat-remote-video video {
   -webkit-border-radius: 5px;
   margin-bottom: 10px;
 }
+.list-category{
+    display: inline-block;
+}
+.list-category .chosen-container{
+    width: 450px !important;
+}
 .ui-accordion .ui-accordion-content-active{
 
 }

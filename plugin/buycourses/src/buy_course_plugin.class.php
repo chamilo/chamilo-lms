@@ -594,4 +594,129 @@ class BuyCoursesPlugin extends Plugin
         return $courseCatalog;
     }
 
+    /**
+     * Get course info
+     * @param int $courseId The course ID
+     * @return array
+     */
+    public function getCourseInfo($courseId)
+    {
+        $entityManager = Database::getManager();
+        $course = $entityManager->find('ChamiloCoreBundle:Course', $courseId);
+
+        if (empty($course)) {
+            return [];
+        }
+
+        $item = $this->getItem($course->getId(), self::PRODUCT_TYPE_COURSE);
+
+        if (empty($item)) {
+            return [];
+        }
+
+        $courseInfo = [
+            'id' => $course->getId(),
+            'title' => $course->getTitle(),
+            'code' => $course->getCode(),
+            'visual_code' => $course->getVisualCode(),
+            'teachers' => [],
+            'price' => $item['price'],
+            'currency' => $item['iso_code'],
+            'course_img' => null
+        ];
+
+        $courseTeachers = $course->getTeachers();
+
+        foreach ($courseTeachers as $teacher) {
+            $courseInfo['teachers'][] = $teacher->getUser()->getCompleteName();
+        }
+
+        $possiblePath = api_get_path(SYS_COURSE_PATH);
+        $possiblePath .= $course->getDirectory();
+        $possiblePath .= '/course-pic.png';
+
+        if (file_exists($possiblePath)) {
+            $courseInfo['course_img'] = api_get_path(WEB_COURSE_PATH)
+                . $course->getDirectory()
+                . '/course-pic.png';
+        }
+
+        return $courseInfo;
+    }
+
+    /**
+     * Get session info
+     * @param array $sessionId The session ID
+     * @return array
+     */
+    public function getSessionInfo($sessionId) 
+    {
+        $entityManager = Database::getManager();
+        $session = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);
+
+        if (empty($session)) {
+            return [];
+        }
+
+        $item = $this->getItem($session->getId(), self::PRODUCT_TYPE_SESSION);
+
+        if (empty($item)) {
+            return [];
+        }
+
+        $sessionDates = SessionManager::parseSessionDates([
+            'display_start_date' => $session->getDisplayStartDate(),
+            'display_end_date' => $session->getDisplayEndDate(),
+            'access_start_date' => $session->getAccessStartDate(),
+            'access_end_date' => $session->getAccessEndDate(),
+            'coach_access_start_date' => $session->getCoachAccessStartDate(),
+            'coach_access_end_date' => $session->getCoachAccessEndDate()
+        ]);
+
+        $sessionInfo = [
+            'id' => $session->getId(),
+            'name' => $session->getName(),
+            'dates' => $sessionDates,
+            'courses' => [],
+            'price' => $item['price'],
+            'currency' => $item['iso_code'],
+            'image' => null
+        ];
+
+        $fieldValue = new ExtraFieldValue('session');
+        $sessionImage = $fieldValue->get_values_by_handler_and_field_variable(
+            $session->getId(),
+            'image'
+        );
+
+        if (!empty($sessionImage)) {
+            $sessionInfo['image'] = api_get_path(WEB_UPLOAD_PATH) . $sessionImage['value'];
+        }
+
+        $sessionCourses = $session->getCourses();
+
+        foreach ($sessionCourses as $sessionCourse) {
+            $course = $sessionCourse->getCourse();
+
+            $sessionCourseData = [
+                'title' => $course->getTitle(),
+                'coaches' => []
+            ];
+
+            $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
+                $course,
+                Chamilo\CoreBundle\Entity\Session::COACH
+            );
+
+            foreach ($userCourseSubscriptions as $userCourseSubscription) {
+                $user = $userCourseSubscription->getUser();
+                $sessionCourseData['coaches'][] = $user->getCompleteName();
+            }
+
+            $sessionInfo['courses'][] = $sessionCourseData;
+        }
+
+        return $sessionInfo;
+    }
+
 }

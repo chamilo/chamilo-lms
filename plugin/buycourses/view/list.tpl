@@ -90,7 +90,7 @@
                                         <i class="fa fa-file-text"></i> {{ 'Description'|get_lang }}
                                     </a>
                                     {% if course.enrolled == "NO" %}
-                                        <a class="btn btn-success" title="" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'code': course.id}|url_encode() }}">
+                                        <a class="btn btn-success" title="" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}">
                                             <i class="fa fa-shopping-cart"></i> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                         </a>
                                     {% endif %}
@@ -165,7 +165,7 @@
                                                 {% if session.enrolled == "YES" %}
                                                     <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                                                 {% elseif session.enrolled == "NO" %}
-                                                    <a class="btn btn-success btn-sm" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'scode': session.id}|url_encode() }}">
+                                                    <a class="btn btn-success btn-sm" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
                                                         <i class="fa fa-shopping-cart"></i> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 {% elseif session.enrolled == "TMP" %}

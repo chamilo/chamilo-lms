@@ -316,13 +316,13 @@ switch ($action) {
     case 'list':
         /*	Display list of student publications */
         if (!empty($my_folder_data['description'])) {
-            $content = '<p><div><strong>'.
-                get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).
-                '</p></div></p>';
+            $content = '<div>'.
+                get_lang('Description').':'.Security::remove_XSS($my_folder_data['description'], STUDENT).
+                '</div>';
         }
         if (api_is_allowed_to_edit() || api_is_coach()) {
             // Work list
-            $content .= '<div class="toolbar-works"><a id="open-view-list" class="btn btn-primary" href="#"><i class="fa fa-users"></i> Ver Estudiantes</a></div>';
+            
             $content .= '<div class="row">';
             $content .= '<div class="col-md-12">';
             $content .= '<div id="work-list" class="table-responsive">';

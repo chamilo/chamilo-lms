@@ -46,7 +46,7 @@ class SelectAjax extends HTML_QuickForm_select
         $defaultValues = empty($defaultValues) ? [] : $defaultValues;
 
         $width = 'element';
-        $givenWidth = $this->getAttribute('width');
+        $givenWidth = '300';
         if (!empty($givenWidth)) {
             $width = $givenWidth;
         }

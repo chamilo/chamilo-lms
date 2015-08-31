@@ -376,11 +376,6 @@ ul#navigation .report a {
 .actions .btn-toolbar {
     margin : 0px;
 }
-.actions span {
-    display: inline-block;
-    margin-right: 10px;
-    vertical-align:middle;
-}
 .actions form {
     margin-right: 10px;
     vertical-align:middle;
@@ -2829,6 +2824,7 @@ form .formw .freeze {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
+  padding-right: 10px;
 }
 
 .data_table th {
@@ -6011,7 +6007,9 @@ div#chat-remote-video video {
 .ui-jqgrid .ui-pg-table td{
   font-size: 12px;
 }
-
+.ui-jqgrid .ui-widget-content .ui-state-default{
+  background: #EEEEEE;
+}
 .ui-tabs .ui-widget-header{
     background: none;
     border-top: none;
@@ -6024,7 +6022,7 @@ div#chat-remote-video video {
     border: none;
 }
 
-.ui-tabs .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+.ui-tabs .ui-state-default, .ui-tabs .ui-widget-content .ui-state-default, .ui-tabs .ui-widget-header .ui-state-default{
     background: #fff;
 }
 .ui-tabs .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{
@@ -6053,6 +6051,12 @@ div#chat-remote-video video {
 }
 .ui-jqgrid .ui-jqgrid-htable th div{
   height: 25px;
+}
+.ui-jqgrid .ui-state-highlight, .ui-jqgrid .ui-widget-content .ui-state-highlight,.ui-jqgrid .ui-widget-header .ui-state-highlight{
+  background: #F7F7F7;
+}
+.ui-jqgrid .ui-state-hover, .ui-jqgrid .ui-widget-content .ui-state-hover,.ui-jqgrid .ui-widget-header .ui-state-hover{
+  background: #F7F7F7;
 }
 /* ui diglog */
 .ui-dialog .ui-widget-header{
@@ -6096,6 +6100,10 @@ div#chat-remote-video video {
   font-weight:normal;
   color:#333333;
 }*/
+.select2-container .select2-selection--single{
+  height: 32px !important;
+  border-color: #CCCCCC !important;
+}
 #dialog-form .dialog-form-content{
   font-size: 12px;
 }
@@ -6443,7 +6451,7 @@ a.sessionView {
   padding-left: 10px;
 }
 #course-list.data_table .title{
-    width: 360px;
+    width: 390px;
     padding-left: 0;
 }
 .actions label{

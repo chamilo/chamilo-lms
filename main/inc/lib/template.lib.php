@@ -643,7 +643,7 @@ class Template
             $js_files[] = 'fontresize.js';
         }
 
-        $js_files[] = 'tag/jquery.fcbkcomplete.js';
+        $js_files[] = 'tag/jquery.fcbkcomplete.min.js';
 
         $js_file_to_string = null;
         $isoCode = api_get_language_isocode();

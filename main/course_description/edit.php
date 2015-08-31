@@ -9,6 +9,19 @@
 
 // protect a course script
 api_protect_course_script(true);
+if (empty($id)) {
+	$id = intval($_REQUEST['id']);
+	if (empty($id)) {
+		// If the ID was not provided, find the first matching description item given the item type
+		$course_description = new CourseDescription();
+		$description = $course_description->get_data_by_description_type($description_type);
+		if (count($description) > 0) {
+			$id = $description['id'];
+		}
+		unset ($course_description);
+		// If no corresponding description is found, edit a new one
+	}
+}
 $original_id = $id;
 
 if (empty($error)) {

@@ -65,7 +65,8 @@ class CourseDescriptionController
     /**
      * It's used for editing a course description,
      * render to listing or edit view
-     * @param int description type
+     * @param int $id description item id
+     * @param int $description_type description type id
      */
     public function edit($id, $description_type)
     {
@@ -84,6 +85,14 @@ class CourseDescriptionController
                     $content = $_POST['contentDescription'];
                     $description_type = $_POST['description_type'];
                     $id = $_POST['id'];
+                    if (empty($id)) {
+                        // If the ID was not provided, find the first matching description item given the item type
+                        $description = $course_description->get_data_by_description_type($description_type);
+                        if (count($description) > 0) {
+                            $id = $description['id'];
+                        }
+                        // If no corresponding description is found, edit a new one
+                    }
                     $progress = isset($_POST['progress']) ? $_POST['progress'] : '';
                     $course_description->set_description_type($description_type);
                     $course_description->set_title($title);
@@ -131,7 +140,14 @@ class CourseDescriptionController
             $data['information'] = $course_description->get_default_information();
 
             $data['description_type'] = $description_type;
-
+            if (empty($id)) {
+                // If the ID was not provided, find the first matching description item given the item type
+                $description = $course_description->get_data_by_description_type($description_type);
+                if (count($description) > 0) {
+                    $id = $description['id'];
+                }
+                // If no corresponding description is found, edit a new one
+            }
             if (!empty($id)) {
                 if (isset($_GET['id_session'])) {
                     $session_id = intval($_GET['id_session']);

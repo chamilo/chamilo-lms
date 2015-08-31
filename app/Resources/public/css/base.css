@@ -2828,7 +2828,7 @@ form .formw .freeze {
   line-height: 18px;
   padding-top: 10px;
   padding-bottom: 10px;
-  text-align: center;
+  padding-left: 10px;
 }
 
 .data_table th {
@@ -6011,34 +6011,33 @@ div#chat-remote-video video {
 .ui-jqgrid .ui-pg-table td{
   font-size: 12px;
 }
-/* .ui-state-hover,.ui-widget-content .ui-state-hover,
-.ui-widget-header .ui-state-hover,
-.ui-state-focus,
-.ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus{
-  border:none;
-  background: #ECF0F1;
-  font-weight:normal;
-  color:#212121
+
+.ui-tabs .ui-widget-header{
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px;
+    border-bottom-color: #dedede;
 }
-.ui-state-hover a,
-.ui-state-hover a:hover,
-.ui-state-hover a:link,
-.ui-state-hover a:visited,
-.ui-state-focus a,
-.ui-state-focus a:hover,
-.ui-state-focus a:link,
-.ui-state-focus a:visited {
-  color:#212121;text-decoration:none
+.ui-tabs.ui-widget-content{
+    border: none;
 }
-.ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active{
-  border:1px solid #aaa;
-  background: #fff;
-  font-weight:normal;
-  color:#212121
-}*/
+
+.ui-tabs .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+    background: #fff;
+}
+.ui-tabs .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{
+    border-color: #dedede;
+}
+.ui-widget{
+    font-family: "Open Sans",sans-serif;
+}
+.ui-tabs .ui-widget-content a.btn-success{
+    color: #fff;
+}
+
+
 .ui-priority-secondary,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary{

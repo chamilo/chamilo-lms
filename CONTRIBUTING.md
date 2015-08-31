@@ -60,6 +60,41 @@ modify or create an entity, but you will still need to follow these two steps:
 1. Modify the main/install/data.sql file (at the end, add a new section before the chamilo_database_version update
 2. Create a new Migration in src/Chamilo/CoreBundle/Migrations/Schema/V110/ (see above section for details)
 
+# Testing through Docker
+
+We are working on an official (production) image of Chamilo LMS for Docker.
+In the meantime, you can test development versions following more or less this procedure:
+```
+host$ composer run -it ubuntu:14.04.2
+root@docker$ apt-get update
+root@docker$ apt-get install -y git vim libapache2-mod-php5 php5-mysql php5-gd php5-intl php5-curl curl mysql-server mysql-client
+```
+Pick a password for the MySQL server and enter it twice, when prompted.
+```
+root@docker$ cd /var/www
+root@docker$ rm -rf html
+root@docker$ git clone --single-branch -b 1.10.0-beta https://github.com/chamilo/chamilo-lms.git html
+root@docker$ chmod -R 0777 app/ vendor/ main/lang/ main/default_course_document/images/ web/
+root@docker$ vim /etc/php5/apache2/php.ini
+```
+Look for timezone and modify it to the best timezone that suits you:
+```
+[Date]
+; Defines the default timezone used by the date functions
+; http://php.net/date.timezone
+;date.timezone =
+date.timezone = Europe/Brussels
+```
+Save and exit.
+```
+root@docker$ service apache2 reload
+root@docker$ service mysql start
+root@docker$ ifconfig | grep inet
+```
+Now you should be able to load Chamilo in your host machine's browser by loading the IP address showing on the first
+line of this command's results (and proceed with the installation on the MySQL server you configured above).
+
+
 
 
 [1]: https://support.chamilo.org/projects/chamilo-18/wiki/Coding_conventions

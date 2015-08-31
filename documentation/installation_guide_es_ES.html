@@ -73,6 +73,7 @@
   <li><a href="#11._rapid">Chamilo Rapid - sistema conversion PPT</a></li>
   <li><a href="#12._cron">Configuración de tareas programadas</a></li>
   <li><a href="#13._name_order">Cambiando el orden del nombre/apellido en el idioma</a></li>
+  <li><a href="#14._alter_conf">Configuraciones opcionales para Apache y Nginx</a></li>
 </ol>
 
 
@@ -780,6 +781,137 @@ Siéntase libre de cambiar esto a
 </pre>
 por ejemplo. El efecto debería ser inmediato.
 </p>
+
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="14._alter_conf"></a>14. Configuraciones opcionales para Apache y Nginx</h2>
+<p><p>
+    Dadas las nuevas actualizaciones de servidores web y la fragilidad en cuanto a seguridad de archivos facilmente
+    localizables por atacantes como los htaccess, se aconseja restringir las configuraciones a un solo archivo.
+    A continuación se presentan dos ejemplos de configuración de modo que no se dependa de los archivos .htaccess.
+</p>
+<p>
+    Nginx: La configuración para nuestro sitio de ejemplo my.chamilo10.net (en el cual los archivos se han almacenado
+    en /var/www/my.chamilo10.net/www) sería la siguiente, tomando como supuesto el uso de php5-fpm a través de sockets:
+<pre>
+server {
+  listen 80;
+  server_name my.chamilo10.net;
+  rewrite_log off;
+  access_log /var/log/nginx/my.chamilo10.net-access.log;
+  error_log /var/log/nginx/my.chamilo10.net-error.log debug;
+  root /var/www/my.chamilo10.net/www;
+  index index.php;
+  port_in_redirect off;
+
+  location / {
+    #client_max_body_size 20M;
+    #try_files $uri /index.php$is_args$args;
+    #rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
+    #rewrite ^/courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 last;
+  }
+  location ~ ^/(app_dev|config)\.php(/|$) {
+    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_split_path_info ^(.+\.php)(/.*)$;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param HTTPS off;
+  }
+  location ~ ^/app\.php(/|$) {
+    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_split_path_info ^(.+\.php)(/.*)$;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param HTTPS off;
+    # Prevents URIs that include the front controller. This will 404:
+    # http://domain.tld/app.php/some-path
+    # Remove the internal directive to allow URIs like this
+    #internal;
+  }
+
+  location ~ \.php$ {
+    client_max_body_size 20M;
+    try_files $uri /index.php$is_args$args;
+
+    rewrite ^/certificates/$ /certificates/index.php?id=%1  last;
+    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/upload/(.*)$ /app/courses/$1/upload/$2 last;
+    rewrite ^/courses/([^/]+)/course-pic85x85.png$ /app/courses/$1/course-pic85x85.png last;
+    rewrite ^/courses/([^/]+)/course-pic.png$ /app/courses/$1/course-pic.png last;
+    rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+
+    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_split_path_info ^(.+\.php)(/.*)$;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param HTTPS off;
+  }
+  location ~ ~\.(ht|git){
+    deny all;
+  }
+  location ^~ /tests/ {
+    deny all;
+  }
+}
+</pre>
+
+Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería la siguiente:
+
+<pre>
+&lt;VirtualHost *:80&gt;
+  ServerAdmin root@localhost
+  DocumentRoot /var/www/my.chamilo10.net/www
+  ServerName my.chamilo10.net
+  ErrorLog  /var/log/apache2/my.chamilo10.net-error.log
+  CustomLog /var/log/apache2/my.chamilo10.net-access.log combined
+
+  ErrorDocument 401 /public/error-401.html
+  DirectoryIndex index.php index.html
+  Options Indexes FollowSymLinks
+
+  &lt;LocationMatch "/.git*"&gt;
+	order deny,allow
+	deny from all
+  &lt;/LocationMatch&gt;
+
+  &lt;Directory ~/.&gt;
+    AllowOverride None
+	Options -Indexes
+  &lt;/Directory&gt;
+
+  &lt;Directory "/var/www/my.chamilo10.net/www"&gt;
+	RewriteEngine On
+	RewriteCond %{QUERY_STRING} ^id=(.*)$
+	RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
+	RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
+	RewriteRule ^courses/([^/]+)/$ app/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
+	RewriteRule ^courses/([^/]+)/upload/(.*)$ main/courses/$1/upload/$2 [QSA,L]
+	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/courses/$1/course-pic85x85.png [QSA,L]
+	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
+	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
+  &lt;/Directory&gt;
+
+  php_value display_errors Off
+  php_value log_errors On
+  php_value display_startup_errors Off
+  php_value post_max_size 300M
+  php_value upload_max_filesize 300M
+  # E_ALL:  php_admin_value error_reporting 6143
+  # E_ALL & ^E_NOTICE:
+  php_admin_value error_reporting 6135
+  #php_admin_value session.save_path /var/www/my.chamilo10.net/sessions/
+  php_admin_value short_open_tag Off
+  php_value session.cookie_httponly 1
+
+&lt;/VirtualHost&gt;
+</pre></p>
+
 <hr style="width: 100%; height: 2px;" />
 <p>
   <br />

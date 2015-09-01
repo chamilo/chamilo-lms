@@ -11,77 +11,77 @@
  */
 
 if (isset($_GET['editQuestion'])) {
-	$objQuestion = Question::read ($_GET['editQuestion']);
-	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
+    $objQuestion = Question::read ($_GET['editQuestion']);
+    $action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 } else {
-	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
-	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
+    $objQuestion = Question :: getInstance($_REQUEST['answerType']);
+    $action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
 if (is_object($objQuestion)) {
-	// FORM CREATION
-	$form = new FormValidator('question_admin_form','post', $action);
-	if (isset($_GET['editQuestion'])) {
-		$class = "btn btn-default";
-		$text = get_lang('ModifyQuestion');
-		$type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
-	} else {
-		$class = "btn btn-default";
-		$text = get_lang('AddQuestionToExercise');
-		$type = $_REQUEST['answerType'];
-	}
+    // FORM CREATION
+    $form = new FormValidator('question_admin_form','post', $action);
+    if (isset($_GET['editQuestion'])) {
+        $class = "btn btn-default";
+        $text = get_lang('ModifyQuestion');
+        $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
+    } else {
+        $class = "btn btn-default";
+        $text = get_lang('AddQuestionToExercise');
+        $type = $_REQUEST['answerType'];
+    }
 
-	$typesInformation = Question::get_question_type_list();
-	$form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
+    $typesInformation = Question::get_question_type_list();
+    $form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
-	// form title
-	$form->addElement('header', $text.': '.$form_title_extra);
+    // form title
+    $form->addElement('header', $text.': '.$form_title_extra);
 
-	// question form elements
-	$objQuestion->createForm($form);
+    // question form elements
+    $objQuestion->createForm($form);
 
-	// answer form elements
-	$objQuestion->createAnswersForm($form);
+    // answer form elements
+    $objQuestion->createAnswersForm($form);
 
-	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
-	if ($objExercise->edit_exercise_in_lp == false) {
-		$form->freeze();
-	}
+    // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
+    if ($objExercise->edit_exercise_in_lp == false) {
+        $form->freeze();
+    }
 
-	// FORM VALIDATION
-	if (isset($_POST['submitQuestion']) && $form->validate()) {
+    // FORM VALIDATION
+    if (isset($_POST['submitQuestion']) && $form->validate()) {
 
-		// question
-		$objQuestion->processCreation($form, $objExercise);
+        // question
+        $objQuestion->processCreation($form, $objExercise);
 
-		// answers
-		$nb_answers = isset($nb_answers) ? $nb_answers : 0;
-		$objQuestion->processAnswersCreation($form, $nb_answers);
+        // answers
+        $nb_answers = isset($nb_answers) ? $nb_answers : 0;
+        $objQuestion->processAnswersCreation($form, $nb_answers);
 
-		// TODO: maybe here is the better place to index this tool, including answers text
+        // TODO: maybe here is the better place to index this tool, including answers text
 
-		// redirect
-		if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {
-			if(isset($_GET['editQuestion'])) {
-				echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
-			} else {
-				//New question
-				echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
-			}
-		} else {
-			echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
-		}
-	} else {
-		if (isset($questionName)) {
-			echo '<h3>'.$questionName.'</h3>';
-		}
-		if (!empty($pictureName)) {
-			echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
-		}
-		if(!empty($msgErr)) {
-			Display::display_normal_message($msgErr); //main API
-		}
-		// display the form
-		$form->display();
-	}
+        // redirect
+        if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {
+            if(isset($_GET['editQuestion'])) {
+                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemUpdated"</script>';
+            } else {
+                //New question
+                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&message=ItemAdded"</script>';
+            }
+        } else {
+            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+        }
+    } else {
+        if (isset($questionName)) {
+            echo '<h3>'.$questionName.'</h3>';
+        }
+        if (!empty($pictureName)) {
+            echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
+        }
+        if (!empty($msgErr)) {
+            Display::display_normal_message($msgErr);
+        }
+        // display the form
+        $form->display();
+    }
 }

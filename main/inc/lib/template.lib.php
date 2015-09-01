@@ -531,7 +531,7 @@ class Template
         foreach ($bowerCSSFiles as $file) {
             $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
         }
-
+        $css[] = api_get_path(WEB_CSS_PATH) . 'bootstrap-select.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css';
 
@@ -674,7 +674,8 @@ class Template
         foreach ($bowerJsFiles as $file) {
             $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
         }
-
+        $js_file_to_string .= '<script type="text/javascript" src="'.  api_get_path(WEB_LIBRARY_PATH) . 'javascript/bootstrap-select.min.js"></script>'."\n";
+        
         foreach ($js_files as $file) {
             $js_file_to_string .= api_get_js($file);
         }

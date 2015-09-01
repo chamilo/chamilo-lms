@@ -5391,9 +5391,10 @@ class learnpath
 
                     $prerequisiteMinScore = isset($array[$i]['prerequisite_min_score']) ? $array[$i]['prerequisite_min_score'] : null;
                     $prerequisiteMaxScore = isset($array[$i]['prerequisite_max_score']) ? $array[$i]['prerequisite_max_score'] : null;
-
+                    $ref = isset($array[$i]['ref']) ? $array[$i]['ref'] : '';
                     $this->arrMenu[] = array(
                         'id' => $array[$i]['id'],
+                        'ref' => $ref,
                         'item_type' => $array[$i]['item_type'],
                         'title' => $array[$i]['title'],
                         'path' => $path,
@@ -6535,7 +6536,6 @@ class learnpath
     public function display_hotpotatoes_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        global $charset;
         $uploadPath = DIR_HOTPOTATOES; //defined in main_api
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
@@ -8319,8 +8319,8 @@ class learnpath
         $return .= '<label for="idNone">' . get_lang('None') . '</label>';
         $return .= '</tr>';
 
-        $sql 	= "SELECT * FROM $tbl_lp_item
-                   WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item
+                WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
         $result = Database::query($sql);
         $arrLP = array();
 
@@ -8415,7 +8415,7 @@ class learnpath
         $return .= '</tr>';
         $return .= '</table>';
         $return .= '<div style="padding-top:3px;">';
-        $return .= '<button class="btn btn-default" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
+        $return .= '<button class="btn btn-primary" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
         $return .= '</form>';
 
         return $return;

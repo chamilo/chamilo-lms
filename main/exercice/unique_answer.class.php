@@ -143,10 +143,10 @@ class UniqueAnswer extends Question
 
                 $item_list = explode('@@', $answer->destination[$i]);
 
-                $try = $item_list[0];
-                $lp = $item_list[1];
-                $list_dest = $item_list[2];
-                $url = $item_list[3];
+                $try = isset($item_list[0]) ? $item_list[0] : '';
+                $lp = isset($item_list[1]) ? $item_list[1] : '';
+                $list_dest = isset($item_list[2]) ? $item_list[2] : '';
+                $url = isset($item_list[3]) ? $item_list[3] : '';
 
                 if ($try == 0) {
                     $try_result = 0;

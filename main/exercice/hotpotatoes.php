@@ -42,9 +42,9 @@ $course_id = api_get_course_int_id();
 // Setting some variables.
 $document_sys_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $uploadPath = '/HotPotatoes_files';
-$finish         = (!empty($_POST['finish']) ? $_POST['finish'] : 0);
-$imgcount       = (!empty($_POST['imgcount']) ? $_POST['imgcount'] : null);
-$fld            = (!empty($_POST['fld']) ? $_POST['fld'] : null);
+$finish = (!empty($_POST['finish']) ? $_POST['finish'] : 0);
+$imgcount = (!empty($_POST['imgcount']) ? $_POST['imgcount'] : null);
+$fld = (!empty($_POST['fld']) ? $_POST['fld'] : null);
 $imgparams = [];
 $dialogBox = '';
 
@@ -56,9 +56,21 @@ if ($finish == 2 && isset($_POST['imgparams'])) {
 if (api_is_allowed_to_edit(null, true)) {
     if (hotpotatoes_init($document_sys_path.$uploadPath)) {
         // If the directory doesn't exist, create the "HotPotatoes" directory.
-        $doc_id = add_document($_course, '/HotPotatoes_files', 'folder', 0, get_lang('HotPotatoesFiles'));
+        $doc_id = add_document(
+            $_course,
+            '/HotPotatoes_files',
+            'folder',
+            0,
+            get_lang('HotPotatoesFiles')
+        );
         // Update properties in dbase (in any case).
-        api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
+        api_item_property_update(
+            $_course,
+            TOOL_DOCUMENT,
+            $doc_id,
+            'FolderCreated',
+            api_get_user_id()
+        );
         // Make invisible (in any case) - why?
         api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
     }
@@ -67,7 +79,13 @@ if (api_is_allowed_to_edit(null, true)) {
 /** Display */
 $nameTools = get_lang('HotPotatoesTests');
 
-$form = new FormValidator('hotpotatoes', 'post', api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data'));
+$form = new FormValidator(
+    'hotpotatoes',
+    'post',
+    api_get_self()."?".api_get_cidreq(),
+    null,
+    array('enctype' => 'multipart/form-data')
+);
 $form->addElement('header', $nameTools);
 $form->addElement('hidden', 'uploadPath');
 $form->addElement('hidden', 'fld', $fld);
@@ -119,7 +137,6 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 $filename = $_FILES['userFile']['name'];
             }
 
-            /*if (treat_uploaded_file($_FILES['userFile'], $document_sys_path, $uploadPath."/".$fld, $max_filled_space, $unzip))*/
             $allow_output_on_success = false;
             if (handle_uploaded_document(
                 $_course,
@@ -163,8 +180,9 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 }
 
                 $title = @htmlspecialchars(GetQuizName($filename, $document_sys_path.$uploadPath.'/'.$fld.'/'), ENT_COMPAT, api_get_system_encoding());
-                $query = "UPDATE $dbTable SET comment='".Database::escape_string($title)."'
-                         WHERE c_id = $course_id AND path=\"".$uploadPath."/".$fld."/".$filename."\"";
+                $query = "UPDATE $dbTable
+                          SET comment='".Database::escape_string($title)."'
+                          WHERE c_id = $course_id AND path=\"".$uploadPath."/".$fld."/".$filename."\"";
                 Database::query($query);
                 api_item_property_update($_course, TOOL_QUIZ, $id, 'QuizAdded', api_get_user_id());
 
@@ -196,7 +214,8 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
         '</a>';
     echo '</div>';
 
-    if ($finish == 2) { // If we are in the img upload process.
+    if ($finish == 2) {
+        // If we are in the img upload process.
         $dialogBox .= get_lang('ImgNote_st').$imgcount.get_lang('ImgNote_en').'<br />';
         while (list($key, $string) = each($imgparams)) {
             $dialogBox .= $string.'; ';

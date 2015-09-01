@@ -44,10 +44,14 @@ if (isset($_POST['action'])) {
 /**
  *  * Get the number of classes to display on the current page.
  */
-function get_number_of_classes() {
+function get_number_of_classes()
+{
     $class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
     $course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
-    $sql = "SELECT * FROM $course_class_table WHERE course_code = '" . $_SESSION['_course']['id'] . "'";
+    $courseCode = api_get_course_id();
+
+    $sql = "SELECT * FROM $course_class_table
+            WHERE course_code = '" . $courseCode. "'";
     $res = Database::query($sql);
     $subscribed_classes = array();
     while ($obj = Database::fetch_object($res)) {
@@ -63,6 +67,7 @@ function get_number_of_classes() {
     }
     $res = Database::query($sql);
     $result = Database::num_rows($res);
+
     return $result;
 }
 
@@ -73,7 +78,9 @@ function get_class_data($from, $number_of_items, $column, $direction) {
     $class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
     $course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
     $class_user_table = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
-    $sql = "SELECT * FROM $course_class_table WHERE course_code = '" . $_SESSION['_course']['id'] . "'";
+    $courseCode = api_get_course_id();
+
+    $sql = "SELECT * FROM $course_class_table WHERE course_code = '" . $courseCode . "'";
     $res = Database::query($sql);
     $subscribed_classes = array();
     while ($obj = Database::fetch_object($res)) {

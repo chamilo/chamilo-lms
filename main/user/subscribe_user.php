@@ -282,6 +282,9 @@ function get_number_of_users()
 	$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$table_user_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
+    $courseCode = api_get_course_id();
+    $sessionId = api_get_session_id();
+
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 
 		if (api_get_session_id() != 0) {
@@ -429,9 +432,15 @@ function get_number_of_users()
 
 		// getting all the users of the course (to make sure that we do not display users that are already in the course)
 		if (!empty($_SESSION["id_session"])) {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], $_SESSION['id_session']);
+            $a_course_users = CourseManager:: get_user_list_from_course_code(
+                $courseCode,
+                $sessionId
+            );
 		} else {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0);
+            $a_course_users = CourseManager:: get_user_list_from_course_code(
+                $courseCode,
+                0
+            );
 	    }
 		foreach ($a_course_users as $user_id=>$course_user) {
 			$users_of_course[] = $course_user['user_id'];
@@ -445,6 +454,7 @@ function get_number_of_users()
 	   $row = Database::fetch_row($res);
 	   $count_user = $row[0];
 	}
+
 	return $count_user;
 }
 /**

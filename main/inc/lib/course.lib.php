@@ -4510,7 +4510,7 @@ class CourseManager
                 WHERE
                     u.access_url_id = " . api_get_current_access_url_id() . " AND
                     login_course_date <= '$now' AND
-                    login_course_date > DATE_SUB(now(), INTERVAL $days DAY) AND
+                    login_course_date > DATE_SUB('$now', INTERVAL $days DAY) AND
                     visibility <> '" . COURSE_VISIBILITY_CLOSED . "' AND visibility <> '" . COURSE_VISIBILITY_HIDDEN . "'
                 GROUP BY a.c_id
                 ORDER BY course_count DESC

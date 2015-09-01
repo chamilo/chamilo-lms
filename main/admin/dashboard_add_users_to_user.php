@@ -159,7 +159,7 @@ function search_users($needle,$type)
             }
            $xajax_response->addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
         } else {
-            $return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
+            $return .= '<select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="15" ">';
             while($user = Database :: fetch_array($rs)) {
                 $person_name = api_get_person_name($user['firstname'], $user['lastname']);
                 $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name,ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
@@ -401,8 +401,8 @@ if(!empty($msg)) {
         <?php echo get_lang('UserListInPlatform') ?>
         <?php if($add_type == 'multiple') { ?>
             <div class="form-group">
-                <label class="col-lg-9 control-label"><?php echo get_lang('FirstLetterUser');?></label>
-                <div class="col-lg-3">
+                <label class="col-sm-7 control-label"><?php echo get_lang('FirstLetterUser');?></label>
+                <div class="col-sm-5">
                 <select class="selectpicker show-tick form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
                     <option value="%">--</option>
                     <?php echo Display::get_alphabet_options($firstLetterUser); ?>
@@ -410,29 +410,46 @@ if(!empty($msg)) {
                 </div>
             </div>
         
-        <div class="form-group">
+        <!-- <div class="form-group">
             <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" onclick="moveItem(document.getElementById('user_to_add'), document.getElementById('destination'))" />
             <div id="ajax_list_users_single"></div>
-        </div>
+        </div> -->
         
         <?php } ?>
-        
-        <div id="ajax_list_users_multiple">
-	<select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="20">
-            <?php
-            while ($enreg = Database::fetch_array($result)) {
-                    $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']);
-            ?>
-                    <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"';?>>
-                <?php echo $person_name.' ('.$enreg['username'].')'; ?>
-            </option>
-            <?php } ?>
-	</select>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <div id="ajax_list_users_multiple">
+                    <select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="15">
+                        <?php   while ($enreg = Database::fetch_array($result)) {
+                                $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
+                                  <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"';?>>
+                            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+                        </option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
         </div>
+        
         
     </div>
     <div class="col-md-4">
-        
+        <?php if ($ajax_search) { ?>
+            <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
+          <?php } else { ?>
+            <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                <i class="fa fa-chevron-right"></i>
+            </button>
+            <br /><br />
+            <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                <i class="fa fa-chevron-left"></i>
+            </button>
+          <?php
+          }
+          ?>
+            <?php
+		echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
+            ?>
     </div>
     <div class="col-md-4">
         <?php
@@ -446,50 +463,26 @@ if(!empty($msg)) {
                     echo get_lang('AssignedUsersListToHumanResourcesManager');
 	}
         ?>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <br>
+                <select id='destination' class="form-control" name="UsersList[]" multiple="multiple" size="15" >
+                    <?php
+                    if (is_array($assigned_users_to_hrm)) {
+                            foreach($assigned_users_to_hrm as $enreg) {
+                                    $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']);
+                    ?>
+                            <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"'; ?>>
+                        <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+                    </option>
+                    <?php }
+                    }?>
+                </select>
+            </div>
+        </div>    
+
     </div>
 </div>
-
-<table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
-
-<tr>
-  <td width="45%" align="center">
-	
-  </td>
-
-  <td width="10%" valign="middle" align="center">
-  <?php if ($ajax_search) { ?>
-    <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
-  <?php } else { ?>
-    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
-        <i class="fa fa-chevron-right"></i>
-    </button>
-    <br /><br />
-    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-        <i class="fa fa-chevron-left"></i>
-    </button>
-  <?php
-  }
-  ?>
-	<br /><br /><br /><br />
-	<?php
-		echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
-	?>
-  </td>
-  <td width="45%" align="center">
-  <select id='destination' name="UsersList[]" multiple="multiple" size="20" style="width:320px;">
-	<?php
-	if (is_array($assigned_users_to_hrm)) {
-		foreach($assigned_users_to_hrm as $enreg) {
-			$person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']);
-	?>
-		<option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"'; ?>>
-            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
-        </option>
-	<?php }
-	}?>
-  </select></td>
-</tr>
-</table>
 
 </form>
 

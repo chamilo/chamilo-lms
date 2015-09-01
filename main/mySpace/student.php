@@ -176,9 +176,7 @@ if ($export_csv) {
 }
 
 $sort_by_first_name = api_sort_by_first_name();
-$actions = '<div class="actions">';
-$actions .= '<div class="row">';
-$actions .= '<div class="col-md-6">';
+$actionsLeft = '';
 
 if (api_is_drh()) {
     $menu_items = array(
@@ -196,23 +194,23 @@ if (api_is_drh()) {
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
-            $actions .= $item;
+            $actionsLeft .= $item;
         }
     }
 } else if (api_is_student_boss()) {
-    $actions .= Display::url(
+    $actionsLeft .= Display::url(
         Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
-    $actions .= Display::url(
+    $actionsLeft .= Display::url(
         Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
         '#'
     );
-    $actions .= Display::url(
+    $actionsLeft .= Display::url(
         Display::return_icon("statistics.png", get_lang("CompanyReport"), array(), ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php"
     );
-    $actions .= Display::url(
+    $actionsLeft .= Display::url(
         Display::return_icon(
             "certificate_list.png",
             get_lang("GradebookSeeListOfStudentsCertificates"),
@@ -222,21 +220,19 @@ if (api_is_drh()) {
         api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
     );
 }
-$actions .= '</div>';
-$actions .= '<div class="col-md-6">';
-$actions .= '<div class="pull-right">';
-$actions .= Display::url(
+
+$actionsRight = '';
+$actionsRight .= Display::url(
     Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);',
     array('onclick'=>'javascript: window.print();')
 );
-$actions .= Display::url(
+$actionsRight .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
     api_get_self().'?export=csv&keyword='.$keyword
 );
-$actions .= '</div>';
-$actions .= '</div>';
-$actions .= '</div>';
-$actions .= '</div>';
+
+
+$toolbar = Display::toolbarAction('toolbar-student', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
 
 $table = new SortableTable(
     'tracking_student',
@@ -300,7 +296,7 @@ if ($export_csv) {
     exit;
 } else {
     Display::display_header($nameTools);
-    echo $actions;
+    echo $toolbar;
     $page_title = get_lang('Students');
     echo Display::page_subheader($page_title);
     if (isset($active)) {

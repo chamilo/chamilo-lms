@@ -179,7 +179,7 @@ if ($export_csv) {
 }
 
 $sort_by_first_name = api_sort_by_first_name();
-$actions = '<div class="actions">&nbsp;';
+$actionsLeft = '';
 
 if (api_is_drh()) {
     $menu_items = array(
@@ -193,16 +193,16 @@ if (api_is_drh()) {
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
-            $actions .= $item;
+            $actionsLeft .= $item;
         }
     }
 }
 
-$actions .= '<span style="float:right">';
-$actions .= Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
-$actions .= Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
-$actions .= '</span>';
-$actions .= '</div>';
+$actionsRight = Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
+$actionsRight .= Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
+
+
+$toolbar = Display::toolbarAction('toolbar-user', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
 
 $table = new SortableTable(
     'tracking_student',
@@ -274,7 +274,7 @@ if ($export_csv) {
     exit;
 } else {
     Display::display_header(get_lang('Users'));
-    echo $actions;
+    echo $toolbar;
     $page_title = get_lang('Users');
     echo Display::page_subheader($page_title);
     if (isset($active)) {

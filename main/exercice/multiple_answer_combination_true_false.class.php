@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 	Class MultipleAnswer
+ * 	Class MultipleAnswerCombinationTrueFalse
  *
  *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
  *	extending the class question
@@ -24,6 +24,10 @@ class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
 		parent::__construct();
 		$this -> type = MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE;
 		$this -> isContent = $this-> getIsContent();
-        $this->options = array('1'=>get_lang('True'),'0' =>get_lang('False'), '2' =>get_lang('DontKnow'));
+		$this->options = array(
+			'1' => get_lang('True'),
+			'0' => get_lang('False'),
+			'2' => get_lang('DontKnow'),
+		);
 	}
 }

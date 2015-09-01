@@ -90,7 +90,12 @@ if (isset($_GET['preview'])) {
     $extra_params = '&preview=1';
 }
 
-$exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, 0);
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info(
+    $learnpath_id,
+    $learnpath_item_id,
+    0
+);
+
 $attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
     $attempt_list = Event::getAllExerciseEventByExeId($exercise_stat_info['exe_id']);
@@ -109,7 +114,11 @@ if (!empty($attempt_list)) {
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercice/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.$extra_params;
-$exercise_url_button = Display::url($label, $exercise_url, array('class'=>'btn btn-success btn-large'));
+$exercise_url_button = Display::url(
+    $label,
+    $exercise_url,
+    array('class' => 'btn btn-success btn-large')
+);
 
 //3. Checking visibility of the exercise (overwrites the exercise button)
 $visible_return = $objExercise->is_visible(
@@ -181,8 +190,6 @@ if (!empty($attempts)) {
         );
 
         $teacher_revised = Display::label(get_lang('Validated'), 'success');
-        //$attempt_link = get_lang('NoResult');
-        //$attempt_link = Display::return_icon('quiz_na.png', get_lang('NoResult'), array(), ICON_SIZE_SMALL);
         if ($attempt_result['attempt_revised'] == 0) {
             $teacher_revised = Display::label(get_lang('NotValidated'), 'info');
         }
@@ -214,7 +221,10 @@ if (!empty($attempts)) {
                     RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES
                 )
             )
-            || ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY && $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END)) {
+            || (
+                $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
+                $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END)
+        ) {
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;

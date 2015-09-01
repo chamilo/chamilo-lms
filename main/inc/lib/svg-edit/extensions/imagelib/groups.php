@@ -13,15 +13,22 @@ api_block_anonymous_users();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $course_info = api_get_course_info();
+$groupId = api_get_group_id();
 
-
-$group_properties 	= GroupManager::get_group_properties(api_get_group_id());
-$groupdirpath 		= $group_properties['directory'];
-$group_disk_path 	= api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$groupdirpath.'/';
-$group_web_path  	= api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$groupdirpath.'/';
+$group_properties = GroupManager::get_group_properties($groupId);
+$groupdirpath = $group_properties['directory'];
+$group_disk_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$groupdirpath.'/';
+$group_web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document'.$groupdirpath.'/';
 
 //get all group files and folders
-$docs_and_folders = DocumentManager::get_all_document_data($course_info, $groupdirpath, api_get_group_id(), null, $is_allowed_to_edit, false);
+$docs_and_folders = DocumentManager::get_all_document_data(
+    $course_info,
+    $groupdirpath,
+    api_get_group_id(),
+    null,
+    $is_allowed_to_edit,
+    false
+);
 
 //get all group filenames
 $array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
@@ -36,13 +43,13 @@ if (count($array_to_search) > 0) {
 $accepted_extensions = array('.svg', '.png');
 
 if (is_array($all_files) && count($all_files) > 0) {
-	foreach ($all_files as & $file) {
-		$slideshow_extension = strrchr($file, '.');
-		$slideshow_extension = strtolower($slideshow_extension);
-		if (in_array($slideshow_extension, $accepted_extensions)) {
-			$png_svg_files[] =$file;
-		}
-	}
+    foreach ($all_files as & $file) {
+        $slideshow_extension = strrchr($file, '.');
+        $slideshow_extension = strtolower($slideshow_extension);
+        if (in_array($slideshow_extension, $accepted_extensions)) {
+            $png_svg_files[] =$file;
+        }
+    }
 }
 
 $style = '<style>';
@@ -58,7 +65,10 @@ $style .='</style>';
 <?php
 echo '<h2>'.get_lang('GroupSingle').': '.$group_properties['name'].'</h2>';
 
-if (($group_properties['doc_state'] == 2 && ($is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid']))) || $group_properties['doc_state'] == 1){
+if ((
+        $group_properties['doc_state'] == 2 &&
+        ($is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $groupId))) || $group_properties['doc_state'] == 1
+){
 
 	if (!empty($png_svg_files)) {
 		echo '<h3>'.get_lang('SelectSVGEditImage').'</h3>';
@@ -69,13 +79,12 @@ if (($group_properties['doc_state'] == 2 && ($is_allowed_to_edit || GroupManager
 			if (strpos($filename, "svg")){
 				$new_sizes['width'] = 60;
 				$new_sizes['height'] = 60;
-			}
-			else {
+			} else {
 				$new_sizes = api_resize_image($image, 60, 60);
 			}
-				echo '<li style="display:inline; padding:8px;">';
-				echo '<a href = "'.$group_web_path.$filename.'" alt="'.$filename.'" title="'.$filename.'">';
-				echo '<img src = "'.$group_web_path.$filename.'" width = "'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+            echo '<li style="display:inline; padding:8px;">';
+            echo '<a href = "'.$group_web_path.$filename.'" alt="'.$filename.'" title="'.$filename.'">';
+            echo '<img src = "'.$group_web_path.$filename.'" width = "'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
 		}
 		echo '</ul>';
 	}

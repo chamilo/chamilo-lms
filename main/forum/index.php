@@ -174,12 +174,6 @@ if (!api_is_anonymous()) {
     }
 }
 
-/* CLEAN GROUP ID FOR AJAXFILEMANAGER */
-
-if (isset($_SESSION['_gid'])) {
-    unset($_SESSION['_gid']);
-}
-
 /* ACTION LINKS */
 
 echo '<div class="actions">';

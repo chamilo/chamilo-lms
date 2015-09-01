@@ -87,7 +87,8 @@ if (Database::num_rows($result) == 0) {
         Database::query($sql);
     }
 } else {
-	$query = "UPDATE $tbl_chat_connected SET last_connection='".$current_time."'
+	$query = "UPDATE $tbl_chat_connected SET
+	          last_connection='".$current_time."'
 	          WHERE c_id = $course_id AND user_id='".$userId."' AND session_id='$session_id' AND to_group_id='$group_id'";
     Database::query($query);
 }

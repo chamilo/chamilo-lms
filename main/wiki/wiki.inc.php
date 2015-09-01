@@ -553,7 +553,7 @@ class Wiki
         $_clean = array();
 
         // cleaning the variables
-        $_clean['assignment'] = null;
+        $_clean['assignment'] = '';
         if (isset($values['assignment'])) {
             $_clean['assignment'] = $values['assignment'];
         }
@@ -562,7 +562,7 @@ class Wiki
         $session_id = api_get_session_id();
         // Unlike ordinary pages of pages of assignments.
         // Allow create a ordinary page although there is a assignment with the same name
-        if ($_clean['assignment']==2 || $_clean['assignment']==1) {
+        if ($_clean['assignment'] == 2 || $_clean['assignment'] == 1) {
             $page = str_replace(' ','_',$values['title']."_uass".$assig_user_id);
         } else {
             $page = str_replace(' ','_',$values['title']);
@@ -604,13 +604,13 @@ class Wiki
         $_clean['linksto'] = self::links_to($_clean['content']);	//check wikilinks
 
         // cleaning config variables
-        $_clean['task'] = $values['task'];
-        $_clean['feedback1'] = $values['feedback1'];
-        $_clean['feedback2'] = $values['feedback2'];
-        $_clean['feedback3'] = $values['feedback3'];
-        $_clean['fprogress1'] = $values['fprogress1'];
-        $_clean['fprogress2'] = $values['fprogress2'];
-        $_clean['fprogress3'] = $values['fprogress3'];
+        $_clean['task'] = isset($values['task']) ? $values['task'] : '';
+        $_clean['feedback1'] = isset($values['feedback1']) ? $values['feedback1'] : '';
+        $_clean['feedback2'] = isset($values['feedback2']) ? $values['feedback2'] : '';
+        $_clean['feedback3'] = isset($values['feedback3']) ? $values['feedback3'] : '';
+        $_clean['fprogress1'] = isset($values['fprogress1']) ? $values['fprogress1'] : '';
+        $_clean['fprogress2'] = isset($values['fprogress2']) ? $values['fprogress2'] : '';
+        $_clean['fprogress3'] = isset($values['fprogress3']) ? $values['fprogress3'] : '';
 
         if (isset($values['initstartdate']) && $values['initstartdate'] == 1) {
             $_clean['startdate_assig'] = $values['startdate_assig'];
@@ -624,9 +624,9 @@ class Wiki
             $_clean['enddate_assig'] = '0000-00-00 00:00:00';
         }
 
-        $_clean['delayedsubmit'] = $values['delayedsubmit'];
-        $_clean['max_text'] = $values['max_text'];
-        $_clean['max_version'] = $values['max_version'];
+        $_clean['delayedsubmit'] = isset($values['delayedsubmit']) ? $values['delayedsubmit'] : '';
+        $_clean['max_text'] = isset($values['max_text']) ? $values['max_text'] : '';
+        $_clean['max_version'] = isset($values['max_version']) ? $values['max_version'] : '';
 
         $course_id = api_get_course_int_id();
 
@@ -826,7 +826,7 @@ class Wiki
                 //double post
 
             } else {
-                if ($values['assignment'] == 1) {
+                if (isset($values['assignment']) && $values['assignment'] == 1) {
                     self::auto_add_page_users($values);
                 }
 

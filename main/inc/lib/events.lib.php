@@ -800,7 +800,8 @@ class Event
         Database::query($sql);
 
         foreach ($users as $user) {
-            $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' (user_id,event_type_name) VALUES('.intval($user).',"'.$event_name.'")';
+            $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' (user_id,event_type_name)
+                    VALUES('.intval($user).',"'.$event_name.'")';
             Database::query($sql);
         }
         $language_id = api_get_language_id($event_message_language);
@@ -1285,27 +1286,31 @@ class Event
         }
 
         $sql = "SELECT * FROM $table_track_exercises
-                WHERE 	status 			= '' AND
-                        exe_user_id 	= $user_id AND
-                        c_id 	        = $courseId AND
-                        exe_exo_id 		= $exercise_id AND
-                        session_id 		= $session_id AND
-                        orig_lp_id 		= $lp_id AND
-                        orig_lp_item_id = $lp_item_id
+                WHERE
+                    status 			= '' AND
+                    exe_user_id 	= $user_id AND
+                    c_id 	        = $courseId AND
+                    exe_exo_id 		= $exercise_id AND
+                    session_id 		= $session_id AND
+                    orig_lp_id 		= $lp_id AND
+                    orig_lp_item_id = $lp_item_id
                 ORDER by exe_id $order ";
 
         $res = Database::query($sql);
         $list = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             //Checking if this attempt was revised by a teacher
-            $sql_revised = 'SELECT exe_id FROM '.$table_track_attempt_recording.' WHERE author != "" AND exe_id = '.$row['exe_id'].' LIMIT 1';
-            $res_revised = Database::query($sql_revised);
+            $sql = 'SELECT exe_id FROM '.$table_track_attempt_recording.'
+                    WHERE author != "" AND exe_id = '.$row['exe_id'].'
+                    LIMIT 1';
+            $res_revised = Database::query($sql);
             $row['attempt_revised'] = 0;
             if (Database::num_rows($res_revised) > 0) {
                 $row['attempt_revised'] = 1;
             }
             $list[$row['exe_id']] = $row;
-            $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
+            $sql = "SELECT * FROM $table_track_attempt
+                    WHERE exe_id = {$row['exe_id']}";
             $res_question = Database::query($sql);
             while ($row_q = Database::fetch_array($res_question, 'ASSOC')) {
                 $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;

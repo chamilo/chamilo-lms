@@ -92,8 +92,6 @@ $(document).ready(function () {
 });
 </script>';
 
-// INIT EXERCISE
-
 $objExercise = new Exercise();
 $course_id = api_get_course_int_id();
 
@@ -139,17 +137,20 @@ if ($form->validate()) {
     echo '<div class="actions">';
 
     if ($objExercise->id != 0) {
-        echo '<a href="admin.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id.'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="admin.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id.'">' .
+            Display :: return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){
             if (!empty($_POST['lp_id'])){
-                $lp_id = Security::remove_XSS($_POST['lp_id']);//TODO:this remains to be implemented after press the first post
+                $lp_id = intval($_POST['lp_id']);//TODO:this remains to be implemented after press the first post
             } else {
-                $lp_id = Security::remove_XSS($_GET['lp_id']);
+                $lp_id = intval($_GET['lp_id']);
             }
             echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";
         } else {
-            echo '<a href="exercise.php">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="exercise.php">' .
+                Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).
+                '</a>';
         }
     }
     echo '</div>';

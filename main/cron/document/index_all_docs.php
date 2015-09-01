@@ -13,7 +13,26 @@ if (empty($_GET['doc'])) {
   echo "Received param ".$_GET['doc']."<br />\n";
 }
 $allowed_mime_types = DocumentManager::file_get_mime_type(true);
-$allowed_extensions = array('doc', 'docx', 'ppt', 'pptx', 'pps', 'ppsx', 'xls', 'xlsx', 'odt', 'odp', 'ods', 'pdf', 'txt', 'rtf', 'msg', 'csv', 'html', 'htm');
+$allowed_extensions = array(
+    'doc',
+    'docx',
+    'ppt',
+    'pptx',
+    'pps',
+    'ppsx',
+    'xls',
+    'xlsx',
+    'odt',
+    'odp',
+    'ods',
+    'pdf',
+    'txt',
+    'rtf',
+    'msg',
+    'csv',
+    'html',
+    'htm',
+);
 $courses_list =  CourseManager::get_courses_list();
 
 // Simulating empty specific fields (this is necessary for indexing)

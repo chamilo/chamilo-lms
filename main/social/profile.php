@@ -59,7 +59,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     header('Location: ' . $url);
     exit;
 
-} else if (!empty($_POST['social_wall_new_msg'])  && !empty($_POST['messageId'])) {
+} else if (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
     $messageId = intval($_POST['messageId']);
     $res = SocialManager::sendWallMessage(
         api_get_user_id(),
@@ -201,18 +201,22 @@ if (isset($_GET['shared'])) {
     $my_link = '../social/profile.php';
     $link_shared = '';
 }
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('SocialNetwork') );
+$interbreadcrumb[] = array(
+    'url' => 'home.php',
+    'name' => get_lang('SocialNetwork'),
+);
 
 if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id()) {
     $info_user =   api_get_user_info($_GET['u']);
-    $interbreadcrumb[]= array (
+    $interbreadcrumb[]= array(
         'url' => '#',
-        'name' => api_get_person_name($info_user['firstName'], $info_user['lastName']));
+        'name' => $info_user['complete_name']
+    );
     $nametool = '';
 }
 if (isset($_GET['u'])) {
-    $param_user='u='.Security::remove_XSS($_GET['u']);
-}else {
+    $param_user = 'u='.Security::remove_XSS($_GET['u']);
+} else {
     $info_user = api_get_user_info(api_get_user_id());
     $param_user = '';
 }
@@ -230,7 +234,7 @@ if (is_array($personal_course_list)) {
     foreach ($personal_course_list as $my_course) {
         if ($i<=10) {
             $list[] = SocialManager::get_logged_user_course_html($my_course, $i);
-            $course_list_code[] = array('code'=> $my_course['code']);
+            $course_list_code[] = array('code' => $my_course['code']);
         } else {
             break;
         }
@@ -241,11 +245,19 @@ if (is_array($personal_course_list)) {
 }
 
 //Social Block Menu
-$social_menu_block = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
+$social_menu_block = SocialManager::show_social_menu(
+    'shared_profile',
+    null,
+    $user_id,
+    $show_full_profile
+);
 
 //Setting some session info
 $user_info = api_get_user_info($my_user_id);
-$sessionList = SessionManager::getSessionsFollowedByUser($my_user_id, $user_info['status']);
+$sessionList = SessionManager::getSessionsFollowedByUser(
+    $my_user_id,
+    $user_info['status']
+);
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock(
@@ -296,7 +308,7 @@ if ($show_full_profile) {
                 continue;
             }
             // get display text, visibility and type from user_field table
-            $field_variable = str_replace('extra_','',$key);
+            $field_variable = str_replace('extra_', '', $key);
 
             $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
                 $field_variable
@@ -471,7 +483,7 @@ if ($show_full_profile) {
         // Courses without sessions
         $my_course = '';
         $i = 1;
-       
+
         foreach ($list as $key => $value) {
             if ( empty($value[2]) ) { //if out of any session
                 $my_courses .=  $value[1];
@@ -488,7 +500,7 @@ if ($show_full_profile) {
         //$social_session_block = $htmlSessionList;
         $social_session_block = $sessionList;
     }
-    
+
     // Block Social User Feeds
     $user_feeds = SocialManager::get_user_feeds($user_id);
 

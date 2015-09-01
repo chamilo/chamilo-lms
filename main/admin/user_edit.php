@@ -417,8 +417,8 @@ if ($error_drh) {
 
 $content = null;
 
-$bigImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);
-$normalImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
+$bigImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);
+$normalImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
 $content .= '<a class="expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
 
 // Display form

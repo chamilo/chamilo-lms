@@ -115,22 +115,22 @@ class Answer
         $result = Database::query($sql);
         $i=1;
 
-		// while a record is found
-		while ($object = Database::fetch_object($result)) {
-			$this->id[$i] = $object->id;
-			$this->answer[$i] = $object->answer;
-			$this->correct[$i] = $object->correct;
-			$this->comment[$i] = $object->comment;
-			$this->weighting[$i] = $object->ponderation;
-			$this->position[$i] = $object->position;
-			$this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
-			$this->hotspot_type[$i] = $object->hotspot_type;
-			$this->destination[$i] = $object->destination;
-			$this->autoId[$i] = $object->id_auto;
-			$i++;
-		}
-		$this->nbrAnswers = $i-1;
-	}
+        // while a record is found
+        while ($object = Database::fetch_object($result)) {
+            $this->id[$i] = $object->id;
+            $this->answer[$i] = $object->answer;
+            $this->correct[$i] = $object->correct;
+            $this->comment[$i] = $object->comment;
+            $this->weighting[$i] = $object->ponderation;
+            $this->position[$i] = $object->position;
+            $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
+            $this->hotspot_type[$i] = $object->hotspot_type;
+            $this->destination[$i] = $object->destination;
+            $this->autoId[$i] = $object->id_auto;
+            $i++;
+        }
+        $this->nbrAnswers = $i-1;
+    }
 
      /**
      * returns all answer ids from this question Id
@@ -178,9 +178,10 @@ class Answer
 
 		$TBL_ANSWER   = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$TBL_QUIZ     = Database::get_course_table(TABLE_QUIZ_QUESTION);
-		$questionId=intval($this->questionId);
+		$questionId = intval($this->questionId);
 
-		$sql = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND id = $questionId";
+		$sql = "SELECT type FROM $TBL_QUIZ
+		        WHERE c_id = {$this->course_id} AND id = $questionId";
 		$result_question = Database::query($sql);
 		$question_type = Database::fetch_array($result_question);
 
@@ -532,6 +533,7 @@ class Answer
             'hotspot_coordinates' => $hotspot_coordinates,
             'hotspot_type' => $hotspot_type,
         ];
+
         Database::update($answerTable, $params, ['id_auto = ?' => $autoId]);
 	}
 
@@ -582,6 +584,7 @@ class Answer
                 // https://support.chamilo.org/issues/6558
                 // function updateAnswers already escape_string, error if we do it twice.
                 // Feed function updateAnswers with none escaped strings
+
                 $this->updateAnswers(
                     $autoId,
                     $this->new_answer[$i],
@@ -596,26 +599,31 @@ class Answer
             }
 
             $answerList[$i] = $autoId;
+
             if ($correct) {
-                $correctList[$autoId] = array('id' => $i, 'correct' => $correct);
+                $correctList[$autoId] = true;
             }
         }
 
-        if (!empty($correctList)) {
-            foreach ($correctList as $autoId => $data) {
-                $correct = $data['correct'];
+        $questionType = self::getQuestionType();
 
-                if (isset($answerList[$correct])) {
-                    $correct = $answerList[$correct];
-                }
+        if ($questionType == MATCHING) {
 
-                $sql = "UPDATE $answerTable
-                        SET correct = $correct
+            if (!empty($correctList)) {
+                foreach ($correctList as $autoId => $status) {
+                    /*$correct = $data['correct'];
+
+                    if (isset($answerList[$correct])) {
+                        $correct = $answerList[$correct];
+                    }*/
+
+                    $sql = "UPDATE $answerTable
+                        SET correct = $autoId
                         WHERE
                             id_auto = $autoId
                         ";
-                Database::query($sql);
-
+                    Database::query($sql);
+                }
             }
         }
 

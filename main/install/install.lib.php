@@ -1536,7 +1536,7 @@ function display_configuration_settings_form(
     echo "<h2>" . display_step_sequence() . get_lang("CfgSetting") . "</h2>";
     echo '</div>';
 
-    echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>main/inc/conf/configuration.php</strong></p>';
+    echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>app/config/configuration.php</strong></p>';
 
     // Parameter 1: administrator's login
     
@@ -1696,7 +1696,7 @@ function display_after_install_message($installType)
     echo '<div class="alert alert-warning">';
     echo '<strong>'.get_lang('SecurityAdvice').'</strong>';
     echo ': ';
-    printf(get_lang('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'main/inc/conf/', 'main/install/');
+    printf(get_lang('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'app/config/', 'main/install/');
     echo '</div>';
     ?></form>
     <br />

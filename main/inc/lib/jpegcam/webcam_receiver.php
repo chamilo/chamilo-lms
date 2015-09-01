@@ -48,7 +48,7 @@ if($ext!= 'jpg'){
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $saveDir=$dirBaseDocuments.$webcamdir;
 $current_session_id = api_get_session_id();
-$groupId=$_SESSION['_gid'];
+$groupId = api_get_group_id();
 
 //avoid duplicates
 $webcamname_to_save=$webcamname;

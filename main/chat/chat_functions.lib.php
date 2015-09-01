@@ -50,11 +50,11 @@ function exit_of_chat($user_id)
 
     foreach ($list_course as $course) {
         $response = user_connected_in_chat($user_id);
-        //if ($response === true) {
-            $sql = 'DELETE FROM '.$tbl_chat_connected.'
-                    WHERE c_id = '.$course['real_id'].' AND user_id = '.$user_id;
-            Database::query($sql);
-        //}
+
+        $sql = 'DELETE FROM '.$tbl_chat_connected.'
+                WHERE c_id = '.$course['real_id'].' AND user_id = '.$user_id;
+        Database::query($sql);
+
     }
 }
 
@@ -73,27 +73,27 @@ function disconnect_user_of_chat()
     $cdate_s = date('s', $now);
 	$cd_count_time_seconds = $cdate_h*3600 + $cdate_m*60 + $cdate_s;
 
-	if (is_array($list_info_user_in_chat) && count($list_info_user_in_chat) > 0) {
-		foreach ($list_info_user_in_chat as $list_info_user) {
-			$date_db_date = date('Y-m-d', api_strtotime($list_info_user['last_connection'], 'UTC'));
-			$date_db_h  = date('H', api_strtotime($list_info_user['last_connection'], 'UTC'));
-			$date_db_m  = date('i', api_strtotime($list_info_user['last_connection'], 'UTC'));
-			$date_db_s  = date('s', api_strtotime($list_info_user['last_connection'], 'UTC'));
+    if (is_array($list_info_user_in_chat) && count($list_info_user_in_chat) > 0) {
+        foreach ($list_info_user_in_chat as $list_info_user) {
+            $date_db_date = date('Y-m-d', api_strtotime($list_info_user['last_connection'], 'UTC'));
+            $date_db_h  = date('H', api_strtotime($list_info_user['last_connection'], 'UTC'));
+            $date_db_m  = date('i', api_strtotime($list_info_user['last_connection'], 'UTC'));
+            $date_db_s  = date('s', api_strtotime($list_info_user['last_connection'], 'UTC'));
             $date_count_time_seconds = $date_db_h * 3600 + $date_db_m * 60 + $date_db_s;
-			if ($cd_date == $date_db_date) {
-				if (($cd_count_time_seconds - $date_count_time_seconds) > 5) {
+            if ($cd_date == $date_db_date) {
+                if (($cd_count_time_seconds - $date_count_time_seconds) > 5) {
                     $tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
-			 		$sql = 'DELETE FROM '.$tbl_chat_connected.'
-			 		        WHERE
-			 		            c_id = '.$course_id.' AND
-			 		            user_id = '.$list_info_user['user_id'].' AND
-			 		            to_group_id = '.$groupId.'
+                    $sql = 'DELETE FROM '.$tbl_chat_connected.'
+                            WHERE
+                                c_id = '.$course_id.' AND
+                                user_id = '.$list_info_user['user_id'].' AND
+                                to_group_id = '.$groupId.'
                             ';
-			 		Database::query($sql);
-				}
-			}
-		}
-	}
+                    Database::query($sql);
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -224,11 +224,8 @@ function saveMessage($message, $userId, $_course, $session_id, $group_id, $previ
             }
 
             $fp = fopen($chat_path.$basename_chat.'.log.html', 'a');
-
-            $userPhoto = Usermanager::getUserPicture($userId, USER_IMAGE_SIZE_MEDIUM);
-
+            $userPhoto = UserManager::getUserPicture($userId, USER_IMAGE_SIZE_MEDIUM);
             $filePhoto = '<img class="chat-image" src="'.$userPhoto.'"/>';
-
             if ($isMaster) {
                 fputs($fp, '<div class="message-teacher"><div class="content-message"><div class="chat-message-block-name">'.$fullName.'</div><div class="chat-message-block-content">'.$message.'</div><div class="message-date">'.$timeNow.'</div></div><div class="icon-message"></div>'.$filePhoto.'</div>'."\n");
             } else {

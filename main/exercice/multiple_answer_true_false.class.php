@@ -82,7 +82,7 @@ class MultipleAnswerTrueFalse extends Question
         }
 
         // Can be more options
-        $option_data = Question::readQuestionOption($this->id, $course_id);
+        $optionData = Question::readQuestionOption($this->id, $course_id);
 
         for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addHtml('<tr>');
@@ -120,8 +120,8 @@ class MultipleAnswerTrueFalse extends Question
                 $defaults['correct[' . $i . ']'] = $correct;
 
                 $j = 1;
-                if (!empty($option_data)) {
-                    foreach ($option_data as $id => $data) {
+                if (!empty($optionData)) {
+                    foreach ($optionData as $id => $data) {
                         $form->addElement('radio', 'correct[' . $i . ']', null, null, $id);
                         $j++;
                         if ($j == 3) {
@@ -212,7 +212,6 @@ class MultipleAnswerTrueFalse extends Question
         if (!empty($this->extra)) {
             $scores = explode(':', $this->extra);
 
-
             if (!empty($scores)) {
                 for ($i = 1; $i <= 3; $i++) {
                     $defaults['option[' . $i . ']'] = $scores[$i - 1];
@@ -231,8 +230,6 @@ class MultipleAnswerTrueFalse extends Question
             $form->addGroup($buttonGroup);
         }
 
-        $defaults['correct'] = $correct;
-
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
@@ -250,19 +247,19 @@ class MultipleAnswerTrueFalse extends Question
     public function processAnswersCreation($form)
     {
 		$questionWeighting = $nbrGoodAnswers = 0;
-		$objAnswer        = new Answer($this->id);
-		$nb_answers       = $form->getSubmitValue('nb_answers');
-        $options_count    = $form->getSubmitValue('options_count');
-        $course_id        = api_get_course_int_id();
+		$objAnswer = new Answer($this->id);
+        $nb_answers = $form->getSubmitValue('nb_answers');
+        //$options_count    = $form->getSubmitValue('options_count');
+        $course_id = api_get_course_int_id();
 
         $correct = array();
         $options = Question::readQuestionOption($this->id, $course_id);
 
         if (!empty($options)) {
-            foreach ($options as $option_data) {
-                $id = $option_data['id'];
-                unset($option_data['id']);
-                Question::updateQuestionOption($id, $option_data, $course_id);
+            foreach ($options as $optionData) {
+                $id = $optionData['id'];
+                unset($optionData['id']);
+                Question::updateQuestionOption($id, $optionData, $course_id);
             }
         } else {
             for ($i=1 ; $i <= 3 ; $i++) {
@@ -282,7 +279,7 @@ class MultipleAnswerTrueFalse extends Question
         $new_options = Question::readQuestionOption($this->id, $course_id);
 
         $sorted_by_position = array();
-        foreach($new_options as $item) {
+        foreach ($new_options as $item) {
         	$sorted_by_position[$item['position']] = $item;
         }
 
@@ -294,18 +291,19 @@ class MultipleAnswerTrueFalse extends Question
             $score = trim($form -> getSubmitValue('option['.$i.']'));
             $extra_values[]= $score;
         }
-        $this->setExtra(implode(':',$extra_values));
+        $this->setExtra(implode(':', $extra_values));
 
-		for ($i=1 ; $i <= $nb_answers ; $i++) {
-        	$answer     = trim($form -> getSubmitValue('answer['.$i.']'));
-            $comment    = trim($form -> getSubmitValue('comment['.$i.']'));
-            $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
+		for ($i = 1; $i <= $nb_answers; $i++) {
+            $answer = trim($form->getSubmitValue('answer['.$i.']'));
+            $comment = trim($form->getSubmitValue('comment['.$i.']'));
+            $goodAnswer = trim($form->getSubmitValue('correct['.$i.']'));
             if (empty($options)) {
                 //If this is the first time that the question is created when
                 // change the default values from the form 1 and 2 by the correct "option id" registered
                 $goodAnswer = $sorted_by_position[$goodAnswer]['id'];
             }
     	    $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
+
         	$objAnswer->createAnswer($answer, $goodAnswer, $comment,'',$i);
         }
 

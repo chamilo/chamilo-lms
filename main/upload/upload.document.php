@@ -8,19 +8,6 @@
  * @package chamilo.upload
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Process the document and return to the document tool
- */
-
-/*
-	Libraries
-*/
-
-//many useful functions in main_api.lib.php, by default included
-if (!function_exists('api_get_path')) {
-    header('location: upload.php');
-    die;
-}
 
 $courseDir = $_course['path'] . "/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -59,7 +46,6 @@ api_display_tool_title($nameTools . $add_group_to_title);
 /**
  * Process
  */
-
 //user has submitted a file
 if (isset($_FILES['user_upload'])) {
 	$upload_ok = process_uploaded_file($_FILES['user_upload']);
@@ -87,10 +73,10 @@ if (isset($_FILES['user_upload'])) {
         	if ($new_title)   $ct .= ", title='$new_title'";
         	Database::query("UPDATE $table_document SET" . substr($ct, 1) ." WHERE id = '$docid'");
     	}
-		//check for missing images in html files
-		$missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);
-		if ($missing_files)  {
-			//show a form to upload the missing files
+        //check for missing images in html files
+        $missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);
+        if ($missing_files)  {
+            //show a form to upload the missing files
             Display::display_normal_message(
                 build_missing_files_form(
                     $missing_files,
@@ -98,17 +84,17 @@ if (isset($_FILES['user_upload'])) {
                     $_FILES['user_upload']['name']
                 )
             );
-		}
-	}
+        }
+    }
 }
 //missing images are submitted
 if (isset($_POST['submit_image'])) {
-	$number_of_uploaded_images = count($_FILES['img_file']['name']);
-	//if images are uploaded
-	if ($number_of_uploaded_images > 0) {
-		//we could also create a function for this, I'm not sure...
-		//create a directory for the missing files
-		$img_directory = str_replace('.','_',$_POST['related_file']."_files");
+    $number_of_uploaded_images = count($_FILES['img_file']['name']);
+    //if images are uploaded
+    if ($number_of_uploaded_images > 0) {
+        //we could also create a function for this, I'm not sure...
+        //create a directory for the missing files
+        $img_directory = str_replace('.','_',$_POST['related_file']."_files");
         $folderData = create_unexisting_directory(
             $_course,
             $_user['user_id'],
@@ -119,7 +105,7 @@ if (isset($_POST['submit_image'])) {
             $img_directory
         );
         $missing_files_dir = $folderData['path'];
-		//put the uploaded files in the new directory and get the paths
+        //put the uploaded files in the new directory and get the paths
         $paths_to_replace_in_file = move_uploaded_file_collection_into_directory(
             $_course,
             $_FILES['img_file'],
@@ -130,15 +116,15 @@ if (isset($_POST['submit_image'])) {
             $to_user_id,
             $max_filled_space
         );
-		//open the html file and replace the paths
+        //open the html file and replace the paths
         replace_img_path_in_html_file(
             $_POST['img_file_path'],
             $paths_to_replace_in_file,
             $base_work_dir . $_POST['related_file']
         );
-		//update parent folders
-		item_property_update_on_folder($_course,$_POST['curdirpath'],$_user['user_id']);
-	}
+        //update parent folders
+        item_property_update_on_folder($_course,$_POST['curdirpath'],$_user['user_id']);
+    }
 }
 //they want to create a directory
 if (isset($_POST['create_dir']) && $_POST['dirname']!='') {
@@ -174,7 +160,9 @@ if (isset($_GET['createdir'])) {
 	Display::display_normal_message($new_folder_text);
 } else {	//give them a link to create a directory
 ?>
-	<p><a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1"><img src="../img/new_folder.gif" border="0" align="absmiddle" alt ="" />
+	<p>
+        <a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1">
+            <img src="../img/new_folder.gif" border="0" align="absmiddle" alt ="" />
             <?php echo(get_lang('CreateDir'));?>
         </a>
     </p>
@@ -184,7 +172,6 @@ if (isset($_GET['createdir'])) {
 
 <div id="folderselector">
 </div>
-
 <!-- start upload form -->
 <form action="<?php echo api_get_self(); ?>" method="POST" name="upload" enctype="multipart/form-data">
 <!-- <input type="hidden" name="MAX_FILE_SIZE" value="5400"> -->

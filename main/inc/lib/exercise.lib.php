@@ -324,7 +324,6 @@ HTML;
 
                     if ($answerType == UNIQUE_ANSWER_IMAGE) {
                         $attributes['style'] = 'display: none;';
-
                         $answer = '<div class="thumbnail">' . $answer . '</div>';
                     }
 
@@ -506,7 +505,9 @@ HTML;
                     if (!empty($user_choice_array)) {
                         foreach ($user_choice_array as $item) {
                             $item = explode(':', $item);
-                            $my_choice[$item[0]] = $item[1];
+                            if (isset($item[1]) && isset($item[0])) {
+                                $my_choice[$item[0]] = $item[1];
+                            }
                         }
                     }
                     $answer = Security::remove_XSS($answer, STUDENT);
@@ -3479,7 +3480,6 @@ HTML;
 
         $counter = 1;
         $total_score = $total_weight = 0;
-
         $exercise_content = null;
 
         // Hide results

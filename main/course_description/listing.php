@@ -10,15 +10,6 @@
 // protect a course script
 api_protect_course_script(true);
 
-// display messages
-if ((isset($messages['edit']) && $messages['edit']) ||
-    (isset($messages['add']) && $messages['add'])
-) {
-	Display :: display_confirmation_message(get_lang('CourseDescriptionUpdated'));
-} else if (isset($messages['destroy']) && $messages['destroy']) {
-	Display :: display_confirmation_message(get_lang('CourseDescriptionDeleted'));
-}
-
 // display actions menu
 if (api_is_allowed_to_edit(null,true)) {
     $categories = array();
@@ -32,10 +23,12 @@ if (api_is_allowed_to_edit(null,true)) {
 	ksort($categories);
 	foreach ($categories as $id => $title) {
 		if ($i==ADD_BLOCK) {
-			echo '<a href="index.php?'.api_get_cidreq().'&action=add">'.Display::return_icon($default_description_icon[$id], $title,'',ICON_SIZE_MEDIUM).'</a>';
+			echo '<a href="index.php?'.api_get_cidreq().'&action=add">'.
+                Display::return_icon($default_description_icon[$id], $title,'',ICON_SIZE_MEDIUM).'</a>';
 			break;
 		} else {
-			echo '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.Display::return_icon($default_description_icon[$id], $title,'',ICON_SIZE_MEDIUM).'</a>';
+			echo '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.
+                Display::return_icon($default_description_icon[$id], $title,'',ICON_SIZE_MEDIUM).'</a>';
 			$i++;
 		}
 	}
@@ -45,7 +38,12 @@ $history = isset($history) ? $history : null;
 
 // display course description list
 if ($history) {
-	echo '<div><table width="100%"><tr><td><h3>'.get_lang('ThematicAdvanceHistory').'</h3></td><td align="right"><a href="index.php?action=listing">'.Display::return_icon('info.png',get_lang('BackToCourseDesriptionList'),array('style'=>'vertical-align:middle;'),ICON_SIZE_SMALL).' '.get_lang('BackToCourseDesriptionList').'</a></td></tr></table></div>';
+	echo '<div>
+        <table width="100%">
+            <tr>
+                <td><h3>'.get_lang('ThematicAdvanceHistory').'</h3></td>
+                <td align="right"><a href="index.php?action=listing">'.
+                Display::return_icon('info.png',get_lang('BackToCourseDesriptionList'), array('style'=>'vertical-align:middle;'),ICON_SIZE_SMALL).' '.get_lang('BackToCourseDesriptionList').'</a></td></tr></table></div>';
 }
 
 $user_info = api_get_user_info();
@@ -79,6 +77,7 @@ if (isset($descriptions) && count($descriptions) > 0) {
             echo '<div class="panel-body">';
             echo $description['content'];
             echo '</div></div>';
+            
         }
     }
 } else {

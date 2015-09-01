@@ -987,4 +987,23 @@ class Session
         return $this->sendSubscriptionNotification;
     }
 
+    /**
+     * Get user from course by status
+     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @param string $status
+     * @return \Doctrine\Common\Collections\Collection|static
+     */
+    public function getUserCourseSubscriptionsByStatus(Course $course, $status)
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq("course", $course)
+            )
+            ->andWhere(
+                Criteria::expr()->eq("status", $status)
+            );
+
+        return $this->userCourseSubscriptions->matching($criteria);
+    }
+
 }

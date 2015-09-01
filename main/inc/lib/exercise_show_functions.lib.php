@@ -236,6 +236,7 @@ class ExerciseShowFunctions
         $ans,
         $in_results_disabled
     ) {
+
         $hide_expected_answer = false;
         if ($feedback_type == 0 && $in_results_disabled == 2) {
             $hide_expected_answer = true;

@@ -93,36 +93,35 @@ class CourseDescription
     /**
      * Get all data by description and session id,
      * first you must set session_id property with the object CourseDescription
-     * @param    int        description type
-     * @param   string  course code (optional)
-     * @param    int        session id (optional)
-     * @return array
+     * @param    int  $description_type Description type
+     * @param   string $course_code Course code (optional)
+     * @param    int $session_id Session id (optional)
+     * @return array    List of fields from the descriptions found of the given type
      */
     public function get_data_by_description_type(
         $description_type,
-        $course_code = '',
+        $courseId = null,
         $session_id = null
     ) {
         $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $course_id = api_get_course_int_id();
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
 
         if (!isset($session_id)) {
             $session_id = $this->session_id;
         }
         $condition_session = api_get_session_condition($session_id);
-        if (!empty($course_code)) {
-            $course_info = api_get_course_info($course_code);
-            $course_id = $course_info['real_id'];
-        }
         $description_type = intval($description_type);
         $sql = "SELECT * FROM $tbl_course_description
-		        WHERE c_id = $course_id AND description_type='$description_type' $condition_session ";
+		        WHERE c_id = $courseId AND description_type='$description_type' $condition_session ";
         $rs = Database::query($sql);
         $data = array();
         if ($description = Database::fetch_array($rs)) {
             $data['description_title'] = $description['title'];
             $data['description_content'] = $description['content'];
             $data['progress'] = $description['progress'];
+            $data['id'] = $description['id'];
         }
 
         return $data;

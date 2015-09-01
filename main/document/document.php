@@ -879,7 +879,10 @@ if (!empty($documentAndFolders)) {
     foreach ($documentAndFolders as $file) {
         if ($file['filetype'] == 'file') {
             $path_info = pathinfo($file['path']);
-            $extension = strtolower($path_info['extension']);
+            $extension = '';
+            if (!empty($path_info['extension'])) {
+                $extension = strtolower($path_info['extension']);
+            }
 
             //@todo use a js loop to auto generate this code
             if (in_array($extension, array('ogg', 'mp3', 'wav'))) {
@@ -1499,32 +1502,19 @@ if ($groupId != 0) {
 if (!isset($folders) || $folders === false) {
     $folders = array();
 }
-
+$btngroup= array('class' => 'btn btn-default');
 $actions = '<div class="actions">';
-if (!$is_certificate_mode) {
-    /* BUILD SEARCH FORM */
-
-    $form = new FormValidator(
-        'search_document',
-        'get',
-        api_get_self().'?'.api_get_cidreq(),
-        '',
-        array(),
-        FormValidator::LAYOUT_INLINE
-    );
-    $form->addText('keyword', '', false, array('class' => 'col-md-2'));
-    $form->addElement('hidden', 'cidReq', api_get_course_id());
-    $form->addElement('hidden', 'id_session', api_get_session_id());
-    $form->addElement('hidden', 'gidReq', $groupId);
-    $form->addButtonSearch(get_lang('Search'));
-    $actions .= $form->returnForm();
-}
+$actions .= '<div class="row">';
+$actions .= '<div class="col-md-8">';
 
 /* GO TO PARENT DIRECTORY */
+
 if ($curdirpath != '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
+    
     $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'">';
     $actions .= Display::return_icon('folder_up.png', get_lang('Up'), '', ICON_SIZE_MEDIUM);
     $actions .= '</a>';
+    
 }
 
 if ($is_certificate_mode && $curdirpath != '/certificates') {
@@ -1646,6 +1636,48 @@ if ($is_allowed_to_edit ||
         );
     }
 }
+require 'document_slideshow.inc.php';
+if ($image_present && !isset($_GET['keyword'])) {
+    $actions .= Display::url(
+        Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl
+    );
+}
+
+if (api_is_allowed_to_edit(null, true)) {
+    $actions .= Display::url(
+        Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'document/document_quota.php?'.api_get_cidreq()
+    );
+}
+
+$actions .= '</div>';
+$actions .= '<div class="col-md-4">';
+$actions .= '<div class="pull-right">';
+if (!$is_certificate_mode) {
+    /* BUILD SEARCH FORM */
+
+    $form = new FormValidator(
+        'search_document',
+        'get',
+        api_get_self().'?'.api_get_cidreq(),
+        '',
+        array(),
+        FormValidator::LAYOUT_INLINE
+    );
+    $form->addText('keyword', '', false, array('class' => 'col-md-2'));
+    $form->addElement('hidden', 'cidReq', api_get_course_id());
+    $form->addElement('hidden', 'id_session', api_get_session_id());
+    $form->addElement('hidden', 'gidReq', $groupId);
+    $form->addButtonSearch(get_lang('Search'));
+    $actions .= $form->returnForm();
+}
+$actions .= '</div>';
+$actions .= '</div>';
+$actions .= '</div>';
+
+
+
 
 $table_footer = '';
 $total_size = 0;
@@ -1822,20 +1854,7 @@ if (!is_null($documentAndFolders)) {
     }
 }
 
-require 'document_slideshow.inc.php';
-if ($image_present && !isset($_GET['keyword'])) {
-    $actions .= Display::url(
-        Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl
-    );
-}
 
-if (api_is_allowed_to_edit(null, true)) {
-    $actions .= Display::url(
-        Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'document/document_quota.php?'.api_get_cidreq()
-    );
-}
 $actions .= '</div>';
 
 if (!empty($moveTo)) {

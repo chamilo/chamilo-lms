@@ -13,7 +13,7 @@ $isDRH = api_is_drh();
 
 if (!$isStudent && !$isStudentBosss && !$isDRH) {
     header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php');
-    die;
+    exit;
 }
 
 $userId = api_get_user_id();
@@ -31,11 +31,11 @@ $tpl->assign('allowSkillsTool', api_get_setting('allow_skills_tool') == 'true');
 $tpl->assign('allowDrhSkillsManagement', api_get_setting('allow_hr_skills_management') == 'true');
 
 if ($isStudent) {
-    $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory "
-        . "FROM $skillTable s "
-        . "INNER JOIN $skillRelUserTable sru ON s.id = sru.skill_id "
-        . "INNER JOIN $courseTable c ON sru.course_id = c.id "
-        . "WHERE sru.user_id = $userId";
+    $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
+            FROM $skillTable s
+            INNER JOIN $skillRelUserTable sru ON s.id = sru.skill_id
+            INNER JOIN $courseTable c ON sru.course_id = c.id
+            WHERE sru.user_id = $userId";
 
     $result = Database::query($sql);
 
@@ -78,11 +78,12 @@ if ($isStudent) {
     }
 
     if ($selectedStudent > 0) {
-        $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory "
-            . "FROM $skillTable s "
-            . "INNER JOIN $skillRelUserTable sru ON s.id = sru.skill_id "
-            . "INNER JOIN $courseTable c ON sru.course_id = c.id "
-            . "WHERE sru.user_id = $selectedStudent";
+        $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
+                FROM $skillTable s
+                INNER JOIN $skillRelUserTable sru ON s.id = sru.skill_id
+                INNER JOIN $courseTable c ON sru.course_id = c.id
+                WHERE sru.user_id = $selectedStudent
+                ";
 
         $result = Database::query($sql);
 
@@ -106,16 +107,13 @@ if ($isStudent) {
                     $courseImageThumb->resize(32, 32, 0);
                     $courseImageThumb->send_image($thumbSysPath);
                 }
-
                 $tableRow['courseImage'] = $thumbWebPath;
             }
-
             $tableRows[] = $tableRow;
         }
     }
 
     $tplPath = 'skill/student_boss_report.tpl';
-
     $tpl->assign('followedStudents', $followedStudents);
     $tpl->assign('selectedStudent', $selectedStudent);
 } else if ($isDRH) {
@@ -141,28 +139,22 @@ if ($isStudent) {
     switch ($action) {
         case 'filterByCourse':
             $course = api_get_course_info_by_id($selectedCourse);
-
             $reportTitle = sprintf(get_lang('AchievedSkillInCourseX'), $course['name']);
-
             $tableRows = $objSkill->listAchievedByCourse($selectedCourse);
             break;
         case 'filterBySkill':
             $skill = $objSkill->get($selectedSkill);
-
             $reportTitle = sprintf(get_lang('StudentsWhoAchievedTheSkillX'), $skill['name']);
-
             $students = UserManager::getUsersFollowedByUser(
                 $userId, STUDENT, false, false, false, null, null, null, null, null, null, DRH
             );
 
             $coursesFilter = array();
-
             foreach ($courses as $course) {
                 $coursesFilter[] = $course['id'];
             }
 
             $tableRows = $objSkill->listUsersWhoAchieved($selectedSkill, $coursesFilter);
-
             break;
     }
 
@@ -190,13 +182,10 @@ if ($isStudent) {
     $tplPath = 'skill/drh_report.tpl';
 
     $tpl->assign('action', $action);
-
     $tpl->assign('courses', $courses);
     $tpl->assign('skills', $skills);
-
     $tpl->assign('selectedCourse', $selectedCourse);
     $tpl->assign('selectedSkill', $selectedSkill);
-
     $tpl->assign('reportTitle', $reportTitle);
 }
 

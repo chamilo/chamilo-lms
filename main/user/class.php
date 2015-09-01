@@ -37,9 +37,7 @@ $(document).ready( function() {
 ';
 
 Display :: display_header($tool_name, "User");
-
 $usergroup = new UserGroup();
-
 if (api_is_allowed_to_edit()) {
     echo '<div class="actions">';
     if ($type == 'registered') {

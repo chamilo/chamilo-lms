@@ -323,7 +323,10 @@ if (api_is_platform_admin()) {
     echo '</div>';
 }
 echo '</div>';
+echo '<div id="session-list" class="table-responsive">';
 echo Display::grid_html('sessions');
+echo '</div>';
+
 Display::display_footer();
 
 

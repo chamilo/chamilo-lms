@@ -16,6 +16,7 @@ class SequenceResourceManager
      * @param array $sequences The sequences
      * @param int $type The type of sequence resource
      * @param int $userId Optional. The user ID
+     *
      * @return array
      */
     public static function checkRequirementsForUser(array $sequences, $type, $userId = 0)
@@ -35,6 +36,7 @@ class SequenceResourceManager
      * Check if the ser has completed the requirements for the session sequences
      * @param array $sequences The sequences
      * @param int $userId Optional. The user ID
+     *
      * @return array
      */
     private static function checkSessionRequirementsForUser(array $sequences, $userId = 0)
@@ -99,16 +101,15 @@ class SequenceResourceManager
     /**
      * Check if at least one sequence are completed
      * @param array $sequences The sequences
-     * @param int $type The type of sequence resource
      *
      * @return boolean
      */
     public static function checkSequenceAreCompleted(array $sequences)
     {
-        foreach ($sequences as $secuence) {
+        foreach ($sequences as $sequence) {
             $status = true;
 
-            foreach ($secuence['requirements'] as $item) {
+            foreach ($sequence['requirements'] as $item) {
                 $status = $status && $item['status'];
             }
 

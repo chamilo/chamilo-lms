@@ -479,6 +479,10 @@ class PDF
         }
         //$this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file
 
+        if ($outputMode == 'F') {
+            $output_file = api_get_path(SYS_ARCHIVE_PATH) . $output_file;
+        }
+
         if ($saveInFile) {
             $fileToSave = !empty($fileToSave) ? $fileToSave : api_get_path(SYS_ARCHIVE_PATH).uniqid();
 
@@ -492,13 +496,9 @@ class PDF
                 $output_file,
                 $outputMode
             ); // F to save the pdf in a file
-            exit;
         }
 
-
-        if ($outputMode == 'F') {
-            // Do NOT exit when export to file
-        } else {
+        if ($outputMode != 'F') {
             exit;
         }
     }

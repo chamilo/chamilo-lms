@@ -1,8 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 // notice for unauthorized people.

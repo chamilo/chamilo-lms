@@ -26,18 +26,18 @@ if (!api_is_allowed_to_edit()) {
 
 $tool_name = get_lang('DelCourse');
 
-if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
-	CourseManager::delete_course($_course['sysCode']);
-	$obj_cat = new Category();
-	$obj_cat->update_category_delete($_course['sysCode']);
+    if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
+    CourseManager::delete_course($_course['sysCode']);
+    $obj_cat = new Category();
+    $obj_cat->update_category_delete($_course['sysCode']);
 
-	// DELETE CONFIRMATION MESSAGE
+    // DELETE CONFIRMATION MESSAGE
     Session::erase('_cid');
     Session::erase('_real_cid');
-	$noPHP_SELF = true;
-	$message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
+    $noPHP_SELF = true;
+    $message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
     $message .=get_lang('HasDel');
-	$message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').' '.api_get_setting('siteName').'</a>';
+    $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').' '.api_get_setting('siteName').'</a>';
 
 } else {
     $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';

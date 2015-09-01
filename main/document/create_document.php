@@ -274,7 +274,7 @@ if ($is_certificate_mode) {
 }
 
 // Show read-only box only in groups
-if (!empty($_SESSION['_gid'])) {
+if (!empty($groupId)) {
 	$group[]= $form->createElement('checkbox', 'readonly', '', get_lang('ReadOnly'));
 }
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');

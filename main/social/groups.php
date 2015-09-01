@@ -20,7 +20,7 @@ $this_section = SECTION_SOCIAL;
 $allowed_views = array('mygroups','newest','pop');
 $content = null;
 
-if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
+if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if ($_GET['view'] == 'mygroups') {
         $interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
         $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('MyGroups'));

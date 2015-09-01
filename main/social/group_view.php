@@ -279,13 +279,10 @@ $tpl = new Template(null);
 SocialManager::setSocialUserBlock($tpl, $user_id, 'groups', $group_id);
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
-
 $tpl->setHelp('Groups');
-
 $tpl->assign('create_link', $create_thread_link);
 $tpl->assign('is_group_member', $is_group_member);
 $tpl->assign('group_info', $group_info);
-
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template('social/group_view.tpl');

@@ -7,9 +7,7 @@
  * @package chamilo.upload
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Process the SCORM package and return to the SCORM tool
- */
+
 $cwdir = getcwd();
 require_once '../newscorm/lp_upload.php';
 

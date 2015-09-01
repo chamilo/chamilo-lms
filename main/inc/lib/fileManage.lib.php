@@ -468,10 +468,12 @@ class FileManager
 		// Determine which query to execute
 		if ($result['number_existing'] > 0) {
 			// Entry exists, update
-			$query = "UPDATE $glued_table SET path='$full_file_name',visibility='$default_visibility', filetype='$filetype' WHERE path='$full_file_name'";
+			$query = "UPDATE $glued_table SET path='$full_file_name',visibility='$default_visibility', filetype='$filetype'
+			          WHERE path='$full_file_name'";
 		} else {
 			// No entry exists, create new one
-			$query = "INSERT INTO $glued_table (path,visibility,filetype) VALUES('$full_file_name','$default_visibility','$filetype')";
+			$query = "INSERT INTO $glued_table (path,visibility,filetype)
+			          VALUES ('$full_file_name','$default_visibility','$filetype')";
 		}
 		Database::query($query);
 	}

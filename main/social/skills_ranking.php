@@ -45,7 +45,16 @@ $extra_params['height'] = 'auto';
 
 //$extra_params['rowList'] = array(10, 20 ,30);
 
-$jqgrid = Display::grid_js('skill_ranking', $url,$columns,$column_model,$extra_params, array(), null, true);
+$jqgrid = Display::grid_js(
+    'skill_ranking',
+    $url,
+    $columns,
+    $column_model,
+    $extra_params,
+    array(),
+    null,
+    true
+);
 $content = Display::grid_html('skill_ranking');
 
 $tpl = new Template(get_lang('Ranking'));

@@ -4,27 +4,20 @@
 /**
  * 	@package chamilo.user
  */
-/**
- * Code
- */
+
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
-
 
 if (!api_is_allowed_to_edit()) {
     api_not_allowed();
     exit;
 }
 
-/*
-  MAIN CODE
- */
 $tool_name = get_lang("AddClassesToACourse");
 //extra entries in breadcrumb
 $interbreadcrumb[] = array("url" => "user.php", "name" => get_lang("ToolUser"));
 $interbreadcrumb[] = array("url" => "class.php", "name" => get_lang("Classes"));
 Display :: display_header($tool_name, "User");
-
 echo Display::page_header($tool_name);
 
 if (isset($_GET['register'])) {
@@ -87,12 +80,11 @@ function get_class_data($from, $number_of_items, $column, $direction) {
         $subscribed_classes[] = $obj->class_id;
     }
     $sql = "SELECT
-							c.id AS col0,
-							c.name   AS col1,
-							COUNT(cu.user_id) AS col2,
-							c.id AS col3
-						FROM $class_table c
-						";
+                c.id AS col0,
+                c.name   AS col1,
+                COUNT(cu.user_id) AS col2,
+                c.id AS col3
+            FROM $class_table c ";
     $sql .= " LEFT JOIN $class_user_table cu ON cu.class_id = c.id";
     $sql .= " WHERE 1 = 1";
     if (isset($_GET['keyword'])) {

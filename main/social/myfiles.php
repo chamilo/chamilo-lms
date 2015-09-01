@@ -4,6 +4,7 @@
  * @author Juan Carlos Trabado herodoto@telefonica.net
  * @package chamilo.social
  */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -75,7 +76,6 @@ $(document).on("ready", function () {
 
 </script>';
 
-$show_message = null;
 // Social Menu Block
 $social_menu_block = SocialManager::show_social_menu('myfiles');
 $actions = null;
@@ -106,7 +106,6 @@ $editor = $tpl->fetch('default/'.$editor->getEditorStandAloneTemplate());
 $tpl->assign('social_right_content', $editor);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('actions', $actions);
-$tpl->assign('message', $show_message);
 
 $social_layout = $tpl->get_template('social/myfiles.tpl');
 $tpl->display($social_layout);

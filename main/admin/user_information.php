@@ -410,12 +410,12 @@ echo '<div class="actions">
 echo Display::page_header($tool_name);
 
 
-$fullUrlBig = Usermanager::getUserPicture(
+$fullUrlBig = UserManager::getUserPicture(
     $user['user_id'],
     USER_IMAGE_SIZE_BIG
 );
 
-$fullUrl = Usermanager::getUserPicture(
+$fullUrl = UserManager::getUserPicture(
     $user['user_id'],
     USER_IMAGE_SIZE_ORIGINAL
 );

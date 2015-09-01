@@ -18,8 +18,8 @@ From version 1.10.x, the following Hooks (or more) exist:
 
 |Number| Directory                         | EventClass     | ObserverInterface               | Reference                 |
 |------|-----------------------------------|----------------|---------------------------------|---------------------------|
-|     1| /main/inc/lib/usermanager.lib.php | HookCreateUser | HookCreateUserObserverInterface | Usermanager::createUser() |
-|     2| /main/inc/lib/usermanager.lib.php | HookUpdateUser | HookUpdateUserObserverInterface | Usermanager::updateUser() |
+|     1| /main/inc/lib/usermanager.lib.php | HookCreateUser | HookCreateUserObserverInterface | UserManager::createUser() |
+|     2| /main/inc/lib/usermanager.lib.php | HookUpdateUser | HookUpdateUserObserverInterface | UserManager::updateUser() |
 |     3| /main/admin/index.php             | HookAdminBlock | HookAdminBlockObserverInterface | ADMIN BLOCK               |
 
 # What do I need to use Hooks?

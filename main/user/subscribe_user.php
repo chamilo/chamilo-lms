@@ -104,7 +104,7 @@ if (isset($_POST['action'])) {
         case 'subscribe':
             if (is_array($_POST['user'])) {
                 foreach ($_POST['user'] as $index => $user_id) {
-                    $user_id=intval($user_id);
+                    $user_id = intval($user_id);
                     if ($type == COURSEMANAGER) {
                         if (!empty($current_session_id)) {
                             $is_suscribe[] = SessionManager::set_coach_to_course_session(
@@ -139,16 +139,16 @@ if (isset($_POST['action'])) {
 
 			$list_register_user='';
 
-            for ($i=0; $i<$is_suscribe_counter;$i++) {
-                for ($j=0; $j<count($user_id_temp);$j++) {
-                    if ($is_suscribe_user_id[$i]==$user_id_temp[$j]) {
-                            if ($is_suscribe[$i]) {
-                                $list_register_user.=" - ".$user_name_temp[$j].'<br/>';
-                                $temp_unique_user=$user_name_temp[$j];
-                                $counter++;
-                            } else {
-                                $list_not_register_user.=" - ".$user_name_temp[$j].'<br/>';
-                            }
+            for ($i = 0; $i < $is_suscribe_counter; $i++) {
+                for ($j = 0; $j < count($user_id_temp); $j++) {
+                    if ($is_suscribe_user_id[$i] == $user_id_temp[$j]) {
+                        if ($is_suscribe[$i]) {
+                            $list_register_user .= " - ".$user_name_temp[$j].'<br/>';
+                            $temp_unique_user = $user_name_temp[$j];
+                            $counter++;
+                        } else {
+                            $list_not_register_user .= " - ".$user_name_temp[$j].'<br/>';
+                        }
                     }
                 }
             }
@@ -281,6 +281,9 @@ function get_number_of_users()
 	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$table_user_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+    $courseCode = api_get_course_id();
+    $sessionId = api_get_session_id();
 
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 
@@ -429,9 +432,15 @@ function get_number_of_users()
 
 		// getting all the users of the course (to make sure that we do not display users that are already in the course)
 		if (!empty($_SESSION["id_session"])) {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], $_SESSION['id_session']);
+            $a_course_users = CourseManager:: get_user_list_from_course_code(
+                $courseCode,
+                $sessionId
+            );
 		} else {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0);
+            $a_course_users = CourseManager:: get_user_list_from_course_code(
+                $courseCode,
+                0
+            );
 	    }
 		foreach ($a_course_users as $user_id=>$course_user) {
 			$users_of_course[] = $course_user['user_id'];
@@ -445,6 +454,7 @@ function get_number_of_users()
 	   $row = Database::fetch_row($res);
 	   $count_user = $row[0];
 	}
+
 	return $count_user;
 }
 /**

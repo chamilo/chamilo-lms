@@ -4,9 +4,7 @@
  * List sessions in an efficient and usable way
  * @package chamilo.admin
  */
-/**
- * Code
- */
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -81,7 +79,6 @@ if($allowTutors == 'true') {
     }';
     ?>
     <script>
-
         function setSearchSelect(columnName) {
         $("#sessions").jqGrid('setColProp', columnName,
         {
@@ -96,14 +93,12 @@ if($allowTutors == 'true') {
         });
     }
 
-
     $(function() {
         <?php
             echo Display::grid_js('sessions', $url,$columns,$column_model,$extra_params, array(), $action_links,true);
         ?>
 
         setSearchSelect("status");
-
         $("#sessions").jqGrid('navGrid','#sessions_pager', {edit:false,add:false,del:false},
             {height:280,reloadAfterSubmit:false}, // edit options
             {height:280,reloadAfterSubmit:false}, // add options
@@ -128,8 +123,6 @@ if($allowTutors == 'true') {
             }
         },buttonicon:'ui-icon-document'})
         */
-
-
         //Adding search options
         var options = {
             'stringResult': true,

@@ -1372,6 +1372,7 @@ class Skill extends Model
     /**
      * Get the users list who achieved a skill
      * @param int $skillId The skill id
+     *
      * @return array The users list
      */
     public function listUsersWhoAchieved($skillId)

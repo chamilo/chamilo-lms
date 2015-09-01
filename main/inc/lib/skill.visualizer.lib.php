@@ -40,13 +40,7 @@ class SkillVisualizer
         }
 
         $this->html .= '<div id="block_'.$block_id.'" class = "open_block window '.$extra_class.'  '.$class.'" style = "top:' . $position['y'] . 'px; left:' . $position['x'] . 'px;">';
-        /*$gradebook_string = '';
-        if (!empty($skill['gradebooks'])) {
-            foreach ($skill['gradebooks'] as $gradebook) {
-                //uncomment this to show the gradebook tags
-                $gradebook_string .= Display::span($gradebook['name'], array('class'=>'label_tag gradebook','style'=>'width:50px')).'<br />';
-            }
-        } */
+
         $content =  $skill['name'];
         $content .= '<div class="btn-group">';
         $content .= Display::url(get_lang('Edit'), '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn'));
@@ -69,7 +63,8 @@ class SkillVisualizer
     /**
      * Adds a node using jplumb
      */
-    private function add_item($skill, $position) {
+    private function add_item($skill, $position)
+    {
         $block_id = $skill['id'];
         $end_point = 'readEndpoint';
         $class = 'default_window';

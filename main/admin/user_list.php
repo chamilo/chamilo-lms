@@ -741,10 +741,10 @@ $form->addElement(
 
 $actions  = '';
 if (api_is_platform_admin()) {
-	$actions .= '<span style="float:right;">'.
+	$actions .= '<div style="float:right;">'.
 		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
          Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
-		 '</span>';
+		 '</div>';
 }
 $actions .= $form->return_form();
 

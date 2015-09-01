@@ -168,14 +168,7 @@ if ($action_forums != 'add') {
         }
     }
 
-    /* CLEAN GROUP ID FOR AJAXFILEMANAGER */
-
-    if (isset($_SESSION['_gid'])) {
-        unset($_SESSION['_gid']);
-    }
-
     /* Display Forum Categories and the Forums in it */
-
     $html = '';
     $html .= '<div class="category-forum">';
 

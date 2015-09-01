@@ -35,7 +35,13 @@ if ($_GET['type'] == "poly" || $_GET['type'] == "delineation" || $_GET['type'] =
 	$hotspot_coordinates = api_substr($hotspot_coordinates,0,-2);
 }
 $course_id = api_get_course_int_id();
-$sql = "UPDATE $TBL_ANSWER SET hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',hotspot_type = '".Database::escape_string($hotspot_type)."'
-        WHERE c_id = $course_id AND id = ".intval($answerId)." AND question_id = ".intval($questionId)." LIMIT 1 ;";
+$sql = "UPDATE $TBL_ANSWER SET
+            hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
+            hotspot_type = '".Database::escape_string($hotspot_type)."'
+        WHERE
+            c_id = $course_id AND
+            id = ".intval($answerId)." AND
+            question_id = ".intval($questionId)."
+        LIMIT 1 ";
 $result = Database::query($sql);
 echo "done=done";

@@ -77,6 +77,7 @@ if (isset($descriptions) && count($descriptions) > 0) {
             echo '<div class="panel-body">';
             echo $description['content'];
             echo '</div></div>';
+            
         }
     }
 } else {

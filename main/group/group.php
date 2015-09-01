@@ -162,12 +162,13 @@ Display::display_header(get_lang('Groups'));
 Display::display_introduction_section(TOOL_GROUP);
 
 echo '<div class="actions">';
+
+echo '<div class="row">';
+echo '<div class="col-md-6">';
 if (api_is_allowed_to_edit(false, true)) {
 
     echo '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('add.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
-
-    echo GroupManager::getSearchForm();
 
     if (api_get_setting('allow_group_categories') == 'true') {
         echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
@@ -192,6 +193,14 @@ if (api_is_allowed_to_edit(false, true)) {
     echo '<a href="group_overview.php?'.api_get_cidreq().'">'.
         Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 }
+echo '</div>';
+echo '<div class="col-md-6">';
+echo '<div class="pull-right">';
+echo GroupManager::getSearchForm();
+echo '</div>';
+echo '</div>';
+echo '</div>';
+
 
 $group_cats = GroupManager::get_categories(api_get_course_id());
 echo '</div>';
@@ -244,7 +253,7 @@ if (api_get_setting('allow_group_categories') == 'true') {
         echo Display::page_header(
             Security::remove_XSS($category['title'].' '. $label.' ').$actions,
             null,
-            'h2',
+            'h4',
             false
         );
 

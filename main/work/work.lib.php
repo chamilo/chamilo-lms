@@ -49,6 +49,8 @@ function display_action_links($id, $cur_dir_path, $action)
             $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings&origin='.$origin.'&gradebook='.$gradebook.'">';
             $display_output .= Display::return_icon('settings.png', get_lang('EditToolOptions'),'',ICON_SIZE_MEDIUM).'</a>';
         }
+        $display_output .= '<a id="open-view-list" href="#">' . Display::return_icon('listwork.png', get_lang('viewStudents'),'',ICON_SIZE_MEDIUM) . '</a>';
+        
     }
 
     if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false, true)) {

@@ -942,18 +942,13 @@ if (api_is_allowed_to_edit(null, true)) {
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
             break;
     }
-
+    
+    echo '<div class="row">';
+    echo '<div class="col-md-6">';
     echo Display::url(
         Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
         $url
     );
-
-    // Build search-form
-    $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAYOUT_INLINE);
-    $form->addText('keyword', '', false);
-    $form->addButtonSearch(get_lang('SearchButton'));
-    $form->display();
-
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=csv">'.
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=xls">'.
@@ -968,14 +963,27 @@ if (api_is_allowed_to_edit(null, true)) {
 
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.
         Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
-
+    echo $actions;
+    
+    echo '</div>';
+    echo '<div class="col-md-6">';
+    echo '<div class="pull-right">';
+        // Build search-form
+        $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAYOUT_INLINE);
+        $form->addText('keyword', '', false);
+        $form->addButtonSearch(get_lang('SearchButton'));
+        $form->display();
+    echo '</div>';    
+    echo '</div>';
+    echo '</div>';
+    
     $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
     if (api_is_allowed_to_edit() && $allowTutors == 'true') {
         $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
             get_lang('Sessions').'</a>';
     }
 
-    echo $actions;
+   
 
     echo '</div>';
 }

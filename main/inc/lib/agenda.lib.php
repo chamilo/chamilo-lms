@@ -2459,23 +2459,31 @@ class Agenda
      */
     public function displayActions($view, $filter = 0)
     {
-        $courseInfo = api_get_course_info();
-
-        $actions = "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
+        $courseInfo = api_get_course_info();     
+        
+        $toolbar = '';
+        $toolbar .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
             Display::return_icon('calendar.png', get_lang('Calendar'), '', ICON_SIZE_MEDIUM)."</a>";
 
         $courseCondition = '';
         if (!empty($courseInfo)) {
             $courseCondition = api_get_cidreq();
         }
-        $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
+        
+        $toolbar .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
             Display::return_icon('week.png', get_lang('AgendaList'), '', ICON_SIZE_MEDIUM)."</a>";
-
+        
+       
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) ||
             GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
             GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
         ) {
+            $toolbar .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=course'>".
+                    Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
+            $toolbar .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=course'>".
+                    Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";
+            
             if ($this->type == 'course') {
                 $form = null;
                 if (!isset($_GET['action'])) {
@@ -2495,17 +2503,10 @@ class Agenda
                     $selectedValues = $this->parseAgendaFilter($filter);
                     $this->showToForm($form, $selectedValues, $attributes);
                     $form = $form->returnForm();
-                }
-                $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=course'>".
-                    Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
-                $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=course'>".
-                    Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";
-                if ($view == 'calendar') {
-                    $actions .= $form;
-                }
+                }   
             }
         }
-
+         
         if (api_is_platform_admin() ||
             api_is_teacher() ||
             api_is_student_boss() ||
@@ -2541,12 +2542,19 @@ class Agenda
                     $form->addButtonReset(get_lang('Reset'));
                     $form = $form->returnForm();
                 }
-
-                if ($view == 'calendar') {
-                    $actions .= $form;
-                }
             }
         }
+        
+        $actions = '<div class="row">';
+        $actions .= '<div class="col-md-9">';
+        if ($view == 'calendar') {
+            $actions .= $form;
+        }
+        $actions .= '</div>';
+        $actions .= '<div class="col-md-3 right">';
+        $actions .= $toolbar; 
+        $actions .= '</div>';
+        $actions .= '</div>';
 
         return $actions;
     }

@@ -130,9 +130,9 @@ if (!empty($course)) {
                 if (empty($session_id)) {
                     $status = $user['status'];
                 } else {
-                    $status = CourseManager::is_course_teacher($user['user_id'], $_SESSION['_course']['id']) ? 1 : 5;
+                    $status = CourseManager::is_course_teacher($user['user_id'], api_get_course_id()) ? 1 : 5;
                 }
-                $fileUrl = Usermanager::getUserPicture($user['user_id'], USER_IMAGE_SIZE_MEDIUM);
+                $fileUrl = UserManager::getUserPicture($user['user_id'], USER_IMAGE_SIZE_MEDIUM);
                 $url_user_profile=api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user['user_id'].'&';
 			?>
 			<li class="list-group-item">

@@ -224,11 +224,8 @@ function saveMessage($message, $userId, $_course, $session_id, $group_id, $previ
             }
 
             $fp = fopen($chat_path.$basename_chat.'.log.html', 'a');
-
-            $userPhoto = Usermanager::getUserPicture($userId, USER_IMAGE_SIZE_MEDIUM);
-
+            $userPhoto = UserManager::getUserPicture($userId, USER_IMAGE_SIZE_MEDIUM);
             $filePhoto = '<img class="chat-image" src="'.$userPhoto.'"/>';
-
             if ($isMaster) {
                 fputs($fp, '<div class="message-teacher"><div class="content-message"><div class="chat-message-block-name">'.$fullName.'</div><div class="chat-message-block-content">'.$message.'</div><div class="message-date">'.$timeNow.'</div></div><div class="icon-message"></div>'.$filePhoto.'</div>'."\n");
             } else {

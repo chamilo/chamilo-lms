@@ -38,12 +38,13 @@ class DatePicker extends HTML_QuickForm_text
 
         $id = $this->getAttribute('id');
         $value = $this->getValue();
+        $label = $this->getLabel();
 
         if (!empty($value)) {
             $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
         }
 
-        if (empty($this->getLabel())) {
+        if (empty($label)) {
             return $this->getElementJS() . '
                 <div class="input-group">
                     <span class="input-group-addon">

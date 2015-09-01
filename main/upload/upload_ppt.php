@@ -6,9 +6,7 @@
  * @package chamilo.upload
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * First, initialise the script
- */
+
 require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
@@ -91,7 +89,6 @@ if (api_get_setting('search_enabled') == 'true') {
 
 $form->addButtonUpload(get_lang('ConvertToLP'), 'convert');
 $form->addElement('hidden', 'ppt2lp', 'true');
-
 $form->add_real_progress_bar(md5(rand(0, 10000)), 'user_file', 1, true);
 $defaults = array('take_slide_name'=>'checked="checked"','index_document'=>'checked="checked"');
 $form->setDefaults($defaults);

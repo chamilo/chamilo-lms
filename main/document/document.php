@@ -879,7 +879,10 @@ if (!empty($documentAndFolders)) {
     foreach ($documentAndFolders as $file) {
         if ($file['filetype'] == 'file') {
             $path_info = pathinfo($file['path']);
-            $extension = strtolower($path_info['extension']);
+            $extension = '';
+            if (!empty($path_info['extension'])) {
+                $extension = strtolower($path_info['extension']);
+            }
 
             //@todo use a js loop to auto generate this code
             if (in_array($extension, array('ogg', 'mp3', 'wav'))) {

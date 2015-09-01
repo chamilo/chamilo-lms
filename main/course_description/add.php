@@ -58,8 +58,8 @@ $form = new FormValidator(
     'index.php?action=add&'.api_get_cidreq()
 );
 $form->addElement('header', '', $header);
-$form->addElement('hidden', 'description_type',$description_type);
-$form->addElement('hidden', 'sec_token',$token);
+$form->addElement('hidden', 'description_type', $description_type);
+$form->addElement('hidden', 'sec_token', $token);
 $form->addText('title', get_lang('Title'), true, array('size'=>'width: 350px;'));
 $form->applyFilter('title','html_filter');
 $form->addHtmlEditor(

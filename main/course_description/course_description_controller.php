@@ -87,7 +87,9 @@ class CourseDescriptionController
                     $id = $_POST['id'];
                     if (empty($id)) {
                         // If the ID was not provided, find the first matching description item given the item type
-                        $description = $course_description->get_data_by_description_type($description_type);
+                        $description = $course_description->get_data_by_description_type(
+                            $description_type
+                        );
                         if (count($description) > 0) {
                             $id = $description['id'];
                         }
@@ -107,12 +109,14 @@ class CourseDescriptionController
                         $affected_rows = $course_description->insert();
                     }
                     Security::clear_token();
-                }
 
-                if ($affected_rows) {
-                    $message['edit'] = true;
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('CourseDescriptionUpdated')
+                        )
+                    );
                 }
-                $this->listing(false, $message);
+                $this->listing(false);
             } else {
                 $data['error'] = 1;
                 $data['default_description_titles'] = $course_description->get_default_description_title();
@@ -202,11 +206,14 @@ class CourseDescriptionController
                         $affected_rows = $course_description->insert(api_get_course_int_id());
                     }
                     Security::clear_token();
+
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('CourseDescriptionUpdated')
+                        )
+                    );
                 }
-                if ($affected_rows) {
-                    $message['add'] = true;
-                }
-                $this->listing(false, $message);
+                $this->listing(false);
             } else {
                 $data['error'] = 1;
                 $data['default_description_titles'] = $course_description->get_default_description_title();
@@ -240,7 +247,7 @@ class CourseDescriptionController
     /**
      * It's used for destroy a course description,
      * render to listing view
-     * @param int description type
+     * @param int $id description type
      */
     public function destroy($id)
     {
@@ -249,11 +256,11 @@ class CourseDescriptionController
         $course_description->set_session_id($session_id);
         if (!empty($id)) {
             $course_description->set_id($id);
-            $affected_rows = $course_description->delete();
+            $course_description->delete();
+            Display::addFlash(
+                Display::return_message(get_lang('CourseDescriptionDeleted'))
+            );
         }
-        if ($affected_rows) {
-            $message['destroy'] = true;
-        }
-        $this->listing(false, $message);
+        $this->listing(false);
     }
 }

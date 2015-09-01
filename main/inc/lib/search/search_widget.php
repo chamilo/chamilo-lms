@@ -19,7 +19,7 @@ require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
  * @param   array $htmlHeadXtra     A reference to the doc $htmlHeadXtra
  */
 function search_widget_prepare(&$htmlHeadXtra) {
-    $htmlHeadXtra[] = '    
+    $htmlHeadXtra[] = '
     <script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.autocomplete.js"></script>
     <script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'search/search_widget.js"></script>
     <link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.autocomplete.css" />
@@ -31,7 +31,7 @@ function search_widget_prepare(&$htmlHeadXtra) {
  */
 function format_one_specific_field_select($prefix, $sf_term_array, $op, $extra_select_attr='size="7" class="sf-select-multiple"') {
 	global $charset;
-    $multiple_select .= '<select '. $extra_select_attr .' title="'. $prefix .'" id="sf-'. $prefix .'" name="sf_'. $prefix .'[]">';
+    $multiple_select = '<select '. $extra_select_attr .' title="'. $prefix .'" id="sf-'. $prefix .'" name="sf_'. $prefix .'[]">';
 
     $all_selected = '';
     if (!empty($_REQUEST['sf_'. $prefix]) ) {
@@ -123,7 +123,7 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
 		$action='index.php';
 	}
 	$navigator_info = api_get_navigator();
-	
+
 	if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 		$submit_button1	= '<input type="submit" id="submit" value="'. get_lang('Search') .'" />';
 		$submit_button2 = '<input class="lower-submit" type="submit" value="'. get_lang('Search') .'" />';
@@ -142,8 +142,8 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
           	'.$submit_button1.'
             <br /><br />';
     $list = get_specific_field_list();
-    
-    if(!empty($list)) {         
+
+    if(!empty($list)) {
         $form .= '<span class="search-links-box">'. $advanced_options .'&nbsp;</span>
             <div id="tags" class="tags" style="display:'. $display_thesaurus .';">
                 <div class="search-help-box">'. $help .'</div>
@@ -200,7 +200,7 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
 	if (isset($_GET['action']) && strcmp(trim($_GET['action']),'search')===0) {
 		$action='index.php';
 	}
-	
+
     $form = '
         <form id="chamilo_search" action="'. $action .'" method="GET">
             <input type="text" id="query" name="query" size="40" />
@@ -226,26 +226,26 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
                 unset($sf_term_array);
                 natcasesort($temp);
                 $sf_term_array = $temp;
-        
+
                 // get specific field name
                 $sf_value = get_specific_field_list(array( 'code' => "'$prefilter_prefix'" ));
                 $sf_value = array_shift($sf_value);
                 $form .= '<label class="sf-select-multiple-title" for="sf_'. $prefix .'[]">'.$icons_for_search_terms[$prefix].' '.$sf_value['name'].'</label><br />';
-        
+
                 $form .= format_one_specific_field_select($prefilter_prefix, $sf_term_array, $op, 'id="prefilter"');
                 $form .= format_specific_fields_selects($sf_terms, $op, $prefilter_prefix);
             } else {
                 $form .= format_specific_fields_selects($sf_terms, $op);
             }
-            
-            
+
+
             $or_checked = '';
             $and_checked = '';
             if ($op == 'or') {
                 $or_checked = 'checked="checked"';
             } else if ($op == 'and') {
                 $and_checked = 'checked="checked"';
-            }    
+            }
             $form .= '
                         </tr>
                         <tr>
@@ -263,11 +263,11 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
                         </tr>
                         </table>
                     </div>';
-        }    
+        }
        $form .= '
         </form>
         <br style="clear: both;"/>';
-    
+
     return $form;
 }
 
@@ -276,7 +276,7 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
  */
 function display_search_form($action, $show_thesaurus, $sf_terms, $op) {
     $type = (!empty($_REQUEST['type'])? htmlentities($_REQUEST['type']): 'normal');
-    
+
     switch ($type) {
         case 'prefilter':
             $prefilter_prefix = api_get_setting('search_prefilter_prefix');
@@ -302,17 +302,17 @@ function display_search_form($action, $show_thesaurus, $sf_terms, $op) {
  * @param   string $action     Just in case your action is not
  * index.php
  */
-function search_widget_show($action='index.php') {
-    global $charset;
+function search_widget_show($action='index.php')
+{
     require_once api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
     // TODO: load images dinamically when they're avalaible from specific field ui to add
-    $icons_for_search_terms = array();
+    $groupId = api_get_group_id();
 
     $sf_terms = array();
     $specific_fields = get_specific_field_list();
     $url_params = array();
 
-    if ( ($cid=api_get_course_id()) != -1 ) { // with cid
+    if (($cid = api_get_course_id()) != -1) { // with cid
 
         // get search engine terms
         $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
@@ -330,30 +330,24 @@ function search_widget_show($action='index.php') {
             $url_params[] = 'sf_'.$specific_field['code'];
             unset($temp);
         }
-
     } else { // without cid
-
         // prepare specific fields names (and also get possible URL param names)
         foreach ($specific_fields as $specific_field) {
             //get Xapian terms for a specific term prefix, in ISO, apparently
             $sf_terms[$specific_field['code']] = xapian_get_all_terms(1000, $specific_field['code']);
             $url_params[] = 'sf_'.$specific_field['code'];
         }
-
     }
-
     echo '<h2>'.get_lang('Search').'</h2>';
-
 
 	// Tool introduction
     // TODO: Settings for the online editor to be checked (insert an image for example). Probably this is a special case here.
     if (api_get_course_id() !== -1)
-    if (!empty($_SESSION['_gid'])) {
-        Display::display_introduction_section(TOOL_SEARCH.$_SESSION['_gid']);
+    if (!empty($groupId)) {
+        Display::display_introduction_section(TOOL_SEARCH.$groupId);
     } else {
         Display::display_introduction_section(TOOL_SEARCH);
     }
-
 
     $op = 'or';
     if (!empty($_REQUEST['operator']) && in_array($op,array('or','and'))) {
@@ -379,5 +373,4 @@ function search_widget_show($action='index.php') {
     // create the form
     // TODO: use FormValidator
     display_search_form($action, $show_thesaurus, $sf_terms, $op);
-
 }

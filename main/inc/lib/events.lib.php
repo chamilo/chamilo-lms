@@ -800,7 +800,8 @@ class Event
         Database::query($sql);
 
         foreach ($users as $user) {
-            $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' (user_id,event_type_name) VALUES('.intval($user).',"'.$event_name.'")';
+            $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' (user_id,event_type_name)
+                    VALUES('.intval($user).',"'.$event_name.'")';
             Database::query($sql);
         }
         $language_id = api_get_language_id($event_message_language);

@@ -2,12 +2,13 @@
 /**
  * @package chamilo.permissions
  */
-/** 
+/**
  * Code
  */
 include_once('permissions_functions.inc.php');
 include_once('all_permissions.inc.php');
-$group_id=$_SESSION['_gid'];
+$group_id = api_get_group_id();
+
 echo $group_id;
 // ---------------------------------------------------
 // 			ACTIONS

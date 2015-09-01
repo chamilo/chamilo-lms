@@ -3,15 +3,15 @@
 /**
 *	@package chamilo.admin
 */
-// resetting the course id
+
 $cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
-$xajax = new xajax();
 
-$xajax -> registerFunction ('search_users');
+$xajax = new xajax();
+$xajax->registerFunction('search_users');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -29,31 +29,33 @@ if (api_is_platform_admin()) {
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 if($allowTutors == 'true') {
     // Database Table Definitions
-    $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-    $tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
-    $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+    $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
     // setting the name of the tool
     $tool_name = get_lang('SubscribeUsersToSession');
-
     $add_type = 'unique';
 
     if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
-    	$add_type = Security::remove_XSS($_REQUEST['add_type']);
+        $add_type = Security::remove_XSS($_REQUEST['add_type']);
     }
 
     $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
-    //checking for extra field with filter on
-
+    // Checking for extra field with filter on
     $extra_field_list= UserManager::get_extra_fields();
     $new_field_list = array();
     if (is_array($extra_field_list)) {
     	foreach ($extra_field_list as $extra_field) {
     		//if is enabled to filter and is a "<select>" field type
     		if ($extra_field[8]==1 && $extra_field[2]==4 ) {
-    			$new_field_list[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
+                $new_field_list[] = array(
+                    'name' => $extra_field[3],
+                    'variable' => $extra_field[1],
+                    'data' => $extra_field[9],
+                );
     		}
     	}
     }
@@ -103,14 +105,16 @@ if($allowTutors == 'true') {
             switch ($type) {
                 case 'single':
                     // search users where username or firstname or lastname begins likes $needle
-                    $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                    $sql = 'SELECT user.user_id, username, lastname, firstname
+                            FROM '.$tbl_user.' user
                             WHERE (username LIKE "'.$needle.'%" OR firstname LIKE "'.$needle.'%"
                                 OR lastname LIKE "'.$needle.'%") AND user.status<>6 AND user.status<>'.DRH.''.
                                 $order_clause.
                                 ' LIMIT 11';
                     break;
                 case 'multiple':
-                    $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                    $sql = 'SELECT user.user_id, username, lastname, firstname
+                            FROM '.$tbl_user.' user
                             WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').'
                             LIKE "'.$needle.'%" AND
                             user.status<>'.DRH.' AND
@@ -134,26 +138,34 @@ if($allowTutors == 'true') {
     			if ($access_url_id != -1) {
                     switch ($type) {
                         case 'single':
-                            $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-                            INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-                            WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
-                            OR firstname LIKE "'.$needle.'%"
-                            OR lastname LIKE "'.$needle.'%") AND user.status<>6 AND user.status<>'.DRH.' '.
-                            $order_clause.
-                            ' LIMIT 11';
+                            $sql = 'SELECT user.user_id, username, lastname, firstname
+                                    FROM '.$tbl_user.' user
+                                    INNER JOIN '.$tbl_user_rel_access_url.' url_user
+                                    ON (url_user.user_id=user.user_id)
+                                    WHERE
+                                        access_url_id = '.$access_url_id.' AND
+                                        (username LIKE "'.$needle.'%" OR firstname LIKE "'.$needle.'%" OR lastname LIKE "'.$needle.'%") AND
+                                        user.status<>6 AND
+                                        user.status<>'.DRH.' '.
+                                    $order_clause.
+                                    ' LIMIT 11';
                             break;
                         case 'multiple':
-                            $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-                            INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-                            WHERE access_url_id = '.$access_url_id.' AND
+                            $sql = 'SELECT user.user_id, username, lastname, firstname
+                                    FROM '.$tbl_user.' user
+                                    INNER JOIN '.$tbl_user_rel_access_url.' url_user
+                                    ON (url_user.user_id=user.user_id)
+                                    WHERE access_url_id = '.$access_url_id.' AND
                                     '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.status<>6 '.$cond_user_id.
-                            $order_clause;
+                                    $order_clause;
                             break;
                         case 'any_session' :
                             $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname
-                                    FROM '.$tbl_user.' user LEFT OUTER JOIN '.$tbl_session_rel_user.' s
+                                    FROM '.$tbl_user.' user
+                                    LEFT OUTER JOIN '.$tbl_session_rel_user.' s
                                     ON (s.user_id = user.user_id)
-                                    INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                                    INNER JOIN '.$tbl_user_rel_access_url.' url_user
+                                    ON (url_user.user_id=user.user_id)
                                     WHERE
                                         access_url_id = '.$access_url_id.' AND
                                         s.user_id IS null AND
@@ -243,7 +255,6 @@ if($allowTutors == 'true') {
 
     </script>';
 
-
     $form_sent = 0;
     $errorMsg = $firstLetterUser = $firstLetterSession='';
     $UserList = $SessionList = array();
@@ -251,10 +262,10 @@ if($allowTutors == 'true') {
     $noPHP_SELF = true;
 
     if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-        $form_sent             = $_POST['form_sent'];
-        $firstLetterUser       = $_POST['firstLetterUser'];
-        $firstLetterSession    = $_POST['firstLetterSession'];
-        $UserList              = $_POST['sessionUsersList'];
+        $form_sent = $_POST['form_sent'];
+        $firstLetterUser = $_POST['firstLetterUser'];
+        $firstLetterSession = $_POST['firstLetterSession'];
+        $UserList = $_POST['sessionUsersList'];
 
         if (!is_array($UserList)) {
             $UserList=array();
@@ -280,7 +291,7 @@ if($allowTutors == 'true') {
         $sql = "SELECT u.user_id, lastname, firstname, username, session_id
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.user_id = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                ON $tbl_session_rel_user.user_id = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                     AND $tbl_session_rel_user.session_id = ".intval($id_session)."
                 WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
 
@@ -288,13 +299,13 @@ if($allowTutors == 'true') {
             $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql="SELECT u.user_id, lastname, firstname, username, session_id
-                FROM $tbl_user u
-                INNER JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.user_id = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                    AND $tbl_session_rel_user.session_id = ".intval($id_session)."
-                    INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-                    WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
+                $sql = "SELECT u.user_id, lastname, firstname, username, session_id
+                        FROM $tbl_user u
+                        INNER JOIN $tbl_session_rel_user
+                        ON $tbl_session_rel_user.user_id = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                        AND $tbl_session_rel_user.session_id = ".intval($id_session)."
+                        INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+                        WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
             }
         }
@@ -315,7 +326,10 @@ if($allowTutors == 'true') {
                     if (UserManager::is_extra_field_available($new_field['variable'])) {
                         if (isset($_POST[$varname]) && $_POST[$varname]!='0') {
                             $use_extra_fields = true;
-                            $extra_field_result[]= UserManager::get_extra_user_data_by_value($new_field['variable'], $_POST[$varname]);
+                            $extra_field_result[] = UserManager::get_extra_user_data_by_value(
+                                $new_field['variable'],
+                                $_POST[$varname]
+                            );
                         }
                     }
                 }
@@ -327,7 +341,10 @@ if($allowTutors == 'true') {
            	if (count($extra_field_result)>1) {
     	    for($i=0;$i<count($extra_field_result)-1;$i++) {
                     if (is_array($extra_field_result[$i+1])) {
-                        $final_result  = array_intersect($extra_field_result[$i],$extra_field_result[$i+1]);
+                        $final_result = array_intersect(
+                            $extra_field_result[$i],
+                            $extra_field_result[$i + 1]
+                        );
                     }
                 }
             } else {
@@ -354,7 +371,7 @@ if($allowTutors == 'true') {
 
         if ($use_extra_fields) {
             $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
-                   FROM $tbl_user u
+                    FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
                     ON $tbl_session_rel_user.user_id = u.user_id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
@@ -389,8 +406,8 @@ if($allowTutors == 'true') {
             }
         }
 
-        $result   = Database::query($sql);
-        $users    = Database::store_result($result,'ASSOC');
+        $result = Database::query($sql);
+        $users = Database::store_result($result,'ASSOC');
 
         foreach ($users as $uid => $user) {
             if ($user['session_id'] != $id_session) {
@@ -555,9 +572,8 @@ if($allowTutors == 'true') {
                     <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
                         <i class="fa fa-arrow-left"></i>
                     </button>
-
                   <?php
-                }
+            }
             ?>
             </div>
             <br />
@@ -568,11 +584,9 @@ if($allowTutors == 'true') {
             } else {
                 //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
     			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
-
             }
     		?>
         </div>
-
         <div class="span5">
             <div class="multiple_select_header">
                 <b><?php echo get_lang('UserListInSession') ?> :</b>
@@ -592,9 +606,7 @@ if($allowTutors == 'true') {
     </form>
     <script>
     <!--
-    function moveItem(origin , destination)
-    {
-
+    function moveItem(origin , destination) {
     	for (var i = 0 ; i<origin.options.length ; i++) {
     		if (origin.options[i].selected) {
     			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
@@ -604,12 +616,10 @@ if($allowTutors == 'true') {
     	}
     	destination.selectedIndex = -1;
     	sortOptions(destination.options);
-
     }
 
     function sortOptions(options)
     {
-
     	newOptions = new Array();
     	for (i = 0 ; i<options.length ; i++)
     		newOptions[i] = options[i];
@@ -618,7 +628,6 @@ if($allowTutors == 'true') {
     	options.length = 0;
     	for (i = 0 ; i < newOptions.length ; i++)
     		options[i] = newOptions[i];
-
     }
 
     function mysort(a, b)
@@ -643,9 +652,7 @@ if($allowTutors == 'true') {
 
     function loadUsersInSelect(select)
     {
-
     	var xhr_object = null;
-
     	if(window.XMLHttpRequest) // Firefox
     		xhr_object = new XMLHttpRequest();
     	else if(window.ActiveXObject) // Internet Explorer
@@ -655,16 +662,12 @@ if($allowTutors == 'true') {
 
     	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
     	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-
     	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-
     	nosessionUsers = makepost(document.getElementById('origin_users'));
     	sessionUsers = makepost(document.getElementById('destination_users'));
     	nosessionClasses = makepost(document.getElementById('origin_classes'));
     	sessionClasses = makepost(document.getElementById('destination_classes'));
     	xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-
     	xhr_object.onreadystatechange = function() {
     		if (xhr_object.readyState == 4) {
     			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
@@ -675,14 +678,11 @@ if($allowTutors == 'true') {
 
     function makepost(select)
     {
-
     	var options = select.options;
     	var ret = "";
     	for (i = 0 ; i<options.length ; i++)
     		ret = ret + options[i].value +'::'+options[i].text+";;";
-
     	return ret;
-
     }
     -->
     </script>
@@ -690,5 +690,4 @@ if($allowTutors == 'true') {
 } else {
     api_not_allowed();
 }
-/*		FOOTER */
 Display::display_footer();

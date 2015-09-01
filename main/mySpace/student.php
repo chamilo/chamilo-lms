@@ -177,6 +177,8 @@ if ($export_csv) {
 
 $sort_by_first_name = api_sort_by_first_name();
 $actions = '<div class="actions">';
+$actions .= '<div class="row">';
+$actions .= '<div class="col-md-6">';
 
 if (api_is_drh()) {
     $menu_items = array(
@@ -220,8 +222,9 @@ if (api_is_drh()) {
         api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
     );
 }
-
-$actions .= '<span style="float:right">';
+$actions .= '</div>';
+$actions .= '<div class="col-md-6">';
+$actions .= '<div class="pull-right">';
 $actions .= Display::url(
     Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);',
     array('onclick'=>'javascript: window.print();')
@@ -230,7 +233,9 @@ $actions .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
     api_get_self().'?export=csv&keyword='.$keyword
 );
-$actions .= '</span>';
+$actions .= '</div>';
+$actions .= '</div>';
+$actions .= '</div>';
 $actions .= '</div>';
 
 $table = new SortableTable(

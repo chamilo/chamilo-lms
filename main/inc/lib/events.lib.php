@@ -1725,37 +1725,6 @@ class Event
     }
 
     /**
-     * @param $exe_id
-     * @param $objExercise
-     * @return array
-     */
-    public static function getAnsweredQuestionsFromAttempt($exe_id, $objExercise)
-    {
-        $attempt_list = self::getAllExerciseEventByExeId($exe_id);
-        $exercise_result = array();
-        if (!empty($attempt_list)) {
-            foreach ($attempt_list as $question_id => $options) {
-                foreach ($options as $item) {
-                    $question_obj = Question::read($item['question_id']);
-                    switch ($question_obj->type) {
-                        case FILL_IN_BLANKS:
-                            $item['answer'] = $objExercise->fill_in_blank_answer_to_string($item['answer']);
-                            break;
-                        case HOT_SPOT:
-                            break;
-                    }
-
-                    if ($item['answer'] != '0' && !empty($item['answer'])) {
-                        $exercise_result[] = $question_id;
-                        break;
-                    }
-                }
-            }
-        }
-        return $exercise_result;
-    }
-
-    /**
      * User logs in for the first time to a course
      * @param int $courseId
      * @param int $user_id

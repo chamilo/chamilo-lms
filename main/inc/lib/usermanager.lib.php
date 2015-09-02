@@ -2982,7 +2982,7 @@ class UserManager
         if (empty($api_service))
             return false;
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
-        $service_name = Database::escape_string($api_service);
+        $api_service = Database::escape_string($api_service);
         $sql = "SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {

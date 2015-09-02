@@ -68,10 +68,14 @@ class DashboardManager
 				}
 				echo '</tr>';
 			} else {
-				echo Display::tag(
-					'tr',
-					Display::tag('td', get_lang('CheckFilePermissions').' '.Security::remove_XSS($plugin_info_file) , array('colspan'=>'3'))
-				);
+				if ($testplugin != 'css') {
+					echo Display::tag(
+						'tr',
+						Display::tag('td',
+							get_lang('CheckFilePermissions') . ' ' . Security::remove_XSS($plugin_info_file),
+							array('colspan' => '3'))
+					);
+				}
 			}
 		}
 

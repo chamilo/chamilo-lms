@@ -48,6 +48,7 @@ class GlossaryManager
         $rs=Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs);
+
             return $row['description'];
         } else {
             return '';
@@ -158,7 +159,6 @@ class GlossaryManager
     {
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
-
         $course_id = api_get_course_int_id();
 
         // check if the glossary term already exists
@@ -206,7 +206,8 @@ class GlossaryManager
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
-        $get_max = "SELECT MAX(display_order) FROM $t_glossary WHERE c_id = $course_id ";
+        $get_max = "SELECT MAX(display_order) FROM $t_glossary
+                    WHERE c_id = $course_id ";
         $res_max = Database::query($get_max);
         if (Database::num_rows($res_max)==0) {
             return 0;
@@ -235,7 +236,10 @@ class GlossaryManager
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT name FROM $t_glossary WHERE c_id = $course_id AND name = '".Database::escape_string($term)."'";
+        $sql = "SELECT name FROM $t_glossary
+                WHERE
+                    c_id = $course_id AND
+                    name = '".Database::escape_string($term)."'";
         if ($not_id<>'') {
             $sql .= " AND glossary_id <> '".Database::escape_string($not_id)."'";
         }

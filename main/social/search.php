@@ -68,7 +68,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
     }
 
     if (empty($users) && empty($groups)) {
-        $social_right_content .= get_lang('SorryNoResults');
+        Display::addFlash(Display::return_message(get_lang('SorryNoResults')));
     }
 
     $results = '<div id="online_grid_container">';

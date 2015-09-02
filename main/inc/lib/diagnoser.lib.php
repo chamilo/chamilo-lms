@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Class Diagnoser
  * Class that is responsible for generating diagnostic information about the system

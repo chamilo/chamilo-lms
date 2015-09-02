@@ -8,7 +8,10 @@
  */
 class LegalManager
 {
-	private function __construct()
+    /**
+     * Constructor
+     */
+	public function __construct()
     {
 
 	}

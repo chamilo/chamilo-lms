@@ -1,8 +1,9 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  *  Used to implement the loading of custom pages
- * 
+ *
  * @license see /license.txt
  * @author 2011, Jean-Karim Bockstael <jeankarim@cblue.be>
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
@@ -27,7 +28,7 @@ class CustomPages
 
     /**
      * Returns the path to a custom page.
-     * 
+     *
      * @param string $name
      * @return string
      */
@@ -38,7 +39,7 @@ class CustomPages
 
     /**
      * If enabled display a custom page and exist. Otherwise log error and returns.
-     * 
+     *
      * @param string $page_name
      * @param array $content used to path data to the custom page
      */
@@ -58,10 +59,10 @@ class CustomPages
     }
 
     /**
-     * Does not look like this function is being used is being used 
-     * 
+     * Does not look like this function is being used is being used
+     *
      * @param type $url_id
-     * @return string 
+     * @return string
      */
     public static function getURLImages($url_id = null)
     {
@@ -76,6 +77,7 @@ class CustomPages
                 $images[] = api_get_path(WEB_PATH) . 'custompages/url-images/' . $url_id . '_url_image_' . $img_id . '.png';
             }
         }
+
         return $images;
     }
 

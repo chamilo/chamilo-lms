@@ -81,6 +81,7 @@ function choose_image($file_name)
             }
         }
     }
+
     return 'defaut.gif';
 }
 
@@ -106,7 +107,6 @@ function format_date($date)
 function format_url($file_path)
 {
     $path_component = explode('/', $file_path);
-
     $path_component = array_map('rawurlencode', $path_component);
 
     return implode('/', $path_component);
@@ -121,7 +121,6 @@ function format_url($file_path)
  */
 function recent_modified_file_time($dir_name, $do_recursive = true)
 {
-
     $dir = dir($dir_name);
     $last_modified = 0;
     $return = 0;
@@ -144,6 +143,7 @@ function recent_modified_file_time($dir_name, $do_recursive = true)
         //prevents returning 0 (for empty directories)
         $return = ($last_modified == 0) ? filemtime($dir_name) : $last_modified;
     }
+
     return $return;
 }
 
@@ -156,18 +156,17 @@ function recent_modified_file_time($dir_name, $do_recursive = true)
 function folder_size($dir_name)
 {
     $size = 0;
-
-    if ($dir_handle = opendir($dir_name))
-    {
-        while (($entry = readdir($dir_handle)) !== false)
-        {
-            if($entry == '.' || $entry == '..')
+    if ($dir_handle = opendir($dir_name)) {
+        while (($entry = readdir($dir_handle)) !== false) {
+            if ($entry == '.' || $entry == '..') {
                 continue;
+            }
 
-            if(is_dir($dir_name.'/'.$entry))
+            if (is_dir($dir_name.'/'.$entry)) {
                 $size += folder_size($dir_name.'/'.$entry);
-            else
+            } else {
                 $size += filesize($dir_name.'/'.$entry);
+            }
         }
 
         closedir($dir_handle);

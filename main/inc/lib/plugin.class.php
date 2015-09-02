@@ -550,7 +550,8 @@ class Plugin
     {
         // Update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $t_courses ORDER BY id";
+        $sql = "SELECT id FROM $t_courses
+                ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->uninstall_course_fields($row['id']);
@@ -611,7 +612,6 @@ class Plugin
         //Avoid Tab Name Spaces
         $tabNameNoSpaces = preg_replace('/\s+/', '', $tabName);
         $subkeytext = "Tabs" . $tabNameNoSpaces;
-
 
         //Check if it is already added
         $checkCondition = array(

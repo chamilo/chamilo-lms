@@ -432,7 +432,7 @@ class GlossaryManager
      */
     public static  function get_glossary_data($from, $number_of_items, $column, $direction)
     {
-        global $_user;
+        $_user = api_get_user_info();
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
         $t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);

@@ -197,7 +197,7 @@ class AnnouncementEmail
      */
     public function sender($key = '')
     {
-        global $_user;
+        $_user = api_get_user_info();
 
         return $key ? $_user[$key] : $_user;
     }

@@ -186,7 +186,7 @@ class NotebookManager
 
     static function display_notes()
     {
-        global $_user;
+        $_user = api_get_user_info();
         if (!isset($_GET['direction'])) {
             $sort_direction = 'ASC';
             $link_sort_direction = 'DESC';
@@ -202,9 +202,11 @@ class NotebookManager
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
             if (api_get_session_id() == 0)
-                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
+                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' .
+                    Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
             elseif (api_is_allowed_to_session_edit(false, true)) {
-                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
+                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' .
+                    Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
             }
         } else {
             echo '<a href="javascript:void(0)">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';

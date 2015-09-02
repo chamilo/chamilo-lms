@@ -14,7 +14,7 @@ class CourseHome
      */
     public static function show_tool_3column($cat)
     {
-        global $_user;
+        $_user = api_get_user_info();
         $TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
         $TABLE_TOOLS = Database :: get_main_table(TABLE_MAIN_COURSE_MODULE);
 

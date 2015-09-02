@@ -176,13 +176,19 @@
         </div>
     {% endfor %}
 
-    {% if _u.logged and not is_subscribed %}
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            {% if _u.logged and not is_subscribed %}
                 <div class="text-center">
                     {{ subscribe_button }}
                 </div>
-            </div>
+            {% elseif not _u.logged %}
+                {% if 'allow_registration'|get_setting == 'true' %}
+                    <a href="{{ _p.web_main ~ 'auth/inscription.php' }}" class="btn btn-info btn-lg">
+                        <i class="fa fa-sign-in fa-fw"></i> {{ 'SignUp'|get_lang }}
+                    </a>
+                {% endif %}
+            {% endif %}
         </div>
-    {% endif %}
+    </div>
 </div>

@@ -677,6 +677,37 @@ class CoursesController
     }
 
     /**
+     * Show the Session Catalogue with filtered session by a query term
+     * @param array $limit
+     */
+    public function sessionListBySearch(array $limit)
+    {
+        $q = isset($_REQUEST['q']) ? Security::remove_XSS($_REQUEST['q']) : null;
+        $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
+        $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+        $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
+
+        $sessions = $this->model->browseSessionsBySearch($q, $limit);
+        $sessionsBlocks = $this->getFormatedSessionsBlock($sessions);
+
+        $tpl = new Template();
+        $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
+        $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
+        $tpl->assign('show_tutor', (api_get_setting('show_session_coach')==='true' ? true : false));
+        $tpl->assign('course_url', $courseUrl);
+        $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
+        $tpl->assign('hidden_links', $hiddenLinks);
+        $tpl->assign('search_token', Security::get_token());
+        $tpl->assign('search_date', Security::remove_XSS($searchDate));
+        $tpl->assign('search_tag', Security::remove_XSS($q));
+        $tpl->assign('sessions', $sessionsBlocks);
+
+        $contentTemplate = $tpl->get_template('auth/session_catalog.tpl');
+
+        $tpl->display($contentTemplate);
+    }
+
+    /**
      * Get the formated data for sessions block to be displayed on Session Catalog page
      * @param array $sessions The session list
      * @return array

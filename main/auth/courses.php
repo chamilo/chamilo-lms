@@ -53,7 +53,8 @@ $actions = array(
     'subscribe_user_with_password',
     'display_sessions',
     'subscribe_to_session',
-    'search_tag'
+    'search_tag',
+    'search_session'
 );
 
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
@@ -308,5 +309,12 @@ switch ($action) {
         }
 
         $courses_controller->sessionsListByCoursesTag($limit);
+        break;
+    case 'search_session':
+        if (!$user_can_view_page) {
+            api_not_allowed(true);
+        }
+
+        $courses_controller->sessionListBySearch($limit);
         break;
 }

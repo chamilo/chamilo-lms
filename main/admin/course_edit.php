@@ -363,7 +363,7 @@ if ($form->validate()) {
             }
         }
 
-        CourseManager::updateTeachers($course_code, $teachers, false, true, false);
+        CourseManager::updateTeachers($course_code, $teachers, true, true, false);
     } else {
         // Normal behaviour
         CourseManager::updateTeachers($course_code, $teachers, true, false);

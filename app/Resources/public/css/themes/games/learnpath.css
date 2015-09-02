@@ -102,11 +102,28 @@
   text-decoration: none;
 }
 #touch-button.btn-touch{
-  background-color: #009AB8;
+  background-color: #C2C2C2;
 }
 #touch-button.btn-touch:hover{
-  background-color: #666264;
+  background-color: #E9E9F0;
 }
+#touch-button.btn-touch{
+  background-color: #EFEFEF;
+  -webkit-border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-bottomright: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-image: url('images/touch-left.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: 1px solid #DDD;
+}
+#touch-button.show-touch{
+  background-image: url('images/touch-right.png');
+}
+
 .scorm-list .panel-default .panel-title a.collapsed{
   background:url("images/arrow-buttom.png") no-repeat 95% center !important;
 }

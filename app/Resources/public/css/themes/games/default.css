@@ -92,6 +92,7 @@ body{
   padding-top: 10px;
   border-radius: 10px;
   padding: 10px;
+  min-height: 185px;
 }
 #slider-sessions .session-description {
   font-size: 12px;
@@ -199,6 +200,7 @@ body{
 	padding:15px;
 	box-sizing:border-box;
 	margin-bottom: 20px;
+        min-height: 285px;
 }
 .my-home .items-home .image-home{
 	text-align: center;
@@ -683,6 +685,9 @@ footer .media{
 .section-mycourses .current-item .thumbnail {
     border: 0 none;
     padding: 0;
+}
+.section-mycourses .current-item .thumbnail img{
+    border-radius: 10px;
 }
 .section-mycourses .description-course{
   padding-top: 10px;

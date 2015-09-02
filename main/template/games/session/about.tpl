@@ -209,9 +209,6 @@
                                 <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}" target="_blank" class="btn-social">
                                     <i class="fa fa-twitter"></i>
                                 </a>
-                                <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}" target="_blank" class="btn-social">
-                                    <i class="fa fa-linkedin"></i>
-                                </a>
                             </div>
                         </div>
                     </div>

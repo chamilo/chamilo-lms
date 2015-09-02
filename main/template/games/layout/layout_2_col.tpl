@@ -11,14 +11,14 @@
     {% endif %}
 
 
-        {% if _u.logged == 0 %}
-            {% if home_page_block %}
+        
+        {% if home_page_block %}
             <!-- Bloque de contenido home -->
             <div class="my-home">
-                    {{ home_page_block }}
+               {{ home_page_block }}
             </div>
-            {% endif %}
         {% endif %}
+        
 
 
         {# Homepage bottom region #}

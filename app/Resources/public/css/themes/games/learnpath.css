@@ -119,6 +119,8 @@
   background-repeat: no-repeat;
   background-position: center center;
   border: 1px solid #DDD;
+  width: 40px;
+  height: 40px;
 }
 #touch-button.show-touch{
   background-image: url('images/touch-right.png');

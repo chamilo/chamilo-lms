@@ -81,25 +81,25 @@ $form->setDefaults(array('score' => $filter_score));
 
 if (!$exportToXLS) {
     Display :: display_header(get_lang('Reporting'));
-    echo '<div class="actions">';
+    $actionsLeft = '';
     if ($global) {
 
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
+        $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
         Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM);
-        echo '</a>';
+        $actionsLeft .= '</a>';
 
-        echo '<span style="float:right">';
+        
 
         $courseLink = '';
         if (!empty(api_get_course_info())) {
             $courseLink = api_get_cidreq();
         }
 
-        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'&'.$courseLink.'">'.
+        $actionsRight .= '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'&'.$courseLink.'">'.
             Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';
-        echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
+        $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
             Display::return_icon('printer.png',get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
-        echo '</span>';
+        
 
         $menuItems[] = Display::url(
             Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32),
@@ -116,34 +116,37 @@ if (!$exportToXLS) {
                 api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=coach'
             );
         }
-        $menuItems[] = Display::return_icon('quiz_na.png', get_lang('ExamTracking'), array(), 32);
+        $menuItems[] = '<a href="#">'.Display::return_icon('quiz_na.png', get_lang('ExamTracking'), array(), 32).'</a>';
 
         $nb_menu_items = count($menuItems);
         if ($nb_menu_items > 1) {
             foreach ($menuItems as $key=> $item) {
-                echo $item;
+                $actionsLeft .= $item;
             }
         }
     } else {
-        echo Display::url(
+        $actionsLeft .= Display::url(
             Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32),
             'courseLog.php?'.api_get_cidreq().'&studentlist=true'
         );
-        echo Display::url(
+        $actionsLeft .= Display::url(
             Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32),
             'courseLog.php?'.api_get_cidreq().'&studentlist=false'
         );
-        echo Display::url(
+        $actionsLeft .= Display::url(
             Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32),
             'courseLog.php?'.api_get_cidreq().'&studentlist=resouces'
         );
-        echo Display::url(
+        $actionsLeft .= Display::url(
             Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), array(), 32),
             api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId
         );
 
     }
-    echo '</div>';
+    
+    
+    $toolbar = Display::toolbarAction('toolbar-exams', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+    echo $toolbar;
 
     $form->display();
     echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';

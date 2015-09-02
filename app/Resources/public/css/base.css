@@ -5949,7 +5949,7 @@ div#chat-remote-video video {
 #student-list-work{
     padding: 10px;
 }
-#work-list, #session-list{
+#work-list, #session-table{
   padding: 10px;
   border:1px solid #dddddd;
   border-radius: 5px;

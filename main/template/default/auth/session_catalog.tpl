@@ -74,7 +74,7 @@
         </div>
     </div>
 
-    <section id="sessions">
+    <section id="session-list">
         <div class="col-md-12">
             <div class="row">
                 {% for session in sessions %}

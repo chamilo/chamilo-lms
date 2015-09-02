@@ -5146,7 +5146,7 @@ class CourseManager
             }
 
             $sql = 'DELETE FROM '.$course_user_table.'
-                    WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
+                    WHERE course_code="'.Database::escape_string($course_code).'" AND relation_type = 0  AND status="1"'.$cond;
             Database::query($sql);
         }
 
@@ -5168,6 +5168,7 @@ class CourseManager
                         role = '',
                         tutor_id = '0',
                         sort = '0',
+                        relation_type = '0',
                         user_course_cat='0'";
                 }
                 Database::query($sql);

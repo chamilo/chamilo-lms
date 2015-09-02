@@ -60,14 +60,15 @@ class MessageManager
 
     /**
      * Get the new messages for the current user from the database.
+     * @return int
      */
     public static function get_new_messages()
     {
-        $table_message = Database::get_main_table(TABLE_MESSAGE);
+        $table = Database::get_main_table(TABLE_MESSAGE);
         if (!api_get_user_id()) {
             return false;
         }
-        $sql = "SELECT * FROM $table_message
+        $sql = "SELECT * FROM $table
                 WHERE user_receiver_id=".api_get_user_id()." AND msg_status=".MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
         $i = Database::num_rows($result);
@@ -527,9 +528,9 @@ class MessageManager
             // delete attachment file
             self::delete_message_attachment_file($id, $user_sender_id);
             // delete message
-            $query = "UPDATE $table_message SET msg_status=3
+            $sql = "UPDATE $table_message SET msg_status=3
                     WHERE user_sender_id='$user_sender_id' AND id='$id'";
-            $result = Database::query($query);
+            $result = Database::query($sql);
 
             return $result;
         }
@@ -626,9 +627,16 @@ class MessageManager
 
             if (!empty($group_id)) {
                 $userGroup = new UserGroup();
-                $path_user_info = $userGroup->get_group_picture_path_by_id($group_id, 'system', true);
+                $path_user_info = $userGroup->get_group_picture_path_by_id(
+                    $group_id,
+                    'system',
+                    true
+                );
             } else {
-                $path_user_info['dir'] = UserManager::getUserPathById($message_uid, 'system');
+                $path_user_info['dir'] = UserManager::getUserPathById(
+                    $message_uid,
+                    'system'
+                );
             }
 
             $path_message_attach = $path_user_info['dir'].'message_attachments/';
@@ -643,8 +651,8 @@ class MessageManager
 
     /**
      * update messages by user id and message id
-     * @param  int		user id
-     * @param  int		message id
+     * @param  int		$user_id
+     * @param  int		$message_id
      * @return resource
      */
     public static function update_message($user_id, $message_id)
@@ -681,8 +689,8 @@ class MessageManager
 
     /**
      * get messages by user id and message id
-     * @param  int		user id
-     * @param  int		message id
+     * @param  int		$user_id
+     * @param  int		$message_id
      * @return array
      */
     public static function get_message_by_user($user_id, $message_id)
@@ -752,6 +760,7 @@ class MessageManager
                 }
             }
         }
+
         return $data;
     }
 
@@ -902,6 +911,7 @@ class MessageManager
                 WHERE msg_status=".MESSAGE_STATUS_OUTBOX." AND user_sender_id=".api_get_user_id();
         $sql_result = Database::query($sql);
         $result = Database::fetch_array($sql_result);
+
         return $result['number_messages'];
     }
 
@@ -1221,6 +1231,7 @@ class MessageManager
                 false
             );
         }
+
         return $html_messages;
     }
 
@@ -1248,8 +1259,6 @@ class MessageManager
         $query_vars = array('id' => $group_id, 'topic_id' => $topic_id, 'topics_page_nr' => 0);
 
         // Main message
-
-        $user_link = '';
         $links = '';
         $main_content = '';
 
@@ -1406,9 +1415,22 @@ class MessageManager
             $options = array('hide_navigation' => false, 'per_page' => $items_per_page);
             $visibility = array(true, true, true, false);
 
-            $style_class = array('item' => array('class' => 'group_social_item'), 'main' => array('class' => 'group_social_grid'));
+            $style_class = array(
+                'item' => array('class' => 'group_social_item'),
+                'main' => array('class' => 'group_social_grid'),
+            );
             if (!empty($array_html_items)) {
-                $html .= Display::return_sortable_grid('items_'.$topic['id'], array(), $array_html_items, $options, $query_vars, null, $visibility, false, $style_class);
+                $html .= Display::return_sortable_grid(
+                    'items_'.$topic['id'],
+                    array(),
+                    $array_html_items,
+                    $options,
+                    $query_vars,
+                    null,
+                    $visibility,
+                    false,
+                    $style_class
+                );
             }
         }
         return $html;
@@ -1430,6 +1452,7 @@ class MessageManager
         $sorted_rows = array(0 => array());
         self::message_recursive_sort($rows, $sorted_rows, $first_seed);
         unset($sorted_rows[0]);
+
         return $sorted_rows;
     }
 
@@ -1592,7 +1615,14 @@ class MessageManager
         }
 
         // display sortable table with messages of the current user
-        $table = new SortableTable('message_inbox', array('MessageManager', 'get_number_of_messages'), array('MessageManager', 'get_message_data'), 3, 20, 'DESC');
+        $table = new SortableTable(
+            'message_inbox',
+            array('MessageManager', 'get_number_of_messages'),
+            array('MessageManager', 'get_message_data'),
+            3,
+            20,
+            'DESC'
+        );
         $table->set_header(0, '', false, array('style' => 'width:15px;'));
         $table->set_header(1, get_lang('Messages'), false);
         $table->set_header(2, get_lang('Date'), true, array('style' => 'width:180px;'));
@@ -1602,7 +1632,13 @@ class MessageManager
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
         }
-        $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages'),'mark_as_unread' => get_lang('MailMarkSelectedAsUnread'),'mark_as_read' => get_lang('MailMarkSelectedAsRead')));
+        $table->set_form_actions(
+            array(
+                'delete' => get_lang('DeleteSelectedMessages'),
+                'mark_as_unread' => get_lang('MailMarkSelectedAsUnread'),
+                'mark_as_read' => get_lang('MailMarkSelectedAsRead'),
+            )
+        );
         $html .= $table->return_table();
         return $html;
     }

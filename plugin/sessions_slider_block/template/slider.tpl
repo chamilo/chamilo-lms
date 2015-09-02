@@ -21,7 +21,11 @@
                                 <div class="card">
                                     <div class="front">
                                         <div class="thumbnail">
-                                            <img src="{{ _p.web_upload ~ session.image_in_slider }}" alt="{{ session.name }}">
+                                            {% if session.image_in_slider %}
+                                                <img src="{{ _p.web_upload ~ session.image_in_slider }}" alt="{{ session.name }}">
+                                            {% else %}
+                                                <img src="{{ _p.web_img ~ 'session_default.png' }}" alt="{{ session.name }}">
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="back">

@@ -903,6 +903,8 @@ class Template
             );
             if (!empty($group_pending_invitations)) {
                 $group_pending_invitations = count($group_pending_invitations);
+            } else {
+                $group_pending_invitations = 0;
             }
             $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
         }

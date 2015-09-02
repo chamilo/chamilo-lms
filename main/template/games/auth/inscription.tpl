@@ -36,7 +36,9 @@
                         <script type="text/javascript">
                             $(function() {
                                 $('#extra_date_of_birth').datepicker({
-                                    dateFormat: 'yy-mm-dd'
+                                    dateFormat: 'yy-mm-dd',
+                                    changeMonth: true,
+                                    changeYear: true
                                 });
                             });
                         </script>

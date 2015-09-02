@@ -10,6 +10,7 @@
         <div class="row">
             {% for session in current_sessions_block.sessions %}
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="slider-block">
                 <h2 class="title-course"><a href="{{ session.link }}">{{ session.name }}</a></h2>
                 <div class="card">
                     <div class="front">
@@ -66,7 +67,7 @@
 
                         </div>
                     </div>
-                </div>
+                </div></div>
             </div>
             {% endfor %}
         </div>

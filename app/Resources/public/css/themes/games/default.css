@@ -93,6 +93,8 @@ body{
   border-radius: 10px;
   padding: 10px;
   min-height: 185px;
+  width: 280px;
+  margin: auto;
 }
 #slider-sessions .session-description {
   font-size: 12px;
@@ -121,6 +123,11 @@ body{
   padding-right: 10px;
 }
 #slider-sessions .slider-block{
+  padding-left: 30px;
+  padding-right: 30px;
+  box-sizing: border-box;
+}
+.current-block .slider-block{
   padding-left: 30px;
   padding-right: 30px;
   box-sizing: border-box;
@@ -224,8 +231,8 @@ body{
 
 .current-block{
   width: 100%;
-  padding-left: 2%;
-  padding-right: 2%;
+  padding-left: 14px;
+  padding-right: 14px;
   text-align: center;
 }
 .current-block .start-progress{

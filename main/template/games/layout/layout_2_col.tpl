@@ -10,16 +10,12 @@
         </div>
     {% endif %}
 
-
-        
         {% if home_page_block %}
             <!-- Bloque de contenido home -->
             <div class="my-home">
                {{ home_page_block }}
             </div>
         {% endif %}
-        
-
 
         {# Homepage bottom region #}
         {% if is_homepage and plugin_homepage_bottom %}

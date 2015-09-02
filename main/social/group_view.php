@@ -232,13 +232,15 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
         }
         foreach ($members as $member) {
             // if is a member
-            if (in_array($member['relation_type'], array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
+            if (in_array($member['relation_type'],
+                array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))
+            ) {
                 //add icons
                 if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
                     $icon= Display::return_icon('social_group_admin.png', get_lang('Admin'));
                 } elseif ($member['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
                     $icon= Display::return_icon('social_group_moderator.png', get_lang('Moderator'));
-                } else{
+                } else {
                     $icon= '';
                 }
 

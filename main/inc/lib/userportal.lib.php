@@ -45,10 +45,13 @@ class IndexManager
         $exercise_list = array();
         if (!empty($personal_course_list)) {
             foreach($personal_course_list as  $course_item) {
-                $course_code     = $course_item['c'];
-                $session_id     = $course_item['id_session'];
+                $course_code = $course_item['c'];
+                $session_id = $course_item['id_session'];
 
-                $exercises = ExerciseLib::get_exercises_to_be_taken($course_code, $session_id);
+                $exercises = ExerciseLib::get_exercises_to_be_taken(
+                    $course_code,
+                    $session_id
+                );
 
                 foreach($exercises as $exercise_item) {
                     $exercise_item['course_code']     = $course_code;
@@ -68,7 +71,8 @@ class IndexManager
         }
     }
 
-    function return_announcements($show_slide = true) {
+    function return_announcements($show_slide = true)
+    {
         //// Display System announcements
         $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
         if ($hideAnnouncements == 'true' && empty($userId)) {
@@ -80,17 +84,30 @@ class IndexManager
         if (!api_is_anonymous() && $this->user_id) {
             $visibility = api_is_allowed_to_create_course() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
             if ($show_slide) {
-                $announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);
+                $announcements = SystemAnnouncementManager:: display_announcements_slider(
+                    $visibility,
+                    $announcement
+                );
             } else {
-                $announcements = SystemAnnouncementManager :: display_all_announcements($visibility, $announcement);
+                $announcements = SystemAnnouncementManager:: display_all_announcements(
+                    $visibility,
+                    $announcement
+                );
             }
         } else {
             if ($show_slide) {
-                $announcements = SystemAnnouncementManager :: display_announcements_slider(SystemAnnouncementManager::VISIBLE_GUEST, $announcement);
+                $announcements = SystemAnnouncementManager:: display_announcements_slider(
+                    SystemAnnouncementManager::VISIBLE_GUEST,
+                    $announcement
+                );
             } else {
-                $announcements = SystemAnnouncementManager :: display_all_announcements(SystemAnnouncementManager::VISIBLE_GUEST, $announcement);
+                $announcements = SystemAnnouncementManager:: display_all_announcements(
+                    SystemAnnouncementManager::VISIBLE_GUEST,
+                    $announcement
+                );
             }
         }
+
         return $announcements;
     }
 
@@ -98,7 +115,8 @@ class IndexManager
      * Alias for the online_logout() function
      * @param   bool    $redirect   Whether to ask online_logout to redirect to index.php or not
      */
-    function logout($redirect = true) {
+    function logout($redirect = true)
+    {
         online_logout($this->user_id, true);
     }
 
@@ -108,7 +126,8 @@ class IndexManager
      * @param string $category
      * @return boolean
      */
-    function category_has_open_courses($category) {
+    function category_has_open_courses($category)
+    {
         $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
         $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $category = Database::escape_string($category);
@@ -125,6 +144,7 @@ class IndexManager
                 }
             }
         }
+
         return false;
     }
 
@@ -136,7 +156,8 @@ class IndexManager
      * @version 1.0.1
      * @todo does $_plugins need to be global?
      */
-    function display_anonymous_right_menu() {
+    function display_anonymous_right_menu()
+    {
         global $loginFailed, $_user;
         $display_add_course_link    = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
         $current_user_id            = api_get_user_id();
@@ -207,7 +228,6 @@ class IndexManager
     public function return_home_page()
     {
         $userId = api_get_user_id();
-        global $_configuration;
         // Including the page for the news
         $html = '';
 
@@ -257,7 +277,8 @@ class IndexManager
 		return $html;
 	}
 
-    function return_notice() {
+    function return_notice()
+    {
         $sys_path               = api_get_path(SYS_PATH);
         $user_selected_language = api_get_interface_language();
 
@@ -276,7 +297,8 @@ class IndexManager
         return $html;
     }
 
-    function return_help() {
+    function return_help()
+    {
         $user_selected_language = api_get_interface_language();
         $sys_path               = api_get_path(SYS_PATH);
         $platformLanguage       = api_get_setting('platformLanguage');
@@ -299,8 +321,8 @@ class IndexManager
         return $html;
     }
 
-    function return_skills_links() {
-        $html = '';
+    function return_skills_links()
+    {
         $content = '';
         $content .= '<ul class="nav nav-pills nav-stacked">';
         /**
@@ -350,7 +372,15 @@ class IndexManager
             }
         }
         $content .= '</ul>';
-        $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block',null, 'skills', 'skillsCollapse');
+        $html = self::show_right_block(
+            get_lang("Skills"),
+            $content,
+            'skill_block',
+            null,
+            'skills',
+            'skillsCollapse'
+        );
+
         return $html;
     }
 
@@ -394,7 +424,6 @@ class IndexManager
                                     ORDER BY title, UPPER(visual_code)";
 
         // Showing only the courses of the current access_url_id.
-        global $_configuration;
         if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
@@ -692,7 +721,7 @@ class IndexManager
             $html .= '<div id="'.$idCollpase.'" class="panel-collapse collapse in" role="tabpanel">' . PHP_EOL;
             $html .= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
             $html .= '</div></div></div>' . PHP_EOL;
-            
+
         } else {
             if (!empty($id)) {
                 $params['id'] = $id;

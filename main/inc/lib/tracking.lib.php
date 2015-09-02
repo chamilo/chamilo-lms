@@ -7001,16 +7001,16 @@ class TrackingUserLogCSV
     		$title[1] = get_lang('ExercicesDetails');
     		$line = '';
     		$sql = "SELECT ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
-                FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
-                WHERE te.c_id = $courseId
-                    AND te.exe_user_id = $userId
-                    AND te.exe_exo_id = ce.id
-                ORDER BY ce.title ASC, te.exe_date ASC";
+                    FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
+                    WHERE te.c_id = $courseId
+                        AND te.exe_user_id = $userId
+                        AND te.exe_exo_id = ce.id
+                    ORDER BY ce.title ASC, te.exe_date ASC";
 
     		$hpsql = "SELECT te.exe_name, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
-                FROM $TABLETRACK_HOTPOTATOES AS te
-                WHERE te.exe_user_id = '$userId' AND te.c_id = $courseId
-                ORDER BY te.c_id ASC, te.exe_date ASC";
+                        FROM $TABLETRACK_HOTPOTATOES AS te
+                        WHERE te.exe_user_id = '$userId' AND te.c_id = $courseId
+                        ORDER BY te.c_id ASC, te.exe_date ASC";
 
     		$hpresults = StatsUtils::getManyResultsXCol($hpsql, 4);
 
@@ -7062,7 +7062,8 @@ class TrackingUserLogCSV
      */
     public function display_student_publications_tracking_info($view, $user_id, $course_id)
     {
-    	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong, $_course;
+    	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK;
+        $_course = api_get_course_info();
         $user_id = intval($user_id);
         $course_id = intval($course_id);
 

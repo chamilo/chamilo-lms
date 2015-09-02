@@ -886,9 +886,7 @@ class Template
         $menu = return_menu();
         $this->assign('menu', $menu);
 
-        //Setting notifications
-
-
+        // Setting notifications
         $count_unread_message = 0;
         if (api_get_setting('allow_message_tool') == 'true') {
             // get count unread message and total invitations

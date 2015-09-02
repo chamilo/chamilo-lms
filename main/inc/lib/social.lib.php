@@ -221,9 +221,9 @@ class SocialManager extends UserManager
             return true;
         } else {
             // invitation already exist
-            $sql_if_exist = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.'
-                             WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7';
-            $res_if_exist = Database::query($sql_if_exist);
+            $sql = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.'
+                    WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7';
+            $res_if_exist = Database::query($sql);
             $row_if_exist = Database::fetch_array($res_if_exist, 'ASSOC');
             if ($row_if_exist['count'] == 1) {
                 $sql = 'UPDATE '.$tbl_message.' SET
@@ -296,6 +296,7 @@ class SocialManager extends UserManager
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list_friend_invitation[$row['user_receiver_id']] = $row;
         }
+
         return $list_friend_invitation;
     }
 
@@ -1134,14 +1135,8 @@ class SocialManager extends UserManager
             'content' => $cleanMessageContent,
             'parent_id' => $messageId
         );
+
         return Database::insert($tblMessage, $attributes);
-
-        /* Deprecated since 2014-10-29
-        $senderInfo = api_get_user_info($userId);
-        $notification = new Notification();
-        $notification->save_notification(Notification::NOTIFICATION_TYPE_WALL_MESSAGE, array($friendId), '', $messageContent, $senderInfo);
-        */
-
     }
 
     /**
@@ -1155,7 +1150,6 @@ class SocialManager extends UserManager
      */
     public static function sendWallMessageAttachmentFile($userId, $fileAttach, $messageId, $fileComment = '')
     {
-        $flag = false;
         $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         // create directory
@@ -1222,15 +1216,15 @@ class SocialManager extends UserManager
         }
 
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
-        $tblMessageAttachement = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+        $tblMessageAttachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         $userId = intval($userId);
         $start = Database::escape_string($start);
         $limit = intval($limit);
 
         $sql = "SELECT id, user_sender_id,user_receiver_id, send_date, content, parent_id,
-          (SELECT ma.path FROM $tblMessageAttachement ma WHERE  ma.message_id = tm.id ) as path,
-          (SELECT ma.filename FROM $tblMessageAttachement ma WHERE  ma.message_id = tm.id ) as filename
+          (SELECT ma.path FROM $tblMessageAttachment ma WHERE  ma.message_id = tm.id ) as path,
+          (SELECT ma.filename FROM $tblMessageAttachment ma WHERE  ma.message_id = tm.id ) as filename
             FROM $tblMessage tm
             WHERE user_receiver_id = $userId
                 AND send_date > '$start' ";
@@ -1518,6 +1512,7 @@ class SocialManager extends UserManager
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $statusMessage = MESSAGE_STATUS_WALL_DELETE;
         $sql = "UPDATE $tblMessage SET msg_status = '$statusMessage' WHERE id = '{$id}' ";
+
         return Database::query($sql);
     }
 
@@ -1563,12 +1558,10 @@ class SocialManager extends UserManager
             $template->assign('gamification_points', $gamificationPoints);
         }
         $chatEnabled = api_is_global_chat_enabled();
-        $templateName = $template->assign('chat_enabled', $chatEnabled);
-
+        $template->assign('chat_enabled', $chatEnabled);
         $templateName = $template->get_template('social/user_block.tpl');
 
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {
-
             $templateName = $template->get_template('social/group_block.tpl');
         }
 
@@ -1770,5 +1763,4 @@ class SocialManager extends UserManager
 
         return $template->fetch($skillBlock);
     }
-
 }

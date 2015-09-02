@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * VideoChat class
- * 
+ *
  * This class provides methods for video chat management.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -43,6 +44,7 @@ class VideoChat
      * @param string $name The video chat name
      * @param int $fromUser The sender user
      * @param int $toUser The receiver user
+     *
      * @return int The created video chat id. Otherwise return false
      */
     public static function createRoom($name, $fromUser, $toUser)
@@ -61,6 +63,7 @@ class VideoChat
     /**
      * Check if the video chat exists by its room name
      * @param string $name The video chat name
+     *
      * @return boolean
      */
     public static function nameExists($name)
@@ -84,6 +87,7 @@ class VideoChat
     /**
      * Get the video chat info by its room name
      * @param string $name The video chat name
+     *
      * @return array The video chat info. Otherwise return false
      */
     public static function getChatRoomByName($name)

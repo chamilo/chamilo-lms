@@ -97,8 +97,8 @@ $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 if ($origin == 'learnpath') {
 ?>
 	<form method="GET" action="exercise.php?<?php echo api_get_cidreq() ?>">
-	<input type="hidden" name="origin" 					value="<?php echo $origin; ?>" />
-    <input type="hidden" name="learnpath_id" 			value="<?php echo $learnpath_id; ?>" />
+	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />
+    <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
     <input type="hidden" name="learnpath_item_id" 		value="<?php echo $learnpath_item_id; ?>" />
     <input type="hidden" name="learnpath_item_view_id"  value="<?php echo $learnpath_item_view_id; ?>" />
 <?php
@@ -127,7 +127,12 @@ if ($objExercise->selectAttempts() > 0) {
         exit;
     }
 }
-$total_score = $objExercise->get_stat_track_exercise_info_by_exe_id($objExercise->id)['exe_result'];
+
+$total_score = 0;
+if (!empty($exercise_stat_info)) {
+    $total_score = $exercise_stat_info['exe_result'];
+}
+
 $max_score = $objExercise->get_max_score();
 
 Display :: display_normal_message(get_lang('Saved').'<br />',false);
@@ -136,12 +141,20 @@ Display :: display_normal_message(get_lang('Saved').'<br />',false);
 ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);
 
 //Unset session for clock time
-ExerciseLib::exercise_time_control_delete($objExercise->id, $learnpath_id, $learnpath_item_id);
+ExerciseLib::exercise_time_control_delete(
+    $objExercise->id,
+    $learnpath_id,
+    $learnpath_item_id
+);
 ExerciseLib::delete_chat_exercise_session($exe_id);
 
 if ($origin != 'learnpath') {
     echo '<hr>';
-    echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-primary'));
+    echo Display::url(
+        get_lang('ReturnToCourseHomepage'),
+        api_get_course_url(),
+        array('class' => 'btn btn-primary')
+    );
 
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');

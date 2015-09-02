@@ -40,9 +40,11 @@ if (empty($group_id)) {
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
     $group_role = $usergroup->get_user_group_role(api_get_user_id(), $group_id);
 
-    if (api_is_platform_admin() || in_array($group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
+    if (api_is_platform_admin() ||
+        in_array($group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))
+    ) {
         $usergroup->delete_topic($group_id, $topic_id);
-        Display::addFlash(DIsplay::return_message(get_lang('Deleted')));
+        Display::addFlash(Display::return_message(get_lang('Deleted')));
         header("Location: group_view.php?id=$group_id");
         exit;
     }
@@ -52,10 +54,10 @@ $content = null;
 $social_right_content = '';
 
 if (isset($_POST['action'])) {
-    $title        = isset($_POST['title']) ? $_POST['title'] : null;
-    $content      = $_POST['content'];
-    $group_id     = intval($_POST['group_id']);
-    $parent_id    = intval($_POST['parent_id']);
+    $title = isset($_POST['title']) ? $_POST['title'] : null;
+    $content = $_POST['content'];
+    $group_id = intval($_POST['group_id']);
+    $parent_id = intval($_POST['parent_id']);
 
     if ($_POST['action'] == 'reply_message_group') {
         $title = cut($content, 50);

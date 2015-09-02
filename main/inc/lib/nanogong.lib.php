@@ -37,7 +37,6 @@ class Nanogong
      */
     public function create_user_folder()
     {
-
 		//COURSE123/exercises/session_id/exercise_id/question_id/user_id
 		if (empty($this->store_path)) {
 			return false;
@@ -78,46 +77,45 @@ class Nanogong
      */
     public function set_parameters($params = array())
     {
+        // Setting course id
+        if (isset($params['course_id'])) {
+            $this->course_id = intval($params['course_id']);
+        } else {
+            $this->course_id = $params['course_id'] = api_get_course_int_id();
+        }
 
-		//Setting course id
-		if (isset($params['course_id'])) {
-			$this->course_id = intval($params['course_id']);
-		} else {
-			$this->course_id = $params['course_id'] = api_get_course_int_id();
-		}
+        //Setting course info
+        if (isset($this->course_id)) {
+            $this->course_info = api_get_course_info_by_id($this->course_id);
+        }
 
-		//Setting course info
-		if (isset($this->course_id)) {
-			$this->course_info = api_get_course_info_by_id($this->course_id);
-		}
+        //Setting session id
+        if (isset($params['session_id'])) {
+            $this->session_id = intval($params['session_id']);
+        } else {
+            $this->session_id = $params['session_id'] = api_get_session_id();
+        }
 
-		//Setting session id
-		if (isset($params['session_id'])) {
-			$this->session_id = intval($params['session_id']);
-		} else {
-			$this->session_id = $params['session_id'] = api_get_session_id();
-		}
+        //Setting user ids
+        if (isset($params['user_id'])) {
+            $this->user_id = intval($params['user_id']);
+        } else {
+            $this->user_id = $params['user_id'] = api_get_user_id();
+        }
 
-		//Setting user ids
-		if (isset($params['user_id'])) {
-			$this->user_id = intval($params['user_id']);
-		} else {
-			$this->user_id = $params['user_id'] = api_get_user_id();
-		}
+        //Setting user ids
+        if (isset($params['exercise_id'])) {
+            $this->exercise_id = intval($params['exercise_id']);
+        } else {
+            $this->exercise_id = 0;
+        }
 
-		//Setting user ids
-		if (isset($params['exercise_id'])) {
-			$this->exercise_id = intval($params['exercise_id']);
-		} else {
-			$this->exercise_id = 0;
-		}
-
-		//Setting user ids
-		if (isset($params['question_id'])) {
-			$this->question_id = intval($params['question_id']);
-		} else {
-			$this->question_id = 0;
-		}
+        //Setting user ids
+        if (isset($params['question_id'])) {
+            $this->question_id = intval($params['question_id']);
+        } else {
+            $this->question_id = 0;
+        }
 
 		$this->can_edit  = false;
 
@@ -130,15 +128,12 @@ class Nanogong
 		}
 
 		//Settings the params array
-		$this->params 			= $params;
-
-		$this->store_path 		= api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/exercises/';
-
+		$this->params = $params;
+		$this->store_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/exercises/';
 		$this->create_user_folder();
-
-		$this->store_path 		= $this->store_path.implode('/', array($this->session_id, $this->exercise_id, $this->question_id, $this->user_id)).'/';
-		$this->filename 		= $this->generate_filename();
-		$this->store_filename 	= $this->store_path.$this->filename;
+		$this->store_path = $this->store_path.implode('/', array($this->session_id, $this->exercise_id, $this->question_id, $this->user_id)).'/';
+		$this->filename = $this->generate_filename();
+		$this->store_filename = $this->store_path.$this->filename;
 	}
 
     /**
@@ -240,8 +235,8 @@ class Nanogong
 				$attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 				$sql = "SELECT filename FROM $attempt_table
                         WHERE
-                            exe_id 		= ".$this->params['exe_id']." AND
-                            user_id 	= ".$this->params['user_id']." AND
+                            exe_id = ".$this->params['exe_id']." AND
+                            user_id = ".$this->params['user_id']." AND
                             question_id = ".$this->params['question_id']." AND
                             session_id 	= ".$this->params['session_id']." AND
                             course_code = '".$this->course_info['code']."'
@@ -272,8 +267,6 @@ class Nanogong
 	 */
     public function get_public_url($force_download = 0)
     {
-		//$params = $this->get_params(true);
-		//$url = api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=get_file&download='.$force_download.'&'.$params;
 		$params = $this->get_params();
 		$filename = basename($this->load_filename_if_exists());
         $url = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/exercises/'.$params['session_id'].'/'.$params['exercise_id'].'/'.$params['question_id'].'/'.$params['user_id'].'/'.$filename;
@@ -286,7 +279,6 @@ class Nanogong
 	 */
 	public function upload_file($is_nano = false)
 	{
-
 		if (!empty($_FILES)) {
 			$upload_ok = process_uploaded_file($_FILES['file'], false);
 
@@ -412,7 +404,6 @@ class Nanogong
 		}
         return $html;
 	}
-
 
 	/*
 	var filename = document.getElementById("audio_title").value+".wav";
@@ -607,7 +598,6 @@ class Nanogong
 		$html .= '<a href="#" class="btn btn-default"  onclick="send_voice()" />'.get_lang('SendRecord').'</a>';
 		$html .= '</form></div>';
 
-
         $html .= Display::url(get_lang('ProblemsRecordingUploadYourOwnAudioFile'), 'javascript:void(0)', array('onclick' => 'show_simple_upload_form();'));
 
 		$html .= '<br /><br /><div id="no_nanogong_div">';
@@ -665,7 +655,6 @@ class Nanogong
             . $params_string
             . '&TB_iframe=true';
 
-        $html = '<br />';
         $html = Display::url(
             get_lang('RecordAnswer'),
             $url,

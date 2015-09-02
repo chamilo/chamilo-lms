@@ -362,13 +362,23 @@ class UserManager
             }
 
             if (!empty($email) && $send_mail) {
-                $recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
+                $recipient_name = api_get_person_name(
+                    $firstName,
+                    $lastName,
+                    null,
+                    PERSON_NAME_EMAIL_ADDRESS
+                );
                 $tplSubject = new Template(null, false, false, false, false, false);
                 $layoutSubject = $tplSubject->get_template(
                     'mail/subject_registration_platform.tpl'
                 );
                 $emailSubject = $tplSubject->fetch($layoutSubject);
-                $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+                $sender_name = api_get_person_name(
+                    api_get_setting('administratorName'),
+                    api_get_setting('administratorSurname'),
+                    null,
+                    PERSON_NAME_EMAIL_ADDRESS
+                );
                 $email_admin = api_get_setting('emailAdministrator');
 
                 if (api_is_multiple_url_enabled()) {
@@ -667,6 +677,7 @@ class UserManager
             $deleted = self::delete_user($id);
             $result = $deleted || $result;
         }
+
         return $result;
     }
 
@@ -955,6 +966,7 @@ class UserManager
         if ($r !== false) {
             Event::addEvent($ev, LOG_USER_ID, $user_id);
         }
+
         return $r;
     }
 
@@ -1437,7 +1449,6 @@ class UserManager
                 $userPath = api_get_path(REL_UPLOAD_PATH).$userPath;
                 break;
             case 'last': // Only the last part starting with users/
-                $userPath = $userPath;
                 break;
         }
 
@@ -1702,6 +1713,7 @@ class UserManager
      *
      * @param    int $user_id    User id
      * @param    $force    Optional parameter to force building after a removal request
+     *
      * @return    A string containing the XHTML code to dipslay the production list, or FALSE
      */
     public static function build_production_list($user_id, $force = false, $showdelete = false)
@@ -1773,8 +1785,8 @@ class UserManager
     /**
      * Remove a user production.
      *
-     * @param    $user_id        User id
-     * @param    $production    The production to remove
+     * @param   int $user_id        User id
+     * @param   string $production    The production to remove
      */
     public static function remove_user_production($user_id, $production)
     {
@@ -1963,6 +1975,7 @@ class UserManager
                 $files[] = $path.$extra_files;
             }
         }
+
         return $files; // can be an empty array
     }
 
@@ -2114,6 +2127,7 @@ class UserManager
                 }
             }
         }
+
         return $extra_data;
     }
 
@@ -2141,7 +2155,8 @@ class UserManager
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $user_id = intval($user_id);
 
-        $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type FROM $t_uf f
+        $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type
+                FROM $t_uf f
                 WHERE f.variable = '$field_variable' ";
 
         if (!$all_visibility) {
@@ -2967,7 +2982,7 @@ class UserManager
         if (empty($api_service))
             return false;
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
-        $service_name = Database::escape_string($api_service);
+        $api_service = Database::escape_string($api_service);
         $sql = "SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {

@@ -453,6 +453,7 @@ class AppPlugin
     /**
      * Get the template list
      * @param  string $pluginName
+     *
      * @return bool
      */
     public function get_templates_list($pluginName)

@@ -1,27 +1,18 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * When a user login, the function LoginRedirection::redirect is called.
  * When this function is called all user info has already been registered in $_user session variable
  * */
-Class LoginRedirection {
-
+class LoginRedirection
+{
     //checks user status and redirect him through custom page if setting is enabled
-    public static function redirect() {
-
+    public static function redirect()
+    {
         global $param;
         $param = isset($param) ? $param : '';
         $redirect_url = '';
-        /*
-          //If session request url is setted, we go there
-          if (!empty($_SESSION['request_uri'])) {
-          $req = $_SESSION['request_uri'];
-          unset($_SESSION['request_uri']);
-          header('location: '.$req);
-          exit();
-          }
-         */
-
         if (api_is_student() && !api_get_setting('student_page_after_login') == '') {
             $redirect_url = html_entity_decode(api_get_setting('student_page_after_login'));
             if ($redirect_url[0] == "/") {

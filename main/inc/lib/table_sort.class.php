@@ -5,9 +5,7 @@
  *
  *	@package chamilo.library
  */
-/**
- * Code
- */
+
 define('SORT_DATE', 3);
 define('SORT_IMAGE', 4);
 

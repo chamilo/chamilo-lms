@@ -141,6 +141,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
             if ($show_output) {
                 Display::display_error_message(get_lang('UplUploadFailedSizeIsZero'));
             }
+
             return false;
         }
     }
@@ -155,6 +156,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
             if ($show_output) {
                 Display::display_error_message(get_lang('UplNotEnoughSpace'));
             }
+
             return false;
         }
     }
@@ -709,6 +711,7 @@ function enough_size($file_size, $dir, $max_dir_space)
             return false;
         }
     }
+
     return true;
 }
 
@@ -750,7 +753,6 @@ function dir_total_space($dir_path)
 
     return $sumSize;
 }
-
 
 /**
  * Tries to add an extension to files without extension

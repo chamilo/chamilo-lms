@@ -12,9 +12,10 @@ class CourseHome
     /**
      * Gets the html content to show in the 3 column view
      */
-    public static function show_tool_3column($cat)
+    public static function show_tool_3column($cat, $userId = null)
     {
-        global $_user;
+        $_user = api_get_user_info($userId);
+
         $TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
         $TABLE_TOOLS = Database :: get_main_table(TABLE_MAIN_COURSE_MODULE);
 

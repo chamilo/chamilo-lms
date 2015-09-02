@@ -5,33 +5,37 @@
 *	Include/require it in your code to use its features.
 *	@package chamilo.library
 */
-/**
- * Code
- */
-define ('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
-define ('EVENT_EMAIL_TEMPLATE_INACTIVE',0);
 
 /**
- * @package chamilo.library
+ * Class EventEmailTemplate
  */
-class EventEmailTemplate extends Model {
+class EventEmailTemplate extends Model
+{
+    public $table;
+    public $columns = array('id', 'message','subject','event_type_name','activated');
 
-    var $table;
-    var $columns = array('id', 'message','subject','event_type_name','activated');
-
-	public function __construct() {
+    /**
+     * Constructor
+     */
+	public function __construct()
+    {
         $this->table =  Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE);
 	}
 
-    public function get_all($where_conditions = array()) {
-        return Database::select('*',$this->table, array('where'=>$where_conditions,'order' =>'name ASC'));
+    public function get_all($where_conditions = array())
+    {
+        return Database::select(
+            '*',
+            $this->table,
+            array('where' => $where_conditions, 'order' => 'name ASC')
+        );
     }
-
 
     /**
      * Displays the title + grid
      */
-	public function display() {
+	public function display()
+    {
 		// action links
 		$content = Display::actions(array(
                 array(
@@ -44,8 +48,12 @@ class EventEmailTemplate extends Model {
         return $content;
 	}
 
-    public function get_status_list() {
-        return array(EVENT_EMAIL_TEMPLATE_ACTIVE => get_lang('Enabled'), EVENT_EMAIL_TEMPLATE_INACTIVE=> get_lang('Disabled'));
+    public function get_status_list()
+    {
+        return array(
+            EVENT_EMAIL_TEMPLATE_ACTIVE => get_lang('Enabled'),
+            EVENT_EMAIL_TEMPLATE_INACTIVE => get_lang('Disabled'),
+        );
     }
 
     /**
@@ -69,7 +77,17 @@ class EventEmailTemplate extends Model {
         $form->addElement('hidden', 'id', $id);
 
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
-        $form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
+        $form->addHtmlEditor(
+            'description',
+            get_lang('Description'),
+            false,
+            false,
+            array(
+                'ToolbarSet' => 'careers',
+                'Width' => '100%',
+                'Height' => '250',
+            )
+        );
 	    $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
@@ -99,22 +117,10 @@ class EventEmailTemplate extends Model {
 		return $form;
     }
 
-      public function get_count() {
+    public function get_count()
+    {
         $row = Database::select('count(*) as count', $this->table, array(),'first');
+
         return $row['count'];
     }
-
-    /*
-    public function save($params) {
-	    $id = parent::save($params);
-	    if (!empty($id)) {
-	    	event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-   		}
-   		return $id;
-    }
-
-    public function delete($id) {
-	    parent::delete($id);
-	    event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-    } */
 }

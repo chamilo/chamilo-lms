@@ -63,7 +63,7 @@ class Import
 		if ($csvReader) {
 			$workflow = new Workflow($csvReader);
 			$writer = new ArrayWriter($resultArray);
-			$result = $workflow->addWriter($writer)->process();
+			$workflow->addWriter($writer)->process();
 		}
 
 		return $resultArray;

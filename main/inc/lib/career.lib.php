@@ -30,7 +30,12 @@ class Career extends Model
      */
     public function get_count()
     {
-        $row = Database::select('count(*) as count', $this->table, array(),'first');
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            array(),
+            'first'
+        );
         return $row['count'];
     }
 
@@ -40,7 +45,11 @@ class Career extends Model
      */
     public function get_all($where_conditions = array())
     {
-        return Database::select('*',$this->table, array('where'=>$where_conditions,'order' =>'name ASC'));
+        return Database::select(
+            '*',
+            $this->table,
+            array('where' => $where_conditions, 'order' => 'name ASC')
+        );
     }
 
     /**
@@ -85,8 +94,8 @@ class Career extends Model
     /**
      * Returns a Form validator Obj
      * @todo the form should be auto generated
-     * @param   string  url
-     * @param   string  action add, edit
+     * @param   string  $url
+     * @param   string  $action add, edit
      * @return  obj     form validator obj
      */
     public function return_form($url, $action)

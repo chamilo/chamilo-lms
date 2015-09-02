@@ -4,7 +4,6 @@
 /**
  * Class SubLanguageManager
  * @package chamilo.admin.sublanguage
- * @todo clean this lib and move to main/inc/lib
  */
 class SubLanguageManager
 {
@@ -76,6 +75,7 @@ class SubLanguageManager
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $all_information = $row;
         }
+
         return $all_information;
     }
 
@@ -226,7 +226,9 @@ class SubLanguageManager
     public static function check_if_exist_language_by_id($language_id)
     {
         $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT count(*) as count FROM ' . $tbl_admin_languages . ' WHERE id="' . intval($language_id) . '"';
+        $sql = 'SELECT count(*) as count
+                FROM ' . $tbl_admin_languages . '
+                WHERE id="' . intval($language_id) . '"';
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             if (Database::result($rs, 0, 'count') == 1) {
@@ -247,7 +249,9 @@ class SubLanguageManager
     public static function get_name_of_language_by_id($language_id)
     {
         $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT original_name FROM ' . $tbl_admin_languages . ' WHERE id= ' . intval($language_id) . '';
+        $sql = 'SELECT original_name
+                FROM ' . $tbl_admin_languages . '
+                WHERE id= ' . intval($language_id) . '';
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             return Database::result($rs, 0, 'original_name');
@@ -320,8 +324,9 @@ class SubLanguageManager
     public static function make_unavailable_language($language_id)
     {
         $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql_make_unavailable = "UPDATE $tbl_admin_languages SET available='0' WHERE id = " . intval($language_id) . "";
-        $result = Database::query($sql_make_unavailable);
+        $sql = "UPDATE $tbl_admin_languages SET available='0'
+                WHERE id = " . intval($language_id) . "";
+        $result = Database::query($sql);
         return $result !== false; //only return false on sql error
     }
 
@@ -333,8 +338,9 @@ class SubLanguageManager
     public static function make_available_language($language_id)
     {
         $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql_make_available = "UPDATE $tbl_admin_languages SET available='1' WHERE id = " . intval($language_id) . "";
-        $result = Database::query($sql_make_available);
+        $sql = "UPDATE $tbl_admin_languages SET available='1'
+                WHERE id = " . intval($language_id) . "";
+        $result = Database::query($sql);
         return $result !== false; //only return false on sql error
     }
 
@@ -350,10 +356,12 @@ class SubLanguageManager
         }
         $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
         $tbl_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $sql_update = "SELECT english_name FROM " . $tbl_admin_languages . " WHERE id= " . intval($language_id) . "";
-        $result = Database::query($sql_update);
+        $sql = "SELECT english_name FROM " . $tbl_admin_languages . "
+                WHERE id= " . intval($language_id) . "";
+        $result = Database::query($sql);
         $lang = Database::fetch_array($result);
-        $sql_update_2 = "UPDATE " . $tbl_settings_current . " SET selected_value='" . $lang['english_name'] . "' WHERE variable='platformLanguage'";
+        $sql_update_2 = "UPDATE " . $tbl_settings_current . " SET selected_value='" . $lang['english_name'] . "'
+                         WHERE variable='platformLanguage'";
         $result_2 = Database::query($sql_update_2);
         Event::addEvent(
             LOG_PLATFORM_LANGUAGE_CHANGE,

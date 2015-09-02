@@ -2089,14 +2089,14 @@ class Tracking
             }
             $tutor = api_get_user_info($teacher['user_id']);
             $data[] = array(
-                'course'        => $course['title'],
-                'session'       => $teacher['name'],
-                'tutor'         => $tutor['username'] . ' - ' . $tutor['lastname'] . ' ' . $tutor['firstname'],
-                'documents'     => $totalDocuments,
-                'links'         => $totalLinks,
-                'forums'        => $totalForums,
-                'works'         => $totalWorks,
-                'wikis'         => $totalWikis,
+                'course' => $course['title'],
+                'session' => $teacher['name'],
+                'tutor' => $tutor['username'] . ' - ' . $tutor['lastname'] . ' ' . $tutor['firstname'],
+                'documents' => $totalDocuments,
+                'links' => $totalLinks,
+                'forums' => $totalForums,
+                'works' => $totalWorks,
+                'wikis' => $totalWikis,
                 'announcements' => $totalAnnouncements,
             );
         }
@@ -3628,7 +3628,7 @@ class Tracking
     public static function count_student_downloaded_documents($student_id, $courseId, $session_id = 0)
     {
         $student_id  = intval($student_id);
-        $course_code = intval($courseId);
+        $courseId = intval($courseId);
         $session_id  = intval($session_id);
 
         // table definition
@@ -3645,8 +3645,8 @@ class Tracking
 
     /**
      * Get course list inside a session from a student
-     * @param    int        Student id
-     * @param    int        Session id (optional)
+     * @param    int        $user_id Student id
+     * @param    int        $id_session Session id (optional)
      * @return    array    Courses list
      */
     public static function get_course_list_in_session_from_student($user_id, $id_session = 0)
@@ -3726,9 +3726,9 @@ class Tracking
 
     /**
      * Get count login per student
-     * @param    int        Student id
-     * @param    int     $courseId
-     * @param    int        Session id (optional)
+     * @param    int    $student_id    Student id
+     * @param    int    $courseId
+     * @param    int    $session_id    Session id (optional)
      * @return    int        count login
      */
     public static function count_login_per_student($student_id, $courseId, $session_id = 0)
@@ -3763,7 +3763,7 @@ class Tracking
         $tbl_user     = Database :: get_main_table(TABLE_MAIN_USER);
 
         $sql = 'SELECT DISTINCT user_id FROM '.$tbl_user.' as user
-            WHERE hr_dept_id='.$hr_dept_id;
+                WHERE hr_dept_id='.$hr_dept_id;
         $rs = Database::query($sql);
 
         while($user = Database :: fetch_array($rs)) {
@@ -4588,11 +4588,6 @@ class Tracking
                     if (!empty($exercises)) {
                         $count_exercises = count($exercises);
                     }
-                    //Count of user results
-                    //$done_exercises     = get_best_exercise_results_by_course($course_code, $session_id_from_get);
-
-                    //From course exercises NOT from LP exercises!!!
-                    //$done_exercises     = Event::get_count_exercises_attempted_by_course($course_code, $session_id_from_get);
                     $answered_exercises = 0;
                     foreach($exercises as $exercise_item) {
                         $attempts = Event::count_exercise_attempts_by_user(
@@ -6165,37 +6160,6 @@ class TrackingCourseLog
     }
 
     /**
-     * This function gets all the information of a certrain ($field_id) additional profile field.
-     * It gets the information of all the users so that it can be displayed in the sortable table or in the csv or xls export
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-     * @since October 2009
-     * @version 1.8.7
-     */
-    public function get_addtional_profile_information_of_field($field_id)
-    {
-    	// Database table definition
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_user_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
-
-    	$sql = "SELECT user.user_id, v.value
-    	        FROM $table_user user INNER JOIN $table_user_field_values v
-    	        ON (user.user_id = v.item_id
-    	        INNER JOIN $extraFieldTable f
-    	        ON (f.id = v.field_id)
-                WHERE
-                    f.extra_field_type = $extraFieldType AND
-                    v.field_id='".intval($field_id)."'";
-    	$result = Database::query($sql);
-    	while($row = Database::fetch_array($result)) {
-    		$return[$row['item_id']][] = $row['value'];
-    	}
-    	return $return;
-    }
-
-    /**
      * This function gets all the information of a certrain ($field_id)
      * additional profile field for a specific list of users is more efficent
      * than get_addtional_profile_information_of_field() function
@@ -6312,11 +6276,11 @@ class TrackingCourseLog
     {
         global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id;
 
-    	$course_code        = Database::escape_string($course_code);
-    	$tbl_user           = Database::get_main_table(TABLE_MAIN_USER);
-    	$tbl_url_rel_user   = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    	$course_code = Database::escape_string($course_code);
+    	$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+    	$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-    	$access_url_id      = api_get_current_access_url_id();
+    	$access_url_id = api_get_current_access_url_id();
 
     	// get all users data from a course for sortable with limit
     	if (is_array($user_ids)) {
@@ -6434,7 +6398,7 @@ class TrackingCourseLog
             );
 
     		if (empty($avg_student_progress)) {
-    			$avg_student_progress=0;
+                $avg_student_progress = 0;
     		}
     		$user['average_progress'] = $avg_student_progress.'%';
 
@@ -6649,16 +6613,16 @@ class TrackingUserLog
     		echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('ExercicesDetails')."<br />";
 
     		$sql = "SELECT ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
-                FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
-                WHERE te.c_id = $courseId
-                    AND te.exe_user_id = ".intval($user_id)."
-                    AND te.exe_exo_id = ce.id
-                ORDER BY ce.title ASC, te.exe_date ASC";
+                    FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
+                    WHERE te.c_id = $courseId
+                        AND te.exe_user_id = ".intval($user_id)."
+                        AND te.exe_exo_id = ce.id
+                    ORDER BY ce.title ASC, te.exe_date ASC";
 
     		$hpsql = "SELECT te.exe_name, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
-                FROM $TBL_TRACK_HOTPOTATOES AS te
-                WHERE te.exe_user_id = '".intval($user_id)."' AND te.c_id = $courseId
-                ORDER BY te.c_id ASC, te.exe_date ASC";
+                        FROM $TBL_TRACK_HOTPOTATOES AS te
+                        WHERE te.exe_user_id = '".intval($user_id)."' AND te.c_id = $courseId
+                        ORDER BY te.c_id ASC, te.exe_date ASC";
 
     		$hpresults = StatsUtils::getManyResultsXCol($hpsql, 4);
 
@@ -6696,21 +6660,22 @@ class TrackingUserLog
     		}
 
     		// The Result of Tests
-    		if(is_array($hpresults)) {
+    		if (is_array($hpresults)) {
     			for($i = 0; $i < sizeof($hpresults); $i++) {
     				$title = GetQuizName($hpresults[$i][0],'');
     				if ($title == '')
     				$title = basename($hpresults[$i][0]);
     				$display_date = api_convert_and_format_date($hpresults[$i][3], null, date_default_timezone_get());
     				?>
-<tr>
-    <td class="content"><?php echo $title; ?></td>
-    <td class="content" align="center"><?php echo $display_date; ?></td>
-    <td class="content" align="center"><?php echo $hpresults[$i][1]; ?> / <?php echo $hpresults[$i][2]; ?>
-    </td>
-</tr>
+                    <tr>
+                        <td class="content"><?php echo $title; ?></td>
+                        <td class="content" align="center"><?php echo $display_date; ?></td>
+                        <td class="content" align="center"><?php echo $hpresults[$i][1]; ?> / <?php echo $hpresults[$i][2]; ?>
+                        </td>
+                    </tr>
 
-<?php        }
+                    <?php
+                }
     		} else {
     			$NoHPTestRes = 1;
     		}
@@ -6739,7 +6704,9 @@ class TrackingUserLog
      */
     public function display_student_publications_tracking_info($view, $user_id, $course_id)
     {
-    	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong, $_course;
+    	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK;
+        $_course = api_get_course_info_by_id($course_id);
+
     	if (substr($view,2,1) == '1') {
     		$new_view = substr_replace($view,'0',2,1);
     		echo "<tr>
@@ -6932,22 +6899,32 @@ class TrackingUserLog
      * @return string IP address (or false on error)
      * @assert (0,0) === false
      */
-    public static function get_ip_from_user_event($user_id, $event_date, $return_as_link = false, $body_replace = null) {
+    public static function get_ip_from_user_event($user_id, $event_date, $return_as_link = false, $body_replace = null)
+    {
         if (empty($user_id) or empty($event_date)) {
             return false;
         }
+        $user_id = intval($user_id);
+        $event_date = Database::escape_string($event_date);
+
         $table_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql_ip = "SELECT login_date, user_ip FROM $table_login WHERE login_user_id = $user_id AND login_date < '$event_date' ORDER BY login_date DESC LIMIT 1";
+        $sql_ip = "SELECT login_date, user_ip FROM $table_login
+                   WHERE login_user_id = $user_id AND login_date < '$event_date'
+                   ORDER BY login_date DESC LIMIT 1";
         $ip = '';
         $res_ip = Database::query($sql_ip);
         if ($res_ip !== false && Database::num_rows($res_ip)>0) {
             $row_ip = Database::fetch_row($res_ip);
             if ($return_as_link) {
-                $ip = Display::url((empty($body_replace)?$row_ip[1]:$body_replace), 'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1], array('title'=>get_lang('TraceIP'), 'target'=>'_blank'));
+                $ip = Display::url(
+                    (empty($body_replace)?$row_ip[1]:$body_replace), 'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1],
+                    array('title'=>get_lang('TraceIP'), 'target'=>'_blank')
+                );
             } else {
                 $ip = $row_ip[1];
             }
         }
+
         return $ip;
     }
 }
@@ -7024,16 +7001,16 @@ class TrackingUserLogCSV
     		$title[1] = get_lang('ExercicesDetails');
     		$line = '';
     		$sql = "SELECT ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
-                FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
-                WHERE te.c_id = $courseId
-                    AND te.exe_user_id = $userId
-                    AND te.exe_exo_id = ce.id
-                ORDER BY ce.title ASC, te.exe_date ASC";
+                    FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
+                    WHERE te.c_id = $courseId
+                        AND te.exe_user_id = $userId
+                        AND te.exe_exo_id = ce.id
+                    ORDER BY ce.title ASC, te.exe_date ASC";
 
     		$hpsql = "SELECT te.exe_name, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
-                FROM $TABLETRACK_HOTPOTATOES AS te
-                WHERE te.exe_user_id = '$userId' AND te.c_id = $courseId
-                ORDER BY te.c_id ASC, te.exe_date ASC";
+                        FROM $TABLETRACK_HOTPOTATOES AS te
+                        WHERE te.exe_user_id = '$userId' AND te.c_id = $courseId
+                        ORDER BY te.c_id ASC, te.exe_date ASC";
 
     		$hpresults = StatsUtils::getManyResultsXCol($hpsql, 4);
 
@@ -7085,7 +7062,8 @@ class TrackingUserLogCSV
      */
     public function display_student_publications_tracking_info($view, $user_id, $course_id)
     {
-    	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong, $_course;
+    	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK;
+        $_course = api_get_course_info();
         $user_id = intval($user_id);
         $course_id = intval($course_id);
 

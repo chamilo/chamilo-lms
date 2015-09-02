@@ -165,7 +165,7 @@
             }
             
             this.style.height = heightFrame.toString() + 'px';
-            $('.panel-forum').css("top", heightFrame);
+            //$('.panel-forum').css("top", heightFrame);
             $('#body-forum').css("display", "none");
         });
 
@@ -208,7 +208,7 @@
             updateResizeFrame();
         });
 
-        $(".open-forum").click(function () {
+        /* $(".open-forum").click(function () {
             $('.panel-forum').animate({
                 top: "0px",
                 height: "100%"
@@ -223,6 +223,18 @@
                 top: heightFrame,
                 height: "100%"
             }, 800);
+            $('#body-forum').css("display", "none");
+            $(".closed-forum").css("display", "none");
+            $(".open-forum").css("display", "block");
+        });
+        */
+        $(".open-forum").click(function () {
+            $('#body-forum').css("display", "block");
+            $(".open-forum").css("display", "none");
+            $(".closed-forum").css("display", "block");
+            $("#chamilo-disqus").css("height", (100 + heightFrame).toString() + 'px');
+        });
+        $(".closed-forum").click(function () {
             $('#body-forum').css("display", "none");
             $(".closed-forum").css("display", "none");
             $(".open-forum").css("display", "block");

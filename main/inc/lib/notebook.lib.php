@@ -173,20 +173,32 @@ class NotebookManager
         $course_id = api_get_course_int_id();
 
         $sql = "DELETE FROM $t_notebook
-                WHERE c_id = $course_id AND notebook_id='" . intval($notebook_id) . "' AND user_id = '" . api_get_user_id() . "'";
+                WHERE
+                    c_id = $course_id AND
+                    notebook_id='" . intval($notebook_id) . "' AND
+                    user_id = '" . api_get_user_id() . "'";
         $result = Database::query($sql);
         $affected_rows = Database::affected_rows($result);
         if ($affected_rows != 1) {
             return false;
         }
         //update item_property (delete)
-        api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, intval($notebook_id), 'delete', api_get_user_id());
+        api_item_property_update(
+            api_get_course_info(),
+            TOOL_NOTEBOOK,
+            intval($notebook_id),
+            'delete',
+            api_get_user_id()
+        );
         return true;
     }
 
+    /**
+     * Display notes
+     */
     static function display_notes()
     {
-        global $_user;
+        $_user = api_get_user_info();
         if (!isset($_GET['direction'])) {
             $sort_direction = 'ASC';
             $link_sort_direction = 'DESC';
@@ -202,9 +214,11 @@ class NotebookManager
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
             if (api_get_session_id() == 0)
-                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
+                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' .
+                    Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
             elseif (api_is_allowed_to_session_edit(false, true)) {
-                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
+                echo '<a href="index.php?' . api_get_cidreq() . '&action=addnote">' .
+                    Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
             }
         } else {
             echo '<a href="javascript:void(0)">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';

@@ -643,7 +643,8 @@ class Template
             $js_files[] = 'fontresize.js';
         }
 
-        $js_files[] = 'tag/jquery.fcbkcomplete.min.js';
+        // Do not use minified version - generates errors (at least in the skills wheel)
+        $js_files[] = 'tag/jquery.fcbkcomplete.js';
 
         $js_file_to_string = null;
         $isoCode = api_get_language_isocode();
@@ -733,7 +734,7 @@ class Template
      */
     private function set_header_parameters()
     {
-        global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $noPHP_SELF, $_configuration, $this_section;
+        global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $help = $this->help;
         $nameTools             = $this->title;
         $navigation            = return_navigation_array();
@@ -827,17 +828,14 @@ class Template
         }
 
         $this->assign('favico', $favico);
-
-        $this->set_help();
+        $this->setHelp();
 
         //@todo move this in the template
         $bug_notification_link = '';
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
             $bug_notification_link = '<li class="report">
 		        						<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
-		        						<img src="'.api_get_path(WEB_IMG_PATH).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang(
-                    'ReportABug'
-                ).'"/></a>
+		        						<img src="'.api_get_path(WEB_IMG_PATH).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang('ReportABug').'"/></a>
 		    						  </li>';
         }
 
@@ -846,9 +844,9 @@ class Template
         $notification = return_notification_menu();
         $this->assign('notification_menu', $notification);
 
-        //Preparing values for the menu
+        // Preparing values for the menu
 
-        //Logout link
+        // Logout link
         $hideLogout = api_get_setting('hide_logout_button');
         if ($hideLogout === 'true') {
             $this->assign('logout_link', null);
@@ -886,9 +884,7 @@ class Template
         $menu = return_menu();
         $this->assign('menu', $menu);
 
-        //Setting notifications
-
-
+        // Setting notifications
         $count_unread_message = 0;
         if (api_get_setting('allow_message_tool') == 'true') {
             // get count unread message and total invitations
@@ -906,9 +902,10 @@ class Template
                 GROUP_USER_PERMISSION_PENDING_INVITATION,
                 false
             );
-            $group_pending_invitations = 0;
             if (!empty($group_pending_invitations)) {
                 $group_pending_invitations = count($group_pending_invitations);
+            } else {
+                $group_pending_invitations = 0;
             }
             $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
         }
@@ -969,11 +966,6 @@ class Template
      */
     private function set_footer_parameters()
     {
-        global $_configuration;
-
-        //Show admin data
-        //$this->assign('show_administrator_data', api_get_setting('show_administrator_data'));
-
         if (api_get_setting('show_administrator_data') == 'true') {
             //Administrator name
             $administrator_data = get_lang('Manager').' : '.Display::encrypted_mailto_link(
@@ -1040,8 +1032,6 @@ class Template
                 $this->assign('teachers', $teacher_data);
             }
         }
-        /* $stats = '';
-          $this->assign('execution_stats', $stats); */
     }
 
     /**
@@ -1266,12 +1256,6 @@ class Template
         $form->addButton('submitAuth', get_lang('LoginEnter'), null, 'primary', null, 'btn-block');
 
         $html = $form->returnForm();
-        // The validation is located in the local.inc
-        /*if ($form->validate()) {
-            // Prevent re-use of the same CAPTCHA phrase
-            $captcha_question->destroy();
-        }*/
-
         if (api_get_setting('openid_authentication') == 'true') {
             include_once 'main/auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
@@ -1294,5 +1278,4 @@ class Template
 
         $this->assign('_admin', $_admin);
     }
-
 }

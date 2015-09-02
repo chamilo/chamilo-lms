@@ -1313,7 +1313,7 @@ class Link extends Model
             $ipu = 'LinkAdded';
             $rv = 2; // 2 = new
         }
-        global $_course, $nameTools, $_user;
+        global $_course, $_user;
         api_item_property_update(
             $_course,
             TOOL_LINK,

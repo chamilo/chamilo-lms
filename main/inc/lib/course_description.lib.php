@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This file contains a class used like library provides functions for
  * course description tool. It's also used like model to

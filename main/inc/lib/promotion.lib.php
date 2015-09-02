@@ -176,7 +176,6 @@ class Promotion extends Model
 
     /**
      * Returns a Form validator Obj
-     * @todo the form should be auto generated
      * @param   string $url
      * @param   string $action
      *
@@ -251,6 +250,7 @@ class Promotion extends Model
      * @param array $params
      *
      * @param bool $show_query
+     *
      * @return bool
      */
     public function save($params, $show_query = false)
@@ -265,11 +265,13 @@ class Promotion extends Model
                 api_get_user_id()
             );
         }
+
         return $id;
     }
 
     /**
      * @param int $id
+     *
      * @return bool
      */
     public function delete($id)

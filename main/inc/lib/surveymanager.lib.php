@@ -18,9 +18,9 @@ class SurveyTree
     public function __construct()
     {
         // Database table definitions
-        $table_survey 			= Database :: get_course_table(TABLE_SURVEY);
+        $table_survey = Database :: get_course_table(TABLE_SURVEY);
         $table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
+        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
         // searching
         $search_restriction = SurveyUtil::survey_search_restriction();

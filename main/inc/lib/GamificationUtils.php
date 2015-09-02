@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * GamificationUtils class
  * Functions to manage the gamification mode

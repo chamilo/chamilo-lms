@@ -214,7 +214,6 @@ class Model
     {
         $params = $this->clean_parameters($params);
 
-
         if ($this->is_course_model) {
             if (!isset($params['c_id']) || empty($params['c_id'])) {
                 $params['c_id'] = api_get_course_int_id();

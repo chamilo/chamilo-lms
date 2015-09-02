@@ -314,7 +314,7 @@ class SystemAnnouncementManager
         $visible_teacher = 0,
         $visible_student = 0,
         $visible_guest = 0,
-        $lang = null,
+        $lang = '',
         $send_mail = 0,
         $add_to_calendar = false,
         $sendEmailTest = false
@@ -357,7 +357,7 @@ class SystemAnnouncementManager
 		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
 		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
 
-        $lang = is_null($lang) ? 'NULL' : $lang;
+        $lang = is_null($lang) ? '' : $lang;
 
 		$current_access_url_id = 1;
 		if (api_is_multiple_url_enabled()) {

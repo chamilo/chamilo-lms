@@ -398,7 +398,6 @@ class Display
         $column_order = array(),
         $form_actions = array()
     ) {
-        global $origin;
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
 

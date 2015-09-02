@@ -55,21 +55,21 @@ function update_db_info($action, $old_path, $new_path = '')
  *           boolean FALSE otherwise.
  */
 function check_name_exist($file_path) {
-	clearstatcache();
-	$save_dir = getcwd();
-	if (!is_dir(dirname($file_path))) {
-		return false;
-	}
-	chdir(dirname($file_path));
-	$file_name = basename($file_path);
+    clearstatcache();
+    $save_dir = getcwd();
+    if (!is_dir(dirname($file_path))) {
+        return false;
+    }
+    chdir(dirname($file_path));
+    $file_name = basename($file_path);
 
-	if (file_exists($file_name)) {
-		chdir($save_dir);
-		return true;
-	} else {
-		chdir($save_dir);
-		return false;
-	}
+    if (file_exists($file_name)) {
+        chdir($save_dir);
+        return true;
+    } else {
+        chdir($save_dir);
+        return false;
+    }
 }
 
 /**
@@ -82,17 +82,17 @@ function check_name_exist($file_path) {
  */
 function my_delete($file)
 {
-	if (check_name_exist($file)) {
-		if (is_file($file)) { // FILE CASE
-			unlink($file);
-			return true;
-		} elseif (is_dir($file)) { // DIRECTORY CASE
-			removeDir($file);
-			return true;
-		}
-	} else {
-		return false; // no file or directory to delete
-	}
+    if (check_name_exist($file)) {
+        if (is_file($file)) { // FILE CASE
+            unlink($file);
+            return true;
+        } elseif (is_dir($file)) { // DIRECTORY CASE
+            removeDir($file);
+            return true;
+        }
+    } else {
+        return false; // no file or directory to delete
+    }
 }
 
 /**
@@ -107,31 +107,31 @@ function my_delete($file)
  */
 function removeDir($dir)
 {
-	if (!@$opendir = opendir($dir)) {
-		return false;
-	}
+    if (!@$opendir = opendir($dir)) {
+        return false;
+    }
 
-	while ($readdir = readdir($opendir)) {
-		if ($readdir != '..' && $readdir != '.') {
-			if (is_file($dir.'/'.$readdir)) {
-				if (!@unlink($dir.'/'.$readdir)) {
-					return false;
-				}
-			} elseif (is_dir($dir.'/'.$readdir)) {
-				if (!removeDir($dir.'/'.$readdir)) {
-					return false;
-				}
-			}
-		}
-	}
+    while ($readdir = readdir($opendir)) {
+        if ($readdir != '..' && $readdir != '.') {
+            if (is_file($dir.'/'.$readdir)) {
+                if (!@unlink($dir.'/'.$readdir)) {
+                    return false;
+                }
+            } elseif (is_dir($dir.'/'.$readdir)) {
+                if (!removeDir($dir.'/'.$readdir)) {
+                    return false;
+                }
+            }
+        }
+    }
 
-	closedir($opendir);
+    closedir($opendir);
 
-	if (!@rmdir($dir)) {
-		return false;
-	}
+    if (!@rmdir($dir)) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 /**
@@ -154,6 +154,7 @@ function folder_is_empty($in_folder)
             $folder_is_empty = 1;
         }
     }
+
     return $folder_is_empty;
 }
 
@@ -173,7 +174,6 @@ function my_rename($file_path, $new_file_name) {
 	$save_dir = getcwd();
 	$path = dirname($file_path);
 	$old_file_name = basename($file_path);
-
 	$new_file_name = api_replace_dangerous_char($new_file_name);
 
 	// If no extension, take the old one
@@ -363,7 +363,8 @@ class FileManager
 			chdir($path);
 			$handle = opendir($path);
 			while ($element = readdir($handle)) {
-				if ($element == '.' || $element == '..') continue; // Skip the current and parent directories
+				if ($element == '.' || $element == '..') continue;
+                // Skip the current and parent directories
 				if (is_dir($element)) {
 					$dir_array[] = $path.'/'.$element;
 				}
@@ -447,7 +448,8 @@ class FileManager
 	 * @author	Roan Embrechts
 	 * @version 1.2
 	 */
-	function set_default_settings($upload_path, $filename, $filetype = 'file', $glued_table, $default_visibility = 'v') {
+	function set_default_settings($upload_path, $filename, $filetype = 'file', $glued_table, $default_visibility = 'v')
+    {
 		if (!$default_visibility) $default_visibility = 'v';
 
 		// Make sure path is not wrongly formed
@@ -477,14 +479,7 @@ class FileManager
 		}
 		Database::query($query);
 	}
-
-
-
 } //end class FileManager
-
-
-
-
 
 /*	DEPRECATED FUNCTIONS */
 

@@ -9,7 +9,6 @@
  */
 class TeacherTimeReport
 {
-
     /**
      * The report data
      * @var array
@@ -18,9 +17,9 @@ class TeacherTimeReport
 
     /**
      * Callback for compare sessions names
-     * @param array $dataA The datab A
+     * @param array $dataA The data A
      * @param array $dataB The data B
-     * @return int returns -1 if dataA is less than dataB, 1 if dataA is greater than dataB, and 0 if they are equal 
+     * @return int returns -1 if dataA is less than dataB, 1 if dataA is greater than dataB, and 0 if they are equal
      */
     public function compareSessions($dataA, $dataB)
     {
@@ -31,7 +30,7 @@ class TeacherTimeReport
      * Callback for compare courses names
      * @param array $dataA The datab A
      * @param array $dataB The data B
-     * @return int returns -1 if dataA is less than dataB, 1 if dataA is greater than dataB, and 0 if they are equal 
+     * @return int returns -1 if dataA is less than dataB, 1 if dataA is greater than dataB, and 0 if they are equal
      */
     public function compareCourses($dataA, $dataB)
     {
@@ -42,7 +41,7 @@ class TeacherTimeReport
      * Callback for compare coaches names
      * @param array $dataA The datab A
      * @param array $dataB The data B
-     * @return int returns -1 if dataA is less than dataB, 1 if dataA is greater than dataB, and 0 if they are equal 
+     * @return int returns -1 if dataA is less than dataB, 1 if dataA is greater than dataB, and 0 if they are equal
      */
     public function compareCoaches($dataA, $dataB)
     {
@@ -63,6 +62,10 @@ class TeacherTimeReport
         uasort($this->data, array($this, 'compareCoaches'));
     }
 
+    /**
+     * @param bool|false $withFilter
+     * @return array
+     */
     public function prepareDataToExport($withFilter = false)
     {
         $dataToExport = array();

@@ -6,8 +6,6 @@
  *	@package chamilo.admin.announcement
  */
 
-/* INIT SECTION */
-
 // Resetting the course id.
 $cidReset = true;
 
@@ -25,7 +23,10 @@ $action_todo = false;
 api_protect_admin_script(true);
 
 // Setting breadcrumbs.
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array(
+    "url" => 'index.php',
+    "name" => get_lang('PlatformAdmin'),
+);
 
 $tool_name = null;
 
@@ -90,8 +91,8 @@ switch($action) {
         // Add an announcement.
         $values['action'] = 'add';
         // Set default time window: NOW -> NEXT WEEK
-        $values['start'] = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()));
-        $values['end']   = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
+        $values['start'] = date('Y-m-d H:i:s', api_strtotime(api_get_local_time()));
+        $values['end']   = date('Y-m-d H:i:s', api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
 
         $values['range'] =
             substr(api_get_local_time(time()), 0, 16).' / '.
@@ -230,7 +231,10 @@ if ($action_todo) {
                 );
 
                 if ($announcement_id !== false) {
-                    SystemAnnouncementManager::announcement_for_groups($announcement_id, array($values['group']));
+                    SystemAnnouncementManager::announcement_for_groups(
+                        $announcement_id,
+                        array($values['group'])
+                    );
                     Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
                 } else {
                     $show_announcement_list = false;
@@ -309,5 +313,5 @@ if ($show_announcement_list) {
     $table->set_form_actions($form_actions);
     $table->display();
 }
-/* FOOTER */
+
 Display :: display_footer();

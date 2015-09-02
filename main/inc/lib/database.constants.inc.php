@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *	This is the database constants definition for Chamilo
  *  This file is called by database.lib.php

@@ -530,6 +530,10 @@ define('TEACHER_HTML_FULLPAGE', 5);
 define('TIMELINE_STATUS_ACTIVE', '1');
 define('TIMELINE_STATUS_INACTIVE', '2');
 
+// Event email template class
+define ('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
+define ('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
+
 /**
  * Inclusion of internationalization libraries
  */
@@ -6089,8 +6093,8 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
         $my_user_id = api_get_user_id();
     }
 
-    $iam_a_global_admin     = api_is_global_platform_admin($my_user_id);
-    $user_is_global_admin   = api_is_global_platform_admin($admin_id_to_check);
+    $iam_a_global_admin = api_is_global_platform_admin($my_user_id);
+    $user_is_global_admin = api_is_global_platform_admin($admin_id_to_check);
 
     if ($iam_a_global_admin) {
         // Global admin can edit everything

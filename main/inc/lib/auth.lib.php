@@ -769,4 +769,36 @@ SQL;
         return $sessionsToBrowse;
     }
 
+    /**
+     * Search sessions by searched term by session name
+     * @param string $queryTerm Term for search
+     * @param array $limit Limit info
+     * @return array The sessions
+     */
+    public function browseSessionsBySearch($queryTerm, array $limit)
+    {
+        $sessionsToBrowse = [];
+
+        $criteria = Doctrine\Common\Collections\Criteria::create()
+            ->where(
+                Doctrine\Common\Collections\Criteria::expr()->contains('name', $queryTerm)
+            )
+            ->setFirstResult($limit['start'])
+            ->setMaxResults($limit['length']);
+
+        $sessions = Database::getManager()
+                ->getRepository('ChamiloCoreBundle:Session')
+                ->matching($criteria);
+
+        foreach ($sessions as $session) {
+            if ($session->getNbrCourses() === 0) {
+                continue;
+            }
+
+            $sessionsToBrowse[] = $session;
+        }
+
+        return $sessionsToBrowse;
+    }
+
 }

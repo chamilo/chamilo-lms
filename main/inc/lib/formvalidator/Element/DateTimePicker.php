@@ -88,7 +88,9 @@ class DateTimePicker extends HTML_QuickForm_text
                     showOn: 'both',
                     buttonImage: '" . Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true) . "',
                     buttonImageOnly: true,
-                    buttonText: '" . get_lang('SelectDate') . "'
+                    buttonText: '" . get_lang('SelectDate') . "',
+                    changeMonth: true,
+                    changeYear: true
                 });
             });
         </script>";

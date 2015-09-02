@@ -122,6 +122,18 @@ class ExtraFieldValue extends Model
                                 );
                             } else {
                                 $em = Database::getManager();
+                                
+                                $currentTags = $em
+                                    ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                    ->findBy([
+                                        'fieldId' => $extraFieldInfo['id'],
+                                        'itemId' => $params['item_id']
+                                    ]);
+
+                                foreach ($currentTags as $extraFieldtag) {
+                                    $em->remove($extraFieldtag);
+                                }
+
                                 $tagValues = is_array($value) ? $value : [$value];
                                 $tags = [];
 
@@ -144,23 +156,8 @@ class ExtraFieldValue extends Model
                                 }
 
                                 foreach ($tags as $tag) {
-                                    $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')->findBy([
-                                        'fieldId' => $extraFieldInfo['id'],
-                                        'itemId' => $params['item_id'],
-                                        'tagId' => $tag->getId()
-                                    ]);
-
-                                    foreach ($fieldTags as $fieldTag) {
-                                        $em->remove($fieldTag);
-
-                                        $tag->setCount($tag->getCount() - 1);
-                                        $em->persist($tag);
-                                        $em->flush();
-                                    }
-
                                     $tag->setCount($tag->getCount() + 1);
                                     $em->persist($tag);
-                                    $em->flush();
 
                                     $fieldRelTag = new Chamilo\CoreBundle\Entity\ExtraFieldRelTag();
                                     $fieldRelTag->setFieldId($extraFieldInfo['id']);
@@ -168,8 +165,9 @@ class ExtraFieldValue extends Model
                                     $fieldRelTag->setTagId($tag->getId());
 
                                     $em->persist($fieldRelTag);
-                                    $em->flush();
                                 }
+
+                                $em->flush();
                             }
                             break;
                         case ExtraField::FIELD_TYPE_FILE_IMAGE:

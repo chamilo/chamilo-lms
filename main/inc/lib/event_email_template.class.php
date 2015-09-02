@@ -103,18 +103,4 @@ class EventEmailTemplate extends Model {
         $row = Database::select('count(*) as count', $this->table, array(),'first');
         return $row['count'];
     }
-
-    /*
-    public function save($params) {
-	    $id = parent::save($params);
-	    if (!empty($id)) {
-	    	event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-   		}
-   		return $id;
-    }
-
-    public function delete($id) {
-	    parent::delete($id);
-	    event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-    } */
 }

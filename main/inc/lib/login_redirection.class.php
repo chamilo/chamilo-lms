@@ -12,16 +12,6 @@ Class LoginRedirection {
         global $param;
         $param = isset($param) ? $param : '';
         $redirect_url = '';
-        /*
-          //If session request url is setted, we go there
-          if (!empty($_SESSION['request_uri'])) {
-          $req = $_SESSION['request_uri'];
-          unset($_SESSION['request_uri']);
-          header('location: '.$req);
-          exit();
-          }
-         */
-
         if (api_is_student() && !api_get_setting('student_page_after_login') == '') {
             $redirect_url = html_entity_decode(api_get_setting('student_page_after_login'));
             if ($redirect_url[0] == "/") {

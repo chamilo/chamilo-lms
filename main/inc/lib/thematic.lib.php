@@ -157,8 +157,8 @@ class Thematic
     public function get_max_thematic_item($use_session = true)
     {
         // Database table definition
-        $tbl_thematic   = Database :: get_course_table(TABLE_THEMATIC);
-        $session_id     = api_get_session_id();
+        $tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
+        $session_id   = api_get_session_id();
         if ($use_session) {
             $condition_session = api_get_session_condition($session_id);
         } else {
@@ -166,7 +166,7 @@ class Thematic
         }
         $course_id = api_get_course_int_id();
         $sql = "SELECT MAX(display_order) FROM $tbl_thematic
-		        WHERE c_id = $course_id AND active = 1 $condition_session";
+                WHERE c_id = $course_id AND active = 1 $condition_session";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 

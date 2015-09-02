@@ -205,7 +205,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                     'view_panel' => 1,
                     'user_friend' => api_get_user_id(),
                     'group_id' => $group_id,
-                    'action' => add_message_group,
+                    'action' => 'add_message_group',
                 ]);
             $create_thread_link = Display::url(
                 get_lang('NewTopic'),

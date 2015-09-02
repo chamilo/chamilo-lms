@@ -643,6 +643,7 @@ class Template
             $js_files[] = 'fontresize.js';
         }
 
+        // Do not use minified version - generates errors (at least in the skills wheel)
         $js_files[] = 'tag/jquery.fcbkcomplete.js';
 
         $js_file_to_string = null;

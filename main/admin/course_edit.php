@@ -168,7 +168,6 @@ if (!empty($coursesInSession)) {
             $allTeachers
         );
         $courseInfo[$groupName] = $sessionTeachers;
-
     }
 }
 
@@ -264,7 +263,7 @@ $(function() {
 });
 </script>';
 
-$form->addButton('submit', get_lang('ModifyCourseInfo'), 'pencil', 'primary');
+$form->addButtonUpdate(get_lang('ModifyCourseInfo'));
 
 // Set some default values
 $courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
@@ -366,7 +365,12 @@ if ($form->validate()) {
         if (!empty($sessionCoaches)) {
             foreach ($sessionCoaches as $sessionId => $teacherInfo) {
                 $coachesToSubscribe = $teacherInfo['coaches_by_session'];
-                SessionManager::updateCoaches($sessionId, $courseId, $coachesToSubscribe, true);
+                SessionManager::updateCoaches(
+                    $sessionId,
+                    $courseId,
+                    $coachesToSubscribe,
+                    true
+                );
             }
         }
 
@@ -379,7 +383,6 @@ if ($form->validate()) {
         $sessionCoaches = $course['session_coaches'];
         if (!empty($sessionCoaches)) {
             foreach ($sessionCoaches as $sessionId => $coachesToSubscribe) {
-                //$coachesToSubscribe = isset($teacherInfo['coaches_by_session']) ? $teacherInfo['coaches_by_session'] : null;
                 if (!empty($coachesToSubscribe)) {
                     SessionManager::updateCoaches(
                         $sessionId,

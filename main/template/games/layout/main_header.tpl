@@ -114,11 +114,12 @@
             </div>
 
             <div class="search-header">
-                <form class="navbar-form" role="search">
+                <form class="navbar-form" role="search" action="{{ _p.web_main ~ 'auth/courses.php' }}">
                     <div class="input-group">
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                         </div>
+                        <input type="hidden" name="action" value="search_session" >
                         <input class="form-control" placeholder="Search" name="q" type="text">
                     </div>
                 </form>

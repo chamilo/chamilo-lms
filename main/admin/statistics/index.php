@@ -61,7 +61,8 @@ echo '</tr></table>';
 
 $course_categories = Statistics::getCourseCategories();
 echo '<br/><br/>';//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
-switch ($_REQUEST['report']) {
+$report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
+switch ($report) {
     case 'courses':
         // total amount of courses
         foreach ($course_categories as $code => $name) {

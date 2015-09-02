@@ -130,7 +130,10 @@ if (!empty($groupId)) {
 
     // Only courseadmin or group members allowed
     if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupId)) {
-        $interbreadcrumb[] = array('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace'));
+        $interbreadcrumb[] = array(
+            'url' => '../group/group_space.php?'.api_get_cidreq(),
+            'name' => get_lang('GroupSpace'),
+        );
     } else {
         api_not_allowed(true);
     }
@@ -170,9 +173,15 @@ if (isset($_REQUEST['certificate'])) {
 
 // Breadcrumbs
 if ($is_certificate_mode) {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+    $interbreadcrumb[] = array(
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('Gradebook'),
+    );
 } else {
-    $interbreadcrumb[] = array('url' => './document.php?id='.$document_id.'&'.api_get_cidreq(), 'name'=> get_lang('Documents'));
+    $interbreadcrumb[] = array(
+        'url' => './document.php?id='.$document_id.'&'.api_get_cidreq(),
+        'name' => get_lang('Documents'),
+    );
 }
 
 // Interbreadcrumb for the current directory root path
@@ -259,7 +268,13 @@ $form->addButtonAdvancedSettings('advanced_params');
 $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
 // Check box options
-$form->addElement('checkbox', 'unzip', get_lang('Options'), get_lang('Uncompress'), 'onclick="javascript: check_unzip();" value="1"');
+$form->addElement(
+    'checkbox',
+    'unzip',
+    get_lang('Options'),
+    get_lang('Uncompress'),
+    'onclick="javascript: check_unzip();" value="1"'
+);
 
 if (api_get_setting('search_enabled') == 'true') {
     //TODO: include language file
@@ -327,8 +342,11 @@ $nav_info = api_get_navigator();
 if ($nav_info ['name'] == 'Internet Explorer') {
     echo $simple_form;
 } else {
-    $headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
-    echo Display::tabs($headers, array($multiple_form, $simple_form),'tabs');
+    $headers = array(
+        get_lang('Upload'),
+        get_lang('Upload').' ('.get_lang('Simple').')',
+    );
+    echo Display::tabs($headers, array($multiple_form, $simple_form), 'tabs');
 }
 
 Display::display_footer();

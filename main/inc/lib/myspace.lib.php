@@ -133,8 +133,8 @@ class MySpace
         }
 
         // protect data
-        $user_id     = intval($user_id);
-        $session_id  = intval($session_id);
+        $user_id = intval($user_id);
+        $session_id = intval($session_id);
         $new_course_list = array();
         foreach ($course_list as $course_item) {
             $courseInfo = api_get_course_info($course_item['code']);
@@ -1023,10 +1023,12 @@ class MySpace
     }
     /**
      * Display a sortable table that contains an overview off all the access to a session
+     * @deprecated seem not to be used
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    static function display_tracking_access_overview($sessionId = 0, $courseId = 0, $studentId = '', $profile = '', $date_from, $date_to) {
+    static function display_tracking_access_overview($sessionId = 0, $courseId = 0, $studentId = '', $profile = '', $date_from, $date_to)
+    {
         //The order is important you need to check the the $column variable in the model.ajax.php file
         $columns = array(
             get_lang('LoginDate'),
@@ -1239,7 +1241,7 @@ class MySpace
      * Fills in course reporting data
      *
      * @param integer course code
-     * @param array $url_params additonal url parameters
+     * @param array $url_params additional url parameters
      * @param array $row the row information (the other columns)
      * @return string html code
      */

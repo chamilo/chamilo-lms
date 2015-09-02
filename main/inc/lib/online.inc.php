@@ -487,7 +487,8 @@ function GetFullUserName($uid) {
  * @return  string  An HTML-formatted message
  */
 function chatcall() {
-	global $_user, $_cid;
+    $_cid = api_get_course_id();
+    $_user = api_get_user_info();
 
 	if (!$_user['user_id']) {
 		return (false);

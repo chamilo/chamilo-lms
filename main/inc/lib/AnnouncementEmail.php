@@ -195,9 +195,9 @@ class AnnouncementEmail
      *
      * @return array
      */
-    public function sender($key = '')
+    public function sender($key = '',  $userId = '')
     {
-        $_user = api_get_user_info();
+        $_user = api_get_user_info($userId);
 
         return $key ? $_user[$key] : $_user;
     }

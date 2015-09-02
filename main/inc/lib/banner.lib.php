@@ -15,8 +15,9 @@
  * @return array containing all the possible tabs
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function get_tabs() {
-    $_course = api_get_course_info();
+function get_tabs($courseId = null)
+{
+    $_course = api_get_course_info($courseId);
 
     $navigation = array();
 

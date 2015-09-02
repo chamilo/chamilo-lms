@@ -1269,7 +1269,10 @@ class MessageManager
 
         $topic_page_nr = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : null;
         $links.= '<div id="message-reply-link">';
-        if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $main_message['user_sender_id'] == $current_user_id) {
+        if (($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
+            $my_group_role == GROUP_USER_PERMISSION_MODERATOR) ||
+            $main_message['user_sender_id'] == $current_user_id
+        ) {
             $urlEdit = api_get_path(WEB_CODE_PATH);
             $urlEdit .= 'social/message_for_group_form.inc.php?';
             $urlEdit .= http_build_query([
@@ -1320,13 +1323,12 @@ class MessageManager
                 'data-title' => get_lang('Reply')
             ]
         );
-        
-        $links.= '&nbsp;&nbsp; &topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$main_message['id'].'" class="ajax btn" title="'.get_lang('Reply').'">';
-        $links.= Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
+
         $links.= '</div>';
 
         $userPicture = $user_sender_info['avatar'];
-        $main_content.= '<div class="message-group-author"><img src="'.$userPicture.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
+        $main_content.= '<div class="message-group-author">
+                         <img src="'.$userPicture.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
         $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$main_message['user_sender_id'].'">'.$name.'&nbsp;</a>';
 
         $date = '';
@@ -1353,8 +1355,6 @@ class MessageManager
                     continue;
                 }
                 $items_page_nr = isset($_GET['items_'.$topic['id'].'_page_nr']) ? intval($_GET['items_'.$topic['id'].'_page_nr']) : null;
-
-                $user_link = '';
                 $links = '';
                 $html_items = '';
                 $user_sender_info = api_get_user_info($topic['user_sender_id']);
@@ -1416,8 +1416,8 @@ class MessageManager
 
     /**
      * Add children to messages by id is used for nested view messages
-     * @param array  rows of messages
-     * @return array new list adding the item children
+     * @param array  $rows rows of messages
+     * @return array $first_seed new list adding the item children
      */
     public static function calculate_children($rows, $first_seed)
     {
@@ -1458,8 +1458,8 @@ class MessageManager
 
     /**
      * Sort date by desc from a multi-dimensional array
-     * @param array1  first array to compare
-     * @param array2  second array to compare
+     * @param array $array1  first array to compare
+     * @param array $array2  second array to compare
      * @return bool
      */
     public function order_desc_date($array1, $array2)
@@ -1532,7 +1532,7 @@ class MessageManager
         $form->addText('subject', get_lang('Subject'), false, ['id' => 'subject_id']);
         $form->addTextarea('content', get_lang('Message'), ['id' => 'content_id', 'rows' => '5']);
 
-        return $form->return_form();
+        return $form->returnForm();
     }
 
     /**
@@ -1544,7 +1544,6 @@ class MessageManager
     public static function generate_invitation_form($id, $params = array())
     {
         $form = new FormValidator('send_invitation');
-        //$form->addElement('text', 'subject', get_lang('Subject'), array('id' => 'subject_id'));
         $form->addTextarea('content', get_lang('AddPersonalMessage'), ['id' => 'content_invitation_id', 'rows' => 5]);
         return $form->return_form();
     }

@@ -323,8 +323,6 @@ class Database
     {
         $connection = self::getManager()->getConnection();
 
-        $result = false;
-
         if (api_get_setting('server_type') == 'test') {
             $result = $connection->executeQuery($query);
         } else {
@@ -332,6 +330,7 @@ class Database
                 $result = $connection->executeQuery($query);
             } catch (Exception $e) {
                 api_not_allowed(false, get_lang('GeneralError'));
+                //error_log($e->getMessage());
                 exit;
             }
         }

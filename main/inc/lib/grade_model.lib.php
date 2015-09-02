@@ -24,7 +24,11 @@ class GradeModel extends Model
      */
     public function get_all($where_conditions = array())
     {
-        return Database::select('*',$this->table, array('where'=>$where_conditions,'order' =>'name ASC'));
+        return Database::select(
+            '*',
+            $this->table,
+            array('where' => $where_conditions, 'order' => 'name ASC')
+        );
     }
 
     /**
@@ -32,7 +36,13 @@ class GradeModel extends Model
      */
     public function get_count()
     {
-        $row = Database::select('count(*) as count', $this->table, array(),'first');
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            array(),
+            'first'
+        );
+
         return $row['count'];
     }
 
@@ -86,9 +96,9 @@ class GradeModel extends Model
 
         $form->addElement('label', get_lang('Components'));
 
-        //Get components
+        // Get components
         $nr_items = 2;
-        $max      = 10;
+        $max = 10;
 
         // Setting the defaults
 
@@ -203,10 +213,14 @@ class GradeModel extends Model
                 }
             }
         }
+
         //event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
    		return $id;
     }
 
+    /**
+     * @param array $params
+     */
     public function update($params)
     {
         parent::update($params);

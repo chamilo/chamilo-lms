@@ -359,7 +359,6 @@ if ($form->validate()) {
     // Updating teachers
 
     if ($addTeacherToSessionCourses) {
-
         // Updating session coaches
         $sessionCoaches = $course['session_coaches'];
         if (!empty($sessionCoaches)) {
@@ -374,7 +373,7 @@ if ($form->validate()) {
             }
         }
 
-        CourseManager::updateTeachers($courseId, $teachers, false, true, false);
+        CourseManager::updateTeachers($courseId, $teachers, true, true, false);
     } else {
         // Normal behaviour
         CourseManager::updateTeachers($courseId, $teachers, true, false);

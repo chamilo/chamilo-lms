@@ -4829,7 +4829,7 @@ class CourseManager
             }
 
             $sql = 'DELETE FROM ' . $course_user_table . '
-                    WHERE c_id ="' . $courseId . '" AND status="1"' . $cond;
+                    WHERE c_id ="' . $courseId . '" AND status="1" AND relation_type = 0 ' . $cond;
             Database::query($sql);
         }
 
@@ -4850,6 +4850,7 @@ class CourseManager
                             status = '1',
                             is_tutor = '0',
                             sort = '0',
+                            relation_type = '0',
                             user_course_cat='0'";
                 }
                 Database::query($sql);

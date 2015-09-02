@@ -115,6 +115,12 @@
                             {% else %}
                                 {{ subscribe_button }}
                             {% endif %}
+                        {% else %}
+                            {% if 'allow_registration'|get_setting == 'true' %}
+                                <a href="{{ _p.web_main ~ 'auth/inscription.php?hide_headers=1' }}" class="btn btn-press ajax" data-title="{{ 'SignUp'|get_lang }}">
+                                    <i class="fa fa-sign-in fa-fw"></i> {{ 'SignUp'|get_lang }}
+                                </a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -216,14 +222,20 @@
             </div>
         </div>
 
-        {% if not is_subscribed and _u.logged %}
-            <div class="row">
-                <div class="col-md-4 col-md-offset-4">
-                    <div class="subscribe text-center">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 subscribe">
+                {% if _u.logged and not is_subscribed %}
+                    <div class="text-center">
                         {{ subscribe_button }}
                     </div>
-                </div>
+                {% elseif not _u.logged %}
+                    {% if 'allow_registration'|get_setting == 'true' %}
+                        <a href="{{ _p.web_main ~ 'auth/inscription.php?hide_headers=1' }}" class="btn btn-press ajax" data-title="{{ 'SignUp'|get_lang }}">
+                            <i class="fa fa-sign-in fa-fw"></i> {{ 'SignUp'|get_lang }}
+                        </a>
+                    {% endif %}
+                {% endif %}
             </div>
-        {% endif %}
+        </div>
     {% endfor %}
 </div>

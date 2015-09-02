@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Class Diagnoser
  * Class that is responsible for generating diagnostic information about the system
@@ -189,7 +190,7 @@ class Diagnoser
         $setting = ini_get('upload_max_filesize');
         $req_setting = '>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M';
         $status = self :: STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_UPLOAD_MAX_FILESIZE)
+        if ((float)$setting >= REQUIRED_MIN_UPLOAD_MAX_FILESIZE)
             $status = self :: STATUS_OK;
         $array[] = $this->build_setting($status, '[INI]', 'upload_max_filesize', 'http://www.php.net/manual/en/ini.core.php#ini.upload_max_filesize', $setting, $req_setting, null, get_lang('UploadMaxFilesizeInfo'));
 
@@ -208,21 +209,54 @@ class Diagnoser
         $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting($status, '[INI]', 'browscap', 'http://www.php.net/manual/en/misc.configuration.php#ini.browscap', $setting, $req_setting, 'on_off', get_lang('BrowscapInfo'));
 
-        //Extensions
-        $extensions = array('gd' 		=> array('link'=>'http://www.php.net/gd', 		'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
-        					'mysql' 	=> array('link'=>'http://www.php.net/mysql', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
-        					'pcre' 		=> array('link'=>'http://www.php.net/pcre', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
-        					'session' 	=> array('link'=>'http://www.php.net/session', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
-        					'standard' 	=> array('link'=>'http://www.php.net/spl', 		'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
-        					'zlib' 		=> array('link'=>'http://www.php.net/zlib', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
-        					'xsl' 		=> array('link'=>'http://be2.php.net/xsl', 		'expected' => 2, 'comment' => get_lang('ExtensionShouldBeLoaded')),
-        					'curl' 		=> array('link'=>'http://www.php.net/curl', 	'expected' => 2, 'comment' => get_lang('ExtensionShouldBeLoaded')),
+        // Extensions
+        $extensions = array(
+            'gd' => array(
+                'link' => 'http://www.php.net/gd',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ),
+            'mysql' => array(
+                'link' => 'http://www.php.net/mysql',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ),
+            'pcre' => array(
+                'link' => 'http://www.php.net/pcre',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ),
+            'session' => array(
+                'link' => 'http://www.php.net/session',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ),
+            'standard' => array(
+                'link' => 'http://www.php.net/spl',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ),
+            'zlib' => array(
+                'link' => 'http://www.php.net/zlib',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ),
+            'xsl' => array(
+                'link' => 'http://be2.php.net/xsl',
+                'expected' => 2,
+                'comment' => get_lang('ExtensionShouldBeLoaded'),
+            ),
+            'curl' => array(
+                'link' => 'http://www.php.net/curl',
+                'expected' => 2,
+                'comment' => get_lang('ExtensionShouldBeLoaded'),
+            ),
         );
 
         foreach ($extensions as $extension => $data) {
-        	$url  	  		= $data['link'];
-        	$expected_value = $data['expected'];
-        	$comment 		= $data['comment'];
+            $url = $data['link'];
+            $expected_value = $data['expected'];
+            $comment = $data['comment'];
 
             $loaded = extension_loaded($extension);
             $status = $loaded ? self :: STATUS_OK : self :: STATUS_ERROR;

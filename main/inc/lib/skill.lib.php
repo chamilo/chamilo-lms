@@ -34,7 +34,7 @@ class SkillProfile extends Model
 
     /**
     * This function is for editing profile info from profile_id.
-    * @param int $profileId
+    * @param int    $profileId
     * @param string $name
     * @param string $description
     */
@@ -71,6 +71,7 @@ class SkillProfile extends Model
                 return $profile_id;
             }
         }
+
         return false;
     }
 
@@ -139,6 +140,7 @@ class SkillRelProfile extends Model
                 WHERE p.profile_id = ".intval($profileId);
         $result = Database::query($sql);
         $profileData = Database::fetch_array($result, 'ASSOC');
+
         return $profileData;
     }
 }
@@ -270,6 +272,7 @@ class SkillRelSkill extends Model
         if ($result) {
             return true;
         }
+
         return false;
     }
 
@@ -284,6 +287,7 @@ class SkillRelSkill extends Model
             'all',
             array('where' => array('skill_id = ? AND parent_id = ?' => array($skill_id, $parent_id)))
         );
+
         if (!empty($result)) {
             return true;
         }

@@ -76,7 +76,6 @@ class PDF
      */
     public function html_to_pdf_with_template($content, $saveToFile = false, $returnHtml = false)
     {
-        global $_configuration;
         Display :: display_no_header();
 
         // Assignments

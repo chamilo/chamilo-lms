@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This file contains a class used like library, provides functions for dashboard.
  * @author Christian Fasanando <christian1827@gmail.com>

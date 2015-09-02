@@ -5,7 +5,7 @@
  * @package chamilo.plugin.sessions_slider_block
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+//require_once __DIR__ . '/../../main/inc/global.inc.php';
 
 $plugin = SessionsSliderBlockPlugin::create();
 
@@ -31,9 +31,9 @@ if ($showSlider) {
 
         if (!empty($course)) {
             $courseDescription = new CourseDescription();
-            $descriptionData = $courseDescription->get_data_by_description_type(1, $course['code'], $session['id']);
+            $descriptionData = $courseDescription->get_data_by_description_type(1, $course['id'], $session['id']);
             if (empty($descriptionData)){
-                $descriptionData = $courseDescription->get_data_by_description_type(1, $course['code']);
+                $descriptionData = $courseDescription->get_data_by_description_type(1, $course['id']);
             }
 
             if (isset($descriptionData['description_content'])) {

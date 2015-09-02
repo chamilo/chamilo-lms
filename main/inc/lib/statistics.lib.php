@@ -52,6 +52,7 @@ class Statistics
         }
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->number;
     }
 
@@ -69,7 +70,8 @@ class Statistics
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u
+            $sql = "SELECT COUNT(*) AS number
+                    FROM ".$course_table." as c, ".$access_url_rel_course_table." as u
                     WHERE u.c_id = c.id AND access_url_id='".$current_url_id."'";
             if (isset ($visibility)) {
                 $sql .= " AND visibility = ".intval($visibility);
@@ -139,6 +141,7 @@ class Statistics
 
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->number;
     }
 
@@ -152,7 +155,8 @@ class Statistics
         $access_url_rel_session_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         if (api_is_multiple_url_enabled()) {
             $current_url_id = api_get_current_access_url_id();
-            $sql = "SELECT COUNT(id) AS number FROM ".$session_table." as s, ".$access_url_rel_session_table." as u WHERE u.session_id=s.id AND access_url_id='".$current_url_id."'";
+            $sql = "SELECT COUNT(id) AS number FROM ".$session_table." as s, ".$access_url_rel_session_table." as u
+                    WHERE u.session_id=s.id AND access_url_id='".$current_url_id."'";
         } else {
             $sql = "SELECT COUNT(id) AS number FROM ".$session_table." ";
         }
@@ -173,9 +177,13 @@ class Statistics
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user, $access_url_rel_user_table url WHERE default_user_id = user.user_id AND user.user_id=url.user_id AND access_url_id='".$current_url_id."'";
+            $sql = "SELECT count(default_id) AS total_number_of_items
+                    FROM $track_e_default, $table_user user, $access_url_rel_user_table url
+                    WHERE default_user_id = user.user_id AND user.user_id=url.user_id AND access_url_id='".$current_url_id."'";
         } else {
-            $sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";
+            $sql = "SELECT count(default_id) AS total_number_of_items
+                    FROM $track_e_default, $table_user user
+                    WHERE default_user_id = user.user_id ";
         }
 
         if (isset($_GET['keyword'])) {
@@ -185,6 +193,7 @@ class Statistics
 
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->total_number_of_items;
     }
 
@@ -198,14 +207,12 @@ class Statistics
      */
     public static function getActivitiesData($from, $numberOfItems, $column, $direction)
     {
-        global $dateTimeFormatLong;
-        $track_e_default    		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-        $table_user 				= Database::get_main_table(TABLE_MAIN_USER);
-        $access_url_rel_user_table	= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $current_url_id 			= api_get_current_access_url_id();
-
-        $column          = intval($column);
-        $from            = intval($from);
+        $track_e_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $current_url_id = api_get_current_access_url_id();
+        $column = intval($column);
+        $from = intval($from);
         $numberOfItems = intval($numberOfItems);
 
         if (!in_array($direction, array('ASC','DESC'))) {
@@ -289,6 +296,7 @@ class Statistics
             }
             $activities[] = $row;
         }
+
         return $activities;
     }
 
@@ -305,6 +313,7 @@ class Statistics
         while ($category = Database::fetch_object($res)) {
             $categories[$category->code] = $category->name;
         }
+
         return $categories;
     }
 
@@ -326,6 +335,7 @@ class Statistics
         foreach ($data as $index => $value) {
             $result[$index] = (int) round($value * $delta);
         }
+
         return $result;
     }
 
@@ -399,7 +409,10 @@ class Statistics
 
         $period = get_lang('PeriodMonth');
         $periodCollection = api_get_months_long();
-        $sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY login_date DESC";
+        $sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins
+                FROM ".$table.$table_url.$where_url."
+                GROUP BY stat_date
+                ORDER BY login_date DESC";
         $sql_last_x = null;
 
         switch ($type) {

@@ -70,13 +70,13 @@ class Plugin
     public function get_info()
     {
         $result = array();
-        $result['title']            = $this->get_title();
-        $result['comment']          = $this->get_comment();
-        $result['version']          = $this->get_version();
-        $result['author']           = $this->get_author();
-        $result['plugin_class']     = get_class($this);
+        $result['title'] = $this->get_title();
+        $result['comment'] = $this->get_comment();
+        $result['version'] = $this->get_version();
+        $result['author'] = $this->get_author();
+        $result['plugin_class'] = get_class($this);
         $result['is_course_plugin'] = $this->isCoursePlugin;
-        $result['is_mail_plugin']   = $this->isMailPlugin;
+        $result['is_mail_plugin'] = $this->isMailPlugin;
 
         if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;
@@ -88,6 +88,7 @@ class Plugin
                 $result[$name] = $value;
             }
         }
+
         return $result;
     }
 
@@ -489,6 +490,7 @@ class Plugin
      * Delete the fields added to the course settings page and the link to the
      * tool on the course's homepage
      * @param int $courseId
+     *
      * @return void
      */
     public function uninstall_course_fields($courseId)
@@ -548,7 +550,8 @@ class Plugin
     {
         // Update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $t_courses ORDER BY id";
+        $sql = "SELECT id FROM $t_courses
+                ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->uninstall_course_fields($row['id']);
@@ -598,9 +601,9 @@ class Plugin
     public function addTab($tabName, $url)
     {
         $sql = "SELECT * FROM settings_current
-            WHERE
-            variable = 'show_tabs' AND
-            subkey like 'custom_tab_%'";
+                WHERE
+                    variable = 'show_tabs' AND
+                    subkey LIKE 'custom_tab_%'";
         $result = Database::query($sql);
         $customTabsNum = Database::num_rows($result);
 
@@ -609,7 +612,6 @@ class Plugin
         //Avoid Tab Name Spaces
         $tabNameNoSpaces = preg_replace('/\s+/', '', $tabName);
         $subkeytext = "Tabs" . $tabNameNoSpaces;
-
 
         //Check if it is already added
         $checkCondition = array(
@@ -714,8 +716,8 @@ class Plugin
 
     /**
      * This method shows or hides plugin's tab
-     * @param boolean Shows or hides the main menu plugin tab
-     * @param string Plugin starter file path
+     * @param boolean $showTab Shows or hides the main menu plugin tab
+     * @param string $filePath Plugin starter file path
      */
     public function manageTab($showTab, $filePath = 'index.php')
     {

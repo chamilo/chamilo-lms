@@ -45,114 +45,100 @@ Display::display_header($originalToolName, 'Doc');
 $image_resizing = isset($_SESSION['image_resizing']) ? $_SESSION['image_resizing'] : null;
 
 ?>
-<style type="text/css">
-<!--
-.disabled_input {
-	background-color: #cccccc;
-}
-.enabled_input {
-	background-color: #ffffff;
-}
--->
-</style>
 
 <script type="text/javascript">
 function enableresizing() { //v2.0
 	document.options.width.disabled=false;
-	document.options.width.className='enabled_input';
+	//document.options.width.className='enabled_input';
 	document.options.height.disabled=false;
-	document.options.height.className='enabled_input';
+	//document.options.height.className='enabled_input';
 }
 function disableresizing() { //v2.0
 	document.options.width.disabled=true;
-	document.options.width.className='disabled_input';
+	//document.options.width.className='disabled_input';
 	document.options.height.disabled=true;
-	document.options.height.className='disabled_input';
+	//document.options.height.className='disabled_input';
 }
 window.onload = <?php echo $image_resizing == 'resizing' ? 'enableresizing' : 'disableresizing'; ?>;
 </script>
 
 <?php
-echo '<div class="actions">';
-echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('slideshow.png',get_lang('BackTo').' '.get_lang('SlideShow'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
+$actions = '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+$actions .= '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('slideshow.png',get_lang('BackTo').' '.get_lang('SlideShow'),'',ICON_SIZE_MEDIUM).'</a>';
+Display::toolbarAction('toolbar-slideshow', $content)
 ?>
-
-<form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options">
+<div class="panel panel-default">
+    <div class="panel-body">
+<form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options" class="form-horizontal">
 	<legend><?php echo get_lang('SlideshowOptions') ?></legend>
-	<div>
-		<div class="label">
-			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php
-	if ($image_resizing == 'noresizing' || $image_resizing == '') {
-		echo ' checked';
-	}
-			?>>
-		<?php echo get_lang('NoResizing');?>
-
-		</div>
-		<div><?php echo get_lang('NoResizingComment');?>
-		</div>
+        <div class="radio">
+            <label>
+                <input name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php
+                    if ($image_resizing == 'noresizing' || $image_resizing == '') {
+                            echo ' checked';
+                    }
+		?>>
+            </label>
+            <?php echo '<b>'. get_lang('NoResizing') . '</b>, ' . get_lang('NoResizingComment') ;?>
+        </div>
+        <div class="radio">
+            <label>
+                <input name="radio_resizing" type="radio" onClick="disableresizing()" value="autoresizing" <?php
+                        if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
+                                echo ' checked';
+                        }
+		?>>
+            </label>
+            <?php echo '<b>'. get_lang('ResizingAuto') . '</b>, ' . get_lang('ResizingAutoComment');?>
 	</div>
-   <div>
-		<div class="label">
-			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="autoresizing" <?php
-	if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
-		echo ' checked';
-	}
-			?>>
-		<?php echo get_lang('ResizingAuto');?>
-
-		</div>
-		<div><?php echo get_lang('ResizingAutoComment');?>
-		</div>
+	<div class="radio">
+            <label>
+                <input class="checkbox" name="radio_resizing" type="radio" onClick="javascript: enableresizing();" value="resizing" <?php
+                    if ($image_resizing == 'resizing') {
+                            echo ' checked';
+                            $width = $_SESSION['image_resizing_width'];
+                            $height = $_SESSION['image_resizing_height'];
+                    }
+		?>>
+            </label>
+            <?php echo '<b>'. get_lang('Resizing') . '</b>, ' . get_lang('ResizingComment'); ?>
 	</div>
-	<div>
-		<div class="label">
-			<input class="checkbox" name="radio_resizing" type="radio" onClick="javascript: enableresizing();" value="resizing" <?php
-
-	if ($image_resizing == 'resizing') {
-		echo ' checked';
-		$width = $_SESSION['image_resizing_width'];
-		$height = $_SESSION['image_resizing_height'];
-	}
-			?>>
-        <?php echo get_lang('Resizing'); ?>
-		</div>
-		<div>
-		<?php echo get_lang('ResizingComment'); ?><br />
-        <?php echo get_lang('Width'); ?>:
-	    &nbsp;<input name="width" type="text" id="width" <?php
+        <div class="form-group">
+            <label class="col-sm-1 control-label"><?php echo get_lang('Width'); ?></label>
+            <div class="col-sm-3">
+                <input class="form-control" name="width" type="text" id="width" <?php
 		if ($image_resizing == 'resizing') {
 			echo ' value="'.$width.'"';
 			echo ' class="enabled_input"';
-	    } else {
-            echo ' class="disabled_input"';
-        }
+                    } else {
+                    echo ' class="disabled_input"';
+                }
 		?> >
-        <br />
-        <?php echo get_lang('Height');?>:
-        &nbsp;&nbsp;&nbsp;&nbsp;<input name="height" type="text" id="height" <?php
+            </div>
+            <div class="col-sm-8"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label"><?php echo get_lang('Height'); ?></label>
+            <div class="col-sm-3">
+                <input class="form-control" name="height" type="text" id="height" <?php
 		if ($image_resizing == 'resizing') {
 			echo ' value="'.$height.'"';
 			echo ' class="enabled_input"';
 		} else {
-            echo ' class="disabled_input"';
-        }
+                        echo ' class="disabled_input"';
+                }
 		?> >
-        <br />
-		</div>
-	</div>
-	<div>
-		<div class="label">
-		</div>
-		<div>
-			<br />
-			<button type="submit" class="save" name="Submit" value="Save" ><?php echo get_lang('Save'); ?></button>
-		</div>
-	</div>
-</form>
+            </div>
+            <div class="col-sm-8"></div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-default" name="Submit" value="Save" ><?php echo get_lang('Save'); ?></button>
+            </div>
+        </div>
+</form>           
+    </div>
+</div>
 <?php
 
 Display::display_footer();

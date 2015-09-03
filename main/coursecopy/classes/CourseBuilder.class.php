@@ -26,6 +26,7 @@ require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
 require_once 'Attendance.class.php';
 require_once 'Work.class.php';
+require_once 'QuizQuestionOption.class.php';
 
 /**
  * Class CourseBuilder

@@ -2088,7 +2088,6 @@ class CourseManager
             return;
         }
 
-
         $sql = "SELECT * FROM $table_course WHERE code = '" . $codeFiltered . "'";
         $res = Database::query($sql);
         $course = Database::fetch_array($res);
@@ -2108,6 +2107,23 @@ class CourseManager
             self::create_database_dump($code);
 
             $course_tables = AddCourse::get_course_tables();
+
+            // Cleaning group categories
+
+            $groupCategories = GroupManager::get_categories($course['code']);
+
+            if (!empty($groupCategories)) {
+                foreach ($groupCategories as $category) {
+                    GroupManager::delete_category($category['id'], $course['code']);
+                }
+            }
+
+            // Cleaning groups
+            $groups = GroupManager::get_groups();
+            if (!empty($groups)) {
+                $groupList = array_column($groups, 'id');
+                GroupManager::delete_groups($groupList);
+            }
 
             // Cleaning c_x tables
             if (!empty($courseId)) {

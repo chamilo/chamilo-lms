@@ -6,9 +6,7 @@
  * @package chamilo.reporting
  * Created on 26 julio 2008  by Julio Montoya gugli100@gmail.com
 */
-/**
- * Main script
- */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -28,27 +26,21 @@ if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
 
-/*
-// Checking whether the current coach is the admin coach.
-if (!api_is_coach()) {
-	api_not_allowed(true);
-}
-*/
-
 // Checking whether the current coach is the admin coach.
 if (api_get_setting('add_users_by_coach') == 'true') {
-	if (!api_is_platform_admin()) {
-		if (isset($_REQUEST['id_session'])) {
-			$id_session = intval($_REQUEST['id_session']);
-			$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-			$rs = Database::query($sql);
-			if (Database::result($rs, 0, 0) != $_user['user_id']) {
-				api_not_allowed(true);
-			}
-		} else {
-			api_not_allowed(true);
-		}
-	}
+    if (!api_is_platform_admin()) {
+        if (isset($_REQUEST['id_session'])) {
+            $id_session = intval($_REQUEST['id_session']);
+            $sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).'
+                    WHERE id='.$id_session;
+            $rs = Database::query($sql);
+            if (Database::result($rs, 0, 0) != $_user['user_id']) {
+                api_not_allowed(true);
+            }
+        } else {
+            api_not_allowed(true);
+        }
+    }
 } else {
 	api_not_allowed(true);
 }
@@ -56,40 +48,40 @@ if (api_get_setting('add_users_by_coach') == 'true') {
 set_time_limit(0);
 
 if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
-	$file_type = $_POST['file_type'];
-	$id_session = intval($_POST['id_session']);
-	if ($file_type == 'csv') {
-		$users = MySpace::parse_csv_data($_FILES['import_file']['tmp_name']);
-	} else {
-		$users = MySpace::parse_xml_data($_FILES['import_file']['tmp_name']);
-	}
-	if (count($users) > 0) {
-		$results = MySpace::validate_data($users);
-		$errors = $results['errors'];
-		$users = $results['users'];
+    $file_type = $_POST['file_type'];
+    $id_session = intval($_POST['id_session']);
+    if ($file_type == 'csv') {
+        $users = MySpace::parse_csv_data($_FILES['import_file']['tmp_name']);
+    } else {
+        $users = MySpace::parse_xml_data($_FILES['import_file']['tmp_name']);
+    }
+    if (count($users) > 0) {
+        $results = MySpace::validate_data($users);
+        $errors = $results['errors'];
+        $users = $results['users'];
 
-		if (count($errors) == 0) {
-			if (!empty($id_session)) {
-				$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-				// Selecting all the courses from the session id requested.
-				$sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id ='$id_session'";
-				$result = Database::query($sql);
-				$course_list = array();
-				while ($row = Database::fetch_array($result)) {
-					$course_list[] = $row['c_id'];
-				}
-				$errors = MySpace::get_user_creator($users);
-				$users = MySpace::check_all_usernames($users, $course_list, $id_session);
-				if (count($errors) == 0) {
-					MySpace::save_data($users, $course_list, $id_session);
-				}
-			} else {
-				header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoSessionId')));
-			}
-		}
-	} else {
-		header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoUsersRead')));
-	}
+        if (count($errors) == 0) {
+            if (!empty($id_session)) {
+                $tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+                // Selecting all the courses from the session id requested.
+                $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id ='$id_session'";
+                $result = Database::query($sql);
+                $course_list = array();
+                while ($row = Database::fetch_array($result)) {
+                    $course_list[] = $row['c_id'];
+                }
+                $errors = MySpace::get_user_creator($users);
+                $users = MySpace::check_all_usernames($users, $course_list, $id_session);
+                if (count($errors) == 0) {
+                    MySpace::save_data($users, $course_list, $id_session);
+                }
+            } else {
+                header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoSessionId')));
+            }
+        }
+    } else {
+        header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoUsersRead')));
+    }
 }
 
 Display :: display_header($tool_name);
@@ -126,11 +118,6 @@ $defaults['sendMail'] = 0;
 $defaults['file_type'] = 'xml';
 $form->setDefaults($defaults);
 $form->display();
-/*
-<?php echo implode('/',$defined_auth_sources); ?>
-&lt;AuthSource&gt;<?php echo implode('/',$defined_auth_sources); ?>&lt;/AuthSource&gt;
-*/
-
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 
@@ -160,7 +147,4 @@ $form->display();
 </pre>
 </blockquote>
 <?php
-/*
-		FOOTER
-*/
 Display :: display_footer();

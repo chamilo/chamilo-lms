@@ -14,3 +14,4 @@ $strings['Gender'] = 'Gender';
 $strings['WorkStudyPlace'] = 'Work study place';
 $strings['Male'] = 'Male';
 $strings['Female'] = 'Female';
+$strings['OfficePosition'] = 'Officer position';

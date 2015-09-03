@@ -3954,7 +3954,7 @@ function api_get_item_property_list_by_tool_by_user(
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $session_condition = ' AND session_id = '.$session_id;
     if (empty($session_id)) {
-        $session_condition = " (session_id = 0 OR session_id IS NULL) ";
+        $session_condition = " AND (session_id = 0 OR session_id IS NULL) ";
     }
     $sql = "SELECT * FROM $item_property_table
             WHERE
@@ -3970,6 +3970,7 @@ function api_get_item_property_list_by_tool_by_user(
             $list[] = $row;
         }
     }
+
     return $list;
 }
 
@@ -3992,10 +3993,14 @@ function api_get_item_property_id($course_code, $tool, $ref, $sessionId = 0)
     $course_id = $course_info['real_id'];
     $sessionCondition = " AND session_id = $sessionId ";
     if (empty($sessionId)) {
-        $sessionCondition = " (session_id = 0 OR session_id IS NULL) ";
+        $sessionCondition = " AND (session_id = 0 OR session_id IS NULL) ";
     }
     $sql = "SELECT id FROM $tableItemProperty
-            WHERE c_id = $course_id AND tool = '$tool' AND ref = $ref $sessionCondition";
+            WHERE
+                c_id = $course_id AND
+                tool = '$tool' AND
+                ref = $ref
+                $sessionCondition";
     $rs  = Database::query($sql);
     $item_property_id = '';
     if (Database::num_rows($rs) > 0) {

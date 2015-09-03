@@ -130,11 +130,36 @@ if (!empty($course)) {
 		@fclose(fopen($chat_path.$basename_chat.'.log.html', 'w'));
 		$doc_id = add_document($_course, $basepath_chat.'/'.$basename_chat.'-'.$i.'.log.html', 'file', filesize($chat_path.$basename_chat.'-'.$i.'.log.html'), $basename_chat.'-'.$i.'.log.html');
 
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $userId, $group_id, null, null, null, $session_id);
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $userId, $group_id, null, null, null, $session_id);
-		item_property_update_on_folder($_course, $basepath_chat, $userId);
+        api_item_property_update(
+            $_course,
+            TOOL_DOCUMENT,
+            $doc_id,
+            'DocumentAdded',
+            $userId,
+            $group_id,
+            null,
+            null,
+            null,
+            $session_id
+        );
+        api_item_property_update(
+            $_course,
+            TOOL_DOCUMENT,
+            $doc_id,
+            'invisible',
+            $userId,
+            $group_id,
+            null,
+            null,
+            null,
+            $session_id
+        );
+        item_property_update_on_folder($_course, $basepath_chat, $userId);
 
-		$doc_id = DocumentManager::get_document_id($_course, $basepath_chat.'/'.$basename_chat.'.log.html');
+        $doc_id = DocumentManager::get_document_id(
+            $_course,
+            $basepath_chat.'/'.$basename_chat.'.log.html'
+        );
 
 		update_existing_document($_course, $doc_id, 0);
 	}

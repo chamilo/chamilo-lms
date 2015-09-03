@@ -74,7 +74,8 @@ function get_number_of_classes()
 /**
  * Get the classes to display on the current page.
  */
-function get_class_data($from, $number_of_items, $column, $direction) {
+function get_class_data($from, $number_of_items, $column, $direction)
+{
     $class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
     $course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
     $class_user_table = Database :: get_main_table(TABLE_MAIN_CLASS_USER);

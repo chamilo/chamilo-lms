@@ -170,7 +170,7 @@ function timeAgo() {
 }
 
 function register_friend(element_input) {
-    if(confirm("'.get_lang('AddToFriends').'")) {
+    if (confirm("'.get_lang('AddToFriends').'")) {
         name_button=$(element_input).attr("id");
         name_div_id="id_"+name_button.substring(13);
         user_id=name_div_id.split("_");
@@ -494,8 +494,7 @@ if ($show_full_profile) {
         //$social_course_block = Display::panel($my_courses, get_lang('MyCourses'));
     }
 
-    //Block Social Sessions
-
+    // Block Social Sessions
     if (count($sessionList) > 0) {
         //$social_session_block = $htmlSessionList;
         $social_session_block = $sessionList;

@@ -47,6 +47,7 @@ function get_count_users()
         null,
         api_is_student_boss() ? null : STUDENT
     );
+
     return $count;
 }
 

@@ -3,9 +3,7 @@
 /**
  * @package chamilo.backup
  */
-/**
- * Code
- */
+
 // Setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;

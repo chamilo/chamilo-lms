@@ -3807,7 +3807,13 @@ class DocumentManager
                 if (!$visible) {
                     return false;
                 } else {
-                    return self::check_visibility_tree($document_data['parent_id'], $course_code, $session_id, $user_id, $groupId);
+                    return self::check_visibility_tree(
+                        $document_data['parent_id'],
+                        $course_code,
+                        $session_id,
+                        $user_id,
+                        $groupId
+                    );
                 }
             }
         } else {

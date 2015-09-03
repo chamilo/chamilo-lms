@@ -47,9 +47,8 @@ if (count($session_list) == 0) {
 $form->addElement('select', 'session_id', get_lang('Sessions'), $my_session_list);
 $form->addButtonFilter(get_lang('Filter'));
 
-
 if (!empty($_REQUEST['score']))	$filter_score = intval($_REQUEST['score']); else $filter_score = 70;
-if (!empty($_REQUEST['session_id']))	$session_id = intval($_REQUEST['session_id']); else $session_id = 0;
+if (!empty($_REQUEST['session_id'])) $session_id = intval($_REQUEST['session_id']); else $session_id = 0;
 
 if (empty($session_id)) {
 	$session_id = key($my_session_list);
@@ -169,7 +168,6 @@ if (!empty($users) && is_array($users)) {
 			}
 
 			$html_result .= $result;
-
 			$html_result .= "</td>";
 		}
 		if (empty($counter)) {

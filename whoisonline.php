@@ -16,19 +16,13 @@ if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 }
 
 $_SESSION['who_is_online_counter'] = 2;
-
-//$htmlHeadXtra[] = api_get_js('jquery.endless-scroll.js');
-//social tab
 $this_section = SECTION_SOCIAL;
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
-$htmlHeadXtra[] = '<script>
-
-
-</script>';
 
 $social_right_content = null;
 $whoisonline_list = null;
+$social_search = '';
 
 /* if (isset($_GET['chatid'])) {
     //send out call request
@@ -68,7 +62,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
             if (api_get_setting('allow_social_tool') == 'true') {
                 if (!api_is_anonymous()) {
                     $query = isset($_GET['q']) ? $_GET['q']: null;
-                    $social_search .= UserManager::get_search_form($query);
+                    $social_search = UserManager::get_search_form($query);
                 }
             }
             //$social_right_content .= SocialManager::display_user_list($user_list);

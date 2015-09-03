@@ -43,7 +43,7 @@ api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
 
 DocumentManager::removeGeneratedAudioTempFile();
 
-if(
+if (
     isset($_SESSION['temp_realpath_image']) &&
     !empty($_SESSION['temp_realpath_image']) &&
     file_exists($_SESSION['temp_realpath_image'])

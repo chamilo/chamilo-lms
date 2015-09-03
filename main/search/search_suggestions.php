@@ -18,7 +18,8 @@ function get_suggestions_from_search_engine($q) {
     if ($cid != -1) {
     	$sql_add = " AND course_code = '".$cid."' ";
     }
-	$sql = "SELECT * FROM $table_sfv where value LIKE '%$q%'".$sql_add." ORDER BY course_code, tool_id, ref_id, field_id";
+	$sql = "SELECT * FROM $table_sfv where value LIKE '%$q%'".$sql_add."
+	        ORDER BY course_code, tool_id, ref_id, field_id";
 	$sql_result = Database::query($sql);
 	$data = array();
     $i = 0;
@@ -39,7 +40,9 @@ function get_suggestions_from_search_engine($q) {
     			//natsort($item_ref_id);
                 $output = array();
                 $field_val = array();
-                $sql2 = "SELECT * FROM $table_sfv where course_code = '$cc' AND tool_id = '$ti' AND ref_id = '$ri' ORDER BY field_id";
+                $sql2 = "SELECT * FROM $table_sfv
+                         WHERE course_code = '$cc' AND tool_id = '$ti' AND ref_id = '$ri'
+                         ORDER BY field_id";
                 $res2 = Database::query($sql2);
                 // TODO this code doesn't manage multiple terms in one same field just yet (should duplicate results in this case)
                 $field_id = 0;

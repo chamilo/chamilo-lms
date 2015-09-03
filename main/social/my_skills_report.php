@@ -8,10 +8,10 @@
 require_once '../inc/global.inc.php';
 
 $isStudent = api_is_student();
-$isStudentBosss = api_is_student_boss();
+$isStudentBoss = api_is_student_boss();
 $isDRH = api_is_drh();
 
-if (!$isStudent && !$isStudentBosss && !$isDRH) {
+if (!$isStudent && !$isStudentBoss && !$isDRH) {
     header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php');
     exit;
 }
@@ -58,19 +58,15 @@ if ($isStudent) {
                 $courseImageThumb->resize(32, 32, 0);
                 $courseImageThumb->send_image($thumbSysPath);
             }
-
             $tableRow['courseImage'] = $thumbWebPath;
         }
-
         $tableRows[] = $tableRow;
     }
 
     $tplPath = 'skill/student_report.tpl';
-} else if ($isStudentBosss) {
+} else if ($isStudentBoss) {
     $selectedStudent = isset($_REQUEST['student']) ? intval($_REQUEST['student']) : 0;
-
     $tableRows = array();
-
     $followedStudents = UserManager::getUsersFollowedByStudentBoss($userId);
 
     foreach ($followedStudents as &$student) {

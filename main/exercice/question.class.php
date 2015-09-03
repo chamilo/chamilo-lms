@@ -101,7 +101,7 @@ abstract class Question
      *
      * @return Question
      */
-    static function read($id, $course_id = null)
+    public static function read($id, $course_id = null)
     {
         $id = intval($id);
 
@@ -144,13 +144,22 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id);
 
-                $sql = "SELECT exercice_id FROM $TBL_EXERCISE_QUESTION
-                        WHERE c_id = $course_id AND question_id = $id";
-                $result_exercise_list = Database::query($sql);
+                $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+
+                $sql = "SELECT DISTINCT q.exercice_id
+                        FROM $TBL_EXERCISE_QUESTION q
+                        INNER JOIN $tblQuiz e
+                        ON e.c_id = q.c_id AND e.id = q.exercice_id
+                        WHERE
+                            q.c_id = $course_id AND
+                            q.question_id = $id AND
+                            e.active >= 0";
+
+                $result = Database::query($sql);
 
                 // fills the array with the exercises which this question is in
-                if ($result_exercise_list) {
-                    while ($obj = Database::fetch_object($result_exercise_list)) {
+                if ($result) {
+                    while ($obj = Database::fetch_object($result)) {
                         $objQuestion->exerciseList[] = $obj->exercice_id;
                     }
                 }
@@ -167,6 +176,7 @@ abstract class Question
      * returns the question ID
      *
      * @author Olivier Brouckaert
+     *
      * @return - integer - question ID
      */
     public function selectId()
@@ -194,6 +204,7 @@ abstract class Question
     public function selectDescription()
     {
         $this->description = text_filter($this->description);
+
         return $this->description;
     }
 
@@ -236,7 +247,7 @@ abstract class Question
      * @author Nicolas Raynaud
      * @return integer - level of the question, 0 by default.
      */
-    function selectLevel()
+    public function selectLevel()
     {
         return $this->level;
     }
@@ -260,6 +271,7 @@ abstract class Question
         if (!empty($this->picture)) {
             return api_get_path(WEB_COURSE_PATH) . $this->course['path'] . '/document/images/' . $this->picture;
         }
+
         return false;
     }
 
@@ -280,7 +292,8 @@ abstract class Question
      * @author Olivier Brouckaert
      * @return integer - number of exercises
      */
-    public function selectNbrExercises() {
+    public function selectNbrExercises()
+    {
         return sizeof($this->exerciseList);
     }
 
@@ -288,6 +301,7 @@ abstract class Question
      * changes the question title
      *
      * @author Olivier Brouckaert
+     *
      * @param string $title - question title
      */
     public function updateTitle($title)
@@ -307,6 +321,7 @@ abstract class Question
      * changes the question description
      *
      * @author Olivier Brouckaert
+     *
      * @param string $description - question description
      */
     public function updateDescription($description)
@@ -372,11 +387,11 @@ abstract class Question
                 $category_id = intval($category_id);
                 $question_id = intval($this->id);
                 $sql = "SELECT count(*) AS nb
-                    FROM $TBL_QUESTION_REL_CATEGORY
-                    WHERE
-                        category_id = $category_id
-                        AND question_id = $question_id
-                        AND c_id=".api_get_course_int_id();
+                        FROM $TBL_QUESTION_REL_CATEGORY
+                        WHERE
+                            category_id = $category_id
+                            AND question_id = $question_id
+                            AND c_id=".api_get_course_int_id();
                 $res = Database::query($sql);
                 $row = Database::fetch_array($res);
                 if ($row['nb'] > 0) {
@@ -483,7 +498,7 @@ abstract class Question
             ) {
                 // removes old answers
                 $sql = "DELETE FROM $TBL_REPONSES
-                        WHERE c_id = $course_id  AND question_id = " . intval($this->id);
+                        WHERE c_id = $course_id AND question_id = " . intval($this->id);
                 Database::query($sql);
             }
 
@@ -728,7 +743,8 @@ abstract class Question
      * @author Olivier Brouckaert
      * @return boolean - true if moved, otherwise false
      */
-    function getTmpPicture() {
+    function getTmpPicture()
+    {
         global $picturePath;
 
         // if the question has got an ID and if the picture exists
@@ -1334,7 +1350,7 @@ abstract class Question
     /**
      * Returns an instance of the class corresponding to the type
      * @param integer $type the type of the question
-     * @return an instance of a Question subclass (or of Questionc class by default)
+     * @return $this instance of a Question subclass (or of Questionc class by default)
      */
     public static function getInstance($type)
     {
@@ -1711,6 +1727,7 @@ abstract class Question
             array('class' => 'ribbon')
         );
         $header .= Display::div($this->description, array('id' => 'question_description'));
+
         return $header;
     }
 
@@ -1793,6 +1810,7 @@ abstract class Question
         $tabQuestionList = Question::get_question_type_list(); // [0]=file to include [1]=type name
 
         require_once $tabQuestionList[$type][0];
+
         $img = $explanation = null;
         eval('$img = ' . $tabQuestionList[$type][1] . '::$typePicture;');
         eval('$explanation = get_lang(' . $tabQuestionList[$type][1] . '::$explanationLangVar);');
@@ -1810,8 +1828,7 @@ abstract class Question
         $sidx = "question",
         $sord = "ASC",
         $where_condition = array()
-    )
-    {
+    ) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $default_where = array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION));
         $result = Database::select(
@@ -1823,6 +1840,7 @@ abstract class Question
                 'order' => "$sidx $sord"
             )
         );
+
         return $result;
     }
 

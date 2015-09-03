@@ -138,7 +138,11 @@ if ($group_id != 0) {
                     Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'confirmation', false)
                 );
             } else {
-                $usergroup->add_user_to_group($user_join, $group_id, GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER);
+                $usergroup->add_user_to_group(
+                    $user_join,
+                    $group_id,
+                    GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER
+                );
                 Display::addFlash(
                     Display::return_message(get_lang('InvitationSent'), 'confirmation', false)
                 );

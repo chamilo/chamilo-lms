@@ -10,9 +10,6 @@
 */
 // TODO: Is this file deprecated?
 
-/*
-		INIT SECTION
-*/
 $reqdate        = $_REQUEST['reqdate'];
 $period         = $_REQUEST['period'];
 $displayType    = $_REQUEST['displayType'];
@@ -20,7 +17,10 @@ require_once '../inc/global.inc.php';
 
 $courseId = api_get_course_int_id();
 
-$interbreadcrumb[]= array ("url"=>"courseLog.php", "name"=> get_lang('ToolName'));
+$interbreadcrumb[] = array(
+    "url" => "courseLog.php",
+    "name" => get_lang('ToolName'),
+);
 
 $nameTools = get_lang('TrafficDetails');
 
@@ -38,7 +38,7 @@ td {border-bottom: thin dashed gray;}
 </style>";
 //@todo use Database library
 $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-Display::display_header($nameTools,"Tracking");
+Display::display_header($nameTools, "Tracking");
 
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -56,14 +56,12 @@ $is_allowedToTrack = $is_courseAdmin;
 </h3>
 <table width="100%" cellpadding="2" cellspacing="3" border="0">
 <?php
-    if ($is_allowedToTrack)
-    {
-        if( !isset($reqdate) || $reqdate < 0 || $reqdate > 2149372861 )
-                $reqdate = time();
-        //** dislayed period
-        echo "<tr><td><b>";
-            switch($period)
-            {
+    if ($is_allowedToTrack) {
+        if (!isset($reqdate) || $reqdate < 0 || $reqdate > 2149372861)
+            $reqdate = time();
+            //** dislayed period
+            echo "<tr><td><b>";
+            switch($period) {
                 case "year" :
                     echo date(" Y", $reqdate);
                     break;
@@ -80,32 +78,30 @@ $is_allowedToTrack = $is_courseAdmin;
         echo "</b></tr></td>";
         //** menu
         echo "<tr>
-                <td>
-        ";
+                <td>";
         echo "  ".get_lang('PeriodToDisplay')." : [<a href='".api_get_self()."?period=year&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodYear')."</a>]
                 [<a href='".api_get_self()."?period=month&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodMonth')."</a>]
                 [<a href='".api_get_self()."?period=day&reqdate=$reqdate' class='specialLink'>".get_lang('PeriodDay')."</a>]
                 &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
                 ".get_lang('DetailView')." :
         ";
-        switch($period)
-        {
+
+        switch($period) {
             case "year" :
-                    //-- if period is "year" display can be by month, day or hour
-                    echo "  [<a href='".api_get_self()."?period=$period&reqdate=$reqdate&displayType=month' class='specialLink'>".get_lang('PeriodMonth')."</a>]";
+                //-- if period is "year" display can be by month, day or hour
+                echo "  [<a href='".api_get_self()."?period=$period&reqdate=$reqdate&displayType=month' class='specialLink'>".get_lang('PeriodMonth')."</a>]";
             case "month" :
-                    //-- if period is "month" display can be by day or hour
-                    echo "  [<a href='".api_get_self()."?period=$period&reqdate=$reqdate&displayType=day' class='specialLink'>".get_lang('PeriodDay')."</a>]";
+                //-- if period is "month" display can be by day or hour
+                echo "  [<a href='".api_get_self()."?period=$period&reqdate=$reqdate&displayType=day' class='specialLink'>".get_lang('PeriodDay')."</a>]";
             case "day" :
-                    //-- if period is "day" display can only be by hour
-                    echo "  [<a href='".api_get_self()."?period=$period&reqdate=$reqdate&displayType=hour' class='specialLink'>".get_lang('PeriodHour')."</a>]";
-                    break;
+                //-- if period is "day" display can only be by hour
+                echo "  [<a href='".api_get_self()."?period=$period&reqdate=$reqdate&displayType=hour' class='specialLink'>".get_lang('PeriodHour')."</a>]";
+                break;
         }
 
         echo "&nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;";
 
-        switch($period)
-        {
+        switch ($period) {
             case "year" :
                 // previous and next date must be evaluated
                 // 30 days should be a good approximation
@@ -136,12 +132,9 @@ $is_allowedToTrack = $is_courseAdmin;
                 ";
                 break;
         }
-        echo "
-                </td>
-              </tr>
-        ";
+        echo "</td></tr>";
         // display information about this period
-        switch($period) {
+        switch ($period) {
             // all days
             case "year" :
                 $sql = "SELECT UNIX_TIMESTAMP( access_date )
@@ -172,14 +165,12 @@ $is_allowedToTrack = $is_courseAdmin;
                         AND YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
                         AND c_id = $courseId
                         AND access_tool IS NULL ";
-                if($displayType == "day")
-                {
+                if ($displayType == "day") {
                     $sql .= "ORDER BY DAYOFYEAR( access_date)";
                     $days_array = StatsUtils::daysTab($sql);
                     StatsUtils::makeHitsTable($days_array,get_lang('PeriodDay'));
-                }
-                else // by hours by default
-                {
+                } else {
+                    // by hours by default
                     $sql .= "ORDER BY HOUR( access_date)";
                     $hours_array = StatsUtils::hoursTab($sql);
                     StatsUtils:: makeHitsTable($hours_array,get_lang('PeriodHour'));
@@ -199,10 +190,9 @@ $is_allowedToTrack = $is_courseAdmin;
                 StatsUtils::makeHitsTable($hours_array,get_lang('PeriodHour'));
                 break;
         }
-    }
-    else // not allowed to track
-    {
-            api_not_allowed();
+    } else {
+        // not allowed to track
+        api_not_allowed();
     }
 ?>
 </table>

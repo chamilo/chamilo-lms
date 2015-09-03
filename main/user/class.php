@@ -20,21 +20,22 @@ $tool_name = get_lang("Classes");
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // Extra entries in breadcrumb
-$interbreadcrumb[] = array ("url" => "user.php?".api_get_cidreq(), "name" => get_lang("ToolUser"));
+$interbreadcrumb[] = array(
+    "url" => "user.php?".api_get_cidreq(),
+    "name" => get_lang("ToolUser"),
+);
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
 $groupFilter = isset($_GET['group_filter']) ? intval($_GET['group_filter']) : 0;
 
 $htmlHeadXtra[] = '
 <script>
-
 $(document).ready( function() {
     $("#group_filter").change(function() {
         window.location = "class.php?'.api_get_cidreq().'&type='.$type.'" +"&group_filter=" + $(this).val();
     });
 });
-</script>
-';
+</script>';
 
 Display :: display_header($tool_name, "User");
 $usergroup = new UserGroup();

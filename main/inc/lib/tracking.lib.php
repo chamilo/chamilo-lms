@@ -3674,11 +3674,11 @@ class Tracking
     /**
      * Get inactive students in course
      * @param    int   $courseId
-     * @param    string    Since login course date (optional, default = 'never')
-     * @param    int        Session id    (optional)
-     * @return    array    Inactives users
+     * @param    string  $since  Since login course date (optional, default = 'never')
+     * @param    int        $session_id    (optional)
+     * @return    array    Inactive users
      */
-    public static function get_inactives_students_in_course($course_code, $since = 'never', $session_id=0)
+    public static function getInactiveStudentsInCourse($courseId, $since = 'never', $session_id = 0)
     {
         $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -3686,9 +3686,11 @@ class Tracking
         $tableCourse   = Database :: get_main_table(TABLE_MAIN_COURSE);
         $inner = '';
         $now = api_get_utc_datetime();
+        $courseId = intval($courseId);
 
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
+        if (empty($courseId)) {
+            return false;
+        }
 
         if ($session_id != 0) {
             $inner = ' INNER JOIN '.$tbl_session_course_user.' session_course_user
@@ -3721,6 +3723,7 @@ class Tracking
         while($user = Database::fetch_array($rs)) {
             $inactive_users[] = $user['user_id'];
         }
+
         return $inactive_users;
     }
 
@@ -3794,7 +3797,6 @@ class Tracking
 
         $sql_type = "SELECT id, lp_type FROM $lp_table WHERE c_id = $course_id";
         $rs_type=Database::query($sql_type);
-        $average_data=0;
         $count_loop=0;
         $average_data_sum = 0;
         $lp_list = array();
@@ -3803,7 +3805,8 @@ class Tracking
             if ($row_type['lp_type']==1) {
                 //lp chamilo
 
-                $sql = "SELECT id FROM $lp_view_table  WHERE c_id = $course_id AND user_id = '".intval($user_id)."' and lp_id='".$row_type['id']."'";
+                $sql = "SELECT id FROM $lp_view_table
+                        WHERE c_id = $course_id AND user_id = '".intval($user_id)."' and lp_id='".$row_type['id']."'";
                 $rs_last_lp_view_id = Database::query($sql);
                 $lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));
 
@@ -4006,7 +4009,6 @@ class Tracking
             ),
         );
 
-        $error_sql = '';
         foreach ($tables as $tableName => $fields) {
             //If session is defined, add it to query
             $where = '';
@@ -4052,6 +4054,7 @@ class Tracking
                 }
             }
         }
+
         return $data;
     }
 
@@ -4105,9 +4108,7 @@ class Tracking
     {
         $course_code = Database::escape_string($course_code);
         $course_info = api_get_course_info($course_code);
-
         $course_id = $course_info['real_id'];
-
         $data = array();
 
         $TABLETRACK_LINKS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
@@ -4121,10 +4122,11 @@ class Tracking
 
         $sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title) as count_visits
                 FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-                WHERE cl.c_id = $course_id AND
-                      sl.links_link_id = cl.id
-                      AND sl.c_id = $course_id
-                      $condition_session
+                WHERE
+                    cl.c_id = $course_id AND
+                    sl.links_link_id = cl.id AND
+                    sl.c_id = $course_id
+                    $condition_session
                 GROUP BY cl.title, cl.url
                 ORDER BY count_visits DESC
                 LIMIT 0, 3";
@@ -4465,11 +4467,11 @@ class Tracking
 
             $html .= '<table class="data_table" width="100%">';
             $html .= '<tr>
-                  '.Display::tag('th', get_lang('Session'),                  array('width'=>'300px')).'
-                  '.Display::tag('th', get_lang('PublishedExercises'),       array('width'=>'300px')).'
-                  '.Display::tag('th', get_lang('NewExercises'),            array('class'=>'head')).'
-                  '.Display::tag('th', get_lang('AverageExerciseResult'),    array('class'=>'head')).'
-                  '.Display::tag('th', get_lang('Details'),                  array('class'=>'head')).'
+                  '.Display::tag('th', get_lang('Session'), array('width'=>'300px')).'
+                  '.Display::tag('th', get_lang('PublishedExercises'), array('width'=>'300px')).'
+                  '.Display::tag('th', get_lang('NewExercises'), array('class'=>'head')).'
+                  '.Display::tag('th', get_lang('AverageExerciseResult'), array('class'=>'head')).'
+                  '.Display::tag('th', get_lang('Details'), array('class'=>'head')).'
                   </tr>';
 
             foreach ($course_in_session as $my_session_id => $session_data) {
@@ -4520,7 +4522,7 @@ class Tracking
                     $average = ExerciseLib::get_average_score_by_course($courseInfo['real_id'], $my_session_id);
                     $all_exercises += $count_exercises;
                     $all_unanswered_exercises_by_user += $count_exercises - $answered_exercises;
-                    $all_average       += $average;
+                    $all_average += $average;
                 }
 
                 $all_average = $all_average /  count($course_list);
@@ -5589,7 +5591,6 @@ class Tracking
         foreach ($courses as $courseIdx => $courseData) {
             $where = '';
             $whereParams = array();
-            $whereCourseCode = $courseData['code'];
             $whereSessionParams = '';
             if (count($sessions > 0)) {
                 foreach ($sessions as $sessionIdx => $sessionData) {
@@ -6426,10 +6427,26 @@ class TrackingCourseLog
     			$user['student_score']  = $avg_student_score;
     		}
 
-    		$user['count_assignments'] = Tracking::count_student_assignments($user['user_id'], $course_code, $session_id);
-    		$user['count_messages'] = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
-    		$user['first_connection'] = Tracking::get_first_connection_date_on_the_course($user['user_id'], $courseId, $session_id);
-    		$user['last_connection'] = Tracking::get_last_connection_date_on_the_course($user['user_id'], $courseInfo, $session_id);
+            $user['count_assignments'] = Tracking::count_student_assignments(
+                $user['user_id'],
+                $course_code,
+                $session_id
+            );
+            $user['count_messages'] = Tracking::count_student_messages(
+                $user['user_id'],
+                $course_code,
+                $session_id
+            );
+            $user['first_connection'] = Tracking::get_first_connection_date_on_the_course(
+                $user['user_id'],
+                $courseId,
+                $session_id
+            );
+            $user['last_connection'] = Tracking::get_last_connection_date_on_the_course(
+                $user['user_id'],
+                $courseInfo,
+                $session_id
+            );
 
     		// we need to display an additional profile field
     		$user['additional'] = '';
@@ -6547,7 +6564,6 @@ class TrackingUserLog
                         ORDER BY YEAR(access_date),MONTH(access_date) ASC";
 
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
-    		//$results = getManyResults2Col($sql);
     		$results = getManyResults3Col($sql);
 
     		echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
@@ -6710,9 +6726,9 @@ class TrackingUserLog
     	if (substr($view,2,1) == '1') {
     		$new_view = substr_replace($view,'0',2,1);
     		echo "<tr>
-                        <td valign='top'>
-                        <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('WorkUploads')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00100'>".get_lang('ExportAsCSV')."</a>]
-                        </td>
+                    <td valign='top'>
+                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('WorkUploads')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00100'>".get_lang('ExportAsCSV')."</a>]
+                    </td>
                 </tr>";
     		echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('WorksDetails')."<br>";
     		$sql = "SELECT u.upload_date, w.title, w.author,w.url
@@ -6758,9 +6774,9 @@ class TrackingUserLog
     		$new_view = substr_replace($view,'1',2,1);
     		echo "
                 <tr>
-                        <td valign='top'>
-                        +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('WorkUploads')."</a>
-                        </td>
+                    <td valign='top'>
+                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('WorkUploads')."</a>
+                    </td>
                 </tr>
             ";
     	}
@@ -6785,11 +6801,11 @@ class TrackingUserLog
             ";
     		echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('LinksDetails')."<br>";
     		$sql = "SELECT cl.title, cl.url
-                        FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-                        WHERE sl.links_link_id = cl.id
-                            AND sl.c_id = $courseId
-                            AND sl.links_user_id = ".intval($user_id)."
-                        GROUP BY cl.title, cl.url";
+                    FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
+                    WHERE sl.links_link_id = cl.id
+                        AND sl.c_id = $courseId
+                        AND sl.links_user_id = ".intval($user_id)."
+                    GROUP BY cl.title, cl.url";
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
     		$results = StatsUtils::getManyResults2Col($sql);
     		echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
@@ -6815,9 +6831,9 @@ class TrackingUserLog
     		$new_view = substr_replace($view,'1',3,1);
     		echo "
                 <tr>
-                        <td valign='top'>
-                        +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('LinksAccess')."</a>
-                        </td>
+                    <td valign='top'>
+                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('LinksAccess')."</a>
+                    </td>
                 </tr>
             ";
     	}
@@ -6834,7 +6850,7 @@ class TrackingUserLog
     public static function display_document_tracking_info($view, $user_id, $course_code, $session_id = 0)
     {
     	// protect data
-    	$user_id     = intval($user_id);
+        $user_id = intval($user_id);
         $courseId = api_get_course_int_id($course_code);
     	$session_id = intval($session_id);
 
@@ -6843,19 +6859,19 @@ class TrackingUserLog
     		$new_view = substr_replace($view,'0',4,1);
     		echo "
                 <tr>
-                        <td valign='top'>
-                        <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('DocumentsAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00001'>".get_lang('ExportAsCSV')."</a>]
-                        </td>
+                    <td valign='top'>
+                    <font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('DocumentsAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00001'>".get_lang('ExportAsCSV')."</a>]
+                    </td>
                 </tr>
             ";
     		echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('DocumentsDetails')."<br>";
 
     		$sql = "SELECT down_doc_path
-                        FROM $downloads_table
-                        WHERE c_id = $courseId
-                            AND down_user_id = $user_id
-                            AND down_session_id = $session_id
-                        GROUP BY down_doc_path";
+                    FROM $downloads_table
+                    WHERE c_id = $courseId
+                        AND down_user_id = $user_id
+                        AND down_session_id = $session_id
+                    GROUP BY down_doc_path";
 
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
     		$results = StatsUtils::getManyResults1Col($sql);
@@ -6882,9 +6898,9 @@ class TrackingUserLog
     		$new_view = substr_replace($view,'1',4,1);
     		echo "
                 <tr>
-                        <td valign='top'>
-                        +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('DocumentsAccess')."</a>
-                        </td>
+                    <td valign='top'>
+                    +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('DocumentsAccess')."</a>
+                    </td>
                 </tr>
             ";
     	}

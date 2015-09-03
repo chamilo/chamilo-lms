@@ -148,25 +148,6 @@ class IndexManager
         return false;
     }
 
-
-    /**
-     * Displays the right-hand menu for anonymous users:
-     * login form, useful links, help section
-     * Warning: function defines globals
-     * @version 1.0.1
-     * @todo does $_plugins need to be global?
-     */
-    function display_anonymous_right_menu()
-    {
-        global $loginFailed, $_user;
-        $display_add_course_link    = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
-        $current_user_id            = api_get_user_id();
-
-        echo self::set_login_form(false);
-        echo self::return_teacher_link();
-        echo self::return_notice();
-    }
-
     function return_teacher_link()
     {
         $html = '';
@@ -279,7 +260,7 @@ class IndexManager
 
     function return_notice()
     {
-        $sys_path               = api_get_path(SYS_PATH);
+        $sys_path = api_get_path(SYS_PATH);
         $user_selected_language = api_get_interface_language();
 
         $html = '';
@@ -493,8 +474,11 @@ class IndexManager
                     LEFT JOIN $main_course_table t3 ON (t3.category_code = t1.code $platform_visible_courses)
                     INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.c_id = t3.id)
-                    WHERE url_rel_course.access_url_id = $url_access_id AND t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
-                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
+                    WHERE
+                        url_rel_course.access_url_id = $url_access_id AND
+                        t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count
+                    ORDER BY t1.tree_pos, t1.name";
             }
         }
 
@@ -587,7 +571,7 @@ class IndexManager
                     // 3. the user is logged in and the user is subscribed to the course and the course visibility is not COURSE_VISIBILITY_CLOSED;
                     // 4. the user is logged in and the user is course admin of te course (regardless of the course visibility setting);
                     // 5. the user is the platform admin api_is_platform_admin().
-                    //
+
                     $courses_shown++;
                     $courses_list_string .= "<li>";
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
@@ -629,13 +613,7 @@ class IndexManager
                     // 2.
                     if ($user_identified && !array_key_exists($course['code'], $courses_of_user)) {
                         if ($course['subscribe'] == '1') {
-                        /*$courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS($_GET['category']).'" method="post">';
-                        $courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
-                        $courses_list_string .= '<input type="hidden" name="subscribe" value="'.$course['code'].'" />';
-                        $courses_list_string .= '<input type="image" name="unsub" src="main/img/enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'</form>';
-                            */
-                        $courses_list_string .= '&nbsp;<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;category_code='.Security::remove_XSS($_GET['category']).'">'.get_lang('Subscribe').'</a><br />';
-
+                            $courses_list_string .= '&nbsp;<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&category_code='.Security::remove_XSS($_GET['category']).'">'.get_lang('Subscribe').'</a><br />';
                         } else {
                             $courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');
                         }
@@ -651,7 +629,9 @@ class IndexManager
             $result .=  $courses_list_string;
         }
         if ($category != '') {
-            $result .=  '<p><a href="'.api_get_self().'"> ' . Display :: return_icon('back.png', get_lang('BackToHomePage')) . get_lang('BackToHomePage') . '</a></p>';
+            $result .=  '<p><a href="'.api_get_self().'"> ' .
+                Display :: return_icon('back.png', get_lang('BackToHomePage')).
+                get_lang('BackToHomePage') . '</a></p>';
         }
         return $result;
     }
@@ -666,7 +646,8 @@ class IndexManager
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        // Secondly we select the courses that are in a category (user_course_cat <> 0) and sort these according to the sort of the category
+        // Secondly we select the courses that are in a category (user_course_cat <> 0)
+        // and sort these according to the sort of the category
         $user_id = intval($user_id);
         $sql_select_courses = "SELECT
             course.code k,
@@ -710,7 +691,8 @@ class IndexManager
     /**
      * @todo use the template system
      */
-    function show_right_block($title, $content, $id = null, $params = null, $idAccordion = null, $idCollpase = null) {
+    function show_right_block($title, $content, $id = null, $params = null, $idAccordion = null, $idCollpase = null)
+    {
         if (!empty($idAccordion)) {
             $html = null;
             $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;
@@ -889,6 +871,7 @@ class IndexManager
             'profile',
             'profileCollapse'
         );
+
         return $html;
     }
 
@@ -1561,7 +1544,7 @@ class IndexManager
     }
 
     /**
-     * Return HTML code for personnal user course category
+     * Return HTML code for personal user course category
      * @param $id
      * @param $title
      * @return string
@@ -1577,6 +1560,7 @@ class IndexManager
             array('class' => 'sessionView'),
             ICON_SIZE_LARGE
         );
+
         return "<div class='session-view-user-category'>$icon<span>$title</span></div>";
     }
 
@@ -1757,5 +1741,4 @@ class IndexManager
     {
         setcookie('defaultMyCourseView'.$userId, $view);
     }
-
 }

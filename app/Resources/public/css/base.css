@@ -6220,9 +6220,12 @@ div#chat-remote-video video {
   text-align: left;
   padding-left: 15px;
 }
-/*form input.form-control{
-  margin-top: 10px;
-}*/
+.tab-wrapper .tab-content{
+    padding: 25px;
+}
+.description-upload{
+    margin-bottom: 10px;
+}
 #whoisonline .items-user{
   text-align: center;
   /*border:1px solid #dddddd; */

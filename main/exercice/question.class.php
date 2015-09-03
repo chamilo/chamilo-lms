@@ -154,12 +154,21 @@ abstract class Question
                 $objQuestion->course        = $course_info;
                 $objQuestion->category	    = Testcategory::getCategoryForQuestion($id);
 
-                $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
-                $result_exercise_list = Database::query($sql);
+                $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+
+                $sql = "SELECT DISTINCT q.exercice_id
+                        FROM $TBL_EXERCICE_QUESTION q
+                        INNER JOIN $tblQuiz e
+                        ON e.c_id = q.c_id AND e.id = e.exercice_id
+                        WHERE
+                            q.c_id = $course_id AND
+                            q.question_id = $id AND
+                            e.active >= 0";
+                $result = Database::query($sql);
 
                 // fills the array with the exercises which this question is in
-                if ($result_exercise_list) {
-                    while ($obj = Database::fetch_object($result_exercise_list)) {
+                if ($result) {
+                    while ($obj = Database::fetch_object($result)) {
                         $objQuestion->exerciseList[] = $obj->exercice_id;
                     }
                 }

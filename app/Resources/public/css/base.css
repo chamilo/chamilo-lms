@@ -6226,6 +6226,9 @@ div#chat-remote-video video {
 .description-upload{
     margin-bottom: 10px;
 }
+.files-table{
+    padding-top: 20px;
+}
 #whoisonline .items-user{
   text-align: center;
   /*border:1px solid #dddddd; */

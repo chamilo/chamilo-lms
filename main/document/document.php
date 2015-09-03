@@ -1676,9 +1676,6 @@ $actions .= '</div>';
 $actions .= '</div>';
 $actions .= '</div>';
 
-
-
-
 $table_footer = '';
 $total_size = 0;
 $sortable_data = array();

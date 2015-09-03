@@ -874,6 +874,7 @@ hr.separator:after {
   width: 60%;
   margin-right: 20%;
   margin-left: 20%;
+  margin-top: 18px;
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -886,6 +887,13 @@ hr.separator:after {
   text-align: center;
   color: #bcbcbc;
   font-size: 12px;
+}
+.registration-form .form_required,
+.registration-form .form_required + small {
+    display: none;
+}
+.registration-form .row {
+    margin-bottom: 0;
 }
 .my-progress .profile-user img{
   width: 50%;

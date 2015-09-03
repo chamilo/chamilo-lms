@@ -2101,14 +2101,13 @@ class CourseManager
                 $url_id = api_get_current_access_url_id();
             }
             UrlManager::delete_url_rel_course($courseId, $url_id);
-            $count = UrlManager::getcountUrlRelCourse($courseId);
+            $count = UrlManager::getCountUrlRelCourse($courseId);
         }
 
         if ($count == 0) {
             self::create_database_dump($code);
 
             $course_tables = AddCourse::get_course_tables();
-
 
             // Cleaning c_x tables
             if (!empty($courseId)) {

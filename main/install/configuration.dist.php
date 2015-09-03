@@ -308,4 +308,10 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // Hide session course coach in dropbox sent to user list
 // $_configuration['dropbox_hide_course_coach'] = false;
 // Show Default view and Session view link in My Courses tab
+<<<<<<< HEAD
 //$_configuration['my_courses_view_by_session'] = false;
+=======
+//$_configuration['my_courses_view_by_session'] = false;
+// If user profile is incomplete (firstname or lastname or email empty) go to profile edit at loggin
+//$_configuration['force_update_incomplete_profile'] = false;
+>>>>>>> 16ea181... cas improvment

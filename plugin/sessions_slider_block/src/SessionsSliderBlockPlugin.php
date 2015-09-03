@@ -13,6 +13,8 @@ class SessionsSliderBlockPlugin extends Plugin
     const FIELD_VARIABLE_SHOW_IN_SLIDER = 'show_in_slider';
     const FIELD_VARIABLE_COURSE_LEVEL = 'course_level';
 
+    private $maxSessionToShowForLoggedUser = 3;
+
     /**
      * Class constructor
      */
@@ -402,7 +404,20 @@ SQL;
             }
         }
 
-        return array_unique($sessionToShow);
+        $sessionToShow = array_unique($sessionToShow);
+
+        if (count($sessionToShow) < $this->maxSessionToShowForLoggedUser) {
+            $sessionsDiff = array_diff($sessionsIdList, $sessionToShow);
+            $sessionsToAppend = array_slice(
+                $sessionsDiff,
+                0,
+                count($sessionsIdList) - count($sessionToShow)
+            );
+
+            $sessionToShow = array_merge($sessionToShow, $sessionsToAppend);
+        }
+
+        return $sessionToShow;
     }
 
     /**

@@ -37,8 +37,25 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     }
 
     $radios = array();
-    $radios[] = $form->createElement('radio', 'start_date_type', null, get_lang('StartDateFromAnAttendance'),'1',array('onclick' => 'check_per_attendance(this)', 'id'=>'from_attendance'));
-    $radios[] = $form->createElement('radio', 'start_date_type', null, get_lang('StartDateCustom'),'2',array('onclick' => 'check_per_custom_date(this)', 'id'=>'custom_date'));
+    $radios[] = $form->createElement(
+        'radio',
+        'start_date_type',
+        null,
+        get_lang('StartDateFromAnAttendance'),
+        '1',
+        array(
+            'onclick' => 'check_per_attendance(this)',
+            'id' => 'from_attendance',
+        )
+    );
+    $radios[] = $form->createElement(
+        'radio',
+        'start_date_type',
+        null,
+        get_lang('StartDateCustom'),
+        '2',
+        array('onclick' => 'check_per_custom_date(this)', 'id' => 'custom_date')
+    );
     $form->addGroup($radios, null, get_lang('StartDateOptions'));
 
     if (isset($thematic_advance_data['attendance_id']) &&
@@ -70,7 +87,6 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         $form->addElement('select', 'start_date_by_attendance', get_lang('StartDate'), $calendar_select, array('id'=>'start_date_select_calendar'));
     }
     $form->addElement('html', '</div>');
-
     $form->addElement('html', '</div>');
 
     $form->addText(
@@ -83,6 +99,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
             'autofocus' => 'autofocus',
         )
     );
+
     $form->addHtmlEditor(
         'content',
         get_lang('Content'),
@@ -100,7 +117,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     } else {
         $form->addButtonUpdate(get_lang('Save'));
     }
-    //$form->addElement('html', '<a href="#" id="save_button" onclick="save();">Save</a>');
+
     $attendance_select_item_id = null;
 
     if (count($attendance_select) > 1) {

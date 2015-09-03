@@ -4,9 +4,7 @@
  * Special reporting page for admins
  * @package chamilo.reporting
  */
-/**
- * Code
- */
+
 ob_start();
 $cidReset = true;
 
@@ -30,23 +28,15 @@ $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
 
-
-/**
- * MAIN PART
- */
-/*
- * liste nominative avec coordonnies et lien vers les cours et les stagiaires dont il est le responsable.
- */
-
 if (isset($_POST['export'])) {
     $order_clause = api_is_western_name_order(PERSON_NAME_DATA_EXPORT) ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 } else {
     $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 }
-$sql_admins = "SELECT user.user_id,lastname,firstname,email
-	FROM $tbl_user as user, $tbl_admin as admin
-	WHERE admin.user_id=user.user_id" . $order_clause;
-$result_admins = Database::query($sql_admins);
+$sql = "SELECT user.user_id,lastname,firstname,email
+        FROM $tbl_user as user, $tbl_admin as admin
+        WHERE admin.user_id=user.user_id" . $order_clause;
+$result_admins = Database::query($sql);
 
 if (api_is_western_name_order()) {
     echo '<table class="data_table"><tr><th>' . get_lang('FirstName') . '</th><th>' . get_lang('LastName') . '</th><th>' . get_lang('Email') . '</th></tr>';

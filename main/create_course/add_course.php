@@ -77,7 +77,6 @@ $form->addElement(
         get_lang('Ex')
     ),
     array(
-        'class' => 'span6',
         'id' => 'title'
     )
 );

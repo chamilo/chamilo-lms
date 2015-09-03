@@ -1,6 +1,6 @@
 /*
     Theme Name: Chamilo Base
-    URI Project: http://www.chamilo.org
+    URL Project: http://www.chamilo.org
     Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 3.0.x
     Author:
         alex.aragon@beeznest.com
@@ -6403,7 +6403,9 @@ a.sessionView {
   padding: 6px;
   font-size: 12px;
 }
-
+#listFriends .help{
+  font-size: 12px;
+}
 #listFriends a{
   display: block;
   text-overflow: ellipsis;

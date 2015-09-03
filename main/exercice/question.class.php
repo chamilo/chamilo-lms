@@ -101,7 +101,7 @@ abstract class Question
      *
      * @return Question
      */
-    static function read($id, $course_id = null)
+    public static function read($id, $course_id = null)
     {
         $id = intval($id);
 
@@ -144,13 +144,25 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->category = TestCategory::getCategoryForQuestion($id);
 
-                $sql = "SELECT exercice_id FROM $TBL_EXERCISE_QUESTION
-                        WHERE c_id = $course_id AND question_id = $id";
-                $result_exercise_list = Database::query($sql);
+                $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+
+                /*$sql = "SELECT exercice_id FROM $TBL_EXERCISE_QUESTION
+                        WHERE c_id = $course_id AND question_id = $id";*/
+
+                $sql = "SELECT DISTINCT q.exercice_id
+                        FROM $TBL_EXERCISE_QUESTION q
+                        INNER JOIN $tblQuiz e
+                        ON e.c_id = q.c_id AND e.id = e.exercice_id
+                        WHERE
+                            q.c_id = $course_id AND
+                            q.question_id = $id AND
+                            e.active >= 0";
+
+                $result = Database::query($sql);
 
                 // fills the array with the exercises which this question is in
-                if ($result_exercise_list) {
-                    while ($obj = Database::fetch_object($result_exercise_list)) {
+                if ($result) {
+                    while ($obj = Database::fetch_object($result)) {
                         $objQuestion->exerciseList[] = $obj->exercice_id;
                     }
                 }
@@ -167,6 +179,7 @@ abstract class Question
      * returns the question ID
      *
      * @author Olivier Brouckaert
+     *
      * @return - integer - question ID
      */
     public function selectId()
@@ -194,6 +207,7 @@ abstract class Question
     public function selectDescription()
     {
         $this->description = text_filter($this->description);
+
         return $this->description;
     }
 
@@ -1334,7 +1348,7 @@ abstract class Question
     /**
      * Returns an instance of the class corresponding to the type
      * @param integer $type the type of the question
-     * @return an instance of a Question subclass (or of Questionc class by default)
+     * @return $this instance of a Question subclass (or of Questionc class by default)
      */
     public static function getInstance($type)
     {

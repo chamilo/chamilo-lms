@@ -36,7 +36,6 @@ function delete_friend (element_div) {
 	}
 }
 
-
 function search_image_social()  {
 	var name_search = $("#id_search_image").attr("value");
 	 $.ajax({
@@ -58,7 +57,6 @@ function show_icon_delete(element_html) {
 	$(ident).attr("alt","'.get_lang('Delete', '').'");
 	$(ident).attr("title","'.get_lang('Delete', '').'");
 }
-
 
 function hide_icon_delete(element_html)  {
 	elem_id=$(element_html).attr("id");
@@ -82,9 +80,6 @@ $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Friends'));
 
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('friends');
-
-$user_id = api_get_user_id();
-
 $user_id = api_get_user_id();
 $name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q'] : null;
 $number_friends = 0;

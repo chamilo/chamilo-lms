@@ -43,7 +43,7 @@ api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
 
 DocumentManager::removeGeneratedAudioTempFile();
 
-if(
+if (
     isset($_SESSION['temp_realpath_image']) &&
     !empty($_SESSION['temp_realpath_image']) &&
     file_exists($_SESSION['temp_realpath_image'])
@@ -1510,11 +1510,11 @@ $actions .= '<div class="col-md-8">';
 /* GO TO PARENT DIRECTORY */
 
 if ($curdirpath != '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
-    
+
     $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'">';
     $actions .= Display::return_icon('folder_up.png', get_lang('Up'), '', ICON_SIZE_MEDIUM);
     $actions .= '</a>';
-    
+
 }
 
 if ($is_certificate_mode && $curdirpath != '/certificates') {
@@ -1646,7 +1646,7 @@ if ($image_present && !isset($_GET['keyword'])) {
 
 if (api_is_allowed_to_edit(null, true)) {
     $actions .= Display::url(
-        Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('statistics.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'document/document_quota.php?'.api_get_cidreq()
     );
 }
@@ -1675,9 +1675,6 @@ if (!$is_certificate_mode) {
 $actions .= '</div>';
 $actions .= '</div>';
 $actions .= '</div>';
-
-
-
 
 $table_footer = '';
 $total_size = 0;
@@ -1986,7 +1983,7 @@ echo $dirForm;
 echo $selector;
 
 $table->display();
-
+/*
 if (count($documentAndFolders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {
         // Getting the course quota
@@ -2003,7 +2000,7 @@ if (count($documentAndFolders) > 1) {
             $already_consumed_space_course
         );
     }
-}
+}*/
 if (!empty($table_footer)) {
     Display::display_warning_message($table_footer);
 }

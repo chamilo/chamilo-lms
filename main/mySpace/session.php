@@ -60,27 +60,29 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
         );
     }
 
-    echo '<div class="actions">';
+    $actionsLeft = '';
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
-            echo $item;
+            $actionsLeft .= $item;
         }
     }
+
     if (count($a_sessions) > 0) {
-        echo '<span style="float:right">';
-        echo Display::url(
+        $actionsRight = Display::url(
             Display::return_icon('printer.png', get_lang('Print'), array(), 32),
             'javascript: void(0);',
             array('onclick'=>'javascript: window.print();')
         );
-        echo Display::url(
+        $actionsRight .= Display::url(
             Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32),
             api_get_self().'?export=csv'
         );
-        echo '</span>';
     }
-    echo '</div>';
+
+    $toolbar = Display::toolbarAction('toolbar-session', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
+    echo $toolbar;
+
     echo Display::page_header(get_lang('YourSessionsList'));
 
 } else {

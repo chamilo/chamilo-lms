@@ -126,7 +126,7 @@ $(document).ready(function() {
                 var end_date_value = end.format('{{ js_format_date }}');
 
                 $('#start_date').html(start_date_value);
-
+                
                 if (start_date_value == end_date_value) {
                     $('#end_date').html(' - ' + end_date_value);
                 } else {
@@ -138,6 +138,13 @@ $(document).ready(function() {
 				$('#color_calendar').removeClass('group_event');
 				$('#color_calendar').addClass('label_tag');
 				$('#color_calendar').addClass('{{ type_event_class }}');
+                                
+                //It shows the CKEDITOR while Adding an Event
+                $('#cke_content').show();
+                //It Fixing a minor bug with textarea ckeditor.remplace
+                $('#content').css('display','none');
+                //Reset the CKEditor content that persist in memory
+                CKEDITOR.instances['content'].setData('');
 
 				allFields.removeClass("ui-state-error");
 				$("#dialog-form").dialog("open");
@@ -146,6 +153,11 @@ $(document).ready(function() {
 						'{{ "Add" | get_lang }}' : function() {
 							var bValid = true;
 							bValid = bValid && checkLength(title, "title", 1, 255);
+                                                        
+                            //This For make the CKEDITOR SERIALIZABLE
+                            for ( instance in CKEDITOR.instances ) {
+                                CKEDITOR.instances[instance].updateElement();
+                            }
 
 							var params = $("#add_event_form").serialize();
 
@@ -264,6 +276,9 @@ $(document).ready(function() {
                 $('#color_calendar').removeClass('personal_event');
                 $('#color_calendar').removeClass('group_event');
                 $('#color_calendar').addClass(calEvent.type+'_event');
+                
+                //It hides the CKEDITOR while clicking an existing Event
+                $('#cke_content').hide();
 
                 $('#start_date').html(calEvent.start.format("YY-MM-DD"));
                 if (calEvent.end) {

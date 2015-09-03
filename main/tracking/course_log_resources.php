@@ -5,8 +5,6 @@
  *	@package chamilo.tracking
  */
 
-/* INIT SECTION */
-
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 // Including the global initialization file
 require_once '../inc/global.inc.php';

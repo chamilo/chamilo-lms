@@ -2088,7 +2088,6 @@ class CourseManager
             return;
         }
 
-
         $sql = "SELECT * FROM $table_course WHERE code = '" . $codeFiltered . "'";
         $res = Database::query($sql);
         $course = Database::fetch_array($res);
@@ -2101,7 +2100,7 @@ class CourseManager
                 $url_id = api_get_current_access_url_id();
             }
             UrlManager::delete_url_rel_course($courseId, $url_id);
-            $count = UrlManager::getcountUrlRelCourse($courseId);
+            $count = UrlManager::getCountUrlRelCourse($courseId);
         }
 
         if ($count == 0) {
@@ -2109,6 +2108,22 @@ class CourseManager
 
             $course_tables = AddCourse::get_course_tables();
 
+            // Cleaning group categories
+
+            $groupCategories = GroupManager::get_categories($course['code']);
+
+            if (!empty($groupCategories)) {
+                foreach ($groupCategories as $category) {
+                    GroupManager::delete_category($category['id'], $course['code']);
+                }
+            }
+
+            // Cleaning groups
+            $groups = GroupManager::get_groups();
+            if (!empty($groups)) {
+                $groupList = array_column($groups, 'id');
+                GroupManager::delete_groups($groupList);
+            }
 
             // Cleaning c_x tables
             if (!empty($courseId)) {

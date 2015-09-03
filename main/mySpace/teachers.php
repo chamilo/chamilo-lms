@@ -178,8 +178,7 @@ if ($export_csv) {
 }
 
 $sort_by_first_name = api_sort_by_first_name();
-$actions = '<div class="actions">';
-
+$actionsLeft = '';
 if (api_is_drh()) {
     $menu_items = array(
         Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php" ),
@@ -192,23 +191,24 @@ if (api_is_drh()) {
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
-            $actions .= $item;
+            $actionsLeft .= $item;
         }
     }
 }
 
-$actions .= '&nbsp;<span style="float:right">';
-$actions .= Display::url(
+$actionsRight = '';
+$actionsRight .= Display::url(
     Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM),
     'javascript: void(0);',
     array('onclick'=>'javascript: window.print();')
 );
-$actions .= Display::url(
+$actionsRight .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
     api_get_self().'?export=csv&keyword='.$keyword
 );
-$actions .= '</span>';
-$actions .= '</div>';
+
+
+$toolbar = Display::toolbarAction('toolbar-teachers', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
 
 $table = new SortableTable(
     'tracking_teachers',
@@ -271,7 +271,7 @@ if ($export_csv) {
     exit;
 } else {
     Display::display_header($nameTools);
-    echo $actions;
+    echo $toolbar;
     $page_title = get_lang('Teachers');
     echo Display::page_subheader($page_title);
     if (isset($active)) {

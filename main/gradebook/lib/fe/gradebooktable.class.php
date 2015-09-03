@@ -883,11 +883,11 @@ class GradebookTable extends SortableTable
         switch ($item->get_item_type()) {
             // category
             case 'C' :
-                $prms_uri='?selectcat=' . $item->get_id() . '&amp;view='.$view;
+                $prms_uri='?selectcat=' . $item->get_id() . '&view='.$view;
 
                 if (isset($_GET['isStudentView'])) {
                     if ( isset($is_student) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
-                        $prms_uri=$prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
+                        $prms_uri=$prms_uri.'&isStudentView='.Security::remove_XSS($_GET['isStudentView']);
                     }
                 }
 
@@ -897,22 +897,28 @@ class GradebookTable extends SortableTable
                 . $item->get_name()
                 . '</a>'
                 . ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']'.$show_message : '');
-            // evaluation
+                // evaluation
             case 'E' :
                 $cat = new Category();
-                $course_id = CourseManager::get_course_by_category($_GET['selectcat']);
-                $show_message = $cat->show_message_resource_delete($course_id);
+                $show_message = false;
+                $course_id = 0;
+                if (isset($_GET['selectcat'])) {
+                    $course_id = CourseManager::get_course_by_category(
+                        $_GET['selectcat']
+                    );
+                    $show_message = $cat->show_message_resource_delete($course_id);
+                }
 
                 // course/platform admin can go to the view_results page
                 if (api_is_allowed_to_edit() && $show_message===false) {
                     if ($item->get_type() == 'presence') {
                         return '&nbsp;'
-                        . '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
+                        . '<a href="gradebook_view_result.php?cidReq='.$course_id.'&selecteval=' . $item->get_id() . '">'
                         . $item->get_name()
                         . '</a>';
                     } else {
                         return '&nbsp;'
-                        . '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
+                        . '<a href="gradebook_view_result.php?cidReq='.$course_id.'&selecteval=' . $item->get_id() . '">'
                         . $item->get_name()
                         . '</a>&nbsp;'.Display::label(get_lang('Evaluation'));
                     }

@@ -419,7 +419,7 @@ class Wiki
             Database::update(
                 $tbl_wiki_conf,
                 $params,
-                ['page_id => ? AND c_id = ?' => [$pageId, $course_id]]
+                ['page_id = ? AND c_id = ?' => [$pageId, $course_id]]
             );
         }
 

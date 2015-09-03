@@ -37,9 +37,6 @@ class ThematicController
     {
         $thematic = new Thematic();
         $data = array();
-        $error = false;
-        $msg_add = false;
-
         $check = Security::check_token('request');
         $thematic_id = isset($_REQUEST['thematic_id']) ? intval($_REQUEST['thematic_id']) : null;
         $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;

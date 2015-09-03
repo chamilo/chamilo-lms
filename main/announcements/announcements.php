@@ -237,7 +237,7 @@ switch ($action) {
                 // determines which users have to be warned (i.e the users who have been inactive for x days or more
                 $since = isset($_GET['since']) ? intval($_GET['since']) : 6;
                 // getting the users who have to be reminded
-                $to = Tracking:: get_inactives_students_in_course(
+                $to = Tracking:: getInactiveStudentsInCourse(
                     api_get_course_int_id(),
                     $since,
                     api_get_session_id()

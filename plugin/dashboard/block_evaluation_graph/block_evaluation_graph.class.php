@@ -83,28 +83,28 @@ class BlockEvaluationGraph extends Block
                         </a></div>
                     </div>
                     <div class="panel-body">';
-                        if (empty($evaluations_base_courses_graph) && empty($evaluations_courses_in_sessions_graph)) {
-                            $html .= '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
-                        } else {
-                            // display evaluations base courses graph
-                            if (!empty($evaluations_base_courses_graph)) {
-                                foreach ($evaluations_base_courses_graph as $course_code => $img_html) {
-                                    $html .= '<div><strong>'.$course_code.'</strong></div>';
-                                    $html .= $img_html;
-                                }
-                            }
-                            // display evaluations base courses graph
-                            if (!empty($evaluations_courses_in_sessions_graph)) {
-                                foreach ($evaluations_courses_in_sessions_graph as $session_id => $courses) {
-                                    $session_name = api_get_session_name($session_id);
-                                    $html .= '<div><strong>'.$session_name.':'.get_lang('Evaluations').'</strong></div>';
-                                    foreach ($courses as $course_code => $img_html) {
-                                        $html .= '<div><strong>'.$course_code.'</strong></div>';
-                                        $html .= $img_html;
-                                    }
-                                }
-                            }
-                        }
+        if (empty($evaluations_base_courses_graph) && empty($evaluations_courses_in_sessions_graph)) {
+            $html .= '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
+        } else {
+            // display evaluations base courses graph
+            if (!empty($evaluations_base_courses_graph)) {
+                foreach ($evaluations_base_courses_graph as $course_code => $img_html) {
+                    $html .= '<div><strong>'.$course_code.'</strong></div>';
+                    $html .= $img_html;
+                }
+            }
+            // display evaluations base courses graph
+            if (!empty($evaluations_courses_in_sessions_graph)) {
+                foreach ($evaluations_courses_in_sessions_graph as $session_id => $courses) {
+                    $session_name = api_get_session_name($session_id);
+                    $html .= '<div><strong>'.$session_name.':'.get_lang('Evaluations').'</strong></div>';
+                    foreach ($courses as $course_code => $img_html) {
+                        $html .= '<div><strong>'.$course_code.'</strong></div>';
+                        $html .= $img_html;
+                    }
+                }
+            }
+        }
 		$html .= '</div>
 			     </div>';
 

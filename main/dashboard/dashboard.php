@@ -39,52 +39,52 @@ echo '</div>';
 
 // block dashboard view
 if (isset($dashboard_view) && $dashboard_view == 'blocks') {
-	if (count($blocks) > 0) {
-		$columns = array();
-		// group content html by number of column
-		if (is_array($blocks)) {
-			$tmp_columns = array();
-			foreach ($blocks as $block) {
-				$tmp_columns[] = $block['column'];
-				if (in_array($block['column'], $tmp_columns)) {
-					$columns['column_'.$block['column']][] = $block['content_html'];
-				}
-			}
-		}
+    if (isset($blocks) && count($blocks) > 0) {
+        $columns = array();
+        // group content html by number of column
+        if (is_array($blocks)) {
+            $tmp_columns = array();
+            foreach ($blocks as $block) {
+                $tmp_columns[] = $block['column'];
+                if (in_array($block['column'], $tmp_columns)) {
+                    $columns['column_'.$block['column']][] = $block['content_html'];
+                }
+            }
+        }
 
-		echo '<div id="columns" class="row">';
-		if (count($columns) > 0) {
-			$columns_name = array_keys($columns);
-			// blocks for column 1
-			if (in_array('column_1',$columns_name)) {
-				echo '<div id="column1" class="col-md-6">';
-					foreach ($columns['column_1'] as $content) {
-						echo $content;
-					}
-				echo '</div>';
-			} else {
-				echo '<div id="column1" class="col-md-6">';
-				echo '&nbsp;';
-				echo '</div>';
-			}
-			// blocks for column 2
-			if (in_array('column_2',$columns_name)) {
-				// blocks for column 1
-				echo '<div id="column2" class="col-md-6">';
-					foreach ($columns['column_2'] as $content) {
-						echo $content;
-					}
-				echo '</div>';
-			} else {
-				echo '<div id="column2" class="col-md-6">';
-				echo '&nbsp;';
-				echo '</div>';
-			}
-		}
-		echo '</div>';
-	} else {
-		echo '<div style="margin-top:20px;">'.get_lang('YouHaveNotEnabledBlocks').'</div>';
-	}
+        echo '<div id="columns" class="row">';
+        if (count($columns) > 0) {
+            $columns_name = array_keys($columns);
+            // blocks for column 1
+            if (in_array('column_1',$columns_name)) {
+                echo '<div id="column1" class="col-md-6">';
+                    foreach ($columns['column_1'] as $content) {
+                        echo $content;
+                    }
+                echo '</div>';
+            } else {
+                echo '<div id="column1" class="col-md-6">';
+                echo '&nbsp;';
+                echo '</div>';
+            }
+            // blocks for column 2
+            if (in_array('column_2',$columns_name)) {
+                // blocks for column 1
+                echo '<div id="column2" class="col-md-6">';
+                    foreach ($columns['column_2'] as $content) {
+                        echo $content;
+                    }
+                echo '</div>';
+            } else {
+                echo '<div id="column2" class="col-md-6">';
+                echo '&nbsp;';
+                echo '</div>';
+            }
+        }
+        echo '</div>';
+    } else {
+        echo '<div style="margin-top:20px;">'.get_lang('YouHaveNotEnabledBlocks').'</div>';
+    }
 
 } else {
 	// block dashboard list

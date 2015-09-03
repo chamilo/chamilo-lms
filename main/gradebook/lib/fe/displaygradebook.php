@@ -516,7 +516,10 @@ class DisplayGradebook
             } else {
                 $header .= '<td></td>';
             }
-            if ($is_course_admin && $message_resource === false && $_GET['selectcat'] != 0) {
+            if ($is_course_admin &&
+                $message_resource === false &&
+                isset($_GET['selectcat']) && $_GET['selectcat'] != 0
+            ) {
                 /* $header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/view_list.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';
                   if ($is_course_admin && $message_resource===false) {
                   $header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() .'"><img src="../img/acces_tool.gif" alt="' . get_lang('ScoreEdit') . '" /> ' . get_lang('ScoreEdit') . '</a>';

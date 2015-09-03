@@ -2,19 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This file contains a class used like library, provides functions for dashboard.
- * @author Christian Fasanando <christian1827@gmail.com>
- * @package chamilo.dashboard
- */
-
-/**
  * DashboardManager can be used to manage dashboard
+ * author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.dashboard
  */
 class DashboardManager
 {
 	/**
-	 * contructor
+	 * Constructor
 	 */
 	public function __construct()
 	{
@@ -68,10 +63,14 @@ class DashboardManager
 				}
 				echo '</tr>';
 			} else {
-				echo Display::tag(
-					'tr',
-					Display::tag('td', get_lang('CheckFilePermissions').' '.Security::remove_XSS($plugin_info_file) , array('colspan'=>'3'))
-				);
+				if ($testplugin != 'css') {
+					echo Display::tag(
+						'tr',
+						Display::tag('td',
+							get_lang('CheckFilePermissions') . ' ' . Security::remove_XSS($plugin_info_file),
+							array('colspan' => '3'))
+					);
+				}
 			}
 		}
 
@@ -165,7 +164,7 @@ class DashboardManager
 			foreach ($extra_user_data as $key => $user_data) {
 				$user_id = $key;
 				$user_block_data = self::get_user_block_data($user_id);
-				$user_block_id   = array_keys($user_block_data);
+				$user_block_id = array_keys($user_block_data);
 
 				// clean disabled block data
 				foreach ($user_block_id as $block_id) {

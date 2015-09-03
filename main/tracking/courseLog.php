@@ -157,10 +157,10 @@ $TABLETRACK_LINKS       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS
 $TABLETRACK_DOWNLOADS   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 $TABLETRACK_ACCESS_2    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $TABLETRACK_EXERCISES 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user             = Database::get_main_table(TABLE_MAIN_USER);
-$TABLEQUIZ              = Database::get_course_table(TABLE_QUIZ_TEST);
+$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
+$TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
 $sessionId = api_get_session_id();
 
@@ -342,12 +342,7 @@ if (count($a_students) > 0) {
     $form = new FormValidator(
         'reminder_form',
         'get',
-        api_get_path(REL_CODE_PATH).'announcements/announcements.php'
-    );
-    $renderer = $form->defaultRenderer();
-    $renderer->setElementTemplate(
-        '<span>{label} {element}</span>&nbsp;<button class="save" type="submit">'.get_lang('SendNotification').'</button>',
-        'since'
+        api_get_path(REL_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq()
     );
     $options = array (
         2 => '2 '.get_lang('Days'),
@@ -372,6 +367,9 @@ if (count($a_students) > 0) {
 
     $form->addElement('hidden', 'action', 'add');
     $form->addElement('hidden', 'remindallinactives', 'true');
+    $form->addElement('hidden', 'cidReq', $courseInfo['code']);
+    $form->addElement('hidden', 'id_session', api_get_session_id());
+    $form->addButtonSend(get_lang('SendNotification'));
 
     $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
 

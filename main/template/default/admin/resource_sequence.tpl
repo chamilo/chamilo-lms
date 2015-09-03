@@ -158,6 +158,7 @@
             $('button[name="use_as_reference"]').click(function() {
                 $('button[name="set_requirement"]').prop('disabled', false);
                 $('#requirements').prop('disabled', false);
+                $('#requirements').selectpicker('refresh');
                 $('button[name="save_resource"]').prop('disabled', false);
 
                 useAsReference(type, sequenceId);

@@ -995,7 +995,7 @@ function api_sort_by_first_name($language = null) {
  * This function is aimed at replacing the function mb_convert_encoding() for human-language strings.
  * @link http://php.net/manual/en/function.mb-convert-encoding
  */
-function api_convert_encoding($string, $to_encoding, $from_encoding = null)
+function api_convert_encoding($string, $to_encoding, $from_encoding = 'UTF-8')
 {
     return mb_convert_encoding($string, $to_encoding, $from_encoding);
 }

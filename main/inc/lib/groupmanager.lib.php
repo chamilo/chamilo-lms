@@ -432,20 +432,20 @@ class GroupManager
 
         $sql = "DELETE FROM ".$forum_table."
                 WHERE c_id = $course_id AND forum_of_group IN ('".implode("' , '", $group_ids)."')";
-        $result = Database::query($sql);
+        Database::query($sql);
 
         // Delete item properties of this group.
         $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $sql = "DELETE FROM ".$itemPropertyTable."
                 WHERE c_id = $course_id AND to_group_id IN ('".implode("' , '", $group_ids)."')";
-        $result = Database::query($sql);
+        Database::query($sql);
 
         // delete the groups
         $sql = "DELETE FROM ".$group_table."
                 WHERE c_id = $course_id AND id IN ('".implode("' , '", $group_ids)."')";
         Database::query($sql);
 
-        return Database::affected_rows($result);
+        return true;
     }
 
     /**
@@ -657,7 +657,8 @@ class GroupManager
         $course_id     = $course_info['real_id'];
         $table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
         $sql = "SELECT * FROM $table_group_cat
-                WHERE c_id = $course_id ORDER BY display_order";
+                WHERE c_id = $course_id
+                ORDER BY display_order";
         $res = Database::query($sql);
         $cats = array ();
         while ($cat = Database::fetch_array($res)) {
@@ -759,7 +760,7 @@ class GroupManager
     public static function delete_category($cat_id, $course_code = null)
     {
         $course_info = api_get_course_info($course_code);
-        $course_id     = $course_info['real_id'];
+        $course_id = $course_info['real_id'];
 
         $table_group = Database:: get_course_table(TABLE_GROUP);
         $table_group_cat = Database:: get_course_table(TABLE_GROUP_CATEGORY);
@@ -774,7 +775,8 @@ class GroupManager
             }
             self :: delete_groups($groups_to_delete);
         }
-        $sql = "DELETE FROM $table_group_cat WHERE c_id = $course_id  AND id='".$cat_id."'";
+        $sql = "DELETE FROM $table_group_cat
+                WHERE c_id = $course_id  AND id='".$cat_id."'";
         Database::query($sql);
     }
 

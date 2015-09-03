@@ -210,12 +210,12 @@ class TestTracking extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testget_inactives_students_in_course() {
+	function testGetInactiveStudentsInCourse() {
 		global $_course;
 		$course_code = $_course;
 		$since='2010-10-02';
 		$session_id='';
-		$res=Tracking::get_inactives_students_in_course($course_code, $since, $session_id);
+		$res=Tracking::getInactiveStudentsInCourse($course_code, $since, $session_id);
 	 	if(!is_null($res))$this->assertTrue(is_array($res));
 	 	//var_dump($res);
 	}

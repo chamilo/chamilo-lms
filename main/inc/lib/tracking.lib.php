@@ -3674,11 +3674,11 @@ class Tracking
     /**
      * Get inactive students in course
      * @param    int   $courseId
-     * @param    string    Since login course date (optional, default = 'never')
-     * @param    int        Session id    (optional)
-     * @return    array    Inactives users
+     * @param    string  $since  Since login course date (optional, default = 'never')
+     * @param    int        $session_id    (optional)
+     * @return    array    Inactive users
      */
-    public static function get_inactives_students_in_course($course_code, $since = 'never', $session_id=0)
+    public static function getInactiveStudentsInCourse($courseId, $since = 'never', $session_id = 0)
     {
         $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -3686,9 +3686,11 @@ class Tracking
         $tableCourse   = Database :: get_main_table(TABLE_MAIN_COURSE);
         $inner = '';
         $now = api_get_utc_datetime();
+        $courseId = intval($courseId);
 
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
+        if (empty($courseId)) {
+            return false;
+        }
 
         if ($session_id != 0) {
             $inner = ' INNER JOIN '.$tbl_session_course_user.' session_course_user
@@ -3721,6 +3723,7 @@ class Tracking
         while($user = Database::fetch_array($rs)) {
             $inactive_users[] = $user['user_id'];
         }
+
         return $inactive_users;
     }
 

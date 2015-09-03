@@ -142,16 +142,16 @@ abstract class Question
 			$objQuestion = Question::getInstance($object->type);
             if (!empty($objQuestion)) {
 
-                $objQuestion->id			= $id;
-                $objQuestion->question		= $object->question;
-                $objQuestion->description	= $object->description;
-                $objQuestion->weighting		= $object->ponderation;
-                $objQuestion->position		= $object->position;
-                $objQuestion->type			= $object->type;
-                $objQuestion->picture		= $object->picture;
-                $objQuestion->level			= (int) $object->level;
-                $objQuestion->extra         = $object->extra;
-                $objQuestion->course        = $course_info;
+                $objQuestion->id = $id;
+                $objQuestion->question = $object->question;
+                $objQuestion->description = $object->description;
+                $objQuestion->weighting = $object->ponderation;
+                $objQuestion->position = $object->position;
+                $objQuestion->type = $object->type;
+                $objQuestion->picture = $object->picture;
+                $objQuestion->level = (int)$object->level;
+                $objQuestion->extra = $object->extra;
+                $objQuestion->course = $course_info;
                 $objQuestion->category	    = Testcategory::getCategoryForQuestion($id);
 
                 $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -159,7 +159,7 @@ abstract class Question
                 $sql = "SELECT DISTINCT q.exercice_id
                         FROM $TBL_EXERCICE_QUESTION q
                         INNER JOIN $tblQuiz e
-                        ON e.c_id = q.c_id AND e.id = e.exercice_id
+                        ON e.c_id = q.c_id AND e.id = q.exercice_id
                         WHERE
                             q.c_id = $course_id AND
                             q.question_id = $id AND

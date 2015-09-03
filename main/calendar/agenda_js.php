@@ -230,7 +230,16 @@ $form->addElement('html', '</div>');
 $form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');
 $form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span id="end_date"></span>');
 $form->addElement('text', 'title', get_lang('Title'), array('id' => 'title'));
-$form->addElement('textarea', 'content', get_lang('Description'), array('id' => 'content'));
+$form->addHtmlEditor(
+    'content', 
+    get_lang('Description'), 
+    false, 
+    false,
+    [
+        'ToolbarSet' => 'TestProposedAnswer',
+        'Height' => '120'
+    ]
+);
 
 if ($agenda->type == 'course') {
     $form->addElement('html', '<div id="add_as_announcement_div" style="display: none">');

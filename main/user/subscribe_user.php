@@ -50,50 +50,49 @@ if ($keyword) {
 	$tool_name = get_lang('SearchResults');
 }
 
-
 $current_session_id = api_get_session_id();
 $list_register_user='';
 $list_not_register_user='';
 
 if (isset($_REQUEST['register'])) {
-	if ($type == COURSEMANAGER) {
-		if (!empty($current_session_id)) {
-			$result_simple_sub = SessionManager::set_coach_to_course_session(
-				$_REQUEST['user_id'],
-				$current_session_id,
-				$courseInfo['code']
-			);
-		} else {
-			$result_simple_sub = CourseManager:: subscribe_user(
-				$_REQUEST['user_id'],
-				$courseInfo['code'],
-				COURSEMANAGER
-			);
-		}
-	} else {
+    if ($type == COURSEMANAGER) {
+        if (!empty($current_session_id)) {
+            $result_simple_sub = SessionManager::set_coach_to_course_session(
+                $_REQUEST['user_id'],
+                $current_session_id,
+                $courseInfo['code']
+            );
+        } else {
+            $result_simple_sub = CourseManager:: subscribe_user(
+                $_REQUEST['user_id'],
+                $courseInfo['code'],
+                COURSEMANAGER
+            );
+        }
+    } else {
         $result_simple_sub = CourseManager:: subscribe_user(
             $_REQUEST['user_id'],
             $courseInfo['code']
         );
-	}
+    }
 
 	$user_id_temp = $_SESSION['session_user_id'];
 
-	if (is_array($user_id_temp)) {
-		$counter = count($user_id_temp);
-		for ($j=0; $j<$counter;$j++) {
-			if 	($user_id_temp[$j]==$_GET['user_id']) {
-				if ($result_simple_sub)	{
+    if (is_array($user_id_temp)) {
+        $counter = count($user_id_temp);
+        for ($j=0; $j<$counter;$j++) {
+            if 	($user_id_temp[$j]==$_GET['user_id']) {
+                if ($result_simple_sub)	{
                     Display::addFlash(Display::return_message($_SESSION['session_user_name'][$j].' '.get_lang('AddedToCourse')));
-				} else {
+                } else {
                     Display::addFlash(Display::return_message($_SESSION['session_user_name'][$j].' '.get_lang('NotAddedToCourse'), 'error'));
 
-				}
-			}
-		}
-		unset($_SESSION['session_user_id']);
-		unset($_SESSION['session_user_name']);
-	}
+                }
+            }
+        }
+        unset($_SESSION['session_user_id']);
+        unset($_SESSION['session_user_name']);
+    }
 
     header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
     exit;
@@ -132,12 +131,12 @@ if (isset($_POST['action'])) {
             $user_id_temp = $_SESSION['session_user_id'];
             $user_name_temp = $_SESSION['session_user_name'];
 
-			unset($_SESSION['session_user_id']);
- 			unset($_SESSION['session_user_name']);
-			$counter = 0;
-			$is_suscribe_counter = count($is_suscribe_user_id);
+            unset($_SESSION['session_user_id']);
+            unset($_SESSION['session_user_name']);
+            $counter = 0;
+            $is_suscribe_counter = count($is_suscribe_user_id);
 
-			$list_register_user='';
+            $list_register_user='';
 
             for ($i = 0; $i < $is_suscribe_counter; $i++) {
                 for ($j = 0; $j < count($user_id_temp); $j++) {
@@ -153,20 +152,20 @@ if (isset($_POST['action'])) {
                 }
             }
 
-			if (!empty($list_register_user)) {
+            if (!empty($list_register_user)) {
                 if ($is_suscribe_counter == 1) {
-					$register_user_message = $temp_unique_user.' '.get_lang('AddedToCourse');
-					Display::addFlash(Display::return_message($register_user_message));
-				} else {
-					$register_user_message = get_lang('UsersRegistered').'<br/><br />'.$list_register_user;
+                    $register_user_message = $temp_unique_user.' '.get_lang('AddedToCourse');
+                    Display::addFlash(Display::return_message($register_user_message));
+                } else {
+                    $register_user_message = get_lang('UsersRegistered').'<br/><br />'.$list_register_user;
                     Display::addFlash(Display::return_message($register_user_message, 'normal', false));
-				}
-			}
+                }
+            }
 
-			if (!empty($list_not_register_user)) {
-				$not_register_user_message = get_lang('UsersNotRegistered').'<br/><br /><br />'.$list_not_register_user;
+            if (!empty($list_not_register_user)) {
+                $not_register_user_message = get_lang('UsersNotRegistered').'<br/><br /><br />'.$list_not_register_user;
                 Display::addFlash(Display::return_message($not_register_user_message, 'error', false));
-			}
+            }
 
             header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
             exit;
@@ -210,7 +209,7 @@ if (api_get_setting('show_email_addresses') == 'true') {
     $table->set_header($col ++, get_lang('Email'));
     $table->set_column_filter($col -1, 'email_filter');
 }
-$table->set_header($col ++, get_lang('Active'),false);
+$table->set_header($col++, get_lang('Active'), false);
 $table->set_column_filter($col -1, 'active_filter');
 $table->set_header($col ++, get_lang('Actions'), false);
 $table->set_column_filter($col -1, 'reg_filter');
@@ -308,7 +307,9 @@ function get_number_of_users()
 					$sql = "SELECT COUNT(u.user_id)
 							FROM $user_table u
 							LEFT JOIN $tbl_session_rel_course_user cu
-							ON u.user_id = cu.user_id and cu.c_id = '".api_get_course_int_id()."' AND session_id ='".api_get_session_id()."'
+							ON
+							    u.user_id = cu.user_id and cu.c_id = '".api_get_course_int_id()."' AND
+							    session_id ='".api_get_session_id()."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user
 							ON (url_rel_user.user_id = u.user_id)
 							WHERE
@@ -341,7 +342,6 @@ function get_number_of_users()
 				}
 			}
 		}
-
 	} else {
 		// students
 		if (api_get_session_id() != 0) {
@@ -423,7 +423,13 @@ function get_number_of_users()
 	// when there is a keyword then we are searching and we have to change the SQL statement
 	if (isset($_GET['keyword']) AND !empty($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_REQUEST['keyword']));
-		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
+		$sql .= " AND (
+		    firstname LIKE '%".$keyword."%' OR
+		    lastname LIKE '%".$keyword."%' OR
+		    email LIKE '%".$keyword."%' OR
+		    username LIKE '%".$keyword."%' OR
+		    official_code LIKE '%".$keyword."%'
+        )";
 
 		// we also want to search for users who have something in their profile fields that matches the keyword
 		if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {

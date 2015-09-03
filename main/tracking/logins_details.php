@@ -16,15 +16,17 @@
 
 /* 		INIT SECTION */
 $uInfo = $_REQUEST['uInfo'];
-if (!isset($_REQUEST['reqdate']))
+if (!isset($_REQUEST['reqdate'])) {
     $reqdate = time();
-else
+} else {
     $reqdate = $_REQUEST['reqdate'];
+}
 $period = $_REQUEST['period'];
-if (!isset($_REQUEST['view']))
+if (!isset($_REQUEST['view'])) {
     $view = "0000000";
-else
+} else {
     $view = $_REQUEST['view'];
+}
 include('../inc/global.inc.php');
 
 $interbreadcrumb[] = array("url" => "../user/user.php", "name" => get_lang('Users'));

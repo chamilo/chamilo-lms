@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@author Bart Mollet, Julio Montoya lot of fixes
 *	@package chamilo.admin
@@ -16,7 +17,7 @@ SessionManager::protect_teacher_session_edit($id_session);
 $tool_name = get_lang('SessionOverview');
 
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
-if($allowTutors == 'true') {
+if ($allowTutors == 'true') {
     // Database Table Definitions
     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_session_rel_class = Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
@@ -221,7 +222,7 @@ if($allowTutors == 'true') {
     <?php
     if ($session['nbr_courses'] == 0) {
     	echo '<tr>
-    			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
+            <td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
     		</tr>';
     } else {
     	// select the courses
@@ -276,7 +277,8 @@ if($allowTutors == 'true') {
     		}
 
     		$orig_param = '&origin=resume_session';
-    		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
+    		//hide_course_breadcrumb the parameter has been added to hide the
+            // name of the course, that appeared in the default $interbreadcrumb
     		echo '
     		<tr>
     			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session),'</td>
@@ -292,7 +294,6 @@ if($allowTutors == 'true') {
     <?php
     echo Display::page_subheader(get_lang('UserList').$url);
     ?>
-
     <!--List of users -->
     <table class="data_table">
         <tr>
@@ -330,7 +331,8 @@ if($allowTutors == 'true') {
 
     	$result = Database::query($sql);
     	$users  = Database::store_result($result);
-    	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
+        // change breadcrumb in destination page
+    	$orig_param = '&origin=resume_session&id_session='.$id_session;
     	foreach ($users as $user) {
             $user_link = '';
             if (!empty($user['user_id'])) {
@@ -347,6 +349,7 @@ if($allowTutors == 'true') {
                     $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
                 }
             }
+
     		echo '<tr>
                     <td width="90%">
                         '.$user_link.'

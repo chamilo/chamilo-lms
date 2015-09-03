@@ -11,12 +11,8 @@
  *
  * 	@package chamilo.tracking
  */
-/**
- * Code
- */
-// TODO: Is this file deprecated?
 
-/* INIT SECTION */
+// TODO: Is this file deprecated?
 
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 require_once '../inc/global.inc.php';
@@ -225,12 +221,9 @@ if ($is_allowedToTrack) {
     /* 	Tools */
     $tempView = $view;
     if ($view[2] == '1') {
-
         $tempView[2] = '0';
-
         $title[1] = $nameTools;
         $line = '';
-
         $title_line = get_lang('ToolTitleToolnameColumn') . ";" . get_lang('ToolTitleUsersColumn') . ";" . get_lang('ToolTitleCountColumn') . "\n";
 
         $sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool )
@@ -239,7 +232,7 @@ if ($is_allowedToTrack) {
                     AND c_id = $courseId
                 GROUP BY access_tool";
 
-        $results = getManyResults3Col($sql);
+        $results = StatsUtils::getManyResults3Col($sql);
 
         if (is_array($results)) {
             for ($j = 0; $j < count($results); $j++) {
@@ -250,9 +243,7 @@ if ($is_allowedToTrack) {
         }
     }
 
-
     /* 	Links */
-
     $tempView = $view;
     if ($view[3] == '1') {
 
@@ -281,20 +272,18 @@ if ($is_allowedToTrack) {
         }
     }
 
-
     /* 	Documents */
-
     $tempView = $view;
     if ($view[4] == '1') {
 
         $tempView[4] = '0';
 
         $sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path)
-                    FROM $TABLETRACK_DOWNLOADS
-                    WHERE c_id = $courseId
-                    GROUP BY down_doc_path";
+                FROM $TABLETRACK_DOWNLOADS
+                WHERE c_id = $courseId
+                GROUP BY down_doc_path";
 
-        $results = getManyResults3Col($sql);
+        $results = StatsUtils::getManyResults3Col($sql);
 
         $title[1] = $nameTools;
         $line = '';
@@ -312,9 +301,7 @@ if ($is_allowedToTrack) {
     /* 	Scorm contents and Learning Path */
     $tempView = $view;
     if ($view[5] == '1') {
-
         $tempView[5] = '0';
-
         $sql = "SELECT id, name FROM $tbl_learnpath_main WHERE c_id = $course_id ";
         $result = Database::query($sql);
 
@@ -354,7 +341,6 @@ if ($is_allowedToTrack) {
                                 $line .= $ar['id'] . " " . $ar2['user_id'] . " " . api_get_person_name($ar2['firstname'], $ar2['lastname']);
                             }
 
-
                             if ($ar2['user_id'] == $scormstudentopen) { //have to list the student's results
                                 $studentId = $ar2['user_id'];
                                 $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
@@ -378,7 +364,6 @@ if ($is_allowedToTrack) {
                             $line .= "\n";
                             $ar2 = Database::fetch_array($result2);
                         }
-
                         $title_line .= "\n";
                     }
                 }

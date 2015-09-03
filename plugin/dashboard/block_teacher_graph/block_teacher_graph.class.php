@@ -195,7 +195,7 @@ class BlockTeacherGraph extends Block
             }
             $graph = '<img src="' . $imgPath . '" >';
 		} else {
-			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
+			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'), 'UTF-8').'</p>';
 		}
 
  		return $graph;

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * List sessions in an efficient and usable way
  * @package chamilo.admin
@@ -22,7 +23,7 @@ $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
 
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
-if($allowTutors == 'true') {
+if ($allowTutors == 'true') {
 
     $error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
     if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
@@ -41,10 +42,19 @@ if($allowTutors == 'true') {
     }
 
     //The order is important you need to check the the $column variable in the model.ajax.php file
-    $columns        = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang('NumberOfUsers'), get_lang('SessionCategoryName'),
-                            get_lang('StartDate'), get_lang('EndDate'), get_lang('Coach'),  get_lang('Status'), get_lang('Visibility'), get_lang('Actions'));
+    $columns = array(
+        get_lang('Name'),
+        get_lang('NumberOfCourses'),
+        get_lang('NumberOfUsers'),
+        get_lang('SessionCategoryName'),
+        get_lang('StartDate'),
+        get_lang('EndDate'),
+        get_lang('Coach'),
+        get_lang('Status'),
+        get_lang('Visibility'),
+        get_lang('Actions'),
+    );
 
-    //$activeurl = '?sidx=session_active';
     //Column config
     $column_model   = array(
         array('name'=>'name',           'index'=>'name',          'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
@@ -56,9 +66,10 @@ if($allowTutors == 'true') {
         array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),
         array('name'=>'status',         'index'=>'session_active','width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
           //for the bottom bar
-          'searchoptions' => array(
-                            'defaultValue'  => '1',
-                            'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
+            'searchoptions' => array(
+                'defaultValue' => '1',
+                'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive')
+            ),
           //for the top bar
           'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))),
         array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),

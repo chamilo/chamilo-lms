@@ -221,19 +221,19 @@ if (!empty($_FILES)) {
 }
 
 // Actions
-echo '<div class="actions">';
+
 // Link back to the documents overview
 if ($is_certificate_mode) {
-    echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'&'.api_get_cidreq().'">'.
+    $actions = '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
-    echo '<a href="document.php?id='.$document_id.'&'.api_get_cidreq().'">'.
+    $actions = '<a href="document.php?id='.$document_id.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 // Link to create a folder
-echo '</div>';
 
+echo $toolbar = Display::toolbarAction('toolbar-upload', array( 0 => $actions), 1);
 // Form to select directory
 $folders = DocumentManager::get_all_document_folders($_course, $groupId, $is_allowed_to_edit);
 if (!$is_certificate_mode) {
@@ -318,7 +318,7 @@ $form->setDefaults($defaults);
 $simple_form = $form->returnForm();
 
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file';
-$multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
+$multiple_form = '<div class="description-upload">'.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'</div>';
 $multiple_form .=  '
     <div class="form-ajax">
     <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">

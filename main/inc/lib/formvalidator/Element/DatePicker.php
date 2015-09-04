@@ -92,7 +92,8 @@ class DatePicker extends HTML_QuickForm_text
                     buttonImageOnly: true,
                     buttonText: '" . get_lang('SelectDate') . "',
                     changeMonth: true,
-                    changeYear: true
+                    changeYear: true,
+                    yearRange: 'c-60y:c+5y'
                 });
             });
         </script>";

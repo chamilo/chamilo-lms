@@ -5653,7 +5653,7 @@ $RecoverDropboxFiles = "Récupérer les fichiers partagés";
 $ForumCategory = "Catégorie de forum";
 $YouCanAccessTheExercise = "Commencer le test";
 $YouHaveBeenRegisteredToCourseX = "Vous avez été inscrit au cours %s";
-$DashboardPluginsHaveBeenUpdatedSucesslly = "Les plugins du panneau de contrôle ont été mis à jour";
+$DashboardPluginsUpdatedSuccessfully = "Les plugins du panneau de contrôle ont été mis à jour";
 $LoginEnter = "S'identifier";
 $AssignSessionsToX = "Assigner des sessions à %s";
 $CopyExercise = "Copier cet exercice comme un nouvel exercice";
@@ -7496,4 +7496,5 @@ $SkillXEnabled = "Compétence \"%s\" activée";
 $SkillXDisabled = "Compétence \"%s\" désactivée";
 $ShowFullSkillNameOnSkillWheelTitle = "Montrer nom complet sur roue de compétences";
 $ShowFullSkillNameOnSkillWheelComment = "Dans la roue des compétences, montrer le titre complet de la compétence même si celle-ci dispose d'un code court (peut rendre la roue moins lisible selon la quantité de compétences)";
+$DBPort = "Port";
 ?>

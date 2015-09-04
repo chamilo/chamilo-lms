@@ -14,9 +14,6 @@ $content['form']->removeElement('email', false);
 $content['form']->removeElement('extra_date_of_birth', false);
 $content['form']->removeElement('pass1', false);
 $content['form']->removeElement('pass2', false);
-$content['form']->removeElement('extra_mail_notify_invitation');
-$content['form']->removeElement('extra_mail_notify_message');
-$content['form']->removeElement('extra_mail_notify_group_message');
 $content['form']->removeElement('official_code');
 $content['form']->removeElement('phone');
 $content['form']->removeElement('language');
@@ -25,6 +22,34 @@ $content['form']->removeElement('submit');
 if (isset($content['form']->_elementIndex['status'])) {
     $content['form']->removeElement('status');
     $content['form']->removeElement('status');
+}
+
+if (isset($content['form']->_elementIndex['extra_mail_notify_invitation'])) {
+    $content['form']->removeElement('extra_mail_notify_invitation');
+}
+
+if (isset($content['form']->_elementIndex['extra_mail_notify_message'])) {
+    $content['form']->removeElement('extra_mail_notify_message');
+}
+
+if (isset($content['form']->_elementIndex['extra_mail_notify_group_message'])) {
+    $content['form']->removeElement('extra_mail_notify_group_message');
+}
+
+if (isset($content['form']->_elementIndex['extra_national_id'])) {
+    $content['form']->removeElement('extra_national_id');
+}
+
+if (isset($content['form']->_elementIndex['extra_officer_position'])) {
+    $content['form']->removeElement('extra_officer_position');
+}
+
+if (isset($content['form']->_elementIndex['extra_work_or_study_place'])) {
+    $content['form']->removeElement('extra_work_or_study_place');
+}
+
+if (isset($content['form']->_elementIndex['extra_gender'])) {
+    $content['form']->removeElement('extra_gender');
 }
 
 $content['form']->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));

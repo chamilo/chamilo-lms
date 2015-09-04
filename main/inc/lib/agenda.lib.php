@@ -2551,10 +2551,10 @@ class Agenda
 
         
         if ($view == 'calendar') {
-            $actionsRigth .= $form;
+            $actionsRight .= $form;
         }
         
-        $toolbar = Display::toolbarAction('toolbar-agenda', array( 0 => $actionsLeft, 1 => $actionsRigth), 2, false);
+        $toolbar = Display::toolbarAction('toolbar-agenda', array( 0 => $actionsLeft, 1 => $actionsRight), 2, false);
         return $toolbar;
     }
 

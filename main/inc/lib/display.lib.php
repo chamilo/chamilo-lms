@@ -2104,7 +2104,7 @@ class Display
 
         return self::url("$icon $text", $url, $attributes);
     }
-    public static function toolbarAction($id, $content = array(), $col = 2, $rigth = true)
+    public static function toolbarAction($id, $content = array(), $col = 2, $right = true)
     {
         $columns = 12/$col;
         $html = '';
@@ -2116,7 +2116,7 @@ class Display
             for ( $i = 0; $i < $col; $i++ ) {
                 $html .= '<div class="col-md-' . $columns . '">';
                 if ( $col == 2 && $i == 1 ) {
-                    if($rigth === true){
+                    if($right === true){
                         $html .= '<div class="pull-right">';
                         $html .= $content[$i];
                         $html .= '</div>';

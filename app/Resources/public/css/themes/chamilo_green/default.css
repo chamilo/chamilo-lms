@@ -38,12 +38,11 @@ body {
   font-family: 'Open Sans', sans-serif;
   line-height: 1.72222;
 }
-
 a{
-  color: #418A00;
+  color: #004600;
 }
 a:hover{
-  color: #004600;
+  color: #418A00;
 }
 .navbar-default .navbar-nav li a{
   color: #ffffff;

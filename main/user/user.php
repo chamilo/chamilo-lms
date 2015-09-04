@@ -202,14 +202,14 @@ if (api_is_allowed_to_edit(null, true)) {
                 if (api_get_session_id()) {
                     $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                     $sql = "SELECT DISTINCT
-                                    user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
-                                    user.username,
-                                    $select_email_condition
-                                    phone,
-                                    user.official_code,
-                                    active
-                                    $legal
-                                  FROM $table_session_course_user as session_course_user, $table_users as user ";
+                                user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
+                                user.username,
+                                $select_email_condition
+                                phone,
+                                user.official_code,
+                                active
+                                $legal
+                            FROM $table_session_course_user as session_course_user, $table_users as user ";
                     if (api_is_multiple_url_enabled()) {
                         $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
@@ -280,7 +280,6 @@ if (api_is_allowed_to_edit(null, true)) {
                 }
 
                 if ($sessionId == 0) {
-
                     // users directly subscribed to the course
                     $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
                     $sql = "SELECT DISTINCT
@@ -446,7 +445,6 @@ if (!$is_allowed_in_course) {
 // Statistics
 Event::event_access_tool(TOOL_USER);
 
-
 /**
  * Get the users to display on the current page.
  */
@@ -609,13 +607,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
     foreach ($a_course_users as $user_id => $o_course_user) {
         if ((
-                isset($_GET['keyword']) &&
-                searchUserKeyword(
-                    $o_course_user['firstname'],
-                    $o_course_user['lastname'],
-                    $o_course_user['username'],
-                    $o_course_user['official_code'],
-                    $_GET['keyword'])
+            isset($_GET['keyword']) &&
+            searchUserKeyword(
+                $o_course_user['firstname'],
+                $o_course_user['lastname'],
+                $o_course_user['username'],
+                $o_course_user['official_code'],
+                $_GET['keyword'])
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
         ) {
 
@@ -942,7 +940,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
             break;
     }
-    
+
     echo '<div class="row">';
     echo '<div class="col-md-6">';
     echo Display::url(
@@ -964,7 +962,7 @@ if (api_is_allowed_to_edit(null, true)) {
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.
         Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
     echo $actions;
-    
+
     echo '</div>';
     echo '<div class="col-md-6">';
     echo '<div class="pull-right">';
@@ -973,17 +971,17 @@ if (api_is_allowed_to_edit(null, true)) {
         $form->addText('keyword', '', false);
         $form->addButtonSearch(get_lang('SearchButton'));
         $form->display();
-    echo '</div>';    
     echo '</div>';
     echo '</div>';
-    
+    echo '</div>';
+
     $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
     if (api_is_allowed_to_edit() && $allowTutors == 'true') {
         $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
             get_lang('Sessions').'</a>';
     }
 
-   
+
 
     echo '</div>';
 }

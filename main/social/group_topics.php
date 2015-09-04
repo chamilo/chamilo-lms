@@ -14,8 +14,8 @@ if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
 
-$group_id	= intval($_GET['id']);
-$topic_id   = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
+$group_id = intval($_GET['id']);
+$topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
 $message_id = isset($_GET['msg_id']) ? intval($_GET['msg_id']) : null;
 
 $usergroup = new UserGroup();
@@ -105,7 +105,6 @@ if (isset($_POST['action'])) {
     $message_id = $res;
 }
 
-
 $htmlHeadXtra[] = '<script>
 
 var counter_image = 1;
@@ -164,7 +163,7 @@ function validate_text_empty(str,msg) {
 }
 
 $(document).ready(function() {
-	if ( $("#msg_'.$message_id.'").length) {
+	if ($("#msg_'.$message_id.'").length) {
 		$("html,body").animate({
 			scrollTop: $("#msg_'.$message_id.'").offset().top
 		})

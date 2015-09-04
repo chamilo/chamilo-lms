@@ -364,7 +364,7 @@ if ($intro_dispCommand) {
     }
 }
 
-$introduction_section .=  '<div class="col-md-12">';
+$introduction_section .= '<div class="col-md-12">';
 
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {

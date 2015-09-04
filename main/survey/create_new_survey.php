@@ -12,7 +12,7 @@
  * 	@todo only the available platform languages should be used => need an
  *  api get_languages and and api_get_available_languages (or a parameter)
  */
-// Including the global initialization file
+
 require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -104,7 +104,12 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }
 
-$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus'));
+$survey_code = $form->addElement(
+    'text',
+    'survey_code',
+    get_lang('SurveyCode'),
+    array('size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus')
+);
 
 if ($_GET['action'] == 'edit') {
     //$survey_code->freeze();
@@ -149,7 +154,6 @@ $surveytypes[1] = get_lang('Conditional');
 
 if ($_GET['action'] == 'add') {
     $form->addElement('hidden', 'survey_type', 0);
-    require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
     $survey_tree = new SurveyTree();
     $list_surveys = $survey_tree->createList($survey_tree->surveylist);
     $list_surveys[0] = '';

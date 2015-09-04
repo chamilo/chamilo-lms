@@ -2104,4 +2104,29 @@ class Display
 
         return self::url("$icon $text", $url, $attributes);
     }
+    public static function toolbarAction($id, $content = array(), $col = 2)
+    {
+        $columns = 12/$col;
+        $html = '';
+        $html .= '<div id="' . $id . '" class="actions">';
+        $html .= '<div class="row">';
+        if ($col > 4) {
+            $html = '<div class="alert alert-warning" role="alert">Not exceeding four columns</div>';
+        } else {
+            for ( $i = 0; $i < $col; $i++ ) {
+                $html .= '<div class="col-md-' . $columns . '">';
+                if ( $col == 2 && $i == 1 ) {
+                    $html .= '<div class="pull-right">';
+                    $html .= $content[$i];
+                    $html .= '</div>';
+                } else {
+                    $html .= $content[$i];
+                }
+                $html .= '</div>';
+            }
+        }
+        $html .= '</div>';
+        $html .= '</div>';
+        return $html;
+    }
 }

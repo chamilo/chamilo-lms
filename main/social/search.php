@@ -16,8 +16,8 @@ if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }
 
-$this_section      = SECTION_SOCIAL;
-$tool_name         = get_lang('Search');
+$this_section = SECTION_SOCIAL;
+$tool_name = get_lang('Search');
 $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
 
 $query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']): null;

@@ -161,49 +161,47 @@ Display::display_header(get_lang('Groups'));
 // Tool introduction
 Display::display_introduction_section(TOOL_GROUP);
 
-echo '<div class="actions">';
+$actionsLeft = '';
 
-echo '<div class="row">';
-echo '<div class="col-md-6">';
 if (api_is_allowed_to_edit(false, true)) {
 
-    echo '<a href="group_creation.php?'.api_get_cidreq().'">'.
+    $actionsLeft .= '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('add.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
 
     if (api_get_setting('allow_group_categories') == 'true') {
-        echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
+        $actionsLeft .=  '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
             Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.
+        $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.
             Display::return_icon('settings.png', get_lang('PropModify'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
-    echo  '<a href="import.php?'.api_get_cidreq().'&action=import">'.
+    $actionsLeft .= '<a href="import.php?'.api_get_cidreq().'&action=import">'.
         Display::return_icon('import_csv.png', get_lang('Import'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=csv">'.
+    $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=csv">'.
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=xls">'.
+    $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=xls">'.
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
+    $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
         Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="group_overview.php?'.api_get_cidreq().'">'.
+    $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'">'.
         Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 }
-echo '</div>';
-echo '<div class="col-md-6">';
-echo '<div class="pull-right">';
-echo GroupManager::getSearchForm();
-echo '</div>';
-echo '</div>';
-echo '</div>';
 
+
+$actionsRight = GroupManager::getSearchForm();
+
+
+$toolbar = Display::toolbarAction('toolbar-groups', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
 
 $group_cats = GroupManager::get_categories(api_get_course_id());
 echo '</div>';
+
+echo $toolbar;
 
 echo UserManager::getUserSubscriptionTab(3);
 

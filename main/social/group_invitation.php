@@ -48,7 +48,6 @@ $form_sent = 0;
 $errorMsg = $firstLetterUser = $firstLetterSession = '';
 $UserList = $SessionList = array();
 $users = $sessions = array();
-
 $content = null;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -135,7 +134,10 @@ if (!$friends) {
 if (is_array($Users) && count($Users) > 0 ) {
     foreach ($Users as $user) {
         if ($user['group_id'] != $group_id) {
-            $nosessionUsersList[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+            $nosessionUsersList[$user['user_id']] = api_get_person_name(
+                $user['firstname'],
+                $user['lastname']
+            );
         }
     }
 }

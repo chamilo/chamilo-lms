@@ -23,7 +23,7 @@ $userGroup = new UserGroup();
 
 $htmlHeadXtra[] = '
 <script>
-function denied_friend (element_input) {
+function denied_friend(element_input) {
     name_button=$(element_input).attr("id");
     name_div_id="id_"+name_button.substring(13);
     user_id=name_div_id.split("_");

@@ -15,6 +15,8 @@ if (!api_is_allowed_to_edit()) {
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : '';
 
+$toolName = get_lang('CustomizeIcons');
+
 switch ($action) {
     case 'delete_icon':
         $tool = CourseHome::getTool($id);
@@ -89,7 +91,7 @@ switch ($action) {
             api_get_session_id()
         );
         $iconsTools = '<div id="custom-icons">';
-        $iconsTools .= Display::page_header( get_lang('CustomizeIcons'),null,'h4');
+        $iconsTools .= Display::page_header(get_lang('CustomizeIcons'), null, 'h4');
         $iconsTools .= '<div class="row">';
         foreach ($toolList as $tool) {
 
@@ -143,6 +145,7 @@ function getCustomWebIconPath()
 {
     // Check if directory exists or create it if it doesn't
     $dir = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/course_home_icons/';
+
     return $dir;
 }
 $tpl = new Template($toolName);

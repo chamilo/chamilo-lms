@@ -105,7 +105,6 @@ function action_formatter(cellvalue, options, rowObject) {
 
 // Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
-
 $htmlHeadXtra[] = '
 <script>
 $(function() {

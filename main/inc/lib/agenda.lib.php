@@ -2461,8 +2461,8 @@ class Agenda
     {
         $courseInfo = api_get_course_info();
 
-        $toolbar = '';
-        $toolbar .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
+        $actionsLeft = '';
+        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
             Display::return_icon('calendar.png', get_lang('Calendar'), '', ICON_SIZE_MEDIUM)."</a>";
 
         $courseCondition = '';
@@ -2470,7 +2470,7 @@ class Agenda
             $courseCondition = api_get_cidreq();
         }
 
-        $toolbar .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
+        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
             Display::return_icon('week.png', get_lang('AgendaList'), '', ICON_SIZE_MEDIUM)."</a>";
 
         $form = '';
@@ -2480,9 +2480,9 @@ class Agenda
             GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
             GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
         ) {
-            $toolbar .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=course'>".
+            $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=course'>".
                     Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
-            $toolbar .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=course'>".
+            $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=course'>".
                     Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";
 
             if ($this->type == 'course') {
@@ -2537,27 +2537,25 @@ class Agenda
                         'session_id',
                         get_lang('Session'),
                         $sessions,
-                        ['id' => 'session_id']
+                        ['id' => 'session_id', 'onchange' => 'submit();']
                     );
-                    $form->addButtonFilter(get_lang('Filter'));
+                    //$form->addButtonFilter(get_lang('Filter'));
+                    //$renderer = $form->defaultRenderer();
+                    //$renderer->setCustomElementTemplate('<div class="col-md-6">{element}</div>');
+                    
                     $form->addButtonReset(get_lang('Reset'));
                     $form = $form->returnForm();
                 }
             }
         }
 
-        $actions = '<div class="row">';
-        $actions .= '<div class="col-md-9">';
+        
         if ($view == 'calendar') {
-            $actions .= $form;
+            $actionsRight .= $form;
         }
-        $actions .= '</div>';
-        $actions .= '<div class="col-md-3 right">';
-        $actions .= $toolbar;
-        $actions .= '</div>';
-        $actions .= '</div>';
-
-        return $actions;
+        
+        $toolbar = Display::toolbarAction('toolbar-agenda', array( 0 => $actionsLeft, 1 => $actionsRight), 2, false);
+        return $toolbar;
     }
 
     /**

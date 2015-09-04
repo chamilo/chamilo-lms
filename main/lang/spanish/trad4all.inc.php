@@ -5661,7 +5661,7 @@ $RecoverDropboxFiles = "Recuperar ficheros dropbox";
 $ForumCategory = "Categoría de foro";
 $YouCanAccessTheExercise = "Ir a la prueba";
 $YouHaveBeenRegisteredToCourseX = "Ha sido inscrito en el curso %s";
-$DashboardPluginsHaveBeenUpdatedSucesslly = "Los plugins del panel de control han sido actualizados correctamente";
+$DashboardPluginsUpdatedSuccessfully = "Los plugins del panel de control han sido actualizados correctamente";
 $LoginEnter = "Entrar";
 $AssignSessionsToX = "Asignar sesiones a %s";
 $CopyExercise = "Copie este ejercicio como uno nuevo";
@@ -7534,4 +7534,5 @@ $SkillXEnabled = "Competencia \"%s\" habilitada";
 $SkillXDisabled = "Competencia \"%s\" deshabilitada";
 $ShowFullSkillNameOnSkillWheelTitle = "Mostrar nombre completo de la competencias en rueda de competencias";
 $ShowFullSkillNameOnSkillWheelComment = "En la rueda de competencias, permite mostrar el nombre de la competencia cuando ésta tiene código corto.";
+$DBPort = "Puerto";
 ?>

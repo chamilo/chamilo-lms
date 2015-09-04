@@ -1,6 +1,6 @@
 /*
     Theme Name: Chamilo Base
-    URI Project: http://www.chamilo.org
+    URL Project: http://www.chamilo.org
     Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 3.0.x
     Author:
         alex.aragon@beeznest.com
@@ -6285,9 +6285,18 @@ div#chat-remote-video video {
   text-align: left;
   padding-left: 15px;
 }
-/*form input.form-control{
-  margin-top: 10px;
-}*/
+#toolbar-agenda .show-tick{
+    width: 420px;
+}
+.tab-wrapper .tab-content{
+    padding: 25px;
+}
+.description-upload{
+    margin-bottom: 10px;
+}
+.files-table{
+    padding-top: 20px;
+}
 #whoisonline .items-user{
   text-align: center;
   /*border:1px solid #dddddd; */
@@ -6468,7 +6477,9 @@ a.sessionView {
   padding: 6px;
   font-size: 12px;
 }
-
+#listFriends .help{
+  font-size: 12px;
+}
 #listFriends a{
   display: block;
   text-overflow: ellipsis;

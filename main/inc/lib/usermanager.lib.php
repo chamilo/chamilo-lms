@@ -3630,7 +3630,7 @@ class UserManager
             api_get_path(WEB_PATH).'main/social/search.php',
             '',
             array(),
-            FormValidator::LAYOUT_INLINE
+            FormValidator::LAYOUT_HORIZONTAL
         );
 
         $form->addText('q', get_lang('UsersGroups'));

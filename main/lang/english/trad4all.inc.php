@@ -5661,7 +5661,7 @@ $RecoverDropboxFiles = "Recover dropbox files";
 $ForumCategory = "Forum category";
 $YouCanAccessTheExercise = "Go to the test";
 $YouHaveBeenRegisteredToCourseX = "You have been registered to course %s";
-$DashboardPluginsHaveBeenUpdatedSucesslly = "Dashboard plugins have been updated sucessfully";
+$DashboardPluginsUpdatedSuccessfully = "Dashboard plugins successfully updated";
 $LoginEnter = "Login";
 $AssignSessionsToX = "Assign sessions to %s";
 $CopyExercise = "Copy this exercise as a new one";
@@ -7509,4 +7509,5 @@ $SkillXEnabled = "Skill \"%s\" enabled";
 $SkillXDisabled = "Skill \"%s\" disabled";
 $ShowFullSkillNameOnSkillWheelTitle = "Show full skill name on skill wheel";
 $ShowFullSkillNameOnSkillWheelComment = "On the wheel of skills, it shows the name of the skill when it has short code.";
+$DBPort = "Port";
 ?>

@@ -27,7 +27,7 @@ if (api_is_allowed_to_edit(null, true) ||
 
     $groupId = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 
-    $form = new FormValidator(
+    /* $form = new FormValidator(
         'filter',
         'post',
         'index.php?action=attendance_sheet_list&' . api_get_cidreq() . $param_gradebook . '&attendance_id=' . $attendance_id,
@@ -35,7 +35,18 @@ if (api_is_allowed_to_edit(null, true) ||
         array(),
         FormValidator::LAYOUT_INLINE
     );
-
+    */
+     
+    
+    $form = new FormValidator(
+            'filter',
+            'post',
+            'index.php?action=attendance_sheet_list&' . api_get_cidreq() . $param_gradebook . '&attendance_id=' . $attendance_id,
+            null,
+            array(),
+            'inline'
+        );
+    
     $values = array(
         'all' => get_lang('All'),
         'today' => get_lang('Today'),
@@ -72,8 +83,15 @@ if (api_is_allowed_to_edit(null, true) ||
     if (!$exists_attendance_today) {
         Display::display_warning_message(get_lang('ThereIsNoClassScheduledTodayTryPickingAnotherDay'));
     }
-
-    $form->addElement('select', 'filter', get_lang('Filter'), $values, array('id' => 'filter_id'));
+    
+    $form->addSelect(
+            'filter',
+            get_lang('Filter'),
+            $values,
+            ['id' => 'filter_id', 'onchange' => 'submit();']
+    );
+    
+    //$form->addElement('select', 'filter', get_lang('Filter'), $values, array('id' => 'filter_id'));
 
     $groupList = GroupManager::get_group_list(null, null, 1);
     $groupIdList = array('--');
@@ -85,7 +103,7 @@ if (api_is_allowed_to_edit(null, true) ||
         $form->addSelect('group_id', get_lang('Group'), $groupIdList);
     }
 
-    $form->addButtonFilter(get_lang('Filter'));
+    //$form->addButtonFilter(get_lang('Filter'));
 
     if (isset($_REQUEST['filter'])) {
         if (in_array($_REQUEST['filter'], array_keys($values))) {
@@ -96,7 +114,7 @@ if (api_is_allowed_to_edit(null, true) ||
     }
 
     $renderer = $form->defaultRenderer();
-    $renderer->setCustomElementTemplate('{label} {element} ');
+    $renderer->setCustomElementTemplate('<div class="col-md-2">{label}</div><div class="col-md-10"> {element} </div>');
 
     $form->setDefaults(
         array(
@@ -106,15 +124,17 @@ if (api_is_allowed_to_edit(null, true) ||
     );
 
     if (!$is_locked_attendance || api_is_platform_admin()) {
-        echo '<div class="actions">';
-        echo '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.
+        
+        $actionsLeft = '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.
             Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
-        echo '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
+        $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
             Display::return_icon('pdf.png',get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
         //if (count($users_in_course) > 0) {
-        $form->display();
+        $actionsRight = $form->returnForm();
         //}
-        echo '</div>';
+        
+        $toolbar = Display::toolbarAction('toolbar-attendance', array(0 => $actionsLeft, 1 => $actionsRight), 2 , false);
+        echo $toolbar;
     }
 
     $message_information = get_lang('AttendanceSheetDescription');

@@ -1688,8 +1688,8 @@ class SocialManager extends UserManager
             }
             $friendHtml.='</ul>';
         } else {
-            $friendHtml.= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
-                .'<a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php"><i class="fa fa-search"></i> '. get_lang('TryAndFindSomeFriends').'</a></div>';
+            $friendHtml.= '<div class="help">'.get_lang('NoFriendsInYourContactList').' '
+                .'<a href="'.api_get_path(WEB_PATH).'whoisonline.php"><i class="fa fa-search"></i> '. get_lang('TryAndFindSomeFriends').'</a></div>';
         }
 
         return $friendHtml;

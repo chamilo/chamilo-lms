@@ -448,7 +448,7 @@ if ($action != 'add') {
 		if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 			$selectlist = array();
 		}
-
+        echo '<div class="files-table">';
         Display::display_sortable_config_table(
             'dropbox',
             $column_header,
@@ -460,6 +460,7 @@ if ($action != 'add') {
             $column_order,
             $selectlist
         );
+        echo '</div>';
 	}
 
 	/*	SENT FILES */
@@ -619,6 +620,7 @@ if ($action != 'add') {
 		if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 			$selectlist = array('download_received' => get_lang('Download'));
 		}
+                echo '<div class="files-table">';
 		Display::display_sortable_config_table(
             'dropbox',
             $column_header,
@@ -630,6 +632,7 @@ if ($action != 'add') {
             $column_order,
             $selectlist
         );
+                echo '</div>';
 	}
 }
 

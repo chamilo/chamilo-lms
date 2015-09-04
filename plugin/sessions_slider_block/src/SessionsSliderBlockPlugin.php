@@ -411,7 +411,7 @@ SQL;
             $sessionsToAppend = array_slice(
                 $sessionsDiff,
                 0,
-                count($sessionsIdList) - count($sessionToShow)
+                $this->maxSessionToShowForLoggedUser - count($sessionToShow)
             );
 
             $sessionToShow = array_merge($sessionToShow, $sessionsToAppend);

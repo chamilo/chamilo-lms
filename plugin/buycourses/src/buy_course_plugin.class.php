@@ -14,6 +14,11 @@ class BuyCoursesPlugin extends Plugin
 {
     const PRODUCT_TYPE_COURSE = 1;
     const PRODUCT_TYPE_SESSION = 2;
+    const PAYMENT_TYPE_PAYPAL = 1;
+    const PAYMENT_TYPE_TRANSFER = 2;
+    const SALE_STATUS_CANCELED = -1;
+    const SALE_STATUS_PENDING = 0;
+    const SALE_STATUS_COMPLETED = 1;
 
     /**
      *
@@ -230,11 +235,11 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Get the item data
-     * @param int $itemId The item ID
+     * @param int $productId The item ID
      * @param int $itemType The item type
      * @return array
      */
-    private function getItem($itemId, $itemType)
+    public function getItemByProduct($productId, $itemType)
     {
         $buyItemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
         $buyCurrencyTable = Database::get_main_table(BuyCoursesUtils::TABLE_CURRENCY);
@@ -250,7 +255,10 @@ class BuyCoursesPlugin extends Plugin
             $fakeItemFrom,
             [
                 'where' => [
-                    'i.product_id = ? AND i.product_type = ?' => [$itemId, $itemType]
+                    'i.product_id = ? AND i.product_type = ?' => [
+                        intval($productId),
+                        intval($itemType)
+                    ]
                 ]
             ],
             'first'
@@ -284,7 +292,7 @@ class BuyCoursesPlugin extends Plugin
                 'price' => 0.00
             ];
 
-            $item = $this->getItem($course->getId(), self::PRODUCT_TYPE_COURSE);
+            $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
 
             if ($item !== false) {
                 $courseItem['visible'] = true;
@@ -440,7 +448,7 @@ class BuyCoursesPlugin extends Plugin
                 continue;
             }
 
-            $item = $this->getItem($session->getId(), self::PRODUCT_TYPE_SESSION);
+            $item = $this->getItemByProduct($session->getId(), self::PRODUCT_TYPE_SESSION);
 
             if (empty($item)) {
                 continue;
@@ -555,7 +563,7 @@ class BuyCoursesPlugin extends Plugin
         $courseCatalog = [];
 
         foreach ($courses as $course) {
-            $item = $this->getItem($course->getId(), self::PRODUCT_TYPE_COURSE);
+            $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
 
             if (empty($item)) {
                 continue;
@@ -608,7 +616,7 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $item = $this->getItem($course->getId(), self::PRODUCT_TYPE_COURSE);
+        $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
 
         if (empty($item)) {
             return [];
@@ -658,7 +666,7 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $item = $this->getItem($session->getId(), self::PRODUCT_TYPE_SESSION);
+        $item = $this->getItemByProduct($session->getId(), self::PRODUCT_TYPE_SESSION);
 
         if (empty($item)) {
             return [];
@@ -717,6 +725,188 @@ class BuyCoursesPlugin extends Plugin
         }
 
         return $sessionInfo;
+    }
+
+    /**
+     * Get registered item data
+     * @param int $itemId The item ID
+     * @return array
+     */
+    public function getItem($itemId)
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesUtils::TABLE_ITEM),
+            [
+                'where' => ['id = ?' => intval($itemId)]
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Register a sale
+     * @param int $itemId The product ID
+     * @param int $paymentType The payment type
+     * @return boolean
+     */
+    public function registerSale($itemId, $paymentType)
+    {
+        if (!in_array($paymentType, [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER])) {
+            return false;
+        }
+
+        $entityManager = Database::getManager();
+
+        $item = $this->getItem($itemId);
+
+        if (empty($item)) {
+            return false;
+        }
+
+        if ($item['product_type'] == self::PRODUCT_TYPE_COURSE) {
+            $course = $entityManager->find('ChamiloCoreBundle:Course', $item['product_id']);
+
+            if (empty($course)) {
+                return false;
+            }
+
+            $productName = $course->getTitle();
+        } elseif ($item['product_type'] == self::PRODUCT_TYPE_SESSION) {
+            $session = $entityManager->find('ChamiloCoreBundle:Session', $item['product_id']);
+
+            if (empty($session)) {
+                return false;
+            }
+
+            $productName = $session->getName();
+        }
+
+        $values = [
+            'currency_id' => $item['currency_id'],
+            'date' => api_get_utc_datetime(),
+            'user_id' => api_get_user_id(),
+            'product_type' => $item['product_type'],
+            'product_name' => $productName,
+            'product_id' => $item['product_id'],
+            'price' => $item['price'],
+            'status' => self::SALE_STATUS_PENDING,
+            'payment_type' => intval($paymentType)
+        ];
+
+        return Database::insert(BuyCoursesUtils::TABLE_SALE, $values);
+    }
+
+    /**
+     * Get sale data by ID
+     * @param int $saleId The sale ID
+     * @return array
+     */
+    public function getSale($saleId)
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesUtils::TABLE_SALE),
+            [
+                'where' => ['id = ?' => intval($saleId)]
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Get currency data by ID
+     * @param int $currencyId The currency ID
+     * @return array
+     */
+    public function getCurrency($currencyId)
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesUtils::TABLE_CURRENCY),
+            [
+                'where' => ['id = ?' => intval($currencyId)]
+            ],
+            'first'
+        );
+    }
+
+    /**
+     * Update the sale status
+     * @param int $saleId The sale ID
+     * @param int $newStatus The new status
+     * @return boolean
+     */
+    private function updateSaleStatus($saleId, $newStatus = self::SALE_STATUS_PENDING)
+    {
+        $saleTable = Database::get_main_table(BuyCoursesUtils::TABLE_SALE);
+
+        return Database::update(
+            $saleTable,
+            ['status' => intval($newStatus)],
+            ['id = ?' => intval($saleId)]
+        );
+    }
+
+    /**
+     * Complete sale process. Update sale status to completed
+     * @param int $saleId The sale ID
+     * @return boolean
+     */
+    public function completeSale($saleId)
+    {
+        $sale = $this->getSale($saleId);
+
+        if ($sale['status'] == self::SALE_STATUS_COMPLETED) {
+            return true;
+        }
+
+        $saleIsCompleted = false;
+
+        switch ($sale['product_type']) {
+            case self::PRODUCT_TYPE_COURSE:
+                $course = api_get_course_info_by_id($sale['product_id']);
+
+                $saleIsCompleted = CourseManager::subscribe_user($sale['user_id'], $course['code']);
+                break;
+            case self::PRODUCT_TYPE_SESSION:
+                SessionManager::suscribe_users_to_session(
+                    $sale['product_id'],
+                    [$sale['user_id']],
+                    api_get_session_visibility($sale['product_id']),
+                    false
+                );
+
+                $saleIsCompleted = true;
+                break;
+        }
+
+        if ($saleIsCompleted) {
+            $this->updateSaleStatus($sale['id'], self::SALE_STATUS_COMPLETED);
+        }
+
+        return $saleIsCompleted;
+    }
+
+    /**
+     * Update sale status to canceled
+     * @param int $saleId The sale ID
+     */
+    public function cancelSale($saleId)
+    {
+        $this->updateSaleStatus($saleId, self::SALE_STATUS_CANCELED);
+    }
+
+    /**
+     * Get payment types
+     * @return array
+     */
+    public function getPaymentTypes()
+    {
+        return [
+            self::PAYMENT_TYPE_PAYPAL => 'PayPal',
+            self::PAYMENT_TYPE_TRANSFER => $this->get_lang('BankTransfer')
+        ];
     }
 
 }

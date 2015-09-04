@@ -49,35 +49,6 @@
         </div>
     </div>
     <div class="col-md-5">
-        <form action="../src/process_confirm.php" method="post">
-            <h3 class="page-header">{{ 'UserInformation'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
-            <dl class="dl-horizontal">
-                <dt>{{ 'Name'|get_lang }}:</dt>
-                <dd>{{ user.complete_name }}</dd>
-                <dt>{{ 'User'|get_lang }}:</dt>
-                <dd>{{ user.username }}</dd>
-                <dt>{{ 'Email'|get_lang }}:</dt>
-                <dd>{{ user.email }}</dd>
-            </dl>
-            <legend align="center">{{ 'PaymentMethods'|get_plugin_lang('BuyCoursesPlugin') }}</legend>
-            <div class="form-group">
-                {% if paypal_enabled == "true" %}
-                    <label class="radio-inline">
-                        <input type="radio" name="payment_type" value="PayPal" > <i class="fa fa-fw fa-cc-paypal"></i> Paypal
-                    </label>
-                {% endif %}
-
-                {% if transfer_enabled == "true" %}
-                    <label class="radio-inline">
-                        <input type="radio" name="payment_type" value="Transfer" > <i class="fa fa-fw fa-money"></i> {{ 'BankTransfer'|get_plugin_lang('BuyCoursesPlugin') }}
-                    </label>
-                {% endif %}
-            </div>
-            <div class="form-group">
-                <button class="btn btn-success" type="submit">
-                    <i class="fa fa-check"></i> {{ 'ConfirmOrder'|get_plugin_lang('BuyCoursesPlugin') }}
-                </button>
-            </div>
-        </form>
+        {{ form }}
     </div>
 </div>

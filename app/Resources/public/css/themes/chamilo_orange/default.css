@@ -130,6 +130,9 @@ header{
 .breadcrumb{
   background: #E5E5E5;
 }
+.nav li a:hover{
+    background: transparent;
+}
 footer{
   background: #4b4139; /* Old browsers */
   background: -moz-linear-gradient(top, #4b4139 0%, #655f4e 100%); /* FF3.6+ */

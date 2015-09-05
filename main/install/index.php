@@ -213,6 +213,7 @@ if (!isset($_GET['running'])) {
     $dbUsernameForm = 'root';
     $dbPassForm = '';
     $dbNameForm = 'chamilo';
+    $dbPortForm = 3306;
 
     // Extract the path to append to the url if Chamilo is not installed on the web root directory.
     $urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));
@@ -439,6 +440,7 @@ if (empty($installationProfile)) {
     <input type="hidden" name="pathForm"           value="<?php echo api_htmlentities($pathForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="urlForm"            value="<?php echo api_htmlentities($urlForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="dbHostForm"         value="<?php echo api_htmlentities($dbHostForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="dbPortForm"         value="<?php echo api_htmlentities($dbPortForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="dbUsernameForm"     value="<?php echo api_htmlentities($dbUsernameForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="dbPassForm"         value="<?php echo api_htmlentities($dbPassForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="dbNameForm"         value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES); ?>" />
@@ -476,6 +478,7 @@ if (@$_POST['step2']) {
         $dbUsernameForm,
         $dbPassForm,
         $dbNameForm,
+        $dbPortForm,
         $installationProfile
     );
 } elseif (@$_POST['step4']) {
@@ -489,7 +492,8 @@ if (@$_POST['step2']) {
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
-            $dbNameForm
+            $dbNameForm,
+            $dbPortForm
         );
 
         $tmp = get_config_param_from_db('platformLanguage');
@@ -594,6 +598,7 @@ if (@$_POST['step2']) {
     <?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
     <?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
     <?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
+    <?php echo get_lang('DBPort').' : '.$dbPortForm; ?><br />
     <?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
     <?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
     <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
@@ -675,7 +680,8 @@ if (@$_POST['step2']) {
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
-            $dbNameForm
+            $dbNameForm,
+            $dbPortForm
         );
 
         $perm = api_get_permissions_for_new_directories();
@@ -749,7 +755,8 @@ if (@$_POST['step2']) {
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
-            null
+            null,
+            $dbPortForm
         );
 
         $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
@@ -761,7 +768,8 @@ if (@$_POST['step2']) {
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
-            $dbNameForm
+            $dbNameForm,
+            $dbPortForm
         );
 
         $metadataList = $manager->getMetadataFactory()->getAllMetadata();

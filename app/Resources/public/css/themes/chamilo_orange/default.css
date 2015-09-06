@@ -58,7 +58,7 @@ a:hover{
   color: #ffffff;
 }
 header{
-  background: url("images/bg-orange.png") repeat-x 0 -50px;
+  background: url("images/bg-orange.png") repeat-x center -50px;
 }
 .navbar-default {
   background: #ff833c; /* Old browsers */

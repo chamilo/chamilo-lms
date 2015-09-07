@@ -4895,7 +4895,6 @@ function downloadAllFilesPerUser($userId, $courseInfo)
         return false;
     }
 
-    require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
     $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
     $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work/';
 

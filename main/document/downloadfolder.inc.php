@@ -58,9 +58,6 @@ if (($path == '/shared_folder' ||
     exit;
 }
 
-// Zip library for creation of the zip file.
-require api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-
 // Creating a ZIP file.
 $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
 

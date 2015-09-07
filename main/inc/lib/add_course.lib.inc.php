@@ -1444,8 +1444,6 @@ class AddCourse
      */
     public static function readPropertiesInArchive($archive, $is_compressed = true)
     {
-        include api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
-        debug::printVar(dirname($archive), 'Zip : ');
         $uid = api_get_user_id();
         /*
         string tempnam (string dir, string prefix)

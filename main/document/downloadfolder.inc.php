@@ -91,9 +91,14 @@ function fixDocumentNameCallback($p_event, &$p_header)
     );
 
     // Changes file.phps to file.php
+
     $basename = basename($documentNameFixed);
     $basenamePHPFixed = str_replace('.phps', '.php', $basename);
-    $documentNameFixed = str_replace($basename, $basenamePHPFixed, $basenamePHPFixed);
+    $documentNameFixed = str_replace(
+        $basename,
+        $basenamePHPFixed,
+        $basenamePHPFixed
+    );
 
     $p_header['stored_filename'] = $documentNameFixed;
 
@@ -227,12 +232,12 @@ if (api_is_allowed_to_edit()) {
                 docs.id = props.ref AND
                 docs.c_id = props.c_id
             WHERE
-                docs.c_id           = $courseId AND
-                props.tool          = '".TOOL_DOCUMENT."' AND
-                docs.path             LIKE '".$querypath."/%' AND
-                props.visibility    <> '1' AND
+                docs.c_id = $courseId AND
+                props.tool = '".TOOL_DOCUMENT."' AND
+                docs.path LIKE '".$querypath."/%' AND
+                props.visibility <> '1' AND
                 (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
-                docs.filetype       = 'folder'";
+                docs.filetype = 'folder'";
     $query2 = Database::query($sql);
 
     // If we get invisible folders, we have to filter out these results from all visible files we found
@@ -252,9 +257,9 @@ if (api_is_allowed_to_edit()) {
                         docs.c_id = $courseId AND
                         props.tool ='".TOOL_DOCUMENT."' AND
                         docs.path LIKE '".$invisible_folders['path']."/%' AND
-                        docs.filetype       ='file' AND
+                        docs.filetype = 'file' AND
                         (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
-                        props.visibility    ='1'";
+                        props.visibility ='1'";
             $query3 = Database::query($sql);
             // Add tem to an array
             while ($files_in_invisible_folder = Database::fetch_assoc($query3)) {

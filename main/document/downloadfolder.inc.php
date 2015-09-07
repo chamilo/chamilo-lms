@@ -58,9 +58,6 @@ if (($path == '/shared_folder' ||
     exit;
 }
 
-// Zip library for creation of the zip file.
-require api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-
 // Creating a ZIP file.
 $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
 
@@ -94,10 +91,16 @@ function fixDocumentNameCallback($p_event, &$p_header)
     );
 
     // Changes file.phps to file.php
+
     $basename = basename($documentNameFixed);
     $basenamePHPFixed = str_replace('.phps', '.php', $basename);
-    $documentNameFixed = str_replace($basename, $basenamePHPFixed, $basenamePHPFixed);
+    $documentNameFixed = str_replace(
+        $basename,
+        $basenamePHPFixed,
+        $documentNameFixed
+    );
 
+    $documentNameFixed = str_replace($remove_dir, '', $documentNameFixed);
     $p_header['stored_filename'] = $documentNameFixed;
 
     return 1;
@@ -161,7 +164,8 @@ if (api_is_allowed_to_edit()) {
                 }
             }
         }
-
+        //error_log($sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path']);
+        //error_log($sysCoursePath.$courseInfo['path'].'/document'.$remove_dir);
         $zip->add(
             $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'],
             PCLZIP_OPT_REMOVE_PATH,
@@ -230,12 +234,12 @@ if (api_is_allowed_to_edit()) {
                 docs.id = props.ref AND
                 docs.c_id = props.c_id
             WHERE
-                docs.c_id           = $courseId AND
-                props.tool          = '".TOOL_DOCUMENT."' AND
-                docs.path             LIKE '".$querypath."/%' AND
-                props.visibility    <> '1' AND
+                docs.c_id = $courseId AND
+                props.tool = '".TOOL_DOCUMENT."' AND
+                docs.path LIKE '".$querypath."/%' AND
+                props.visibility <> '1' AND
                 (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
-                docs.filetype       = 'folder'";
+                docs.filetype = 'folder'";
     $query2 = Database::query($sql);
 
     // If we get invisible folders, we have to filter out these results from all visible files we found
@@ -255,9 +259,9 @@ if (api_is_allowed_to_edit()) {
                         docs.c_id = $courseId AND
                         props.tool ='".TOOL_DOCUMENT."' AND
                         docs.path LIKE '".$invisible_folders['path']."/%' AND
-                        docs.filetype       ='file' AND
+                        docs.filetype = 'file' AND
                         (props.session_id IN ('0', '$sessionId') OR props.session_id IS NULL) AND
-                        props.visibility    ='1'";
+                        props.visibility ='1'";
             $query3 = Database::query($sql);
             // Add tem to an array
             while ($files_in_invisible_folder = Database::fetch_assoc($query3)) {
@@ -294,7 +298,9 @@ if (api_is_allowed_to_edit()) {
 }
 
 // Launch event
-Event::event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)');
+Event::event_download(
+    ($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)'
+);
 
 // Start download of created file
 $name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';

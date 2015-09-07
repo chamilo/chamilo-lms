@@ -118,7 +118,6 @@ $nameTools = get_lang('Exercises');
 $errorXmlExport = null;
 if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
     require_once api_get_path(SYS_CODE_PATH).'exercice/export/qti2/qti2_export.php';
-    require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 
     $export = export_exercise_to_qti($exerciseId, true);
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);

@@ -8,8 +8,6 @@
 
 require_once '../inc/global.inc.php';
 
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 require_once 'hotpotatoes.lib.php';
 
 // Section (for the tabs).

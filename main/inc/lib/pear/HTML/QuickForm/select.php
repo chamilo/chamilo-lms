@@ -550,7 +550,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $this->setName($myName);
             }
 
-            $strHtml .= $tabs . '<select class="selectpicker show-tick form-control"' . $attrString . ">\n";
+            $strHtml .= $tabs . '<select data-live-search="true" class="selectpicker show-tick form-control"' . $attrString . ">\n";
 
             $strValues = is_array($this->_values)? array_map('strval', $this->_values): array();
 

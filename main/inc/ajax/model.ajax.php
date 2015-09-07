@@ -1509,7 +1509,7 @@ switch ($action) {
                     $class = 'btn btn-danger';
                     $text = get_lang('Remove');
                 } else {
-                    $url  = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq();
+                    $url  = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered';
                     $class = 'btn btn-primary';
                     //$icon = Display::return_icon('add.png', get_lang('Add'));
                     $text = get_lang('Add');

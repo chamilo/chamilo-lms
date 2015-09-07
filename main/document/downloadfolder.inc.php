@@ -97,9 +97,10 @@ function fixDocumentNameCallback($p_event, &$p_header)
     $documentNameFixed = str_replace(
         $basename,
         $basenamePHPFixed,
-        $basenamePHPFixed
+        $documentNameFixed
     );
 
+    $documentNameFixed = str_replace($remove_dir, '', $documentNameFixed);
     $p_header['stored_filename'] = $documentNameFixed;
 
     return 1;
@@ -163,7 +164,8 @@ if (api_is_allowed_to_edit()) {
                 }
             }
         }
-
+        //error_log($sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path']);
+        //error_log($sysCoursePath.$courseInfo['path'].'/document'.$remove_dir);
         $zip->add(
             $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'],
             PCLZIP_OPT_REMOVE_PATH,
@@ -296,7 +298,9 @@ if (api_is_allowed_to_edit()) {
 }
 
 // Launch event
-Event::event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)');
+Event::event_download(
+    ($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)'
+);
 
 // Start download of created file
 $name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';

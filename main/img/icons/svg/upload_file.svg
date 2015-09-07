@@ -15,7 +15,10 @@
    viewBox="0 0 546.13333 546.13333"
    id="svg548"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="file_upload.svg">
+   sodipodi:docname="upload_file.svg"
+   inkscape:export-filename="/var/www/chamilo110x/main/img/icons/16/upload_file.png"
+   inkscape:export-xdpi="11.25"
+   inkscape:export-ydpi="11.25">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -29,13 +32,13 @@
      inkscape:window-height="1056"
      id="namedview33"
      showgrid="false"
-     inkscape:zoom="1.9327147"
-     inkscape:cx="-46.165653"
-     inkscape:cy="27.644558"
+     inkscape:zoom="6.8475478"
+     inkscape:cx="44.012615"
+     inkscape:cy="39.256707"
      inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g4175" />
+     inkscape:current-layer="g4188" />
   <svg:metadata
      id="metadata34">
     <rdf:RDF>
@@ -44,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </svg:metadata>
@@ -206,7 +209,7 @@
       </svg:g>
       <svg:g
          id="g4174"
-         transform="matrix(1.8184527,0,0,1.8184527,18.464525,141.83006)">
+         transform="matrix(1.9964955,0,0,1.9806095,21.937608,132.70027)">
         <svg:path
            d="M 3.1354782,28.608205 30.106924,4.6142926 56.878952,28.54226 48.511963,29.922067 47.251286,54.457843 14.279833,54.589733 13.079936,29.998865 3.1354782,28.608205 Z"
            id="rect3593"

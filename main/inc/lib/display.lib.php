@@ -1893,9 +1893,9 @@ class Display
             foreach ($items as $item) {
                 $html .= '<div class="accordion-my-group">';
                 $html .= '<div class="accordion-heading">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
-                                '.$item['title'].'
-                                </a>
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
+                            '.$item['title'].'
+                            </a>
                           </div>';
 
                 $html .= '<div id="collapse'.$count.'" class="accordion-body">';
@@ -1906,6 +1906,7 @@ class Display
             }
             $html .= '</div>';
         }
+
         return $html;
     }
 
@@ -1915,8 +1916,10 @@ class Display
     public static function group_button($title, $elements)
     {
         $html = '<div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">'.$title.'  <span class="caret"></span></button>
-            <ul class="dropdown-menu">';
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                '.$title.'
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">';
         foreach ($elements as $item) {
             $html .= Display::tag('li', Display::url($item['title'], $item['href']));
         }
@@ -1957,6 +1960,7 @@ class Display
                             <param name="flashvars" value="controls=true&file='.$params['url'].'" />
                           </object>';
                 $html .= '</audio>';
+
                 return $html;
                 break;
         }
@@ -1991,6 +1995,7 @@ class Display
                 $messageToString .= $message;
             }
         }
+
         return $messageToString;
     }
 
@@ -2032,10 +2037,7 @@ class Display
             $objSSO = null;
 
             if (!empty($subSSOClass)) {
-                require_once api_get_path(
-                        SYS_CODE_PATH
-                    )."auth/sso/sso.$subSSOClass.class.php";
-
+                require_once api_get_path(SYS_CODE_PATH)."auth/sso/sso.$subSSOClass.class.php";
                 $subSSOClass = 'sso'.$subSSOClass;
                 $objSSO = new $subSSOClass();
             } else {
@@ -2090,20 +2092,26 @@ class Display
      * @param string $text The button content
      * @param string $url The url to button
      * @param string $icon The Awesome Font class for icon
-     * @param string $type Ooptional. The button Bootstrap class. Default 'default' class
+     * @param string $type Optional. The button Bootstrap class. Default 'default' class
      * @param array $attributes The additional attributes
      * @return string The button HTML
      */
     public static function toolbarButton($text, $url, $icon = 'check', $type = 'default', array $attributes = [])
     {
         $buttonClass = "btn btn-$type";
-
         $icon = self::tag('i', null, ['class' => "fa fa-$icon"]);
-
         $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
 
         return self::url("$icon $text", $url, $attributes);
     }
+
+    /**
+     * @param int $id
+     * @param array $content
+     * @param int $col
+     * @param bool|true $right
+     * @return string
+     */
     public static function toolbarAction($id, $content = array(), $col = 2, $right = true)
     {
         $columns = 12/$col;
@@ -2131,6 +2139,7 @@ class Display
         }
         $html .= '</div>';
         $html .= '</div>';
+
         return $html;
     }
 }

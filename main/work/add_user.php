@@ -6,7 +6,7 @@ require_once '../inc/global.inc.php';
 // Including necessary files
 require_once 'work.lib.php';
 
-$current_course_tool  = TOOL_STUDENTPUBLICATION;
+$current_course_tool = TOOL_STUDENTPUBLICATION;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
 $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
@@ -30,8 +30,14 @@ if (!api_is_allowed_to_edit()) {
 
 $courseInfo = api_get_course_info();
 
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId, 'name' => $my_folder_data['title']);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+    'name' => get_lang('StudentPublications'),
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
+    'name' => $my_folder_data['title'],
+);
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddUsers'));
 
 $error_message = null;

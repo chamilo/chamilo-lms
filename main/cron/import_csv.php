@@ -605,6 +605,7 @@ class ImportCsv
                     );
 
                     if ($result) {
+
                         if ($row['username'] != $userInfo['username']) {
                             $this->logger->addInfo("Students - Username was changes from '".$userInfo['username']."' to '".$row['username']."' ");
                         }
@@ -1466,6 +1467,8 @@ class ImportCsv
             Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT_NOT),
             Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT),
             Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_VALUES),
+            Database::get_main_table(TABLE_TOOL_LIST),
+            Database::get_main_table(TABLE_TOOL_INTRO),
         );
 
         foreach ($truncateTables as $table) {

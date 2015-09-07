@@ -3314,13 +3314,13 @@ function api_not_allowed($print_headers = false, $message = null)
 
     global $this_section;
 
-    if (empty($user_id)) {
-
-        // Why the CustomPages::enabled() need to be to set the request_uri
-        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-    }
-
     if (CustomPages::enabled() && !isset($user_id)) {
+
+        if (empty($user_id)) {
+            // Why the CustomPages::enabled() need to be to set the request_uri
+            $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+        }
+
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
 
@@ -3330,7 +3330,11 @@ function api_not_allowed($print_headers = false, $message = null)
     if (isset($message)) {
         $msg = $message;
     } else {
-        $msg = Display::return_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a>', 'error', false);
+        $msg = Display::return_message(
+            get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a>',
+            'error',
+            false
+        );
     }
 
     $msg = Display::div($msg, array('align'=>'center'));
@@ -3342,11 +3346,13 @@ function api_not_allowed($print_headers = false, $message = null)
     }
 
     $tpl = new Template(null, $show_headers, $show_headers);
-
     $tpl->assign('hide_login_link', 1);
-
     $tpl->assign('content', $msg);
-    if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
+
+    if (($user_id != 0 && !api_is_anonymous()) &&
+        (!isset($course) || $course == -1) &&
+        empty($_GET['cidReq'])
+    ) {
         // if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
         // to the user_portal
@@ -3360,29 +3366,41 @@ function api_not_allowed($print_headers = false, $message = null)
             $this_section == SECTION_PLATFORM_ADMIN
         )
     ) {
-
-        //only display form and return to the previous URL if there was a course ID included
+        $courseCode = api_get_course_id();
+        // Only display form and return to the previous URL if there was a course ID included
         if ($user_id != 0 && !api_is_anonymous()) {
             //if there is a user ID, then the user is not allowed but the session is still there. Say so and exit
             $tpl->assign('content', $msg);
             $tpl->display_one_col_template();
             exit;
         }
-        if (!is_null(api_get_course_id())) {
-            api_set_firstpage_parameter(api_get_course_id());
+
+        if (!is_null($courseCode)) {
+            api_set_firstpage_parameter($courseCode);
         }
 
         // If the user has no user ID, then his session has expired
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
         $action = str_replace('&amp;', '&', $action);
-        $form = new FormValidator('formLogin', 'post', $action, null, array(), FormValidator::LAYOUT_BOX_NO_LABEL);
+        $form = new FormValidator(
+            'formLogin',
+            'post',
+            $action,
+            null,
+            array(),
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
         $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'autocapitalize_off'));
         $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password')));
         $form->addButton('submitAuth', get_lang('LoginEnter'), '', 'primary');
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (above)
         $content = Display::return_message(get_lang('NotAllowed'), 'error', false);
-        $content .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
+
+        if (!empty($courseCode)) {
+            $content .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
+        }
+
         if (api_is_cas_activated()) {
             $content .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
             $content .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
@@ -3396,7 +3414,15 @@ function api_not_allowed($print_headers = false, $message = null)
         if (api_is_cas_activated()) {
             $content .= "</div>";
         }
-        $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
+
+        if (!empty($courseCode)) {
+            $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.
+                get_lang('ReturnToCourseHomepage').'</a></p>';
+        } else {
+            $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.
+                get_lang('CampusHomepage').'</a></p>';
+        }
+
         $tpl->setLoginBodyClass();
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();

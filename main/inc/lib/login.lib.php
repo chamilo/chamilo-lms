@@ -333,18 +333,6 @@ class Login
                     UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
                     Session::write('is_platformAdmin', $is_platformAdmin);
                     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
-
-//
-//
-//                    // If request_uri is setted we have to go further to have course permissions
-//                    if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
-//                        if (isset($_SESSION['noredirection'])) {
-//                            //If we just want to reset info without redirecting user
-//                            unset($_SESSION['noredirection']);
-//                        } else {
-//                            LoginRedirection::redirect();
-//                        }
-//                    }
                 } else {
                     header('location:' . api_get_path(WEB_PATH));
                     //exit("WARNING UNDEFINED UID !! ");

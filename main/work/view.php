@@ -42,9 +42,11 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $url_dir = 'work_list.php?id='.$my_folder_data['id'];
     }
 
+    $userInfo = api_get_user_info($work['user_id']);
     $interbreadcrumb[] = array('url' => $url_dir, 'name' => $my_folder_data['title']);
+    $interbreadcrumb[] = array('url' => '#', 'name' => $userInfo['complete_name']);
     $interbreadcrumb[] = array('url' => '#','name' => $work['title']);
-    //|| api_is_drh()
+
     if (($courseInfo['show_score'] == 0 &&
         $work['active'] == 1 &&
         $work['accepted'] == 1
@@ -99,6 +101,35 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $tpl = new Template();
         $tpl->assign('work', $work);
         $tpl->assign('comments', $comments);
+
+        $actions = '';
+        if (isset($work['contains_file'])) {
+            if (isset($work['download_url'])) {
+                $actions .= Display::url(
+                    Display::return_icon(
+                        'save.png',
+                        get_lang('Download'),
+                        null,
+                        ICON_SIZE_MEDIUM
+                    ),
+                    $work['download_url']
+                );
+
+                if (isset($work['url_correction'])) {
+                    $actions .= Display::url(
+                        Display::return_icon(
+                            'check.png',
+                            get_lang('Correction'),
+                            null,
+                            ICON_SIZE_MEDIUM
+                        ),
+                        $work['download_url'].'&correction=1'
+                    );
+                }
+            }
+        }
+
+        $tpl->assign('actions', $actions);
         if (api_is_allowed_to_session_edit()) {
             $tpl->assign('form', $commentForm);
         }

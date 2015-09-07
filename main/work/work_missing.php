@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
@@ -15,8 +13,8 @@ require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
-
 $group_id = api_get_group_id();
+$user_id = api_get_user_id();
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -38,16 +36,17 @@ switch ($action) {
     case 'send_mail':
         $check = Security::check_token('get');
         if ($check) {
-            $mails_sent_to = send_reminder_users_without_publication($my_folder_data);
+            $mails_sent_to = send_reminder_users_without_publication(
+                $my_folder_data
+            );
 
             if (empty($mails_sent_to)) {
-                $error_message = Display::return_message(get_lang('NoResults'), 'warning');
+                Display::addFlash(Display::return_message(get_lang('NoResults'), 'warning'));
             } else {
-                $error_message = Display::return_message(get_lang('MessageHasBeenSent').' '.implode(', ', $mails_sent_to), 'success');
-            }
-
-            if (!empty($error_message)) {
-                Session::write('error_message', $error_message);
+                Display::addFlash(Display::return_message(
+                    get_lang('MessageHasBeenSent').' '.implode(', ', $mails_sent_to),
+                    'success'
+                ));
             }
             Security::clear_token();
         }
@@ -75,45 +74,53 @@ if (!empty($group_id)) {
         api_not_allowed();
     }
 
-    $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id,
+        'name' => get_lang('GroupSpace').' '.$group_properties['name']
+    );
 }
 
-$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId, 'name' =>  $my_folder_data['title']);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+    'name' => get_lang('StudentPublications')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
+    'name' =>  $my_folder_data['title']
+);
 
 if (isset($_GET['list']) && $_GET['list'] == 'with') {
-    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('UsersWithTask'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UsersWithTask'));
 } else {
-    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('UsersWithoutTask'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UsersWithoutTask'));
 }
 
-Display :: display_header(null);
+Display::display_header(null);
 
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$workId.'&'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
-
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$workId.'&'.api_get_cidreq().'">'.
+    Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
+$output = '';
 if (!empty($workId)) {
     if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
-        $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$workId.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
+        $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
             Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>";
     } else {
         if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
-            $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$workId.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$token.'">'.
+            $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without&action=send_mail&sec_token='.$token.'">'.
                 Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM)."</a>";
         } else {
-            $display_output .= Display::return_icon('mail_send_na.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM);
+            $output .= Display::return_icon('mail_send_na.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM);
         }
     }
 }
 
-echo $display_output;
+echo $output;
 echo '</div>';
 
-$error_message = Session::read('error_message');
-if (!empty($error_message)) {
-    echo $error_message;
-    Session::erase('error_message');
-}
 
 display_list_users_without_publication($workId);

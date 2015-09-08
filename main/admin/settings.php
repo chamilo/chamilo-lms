@@ -415,7 +415,7 @@ $action_images['templates'] = 'template.png';
 $action_images['plugins'] = 'plugins.png';
 $action_images['shibboleth'] = 'shibboleth.png';
 $action_images['facebook'] = 'facebook.png';
-$action_images['crons'] = 'platform_event.png';
+$action_images['crons'] = 'crons.png';
 
 $action_array = array();
 $resultcategories = array();

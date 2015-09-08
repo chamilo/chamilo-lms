@@ -161,17 +161,6 @@ $interbreadcrumb[]= array(	'url' =>'index.php','name' => get_lang('ToolGradebook
 Display :: display_header(get_lang('NewCategory'));
 
 $display_form = true;
-
-/*if (!empty($grading_contents)) {
-    $count_items = count($grading_contents['items']);
-    $cats  = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
-    $cats_count = count($cats) - 1 ;
-
-    if ($cats_count >= $count_items) {
-        Display::display_warning_message(get_lang('CheckYourGradingModelValues'));
-        $display_form = false;
-    }
-}*/
 if ($display_form) {
     $form->display();
 }

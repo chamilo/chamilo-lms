@@ -16,170 +16,6 @@ class GradeBookResult
      */
     public function __construct($get_questions=false,$get_answers=false)
     {
-        //nothing to do
-        /*
-        $this->exercise_list = array();
-        $this->readExercisesList();
-        if($get_questions)
-        {
-            foreach($this->exercises_list as $exe)
-            {
-                $this->exercises_list['questions'] = $this->getExerciseQuestionList($exe['id']);
-            }
-        }
-        */
-    }
-
-    /**
-     * Reads exercises information (minimal) from the data base
-     * @param	boolean		Whether to get only visible exercises (true) or all of them (false). Defaults to false.
-     * @return	array		A list of exercises available
-     */
-    private function _readGradebookList($only_visible = false)
-    {
-        $return = array();
-        $TBL_EXERCISES= Database::get_course_table(TABLE_QUIZ_TEST);
-
-        $sql = "SELECT id,title,type,random,active FROM $TBL_EXERCISES";
-        if ($only_visible) {
-            $sql.= ' WHERE active=1';
-        }
-        $sql .= ' ORDER BY title';
-        $result=Database::query($sql);
-
-        // if the exercise has been found
-        while($row=Database::fetch_array($result,'ASSOC')) {
-            $return[] = $row;
-        }
-        // exercise not found
-        return $return;
-    }
-
-    /**
-     * Gets the questions related to one exercise
-     * @param	integer		Exercise ID
-     */
-    private function _readGradeBookQuestionsList($e_id)
-    {
-        $return = array();
-        $TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $course_id = api_get_course_int_id();
-        $sql="SELECT q.id, q.question, q.ponderation, q.position, q.type, q.picture " .
-            " FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
-            " WHERE eq.c_di = $course_id AND
-					q.c_di = $course_id AND
-					eq.question_id=q.id AND
-					eq.exercice_id='$e_id' " .
-            " ORDER BY q.position";
-        $result = Database::query($sql);
-
-        // fills the array with the question ID for this exercise
-        // the key of the array is the question position
-        while($row=Database::fetch_array($result,'ASSOC')) {
-            $return[] = $row;
-        }
-
-        return true;
-    }
-
-    /**
-     * Gets the results of all students (or just one student if access is limited)
-     * @param	string		The document path (for HotPotatoes retrieval)
-     * @param	integer		User ID. Optional. If no user ID is provided,
-     * we take all the results. Defauts to null
-     */
-    public function _getGradeBookReporting($document_path, $user_id = null)
-    {
-        $return = array();
-        $TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
-        $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
-        $TBL_TRACK_EXERCISES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_HOTPOTATOES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-
-        $cid = api_get_course_id();
-        $course_id = api_get_course_int_id();
-        if (empty($user_id)) {
-            //get all results (ourself and the others) as an admin should see them
-            //AND exe_user_id <> $_user['user_id']  clause has been removed
-            $sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)").", ce.title, te.exe_result ,
-						te.exe_weighting, te.exe_date,te.exe_id, user.email, user.user_id
-				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te, $TBL_USER user
-				  WHERE ce.c_id = $course_id AND
-				  		te.exe_exo_id = ce.id AND
-				  		user_id=te.exe_user_id AND te.c_id = ce.c_id
-				  ORDER BY te.c_id ASC, ce.title ASC, te.exe_date ASC";
-
-            $hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
-						tth.exe_result , tth.exe_weighting, tth.exe_date, tu.email, tu.user_id
-					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-					WHERE  tu.user_id=tth.exe_user_id AND tth.c_id = $course_id
-					ORDER BY tth.c_id ASC, tth.exe_date ASC";
-
-        } else { // get only this user's results
-            $sql = "SELECT '',ce.title, te.exe_result , te.exe_weighting, te.exe_date,te.exe_id
-						FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te
-				  		WHERE 	ce.c_id 		= $course_id AND
-				  				te.exe_exo_id 	= ce.id AND
-				  				te.exe_user_id 	= $user_id AND
-				  				te.c_id = ce.c_id
-				  		ORDER BY te.c_id ASC, ce.title ASC, te.exe_date ASC";
-
-            $hpsql="SELECT '',exe_name, exe_result , exe_weighting, exe_date
-					FROM $TBL_TRACK_HOTPOTATOES
-					WHERE exe_user_id = '".$user_id."' AND c_id = $course_id
-					ORDER BY c_id ASC, exe_date ASC";
-        }
-
-        $results = StatsUtils::getManyResultsXCol($sql, 8);
-        $hpresults = StatsUtils::getManyResultsXCol($hpsql, 7);
-
-        $NoTestRes = 0;
-        $NoHPTestRes = 0;
-        $j = 0;
-        //Print the results of tests
-        if (is_array($results)) {
-            for ($i = 0; $i < sizeof($results); $i++) {
-                $return[$i] = array();
-                $id = $results[$i][5];
-                $mailid = $results[$i][6];
-                $user = $results[$i][0];
-                $test = $results[$i][1];
-                $res = $results[$i][2];
-                if(empty($user_id)) {
-                    $user = $results[$i][0];
-                    $return[$i]['user'] = $user;
-                    $return[$i]['user_id'] = $results[$i][7];
-                }
-                $return[$i]['title'] = $test;
-                $return[$i]['time'] = api_convert_and_format_date($results[$i][4], null, date_default_timezone_get());
-                $return[$i]['result'] = $res;
-                $return[$i]['max'] = $results[$i][3];
-                $j=$i;
-            }
-        }
-        $j++;
-        // Print the Result of Hotpotatoes Tests
-        if (is_array($hpresults)) {
-            for ($i = 0; $i < sizeof($hpresults); $i++) {
-                $return[$j+$i] = array();
-                $title = GetQuizName($hpresults[$i][1],$document_path);
-                if ($title =='') {
-                    $title = basename($hpresults[$i][1]);
-                }
-                if (empty($user_id)) {
-                    $return[$j+$i]['user'] = $hpresults[$i][0];
-                    $return[$j+$i]['user_id'] = $results[$i][6];
-
-                }
-                $return[$j+$i]['title'] = $title;
-                $return[$j+$i]['time'] = api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get());
-                $return[$j+$i]['result'] = $hpresults[$i][2];
-                $return[$j+$i]['max'] = $hpresults[$i][3];
-            }
-        }
-        $this->results = $return;
-        return true;
     }
 
     /**
@@ -191,7 +27,6 @@ class GradeBookResult
      */
     public function exportCompleteReportCSV($dato)
     {
-        //$this->_getGradeBookReporting($document_path,$user_id);
         $filename = 'gradebook_results_'.gmdate('YmdGis').'.csv';
         if (!empty($user_id)) {
             $filename = 'gradebook_results_user_'.$user_id.'_'.gmdate('YmdGis').'.csv';
@@ -235,6 +70,7 @@ class GradeBookResult
         header('Content-Description: '.$filename);
         header('Content-transfer-encoding: binary');
         echo $data;
+
         return true;
     }
 
@@ -287,8 +123,6 @@ class GradeBookResult
         $_course = api_get_course_info();
         $filename = 'gb_results_'.$_course['code'].'_'.gmdate('YmdGis');
         $filepath = api_get_path(SYS_ARCHIVE_PATH).$filename;
-        //build the results
-        $inc = api_get_path(LIBRARY_PATH).'phpdocx/classes/CreateDocx.inc';
         require_once api_get_path(LIBRARY_PATH).'phpdocx/classes/CreateDocx.inc';
         $docx = new CreateDocx();
         $paramsHeader = array(
@@ -333,6 +167,7 @@ class GradeBookResult
         header('Cache-Control: must-revalidate, post-check=0,pre-check=0');
         header('Pragma: public');
         echo $data;
+
         return true;
     }
 }

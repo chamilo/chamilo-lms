@@ -32,35 +32,35 @@ class UserDataGenerator
 
 	public function UserDataGenerator($userid, $evals = array(), $links = array())
 	{
-		$this->userid = $userid;
-		$evals_filtered = array();
-		$result = array();
-		foreach ($evals as $eval) {
-			$toadd = true;
-			$coursecode = $eval->get_course_code();
-			if (isset($coursecode)) {
-				$result = Result :: load(null, $userid, $eval->get_id());
-				if (count($result) == 0) {
-					$toadd = false;
-				}
-			}
-			if ($toadd) {
-				$evals_filtered_copy = $evals;
-			}
+        $this->userid = $userid;
+        $evals_filtered = array();
+        $result = array();
+        foreach ($evals as $eval) {
+            $toadd = true;
+            $coursecode = $eval->get_course_code();
+            if (isset($coursecode)) {
+                $result = Result :: load(null, $userid, $eval->get_id());
+                if (count($result) == 0) {
+                    $toadd = false;
+                }
+            }
+            if ($toadd) {
+                $evals_filtered_copy = $evals;
+            }
 
-		}
-		if (count($result) == 0) {
-			$evals_filtered=$evals;
-		} else {
-			$evals_filtered=$evals_filtered_copy;
-		}
-		$this->items = array_merge($evals_filtered, $links);
+        }
+        if (count($result) == 0) {
+            $evals_filtered=$evals;
+        } else {
+            $evals_filtered=$evals_filtered_copy;
+        }
+        $this->items = array_merge($evals_filtered, $links);
 
-		$this->coursecodecache = array();
-		$this->categorycache = array();
-		$this->scorecache = null;
-		$this->avgcache = null;
-	}
+        $this->coursecodecache = array();
+        $this->categorycache = array();
+        $this->scorecache = null;
+        $this->avgcache = null;
+    }
 
 	/**
 	 * Get total number of items (rows)
@@ -192,6 +192,7 @@ class UserDataGenerator
 		$cat2 = $this->get_category_cached($item2->get_category_id());
 		$name1 = api_strtolower($this->get_category_name_to_display($cat1));
 		$name2 = api_strtolower($this->get_category_name_to_display($cat2));
+
 		return api_strnatcmp($name1, $name2);
 	}
 
@@ -214,6 +215,7 @@ class UserDataGenerator
 	{
 		$score1 = $this->avgcache[$item1->get_item_type() . $item1->get_id()];
 		$score2 = $this->avgcache[$item2->get_item_type() . $item2->get_id()];
+
 		return $this->compare_scores($score1, $score2);
 	}
 
@@ -226,6 +228,7 @@ class UserDataGenerator
 	{
 		$score1 = $this->scorecache[$item1->get_item_type() . $item1->get_id()];
 		$score2 = $this->scorecache[$item2->get_item_type() . $item2->get_id()];
+
 		return $this->compare_scores($score1, $score2);
 	}
 
@@ -238,6 +241,7 @@ class UserDataGenerator
 	{
 		$score1 = $this->scorecache[$item1->get_item_type() . $item1->get_id()];
 		$score2 = $this->scorecache[$item2->get_item_type() . $item2->get_id()];
+
 		return ScoreDisplay :: compare_scores_by_custom_display($score1, $score2);
 	}
 
@@ -313,6 +317,7 @@ class UserDataGenerator
 		if ($ignore_score_color) {
 			$displaytype |= SCORE_IGNORE_SPLIT;
 		}
+
 		return $scoredisplay->display_score($studscore, $displaytype, SCORE_ONLY_DEFAULT);
 	}
 

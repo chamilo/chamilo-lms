@@ -21,7 +21,7 @@ $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
-$interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidReq(), 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => 'group_space.php?'.api_get_cidReq(), 'name' => $current_group['name']);
 $is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
 

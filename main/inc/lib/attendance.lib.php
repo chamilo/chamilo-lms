@@ -56,40 +56,39 @@ class Attendance
 		return $obj->total_number_of_items;
 	}
 
-	/**
-	 * Get attendance list only the id, name and attendance_qualify_max fields
-	 * @param   string  course db name (optional)
-	 * @param   int     session id (optional)
-	 * @return  array	attendances list
-	 */
-	public function get_attendances_list($course_id = '', $session_id = null)
-	{
-		// Initializing database table and variables
-		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
-		$data = array();
+    /**
+     * Get attendance list only the id, name and attendance_qualify_max fields
+     * @param   string  course db name (optional)
+     * @param   int     session id (optional)
+     * @return  array	attendances list
+     */
+    public function get_attendances_list($course_id = '', $session_id = null)
+    {
+        $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
+        $data = array();
 
-		if (empty($course_id)) {
-			$course_id = api_get_course_int_id();
-		} else {
-			$course_id = intval($course_id);
-		}
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = intval($course_id);
+        }
 
-		$session_id = isset($session_id)?intval($session_id):api_get_session_id();
-		$condition_session = api_get_session_condition($session_id);
+        $session_id = isset($session_id)?intval($session_id):api_get_session_id();
+        $condition_session = api_get_session_condition($session_id);
 
-		// Get attendance data
-		$sql = "SELECT id, name, attendance_qualify_max
-				FROM $tbl_attendance
-				WHERE c_id = $course_id AND active = 1 $condition_session ";
-		$rs  = Database::query($sql);
-		if (Database::num_rows($rs) > 0) {
-			while ($row = Database::fetch_array($rs,'ASSOC')) {
-				$data[$row['id']] = $row;
-			}
-		}
+        // Get attendance data
+        $sql = "SELECT id, name, attendance_qualify_max
+                FROM $tbl_attendance
+                WHERE c_id = $course_id AND active = 1 $condition_session ";
+        $rs  = Database::query($sql);
+        if (Database::num_rows($rs) > 0) {
+            while ($row = Database::fetch_array($rs,'ASSOC')) {
+                $data[$row['id']] = $row;
+            }
+        }
 
-		return $data;
-	}
+        return $data;
+    }
 
 	/**
 	 * Get the attendaces to display on the current page (fill the sortable-table)
@@ -849,7 +848,6 @@ class Attendance
 		}
 
 		// get count of presences by users inside current attendance and save like results
-		$count_presences = 0;
 		if (count($user_ids) > 0) {
 			foreach ($user_ids as $uid) {
 				$count_presences = 0;

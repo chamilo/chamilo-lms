@@ -325,6 +325,7 @@ function set_file_folder_permissions()
 function write_system_config_file($path)
 {
     global $dbHostForm;
+    global $dbPortForm;
     global $dbUsernameForm;
     global $dbPassForm;
     global $dbNameForm;
@@ -342,6 +343,7 @@ function write_system_config_file($path)
 
     $config['{DATE_GENERATED}'] = date('r');
     $config['{DATABASE_HOST}'] = $dbHostForm;
+    $config['{DATABASE_PORT}'] = $dbPortForm;
     $config['{DATABASE_USER}'] = $dbUsernameForm;
     $config['{DATABASE_PASSWORD}'] = $dbPassForm;
     $config['{DATABASE_MAIN}'] = $dbNameForm;
@@ -523,14 +525,16 @@ function get_config_param_from_db($param = '')
  * @param string  $dbUsernameForm DB username
  * @param string  $dbPassForm DB password
  * @param string  $dbNameForm DB name
+ * @param int     $dbPortForm DB port
  *
  * @return EntityManager
  */
-function connectToDatabase($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
+function connectToDatabase($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm, $dbPortForm = 3306)
 {
     $dbParams = array(
         'driver' => 'pdo_mysql',
         'host' => $dbHostForm,
+        'port' => $dbPortForm,
         'user' => $dbUsernameForm,
         'password' => $dbPassForm,
         'dbname' => $dbNameForm
@@ -1298,6 +1302,7 @@ function displayDatabaseParameter(
  * @param string $dbUsernameForm
  * @param string $dbPassForm
  * @param string $dbNameForm
+ * @param int    $dbPortForm
  * @param string $installationProfile
  */
 function display_database_settings_form(
@@ -1306,6 +1311,7 @@ function display_database_settings_form(
     $dbUsernameForm,
     $dbPassForm,
     $dbNameForm,
+    $dbPortForm = 3306,
     $installationProfile = ''
 ) {
     if ($installType == 'update') {
@@ -1314,6 +1320,7 @@ function display_database_settings_form(
         $dbUsernameForm     = $_configuration['db_user'];
         $dbPassForm         = $_configuration['db_password'];
         $dbNameForm         = $_configuration['main_database'];
+        $dbPortForm         = $_configuration['db_port'];
 
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
@@ -1340,6 +1347,20 @@ function display_database_settings_form(
                 <input type="text" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" />
             </div>
             <div class="col-sm-3"><?php echo get_lang('EG').' localhost'; ?></div>
+            <?php } ?>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4"><?php echo get_lang('DBPort'); ?> </label>
+            <?php if ($installType == 'update'){ ?>
+            <div class="col-sm-5">
+                <input type="hidden" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" /><?php echo $dbPortForm; ?>
+            </div>
+            <div class="col-sm-3"></div>
+            <?php }else{ ?>
+            <div class="col-sm-5">
+                <input type="text" size="25" maxlength="50" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" />
+            </div>
+            <div class="col-sm-3"><?php echo get_lang('EG').' 3306'; ?></div>
             <?php } ?>
         </div>
         <div class="form-group">
@@ -1400,7 +1421,8 @@ function display_database_settings_form(
                 $dbHostForm,
                 $dbUsernameForm,
                 $dbPassForm,
-                null
+                null,
+                $dbPortForm
             );
             $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
             if (in_array($dbNameForm, $databases)) {
@@ -1415,6 +1437,7 @@ function display_database_settings_form(
             <?php echo $database_exists_text ?>
             <div id="db_status" class="alert alert-success">
                 Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br />
+                Database port: <strong><?php echo $manager->getConnection()->getPort(); ?></strong><br />
                 Database driver: <strong><?php echo $manager->getConnection()->getDriver()->getName(); ?></strong><br />
 
             </div>

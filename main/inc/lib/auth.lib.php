@@ -102,7 +102,9 @@ class Auth
     {
         $user_id = api_get_user_id();
         $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT * FROM " . $table_category . " WHERE user_id=$user_id ORDER BY sort ASC";
+        $sql = "SELECT * FROM " . $table_category . "
+                WHERE user_id=$user_id
+                ORDER BY sort ASC";
         $result = Database::query($sql);
         $output = array();
         while ($row = Database::fetch_array($result)) {

@@ -21,8 +21,7 @@ function choose_image($file_name)
     static $type, $image;
 
     /* TABLES INITIALISATION */
-    if (!$type || !$image)
-    {
+    if (!$type || !$image) {
         $type['word'      ] = array('doc', 'dot',  'rtf', 'mcw',  'wps', 'psw', 'docm', 'docx', 'dotm',  'dotx');
         $type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php', 'xhtml');
         $type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg', 'tif', 'tiff');

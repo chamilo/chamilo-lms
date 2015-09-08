@@ -72,6 +72,7 @@ define('LANGUAGE_DETECT_MAX_DELTA', 140000);
  * @param string $variable				This is the identificator (name) of the translated string to be retrieved.
  * @param string $reserved				This parameter has been reserved for future use.
  * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
+ *
  * @return string						Returns the requested string in the correspondent language.
  *
  * @author Roan Embrechts

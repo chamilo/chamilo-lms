@@ -64,9 +64,7 @@ if (isset($_GET['action'])) {
 }
 
 /*	Header */
-
-
-$interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidReq(), 'name' => get_lang('Groups'));
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
     // So we are not in learnpath tool
     if (!$is_allowed_in_course) {
@@ -124,9 +122,6 @@ echo GroupManager::getSearchForm();
 echo '</div>';
 echo '</div>';
 echo '</div>';
-    
-    
-
 echo '</div>';
 
 echo GroupManager::getOverview($courseId, $keyword);

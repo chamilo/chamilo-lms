@@ -115,7 +115,8 @@ function getDropboxConf()
 /**
 * This function deletes a dropbox category
 *
-* @todo give the user the possibility what needs to be done with the files in this category: move them to the root, download them as a zip, delete them
+* @todo give the user the possibility what needs to be done with the files
+ * in this category: move them to the root, download them as a zip, delete them
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
@@ -156,11 +157,13 @@ function delete_category($action, $id, $user_id = null)
     }
 
     // step 1: delete the category
-    $sql = "DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id='".intval($id)."' AND $sentreceived='1'";
+    $sql = "DELETE FROM ".$dropbox_cnf['tbl_category']."
+            WHERE c_id = $course_id AND cat_id='".intval($id)."' AND $sentreceived='1'";
     Database::query($sql);
 
     // step 2: delete all the documents in this category
-    $sql = "SELECT * FROM ".$entries_table." WHERE c_id = $course_id AND cat_id='".intval($id)."'";
+    $sql = "SELECT * FROM ".$entries_table."
+            WHERE c_id = $course_id AND cat_id='".intval($id)."'";
     $result = Database::query($sql);
 
     while($row = Database::fetch_array($result)) {
@@ -172,6 +175,7 @@ function delete_category($action, $id, $user_id = null)
             $dropboxfile->deleteSentWork($row[$id_field]);
         }
     }
+
     return $return_message;
 }
 
@@ -241,6 +245,7 @@ function store_move($id, $target, $part)
     } else {
         $return_message = get_lang('NotMovedError');
     }
+
     return $return_message;
 }
 
@@ -291,6 +296,7 @@ function display_file_checkbox($id, $part) {
         $checked = 'checked';
     }
     $return_value = '<input type="checkbox" name="'.Security::remove_XSS($part).'_'.Security::remove_XSS($id).'" value="'.Security::remove_XSS($id).'" '.$checked.' />';
+
     return $return_value;
 }
 
@@ -314,7 +320,8 @@ function get_dropbox_categories($filter = '')
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
 
-    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND user_id='".$_user['user_id']."' $condition_session";
+    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
+            WHERE c_id = $course_id AND user_id='".$_user['user_id']."' $condition_session";
 
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
@@ -336,7 +343,8 @@ function get_dropbox_category($id)
     $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     if (empty($id) or $id != intval($id)) { return array(); }
-    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id='".$id."'";
+    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']."
+            WHERE c_id = $course_id AND cat_id='".$id."'";
     $res = Database::query($sql);
     if ($res === false) {
         return array();
@@ -524,7 +532,11 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     $origin = isset($_GET['origin']) ? $_GET['origin'] : null;
 
     $token = Security::get_token();
-    $dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
+    $dropbox_person = new Dropbox_Person(
+        api_get_user_id(),
+        $is_courseAdmin,
+        $is_courseTutor
+    );
 
     $form = new FormValidator(
         'sent_form',
@@ -695,6 +707,7 @@ function getLoginFromId($id)
     $result = Database::query($sql);
     $res = Database::fetch_array($result);
     if (!$res) return false;
+
     return stripslashes($res['username']);
 }
 
@@ -707,6 +720,7 @@ function isCourseMember($user_id)
     $_course = api_get_course_info();
     $course_code = $_course['code'];
     $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true);
+
     return $is_course_member;
 }
 
@@ -729,9 +743,11 @@ function removeUnusedFiles()
     $result = Database::query($sql);
     while ($res = Database::fetch_array($result)) {
         //delete the selected files from the post and file tables
-        $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . " WHERE c_id = $course_id AND file_id = '" . $res['id'] . "'";
+        $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . "
+                WHERE c_id = $course_id AND file_id = '" . $res['id'] . "'";
         Database::query($sql);
-        $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . " WHERE c_id = $course_id AND id ='" . $res['id'] . "'";
+        $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . "
+                WHERE c_id = $course_id AND id ='" . $res['id'] . "'";
         Database::query($sql);
         //delete file from server
         @unlink( dropbox_cnf('sysPath') . '/' . $res['filename']);
@@ -758,7 +774,8 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     $mailingPseudoId = intval($mailingPseudoId);
     $sql = "SELECT f.uploader_id
             FROM " . $dropbox_cnf['tbl_file'] . " f
-            LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
+            LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p
+            ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
             WHERE
                 p.dest_user_id = '" . $mailingPseudoId . "' AND
                 p.c_id = $course_id
@@ -855,7 +872,8 @@ function store_add_dropbox()
     }
 
     // we are doing a just upload but an additional recipient is selected.
-    // note: why can't this be valid? It is like sending a document to yourself AND to a different person (I do this quite often with my e-mails)
+    // note: why can't this be valid? It is like sending a document to
+    // yourself AND to a different person (I do this quite often with my e-mails)
     if ($thisIsJustUpload && (count($_POST['recipients']) != 1)) {
         return get_lang('MailingJustUploadSelectNoOther');
     }
@@ -881,7 +899,8 @@ function store_add_dropbox()
 
     // check if the filesize does not exceed the allowed size.
     if ($dropbox_filesize <= 0 || $dropbox_filesize > $dropbox_cnf['maxFilesize']) {
-        return get_lang('DropboxFileTooBig'); // TODO: The "too big" message does not fit in the case of uploading zero-sized file.
+        return get_lang('DropboxFileTooBig');
+        // TODO: The "too big" message does not fit in the case of uploading zero-sized file.
     }
 
     // check if the file is actually uploaded
@@ -914,7 +933,8 @@ function store_add_dropbox()
         $_POST['authors'] = getUserNameFromId($_user['user_id']);
     }
 
-    // note: I think we could better migrate everything from here on to separate functions: store_new_dropbox, store_new_mailing, store_just_upload
+    // note: I think we could better migrate everything from here on to
+    // separate functions: store_new_dropbox, store_new_mailing, store_just_upload
 
     if ($dropbox_overwrite) {
         $dropbox_person = new Dropbox_Person($_user['user_id'], api_is_course_admin(), api_is_course_tutor());
@@ -995,7 +1015,15 @@ function store_add_dropbox()
         }
     }
 
-    new Dropbox_SentWork($_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $new_work_recipients);
+    new Dropbox_SentWork(
+        $_user['user_id'],
+        $dropbox_title,
+        $_POST['description'],
+        strip_tags($_POST['authors']),
+        $dropbox_filename,
+        $dropbox_filesize,
+        $new_work_recipients
+    );
 
     Security::clear_token();
     return get_lang('FileUploadSucces');
@@ -1059,7 +1087,8 @@ function feedback_form()
     return $return;
 }
 
-function user_can_download_file($id, $user_id) {
+function user_can_download_file($id, $user_id)
+{
     $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
     $id = intval($id);
@@ -1080,7 +1109,8 @@ function user_can_download_file($id, $user_id) {
 // we now check if the other users have not delete this document yet.
 // If this is the case then it is useless to see the
 // add feedback since the other users will never get to see the feedback.
-function check_if_file_exist($id) {
+function check_if_file_exist($id)
+{
     $dropbox_cnf = getDropboxConf();
     $id = intval($id);
     $course_id = api_get_course_int_id();
@@ -1095,8 +1125,6 @@ function check_if_file_exist($id) {
     $count = Database::num_rows($result);
     return $number_users_who_see_file > 0 || $count > 0;
 }
-
-
 
 /**
 * @return a language string (depending on the success or failure.
@@ -1276,7 +1304,8 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 function get_total_number_feedback($file_id = '') {
     $dropbox_cnf = getDropboxConf();
     $course_id = api_get_course_int_id();
-    $sql = "SELECT COUNT(feedback_id) AS total, file_id FROM ".$dropbox_cnf['tbl_feedback']."
+    $sql = "SELECT COUNT(feedback_id) AS total, file_id
+            FROM ".$dropbox_cnf['tbl_feedback']."
             WHERE c_id = $course_id GROUP BY file_id";
     $result = Database::query($sql);
     $return = array();

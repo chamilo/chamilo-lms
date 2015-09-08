@@ -634,16 +634,22 @@ switch ($action) {
                 if (isset($_FILES['mp3'])) {
                     $audio = $_FILES['mp3'];
                 }
+
+                $description = isset($_POST['description']) ? $_POST['description'] : '';
+                $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
+                $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
+                $url = isset($_POST['url']) ? $_POST['url'] : '';
+
                 $_SESSION['oLP']->edit_item(
                     $_REQUEST['id'],
                     $_POST['parent'],
                     $_POST['previous'],
                     $post_title,
-                    $_POST['description'],
-                    $_POST['prerequisites'],
+                    $description,
+                    $prerequisites,
                     $audio,
-                    $_POST['maxTimeAllowed'],
-                    $_POST['url']
+                    $maxTimeAllowed,
+                    $url
                 );
 
                 if (isset($_POST['content_lp'])) {

@@ -141,32 +141,32 @@ if (isset($_POST['submitWork'])) {
                                  php_flag zlib.output_compression off") or die(get_lang('ErrorCreatingDir').' (code 406)');
                 }
 
-				if ($error) {
+                if ($error) {
                 } elseif ($thisIsAMailing) {
-				    if (preg_match(dropbox_cnf('mailingZipRegexp'), $dropbox_title)) {
-			            $newWorkRecipients = dropbox_cnf('mailingIdBase');
-					} else {
-				        $error = true;
-				        $errormsg = $dropbox_title . ': ' . get_lang('MailingWrongZipfile');
-					}
-				} elseif ($thisIsJustUpload) {
-		            $newWorkRecipients = array();
-	        	} else {
-				 	// Creating the array that contains all the users who will receive the file
-					$newWorkRecipients = array();
-		            foreach ($_POST['recipients'] as $rec) {
-		            	if (strpos($rec, 'user_') === 0) {
-		            		$newWorkRecipients[] = substr($rec, strlen('user_'));
-		            	} elseif (strpos($rec, 'group_') === 0) {
-		            		$userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_')));
-		            		foreach ($userList as $usr) {
-		            			if (!in_array($usr['user_id'], $newWorkRecipients) && $usr['user_id'] != $_user['user_id']) {
-		            				$newWorkRecipients[] = $usr['user_id'];
-		            			}
-		            		}
-		            	}
-		            }
-	        	}
+                    if (preg_match(dropbox_cnf('mailingZipRegexp'), $dropbox_title)) {
+                        $newWorkRecipients = dropbox_cnf('mailingIdBase');
+                    } else {
+                        $error = true;
+                        $errormsg = $dropbox_title . ': ' . get_lang('MailingWrongZipfile');
+                    }
+                } elseif ($thisIsJustUpload) {
+                    $newWorkRecipients = array();
+                } else {
+                    // Creating the array that contains all the users who will receive the file
+                    $newWorkRecipients = array();
+                    foreach ($_POST['recipients'] as $rec) {
+                        if (strpos($rec, 'user_') === 0) {
+                            $newWorkRecipients[] = substr($rec, strlen('user_'));
+                        } elseif (strpos($rec, 'group_') === 0) {
+                            $userList = GroupManager::get_subscribed_users(substr($rec, strlen('group_')));
+                            foreach ($userList as $usr) {
+                                if (!in_array($usr['user_id'], $newWorkRecipients) && $usr['user_id'] != $_user['user_id']) {
+                                    $newWorkRecipients[] = $usr['user_id'];
+                                }
+                            }
+                        }
+                    }
+                }
 
 				// After uploading the file, create the db entries
 

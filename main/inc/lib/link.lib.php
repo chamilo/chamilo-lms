@@ -161,8 +161,6 @@ class Link extends Model
         $session_id = api_get_session_id();
 
         if ($type == 'link') {
-            $tbl_link = Database:: get_course_table(TABLE_LINK);
-
             $title = Security:: remove_XSS(stripslashes($_POST['title']));
             $urllink = Security:: remove_XSS($_POST['url']);
             $description = Security:: remove_XSS($_POST['description']);

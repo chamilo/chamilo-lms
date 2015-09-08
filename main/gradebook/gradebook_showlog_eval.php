@@ -4,7 +4,7 @@
  * Script
  * @package chamilo.gradebook
  */
-//$cidReset = true;
+
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
@@ -44,8 +44,11 @@ foreach($list_info as $key => $info_log) {
     $list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 
-$parameters=array('visiblelog'=>$visible_log,'selectcat'=>intval($_GET['selectcat']));
-$table = new SortableTableFromArrayConfig($list_info, 1,20,'gradebookeval');
+$parameters = array(
+    'visiblelog' => $visible_log,
+    'selectcat' => intval($_GET['selectcat']),
+);
+$table = new SortableTableFromArrayConfig($list_info, 1, 20, 'gradebookeval');
 $table->set_additional_parameters($parameters);
 
 $table->set_header(0, get_lang('GradebookNameLog'));

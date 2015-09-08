@@ -16,7 +16,14 @@ $evaluation = Evaluation :: load ($select_eval);
 
 $evaluation[0]->check_lock_permissions();
 
-$edit_result_form = new EvalForm(EvalForm :: TYPE_ALL_RESULTS_EDIT, $evaluation[0], $resultedit, 'edit_result_form', null, api_get_self() . '?&selecteval='.$select_eval);
+$edit_result_form = new EvalForm(
+    EvalForm :: TYPE_ALL_RESULTS_EDIT,
+    $evaluation[0],
+    $resultedit,
+    'edit_result_form',
+    null,
+    api_get_self().'?&selecteval='.$select_eval
+);
 $table = $edit_result_form->toHtml();
 if ($edit_result_form->validate()) {
     $values = $edit_result_form->exportValues();
@@ -43,6 +50,6 @@ $interbreadcrumb[]= array (
     'name' => get_lang('ViewResult')
 );
 Display :: display_header(get_lang('EditResult'));
-DisplayGradebook :: display_header_result ($evaluation[0],null,0,0);
+DisplayGradebook::display_header_result($evaluation[0],null,0,0);
 echo $table;
 Display :: display_footer();

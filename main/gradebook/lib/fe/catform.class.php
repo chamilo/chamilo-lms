@@ -321,19 +321,13 @@ class CatForm extends FormValidator
 
             //Getting grade models
             $obj = new GradeModel();
-            $obj->fill_grade_model_select_in_form($this, 'grade_model_id', $this->category_object->get_grade_model_id());
+            $obj->fill_grade_model_select_in_form(
+                $this,
+                'grade_model_id',
+                $this->category_object->get_grade_model_id()
+            );
 
-            /*
-            $grade_models = $obj->get_all();
-            $options = array(-1 => get_lang('None'));
-            foreach ($grade_models as $item) {
-                $options[$item['id']] = $item['name'];
-            }
-            $this->addElement('select', 'grade_model_id', array(get_lang('GradeModel'), get_lang('OnlyActiveWhenThereAreAnyComponents')), $options);
-             *
-             */
-
-            //Freeze or not
+            // Freeze or not
             $course_code = api_get_course_id();
             $session_id = api_get_session_id();
             $test_cats = Category :: load(
@@ -357,7 +351,6 @@ class CatForm extends FormValidator
             }
 
             $generateCertificatesParams = array();
-
             if ($this->category_object->getGenerateCertificates()) {
                 $generateCertificatesParams['checked'] = 'checked';
             }
@@ -371,7 +364,7 @@ class CatForm extends FormValidator
             );
         }
 
-        if (!empty(api_get_session_id())) {
+        if (!empty($session_id)) {
             $isRequirementCheckbox = $this->addCheckBox(
                 'is_requirement',
                 [
@@ -393,16 +386,13 @@ class CatForm extends FormValidator
             $this->addButtonUpdate(get_lang('EditCategory'));
         }
 
-        //if (!empty($grading_contents)) {
         $this->addRule('weight', get_lang('OnlyNumbers'), 'numeric');
-        //$this->addRule('weight',get_lang('NoDecimals'),'nopunctuation');
         $this->addRule(
             array('weight', 'zero'),
             get_lang('NegativeValue'),
             'compare',
             '>='
         );
-        //}
 
         $setting = api_get_setting('tool_visible_by_default_at_creation');
         $visibility_default = 1;
@@ -418,11 +408,16 @@ class CatForm extends FormValidator
      */
     protected function build_select_course_form()
     {
-        $select = $this->addElement('select','select_course',array(get_lang('PickACourse'),'test'), null);
+        $select = $this->addElement(
+            'select',
+            'select_course',
+            array(get_lang('PickACourse'), 'test'),
+            null
+        );
         $coursecat = Category :: get_all_courses(api_get_user_id());
         //only return courses that are not yet created by the teacher
 
-        foreach($coursecat as $row) {
+        foreach ($coursecat as $row) {
             $select->addoption($row[1],$row[0]);
         }
         $this->setDefaults(array(

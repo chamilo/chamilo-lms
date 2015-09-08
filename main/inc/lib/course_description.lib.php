@@ -339,7 +339,8 @@ class CourseDescription
 
     /**
      * Get description id by description type
-     * @param int description type
+     * @param int $description_type
+     *
      * @return int description id
      */
     public function get_id_by_description_type($description_type)

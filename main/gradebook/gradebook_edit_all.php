@@ -34,13 +34,13 @@ $tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
 $tbl_work = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
 $tbl_attendance = Database:: get_course_table(TABLE_ATTENDANCE);
 
-$table_evaluated[LINK_EXERCISE]           = array(TABLE_QUIZ_TEST, 'title', 'id', get_lang('Exercise'));
-$table_evaluated[LINK_DROPBOX]            = array(TABLE_DROPBOX_FILE, 'name','id', get_lang('Dropbox'));
+$table_evaluated[LINK_EXERCISE] = array(TABLE_QUIZ_TEST, 'title', 'id', get_lang('Exercise'));
+$table_evaluated[LINK_DROPBOX] = array(TABLE_DROPBOX_FILE, 'name','id', get_lang('Dropbox'));
 $table_evaluated[LINK_STUDENTPUBLICATION] = array(TABLE_STUDENT_PUBLICATION, 'url','id', get_lang('Student_publication'));
-$table_evaluated[LINK_LEARNPATH]          = array(TABLE_LP_MAIN, 'name','id', get_lang('Learnpath'));
-$table_evaluated[LINK_FORUM_THREAD]       = array(TABLE_FORUM_THREAD, 'thread_title_qualify', 'thread_id', get_lang('Forum'));
-$table_evaluated[LINK_ATTENDANCE]         = array(TABLE_ATTENDANCE, 'attendance_title_qualify', 'id', get_lang('Attendance'));
-$table_evaluated[LINK_SURVEY]             = array(TABLE_SURVEY, 'code', 'survey_id', get_lang('Survey'));
+$table_evaluated[LINK_LEARNPATH] = array(TABLE_LP_MAIN, 'name','id', get_lang('Learnpath'));
+$table_evaluated[LINK_FORUM_THREAD] = array(TABLE_FORUM_THREAD, 'thread_title_qualify', 'thread_id', get_lang('Forum'));
+$table_evaluated[LINK_ATTENDANCE] = array(TABLE_ATTENDANCE, 'attendance_title_qualify', 'id', get_lang('Attendance'));
+$table_evaluated[LINK_SURVEY] = array(TABLE_SURVEY, 'code', 'survey_id', get_lang('Survey'));
 
 $submitted = isset($_POST['submitted']) ? $_POST['submitted'] : '';
 if ($submitted==1) {
@@ -205,7 +205,6 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
         </a>
     </div>
 <?php
-
 
 $form->display();
 

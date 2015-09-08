@@ -196,5 +196,4 @@ class DatePicker extends HTML_QuickForm_text
                 break;
         }
     }
-
 }

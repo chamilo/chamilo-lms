@@ -140,7 +140,7 @@ class Redirect
      */
     protected static function navigate($url)
     {
-        session_write_close(); //should not be neeeded
+        session_write_close(); //should not be needed
         header("Location: $url");
         exit;
     }

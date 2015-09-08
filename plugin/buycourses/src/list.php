@@ -21,24 +21,6 @@ if (api_is_platform_admin()) {
 $templateName = $plugin->get_lang('CourseListOnSale');
 $tpl = new Template($templateName);
 
-if (isset($_SESSION['bc_success'])) {
-    $tpl->assign('rmessage', 'YES');
-    if ($_SESSION['bc_success'] == true) {
-        $message = sprintf($plugin->get_lang($_SESSION['bc_message']), $_SESSION['bc_url']);
-        unset($_SESSION['bc_url']);
-        $tpl->assign('class', 'confirmation-message');
-    } else {
-        $message = $plugin->get_lang($_SESSION['bc_message']);
-        $tpl->assign('class', 'warning-message');
-    }
-    $tpl->assign('responseMessage', $message);
-    unset($_SESSION['bc_success']);
-    unset($_SESSION['bc_message']);
-
-} else {
-    $tpl->assign('rmessage', 'NO');
-}
-
 $courseList = $plugin->getCatalogCourseList();
 $sessionList = [];
 $currency = $plugin->getSelectedCurrency();

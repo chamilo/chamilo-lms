@@ -455,22 +455,8 @@ class BuyCoursesPlugin extends Plugin
                 continue;
             }
 
-            $sessionData = [
-                'id' => $session->getId(),
-                'name' => $session->getName(),
-                'dates' => SessionManager::parseSessionDates([
-                    'display_start_date' => $session->getDisplayStartDate(),
-                    'display_end_date' => $session->getDisplayEndDate(),
-                    'access_start_date' => $session->getAccessStartDate(),
-                    'access_end_date' => $session->getAccessEndDate(),
-                    'coach_access_start_date' => $session->getCoachAccessStartDate(),
-                    'coach_access_end_date' => $session->getCoachAccessEndDate()
-                ]),
-                'price' => $item['price'],
-                'currency' => $item['iso_code'],
-                'courses' => [],
-                'enrolled' => $this->getUserStatusForSession(api_get_user_id(), $session)
-            ];
+            $sessionData = $this->getSessionInfo($session->getId());
+            $sessionData['enrolled'] = $this->getUserStatusForSession(api_get_user_id(), $session);
 
             foreach ($sessionCourses as $sessionCourse) {
                 $course = $sessionCourse->getCourse();

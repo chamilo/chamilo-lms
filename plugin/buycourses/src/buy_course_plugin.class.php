@@ -399,10 +399,11 @@ class BuyCoursesPlugin extends Plugin
             $buySaleTable,
             [
                 'where' => [
-                    'user_id = ? AND product_type = ? AND product_id = ?' => [
+                    'user_id = ? AND product_type = ? AND product_id = ? AND status = ?' => [
                         $userId,
                         self::PRODUCT_TYPE_SESSION,
-                        $session->getId()
+                        $session->getId(),
+                        self::SALE_STATUS_PENDING
                     ]
                 ]
             ],
@@ -521,10 +522,11 @@ class BuyCoursesPlugin extends Plugin
             $buySaleTable,
             [
                 'where' => [
-                    'user_id = ? AND product_type = ? AND product_id = ?' => [
+                    'user_id = ? AND product_type = ? AND product_id = ? AND status = ?' => [
                         $userId,
                         self::PRODUCT_TYPE_COURSE,
-                        $course->getId()
+                        $course->getId(),
+                        self::SALE_STATUS_PENDING
                     ]
                 ]
             ],

@@ -1,7 +1,5 @@
 <script type='text/javascript' src="../js/buycourses.js"></script>
 
-<link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
-
 <div class="row">
     <div class="col-md-7">
         <h3 class="page-header">{{ 'PurchaseData'|get_plugin_lang('BuyCoursesPlugin') }}</h3>

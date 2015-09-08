@@ -4,24 +4,6 @@
  * @package chamilo.plugin.buycourses
  */
 $(document).ready(function () {
-    $("input[name='price']").change(function () {
-        $(this).parent().next().children().attr("style", "display:none");
-        $(this).parent().next().children().next().attr("style", "display:''");
-        $(this).parent().parent().addClass("fmod");
-        $(this).parent().parent().children().each(function () {
-            $(this).addClass("btop");
-        });
-    });
-
-    $("input[name='price']").keyup(function () {
-        $(this).parent().next().children().attr("style", "display:none");
-        $(this).parent().next().children().next().attr("style", "display:''");
-        $(this).parent().parent().addClass("fmod");
-        $(this).parent().parent().children().each(function () {
-            $(this).addClass("btop");
-        });
-    });
-
     $(".bc-button-save").click(function () {
         var currentRow = $(this).closest("tr");
         var courseOrSessionObject = {
@@ -52,20 +34,6 @@ $(document).ready(function () {
         );
     });
 
-    $('#sync').click(function (e) {
-        $.post("function.php", {tab: "sync"},
-            function (data) {
-                if (data.status == "false") {
-                    alert(data.contenido);
-                } else {
-                    alert(data.contenido);
-                    location.reload();
-                }
-            }, "json");
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
     $(".filter").click(function (e) {
         var target = "#"+($(this).closest(".row").children().last()).attr("id");
         var filterFields = $(this).siblings("input");
@@ -87,38 +55,6 @@ $(document).ready(function () {
             }, "json");
         e.preventDefault();
         e.stopPropagation();
-    });
-
-    $("#cancel_order").click(function (e) {
-        $.post("function.php", {tab: "unset_variables"});
-        window.location.replace("list.php");
-    });
-
-    $(".clear_order").click(function (e) {
-        var vid = $(this).parent().attr("id");
-        $.post("function.php", {tab: "clear_order", id: vid},
-            function (data) {
-                location.reload();
-            }, "json");
-
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
-    $(".confirm_order").click(function (e) {
-        var vid = $(this).parent().attr("id");
-        $.post("function.php", {tab: "confirm_order", id: vid},
-            function (data) {
-                location.reload();
-            }, "json");
-
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
-    $(".slt_tpv").change(function () {
-        var vcod = $(this).val();
-        $.post("function.php", {tab: "activar_tpv", cod: vcod});
     });
 });
 

@@ -15,10 +15,6 @@ $tableBuySessionTemporal = Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY)
 $tableBuySessionRelCourse = Database::get_main_table(TABLE_BUY_SESSION_COURSE);
 $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
-$tableBuyCourseCountry = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
-$tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
-$tableBuyCourseTransfer = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
-$tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
 $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -30,23 +26,6 @@ $itemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
 $plugin = BuyCoursesPlugin::create();
 $buy_name = $plugin->get_lang('Buy');
 $currency = $plugin->getSelectedCurrency();
-
-if ($_REQUEST['tab'] == 'sync') {
-    $sql = "SELECT code, title FROM $tableCourse;";
-    $res = Database::query($sql);
-    while ($row = Database::fetch_assoc($res)) {
-        $aux_code .= $row['code'];
-        $aux_title .= $row['title'];
-    }
-    $sql = "SELECT name, access_start_date, access_end_date FROM $tableSession;";
-    $res = Database::query($sql);
-    while ($row = Database::fetch_assoc($res)) {
-        $aux_name .= $row['name'];
-        $aux_date_start .= $row['access_start_date'];
-        $aux_date_end .= $row['access_end_date'];
-    }
-    echo json_encode(array("status" => "true", "content" => $content));
-}
 
 if ($_REQUEST['tab'] == 'sessions_filter') {
     $session = isset($_REQUEST['name']) ? Database::escape_string($_REQUEST['name']) : '';
@@ -428,66 +407,4 @@ if ($_REQUEST['tab'] == 'save_mod') {
 
     echo json_encode($jsonResult);
     exit;
-}
-
-if ($_REQUEST['tab'] == 'unset_variables') {
-    unset($_SESSION['bc_user_id']);
-    unset($_SESSION['bc_registered']);
-    unset($_SESSION['bc_code']);
-    unset($_SESSION['bc_title']);
-    unset($_SESSION["Payment_Amount"]);
-    unset($_SESSION["currencyCodeType"]);
-    unset($_SESSION["PaymentType"]);
-    unset($_SESSION["nvpReqArray"]);
-    unset($_SESSION['TOKEN']);
-    $_SESSION['bc_success'] = false;
-    $_SESSION['bc_message'] = 'CancelOrder';
-    unset($_SESSION['bc_url']);
-}
-
-if ($_REQUEST['tab'] == 'clear_order') {
-    $id = substr(intval($_REQUEST['id']), 6);
-    $sql = "DELETE FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
-
-    $res = Database::query($sql);
-    if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteTheAccount');
-        echo json_encode(array("status" => "false", "content" => $content));
-    } else {
-        $content = get_lang('Saved');
-        echo json_encode(array("status" => "true", "content" => $content));
-    }
-}
-
-if ($_REQUEST['tab'] == 'confirm_order') {
-    $id = substr(intval($_REQUEST['id']), 6);
-    $sql = "SELECT * FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
-    $res = Database::query($sql);
-    $row = Database::fetch_assoc($res);
-
-    $isAllowed = false;
-    $user_id = $row['user_id'];
-    $course_code = $row['course_code'];
-    $all_course_information = CourseManager::get_course_information($course_code);
-
-    if (CourseManager::subscribe_user($user_id, $course_code)) {
-        $isAllowed = true;
-    } else {
-        $isAllowed = false;
-    }
-    //Activate user account
-    if ($isAllowed) {
-        // 1. set account inactive
-        $sql = "UPDATE $tableUser SET active = '1' WHERE user_id = " . intval($_SESSION['bc_user_id']) . "";
-        Database::query($sql);
-
-        $sql = "DELETE FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
-        $res = Database::query($sql);
-
-        $content = $plugin->get_lang('TheSubscriptionAndActivationWereDoneSuccessfully');
-        echo json_encode(array("status" => "true", "content" => $content));
-    } else {
-        $content = $plugin->get_lang('ProblemToSubscribeTheUser');
-        echo json_encode(array("status" => "false", "content" => $content));
-    }
 }

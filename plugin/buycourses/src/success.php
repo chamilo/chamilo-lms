@@ -79,7 +79,7 @@ if ($form->validate()) {
             if ($saleIsCompleted && $buyingCourse) {
                 Display::addFlash(
                     Display::return_message(
-                        sprintf($plugin->get_lang('EnrollToSessionXSuccessful'), $session['name']),
+                        sprintf($plugin->get_lang('EnrollToCourseXSuccessful'), $session['name']),
                         'success'
                     )
                 );
@@ -89,7 +89,7 @@ if ($form->validate()) {
             if ($saleIsCompleted && $buyingSession) {
                 Display::addFlash(
                     Display::return_message(
-                        sprintf($plugin->get_lang('EnrollToCourseXSuccessful'), $course['name']),
+                        sprintf($plugin->get_lang('EnrollToSessionXSuccessful'), $course['name']),
                         'success'
                     )
                 );

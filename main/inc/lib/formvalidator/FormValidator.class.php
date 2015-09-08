@@ -336,7 +336,7 @@ EOT;
             $name,
             $label,
             'times',
-            'default',
+            'danger',
             null,
             null,
             array(),

@@ -26,9 +26,9 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[]= array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[] = array('url' => './index.php', 'name' => get_lang(ucfirst(TOOL_SEARCH)));
@@ -90,7 +90,7 @@ foreach ($specific_fields as $specific_field) {
 
 // Get right group of terms to show on multiple select.
 $fixed_queries = array();
-$course_filter = NULL;
+$course_filter = null;
 if ( ($cid=api_get_course_id()) != -1 ) {
     // Results only from actual course.
     $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
@@ -99,7 +99,7 @@ if ( ($cid=api_get_course_id()) != -1 ) {
 if (count($term_array)) {
     $fixed_queries = chamilo_join_queries($term_array, null, $op);
 
-    if ($course_filter != NULL) {
+    if ($course_filter != null) {
         $fixed_queries = chamilo_join_queries($fixed_queries, $course_filter, 'and');
     }
 } else {

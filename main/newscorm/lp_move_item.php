@@ -10,19 +10,10 @@
 * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
 * @package chamilo.learnpath
 */
-/**
- * Code
- */
-/* INIT SECTION */
 
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
-
-/* Libraries */
-
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
 
 include 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
@@ -55,61 +46,47 @@ $_SESSION['oLP']->get_js_dropdown_array() .
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp      = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
-$isStudentView  = (int) $_REQUEST['isStudentView'];
-$learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= $_POST['submit_button'];
-/*
-$chapter_id     = $_GET['chapter_id'];
-$title          = $_POST['title'];
-$description   = $_POST['description'];
-$Submititem     = $_POST['Submititem'];
-$action         = $_REQUEST['action'];
-$id             = (int) $_REQUEST['id'];
-$type           = $_REQUEST['type'];
-$direction      = $_REQUEST['direction'];
-$moduleid       = $_REQUEST['moduleid'];
-$prereq         = $_REQUEST['prereq'];
-$type           = $_REQUEST['type'];
-*/
+$isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : '';
+$learnpath_id = (int) $_REQUEST['lp_id'];
+$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : '';
 
 /* MAIN CODE */
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
-     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+    $htmlHeadXtra[] = "<script type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-    error_log('New LP - User not authorized in lp_add_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
 $course_id = api_get_course_int_id();
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
+$sql = "SELECT * FROM $tbl_lp
+        WHERE c_id = $course_id AND id = $learnpath_id";
 
-$result = Database::query($sql_query);
+$result = Database::query($sql);
 $therow = Database::fetch_array($result);
 
-//$admin_output = '';
 /*
     Course admin section
     - all the functions not available for students - always available in this case (page only shown to admin)
 */
 /* SHOWING THE ADMIN TOOLS */
 
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
     $gradebook=	$_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
@@ -121,10 +98,8 @@ $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
 Display::display_header(get_lang('Move'), 'Path');
-//api_display_tool_title($therow['name']);
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
-//$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
 ?>
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -150,12 +125,7 @@ function confirmation(name)
 </script>
 <?php
 
-//echo $admin_output;
-
-/* DISPLAY SECTION */
-
 echo $_SESSION['oLP']->build_action_menu();
-
 echo '<div class="row">';
 echo '<div class="col-md-3">';
     echo $_SESSION['oLP']->return_new_tree();
@@ -165,7 +135,7 @@ echo '<div class="col-md-9">';
 
 if (isset($is_success) && $is_success === true) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
-        $msg .= 'The item has been moved.';
+    $msg .= 'The item has been moved.';
     $msg .= '</div>';
     echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
 } else {

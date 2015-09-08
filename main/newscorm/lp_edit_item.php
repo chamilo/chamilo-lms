@@ -56,8 +56,9 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
 $course_id = api_get_course_int_id();
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
-$result = Database::query($sql_query);
+$sql = "SELECT * FROM $tbl_lp
+        WHERE c_id = $course_id AND id = $learnpath_id";
+$result = Database::query($sql);
 $therow = Database::fetch_array($result);
 
 /*
@@ -73,8 +74,8 @@ if (isset($_SESSION['gradebook'])) {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
     );
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
@@ -120,7 +121,8 @@ echo '<div class="col-md-3">';
 $path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
 $path_item = Database::escape_string($path_item);
 $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE c_id = $course_id AND id = '". $path_item."' ";
+$sql_doc = "SELECT path FROM " . $tbl_doc . "
+            WHERE c_id = $course_id AND id = '". $path_item."' ";
 
 $res_doc = Database::query($sql_doc);
 $path_file = Database::result($res_doc, 0, 0);

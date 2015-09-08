@@ -1,10 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	This class provides methods for the notebook management.
-*	Include/require it in your code to use its features.
-*	@package chamilo.library
-*/
 
 /**
  * Class EventEmailTemplate
@@ -58,10 +53,10 @@ class EventEmailTemplate extends Model
 
     /**
      * Returns a Form validator Obj
-     * @todo the form should be auto generated
-     * @param   string  url
-     * @param   string  action add, edit
-     * @return  obj     form validator obj
+     * @param   string  $url
+     * @param   string  $action add, edit
+     *
+     * @return  FormValidator
      */
     public function return_form($url, $action)
     {
@@ -114,6 +109,7 @@ class EventEmailTemplate extends Model
 
         // Setting the rules
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+
 		return $form;
     }
 

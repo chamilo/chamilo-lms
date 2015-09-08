@@ -37,6 +37,7 @@ class CourseRequestManager
             $wanted_course_code
         );
         $result = Database::fetch_array(Database::query($sql));
+
         return $result['number'] > 0;
     }
 
@@ -349,7 +350,8 @@ class CourseRequestManager
     public static function delete_course_request($id)
     {
         $id = (int)$id;
-        $sql = "DELETE FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE id = ".$id;
+        $sql = "DELETE FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)."
+                WHERE id = ".$id;
         $result = Database::query($sql);
         return $result !== false;
     }
@@ -365,7 +367,8 @@ class CourseRequestManager
             $sql = "SELECT COUNT(id) AS number FROM ".$course_table;
         } else {
             $status = (int)$status;
-            $sql = "SELECT COUNT(id) AS number FROM ".$course_table." WHERE status = ".$status;
+            $sql = "SELECT COUNT(id) AS number FROM ".$course_table."
+                    WHERE status = ".$status;
         }
         $result = Database::fetch_array(Database::query($sql));
         if (is_array($result)) {

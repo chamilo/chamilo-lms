@@ -323,7 +323,6 @@ class Certificate extends Model
      */
     public function parse_certificate_variables($array)
     {
-        $text = '';
         $headers = $array[0];
         $content = $array[1];
         $final_content = array();
@@ -361,6 +360,7 @@ class Certificate extends Model
                 get_lang('Date'). ': '.$final_content['date_certificate'].$break_space.
                 get_lang('Score'). ': '.$final_content['gradebook_grade'].$break_space.
                 'URL'. ': '.$final_content['certificate_link'];
+
         return $text;
     }
 

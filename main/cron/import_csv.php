@@ -975,9 +975,13 @@ class ImportCsv
                     // Update
                     $params = array(
                         'title' => $row['title'],
+                        'category_code' => $row['course_category']
                     );
 
-                    $result = CourseManager::update_attributes($courseInfo['real_id'], $params);
+                    $result = CourseManager::update_attributes(
+                        $courseInfo['real_id'],
+                        $params
+                    );
 
                     $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
 

@@ -66,11 +66,11 @@
                 </div>
                 <div class="col-md-3">
                     <div class="thumbnail">
-                        <a href="src/pending_orders.php">
+                        <a href="src/sales_report.php">
                             <img src="resources/img/128/backlogs.png">
                         </a>
                         <div class="caption">
-                            <a class="btn btn-default btn-sm" href="src/pending_orders.php"> {{ 'SalesReport'|get_plugin_lang('BuyCoursesPlugin') }} </a>
+                            <a class="btn btn-default btn-sm" href="src/sales_report.php"> {{ 'SalesReport'|get_plugin_lang('BuyCoursesPlugin') }} </a>
                         </div>
                     </div>
                 </div>

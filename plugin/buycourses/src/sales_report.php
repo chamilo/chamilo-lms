@@ -109,7 +109,7 @@ $template->assign('sale_status_canceled', BuyCoursesPlugin::SALE_STATUS_CANCELED
 $template->assign('sale_status_pending', BuyCoursesPlugin::SALE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SALE_STATUS_COMPLETED);
 
-$content = $template->fetch('buycourses/view/pending_orders.tpl');
+$content = $template->fetch('buycourses/view/sales_report.tpl');
 
 $template->assign('header', $templateName);
 $template->assign('content', $content);

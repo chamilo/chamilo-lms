@@ -931,7 +931,8 @@ class BuyCoursesPlugin extends Plugin
             ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
             "$saleTable s $innerJoins",
             [
-                'where' => ['s.status = ?' => intval($status)]
+                'where' => ['s.status = ?' => intval($status)],
+                'order' => 'id DESC'
             ]
         );
     }

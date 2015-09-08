@@ -1251,6 +1251,11 @@ function api_block_anonymous_users($printHeaders = true)
 function api_get_navigator() {
     $navigator = 'Unknown';
     $version = 0;
+
+    if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+        return array('name' => 'Unknown', 'version' => '0.0.0');
+    }
+
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false) {
         $navigator = 'Opera';
         list (, $version) = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
@@ -1280,8 +1285,8 @@ function api_get_navigator() {
     if (strpos($version, '.') === false) {
         $version = number_format(doubleval($version), 1);
     }
-    $return_array = array ('name' => $navigator, 'version' => $version);
-    return $return_array;
+    $return = array('name' => $navigator, 'version' => $version);
+    return $return;
 }
 
 /**

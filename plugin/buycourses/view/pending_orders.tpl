@@ -1,39 +1,51 @@
-<script type='text/javascript' src="../js/buycourses.js"></script>
+{{ form }}
 
-<link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
-
-<div class="row">
-    <div class="span12">
-        <table id="orders_table" class="data_table">
-            <tr class="row_odd">
-                <th class="ta-center">{{ 'ReferenceOrder'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="text-center">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th class="text-center">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th class="text-center">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th class="text-center">{{ 'ProductType'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th>{{ 'Name'|get_lang }}</th>
-                <th>{{ 'Title'|get_lang }}</th>
-                <th class="span2">{{ 'Price'|get_lang }}</th>
-                <th class="ta-center">{{ 'Date'|get_lang }}</th>
-                <th class="span2 ta-center">{{ 'Options'|get_lang }}</th>
+                <th>{{ 'UserName'|get_lang }}</th>
+                {% if selected_status == sale_status_pending %}
+                    <th class="text-center">{{ 'Options'|get_lang }}</th>
+                {% endif %}
             </tr>
-            {% set i = 0 %}
-
-            {% for order in pending %}
-                {{ i%2==0 ? '<tr class="row_even">' : '<tr class="row_odd">' }}
-                    {% set i = i + 1 %}
-                    <td class="ta-center">{{ order.reference }}</td>
-                    <td>{{ order.name }}</td>
-                    <td>{{ order.title }}</td>
-                    <td>{{ order.price }} {{ currency }}</td>
-                    <td class="ta-center">{{ order.date }}</td>
-                    <td class="ta-center" id="order{{ order.cod }}">
-                        <img src="{{ confirmation_img }}" alt="ok" class="cursor confirm_order"
-                             title="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}"/>
-                        &nbsp;&nbsp;
-                        <img src="{{ delete_img }}" alt="delete" class="cursor clear_order"
-                             title="{{ 'DeleteTheOrder'|get_plugin_lang('BuyCoursesPlugin') }}"/>
+        </thead>
+        <tbody>
+            {% for sale in sale_list %}
+                <tr {{ sale.id == selected_sale ? 'class="warning"' : '' }}>
+                    <td class="text-center">
+                        {% if sale.status == sale_status_canceled %}
+                            {{ 'SaleCanceled'|get_plugin_lang('BuyCoursesPlugin') }}
+                        {% elseif sale.status == sale_status_pending %}
+                            {{ 'SalePending'|get_plugin_lang('BuyCoursesPlugin') }}
+                        {% elseif sale.status == sale_status_completed %}
+                            {{ 'SaleCompleted'|get_plugin_lang('BuyCoursesPlugin') }}
+                        {% endif %}
                     </td>
+                    <td class="text-center">{{ sale.date }}</td>
+                    <td class="text-right">{{ sale.currency ~ ' ' ~ sale.price }}</td>
+                    <td class="text-center">{{ sale.product_type }}</td>
+                    <td>{{ sale.product_name }}</td>
+                    <td>{{ sale.complete_user_name }}</td>
+                    {% if selected_status == sale_status_pending %}
+                        <td class="text-center">
+                            {% if sale.status == sale_status_pending %}
+                                <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}" class="btn btn-success btn-sm">
+                                    <i class="fa fa-user-plus fa-fw"></i> {{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </a>
+                                <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode() }}" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-times fa-fw"></i> {{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
-
-        </table>
-    </div>
-    <div class="cleared"></div>
+        </tbody>
+    </table>
 </div>

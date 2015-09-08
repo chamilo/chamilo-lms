@@ -909,4 +909,56 @@ class BuyCoursesPlugin extends Plugin
         ];
     }
 
+    /**
+     * Get a list of sales by the status
+     * @param type $status
+     * @return type
+     */
+    public function getSaleListByStatus($status = self::SALE_STATUS_PENDING)
+    {
+        $saleTable = Database::get_main_table(BuyCoursesUtils::TABLE_SALE);
+        $currencyTable = Database::get_main_table(BuyCoursesUtils::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $innerJoins = "
+            INNER JOIN $currencyTable c
+                ON s.currency_id = c.id
+            INNER JOIN $userTable u
+                ON s.user_id = u.id
+        ";
+
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => ['s.status = ?' => intval($status)]
+            ]
+        );
+    }
+
+    /**
+     * Get the statuses for sales
+     * @return array
+     */
+    public function getSaleStatuses()
+    {
+        return [
+            self::SALE_STATUS_CANCELED => $this->get_lang('SaleCanceled'),
+            self::SALE_STATUS_PENDING => $this->get_lang('SalePending'),
+            self::SALE_STATUS_COMPLETED => $this->get_lang('SaleCompleted')
+        ];
+    }
+
+    /**
+     * Get the list of product types
+     * @return array
+     */
+    public function getProductTypes()
+    {
+        return [
+            self::PRODUCT_TYPE_COURSE => get_lang('Course'),
+            self::PRODUCT_TYPE_SESSION => get_lang('Session')
+        ];
+    }
+
 }

@@ -4,37 +4,113 @@
  * List of pending payments of the Buy Courses plugin
  * @package chamilo.plugin.buycourses
  */
-/**
- * Initialization
- */
+//Initialization
+$cidReset = true;
+
 require_once '../config.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
 
+api_protect_admin_script();
+
 $plugin = BuyCoursesPlugin::create();
-$_cid = 0;
-$tableName = $plugin->get_lang('AvailableCoursesConfiguration');
-$interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
-$interbreadcrumb[] = array("url" => "paymentsetup.php", "name" => $plugin->get_lang('PaymentsConfiguration'));
 
-$tpl = new Template($tableName);
+if (isset($_GET['order'])) {
+    $sale = $plugin->getSale($_GET['order']);
 
-$teacher = api_is_platform_admin();
-api_protect_admin_script(true);
+    if (empty($sale)) {
+        api_not_allowed(true);
+    }
 
-if ($teacher) {
-    $pendingList = pendingList($_SESSION['bc_codetext']);
-    $confirmationImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/message_confirmation.png';
-    $deleteImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/delete.png';
-    $currencyType = findCurrency();
+    $urlToRedirect = api_get_self() . '?';
 
-    $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('pending', $pendingList);
-    $tpl->assign('confirmation_img', $confirmationImg);
-    $tpl->assign('delete_img', $deleteImg);
-    $tpl->assign('currency', $currencyType);
+    switch ($_GET['action']) {
+        case 'confirm':
+            $plugin->completeSale($sale['id']);
 
-    $listing_tpl = 'buycourses/view/pending_orders.tpl';
-    $content = $tpl->fetch($listing_tpl);
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
+            Display::addFlash(
+                Display::return_message(
+                    sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $sale['product_name']),
+                    'success'
+                )
+            );
+
+            $urlToRedirect .= http_build_query([
+                'status' => BuyCoursesPlugin::SALE_STATUS_COMPLETED,
+                'sale' =>  $sale['id']
+            ]);
+            break;
+        case 'cancel':
+            $plugin->cancelSale($sale['id']);
+
+            Display::addFlash(
+                Display::return_message(
+                    $plugin->get_lang('OrderCanceled'),
+                    'warning'
+                )
+            );
+
+            $urlToRedirect .= http_build_query([
+                'status' => BuyCoursesPlugin::SALE_STATUS_CANCELED,
+                'sale' =>  $sale['id']
+            ]);
+            break;
+    }
+
+    header("Location: $urlToRedirect");
+    exit;
 }
+
+$productTypes = $plugin->getProductTypes();
+$saleStatuses = $plugin->getSaleStatuses();
+$selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
+$selectedSale = isset($_GET['sale']) ? intval($_GET['sale']) : 0;
+
+$form = new FormValidator('search', 'get');
+
+if ($form->validate()) {
+    $selectedStatus = $form->getSubmitValue('status');
+
+    if ($selectedStatus === false) {
+        $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
+    }
+}
+
+$form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
+$form->addButtonFilter($plugin->get_lang('SearchByStatus'));
+$form->setDefaults(['status' => $selectedStatus]);
+
+$sales = $plugin->getSaleListByStatus($selectedStatus);
+$saleList = [];
+
+foreach ($sales as $sale) {
+    $saleList[] = [
+        'id' => $sale['id'],
+        'status' => $sale['status'],
+        'date' => api_format_date($sale['date'], DATE_FORMAT_LONG_NO_DAY),
+        'currency' => $sale['iso_code'],
+        'price' => $sale['price'],
+        'product_name' => $sale['product_name'],
+        'product_type' => $productTypes[$sale['product_type']],
+        'complete_user_name' => api_get_person_name($sale['firstname'], $sale['lastname'])
+    ];
+}
+
+//View
+$interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
+
+$templateName = $plugin->get_lang('SalesReport');
+
+$template = new Template($templateName);
+$template->assign('form', $form->returnForm());
+$template->assign('selected_sale', $selectedSale);
+$template->assign('selected_status', $selectedStatus);
+$template->assign('sale_list', $saleList);
+$template->assign('sale_status_canceled', BuyCoursesPlugin::SALE_STATUS_CANCELED);
+$template->assign('sale_status_pending', BuyCoursesPlugin::SALE_STATUS_PENDING);
+$template->assign('sale_status_completed', BuyCoursesPlugin::SALE_STATUS_COMPLETED);
+
+$content = $template->fetch('buycourses/view/pending_orders.tpl');
+
+$template->assign('header', $templateName);
+$template->assign('content', $content);
+$template->display_one_col_template();

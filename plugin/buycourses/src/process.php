@@ -10,6 +10,13 @@
 require_once '../config.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
 
+$currentUserId = api_get_user_id();
+
+if (empty($currentUserId)) {
+    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'auth/inscription.php');
+    exit;
+}
+
 $plugin = BuyCoursesPlugin::create();
 $includeSession = $plugin->get('include_sessions') === 'true';
 $paypalEnabled = $plugin->get('paypal_enable') === 'true';

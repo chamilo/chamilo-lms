@@ -199,8 +199,10 @@ function user_is_online($user_id)
 
 	$result = Database::query($query);
 	if (Database::num_rows($result)) {
+
 		return true;
 	}
+
 	return false;
 
 }
@@ -238,8 +240,8 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
 	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
+	$friend_user_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+	$table_user	= Database::get_main_table(TABLE_MAIN_USER);
 
 	if ($friends) {
 		// 	who friends from social network is online
@@ -464,7 +466,6 @@ function GetFullUserName($uid) {
 	$query = "SELECT firstname, lastname FROM ".$user_table." WHERE id=$uid";
 	$result = @Database::query($query);
 	if (count($result)>0) {
-		$str = '';
 		while(list($firstname,$lastname)= Database::fetch_array($result)) {
 			$str = str_replace(' ', '&nbsp;', api_get_person_name($firstname, $lastname));
 			return $str;

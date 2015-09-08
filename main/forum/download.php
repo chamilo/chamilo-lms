@@ -12,7 +12,7 @@
 session_cache_limiter('public');
 
 require_once '../inc/global.inc.php';
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 require_once 'forumconfig.inc.php';
 
@@ -48,10 +48,11 @@ if (is_dir($full_file_name)) {
     $document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path();
     //redirect
     header('Location: '.$document_explorer);
+    exit;
 }
 
 $tbl_forum_attachment  = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-$tbl_forum_post 	   = Database::get_course_table(TABLE_FORUM_POST);
+$tbl_forum_post = Database::get_course_table(TABLE_FORUM_POST);
 
 $course_id = api_get_course_int_id();
 $courseInfo =     api_get_course_info_by_id($course_id);

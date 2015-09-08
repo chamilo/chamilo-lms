@@ -8,19 +8,19 @@
  */
 class DashboardManager
 {
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
 
-	/**
-	 * This function allows easy activating and inactivating of dashboard plugins
-	 * @return void
-	 */
-	public static function handle_dashboard_plugins()
-	{
+    /**
+     * This function allows easy activating and inactivating of dashboard plugins
+     * @return void
+     */
+    public static function handle_dashboard_plugins()
+    {
         $token = Security::get_existing_token();
         $tokenCondition = '&amp;sec_token='.$token;
 
@@ -107,7 +107,8 @@ class DashboardManager
 
     /**
      * display checkboxes for dashboard plugin list
-     * @param string  plugin path
+     * @param string  $plugin_path
+     *
      * @return void
      */
     public static function display_dashboard_plugin_checkboxes($plugin_path) {
@@ -182,7 +183,7 @@ class DashboardManager
                 }
 
                 // update extra user blocks data
-                $upd_extra_field = self::store_user_blocks($user_id, $user_blocks_id, $columns);
+                self::store_user_blocks($user_id, $user_blocks_id, $columns);
             }
 
             // clean from block data
@@ -239,9 +240,7 @@ class DashboardManager
                     $result = Database::query($ins);
                     $affected_rows = Database::affected_rows($result);
                 }
-
             }
-
         }
 
         return $affected_rows;
@@ -251,8 +250,8 @@ class DashboardManager
 	 * Get all plugins path inside dashboard directory
 	 * @return array name plugins directories
 	 */
-	public static function getPossibleDashboardPluginsPath() {
-
+	public static function getPossibleDashboardPluginsPath()
+    {
 		// get all plugins path inside plugin directory
 		/* We scan the plugin directory. Each folder is a potential plugin. */
 		$possiblePlugins = array();
@@ -264,6 +263,7 @@ class DashboardManager
 			}
 		}
 		@closedir($handle);
+
 		return $possiblePlugins;
 	}
 
@@ -271,8 +271,8 @@ class DashboardManager
 	 * Get all blocks data without plugin directory
 	 * @return array Block data
 	 */
-	public static function get_block_data_without_plugin() {
-
+	public static function get_block_data_without_plugin()
+    {
 		$tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
 		$possibleplugins = self::getPossibleDashboardPluginsPath();
 
@@ -288,7 +288,8 @@ class DashboardManager
 					$active = 1;
 				}
 				// update active
-				$upd = "UPDATE $tbl_block SET active = '$active' WHERE path = '".$row['path']."'";
+				$upd = "UPDATE $tbl_block SET active = '$active'
+				        WHERE path = '".$row['path']."'";
 				Database::query($upd);
 			}
 		}
@@ -302,6 +303,7 @@ class DashboardManager
 				$block_data[] = $row_block;
 			}
 		}
+
 		return $block_data;
 
 	}
@@ -409,7 +411,6 @@ class DashboardManager
 		}
 	}
 
-
 	/**
 	 * display checkboxes for user dashboard list
 	 * @param int 	User id
@@ -451,7 +452,12 @@ class DashboardManager
 		foreach ($selected_blocks_id as $block_id) {
 			$fvalue[] = $block_id.':'.$columns[$block_id];
 		}
-		$upd_extra_field = UserManager::update_extra_field_value($user_id, $fname, $fvalue);
+        $upd_extra_field = UserManager::update_extra_field_value(
+            $user_id,
+            $fname,
+            $fvalue
+        );
+
 		return $upd_extra_field;
 
 	}
@@ -461,8 +467,8 @@ class DashboardManager
 	 * @param int  		User id
 	 * @return array  	data (block_id,column)
 	 */
-	public static function get_user_block_data($user_id) {
-
+	public static function get_user_block_data($user_id)
+    {
 		$user_id = intval($user_id);
 		$field_variable = 'dashboard';
 		$extra_user_data = UserManager::get_extra_user_data_by_field($user_id, $field_variable);
@@ -476,6 +482,7 @@ class DashboardManager
 				$data[$block_id] = array('block_id' => $block_id, 'column' => $column);
 			}
 		}
+
 		return $data;
 	}
 
@@ -485,8 +492,8 @@ class DashboardManager
 	 * @param string	plugin path
 	 * @return bool
 	 */
-	public static function close_user_block($user_id, $path) {
-
+	public static function close_user_block($user_id, $path)
+    {
 		$enabled_dashboard_blocks = self::get_enabled_dashboard_blocks($path);
 		$user_block_data = self::get_user_block_data($user_id);
 

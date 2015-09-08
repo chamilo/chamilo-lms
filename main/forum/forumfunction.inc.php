@@ -208,7 +208,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
 
     $form->addElement('hidden', 'lp_id', $lp_id);
     // Setting the form elements.
-    $form->addElement('header', '', get_lang('AddForumCategory'));
+    $form->addElement('header', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), array('autofocus'));
     $form->addElement(
         'html_editor',

@@ -123,21 +123,25 @@ class Security
                 if (isset($_SESSION['sec_token']) && isset($_REQUEST['sec_token']) && $_SESSION['sec_token'] === $_REQUEST['sec_token']) {
                     return true;
                 }
+
                 return false;
             case 'get':
                 if (isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token']) {
                     return true;
                 }
+
                 return false;
             case 'post':
                 if (isset($_SESSION['sec_token']) && isset($_POST['sec_token']) && $_SESSION['sec_token'] === $_POST['sec_token']) {
                     return true;
                 }
+
                 return false;
             default:
                 if (isset($_SESSION['sec_token']) && isset($request_type) && $_SESSION['sec_token'] === $request_type) {
                     return true;
                 }
+
                 return false;
         }
         return false; // Just in case, don't let anything slip.
@@ -153,6 +157,7 @@ class Security
         if (isset($_SESSION['sec_ua']) and $_SESSION['sec_ua'] === $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed']) {
             return true;
         }
+
         return false;
     }
 
@@ -180,6 +185,7 @@ class Security
         $token = md5(uniqid(rand(), TRUE));
         $string = '<input type="hidden" name="sec_token" value="'.$token.'" />';
         $_SESSION['sec_token'] = $token;
+
         return $string;
     }
 
@@ -194,8 +200,9 @@ class Security
      */
     public static function get_token()
     {
-        $token = md5(uniqid(rand(), TRUE));
+        $token = md5(uniqid(rand(), true));
         $_SESSION['sec_token'] = $token;
+
         return $token;
     }
 
@@ -205,8 +212,10 @@ class Security
     public static function get_existing_token()
     {
         if (isset($_SESSION['sec_token']) && !empty($_SESSION['sec_token'])) {
+
             return $_SESSION['sec_token'];
         } else {
+
             return self::get_token();
         }
     }
@@ -218,7 +227,7 @@ class Security
      */
     public static function get_ua()
     {
-        $_SESSION['sec_ua_seed'] = uniqid(rand(), TRUE);
+        $_SESSION['sec_ua_seed'] = uniqid(rand(), true);
         $_SESSION['sec_ua'] = $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
     }
 
@@ -263,6 +272,7 @@ class Security
         if (!empty($option['save'])) {
             self::$clean[$name] = $result;
         }
+
         return $result;
     }
 
@@ -277,7 +287,8 @@ class Security
         if (isset(self::$clean[$varname])) {
             return self::$clean[$varname];
         }
-        return NULL;
+
+        return null;
     }
 
     /**

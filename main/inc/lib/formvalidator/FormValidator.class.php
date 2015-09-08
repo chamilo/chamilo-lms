@@ -336,7 +336,7 @@ EOT;
             $name,
             $label,
             'times',
-            'btn',
+            'default',
             null,
             null,
             array(),

@@ -63,7 +63,14 @@ if (isset($action) && $action == 'calendar_add') {
         ''
     );
     $form->addElement('header', get_lang('AddADateTime'));
-    $form->addElement('date_time_picker', 'date_time');
+    //$form->addElement('date_time_picker', 'date_time');
+    
+    $form->addDateTimePicker(
+            'date_time',
+            array(get_lang('StartDate')),
+            array('id' => 'date_time')
+        );
+    
     $defaults['date_time'] = date('Y-m-d H:i', api_strtotime(api_get_local_time()));
 
     $form->addElement(
@@ -112,11 +119,11 @@ if (isset($action) && $action == 'calendar_add') {
     }
 
     echo Display::page_subheader(get_lang('CalendarList'));
-    echo '<div class="attendance-calendar-list">';
+    echo '<ul class="list-group">';
     if (!empty($attendance_calendar)) {
         foreach ($attendance_calendar as $calendar) {
 
-            echo '<div class="attendance-calendar-row">';
+            echo '<li class="list-group-item">';
             if ((isset($action) && $action == 'calendar_edit') &&
                 (isset($calendar_id) && $calendar_id == $calendar['id'])
             ) {
@@ -128,8 +135,8 @@ if (isset($action) && $action == 'calendar_add') {
                     'index.php?action=calendar_edit&attendance_id=' . $attendance_id . '&calendar_id=' . $calendar_id . '&' . api_get_cidreq() . $param_gradebook,
                     ''
                 );
-
-                $form->addElement('date_time_picker', 'date_time', '', array('form_name'=>'attendance_calendar_edit'), 5);
+                $form->addDateTimePicker('date_time', array(get_lang('Date')), array('form_name'=>'attendance_calendar_edit'), 5);
+                //$form->addElement('date_time_picker', 'date_time', '', array('form_name'=>'attendance_calendar_edit'), 5);
                 $defaults['date_time'] = $calendar['date_time'];
                 $form->addButtonSave(get_lang('Save'));
                 $form->addButtonCancel(get_lang('Cancel'), 'cancel');
@@ -139,7 +146,9 @@ if (isset($action) && $action == 'calendar_add') {
             } else {
                 echo Display::return_icon(
                     'lp_calendar_event.png',
-                    get_lang('DateTime')
+                    get_lang('DateTime'),
+                        null,
+                        ICON_SIZE_MEDIUM
                 ).' '.substr($calendar['date_time'], 0, strlen($calendar['date_time'])- 3) .'&nbsp;';
 
                 if (isset($calendar['groups']) && !empty($calendar['groups'])) {
@@ -150,19 +159,19 @@ if (isset($action) && $action == 'calendar_add') {
 
                 if (!$is_locked_attendance || api_is_platform_admin()) {
                     if (api_is_allowed_to_edit()) {
-                        echo '<span style="margin-left:20px;">';
+                        echo '<div class="pull-right">';
                         echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.$param_gradebook.'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), array('style'=>'vertical-align:middle'), ICON_SIZE_SMALL).'</a>&nbsp;';
                         echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().$param_gradebook.'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
                             Display::return_icon('delete.png', get_lang('Delete'), array('style'=>'vertical-align:middle'), ICON_SIZE_SMALL).'</a>';
-                        echo '</span>';
+                        echo '</div>';
                     }
                 }
             }
-            echo '</div>';
+            echo '</li>';
         }
     } else {
         echo Display::return_message(get_lang('ThereAreNoRegisteredDatetimeYet'), 'warning');
     }
-    echo '</div>';
+    echo '</ul>';
 }

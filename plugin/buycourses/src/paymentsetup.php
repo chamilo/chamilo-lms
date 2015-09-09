@@ -7,9 +7,10 @@
 /**
  * Initialization
  */
+$cidReset = true;
+
 require_once dirname(__FILE__) . '/buy_course.lib.php';
 require_once '../../../main/inc/global.inc.php';
-require_once 'buy_course_plugin.class.php';
 
 api_protect_admin_script(true);
 

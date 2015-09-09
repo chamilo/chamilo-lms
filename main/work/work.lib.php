@@ -2064,7 +2064,7 @@ function get_work_user_list(
                 if (api_is_allowed_to_edit()) {
                     if (!empty($work['url_correction'])) {
                         $action .= Display::url(
-                            Display::return_icon('check.png', get_lang('Correction'), null, ICON_SIZE_SMALL),
+                            Display::return_icon('check-circle.png', get_lang('Correction'), null, ICON_SIZE_SMALL),
                             api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
                         );
                     }

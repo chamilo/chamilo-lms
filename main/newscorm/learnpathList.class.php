@@ -219,12 +219,12 @@ class LearnpathList
      *  @param int  $session_id Id of session
      *  @return array List of lessons with lessons id as keys
      */
-    public static function  get_course_lessons($course_code, $session_id)
+    public static function get_course_lessons($course_code, $session_id)
     {
-        $tbl_course_lp = Database::get_course_table(TABLE_LP_MAIN);
+        $table = Database::get_course_table(TABLE_LP_MAIN);
         $course = api_get_course_info($course_code);
         // @todo AND session_id = %s ?
-        $sql = "SELECT * FROM $tbl_course_lp WHERE c_id = %s ";
+        $sql = "SELECT * FROM $table WHERE c_id = %s ";
         $sql_query = sprintf($sql, $course['real_id']);
         $result = Database::query($sql_query);
 

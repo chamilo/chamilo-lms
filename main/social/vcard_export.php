@@ -11,8 +11,6 @@
  */
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(WEB_PATH).'vendor/autoload.php';
-require_once api_get_path(WEB_PATH).'vendor/jeroendesloovere/vcard/src/VCard.php';
 
 use JeroenDesloovere\VCard\VCard;
 

@@ -194,7 +194,7 @@ if (api_is_allowed_to_edit(null, true) ||
                         floatingHeaderRow.css("width", $(this).css("width"));
                         floatingHeaderRow.css("visibility", "visible");
                         floatingHeaderRow.css("z-index", "1000");
-                        originalHeaderRow.css("height", "80px");
+                        originalHeaderRow.css("height", "64px");
                     } else {
                         floatingHeaderRow.css("visibility", "hidden");
                         floatingHeaderRow.css("top", "0px");
@@ -239,7 +239,7 @@ if (api_is_allowed_to_edit(null, true) ||
                             <th width="100px"><?php echo get_lang('AttendancesFaults')?></th>
                         </tr>
                         <tr class="tableFloatingHeaderOriginal" >
-                            <th height="65px" width="10px"><?php echo '#';?></th>
+                            <th width="10px"><?php echo '#';?></th>
                             <th width="10px"><?php echo get_lang('Photo')?></th>
                             <th width="150px"><?php echo get_lang('LastName')?></th>
                             <th width="140px"><?php echo get_lang('FirstName')?></th>
@@ -287,23 +287,23 @@ if (api_is_allowed_to_edit(null, true) ||
                     foreach ($attendant_calendar as $calendar) {
                         $date = $calendar['date'];
                         $time = $calendar['time'];
-                        $datetime = $date.'<br />'.$time;
+                        $datetime = '<div class="grey">'. $date . ' - ' . $time . '</div>';
 
-                        $img_lock = Display::return_icon('lock.gif',get_lang('DateUnLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));
+                        $img_lock = Display::return_icon('lock-closed.png',get_lang('DateUnLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));
 
                         if (!empty($calendar['done_attendance'])){
-                            $datetime = '<font color="blue">'.$date.'<br />'.$time.'</font>';
+                            $datetime = '<div class="blue">' . $date . ' - ' . $time . '</div>';
                         }
                         $disabled_check = 'disabled = "true"';
                         $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" disabled />';
                         if ($next_attendance_calendar_id == $calendar['id']) {
                             $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
                             $disabled_check = '';
-                            $img_lock = Display::return_icon('unlock.gif',get_lang('DateLock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
+                            $img_lock = Display::return_icon('lock-closed.png',get_lang('DateLock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
                         }
 
-                        $result .= '<th width="800px">';
-                        $result .= '<center><div style="font-size:10px;width:125px;">'.$datetime.'&nbsp;';
+                        $result .= '<th>';
+                        $result .= '<div class="date-attendance">'.$datetime.'&nbsp;';
 
                         if (api_is_allowed_to_edit(null, true)) {
                             $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
@@ -311,7 +311,7 @@ if (api_is_allowed_to_edit(null, true) ||
 
                         if ($is_locked_attendance == false) {
                             if (api_is_allowed_to_edit(null, true)) {
-                                $result .= '<br /><input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></center></th>';
+                                $result .= '<input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></th>';
                             }
                         }
                     }
@@ -370,8 +370,8 @@ if (api_is_allowed_to_edit(null, true) ||
                             }
 
                             echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
-                            echo '<div style="height:20px">';
-                            echo '<center>';
+                            echo '<div class="check">';
+                           
                             if (api_is_allowed_to_edit(null, true)) {
                                 if (!$is_locked_attendance || api_is_platform_admin()) {
                                     echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
@@ -392,7 +392,7 @@ if (api_is_allowed_to_edit(null, true) ||
                                         break;
                                 }
                             }
-                            echo '</center>';
+                            
                             echo '</div>';
                             echo '</td>';
                         }
@@ -402,7 +402,7 @@ if (api_is_allowed_to_edit(null, true) ||
                             $calendarClass = "checkboxes_col_".$calendar['id'];
                         }
                         echo '<td class="'.$calendarClass.'">';
-                        echo '<div style="height:20px">';
+                        echo '<div>';
                         echo '<center>&nbsp;</center>
                         </div>
                         </td>';
@@ -413,15 +413,16 @@ if (api_is_allowed_to_edit(null, true) ||
                 echo '</tbody></table>';
                 echo '</div></div>';
                 ?>
-                <div class="clear"></div>
-                <div style="margin-top:20px;">
+               
+                <div class="row">
+                    <div class="col-md-12">
                 <?php if (!$is_locked_attendance || api_is_platform_admin()) {
                     if (api_is_allowed_to_edit(null, true)) {
                         ?>
                         <button type="submit" class="btn btn-primary"><?php echo get_lang('Save') ?></button>
                     <?php }
                 }
-                ?>
+                ?>  </div>
                 </div>
         </form>
     <?php

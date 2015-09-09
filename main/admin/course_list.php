@@ -391,20 +391,21 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     );
     $courseListUrl = api_get_self();
     $actions .= '<div class="row">';
+    $actions .= '<div class="col-md-2">';
+    $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
+    if (api_get_setting('course_validation') == 'true') {
+        $actions .= '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'',ICON_SIZE_MEDIUM).'</a>';
+    }
+    $actions .= '</div>';
     $actions .= '<div class="col-md-4">';
     $actions .= $form->return_form();
     $actions .= '</div>';
     $actions .= '<div class="col-md-4">';
     $actions .= $sessionFilter->return_form();
     $actions .= '</div>';
-    $actions .= '<div class="col-md-4">';
-
-    $actions .= $advanced;
+    $actions .= '<div class="col-md-2">';
     $actions .= '<div class="pull-right">';
-    $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
-    if (api_get_setting('course_validation') == 'true') {
-        $actions .= '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'',ICON_SIZE_MEDIUM).'</a>';
-    }
+    $actions .= $advanced;
     $actions .= '</div>';
     $actions .= '</div>';
     $actions .= '</div>';

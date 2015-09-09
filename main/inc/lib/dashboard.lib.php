@@ -386,7 +386,7 @@ class DashboardManager
 					echo '<td>'.$block['name'].'</td>';
 					echo '<td>'.$block['description'].'</td>';
 					echo '<td>
-                            <select name="columns['.$block['id'].']">
+                            <select class="selectpicker show-tick form-control" name="columns['.$block['id'].']">
                             <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==1?'selected':'').' >1</option>
                             <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==2?'selected':'').' >2</option>
                             </select>
@@ -398,10 +398,10 @@ class DashboardManager
 			}
 
 			echo '</table>';
-			echo '<br />';
-			echo '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'">'.
+			echo '<div class="row"><div class="col-md-12">';
+			echo '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><i class="fa fa-check-square"></i> '.
                 get_lang('EnableDashboardBlock').'</button></form>';
-			echo '</div>';
+			echo '</div></div>';
 		} else {
 			echo '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
 			if (api_is_platform_admin()) {

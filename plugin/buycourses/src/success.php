@@ -157,7 +157,7 @@ if ($form->validate()) {
     }
 
     unset($_SESSION['bc_sale_id']);
-    header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/list.php');
+    header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/course_catalog.php');
     exit;
 }
 
@@ -179,7 +179,7 @@ if ($shippingDetails['ACK'] !== 'Success') {
     exit;
 }
 
-$interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
+$interbreadcrumb[] = array("url" => "course_catalog.php", "name" => $plugin->get_lang('CourseListOnSale'));
 
 $templateName = $plugin->get_lang('PaymentMethods');
 $tpl = new Template($templateName);

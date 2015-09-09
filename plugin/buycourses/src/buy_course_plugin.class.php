@@ -429,16 +429,14 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Lists current user session details, including each session course details
+     * @param string $name Optional. The name filter
+     * @param int $min Optional. The minimum price filter
+     * @param int $max Optional. The maximum price filter
      * @return array
      */
-    public function getCatalogSessionList()
+    public function getCatalogSessionList($name = null, $min = 0, $max = 0)
     {
-        $auth = new Auth();
-        $sessions = $auth->browseSessions();
-
-        $entityManager = Database::getManager();
-        $scRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourse');
-        $scuRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourseRelUser');
+        $sessions = $this->filterSessionList($name, $min, $max);
 
         $sessionCatalog = array();
         // loop through all sessions
@@ -541,9 +539,16 @@ class BuyCoursesPlugin extends Plugin
      * Lists current user course details
      * @return array
      */
-    public function getCatalogCourseList()
+    /**
+     * Lists current user course details
+     * @param string $name Optional. The name filter
+     * @param int $min Optional. The minimum price filter
+     * @param int $max Optional. The maximum price filter
+     * @return array
+     */
+    public function getCatalogCourseList($name = null, $min = 0, $max = 0)
     {
-        $courses = $this->getCourses();
+        $courses = $this->filterCourseList($name, $min, $max);
 
         if (empty($courses)) {
             return [];
@@ -949,6 +954,117 @@ class BuyCoursesPlugin extends Plugin
             self::PRODUCT_TYPE_COURSE => get_lang('Course'),
             self::PRODUCT_TYPE_SESSION => get_lang('Session')
         ];
+    }
+
+    /**
+     * Search filtered sessions by name, and range of price
+     * @param string $name Optional. The name filter
+     * @param int $min Optional. The minimun price filter
+     * @param int $max Optional. The maximum price filter
+     * @return array
+     */
+    private function filterSessionList($name = null, $min = 0, $max = 0)
+    {
+        if (empty($name) && empty($min) && empty($max)) {
+            $auth = new Auth();
+            return $auth->browseSessions();
+        }
+
+        $itemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        $min = floatval($min);
+        $max = floatval($max);
+
+        $innerJoin = "$itemTable i ON s.id = i.product_id";
+        $whereConditions = [
+            'i.product_type = ? ' => self::PRODUCT_TYPE_SESSION
+        ];
+
+        if (!empty($name)) {
+            $whereConditions['AND s.name LIKE %?%'] = $name;
+        }
+
+        if (!empty($min)) {
+            $whereConditions['AND i.price >= ?'] = $min;
+        }
+
+        if (!empty($max)) {
+            $whereConditions['AND i.price <= ?'] = $max;
+        }
+
+        $sessionIds = Database::select(
+            's.id',
+            "$sessionTable s INNER JOIN $innerJoin",
+            ['where' => $whereConditions]
+        );
+
+        if (!$sessionIds) {
+            return [];
+        }
+
+        $sessions = [];
+
+        foreach ($sessionIds as $sessionId) {
+            $sessions[] = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
+        }
+
+        return $sessions;
+    }
+
+    /**
+     * Search filtered courses by name, and range of price
+     * @param string $name Optional. The name filter
+     * @param int $min Optional. The minimun price filter
+     * @param int $max Optional. The maximum price filter
+     * @return array
+     */
+    private function filterCourseList($name = null, $min = 0, $max = 0)
+    {
+        if (empty($name) && empty($min) && empty($max)) {
+            return $this->getCourses();
+        }
+
+        $itemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+
+        $min = floatval($min);
+        $max = floatval($max);
+
+        $innerJoin = "$itemTable i ON c.id = i.product_id";
+        $whereConditions = [
+            'i.product_type = ? ' => self::PRODUCT_TYPE_COURSE
+        ];
+
+        if (!empty($name)) {
+            $whereConditions['AND c.title LIKE %?%'] = $name;
+        }
+
+        if (!empty($min)) {
+            $whereConditions['AND i.price >= ?'] = $min;
+        }
+
+        if (!empty($max)) {
+            $whereConditions['AND i.price <= ?'] = $max;
+        }
+
+        $courseIds = Database::select(
+            'c.id',
+            "$courseTable c INNER JOIN $innerJoin",
+            ['where' => $whereConditions]
+        );
+
+        if (!$courseIds) {
+            return [];
+        }
+
+        $courses = [];
+
+        foreach ($courseIds as $courseId) {
+            $courses[] = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId);
+        }
+
+        return $courses;
     }
 
 }

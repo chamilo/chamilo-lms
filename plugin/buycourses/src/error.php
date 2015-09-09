@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * Errors management for the Buy Courses plugin - Redirects to list.php
+ * Errors management for the Buy Courses plugin - Redirects to course_catalog.php
  * @package chamilo.plugin.buycourses
  */
 /**
@@ -23,4 +23,4 @@ unset($_SESSION['TOKEN']);
 $_SESSION['bc_success'] = false;
 $_SESSION['bc_message'] = 'CancelOrder';
 
-header('Location:list.php');
+header('Location: course_catalog.php');

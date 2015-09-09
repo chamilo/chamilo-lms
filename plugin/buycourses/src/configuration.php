@@ -21,7 +21,7 @@ $courses = $plugin->getCoursesForConfiguration();
 
 //view
 $interbreadcrumb[] = [
-    'url' => 'list.php',
+    'url' => 'course_catalog.php',
     'name' => $plugin->get_lang('CourseListOnSale')
 ];
 $interbreadcrumb[] = [

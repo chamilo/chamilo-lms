@@ -129,7 +129,7 @@ switch ($sale['payment_type']) {
             );
 
             unset($_SESSION['bc_sale_id']);
-            header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/list.php');
+            header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/course_catalog.php');
             exit;
         }
 

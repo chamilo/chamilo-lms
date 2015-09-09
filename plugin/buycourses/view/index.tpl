@@ -34,11 +34,11 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="thumbnail">
-                    <a href="src/list.php">
+                    <a href="src/course_catalog.php">
                         <img src="resources/img/128/buycourses.png">
                     </a>
                     <div class="caption">
-                        <a class="btn btn-default btn-sm" href="src/list.php">{{ 'BuyCourses'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                        <a class="btn btn-default btn-sm" href="src/course_catalog.php">{{ 'BuyCourses'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                     </div>
                 </div>
             </div>

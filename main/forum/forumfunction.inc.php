@@ -3474,7 +3474,18 @@ function store_edit_post($values)
         } else {
             if ($link_info === false && !$_GET['thread']) {
                 $weigthqualify = $values['weight_calification'];
-                GradebookUtils::add_resource_to_course_gradebook($values['category_id'], $ccode, 5, $values['thread_id'], Database::escape_string(stripslashes($values['calification_notebook_title'])), $weigthqualify, $values['numeric_calification'], null, 0, $sid);
+                GradebookUtils::add_resource_to_course_gradebook(
+                    $values['category_id'],
+                    $ccode,
+                    5,
+                    $values['thread_id'],
+                    Database::escape_string(stripslashes($values['calification_notebook_title'])),
+                    $weigthqualify,
+                    $values['numeric_calification'],
+                    null,
+                    0,
+                    $sid
+                );
             }
         }
     }

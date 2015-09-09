@@ -3674,20 +3674,6 @@ a:active{
     width: 800px;
 }
 
-#my_timeline #next {
-    background: url("../../main/img/action_next.png") no-repeat transparent;
-    height: 32px;
-    width: 32px;
-    float:right;
-}
-
-#my_timeline #prev {
-    background: url("../../main/img/action_prev.png") no-repeat transparent;
-    height: 32px;
-    width: 32px;
-    float:left;
-}
-
 #dates .selected {
     font-size: 22px;
     font-weight: bold;

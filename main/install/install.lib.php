@@ -610,7 +610,7 @@ function display_language_selection_box($name = 'language_list', $default_langua
 
     // Displaying the box.
     $html = '';
-    $html .= "\t\t<select class='form-control' name=\"$name\">\n";
+    $html .= "\t\t<select class='selectpicker show-tick' name=\"$name\">\n";
     foreach ($language_list as $key => $value) {
         if ($key == $default_language) {
             $option_end = ' selected="selected">';
@@ -1157,7 +1157,7 @@ function get_contact_registration_form()
     <div class="form-group">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</label>
             <div class="col-sm-9">
-                    <select name="company_activity" id="company_activity" >
+                    <select class="selectpicker show-tick" name="company_activity" id="company_activity" >
                             <option value="">--- '.get_lang('SelectOne').' ---</option>
                             <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option><Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
                             <Option value="Architecture">Architecture</Option><Option value="Banking/Finance">Banking/Finance</Option>
@@ -1181,7 +1181,7 @@ function get_contact_registration_form()
     <div class="form-group">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('PersonRole').'</label>
             <div class="col-sm-9">
-                    <select name="person_role" id="person_role" >
+                    <select class="selectpicker show-tick" name="person_role" id="person_role" >
                             <option value="">--- '.get_lang('SelectOne').' ---</option>
                             <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
                             <Option value="CFO">CFO</Option><Option value="CIO/CTO">CIO/CTO</Option>
@@ -1211,7 +1211,7 @@ function get_contact_registration_form()
     <div class="form-group">
             <label class="col-sm-3">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</label>
             <div class="col-sm-9">
-                    <select id="language" name="language">
+                    <select class="selectpicker show-tick" id="language" name="language">
                             <option value="bulgarian">Bulgarian</option>
                             <option value="indonesian">Bahasa Indonesia</option>
                             <option value="bosnian">Bosanski</option>
@@ -1765,7 +1765,7 @@ function get_countries_list_from_array($combo = false)
 
     $country_select = '';
     if ($combo) {
-        $country_select = '<select id="country" name="country">';
+        $country_select = '<select class="selectpicker show-tick" id="country" name="country">';
         $country_select .= '<option value="">--- '.get_lang('SelectOne').' ---</option>';
         foreach ($a_countries as $country) {
             $country_select .= '<option value="'.$country.'">'.$country.'</option>';

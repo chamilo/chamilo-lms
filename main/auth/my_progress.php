@@ -16,12 +16,15 @@ $nameTools = get_lang('MyProgress');
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.5.js');
-$htmlHeadXtra[] = '
-<script language="javascript">
+$htmlHeadXtra[] = "
+<script language='javascript'>
 $(function() {
-    $().timelinr();
+    $().timelinr({
+        containerDiv: '#my_timeline',
+        autoPlayPause: 2000
+    })
 });
-</script>';
+</script>";
 
 $user_id = api_get_user_id();
 $course_user_list = CourseManager::get_courses_list_by_user_id($user_id);
@@ -70,15 +73,16 @@ $content .= Tracking::show_course_detail(api_get_user_id(), $courseCode, $sessio
 
 if (!empty($dates)) {
     if (!empty($content)) {
-        $content .= '<br /><br />';
+        $content .= '';
     }
-    $content .= '<div class="row"><div class="col-md-12">'.Display::page_subheader(get_lang('Timeline')).'</div>';
-    $content .= '<div id="my_timeline">
-        <div class="actions">
-            <a href="#" id="prev"></a> <!-- optional -->
-            <a href="#" id="next"></a> <!-- optional -->
-        </div>
-    <ul id="dates">
+    $content .= '<div class="row"><div class="col-md-12">'.Display::page_subheader(get_lang('Timeline'));
+    $content .= '<div id="my_timeline">';
+    
+    $actionsLeft = '<a href="#" id="prev">' . Display::return_icon('previous.png',  get_lang('Previous'), null, ICON_SIZE_MEDIUM) . '</a>';
+    $actionsRight = '<a href="#" id="next">' . Display::return_icon('next.png',  get_lang('Next'), null, ICON_SIZE_MEDIUM) . '</a>';
+    $content .= Display::toolbarAction('toolbar-linetime',array(0 => $actionsLeft, 1 => $actionsRight), 2, true);
+    
+    $content .= '<ul id="dates">
         '.$dates.'
     </ul>
     <ul id="issues">

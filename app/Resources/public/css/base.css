@@ -221,20 +221,40 @@ ul#navigation .report a {
 #results .file_upload_highlight {
     background: #F4D364;
 }
+.file_upload{
+    position: relative;
+}
 .work_correction_file_upload .button-load {
-    position: absolute;
-    top: -60px;
-    left: -30px;
+    position: relative;
     font-size: 10px;
-    width: 100px;
-    padding-top: 0px;
+    font-weight: normal;
+    width: 100%;
+    padding-top: 5px;
     background: none;
 }
-
-.work_correction_file_upload {
-    height: 40px;
+.file_upload_small{
+    line-height: 15px;
+    border: 1px solid #AFDDE9;
+    background: #D4E6F0;
+    width: 100%;
 }
-
+.work_correction_file_upload {
+    height: 40px !important;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.file_upload input{
+    position: relative;
+    border: none;
+}
+#results .jqgrid_whitespace .date-time{
+    font-size: 12px;
+    color: #666666;
+    text-align: center;
+}
+.list-work-results{
+    margin-top: 20px;
+}
 .impress-content{
     position: relative;
     width: 100%;
@@ -2261,6 +2281,7 @@ div.admin_section h4 {
 
 .ui-jqgrid tr.jqgrow td {
     height:38px !important;
+    white-space: inherit;
 }
 
 .exercise_overview_options {

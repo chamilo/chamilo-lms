@@ -2055,7 +2055,7 @@ function get_work_user_list(
                 $work_date = api_convert_and_format_date($work['sent_date']);
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . '<br />' . $work_date;
+                $work['sent_date'] = '<div class="date-time">' . date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . ' ' . $work_date . '</div>';
 
                 // Actions.
                 $correction = '';

@@ -276,7 +276,6 @@ class CourseRequestManager
         $code = $wanted_code;
         $tutor_name = $course_request_info['tutor_name'];
         $directory = $course_request_info['directory'];
-        $db_name = $course_request_info['db_name'];
         $visual_code = $course_request_info['visual_code'];
         $request_date = $course_request_info['request_date'];
         $status = $course_request_info['status'];

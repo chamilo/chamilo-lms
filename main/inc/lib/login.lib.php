@@ -415,8 +415,6 @@ class Login
                     $_course['official_code'] = $course_data['visual_code']; // use in echo
                     $_course['sysCode'] = $course_data['code']; // use as key in db
                     $_course['path'] = $course_data['directory']; // use as key in path
-                    $_course['dbName'] = $course_data['db_name']; // use as key in db list
-                    $_course['db_name'] = $course_data['db_name']; // not needed in Chamilo 1.9
                     $_course['titular'] = $course_data['tutor_name']; // this should be deprecated and use the table course_rel_user
                     $_course['language'] = $course_data['course_language'];
                     $_course['extLink']['url'] = $course_data['department_url'];

@@ -1838,13 +1838,6 @@ function api_format_course_array($course_data)
     $_course['path'] = $course_data['directory']; // Use as key in path.
     $_course['directory'] = $course_data['directory'];
     $_course['creation_date'] = $course_data['creation_date'];
-
-    //@todo should be deprecated
-    // Use as key in db list.
-    //$_course['dbName'] = $course_data['db_name'];
-    //$_course['db_name'] = $course_data['db_name'];
-    // Use in all queries.
-
     $_course['titular'] = $course_data['tutor_name'];
     $_course['language'] = $course_data['course_language'];
     $_course['extLink']['url'] = $course_data['department_url'];

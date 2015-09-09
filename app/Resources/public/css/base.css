@@ -4679,6 +4679,12 @@ i.size-32.icon-new-work{
   color: #4d4d4d;
   margin-bottom: 0px;
 }
+.social-avatar .social-avatar-vcard{
+  font-size: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  color: #666666;  
+}
 .social-avatar .social-avatar-email,
 .social-avatar .social-avatar-chat{
   font-size: 12px;

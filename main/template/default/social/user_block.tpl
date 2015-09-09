@@ -5,6 +5,12 @@
             <p class="firstname">{{ user.firstname }}</p>
             <p class="lastname">{{ user.lastname }}</p>
         </div>
+        <div class="social-avatar-vcard">
+            <a href="{{ vCardUserLink }}">
+                <img src="{{ "contacts.png" | icon }}" atl="{{ "Info" | get_lang }}">
+                {{ "Info" | get_lang }}
+            </a>
+        </div>
         <div class="social-avatar-email">
             <img src="{{ "instant_message.png" | icon }}" atl="{{ "Email" | get_lang }}">
             {{ user.email}}

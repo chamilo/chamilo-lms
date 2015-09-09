@@ -2071,6 +2071,17 @@ class Display
 
         return $editProfileUrl;
     }
+    
+    /**
+     * Get the vCard for a user
+     * @param int $userId The user id
+     * @return *.*vcf file
+     */
+    public static function getVCardUserLink($userId)
+    {      
+        $vCardUrl = api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.intval($userId);;
+        return $vCardUrl;
+    }
 
     /**
      * @param string $content

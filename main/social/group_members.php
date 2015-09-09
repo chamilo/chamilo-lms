@@ -188,7 +188,7 @@ if (count($new_member_list) > 0) {
 }
 
 $tpl = new Template(null);
-$tpl->set_help('Groups');
+$tpl->setHelp('Groups');
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);

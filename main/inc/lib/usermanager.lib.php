@@ -1325,24 +1325,6 @@ class UserManager
     }
 
     /**
-     * Get user information
-     * @param     string     The username
-     * @deprecated use api_get_user_info
-     * @return array All user information as an associative array
-     */
-    public static function get_user_info($username)
-    {
-        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-        $username = Database::escape_string($username);
-        $sql = "SELECT * FROM $user_table WHERE username='".$username."'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            return Database::fetch_array($res);
-        }
-        return false;
-    }
-
-    /**
      * Get user picture URL or path from user ID (returns an array).
      * The return format is a complete path, enabling recovery of the directory
      * with dirname() or the file with basename(). This also works for the

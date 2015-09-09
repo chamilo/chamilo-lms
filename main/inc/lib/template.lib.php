@@ -236,15 +236,6 @@ class Template
     }
 
     /**
-     * @deprecated
-     * @param null $helpInput
-     */
-    public function set_help($helpInput = null)
-    {
-        $this->setHelp($helpInput);
-    }
-
-    /**
      * @param string $helpInput
      */
     public function setHelp($helpInput = null)

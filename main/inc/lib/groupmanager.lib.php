@@ -1708,48 +1708,6 @@ class GroupManager
     }
 
     /**
-     * Get all tutors for the current course.
-     * @return array An array with firstname, lastname and user_id for all
-     *               tutors in the current course.
-     * @deprecated this function uses the old tutor implementation
-     */
-    public static function get_all_tutors()
-    {
-        $course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user.user_id AS user_id, user.lastname AS lastname, user.firstname AS firstname
-				FROM ".$user_table." user, ".$course_user_table." cu
-				WHERE cu.user_id=user.user_id
-				AND cu.is_tutor='1'
-				AND cu.c_id='".api_get_course_int_id()."'";
-        $resultTutor = Database::query($sql);
-        $tutors = array();
-        while ($tutor = Database::fetch_array($resultTutor)) {
-            $tutors[] = $tutor;
-        }
-        return $tutors;
-    }
-
-    /**
-     * Is user a tutor in current course
-     * @param int $user_id
-     * @return bool TRUE if given user is a tutor in the current course.
-     * @deprecated this function uses the old tutor implementation
-     */
-    public static function is_tutor($user_id)
-    {
-        $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $user_id = intval($user_id);
-
-        $sql = "SELECT is_tutor FROM ".$course_user_table."
-		        WHERE user_id = '".$user_id."' AND c_id ='".api_get_course_int_id()."'"." AND is_tutor=1";
-        $db_result = Database::query($sql);
-        $result = Database::num_rows($db_result) > 0;
-
-        return $result;
-    }
-
-    /**
      * Get all group's from a given course in which a given user is unsubscribed
      * @author  Patrick Cool
      * @param     int  course id

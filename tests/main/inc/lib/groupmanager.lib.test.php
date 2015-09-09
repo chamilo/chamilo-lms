@@ -385,21 +385,6 @@ class TestGroupManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testGetAllTutors(){
-		$res =GroupManager::get_all_tutors();
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
-	public function testIsTutor(){
-		global $user_id, $_course;
-		$res = GroupManager::is_tutor($user_id);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === false);
-		//var_dump($res);
-
-	}
-
 	public function testGetGroupIds(){
 		global $user_id;
 		$course_db= 'chamilo_COURSETEST';

@@ -82,7 +82,7 @@ class Display
             }
         }
 
-        self::$global_template->set_help($help);
+        self::$global_template->setHelp($help);
 
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;

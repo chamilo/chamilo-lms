@@ -1949,28 +1949,6 @@ class CourseManager
     }
 
     /**
-     * @param int $courseId
-     * @param int $session_id
-     * @return string
-     * @deprecated seem not to be use
-     */
-    public static function get_coach_list_from_course_code_to_string($courseId, $session_id)
-    {
-        $tutor_data = '';
-        if ($session_id != 0) {
-            $coaches = self::get_email_of_tutor_to_session($session_id, $courseId);
-            $coach_list = array();
-            foreach ($coaches as $coach) {
-                $coach_list[] = $coach['complete_name'];
-            }
-            if (!empty($coach_list)) {
-                $tutor_data = implode(self::USER_SEPARATOR, $coach_list);
-            }
-        }
-        return $tutor_data;
-    }
-
-    /**
      * Return user info array of all users registered in the specified course
      * this includes the users of the course itself and the users of all linked courses.
      *

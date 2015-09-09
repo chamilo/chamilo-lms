@@ -3277,11 +3277,6 @@ HTML;
             if (($pos = api_strpos($temp, '[')) === false) {
                 // adds the end of the text
                 $answer = $temp;
-                /* // Deprecated code
-             // TeX parsing - replacement of texcode tags
-            $texstring = api_parse_tex($texstring);
-            $answer = str_replace("{texcode}", $texstring, $answer);
-            */
                 $real_text[] = $answer;
                 break; //no more "blanks", quit the loop
             }

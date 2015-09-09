@@ -832,50 +832,6 @@ function get_week_from_day($date) {
     }
 }
 
-
-/**
- * Deprecated functions
- */
-
-/**
- * Applies parsing the content for tex commands that are separated by [tex]
- * [/tex] to make it readable for techexplorer plugin.
- * @param string $text    The text to parse
- * @return string         The text after parsing.
- * @author Patrick Cool <patrick.cool@UGent.be>
- * @version June 2004
- */
-function api_parse_tex($textext) {
-    /*
-    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
-        return str_replace(array('[tex]', '[/tex]'), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
-    }
-    return str_replace(array('[tex]', '[/tex]'), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
-    */
-    return $textext;
-}
-
-/**
- * Applies parsing for tex commandos that are seperated by [tex]
- * [/tex] to make it readable for techexplorer plugin.
- * This function should not be accessed directly but should be accesse through the text_filter function
- * @param string $text    The text to parse
- * @return string         The text after parsing.
- * @author Patrick Cool <patrick.cool@UGent.be>
- * @version June 2004
- */
-function _text_parse_texexplorer($textext) {
-    /*
-    if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
-        $textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
-    } else {
-        $textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
-    }
-    return $textext;
-    */
-    return $textext;
-}
-
 /**
  * This function splits the string into words and then joins them back together again one by one.
  * Example: "Test example of a long string"

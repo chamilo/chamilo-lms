@@ -10,6 +10,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 $category = isset($_GET['category']) ? $_GET['category'] : null;
 
+$parentInfo = [];
 if (!empty($category)) {
     $parentInfo = getCategory($category);
 }
@@ -39,9 +40,19 @@ if (!empty($action)) {
         }
     } elseif (($action == 'add' || $action == 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
         if ($action == 'add') {
-            $ret = addNode($_POST['code'], $_POST['name'], $_POST['auth_course_child'], $category);
+            $ret = addNode(
+                $_POST['code'],
+                $_POST['name'],
+                $_POST['auth_course_child'],
+                $category
+            );
         } else {
-            $ret = editNode($_POST['code'], $_POST['name'], $_POST['auth_course_child'], $categoryId);
+            $ret = editNode(
+                $_POST['code'],
+                $_POST['name'],
+                $_POST['auth_course_child'],
+                $categoryId
+            );
         }
         if ($ret) {
             $action = '';
@@ -56,7 +67,10 @@ if (!empty($action)) {
 }
 
 $tool_name = get_lang('AdminCategories');
-$interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    "name" => get_lang('PlatformAdmin'),
+);
 
 Display::display_header($tool_name);
 

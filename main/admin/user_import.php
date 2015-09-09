@@ -5,10 +5,6 @@
  * @package chamilo.admin
  */
 
-/**
- * Validate the imported data.
- */
-
 $cidReset = true;
 require '../inc/global.inc.php';
 
@@ -149,7 +145,7 @@ function complete_missing_data($user)
     }
 
     if (empty($user['ExpiryDate'])) {
-        $user['ExpiryDate'] = '0000-00-00 00:00:00';
+        $user['ExpiryDate'] = '';
     }
 
     return $user;

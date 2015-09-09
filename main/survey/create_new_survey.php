@@ -239,15 +239,6 @@ if ($form->validate()) {
     // Storing the survey
     $return = SurveyManager::store_survey($values);
 
-    /* // Deleting the shared survey if the survey is getting unshared (this only happens when editing)
-      if (is_numeric($survey_data['survey_share']) && $values['survey_share']['survey_share'] == 0 && $values['survey_id'] != '') {
-      SurveyManager::delete_survey($survey_data['survey_share'], true);
-      }
-      // Storing the already existing questions and options of a survey that gets shared (this only happens when editing)
-      if ($survey_data['survey_share'] == 0 && $values['survey_share']['survey_share'] !== 0 && $values['survey_id'] != '') {
-      SurveyManager::get_complete_survey_structure($return['id']);
-      }
-     */
     if ($return['type'] == 'error') {
         // Display the error
         Display::display_error_message(get_lang($return['message']), false);
@@ -299,7 +290,6 @@ if ($form->validate()) {
         }
     }
 
-    Display::addFlash(Display::return_message(($return['message']=='SurveyUpdatedSuccesfully'?get_lang($return['message']):$return['message']), false));
     // Redirecting to the survey page (whilst showing the return message)
     header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&message='.$return['message'].'&'.api_get_cidreq());
     exit;

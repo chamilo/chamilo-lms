@@ -197,7 +197,12 @@ class SurveyManager
 			            lang="'.Database::escape_string($values['survey_language']).'"';
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
-                $return['message'] = 'ThisSurveyCodeSoonExistsInThisLanguage';
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('ThisSurveyCodeSoonExistsInThisLanguage'),
+                        'error'
+                    )
+                );
                 $return['type'] = 'error';
                 $return['id'] = isset($values['survey_id']) ? $values['survey_id'] : 0;
 
@@ -333,12 +338,14 @@ class SurveyManager
                 SurveyManager::copy_survey($values['parent_id'], $survey_id);
             }
 
-            $return['message'] = 'SurveyCreatedSuccesfully';
-            $return['type'] = 'confirmation';
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('SurveyCreatedSuccesfully'),
+                    'success'
+                )
+            );
             $return['id'] = $survey_id;
-
         } else {
-
             // Check whether the code doesn't soon exists in this language
             $sql = 'SELECT 1 FROM '.$table_survey.'
 			        WHERE
@@ -348,7 +355,12 @@ class SurveyManager
 			            survey_id !='.intval($values['survey_id']);
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
-                $return['message'] = 'ThisSurveyCodeSoonExistsInThisLanguage';
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('ThisSurveyCodeSoonExistsInThisLanguage'),
+                        'error'
+                    )
+                );
                 $return['type'] = 'error';
                 $return['id'] = isset($values['survey_id']) ? $values['survey_id'] : 0;
                 return $return;
@@ -430,9 +442,14 @@ class SurveyManager
                 api_get_user_id()
             );
 
-            $return['message'] = 'SurveyUpdatedSuccesfully';
-            $return['type'] = 'confirmation';
-            $return['id']	= $values['survey_id'];
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('SurveyUpdatedSuccesfully'),
+                    'confirmation'
+                )
+            );
+
+            $return['id'] = $values['survey_id'];
         }
         return $return;
     }
@@ -962,6 +979,8 @@ class SurveyManager
      */
     public static function save_question($survey_data, $form_content)
     {
+        $return_message = '';
+
         if (strlen($form_content['question']) > 1) {
             // Checks length of the question
             $empty_answer = false;
@@ -1052,14 +1071,15 @@ class SurveyManager
 
                     $params = array_merge($params, $extraParams);
                     $question_id = Database::insert($tbl_survey_question, $params);
+                    if ($question_id) {
 
-                    $sql = "UPDATE $tbl_survey_question SET question_id = $question_id
-                            WHERE iid = $question_id";
-                    Database::query($sql);
+                        $sql = "UPDATE $tbl_survey_question SET question_id = $question_id
+                                WHERE iid = $question_id";
+                        Database::query($sql);
 
-                    $form_content['question_id'] = $question_id;
-                    $return_message = 'QuestionAdded';
-
+                        $form_content['question_id'] = $question_id;
+                        $return_message = 'QuestionAdded';
+                    }
                 } else {
                     // Updating an existing question
 
@@ -1123,6 +1143,9 @@ class SurveyManager
             $return_message = 'PleaseEnterAQuestion';
         }
 
+        if (!empty($return_message)) {
+            Display::addFlash(Display::return_message(get_lang($return_message)));
+        }
         return $return_message;
     }
 

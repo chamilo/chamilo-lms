@@ -116,21 +116,6 @@ if (isset($action)) {
 	}
 }
 
-if (isset($_GET['message'])) {
-	// We have created the survey or updated the survey
-	if (in_array($_GET['message'], array('SurveyUpdatedSuccesfully','SurveyCreatedSuccesfully'))) {
-		Display::display_confirmation_message(get_lang($message_information).', '.PHP_EOL.api_strtolower(get_lang('YouCanNowAddQuestionToYourSurvey')));
-	}
-	// We have added a question
-	if (in_array($_GET['message'], array('QuestionAdded', 'QuestionUpdated'))) {
-		Display::display_confirmation_message(get_lang($message_information));
-	}
-
-	if (in_array($_GET['message'], array('YouNeedToCreateGroups'))) {
-		Display::display_warning_message(get_lang($message_information), false);
-	}
-}
-
 if (!empty($survey_data['survey_version'])) echo '<b>'.get_lang('Version').': '.$survey_data['survey_version'].'</b>';
 
 // We exit here is the first or last question is a pagebreak (which causes errors)

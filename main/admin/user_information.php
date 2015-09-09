@@ -53,7 +53,7 @@ if (api_is_platform_admin()) {
     );
     $vCardExportLink = Display::url(
         Display::return_icon(
-            'contact-vcard-icon.png', get_lang('Info'),'', ICON_SIZE_MEDIUM
+            'vcard.png', get_lang('UserInfo'),'', ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$user['user_id']
     );

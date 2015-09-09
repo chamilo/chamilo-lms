@@ -5,15 +5,17 @@
             <p class="firstname">{{ user.firstname }}</p>
             <p class="lastname">{{ user.lastname }}</p>
         </div>
-        <div class="social-avatar-vcard">
-            <a href="{{ vCardUserLink }}">
-                <img src="{{ "contacts.png" | icon }}" atl="{{ "Info" | get_lang }}">
-                {{ "Info" | get_lang }}
+        <div class="social-avatar-email">
+            <a href="{{ _p.web }}main/messages/new_message.php">
+                <img src="{{ "instant_message.png" | icon }}" atl="{{ "Email" | get_lang }}">
+                {{ user.email}}
             </a>
         </div>
-        <div class="social-avatar-email">
-            <img src="{{ "instant_message.png" | icon }}" atl="{{ "Email" | get_lang }}">
-            {{ user.email}}
+        <div class="social-avatar-vcard">
+            <a href="{{ vCardUserLink }}">
+                <img src="{{ "vcard.png" | icon(22) }}" atl="{{ "UserInfo" | get_lang }}">
+                {{ "UserInfo" | get_lang }}
+            </a>
         </div>
         {% if chat_enabled == 1 %}
             {% if user.user_is_online_in_chat != 0 %}
@@ -31,12 +33,10 @@
             {% endif %}
         {% endif %}
         {% if not profileEditionLink is empty %}
-        <p>
-            <a class="btn btn-link" href="{{ profileEditionLink }}">
+            <a class="btn btn-default" href="{{ profileEditionLink }}">
                 <i class="fa fa-edit"></i>
                 {{ "EditProfile" | get_lang }}
             </a>
-        </p>
         {% endif %}
     </div>
 </div>

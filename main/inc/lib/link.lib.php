@@ -1528,10 +1528,10 @@ class Link extends Model
         $count = count($categories);
         if (!empty($count)) {
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
-            echo Display::return_icon('view_remove.png', get_lang('shownone'), '', ICON_SIZE_MEDIUM).'</a>';
+            echo Display::return_icon('forum_listview.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM). get_lang('FlatView') . ' </a>';
 
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=all">';
-            echo Display::return_icon('view_tree.png', get_lang('showall'), '', ICON_SIZE_MEDIUM).'</a>';
+            echo Display::return_icon('forum_nestedview.png', get_lang('NestedView'), '', ICON_SIZE_MEDIUM) . get_lang('NestedView') . '</a>';
         }
         echo '</div>';
 
@@ -1543,10 +1543,12 @@ class Link extends Model
         $count = Database::num_rows($result);
 
         if ($count !== 0) {
-            echo '<table class="data_table">';
-            echo '<tr><th style="font-weight: bold; text-align:left;padding-left: 10px;">'.get_lang('General').'</th></tr>';
-            echo '</table>';
+            echo '<div class="panel panel-default">';
+            echo '<div class="panel-heading">'.get_lang('General').'</div>';
+            echo '<div class="panel-body">';
             self::showlinksofcategory(0);
+            echo '</div>';
+            echo '</div>';
         }
 
         $i = 0;
@@ -1576,10 +1578,11 @@ class Link extends Model
                     Display :: return_icon('invisible.png', get_lang('Show'), array (), ICON_SIZE_SMALL) . '</a>';
             }
 
-            echo '<tr>';
-            echo '<table class="data_table">';
-            echo '<tr>';
-            echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;">';
+            
+            
+            
+            echo '<div class="panel panel-default">';
+            echo '<div class="panel-heading">';
 
             if ($showChildren) {
                 echo '<a class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id=">';
@@ -1589,31 +1592,30 @@ class Link extends Model
                 echo Display::return_icon('view_tree.png');
             }
 
-            echo '&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).'</a>
-                    <br />&nbsp;&nbsp;&nbsp;'.$myrow['description'];
-            echo '</th>';
+            echo Security::remove_XSS($myrow['category_title']).'</a>';
+            echo '<div class="pull-right">';
             if (api_is_allowed_to_edit(null, true)) {
                 if ($session_id == $myrow['session_id']) {
-                    echo '<th>';
+                    
                     echo $strVisibility;
                     Link::showCategoryAdminTools($myrow, $counter, count($categories));
-                    echo '</th>';
+                    
                 } else {
-                    echo '<th>'.get_lang('EditionNotAvailableFromSession');
+                    echo get_lang('EditionNotAvailableFromSession');
                 }
             }
-            echo '</tr>';
-            echo '</table>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="panel-body">';
+            echo $myrow['description'];
 
             if ($showChildren) {
                 echo Link::showlinksofcategory($myrow['id']);
             }
-            echo '</tr>';
-
-            echo '</th>';
-            echo '</tr>';
-            echo '</table>';
-            echo '</tr>';
+            
+            echo '</div>';
+            echo '</div>';
+            
             $counter++;
             /*
 
@@ -1705,7 +1707,7 @@ class Link extends Model
             //}
             // Displaying the link of the category
         }
-        echo '</table>';
+        
     }
 
     /**

@@ -4359,8 +4359,19 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
 function showStudentList($workId)
 {
     $columnModel = array(
-        array('name'=>'student', 'index'=>'student', 'width'=>'350px', 'align'=>'left', 'sortable' => 'false'),
-        array('name'=>'works', 'index'=>'works', 'align'=>'center', 'sortable' => 'false')
+        array(
+            'name' => 'student',
+            'index' => 'student',
+            'width' => '350px',
+            'align' => 'left',
+            'sortable' => 'false',
+        ),
+        array(
+            'name' => 'works',
+            'index' => 'works',
+            'align' => 'center',
+            'sortable' => 'false',
+        ),
     );
     $token = null;
 
@@ -4533,7 +4544,10 @@ function getWorkUserListData(
                 );
             }
             $works = $userWorks." / ".count($workParents);
-            $results[] = array('student' => $url, 'works' => $works);
+            $results[] = array(
+                'student' => $url,
+                'works' => Display::url($works, $link),
+            );
         }
     }
     return $results;

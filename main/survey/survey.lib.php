@@ -185,6 +185,8 @@ class SurveyManager
     {
         $_user = api_get_user_info();
         $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $courseCode = api_get_course_id();
         $table_survey 	= Database :: get_course_table(TABLE_SURVEY);
         $shared_survey_id = 0;
 
@@ -295,7 +297,6 @@ class SurveyManager
                     $extraParams['survey_version'] = $versionValue;
                 }
             }
-            $course_id = api_get_course_int_id();
 
             $params = [
                 'c_id' => $course_id,
@@ -451,6 +452,60 @@ class SurveyManager
 
             $return['id'] = $values['survey_id'];
         }
+
+        $survey_id = intval($return['id']);
+
+        // Gradebook
+        $gradebook_option = false;
+        if (isset($values['survey_qualify_gradebook'])) {
+            $gradebook_option = $values['survey_qualify_gradebook'] > 0;
+        }
+
+        $gradebook_link_type = 8;
+
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(
+            $courseCode,
+            $gradebook_link_type,
+            $survey_id,
+            $session_id
+        );
+
+        $gradebook_link_id = isset($link_info['id']) ? $link_info['id'] : false;
+
+        if ($gradebook_option) {
+            if ($survey_id > 0) {
+                $title_gradebook = ''; // Not needed here.
+                $description_gradebook = ''; // Not needed here.
+                $survey_weight = floatval($_POST['survey_weight']);
+                $max_score = 1;
+
+                if (!$gradebook_link_id) {
+                    GradebookUtils::add_resource_to_course_gradebook(
+                        $values['category_id'],
+                        $courseCode,
+                        $gradebook_link_type,
+                        $survey_id,
+                        $title_gradebook,
+                        $survey_weight,
+                        $max_score,
+                        $description_gradebook,
+                        1,
+                        $session_id
+                    );
+                } else {
+                    GradebookUtils::update_resource_from_course_gradebook(
+                        $gradebook_link_id,
+                        $courseCode,
+                        $survey_weight
+                    );
+                }
+            }
+        } else {
+            // Delete everything of the gradebook for this $linkId
+            GradebookUtils::remove_resource_from_course_gradebook($gradebook_link_id);
+            exit;
+        }
+
         return $return;
     }
 

@@ -386,9 +386,9 @@ class GradebookUtils
      */
     public static function is_resource_in_course_gradebook($course_code, $resource_type, $resource_id, $session_id = 0)
     {
-        $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $course_code = Database::escape_string($course_code);
-        $sql = "SELECT * FROM $l l
+        $sql = "SELECT * FROM $table l
                 WHERE
                     course_code = '$course_code' AND
                     type = ".(int)$resource_type . " AND

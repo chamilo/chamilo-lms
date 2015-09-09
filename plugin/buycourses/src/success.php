@@ -11,6 +11,11 @@ require_once '../config.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
 
 $plugin = BuyCoursesPlugin::create();
+$paypalEnabled = $plugin->get('paypal_enable') === 'true';
+
+if (!$paypalEnabled) {
+    api_not_allowed(true);
+}
 
 $sale = $plugin->getSale($_SESSION['bc_sale_id']);
 

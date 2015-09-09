@@ -59,11 +59,18 @@ $form->addText('name', get_lang('Name'), false, ['cols-size' => [5, 7, 0]]);
 $form->addText('username', get_lang('Username'), false, ['cols-size' => [5, 7, 0]]);
 $form->addText('email', get_lang('EmailAddress'), false, ['cols-size' => [5, 7, 0]]);
 $form->addHeader($plugin->get_lang('PaymentMethods'));
-$form->addRadio(
-    'payment_type',
-    null,
-    $plugin->getPaymentTypes()
-);
+
+$paymentTypesOptions = $plugin->getPaymentTypes();
+
+if (!$paypalEnabled) {
+    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL]);
+}
+
+if (!$transferEnabled) {
+    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER]);
+}
+
+$form->addRadio('payment_type', null, $paymentTypesOptions);
 $form->addHidden('t', intval($_GET['t']));
 $form->addHidden('i', intval($_GET['i']));
 $form->freeze(['name', 'username', 'email']);
@@ -82,8 +89,6 @@ $tpl = new Template($templateName);
 $tpl->assign('buying_course', $buyingCourse);
 $tpl->assign('buying_session', $buyingSession);
 $tpl->assign('user', api_get_user_info());
-$tpl->assign('paypal_enabled', $paypalEnabled);
-$tpl->assign('transfer_enabled', $transferEnabled);
 $tpl->assign('form', $form->returnForm());
 
 if ($buyingCourse) {

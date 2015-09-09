@@ -1,10 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * 	Saving the scores.
  * 	@package chamilo.exercise
- * 	@author
- * 	@version $Id: savescores.php 15602 2008-06-18 08:52:24Z pcool $
  */
 require_once '../inc/global.inc.php';
 $courseInfo = api_get_course_info();

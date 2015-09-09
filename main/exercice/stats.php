@@ -2,6 +2,7 @@
 /* See license terms in /license.txt */
 
 require_once '../inc/global.inc.php';
+
 $this_section = SECTION_COURSES;
 
 $exercise_id = isset($_GET['exerciseId']) && !empty($_GET['exerciseId']) ? intval($_GET['exerciseId']) : 0;
@@ -251,7 +252,6 @@ if (!empty($question_list)) {
             }
             $id++;
         }
-
 	}
 }
 
@@ -281,11 +281,6 @@ $interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook&".api_get
 $interbreadcrumb[] = array("url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(), "name" => $objExercise->name);
 
 $tpl = new Template(get_lang('ReportByQuestion'));
-
-//$actions = array();
-//$actions[]= array(get_lang('Back'), Display::return_icon('back.png', get_lang('Back'), 'exercise_report.php?'.$exercise_id));
-//$tpl->set_actions($actions);
-
 $actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">' .
     Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 $actions = Display::div($actions, array('class'=> 'actions'));

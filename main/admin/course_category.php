@@ -30,11 +30,13 @@ if (!empty($action)) {
                 $_configuration['enable_multiple_url_support_for_course_category'])
             ) {
                 deleteNode($categoryId);
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
                 header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
                 exit();
             }
         } else {
             deleteNode($categoryId);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
             header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
             exit();
         }
@@ -46,6 +48,8 @@ if (!empty($action)) {
                 $_POST['auth_course_child'],
                 $category
             );
+
+            Display::addFlash(Display::return_message(get_lang('Created')));
         } else {
             $ret = editNode(
                 $_POST['code'],
@@ -53,6 +57,7 @@ if (!empty($action)) {
                 $_POST['auth_course_child'],
                 $categoryId
             );
+            Display::addFlash(Display::return_message(get_lang('Updated')));
         }
         if ($ret) {
             $action = '';
@@ -62,6 +67,7 @@ if (!empty($action)) {
     } elseif ($action == 'moveUp') {
         moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         exit();
     }
 }

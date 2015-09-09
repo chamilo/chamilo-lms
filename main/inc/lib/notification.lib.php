@@ -371,7 +371,7 @@ class Notification extends Model
         }
 
         // See message with link text
-        if (!empty($link_to_new_message)) {
+        if (!empty($link_to_new_message) && api_get_setting('allow_message_tool') == 'true') {
             $content = $content.'<br /><br />'.$link_to_new_message;
         }
 

@@ -777,6 +777,11 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $values = [
+            'reference' => $this->generateReference(
+                api_get_user_id(),
+                $item['product_type'],
+                $item['product_id']
+            ),
             'currency_id' => $item['currency_id'],
             'date' => api_get_utc_datetime(),
             'user_id' => api_get_user_id(),
@@ -1065,6 +1070,21 @@ class BuyCoursesPlugin extends Plugin
         }
 
         return $courses;
+    }
+
+    /**
+     * Generates an order reference
+     * @param int $userId The user ID
+     * @param int $productType The course/session type
+     * @param int $productId The course/session ID
+     * @return string
+     */
+    public function generateReference($userId, $productType, $productId)
+    {
+        return vsprintf(
+            "%d-%d-%d-%s",
+            [$userId, $productType, $productId, BuyCoursesUtils::randomText()]
+        );
     }
 
 }

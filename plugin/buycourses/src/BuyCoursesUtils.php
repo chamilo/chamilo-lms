@@ -186,4 +186,34 @@ class BuyCoursesUtils
         return $form;
     }
 
+    /**
+     * Generates a random text (used for order references)
+     * @param int $length Optional. Length of characters
+     * @param boolean $lowercase Optional. Include lowercase characters
+     * @param boolean $uppercase Optional. Include uppercase characters
+     * @param boolean $numbers Optional. Include numbers
+     * @return string
+     */
+    public static function randomText($length = 6, $lowercase = true, $uppercase = true, $numbers = true)
+    {
+        $salt = $lowercase ? 'abchefghknpqrstuvwxyz' : '';
+        $salt .= $uppercase ? 'ACDEFHKNPRSTUVWXYZ' : '';
+        $salt .= $numbers ? (strlen($salt) ? '2345679' : '0123456789') : '';
+
+        if (strlen($salt) == 0) {
+            return '';
+        }
+
+        $str = '';
+
+        srand((double)microtime() * 1000000);
+
+        for ($i = 0; $i < $length; $i++) {
+            $numbers = rand(0, strlen($salt) - 1);
+            $str .= substr($salt, $numbers, 1);
+        }
+
+        return $str;
+    }
+
 }

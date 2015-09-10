@@ -4,6 +4,8 @@
     <dl>
         <dt>Fecha</dt>
         <dd>{{ sale.date }}</dd>
+        <dt>{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
+        <dd>sale.reference</dd>
         <dt>Usuario</dt>
         <dd>{{ user.complete_name }}</dd>
         <dt>Curso</dt>

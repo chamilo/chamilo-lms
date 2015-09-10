@@ -4,6 +4,7 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
+                <th class="text-center">{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-center">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-center">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-center">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
@@ -18,6 +19,7 @@
         <tbody>
             {% for sale in sale_list %}
                 <tr {{ sale.id == selected_sale ? 'class="warning"' : '' }}>
+                    <td class="text-center">{{ sale.reference }}</td>
                     <td class="text-center">
                         {% if sale.status == sale_status_canceled %}
                             {{ 'SaleCanceled'|get_plugin_lang('BuyCoursesPlugin') }}

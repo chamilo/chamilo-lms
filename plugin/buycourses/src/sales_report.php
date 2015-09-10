@@ -85,6 +85,7 @@ $saleList = [];
 foreach ($sales as $sale) {
     $saleList[] = [
         'id' => $sale['id'],
+        'reference' => $sale['reference'],
         'status' => $sale['status'],
         'date' => api_format_date($sale['date'], DATE_FORMAT_LONG_NO_DAY),
         'currency' => $sale['iso_code'],

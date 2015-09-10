@@ -103,6 +103,7 @@ $saleTable->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     ['autoincrement' => true, 'unsigned' => true]
 );
+$saleTable->addColumn('reference', \Doctrine\DBAL\Types\Type::STRING);
 $saleTable->addColumn('date', \Doctrine\DBAL\Types\Type::DATE);
 $saleTable->addColumn(
     'user_id',

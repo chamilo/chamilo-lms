@@ -104,6 +104,7 @@ switch ($sale['payment_type']) {
                     'product' => $sale['product_name'],
                     'currency' => $currency['iso_code'],
                     'price' => $sale['price'],
+                    'reference' => $sale['reference']
                 ]
             );
             $messageTemplate->assign('sale_product', $sale['product_name']);

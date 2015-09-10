@@ -1316,11 +1316,11 @@ function display_database_settings_form(
 ) {
     if ($installType == 'update') {
         global $_configuration;
-        $dbHostForm         = $_configuration['db_host'];
-        $dbUsernameForm     = $_configuration['db_user'];
-        $dbPassForm         = $_configuration['db_password'];
-        $dbNameForm         = $_configuration['main_database'];
-        $dbPortForm         = $_configuration['db_port'];
+        $dbHostForm = $_configuration['db_host'];
+        $dbUsernameForm = $_configuration['db_user'];
+        $dbPassForm = $_configuration['db_password'];
+        $dbNameForm = $_configuration['main_database'];
+        $dbPortForm = isset($_configuration['db_port']) ? $_configuration['db_port'] : '';
 
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
@@ -1562,7 +1562,7 @@ function display_configuration_settings_form(
     echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>app/config/configuration.php</strong></p>';
 
     // Parameter 1: administrator's login
-    
+
     $html = '';
 
     $html .= display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
@@ -1583,10 +1583,10 @@ function display_configuration_settings_form(
     //Parameter 6: administrator's telephone
     $html .=  display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
 
-        
+
     echo panel($html, get_lang('Administrator'), 'administrator');
 
-   
+
     //echo '<table class="table">';
 
     //First parameter: language
@@ -1602,12 +1602,12 @@ function display_configuration_settings_form(
     }
     $html.= "</div>";
 
-    
+
     //Second parameter: Chamilo URL
     $html .= '<div class="form-group">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('ChamiloURL') .get_lang('ThisFieldIsRequired').'</label>';
-    
-    
+
+
 
     if ($installType == 'update') {
         $html .= api_htmlentities($urlForm, ENT_QUOTES)."\n";
@@ -1617,7 +1617,7 @@ function display_configuration_settings_form(
         $html .= '</div>';
     }
     $html .= '</div>';
-    
+
     //Parameter 9: campus name
     $html .= display_configuration_parameter($installType, get_lang('CampusName'), 'campusForm', $campusForm);
 
@@ -1626,20 +1626,20 @@ function display_configuration_settings_form(
 
     //Parameter 11: institute (short) name
     $html .= display_configuration_parameter($installType, get_lang('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
-    
-    
+
+
     $html .= '<div class="form-group">
             <label class="col-sm-6 control-label">' . get_lang("EncryptMethodUserPass") . '</label>
         <div class="col-sm-6">';
-    if ($installType == 'update') { 
+    if ($installType == 'update') {
         $html .= '<input type="hidden" name="encryptPassForm" value="'. $encryptPassForm .'" />'. $encryptPassForm;
     } else {
-            
+
         $html .= '<div class="checkbox">
                     <label>
                         <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '. ($encryptPassForm == 'bcrypt' ? 'checked="checked" ':'') .'/> bcrypt
-                    </label>';       
-            
+                    </label>';
+
         $html .= '<label>
                         <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" '. ($encryptPassForm == 'sha1' ? 'checked="checked" ':'') .'/> sha1
                     </label>';
@@ -1650,16 +1650,16 @@ function display_configuration_settings_form(
 
         $html .= '<label>
                         <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '. ($encryptPassForm == 'none' ? 'checked="checked" ':'') .'/>'. get_lang('None').'
-                    </label>'; 
+                    </label>';
         $html .= '</div>';
     }
     $html .= '</div></div>';
-  
-   
+
+
     $html .= '<div class="form-group">
             <label class="col-sm-6 control-label">' . get_lang('AllowSelfReg') . '</label>
             <div class="col-sm-6">';
-    if ($installType == 'update') { 
+    if ($installType == 'update') {
         $html .= '<input type="hidden" name="allowSelfReg" value="'. $allowSelfReg .'" />'. $allowSelfReg ? get_lang('Yes') : get_lang('No');
     } else {
         $html .= '<div class="control-group">';
@@ -1672,14 +1672,14 @@ function display_configuration_settings_form(
         $html .= '</div>';
     }
     $html .= '</div>';
-    $html .= '</div>';    
-    
+    $html .= '</div>';
+
     $html .= '<div class="form-group">';
     $html .= '<label class="col-sm-6 control-label">'. get_lang('AllowSelfRegProf') .'</label>
         <div class="col-sm-6">';
     if ($installType == 'update'){
         $html .= '<input type="hidden" name="allowSelfRegProf" value="'. $allowSelfRegProf.'" />'. $allowSelfRegProf? get_lang('Yes') : get_lang('No');
-    } else { 
+    } else {
         $html .= '<div class="control-group">
                 <label class="checkbox-inline">
                     <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" '. ($allowSelfRegProf ? 'checked="checked" ' : '') .'/>
@@ -1690,12 +1690,12 @@ function display_configuration_settings_form(
                    '. get_lang('No') .'
                 </label>';
         $html .= '</div>';
-    }    
+    }
     $html .= '</div>
-    </div>';    
-      
-    echo panel($html, get_lang('Platform'), 'platform'); 
- ?> 
+    </div>';
+
+    echo panel($html, get_lang('Platform'), 'platform');
+ ?>
     <div class='form-group'>
         <div class="col-sm-6">
             <button type="submit" class="btn btn-default pull-right" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" ><i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?></button>
@@ -1703,9 +1703,9 @@ function display_configuration_settings_form(
         </div>
         <div class="col-sm-6">
             <button class="btn btn-success" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" ><i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?></button>
-        </div>   
+        </div>
     </div>
-    
+
     <?php
 }
 

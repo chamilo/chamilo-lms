@@ -40,9 +40,9 @@ switch ($action) {
             curl_close($ch);
 
             if ($result) {
-                echo Display::return_icon('accept.png', get_lang('Ok'));
+                echo Display::return_icon('check-circle.png', get_lang('Ok'), null, ICON_SIZE_TINY);
             } else {
-                echo Display::return_icon('wrong.gif', get_lang('Wrong'));
+                echo Display::return_icon('closed-circle.png', get_lang('Wrong'), null, ICON_SIZE_TINY);
             }
         }
         break;

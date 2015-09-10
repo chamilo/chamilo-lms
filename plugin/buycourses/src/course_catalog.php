@@ -9,7 +9,6 @@
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
-require_once 'buy_course.lib.php';
 
 $plugin = BuyCoursesPlugin::create();
 $includeSessions = $plugin->get('include_sessions') === 'true';

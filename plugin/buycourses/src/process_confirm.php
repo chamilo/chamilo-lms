@@ -8,7 +8,6 @@
  * Init
  */
 require_once '../config.php';
-require_once dirname(__FILE__) . '/buy_course.lib.php';
 
 $plugin = BuyCoursesPlugin::create();
 
@@ -107,9 +106,6 @@ switch ($sale['payment_type']) {
                     'reference' => $sale['reference']
                 ]
             );
-            $messageTemplate->assign('sale_product', $sale['product_name']);
-            $messageTemplate->assign('sale_currency', $currency['iso_code']);
-            $messageTemplate->assign('sale_price', $sale['price']);
             $messageTemplate->assign('transfer_accounts', $transferAccounts);
 
             api_mail_html(

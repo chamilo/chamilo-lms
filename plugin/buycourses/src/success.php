@@ -8,7 +8,6 @@
  * Init
  */
 require_once '../config.php';
-require_once dirname(__FILE__) . '/buy_course.lib.php';
 
 $plugin = BuyCoursesPlugin::create();
 $paypalEnabled = $plugin->get('paypal_enable') === 'true';

@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-use \Doctrine\DBAL\Types\Type;
 /**
  * BuyCoursesUtils
  *

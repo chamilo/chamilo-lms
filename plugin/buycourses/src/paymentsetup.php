@@ -9,7 +9,6 @@
  */
 $cidReset = true;
 
-require_once dirname(__FILE__) . '/buy_course.lib.php';
 require_once '../../../main/inc/global.inc.php';
 
 api_protect_admin_script(true);

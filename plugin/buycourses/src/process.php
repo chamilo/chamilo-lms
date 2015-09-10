@@ -8,7 +8,6 @@
  * Initialization
  */
 require_once '../config.php';
-require_once dirname(__FILE__) . '/buy_course.lib.php';
 
 $currentUserId = api_get_user_id();
 

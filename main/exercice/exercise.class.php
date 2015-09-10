@@ -2297,7 +2297,10 @@ class Exercise
         }
 
         $real_answers = array();
-        $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
+        $quiz_question_options = Question::readQuestionOption(
+            $questionId,
+            $course_id
+        );
 
         $organs_at_risk_hit = 0;
         $questionScore = 0;
@@ -2488,7 +2491,7 @@ class Exercise
 
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
 
-                        if ($answerCorrect == $answerAutoId) {
+                        if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
                             } else {
@@ -2503,6 +2506,7 @@ class Exercise
                         }
                     } else {
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -3307,7 +3311,7 @@ class Exercise
                                 );
                             }
                             break;
-                        case MULTIPLE_ANSWER_TRUE_FALSE :
+                        case MULTIPLE_ANSWER_TRUE_FALSE:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_multiple_answer_true_false(
                                     $feedback_type,
@@ -3578,6 +3582,7 @@ class Exercise
         if ($debug) error_log('-- end answer loop --');
 
         $final_answer = true;
+
         foreach ($real_answers as $my_answer) {
             if (!$my_answer) {
                 $final_answer = false;
@@ -3585,7 +3590,9 @@ class Exercise
         }
 
         //we add the total score after dealing with the answers
-        if ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
+        if ($answerType == MULTIPLE_ANSWER_COMBINATION ||
+            $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
+        ) {
             if ($final_answer) {
                 //getting only the first score where we save the weight of all the question
                 $answerWeighting = $objAnswerTmp->selectWeighting(1);

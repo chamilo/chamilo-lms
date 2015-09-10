@@ -12,20 +12,20 @@
  **/
 class MultipleAnswer extends Question
 {
-	static $typePicture = 'mcma.png';
-	static $explanationLangVar = 'MultipleSelect';
+    static $typePicture = 'mcma.png';
+    static $explanationLangVar = 'MultipleSelect';
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-		parent::__construct();
-		$this -> type = MULTIPLE_ANSWER;
-		$this -> isContent = $this-> getIsContent();
-	}
+        parent::__construct();
+        $this -> type = MULTIPLE_ANSWER;
+        $this -> isContent = $this-> getIsContent();
+    }
 
-	/**
+    /**
      * function which redifines Question::createAnswersForm
      * @param the formvalidator instance
      * @param the answers number to display
@@ -143,7 +143,7 @@ class MultipleAnswer extends Question
 
         $buttonGroup = [];
 
-        global $text, $class;
+        global $text;
         if ($obj_ex->edit_exercise_in_lp == true) {
             // setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
@@ -171,31 +171,31 @@ class MultipleAnswer extends Question
 	 * @param the formvalidator instance
 	 * @param the answers number to display
 	 */
-	function processAnswersCreation($form) {
+	function processAnswersCreation($form)
+    {
+        $questionWeighting = $nbrGoodAnswers = 0;
+        $objAnswer  = new Answer($this->id);
+        $nb_answers = $form->getSubmitValue('nb_answers');
 
-		$questionWeighting = $nbrGoodAnswers = 0;
-		$objAnswer  = new Answer($this->id);
-		$nb_answers = $form->getSubmitValue('nb_answers');
-
-		for($i=1 ; $i <= $nb_answers ; $i++) {
-        	$answer = trim(str_replace(['<p>', '</p>'], '', $form -> getSubmitValue('answer['.$i.']')));
+        for($i=1 ; $i <= $nb_answers ; $i++) {
+            $answer = trim(str_replace(['<p>', '</p>'], '', $form -> getSubmitValue('answer['.$i.']')));
             $comment = trim(str_replace(['<p>', '</p>'], '', $form -> getSubmitValue('comment['.$i.']')));
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
 
-			if ($goodAnswer) {
-    			$weighting = abs($weighting);
-			} else {
-				$weighting = abs($weighting);
-				$weighting = -$weighting;
-			}
-    		if($weighting > 0) {
+            if ($goodAnswer) {
+                $weighting = abs($weighting);
+            } else {
+                $weighting = abs($weighting);
+                $weighting = -$weighting;
+            }
+            if($weighting > 0) {
                 $questionWeighting += $weighting;
             }
-        	$objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i);
+            $objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i);
         }
 
-    	// saves the answers into the data base
+        // saves the answers into the data base
         $objAnswer -> save();
 
         // sets the total weighting of the question

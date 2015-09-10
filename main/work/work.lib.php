@@ -2055,7 +2055,7 @@ function get_work_user_list(
                 $work_date = api_convert_and_format_date($work['sent_date']);
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . '<br />' . $work_date;
+                $work['sent_date'] = '<div class="date-time">' . date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . ' ' . $work_date . '</div>';
 
                 // Actions.
                 $correction = '';
@@ -2064,7 +2064,7 @@ function get_work_user_list(
                 if (api_is_allowed_to_edit()) {
                     if (!empty($work['url_correction'])) {
                         $action .= Display::url(
-                            Display::return_icon('check.png', get_lang('Correction'), null, ICON_SIZE_SMALL),
+                            Display::return_icon('check-circle.png', get_lang('Correction'), null, ICON_SIZE_SMALL),
                             api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
                         );
                     }
@@ -4359,8 +4359,19 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
 function showStudentList($workId)
 {
     $columnModel = array(
-        array('name'=>'student', 'index'=>'student', 'width'=>'350px', 'align'=>'left', 'sortable' => 'false'),
-        array('name'=>'works', 'index'=>'works', 'align'=>'center', 'sortable' => 'false')
+        array(
+            'name' => 'student',
+            'index' => 'student',
+            'width' => '350px',
+            'align' => 'left',
+            'sortable' => 'false',
+        ),
+        array(
+            'name' => 'works',
+            'index' => 'works',
+            'align' => 'center',
+            'sortable' => 'false',
+        ),
     );
     $token = null;
 
@@ -4533,7 +4544,10 @@ function getWorkUserListData(
                 );
             }
             $works = $userWorks." / ".count($workParents);
-            $results[] = array('student' => $url, 'works' => $works);
+            $results[] = array(
+                'student' => $url,
+                'works' => Display::url($works, $link),
+            );
         }
     }
     return $results;

@@ -221,20 +221,40 @@ ul#navigation .report a {
 #results .file_upload_highlight {
     background: #F4D364;
 }
+.file_upload{
+    position: relative;
+}
 .work_correction_file_upload .button-load {
-    position: absolute;
-    top: -60px;
-    left: -30px;
+    position: relative;
     font-size: 10px;
-    width: 100px;
-    padding-top: 0px;
+    font-weight: normal;
+    width: 100%;
+    padding-top: 5px;
     background: none;
 }
-
-.work_correction_file_upload {
-    height: 40px;
+.file_upload_small{
+    line-height: 15px;
+    border: 1px solid #AFDDE9;
+    background: #D4E6F0;
+    width: 100%;
 }
-
+.work_correction_file_upload {
+    height: 40px !important;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.file_upload input{
+    position: relative;
+    border: none;
+}
+#results .jqgrid_whitespace .date-time{
+    font-size: 12px;
+    color: #666666;
+    text-align: center;
+}
+.list-work-results{
+    margin-top: 20px;
+}
 .impress-content{
     position: relative;
     width: 100%;
@@ -1039,9 +1059,7 @@ button.next.disabled {
     padding-top: 10px;
     text-shadow: gray 3px 3px 2px;
 }
-
 /* ATTENDANCE */
-
 div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.row div.formw  {
     float: left;
     display:inline;
@@ -1059,23 +1077,26 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 .attendance-calendar-row {
     padding:5px;
 }
-.attendance-faults-bar {
-    width:90%;
-    background-color:none;
-    padding:2px;
-    font-size:120%;
-    font-weight: bold;
-    padding:5px;
+.attendance-calendar-table .check{
+    text-align: center;
 }
-
-.attendance-users-table td {
-    height:66px;
+.date-attendance{
+    color: #666;
+    text-align: center;
+    font-size: 12px;
+    width: 150px;
+    margin: auto;
 }
-
-.attendance-calendar-table td {
-    height:66px;
+.date-attendance .blue{
+    color: #2E75A3;
 }
-
+.date-attendance .grey{
+    color: #666;
+}
+.tableFloatingHeaderOriginal{
+    font-size: 12px;
+    height: 60px;
+}
 /**********************************************
  *  MESSAGE TOOL                           *
  **********************************************/
@@ -2260,6 +2281,7 @@ div.admin_section h4 {
 
 .ui-jqgrid tr.jqgrow td {
     height:38px !important;
+    white-space: inherit;
 }
 
 .exercise_overview_options {
@@ -2924,17 +2946,6 @@ form .formw .freeze {
     color:#999;
     font-size: 11px;
 }
-
-/* Stick table header */
-
-.tableWithFloatingHeader th {
-    padding: 5px 5px 0px 5px;
-}
-.tableFloatingHeaderOriginal th, .tableWithFloatingHeader th{
-    height:80px;
-}
-
-/* jsPlumb */
 /* ****************************************************
                      CSS SKILL
  **************************************************** */
@@ -3682,20 +3693,6 @@ a:active{
     /* height: 60px; */
     overflow: hidden;
     width: 800px;
-}
-
-#my_timeline #next {
-    background: url("../../main/img/action_next.png") no-repeat transparent;
-    height: 32px;
-    width: 32px;
-    float:right;
-}
-
-#my_timeline #prev {
-    background: url("../../main/img/action_prev.png") no-repeat transparent;
-    height: 32px;
-    width: 32px;
-    float:left;
 }
 
 #dates .selected {

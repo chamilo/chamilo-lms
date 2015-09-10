@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 /**
  * @desc The dropbox is a personal (peer to peer) file exchange module that allows
  * you to send documents to a certain (group of) users.
@@ -154,9 +153,18 @@ if (api_is_excluded_user_type()) {
 }
 
 if (empty($session_id)) {
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, false);
+    $is_course_member = CourseManager::is_user_subscribed_in_course(
+        $user_id,
+        $course_code,
+        false
+    );
 } else {
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true, $session_id);
+    $is_course_member = CourseManager::is_user_subscribed_in_course(
+        $user_id,
+        $course_code,
+        true,
+        $session_id
+    );
 }
 
 /*	Object Initialisation */
@@ -166,11 +174,14 @@ if (empty($session_id)) {
 // @todo consider moving the javascripts in a function that displays the javascripts
 // only when it is needed.
 if ($action == 'add') {
-	$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+    $dropbox_person = new Dropbox_Person(
+        $_user['user_id'],
+        $is_courseAdmin,
+        $is_courseTutor
+    );
 }
 
 /*	Create javascript and htmlHeaders */
-
 $javascript = "<script type=\"text/javascript\">
 	function confirmsend ()
 	{
@@ -204,13 +215,12 @@ $javascript = "<script type=\"text/javascript\">
 			return true;
 		}
 	}
-	";
+";
 
 if (dropbox_cnf('allowOverwrite')) {
     //sentArray keeps list of all files still available in the sent files list
     //of the user.
     //This is used to show or hide the overwrite file-radio button of the upload form
-
 	$javascript .= "
 		var sentArray = new Array(";
     if (isset($dropbox_person)) {
@@ -287,12 +297,12 @@ $htmlHeadXtra[] = '<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="-1">';
 
 $checked_files = false;
-if (!$view OR $view == 'received') {
+if (!$view || $view == 'received') {
 	$part = 'received';
 } elseif ($view = 'sent') {
 	$part = 'sent';
 } else {
-	header ('location: index.php?view='.$view.'&error=Error');
+	header('location: index.php?view='.$view.'&error=Error');
 }
 
 if (($postAction == 'download_received' || $postAction == 'download_sent') and !$_POST['store_feedback']) {
@@ -311,11 +321,11 @@ if (($postAction == 'download_received' || $postAction == 'download_sent') and !
  */
 
 if ((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(null, true)) {
-	if ($origin != 'learnpath') {
-		api_not_allowed(true);//print headers/footers
-	} else {
-		api_not_allowed();
-	}
+    if ($origin != 'learnpath') {
+        api_not_allowed(true);//print headers/footers
+    } else {
+        api_not_allowed();
+    }
 	exit();
 }
 

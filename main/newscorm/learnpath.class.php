@@ -7914,8 +7914,8 @@ class learnpath
         $return .= '<tr>';
         $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
         $return .= '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="idParent" name="parent" style="width:100%;" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
-        //$parent_item_id = $_SESSION['parent_item_id'];
+        $return .= '<select id="idParent" name="parent" style="width:100%;" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
+
         $return .= '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
@@ -7979,35 +7979,14 @@ class learnpath
 
                 }
             }
-
-            // Commented the prerequisites, only visible in edit (work).
-            /*
-                    $return .= '<tr>';
-                    $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('LearnpathPrerequisites').'</label></td>';
-                    $return .= '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang('NoPrerequisites').'</option>';
-
-                    foreach($arrHide as $key => $value) {
-                        if ($key == $s_selected_position && $action == 'add') {
-                            $return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
-                        }
-                        elseif ($key == $id_prerequisite && $action == 'edit') {
-                            $return .= '<option value="'.$key.'" selected="selected">'.$value['value'].'</option>';
-                        }
-                        else {
-                            $return .= '<option value="'.$key.'">'.$value['value'].'</option>';
-                        }
-                    }
-
-                    $return .= "</select></td>";
-            */
             $return .= '</tr>';
         }
 
         $return .= '<tr>';
         if ($action == 'add') {
-            $return .= '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">' . get_lang('AddAssignmentToCourse') . '</button></td>';
+            $return .= '<td>&nbsp</td><td><button class="btn btn-primary" name="submit_button" type="submit">' . get_lang('AddAssignmentToCourse') . '</button></td>';
         } else {
-            $return .= '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">' . get_lang('EditCurrentStudentPublication') . '</button></td>';
+            $return .= '<td>&nbsp</td><td><button class="btn btn-primary" name="submit_button" type="submit">' . get_lang('EditCurrentStudentPublication') . '</button></td>';
         }
         $return .= '</tr>';
         $return .= '</table>';

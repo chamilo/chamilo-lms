@@ -312,12 +312,12 @@ if ($course_id_changed) {
 
 $course_id = $course_info['real_id'];
 // Redefining table calls
-$TBL_EXERCISE_QUESTION      = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCISES              = Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS              = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES               = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_CATEGORY               = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-$TBL_COURSE_REL_CATEGORY	= Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+$TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
+$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
+$TBL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+$TBL_COURSE_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 
 // Get course categories for the selected course
 
@@ -471,7 +471,7 @@ if ($exerciseId > 0) {
 	$level_where = '';
 	$from = '';
 	if (isset($courseCategoryId) && $courseCategoryId > 0) {
-		$from = " INNER JOIN  $TBL_COURSE_REL_CATEGORY crc ON crc.question_id=q.id  AND crc.c_id= q.c_id ";
+		$from = " INNER JOIN  $TBL_COURSE_REL_CATEGORY crc ON crc.question_id=q.id AND crc.c_id= q.c_id ";
 		$level_where .= " AND
 		        crc.c_id = $selected_course AND
 		        crc.category_id = $courseCategoryId";

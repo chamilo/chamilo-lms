@@ -36,11 +36,13 @@ if ($global) {
 	$temp_course_list = CourseManager :: get_courses_list();
 	foreach($temp_course_list  as $temp_course_item) {
 		$course_item = CourseManager ::get_course_information($temp_course_item['code']);
-		$course_list[]= array('db_name' =>$course_item['db_name'],'code'=>$course_item['code'], 'title'=>$course_item['title']);
+        $course_list[] = array(
+            'code' => $course_item['code'],
+            'title' => $course_item['title'],
+        );
 	}
 } else {
-	$current_course['db_name'] 	= $_course['dbName'];
-	$current_course['code'] 	= $_course['id'];
+    $current_course['code'] = $_course['id'];
 	$course_list = array($current_course);
 }
 
@@ -49,7 +51,7 @@ foreach($course_list as $data) {
     $new_course_select[$data['code']] = $data['title'];
 }
 
-$form = new FormValidator('search_simple','POST','','',null,false);
+$form = new FormValidator('search_simple', 'POST', '', '', null, false);
 $form->addElement('select','course_code',get_lang('Course'), $new_course_select);
 if ($global) {
 	$form->addElement('hidden','view','admin');
@@ -57,7 +59,9 @@ if ($global) {
 	//Get exam lists
     $course_id = api_get_course_int_id();
 	$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-	$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE c_id = $course_id AND active='1' ORDER BY quiz.title ASC";
+	$sqlExercices = "SELECT quiz.title,id FROM ".$t_quiz." AS quiz
+	                 WHERE c_id = $course_id AND active='1'
+	                 ORDER BY quiz.title ASC";
 	$resultExercices = Database::query($sqlExercices);
 	$exercise_list[0] = get_lang('All');
 	while($a_exercices = Database::fetch_array($resultExercices)) {

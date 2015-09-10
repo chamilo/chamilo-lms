@@ -479,28 +479,4 @@ class FileManager
 		}
 		Database::query($query);
 	}
-} //end class FileManager
-
-/*	DEPRECATED FUNCTIONS */
-
-/**
- * Like in Java, creates the directory named by this abstract pathname,
- * including any necessary but nonexistent parent directories.
- *
- * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
- *
- * @param  string $path - path to create
- * @param  string $mode - directory permission (default is '770')
- *
- * @return boolean TRUE if succeeds FALSE otherwise
- */
-function mkdirs($path, $mode = '0770') {
-	if (file_exists($path)) {
-		return false;
-	} else {
-		FileManager :: mkdirs(dirname($path), $mode);
-	 	//mkdir($path, $mode);
-		return true;
-	}
 }

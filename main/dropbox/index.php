@@ -285,15 +285,15 @@ if ($action != 'add') {
 ?>
 <ul class="nav nav-tabs">
     <li <?php if (!$view || $view == 'sent') { echo 'class="active"'; } ?> >
-        <a href="index.php?<?php echo api_get_cidreq(); ?>&view=sent" ><?php echo get_lang('SentFiles'); ?></a></li>
+        <a href="index.php?<?php echo api_get_cidreq(); ?>&view=sent" ><?php echo get_lang('SentFiles'); ?></a>
+    </li>
     <li <?php if ($view == 'received') { echo 'class="active"'; } ?> >
-        <a href="index.php?<?php echo api_get_cidreq(); ?>&view=received"  ><?php echo get_lang('ReceivedFiles'); ?></a></li>
+        <a href="index.php?<?php echo api_get_cidreq(); ?>&view=received"  ><?php echo get_lang('ReceivedFiles'); ?></a>
+    </li>
 </ul>
 <?php
 	}
-
-	/*	RECEIVED FILES */
-
+    /*	RECEIVED FILES */
 	if ($view == 'received' || !$dropbox_cnf['sent_received_tabs']) {
 		// This is for the categories
 		if (isset($viewReceivedCategory) AND $viewReceivedCategory != '') {

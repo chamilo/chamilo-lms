@@ -1169,8 +1169,17 @@ function chamilo_void_save_asset(score, max, min, status) {
         min = 0;
     }
 
-    //assume a default of 100, otherwise the score will not get saved (see lpi->set_score())
-    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, score, max, min, status);
+    // Assume a default of 100, otherwise the score will not get saved (see lpi->set_score())
+    xajax_save_item(
+        olms.lms_lp_id,
+        olms.lms_user_id,
+        olms.lms_view_id,
+        olms.lms_item_id,
+        score,
+        max,
+        min,
+        status
+    );
 }
 
 /**
@@ -1442,6 +1451,7 @@ function switch_item(current_item, next_item){
             olms.lesson_location,
             olms.interactions,
             olms.lms_item_core_exit,
+            orig_item_type,
             olms.session_id,
             olms.course_id,
             olms.finishSignalReceived,
@@ -1536,6 +1546,7 @@ function switch_item(current_item, next_item){
         olms.lesson_location,
         olms.interactions,
         olms.lms_item_core_exit,
+        orig_item_type,
         olms.session_id,
         olms.course_id,
         olms.finishSignalReceived,
@@ -1607,7 +1618,6 @@ function switch_item(current_item, next_item){
     if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
         xajax_start_timer();
     }
-
 
     //(4) refresh the audio player if needed
     $.ajax({
@@ -1701,7 +1711,7 @@ function xajax_save_item(
     params += '&statusSignalReceived='+statusSignalReceived;
 
     // console.info(session_time);
-    if (olms.lms_lp_type == 1 || item_type == 'document') {
+    if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
         logit_lms('xajax_save_item with params:' + params,3);
         $.ajax({
             type:"POST",

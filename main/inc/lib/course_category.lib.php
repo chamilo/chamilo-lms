@@ -140,7 +140,8 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
         'parent_id' => empty($parent_id) ? '' : $parent_id,
         'tree_pos' => $tree_pos,
         'children_count' => 0,
-        'auth_course_child' => $canHaveCourses
+        'auth_course_child' => $canHaveCourses,
+        'auth_cat_child' => 'TRUE'
     ];
 
     $categoryId = Database::insert($tbl_category, $params);
@@ -242,7 +243,8 @@ function editNode($code, $name, $canHaveCourses, $old_code)
     Database::query($sql);
 
     // Updating course category
-    $sql = "UPDATE $tbl_course SET category_code = '$code' WHERE category_code = '$old_code' ";
+    $sql = "UPDATE $tbl_course SET category_code = '$code'
+            WHERE category_code = '$old_code' ";
     Database::query($sql);
     return true;
 }

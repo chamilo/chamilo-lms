@@ -469,8 +469,11 @@ class WSCMCourse extends WSCM
 				$cd->set_title($course_desc_title);
 				$cd->set_content($course_desc_content);
 				$cd->set_session_id(0);
+
 				// Get course info
-				$course_info = CourseManager::get_course_information(CourseManager::get_course_code_from_course_id($course_id));
+                $course_info = CourseManager::get_course_information(
+                    CourseManager::get_course_code_from_course_id($course_id)
+                );
 				// Check if this course description exists
 				$descriptions = CourseDescription::get_descriptions($course_id);
 				$exists = false;
@@ -479,11 +482,12 @@ class WSCMCourse extends WSCM
 						$exists = true;
 					}
 				}
+                $cd->set_course_id($course_info['real_id']);
 				if (!$exists) {
 					$cd->set_progress(0);
-					$cd->insert($course_info['db_name']);
+					$cd->insert();
 				} else {
-					$cd->update($course_info['db_name']);
+					$cd->update();
 				}
 			}
 		}

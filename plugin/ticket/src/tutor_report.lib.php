@@ -18,8 +18,8 @@ function initializeReport($course_code)
     $table_semanas_curso = Database::get_main_table('rp_semanas_curso');
     $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
     $table_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $table_post = Database::get_course_table(TABLE_FORUM_POST, $course_info['dbName']);
-    $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION, $course_info['dbName']);
+    $table_post = Database::get_course_table(TABLE_FORUM_POST);
+    $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_code = Database::escape_string($course_code);
     $res = Database::query("SELECT COUNT(*) as cant FROM $table_reporte_semanas WHERE course_code = '" . $course_code . "'");
     $sqlWeeks = "SELECT semanas FROM $table_semanas_curso WHERE course_code = '$course_code'";

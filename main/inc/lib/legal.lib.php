@@ -11,10 +11,9 @@ class LegalManager
     /**
      * Constructor
      */
-	public function __construct()
+    public function __construct()
     {
-
-	}
+    }
 
 	/**
 	 * Add a new Term and Condition
@@ -28,7 +27,7 @@ class LegalManager
     {
         $legal_table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
-        $type     = intval($type);
+        $type = intval($type);
         $time = time();
 
         if ($last['content'] != $content) {

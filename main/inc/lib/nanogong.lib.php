@@ -2,13 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Class Nanogong
  *
  * Files are saved in the path:
- *
  *  courses/XXX/exercises/(session_id)/(exercise_id)/(question_id)/(user_id)/
  *
- * The file name is composed with
- *
+ * The file name is composed with:
  * (course_id)/(session_id)/(user_id)/(exercise_id)/(question_id)/(exe_id).wav|mp3|ogg
  *
  *
@@ -37,13 +36,10 @@ class Nanogong
      */
     public function create_user_folder()
     {
-		//COURSE123/exercises/session_id/exercise_id/question_id/user_id
-		if (empty($this->store_path)) {
-			return false;
-		}
-
-        //@todo use an array to create folders
-		$folders_to_create = array();
+        //COURSE123/exercises/session_id/exercise_id/question_id/user_id
+        if (empty($this->store_path)) {
+            return false;
+        }
 
         // Trying to create the courses/COURSE123/exercises/ dir just in case.
         $directoryPermissions = api_get_permissions_for_new_directories();

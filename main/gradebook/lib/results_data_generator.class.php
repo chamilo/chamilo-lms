@@ -79,7 +79,11 @@ class ResultsDataGenerator
             if ($pdf) {
                 $user['score'] = $result->get_score();
             } else {
-                $user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);
+                $user['score'] = $this->get_score_display(
+                    $result->get_score(),
+                    true,
+                    $ignore_score_color
+                );
             }
             $user['percentage_score'] = intval($scoredisplay->display_score(
                 array($result->get_score(), $this->evaluation->get_max()),
@@ -92,7 +96,11 @@ class ResultsDataGenerator
                 $user['scoreletter'] = $result->get_score();
             }
             if ($scoredisplay->is_custom()) {
-                $user['display'] = $this->get_score_display($result->get_score(), false, $ignore_score_color);
+                $user['display'] = $this->get_score_display(
+                    $result->get_score(),
+                    false,
+                    $ignore_score_color
+                );
             }
             $table[] = $user;
         }
@@ -112,6 +120,7 @@ class ResultsDataGenerator
             $table = array_reverse($table);
         }
         $return = array_slice($table, $start, $count);
+
         return $return;
 
     }
@@ -131,8 +140,15 @@ class ResultsDataGenerator
             if ($realscore === true) {
                 $type = SCORE_DIV_PERCENT ;
             }
-            return $scoredisplay->display_score(array($score, $this->evaluation->get_max()), $type, SCORE_BOTH, $ignore_score_color);
+
+            return $scoredisplay->display_score(
+                array($score, $this->evaluation->get_max()),
+                $type,
+                SCORE_BOTH,
+                $ignore_score_color
+            );
         }
+
         return '';
     }
 

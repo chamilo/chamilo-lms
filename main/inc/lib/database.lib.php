@@ -116,7 +116,7 @@ class Database
     public static function getUTCDateTimeTypeClass()
     {
         return isset(self::$utcDateTimeClass) ? self::$utcDateTimeClass :
-        'Chamilo\CoreBundle\DoctrineExtensions\DBAL\Types\UTCDateTimeType';
+        'Application\DoctrineExtensions\DBAL\Types\UTCDateTimeType';
     }
 
     /**

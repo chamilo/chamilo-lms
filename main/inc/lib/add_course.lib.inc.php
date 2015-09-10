@@ -1433,50 +1433,6 @@ class AddCourse
     }
 
     /**
-     * Extract properties of the files from a ZIP package, write them to disk and
-     * return them as an array.
-     * @todo this function seems not to be used
-     * @param string        Absolute path to the ZIP file
-     * @param bool          Whether the ZIP file is compressed (not implemented). Defaults to TRUE.
-     * @return array        List of files properties from the ZIP package
-     * @deprecated seems not to be used
-     * @assert (null) === false
-     */
-    public static function readPropertiesInArchive($archive, $is_compressed = true)
-    {
-        $uid = api_get_user_id();
-        /*
-        string tempnam (string dir, string prefix)
-        tempnam() creates a unique temporary file in the dir directory. If the
-        directory doesn't existm tempnam() will generate a filename in the system's
-        temporary directory.
-        Before PHP 4.0.6, the behaviour of tempnam() depended of the underlying OS.
-        Under Windows, the "TMP" environment variable replaces the dir parameter;
-        under Linux, the "TMPDIR" environment variable has priority, while for the
-        OSes based on system V R4, the dir parameter will always be used if the
-        directory which it represents exists. Consult your documentation for more
-        details.
-        tempnam() returns the temporary filename, or the string NULL upon failure.
-        */
-        $zip_file = new PclZip($archive);
-        $tmp_dir_name = dirname($archive) . '/tmp' . $uid . uniqid($uid);
-        if (mkdir(
-            $tmp_dir_name,
-            api_get_permissions_for_new_directories(),
-            true
-        )) {
-            $unzipping_state = $zip_file->extract($tmp_dir_name);
-        } else {
-            die ('mkdir failed');
-        }
-        $path_to_archive_ini = dirname($tmp_dir_name) . '/archive.ini';
-        //echo $path_to_archive_ini;
-        $course_properties = parse_ini_file($path_to_archive_ini);
-        rmdir($tmp_dir_name);
-        return $course_properties;
-    }
-
-    /**
      * Generate a new id for c_tool table
      * @param int $courseId The course id
      * @return int the new id

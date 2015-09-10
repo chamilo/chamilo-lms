@@ -95,11 +95,12 @@ abstract class Question
     /**
      * Reads question information from the data base
      *
-     * @author Olivier Brouckaert
      * @param int $id - question ID
      * @param int $course_id
      *
      * @return Question
+     *
+     * @author Olivier Brouckaert
      */
     public static function read($id, $course_id = null)
     {
@@ -177,7 +178,7 @@ abstract class Question
      *
      * @author Olivier Brouckaert
      *
-     * @return - integer - question ID
+     * @return integer - question ID
      */
     public function selectId()
     {
@@ -300,9 +301,9 @@ abstract class Question
     /**
      * changes the question title
      *
-     * @author Olivier Brouckaert
-     *
      * @param string $title - question title
+     *
+     * @author Olivier Brouckaert
      */
     public function updateTitle($title)
     {
@@ -320,9 +321,10 @@ abstract class Question
     /**
      * changes the question description
      *
+     * @param string $description - question description
+     *
      * @author Olivier Brouckaert
      *
-     * @param string $description - question description
      */
     public function updateDescription($description)
     {
@@ -332,8 +334,9 @@ abstract class Question
     /**
      * changes the question weighting
      *
-     * @author Olivier Brouckaert
      * @param integer $weighting - question weighting
+     *
+     * @author Olivier Brouckaert
      */
     public function updateWeighting($weighting)
     {
@@ -341,39 +344,44 @@ abstract class Question
     }
 
     /**
+     * @param array $category
+     *
      * @author Hubert Borderiou 12-10-2011
-     * @param array of category $in_category
+     *
      */
-    public function updateCategory($in_category)
+    public function updateCategory($category)
     {
-        $this->category = $in_category;
+        $this->category = $category;
     }
 
     /**
+     * @param int $value
+     *
      * @author Hubert Borderiou 12-10-2011
-     * @param int $in_positive
      */
-    public function updateScoreAlwaysPositive($in_positive)
+    public function updateScoreAlwaysPositive($value)
     {
-        $this->scoreAlwaysPositive = $in_positive;
+        $this->scoreAlwaysPositive = $value;
     }
 
     /**
+     * @param int $value
+     *
      * @author Hubert Borderiou 12-10-2011
-     * @param int $in_positive
      */
-    public function updateUncheckedMayScore($in_positive)
+    public function updateUncheckedMayScore($value)
     {
-        $this->uncheckedMayScore = $in_positive;
+        $this->uncheckedMayScore = $value;
     }
 
     /**
      * Save category of a question
      *
-     * A question can have n categories
-     * if category is empty, then question has no category then delete the category entry
+     * A question can have n categories if category is empty,
+     * then question has no category then delete the category entry
      *
-     * @param  - int $in_positive
+     * @param array $category_list
+     *
      * @author Julio Montoya - Adding multiple cat support
      */
     public function saveCategories($category_list)
@@ -406,20 +414,21 @@ abstract class Question
     }
 
     /**
-     * @author Hubert Borderiou 12-10-2011
-     * @param int $in_category
      * in this version, a question can only have 1 category
      * if category is 0, then question has no category then delete the category entry
+     * @param int $category
+     *
+     * @author Hubert Borderiou 12-10-2011
      */
-    public function saveCategory($in_category)
+    public function saveCategory($category)
     {
-        if ($in_category <= 0) {
+        if ($category <= 0) {
             $this->deleteCategory();
         } else {
             // update or add category for a question
 
             $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-            $category_id = intval($in_category);
+            $category_id = intval($category);
             $question_id = intval($this->id);
             $sql = "SELECT count(*) AS nb FROM $table
                     WHERE question_id = $question_id AND c_id=" . api_get_course_int_id();
@@ -440,7 +449,6 @@ abstract class Question
     /**
      * @author hubert borderiou 12-10-2011
      * delete any category entry for question id
-     * @param : none
      * delete the category for question
      */
     public function deleteCategory()
@@ -455,8 +463,9 @@ abstract class Question
     /**
      * changes the question position
      *
-     * @author Olivier Brouckaert
      * @param integer $position - question position
+     *
+     * @author Olivier Brouckaert
      */
     public function updatePosition($position)
     {
@@ -466,8 +475,9 @@ abstract class Question
     /**
      * changes the question level
      *
-     * @author Nicolas Raynaud
      * @param integer $level - question level
+     *
+     * @author Nicolas Raynaud
      */
     public function updateLevel($level)
     {
@@ -478,8 +488,9 @@ abstract class Question
      * changes the answer type. If the user changes the type from "unique answer" to "multiple answers"
      * (or conversely) answers are not deleted, otherwise yes
      *
-     * @author Olivier Brouckaert
      * @param integer $type - answer type
+     *
+     * @author Olivier Brouckaert
      */
     public function updateType($type)
     {
@@ -509,10 +520,13 @@ abstract class Question
     /**
      * adds a picture to the question
      *
-     * @author Olivier Brouckaert
      * @param string $Picture - temporary path of the picture to upload
      * @param string $PictureName - Name of the picture
+     * @param string $picturePath
+     *
      * @return boolean - true if uploaded, otherwise false
+     *
+     * @author Olivier Brouckaert
      */
     public function uploadPicture($Picture, $PictureName, $picturePath = null)
     {
@@ -566,10 +580,12 @@ abstract class Question
     /**
      * Resizes a picture || Warning!: can only be called after uploadPicture,
      * or if picture is already available in object.
-     * @author Toon Keppens
      * @param string $Dimension - Resizing happens proportional according to given dimension: height|width|any
      * @param integer $Max - Maximum size
+     *
      * @return boolean - true if success, false if failed
+     *
+     * @author Toon Keppens
      */
     public function resizePicture($Dimension, $Max)
     {
@@ -671,9 +687,10 @@ abstract class Question
             $extension = $picture[sizeof($picture) - 1];
             $picture = 'quiz-' . $questionId . '.' . $extension;
             $result = @copy($source_path . '/' . $this->picture, $destination_path . '/' . $picture) ? true : false;
-            //If copy was correct then add to the database
+            // If copy was correct then add to the database
             if ($result) {
-                $sql = "UPDATE $TBL_QUESTIONS SET picture='" . Database::escape_string($picture) . "'
+                $sql = "UPDATE $TBL_QUESTIONS SET
+                        picture = '" . Database::escape_string($picture) . "'
                         WHERE c_id = $course_id AND id='" . intval($questionId) . "'";
                 Database::query($sql);
 
@@ -1146,7 +1163,7 @@ abstract class Question
                             c_id = $course_id
                             AND exercice_id = " . intval($exerciseId) . "
                             AND question_order > " . $row['question_order'];
-                    $res = Database::query($sql);
+                    Database::query($sql);
                 }
             }
 

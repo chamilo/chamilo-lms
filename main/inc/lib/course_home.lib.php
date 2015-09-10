@@ -994,8 +994,6 @@ class CourseHome
      */
     public static function show_session_data($id_session)
     {
-        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
         $sessionInfo = api_get_session_info($id_session);
@@ -1332,9 +1330,7 @@ class CourseHome
 
     /**
      * @param int $id
-     * @param int $courseId
-     * @param int $sessionId
-     * @param $values
+     * @param array $values
      */
     public static function updateTool($id, $values)
     {

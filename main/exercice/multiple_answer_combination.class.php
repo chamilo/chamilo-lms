@@ -13,20 +13,20 @@
  **/
 class MultipleAnswerCombination extends Question
 {
-	static $typePicture = 'mcmac.png';
-	static $explanationLangVar = 'MultipleSelectCombination';
+    static $typePicture = 'mcmac.png';
+    static $explanationLangVar = 'MultipleSelectCombination';
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-		parent::__construct();
-		$this -> type = MULTIPLE_ANSWER_COMBINATION;
-		$this -> isContent = $this-> getIsContent();
-	}
+        parent::__construct();
+        $this -> type = MULTIPLE_ANSWER_COMBINATION;
+        $this -> isContent = $this-> getIsContent();
+    }
 
-	/**
+    /**
      * function which redefines Question::createAnswersForm
      * @param FormValidator $form
      */
@@ -111,22 +111,22 @@ class MultipleAnswerCombination extends Question
             $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
             $answer_number->freeze();
 
-			$form->addElement('checkbox',
+            $form->addElement('checkbox',
                 'correct[' . $i . ']',
                 null,
                 null,
                 'class="checkbox" style="margin-left: 0em;"'
             );
-			$boxes_names[] = 'correct[' . $i . ']';
+            $boxes_names[] = 'correct[' . $i . ']';
 
-			$form->addElement(
+            $form->addElement(
                 'html_editor',
                 'answer[' . $i . ']',
                 null,
                 array(),
                 array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
             );
-			$form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
 
             $form->addElement(
                 'html_editor',

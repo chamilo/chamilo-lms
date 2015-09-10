@@ -88,6 +88,7 @@ class Link extends Model
         $params['display_order'] = $order;
 
         $id = parent::save($params, $show_query);
+
         if (!empty($id)) {
             // iid
             $sql = "UPDATE ".$this->table." SET id = iid WHERE iid = $id";
@@ -161,23 +162,21 @@ class Link extends Model
         $session_id = api_get_session_id();
 
         if ($type == 'link') {
-            $tbl_link = Database:: get_course_table(TABLE_LINK);
-
-            $title = Security:: remove_XSS(stripslashes($_POST['title']));
-            $urllink = Security:: remove_XSS($_POST['url']);
-            $description = Security:: remove_XSS($_POST['description']);
-            $selectcategory = Security:: remove_XSS($_POST['category_id']);
+            $title = Security::remove_XSS(stripslashes($_POST['title']));
+            $urllink = Security::remove_XSS($_POST['url']);
+            $description = Security::remove_XSS($_POST['description']);
+            $selectcategory = Security::remove_XSS($_POST['category_id']);
 
             if (!isset($_POST['on_homepage'])) {
                 $onhomepage = 0;
             } else {
-                $onhomepage = Security:: remove_XSS($_POST['on_homepage']);
+                $onhomepage = Security::remove_XSS($_POST['on_homepage']);
             }
 
             if (empty($_POST['target'])) {
                 $target = '_self'; // Default target.
             } else {
-                $target = Security:: remove_XSS($_POST['target']);
+                $target = Security::remove_XSS($_POST['target']);
             }
 
             $urllink = trim($urllink);
@@ -221,15 +220,9 @@ class Link extends Model
                 if ((api_get_setting('search_enabled') == 'true') &&
                     $link_id && extension_loaded('xapian')
                 ) {
-                    require_once api_get_path(
-                            LIBRARY_PATH
-                        ) . 'search/ChamiloIndexer.class.php';
-                    require_once api_get_path(
-                            LIBRARY_PATH
-                        ) . 'search/IndexableChunk.class.php';
-                    require_once api_get_path(
-                            LIBRARY_PATH
-                        ) . 'specific_fields_manager.lib.php';
+                    require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
+                    require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
+                    require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
                     $course_int_id = $_course['real_id'];
                     $courseCode = $_course['code'];
@@ -272,7 +265,6 @@ class Link extends Model
                             'link_id' => (int)$link_id
                         ),
                         SE_USER => (int)api_get_user_id(),
-
                     );
                     $ic_slide->xapian_data = serialize($xapian_data);
                     $description = $all_specific_terms . ' ' . $description;
@@ -577,7 +569,8 @@ class Link extends Model
             $link_title = Database:: escape_string($values['title']);
             $link_description = Database:: escape_string($values['description']);
 
-            // Actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one.
+            // Actually, it consists on delete terms from db,
+            // insert new ones, create a new search engine document, and remove the old one.
             // Get search_did.
             $tbl_se_ref = Database:: get_main_table(
                 TABLE_MAIN_SEARCH_ENGINE_REF
@@ -869,33 +862,35 @@ class Link extends Model
      */
     public static function showlinksofcategory($catid)
     {
-        global $urlview, $up, $down, $_user, $token;
+        global $token;
+        $_user = api_get_user_info();
+        $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $catid = intval($catid);
 
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $TABLE_ITEM_PROPERTY = Database:: get_course_table(TABLE_ITEM_PROPERTY);
 
         // Condition for the session.
-        $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id, true, true, 'link.session_id');
-        $catid = intval($catid);
 
-        $course_id = api_get_course_int_id();
+        $content = '';
 
-        $sqlLinks = "SELECT *, link.id FROM $tbl_link link
-                     INNER JOIN $TABLE_ITEM_PROPERTY itemproperties
-                     ON (link.id=itemproperties.ref AND link.c_id = itemproperties.c_id )
-                     WHERE
-                        itemproperties.tool='" . TOOL_LINK . "' AND
-                        link.category_id='" . $catid . "' AND
-                        (itemproperties.visibility='0' OR itemproperties.visibility='1')
-                        $condition_session AND
-                        link.c_id = " . $course_id . " AND
-                        itemproperties.c_id = " . $course_id . "
-                    ORDER BY link.display_order DESC";
-        $result = Database:: query($sqlLinks);
+        $sql = "SELECT *, link.id FROM $tbl_link link
+                INNER JOIN $TABLE_ITEM_PROPERTY itemproperties
+                ON (link.id=itemproperties.ref AND link.c_id = itemproperties.c_id )
+                WHERE
+                    itemproperties.tool='" . TOOL_LINK . "' AND
+                    link.category_id='" . $catid . "' AND
+                    (itemproperties.visibility='0' OR itemproperties.visibility='1')
+                    $condition_session AND
+                    link.c_id = " . $course_id . " AND
+                    itemproperties.c_id = " . $course_id . "
+                ORDER BY link.display_order DESC";
+        $result = Database:: query($sql);
         $numberoflinks = Database:: num_rows($result);
         if ($numberoflinks > 0) {
-            echo '<table class="data_table" width="100%">';
+            $content .= '<table class="data_table" width="100%">';
             $i = 1;
             while ($myrow = Database:: fetch_array($result)) {
                 // Validation when belongs to a session.
@@ -927,52 +922,45 @@ class Link extends Model
                 }
 
                 if ($myrow['visibility'] == '1') {
-                    echo '<tr class="' . $css_class . '">';
-                    echo '<td align="center" valign="middle" width="5%">';
-                    echo '<a href="link_goto.php?' . api_get_cidreq() .
-                        '&link_id=' . $myrow['id'] .
-                        '&link_url=' . urlencode($myrow['url']) . '" target="_blank">
-                            <img src="../../main/img/link.gif" border="0" alt="' . get_lang('Link') . '"/></a>
+                    $content .= '<tr class="' . $css_class . '">';
+                    $content .= '<td align="center" valign="middle" width="5%">';
+                    $content .= '<a href="link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] .'&link_url=' . urlencode($myrow['url']) . '" target="_blank">
+                        <img src="../../main/img/link.gif" border="0" alt="' . get_lang('Link') . '"/></a>
                         </td>
                         <td width="80%" valign="top">
-                        <a href="link_goto.php?' . api_get_cidreq() .
-                        '&link_id=' . $myrow['id'] .
-                        '&link_url=' . urlencode($myrow['url']) . '" target="' . $myrow['target'] . '">';
-                    echo Security:: remove_XSS($myrow['title']);
-                    echo '</a>';
-                    echo $link_validator;
-                    echo $session_img;
-                    echo '<br />' . $myrow['description'];
+                        <a href="link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] .'&link_url=' . urlencode($myrow['url']) . '" target="' . $myrow['target'] . '">';
+                    $content .= Security:: remove_XSS($myrow['title']);
+                    $content .= '</a>';
+                    $content .= $link_validator;
+                    $content .= $session_img;
+                    $content .= '<br />' . $myrow['description'];
                 } else {
                     if (api_is_allowed_to_edit(null, true)) {
-                        echo '<tr class="' . $css_class . '">';
-                        echo '<td align="center" valign="middle" width="5%">
-                            <a href="link_goto.php?' . api_get_cidreq() .
-                            '&link_id=' . $myrow['id'] . "
-                            &link_url=" . urlencode($myrow['url']) . '"
-                            target="_blank" class="invisible">';
-                        echo Display:: return_icon(
+                        $content .= '<tr class="' . $css_class . '">';
+                        $content .= '<td align="center" valign="middle" width="5%">
+                            <a href="link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] . "&link_url=" . urlencode($myrow['url']) . '" target="_blank" class="invisible">';
+                        $content .= Display:: return_icon(
                             'link_na.gif',
                             get_lang('Link')
-                        ), '</a>';
-                        echo '</td><td width="80%" valign="top">
-                              <a href="link_goto.php?', api_get_cidreq(), '&link_id=', $myrow['id'], '&link_url=', urlencode($myrow['url']), '" target="', $myrow['target'], '"  class="invisible">';
-                        echo Security:: remove_XSS($myrow['title']);
-                        echo "</a>";
-                        echo $link_validator;
-                        echo $session_img, '<br />', $myrow['description'];
+                        ).'</a>';
+                        $content .= '</td><td width="80%" valign="top">
+                              <a href="link_goto.php?'.api_get_cidreq().'&link_id='.$myrow['id'].'&link_url='.urlencode($myrow['url']).'" target="'. $myrow['target']. '"  class="invisible">';
+                        $content .= Security:: remove_XSS($myrow['title']);
+                        $content .= "</a>";
+                        $content .= $link_validator;
+                        $content .= $session_img.'<br />'.$myrow['description'];
                     }
                 }
 
                 if (api_is_allowed_to_edit(null, true)) {
-                    echo '<td style="text-align:center;">';
+                    $content .= '<td style="text-align:center;">';
                     if ($session_id == $myrow['session_id']) {
                         $url = api_get_self() . '?' . api_get_cidreq() .
                             '&action=editlink&category=' . (!empty ($category) ? $category : '') .
                             '&id=' . $myrow['id'] .
                             '&category_id=' . $myrow['id'];
 
-                        echo '<a href="' .$url .'">'.
+                        $content .= '<a href="' .$url .'">'.
                             Display:: return_icon(
                                 'edit.png',
                                 get_lang('Modify'),
@@ -996,7 +984,7 @@ class Link extends Model
                         }*/
 
                         if ($myrow['visibility'] == '1') {
-                            echo '<a href="link.php?' . api_get_cidreq() .
+                            $content .= '<a href="link.php?' . api_get_cidreq() .
                                 '&sec_token=' . $token .
                                 '&action=invisible&id=' . $myrow['id'] .
                                 '&scope=link&category_id=' . $myrow['category_id'] . '" title="' . get_lang('Hide') . '">' .
@@ -1008,12 +996,7 @@ class Link extends Model
                                 ) . '</a>';
                         }
                         if ($myrow['visibility'] == '0') {
-                            echo ' <a href="link.php?' . api_get_cidreq() .
-                                '&sec_token=' . $token .
-                                '&action=visible&id=' . $myrow['id'] .
-                                '&scope=link&category_id=' . $myrow['category_id'] . '" title="' . get_lang(
-                                    'Show'
-                                ) . '">' .
+                            $content .= ' <a href="link.php?' . api_get_cidreq() .'&sec_token=' . $token .'&action=visible&id=' . $myrow['id'] .'&scope=link&category_id=' . $myrow['category_id'] . '" title="' . get_lang('Show') . '">' .
                                 Display:: return_icon(
                                     'invisible.png',
                                     get_lang('Show'),
@@ -1021,7 +1004,7 @@ class Link extends Model
                                     ICON_SIZE_SMALL
                                 ) . '</a>';
                         }
-                        echo ' <a href="' . api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=deletelink&id=' . $myrow['id'] .'&category_id=' . $myrow['category_id'] . "\"
+                        $content .= ' <a href="' . api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=deletelink&id=' . $myrow['id'] .'&category_id=' . $myrow['category_id'] . "\"
                             onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "'))
                             return false;\" title=\"" . get_lang('Delete') . '">' .
                             Display:: return_icon(
@@ -1032,20 +1015,22 @@ class Link extends Model
                             ) . '</a>';
 
                     } else {
-                        echo Display:: return_icon(
+                        $content .= Display:: return_icon(
                             'edit_na.png',
                             get_lang('EditionNotAvailableFromSession'),
                             array(),
                             ICON_SIZE_SMALL
                         ); //get_lang('EditionNotAvailableFromSession');
                     }
-                    echo '</td>';
+                    $content .= '</td>';
                 }
-                echo '</tr>';
+                $content .= '</tr>';
                 $i++;
             }
-            echo '</table>';
+            $content .= '</table>';
         }
+
+        return $content;
     }
 
     /**
@@ -1058,7 +1043,7 @@ class Link extends Model
     {
         $categoryId = $category['id'];
         $token = null;
-        echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&sec_token=' . $token . '&action=editcategory&id=' . $categoryId . '&category_id=' . $categoryId . '" title=' . get_lang('Modify') . '">' .
+        $tools = '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&sec_token=' . $token . '&action=editcategory&id=' . $categoryId . '&category_id=' . $categoryId . '" title=' . get_lang('Modify') . '">' .
             Display:: return_icon(
                 'edit.png',
                 get_lang('Modify'),
@@ -1068,7 +1053,7 @@ class Link extends Model
 
         // DISPLAY MOVE UP COMMAND only if it is not the top link.
         if ($currentCategory != 0) {
-            echo '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&sec_token=' . $token . '&action=up&up=', $categoryId, '&category_id=' . $categoryId . '" title="' . get_lang('Up') . '">' .
+            $tools .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&sec_token=' . $token . '&action=up&up='.$categoryId.'&category_id='.$categoryId.'" title="'.get_lang('Up').'">'.
                 Display:: return_icon(
                     'up.png',
                     get_lang('Up'),
@@ -1076,7 +1061,7 @@ class Link extends Model
                     ICON_SIZE_SMALL
                 ) . '</a>';
         } else {
-            echo Display:: return_icon(
+            $tools .= Display:: return_icon(
                 'up_na.png',
                 get_lang('Up'),
                 array(),
@@ -1086,11 +1071,7 @@ class Link extends Model
 
         // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
         if ($currentCategory < $countCategories-1) {
-            echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .
-                '&sec_token=' . $token .
-                '&action=down&down=' . $categoryId .
-                '&category_id=' . $categoryId . '">
-                ' .
+            $tools .= '<a href="' . api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=down&down=' . $categoryId .'&category_id=' . $categoryId . '">'.
                 Display:: return_icon(
                     'down.png',
                     get_lang('Down'),
@@ -1098,7 +1079,7 @@ class Link extends Model
                     ICON_SIZE_SMALL
                 ) . '</a>';
         } else {
-            echo Display:: return_icon(
+            $tools .= Display:: return_icon(
                     'down_na.png',
                     get_lang('Down'),
                     array(),
@@ -1106,17 +1087,16 @@ class Link extends Model
                 ) . '</a>';
         }
 
-        echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .
-            '&sec_token=' . $token .
-            '&action=deletecategory&id=', $categoryId,
-            "&category_id=$categoryId\"
-            onclick=\"javascript: if(!confirm('" . get_lang('CategoryDelconfirm') . "')) return false;\">",
+        $tools .= '<a href="' . api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=deletecategory&id='.$categoryId.            "&category_id=$categoryId\"
+            onclick=\"javascript: if(!confirm('" . get_lang('CategoryDelconfirm') . "')) return false;\">".
             Display:: return_icon(
                 'delete.png',
                 get_lang('Delete'),
                 array(),
                 ICON_SIZE_SMALL
             ) . '</a>';
+
+        return $tools;
     }
 
     /**
@@ -1510,6 +1490,13 @@ class Link extends Model
         }
     }
 
+    /**
+     * @param int $course_id
+     * @param int $session_id
+     * @param int $categoryId
+     * @param string $show
+     * @param null $token
+     */
     public static function listLinksAndCategories($course_id, $session_id, $categoryId, $show = 'none', $token = null)
     {
         $tbl_link = Database::get_course_table(TABLE_LINK);
@@ -1530,29 +1517,24 @@ class Link extends Model
         $count = count($categories);
         if (!empty($count)) {
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
-            echo Display::return_icon('view_remove.png', get_lang('shownone'), '', ICON_SIZE_MEDIUM).'</a>';
+            echo Display::return_icon('forum_listview.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM). get_lang('FlatView') . ' </a>';
 
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=all">';
-            echo Display::return_icon('view_tree.png', get_lang('showall'), '', ICON_SIZE_MEDIUM).'</a>';
+            echo Display::return_icon('forum_nestedview.png', get_lang('NestedView'), '', ICON_SIZE_MEDIUM) . get_lang('NestedView') . '</a>';
         }
         echo '</div>';
 
         // Displaying the links which have no category (thus category = 0 or NULL),
         // if none present this will not be displayed
         $sql = "SELECT * FROM $tbl_link
-                WHERE c_id = $course_id AND category_id=0 OR category_id IS NULL";
+                WHERE c_id = $course_id AND (category_id=0 OR category_id IS NULL)";
         $result = Database::query($sql);
         $count = Database::num_rows($result);
 
         if ($count !== 0) {
-            echo '<table class="data_table">';
-            echo '<tr><th style="font-weight: bold; text-align:left;padding-left: 10px;">'.get_lang('General').'</th></tr>';
-            echo '</table>';
-            self::showlinksofcategory(0);
+            echo Display::panel(Link::showlinksofcategory(0), get_lang('General'));
         }
 
-        $i = 0;
-        $view = '0';
         $counter = 0;
         foreach ($categories as $myrow) {
             // Student don't see invisible categories.
@@ -1578,136 +1560,36 @@ class Link extends Model
                     Display :: return_icon('invisible.png', get_lang('Show'), array (), ICON_SIZE_SMALL) . '</a>';
             }
 
-            echo '<tr>';
-            echo '<table class="data_table">';
-            echo '<tr>';
-            echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;">';
-
+            $header = '';
             if ($showChildren) {
-                echo '<a class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id=">';
-                echo Display::return_icon('view_remove.png');
+                $header .= '<a class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id=">';
+                $header .= Display::return_icon('view_remove.png');
             } else {
-                echo '<a class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$myrow['id'].'">';
-                echo Display::return_icon('view_tree.png');
+                $header .= '<a class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$myrow['id'].'">';
+                $header .= Display::return_icon('view_tree.png');
             }
 
-            echo '&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).'</a>
-                    <br />&nbsp;&nbsp;&nbsp;'.$myrow['description'];
-            echo '</th>';
+            $header .= Security::remove_XSS($myrow['category_title']).'</a>';
+
+            $header .= '<div class="pull-right">';
             if (api_is_allowed_to_edit(null, true)) {
                 if ($session_id == $myrow['session_id']) {
-                    echo '<th>';
-                    echo $strVisibility;
-                    Link::showCategoryAdminTools($myrow, $counter, count($categories));
-                    echo '</th>';
+                    $header .= $strVisibility;
+                    $header .= Link::showCategoryAdminTools($myrow, $counter, count($categories));
                 } else {
-                    echo '<th>'.get_lang('EditionNotAvailableFromSession');
+                    $header .= get_lang('EditionNotAvailableFromSession');
                 }
             }
-            echo '</tr>';
-            echo '</table>';
 
+            $childrenContent = '';
             if ($showChildren) {
-                echo Link::showlinksofcategory($myrow['id']);
+                $childrenContent = Link::showlinksofcategory($myrow['id']);
             }
-            echo '</tr>';
 
-            echo '</th>';
-            echo '</tr>';
-            echo '</table>';
-            echo '</tr>';
+            echo Display::panel($myrow['description'].$childrenContent, $header);
+
             $counter++;
-            /*
-
-            if ($myrow['visibility'] == '1') {
-                if (isset($urlview[$i]) && $urlview[$i] == '1') {
-                    $newurlview = $urlview;
-                    $newurlview[$i] = '0';
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview='.Security::remove_XSS($newurlview).'">';
-                    echo '<img src="../img/icons/22/view_remove.png" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).'</a>
-                    <br />&nbsp;&nbsp;&nbsp;'.$myrow['description'];
-                    echo '</th>';
-                    if (api_is_allowed_to_edit(null, true)) {
-                        if ($session_id == $myrow['session_id']) {
-                            echo '<th>';
-                            echo $strVisibility;
-                            Link::showcategoryadmintools($myrow['id']);
-                            echo '</th>';
-                        } else {
-                            echo '<th>'.get_lang('EditionNotAvailableFromSession');
-                        }
-                    }
-                    echo '</tr>';
-                    echo '</table>';
-                    echo Link::showlinksofcategory($myrow['id']);
-                    echo '</tr>';
-                } else {
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
-                    echo is_array($view) ? implode('', $view) : $view;
-                    echo '"><img src="../img/icons/22/view_tree.png" />&nbsp;&nbsp;'.
-                        Security::remove_XSS($myrow['category_title']).$session_img;
-                    echo'</a><br />&nbsp;&nbsp;&nbsp;';
-                    echo $myrow['description'];
-
-                    if (api_is_allowed_to_edit(null, true)) {
-                        if ($session_id == $myrow['session_id']) {
-                            echo '<th style="text-align:center;">';
-                            echo $strVisibility;
-                            Link::showcategoryadmintools($myrow['id']);
-                            echo '</th>';
-                        }
-                    }
-                    echo '</th>';
-                    echo '</tr>';
-                    echo '</table>';
-                    echo '</tr>';
-                }
-            } else {
-                // NO VISIBLE
-                if (api_is_allowed_to_edit(null, true)) {
-                    if (isset($urlview[$i]) && $urlview[$i] == '1') {
-                        $newurlview = $urlview;
-                        $newurlview[$i] = '0';
-                        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview='.Security::remove_XSS($newurlview).'">';
-                        echo '<img src="../img/icons/22/view_remove_na.png" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).'</a><br />&nbsp;&nbsp;&nbsp;'.$myrow['description'];
-                        echo '</th>';
-                        if (api_is_allowed_to_edit(null, true)) {
-                            if ($session_id == $myrow['session_id']) {
-                                echo '<th>'; echo $strVisibility; Link::showcategoryadmintools($myrow['id']); echo '</th>';
-                            } else {
-                                echo '<th>'.get_lang('EditionNotAvailableFromSession');
-                            }
-                        }
-                        echo '</tr>';
-                        echo '</table>';
-                        echo Link::showlinksofcategory($myrow['id']);
-                        echo '</tr>';
-                    } else {
-                        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
-                        echo is_array($view) ? implode('', $view) : $view;
-                        echo '"><img src="../img/icons/22/view_tree_na.png" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).$session_img;
-                        echo'</a><br />&nbsp;&nbsp;&nbsp;';
-                        echo $myrow['description'];
-
-                        if (api_is_allowed_to_edit(null, true)) {
-                            if ($session_id == $myrow['session_id']) {
-                                echo '<th style="text-align:center;">';
-                                echo $strVisibility;
-                                Link::showcategoryadmintools($myrow['id']);
-                                echo '</th>';
-                            }
-                        }
-
-                        echo '</th>';
-                        echo '</tr>';
-                        echo '</table>';
-                        echo '</tr>';
-                    }
-                }*/
-            //}
-            // Displaying the link of the category
         }
-        echo '</table>';
     }
 
     /**
@@ -1725,7 +1607,6 @@ class Link extends Model
         $categoryId = isset($linkInfo['category_id']) ? $linkInfo['category_id'] : '';
         $lpId = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
 
-        $category = 0;
         $form = new FormValidator(
             'link',
             'post',

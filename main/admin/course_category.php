@@ -10,6 +10,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 $category = isset($_GET['category']) ? $_GET['category'] : null;
 
+$parentInfo = [];
 if (!empty($category)) {
     $parentInfo = getCategory($category);
 }
@@ -29,19 +30,34 @@ if (!empty($action)) {
                 $_configuration['enable_multiple_url_support_for_course_category'])
             ) {
                 deleteNode($categoryId);
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
                 header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
                 exit();
             }
         } else {
             deleteNode($categoryId);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
             header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
             exit();
         }
     } elseif (($action == 'add' || $action == 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
         if ($action == 'add') {
-            $ret = addNode($_POST['code'], $_POST['name'], $_POST['auth_course_child'], $category);
+            $ret = addNode(
+                $_POST['code'],
+                $_POST['name'],
+                $_POST['auth_course_child'],
+                $category
+            );
+
+            Display::addFlash(Display::return_message(get_lang('Created')));
         } else {
-            $ret = editNode($_POST['code'], $_POST['name'], $_POST['auth_course_child'], $categoryId);
+            $ret = editNode(
+                $_POST['code'],
+                $_POST['name'],
+                $_POST['auth_course_child'],
+                $categoryId
+            );
+            Display::addFlash(Display::return_message(get_lang('Updated')));
         }
         if ($ret) {
             $action = '';
@@ -51,12 +67,16 @@ if (!empty($action)) {
     } elseif ($action == 'moveUp') {
         moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         exit();
     }
 }
 
 $tool_name = get_lang('AdminCategories');
-$interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    "name" => get_lang('PlatformAdmin'),
+);
 
 Display::display_header($tool_name);
 

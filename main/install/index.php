@@ -303,11 +303,14 @@ if ($encryptPassForm == '1') {
     <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
     <style type="text/css" media="screen, projection">
         @import "../../web/assets/bootstrap/dist/css/bootstrap.min.css";
+        @import "<?php echo api_get_path(WEB_CSS_PATH)?>bootstrap-select.css";
         @import "../../web/assets/fontawesome/css/font-awesome.min.css";
         @import "../../web/css/base.css";
         @import "../../web/css/themes/chamilo/default.css";
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH)?>javascript/bootstrap-select.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
             $("#button_please_wait").hide();

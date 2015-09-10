@@ -3,7 +3,8 @@
 /**
  * @package chamilo.notebook
  * @author Christian Fasanando, initial version
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium, refactoring and tighter integration
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium,
+ * refactoring and tighter integration
  */
 
 // Including the global initialization file
@@ -37,11 +38,11 @@ Event::event_access_tool(TOOL_NOTEBOOK);
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
 	$tool = 'NoteAddNew';
-	$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('ToolNotebook'));
+	$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('ToolNotebook'));
 }
 if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
 	$tool = 'ModifyNote';
-	$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('ToolNotebook'));
+	$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('ToolNotebook'));
 }
 
 // Displaying the header
@@ -63,136 +64,138 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
 
 	$_SESSION['notebook_view'] = 'creation_date';
 
-	// Initiate the object
-	$form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
-	// Setting the form elements
-	$form->addElement('header', '', get_lang('NoteAddNew'));
-	$form->addElement('text', 'note_title', get_lang('NoteTitle'), array('size' => '95', 'id' => 'note_title'));
-	//$form->applyFilter('note_title', 'html_filter');
-	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
-		? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
-		: array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
-	);
-	$form->addButtonCreate(get_lang('AddNote'), 'SubmitNote');
+    $form = new FormValidator(
+        'note',
+        'post',
+        api_get_self().'?action='.Security::remove_XSS($_GET['action'])
+    );
+    // Setting the form elements
+    $form->addElement('header', '', get_lang('NoteAddNew'));
+    $form->addElement('text', 'note_title', get_lang('NoteTitle'), array('id' => 'note_title'));
 
-	// Setting the rules
-	$form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
+        ? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
+        : array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
+    );
+    $form->addButtonCreate(get_lang('AddNote'), 'SubmitNote');
 
-	// The validation or display
-	if ($form->validate()) {
-		$check = Security::check_token('post');
-		if ($check) {
-	   		$values = $form->exportValues();
-	   		$res = NotebookManager::save_note($values);
-	   		if ($res) {
-	   			Display::display_confirmation_message(get_lang('NoteAdded'));
-	   		}
-		}
-		Security::clear_token();
-		NotebookManager::display_notes();
-	} else {
-		echo '<div class="actions">';
-		echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToNotesList'),'',ICON_SIZE_MEDIUM).'</a>';
-		echo '</div>';
-		$token = Security::get_token();
-		$form->addElement('hidden', 'sec_token');
-		$form->setConstants(array('sec_token' => $token));
-		$form->display();
-	}
+    // Setting the rules
+    $form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
+
+    // The validation or display
+    if ($form->validate()) {
+        $check = Security::check_token('post');
+        if ($check) {
+            $values = $form->exportValues();
+            $res = NotebookManager::save_note($values);
+            if ($res) {
+                Display::display_confirmation_message(get_lang('NoteAdded'));
+            }
+        }
+        Security::clear_token();
+        NotebookManager::display_notes();
+    } else {
+        echo '<div class="actions">';
+        echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToNotesList'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '</div>';
+        $token = Security::get_token();
+        $form->addElement('hidden', 'sec_token');
+        $form->setConstants(array('sec_token' => $token));
+        $form->display();
+    }
 } elseif (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id'])) {
     // Action handling: Editing a note
 
-	if (!empty($_GET['isStudentView'])) {
-		NotebookManager::display_notes();
-		exit;
-	}
+    if (!empty($_GET['isStudentView'])) {
+        NotebookManager::display_notes();
+        exit;
+    }
 
-	// Initialize the object
-	$form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.Security::remove_XSS($_GET['notebook_id']));
-	// Setting the form elements
-	$form->addElement('header', '', get_lang('ModifyNote'));
-	$form->addElement('hidden', 'notebook_id');
-	$form->addElement('text', 'note_title', get_lang('NoteTitle'), array('size' => '100'));
-	//$form->applyFilter('note_title', 'html_filter');
-	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
-		? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
-		: array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
-	);
-	$form->addButtonUpdate(get_lang('ModifyNote'), 'SubmitNote');
+    // Initialize the object
+    $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.Security::remove_XSS($_GET['notebook_id']));
+    // Setting the form elements
+    $form->addElement('header', '', get_lang('ModifyNote'));
+    $form->addElement('hidden', 'notebook_id');
+    $form->addElement('text', 'note_title', get_lang('NoteTitle'), array('size' => '100'));
+    //$form->applyFilter('note_title', 'html_filter');
+    $form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
+        ? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
+        : array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
+    );
+    $form->addButtonUpdate(get_lang('ModifyNote'), 'SubmitNote');
 
-	// Setting the defaults
-	$defaults = NotebookManager::get_note_information(Security::remove_XSS($_GET['notebook_id']));
-	$form->setDefaults($defaults);
+    // Setting the defaults
+    $defaults = NotebookManager::get_note_information(Security::remove_XSS($_GET['notebook_id']));
+    $form->setDefaults($defaults);
 
-	// Setting the rules
-	$form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
+    // Setting the rules
+    $form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
 
-	// The validation or display
-	if ($form->validate()) {
-		$check = Security::check_token('post');
-		if ($check) {
-	   		$values = $form->exportValues();
-	   		$res = NotebookManager::update_note($values);
-	   		if ($res) {
-	   			Display::display_confirmation_message(get_lang('NoteUpdated'));
-	   		}
+    // The validation or display
+    if ($form->validate()) {
+        $check = Security::check_token('post');
+        if ($check) {
+            $values = $form->exportValues();
+            $res = NotebookManager::update_note($values);
+            if ($res) {
+                Display::display_confirmation_message(get_lang('NoteUpdated'));
+            }
 
-		}
-		Security::clear_token();
-		NotebookManager::display_notes();
-	} else {
-		echo '<div class="actions">';
-		echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToNotesList'),'',ICON_SIZE_MEDIUM).'</a>';
-		echo '</div>';
-		$token = Security::get_token();
-		$form->addElement('hidden', 'sec_token');
-		$form->setConstants(array('sec_token' => $token));
-		$form->display();
-	}
-}
+        }
+        Security::clear_token();
+        NotebookManager::display_notes();
+    } else {
+        echo '<div class="actions">';
+        echo '<a href="index.php">'.
+            Display::return_icon('back.png',get_lang('BackToNotesList'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '</div>';
+        $token = Security::get_token();
+        $form->addElement('hidden', 'sec_token');
+        $form->setConstants(array('sec_token' => $token));
+        $form->display();
+    }
+} elseif (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric($_GET['notebook_id'])) {
+    // Action handling: deleting a note
 
-// Action handling: deleting a note
-elseif (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric($_GET['notebook_id'])) {
+    $res = NotebookManager::delete_note(Security::remove_XSS($_GET['notebook_id']));
+    if ($res) {
+        Display::display_confirmation_message(get_lang('NoteDeleted'));
+    }
 
-	$res = NotebookManager::delete_note(Security::remove_XSS($_GET['notebook_id']));
-	if ($res) {
-		Display::display_confirmation_message(get_lang('NoteDeleted'));
-	}
-
-	NotebookManager::display_notes();
+    NotebookManager::display_notes();
 } elseif (
-	isset($_GET['action']) && $_GET['action'] == 'changeview' &&
-	in_array($_GET['view'], array('creation_date', 'update_date', 'title'))
-) {
+    isset($_GET['action']) && $_GET['action'] == 'changeview' &&
+    in_array($_GET['view'], array('creation_date', 'update_date', 'title'))
+    ) {
 
-	// Action handling: changing the view (sorting order)
-	switch ($_GET['view']) {
-		case 'creation_date':
-			if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {
-				Display::display_confirmation_message(get_lang('NotesSortedByCreationDateAsc'));
-			} else {
-				Display::display_confirmation_message(get_lang('NotesSortedByCreationDateDESC'));
-			}
-			break;
-		case 'update_date':
-			if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {
-				Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateAsc'));
-			} else {
-				Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateDESC'));
-			}
-			break;
-		case 'title':
-			if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {
-				Display::display_confirmation_message(get_lang('NotesSortedByTitleAsc'));
-			} else {
-				Display::display_confirmation_message(get_lang('NotesSortedByTitleDESC'));
-			}
-			break;
-	}
-	$_SESSION['notebook_view'] = $_GET['view'];
-	NotebookManager::display_notes();
+    // Action handling: changing the view (sorting order)
+    switch ($_GET['view']) {
+        case 'creation_date':
+            if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {
+                Display::display_confirmation_message(get_lang('NotesSortedByCreationDateAsc'));
+            } else {
+                Display::display_confirmation_message(get_lang('NotesSortedByCreationDateDESC'));
+            }
+            break;
+        case 'update_date':
+            if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {
+                Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateAsc'));
+            } else {
+                Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateDESC'));
+            }
+            break;
+        case 'title':
+            if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {
+                Display::display_confirmation_message(get_lang('NotesSortedByTitleAsc'));
+            } else {
+                Display::display_confirmation_message(get_lang('NotesSortedByTitleDESC'));
+            }
+            break;
+    }
+    $_SESSION['notebook_view'] = $_GET['view'];
+    NotebookManager::display_notes();
 } else {
-	NotebookManager::display_notes();
+    NotebookManager::display_notes();
 }
 
 // Footer

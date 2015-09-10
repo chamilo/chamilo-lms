@@ -6321,7 +6321,7 @@ $LdapDescriptionComment = "I. Configirazione LDAP
 
 Modifica del file main/inc/conf/auth.conf.php
 
--> Modifica valori array $extldap_config 
+-> Modifica valori array \$extldap_config 
 
 I parametri sono 
 base domain string (ex : 'base_dn' => 'DC=cblue,DC=be')
@@ -6334,7 +6334,7 @@ protocol version (2 or 3) (ex : 'protocol_version' => 3)
 user_search (ex : 'user_search' => 'sAMAccountName=%username%')
 encoding (ex : 'encoding' => 'UTF-8')
 update_userinfo (ex : 'update_userinfo' => true)
--> To update correspondences between user and LDAP attributes, edit array $extldap_user_correspondance 
+-> To update correspondences between user and LDAP attributes, edit array &#36;extldap_user_correspondance 
 Array values are <chamilo_field> => >ldap_field> 
 Array structure is explained in file main/auth/external_login/ldap.conf.php
 
@@ -6344,8 +6344,8 @@ II. Attica autenticazione LDAP
 Modifica file main/inc/conf/configuration.php
 
 -> Togli commento alle linee 
-$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
-$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
+&#36;extAuthSource[\"extldap\"][\"login\"] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].\"auth/external_login/login.ldap.php\";
+&#36;extAuthSource[\"extldap\"][\"newUser\"] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
 
 N.B. : utenti LDAP usano gli stessi campi degli altri utenti. 
 N.B. : l'attivazione LDAP aggiunge al menù External authentication [LDAP] nelle pagine \"aggiungi o modifica\" utente.";

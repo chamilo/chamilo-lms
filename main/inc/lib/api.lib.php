@@ -1251,6 +1251,11 @@ function api_block_anonymous_users($printHeaders = true)
 function api_get_navigator() {
     $navigator = 'Unknown';
     $version = 0;
+
+    if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+        return array('name' => 'Unknown', 'version' => '0.0.0');
+    }
+
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false) {
         $navigator = 'Opera';
         list (, $version) = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
@@ -1280,8 +1285,8 @@ function api_get_navigator() {
     if (strpos($version, '.') === false) {
         $version = number_format(doubleval($version), 1);
     }
-    $return_array = array ('name' => $navigator, 'version' => $version);
-    return $return_array;
+    $return = array('name' => $navigator, 'version' => $version);
+    return $return;
 }
 
 /**
@@ -1833,13 +1838,6 @@ function api_format_course_array($course_data)
     $_course['path'] = $course_data['directory']; // Use as key in path.
     $_course['directory'] = $course_data['directory'];
     $_course['creation_date'] = $course_data['creation_date'];
-
-    //@todo should be deprecated
-    // Use as key in db list.
-    //$_course['dbName'] = $course_data['db_name'];
-    //$_course['db_name'] = $course_data['db_name'];
-    // Use in all queries.
-
     $_course['titular'] = $course_data['tutor_name'];
     $_course['language'] = $course_data['course_language'];
     $_course['extLink']['url'] = $course_data['department_url'];
@@ -7902,10 +7900,9 @@ function api_mail_html(
     }
     $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
 
-    $mailView = new Template(null, false, false, false, false, false);
+    $mailView = new Template(null, false, false, false, false, false, false);
     $mailView->assign('content', $message);
     $layout = $mailView->get_template('mail/mail.tpl');
-
     $mail->Body = $mailView->fetch($layout);
 
     // Attachment ...

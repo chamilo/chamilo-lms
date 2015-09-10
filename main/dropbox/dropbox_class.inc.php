@@ -92,7 +92,6 @@ class Dropbox_Work
 	 */
 	public function _createNewWork($uploader_id, $title, $description, $author, $filename, $filesize)
     {
-        $_user = api_get_user_info();
         $dropbox_cnf = getDropboxConf();
 
         // Fill in the properties
@@ -184,51 +183,51 @@ class Dropbox_Work
 
         $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-		// Do some sanity checks
-		$id	= intval($id);
+        // Do some sanity checks
+        $id	= intval($id);
 
-		// Get the data from DB
-		$sql = "SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
-				FROM ".$dropbox_cnf['tbl_file']."
-				WHERE c_id = $course_id AND id = ".intval($id)."";
+        // Get the data from DB
+        $sql = "SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
+                FROM ".$dropbox_cnf['tbl_file']."
+                WHERE c_id = $course_id AND id = ".$id."";
         $result = Database::query($sql);
-		$res = Database::fetch_array($result, 'ASSOC');
+        $res = Database::fetch_array($result, 'ASSOC');
 
-		// Check if uploader is still in Chamilo system
-		$uploader_id = stripslashes($res['uploader_id']);
-		$uploaderName = getUserNameFromId($uploader_id);
-		if (!$uploaderName) {
-			//deleted user
-			$this->uploader_id = -1;
-			$this->uploaderName = get_lang('Unknown', '');
-		} else {
-			$this->uploader_id = $uploader_id;
-			$this->uploaderName = $uploaderName;
-		}
+        // Check if uploader is still in Chamilo system
+        $uploader_id = stripslashes($res['uploader_id']);
+        $uploaderName = getUserNameFromId($uploader_id);
+        if (!$uploaderName) {
+            //deleted user
+            $this->uploader_id = -1;
+            $this->uploaderName = get_lang('Unknown', '');
+        } else {
+            $this->uploader_id = $uploader_id;
+            $this->uploaderName = $uploaderName;
+        }
 
-		// Fill in properties
-		$this->id = $id;
-		$this->filename = stripslashes($res['filename']);
-		$this->filesize = stripslashes($res['filesize']);
-		$this->title = stripslashes($res['title']);
-		$this->description = stripslashes($res['description']);
-		$this->author = stripslashes($res['author']);
-		$this->upload_date = stripslashes($res['upload_date']);
-		$this->last_upload_date = stripslashes($res['last_upload_date']);
-		$this->category = $res['cat_id'];
+        // Fill in properties
+        $this->id = $id;
+        $this->filename = stripslashes($res['filename']);
+        $this->filesize = stripslashes($res['filesize']);
+        $this->title = stripslashes($res['title']);
+        $this->description = stripslashes($res['description']);
+        $this->author = stripslashes($res['author']);
+        $this->upload_date = stripslashes($res['upload_date']);
+        $this->last_upload_date = stripslashes($res['last_upload_date']);
+        $this->category = $res['cat_id'];
 
-		// Getting the feedback on the work.
-		if ($action == 'viewfeedback' AND $this->id == $_GET['id']) {
-			$feedback2 = array();
-			$sql_feedback = "SELECT * FROM ".$dropbox_cnf['tbl_feedback']."
-			                 WHERE c_id = $course_id AND file_id='".$id."' ORDER BY feedback_id ASC";
-			$result = Database::query($sql_feedback);
-			while ($row_feedback = Database::fetch_array($result)) {
-				$row_feedback['feedback'] = Security::remove_XSS($row_feedback['feedback']);
-				$feedback2[] = $row_feedback;
-			}
-			$this->feedback2= $feedback2;
-		}
+        // Getting the feedback on the work.
+        if ($action == 'viewfeedback' AND $this->id == $_GET['id']) {
+            $feedback2 = array();
+            $sql_feedback = "SELECT * FROM ".$dropbox_cnf['tbl_feedback']."
+                             WHERE c_id = $course_id AND file_id='".$id."' ORDER BY feedback_id ASC";
+            $result = Database::query($sql_feedback);
+            while ($row_feedback = Database::fetch_array($result)) {
+                $row_feedback['feedback'] = Security::remove_XSS($row_feedback['feedback']);
+                $feedback2[] = $row_feedback;
+            }
+            $this->feedback2= $feedback2;
+        }
 	}
 }
 
@@ -275,7 +274,14 @@ class Dropbox_SentWork extends Dropbox_Work
         $_course = api_get_course_info();
 
 		// Call constructor of Dropbox_Work object
-		$this->Dropbox_Work($uploader_id, $title, $description, $author, $filename, $filesize);
+        $this->Dropbox_Work(
+            $uploader_id,
+            $title,
+            $description,
+            $author,
+            $filename,
+            $filesize
+        );
 
 		$course_id = api_get_course_int_id();
 
@@ -416,11 +422,11 @@ class Dropbox_Person
 	    $course_id = api_get_course_int_id();
 
 		// Fill in properties
-		$this->userId           = $userId;
-		$this->isCourseAdmin    = $isCourseAdmin;
-		$this->isCourseTutor    = $isCourseTutor;
-		$this->receivedWork     = array();
-		$this->sentWork         = array();
+        $this->userId = $userId;
+        $this->isCourseAdmin = $isCourseAdmin;
+        $this->isCourseTutor = $isCourseTutor;
+        $this->receivedWork = array();
+        $this->sentWork = array();
 
 		// Note: perhaps include an ex coursemember check to delete old files
 
@@ -585,11 +591,14 @@ class Dropbox_Person
         $course_id = api_get_course_int_id();
 
 		$id = intval($id);
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_file']." WHERE c_id = $course_id AND cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf['tbl_file']."
+		        WHERE c_id = $course_id AND cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf['tbl_category']."
+		        WHERE c_id = $course_id AND cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
-		$sql = "DELETE FROM ".$dropbox_cnf['tbl_post']." WHERE c_id = $course_id AND cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf['tbl_post']."
+		        WHERE c_id = $course_id AND cat_id = '".$id."' ";
 		if (!Database::query($sql)) return false;
 		return true;
 	}

@@ -1417,7 +1417,10 @@ class Agenda
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $events_added = array();
+            $eventsAdded = array();
+            foreach ($this->events as $eventData) {
+                $eventsAdded[] = $eventData['id'];
+            }
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $eventId = $row['ref'];
                 $items = $this->getUsersAndGroupSubscribedToEvent($eventId, $course_id, $this->sessionId);
@@ -1427,11 +1430,11 @@ class Agenda
                 $event['id'] = 'course_'.$row['id'];
 
                 // To avoid doubles
-                if (in_array($row['id'], $events_added)) {
+                if (in_array($event['id'], $eventsAdded)) {
                     continue;
                 }
 
-                $events_added[] = $row['id'];
+                $eventsAdded[] = $row['id'];
                 $attachment = $this->getAttachment($row['id'], $courseInfo);
 
                 if (!empty($attachment)) {

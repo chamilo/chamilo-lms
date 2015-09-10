@@ -1960,7 +1960,7 @@ function installSettings(
                 WHERE variable = '$variable'";
         Database::query($sql);
     }
-    $res = installProfileSettings($installationProfile);
+    installProfileSettings($installationProfile);
 }
 
 /**
@@ -2336,11 +2336,11 @@ function fixIds(EntityManager $em)
         if (!empty($dataList)) {
             foreach ($dataList as $data) {
                 if (isset($oldGroups[$data['group_id']])) {
-                    //Deleting relation
+                    // Deleting relation
                     $sql = "DELETE FROM announcement_rel_group WHERE id = {$data['id']}";
                     $connection->executeQuery($sql);
 
-                    //Add new relation
+                    // Add new relation
                     $data['group_id'] = $oldGroups[$data['group_id']];
                     $sql = "INSERT INTO announcement_rel_group(group_id, announcement_id)
                             VALUES ('{$data['group_id']}', '{$data['announcement_id']}')";
@@ -2363,7 +2363,6 @@ function fixIds(EntityManager $em)
             }
         }
     }
-
 
     // Extra fields
     $extraFieldTables = [
@@ -2517,6 +2516,7 @@ function finishInstallation(
 
     UserManager::setPasswordEncryption($encryptPassForm);
 
+    // Create admin user.
     UserManager::create_user(
         $adminFirstName,
         $adminLastName,
@@ -2538,6 +2538,7 @@ function finishInstallation(
         true //$isAdmin = false
     );
 
+    // Create anonymous user.
     UserManager::create_user(
         'Joe',
         'Anonymous',
@@ -2584,11 +2585,11 @@ function finishInstallation(
 /**
  * Update settings based on installation profile defined in a JSON file
  * @param string $installationProfile The name of the JSON file in main/install/profiles/ folder
+ *
  * @return bool false on failure (no bad consequences anyway, just ignoring profile)
  */
-function installProfileSettings(
-    $installationProfile = ''
-) {
+function installProfileSettings($installationProfile = '')
+{
     if (empty($installationProfile)) {
         return false;
     }
@@ -2614,7 +2615,7 @@ function installProfileSettings(
     }
     $settings = $params->params;
     if (!empty($params->parent)) {
-        $res = installProfileSettings($params->parent);
+        installProfileSettings($params->parent);
     }
     foreach ($settings as $id => $param) {
         $sql = "UPDATE settings_current
@@ -2625,5 +2626,6 @@ function installProfileSettings(
         }
         Database::query($sql);
     }
+
     return true;
 }

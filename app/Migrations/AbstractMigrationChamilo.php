@@ -36,7 +36,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
                 'host' => api_get_configuration_value('db_host'),
                 'user' => api_get_configuration_value('db_user'),
                 'password' => api_get_configuration_value('db_password'),
-                'dbname' => api_get_configuration_value('main_database')
+                'dbname' => api_get_configuration_value('main_database'),
+                'port' => api_get_configuration_value('db_port')
             );
             $database = new \Database();
             $database->connect(

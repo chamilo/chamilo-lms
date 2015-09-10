@@ -9,11 +9,10 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Class Version20150803163400
  *
- * @package Application\Migrations\Schema\V11010
+ * @package Application\Migrations\Schema\V110
  */
 class Version20150803163400 extends AbstractMigrationChamilo
 {
-
     /**
      * @param Schema $schema
      */

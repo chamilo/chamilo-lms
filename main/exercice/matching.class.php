@@ -5,7 +5,8 @@
  *  Class Matching
  *  Matching questions type class
  *
- *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
+ *  This class allows to instantiate an object of
+ *  type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER)
  *	extending the class question
  *
  *	@author Eric Marguin
@@ -254,6 +255,7 @@ class Matching extends Question
             $matches = $form->getSubmitValue('matches['.$i.']');
             $weighting = $form->getSubmitValue('weighting['.$i.']');
             $this->weighting += $weighting;
+
             $objAnswer->createAnswer(
                 $answer,
                 $matches,
@@ -262,7 +264,6 @@ class Matching extends Question
                 $position
             );
         }
-
         $objAnswer->save();
         $this->save();
     }

@@ -2254,7 +2254,10 @@ class Exercise
             error_log('$answerType: '.$answerType);
         }
 
-        if ($answerType == FREE_ANSWER || $answerType == ORAL_EXPRESSION || $answerType == CALCULATED_ANSWER) {
+        if ($answerType == FREE_ANSWER ||
+            $answerType == ORAL_EXPRESSION ||
+            $answerType == CALCULATED_ANSWER
+        ) {
             $nbrAnswers = 1;
         }
 
@@ -2283,7 +2286,8 @@ class Exercise
         $user_answer = '';
 
         // Get answer list for matching
-        $sql = "SELECT id_auto, id, answer FROM $table_ans
+        $sql = "SELECT id_auto, id, answer
+                FROM $table_ans
                 WHERE c_id = $course_id AND question_id = $questionId";
         $res_answer = Database::query($sql);
 
@@ -2293,7 +2297,10 @@ class Exercise
         }
 
         $real_answers = array();
-        $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
+        $quiz_question_options = Question::readQuestionOption(
+            $questionId,
+            $course_id
+        );
 
         $organs_at_risk_hit = 0;
         $questionScore = 0;
@@ -2387,9 +2394,9 @@ class Exercise
                 case MULTIPLE_ANSWER: //2
                     if ($from_database) {
                         $choice = array();
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
-                                     WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
-                        $resultans = Database::query($queryans);
+                        $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                                WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+                        $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
                             $choice[$ind] = 1;
@@ -2484,7 +2491,7 @@ class Exercise
 
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
 
-                        if ($answerCorrect == $answerAutoId) {
+                        if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
                             } else {
@@ -2499,6 +2506,7 @@ class Exercise
                         }
                     } else {
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -2792,7 +2800,8 @@ class Exercise
                             $res_user_answer = Database::query($sql);
 
                             if (Database::num_rows($res_user_answer) > 0) {
-                                $s_user_answer = Database::result($res_user_answer, 0, 0); //  rich - good looking
+                                //  rich - good looking
+                                $s_user_answer = Database::result($res_user_answer, 0, 0);
                             } else {
                                 $s_user_answer = 0;
                             }
@@ -2845,10 +2854,11 @@ class Exercise
                         break(2); // break the switch and the "for" condition
                     } else {
                         if ($answerCorrect) {
-                            if ($answerCorrect == $choice[$answerAutoId]) {
+                            if (isset($choice[$answerAutoId]) &&
+                                $answerCorrect == $choice[$answerAutoId]
+                            ) {
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
-
                                 $user_answer = Display::span($answerMatching[$choice[$answerAutoId]]);
                             } else {
                                 if (isset($answerMatching[$choice[$answerAutoId]])) {
@@ -2862,7 +2872,7 @@ class Exercise
                         }
                         break;
                     }
-                case HOT_SPOT :
+                case HOT_SPOT:
                     if ($from_database) {
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         $sql = "SELECT hotspot_correct
@@ -2944,12 +2954,8 @@ class Exercise
                     break;
             } // end switch Answertype
 
-            global $origin;
-
             if ($show_result) {
-
                 if ($debug) error_log('show result '.$show_result);
-
                 if ($from == 'exercise_result') {
                     if ($debug) error_log('Showing questions $from '.$from);
                     //display answers (if not matching type, or if the answer is correct)
@@ -3305,7 +3311,7 @@ class Exercise
                                 );
                             }
                             break;
-                        case MULTIPLE_ANSWER_TRUE_FALSE :
+                        case MULTIPLE_ANSWER_TRUE_FALSE:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_multiple_answer_true_false(
                                     $feedback_type,
@@ -3576,6 +3582,7 @@ class Exercise
         if ($debug) error_log('-- end answer loop --');
 
         $final_answer = true;
+
         foreach ($real_answers as $my_answer) {
             if (!$my_answer) {
                 $final_answer = false;
@@ -3583,7 +3590,9 @@ class Exercise
         }
 
         //we add the total score after dealing with the answers
-        if ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
+        if ($answerType == MULTIPLE_ANSWER_COMBINATION ||
+            $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
+        ) {
             if ($final_answer) {
                 //getting only the first score where we save the weight of all the question
                 $answerWeighting = $objAnswerTmp->selectWeighting(1);

@@ -9,7 +9,7 @@
  */
 require_once '../config.php';
 
-$itemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
+$itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
 
 $plugin = BuyCoursesPlugin::create();
 $currency = $plugin->getSelectedCurrency();

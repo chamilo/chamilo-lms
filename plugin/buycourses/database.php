@@ -18,7 +18,7 @@ $connection = $entityManager->getConnection();
 $platform = $connection->getDatabasePlatform();
 
 //Create tables
-$paypalTable = $pluginSchema->createTable(BuyCoursesUtils::TABLE_PAYPAL);
+$paypalTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_PAYPAL);
 $paypalTable->addColumn(
     'id',
     \Doctrine\DBAL\Types\Type::INTEGER,
@@ -30,7 +30,7 @@ $paypalTable->addColumn('signature', \Doctrine\DBAL\Types\Type::STRING);
 $paypalTable->addColumn('sandbox', \Doctrine\DBAL\Types\Type::BOOLEAN);
 $paypalTable->setPrimaryKey(['id']);
 
-$transferTable = $pluginSchema->createTable(BuyCoursesUtils::TABLE_TRANSFER);
+$transferTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_TRANSFER);
 $transferTable->addColumn(
     'id',
     \Doctrine\DBAL\Types\Type::INTEGER,
@@ -41,7 +41,7 @@ $transferTable->addColumn('account', \Doctrine\DBAL\Types\Type::STRING);
 $transferTable->addColumn('swift', \Doctrine\DBAL\Types\Type::STRING);
 $transferTable->setPrimaryKey(['id']);
 
-$currencyTable = $pluginSchema->createTable(BuyCoursesUtils::TABLE_CURRENCY);
+$currencyTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_CURRENCY);
 $currencyTable->addColumn(
     'id',
     \Doctrine\DBAL\Types\Type::INTEGER,
@@ -67,7 +67,7 @@ $currencyTable->addUniqueIndex(['country_code']);
 $currencyTable->addIndex(['iso_code']);
 $currencyTable->setPrimaryKey(['id']);
 
-$itemTable = $pluginSchema->createTable(BuyCoursesUtils::TABLE_ITEM);
+$itemTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_ITEM);
 $itemTable->addColumn(
     'id',
     \Doctrine\DBAL\Types\Type::INTEGER,
@@ -97,7 +97,7 @@ $itemTable->addForeignKeyConstraint(
     ['onDelete' => 'CASCADE']
 );
 
-$saleTable = $pluginSchema->createTable(BuyCoursesUtils::TABLE_SALE);
+$saleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SALE);
 $saleTable->addColumn(
     'id',
     \Doctrine\DBAL\Types\Type::INTEGER,
@@ -144,10 +144,10 @@ foreach ($queries as $query) {
 }
 
 //Insert data
-$paypalTable = Database::get_main_table(BuyCoursesUtils::TABLE_PAYPAL);
-$currencyTable = Database::get_main_table(BuyCoursesUtils::TABLE_CURRENCY);
-$itemTable = Database::get_main_table(BuyCoursesUtils::TABLE_ITEM);
-$saleTable = Database::get_main_table(BuyCoursesUtils::TABLE_SALE);
+$paypalTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL);
+$currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+$itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+$saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
 
 Database::insert(
     $paypalTable,

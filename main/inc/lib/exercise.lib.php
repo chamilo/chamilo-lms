@@ -981,7 +981,6 @@ HTML;
                                 </script>
 JAVASCRIPT;
                             }
-
                         }
 
                         $s .= <<<HTML

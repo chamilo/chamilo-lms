@@ -389,12 +389,15 @@ $(function() {
 
 echo $documentsAddedInWork;
 echo Display::grid_html('results');
-
-echo '<table style="display:none; width:50%" class="files data_table">
+echo '<div class="list-work-results">';
+echo '<div class="panel panel-default">';
+echo '<div class="panel-body">';
+echo '<table style="display:none; width:100%" class="files data_table">
         <tr>
             <th>'.get_lang('FileName').'</th>
             <th>'.get_lang('Size').'</th>
             <th>'.get_lang('Status').'</th>
         </tr>
     </table>';
+echo '</div></div></div>';
 Display :: display_footer();

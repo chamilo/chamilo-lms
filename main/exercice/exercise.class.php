@@ -2254,7 +2254,10 @@ class Exercise
             error_log('$answerType: '.$answerType);
         }
 
-        if ($answerType == FREE_ANSWER || $answerType == ORAL_EXPRESSION || $answerType == CALCULATED_ANSWER) {
+        if ($answerType == FREE_ANSWER ||
+            $answerType == ORAL_EXPRESSION ||
+            $answerType == CALCULATED_ANSWER
+        ) {
             $nbrAnswers = 1;
         }
 
@@ -2283,7 +2286,8 @@ class Exercise
         $user_answer = '';
 
         // Get answer list for matching
-        $sql = "SELECT id_auto, id, answer FROM $table_ans
+        $sql = "SELECT id_auto, id, answer
+                FROM $table_ans
                 WHERE c_id = $course_id AND question_id = $questionId";
         $res_answer = Database::query($sql);
 
@@ -2387,9 +2391,9 @@ class Exercise
                 case MULTIPLE_ANSWER: //2
                     if ($from_database) {
                         $choice = array();
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
-                                     WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
-                        $resultans = Database::query($queryans);
+                        $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                                WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+                        $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
                             $choice[$ind] = 1;
@@ -2792,7 +2796,8 @@ class Exercise
                             $res_user_answer = Database::query($sql);
 
                             if (Database::num_rows($res_user_answer) > 0) {
-                                $s_user_answer = Database::result($res_user_answer, 0, 0); //  rich - good looking
+                                //  rich - good looking
+                                $s_user_answer = Database::result($res_user_answer, 0, 0);
                             } else {
                                 $s_user_answer = 0;
                             }
@@ -2845,10 +2850,11 @@ class Exercise
                         break(2); // break the switch and the "for" condition
                     } else {
                         if ($answerCorrect) {
-                            if ($answerCorrect == $choice[$answerAutoId]) {
+                            if (isset($choice[$answerAutoId]) &&
+                                $answerCorrect == $choice[$answerAutoId]
+                            ) {
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
-
                                 $user_answer = Display::span($answerMatching[$choice[$answerAutoId]]);
                             } else {
                                 if (isset($answerMatching[$choice[$answerAutoId]])) {
@@ -2862,7 +2868,7 @@ class Exercise
                         }
                         break;
                     }
-                case HOT_SPOT :
+                case HOT_SPOT:
                     if ($from_database) {
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         $sql = "SELECT hotspot_correct
@@ -2944,12 +2950,8 @@ class Exercise
                     break;
             } // end switch Answertype
 
-            global $origin;
-
             if ($show_result) {
-
                 if ($debug) error_log('show result '.$show_result);
-
                 if ($from == 'exercise_result') {
                     if ($debug) error_log('Showing questions $from '.$from);
                     //display answers (if not matching type, or if the answer is correct)

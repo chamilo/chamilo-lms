@@ -847,7 +847,7 @@ abstract class Question
             // creates a new question
             $sql = "SELECT max(position)
                     FROM $TBL_QUESTIONS as question,
-                        $TBL_EXERCISE_QUESTION as test_question
+                    $TBL_EXERCISE_QUESTION as test_question
                     WHERE
                         question.id = test_question.question_id AND
                         test_question.exercice_id = " . intval($exerciseId) . " AND

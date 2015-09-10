@@ -617,12 +617,12 @@ class Answer
                         $correct = $answerList[$correct];
                     }*/
 
-                    $sql = "UPDATE $answerTable
+                    /*$sql = "UPDATE $answerTable
                         SET correct = $autoId
                         WHERE
                             id_auto = $autoId
                         ";
-                    Database::query($sql);
+                    Database::query($sql);*/
                 }
             }
         }

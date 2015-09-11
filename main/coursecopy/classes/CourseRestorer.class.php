@@ -2951,8 +2951,6 @@ class CourseRestorer
 
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {
-
-
 				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $thematic->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $thematic->content,
@@ -2964,7 +2962,7 @@ class CourseRestorer
 				$thematic->params['c_id']  = $this->destination_course_id;
 				unset($thematic->params['id']);
                 unset($thematic->params['iid']);
-                var_dump($thematic->params);
+
 				$last_id = Database::insert($table_thematic, $thematic->params, false);
 
 				if ($last_id) {

@@ -56,6 +56,8 @@ if ($dokeos_chapter) {
             } else {
                 $src = 'blank.php?error=prerequisites';
             }
+
+            $src = $_SESSION['oLP']->checkXFrameOptions($src);
             break;
         case 2:
             $_SESSION['oLP']->stop_previous_item();

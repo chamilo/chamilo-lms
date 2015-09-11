@@ -28,6 +28,17 @@ if (isset($_GET['error'])) {
             echo '<br /><br />';
             Display::display_warning_message(get_lang('ReachedOneAttempt'));
             break;
+        case 'x_frames_options':
+            if (isset($_SESSION['x_frame_source'])) {
+                $src = $_SESSION['x_frame_source'];
+                echo Display::return_message(
+                    Display::url($src, $src, ['target' => '_blank']),
+                    'normal',
+                    false
+                );
+                unset($_SESSION['x_frame_source']);
+            }
+            break;
         default:
             break;
     }

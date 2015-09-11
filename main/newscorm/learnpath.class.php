@@ -6030,7 +6030,6 @@ class learnpath
             $file = $filepath . $row['path'];
 
             if ($fp = @ fopen($file, 'w')) {
-                $content = text_filter($content);
                 $content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'] . '/courses/', $content);
 
                 // Change the path of mp3 to absolute.

@@ -1586,8 +1586,9 @@ class CourseRestorer
 				$new_announcement_id = Database::insert($table, $params);
 
                 if ($new_announcement_id) {
-                    $sql = "UPDATE $table SET id = iid WHERE iid = $id";
+                    $sql = "UPDATE $table SET id = iid WHERE iid = $new_announcement_id";
                     Database::query($sql);
+
                     if (!isset($this->course->resources[RESOURCE_ANNOUNCEMENT][$id])) {
                         $this->course->resources[RESOURCE_ANNOUNCEMENT][$id] = new stdClass();
                     }
@@ -1597,14 +1598,15 @@ class CourseRestorer
 				$origin_path = $this->course->backup_path.'/upload/announcements/';
 				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/announcements/';
 
-				//Copy announcement attachment file
+				// Copy announcement attachment file
 				if (!empty($this->course->orig)) {
 
-					$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-
+					$table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 					$sql = 'SELECT path, comment, size, filename
 					        FROM '.$table_attachment.'
-					        WHERE c_id = '.$this->destination_course_id.' AND announcement_id = '.$id;
+					        WHERE
+					            c_id = '.$this->destination_course_id.' AND
+					            announcement_id = '.$id;
 					$attachment_event = Database::query($sql);
 					$attachment_event = Database::fetch_object($attachment_event);
 
@@ -1612,7 +1614,10 @@ class CourseRestorer
                         !is_dir($origin_path.$attachment_event->path)
                     ) {
 						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
-						$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
+                        $copy_result = copy(
+                            $origin_path.$attachment_event->path,
+                            $destination_path.$new_filename
+                        );
 
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
@@ -2907,11 +2912,12 @@ class CourseRestorer
 				$new_id = Database::insert($table_wiki, $params);
 
                 if ($new_id) {
-                    $this->course->resources[RESOURCE_WIKI][$id]->destination_id = $new_id;
 
-                    $sql = "UPDATE $table_wiki SET page_id = '$new_id'
-                            WHERE c_id = ".$this->destination_course_id." AND id = '$new_id'";
+                    $sql = "UPDATE $table_wiki SET page_id = '$new_id', id = iid
+                            WHERE c_id = ".$this->destination_course_id." AND iid = '$new_id'";
                     Database::query($sql);
+
+                    $this->course->resources[RESOURCE_WIKI][$id]->destination_id = $new_id;
 
                     // we also add an entry in wiki_conf
                     $params = [
@@ -2951,9 +2957,10 @@ class CourseRestorer
 
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {
+
 				// check resources inside html from ckeditor tool and copy correct urls into recipient course
-                $thematic->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
-                    $thematic->content,
+                $thematic->params['content'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                    $thematic->params['content'],
                     $this->course->code,
                     $this->course->destination_path,
                     $this->course->backup_path,

@@ -394,11 +394,10 @@ class CourseSelectForm
 		// Loading the results from the checkboxes of ethe javascript
 		$resource = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
 
-		$course_info 	= api_get_course_info($course_code);
-		$table_doc 		= Database::get_course_table(TABLE_DOCUMENT);
-		$table_prop 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-		$course_id 		= $course_info['real_id'];
+		$course_info = api_get_course_info($course_code);
+		$table_doc = Database::get_course_table(TABLE_DOCUMENT);
+		$table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
+		$course_id = $course_info['real_id'];
 
 		/* Searching the documents resource that have been set to null because
         $avoid_serialize is true in the display_form() function*/
@@ -420,13 +419,20 @@ class CourseSelectForm
 							WHERE
 							    d.c_id = '.$course_id.' AND
                                 p.c_id = '.$course_id.' AND
-                                tool 	= \''.TOOL_DOCUMENT.'\' AND
-                                p.ref 	= d.id AND p.visibility != 2 AND
-                                d.id 	= '.$resource_item.$condition_session.'
+                                tool = \''.TOOL_DOCUMENT.'\' AND
+                                p.ref = d.id AND p.visibility != 2 AND
+                                d.id = '.$resource_item.$condition_session.'
 							ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
-						$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
+                        $doc = new Document(
+                            $obj->id,
+                            $obj->path,
+                            $obj->comment,
+                            $obj->title,
+                            $obj->filetype,
+                            $obj->size
+                        );
                         if ($doc) {
                             $course->add_resource($doc);
                             // adding item property
@@ -449,6 +455,7 @@ class CourseSelectForm
 
 		if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
+
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
 						foreach($resources as $id => $obj) {

@@ -7,8 +7,7 @@
  * @package chamilo.backup
  */
 
-// Including the global initialization file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
@@ -71,7 +70,9 @@ if (Security::check_token('post') && (
             $delete_file = false;
         } else {
             if ($_FILES['backup']['error'] == 0) {
-                $filename = CourseArchiver::import_uploaded_file($_FILES['backup']['tmp_name']);
+                $filename = CourseArchiver::import_uploaded_file(
+                    $_FILES['backup']['tmp_name']
+                );
                 if ($filename === false) {
                     $error = true;
                 } else {

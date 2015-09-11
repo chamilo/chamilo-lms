@@ -17,6 +17,9 @@ html,body {
   padding: 0;
   height: 100%;
 }
+header{
+  padding-top: 20px;
+}
 #page-wrap{
   min-height: 100%;
   margin-bottom: 0;
@@ -68,9 +71,8 @@ a.thumbnail:hover{
   visibility: visible;
 }
 .logo{
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   padding: 5px;
-  margin-top: 10px;
 }
 .title-tools{
   text-align: left;

@@ -160,14 +160,9 @@ $interbreadcrumb[] = [
     'name' => $plugin->get_lang('AvailableCoursesConfiguration')
 ];
 
-$tpl = new Template(
-    $plugin->get_lang('PaymentConfiguration')
-);
-$tpl->assign(
-    'header',
-    $plugin->get_lang('PaymentConfiguration')
-);
-$tpl->assign('server', $_configuration['root_web']);
+$templateName = $plugin->get_lang('PaymentsConfiguration');
+$tpl = new Template($templateName);
+$tpl->assign('header', $templateName);
 $tpl->assign('curency_form', $currencyForm->returnForm());
 $tpl->assign('paypal_form', $paypalForm->returnForm());
 $tpl->assign('transfer_form', $transferForm->returnForm());

@@ -60,7 +60,7 @@
                             <img src="resources/img/128/paymentsettings.png">
                         </a>
                         <div class="caption">
-                            <a class="btn btn-default btn-sm" href="src/paymentsetup.php">{{ 'ConfigurationOfPayments'|get_plugin_lang('BuyCoursesPlugin') }} </a>
+                            <a class="btn btn-default btn-sm" href="src/paymentsetup.php">{{ 'PaymentsConfiguration'|get_plugin_lang('BuyCoursesPlugin') }} </a>
                         </div>
                     </div>
                 </div>

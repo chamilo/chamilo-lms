@@ -76,7 +76,7 @@ if ($_REQUEST['tab'] == 'save_mod') {
     } else {
         $jsonResult = [
             "status" => false,
-            "content" => $plugin->get_lang('ProblemToSaveTheMessage')
+            "content" => $plugin->get_lang('ItemNotSaved')
         ];
     }
 

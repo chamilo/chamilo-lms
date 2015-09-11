@@ -80,20 +80,20 @@ if ($form->validate()) {
         case 'Completed':
             $saleIsCompleted = $plugin->completeSale($sale['id']);
 
-            if ($saleIsCompleted && $buyingCourse) {
+            if ($saleIsCompleted && $buyingSession) {
                 Display::addFlash(
                     Display::return_message(
-                        sprintf($plugin->get_lang('EnrollToCourseXSuccessful'), $session['name']),
+                        sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $session['name']),
                         'success'
                     )
                 );
                 break;
             }
 
-            if ($saleIsCompleted && $buyingSession) {
+            if ($saleIsCompleted && $buyingCourse) {
                 Display::addFlash(
                     Display::return_message(
-                        sprintf($plugin->get_lang('EnrollToSessionXSuccessful'), $course['name']),
+                        sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $course['title']),
                         'success'
                     )
                 );
@@ -149,7 +149,8 @@ if ($form->validate()) {
             Display::addFlash(
                 Display::return_message(
                     sprintf($plugin->get_lang('PurchaseStatusX'), $purchaseStatus),
-                    'warning'
+                    'warning',
+                    false
                 )
             );
             break;

@@ -121,7 +121,8 @@ switch ($sale['payment_type']) {
                         $plugin->get_lang('PurchaseStatusX'),
                         $plugin->get_lang('PendingReasonByTransfer')
                     ),
-                    'success'
+                    'success',
+                    false
                 )
             );
 

@@ -43,7 +43,7 @@
                                             {% elseif course.enrolled == "NO" %}
                                                 <div class="text-center">
                                                     <a class="ajax btn btn-primary" title="" href="{{ course_description_url }}" data-title="{{ course.title }}">
-                                                        <i class="fa fa-file-text"></i> {{ 'Description'|get_lang }}
+                                                        <i class="fa fa-file-text"></i> {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                     <a class="btn btn-success" title="" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}">
                                                         <i class="fa fa-shopping-cart"></i> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}

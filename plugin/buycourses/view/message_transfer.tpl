@@ -2,15 +2,15 @@
     <p>{{ 'DearUser'|get_lang }}</p>
     <p>{{ 'PurchaseDetailsIntro'|get_plugin_lang('BuyCoursesPlugin') }}</p>
     <dl>
-        <dt>Fecha</dt>
+        <dt>{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
         <dd>{{ sale.date }}</dd>
         <dt>{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
         <dd>sale.reference</dd>
-        <dt>Usuario</dt>
+        <dt>{{ 'UserName'|get_lang }}</dt>
         <dd>{{ user.complete_name }}</dd>
-        <dt>Curso</dt>
+        <dt>{{ 'Course'|get_lang }}</dt>
         <dd>{{ sale.product }}</dd>
-        <dt>Precio</dt>
+        <dt>{{ 'ProductName'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
         <dd>{{ sale.currency ~ ' ' ~ sale.price }}</dd>
     </dl>
     <p>{{ 'BankAccountIntro'|get_plugin_lang('BuyCoursesPlugin')|format(sale.product) }}</p>
@@ -32,4 +32,5 @@
             {% endfor %}
         </tbody>
     </table>
+    <p>{{ 'PurchaseDetailsEnd'|get_plugin_lang('BuyCoursesPlugin') }}</p>
 </div>

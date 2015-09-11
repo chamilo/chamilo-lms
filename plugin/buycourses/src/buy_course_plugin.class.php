@@ -943,9 +943,9 @@ class BuyCoursesPlugin extends Plugin
     public function getSaleStatuses()
     {
         return [
-            self::SALE_STATUS_CANCELED => $this->get_lang('SaleCanceled'),
-            self::SALE_STATUS_PENDING => $this->get_lang('SalePending'),
-            self::SALE_STATUS_COMPLETED => $this->get_lang('SaleCompleted')
+            self::SALE_STATUS_CANCELED => $this->get_lang('SaleStatusCanceled'),
+            self::SALE_STATUS_PENDING => $this->get_lang('SaleStatusPending'),
+            self::SALE_STATUS_COMPLETED => $this->get_lang('SaleStatusCompleted')
         ];
     }
 

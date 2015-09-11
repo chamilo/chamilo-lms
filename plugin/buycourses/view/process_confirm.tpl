@@ -80,7 +80,8 @@
                 </tbody>
             </table>
         </div>
+        <p>{{ 'OnceItIsConfirmedYouWillReceiveAnEmailWithTheBankInformationAndAnOrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</p>
     </div>
 </div>
-    
+
 {{ form }}

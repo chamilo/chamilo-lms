@@ -22,11 +22,11 @@
                     <td class="text-center">{{ sale.reference }}</td>
                     <td class="text-center">
                         {% if sale.status == sale_status_canceled %}
-                            {{ 'SaleCanceled'|get_plugin_lang('BuyCoursesPlugin') }}
+                            {{ 'SaleStatusCanceled'|get_plugin_lang('BuyCoursesPlugin') }}
                         {% elseif sale.status == sale_status_pending %}
-                            {{ 'SalePending'|get_plugin_lang('BuyCoursesPlugin') }}
+                            {{ 'SaleStatusPending'|get_plugin_lang('BuyCoursesPlugin') }}
                         {% elseif sale.status == sale_status_completed %}
-                            {{ 'SaleCompleted'|get_plugin_lang('BuyCoursesPlugin') }}
+                            {{ 'SaleStatusCompleted'|get_plugin_lang('BuyCoursesPlugin') }}
                         {% endif %}
                     </td>
                     <td class="text-center">{{ sale.date }}</td>

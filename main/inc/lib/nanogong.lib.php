@@ -19,6 +19,12 @@ class Nanogong
     public $store_path;
     public $params;
     public $can_edit = false;
+    public $course_id;
+    public $session_id;
+    public $exercise_id;
+    public $question_id;
+    public $user_id;
+    public $course_info;
 
     /* Files allowed to upload */
     public $available_extensions = array('mp3', 'wav', 'ogg');
@@ -113,7 +119,7 @@ class Nanogong
             $this->question_id = 0;
         }
 
-		$this->can_edit  = false;
+		$this->can_edit = false;
 
 		if (api_is_allowed_to_edit()) {
 			$this->can_edit = true;
@@ -123,7 +129,7 @@ class Nanogong
 			}
 		}
 
-		//Settings the params array
+		// Settings the params array
 		$this->params = $params;
 		$this->store_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/exercises/';
 		$this->create_user_folder();

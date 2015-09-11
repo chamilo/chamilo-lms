@@ -19,24 +19,24 @@ class CourseSelectForm
 	static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
     {
         global $charset;
-		$resource_titles[RESOURCE_EVENT]                = get_lang('Events');
-		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
-		$resource_titles[RESOURCE_DOCUMENT] 			= get_lang('Documents');
-		$resource_titles[RESOURCE_LINK] 				= get_lang('Links');
-		$resource_titles[RESOURCE_COURSEDESCRIPTION]	= get_lang('CourseDescription');
-		$resource_titles[RESOURCE_FORUM]                = get_lang('Forums');
-        $resource_titles[RESOURCE_FORUMCATEGORY]        = get_lang('ForumCategory');
-		$resource_titles[RESOURCE_QUIZ] 				= get_lang('Tests');
-        $resource_titles[RESOURCE_TEST_CATEGORY] 		= get_lang('QuestionCategory');
-		$resource_titles[RESOURCE_LEARNPATH]            = get_lang('ToolLearnpath');
-		$resource_titles[RESOURCE_SCORM]                = 'SCORM';
-		$resource_titles[RESOURCE_TOOL_INTRO]           = get_lang('ToolIntro');
-		$resource_titles[RESOURCE_SURVEY]               = get_lang('Survey');
-		$resource_titles[RESOURCE_GLOSSARY] 			= get_lang('Glossary');
-		$resource_titles[RESOURCE_WIKI]                 = get_lang('Wiki');
-		$resource_titles[RESOURCE_THEMATIC]             = get_lang('Thematic');
-		$resource_titles[RESOURCE_ATTENDANCE]           = get_lang('Attendance');
-        $resource_titles[RESOURCE_WORK]                 = get_lang('ToolStudentPublication');
+        $resource_titles[RESOURCE_EVENT] = get_lang('Events');
+        $resource_titles[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
+        $resource_titles[RESOURCE_DOCUMENT] = get_lang('Documents');
+        $resource_titles[RESOURCE_LINK] = get_lang('Links');
+        $resource_titles[RESOURCE_COURSEDESCRIPTION] = get_lang('CourseDescription');
+        $resource_titles[RESOURCE_FORUM] = get_lang('Forums');
+        $resource_titles[RESOURCE_FORUMCATEGORY] = get_lang('ForumCategory');
+        $resource_titles[RESOURCE_QUIZ] = get_lang('Tests');
+        $resource_titles[RESOURCE_TEST_CATEGORY] = get_lang('QuestionCategory');
+        $resource_titles[RESOURCE_LEARNPATH] = get_lang('ToolLearnpath');
+        $resource_titles[RESOURCE_SCORM] = 'SCORM';
+        $resource_titles[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
+        $resource_titles[RESOURCE_SURVEY] = get_lang('Survey');
+        $resource_titles[RESOURCE_GLOSSARY] = get_lang('Glossary');
+        $resource_titles[RESOURCE_WIKI] = get_lang('Wiki');
+        $resource_titles[RESOURCE_THEMATIC] = get_lang('Thematic');
+        $resource_titles[RESOURCE_ATTENDANCE] = get_lang('Attendance');
+        $resource_titles[RESOURCE_WORK] = get_lang('ToolStudentPublication');
 ?>
 		<script>
 			function exp(item) {
@@ -401,7 +401,6 @@ class CourseSelectForm
 
 		/* Searching the documents resource that have been set to null because
         $avoid_serialize is true in the display_form() function*/
-
 		if ($from == 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);

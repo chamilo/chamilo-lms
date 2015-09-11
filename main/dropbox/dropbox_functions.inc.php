@@ -570,16 +570,34 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
             );
         }
 
-        $hideCoach = api_get_setting('dropbox_hide_course_coach');
+        $complete_user_list2 = CourseManager::get_coach_list_from_course_code(
+            $course_info['code'],
+            api_get_session_id()
+        );
 
-        if ($hideCoach !== 'true') {
-            $complete_user_list2 = CourseManager::get_coach_list_from_course_code(
-                $course_info['code'],
-                api_get_session_id()
-            );
+        $generalCoachList = array();
+        $courseCoachList = array();
+        foreach ($complete_user_list2 as $coach) {
+            if ($coach['type'] == 'general_coach') {
+                $generalCoachList[] = $coach;
+            } else {
+                $courseCoachList[] = $coach;
+            }
+        }
+
+        $hideCourseCoach = api_get_setting('dropbox_hide_course_coach');
+        if ($hideCourseCoach == 'false') {
             $complete_user_list_for_dropbox = array_merge(
                 $complete_user_list_for_dropbox,
-                $complete_user_list2
+                $courseCoachList
+            );
+        }
+        $hideGeneralCoach = api_get_setting('dropbox_hide_general_coach');
+
+        if ($hideGeneralCoach == 'false') {
+            $complete_user_list_for_dropbox = array_merge(
+                $complete_user_list_for_dropbox,
+                $generalCoachList
             );
         }
     } else {

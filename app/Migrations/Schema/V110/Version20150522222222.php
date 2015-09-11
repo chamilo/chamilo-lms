@@ -707,9 +707,26 @@ class Version20150522222222 extends AbstractMigrationChamilo
             '',
             'radio',
             'Tools',
-            ($value?$value:'false'),
+            ($value ? $value : 'false'),
             'DropboxHideCourseCoachTitle',
             'DropboxHideCourseCoachComment',
+            null,
+            '',
+            1,
+            true,
+            false,
+            [0 => ['value' => 'true', 'text' => 'Yes'], 1 => ['value' => 'false', 'text' => 'No']]
+        );
+
+        $value = api_get_configuration_value('dropbox_hide_general_coach');
+        $this->addSettingCurrent(
+            'dropbox_hide_general_coach',
+            '',
+            'radio',
+            'Tools',
+            ($value ? $value : 'false'),
+            'DropboxHideGeneralCoachTitle',
+            'DropboxHideGeneralCoachComment',
             null,
             '',
             1,

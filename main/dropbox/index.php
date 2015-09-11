@@ -346,7 +346,7 @@ if ($action != 'add') {
 		}
 		$column_show[] = 0;
 
-		// Here we change the way how the colums are going to be sort
+		// Here we change the way how the columns are going to be sort
 		// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
 		// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
 
@@ -366,26 +366,29 @@ if ($action != 'add') {
 
 				// New icon
 				$new_icon = '';
-				if ($dropbox_file->last_upload_date > $last_access AND !in_array($dropbox_file->id, $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX])) {
+				if ($dropbox_file->last_upload_date > $last_access &&
+                    !in_array($dropbox_file->id, $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX])
+                ) {
 					$new_icon = '&nbsp;'.Display::return_icon('new_dropbox_message.png', get_lang('New'),'',ICON_SIZE_SMALL);
 				}
 
 				$link_open = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">';
 				$dropbox_file_data[] = $link_open.DocumentManager::build_document_icon_tag('file', $dropbox_file->title).'</a>';
-				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&action=download">'.Display::return_icon('save.png', get_lang('Download'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.$dropbox_file->title.'</a>'.$new_icon.'<br />'.$dropbox_file->description;
+				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&action=download">'.
+                    Display::return_icon('save.png', get_lang('Download'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.$dropbox_file->title.'</a>'.$new_icon.'<br />'.$dropbox_file->description;
 				$file_size = $dropbox_file->filesize;
 				$dropbox_file_data[] = format_file_size($file_size);
 				$dropbox_file_data[] = $dropbox_file->author;
-				//$dropbox_file_data[] = $dropbox_file->description;
 
 				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date);
-				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.api_format_date($last_upload_date).'</span>';
+				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.
+                    api_format_date($last_upload_date).'</span>';
 
 				$action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('discuss.png', get_lang('Comment'),'',ICON_SIZE_SMALL).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movereceived&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('move.png', get_lang('Move'),'',ICON_SIZE_SMALL).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=deletereceivedfile&id='.$dropbox_file->id.'&'.$sort_params.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.
-                                    Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+                <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('discuss.png', get_lang('Comment'),'',ICON_SIZE_SMALL).'</a>
+                <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movereceived&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('move.png', get_lang('Move'),'',ICON_SIZE_SMALL).'</a>
+                <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=deletereceivedfile&id='.$dropbox_file->id.'&'.$sort_params.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.
+                Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
 
 				// This is a hack to have an additional row in a sortable table
 
@@ -433,7 +436,11 @@ if ($action != 'add') {
 		}
 
 		// Displaying the table
-		$additional_get_parameters = array('view' => $view, 'view_received_category' => $viewReceivedCategory, 'view_sent_category' => $viewSentCategory);
+        $additional_get_parameters = array(
+            'view' => $view,
+            'view_received_category' => $viewReceivedCategory,
+            'view_sent_category' => $viewSentCategory,
+        );
         $selectlist = array(
             'delete_received' => get_lang('Delete'),
             'download_received' => get_lang('Download')
@@ -534,7 +541,8 @@ if ($action != 'add') {
 				$dropbox_file_data[] = $dropbox_file->id;
 				$link_open = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">';
 				$dropbox_file_data[] = $link_open.DocumentManager::build_document_icon_tag('file', $dropbox_file->title).'</a>';
-				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&action=download">'.Display::return_icon('save.png', get_lang('Save'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.$dropbox_file->title.'</a><br />'.$dropbox_file->description;
+				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&action=download">'.
+                    Display::return_icon('save.png', get_lang('Save'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.$dropbox_file->title.'</a><br />'.$dropbox_file->description;
 				$file_size = $dropbox_file->filesize;
 				$dropbox_file_data[] = format_file_size($file_size);
                 $receivers_celldata = null;
@@ -551,9 +559,9 @@ if ($action != 'add') {
 				$receivers_celldata = '';
 
 				$action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('discuss.png', get_lang('Comment'),'',ICON_SIZE_SMALL).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movesent&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('move.png', get_lang('Move'),'',ICON_SIZE_SMALL).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=deletesentfile&id='.$dropbox_file->id.'&'.$sort_params.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+                    <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('discuss.png', get_lang('Comment'),'',ICON_SIZE_SMALL).'</a>
+                    <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movesent&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('move.png', get_lang('Move'),'',ICON_SIZE_SMALL).'</a>
+                    <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=deletesentfile&id='.$dropbox_file->id.'&'.$sort_params.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
 				// This is a hack to have an additional row in a sortable table
 				if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
 					$action_icons .= "</td></tr>\n"; // ending the normal row of the sortable table
@@ -620,7 +628,8 @@ if ($action != 'add') {
 		if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 			$selectlist = array('download_received' => get_lang('Download'));
 		}
-                echo '<div class="files-table">';
+
+        echo '<div class="files-table">';
 		Display::display_sortable_config_table(
             'dropbox',
             $column_header,
@@ -632,7 +641,7 @@ if ($action != 'add') {
             $column_order,
             $selectlist
         );
-                echo '</div>';
+        echo '</div>';
 	}
 }
 

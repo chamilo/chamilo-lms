@@ -6,6 +6,7 @@
  * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
  * @author Imanol Losada      <imanol.losada@beeznest.com>
  * @author Alex Aragón      <alex.aragon@beeznest.com>
+ * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 /**
  * Plugin class for the BuyCourses plugin
@@ -39,10 +40,13 @@ class BuyCoursesPlugin extends Plugin
     {
         parent::__construct(
             '1.0',
-            'Jose Angel Ruiz - NoSoloRed (original author),
-            Francis Gonzales and Yannick Warnier - BeezNest (integration),
-            Alex Aragón - BeezNest (Design icons and css styles),
-            Imanol Losada - BeezNest (introduction of sessions purchase)',
+            "
+                Jose Angel Ruiz - NoSoloRed (original author),
+                Francis Gonzales and Yannick Warnier - BeezNest (integration),
+                Alex Aragón - BeezNest (Design icons and css styles),
+                Imanol Losada - BeezNest (introduction of sessions purchase)
+                Angel Fernando Quiroz Campos - BeezNest
+            ",
             array(
                 'show_main_menu_tab' => 'boolean',
                 'include_sessions' => 'boolean',

@@ -1723,8 +1723,11 @@ class CourseManager
         $users = array();
 
         // We get the coach for the given course in a given session.
-        $sql = 'SELECT id_user FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-               ' WHERE id_session="'.$session_id.'" AND course_code="'.$course_code.'" AND status = 2';
+        $sql = 'SELECT id_user FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
+                WHERE
+                    id_session="'.$session_id.'" AND
+                    course_code="'.$course_code.'" AND
+                    status = 2';
         $rs = Database::query($sql);
         while ($user = Database::fetch_array($rs)) {
             $user_info = api_get_user_info($user['id_user']);
@@ -1732,7 +1735,9 @@ class CourseManager
             $user_info['role'] = $user['role'];
             $user_info['tutor_id'] = $user['tutor_id'];
             $user_info['email'] = $user['email'];
+            $user_info['type'] = 'course_coach';
             $users[$user['id_user']] = $user_info;
+
         }
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1745,6 +1750,7 @@ class CourseManager
         $user_info['role'] = $user['role'];
         $user_info['tutor_id'] = $user['tutor_id'];
         $user_info['email'] = $user['email'];
+        $user_info['type'] = 'general_coach';
         $users[$session_id_coach] = $user_info;
 
         return $users;

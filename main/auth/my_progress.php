@@ -67,7 +67,7 @@ if (!empty($course_user_list)) {
         }
         $course_info = api_get_course_info($result['course_code']);
         $course_image = '<img src="'.$course_info['course_image'].'">';
-        $dates .= '<li><a href="#'.$login.'">'.api_get_utc_datetime($login).'</a></li>';
+        $dates .= '<li><a href="#'.$login.'">'.api_get_local_time($login).'</a></li>';
         $issues .= '<li id ="'.$login.'">
                         <div class="row">
                             <div class="span2"><div class="thumbnail">'.$course_image.'</div>

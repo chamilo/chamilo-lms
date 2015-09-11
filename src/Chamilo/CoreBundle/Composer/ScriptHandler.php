@@ -67,6 +67,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/announcements/resources/announcements_email.class.php',
             __DIR__.'/../../../../main/inc/lib/main_api.lib.php',
             __DIR__.'/../../../../main/exercice/export/scorm/scorm_export.php',
+            __DIR__.'/../../../../main/exercice/testheaderpage.php',
             //__DIR__.'/../../../../main/inc/lib/nusoap/class.soapclient.php',
             __DIR__.'/../../../../main/inc/lib/nusoap/nusoap.php',
             __DIR__.'/../../../../main/admin/admin_page.class.php',
@@ -123,6 +124,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/course_description/upload_file_form.class.php',
             __DIR__.'/../../../../main/auth/external_login/facebook-php-sdk/src/facebook.php',
             __DIR__.'/../../../../main/auth/external_login/facebook-php-sdk/src/base_facebook.php',
+            __DIR__.'/../../../../main/inc/latex.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/calendar_popup.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/datepicker.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/datepickerdate.php',
@@ -132,7 +134,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/style_button.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/style_reset_button.php',
             __DIR__.'/../../../../main/inc/lib/formvalidator/Element/style_submit_button.php',
-            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/tbl_change.js.php',
+            __DIR__.'/../../../../main/inc/lib/formvalidator/Element/tbl_change.js.php'
         ];
 
         foreach ($paths as $path) {

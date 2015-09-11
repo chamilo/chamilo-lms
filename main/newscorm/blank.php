@@ -12,6 +12,11 @@ $language_file = array('learnpath', 'document','exercice');
 $use_anonymous = true;
 require_once '../inc/global.inc.php';
 Display::display_reduced_header();
+$htmlHeadXtra[] = "
+<style>
+body { background: none;}
+</style>
+";
 
 if (isset($_GET['error'])) {
     switch ($_GET['error']){

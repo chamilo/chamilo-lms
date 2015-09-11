@@ -31,7 +31,13 @@ $courseId = $courseInfo['real_id'];
 $connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);
 $quote_simple = "'";
 
-$form = new FormValidator('myform', 'get', api_get_self(), null, array('id' => 'myform'));
+$form = new FormValidator(
+    'myform',
+    'get',
+    api_get_self(),
+    null,
+    array('id' => 'myform')
+);
 $form->addElement('text', 'from', get_lang('From'), array('id' => 'date_from'));
 $form->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to'));
 $form->addElement(

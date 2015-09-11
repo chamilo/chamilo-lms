@@ -1575,7 +1575,7 @@ class Link extends Model
             // Validation when belongs to a session
             $showChildren = $categoryId == $myrow['id'] || $show == 'all';
             $session_img = api_get_session_image($myrow['session_id'], $_user['status']);
-            $myrow['description'] = text_filter($myrow['description']);
+            $myrow['description'] = $myrow['description'];
 
             $strVisibility = '';
             $visibilityClass = null;

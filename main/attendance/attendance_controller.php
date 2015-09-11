@@ -112,7 +112,9 @@ class AttendanceController
 
                     $attendance->category_id = $_POST['category_id'];
                     $link_to_gradebook = false;
-                    if ( isset($_POST['attendance_qualify_gradebook']) && $_POST['attendance_qualify_gradebook'] == 1 ) {
+                    if (isset($_POST['attendance_qualify_gradebook']) &&
+                        $_POST['attendance_qualify_gradebook'] == 1
+                    ) {
                         $link_to_gradebook = true;
                     }
                     $last_id = $attendance->attendance_edit($attendance_id,$link_to_gradebook);
@@ -135,10 +137,12 @@ class AttendanceController
             }
         } else {
             // default values
-            $attendance_data 		= $attendance->get_attendance_by_id($attendance_id);
-            $data['attendance_id'] 	= $attendance_data['id'];
-            $data['title'] 			= $attendance_data['name'];
-            $data['description'] 	= $attendance_data['description'];
+            $attendance_data = $attendance->get_attendance_by_id(
+                $attendance_id
+            );
+            $data['attendance_id'] = $attendance_data['id'];
+            $data['title'] = $attendance_data['name'];
+            $data['description'] = $attendance_data['description'];
             $data['attendance_qualify_title'] = $attendance_data['attendance_qualify_title'];
             $data['attendance_weight'] = $attendance_data['attendance_weight'];
 
@@ -159,12 +163,15 @@ class AttendanceController
         $allowDeleteAttendance = api_get_setting('allow_delete_attendance');
         if ($allowDeleteAttendance !== 'true') {
             $this->attendance_list();
+
             return false;
         }
+
         $attendance = new Attendance();
         if (!empty($attendance_id)) {
             $affected_rows = $attendance->attendance_delete($attendance_id);
         }
+
         if ($affected_rows) {
             $message['message_attendance_delete'] = true;
         }
@@ -256,8 +263,8 @@ class AttendanceController
      * It's used for controlling attendance sheet (list, add),
      * render to attendance_sheet view
      * @param string $action
-     * @param int	 $attendance_id
-     * @param int $student_id
+     * @param int  $attendance_id
+     * @param int  $student_id
      * @param bool $edit
      */
     public function attendance_sheet($action, $attendance_id, $student_id = 0, $edit = true)

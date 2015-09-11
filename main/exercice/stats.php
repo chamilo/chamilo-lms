@@ -276,7 +276,6 @@ foreach ($data as $row_table) {
 }
 $content .= $table->toHtml();
 
-
 $interbreadcrumb[] = array("url" => "exercise.php?gradebook=$gradebook&".api_get_cidreq(), "name" => get_lang('Exercises'));
 $interbreadcrumb[] = array("url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(), "name" => $objExercise->name);
 

@@ -20,23 +20,26 @@ interface SmsPluginLibraryInterface
 
     /**
      * @param array $additionalParameters
+     *
      * @return mixed
      */
     public function send($additionalParameters);
 
     /**
      * @param array $additionalParameters
+     *
      * @return mixed
      */
     public function getSms($additionalParameters);
 
     /**
      * buildSms (builds an SMS from a template and data)
-     * @param   object  ClockworksmsPlugin object
-     * @param   object  Template object
-     * @param   string  Template file name
-     * @param   string  Text key from lang file
-     * @param   array   Data to fill message variables (if any)
+     * @param   object  $plugin ClockworksmsPlugin object
+     * @param   object  $tpl Template object
+     * @param   string  $templateName Template file name
+     * @param   string  $messageKey Text key from lang file
+     * @param   array   $parameters Data to fill message variables (if any)
+     *
      * @return  object  Template object with message property updated
      */
     public function buildSms($plugin, $tpl, $templateName, $messageKey, $parameters = null);

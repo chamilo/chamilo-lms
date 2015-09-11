@@ -5594,7 +5594,7 @@ class CourseManager
         $current_url_id = api_get_current_access_url_id();
 
         // Get course list auto-register
-        $special_course_list            = self::get_special_course_list();
+        $special_course_list = self::get_special_course_list();
 
         $without_special_courses = '';
         if (!empty($special_course_list)) {
@@ -5604,13 +5604,16 @@ class CourseManager
         //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
         $sql = "SELECT course.id, course.title, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
                 course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                FROM    $TABLECOURS      course,
-                        $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
-                WHERE   course.id=".intval($courseId)."
-                        AND course.id = course_rel_user.c_id
-                        AND url.c_id = course.id
-                        AND course_rel_user.user_id = ".intval($user_id)."
-                        $without_special_courses ";
+                FROM
+                $TABLECOURS course,
+                $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
+                WHERE
+                    course.id=".intval($courseId)." AND
+                    course.id = course_rel_user.c_id AND
+                    url.c_id = course.id AND
+                    course_rel_user.user_id = ".intval($user_id)."
+                    $without_special_courses
+                ";
 
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
@@ -5622,7 +5625,8 @@ class CourseManager
 
         $result = Database::query($sql);
 
-        // Browse through all courses. We can only have one course because of the  course.id=".intval($courseId) in sql query
+        // Browse through all courses. We can only have one course because
+        // of the  course.id=".intval($courseId) in sql query
         $course = Database::fetch_array($result);
         $course_info = api_get_course_info($course['code']);
         //$course['id_session'] = null;
@@ -5631,10 +5635,15 @@ class CourseManager
 
         // For each course, get if there is any notification icon to show
         // (something that would have changed since the user's last visit).
-        $show_notification = Display :: show_notification($course_info);
+        $show_notification = Display::show_notification($course_info);
 
         // New code displaying the user's status in respect to this course.
-        $status_icon = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
+        $status_icon = Display::return_icon(
+            'blackboard.png',
+            $course_info['title'],
+            array(),
+            ICON_SIZE_LARGE
+        );
 
         $params = array();
         $params['right_actions'] = '';

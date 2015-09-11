@@ -53,7 +53,10 @@ $nameTools = get_lang('QuestionPool');
 $interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
 
 if (!empty($objExercise)) {
-    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
+    $interbreadcrumb[] = array(
+        "url" => "admin.php?exerciseId=".$objExercise->id."&".api_get_cidreq(),
+        "name" => $objExercise->name
+    );
 }
 
 // message to be displayed if actions successful

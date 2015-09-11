@@ -17,9 +17,9 @@ require_once 'dropbox_functions.inc.php';
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
 
-if (isset($_GET['cat_id']) AND
-    is_numeric($_GET['cat_id']) AND
-    $_GET['action'] == 'downloadcategory' AND
+if (isset($_GET['cat_id']) &&
+    is_numeric($_GET['cat_id']) &&
+    $_GET['action'] == 'downloadcategory' &&
     isset($_GET['sent_received'])
 ) {
     /** step 1: constructing the sql statement.
@@ -69,9 +69,7 @@ if (isset($_GET['cat_id']) AND
 
 // Check if the id makes sense
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    Display::display_header($nameTools, 'Dropbox');
-    Display :: display_error_message(get_lang('Error'));
-    Display::display_footer();
+    api_not_allowed(true);
     exit;
 }
 
@@ -84,9 +82,13 @@ if (user_can_download_file($_GET['id'], api_get_user_id())) {
 /*		ERROR IF NOT ALLOWED TO DOWNLOAD */
 
 if (!$allowed_to_download) {
-    Display::display_header($nameTools, 'Dropbox');
-    Display::display_error_message(get_lang('YouAreNotAllowedToDownloadThisFile'));
-    Display::display_footer();
+    api_not_allowed(
+        true,
+        Display::return_message(
+            get_lang('YouAreNotAllowedToDownloadThisFile'),
+            'error'
+        )
+    );
 	exit;
 } else {
     /*      DOWNLOAD THE FILE */
@@ -100,50 +102,8 @@ if (!$allowed_to_download) {
         exit;
     }
     $file = $work->title;
-    $mimetype = DocumentManager::file_get_mime_type(true);
-    $fileinfo = pathinfo($file);
-    $extension = $fileinfo['extension'];
-
-    if (!empty($extension) && isset($mimetype[$extension]) && $_GET['action'] != 'download') {
-        // give hint to browser about filetype
-        header( 'Content-type: ' . $mimetype[$extension] . "\n");
-    } else {
-        //no information about filetype: force a download dialog window in browser
-        header( "Content-type: application/octet-stream\n");
-    }
-    header('Content-Disposition: attachment; filename='.$file);
-
-    /**
-     * Note that if you use these two headers from a previous example:
-     * header('Cache-Control: no-cache, must-revalidate');
-     * header('Pragma: no-cache');
-     * before sending a file to the browser, the "Open" option on Internet Explorer's file download dialog will not work properly. If the user clicks "Open" instead of "Save," the target application will open an empty file, because the downloaded file was not cached. The user will have to save the file to their hard drive in order to use it.
-     * Make sure to leave these headers out if you'd like your visitors to be able to use IE's "Open" option.
-     */
-    header("Pragma: \n");
-    header("Cache-Control: \n");
-    header("Cache-Control: public\n"); // IE cannot download from sessions without a cache
-
-    /*if (isset($_SERVER['HTTPS'])) {
-        /**
-         * We need to set the following headers to make downloads work using IE in HTTPS mode.
-         *
-        //header('Pragma: ');
-        //header('Cache-Control: ');
-        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT\n");
-        header("Last-Modified: " . gmdate( "D, d M Y H:i:s") . " GMT\n");
-        header("Cache-Control: no-store, no-cache, must-revalidate\n"); // HTTP/1.1
-        header("Cache-Control: post-check=0, pre-check=0\n", false);
-    }*/
-
-    header('Content-Description: '.trim(htmlentities($file)));
-    header('Content-transfer-encoding: binary');
-
-    header("Content-Length: " . filesize($path)."\n" );
-
-    $fp = fopen( $path, 'rb');
-    fpassthru($fp);
-    exit();
+    DocumentManager::file_send_for_download($path, true, $file);
+    exit;
 }
 //@todo clean this file the code below is useless there are 2 exits in previous conditions ... maybe a bad copy/paste/merge?
 exit;

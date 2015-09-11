@@ -53,7 +53,9 @@ class SubLanguageManager
     {
         $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT * FROM ' . $table . '
-                WHERE parent_id= ' . intval($parent_id) . ' AND id= ' . intval($sub_language_id) . '';
+                WHERE
+                    parent_id= ' . intval($parent_id).' AND
+                    id= ' . intval($sub_language_id) . '';
         $rs = Database::query($sql);
         $all_information = array();
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
@@ -173,7 +175,11 @@ class SubLanguageManager
      */
     public static function remove_sub_language($parent_id, $sub_language_id)
     {
-        if (empty($parent_id) or (intval($parent_id) != $parent_id) or empty($sub_language_id) or (intval($sub_language_id) != $sub_language_id)) {
+        if (empty($parent_id) ||
+            (intval($parent_id) != $parent_id) ||
+            empty($sub_language_id) ||
+            (intval($sub_language_id) != $sub_language_id)
+        ) {
             return false;
         }
         $table = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
@@ -189,7 +195,7 @@ class SubLanguageManager
             return false;
         } //can't delete dir, so do not delete language record
         $sql = 'DELETE FROM ' . $table . '
-                WHERE id= ' . intval($sub_language_id) . ' ';
+                WHERE id= ' . intval($sub_language_id);
         $res = Database::query($sql);
 
         return $res;

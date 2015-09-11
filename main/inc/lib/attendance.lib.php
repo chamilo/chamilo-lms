@@ -198,7 +198,7 @@ class Attendance
 							Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
 						$attendance[2] = '<span class="muted">'.$attendance[2].'</span>';
 					}
-					if ($allowDelete) {
+					if ($allowDelete === 'true') {
 						$actions .= '<a href="index.php?' . api_get_cidreq() . '&action=attendance_delete&attendance_id=' . $attendance[0] . $param_gradebook . '">' .
 							Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
 					}
@@ -487,6 +487,7 @@ class Attendance
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
         $user_id = api_get_user_id();
         $course_id = $_course['real_id'];
+
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
@@ -506,9 +507,10 @@ class Attendance
 				}
 			}
 		} else  {
-			$attendance_id	= intval($attendance_id);
+			$attendance_id= intval($attendance_id);
 			$sql = "UPDATE $tbl_attendance SET active = 2
 					WHERE c_id = $course_id AND id = '$attendance_id'";
+
 			$result = Database::query($sql);
 			$affected_rows = Database::affected_rows($result);
 			if (!empty($affected_rows)) {

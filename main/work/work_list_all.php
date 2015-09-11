@@ -195,8 +195,10 @@ if (!empty($error_message)) {
 }
 
 if (!empty($my_folder_data['description'])) {
-    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.
-        Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
+    $contentWork = Security::remove_XSS($my_folder_data['description']);
+    $html = '';
+    $html .= Display::panel($contentWork, get_lang('Description'));
+    echo $html;  
 }
 
 $check_qualification = intval($my_folder_data['qualification']);
@@ -388,7 +390,8 @@ $(function() {
 <?php
 
 echo $documentsAddedInWork;
-echo Display::grid_html('results');
+$tableWork = Display::grid_html('results');
+echo Display::panel($tableWork);
 echo '<div class="list-work-results">';
 echo '<div class="panel panel-default">';
 echo '<div class="panel-body">';

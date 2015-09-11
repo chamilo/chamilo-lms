@@ -1307,7 +1307,6 @@ class CourseRestorer
                         $this->course->resources[RESOURCE_LINK][$id] = new stdClass();
                     }
                     $this->course->resources[RESOURCE_LINK][$id]->destination_id = $id;
-
                 }
 			}
 		}
@@ -1544,9 +1543,12 @@ class CourseRestorer
                 if ($id) {
                     $sql = "UPDATE $table SET id = iid WHERE iid = $id";
                     Database::query($sql);
-                }
 
-				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = $id;
+                    if (!isset($this->course->resources[RESOURCE_COURSEDESCRIPTION][$id])) {
+                        $this->course->resources[RESOURCE_COURSEDESCRIPTION][$id] = new stdClass();
+                    }
+                    $this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = $id;
+                }
 			}
 		}
 	}
@@ -1586,9 +1588,11 @@ class CourseRestorer
                 if ($new_announcement_id) {
                     $sql = "UPDATE $table SET id = iid WHERE iid = $id";
                     Database::query($sql);
+                    if (!isset($this->course->resources[RESOURCE_ANNOUNCEMENT][$id])) {
+                        $this->course->resources[RESOURCE_ANNOUNCEMENT][$id] = new stdClass();
+                    }
+                    $this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = $new_announcement_id;
                 }
-
-				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = $new_announcement_id;
 
 				$origin_path = $this->course->backup_path.'/upload/announcements/';
 				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/announcements/';
@@ -2451,7 +2455,7 @@ class CourseRestorer
                     'author' => self::DBUTF8($lp->author),
                     'preview_image' => self::DBUTF8($lp->preview_image),
                     'use_max_score' => self::DBUTF8($lp->use_max_score),
-                    'autolaunch' => self::DBUTF8($lp->autolaunch),
+                    'autolaunch' => self::DBUTF8(isset($lp->autolaunch) ? $lp->autolaunch : ''),
                     'created_on' => self::DBUTF8($lp->created_on),
                     'modified_on' => self::DBUTF8($lp->modified_on),
                     'publicated_on' => empty($lp->publicated_on) ? api_get_utc_datetime() : self::DBUTF8($lp->publicated_on),
@@ -2818,8 +2822,6 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
 
                 $params = [];
-
-				$condition_session = "";
     			if (!empty($session_id)) {
     				$session_id = intval($session_id);
                     $params['session_id'] = $session_id;
@@ -2841,6 +2843,10 @@ class CourseRestorer
 
                 $my_id = Database::insert($table_glossary, $params);
                 if ($my_id) {
+
+                    $sql = "UPDATE $table_glossary SET glossary_id = iid WHERE iid = $my_id";
+                    Database::query($sql);
+
                     api_item_property_update(
                         $this->destination_course_info,
                         TOOL_GLOSSARY,
@@ -2848,6 +2854,11 @@ class CourseRestorer
                         "GlossaryAdded",
                         api_get_user_id()
                     );
+
+                    if (!isset($this->course->resources[RESOURCE_GLOSSARY][$id])) {
+                        $this->course->resources[RESOURCE_GLOSSARY][$id] = new stdClass();
+                    }
+
                     $this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = $my_id;
                 }
 			}
@@ -2941,6 +2952,7 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {
 
+
 				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $thematic->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $thematic->content,
@@ -2952,9 +2964,10 @@ class CourseRestorer
 				$thematic->params['c_id']  = $this->destination_course_id;
 				unset($thematic->params['id']);
                 unset($thematic->params['iid']);
+                var_dump($thematic->params);
 				$last_id = Database::insert($table_thematic, $thematic->params, false);
 
-				if (is_numeric($last_id)) {
+				if ($last_id) {
 
                     $sql = "UPDATE $table_thematic SET id = iid WHERE iid = $last_id";
                     Database::query($sql);
@@ -2973,9 +2986,13 @@ class CourseRestorer
 						$thematic_advance['attendance_id'] = 0;
 						$thematic_advance['thematic_id'] = $last_id;
 						$thematic_advance['c_id']  = $this->destination_course_id;
-						$my_id = Database::insert($table_thematic_advance, $thematic_advance, false);
+                        $my_id = Database::insert(
+                            $table_thematic_advance,
+                            $thematic_advance,
+                            false
+                        );
 
-						if (is_numeric($my_id)) {
+						if ($my_id) {
 
                             $sql = "UPDATE $table_thematic_advance SET id = iid WHERE iid = $my_id";
                             Database::query($sql);
@@ -2997,7 +3014,7 @@ class CourseRestorer
 						$thematic_plan['c_id'] = $this->destination_course_id;
 						$my_id = Database::insert($table_thematic_plan, $thematic_plan, false);
 
-						if (is_numeric($my_id)) {
+						if ($my_id) {
 
                             $sql = "UPDATE $table_thematic_plan SET id = iid WHERE iid = $my_id";
                             Database::query($sql);

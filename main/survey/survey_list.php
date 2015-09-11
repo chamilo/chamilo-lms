@@ -101,7 +101,9 @@ if ($action == 'delete' && isset($_GET['survey_id'])) {
         exit;
     }
     // If the survey is shared => also delete the shared content
-    if (is_numeric($survey_data['survey_share'])) {
+    if (isset($survey_data['survey_share']) &&
+        is_numeric($survey_data['survey_share'])
+    ) {
         SurveyManager::delete_survey($survey_data['survey_share'], true);
     }
 

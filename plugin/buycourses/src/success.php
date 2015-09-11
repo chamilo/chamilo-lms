@@ -64,12 +64,14 @@ if ($form->validate()) {
     $confirmPayments = ConfirmPayment($sale['price']);
 
     if ($confirmPayments['ACK'] !== 'Success') {
-        var_dump([
-            'error_code' => $confirmPayments['L_ERRORCODE0'],
-            'short_message' => $confirmPayments['L_SHORTMESSAGE0'],
-            'long_message' => $confirmPayments['L_LONGMESSAGE0'],
-            'severity_code' => $confirmPayments['L_SEVERITYCODE0']
-        ]);
+        $erroMessage = vsprintf(
+            $plugin->get_lang('ErrorOccurred'),
+            [$expressCheckout['L_ERRORCODE0'], $confirmPayments['L_LONGMESSAGE0']]
+        );
+        Display::addFlash(
+            Display::return_message($erroMessage, 'error', false)
+        );
+        header('Location: ../index.php');
         exit;
     }
 
@@ -175,12 +177,14 @@ if (empty($token)) {
 $shippingDetails = GetShippingDetails($token);
 
 if ($shippingDetails['ACK'] !== 'Success') {
-    var_dump([
-        'error_code' => $shippingDetails['L_ERRORCODE0'],
-        'short_message' => $shippingDetails['L_SHORTMESSAGE0'],
-        'long_message' => $shippingDetails['L_LONGMESSAGE0'],
-        'severity_code' => $shippingDetails['L_SEVERITYCODE0']
-    ]);
+    $erroMessage = vsprintf(
+        $plugin->get_lang('ErrorOccurred'),
+        [$expressCheckout['L_ERRORCODE0'], $shippingDetails['L_LONGMESSAGE0']]
+    );
+    Display::addFlash(
+        Display::return_message($erroMessage, 'error', false)
+    );
+    header('Location: ../index.php');
     exit;
 }
 

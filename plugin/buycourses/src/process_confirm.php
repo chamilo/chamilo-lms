@@ -51,12 +51,14 @@ switch ($sale['payment_type']) {
         );
 
         if ($expressCheckout["ACK"] !== 'Success') {
-            var_dump([
-                'error_code' => $expressCheckout['L_ERRORCODE0'],
-                'short_message' => $expressCheckout['L_SHORTMESSAGE0'],
-                'long_message' => $expressCheckout['L_LONGMESSAGE0'],
-                'severity_code' => $expressCheckout['L_SEVERITYCODE0']
-            ]);
+            $erroMessage = vsprintf(
+                $plugin->get_lang('ErrorOccurred'),
+                [$expressCheckout['L_ERRORCODE0'], $expressCheckout['L_LONGMESSAGE0']]
+            );
+            Display::addFlash(
+                Display::return_message($erroMessage, 'error', false)
+            );
+            header('Location: ../index.php');
             exit;
         }
 

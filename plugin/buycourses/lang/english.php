@@ -83,3 +83,4 @@ $strings['InfoApiCredentials'] = 'To generate your API credentials to integrate 
 $strings['InfoApiStepOne'] = 'Go to your PayPal account, <strong>Summary</strong>, then <front>Seller preferences</front> in the <front>Selling Tools</front> menu (if you do not have this menu entry, you might need to get the authorization to sell stuff through PayPal first).';
 $strings['InfoApiStepTwo'] = 'In paragraph <strong>API access</strong>, click <strong>Update</strong>';
 $strings['InfoApiStepThree'] = 'In Option 2 (Request API credentials to create your own API username and password), click the <strong>View API Signature</strong> link, and copy the credentials shown right into the BuyCourses plugin form';
+$strings['ErrorOccurred'] = '<strong>An error ocurred</strong>. Code: %s. Message: %s. Please contact to platform admin';

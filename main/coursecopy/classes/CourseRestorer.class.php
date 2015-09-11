@@ -1899,7 +1899,7 @@ class CourseRestorer
                     $answerId = Database::insert($table_ans, $params);
 
                     if ($answerId) {
-                        $sql = "UPDATE $table_ans SET id = iid, id_auto = iid, WHERE iid = $answerId";
+                        $sql = "UPDATE $table_ans SET id = iid, id_auto = iid WHERE iid = $answerId";
                         Database::query($sql);
                     }
 				}

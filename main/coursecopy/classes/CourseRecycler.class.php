@@ -46,9 +46,9 @@ class CourseRecycler
 
         $this->type = $type;
 
-        $table_tool_intro 		= Database::get_course_table(TABLE_TOOL_INTRO);
+        $table_tool_intro = Database::get_course_table(TABLE_TOOL_INTRO);
         $table_linked_resources = Database::get_course_table(TABLE_LINKED_RESOURCES);
-        $table_item_properties 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $this->recycle_links();
         $this->recycle_link_categories();
@@ -117,7 +117,8 @@ class CourseRecycler
                 }
 
                 $ids = implode(',', (array_keys($this->course->resources[RESOURCE_DOCUMENT])));
-                $sql = "DELETE FROM $table WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                $sql = "DELETE FROM $table
+                        WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
                 Database::query($sql);
             }
         }
@@ -129,8 +130,8 @@ class CourseRecycler
     public function recycle_wiki()
     {
         if ($this->course->has_resources(RESOURCE_WIKI)) {
-            $table_wiki 		= Database::get_course_table(TABLE_WIKI);
-            $table_wiki_conf 	= Database::get_course_table(TABLE_WIKI_CONF);
+            $table_wiki = Database::get_course_table(TABLE_WIKI);
+            $table_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
             $pages = array();
             foreach ($this->course->resources[RESOURCE_WIKI] as $resource) {
                 $pages[] = $resource->page_id;
@@ -138,9 +139,11 @@ class CourseRecycler
             $wiki_ids = implode(',', (array_keys($this->course->resources[RESOURCE_WIKI])));
             $page_ids = implode(',', $pages);
 
-            $sql = "DELETE FROM ".$table_wiki." WHERE c_id = ".$this->course_id." AND id IN(".$wiki_ids.")";
+            $sql = "DELETE FROM ".$table_wiki."
+                    WHERE c_id = ".$this->course_id." AND id IN(".$wiki_ids.")";
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_wiki_conf." WHERE c_id = ".$this->course_id." AND page_id IN(".$page_ids.")";
+            $sql = "DELETE FROM ".$table_wiki_conf."
+                    WHERE c_id = ".$this->course_id." AND page_id IN(".$page_ids.")";
             Database::query($sql);
         }
     }
@@ -279,7 +282,6 @@ class CourseRecycler
                     WHERE c_id = ".$this->course_id." AND forum_id IN(".$forum_ids.")";
             Database::query($sql);
         }
-
     }
 
     /**
@@ -374,10 +376,11 @@ class CourseRecycler
     public function recycle_quizzes()
     {
         if ($this->course->has_resources(RESOURCE_QUIZ)) {
+
             $table_qui_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
             $table_qui_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-            $table_qui 	   = Database :: get_course_table(TABLE_QUIZ_TEST);
-            $table_rel 	   = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
+            $table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
+            $table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $table_qui_que_opt = Database :: get_course_table(TABLE_QUIZ_QUESTION_OPTION);
             $table_qui_que_cat = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
             $table_qui_que_rel_cat = Database :: get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
@@ -617,7 +620,13 @@ class CourseRecycler
                     }
                     $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
                     Database::delete($table_attendance, $cond);
-                    api_item_property_update($this->course_info, TOOL_ATTENDANCE, $last_id,'AttendanceDeleted', api_get_user_id());
+                    api_item_property_update(
+                        $this->course_info,
+                        TOOL_ATTENDANCE,
+                        $last_id,
+                        'AttendanceDeleted',
+                        api_get_user_id()
+                    );
                 }
             }
         }

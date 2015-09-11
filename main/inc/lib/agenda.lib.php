@@ -2493,10 +2493,15 @@ class Agenda
             GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
             GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
         ) {
-            $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=course'>".
-                    Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
-            $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=course'>".
-                    Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";
+            $actionsLeft .= Display::url(
+                Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=".$this->type
+            );
+
+            $actionsLeft .= Display::url(
+                Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=".$this->type
+            );
 
             if ($this->type == 'course') {
 

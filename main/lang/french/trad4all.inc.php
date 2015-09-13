@@ -7408,7 +7408,7 @@ $DocumentsDefaultVisibilityDefinedInCourseTitle = "Visibilité des documents dé
 $DocumentsDefaultVisibilityDefinedInCourseComment = "Visibilité par défaut des documents au moment de leur création dans les cours";
 $HtmlPurifierWikiTitle = "HTMLPurifier dans le wiki";
 $HtmlPurifierWikiComment = "Activer HTMLPurifier dans l'outil de wiki (augmente la sécurité mais réduit les options de style visuel)";
-$ClickOrDropFilesHere = "Cliquez ou déplacez un ou plusieurs fichiers dans cette zone";
+$ClickOrDropFilesHere = "Cliquez ou déplacez un ou plusieurs fichiers ici";
 $RemoveTutorStatus = "Retirer le statut de coach";
 $ImportGradebookInCourse = "Importer cahiers de notes depuis cours de base";
 $InstitutionAddressTitle = "Adresse de l'institution";
@@ -7497,4 +7497,6 @@ $SkillXDisabled = "Compétence \"%s\" désactivée";
 $ShowFullSkillNameOnSkillWheelTitle = "Montrer nom complet sur roue de compétences";
 $ShowFullSkillNameOnSkillWheelComment = "Dans la roue des compétences, montrer le titre complet de la compétence même si celle-ci dispose d'un code court (peut rendre la roue moins lisible selon la quantité de compétences)";
 $DBPort = "Port";
+$CreatedBy = "Créé par";
+$UploadMyAssignment = "Envoyer mon travail";
 ?>

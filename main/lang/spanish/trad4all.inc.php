@@ -7536,4 +7536,5 @@ $ShowFullSkillNameOnSkillWheelTitle = "Mostrar nombre completo de la competencia
 $ShowFullSkillNameOnSkillWheelComment = "En la rueda de competencias, permite mostrar el nombre de la competencia cuando ésta tiene código corto.";
 $DBPort = "Puerto";
 $CreatedBy = "Creado por";
+$UploadMyAssignment = "Enviar mi tarea";
 ?>

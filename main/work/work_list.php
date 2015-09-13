@@ -52,7 +52,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
     $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin;
     //$actionsRight .= Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).' ' . get_lang('UploadADocument') . '</a>';
     
-    $actionsRight = Display::toolbarButton(get_lang('UploadADocument'), $url, 'upload', 'success');
+    $actionsRight = Display::toolbarButton(get_lang('UploadMyAssignment'), $url, 'upload', 'success');
 }
 echo Display::toolbarAction('toolbar-work', array(0 => $actionsLeft, 1 => $actionsRight));
 

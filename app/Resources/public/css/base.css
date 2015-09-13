@@ -17,6 +17,9 @@ html,body {
   padding: 0;
   height: 100%;
 }
+header{
+  padding-top: 20px;
+}
 #page-wrap{
   min-height: 100%;
   margin-bottom: 0;
@@ -68,9 +71,8 @@ a.thumbnail:hover{
   visibility: visible;
 }
 .logo{
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   padding: 5px;
-  margin-top: 10px;
 }
 .title-tools{
   text-align: left;
@@ -370,34 +372,36 @@ ul#navigation .report a {
     padding: 6px;
     border: 1px solid #DDD
 }
-/* .actions a img{
-  margin-right: 5px;
-}
 .actions a{
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    display: inline-block;
-    margin-left: 5px;
-    padding: 5px;
-    background: #ffffff;
-    background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5));
-    background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%);
-    background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%);
-    background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%);
-    background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 );
+    text-decoration: none;
+    margin-right: 5px;
 }
 .actions a:hover{
-    background: #f4f4f4;
-    background: -moz-linear-gradient(top, #f4f4f4 0%, #dddddd 71%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f4f4f4), color-stop(71%,#dddddd));
-    background: -webkit-linear-gradient(top, #f4f4f4 0%,#dddddd 71%);
-    background: -o-linear-gradient(top, #f4f4f4 0%,#dddddd 71%);
-    background: -ms-linear-gradient(top, #f4f4f4 0%,#dddddd 71%);
-    background: linear-gradient(to bottom, #f4f4f4 0%,#dddddd 71%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f4f4', endColorstr='#dddddd',GradientType=0 );
-}*/
+    text-decoration: none;
+}
+.actions img{
+    padding: 3px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+}
+.actions img:hover{
+    background: #ededed; /* Old browsers */
+    background: -moz-linear-gradient(top, #ededed 2%, #f6f6f6 49%, #ffffff 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(2%,#ededed), color-stop(49%,#f6f6f6), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
 .actions .btn-toolbar {
     margin : 0px;
 }
@@ -4255,111 +4259,21 @@ li.annoucement{
     margin-bottom: 5px;
 }
 
-.link_category .head {
-    background-color: #EFEFEF;
-    border: 1px solid #CCCCCC;
-    margin-bottom: 5px;
-    padding-top: 2px;
-    padding-right: 2px;
-    padding-bottom: 2px;
-    vertical-align: middle;
-}
-
-.link_category .body{
-    margin-left: 32px;
-}
-
-.link:nth-child(2n) {
-    background-color: #F9F9F9;
-}
-
 .link{
-    border-top: 1px solid #DDDDDD;
-    border-left: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
+    margin-top: 15px;
 }
-
-.link:last-child{
-    border-bottom: 1px solid #DDDDDD;
-    border-left: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
+.link .list-group-item-heading a{
+    text-decoration: none;
 }
-
-.link{
-    border-collapse: collapse;
-    /*border: 1px solid #CCCCCC;*/
-    padding-top: 6px;
-    padding-right: 6px;
-    padding-bottom: 6px;
-    padding-left: 6px;
-    vertical-align: middle;
+.link .list-group-item-heading .invisible{
+    color: #666666;
 }
-
-.link .icon{
-    position: absolute;
-    float: left;
+.link .list-group-item-text{
+    font-size: 12px;
 }
-
-.link:hover{
-    background-color: #E5EDF9;
+.link .check-link{
+    margin-left: 5px;
 }
-
-.link .title,
-.link .description{
-    margin-left: 32px;
-}
-
-.link .description{
-    font-weight: normal;
-    color: #000000;
-}
-
-.link.invisible img{
-    opacity:0.4;
-    filter:alpha(opacity=40); /* For IE8 and earlier */
-}
-
-.link.invisible .description{
-    color: #999999;
-}
-
-.link .status{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:22px;
-    height:22px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-repeat: no-repeat;
-    background-position:center center;
-    box-shadow:none;
-}
-
-.link.invalid .status{
-    background-image:  url('../../main/img/icons/22/error.png');
-}
-
-.link.valid .status{
-    background-image:  url('../../main/img/icons/22/accept.png');
-}
-
-.btn.validate_link{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:22px;
-    height:22px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-image:  url('../../main/img/icons/22/preview_view.png');
-    background-repeat: no-repeat;
-    background-position:center center;
-    box-shadow:none;
-}
-
 /*
   Glossary
 */

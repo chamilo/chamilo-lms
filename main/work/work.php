@@ -325,8 +325,8 @@ switch ($action) {
             
             $content .= '<div class="row">';
             $content .= '<div class="col-md-12">';
-            $content .= '<div id="work-list" class="table-responsive">';
-            $content .= showTeacherWorkGrid();
+            $content .= '<div class="table-responsive">';
+            $content .= Display::panel(showTeacherWorkGrid());
             $content .= '</div>';
             $content .= '</div>';
             $content .= '<div id="student-list-work" style="display: none" class="table-responsive">';
@@ -334,7 +334,7 @@ switch ($action) {
             $content .= showStudentList($work_id);
             $content .= '</div>';
         } else {
-            $content .= showStudentWorkGrid();
+            $content .= Display::panel(showStudentWorkGrid());
         }
         break;
 }

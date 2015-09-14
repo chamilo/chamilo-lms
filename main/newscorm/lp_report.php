@@ -7,6 +7,10 @@ require_once '../inc/global.inc.php';
 
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
+if (!$isAllowedToEdit) {
+    api_not_allowed(true);
+}
+
 $lpTable = Database::get_course_table(TABLE_LP_MAIN);
 
 $lpId = isset($_GET['lp_id']) ? boolval($_GET['lp_id']) : false;

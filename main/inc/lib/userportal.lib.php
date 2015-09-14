@@ -1583,10 +1583,13 @@ class IndexManager
         // get html course params
         // ['right_actions'] ['teachers'] ['notifications']
         $tabParams = CourseManager::getCourseParamsForDisplay($id, $loadDirs);
+        $teachers = '';
         // teacher list
         if (!empty($tabParams['teachers'])) {
             $teachers = '<p class="'.$class2.' view-by-session-teachers">'.$tabParams['teachers'].'</p>';
         }
+
+        $rightActions = '';
 
         // notification
         if (!empty($tabParams['right_actions'])) {

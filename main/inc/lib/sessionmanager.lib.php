@@ -5710,7 +5710,8 @@ class SessionManager
         foreach ($listCourseSession as $courseId => $listSessionId) {
 
             // course info
-            $courseInfo = api_get_course_int_id($courseId);
+            $courseInfo = api_get_course_info_by_id($courseId);
+
             $listOneCourse = array();
             $listOneCourse['courseId'] = $courseId;
             $listOneCourse['title'] = $courseInfo['title'];
@@ -5748,7 +5749,8 @@ class SessionManager
             $listOneCourse['sessionCatList'] = $listCat;
 
             // user course category
-            list($userCatId, $userCatTitle) = CourseManager::getUserCourseCategoryForCourse(
+            CourseManager::getUserCourseCategoryForCourse(
+            list($userCatId, $userCatTitle) =
                 $userId,
                 $courseId
             );

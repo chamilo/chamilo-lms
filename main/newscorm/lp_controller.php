@@ -1282,6 +1282,9 @@ switch ($action) {
         $_SESSION['oLP']->set_seriousgame_mode();
         require 'lp_list.php';
         break;
+    case 'report':
+        require 'lp_report.php';
+        break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);
         require 'lp_list.php';

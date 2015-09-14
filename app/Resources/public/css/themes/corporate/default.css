@@ -1,5 +1,5 @@
 /*!
- * CSS BABY ORANGE - v. 2.0
+ * CSS CORPORATE - v. 2.0
  * 2015 - Alex Aragón (aragonc@beeznest.com)
  * Licensed GPL
  * Based on Bootstrap
@@ -42,18 +42,19 @@ a{
   color: #666666;
 }
 a:hover{
-  color: #EC5923;
+  color: #FE9A2E;
+  text-decoration: none;
 }
 
 .navbar-default {
-background: #ffffff; /* Old browsers */
-background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
-background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+background: #2eaebb; /* Old browsers */
+background: -moz-linear-gradient(top, #2eaebb 0%, #248994 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2eaebb), color-stop(100%,#248994)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #2eaebb 0%,#248994 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #2eaebb 0%,#248994 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #2eaebb 0%,#248994 100%); /* IE10+ */
+background: linear-gradient(to bottom, #2eaebb 0%,#248994 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2eaebb', endColorstr='#248994',GradientType=0 ); /* IE6-9 */
   border-color: #E5E5E5;
 }
 .navbar-default .navbar-brand {
@@ -66,14 +67,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
   color: #ffffff;
 }
 .navbar-default .navbar-nav > li > a {
-  color: #666666;
+  color: #ffffff;
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
   color: #FFFFFF;
   background: #3A4751;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
-  background-color: #EA5520;
+  background-color: #FE9A2E; ;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
   color: #ffffff;
@@ -88,25 +89,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 }
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
     color: #FFFFFF;
-background: #e83b10; /* Old browsers */
-background: -moz-linear-gradient(top, #e83b10 1%, #ec5923 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#e83b10), color-stop(100%,#ec5923)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #e83b10 1%,#ec5923 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #e83b10 1%,#ec5923 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #e83b10 1%,#ec5923 100%); /* IE10+ */
-background: linear-gradient(to bottom, #e83b10 1%,#ec5923 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e83b10', endColorstr='#ec5923',GradientType=0 ); /* IE6-9 */
+    background: #FE9A2E; 
 }
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
-  color: #FFFFFF;
-background: #e83b10; /* Old browsers */
-background: -moz-linear-gradient(top, #e83b10 1%, #ec5923 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#e83b10), color-stop(100%,#ec5923)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #e83b10 1%,#ec5923 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #e83b10 1%,#ec5923 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #e83b10 1%,#ec5923 100%); /* IE10+ */
-background: linear-gradient(to bottom, #e83b10 1%,#ec5923 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e83b10', endColorstr='#ec5923',GradientType=0 ); /* IE6-9 */
+   color: #FFFFFF;
+   background: #FE9A2E; 
 }
 .navbar-default .navbar-toggle {
   border-color: #0099c0;
@@ -151,7 +138,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e83b10', end
     background-color: #F9F9F9;
 }
 footer{
-  background: #3D3D3D;
+  background: #258B96;
   color: #9DD0F1;
   border-top: 4px solid #CCC;
 }

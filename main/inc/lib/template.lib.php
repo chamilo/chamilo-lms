@@ -565,7 +565,7 @@ class Template
         );
 
         // add chat.js for View by Session, we need the $.cookie library included in it
-        $viewBySession = isset($_configuration['my_courses_view_by_session']) && $_configuration['my_courses_view_by_session'] ? $_configuration['my_courses_view_by_session'] : false;
+        $viewBySession = api_get_configuration_value('my_courses_view_by_session');
 
         if (api_is_global_chat_enabled() || $viewBySession) {
             // Do not include the global chat in LP

@@ -10354,38 +10354,55 @@ EOD;
      *
      * @return string
      */
-    public function checkXFrameOptions($src)
+    public function fixBlockedLinks($src)
     {
-        if (strpos($src, api_get_path(WEB_CODE_PATH)) === false) {
-            // Check X-Frame-Options
-            $ch = curl_init();
+        $urlInfo = parse_url($src);
+        //$platformProtocol = api_get_protocol();
 
-            $options = array(
-                CURLOPT_URL => $src,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_AUTOREFERER => true,
-                CURLOPT_CONNECTTIMEOUT => 120,
-                CURLOPT_TIMEOUT => 120,
-                CURLOPT_MAXREDIRS => 10,
-            );
-            curl_setopt_array($ch, $options);
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch);
-            $headers = substr($response, 0, $httpCode['header_size']);
+        $platformProtocol = 'https';
+        if (strpos(api_get_path(WEB_CODE_PATH), 'https') === false) {
+            $platformProtocol = 'http';
+        }
 
-            $error = false;
-            if (stripos($headers, 'X-Frame-Options: DENY') > -1 ||
-                stripos($headers, 'X-Frame-Options: SAMEORIGIN')>-1
-            ) {
-                $error = true;
-            }
+        $protocolFixApplied = false;
+        if ($platformProtocol != $urlInfo['scheme']) {
+            $_SESSION['x_frame_source'] = $src;
+            $src = 'blank.php?error=x_frames_options';
+            $protocolFixApplied = true;
+        }
 
-            if ($error) {
-                $_SESSION['x_frame_source'] = $src;
-                $src = 'blank.php?error=x_frames_options';
+        if ($protocolFixApplied == false) {
+            if (strpos($src, api_get_path(WEB_CODE_PATH)) === false) {
+                // Check X-Frame-Options
+                $ch = curl_init();
+
+                $options = array(
+                    CURLOPT_URL => $src,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_HEADER => true,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_AUTOREFERER => true,
+                    CURLOPT_CONNECTTIMEOUT => 120,
+                    CURLOPT_TIMEOUT => 120,
+                    CURLOPT_MAXREDIRS => 10,
+                );
+                curl_setopt_array($ch, $options);
+                $response = curl_exec($ch);
+                $httpCode = curl_getinfo($ch);
+                $headers = substr($response, 0, $httpCode['header_size']);
+
+                $error = false;
+                if (stripos($headers, 'X-Frame-Options: DENY') > -1 ||
+                    stripos($headers, 'X-Frame-Options: SAMEORIGIN') > -1
+                ) {
+                    $error = true;
+                }
+
+                if ($error) {
+                    $_SESSION['x_frame_source'] = $src;
+                    $src = 'blank.php?error=x_frames_options';
+                }
             }
         }
 

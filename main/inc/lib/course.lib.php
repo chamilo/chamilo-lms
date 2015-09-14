@@ -5628,7 +5628,11 @@ class CourseManager
         // Browse through all courses. We can only have one course because
         // of the  course.id=".intval($courseId) in sql query
         $course = Database::fetch_array($result);
-        $course_info = api_get_course_info($course['code']);
+        $course_info = api_get_course_info_by_id($courseId);
+        if (empty($course_info)) {
+            return '';
+        }
+
         //$course['id_session'] = null;
         $course_info['id_session'] = null;
         $course_info['status'] = $course['status'];

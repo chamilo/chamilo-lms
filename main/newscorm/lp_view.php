@@ -168,7 +168,8 @@ if (!isset($src)) {
                     $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
 
-                $src = $_SESSION['oLP']->checkXFrameOptions($src);
+                $src = $_SESSION['oLP']->fixBlockedLinks($src);
+
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';

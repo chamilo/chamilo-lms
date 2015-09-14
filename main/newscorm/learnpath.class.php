@@ -9879,7 +9879,7 @@ EOD;
      *
      * @return string
      */
-    public function checkXFrameOptions($src)
+    public function fixBlockedLinks($src)
     {
         if (strpos($src, api_get_path(WEB_CODE_PATH)) === false) {
             // Check X-Frame-Options
@@ -9909,6 +9909,14 @@ EOD;
             }
 
             if ($error) {
+                $_SESSION['x_frame_source'] = $src;
+                $src = 'blank.php?error=x_frames_options';
+            }
+        } else {
+            $urlInfo = parse_url($src);
+            $platformProtocol = api_get_protocol();
+
+            if ($platformProtocol != $urlInfo['scheme']) {
                 $_SESSION['x_frame_source'] = $src;
                 $src = 'blank.php?error=x_frames_options';
             }

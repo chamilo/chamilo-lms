@@ -59,7 +59,7 @@ if ($dokeos_chapter) {
             } else {
                 $src = 'blank.php?error=prerequisites';
             }
-            $src = $_SESSION['oLP']->checkXFrameOptions($src);
+            $src = $_SESSION['oLP']->fixBlockedLinks($src);
             break;
         case 2:
             $_SESSION['oLP']->stop_previous_item();

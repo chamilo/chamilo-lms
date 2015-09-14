@@ -132,7 +132,7 @@ class MultipleAnswer extends Question
 
             $form->addHtmlEditor("comment[$i]", null, null, true, $editorConfig);
 
-            $form->addElement('text', 'weighting[' . $i . ']', null, array('class' => "col-md-1", 'value' => '0'));
+            $form->addElement('text', 'weighting[' . $i . ']', null, array('style' => "width: 60px;", 'value' => '0'));
             $form->addHtml('</tr>');
         }
 

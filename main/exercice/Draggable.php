@@ -128,7 +128,7 @@ class Draggable extends Question
             $form->addHtml('<tr>');
             $form->addText("answer[$i]", null);
             $form->addSelect("matches[$i]", null, $matches);
-            $form->addText("weighting[$i]", null, true, ['value' => 10]);
+            $form->addText("weighting[$i]", null, true, ['value' => 10, 'style' => 'width: 60px;']);
             $form->addHtml('</tr>');
         }
 

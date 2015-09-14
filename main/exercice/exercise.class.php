@@ -1221,7 +1221,15 @@ class Exercise
             } else {
                 $form->addElement('html','<div id="timercontrol" style="display:none;">');
             }
-            $form->addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
+            $form->addText(
+                'enabletimercontroltotalminutes',
+                get_lang('ExerciseTotalDurationInMinutes'),
+                false,
+                [
+                    'id' => 'enabletimercontroltotalminutes',
+                    'cols-size' => [2, 2, 8]
+                ]
+            );
             $form->addElement('html','</div>');
 
             $form->addElement('text', 'pass_percentage', array(get_lang('PassPercentage'), null, '%'),  array('id' => 'pass_percentage'));

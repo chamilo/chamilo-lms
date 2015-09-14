@@ -252,7 +252,7 @@ class UniqueAnswer extends Question
             } else {
                 $form->addHtmlEditor('comment[' . $i . ']', null, null, false, $editor_config);
             }
-            $form->addText('weighting[' . $i . ']', null, null, array('class' => "col-md-1", 'value' => '0'));
+            $form->addText('weighting[' . $i . ']', null, null, array('style' => 'width: 60px;', 'value' => '0'));
             $form->addHtml('</tr>');
         }
 

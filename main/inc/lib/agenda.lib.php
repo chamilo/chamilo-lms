@@ -1541,7 +1541,7 @@ class Agenda
         }
 
         if (Database::num_rows($result)) {
-            $eventsAdded = array_column($this->events, 'id');
+            $eventsAdded = array_column($this->events, 'unique_id');
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $eventId = $row['ref'];
                 $items = $this->getUsersAndGroupSubscribedToEvent(
@@ -1553,13 +1553,14 @@ class Agenda
                 $user_to_array = $items['users'];
                 $event = array();
                 $event['id'] = 'course_'.$row['id'];
+                $event['unique_id']  = 'course_'.$row['id'].intval($row['session_id']);
 
                 // To avoid doubles
-                if (in_array($event['id'], $eventsAdded)) {
+                if (in_array($event['unique_id'], $eventsAdded)) {
                     continue;
                 }
 
-                $eventsAdded[] = $row['id'];
+                $eventsAdded[] = $row['unique_id'];
                 $attachment = $this->getAttachment($row['id'], $courseInfo);
 
                 if (!empty($attachment)) {

@@ -1435,7 +1435,7 @@ class Agenda
                     continue;
                 }
 
-                $eventsAdded[] = $row['id'];
+                $eventsAdded[] = $event['unique_id'];
                 $attachment = $this->getAttachment($row['id'], $courseInfo);
 
                 if (!empty($attachment)) {

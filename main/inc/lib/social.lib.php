@@ -1671,7 +1671,10 @@ class SocialManager extends UserManager
                     $friendAvatarMedium = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_MEDIUM);
                     $friendAvatarSmall = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_SMALL);
                     $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" class="user-image"/>';
-                    if (api_is_global_chat_enabled()){
+                    $showLinkToChat = api_is_global_chat_enabled() &&
+                        $friend['friend_user_id'] != api_get_user_id();
+
+                    if ($showLinkToChat){
                         $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);">';
                         $friendHtml .=  $friend_avatar.' <span class="username">' . $name_user . '</span>';
                         $friendHtml .= '<span class="status">' . $statusIcon . '</span>';

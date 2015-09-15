@@ -2075,14 +2075,14 @@ function fixIds(EntityManager $em)
                 }
                 break;
             case TOOL_FORUM:
-                $sql = "SELECT * FROM c_forum_forum WHERE c_id = $courseId AND id = $ref";
+                $sql = "SELECT * FROM c_forum_forum WHERE c_id = $courseId AND forum_id = $ref";
                 $data = $connection->fetchAssoc($sql);
                 if ($data) {
                     $newId = $data['iid'];
                 }
                 break;
             case 'thread':
-                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND thread_id = $ref";
                 $data = $connection->fetchAssoc($sql);
                 if ($data) {
                     $newId = $data['iid'];

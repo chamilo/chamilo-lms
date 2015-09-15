@@ -69,7 +69,10 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_course_access ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_online ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_attempt ADD COLUMN c_id int NOT NULL");
-        $this->addSql("ALTER TABLE track_e_default ADD COLUMN session_id int NOT NULL");
+        $table = $schema->getTable('track_e_default');
+        if (!$table->hasColumn('session_id')) {
+            $this->addSql("ALTER TABLE track_e_default ADD COLUMN session_id int NOT NULL");
+        }
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN user_ip varchar(39) NOT NULL default ''");
         $this->addSql("ALTER TABLE track_e_exercices ADD COLUMN user_ip varchar(39) NOT NULL default ''");
         $this->addSql("ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL default ''");

@@ -379,7 +379,10 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 		.addClass('chatboxoptions')
 		.appendTo(chatboxHead);
 
-	if (!!Modernizr.prefixed('RTCPeerConnection', window)) {
+	if (
+            !!Modernizr.prefixed('RTCPeerConnection', window) &&
+            (online === '1' || online === 1)
+        ) {
 		$('<a>')
 			.addClass('btn btn-xs')
 			.attr({

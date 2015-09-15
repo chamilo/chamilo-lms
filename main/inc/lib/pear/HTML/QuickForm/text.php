@@ -166,6 +166,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 return '
                         <label {label-for}>{label}</label>
                         <div class="input-group">
+                            
                             {icon}
                             {element}
                         </div>';
@@ -237,7 +238,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            return '<input' . $this->_getAttrString($this->_attributes) . ' />';
+            return '<input ' . $this->_getAttrString($this->_attributes) . ' />';
         }
     }
 }

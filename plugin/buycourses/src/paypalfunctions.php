@@ -215,6 +215,15 @@ function ConfirmPayment($FinalPaymentAmt)
 
     $nvpstr = '&TOKEN=' . $token . '&PAYERID=' . $payerID . '&PAYMENTREQUEST_0_PAYMENTACTION=' . $paymentType . '&PAYMENTREQUEST_0_AMT=' . $FinalPaymentAmt;
     $nvpstr .= '&PAYMENTREQUEST_0_CURRENCYCODE=' . $currencyCodeType . '&IPADDRESS=' . $serverName;
+    $nvpstr = '&' . http_build_query([
+        'TOKEN' => $token,
+        'PAYERID' => $payerID,
+        'PAYMENTACTION' => $paymentType,
+        'PAYMENTREQUEST_0_AMT' => $FinalPaymentAmt,
+        'PAYMENTREQUEST_0_CURRENCYCODE' => $currencyCodeType,
+        'IPADDRESS' => $serverName,
+        'paymentactionspecified' => 'true'
+    ]);
 
     /**
      * Make the call to PayPal to finalize payment

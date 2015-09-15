@@ -19,7 +19,7 @@ $isValid = loginWSAuthenticate($login, $password, $wsUrl);
 // if the authentication was successful, proceed
 if ($isValid === 1) {
     //error_log('WS authentication worked');
-    $chamiloUser = UserManager::get_user_info($login);
+    $chamiloUser = api_get_user_info($login);
     $loginFailed = false;
     $_user['user_id'] = $chamiloUser['user_id'];
     $_user['status'] = (isset($chamiloUser['status']) ? $chamiloUser['status'] : 5);

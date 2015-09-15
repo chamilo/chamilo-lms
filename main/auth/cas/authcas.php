@@ -84,7 +84,7 @@ function cas_is_authenticated()
 		}*/
 		if (!$logout){
 		    // get user info from username
-		    $tab_user_info = UserManager::get_user_info($login);
+		    $tab_user_info = api_get_user_info($login);
 
 		    // user found in the chamilo database
 		    if (is_array($tab_user_info)) {

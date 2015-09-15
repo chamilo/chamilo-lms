@@ -143,7 +143,7 @@ function startChatSession() {
                         if (item)    { // fix strange ie bug
                             //my_user_id        = item.f;
                             if ($("#chatbox_"+my_user_id).length <= 0) {
-                                createChatBox(my_user_id, user_items.user_info.user_name, 1, user_items.user_info.online);
+                                createChatBox(my_user_id, user_items.user_info.user_name, 1, user_items.user_info.online, user_items.user_info.avatar);
                             }
 
                             if (item.s == 1) {
@@ -242,7 +242,7 @@ function chatHeartbeat() {
 					if (item)	{ // fix strange ie bug
 
 						if ($("#chatbox_"+my_user_id).length <= 0) {
-							createChatBox(my_user_id, user_items.user_info.user_name, 0, user_items.user_info.online);
+							createChatBox(my_user_id, user_items.user_info.user_name, 0, user_items.user_info.online, user_items.user_info.avatar);
 						}
 						if ($("#chatbox_"+my_user_id).css('display') == 'none') {
 							$("#chatbox_"+my_user_id).css('display','block');

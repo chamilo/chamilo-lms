@@ -104,11 +104,13 @@ class Chat extends Model
                 $items[$from_user_id]['items'][] = $item;
                 $items[$from_user_id]['user_info']['user_name'] = $user_info['complete_name'];
                 $items[$from_user_id]['user_info']['online'] = $user_info['user_is_online'];
+                $items[$from_user_id]['user_info']['avatar'] = $user_info['avatar_small'];
                 $_SESSION['openChatBoxes'][$from_user_id] = api_strtotime($chat['sent'], 'UTC');
             }
             $_SESSION['chatHistory'][$from_user_id]['items'][] = $item;
             $_SESSION['chatHistory'][$from_user_id]['user_info']['user_name'] = $user_info['complete_name'];
             $_SESSION['chatHistory'][$from_user_id]['user_info']['online'] = $user_info['user_is_online'];
+            $_SESSION['chatHistory'][$from_user_id]['user_info']['avatar'] = $user_info['avatar_small'];
         }
 
         if (!empty($_SESSION['openChatBoxes'])) {

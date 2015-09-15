@@ -7537,4 +7537,6 @@ $ShowFullSkillNameOnSkillWheelComment = "En la rueda de competencias, permite mo
 $DBPort = "Puerto";
 $CreatedBy = "Creado por";
 $UploadMyAssignment = "Enviar mi tarea";
+$Inserted = "Añadido";
+$YourBroswerDoesNotSupportWebRTC = "Su navegador no soporta nativamente la transmisión por videoconferencia.";
 ?>

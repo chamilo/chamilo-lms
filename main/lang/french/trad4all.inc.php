@@ -7499,4 +7499,6 @@ $ShowFullSkillNameOnSkillWheelComment = "Dans la roue des compétences, montrer 
 $DBPort = "Port";
 $CreatedBy = "Créé par";
 $UploadMyAssignment = "Envoyer mon travail";
+$Inserted = "Inséré";
+$YourBroswerDoesNotSupportWebRTC = "Votre navigateur ne supporte pas nativement la transmission de vidéo.";
 ?>

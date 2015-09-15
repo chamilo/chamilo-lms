@@ -7512,4 +7512,6 @@ $ShowFullSkillNameOnSkillWheelComment = "On the wheel of skills, it shows the na
 $DBPort = "Port";
 $CreatedBy = "Created by";
 $UploadMyAssignment = "Upload my assignment";
+$Inserted = "Inserted";
+$YourBroswerDoesNotSupportWebRTC = "Your browser does not support native video transmission.";
 ?>

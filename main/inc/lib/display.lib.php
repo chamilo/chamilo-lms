@@ -2163,4 +2163,50 @@ class Display
 
         return $html;
     }
+
+    /**
+     * Get a HTML code for a icon by Font Awesome
+     * @param string $name The icon name
+     * @param boolean $fixWidth Optional. Whether add the fw class
+     * @param int|string $size Optional. The size for the icon. 
+     * @param string $aditionalClass Optional. Additional class
+     * @return string
+     */
+    public static function returnFontAswesomeIcon(
+        $name,
+        $fixWidth = false,
+        $size = null,
+        $aditionalClass = null
+    )
+    {
+        $className = "fa fa-$name";
+
+        if ($fixWidth) {
+            $className .= ' fa-fw';
+        }
+
+        switch ($size) {
+            case 'lg':
+                $className .= ' fa-lg';
+                break;
+            case 2:
+                //no break
+            case 3:
+                //no break
+            case 4:
+                //no break
+            case 5:
+                $className .= " fa-{$size}x";
+                break;
+        }
+
+        if (!empty($aditionalClass)) {
+            $className .= " $aditionalClass";
+        }
+
+        $icon = self::tag('i', null, ['class' => $className]);
+
+        return "$icon ";
+    }
+
 }

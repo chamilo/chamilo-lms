@@ -313,3 +313,7 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['my_courses_view_by_session'] = false;
 // Allow agenda events coloring
 //$_configuration['allow_agenda_events_coloring'] = false;
+// Fix urls changing http with https in scorm packages.
+//$_configuration['lp_replace_http_to_https'] = false;
+
+

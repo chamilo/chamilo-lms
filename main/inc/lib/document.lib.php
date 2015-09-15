@@ -311,11 +311,16 @@ class DocumentManager
      * @param string $full_file_name
      * @param boolean $forced
      * @param string $name
+     * @param string $fixLinksHttpToHttps change file content from http to https
      *
      * @return false if file doesn't exist, true if stream succeeded
      */
-    public static function file_send_for_download($full_file_name, $forced = false, $name = '')
-    {
+    public static function file_send_for_download(
+        $full_file_name,
+        $forced = false,
+        $name = '',
+        $fixLinksHttpToHttps = false
+    ) {
         session_write_close(); //we do not need write access to session anymore
         if (!is_file($full_file_name)) {
             return false;
@@ -389,8 +394,14 @@ class DocumentManager
             } else {
                 header('Content-Disposition: inline; filename= ' . $filename);
             }
-            readfile($full_file_name);
 
+            if ($fixLinksHttpToHttps) {
+                $content = file_get_contents($full_file_name);
+                $content = str_replace('http://', 'https://', $content);
+                echo $content;
+            } else {
+                readfile($full_file_name);
+            }
             return true;
         }
     }

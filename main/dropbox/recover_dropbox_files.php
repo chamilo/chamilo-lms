@@ -28,7 +28,8 @@ if (isset($_GET['recover_id']) && !empty($_GET['recover_id'])) {
     }
 }
 
-$sql = "SELECT * FROM $file_tbl WHERE c_id = $course_id AND session_id = $session_id";
+$sql = "SELECT * FROM $file_tbl
+        WHERE c_id = $course_id AND session_id = $session_id";
 $result = Database::query($sql);
 
 if (Database::num_rows($result)) {
@@ -36,13 +37,17 @@ if (Database::num_rows($result)) {
     $rows = array();
     foreach ($files as $file) {
         //Check if I have this file:
-        $sql = "SELECT * FROM $person_tbl WHERE c_id = $course_id AND user_id = $user_id AND file_id = {$file['id']}";
+        $sql = "SELECT * FROM $person_tbl
+                WHERE c_id = $course_id AND user_id = $user_id AND file_id = {$file['id']}";
         $result_person = Database::query($sql);
         if (Database::num_rows($result_person) == 0 ) {
             $rows[] = array(
                     $file['filename'],
                     api_convert_and_format_date($file['upload_date']),
-                    Display::url(get_lang('Recover'), api_get_self().'?recover_id='.$file['id'], array('class' => 'btn btn-default'))
+                    Display::url(
+                        get_lang('Recover'), api_get_self().'?recover_id='.$file['id'],
+                        array('class' => 'btn btn-default')
+                    )
             );
         }
     }

@@ -51,6 +51,7 @@ class Thematic
                 WHERE c_id = $course_id AND active = 1 $condition_session ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->total_number_of_items;
     }
 
@@ -70,7 +71,7 @@ class Thematic
             $condition_session = api_get_session_condition(0);
         }
         $column = intval($column);
-        $from   = intval($from);
+        $from = intval($from);
         $number_of_items = intval($number_of_items);
 
         if (!in_array($direction, array('ASC','DESC'))) {
@@ -82,7 +83,8 @@ class Thematic
         $sql = "SELECT id AS col0, title AS col1, display_order AS col2, session_id
                 FROM $tbl_thematic
 				WHERE c_id = $course_id AND active = 1 $condition_session
-				ORDER BY col2 LIMIT $from,$number_of_items ";
+				ORDER BY col2
+				LIMIT $from,$number_of_items ";
         $res = Database::query($sql);
 
         $thematics = array ();
@@ -165,7 +167,8 @@ class Thematic
             $condition_session = '';
         }
         $course_id = api_get_course_int_id();
-        $sql = "SELECT MAX(display_order) FROM $tbl_thematic
+        $sql = "SELECT MAX(display_order)
+                FROM $tbl_thematic
                 WHERE c_id = $course_id AND active = 1 $condition_session";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
@@ -571,6 +574,7 @@ class Thematic
                 }
             }
         }
+
         return $data;
     }
 
@@ -1100,7 +1104,6 @@ class Thematic
         $last_description_type = $row['max'];
 
         if (isset($last_description_type)) {
-            $row = Database::fetch_array($rs);
             $next_description_type = $last_description_type + 1;
         } else {
             $next_description_type = ADD_THEMATIC_PLAN;

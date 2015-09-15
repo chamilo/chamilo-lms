@@ -150,19 +150,27 @@ if (!isset($src)) {
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
+                $src = $_SESSION['oLP']->get_link(
+                    'http',
+                    $lp_item_id,
+                    $get_toc_list
+                );
 
                 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
-                $file_info = pathinfo($file_info['path']);
+                if (isset($file_info['path'])) {
+                    $file_info = pathinfo($file_info['path']);
+                }
+
                 if (
                     isset($file_info['extension']) &&
                     api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
                 ) {
-                    $src = api_get_path(WEB_CODE_PATH)
-                        . 'newscorm/lp_view_item.php?lp_item_id=' . $lp_item_id
-                        . '&' . api_get_cidreq();
+                    $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
+
+                $src = $_SESSION['oLP']->fixBlockedLinks($src);
+
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -183,11 +191,14 @@ if (!isset($src)) {
         case 3:
             // aicc
             $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="' . $_SESSION['oLP']->get_js_lib()
-                . '" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="' . $_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
+                $src = $_SESSION['oLP']->get_link(
+                    'http',
+                    $lp_item_id,
+                    $get_toc_list
+                );
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php';
@@ -294,7 +305,8 @@ $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;
 $_setting['show_navigation_menu'] = 'false';
 $scorm_css_header = true;
-$lp_theme_css = $_SESSION['oLP']->get_theme(); // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
+$lp_theme_css = $_SESSION['oLP']->get_theme();
+// Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
 
 if ($_SESSION['oLP']->mode == 'fullscreen') {
     $htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
@@ -391,8 +403,7 @@ if (api_get_course_setting('lp_return_link') == 1) {
     $buttonHomeText = get_lang('LearningPathList');
 }
 
-$lpPreviewImagePath = 'unknown.png';
-
+$lpPreviewImagePath = api_get_path(WEB_CODE_PATH).'img/icons/64/unknown.png';
 if ($_SESSION['oLP']->get_preview_image()) {
     $lpPreviewImagePath = $_SESSION['oLP']->get_preview_image_path();
 }

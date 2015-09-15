@@ -139,7 +139,7 @@ $code = isset($code) ? $code : null;
             $form .= '<input type="hidden" name="pageLength" value="' . $pageLength . '">';
             $form .= '<div class="form-group">';
             $form .= '<div class="col-sm-12">';
-            $form .= '<select name="category_code" onchange="submit();" class="chzn-select form-control">';
+            $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
             $codeType = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : '';
             foreach ($browse_course_categories[0] as $category) {
                 $categoryCode = $category['code'];

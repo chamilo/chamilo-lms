@@ -163,6 +163,7 @@ class CourseBuilder
                 }
             }
         }
+
         // Once we've built the resources array a bit more, try to get items
         //  from the item_property table and order them in the "resources" array
         foreach ($this->course->resources as $type => $resources) {
@@ -173,7 +174,7 @@ class CourseBuilder
                             WHERE
                                 c_id = $courseId AND
                                 tool = '".$tool."' AND
-                                ref='".$resource->get_id()."'";
+                                ref = '".$resource->get_id()."'";
                     $res = Database::query($sql);
                     $all_properties = array();
                     while ($item_property = Database::fetch_array($res)) {
@@ -276,7 +277,7 @@ class CourseBuilder
                             p.visibility != 2 AND
                             path NOT LIKE '/images/gallery%' AND
                             $avoid_paths AND
-                            d.session_id = 0
+                            (d.session_id = 0 OR d.session_id IS NULL)
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
@@ -288,7 +289,7 @@ class CourseBuilder
                             tool = '".TOOL_DOCUMENT."' AND
                             p.visibility != 2 AND
                             $avoid_paths AND
-                            d.session_id = 0
+                            (d.session_id = 0 OR d.session_id IS NULL)
                         ORDER BY path";
             }
 
@@ -484,7 +485,7 @@ class CourseBuilder
                         p.ref=l.id AND
                         p.tool = '".TOOL_LINK."' AND
                         p.visibility != 2 AND
-                        l.session_id = 0
+                        (l.session_id = 0 OR l.session_id IS NULL)
                     ORDER BY l.display_order";
         }
 
@@ -536,7 +537,8 @@ class CourseBuilder
             $with_base_content
         );
 
-        $sql = "SELECT * FROM $table WHERE c_id = $courseId $sessionCondition";
+        $sql = "SELECT * FROM $table
+                WHERE c_id = $courseId $sessionCondition";
 
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
@@ -609,7 +611,7 @@ class CourseBuilder
             //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
         } else {
             $sql = "SELECT * FROM $table_qui
-                    WHERE c_id = $courseId AND active >=0 AND session_id = 0";
+                    WHERE c_id = $courseId AND active >=0 AND (session_id = 0 OR session_id IS NULL)";
             //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
         }
 
@@ -933,7 +935,8 @@ class CourseBuilder
             $with_base_content
         );
 
-        $sql = 'SELECT * FROM '.$table_survey.' WHERE c_id = '.$courseId.' '.$sessionCondition;
+        $sql = 'SELECT * FROM '.$table_survey.'
+                WHERE c_id = '.$courseId.' '.$sessionCondition;
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $survey = new Survey(
@@ -1189,7 +1192,7 @@ class CourseBuilder
                     WHERE c_id = '.$courseId.'  '.$session_condition;
         } else {
             $sql = 'SELECT * FROM '.$table_main.'
-                    WHERE c_id = '.$courseId.' AND session_id = 0';
+                    WHERE c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
         }
 
         if (!empty($id_list)) {
@@ -1201,7 +1204,8 @@ class CourseBuilder
         if ($db_result) {
             while ($obj = Database::fetch_object($db_result)) {
                 $items = array();
-                $sql_items = "SELECT * FROM ".$table_item." WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
+                $sql_items = "SELECT * FROM ".$table_item."
+                              WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
                 $db_items = Database::query($sql_items);
                 while ($obj_item = Database::fetch_object($db_items)) {
                     $item['id'] = $obj_item->id;
@@ -1316,19 +1320,21 @@ class CourseBuilder
             }
             //@todo check this queries are the same ...
             if (!empty($this->course->type) && $this->course->type == 'partial') {
-                $sql = 'SELECT * FROM '.$table_glossary.' g WHERE g.c_id = '.$courseId.' '.$session_condition;
+                $sql = 'SELECT * FROM '.$table_glossary.' g
+                        WHERE g.c_id = '.$courseId.' '.$session_condition;
             } else {
-                $sql = 'SELECT * FROM '.$table_glossary.' g WHERE g.c_id = '.$courseId.' '.$session_condition;
+                $sql = 'SELECT * FROM '.$table_glossary.' g
+                        WHERE g.c_id = '.$courseId.' '.$session_condition;
             }
         } else {
             $table_glossary = Database:: get_course_table(TABLE_GLOSSARY);
             //@todo check this queries are the same ... ayayay
             if (!empty($this->course->type) && $this->course->type == 'partial') {
                 $sql = 'SELECT * FROM '.$table_glossary.' g
-                        WHERE g.c_id = '.$courseId.' AND session_id = 0';
+                        WHERE g.c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
             } else {
                 $sql = 'SELECT * FROM '.$table_glossary.' g
-                        WHERE g.c_id = '.$courseId.' AND session_id = 0';
+                        WHERE g.c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
             }
         }
         $db_result = Database::query($sql);
@@ -1415,7 +1421,7 @@ class CourseBuilder
         } else {
             $tbl_wiki = Database::get_course_table(TABLE_WIKI);
             $sql = 'SELECT * FROM '.$tbl_wiki.'
-                    WHERE c_id = '.$courseId.' AND session_id = 0';
+                    WHERE c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
         }
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
@@ -1497,10 +1503,7 @@ class CourseBuilder
                             t.c_id = $courseId AND
                             tp.c_id = $courseId AND
                             thematic_id = {$row['id']}  AND
-                            tp.id IN (".implode(
-                        ', ',
-                        $thematic_plan_id_list
-                    ).") ";
+                            tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
 
                 $result = Database::query($sql);
                 while ($sub_row = Database::fetch_array($result, 'ASSOC')) {

@@ -398,7 +398,7 @@ $action_images['tools'] = 'tools.png';
 $action_images['user'] = 'user.png';
 $action_images['gradebook'] = 'gradebook.png';
 $action_images['ldap'] = 'ldap.png';
-$action_images['cas'] = 'user_access.png';
+$action_images['cas'] = 'cas.png';
 $action_images['security'] = 'security.png';
 $action_images['languages'] = 'languages.png';
 $action_images['tuning'] = 'tuning.png';
@@ -415,7 +415,7 @@ $action_images['templates'] = 'template.png';
 $action_images['plugins'] = 'plugins.png';
 $action_images['shibboleth'] = 'shibboleth.png';
 $action_images['facebook'] = 'facebook.png';
-$action_images['crons'] = 'platform_event.png';
+$action_images['crons'] = 'crons.png';
 
 $action_array = array();
 $resultcategories = array();

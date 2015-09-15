@@ -1373,9 +1373,9 @@ switch ($action) {
             foreach ($result as $item) {
                 $item['display_text'] = $item['displayText'];
                 $item['field_type'] = $obj->get_field_type_by_id($item['fieldType']);
-                $item['changeable'] = $item['changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $item['visible'] = $item['visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $item['filter'] = $item['filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['changeable'] = $item['changeable'] ? Display::return_icon('check-circle.png', get_lang('Invisible')) : Display::return_icon('closed-circle.png', get_lang('Visible'), null, ICON_SIZE_SMALL);
+                $item['visible'] = $item['visible'] ? Display::return_icon('check-circle.png', get_lang('Invisible')) : Display::return_icon('closed-circle.png', get_lang('Visible'), null, ICON_SIZE_SMALL);
+                $item['filter'] = $item['filter'] ? Display::return_icon('check-circle.png', get_lang('Invisible')) : Display::return_icon('closed-circle.png', get_lang('Visible'), null, ICON_SIZE_SMALL);
                 $new_result[] = $item;
             }
             $result = $new_result;
@@ -1509,7 +1509,7 @@ switch ($action) {
                     $class = 'btn btn-danger';
                     $text = get_lang('Remove');
                 } else {
-                    $url  = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq();
+                    $url  = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered';
                     $class = 'btn btn-primary';
                     //$icon = Display::return_icon('add.png', get_lang('Add'));
                     $text = get_lang('Add');

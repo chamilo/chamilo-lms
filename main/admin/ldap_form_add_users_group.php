@@ -1,10 +1,11 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * Form to add users through LDAP (deprecated?)
  * @package chamilo.admin
  * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
+
 /**
  * This form is included by ldap_import_students.php and ldap_import_students_to_session.php
  */

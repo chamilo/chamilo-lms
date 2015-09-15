@@ -100,6 +100,7 @@
                                 {{ row.action_build }}
                                 {{ row.action_edit }}
                                 {{ row.action_visible }}
+                                {{ row.action_tracking }}
                                 {{ row.action_publish }}
                                 {{ row.action_subscribe_users }}
                                 {{ row.action_serious_game }}

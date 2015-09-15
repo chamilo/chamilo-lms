@@ -480,6 +480,7 @@ class WSCourse extends WS
 				$cd->set_session_id(0);
 				// Get course info
 				$course_info = CourseManager::get_course_information(CourseManager::get_course_code_from_course_id($course_id));
+                $cd->set_course_id($course_info['real_id']);
 				// Check if this course description exists
 				$descriptions = CourseDescription::get_descriptions($course_id);
 				$exists = false;
@@ -490,15 +491,11 @@ class WSCourse extends WS
 				}
 				if (!$exists) {
 					$cd->set_progress(0);
-					$cd->insert($course_info['db_name']);
+					$cd->insert();
 				} else {
-					$cd->update($course_info['db_name']);
+					$cd->update();
 				}
 			}
 		}
 	}
-
-
-
 }
-

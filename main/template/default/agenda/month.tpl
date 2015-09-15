@@ -548,6 +548,7 @@ $(document).ready(function() {
 });
 </script>
 {{ actions_div }}
+{{ toolbar }}
 
 <div id="simple-dialog-form" style="display:none;">
     <div style="width:500px">

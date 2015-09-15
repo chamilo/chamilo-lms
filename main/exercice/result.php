@@ -54,8 +54,11 @@ if (!$is_allowedToEdit) {
 }
 
 if ($show_headers) {
-	$interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
-	$interbreadcrumb[] = array("url" => "#","name" => get_lang('Result'));
+    $interbreadcrumb[] = array(
+        "url" => "exercise.php?".api_get_cidreq(),
+        "name" => get_lang('Exercises'),
+    );
+    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Result'));
 	$this_section = SECTION_COURSES;
 	Display::display_header();
 } else {

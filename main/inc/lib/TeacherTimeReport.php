@@ -100,5 +100,4 @@ class TeacherTimeReport
 
         return $dataToExport;
     }
-
 }

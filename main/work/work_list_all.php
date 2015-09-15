@@ -165,7 +165,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     echo Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
-    echo Display::return_icon('user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo Display::return_icon('addworkuser.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
     echo Display::return_icon('pdf.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -195,8 +195,10 @@ if (!empty($error_message)) {
 }
 
 if (!empty($my_folder_data['description'])) {
-    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.
-        Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
+    $contentWork = Security::remove_XSS($my_folder_data['description']);
+    $html = '';
+    $html .= Display::panel($contentWork, get_lang('Description'));
+    echo $html;  
 }
 
 $check_qualification = intval($my_folder_data['qualification']);
@@ -388,13 +390,17 @@ $(function() {
 <?php
 
 echo $documentsAddedInWork;
-echo Display::grid_html('results');
-
-echo '<table style="display:none; width:50%" class="files data_table">
+$tableWork = Display::grid_html('results');
+echo Display::panel($tableWork);
+echo '<div class="list-work-results">';
+echo '<div class="panel panel-default">';
+echo '<div class="panel-body">';
+echo '<table style="display:none; width:100%" class="files data_table">
         <tr>
             <th>'.get_lang('FileName').'</th>
             <th>'.get_lang('Size').'</th>
             <th>'.get_lang('Status').'</th>
         </tr>
     </table>';
+echo '</div></div></div>';
 Display :: display_footer();

@@ -50,6 +50,7 @@ class Template
      * @param bool $show_learnpath
      * @param bool $hide_global_chat
      * @param bool $load_plugins
+     * @param bool $sendHeaders send http headers or not
      */
     public function __construct(
         $title = '',
@@ -57,7 +58,8 @@ class Template
         $show_footer = true,
         $show_learnpath = false,
         $hide_global_chat = false,
-        $load_plugins = true
+        $load_plugins = true,
+        $sendHeaders = true
     ) {
         // Page title
         $this->title = $title;
@@ -147,7 +149,7 @@ class Template
         $this->set_footer($show_footer);
         $this->set_header($show_header);
 
-        $this->set_header_parameters();
+        $this->set_header_parameters($sendHeaders);
         $this->set_footer_parameters();
 
         $defaultStyle = api_get_configuration_value('default_template');
@@ -231,15 +233,6 @@ class Template
             }
         }
         return $result;
-    }
-
-    /**
-     * @deprecated
-     * @param null $helpInput
-     */
-    public function set_help($helpInput = null)
-    {
-        $this->setHelp($helpInput);
     }
 
     /**
@@ -676,7 +669,7 @@ class Template
             $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
         }
         $js_file_to_string .= '<script type="text/javascript" src="'.  api_get_path(WEB_LIBRARY_PATH) . 'javascript/bootstrap-select.min.js"></script>'."\n";
-        
+
         foreach ($js_files as $file) {
             $js_file_to_string .= api_get_js($file);
         }
@@ -731,8 +724,9 @@ class Template
 
     /**
      * Set header parameters
+     * @param bool $sendHeaders send headers
      */
-    private function set_header_parameters()
+    private function set_header_parameters($sendHeaders)
     {
         global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $help = $this->help;
@@ -924,12 +918,12 @@ class Template
         }
         $this->assign('header_extra_content', $extra_header);
 
-        //if ($this->show_header == 1) {
+        if ($sendHeaders) {
             header('Content-Type: text/html; charset='.api_get_system_encoding());
             header(
                 'X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'], 0, 1)
             );
-        //}
+        }
 
         $socialMeta = '';
         $metaTitle = api_get_setting('meta_title');
@@ -967,7 +961,7 @@ class Template
     private function set_footer_parameters()
     {
         if (api_get_setting('show_administrator_data') == 'true') {
-            //Administrator name
+            // Administrator name
             $administrator_data = get_lang('Manager').' : '.Display::encrypted_mailto_link(
                     api_get_setting('emailAdministrator'),
                     api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))
@@ -975,7 +969,7 @@ class Template
             $this->assign('administrator_name', $administrator_data);
         }
 
-        //Loading footer extra content
+        // Loading footer extra content
         if (!api_is_platform_admin()) {
             $extra_footer = trim(api_get_setting('footer_extra_content'));
             if (!empty($extra_footer)) {
@@ -983,7 +977,7 @@ class Template
             }
         }
 
-        //Tutor name
+        // Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
             $courseId  = api_get_course_int_id();
@@ -991,7 +985,10 @@ class Template
             if (!empty($courseId)) {
                 $tutor_data = '';
                 if ($id_session != 0) {
-                    $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $courseId);
+                    $coachs_email = CourseManager::get_email_of_tutor_to_session(
+                        $id_session,
+                        $courseId
+                    );
                     $email_link = array();
                     foreach ($coachs_email as $coach) {
                         $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);

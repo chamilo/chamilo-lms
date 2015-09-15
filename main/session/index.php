@@ -247,7 +247,7 @@ if (!empty($session)) {
 
         $courseUrl = $sessionCourse->getDirectory() . '/index.php?';
         $courseUrl .= http_build_query([
-            'session_id' => $session->getId()
+            'id_session' => $session->getId()
         ]);
 
         header('Location: ' . api_get_path(WEB_COURSE_PATH) . $courseUrl);

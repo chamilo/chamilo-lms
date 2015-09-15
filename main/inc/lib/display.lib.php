@@ -82,7 +82,7 @@ class Display
             }
         }
 
-        self::$global_template->set_help($help);
+        self::$global_template->setHelp($help);
 
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
@@ -1268,8 +1268,7 @@ class Display
 	        foreach($rows as $content) {
 	            $table->setCellContents($row, $column, $content);
                 $row++;
-                    //$column++;
-                }
+            }
         }
         return $table->toHtml();
     }
@@ -1341,8 +1340,9 @@ class Display
                     tet.to_group_id group_id,
                     ctt.image image,
                     ctt.link link
-                FROM $tool_edit_table tet INNER JOIN $course_tool_table ctt
-                ON  tet.c_id = ctt.c_id
+                FROM $tool_edit_table tet
+                INNER JOIN $course_tool_table ctt
+                ON tet.c_id = ctt.c_id
                 WHERE
                     tet.c_id = $course_id AND
                     tet.lastedit_date > '$oldestTrackDate' ".
@@ -1358,7 +1358,7 @@ class Display
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         // Filter all last edits of all tools of the course
-        while ($res && ($item_property = Database::fetch_array($res))) {
+        while ($res && ($item_property = Database::fetch_array($res, 'ASSOC'))) {
 
             // First thing to check is if the user never entered the tool
             // or if his last visit was earlier than the last modification.
@@ -1390,6 +1390,7 @@ class Display
                 ) {
                    continue;
                 }
+
                 // If it's a survey, make sure the user's invited. Otherwise drop it.
                 if ($item_property['tool'] == TOOL_SURVEY) {
                     $survey_info = SurveyManager::get_survey($item_property['ref'], 0, $course_code);
@@ -1403,13 +1404,21 @@ class Display
                         }
                     }
                 }
+
                 // If it's a learning path, ensure it is currently visible to the user
                 if ($item_property['tool'] == TOOL_LEARNPATH) {
                     if (!learnpath::is_lp_visible_for_student($item_property['ref'], $user_id, $course_code)) {
                         continue;
                     }
                 }
-                if ($item_property['tool'] == 'work' && $item_property['type'] == 'DirectoryCreated') {
+
+                if ($item_property['tool'] == TOOL_DROPBOX) {
+                    $item_property['link'] = 'dropbox/dropbox_download.php?id='.$item_property['ref'];
+                }
+
+                if ($item_property['tool'] == 'work' &&
+                    $item_property['type'] == 'DirectoryCreated'
+                ) {
                     $item_property['lastedit_type'] = 'WorkAdded';
                 }
                 $notifications[$item_property['tool']] = $item_property;
@@ -1417,16 +1426,28 @@ class Display
         }
 
         // Show all tool icons where there is something new.
-        $retvalue = '&nbsp;';
-        while (list($key, $notification) = each($notifications)) {
+        $return = '&nbsp;';
+        foreach($notifications as $notification) {
             $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
             $type = $notification['lastedit_type'];
             $label = get_lang('TitleNotification').": ".get_lang($type)." ($lastDate)";
-            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&ref='.$notification['ref'].'&gidReq='.$notification['to_group_id'].'&id_session='.$sessionId.'">'.
-                            Display::return_icon($notification['image'], $label).'</a>&nbsp;';
+
+            if (strpos($notification['link'], '?') === false) {
+                $notification['link'] = $notification['link'].'?notification=1';
+            } else {
+                $notification['link'] = $notification['link'].'&notification=1';
+            }
+            $return .= Display::url(
+                Display::return_icon($notification['image'], $label),
+                api_get_path(WEB_CODE_PATH).
+                $notification['link'].'&cidReq='.$course_code.
+                '&ref='.$notification['ref'].
+                '&gidReq='.$notification['to_group_id'].
+                '&id_session='.$sessionId
+            ).'&nbsp;';
         }
 
-        return $retvalue;
+        return $return;
     }
 
     /**
@@ -1893,9 +1914,9 @@ class Display
             foreach ($items as $item) {
                 $html .= '<div class="accordion-my-group">';
                 $html .= '<div class="accordion-heading">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
-                                '.$item['title'].'
-                                </a>
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
+                            '.$item['title'].'
+                            </a>
                           </div>';
 
                 $html .= '<div id="collapse'.$count.'" class="accordion-body">';
@@ -1906,6 +1927,7 @@ class Display
             }
             $html .= '</div>';
         }
+
         return $html;
     }
 
@@ -1915,8 +1937,10 @@ class Display
     public static function group_button($title, $elements)
     {
         $html = '<div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">'.$title.'  <span class="caret"></span></button>
-            <ul class="dropdown-menu">';
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                '.$title.'
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">';
         foreach ($elements as $item) {
             $html .= Display::tag('li', Display::url($item['title'], $item['href']));
         }
@@ -1957,6 +1981,7 @@ class Display
                             <param name="flashvars" value="controls=true&file='.$params['url'].'" />
                           </object>';
                 $html .= '</audio>';
+
                 return $html;
                 break;
         }
@@ -1991,6 +2016,7 @@ class Display
                 $messageToString .= $message;
             }
         }
+
         return $messageToString;
     }
 
@@ -2021,9 +2047,7 @@ class Display
         $editProfileUrl = api_get_path(WEB_CODE_PATH).'auth/profile.php';
 
         if ($asAdmin) {
-            $editProfileUrl = api_get_path(
-                    WEB_CODE_PATH
-                )."admin/user_edit.php?user_id=".intval($userId);
+            $editProfileUrl = api_get_path(WEB_CODE_PATH)."admin/user_edit.php?user_id=".intval($userId);
         }
 
         if (api_get_setting('sso_authentication') === 'true') {
@@ -2032,10 +2056,7 @@ class Display
             $objSSO = null;
 
             if (!empty($subSSOClass)) {
-                require_once api_get_path(
-                        SYS_CODE_PATH
-                    )."auth/sso/sso.$subSSOClass.class.php";
-
+                require_once api_get_path(SYS_CODE_PATH)."auth/sso/sso.$subSSOClass.class.php";
                 $subSSOClass = 'sso'.$subSSOClass;
                 $objSSO = new $subSSOClass();
             } else {
@@ -2055,18 +2076,20 @@ class Display
      * @param string $content
      * @param string $title
      * @param string $footer
-     * @param string $style
+     * @param string $style primary|success|info|warning|danger
      * @param string $extra
      *
      * @return string
      */
-    public static function panel($content, $title = '', $footer = '', $style = '', $extra='')
+    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '')
     {
         $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
-        $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
+        $footer = !empty($footer) ? '<div class="panel-footer ">'.$footer.'</div>' : '';
+        $styles = ['primary','success','info','warning','danger'];
+        $style = !in_array($style, $styles) ? 'default' : $style;
 
         return '
-            <div class="panel panel-default">
+            <div class="panel panel-'.$style.'">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'
@@ -2090,21 +2113,27 @@ class Display
      * @param string $text The button content
      * @param string $url The url to button
      * @param string $icon The Awesome Font class for icon
-     * @param string $type Ooptional. The button Bootstrap class. Default 'default' class
+     * @param string $type Optional. The button Bootstrap class. Default 'default' class
      * @param array $attributes The additional attributes
      * @return string The button HTML
      */
     public static function toolbarButton($text, $url, $icon = 'check', $type = 'default', array $attributes = [])
     {
         $buttonClass = "btn btn-$type";
-
         $icon = self::tag('i', null, ['class' => "fa fa-$icon"]);
-
         $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
 
         return self::url("$icon $text", $url, $attributes);
     }
-    public static function toolbarAction($id, $content = array(), $col = 2)
+
+    /**
+     * @param int $id
+     * @param array $content
+     * @param int $col
+     * @param bool|true $right
+     * @return string
+     */
+    public static function toolbarAction($id, $content = array(), $col = 2, $right = true)
     {
         $columns = 12/$col;
         $html = '';
@@ -2116,9 +2145,13 @@ class Display
             for ( $i = 0; $i < $col; $i++ ) {
                 $html .= '<div class="col-md-' . $columns . '">';
                 if ( $col == 2 && $i == 1 ) {
-                    $html .= '<div class="pull-right">';
-                    $html .= $content[$i];
-                    $html .= '</div>';
+                    if($right === true){
+                        $html .= '<div class="pull-right">';
+                        $html .= $content[$i];
+                        $html .= '</div>';
+                    } else {
+                        $html .= $content[$i];
+                    }
                 } else {
                     $html .= $content[$i];
                 }
@@ -2127,6 +2160,7 @@ class Display
         }
         $html .= '</div>';
         $html .= '</div>';
+
         return $html;
     }
 }

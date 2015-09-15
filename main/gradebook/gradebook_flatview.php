@@ -148,15 +148,19 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
 
 if (isset($_GET['exportpdf']))	{
     $interbreadcrumb[] = array (
-        'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
+        'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq(),
         'name' => get_lang('FlatView')
     );
+
+    $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : '';
+    $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : '';
+    $url = api_get_self().'?exportpdf=&offset='.$offset.'&selectcat='.intval($_GET['selectcat']).'&'.api_get_cidreq().'&flatviewlist_page_nr='.$pageNum.'&flatviewlist_per_page='.$perPage;
 
     $export_pdf_form = new DataForm(
         DataForm::TYPE_EXPORT_PDF,
         'export_pdf_form',
         null,
-        api_get_self() . '?exportpdf=&offset=' . intval($_GET['offset']) . '&selectcat=' . intval($_GET['selectcat']).'&'.api_get_cidreq(),
+        $url,
         '_blank',
         ''
     );

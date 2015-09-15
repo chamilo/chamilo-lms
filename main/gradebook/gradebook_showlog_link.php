@@ -5,7 +5,7 @@
  * Script
  * @package chamilo.gradebook
  */
-//$cidReset = true;
+
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -24,7 +24,10 @@ $t_user     = Database :: get_main_table(TABLE_MAIN_USER);
 $t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $visible_link=Security::remove_XSS($_GET['visiblelink']);
 $evaledit   = EvalLink :: load($visible_link);
-$sql="SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
+$sql = "SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at,us.username
+        FROM ".$t_link_log." lk inner join ".$t_user." us
+        ON lk.user_id_log=us.user_id
+        WHERE lk.id_linkeval_log=".$evaledit[0]->get_id()." AND lk.type='link';";
 $result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
@@ -36,7 +39,10 @@ foreach($list_info as $key => $info_log) {
     $list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 
-$parameters=array('visiblelink'=>Security::remove_XSS($_GET['visiblelink']),'selectcat'=>Security::remove_XSS($_GET['selectcat']));
+$parameters = array(
+    'visiblelink' => Security::remove_XSS($_GET['visiblelink']),
+    'selectcat' => Security::remove_XSS($_GET['selectcat']),
+);
 
 $table = new SortableTableFromArrayConfig($list_info, 1,20,'gradebooklink');
 $table->set_additional_parameters($parameters);

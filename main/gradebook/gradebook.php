@@ -33,10 +33,11 @@ api_block_anonymous_users();
 $htmlHeadXtra[]= '<script type="text/javascript">
 function confirmation ()
 {
-	if (confirm("' . get_lang('DeleteAll') . '?"))
-		{return true;}
-	else
-		{return false;}
+	if (confirm("'.get_lang('DeleteAll').'?")) {
+	    return true;
+	} else {
+	    return false;
+	}
 }
 </script>';
 $filter_confirm_msg = true;
@@ -68,7 +69,7 @@ if (isset ($_GET['createallcategories'])) {
 $selectcat=isset($_GET['selectcat']) ?  Security::remove_XSS($_GET['selectcat']) : '';
 
 if (isset ($_GET['movecat'])) {
-    $move_cat=Security::remove_XSS($_GET['movecat']);
+    $move_cat = Security::remove_XSS($_GET['movecat']);
     GradebookUtils::block_students();
     $cats= Category :: load($move_cat);
     if (!isset ($_GET['targetcat'])) {
@@ -94,9 +95,9 @@ if (isset ($_GET['movecat'])) {
             header('Location: ' . api_get_self() . '?categorymoved=&selectcat=' . Security::remove_XSS($_GET['selectcat']));
             exit;
         }
-        unset ($targetcat);
+        unset($targetcat);
     }
-    unset ($cats);
+    unset($cats);
 }
 
 //move an evaluation
@@ -140,7 +141,14 @@ if (isset ($_GET['movelink'])) {
     GradebookUtils::block_students();
     $get_move_link=Security::remove_XSS($_GET['movelink']);
     $link= LinkFactory :: load($get_move_link);
-    $move_form= new LinkForm(LinkForm :: TYPE_MOVE, null, $link[0], 'move_link_form', null, api_get_self() . '?movelink=' . $get_move_link . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
+    $move_form = new LinkForm(
+        LinkForm :: TYPE_MOVE,
+        null,
+        $link[0],
+        'move_link_form',
+        null,
+        api_get_self().'?movelink='.$get_move_link.'&selectcat='.Security::remove_XSS($_GET['selectcat'])
+    );
     if ($move_form->validate()) {
         $targetcat= Category :: load($move_form->exportValue('move_cat'));
         $link[0]->move_to_cat($targetcat[0]);
@@ -468,12 +476,12 @@ if (!empty($keyword)) {
     $allcat= array ();
     if ((isset($_GET['selectcat']) && $_GET['selectcat']==0) && isset($_GET['search'])) {
         $allcat= $cats[0]->get_subcategories(null);
-        $allcat_info = Category    :: find_category($keyword,$allcat);
+        $allcat_info = Category::find_category($keyword,$allcat);
         $alleval=array();
         $alllink=array();
     } else {
-        $alleval	 = Evaluation  :: find_evaluations($keyword, $cats[0]->get_id());
-        $alllink	 = LinkFactory :: find_links($keyword, $cats[0]->get_id());
+        $alleval = Evaluation::find_evaluations($keyword, $cats[0]->get_id());
+        $alllink = LinkFactory::find_links($keyword, $cats[0]->get_id());
     }
 
 } elseif (isset ($_GET['studentoverview'])) {
@@ -586,7 +594,13 @@ if (isset($allcat_info) && count($allcat_info)>=0 && (isset($_GET['selectcat']) 
 } else {
     $allcat=$allcat;
 }
-$gradebooktable= new GradebookTable($cats[0], $allcat, $alleval, $alllink, $addparams);
+$gradebooktable = new GradebookTable(
+    $cats[0],
+    $allcat,
+    $alleval,
+    $alllink,
+    $addparams
+);
 if (((empty ($allcat)) && (empty ($alleval)) && (empty ($alllink)) && (!$is_platform_admin) && ($is_course_admin) && (!isset ($_GET['selectcat']))) && api_is_course_tutor()) {
     Display :: display_normal_message(get_lang('GradebookWelcomeMessage') . '<br /><br /><form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1"><input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',false);
 }

@@ -2,13 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Class Nanogong
  *
  * Files are saved in the path:
- *
  *  courses/XXX/exercises/(session_id)/(exercise_id)/(question_id)/(user_id)/
  *
- * The file name is composed with
- *
+ * The file name is composed with:
  * (course_id)/(session_id)/(user_id)/(exercise_id)/(question_id)/(exe_id).wav|mp3|ogg
  *
  *
@@ -20,6 +19,12 @@ class Nanogong
     public $store_path;
     public $params;
     public $can_edit = false;
+    public $course_id;
+    public $session_id;
+    public $exercise_id;
+    public $question_id;
+    public $user_id;
+    public $course_info;
 
     /* Files allowed to upload */
     public $available_extensions = array('mp3', 'wav', 'ogg');
@@ -37,13 +42,10 @@ class Nanogong
      */
     public function create_user_folder()
     {
-		//COURSE123/exercises/session_id/exercise_id/question_id/user_id
-		if (empty($this->store_path)) {
-			return false;
-		}
-
-        //@todo use an array to create folders
-		$folders_to_create = array();
+        //COURSE123/exercises/session_id/exercise_id/question_id/user_id
+        if (empty($this->store_path)) {
+            return false;
+        }
 
         // Trying to create the courses/COURSE123/exercises/ dir just in case.
         $directoryPermissions = api_get_permissions_for_new_directories();
@@ -117,7 +119,7 @@ class Nanogong
             $this->question_id = 0;
         }
 
-		$this->can_edit  = false;
+		$this->can_edit = false;
 
 		if (api_is_allowed_to_edit()) {
 			$this->can_edit = true;
@@ -127,7 +129,7 @@ class Nanogong
 			}
 		}
 
-		//Settings the params array
+		// Settings the params array
 		$this->params = $params;
 		$this->store_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/exercises/';
 		$this->create_user_folder();

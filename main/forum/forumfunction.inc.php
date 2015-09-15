@@ -208,7 +208,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
 
     $form->addElement('hidden', 'lp_id', $lp_id);
     // Setting the form elements.
-    $form->addElement('header', '', get_lang('AddForumCategory'));
+    $form->addElement('header', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), array('autofocus'));
     $form->addElement(
         'html_editor',
@@ -2380,13 +2380,13 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 'thread_title' => $clean_post_title,
                 'forum_id' => $values['forum_id'],
                 'thread_poster_id' => $_user['user_id'],
-                'thread_poster_name' => stripslashes(isset($values['poster_name']) ? $values['poster_name'] : null),
+                'thread_poster_name' => stripslashes(isset($values['poster_name']) ? $values['poster_name'] : ''),
                 'thread_date' => $post_date,
-                'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null,
-                'thread_title_qualify' => stripslashes($values['calification_notebook_title']),
-                'thread_qualify_max' => $values['numeric_calification'],
-                'thread_weight' => $values['weight_calification'],
-                'thread_peer_qualify' => $values['thread_peer_qualify'],
+                'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : '',
+                'thread_title_qualify' => isset($values['calification_notebook_title']) ? $values['calification_notebook_title'] : '',
+                'thread_qualify_max' => isset($values['numeric_calification']) ? $values['numeric_calification'] : '',
+                'thread_weight' => isset($values['weight_calification']) ? $values['weight_calification'] : '',
+                'thread_peer_qualify' => isset($values['thread_peer_qualify']) ? $values['thread_peer_qualify'] : '',
                 'session_id' => api_get_session_id()
             ]
         );
@@ -2473,9 +2473,9 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
             'thread_id' => $last_thread_id,
             'forum_id' => $values['forum_id'],
             'poster_id' => $_user['user_id'],
-            'poster_name' => isset($values['poster_name']) ? $values['poster_name'] : null,
+            'poster_name' => isset($values['poster_name']) ? $values['poster_name'] : '',
             'post_date' => $post_date,
-            'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : null,
+            'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : '',
             'post_parent_id' => 0,
             'visible' => $visible,
         ];
@@ -3474,7 +3474,18 @@ function store_edit_post($values)
         } else {
             if ($link_info === false && !$_GET['thread']) {
                 $weigthqualify = $values['weight_calification'];
-                GradebookUtils::add_resource_to_course_gradebook($values['category_id'], $ccode, 5, $values['thread_id'], Database::escape_string(stripslashes($values['calification_notebook_title'])), $weigthqualify, $values['numeric_calification'], null, 0, $sid);
+                GradebookUtils::add_resource_to_course_gradebook(
+                    $values['category_id'],
+                    $ccode,
+                    5,
+                    $values['thread_id'],
+                    Database::escape_string(stripslashes($values['calification_notebook_title'])),
+                    $weigthqualify,
+                    $values['numeric_calification'],
+                    null,
+                    0,
+                    $sid
+                );
             }
         }
     }

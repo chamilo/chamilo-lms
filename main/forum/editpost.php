@@ -70,8 +70,8 @@ if (!empty($gradebook) && $gradebook == 'view') {
 
 if ($origin == 'group') {
     $_clean['toolgroup'] = (int) $_SESSION['toolgroup'];
-    $group_properties = GroupManager :: get_group_properties($_clean['toolgroup']);
-    $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
+    $group_properties = GroupManager::get_group_properties($_clean['toolgroup']);
+    $interbreadcrumb[] = array('url' => '../group/group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
     $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&gidReq='.$_SESSION['toolgroup'].'&forum='.Security::remove_XSS($_GET['forum']), 'name' => prepare4display($current_forum['forum_title']));
     $interbreadcrumb[] = array('url' => 'javascript: void (0);', 'name' => get_lang('EditPost'));
@@ -178,11 +178,14 @@ if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
     if ($origin == 'group') {
-        echo '<a href="../group/group_space.php?'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="index.php?'.api_get_cidreq().'">'.
+            Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin='.$origin.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin='.$origin.'">'.
+        Display::return_icon('forum.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 }
 

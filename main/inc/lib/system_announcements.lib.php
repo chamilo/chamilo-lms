@@ -6,7 +6,7 @@
  */
 class SystemAnnouncementManager
 {
-    CONST VISIBLE_GUEST   = 1;
+    CONST VISIBLE_GUEST = 1;
     CONST VISIBLE_STUDENT = 2;
     CONST VISIBLE_TEACHER = 3;
 
@@ -235,7 +235,8 @@ class SystemAnnouncementManager
 		$visibility = api_is_allowed_to_create_course() ? self::VISIBLE_TEACHER : self::VISIBLE_STUDENT;
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$sql = 'SELECT id FROM '.$db_table.' WHERE (lang="'.$user_selected_language.'" OR lang IS NULL) ';
+		$sql = 'SELECT id FROM '.$db_table.'
+		        WHERE (lang="'.$user_selected_language.'" OR lang IS NULL) ';
 		if (isset($user_id)) {
 			switch ($visibility) {
 				case self::VISIBLE_GUEST :
@@ -605,6 +606,7 @@ class SystemAnnouncementManager
 		$id = intval($id);
 		$sql = "SELECT * FROM ".$db_table." WHERE id = ".$id;
 		$announcement = Database::fetch_object(Database::query($sql));
+
 		return $announcement;
 	}
 
@@ -630,9 +632,11 @@ class SystemAnnouncementManager
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."'
 		        WHERE id='".$announcement_id."'";
 		$res = Database::query($sql);
+
 		if ($res === false) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -651,6 +655,7 @@ class SystemAnnouncementManager
 
         $title = api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset);
         $content = api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'', $content)), ENT_QUOTES, $charset);
+        $now = api_get_utc_datetime();
 
         if ($sendEmailTest) {
             MessageManager::send_message_simple(api_get_user_id(), $title, $content);
@@ -686,6 +691,9 @@ class SystemAnnouncementManager
 
         // Sent to active users.
         $sql .= " AND email <>'' AND active = 1 ";
+
+        // Expiration date
+        $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
 		if ((empty($teacher) or $teacher == '0') AND  (empty($student) or $student == '0')) {
 			return true;
@@ -828,5 +836,4 @@ class SystemAnnouncementManager
 
         return $template->fetch('default/announcement/view.tpl');
     }
-
 }

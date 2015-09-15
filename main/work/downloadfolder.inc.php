@@ -35,9 +35,6 @@ if (empty($_course) || empty($_course['path'])) {
 
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
-//zip library for creation of the zipfile
-require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-
 // Creating a ZIP file
 $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
 

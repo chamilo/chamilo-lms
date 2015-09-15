@@ -28,6 +28,8 @@
  */
 // Database host
 $_configuration['db_host'] = '{DATABASE_HOST}';
+// Database port
+$_configuration['db_port'] = '{DATABASE_PORT}';
 // Database name
 $_configuration['main_database'] = '{DATABASE_MAIN}';
 // Database username

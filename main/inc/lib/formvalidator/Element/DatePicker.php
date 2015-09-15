@@ -44,18 +44,14 @@ class DatePicker extends HTML_QuickForm_text
             $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
         }
 
-        if (empty($label)) {
-            return $this->getElementJS() . '
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <input ' . $this->_getAttrString($this->_attributes) . '>
-                    </span>
-                    <input class="form-control" type="text" readonly id="' . $id . '_alt" value="' . $value . '">
-                </div>
-            ';
-        }
-
-        return $this->getElementJS() . parent::toHtml();
+        return $this->getElementJS() . '
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <input ' . $this->_getAttrString($this->_attributes) . '>
+                </span>
+                <input class="form-control" type="text" readonly id="' . $id . '_alt" value="' . $value . '">
+            </div>
+        ';
     }
 
     /**
@@ -92,7 +88,8 @@ class DatePicker extends HTML_QuickForm_text
                     buttonImageOnly: true,
                     buttonText: '" . get_lang('SelectDate') . "',
                     changeMonth: true,
-                    changeYear: true
+                    changeYear: true,
+                    yearRange: 'c-60y:c+5y'
                 });
             });
         </script>";
@@ -145,12 +142,7 @@ class DatePicker extends HTML_QuickForm_text
                         {label}
                     </label>
 
-                    <div class="input-group">
-                        <span class="input-group-addon cursor-pointer">
-                            {element}
-                        </span>
-                        <input class="form-control" type="text" readonly id="' . $id . '_alt" value="' . $value . '">
-                    </div>
+                    {element}
                 </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
@@ -163,12 +155,7 @@ class DatePicker extends HTML_QuickForm_text
                     <div class="col-sm-'.$size[1].'">
                         {icon}
 
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                {element}
-                            </span>
-                            <input class="form-control" type="text" readonly id="' . $id . '_alt" value="' . $value . '">
-                        </div>
+                        {element}
 
                         <!-- BEGIN label_2 -->
                             <p class="help-block">{label_2}</p>
@@ -186,14 +173,8 @@ class DatePicker extends HTML_QuickForm_text
                 </div>';
                 break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '
-                        <div class="input-group">
-                            {icon}
-                            {element}
-                            <input class="form-control" type="text" readonly id="' . $id . '_alt" value="' . $value . '">
-                        </div>';
+                return '{element}';
                 break;
         }
     }
-
 }

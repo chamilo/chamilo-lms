@@ -366,11 +366,9 @@ if ($action_forums != 'add') {
                     $session_displayed = '';
                 }
 
-                //$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
                 // the number of topics and posts
-                $my_number_threads = isset($forum['number_of_threads']) ? $forum['number_of_threads'] : 0 ;
-
-                $my_number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : 0 ;
+                $my_number_threads = isset($forum['number_of_threads']) ? $forum['number_of_threads'] : 0;
+                $my_number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : 0;
 
                 $html .= '<div class="row">';
                 $html .= '<div class="col-md-6">';
@@ -488,11 +486,13 @@ if ($action_forums != 'add') {
                 }
 
                 $iconnotify = 'notification_mail_na.png';
+
                 if (is_array(isset($_SESSION['forum_notification']['forum']) ? $_SESSION['forum_notification']['forum'] : null)) {
                     if (in_array($forum['forum_id'],$_SESSION['forum_notification']['forum'])) {
                         $iconnotify = 'notification_mail.png';
                     }
                 }
+
                 if (!api_is_anonymous()) {
                     $html .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&forumcategory='
                         . Security::remove_XSS($_GET['forumcategory']) . '&action=notify&content=forum&id='
@@ -500,10 +500,8 @@ if ($action_forums != 'add') {
                 }
                 $html .= '</div>';
                 $html .= '</div>';
-
                 $html .= '</div>';
                 $html .= '</div>';
-
                 $html .= '</div></div>';
             }
            echo $html;

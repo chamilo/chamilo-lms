@@ -9,6 +9,11 @@
 $use_anonymous = true;
 require_once '../inc/global.inc.php';
 Display::display_reduced_header();
+$htmlHeadXtra[] = "
+<style>
+body { background: none;}
+</style>
+";
 
 if (isset($_GET['error'])) {
     switch ($_GET['error']){
@@ -27,6 +32,17 @@ if (isset($_GET['error'])) {
         case 'reached_one_attempt':
             echo '<br /><br />';
             Display::display_warning_message(get_lang('ReachedOneAttempt'));
+            break;
+        case 'x_frames_options':
+            if (isset($_SESSION['x_frame_source'])) {
+                $src = $_SESSION['x_frame_source'];
+                echo Display::return_message(
+                    Display::url($src, $src, ['target' => '_blank']),
+                    'normal',
+                    false
+                );
+                unset($_SESSION['x_frame_source']);
+            }
             break;
         default:
             break;

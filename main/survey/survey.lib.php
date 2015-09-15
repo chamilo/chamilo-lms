@@ -185,6 +185,8 @@ class SurveyManager
     {
         $_user = api_get_user_info();
         $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $courseCode = api_get_course_id();
         $table_survey 	= Database :: get_course_table(TABLE_SURVEY);
         $shared_survey_id = 0;
 
@@ -197,7 +199,12 @@ class SurveyManager
 			            lang="'.Database::escape_string($values['survey_language']).'"';
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
-                $return['message'] = 'ThisSurveyCodeSoonExistsInThisLanguage';
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('ThisSurveyCodeSoonExistsInThisLanguage'),
+                        'error'
+                    )
+                );
                 $return['type'] = 'error';
                 $return['id'] = isset($values['survey_id']) ? $values['survey_id'] : 0;
 
@@ -290,7 +297,6 @@ class SurveyManager
                     $extraParams['survey_version'] = $versionValue;
                 }
             }
-            $course_id = api_get_course_int_id();
 
             $params = [
                 'c_id' => $course_id,
@@ -333,12 +339,14 @@ class SurveyManager
                 SurveyManager::copy_survey($values['parent_id'], $survey_id);
             }
 
-            $return['message'] = 'SurveyCreatedSuccesfully';
-            $return['type'] = 'confirmation';
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('SurveyCreatedSuccesfully'),
+                    'success'
+                )
+            );
             $return['id'] = $survey_id;
-
         } else {
-
             // Check whether the code doesn't soon exists in this language
             $sql = 'SELECT 1 FROM '.$table_survey.'
 			        WHERE
@@ -348,7 +356,12 @@ class SurveyManager
 			            survey_id !='.intval($values['survey_id']);
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
-                $return['message'] = 'ThisSurveyCodeSoonExistsInThisLanguage';
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('ThisSurveyCodeSoonExistsInThisLanguage'),
+                        'error'
+                    )
+                );
                 $return['type'] = 'error';
                 $return['id'] = isset($values['survey_id']) ? $values['survey_id'] : 0;
                 return $return;
@@ -430,10 +443,69 @@ class SurveyManager
                 api_get_user_id()
             );
 
-            $return['message'] = 'SurveyUpdatedSuccesfully';
-            $return['type'] = 'confirmation';
-            $return['id']	= $values['survey_id'];
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('SurveyUpdatedSuccesfully'),
+                    'confirmation'
+                )
+            );
+
+            $return['id'] = $values['survey_id'];
         }
+
+        $survey_id = intval($return['id']);
+
+        // Gradebook
+        $gradebook_option = false;
+        if (isset($values['survey_qualify_gradebook'])) {
+            $gradebook_option = $values['survey_qualify_gradebook'] > 0;
+        }
+
+        $gradebook_link_type = 8;
+
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(
+            $courseCode,
+            $gradebook_link_type,
+            $survey_id,
+            $session_id
+        );
+
+        $gradebook_link_id = isset($link_info['id']) ? $link_info['id'] : false;
+
+        if ($gradebook_option) {
+            if ($survey_id > 0) {
+                $title_gradebook = ''; // Not needed here.
+                $description_gradebook = ''; // Not needed here.
+                $survey_weight = floatval($_POST['survey_weight']);
+                $max_score = 1;
+
+                if (!$gradebook_link_id) {
+                    GradebookUtils::add_resource_to_course_gradebook(
+                        $values['category_id'],
+                        $courseCode,
+                        $gradebook_link_type,
+                        $survey_id,
+                        $title_gradebook,
+                        $survey_weight,
+                        $max_score,
+                        $description_gradebook,
+                        1,
+                        $session_id
+                    );
+                } else {
+                    GradebookUtils::update_resource_from_course_gradebook(
+                        $gradebook_link_id,
+                        $courseCode,
+                        $survey_weight
+                    );
+                }
+            }
+        } else {
+            // Delete everything of the gradebook for this $linkId
+            GradebookUtils::remove_resource_from_course_gradebook($gradebook_link_id);
+            exit;
+        }
+
         return $return;
     }
 
@@ -962,6 +1034,8 @@ class SurveyManager
      */
     public static function save_question($survey_data, $form_content)
     {
+        $return_message = '';
+
         if (strlen($form_content['question']) > 1) {
             // Checks length of the question
             $empty_answer = false;
@@ -1052,14 +1126,15 @@ class SurveyManager
 
                     $params = array_merge($params, $extraParams);
                     $question_id = Database::insert($tbl_survey_question, $params);
+                    if ($question_id) {
 
-                    $sql = "UPDATE $tbl_survey_question SET question_id = $question_id
-                            WHERE iid = $question_id";
-                    Database::query($sql);
+                        $sql = "UPDATE $tbl_survey_question SET question_id = $question_id
+                                WHERE iid = $question_id";
+                        Database::query($sql);
 
-                    $form_content['question_id'] = $question_id;
-                    $return_message = 'QuestionAdded';
-
+                        $form_content['question_id'] = $question_id;
+                        $return_message = 'QuestionAdded';
+                    }
                 } else {
                     // Updating an existing question
 
@@ -1123,6 +1198,9 @@ class SurveyManager
             $return_message = 'PleaseEnterAQuestion';
         }
 
+        if (!empty($return_message)) {
+            Display::addFlash(Display::return_message(get_lang($return_message)));
+        }
         return $return_message;
     }
 

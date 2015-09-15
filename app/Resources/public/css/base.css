@@ -1,6 +1,6 @@
 /*
     Theme Name: Chamilo Base
-    URI Project: http://www.chamilo.org
+    URL Project: http://www.chamilo.org
     Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 3.0.x
     Author:
         alex.aragon@beeznest.com
@@ -16,6 +16,9 @@ html,body {
   margin: 0;
   padding: 0;
   height: 100%;
+}
+header{
+  padding-top: 20px;
 }
 #page-wrap{
   min-height: 100%;
@@ -68,9 +71,8 @@ a.thumbnail:hover{
   visibility: visible;
 }
 .logo{
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   padding: 5px;
-  margin-top: 10px;
 }
 .title-tools{
   text-align: left;
@@ -221,14 +223,39 @@ ul#navigation .report a {
 #results .file_upload_highlight {
     background: #F4D364;
 }
+.file_upload{
+    position: relative;
+}
 .work_correction_file_upload .button-load {
-    position: absolute;
-    top: -60px;
-    left: -30px;
+    position: relative;
     font-size: 10px;
-    width: 100px;
-    padding-top: 0px;
+    font-weight: normal;
+    width: 100%;
+    padding-top: 5px;
     background: none;
+}
+.file_upload_small{
+    line-height: 15px;
+    border: 1px solid #AFDDE9;
+    background: #D4E6F0;
+    width: 100%;
+}
+.work_correction_file_upload {
+    height: 40px !important;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.file_upload input{
+    position: relative;
+    border: none;
+}
+#results .jqgrid_whitespace .date-time{
+    font-size: 12px;
+    color: #666666;
+    text-align: center;
+}
+.list-work-results{
+    margin-top: 20px;
 }
 .impress-content{
     position: relative;
@@ -345,34 +372,36 @@ ul#navigation .report a {
     padding: 6px;
     border: 1px solid #DDD
 }
-/* .actions a img{
-  margin-right: 5px;
-}
 .actions a{
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    display: inline-block;
-    margin-left: 5px;
-    padding: 5px;
-    background: #ffffff; 
-    background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); 
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); 
-    background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); 
-    background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); 
-    background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); 
-    background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); 
+    text-decoration: none;
+    margin-right: 5px;
 }
 .actions a:hover{
-    background: #f4f4f4; 
-    background: -moz-linear-gradient(top, #f4f4f4 0%, #dddddd 71%); 
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f4f4f4), color-stop(71%,#dddddd)); 
-    background: -webkit-linear-gradient(top, #f4f4f4 0%,#dddddd 71%);  
-    background: -o-linear-gradient(top, #f4f4f4 0%,#dddddd 71%); 
-    background: -ms-linear-gradient(top, #f4f4f4 0%,#dddddd 71%);
-    background: linear-gradient(to bottom, #f4f4f4 0%,#dddddd 71%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f4f4', endColorstr='#dddddd',GradientType=0 ); 
-}*/
+    text-decoration: none;
+}
+.actions img{
+    padding: 3px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+}
+.actions img:hover{
+    background: #ededed; /* Old browsers */
+    background: -moz-linear-gradient(top, #ededed 2%, #f6f6f6 49%, #ffffff 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(2%,#ededed), color-stop(49%,#f6f6f6), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ededed 2%,#f6f6f6 49%,#ffffff 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
 .actions .btn-toolbar {
     margin : 0px;
 }
@@ -1034,9 +1063,7 @@ button.next.disabled {
     padding-top: 10px;
     text-shadow: gray 3px 3px 2px;
 }
-
 /* ATTENDANCE */
-
 div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.row div.formw  {
     float: left;
     display:inline;
@@ -1054,23 +1081,26 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 .attendance-calendar-row {
     padding:5px;
 }
-.attendance-faults-bar {
-    width:90%;
-    background-color:none;
-    padding:2px;
-    font-size:120%;
-    font-weight: bold;
-    padding:5px;
+.attendance-calendar-table .check{
+    text-align: center;
 }
-
-.attendance-users-table td {
-    height:66px;
+.date-attendance{
+    color: #666;
+    text-align: center;
+    font-size: 12px;
+    width: 150px;
+    margin: auto;
 }
-
-.attendance-calendar-table td {
-    height:66px;
+.date-attendance .blue{
+    color: #2E75A3;
 }
-
+.date-attendance .grey{
+    color: #666;
+}
+.tableFloatingHeaderOriginal{
+    font-size: 12px;
+    height: 60px;
+}
 /**********************************************
  *  MESSAGE TOOL                           *
  **********************************************/
@@ -2255,6 +2285,7 @@ div.admin_section h4 {
 
 .ui-jqgrid tr.jqgrow td {
     height:38px !important;
+    white-space: inherit;
 }
 
 .exercise_overview_options {
@@ -2919,17 +2950,6 @@ form .formw .freeze {
     color:#999;
     font-size: 11px;
 }
-
-/* Stick table header */
-
-.tableWithFloatingHeader th {
-    padding: 5px 5px 0px 5px;
-}
-.tableFloatingHeaderOriginal th, .tableWithFloatingHeader th{
-    height:80px;
-}
-
-/* jsPlumb */
 /* ****************************************************
                      CSS SKILL
  **************************************************** */
@@ -3425,7 +3445,7 @@ div#no-data-view div.controls {
     padding-top: 1px;
 }
 
-/* styles for the star rater 
+/* styles for the star rater
 .star-rating{
     list-style:none;
     margin: 0px;
@@ -3677,20 +3697,6 @@ a:active{
     /* height: 60px; */
     overflow: hidden;
     width: 800px;
-}
-
-#my_timeline #next {
-    background: url("../../main/img/action_next.png") no-repeat transparent;
-    height: 32px;
-    width: 32px;
-    float:right;
-}
-
-#my_timeline #prev {
-    background: url("../../main/img/action_prev.png") no-repeat transparent;
-    height: 32px;
-    width: 32px;
-    float:left;
 }
 
 #dates .selected {
@@ -4028,7 +4034,7 @@ a.forum_group_link {
     min-height: 50px;
 }
 .new_actions .nav > li > a {
-    
+
     border-radius: 0 0 0 0;
     border-right: 1px solid #E5E5E5;
     margin: 0;
@@ -4253,111 +4259,21 @@ li.annoucement{
     margin-bottom: 5px;
 }
 
-.link_category .head {
-    background-color: #EFEFEF;
-    border: 1px solid #CCCCCC;
-    margin-bottom: 5px;
-    padding-top: 2px;
-    padding-right: 2px;
-    padding-bottom: 2px;
-    vertical-align: middle;
-}
-
-.link_category .body{
-    margin-left: 32px;
-}
-
-.link:nth-child(2n) {
-    background-color: #F9F9F9;
-}
-
 .link{
-    border-top: 1px solid #DDDDDD;
-    border-left: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
+    margin-top: 15px;
 }
-
-.link:last-child{
-    border-bottom: 1px solid #DDDDDD;
-    border-left: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
+.link .list-group-item-heading a{
+    text-decoration: none;
 }
-
-.link{
-    border-collapse: collapse;
-    /*border: 1px solid #CCCCCC;*/
-    padding-top: 6px;
-    padding-right: 6px;
-    padding-bottom: 6px;
-    padding-left: 6px;
-    vertical-align: middle;
+.link .list-group-item-heading .invisible{
+    color: #666666;
 }
-
-.link .icon{
-    position: absolute;
-    float: left;
+.link .list-group-item-text{
+    font-size: 12px;
 }
-
-.link:hover{
-    background-color: #E5EDF9;
+.link .check-link{
+    margin-left: 5px;
 }
-
-.link .title,
-.link .description{
-    margin-left: 32px;
-}
-
-.link .description{
-    font-weight: normal;
-    color: #000000;
-}
-
-.link.invisible img{
-    opacity:0.4;
-    filter:alpha(opacity=40); /* For IE8 and earlier */
-}
-
-.link.invisible .description{
-    color: #999999;
-}
-
-.link .status{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:22px;
-    height:22px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-repeat: no-repeat;
-    background-position:center center;
-    box-shadow:none;
-}
-
-.link.invalid .status{
-    background-image:  url('../../main/img/icons/22/error.png');
-}
-
-.link.valid .status{
-    background-image:  url('../../main/img/icons/22/accept.png');
-}
-
-.btn.validate_link{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:22px;
-    height:22px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-image:  url('../../main/img/icons/22/preview_view.png');
-    background-repeat: no-repeat;
-    background-position:center center;
-    box-shadow:none;
-}
-
 /*
   Glossary
 */
@@ -6197,7 +6113,7 @@ div#chat-remote-video video {
   padding-top: 3px;
   padding-bottom: 5px;
   border-radius: 5px;
-  
+
 }
 .hot-course-head{
   padding-top: 10px;
@@ -6220,9 +6136,18 @@ div#chat-remote-video video {
   text-align: left;
   padding-left: 15px;
 }
-/*form input.form-control{
-  margin-top: 10px;
-}*/
+#toolbar-agenda .show-tick{
+    width: 420px;
+}
+.tab-wrapper .tab-content{
+    padding: 25px;
+}
+.description-upload{
+    margin-bottom: 10px;
+}
+.files-table{
+    padding-top: 20px;
+}
 #whoisonline .items-user{
   text-align: center;
   /*border:1px solid #dddddd; */
@@ -6403,7 +6328,9 @@ a.sessionView {
   padding: 6px;
   font-size: 12px;
 }
-
+#listFriends .help{
+  font-size: 12px;
+}
 #listFriends a{
   display: block;
   text-overflow: ellipsis;
@@ -6448,7 +6375,7 @@ a.sessionView {
 {
   width: 70px;
   float: left;
-  margin-right: 5px; 
+  margin-right: 5px;
 }
 #course-block .list-group .list-group-item .title,
 #session-block .list-group .list-group-item .title{

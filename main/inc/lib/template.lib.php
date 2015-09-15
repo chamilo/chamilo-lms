@@ -805,7 +805,17 @@ class Template
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
 
-        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+        //Defaul root chamilo favicon
+        $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_PATH) . 'favicon.ico" type="image/x-icon" />';
+
+        //Added to verify if in the current Chamilo Theme exist a favicon
+        $favicoThemeUrl = api_get_path(SYS_CSS_PATH) . 'themes/' . $this->theme . '/images/';
+
+        //If exist pick the current chamilo theme favicon
+        if (is_file($favicoThemeUrl . 'favicon.ico')) {
+            $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_CSS_PATH)
+                . 'themes/' . $this->theme . '/images/favicon.ico" type="image/x-icon" />';  
+        }
 
         if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();

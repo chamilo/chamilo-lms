@@ -1419,7 +1419,7 @@ class Agenda
         if (Database::num_rows($result)) {
             $eventsAdded = array();
             foreach ($this->events as $eventData) {
-                $eventsAdded[] = $eventData['id'];
+                $eventsAdded[] = $eventData['unique_id'];
             }
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $eventId = $row['ref'];
@@ -1428,9 +1428,10 @@ class Agenda
                 $user_to_array = $items['users'];
                 $event = array();
                 $event['id'] = 'course_'.$row['id'];
+                $event['unique_id']  = 'course_'.$row['id'].intval($row['session_id']);
 
                 // To avoid doubles
-                if (in_array($event['id'], $eventsAdded)) {
+                if (in_array($event['unique_id'], $eventsAdded)) {
                     continue;
                 }
 

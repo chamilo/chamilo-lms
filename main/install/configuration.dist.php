@@ -217,3 +217,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 ];*/
 // Boost option to ignore encoding check for learning paths
 //$_configuration['lp_fixed_encoding'] = 'false';
+// Fix urls changing http with https in scorm packages.
+//$_configuration['lp_replace_http_to_https'] = false;

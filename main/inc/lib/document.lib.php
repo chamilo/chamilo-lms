@@ -399,7 +399,7 @@ class DocumentManager
                 $content = file_get_contents($full_file_name);
                 $content = str_replace(
                     array('http%3A%2F%2F', 'http://'),
-                    'https://',
+                    array('https%3A%2F%2F', 'https://'),
                     $content
                 );
                 echo $content;

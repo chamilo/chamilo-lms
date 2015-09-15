@@ -295,32 +295,31 @@ Display::display_header($nameTool);
  */ ?>
 
 	<!-- PPT2LP -->
-	<div id="main_ppt2lp">
-		<div id="extension_header_ppt2lp" class="accordion_header">
-			<a href="#"><?php echo get_lang('Ppt2lp') ?></a>
-		</div>
-		<div id="extension_content_ppt2lp" style="display:none" class="accordion_content">
-			<?php echo get_lang('Ppt2lpDescription').' '.get_lang('Ppt2lpVoiceRecordingNeedsRed5') ?><br /><br />
-			<table width="100%">
-				<tr>
-					<td valign="top" align="center">
-						<?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp')); ?>
-					</td>
-					<td align="center" width="50%">
-						<form method="POST" action="<?php echo api_get_self(); ?>">
+        <div class="chamilo-rapid">
+        <div class="row">
+            <div class="col-md-12">
+                <?php echo Display::panel(get_lang('Ppt2lpDescription').' '.get_lang('Ppt2lpVoiceRecordingNeedsRed5'), get_lang('Ppt2lp')) ?>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp'), array('class'=>'img-responsive')); ?>
+                </div>
+                <div class="col-md-7">
+                    <form method="POST" class="form-horizontal" action="<?php echo api_get_self(); ?>">
 						<?php
 
 						$form = new FormValidator('ppt2lp');
 						$form -> addElement('text', 'host', get_lang('Host'));
-						$form -> addElement('html','<br /><br />');
+						//$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'port', get_lang('Port'));
-						$form -> addElement('html','<br /><br />');
+						//$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'user', get_lang('UserOnHost'));
-						$form -> addElement('html','<br /><br />');
+						//$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'ftp_password', get_lang('FtpPassword'));
-						$form -> addElement('html','<br /><br />');
+						//$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'path_to_lzx', get_lang('PathToLzx'));
-						$form -> addElement('html','<br /><br />');
+						//$form -> addElement('html','<br /><br />');
 						$options = array(
 									'540x405'=>'540x405',
 									'640x480'=>'640x480',
@@ -336,7 +335,7 @@ Display::display_header($nameTool);
 						$defaults = array();
 						$renderer = $form -> defaultRenderer();
 						$renderer -> setElementTemplate('<div style="text-align:left">{label}</div><div style="text-align:left">{element}</div>');
-						$form -> addElement('html','<br /><br />');
+						//$form -> addElement('html','<br /><br />');
 						if(in_array('service_ppt2lp',$listActiveServices))
 						{
 							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.'
@@ -361,11 +360,10 @@ Display::display_header($nameTool);
 						echo '<br />';
 						?>
 						</form>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
+                </div>
+            </div>
+        </div>
+	
 	<?php
 	/*
 	<!-- EPHORUS -->

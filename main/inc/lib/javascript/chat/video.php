@@ -14,11 +14,7 @@ if ($room === false) {
     Header::location(api_get_path(WEB_PATH));
 }
 
-$friend_html = SocialManager::listMyFriendsBlock(
-    $user_id,
-    $link_shared,
-    $show_full_profile
-);
+$friend_html = SocialManager::listMyFriendsBlock($user_id, '', false);
 
 $isSender = $room['from_user'] == api_get_user_id();
 $isReceiver = $room['to_user'] == api_get_user_id();
@@ -46,8 +42,14 @@ $template->assign('block_friends', $friend_html);
 
 $content = $template->fetch('default/chat/video.tpl');
 
-//$template->assign('header', $room['room_name']);
+$templateHeader = Display::returnFontAswesomeIcon('video-camera', true, 'lg')
+    . $room['room_name'];
+
+$template->assign('header', $templateHeader);
 $template->assign('content', $content);
-$template->assign('message', Display::return_message(get_lang('BroswerDoesNotSupportWebRTC'), 'warning'));
+$template->assign(
+    'message',
+    Display::return_message(get_lang('YourBroswerDoesNotSupportWebRTC'), 'warning')
+);
 $template->display_one_col_template();
 //$template->display_no_layout_template();

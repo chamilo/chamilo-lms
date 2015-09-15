@@ -1,10 +1,5 @@
 <div id="chat-video-panel">
     <div class="row">
-        <div class="col-md-12">
-            <h3 class="title"><i class="fa fa-video-camera"></i> {{ room.room_name }} </h3>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-4">
             <div id="chat-local-video"></div>
             <div class="username-local">

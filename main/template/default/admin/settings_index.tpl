@@ -13,7 +13,7 @@ $(document).ready(function() {
 
         var extraContentEditor = CKEDITOR.instances.extra_content;
 
-        $('a.edit-block').on('click', function(e) {
+        $('a.admin-edit-block').on('click', function(e) {
             e.preventDefault();
 
             var $self = $(this);

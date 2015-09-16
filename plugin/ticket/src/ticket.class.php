@@ -162,8 +162,9 @@ class TicketManager
             Database::query($sql_update_total);
             if (self::insert_message($ticket_id, $subject, $content, $file_attachments, $request_user)) {
                 global $data_files;
-                if ($other_area) {
-                    $user = UserManager::get_user_info_by_id($request_user);
+                if (1) {
+                //if ($other_area) {
+                    $user = api_get_user_info($request_user);
                     $helpDeskMessage = '<table>
                                             <tr>
                                                 <td width="100px"><b>' . get_lang('User') . '</b></td>
@@ -186,11 +187,31 @@ class TicketManager
                                                 <td width="400px">' . $content . '</td>
                                             </tr>
                                         </table>';
+
+                    // Send email to "other area" email
                     api_mail_html(
-                            $plugin->get_lang('VirtualSupport'), $email, $plugin->get_lang('IncidentResentToVirtualSupport'),
-                            $helpDeskMessage, $user['firstname'] . ' ' . $user['lastname'], $personalEmail,
-                            array(), $data_files
+                        $plugin->get_lang('VirtualSupport'),
+                        $email,
+                        $plugin->get_lang('IncidentResentToVirtualSupport'),
+                        $helpDeskMessage,
+                        $user['firstname'].' '.$user['lastname'],
+                        $personalEmail,
+                        array(),
+                        $data_files
                     );
+
+                    // Send email to user
+                    api_mail_html(
+                        $plugin->get_lang('VirtualSupport'),
+                        $user['email'],
+                        $plugin->get_lang('IncidentResentToVirtualSupport'),
+                        $helpDeskMessage,
+                        $user['firstname'].' '.$user['lastname'],
+                        $personalEmail,
+                        array(),
+                        $data_files
+                    );
+
                     $studentMessage = sprintf($plugin->get_lang('YourQuestionWasSentToTheResponableAreaX'), $email, $email);
                     $studentMessage .= sprintf($plugin->get_lang('YourAnswerToTheQuestionWillBeSentToX'), $personalEmail);
                     self::insert_message(

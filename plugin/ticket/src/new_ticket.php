@@ -4,11 +4,14 @@
 /**
  * @package chamilo.plugin.ticket
  */
+
 $cidReset = true;
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
-if (!api_is_platform_admin() && $plugin->get('allow_student_add') != 'true') {
+if (!api_is_platform_admin() &&
+    $plugin->get('allow_student_add') != 'true'
+) {
     header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php');
     exit;
 }
@@ -71,23 +74,23 @@ function validate() {
     var selected = document.getElementById("category_id").selectedIndex;
     var id = document.getElementById("category_id").options[selected].value;
     if (document.getElementById("user_id_request").value == "") {
-            alert("' . $plugin->get_lang("ValidUser") . '");
-            return false;
+        alert("' . $plugin->get_lang("ValidUser") . '");
+        return false;
     } else if(id == 0) {
-            alert("' . $plugin->get_lang("ValidType") . '");
-            return false;
+        alert("' . $plugin->get_lang("ValidType") . '");
+        return false;
     } else if(document.getElementById("subject").value == "") {
-            alert("' . $plugin->get_lang("ValidSubject") . '");
-            return false;
+        alert("' . $plugin->get_lang("ValidSubject") . '");
+        return false;
     } else if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
-            alert("' . $plugin->get_lang("ValidCourse") . '");
-            return false;
+        alert("' . $plugin->get_lang("ValidCourse") . '");
+        return false;
     } else if(id != "CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)) {
-            alert("' . $plugin->get_lang("ValidEmail") . '");
-            return false;
+        alert("' . $plugin->get_lang("ValidEmail") . '");
+        return false;
     } else if(fckEditor1val == "") {
-            alert("' . $plugin->get_lang("ValidMessage") . '");
-            return false;
+        alert("' . $plugin->get_lang("ValidMessage") . '");
+        return false;
     }
 }
 
@@ -199,14 +202,13 @@ function show_form_send_ticket()
     global $types, $plugin;
     echo '<div class="divTicket">';
 
-    //Category List
+    // Category List
     $categoryList = array();
     foreach ($types as $type) {
         $categoryList[$type['category_id']] = $type['name'] . ": " . $type['description'];
     }
-    //End Category List
 
-    //Status List
+    // Status List
     $statusList = array();
     $statusAttributes = array(
         'style' => 'display: none;',
@@ -495,6 +497,7 @@ function get_number_of_users()
     }
     $res = Database::query($sql);
     $obj = Database::fetch_object($res);
+
     return $obj->total_number_of_items;
 }
 

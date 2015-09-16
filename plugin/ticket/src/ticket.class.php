@@ -48,6 +48,7 @@ class TicketManager
         while ($row = Database::fetch_assoc($result)) {
             $types[] = $row;
         }
+
         return $types;
     }
 
@@ -381,7 +382,10 @@ class TicketManager
             foreach ($file_attachments as $file_attach) {
                 if ($file_attach['error'] == 0) {
                     $data_files[] = self::save_message_attachment_file(
-                                    $file_attach, $ticket_id, $message_id, $message_attch_id
+                        $file_attach,
+                        $ticket_id,
+                        $message_id,
+                        $message_attch_id
                     );
                     $message_attch_id++;
                 } else {
@@ -430,7 +434,7 @@ class TicketManager
             }
             $new_path = $path_message_attach . $new_file_name;
             if (is_uploaded_file($file_attach['tmp_name'])) {
-                $result = @copy($file_attach['tmp_name'], $new_path);
+                @copy($file_attach['tmp_name'], $new_path);
             }
             $safe_file_name = Database::escape_string($file_name);
             $safe_new_file_name = Database::escape_string($new_file_name);
@@ -458,6 +462,7 @@ class TicketManager
                     '$now'
                 )";
             Database::query($sql);
+
             return array(
                 'path' => $path_message_attach . $safe_new_file_name,
                 'filename' => $safe_file_name
@@ -657,7 +662,7 @@ class TicketManager
             }
         }
         $sql .= " ORDER BY col$column $direction";
-        $sql .= " LIMIT $from,$number_of_items";
+        $sql .= " LIMIT $from, $number_of_items";
 
         $result = Database::query($sql);
         $tickets = array();
@@ -1028,8 +1033,9 @@ class TicketManager
             }
             $sql = "SELECT  * FROM  $table_support_messages message,
                     $table_main_user user
-                    WHERE message.ticket_id = '$ticket_id'
-                    AND message.sys_insert_user_id = user.user_id ";
+                    WHERE
+                        message.ticket_id = '$ticket_id' AND
+                        message.sys_insert_user_id = user.user_id ";
             $result = Database::query($sql);
             $ticket['messages'] = array();
             $attach_icon = Display::return_icon('attachment.gif', '');
@@ -1050,10 +1056,12 @@ class TicketManager
                 }
 
                 $message['user_created'] = "<a href='$href'> $completeName </a>";
-                $sql_atachment = "SELECT * FROM $table_support_message_attachments
-                                  WHERE message_id = " . $row['message_id'] . "
-                                  AND ticket_id= '$ticket_id'  ";
-                $result_attach = Database::query($sql_atachment);
+                $sql = "SELECT *
+                        FROM $table_support_message_attachments
+                        WHERE
+                            message_id = " . $row['message_id'] . " AND
+                            ticket_id= '$ticket_id'  ";
+                $result_attach = Database::query($sql);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
                     $archiveURL = $archiveURL = $webPath . "plugin/" . PLUGIN_NAME . '/src/download.php?ticket_id=' . $ticket_id . '&file=';
                     $row2['attachment_link'] = $attach_icon . '&nbsp;<a href="' . $archiveURL . $row2['path'] . '&title=' . $row2['filename'] . '">' . $row2['filename'] . '</a>&nbsp;(' . $row2['size'] . ')';
@@ -1127,6 +1135,7 @@ class TicketManager
                 sys_lastedit_datetime ='" . $now . "'
                 WHERE ticket_id ='$ticket_id'";
         $result = Database::query($sql);
+
         if (Database::affected_rows($result) > 0) {
             return true;
         } else {

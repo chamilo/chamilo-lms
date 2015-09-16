@@ -80,6 +80,13 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
 
+ $htmlHeadXtra[] = '<script type="text/javascript">
+    <!--
+        var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
+    -->
+    </script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
@@ -363,30 +370,29 @@ if ($is_allowed_to_edit) {
     echo '<div id="header">';
     //echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();"></a>';
 
-                    // Return to course home.
-                    if ($is_allowed_to_edit) {
-                        $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
-                    } else {
-                        $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
-                    }
+    // Return to course home.
+    if ($is_allowed_to_edit) {
+        $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
+    } else {
+        $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
+    }
 
-                    $name = get_lang('CourseHomepageLink');
-                    // Return to lp list
-                    if (api_get_course_setting('lp_return_link') == 1) {
-                        $url .= '&redirectTo=lp_list';
-                        $name = get_lang('LearningPathList');
-                    }
+    $name = get_lang('CourseHomepageLink');
+    // Return to lp list
+    if (api_get_course_setting('lp_return_link') == 1) {
+        $url .= '&redirectTo=lp_list';
+        $name = get_lang('LearningPathList');
+    }
 
-                    echo Display::url(
-                        $name,
-                        $url,
-                        array(
-                            'class' => 'home btn btn-small btn-info',
-                            'target' => '_self',
-                            'onclick' => 'javascript: window.parent.API.save_asset();'
-                        )
-                    );
-
+    echo Display::url(
+        $name,
+        $url,
+        array(
+            'class' => 'home btn btn-small btn-info',
+            'target' => '_self',
+            'onclick' => 'javascript: window.parent.API.save_asset();'
+        )
+    );
 
     echo '</div>';
 ?>
@@ -488,6 +494,7 @@ if ($is_allowed_to_edit) {
     // Loads the glossary library.
     <?php
     $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
     if (in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'))) {
            if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                 ?>
@@ -498,7 +505,8 @@ if ($is_allowed_to_edit) {
                   {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
                   {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
                   {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
-                  {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
+                  {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+                  <?php echo $fixLink; ?>
 
           ] }
           );
@@ -514,13 +522,34 @@ if ($is_allowed_to_edit) {
           {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
           {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
           {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
-          {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
+          {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+          <?php echo $fixLink; ?>
       ]}
       );
   <?php
        }
+  } else {
+  $fixLinks = api_get_configuration_value('lp_add_popup');
+      if (1) {
+       ?>console.log(1);
+          $(document).ready(function() {
+                $.frameReady(function(){
+                    //  $("<div>I am a div courses</div>").prependTo("body");
+                    },
+                    "top.content_name",
+                    {
+                    load: [
+                        {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+                        {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+                        <?php echo $fixLink; ?>
+                    ]}
+                );
+         });
+            <?php
+      }
   }
   ?>}
+
     $(document).ready(function() {
         updateContentHeight();
         $('#hide_bar').children().click(function(){
@@ -529,6 +558,7 @@ if ($is_allowed_to_edit) {
         $(window).resize(function() {
             updateContentHeight();
         });
+
     });
     window.onload = updateContentHeight();
     window.onresize = updateContentHeight();

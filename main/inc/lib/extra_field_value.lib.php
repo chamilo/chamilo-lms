@@ -144,6 +144,8 @@ class ExtraFieldValue extends Model
                         $em->remove($extraFieldtag);
                     }
 
+                    $em->flush();
+
                     $tagValues = is_array($value) ? $value : [$value];
                     $tags = [];
 
@@ -157,7 +159,6 @@ class ExtraFieldValue extends Model
 
                         if (empty($tagsResult)) {
                             $tag = new \Chamilo\CoreBundle\Entity\Tag();
-                            $tag->setCount(0);
                             $tag->setFieldId($extraFieldInfo['id']);
                             $tag->setTag($tagValue);
 
@@ -168,9 +169,19 @@ class ExtraFieldValue extends Model
                     }
 
                     foreach ($tags as $tag) {
-                        $tag->setCount($tag->getCount() + 1);
-                        $em->persist($tag);
+                        $tagUses = $em
+                            ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                            ->findBy([
+                                'tagId' => $tag->getId()
+                            ]);
 
+                        $tag->setCount(count($tagUses) + 1);
+                        $em->persist($tag);    
+                    }
+
+                    $em->flush();
+
+                    foreach ($tags as $tag) {
                         $fieldRelTag = new Chamilo\CoreBundle\Entity\ExtraFieldRelTag();
                         $fieldRelTag->setFieldId($extraFieldInfo['id']);
                         $fieldRelTag->setItemId($params['item_id']);

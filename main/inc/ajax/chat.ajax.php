@@ -82,7 +82,13 @@ switch ($action) {
                 api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room={$room['room_name']}"
             );
 
-            $chat->send(api_get_user_id(), $to_user_id, $videoChatLink, false);
+            $chat->send(
+                api_get_user_id(),
+                $to_user_id,
+                $videoChatLink,
+                false,
+                false
+            );
 
             echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
             break;
@@ -131,7 +137,13 @@ switch ($action) {
             api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room=$roomName"
         );
 
-        $chat->send(api_get_user_id(), $to_user_id, $videoChatLink, false);
+        $chat->send(
+            api_get_user_id(),
+            $to_user_id,
+            $videoChatLink,
+            false,
+            false
+        );
 
         echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
         break;

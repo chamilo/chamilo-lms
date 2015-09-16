@@ -194,6 +194,8 @@ class TicketManager
                                                 <td width="400px">' . $content . '</td>
                                             </tr>
                                         </table>';
+
+                    // Send email to "other area" email
                     api_mail_html(
                         $plugin->get_lang('VirtualSupport'),
                         $email,
@@ -204,6 +206,19 @@ class TicketManager
                         array(),
                         $data_files
                     );
+
+                    // Send email to user
+                    api_mail_html(
+                        $plugin->get_lang('VirtualSupport'),
+                        $user['email'],
+                        $plugin->get_lang('IncidentResentToVirtualSupport'),
+                        $helpDeskMessage,
+                        $user['firstname'].' '.$user['lastname'],
+                        $personalEmail,
+                        array(),
+                        $data_files
+                    );
+
                     $studentMessage = sprintf($plugin->get_lang('YourQuestionWasSentToTheResponableAreaX'), $email, $email);
                     $studentMessage .= sprintf($plugin->get_lang('YourAnswerToTheQuestionWillBeSentToX'), $personalEmail);
                     self::insert_message(

@@ -104,11 +104,13 @@ class Chat extends Model
                 $items[$from_user_id]['items'][] = $item;
                 $items[$from_user_id]['user_info']['user_name'] = $user_info['complete_name'];
                 $items[$from_user_id]['user_info']['online'] = $user_info['user_is_online'];
+                $items[$from_user_id]['user_info']['avatar'] = $user_info['avatar_small'];
                 $_SESSION['openChatBoxes'][$from_user_id] = api_strtotime($chat['sent'], 'UTC');
             }
             $_SESSION['chatHistory'][$from_user_id]['items'][] = $item;
             $_SESSION['chatHistory'][$from_user_id]['user_info']['user_name'] = $user_info['complete_name'];
             $_SESSION['chatHistory'][$from_user_id]['user_info']['online'] = $user_info['user_is_online'];
+            $_SESSION['chatHistory'][$from_user_id]['user_info']['avatar'] = $user_info['avatar_small'];
         }
 
         if (!empty($_SESSION['openChatBoxes'])) {
@@ -167,12 +169,20 @@ class Chat extends Model
 
     /**
      * Sends a message from one user to another user
-     * @param int The ID of the user sending the message
-     * @param int The ID of the user receiving the message
-     * @param string Message
+     * @param int $from_user_id The ID of the user sending the message
+     * @param int $to_user_id The ID of the user receiving the message
+     * @param string $message Message
+     * @param boolean $printResult Optional. Whether print the result
+     * @param boolean $sanitize Optional. Whether sanitize the message
      * @return void Prints "1"
      */
-    public function send($from_user_id, $to_user_id, $message, $printResult = true)
+    public function send(
+        $from_user_id,
+        $to_user_id,
+        $message,
+        $printResult = true,
+        $sanitize =  true
+    )
     {
         $user_friend_relation = SocialManager::get_relation_between_contacts($from_user_id, $to_user_id);
         if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
@@ -181,7 +191,14 @@ class Chat extends Model
             $this->save_window($to_user_id);
 
             $_SESSION['openChatBoxes'][$to_user_id] = api_get_utc_datetime();
-            $messagesan = self::sanitize($message);
+
+            if ($sanitize) {
+                $messagesan = self::sanitize($message);
+            } else {
+                $messagesan = $message;
+            }
+            
+            error_log(print_r($sanitize) . '----' . $messagesan);
 
             if (!isset($_SESSION['chatHistory'][$to_user_id])) {
                 $_SESSION['chatHistory'][$to_user_id] = array();

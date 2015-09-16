@@ -52,7 +52,7 @@
                 var startVideoChat = function() {
                     var webRTC = new SimpleWebRTC({
                         localVideoEl: 'chat-local-video',
-                        remoteVideosEl: 'chat-remote-video',
+                        remoteVideosEl: '',
                         autoRequestMedia: true
                     });
 
@@ -61,6 +61,7 @@
                     });
                     webRTC.on('videoAdded', function (video, peer) {
                         $(video).addClass('skip');
+                        $('#chat-remote-video').html(video);
                     });
                 };
 

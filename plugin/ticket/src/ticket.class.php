@@ -1023,7 +1023,9 @@ class TicketManager
                 $row['course_url'] = null;
                 if ($row['course_id'] != 0) {
                     $course = api_get_course_info_by_id($row['course_id']);
-                    $row['course_url'] = '<a href="' . api_get_path(WEB_COURSE_PATH) . $course['path'] . '">' . $course['name'] . '</a>';
+                    if ($course) {
+                        $row['course_url'] = '<a href="'.$course['course_public_url'].'">'.$course['name'].'</a>';
+                    }
                 }
                 $userInfo = api_get_user_info($row['request_user']);
                 $row['user_url'] = '<a href="' . api_get_path(WEB_PATH) . 'main/admin/user_information.php?user_id=' . $row['request_user'] . '">

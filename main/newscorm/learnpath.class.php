@@ -3378,10 +3378,22 @@ class learnpath
                             if (is_youtube_link($file)) {
                                 $src  = get_youtube_video_id($file);
                                 $file = 'embed.php?type=youtube&src='.$src;
-                            }
-                            if (isVimeoLink($file)) {
+                            } elseif (isVimeoLink($file)) {
                                 $src  = getVimeoLinkId($file);
                                 $file = 'embed.php?type=vimeo&src='.$src;
+                            } else {
+                                // If the current site is HTTPS and the link is
+                                // HTTP, browsers will refuse opening the link
+                                $urlId = api_get_current_access_url_id();
+                                $url = api_get_access_url($urlId, false);
+                                $protocol = substr($url['url'], 0, 5);
+                                if ($protocol === 'https') {
+                                    $linkProtocol = substr($file, 0, 5);
+                                    if ($linkProtocol === 'http:') {
+                                        //this is the special intervention case
+                                        $file = 'embed.php?type=nonhttps&src=' .  urlencode($file);
+                                    }
+                                }
                             }
                         } else {
                             // Check how much attempts of a exercise exits in lp

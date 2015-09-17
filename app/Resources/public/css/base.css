@@ -423,6 +423,9 @@ ul#navigation .report a {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+.select-list-ajax{
+    padding: 10px;
+}
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/

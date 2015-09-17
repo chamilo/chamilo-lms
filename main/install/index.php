@@ -690,7 +690,7 @@ if (@$_POST['step2']) {
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
 
-        Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
+        error_log('Starting migration process from '.$my_old_version.' ('.time().')');
 
         switch ($my_old_version) {
             case '1.9.0':

@@ -1,10 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * Header utility functions.
  *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
+ * @deprecated
  */
 class Header
 {

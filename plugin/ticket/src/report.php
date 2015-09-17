@@ -186,7 +186,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $sql = "SELECT
                  u.user_id AS col0,
                  u.official_code AS col2,
-		 $col34
+		        $col34
                  u.username AS col5,
                  u.email AS col6,
                  u.status AS col7,
@@ -305,12 +305,12 @@ if (isset($_POST['report'])) {
     $table_result->set_header(4, get_lang('Tool'), false);
     while ($row = Database::fetch_assoc($result)) {
         $row = array(
-                $row['username'],
-                $row['fullname'],
-                $row['access_date'],
-                $row['course'],
-                get_lang($tools[$row['tool']]['name'])
-            );
+            $row['username'],
+            $row['fullname'],
+            $row['access_date'],
+            $row['course'],
+            get_lang($tools[$row['tool']]['name'])
+        );
         $table_result->addRow($row);
     }
     $table_result->display();

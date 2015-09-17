@@ -4,9 +4,7 @@
 /**
  * @package chamilo.plugin.ticket
  */
-/**
- * Init section
- */
+
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
@@ -27,7 +25,7 @@ $userLabel = Display::tag('label', get_lang('User'), array('class' => 'control-l
 $personName = api_get_person_name($userInfo['firstname'], $userInfo['lastname']);
 $userInput = Display::tag(
     'input',
-    '', 
+    '',
     array(
         'disabled' => 'disabled',
         'type' => 'text',

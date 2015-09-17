@@ -476,7 +476,10 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("UPDATE c_student_publication_assignment SET expires_on = NULL WHERE expires_on = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE c_student_publication_assignment SET ends_on = NULL WHERE ends_on = '0000-00-00 00:00:00'");
 
+        $this->addSql("UPDATE settings_current SET type = 'checkbox' WHERE variable = 'registration' AND category = 'User'");
+
         $this->addSql("UPDATE settings_current SET selected_value = 'UTF-8' WHERE variable = 'platform_charset'");
+
     }
 
     /**

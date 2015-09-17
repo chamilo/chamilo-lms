@@ -1573,7 +1573,7 @@ class Agenda
                     continue;
                 }
 
-                $eventsAdded[] = $row['unique_id'];
+                $eventsAdded[] = $event['unique_id'];
                 $attachment = $this->getAttachment($row['id'], $courseInfo);
 
                 if (!empty($attachment)) {

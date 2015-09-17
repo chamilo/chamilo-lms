@@ -315,5 +315,6 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['allow_agenda_events_coloring'] = false;
 // Fix urls changing http with https in scorm packages.
 //$_configuration['lp_replace_http_to_https'] = false;
-
+// Fix embedded videos inside lps, adding an optional popup
+//$_configuration['lp_fix_embed_content'] = false;
 

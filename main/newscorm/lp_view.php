@@ -494,7 +494,13 @@ if ($is_allowed_to_edit) {
     // Loads the glossary library.
     <?php
     $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
+    $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
+
+    $fixLink = '';
+    if ($fixLinkSetting) {
+        $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
+    }
+
     if (in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'))) {
            if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                 ?>
@@ -529,21 +535,21 @@ if ($is_allowed_to_edit) {
   <?php
        }
   } else {
-  $fixLinks = api_get_configuration_value('lp_add_popup');
-      if (1) {
-       ?>console.log(1);
+        $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
+      if ($fixLinkSetting) {
+       ?>
           $(document).ready(function() {
-                $.frameReady(function(){
-                    //  $("<div>I am a div courses</div>").prependTo("body");
-                    },
-                    "top.content_name",
-                    {
-                    load: [
-                        {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-                        {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
-                        <?php echo $fixLink; ?>
-                    ]}
-                );
+            $.frameReady(function(){
+                //  $("<div>I am a div courses</div>").prependTo("body");
+                },
+                "top.content_name",
+                {
+                load: [
+                    {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+                    {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+                    <?php echo $fixLink; ?>
+                ]}
+            );
          });
             <?php
       }

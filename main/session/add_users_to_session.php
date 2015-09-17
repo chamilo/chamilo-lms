@@ -539,9 +539,11 @@ $link_add_group = Display::url(
 );
 
 $newLinks = Display::url(
+    Display::return_icon('teacher.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).    
     get_lang('EnrollTrainersFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$id_session
 );
 $newLinks .= Display::url(
+    Display::return_icon('user.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).    
     get_lang('EnrollStudentsFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$id_session
 );
 ?>

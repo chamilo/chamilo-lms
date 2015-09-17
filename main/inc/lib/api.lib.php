@@ -7234,8 +7234,8 @@ function api_get_password_checker_js($usernameInputId, $passwordInputid)
 
     var verdicts = ['".implode("','", $verdicts)."'];
     var errorMessages = {
-        password_to_short : '".get_lang('PasswordIsTooShort')."',
-        same_as_username : '".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."'
+        password_to_short : \"" . get_lang('PasswordIsTooShort')."\",
+        same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
     };
 
     $(document).ready(function() {
@@ -7249,9 +7249,9 @@ function api_get_password_checker_js($usernameInputId, $passwordInputid)
             },
             errorMessages : errorMessages,
             viewports: {
-                progress: '#password_progress'
-                //verdict: undefined,
-                //errors: undefined
+                progress: '#password_progress',
+                verdict: '#password-verdict',
+                errors: '#password-errors'
             },
             usernameField: '$usernameInputId'
         };

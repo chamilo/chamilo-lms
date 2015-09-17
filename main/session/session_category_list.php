@@ -18,14 +18,11 @@ api_protect_limit_for_session_admin();
 $this_section = SECTION_PLATFORM_ADMIN;
 $htmlHeadXtra[] = '<script>
 function selectAll(idCheck,numRows,action) {
-    for(i=0;i<numRows;i++) {
-        idcheck = document.getElementById(idCheck+"_"+i);
-        if (action == "true"){
-            idcheck.checked = true;
-        } else {
-            idcheck.checked = false;
-        }
+    for(i = 0; i < numRows; i++) {
+        idcheck = document.getElementById(idCheck + "_" + i);
+        idcheck.checked = action == "true";
     }
+}
 </script>';
 
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);

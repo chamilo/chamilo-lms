@@ -9,6 +9,7 @@ class ch_dropdown extends survey_question
     /**
      * @param array $survey_data
      * @param $formData
+     *
      * @return FormValidator
      */
     public function createForm($survey_data, $formData)

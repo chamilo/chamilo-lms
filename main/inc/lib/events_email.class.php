@@ -51,8 +51,7 @@ class EventsMail
 
         // Fill the array's cells with info regarding the user that fired the event
         // (for the keys in the template)
-        if ( isset($event_data["about_user"]) )
-        {
+        if (isset($event_data["about_user"])) {
             $about_user = api_get_user_info($event_data["about_user"]);
             $event_data["firstname"] = $about_user["firstname"];
             $event_data["lastname"] = $about_user["lastname"];
@@ -63,24 +62,27 @@ class EventsMail
         }
 
         // First, we send the mail to people we put in the $event_data["send_to"]
-        if ($event_data["send_to"] != null) // the users we precised need to receive the mail
-        {
-            foreach ($event_data["send_to"] as $id) // for every member put in the array
-            {
+        if ($event_data["send_to"] != null) {
+            // the users we precised need to receive the mail
+            foreach ($event_data["send_to"] as $id) {
+                // for every member put in the array
                 // get user's info (to know where to send)
                 $user_info = api_get_user_info($id);
 
                 // get the language the email will be in
-                if ($event_data["prior_lang"] != null) // if $lang is not null, we use that lang
-                {
+                if ($event_data["prior_lang"] != null) {
+                    // if $lang is not null, we use that lang
                     $language = $event_data["prior_lang"];
-                }
-                else  // else we use the user's language
-                {
-                    $sql = 'SELECT language FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' u
-                    WHERE u.user_id = "' . $id . '"
+                } else {
+                    // else we use the user's language
+                    $sql = 'SELECT language
+                            FROM '.Database::get_main_table(TABLE_MAIN_USER).' u
+                            WHERE u.user_id = "'.$id.'"
                     ';
-                    $language = Database::store_result(Database::query($sql), 'ASSOC');
+                    $language = Database::store_result(
+                        Database::query($sql),
+                        'ASSOC'
+                    );
                     $language = $language[0]["language"];
                 }
 
@@ -99,18 +101,32 @@ class EventsMail
                 // checks if there's a file we need to join to the mail
                 if (isset($values["certificate_pdf_file"])) {
                     $message = str_replace("\n", "<br />", $message);
-                    api_mail_html($recipient_name, $user_info["mail"], $subject, $message, $sender_name, $email_admin, null, array($values['certificate_pdf_file']));
+                    api_mail_html(
+                        $recipient_name,
+                        $user_info["mail"],
+                        $subject,
+                        $message,
+                        $sender_name,
+                        $email_admin,
+                        null,
+                        array($values['certificate_pdf_file'])
+                    );
                 } else {
-                    api_mail_html($recipient_name, $user_info["mail"], $subject, $message, $sender_name, $email_admin);
+                    api_mail_html(
+                        $recipient_name,
+                        $user_info["mail"],
+                        $subject,
+                        $message,
+                        $sender_name,
+                        $email_admin
+                    );
                 }
 
                 // If the mail only need to be send once (we know that thanks to the events.conf), we log it in the table
-                if ($event_config[$event_name]["sending_mail_once"])
-                {
-                    $sql = 'INSERT INTO ' . Database::get_main_table(TABLE_EVENT_SENT) . '
-                        (user_from, user_to, event_type_name)
-                        VALUES ('.$event_data["user_id"].', '.$id.' ,"'.Database::escape_string($event_name).'");
-                        ';
+                if ($event_config[$event_name]["sending_mail_once"]) {
+                    $sql = 'INSERT INTO ' . Database::get_main_table(TABLE_EVENT_SENT) . ' (user_from, user_to, event_type_name)
+                            VALUES ('.$event_data["user_id"].', '.$id.' ,"'.Database::escape_string($event_name).'")
+                    ';
                     Database::query($sql);
                 }
             }
@@ -118,20 +134,19 @@ class EventsMail
 
         // Second, we send to people linked to the event
         // So, we get everyone
-        $sql = 'SELECT u.user_id, u.language, u.email, u.firstname, u.lastname FROM ' . Database::get_main_table(TABLE_EVENT_TYPE_REL_USER) . ' ue
+        $sql = 'SELECT u.user_id, u.language, u.email, u.firstname, u.lastname
+                FROM ' . Database::get_main_table(TABLE_EVENT_TYPE_REL_USER) . ' ue
                 INNER JOIN '.Database::get_main_table(TABLE_MAIN_USER).' u ON u.user_id = ue.user_id
                 WHERE event_type_name = "' . $event_name . '"';
         $result = Database::store_result(Database::query($sql), 'ASSOC');
-
-        foreach ($result as $key => $value) // for each of the linked users
-        {
+        // for each of the linked users
+        foreach ($result as $key => $value) {
             // we get the language
-            if ($event_data["prior_lang"] != null) // if $lang is not null, we use that lang
-            {
+            if ($event_data["prior_lang"] != null) {
+                // if $lang is not null, we use that lang
                 $language = $event_data["prior_lang"];
-            }
-            else // else we get the user's lang
-            {
+            } else {
+                // else we get the user's lang
                 $sql = 'SELECT language FROM '.Database::get_main_table(TABLE_MAIN_USER).'
                     where user_id = '.$value["user_id"].' ';
                 $result = Database::store_result(Database::query($sql), 'ASSOC');
@@ -151,11 +166,17 @@ class EventsMail
             // we send the mail
             $recipient_name = api_get_person_name($value['firstname'], $value['lastname']);
 
-            api_mail_html($recipient_name, $value["email"], $subject, $message, $sender_name, $email_admin);
+            api_mail_html(
+                $recipient_name,
+                $value["email"],
+                $subject,
+                $message,
+                $sender_name,
+                $email_admin
+            );
 
             // If the mail only need to be send once (we know that thanks to the events.conf, we log it in the table
-            if ($event_config[$event_name]["sending_mail_once"])
-            {
+            if ($event_config[$event_name]["sending_mail_once"]) {
                 $sql = 'INSERT INTO ' . Database::get_main_table(TABLE_EVENT_SENT) . '
                     (user_from, user_to, event_type_name)
                     VALUES ('.$event_data["user_id"].', '.$value["user_id"].' , "'.Database::escape_string($event_name).'");
@@ -206,10 +227,14 @@ class EventsMail
      */
     private static function getMessage($event_name, $language)
     {
-        $sql = 'SELECT message, subject, l.dokeos_folder FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE) . ' em
+        $sql = 'SELECT message, subject, l.dokeos_folder
+                FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE) . ' em
                 INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE) . ' l
                 ON em.language_id = l.id
-                WHERE em.event_type_name = "' . $event_name . '" and (l.dokeos_folder = "' . $language . '" OR l.dokeos_folder = "english") and em.message <> ""
+                WHERE
+                    em.event_type_name = "' . $event_name . '" AND
+                    (l.dokeos_folder = "' . $language . '" OR l.dokeos_folder = "english") AND
+                    em.message <> ""
                 ';
         return Database::store_result(Database::query($sql), 'ASSOC');
     }
@@ -224,18 +249,16 @@ class EventsMail
      */
     private static function getCorrectMessage(&$message, &$subject, $language, $result)
     {
-        foreach ($result as $msg)
-        {
-            if ($msg["dokeos_folder"] == $language)
-            {
+        foreach ($result as $msg) {
+            if ($msg["dokeos_folder"] == $language) {
                 $message = $msg["message"];
                 $subject = $msg["subject"];
                 break;
-            }
-            else if ($msg["dokeos_folder"] == "english")
-            {
-                $message = $msg["message"];
-                $subject = $msg["subject"];
+            } else {
+                if ($msg["dokeos_folder"] == "english") {
+                    $message = $msg["message"];
+                    $subject = $msg["subject"];
+                }
             }
         }
     }
@@ -250,8 +273,7 @@ class EventsMail
      */
     private static function formatMessage(&$message, &$subject, $event_config, $event_name, &$event_data)
     {
-        foreach ($event_config[$event_name]["available_keyvars"] as $key => $word)
-        {
+        foreach ($event_config[$event_name]["available_keyvars"] as $key => $word) {
             $message = str_replace('((' . $key . '))', $event_data[$word], $message);
             $subject = str_replace('((' . $key . '))', $event_data[$word], $subject);
         }

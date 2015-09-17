@@ -152,9 +152,9 @@ $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
 Database::insert(
     $paypalTable,
     [
-        'username' => 'API_UserName',
-        'password' => 'API_Password',
-        'signature' => 'API_Signature',
+        'username' => '',
+        'password' => '',
+        'signature' => '',
         'sandbox' => true
     ]
 );

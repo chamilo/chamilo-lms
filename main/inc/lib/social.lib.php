@@ -759,7 +759,7 @@ class SocialManager extends UserManager
                 $sendMessageText = get_lang('SendMessage');
                 $sendMessageIcon = Display::return_icon(
                     'compose_message.png',
-                    get_lang('SendMessage')
+                    $sendMessageText
                 );
                 $sendMesssageUrl = api_get_path(WEB_AJAX_PATH)
                     . 'user_manager.ajax.php?'
@@ -774,7 +774,8 @@ class SocialManager extends UserManager
                     $sendMesssageUrl,
                     [
                         'class' => 'ajax',
-                        'title' => get_lang('SendMessage')
+                        'title' => $sendMessageText,
+                        'data-title' => $sendMessageText
                     ]
                 );
                 $html .= '</li>';

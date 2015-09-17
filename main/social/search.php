@@ -99,7 +99,10 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                 $sendMesssageUrl,
                 'envelope',
                 'default',
-                ['class' => 'ajax btn-sm']
+                [
+                    'class' => 'ajax btn-sm',
+                    'data-title' => get_lang('SendMessage')
+                ]
             );
 
             $img = '<img src="'.$user_info['avatar'].'" width="100" height="100">';

@@ -345,7 +345,6 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 if (isset($_SESSION['oLP'])) {
     $_SESSION['oLP']->update_queue = array(); // Reinitialises array used by javascript to update items in the TOC.
-    $_SESSION['oLP']->message = ''; // Should use ->clear_message() method but doesn't work.
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {

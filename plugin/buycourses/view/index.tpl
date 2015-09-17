@@ -37,7 +37,7 @@
                     <a href="src/course_catalog.php">
                         <img src="resources/img/128/buycourses.png">
                     </a>
-                    <div class="caption">
+                    <div class="caption"  align="center">
                         <a class="btn btn-default btn-sm" href="src/course_catalog.php">{{ 'BuyCourses'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                         <a href="src/configuration.php">
                             <img src="resources/img/128/settings.png">
                         </a>
-                        <div class="caption">
+                        <div class="caption"  align="center">
                             <a class="btn btn-default btn-sm" href="src/configuration.php">{{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                         <a href="src/paymentsetup.php">
                             <img src="resources/img/128/paymentsettings.png">
                         </a>
-                        <div class="caption">
+                        <div class="caption" align="center">
                             <a class="btn btn-default btn-sm" href="src/paymentsetup.php">{{ 'PaymentsConfiguration'|get_plugin_lang('BuyCoursesPlugin') }} </a>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                         <a href="src/sales_report.php">
                             <img src="resources/img/128/backlogs.png">
                         </a>
-                        <div class="caption">
+                        <div class="caption"  align="center">
                             <a class="btn btn-default btn-sm" href="src/sales_report.php"> {{ 'SalesReport'|get_plugin_lang('BuyCoursesPlugin') }} </a>
                         </div>
                     </div>

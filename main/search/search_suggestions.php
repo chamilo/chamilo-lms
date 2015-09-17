@@ -1,27 +1,28 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Suggest words to search
  * @package chamilo.search
  */
-/**
- * Code
- */
+
 require_once dirname(__FILE__) . '/../inc/global.inc.php';
 
-function get_suggestions_from_search_engine($q) {
+function get_suggestions_from_search_engine($q)
+{
     if (strlen($q)<2) { return null;}
     global $charset;
-	$table_sfv     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
-	$q = Database::escape_string($q);
+    $table_sfv     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $q = Database::escape_string($q);
     $cid = api_get_course_id();
     $sql_add = '';
     if ($cid != -1) {
-    	$sql_add = " AND course_code = '".$cid."' ";
+        $sql_add = " AND course_code = '".$cid."' ";
     }
-	$sql = "SELECT * FROM $table_sfv where value LIKE '%$q%'".$sql_add."
-	        ORDER BY course_code, tool_id, ref_id, field_id";
-	$sql_result = Database::query($sql);
-	$data = array();
+    $sql = "SELECT * FROM $table_sfv where value LIKE '%$q%'".$sql_add."
+            ORDER BY course_code, tool_id, ref_id, field_id";
+    $sql_result = Database::query($sql);
+    $data = array();
     $i = 0;
     while ($row = Database::fetch_array($sql_result)) {
         echo api_convert_encoding($row['value'],'UTF-8',$charset)."| value\n";
@@ -35,9 +36,9 @@ function get_suggestions_from_search_engine($q) {
     // initial value...
     $more_sugg = array();
     foreach ($data as $cc => $course_id) {
-    	foreach ($course_id as $ti => $item_tool_id) {
-    		foreach ($item_tool_id as $ri => $item_ref_id) {
-    			//natsort($item_ref_id);
+        foreach ($course_id as $ti => $item_tool_id) {
+            foreach ($item_tool_id as $ri => $item_ref_id) {
+                //natsort($item_ref_id);
                 $output = array();
                 $field_val = array();
                 $sql2 = "SELECT * FROM $table_sfv
@@ -57,13 +58,13 @@ function get_suggestions_from_search_engine($q) {
                     $field_val[$row2['field_id']] = $row2['value'];
                     $current_field_val = '';
                     foreach ($field_val as $id => $val) {
-                    	$current_field_val .= $val.' - ';
+                        $current_field_val .= $val.' - ';
                     }
                     //Check whether we have a field repetition or not. Results
                     // have been ordered by field_id, so we should catch them
                     // all here
                     if ($field_id == $row2['field_id']) {
-                    	//We found the same field id twice, split the output
+                        //We found the same field id twice, split the output
                         // array to allow for two sets of results (copy all
                         // existing array elements into copies and update the
                         // copies) eg. Yannick - Car - Driving in $output[1]
@@ -71,7 +72,7 @@ function get_suggestions_from_search_engine($q) {
                         // in $output[3]
                         $c = count($output);
                         for ($i=0;$i<$c; $i++) {
-                        	$output[($c+$i)] = $current_field_val;
+                            $output[($c+$i)] = $current_field_val;
                         }
                     } else {
                         //no identical field id, continue as usual
@@ -91,11 +92,11 @@ function get_suggestions_from_search_engine($q) {
                     if (api_stristr($out,$q) === false) {continue;}
                     $s = api_convert_encoding(substr($out,0,-3),'UTF-8',$charset) . "| value\n";
                     if (!in_array($s,$more_sugg)) {
-        			    $more_sugg[] = $s;
+                        $more_sugg[] = $s;
                     }
                 }
-    		}
-    	}
+            }
+        }
     }
     foreach ($more_sugg as $sugg) {
         echo $sugg;

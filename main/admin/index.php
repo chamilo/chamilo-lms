@@ -19,7 +19,7 @@ api_protect_admin_script(true);
 $nameTools = get_lang('PlatformAdmin');
 
 $accessUrlId = 0;
-$adminExtraContentDir = api_get_path(SYS_PATH) . "home/admin/";
+$adminExtraContentDir = api_get_path(SYS_APP_PATH) . "home/admin/";
 
 if (api_is_multiple_url_enabled()) {
     $accessUrlId = api_get_current_access_url_id();
@@ -28,7 +28,7 @@ if (api_is_multiple_url_enabled()) {
         $urlInfo = api_get_access_url($accessUrlId);
         $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
         $cleanUrl = str_replace('/', '-', $url);
-        $adminExtraContentDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
+        $adminExtraContentDir = api_get_path(SYS_APP_PATH) . "home/$cleanUrl/admin/";
     }
 }
 
@@ -481,6 +481,7 @@ if (api_is_platform_admin()) {
 
         if (!empty($extraData['block'])) {
             if (!is_dir($adminExtraContentDir)) {
+                var_dump($adminExtraContentDir);
                 mkdir(
                     $adminExtraContentDir,
                     api_get_permissions_for_new_directories(),

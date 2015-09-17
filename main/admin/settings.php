@@ -85,12 +85,14 @@ $url_id = api_get_current_access_url_id();
 
 $settings = null;
 
-function get_settings($category = null) {
+function get_settings($category = null)
+{
     $url_id = api_get_current_access_url_id();
     $settings_by_access_list = array();
 
     if ($url_id == 1) {
         $settings = api_get_settings($category, 'group', $url_id);
+
     } else {
         $url_info = api_get_access_url($url_id);
         if ($url_info['active'] == 1) {
@@ -119,6 +121,7 @@ function get_settings($category = null) {
             }
         }
     }
+
     if (isset($category) && $category== 'search_setting') {
         if (!empty($_REQUEST['search_field'])) {
             $settings = search_setting($_REQUEST['search_field']);

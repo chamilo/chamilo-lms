@@ -5,7 +5,7 @@
     <div class="col-md-3">
         {{ social_avatar_block }}
         {{ social_extra_info_block }}        
-        <div class="social-menu">
+        <div class="social-network-menu">
             {{ social_menu_block }}
         </div>
     </div>

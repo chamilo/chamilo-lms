@@ -72,14 +72,14 @@
         ]
     },
     {
-        "pageClass": ".section-social",
+        "pageClass": ".section-social-network",
         "steps": [
             {
                 "elementSelector": ".breadcrumb",
                 "message": "SocialAllowsYouToGetInTouchWithOtherUsersOfThePlatform"
             },
             {
-                "elementSelector": ".social-menu",
+                "elementSelector": ".social-network-menu",
                 "message": "SocialMenuGivesAccessToDifferentToolsToGetInTouchOrPublishStuff"
             }
         ]

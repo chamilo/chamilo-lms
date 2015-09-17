@@ -154,7 +154,7 @@ define('SECTION_COURSE_ADMIN', 'course_admin');
 define('SECTION_PLATFORM_ADMIN', 'platform_admin');
 define('SECTION_MYGRADEBOOK', 'mygradebook');
 define('SECTION_TRACKING', 'session_my_space');
-define('SECTION_SOCIAL', 'social');
+define('SECTION_SOCIAL', 'social-network');
 define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');

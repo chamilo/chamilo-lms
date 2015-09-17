@@ -2039,8 +2039,8 @@ function fixIds(EntityManager $em)
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
         $courseId = $item['c_id'];
-        $iid = isset($item['iid']) ? $item['iid'] : 0;
-        $ref = isset($item['ref']) ? $item['ref'] : 0;
+        $iid = isset($item['iid']) ? intval($item['iid']) : 0;
+        $ref = isset($item['ref']) ? intval($item['ref']) : 0;
         $sql = null;
 
         $newId = '';

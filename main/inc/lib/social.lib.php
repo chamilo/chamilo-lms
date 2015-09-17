@@ -756,8 +756,28 @@ class SocialManager extends UserManager
 
             // My friend profile.
             if ($user_id != api_get_user_id()) {
-                $html .= '<li><a href="#" class="btn-to-send-message" data-send-to="' . $user_id . '" title="'.get_lang('SendMessage').'">';
-                $html .= Display::return_icon('compose_message.png', get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';
+                $sendMessageText = get_lang('SendMessage');
+                $sendMessageIcon = Display::return_icon(
+                    'compose_message.png',
+                    get_lang('SendMessage')
+                );
+                $sendMesssageUrl = api_get_path(WEB_AJAX_PATH)
+                    . 'user_manager.ajax.php?'
+                    . http_build_query([
+                        'a' => 'get_user_popup',
+                        'user_id' => $user_id
+                    ]);
+
+                $html .= '<li>';
+                $html .= Display::url(
+                    "$sendMessageIcon $sendMessageText",
+                    $sendMesssageUrl,
+                    [
+                        'class' => 'ajax',
+                        'title' => get_lang('SendMessage')
+                    ]
+                );
+                $html .= '</li>';
             }
 
             // Check if I already sent an invitation message

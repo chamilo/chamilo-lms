@@ -87,8 +87,20 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                 $send_inv = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="' . $user['user_id'] . '">
                              <i class="fa fa-user"></i> '.get_lang('SendInvitation').'</a>';
             }
-            $send_msg = '<a href="#" class="btn-to-send-message '.$buttonClass.'" data-send-to="' . $user['user_id'] . '">
-                        <i class="fa fa-envelope"></i> '.get_lang('SendMessage').'</a>';
+
+            $sendMesssageUrl = api_get_path(WEB_AJAX_PATH)
+                . 'user_manager.ajax.php?'
+                . http_build_query([
+                    'a' => 'get_user_popup',
+                    'user_id' => $user['user_id']
+                ]);
+            $send_msg = Display::toolbarButton(
+                get_lang('SendMessage'),
+                $sendMesssageUrl,
+                'envelope',
+                'default',
+                ['class' => 'ajax btn-sm']
+            );
 
             $img = '<img src="'.$user_info['avatar'].'" width="100" height="100">';
 

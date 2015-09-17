@@ -377,7 +377,7 @@ ul#navigation .report a {
 }
 .actions a{
     text-decoration: none;
-    margin-right: 5px;
+    margin-right: 10px;
 }
 .actions a:hover{
     text-decoration: none;
@@ -414,6 +414,14 @@ ul#navigation .report a {
 }
 .actions fieldset {
     margin-top:0px;
+}
+.separate-action{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.control-course{
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 /*****************************************************
  *              AGENDA                               *

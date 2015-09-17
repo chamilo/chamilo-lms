@@ -637,9 +637,6 @@ The more frequent ones have been marked with *
                 border-radius: 4px 4px 0 0;
     }
 
-    #section-social .row > [class*="span"], #section-social .row-fluid > [class*="span"] {
-        float: left;
-    }
     /* Some fixes for w~720px */
     .section-mycampus #top_main_content .content-column {
         float: left;
@@ -689,7 +686,7 @@ The more frequent ones have been marked with *
     footer .container .row {
         padding-top: 15px;
     }
-    .social-menu .social-background-content .thumbnail{
+    .social-network-menu .social-background-content .thumbnail{
         border:none;
         box-shadow: none;
     }
@@ -822,9 +819,6 @@ The more frequent ones have been marked with *
     #topbar_push {
         height: 0px;
     }
-    .section-social .span9 {
-        width: 530px;
-    }
 }
 
 @media (min-width: 980px) and (max-width: 1200px) {
@@ -841,14 +835,8 @@ The more frequent ones have been marked with *
     .course-tool {
         width: 280px;
     }
-    .section-social .span9, .section-mycourses .span9{
-        width: 680px;
-    }
-    .section-social .social-menu {
+    .section-social-network .social-network-menu {
         width: 200px;
-    }
-    .section-social .span5 {
-        width: 350px;
     }
     
 }

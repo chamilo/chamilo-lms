@@ -381,7 +381,7 @@ class learnpath
 
                             if ($this->debug > 2) {
                                 error_log(
-                                    'New LP - learnpath::__construct() '.__LINE__.' - Inserting blank item_view : '.$sql_ins,
+                                    'New LP - learnpath::__construct() '.__LINE__.' - Inserting blank item_view : '.$sql,
                                     0
                                 );
                             }
@@ -732,8 +732,9 @@ class learnpath
         // Session id.
         $session_id = api_get_session_id();
 
-        $check_name = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND name = '$name'";
-        //if ($this->debug > 2) { error_log('New LP - Checking the name for new LP: '.$check_name, 0); }
+        $check_name = "SELECT * FROM $tbl_lp
+                       WHERE c_id = $course_id AND name = '$name'";
+
         $res_name = Database::query($check_name);
 
         if ($publicated_on == '0000-00-00 00:00:00' || empty($publicated_on)) {
@@ -832,18 +833,6 @@ class learnpath
                 }
                 break;
         }
-    }
-
-    /**
-     * Appends a message to the message attribute
-     * @param	string	$string Message to append.
-     */
-    public function append_message($string)
-    {
-        if ($this->debug > 0) {
-            error_log('New LP - In learnpath::append_message()', 0);
-        }
-        $this->message .= $string;
     }
 
     /**
@@ -970,17 +959,6 @@ class learnpath
     }
 
     /**
-     * Clears the message attribute
-     */
-    public function clear_message()
-    {
-        if ($this->debug > 0) {
-            error_log('New LP - In learnpath::clear_message()', 0);
-        }
-        $this->message = '';
-    }
-
-    /**
      * Closes the current resource
      *
      * Stops the timer
@@ -990,7 +968,6 @@ class learnpath
      */
     public function close()
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::close()', 0);
         }
@@ -1031,7 +1008,8 @@ class learnpath
 
         // Delete lp item id.
         foreach ($this->items as $id => $dummy) {
-            $sql = "DELETE FROM $lp_item_view WHERE c_id = $course_id AND lp_item_id = '" . $id . "'";
+            $sql = "DELETE FROM $lp_item_view
+                    WHERE c_id = $course_id AND lp_item_id = '" . $id . "'";
             Database::query($sql);
         }
 
@@ -3261,18 +3239,6 @@ class learnpath
     }
 
     /**
-     * Gets the user-friendly message stored in $this->message
-     * @return	string	Message
-     */
-    public function get_message()
-    {
-        if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_message()', 0);
-        }
-        return $this->message;
-    }
-
-    /**
      * Gets the learnpath name/title
      * @return	string	Learnpath name/title
      */
@@ -4292,7 +4258,6 @@ class learnpath
             $res = $this->items[$this->current]->save(false, $this->prerequisites_match($this->current));
             $this->autocomplete_parents($this->current);
             $status = $this->items[$this->current]->get_status();
-            $this->append_message('new_item_status: ' . $status);
             $this->update_queue[$this->current] = $status;
             return $res;
         }
@@ -5145,7 +5110,8 @@ class learnpath
             error_log('New LP - In learnpath::update_reinit()', 0);
         }
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." AND id = " . $this->get_id();
+        $sql = "SELECT * FROM $lp_table
+                WHERE c_id = ".$course_id." AND id = " . $this->get_id();
         $res = Database::query($sql);
         if (Database :: num_rows($res) > 0) {
             $row = Database :: fetch_array($res);
@@ -5438,9 +5404,6 @@ class learnpath
      */
     public function overview()
     {
-        $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
-        $_course = api_get_course_info();
-
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::overview()', 0);
         }
@@ -5886,7 +5849,8 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         global $charset;
-        $dir = isset ($_GET['dir']) ? $_GET['dir'] : $_POST['dir']; // Please, do not modify this dirname formatting.
+        $dir = isset ($_GET['dir']) ? $_GET['dir'] : $_POST['dir'];
+        // Please, do not modify this dirname formatting.
         if (strstr($dir, '..'))
             $dir = '/';
         if ($dir[0] == '.')
@@ -8141,7 +8105,8 @@ class learnpath
             $return .= 'child_value[0][' . $i++ . '] = "' . $row_zero['id'] . '";' . "\n";
         }
         $return .= "\n";
-        $sql = "SELECT * FROM " . $tbl_lp_item . " WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "SELECT * FROM " . $tbl_lp_item . "
+                WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
         $res = Database::query($sql);
         while ($row = Database :: fetch_array($res)) {
             $sql_parent = "SELECT * FROM " . $tbl_lp_item . "
@@ -8173,8 +8138,6 @@ class learnpath
     public function display_move_item($item_id)
     {
         $course_id = api_get_course_int_id();
-        $_course = api_get_course_info();
-        global $charset;
         $return = '';
 
         if (is_numeric($item_id)) {

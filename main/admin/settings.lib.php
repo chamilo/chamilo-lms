@@ -1166,7 +1166,8 @@ function update_gradebook_score_display_custom_values($values) {
     $scoredisplay->update_custom_score_display_settings($final);
 }
 
-function generate_settings_form($settings, $settings_by_access_list) {
+function generate_settings_form($settings, $settings_by_access_list)
+{
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
@@ -1185,10 +1186,11 @@ function generate_settings_form($settings, $settings_by_access_list) {
 
     $default_values = array();
     $url_info = api_get_access_url($url_id);
-
     $i = 0;
     foreach ($settings as $row) {
-        if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; }
+        if (in_array($row['variable'], array_keys($settings_to_avoid))) {
+            continue;
+        }
 
         if (!empty($_configuration['multiple_access_urls'])) {
             if (api_is_global_platform_admin()) {
@@ -1234,7 +1236,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
                 if (is_array($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
                     // We are sure that the other site have a selected value.
                     if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value'] != '')
-                        $row['selected_value'] =$settings_by_access_list[$row['variable']] [$row['subkey']] [ $row['category'] ]['selected_value'];
+                        $row['selected_value'] = $settings_by_access_list[$row['variable']] [$row['subkey']] [$row['category']]['selected_value'];
                 }
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
             }
@@ -1243,11 +1245,28 @@ function generate_settings_form($settings, $settings_by_access_list) {
         switch ($row['type']) {
             case 'textfield':
                 if (in_array($row['variable'], $convert_byte_to_mega_list)) {
-                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('maxlength' => '8'));
+                    $form->addElement(
+                        'text',
+                        $row['variable'],
+                        array(
+                            get_lang($row['title']),
+                            get_lang($row['comment']),
+                            get_lang('MB'),
+                        ),
+                        array('maxlength' => '8')
+                    );
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = round($row['selected_value']/1024/1024, 1);
                 } elseif ($row['variable'] == 'account_valid_duration') {
-                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), array('maxlength' => '5'));
+                    $form->addElement(
+                        'text',
+                        $row['variable'],
+                        array(
+                            get_lang($row['title']),
+                            get_lang($row['comment']),
+                        ),
+                        array('maxlength' => '5')
+                    );
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
 
@@ -1256,7 +1275,15 @@ function generate_settings_form($settings, $settings_by_access_list) {
                     continue;
                 } else {
                     $hideme['class'] = 'span4';
-                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), $hideme);
+                    $form->addElement(
+                        'text',
+                        $row['variable'],
+                        array(
+                            get_lang($row['title']),
+                            get_lang($row['comment']),
+                        ),
+                        $hideme
+                    );
                     $form->applyFilter($row['variable'],'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
                 }
@@ -1286,27 +1313,38 @@ function generate_settings_form($settings, $settings_by_access_list) {
             case 'radio':
                 $values = api_get_settings_options($row['variable']);
                 $group = array ();
-                if (is_array($values )) {
+                if (is_array($values)) {
                     foreach ($values as $key => $value) {
-                        $element = & $form->createElement('radio', $row['variable'], '', get_lang($value['display_text']), $value['value']);
+                        $element = &$form->createElement(
+                            'radio',
+                            $row['variable'],
+                            '',
+                            get_lang($value['display_text']),
+                            $value['value']
+                        );
                         if ($hide_element) {
                             $element->freeze();
                         }
                         $group[] = $element;
                     }
                 }
-                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])), '', false); //julio
+                $form->addGroup(
+                    $group,
+                    $row['variable'],
+                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    '',
+                    false
+                );
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             case 'checkbox';
                 // 1. We collect all the options of this variable.
-                $sql = "SELECT * FROM $table_settings_current WHERE variable='".$row['variable']."' AND access_url =  1";
+                $sql = "SELECT * FROM $table_settings_current
+                        WHERE variable='".$row['variable']."' AND access_url =  1";
 
                 $result = Database::query($sql);
                 $group = array ();
                 while ($rowkeys = Database::fetch_array($result)) {
-                    //if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') { continue; }
-
                     // Profile tab option should be hidden when the social tool is enabled.
                     if (api_get_setting('allow_social_tool') == 'true') {
                         if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_profile') {
@@ -1319,14 +1357,25 @@ function generate_settings_form($settings, $settings_by_access_list) {
                         continue;
                     }
 
-                    $element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
+                    $element = &$form->createElement(
+                        'checkbox',
+                        $rowkeys['subkey'],
+                        '',
+                        get_lang($rowkeys['subkeytext'])
+                    );
+
                     if ($row['access_url_changeable'] == 1) {
                         // 2. We look into the DB if there is a setting for a specific access_url.
                         $access_url = $_configuration['access_url'];
                         if (empty($access_url)) {
                             $access_url = 1;
                         }
-                        $sql = "SELECT selected_value FROM $table_settings_current WHERE variable='".$rowkeys['variable']."' AND subkey='".$rowkeys['subkey']."'  AND  subkeytext='".$rowkeys['subkeytext']."' AND access_url =  $access_url";
+                        $sql = "SELECT selected_value FROM $table_settings_current
+                                WHERE
+                                    variable='".$rowkeys['variable']."' AND
+                                    subkey='".$rowkeys['subkey']."' AND
+                                    subkeytext='".$rowkeys['subkeytext']."' AND
+                                    access_url =  $access_url";
                         $result_access = Database::query($sql);
                         $row_access = Database::fetch_array($result_access);
                         if ($row_access['selected_value'] == 'true' && !$form->isSubmitted()) {
@@ -1342,7 +1391,12 @@ function generate_settings_form($settings, $settings_by_access_list) {
                     }
                     $group[] = $element;
                 }
-                $form->addGroup($group, $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])),'');
+                $form->addGroup(
+                    $group,
+                    $row['variable'],
+                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    ''
+                );
                 break;
             case 'link':
                 $form->addElement('static', null, array(get_lang($row['title']), get_lang($row['comment'])), get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);
@@ -1413,7 +1467,7 @@ function search_setting($search)
             $found = false;
 
             $title = api_strtolower(get_lang($setting['title']));
-            //try the title
+            // try the title
             if (strpos($title, $search) === false) {
                 $comment = api_strtolower(get_lang($setting['comment']));
                 //Try the comment

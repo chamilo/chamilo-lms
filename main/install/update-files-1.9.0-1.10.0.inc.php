@@ -13,7 +13,7 @@ use Symfony\Component\Finder\Finder;
  * current configuration file.
  * @package chamilo.install
  */
-Log::notice('Entering file');
+error_log('Entering file');
 
 if (defined('SYSTEM_INSTALLATION')) {
     // Changes for 1.10.x

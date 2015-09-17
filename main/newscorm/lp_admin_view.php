@@ -294,8 +294,7 @@ switch ($_GET['action']) {
         }
         break;
 }
-if(!empty($_GET['updateaudio']))
-{
+if (!empty($_GET['updateaudio'])) {
     // list of items to add audio files
     echo $_SESSION['oLP']->overview();
 }

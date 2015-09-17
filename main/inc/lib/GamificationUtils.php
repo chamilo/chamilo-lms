@@ -40,6 +40,7 @@ class GamificationUtils
      * Get the achieved points for an user in a session
      * @param int $sessionId The session ID
      * @param int $userId The user ID
+     *
      * @return int The count of points
      */
     public static function getSessionPoints($sessionId, $userId)
@@ -89,6 +90,7 @@ class GamificationUtils
      * Get the calculated progress for an user in a session
      * @param int $sessionId The session ID
      * @param int $userId The user ID
+     *
      * @return float The progress
      */
     public static function getSessionProgress($sessionId, $userId)
@@ -124,6 +126,7 @@ class GamificationUtils
      * Get the number of stars achieved for an user in a session
      * @param int $sessionId The session ID
      * @param int $userId The user ID
+     *
      * @return int The number of stars
      */
     public static function getSessionStars($sessionId, $userId)
@@ -173,6 +176,7 @@ class GamificationUtils
      * Get the stars on sessions with gamification mode
      * @param int $userId The user ID
      * @param int $userStatus The user Status
+     *
      * @return int
      */
     public static function getTotalUserStars($userId, $userStatus)
@@ -199,6 +203,7 @@ class GamificationUtils
      * Get the total progress on sessions with gamification mode
      * @param int $userId The user ID
      * @param int $userStatus The user Status
+     *
      * @return float
      */
     public static function getTotalUserProgress($userId, $userStatus)

@@ -5,8 +5,9 @@
  * This script is the Tickets plugin main entry point
  * @package chamilo.plugin.ticket
  */
+
 $cidReset = true;
-//needed in order to load the plugin lang variables
+// needed in order to load the plugin lang variables
 $course_plugin = 'ticket';
 require_once '../config.php';
 
@@ -30,7 +31,7 @@ function load_history_ticket (div_course,ticket_id) {
             $("div#div_"+ticket_id).html(data);
             $("div#div_"+ticket_id).attr("class","blackboard_show");
             $("div#div_"+ticket_id).attr("style","");
-           }
+        }
     });
 }
 function clear_course_list (div_course) {
@@ -44,7 +45,7 @@ $(function() {
 });
 
 $(document).ready(function() {
-        $("#advanced_search_form").css("display","none");
+    $("#advanced_search_form").css("display","none");
 });
 
 function display_advanced_search_form () {

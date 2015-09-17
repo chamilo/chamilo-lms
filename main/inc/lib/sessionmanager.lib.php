@@ -390,6 +390,7 @@ class SessionManager
     public static function get_sessions_admin($options = array(), $get_count = false)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
@@ -432,6 +433,15 @@ class SessionManager
                 " s.session_category_id, ".
                 " $inject_extra_fields ".
                 " s.id ";
+
+            if (strpos($options['order'], 'category_name') === 0) {
+                $inject_joins .= "
+                    LEFT JOIN $sessionCategoryTable sc
+                        ON s.session_category_id = sc.id
+                ";
+
+                $order = str_replace('category_name', 'sc.name', $order);
+            }
         }
 
         $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";

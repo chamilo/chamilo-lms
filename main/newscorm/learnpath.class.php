@@ -381,7 +381,7 @@ class learnpath
 
                             if ($this->debug > 2) {
                                 error_log(
-                                    'New LP - learnpath::__construct() '.__LINE__.' - Inserting blank item_view : '.$sql_ins,
+                                    'New LP - learnpath::__construct() '.__LINE__.' - Inserting blank item_view : '.$sql,
                                     0
                                 );
                             }
@@ -732,8 +732,9 @@ class learnpath
         // Session id.
         $session_id = api_get_session_id();
 
-        $check_name = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND name = '$name'";
-        //if ($this->debug > 2) { error_log('New LP - Checking the name for new LP: '.$check_name, 0); }
+        $check_name = "SELECT * FROM $tbl_lp
+                       WHERE c_id = $course_id AND name = '$name'";
+
         $res_name = Database::query($check_name);
 
         if ($publicated_on == '0000-00-00 00:00:00' || empty($publicated_on)) {
@@ -1007,7 +1008,8 @@ class learnpath
 
         // Delete lp item id.
         foreach ($this->items as $id => $dummy) {
-            $sql = "DELETE FROM $lp_item_view WHERE c_id = $course_id AND lp_item_id = '" . $id . "'";
+            $sql = "DELETE FROM $lp_item_view
+                    WHERE c_id = $course_id AND lp_item_id = '" . $id . "'";
             Database::query($sql);
         }
 

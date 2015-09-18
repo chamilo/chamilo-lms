@@ -40,10 +40,10 @@
             var $frmSendInvitation = $sendInvitationModal.find('.modal-body form'),
                 url = '{{ _p.web_ajax }}message.ajax.php?a=send_invitation&user_id=' + sendToUser;
 
-            $.get(url, $frmSendInvitation.serialize(), function(response) {
-                $('#send-invitation-alert').html(response);
-
+            $.get(url, $frmSendInvitation.serialize(), function() {
                 $frmSendInvitation[0].reset();
+
+                window.location.reload();
             });
         });
     });

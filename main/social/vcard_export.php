@@ -1,12 +1,9 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
  * VCard Generator
- * 
- *  @package chamilo.social
- * 
+ * @package chamilo.social
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
  */
 
@@ -14,12 +11,11 @@ require_once '../inc/global.inc.php';
 
 use JeroenDesloovere\VCard\VCard;
 
-parse_str($_SERVER['QUERY_STRING'], $params);
+api_block_anonymous_users();
 
-if(isset($params['userId'])) {
-	$userId = $params['userId'];
-}
-else {
+if (isset($_REQUEST['userId'])) {
+	$userId = intval($_REQUEST['userId']);
+} else {
 	api_not_allowed();
 	die();
 }

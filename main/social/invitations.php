@@ -99,16 +99,16 @@ if ($number_loop != 0) {
         $sender_user_id = $invitation['user_sender_id'];
         $user_info = api_get_user_info($sender_user_id);
         $userPicture = $user_info['avatar'];
-        $invitationHtml .= '<div id="id_'.$sender_user_id.'" class="well">';
+        $invitationHtml .= '<div id="id_'.$sender_user_id.'" class="panel panel-default">';
 
         $title = Security::remove_XSS($invitation['title'], STUDENT, true);
         $content = Security::remove_XSS($invitation['content'], STUDENT, true);
         $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
         $invitationHtml .= '<div class="row">';
-        $invitationHtml .= '<div class="col-md-3">';
-        $invitationHtml .= '<a href="profile.php?u='.$sender_user_id.'"><img src="'.$userPicture.'"/></a>';
+        $invitationHtml .= '<div class="col-md-2">';
+        $invitationHtml .= '<a href="profile.php?u='.$sender_user_id.'"><img class="img-responsive" src="'.$userPicture.'"/></a>';
         $invitationHtml .= '</div>';
-        $invitationHtml .= '<div class="col-md-9">';
+        $invitationHtml .= '<div class="col-md-10">';
         $invitationHtml .= '<h4 class="title-profile"><a href="profile.php?u='.$sender_user_id.'">
                                     '.$user_info['complete_name'].'</a>:
                                     </h4>';

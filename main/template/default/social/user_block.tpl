@@ -7,13 +7,13 @@
         </div>
         <div class="social-avatar-email">
             <a href="{{ _p.web }}main/messages/new_message.php">
-                <img src="{{ "instant_message.png" | icon }}" atl="{{ "Email" | get_lang }}">
+                <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
                 {{ user.email}}
             </a>
         </div>
         <div class="social-avatar-vcard">
             <a href="{{ vCardUserLink }}">
-                <img src="{{ "vcard.png" | icon(22) }}" atl="{{ "UserInfo" | get_lang }}">
+                <img src="{{ "vcard.png" | icon(22) }}" alt="{{ "UserInfo" | get_lang }}">
                 {{ "UserInfo" | get_lang }}
             </a>
         </div>

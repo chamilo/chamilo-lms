@@ -51,13 +51,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $archiveFile = 'export_courses_list_'.api_get_local_time();
 
         $listToExport[] = [
-            'Code',
-            'Title',
-            'CourseCategory',
-            'Teacher',
-            'Language',
-            'Users',
-            'OtherTeachers'
+            get_lang('Code'),
+            get_lang('Title'),
+            get_lang('CourseCategory'),
+            get_lang('Teacher'),
+            get_lang('Language'),
+            get_lang('Users'),
+            get_lang('OtherTeachers')
         ];
 
         $dataToExport = [];

@@ -8,156 +8,155 @@
  * Init
  */
 require_once '../config.php';
-require_once dirname(__FILE__) . '/buy_course.lib.php';
 
-if ($_POST['payment_type'] == '') {
-    header('Location:process.php');
+$plugin = BuyCoursesPlugin::create();
+
+$saleId = $_SESSION['bc_sale_id'];
+
+if (empty($saleId)) {
+    api_not_allowed(true);
 }
 
-$tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
-$tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
+$sale = $plugin->getSale($saleId);
 
-if (isset($_POST['Confirm'])) {
-    // Save the user, course and reference in a tmp table
-    $user_id = $_SESSION['bc_user_id'];
-    $reference = calculateReference($_SESSION['bc_codetext']);
+if (empty($sale)) {
+    api_not_allowed(true);
+}
 
-    reset($_POST);
-    while (list ($param, $val) = each($_POST)) {
-        $asignacion = "\$" . $param . "=mysql_real_escape_string(\$_POST['" . $param . "']);";
-        eval($asignacion);
-    }
+$currency = $plugin->getCurrency($sale['currency_id']);
 
-    $sql = $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
-        "INSERT INTO $tableBuySessionTemporal (user_id, name, session_id, title, reference, price)
-        VALUES ('" . $user_id . "', '" . $name . "','" . $_SESSION['bc_code'] . "','" . $title . "','" . $reference . "','" . $price . "');" :
-        "INSERT INTO $tableBuyCourseTemporal (user_id, name, course_code, title, reference, price)
-        VALUES ('" . $user_id . "', '" . $name . "','" . $_SESSION['bc_codetext'] . "','" . $title . "','" . $reference . "','" . $price . "');";
-    $res = Database::query($sql);
+switch ($sale['payment_type']) {
+    case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
+        $paypalParams = $plugin->getPaypalParams();
 
-    // Notify the user and send the bank info
+        $pruebas = $paypalParams['sandbox'] == 1;
+        $paypalUsername = $paypalParams['username'];
+        $paypalPassword = $paypalParams['password'];
+        $paypalSignature = $paypalParams['signature'];
 
-    $accountsList = listAccounts();
-    $text = '<div align="center"><table style="width:70%"><tr><th style="text-align:center"><h3>Datos Bancarios</h3></th></tr>';
-    foreach ($accountsList as $account) {
-        $text .= '<tr>';
-        $text .= '<td>';
-        $text .= '<font color="#0000FF"><strong>' . htmlspecialchars($account['name']) . '</strong></font><br />';
-        if ($account['swift'] != '') {
-            $text .= 'SWIFT: <strong>' . htmlspecialchars($account['swift']) . '</strong><br />';
+        require_once("paypalfunctions.php");
+
+        $i = 0;
+        $extra = "&L_PAYMENTREQUEST_0_NAME0={$sale['product_name']}";
+        $extra .= "&L_PAYMENTREQUEST_0_AMT0={$sale['price']}";
+        $extra .= "&L_PAYMENTREQUEST_0_QTY0=1";
+
+        $expressCheckout = CallShortcutExpressCheckout(
+            $sale['price'],
+            $currency['iso_code'],
+            'paypal',
+            api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/success.php',
+            api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/error.php',
+            $extra
+        );
+
+        if ($expressCheckout["ACK"] !== 'Success') {
+            $erroMessage = vsprintf(
+                $plugin->get_lang('ErrorOccurred'),
+                [$expressCheckout['L_ERRORCODE0'], $expressCheckout['L_LONGMESSAGE0']]
+            );
+            Display::addFlash(
+                Display::return_message($erroMessage, 'error', false)
+            );
+            header('Location: ../index.php');
+            exit;
         }
-        $text .= 'Cuenta Bancaria: <strong>' . htmlspecialchars($account['account']) . '</strong><br />';
-        $text .= '</td></tr>';
-    }
-    $text .= '</table></div>';
 
-    $plugin = BuyCoursesPlugin::create();
-    $asunto = utf8_encode($plugin->get_lang('bc_subject'));
+        RedirectToPayPal($expressCheckout["TOKEN"]);
+        break;
+    case BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER:
+        $buyingCourse = false;
+        $buyingSession = false;
 
+        switch ($sale['product_type']) {
+            case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
+                $buyingCourse = true;
+                $course = $plugin->getCourseInfo($sale['product_id']);
+                break;
+            case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
+                $buyingSession = true;
+                $session = $plugin->getSessionInfo($sale['product_id']);
+                break;
+        }
 
-    if (!isset($_SESSION['_user'])) {
-        $name = $_SESSION['bc_user']['firstName'] . ' ' . $_SESSION['bc_user']['lastName'];
-        $email = $_SESSION['bc_user']['mail'];
-    } else {
-        $name = $_SESSION['bc_user']['firstname'] . ' ' . $_SESSION['bc_user']['lastname'];
-        $email = $_SESSION['bc_user']['email'];
-    }
+        $transferAccounts = $plugin->getTransferAccounts();
+        $userInfo = api_get_user_info($sale['user_id']);
 
-    $message = $plugin->get_lang('bc_message');
-    $message = str_replace("{{name}}", $name, $message);
-    $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
-        $message = str_replace("{{session}}", sessionInfo($_SESSION['bc_code'])['name'], $message) :
-        $message = str_replace("{{course}}", courseInfo($_SESSION['bc_code'])['title'], $message);
-    $message = str_replace("{{".$parameterName."}}", $title, $message);
-    $message = str_replace("{{reference}}", $reference, $message);
-    $message .= $text;
+        $form = new FormValidator('success', 'POST', api_get_self(), null, null, FormValidator::LAYOUT_INLINE);
 
-    api_mail_html($name, $email, $asunto, $message);
-    // Return to course list
-    header('Location:list.php');
-}
+        if ($form->validate()) {
+            $formValues = $form->getSubmitValues();
 
+            if (isset($formValues['cancel'])) {
+                $plugin->cancelSale($sale['id']);
 
-$currencyType = $_POST['currency_type'];
-$_SESSION['bc_currency_type'] = $currencyType;
-$server = $_POST['server'];
+                unset($_SESSION['bc_sale_id']);
 
-if ($_POST['payment_type'] == "PayPal") {
-    $sql = "SELECT * FROM $tableBuyCoursePaypal WHERE id='1';";
-    $res = Database::query($sql);
-    $row = Database::fetch_assoc($res);
-    $pruebas = ($row['sandbox'] == "YES") ? true: false;
-    $paypalUsername = $row['username'];
-    $paypalPassword = $row['password'];
-    $paypalSignature = $row['signature'];
-    require_once("paypalfunctions.php");
-    // PayPal Express Checkout Module
-    $paymentAmount = $_SESSION["Payment_Amount"];
-    $currencyCodeType = $currencyType;
-    $paymentType = "Sale";
-    $returnURL = $server . "plugin/buycourses/src/success.php";
-    $cancelURL = $server . "plugin/buycourses/src/error.php";
+                header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/index.php');
+                exit;
+            }
 
+            $messageTemplate = new Template();
+            $messageTemplate->assign('user', $userInfo);
+            $messageTemplate->assign(
+                'sale',
+                [
+                    'date' => api_format_date($sale['date'], DATE_FORMAT_LONG_NO_DAY),
+                    'product' => $sale['product_name'],
+                    'currency' => $currency['iso_code'],
+                    'price' => $sale['price'],
+                    'reference' => $sale['reference']
+                ]
+            );
+            $messageTemplate->assign('transfer_accounts', $transferAccounts);
 
-    $title = $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
-        sessionInfo($_SESSION['bc_code'])['name'] :
-        courseInfo($_SESSION['bc_code'])['title'];
+            api_mail_html(
+                $userInfo['complete_name'],
+                $userInfo['email'],
+                $plugin->get_lang('bc_subject'),
+                $messageTemplate->fetch('buycourses/view/message_transfer.tpl')
+            );
 
-    $i = 0;
-    $extra = "&L_PAYMENTREQUEST_0_NAME" . $i . "=" . $title;
-    $extra .= "&L_PAYMENTREQUEST_0_AMT" . $i . "=" . $paymentAmount;
-    $extra .= "&L_PAYMENTREQUEST_0_QTY" . $i . "=1";
+            Display::addFlash(
+                Display::return_message(
+                    sprintf(
+                        $plugin->get_lang('PurchaseStatusX'),
+                        $plugin->get_lang('PendingReasonByTransfer')
+                    ),
+                    'success',
+                    false
+                )
+            );
 
-    $resArray = CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $extra);
-    $ack = strtoupper($resArray["ACK"]);
+            unset($_SESSION['bc_sale_id']);
+            header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/course_catalog.php');
+            exit;
+        }
 
-    if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
-        RedirectToPayPal($resArray["TOKEN"]);
-    } else {
-        $ErrorCode = urldecode($resArray["L_ERRORCODE0"]);
-        $ErrorShortMsg = urldecode($resArray["L_SHORTMESSAGE0"]);
-        $ErrorLongMsg = urldecode($resArray["L_LONGMESSAGE0"]);
-        $ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
+        $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
+        $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
 
-        echo "<br />SetExpressCheckout API call failed. ";
-        echo "<br />Detailed Error Message: " . $ErrorLongMsg;
-        echo "<br />Short Error Message: " . $ErrorShortMsg;
-        echo "<br />Error Code: " . $ErrorCode;
-        echo "<br />Error Severity Code: " . $ErrorSeverityCode;
-    }
-}
+        $template = new Template();
 
-if ($_POST['payment_type'] == "Transfer") {
-    $_cid = 0;
-    $templateName = $plugin->get_lang('PaymentMethods');
-    $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
+        if ($buyingCourse) {
+            $template->assign('course', $course);
+        } elseif ($buyingSession) {
+            $template->assign('session', $session);
+        }
 
-    $tpl = new Template($templateName);
+        $template->assign('buying_course', $buyingCourse);
+        $template->assign('buying_session', $buyingSession);
 
-    $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
-        $tpl->assign('session', sessionInfo($_SESSION['bc_code'])) :
-        $tpl->assign('course', courseInfo($_SESSION['bc_code']));
+        $template->assign('title', $sale['product_name']);
+        $template->assign('price', $sale['price']);
+        $template->assign('currency', $sale['currency_id']);
+        $template->assign('user', $userInfo);
+        $template->assign('transfer_accounts', $transferAccounts);
+        $template->assign('form', $form->returnForm());
 
-    $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('title', $_SESSION['bc_title']);
-    $tpl->assign('price', $_SESSION['Payment_Amount']);
-    $tpl->assign('currency', $_SESSION['bc_currency_type']);
-    if (!isset($_SESSION['_user'])) {
-        $tpl->assign('name', $_SESSION['bc_user']['firstName'] . ' ' . $_SESSION['bc_user']['lastName']);
-        $tpl->assign('email', $_SESSION['bc_user']['mail']);
-        $tpl->assign('user', $_SESSION['bc_user']['username']);
-    } else {
-        $tpl->assign('name', $_SESSION['bc_user']['firstname'] . ' ' . $_SESSION['bc_user']['lastname']);
-        $tpl->assign('email', $_SESSION['bc_user']['email']);
-        $tpl->assign('user', $_SESSION['bc_user']['username']);
-    }
+        $content = $template->fetch('buycourses/view/process_confirm.tpl');
 
-    //Get bank list account
-    $accountsList = listAccounts();
-    $tpl->assign('accounts', $accountsList);
-
-    $listing_tpl = 'buycourses/view/process_confirm.tpl';
-    $content = $tpl->fetch($listing_tpl);
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
+        $template->assign('content', $content);
+        $template->display_one_col_template();
+        break;
 }

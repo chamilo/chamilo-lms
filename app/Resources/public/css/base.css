@@ -3627,7 +3627,6 @@ a:active{
 }
 
 #my_timeline {
-    background: url("dot.gif") repeat-x scroll left 45px;
     margin: 0px auto;
 }
 
@@ -3644,7 +3643,6 @@ a:active{
 }
 
 #dates li {
-    background: url("biggerdot.png") no-repeat scroll center bottom transparent;
     float: left;
     font-size: 14px;
     height: 50px;
@@ -4287,10 +4285,6 @@ i.size-32.icon-new-note{
     background-position: right center;
 }
 
-#course_category_well {
-    padding: 9px 0;
-}
-
 .nav-list img {
     margin-right: 6px;
 }
@@ -4355,7 +4349,6 @@ i.size-32.icon-new-work{
     margin-left: 110px;
 }
 .btn-msg {
-  background: url("send_msg.png") no-repeat left center;
   background-position: 3px;
   padding: 2px 4px;
   padding-left: 22px;
@@ -4365,7 +4358,6 @@ i.size-32.icon-new-work{
   background-color: #e6e6e6;
 }
 .btn-inv {
-  background: url("send_inv.png") no-repeat left center;
   background-position: 3px;
   padding: 2px 4px;
   padding-left: 22px;
@@ -4375,7 +4367,6 @@ i.size-32.icon-new-work{
   background-color: #e6e6e6;
 }
 .btn-inv-off {
-  background: url("send_inv_off.png") no-repeat left center;
   background-position: 3px;
   padding: 2px 4px;
   padding-left: 22px;

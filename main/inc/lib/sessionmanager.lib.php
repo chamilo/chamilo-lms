@@ -390,6 +390,7 @@ class SessionManager
     public static function get_sessions_admin($options = array(), $get_count = false)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
@@ -418,6 +419,8 @@ class SessionManager
         $order = $conditions['order'];
         $limit = $conditions['limit'];
 
+        $isMakingOrder = false;
+
         if ($get_count == true) {
             $select = " SELECT count(*) as total_rows";
         } else {
@@ -432,6 +435,22 @@ class SessionManager
                 " s.session_category_id, ".
                 " $inject_extra_fields ".
                 " s.id ";
+
+            $isMakingOrder = strpos($options['order'], 'category_name') === 0;
+        }
+
+        $isFilteringSessionCategory = strpos($where, 'category_name') !== false;
+
+        if ($isMakingOrder || $isFilteringSessionCategory) {
+            $inject_joins .= " LEFT JOIN $sessionCategoryTable sc ON s.session_category_id = sc.id ";
+
+            if ($isFilteringSessionCategory) {
+                $where = str_replace('category_name', 'sc.name', $where);
+            }
+
+            if ($isMakingOrder) {
+                $order = str_replace('category_name', 'sc.name', $order);
+            }
         }
 
         $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";

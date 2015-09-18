@@ -372,9 +372,13 @@ class SocialManager extends UserManager
             $send_message = MessageManager::send_message($userfriend_id, $subject_message, $content_message);
 
             if ($send_message) {
-                echo Display::display_confirmation_message($succes, true);
+                Display::addFlash(
+                    Display::display_confirmation_message($succes, true, true)
+                );
             } else {
-                echo Display::display_error_message(get_lang('ErrorSendingMessage'), true);
+                Display::addFlash(
+                    Display::display_error_message(get_lang('ErrorSendingMessage'), true, true)
+                );
             }
             return false;
         } elseif (isset($userfriend_id) && !isset($subject_message)) {
@@ -384,9 +388,21 @@ class SocialManager extends UserManager
                 $count_is_true = self::send_invitation_friend(api_get_user_id(), $userfriend_id, $message_title, $content_message);
 
                 if ($count_is_true) {
-                    echo Display::display_confirmation_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES, $charset), false);
+                    Display::addFlash(
+                        Display::display_confirmation_message(
+                            api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES, $charset),
+                            false,
+                            true
+                        )
+                    );
                 } else {
-                    echo Display::display_warning_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES, $charset), false);
+                    Display::addFlash(
+                        Display::display_warning_message(
+                            api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES, $charset),
+                            false,
+                            true
+                        )
+                    );
                 }
             }
         }
@@ -756,8 +772,29 @@ class SocialManager extends UserManager
 
             // My friend profile.
             if ($user_id != api_get_user_id()) {
-                $html .= '<li><a href="#" class="btn-to-send-message" data-send-to="' . $user_id . '" title="'.get_lang('SendMessage').'">';
-                $html .= Display::return_icon('compose_message.png', get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';
+                $sendMessageText = get_lang('SendMessage');
+                $sendMessageIcon = Display::return_icon(
+                    'compose_message.png',
+                    $sendMessageText
+                );
+                $sendMesssageUrl = api_get_path(WEB_AJAX_PATH)
+                    . 'user_manager.ajax.php?'
+                    . http_build_query([
+                        'a' => 'get_user_popup',
+                        'user_id' => $user_id
+                    ]);
+
+                $html .= '<li>';
+                $html .= Display::url(
+                    "$sendMessageIcon $sendMessageText",
+                    $sendMesssageUrl,
+                    [
+                        'class' => 'ajax',
+                        'title' => $sendMessageText,
+                        'data-title' => $sendMessageText
+                    ]
+                );
+                $html .= '</li>';
             }
 
             // Check if I already sent an invitation message

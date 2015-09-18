@@ -39,7 +39,7 @@ if (
     if ($lastMessageId !== false) {
         // Render mail
         $url = $plugin->getRenderMailUrl(array('queueId' => $lastMessageId));
-        Header::location($url);
+        header('Location: '.$url);
         exit;
     }
     $courses = SessionManager::get_course_list_by_session_id($data['sessionId']);

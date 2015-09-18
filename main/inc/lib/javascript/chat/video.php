@@ -11,7 +11,8 @@ $roomName = isset($_GET['room']) ? $_GET['room'] : null;
 $room = VideoChat::getChatRoomByName($roomName);
 
 if ($room === false) {
-    Header::location(api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
+    exit;
 }
 
 $friend_html = SocialManager::listMyFriendsBlock($user_id, '', false);
@@ -20,7 +21,8 @@ $isSender = $room['from_user'] == api_get_user_id();
 $isReceiver = $room['to_user'] == api_get_user_id();
 
 if (!$isSender && !$isReceiver) {
-    Header::location(api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
+    exit;
 }
 
 if ($isSender) {

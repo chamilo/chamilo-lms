@@ -498,7 +498,8 @@ if (api_is_platform_admin()) {
 
             file_put_contents($fullFilePath, $extraData['extra_content']);
 
-            Header::location(api_get_self());
+            header('Location: '.api_get_self());
+            exit;
         }
     }
 

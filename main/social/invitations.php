@@ -86,7 +86,7 @@ $total_invitations = $number_loop + count($list_get_invitation_sent) + count($pe
 if ($total_invitations == 0 && count($_GET) <= 0) {
     $socialInvitationsBlock .= '<div class="row">
         <div class="col-md-12">
-            <a class="btn btn-default" href="search.php">'.
+            <a class="btn btn-success" href="search.php"><i class="fa fa-search"></i> '.
                 get_lang('TryAndFindSomeFriends').'
             </a>
             </div>

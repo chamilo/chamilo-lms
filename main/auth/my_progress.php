@@ -53,16 +53,19 @@ if (!empty($course_user_list)) {
             $last = '<a href="#'.$login.'">'.get_lang('Last').'</a>';
         }
         $course_info = api_get_course_info_by_id($result['c_id']);
-        $course_image = '<img src="'.$course_info['course_image'].'">';
-        $dates .= '<li><a href="#'.$login.'">'.api_get_utc_datetime($login).'</a></li>';
-        $issues .= '<li id ="'.$login.'">
-                        <div class="img-course">'.$course_image.'</div>
-                        <div class="text-course">'.sprintf(
-                            get_lang('YouHaveEnteredTheCourseXInY'),
-                            $courseInfo['code'],
-                            api_convert_and_format_date($login, DATE_FORMAT_LONG)
-                        ).'</div>
-                    </li>';
+        $course_image = '<img src="'.$course_info['course_image_large'].'">';
+        $dates .= '<li><a href="#'.$login.'">' . gmdate('Y - m - d', $login) . '</a></li>';
+        $issues .= '<li id ="'.$login.'">';
+        $issues .= '<div class="img-course">'.$course_image.'</div>';
+        
+        $issues .= '<div class="text-course">';
+        $issues .= '<p>' . sprintf(
+                get_lang('YouHaveEnteredTheCourseXInY'),
+                '" '. $courseInfo['name'] .' "',
+                api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG) 
+                ) . '</p>';
+        $issues .= '</div>'; 
+        $issues .= '</li>';
         $count++;
     }
 }
@@ -83,8 +86,8 @@ if (!empty($dates)) {
     $content .= '<ul id="issues">' . $issues . '</ul>';
     $content .= '<div id="grad_left"></div>';
     $content .= '<div id="grad_right"></div>';
-    $content .= '<a href="#" id="prev">' . Display::return_icon('previous.png',  get_lang('Previous'), null, ICON_SIZE_MEDIUM) . '</a>';
-    $content .= '<a href="#" id="next">' . Display::return_icon('next.png',  get_lang('Next'), null, ICON_SIZE_MEDIUM) . '</a>';
+    $content .= '<a href="#" id="prev"></a>';
+    $content .= '<a href="#" id="next"></a>';
     $content .= '</div></div>';
     
 }

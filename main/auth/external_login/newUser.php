@@ -52,4 +52,3 @@ if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
     unset($_user['user_id']);
     $uidReset = false;
 }
-?>

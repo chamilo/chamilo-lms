@@ -356,7 +356,8 @@ function get_dropbox_category($id)
 /**
 * This functions stores a new dropboxcategory
 *
-* @var  it might not seem very elegant if you create a category in sent and in received with the same name that you get two entries in the
+* @var  it might not seem very elegant if you create a category in sent
+ * and in received with the same name that you get two entries in the
 *       dropbox_category table but it is the easiest solution. You get
 *       cat_name | received | sent | user_id
 *       test     |    1     |   0  |    237

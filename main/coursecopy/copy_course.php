@@ -3,9 +3,6 @@
 /**
  * @package chamilo.backup
  */
-/**
- * Code
- */
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
@@ -65,7 +62,10 @@ if (Security::check_token('post') && (
     $cr = new CourseRestorer($course);
     $cr->set_file_option($_POST['same_file_name_option']);
     $cr->restore($_POST['destination_course']);
-    Display::display_normal_message(get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.$_POST['destination_course'].'</a>', false);
+    Display::display_normal_message(
+        get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.$_POST['destination_course'].'</a>',
+        false
+    );
 } elseif (Security::check_token('post') && (
         isset ($_POST['copy_option']) &&
         $_POST['copy_option'] == 'select_items'
@@ -78,7 +78,7 @@ if (Security::check_token('post') && (
     $course = $cb->build();
     $hiddenFields = array();
     $hiddenFields['same_file_name_option'] = $_POST['same_file_name_option'];
-    $hiddenFields['destination_course']    = $_POST['destination_course'];
+    $hiddenFields['destination_course'] = $_POST['destination_course'];
     // Add token to Course select form
     $hiddenFields['sec_token'] = Security::get_token();
     CourseSelectForm::display_form($course, $hiddenFields, true);

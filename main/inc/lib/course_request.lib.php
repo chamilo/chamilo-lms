@@ -51,7 +51,7 @@ class CourseRequestManager
      * @param string $objetives
      * @param string $target_audience
      * @param int/string $user_id
-     * @return int/bool                 The database id of the newly created course request or FALSE on failure.
+     * @return int/bool The database id of the newly created course request or FALSE on failure.
      */
     public static function create_course_request(
         $wanted_code,
@@ -240,7 +240,7 @@ class CourseRequestManager
      * @param string $objetives
      * @param string $target_audience
      * @param int/string $user_id
-     * @return bool                     Returns TRUE on success or FALSE on failure.
+     * @return bool Returns TRUE on success or FALSE on failure.
      */
     public static function update_course_request(
         $id,
@@ -299,7 +299,13 @@ class CourseRequestManager
         if ($user_id != $course_request_info['code']) {
             $user_info = api_get_user_info($user_id);
             if (is_array($user_info)) {
-                $tutor_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $course_language);
+                $tutor_name = api_get_person_name(
+                    $user_info['firstname'],
+                    $user_info['lastname'],
+                    null,
+                    null,
+                    $course_language
+                );
             } else {
                 $user_id = $course_request_info['code'];
             }
@@ -308,7 +314,13 @@ class CourseRequestManager
         if ($course_language != $course_request_info['course_language']) {
             $user_info = api_get_user_info($user_id);
             if (is_array($user_info)) {
-                $tutor_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $course_language);
+                $tutor_name = api_get_person_name(
+                    $user_info['firstname'],
+                    $user_info['lastname'],
+                    null,
+                    null,
+                    $course_language
+                );
             }
         }
 

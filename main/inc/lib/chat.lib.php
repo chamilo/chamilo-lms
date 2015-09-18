@@ -28,13 +28,20 @@ class Chat extends Model
      */
     function get_user_status()
     {
-        $status = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'user_chat_status', false, true);
+        $status = UserManager::get_extra_user_data_by_field(
+            api_get_user_id(),
+            'user_chat_status',
+            false,
+            true
+        );
+
         return $status['user_chat_status'];
     }
 
     /**
     * Set user chat status
     * @param int 0 if disconnected, 1 if connected
+     *
     * @return void
     */
     public function setUserStatus($status)
@@ -68,13 +75,10 @@ class Chat extends Model
     public function heartbeat()
     {
         $to_user_id = api_get_user_id();
-        $minutes = 60;
-        $now = time() - $minutes * 60;
-        $now = api_get_utc_datetime($now);
 
-        //OR  sent > '$now'
         $sql = "SELECT * FROM ".$this->table."
-                WHERE to_user = '".intval($to_user_id)."' AND ( recd  = 0 ) ORDER BY id ASC";
+                WHERE to_user = '".intval($to_user_id)."' AND ( recd  = 0 )
+                ORDER BY id ASC";
         $result = Database::query($sql);
 
         $chat_list = array();
@@ -132,7 +136,8 @@ class Chat extends Model
             }
         }
 
-        $sql = "UPDATE ".$this->table." SET recd = 1 WHERE to_user = '".$to_user_id."' AND recd = 0";
+        $sql = "UPDATE ".$this->table." SET recd = 1
+                WHERE to_user = '".$to_user_id."' AND recd = 0";
         Database::query($sql);
 
         if ($items != '') {
@@ -141,18 +146,18 @@ class Chat extends Model
         echo json_encode(array('items' => $items));
     }
 
-    /*
-     * Returns an array of messages inside a chat session with a specific user
-     * @param int The ID of the user with whom the current user is chatting
-     * @return array Messages list
-     */
-
+    /**
+    * Returns an array of messages inside a chat session with a specific user
+    * @param int The ID of the user with whom the current user is chatting
+    * @return array Messages list
+    */
     public function box_session($user_id)
     {
         $items = array();
         if (isset($_SESSION['chatHistory'][$user_id])) {
             $items = $_SESSION['chatHistory'][$user_id];
         }
+
         return $items;
     }
 
@@ -184,7 +189,10 @@ class Chat extends Model
         $sanitize =  true
     )
     {
-        $user_friend_relation = SocialManager::get_relation_between_contacts($from_user_id, $to_user_id);
+        $user_friend_relation = SocialManager::get_relation_between_contacts(
+            $from_user_id,
+            $to_user_id
+        );
         if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
 
             $user_info = api_get_user_info($to_user_id, true);
@@ -197,7 +205,7 @@ class Chat extends Model
             } else {
                 $messagesan = $message;
             }
-            
+
             error_log(print_r($sanitize) . '----' . $messagesan);
 
             if (!isset($_SESSION['chatHistory'][$to_user_id])) {
@@ -250,7 +258,8 @@ class Chat extends Model
 
     /**
      * Filter chat messages to avoid XSS or other JS
-     * @param string Unfiltered message
+     * @param string $text Unfiltered message
+     *
      * @return string Filterd mssage
      */
     public function sanitize($text)
@@ -259,6 +268,7 @@ class Chat extends Model
         $text = str_replace("\n\r", "\n", $text);
         $text = str_replace("\r\n", "\n", $text);
         $text = str_replace("\n", "<br>", $text);
+
         return $text;
     }
 

@@ -5690,13 +5690,13 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
     return false;
 }
 
-
 /**
  * Replaces "forbidden" characters in a filename string.
  *
  * @param string $filename
  * @param int $length
  * @param bool $file_name
+ *
  * @return string
  */
 function api_replace_dangerous_char($filename)

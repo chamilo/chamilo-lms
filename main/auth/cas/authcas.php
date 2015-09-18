@@ -5,11 +5,9 @@
 * Gets all the info via the ldap module (ldap has to work)
 
 */
-require_once(api_get_path(SYS_PATH).'main/auth/cas/cas_var.inc.php');
-require_once(api_get_path(SYS_PATH).'main/auth/external_login/ldap.inc.php');
-require_once(api_get_path(SYS_PATH).'main/auth/external_login/functions.inc.php');
-
-
+require_once api_get_path(SYS_PATH).'main/auth/cas/cas_var.inc.php';
+require_once api_get_path(SYS_PATH).'main/auth/external_login/ldap.inc.php';
+require_once api_get_path(SYS_PATH).'main/auth/external_login/functions.inc.php';
 
 /**
 * @return true if cas is configured
@@ -21,6 +19,7 @@ function cas_configured() {
     if (!empty($cas_auth_ver) && !empty($cas_auth_server) && !empty($cas_auth_port)) {
         $res = true;
     }
+
     return $res;
 }
 
@@ -41,9 +40,7 @@ function cas_is_authenticated()
         return;
     }
 
-
-	if (!is_object($PHPCAS_CLIENT) )
-	{
+	if (!is_object($PHPCAS_CLIENT)) {
 		phpCAS::client($cas_auth_ver,$cas_auth_server,$cas_auth_port,$cas_auth_uri);
 		phpCAS::setNoCasServerValidation();
 	}
@@ -152,9 +149,7 @@ function cas_is_authenticated()
 //			}
 //		}
 		return $login;
-	}
-	else
-	{
+    } else {
 		return false;
 	}
 }
@@ -184,23 +179,19 @@ function cas_logout($uinfo=null, $location=null)
     phpCAS::logoutWithRedirectService($location);
 }
 
-
-
 /*
  * Return the direct URL to a course code with CAS login
  */
-function get_cas_direct_URL($in_course_code) {
+function get_cas_direct_URL($in_course_code)
+{
     return api_get_path(WEB_PATH).'main/auth/cas/logincas.php?firstpage='.$in_course_code;
 }
 
-
-function getCASLogoHTML() {
+function getCASLogoHTML()
+{
     $out_res = "";
     if (api_get_setting("casLogoURL") != "") {
         $out_res = "<img src='".api_get_setting("casLogoURL")."' alt='CAS Logo' />";
     }
     return $out_res;
 }
-
-
-?>

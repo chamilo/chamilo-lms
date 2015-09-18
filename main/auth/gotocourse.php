@@ -1,8 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
- * For licensing terms, see /license.txt
  *
- * Allow the user to login to a course after reaching a course URL (e.g. http://chamilo.chamilo.org/courses/MYCOURSE/?id_session=0 )
+ * Allow the user to login to a course after reaching a course URL
+ * (e.g. http://chamilo.chamilo.org/courses/MYCOURSE/?id_session=0 )
  * See https://support.chamilo.org/issues/6768
  *
  * Author : hubert.borderiou@grenet.fr
@@ -50,5 +52,6 @@ if (isset($_GET['firstpage'])) {
 
 } else {
     api_delete_firstpage_parameter();
-    Header('Location: '.api_get_path(WEB_PATH).'index.php');
+    header('Location: '.api_get_path(WEB_PATH).'index.php');
+    exit;
 }

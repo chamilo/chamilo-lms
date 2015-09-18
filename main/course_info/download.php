@@ -6,7 +6,6 @@
  * @package chamilo.course_info
  */
 
-//session_cache_limiter('public');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 

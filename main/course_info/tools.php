@@ -50,9 +50,24 @@ switch ($action) {
         $allowed_picture_types = array ('jpg', 'jpeg', 'png');
         $form->addElement('file', 'icon', get_lang('CustomIcon'));
         $form->addRule('icon', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-        $form->addElement('select', 'target', get_lang('Target'), array('_self' => '_self', '_blank' => '_blank'));
-        $form->addElement('select', 'visibility', get_lang('Visibility'), array(1 => get_lang('Visible'), 0 => get_lang('Invisible')));
-        $form->addElement('textarea', 'description', get_lang('Description'),array ('rows' => '3', 'cols' => '40'));
+        $form->addElement(
+            'select',
+            'target',
+            get_lang('Target'),
+            array('_self' => '_self', '_blank' => '_blank')
+        );
+        $form->addElement(
+            'select',
+            'visibility',
+            get_lang('Visibility'),
+            array(1 => get_lang('Visible'), 0 => get_lang('Invisible'))
+        );
+        $form->addElement(
+            'textarea',
+            'description',
+            get_lang('Description'),
+            array('rows' => '3', 'cols' => '40')
+        );
         $form->addButtonUpdate(get_lang('Update'));
         $form->addHtml('</div>');
         $form->addHtml('<div class="col-md-5">');

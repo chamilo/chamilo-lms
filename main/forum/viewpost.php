@@ -59,9 +59,18 @@ if (!empty($gradebook) && $gradebook == 'view') {
 if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
-    $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search'])), 'name' => $nameTools);
-    $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&search='.Security::remove_XSS(urlencode($_GET['search'])), 'name' => prepare4display($current_forum_category['cat_title']));
-    $interbreadcrumb[] = array('url' => 'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&search='.Security::remove_XSS(urlencode($_GET['search'])), 'name' => prepare4display($current_forum['forum_title']));
+    $interbreadcrumb[] = array(
+        'url' => 'index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode($_GET['search'])),
+        'name' => $nameTools,
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$current_forum_category['cat_id'].'&search='.Security::remove_XSS(urlencode($_GET['search'])),
+        'name' => prepare4display($current_forum_category['cat_title']),
+    );
+    $interbreadcrumb[] = array(
+        'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&search='.Security::remove_XSS(urlencode($_GET['search'])),
+        'name' => prepare4display($current_forum['forum_title']),
+    );
 
     // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
     Display :: display_header('');
@@ -72,7 +81,9 @@ if ($origin == 'learnpath') {
 
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 OR $current_thread['visibility'] == 0)) {
+if (!api_is_allowed_to_edit(false, true) &&
+    ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
+) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;
@@ -81,10 +92,15 @@ if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 
 
 /* Actions */
 
-if ($_GET['action'] == 'delete' && isset($_GET['content']) && isset($_GET['id']) && api_is_allowed_to_edit(false, true)) {
+if ($_GET['action'] == 'delete' &&
+    isset($_GET['content']) &&
+    isset($_GET['id']) && api_is_allowed_to_edit(false, true)
+) {
     $message = delete_post($_GET['id']);
 }
-if (($_GET['action'] == 'invisible' || $_GET['action'] == 'visible') && isset($_GET['id']) && api_is_allowed_to_edit(false, true)) {
+if (($_GET['action'] == 'invisible' || $_GET['action'] == 'visible') &&
+    isset($_GET['id']) && api_is_allowed_to_edit(false, true)
+) {
     $message = approve_post($_GET['id'], $_GET['action']);
 }
 if ($_GET['action'] == 'move' && isset($_GET['post'])) {
@@ -105,23 +121,29 @@ if ($message != 'PostDeletedSpecial') {
     /* Action Links */
 
     echo '<div style="float:right;">';
-    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'&gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search']));
+    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'&gradebook='.$gradebook.'&search='.Security::remove_XSS(urlencode($_GET['search']));
     echo $my_url.'&view=flat&origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
     echo $my_url.'&view=threaded&origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
     echo $my_url.'&view=nested&origin='.$origin.'">'.get_lang('NestedView').'</a>';
     $my_url = null;
     echo '</div>';
-    // The reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
+    // The reply to thread link should only appear when the forum_category is
+    // not locked AND the forum is not locked AND the thread is not locked.
     // If one of the three levels is locked then the link should not be displayed.
-    if (($current_forum_category && $current_forum_category['locked'] == 0) AND $current_forum['locked'] == 0 AND $current_thread['locked'] == 0 OR api_is_allowed_to_edit(false, true)) {
+    if (($current_forum_category && $current_forum_category['locked'] == 0) &&
+        $current_forum['locked'] == 0 && $current_thread['locked'] == 0 || api_is_allowed_to_edit(false, true)
+    ) {
         // The link should only appear when the user is logged in or when anonymous posts are allowed.
-        if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 AND !$_user['user_id'])) {
+        if ($_user['user_id'] || ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
             // reply link
-            echo '<a href="reply.php?'.api_get_cidreq().'&gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
+            echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
 
             // new thread link
-            if (api_is_allowed_to_edit(false, true) OR ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)) {
-                if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
+            if (api_is_allowed_to_edit(false, true) ||
+                ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
+                ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
+            ) {
+                if ($current_forum['locked'] <> 1 && $current_forum['locked'] <> 1) {
                     echo '&nbsp;&nbsp;';
                     /*echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('new_thread.png','','',ICON_SIZE_MEDIUM).'</a>';*/
                 } else {
@@ -141,7 +163,7 @@ if ($message != 'PostDeletedSpecial') {
         $viewmode = $_SESSION['view'];
     }
 
-    $viewmode_whitelist=array('flat', 'threaded', 'nested');
+    $viewmode_whitelist = array('flat', 'threaded', 'nested');
     if (isset($_GET['view']) && in_array($_GET['view'], $viewmode_whitelist)) {
         $viewmode = Database::escape_string($_GET['view']);
         $_SESSION['view'] = $viewmode;

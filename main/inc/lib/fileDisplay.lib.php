@@ -22,59 +22,146 @@ function choose_image($file_name)
 
     /* TABLES INITIALISATION */
     if (!$type || !$image) {
-        $type['word'      ] = array('doc', 'dot',  'rtf', 'mcw',  'wps', 'psw', 'docm', 'docx', 'dotm',  'dotx');
-        $type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php', 'xhtml');
-        $type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg', 'tif', 'tiff');
-        $type['image_vect'] = array('svg','svgz');
-        $type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib', 'amr', 'kar', 'oga','au','wma');
-		$type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'm2v', 'm4v', 'flv', 'f4v', 'avi', 'wmv', 'asf', '3gp','ogv','ogg','ogx','webm');
-        $type['excel'     ] = array('xls', 'xlt',  'xls', 'xlt', 'pxl', 'xlsx', 'xlsm', 'xlam', 'xlsb', 'xltm', 'xltx');
-        $type['compressed'] = array('zip', 'tar',  'rar', 'gz');
-        $type['code'      ] = array('js',  'cpp',  'c',   'java', 'phps', 'jsp', 'asp', 'aspx', 'cfm');
-        $type['acrobat'   ] = array('pdf');
-        $type['powerpoint'] = array('ppt', 'pps', 'pptm', 'pptx', 'potm', 'potx', 'ppam', 'ppsm', 'ppsx');
-        $type['flash'     ] = array('fla', 'swf');
-        $type['text'      ] = array('txt','log');
-        $type['oo_writer' ] = array('odt', 'ott', 'sxw', 'stw');
-        $type['oo_calc'   ] = array('ods', 'ots', 'sxc', 'stc');
+        $type['word'] = array(
+            'doc',
+            'dot',
+            'rtf',
+            'mcw',
+            'wps',
+            'psw',
+            'docm',
+            'docx',
+            'dotm',
+            'dotx',
+        );
+        $type['web'] = array(
+            'htm',
+            'html',
+            'htx',
+            'xml',
+            'xsl',
+            'php',
+            'xhtml',
+        );
+        $type['image'] = array(
+            'gif',
+            'jpg',
+            'png',
+            'bmp',
+            'jpeg',
+            'tif',
+            'tiff',
+        );
+        $type['image_vect'] = array('svg', 'svgz');
+        $type['audio'] = array(
+            'wav',
+            'mid',
+            'mp2',
+            'mp3',
+            'midi',
+            'sib',
+            'amr',
+            'kar',
+            'oga',
+            'au',
+            'wma',
+        );
+        $type['video'] = array(
+            'mp4',
+            'mov',
+            'rm',
+            'pls',
+            'mpg',
+            'mpeg',
+            'm2v',
+            'm4v',
+            'flv',
+            'f4v',
+            'avi',
+            'wmv',
+            'asf',
+            '3gp',
+            'ogv',
+            'ogg',
+            'ogx',
+            'webm',
+        );
+        $type['excel'] = array(
+            'xls',
+            'xlt',
+            'xls',
+            'xlt',
+            'pxl',
+            'xlsx',
+            'xlsm',
+            'xlam',
+            'xlsb',
+            'xltm',
+            'xltx',
+        );
+        $type['compressed'] = array('zip', 'tar', 'rar', 'gz');
+        $type['code'] = array(
+            'js',
+            'cpp',
+            'c',
+            'java',
+            'phps',
+            'jsp',
+            'asp',
+            'aspx',
+            'cfm',
+        );
+        $type['acrobat'] = array('pdf');
+        $type['powerpoint'] = array(
+            'ppt',
+            'pps',
+            'pptm',
+            'pptx',
+            'potm',
+            'potx',
+            'ppam',
+            'ppsm',
+            'ppsx',
+        );
+        $type['flash'] = array('fla', 'swf');
+        $type['text'] = array('txt', 'log');
+        $type['oo_writer'] = array('odt', 'ott', 'sxw', 'stw');
+        $type['oo_calc'] = array('ods', 'ots', 'sxc', 'stc');
         $type['oo_impress'] = array('odp', 'otp', 'sxi', 'sti');
-        $type['oo_draw'   ] = array('odg', 'otg', 'sxd', 'std');
-        $type['epub'      ] = array('epub');
-		$type['java'      ] = array('class','jar');
-		$type['freemind'  ] = array('mm');
+        $type['oo_draw'] = array('odg', 'otg', 'sxd', 'std');
+        $type['epub'] = array('epub');
+        $type['java'] = array('class', 'jar');
+        $type['freemind'] = array('mm');
 
-        $image['word'      ] = 'word.gif';
-        $image['web'       ] = 'file_html.gif';
-        $image['image'     ] = 'file_image.gif';
+        $image['word'] = 'word.gif';
+        $image['web'] = 'file_html.gif';
+        $image['image'] = 'file_image.gif';
         $image['image_vect'] = 'file_svg.png';
-        $image['audio'     ] = 'file_sound.gif';
-        $image['video'     ] = 'film.gif';
-        $image['excel'     ] = 'excel.gif';
+        $image['audio'] = 'file_sound.gif';
+        $image['video'] = 'film.gif';
+        $image['excel'] = 'excel.gif';
         $image['compressed'] = 'file_zip.gif';
-        $image['code'      ] = 'icons/22/mime_code.png';
-        $image['acrobat'   ] = 'file_pdf.gif';
+        $image['code'] = 'icons/22/mime_code.png';
+        $image['acrobat'] = 'file_pdf.gif';
         $image['powerpoint'] = 'powerpoint.gif';
-        $image['flash'     ] = 'file_flash.gif';
-        $image['text'      ] = 'icons/22/mime_text.png';
-        $image['oo_writer' ] = 'file_oo_writer.gif';
-        $image['oo_calc'   ] = 'file_oo_calc.gif';
+        $image['flash'] = 'file_flash.gif';
+        $image['text'] = 'icons/22/mime_text.png';
+        $image['oo_writer'] = 'file_oo_writer.gif';
+        $image['oo_calc'] = 'file_oo_calc.gif';
         $image['oo_impress'] = 'file_oo_impress.gif';
-        $image['oo_draw'   ] = 'file_oo_draw.gif';
-        $image['epub'      ] = 'file_epub.gif';
-		$image['java'      ] = 'file_java.png';
-		$image['freemind'  ] = 'file_freemind.png';
+        $image['oo_draw'] = 'file_oo_draw.gif';
+        $image['epub'] = 'file_epub.gif';
+        $image['java'] = 'file_java.png';
+        $image['freemind'] = 'file_freemind.png';
     }
 
-    /* FUNCTION CORE */
     $extension = array();
     if (!is_array($file_name)) {
         if (preg_match('/\.([[:alnum:]]+)(\?|$)/', $file_name, $extension)) {
             $extension[1] = strtolower($extension[1]);
 
-            foreach ($type as $generic_type => $extension_list)
-            {
-                if (in_array($extension[1], $extension_list))
-                {
+            foreach ($type as $generic_type => $extension_list) {
+                if (in_array($extension[1], $extension_list)) {
                     return $image[$generic_type];
                 }
             }
@@ -185,8 +272,8 @@ function folder_size($dir_name)
 function get_total_folder_size($path, $can_see_invisible = false)
 {
     $table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $table_document 	= Database::get_course_table(TABLE_DOCUMENT);
-    $tool_document 		= TOOL_DOCUMENT;
+    $table_document = Database::get_course_table(TABLE_DOCUMENT);
+    $tool_document = TOOL_DOCUMENT;
 
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
@@ -216,6 +303,7 @@ function get_total_folder_size($path, $can_see_invisible = false)
     $result = Database::query($sql);
     if ($result && Database::num_rows($result) != 0) {
         $row = Database::fetch_row($result);
+
         return $row[0] == null ? 0 : $row[0];
     } else {
         return 0;

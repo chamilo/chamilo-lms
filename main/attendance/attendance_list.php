@@ -11,12 +11,8 @@
 api_protect_course_script(true);
 
 if (api_is_allowed_to_edit(null, true)) {
-    $param_gradebook = '';
-    if (isset($_SESSION['gradebook'])) {
-        $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
-    }
     echo '<div class="actions">';
-    echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=attendance_add">'.
+    echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_add">'.
         Display::return_icon('new_attendance_list.png', get_lang('CreateANewAttendance'),'',ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 }
@@ -36,7 +32,7 @@ $table = new SortableTable(
 );
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, array('style'=>'width:20px;'));
-$table->set_header(1, get_lang('Name'), true );
+$table->set_header(1, get_lang('Name'), true);
 $table->set_header(2, get_lang('Description'), true);
 $table->set_header(3, get_lang('CountDoneAttendance'), true, array('style'=>'width:90px;'));
 

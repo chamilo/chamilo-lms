@@ -638,6 +638,7 @@ class Auth
             $form->addElement('text', 'course_registration_code');
             $form->addButton(get_lang('SubmitRegistrationCode'));
             $content = $form->returnForm();
+
             return array('message' => $message, 'content' => $content);
         }
     }
@@ -655,7 +656,7 @@ class Auth
 
         $_sessions = $qb->select('s')
             ->from('ChamiloCoreBundle:Session', 's');
-        
+
         if (!empty($limit)) {
             $_sessions->setFirstResult($limit['start'])
                 ->setMaxResults($limit['length']);
@@ -806,5 +807,4 @@ SQL;
 
         return $sessionsToBrowse;
     }
-
 }

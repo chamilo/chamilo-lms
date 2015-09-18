@@ -11,8 +11,6 @@
 *   @author Modify by hubert borderiou 2011-10-21 Question's category
 */
 
-// name of the language file that needs to be included
-
 use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';

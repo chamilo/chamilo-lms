@@ -8,8 +8,6 @@
 * @author Olivier Brouckaert, Julio Montoya
 */
 
-// name of the language file that needs to be included
-
 use \ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';

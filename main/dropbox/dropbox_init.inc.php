@@ -341,7 +341,7 @@ if ($view == 'received') {
 	}
 }
 
-if ($view == 'sent' OR empty($view)) {
+if ($view == 'sent' || empty($view)) {
 	$interbreadcrumb[] = array('url' => '../dropbox/index.php', 'name' => get_lang('Dropbox', ''));
 	$nameTools = get_lang('SentFiles');
 

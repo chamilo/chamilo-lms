@@ -1,4 +1,6 @@
-<?php /* For licensing terms, see /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
+
 // External login module : WS (for Web Services)
 /**
  *
@@ -92,6 +94,7 @@ function loginWSAuthenticate($username, $password, $wsUrl) {
         }
         return 0;
     }
+
     return $response->validateUserResult;
 }
 

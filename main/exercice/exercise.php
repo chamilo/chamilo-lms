@@ -11,8 +11,6 @@
  * Modified by hubert.borderiou (question category)
  */
 
-// name of the language file that needs to be included
-
 use \ChamiloSession as Session;
 
 // including the global library

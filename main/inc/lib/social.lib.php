@@ -477,9 +477,8 @@ class SocialManager extends UserManager
 
             }
         } else {
-                $imageCourse = Display::return_icon('course.png', get_lang('Course'), array('class' => 'img-default'));
+            $imageCourse = Display::return_icon('course.png', get_lang('Course'), array('class' => 'img-default'));
         }
-        //$imageCourse = Display::return_icon('course.png', get_lang('Course'));
 
         //display course entry
         if (api_get_setting('course_images_in_courses_list') === 'true') {
@@ -502,7 +501,6 @@ class SocialManager extends UserManager
 
 
         $session = '';
-        $active = false;
         if (!empty($my_course['session_name']) && !empty($my_course['id_session'])) {
 
             // Request for the name of the general coach
@@ -522,7 +520,6 @@ class SocialManager extends UserManager
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
                 }
-                $active = true;
             } else {
                 $session ['dates'] = ' - '.get_lang('From').' '.$my_course['access_start_date'].' '.get_lang('To').' '.$my_course['access_end_date'];
                 if (api_get_setting('show_session_coach') === 'true') {
@@ -531,7 +528,12 @@ class SocialManager extends UserManager
             }
         }
         $my_course['id_session'] = isset($my_course['id_session']) ? $my_course['id_session'] : 0;
-        $output = array($my_course['user_course_cat'], $result, $my_course['id_session'], $session);
+        $output = array(
+            $my_course['user_course_cat'],
+            $result,
+            $my_course['id_session'],
+            $session,
+        );
 
         return $output;
     }

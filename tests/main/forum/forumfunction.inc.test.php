@@ -202,44 +202,6 @@ class TestForumFunction extends UnitTestCase {
 		 //var_dump($res);
 	 }
 
-	 /**
-	* This function takes care of the display of the lock icon
-	* @param $content what is it that we want to (un)lock: forum category, forum, thread, post
-	* @param $id the id of the content we want to (un)lock
-	* @param $current_visibility_status what is the current status of the visibility (0 = invisible, 1 = visible)
-	* @return void display the lock HTML.
-	*/
-
-	 function testdisplay_lock_unlock_icon() {
-		 $content = 'testterm';
-		 $id = 1;
-		 $current_lock_status = 0;
-		 ob_start();
-		 $res = display_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters='');
-		 ob_end_clean();
-		 $this->assertTrue(is_null($res));
-		 //var_dump($res);
-	 }
-
-	 /**
-	* This function takes care of the display of the up and down icon
-	* @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
-	* @param $id is the id of the item we want to display the icons for
-	* @param $list is an array of all the items. All items in this list should have an up and down icon except for the first (no up icon) and the last (no down icon)
-	* 		 The key of this $list array is the id of the item.
-	* @return void HTML
-	*/
-
-	public function testdisplay_up_down_icon() {
-		 $content = 'testcontent';
-		 $id = 1;
-		 $list = array('test');
-		 ob_start();
-		 $res = display_up_down_icon($content, $id, $list);
-		 ob_end_clean();
-		 $this->assertTrue(is_null($res));
-		 //var_dump($res);
-	 }
 
 	 /**
 	* This function displays the user image from the profile, with a link to the user's details.
@@ -267,25 +229,6 @@ class TestForumFunction extends UnitTestCase {
 		 $user_id = 1;
 		 $res = display_user_link($user_id, $name, $origin='');
 		 $this->assertTrue(is_string($res));
-		 //var_dump($res);
-	 }
-
-	/**
-	* This function takes care of the display of the visibility icon
-	* @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
-	* @param $id the id of the content we want to make invisible
-	* @param $current_visibility_status what is the current status of the visibility (0 = invisible, 1 = visible)
-	* @return void string HTML
-	*/
-
-	public function testdisplay_visible_invisible_icon() {
-		 $content = 'testcontent';
-		 $current_visibility_status = 0;
-		 $id = 1;
-		 ob_start();
-		 $res = display_visible_invisible_icon($content, $id, $current_visibility_status, $additional_url_parameters='');
-		 ob_end_clean();
-		 $this->assertTrue(is_null($res));
 		 //var_dump($res);
 	 }
 

@@ -11,77 +11,77 @@
  */
 class DashboardController
 {
- 	private $toolname;
-	private $view;
-	private $user_id;
+    private $toolname;
+    private $view;
+    private $user_id;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		$this->user_id = api_get_user_id();
-		$this->toolname = 'dashboard';
-		$this->view = new View($this->toolname);
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->user_id = api_get_user_id();
+        $this->toolname = 'dashboard';
+        $this->view = new View($this->toolname);
+    }
 
-	/**
-	 * Display blocks from dashboard plugin paths
-	 * @param string message (optional)
-	 * render to dashboard.php view
-	 */
-	public function display($msg = false)
-	{
-		$data = array();
-		$user_id = $this->user_id;
+    /**
+     * Display blocks from dashboard plugin paths
+     * @param string message (optional)
+     * render to dashboard.php view
+     */
+    public function display($msg = false)
+    {
+        $data = array();
+        $user_id = $this->user_id;
 
-		$block_data_without_plugin = DashboardManager::get_block_data_without_plugin();
-		$dashboard_blocks = DashboardManager::get_enabled_dashboard_blocks();
-		$user_block_data  = DashboardManager::get_user_block_data($user_id);
-		$user_blocks_id = array_keys($user_block_data);
+        $block_data_without_plugin = DashboardManager::get_block_data_without_plugin();
+        $dashboard_blocks = DashboardManager::get_enabled_dashboard_blocks();
+        $user_block_data  = DashboardManager::get_user_block_data($user_id);
+        $user_blocks_id = array_keys($user_block_data);
 
         $data_block = null;
 
-		if (!empty($dashboard_blocks)) {
-			foreach ($dashboard_blocks as $block) {
+        if (!empty($dashboard_blocks)) {
+            foreach ($dashboard_blocks as $block) {
 
-				// display only user blocks
-				if (!in_array($block['id'], $user_blocks_id)) continue;
+                // display only user blocks
+                if (!in_array($block['id'], $user_blocks_id)) continue;
 
-				$path = $block['path'];
-				$controller_class = $block['controller'];
-				$filename_controller = $path.'.class.php';
-				$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';
-				require_once $dashboard_plugin_path.$filename_controller;
-				if (class_exists($controller_class)) {
-    				$obj = new $controller_class($user_id);
+                $path = $block['path'];
+                $controller_class = $block['controller'];
+                $filename_controller = $path.'.class.php';
+                $dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';
+                require_once $dashboard_plugin_path.$filename_controller;
+                if (class_exists($controller_class)) {
+                    $obj = new $controller_class($user_id);
 
-    				// check if user is allowed to see the block
-    				if (method_exists($obj, 'is_block_visible_for_user')) {
-    					$is_block_visible_for_user = $obj->is_block_visible_for_user($user_id);
-    					if (!$is_block_visible_for_user) continue;
-    				}
+                    // check if user is allowed to see the block
+                    if (method_exists($obj, 'is_block_visible_for_user')) {
+                        $is_block_visible_for_user = $obj->is_block_visible_for_user($user_id);
+                        if (!$is_block_visible_for_user) continue;
+                    }
 
-    				$data_block[$path] = $obj->get_block();
-    				// set user block column
-    				$data_block[$path]['column'] = $user_block_data[$block['id']]['column'];
-				}
-			}
+                    $data_block[$path] = $obj->get_block();
+                    // set user block column
+                    $data_block[$path]['column'] = $user_block_data[$block['id']]['column'];
+                }
+            }
 
-			$data['blocks'] = $data_block;
-			$data['dashboard_view'] = 'blocks';
-		}
+            $data['blocks'] = $data_block;
+            $data['dashboard_view'] = 'blocks';
+        }
 
-		if ($msg) {
-			$data['msg'] = $msg;
-		}
+        if ($msg) {
+            $data['msg'] = $msg;
+        }
 
-		// render to the view
-		$this->view->set_data($data);
-		$this->view->set_layout('layout');
-		$this->view->set_template('dashboard');
-		$this->view->render();
-	}
+        // render to the view
+        $this->view->set_data($data);
+        $this->view->set_layout('layout');
+        $this->view->set_template('dashboard');
+        $this->view->render();
+    }
 
 	/**
 	 * This method allow store user blocks from dashboard manager

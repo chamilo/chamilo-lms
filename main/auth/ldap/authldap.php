@@ -24,7 +24,8 @@
     ---------------
     This historial has been discontinued. Please use the Mercurial logs for more
     3.2 - updated to allow for specific term search for teachers identification
-    3.1 - updated code to use database settings, to respect coding conventions as much as possible (camel-case removed) and to allow for non-anonymous login
+    3.1 - updated code to use database settings, to respect coding conventions
+ *        as much as possible (camel-case removed) and to allow for non-anonymous login
     3.0    - updated to use ldap_var.inc.php instead of ldap_var.inc (deprecated)
         (November 2003)
     2.9    - further changes for new login procedure

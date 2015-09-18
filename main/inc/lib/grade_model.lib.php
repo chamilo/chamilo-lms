@@ -62,9 +62,10 @@ class GradeModel extends Model
     /**
      * Returns a Form validator Obj
      * @todo the form should be auto generated
-     * @param   string  url
-     * @param   string  action add, edit
-     * @return  obj     form validator obj
+     * @param   string  $url
+     * @param   string  $action add, edit
+     *
+     * @return  FormValidator form validator obj
      */
     public function return_form($url, $action)
     {
@@ -189,6 +190,7 @@ class GradeModel extends Model
 
         // Setting the rules
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+
 		return $form;
     }
 

@@ -10,8 +10,6 @@
  * @author Julio Montoya <gugli100@gmail.com> Updating form with formvalidator
  */
 
-// name of the language file that needs to be included
-
 use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';

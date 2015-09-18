@@ -1217,14 +1217,13 @@ class Template
             'login',
             get_lang('UserName'),
             true,
-            array('id' => 'login', 'autofocus' => 'autofocus', 'icon' => 'user')
-        );
+            array('id' => 'login', 'autofocus' => 'autofocus', 'icon' => 'user fa-fw', 'placeholder' => get_lang('UserName')));
 
         $form->addElement(
             'password',
             'password',
             get_lang('Pass'),
-            array('id' => 'password', 'icon' => 'lock')
+            array('id' => 'password', 'icon' => 'lock fa-fw', 'placeholder' => get_lang('Pass'))
         );
 
         // Captcha

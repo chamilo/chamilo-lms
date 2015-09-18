@@ -90,7 +90,7 @@ function search_courses($needle, $type)
 
 		$rs	= Database::query($sql);
 
-		$return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">';
+		$return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" >';
 		while($course = Database :: fetch_array($rs)) {
 			$return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'],ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
 		}

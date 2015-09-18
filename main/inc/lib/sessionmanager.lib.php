@@ -419,6 +419,8 @@ class SessionManager
         $order = $conditions['order'];
         $limit = $conditions['limit'];
 
+        $isMakingOrder = false;
+
         if ($get_count == true) {
             $select = " SELECT count(*) as total_rows";
         } else {
@@ -434,12 +436,19 @@ class SessionManager
                 " $inject_extra_fields ".
                 " s.id ";
 
-            if (strpos($options['order'], 'category_name') === 0) {
-                $inject_joins .= "
-                    LEFT JOIN $sessionCategoryTable sc
-                        ON s.session_category_id = sc.id
-                ";
+            $isMakingOrder = strpos($options['order'], 'category_name') === 0;
+        }
 
+        $isFilteringSessionCategory = strpos($where, 'category_name') !== false;
+
+        if ($isMakingOrder || $isFilteringSessionCategory) {
+            $inject_joins .= " LEFT JOIN $sessionCategoryTable sc ON s.session_category_id = sc.id ";
+
+            if ($isFilteringSessionCategory) {
+                $where = str_replace('category_name', 'sc.name', $where);
+            }
+
+            if ($isMakingOrder) {
                 $order = str_replace('category_name', 'sc.name', $order);
             }
         }

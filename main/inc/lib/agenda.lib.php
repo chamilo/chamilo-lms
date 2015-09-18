@@ -145,7 +145,7 @@ class Agenda
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
         $id = null;
-        $content = nl2br($content);
+        $content = Security::remove_XSS($content);
         $eventComment = nl2br($eventComment);
 
         switch ($this->type) {

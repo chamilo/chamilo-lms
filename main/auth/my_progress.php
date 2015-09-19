@@ -15,7 +15,7 @@ $nameTools = get_lang('MyProgress');
 
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.5.js');
+$htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.54.js');
 $htmlHeadXtra[] = "
 <script language='javascript'>
 $(function() {
@@ -24,6 +24,7 @@ $(function() {
         autoPlayPause: 2000
     })
 });
+
 </script>";
 
 $user_id = api_get_user_id();
@@ -52,18 +53,19 @@ if (!empty($course_user_list)) {
             $last = '<a href="#'.$login.'">'.get_lang('Last').'</a>';
         }
         $course_info = api_get_course_info_by_id($result['c_id']);
-        $course_image = '<img src="'.$course_info['course_image'].'">';
-        $dates .= '<li><a href="#'.$login.'">'.api_get_utc_datetime($login).'</a></li>';
-        $issues .= '<li id ="'.$login.'">
-                        <div class="row">
-                            <div class="col-md-12"><div class="thumbnail">'.$course_image.'</div>
-                        </div>
-                        <div class="col-md-3">'.sprintf(
-                            get_lang('YouHaveEnteredTheCourseXInY'),
-                            $courseInfo['code'],
-                            api_convert_and_format_date($login, DATE_FORMAT_LONG)
-                        ).'</div>
-                    </li>';
+        $course_image = '<img src="'.$course_info['course_image_large'].'">';
+        $dates .= '<li><a href="#'.$login.'">' . gmdate('Y - m - d', $login) . '</a></li>';
+        $issues .= '<li id ="'.$login.'">';
+        $issues .= '<div class="img-course">'.$course_image.'</div>';
+        
+        $issues .= '<div class="text-course">';
+        $issues .= '<p>' . sprintf(
+                get_lang('YouHaveEnteredTheCourseXInY'),
+                '" '. $courseInfo['name'] .' "',
+                api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG) 
+                ) . '</p>';
+        $issues .= '</div>'; 
+        $issues .= '</li>';
         $count++;
     }
 }
@@ -75,20 +77,19 @@ if (!empty($dates)) {
     if (!empty($content)) {
         $content .= '';
     }
-    $content .= '<div class="row"><div class="col-md-12">'.Display::page_subheader(get_lang('Timeline'));
+    
+    $content .= Display::page_subheader(get_lang('Timeline'));
+    $content .= '<div class="row">';
+    $content .= '<div class="col-md-12">';
     $content .= '<div id="my_timeline">';
+    $content .= '<ul id="dates">' . $dates . '</ul>';
+    $content .= '<ul id="issues">' . $issues . '</ul>';
+    $content .= '<div id="grad_left"></div>';
+    $content .= '<div id="grad_right"></div>';
+    $content .= '<a href="#" id="prev"></a>';
+    $content .= '<a href="#" id="next"></a>';
+    $content .= '</div></div>';
     
-    $actionsLeft = '<a href="#" id="prev">' . Display::return_icon('previous.png',  get_lang('Previous'), null, ICON_SIZE_MEDIUM) . '</a>';
-    $actionsRight = '<a href="#" id="next">' . Display::return_icon('next.png',  get_lang('Next'), null, ICON_SIZE_MEDIUM) . '</a>';
-    $content .= Display::toolbarAction('toolbar-linetime',array(0 => $actionsLeft, 1 => $actionsRight), 2, true);
-    
-    $content .= '<ul id="dates">
-        '.$dates.'
-    </ul>
-    <ul id="issues">
-        '.$issues.'
-    </ul>
-    </div></div>';
 }
 
 $message = null;

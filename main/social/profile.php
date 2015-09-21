@@ -54,6 +54,8 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
         );
     }
 
+    Display::addFlash(Display::return_message(get_lang('MessageSent')));
+
     $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
     $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: ' . $url);
@@ -68,6 +70,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
         $messageId,
         MESSAGE_STATUS_WALL
     );
+    Display::addFlash(Display::return_message(get_lang('MessageSent')));
     $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
     $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: ' . $url);
@@ -76,6 +79,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
 } else if (isset($_GET['messageId'])) {
     $messageId = Security::remove_XSS($_GET['messageId']);
     $status = SocialManager::deleteMessage($messageId);
+    Display::addFlash(Display::return_message(get_lang('MessageDeleted')));
     header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/profile.php');
     exit;
 
@@ -637,11 +641,11 @@ $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 
 $formModalTpl =  new Template();
-$formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
-$formModalTpl->assign('invitationForm', MessageManager::generate_invitation_form('send_invitation'));
+//$formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
+$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 
-$tpl->assign('formModals', $formModals);
+$tpl->assign('form_modals', $formModals);
 $social_layout = $tpl->get_template('social/profile.tpl');
 $tpl->display($social_layout);
 

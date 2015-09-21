@@ -220,11 +220,11 @@ $tpl->assign('social_right_content', $social_right_content);
 $tpl->assign('search_form', $searchForm);
 
 $formModalTpl =  new Template();
-$formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
-$formModalTpl->assign('invitationForm', MessageManager::generate_invitation_form('send_invitation'));
+//$formModalTpl->assign('message_form', MessageManager::generate_message_form('send_message'));
+$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 
-$tpl->assign('formModals', $formModals);
+$tpl->assign('form_modals', $formModals);
 
 $social_layout = $tpl->get_template('social/search.tpl');
 $tpl->display($social_layout);

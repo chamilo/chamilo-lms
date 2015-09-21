@@ -23,7 +23,7 @@
     </div>
 </div>
 
-{% if formModals is defined %}
-    {{ formModals }}
+{% if form_modals is defined %}
+    {{ form_modals }}
 {% endif %}
 {% endblock %}

@@ -1581,16 +1581,16 @@ class SocialManager extends UserManager
         if (api_get_user_id() == $userId) {
             $profileEditionLink = Display::getProfileEditionLink($userId);
         }
-        
+
         $vCardUserLink = Display::getVCardUserLink($userId);
 
         $userInfo = api_get_user_info($userId, true, false, true);
 
         $template->assign('user', $userInfo);
-        $template->assign('socialAvatarBlock', $socialAvatarBlock);
-        $template->assign('profileEditionLink', $profileEditionLink);
+        $template->assign('social_avatar_block', $socialAvatarBlock);
+        $template->assign('profile_edition_link', $profileEditionLink);
         //Added the link to export the vCard to the Template
-        $template->assign('vCardUserLink', $vCardUserLink);
+        $template->assign('vcard_user_link', $vCardUserLink);
 
         if (api_get_setting('gamification_mode') === '1') {
             $gamificationPoints = GamificationUtils::getTotalUserPoints(

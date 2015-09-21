@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-3">
         {{ social_avatar_block }}
-        {{ social_extra_info_block }}        
+        {{ social_extra_info_block }}
         <div class="social-network-menu">
             {{ social_menu_block }}
         </div>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
             </div>
-         {% endif %}                   
+         {% endif %}
         <!-- Block session list -->
         {% if sessionList != null %}
         <div class="panel-group" id="session-block" role="tablist" aria-multiselectable="true">
@@ -81,14 +81,13 @@
                 </div>
             </div>
          </div>
-         {% endif %}              
-        
-        
+         {% endif %}
+
         {{ social_rss_block }}
         {{ social_right_information }}
     </div>
 </div>
-    {% if formModals is defined %}
-        {{ formModals }}
+    {% if form_modals is defined %}
+        {{ form_modals }}
     {% endif %}
 {% endblock %}

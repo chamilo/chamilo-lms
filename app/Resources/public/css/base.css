@@ -4592,6 +4592,9 @@ i.size-32.icon-new-work{
 .social-avatar{
   text-align: center;
 }
+.social-avatar .user-details {
+    font-size: 12px;
+}
 .social-avatar .img-profile{
   margin-bottom: 5px;
   padding-left: 50px;
@@ -4605,34 +4608,6 @@ i.size-32.icon-new-work{
 .social-avatar .social-profile .img-responsive{
   display: inline-block;
   margin: auto;
-}
-.social-avatar .lastname{
-  font-size: 14px;
-  font-weight: bold;
-  color: #4d4d4d;
-  margin-bottom: 5px;
-}
-.social-avatar .firstname{
-  font-size: 14px;
-  font-weight: bold;
-  color: #4d4d4d;
-  margin-bottom: 0px;
-}
-.social-avatar .social-avatar-vcard{
-  font-size: 12px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  color: #666666;  
-}
-.social-avatar .social-avatar-email,
-.social-avatar .social-avatar-chat{
-  font-size: 12px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  color: #666666;
-}
-.social-avatar .social-avatar-chat{
-  margin-bottom: 15px;
 }
 .social-avatar .edit-profile{
   margin-top: 15px;

@@ -419,6 +419,8 @@ class SessionManager
         $order = $conditions['order'];
         $limit = $conditions['limit'];
 
+        $isMakingOrder = false;
+
         if ($get_count == true) {
             $select = " SELECT count(*) as total_rows";
         } else {
@@ -434,12 +436,19 @@ class SessionManager
                 " $inject_extra_fields ".
                 " s.id ";
 
-            if (strpos($options['order'], 'category_name') === 0) {
-                $inject_joins .= "
-                    LEFT JOIN $sessionCategoryTable sc
-                        ON s.session_category_id = sc.id
-                ";
+            $isMakingOrder = strpos($options['order'], 'category_name') === 0;
+        }
 
+        $isFilteringSessionCategory = strpos($where, 'category_name') !== false;
+
+        if ($isMakingOrder || $isFilteringSessionCategory) {
+            $inject_joins .= " LEFT JOIN $sessionCategoryTable sc ON s.session_category_id = sc.id ";
+
+            if ($isFilteringSessionCategory) {
+                $where = str_replace('category_name', 'sc.name', $where);
+            }
+
+            if ($isMakingOrder) {
                 $order = str_replace('category_name', 'sc.name', $order);
             }
         }
@@ -488,7 +497,7 @@ class SessionManager
                     $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
                 }
 
-                $session = self::convert_dates_to_local($session);
+                $session = self::convert_dates_to_local($session, true);
 
                 switch ($session['visibility']) {
                     case SESSION_VISIBLE_READ_ONLY: //1
@@ -6838,13 +6847,12 @@ class SessionManager
     }
 
     /**
-     * Converts all dates sent through the param array (given form) to correct
-     * dates with timezones
-     * @param array The dates
+     * Converts all dates sent through the param array (given form) to correct dates with timezones
+     * @param array The dates The same array, with times converted
+     * @param boolean $applyFormat Whether apply the DATE_TIME_FORMAT_SHORT format for sessions
      * @return array The same array, with times converted
-     * @assert ('a') === false
      */
-    static function convert_dates_to_local($params)
+    static function convert_dates_to_local($params, $applyFormat = false)
     {
         if (!is_array($params)) {
             return false;
@@ -6857,6 +6865,33 @@ class SessionManager
 
         $params['coach_access_start_date'] = isset($params['coach_access_start_date']) ? api_get_local_time($params['coach_access_start_date'], null, null, true) : null;
         $params['coach_access_end_date'] = isset($params['coach_access_end_date']) ? api_get_local_time($params['coach_access_end_date'], null, null, true) : null;
+
+        if ($applyFormat) {
+            if (isset($params['display_start_date'])) {
+                $params['display_start_date'] = api_format_date($params['display_start_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['display_end_date'])) {
+                $params['display_end_date'] = api_format_date($params['display_end_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['access_start_date'])) {
+                $params[''] = api_format_date($params['access_start_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['access_end_date'])) {
+                $params['access_end_date'] = api_format_date($params['access_end_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['coach_access_start_date'])) {
+                $params['coach_access_start_date'] = api_format_date($params['coach_access_start_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['coach_access_end_date'])) {
+                $params['coach_access_end_date'] = api_format_date($params['coach_access_end_date'], DATE_TIME_FORMAT_SHORT);
+            }
+        }
+
         return $params;
     }
 

@@ -372,9 +372,13 @@ class SocialManager extends UserManager
             $send_message = MessageManager::send_message($userfriend_id, $subject_message, $content_message);
 
             if ($send_message) {
-                echo Display::display_confirmation_message($succes, true);
+                Display::addFlash(
+                    Display::display_confirmation_message($succes, true, true)
+                );
             } else {
-                echo Display::display_error_message(get_lang('ErrorSendingMessage'), true);
+                Display::addFlash(
+                    Display::display_error_message(get_lang('ErrorSendingMessage'), true, true)
+                );
             }
             return false;
         } elseif (isset($userfriend_id) && !isset($subject_message)) {
@@ -384,9 +388,21 @@ class SocialManager extends UserManager
                 $count_is_true = self::send_invitation_friend(api_get_user_id(), $userfriend_id, $message_title, $content_message);
 
                 if ($count_is_true) {
-                    echo Display::display_confirmation_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES, $charset), false);
+                    Display::addFlash(
+                        Display::display_confirmation_message(
+                            api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES, $charset),
+                            false,
+                            true
+                        )
+                    );
                 } else {
-                    echo Display::display_warning_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES, $charset), false);
+                    Display::addFlash(
+                        Display::display_warning_message(
+                            api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES, $charset),
+                            false,
+                            true
+                        )
+                    );
                 }
             }
         }
@@ -1565,12 +1581,16 @@ class SocialManager extends UserManager
         if (api_get_user_id() == $userId) {
             $profileEditionLink = Display::getProfileEditionLink($userId);
         }
+        
+        $vCardUserLink = Display::getVCardUserLink($userId);
 
         $userInfo = api_get_user_info($userId, true, false, true);
 
         $template->assign('user', $userInfo);
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
+        //Added the link to export the vCard to the Template
+        $template->assign('vCardUserLink', $vCardUserLink);
 
         if (api_get_setting('gamification_mode') === '1') {
             $gamificationPoints = GamificationUtils::getTotalUserPoints(

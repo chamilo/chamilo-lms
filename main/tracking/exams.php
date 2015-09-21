@@ -91,7 +91,9 @@ if (!$exportToXLS) {
         
 
         $courseLink = '';
-        if (!empty(api_get_course_info())) {
+        $courseInfo = api_get_course_info();
+
+        if (!empty($courseInfo)) {
             $courseLink = api_get_cidreq();
         }
 

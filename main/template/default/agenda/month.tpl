@@ -154,7 +154,7 @@ $(document).ready(function() {
 							var bValid = true;
 							bValid = bValid && checkLength(title, "title", 1, 255);
                                                         
-                            //This For make the CKEDITOR SERIALIZABLE
+                            //Update the CKEditor Instance to the remplaced textarea, ready to be serializable
                             for ( instance in CKEDITOR.instances ) {
                                 CKEDITOR.instances[instance].updateElement();
                             }
@@ -211,9 +211,6 @@ $(document).ready(function() {
                         $("#comment").val('');
 					}
 				});
-
-	            // Don't follow the link.
-	            return false;
 
 				calendar.fullCalendar('unselect');
                 //Reload events

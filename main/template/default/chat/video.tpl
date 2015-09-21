@@ -1,7 +1,7 @@
 <div id="chat-video-panel">
     <div class="row">
         <div class="col-md-4">
-            <div id="chat-local-video"></div>
+            <div class="user-video" id="chat-local-video"></div>
             <div class="username-local">
                 {% if user_local.user_is_online_in_chat == 1 %}
                     <img src="{{ 'online.png' | icon(16) }}" />
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="col-md-8">
-            <div class="user-from" id="chat-remote-video"></div>
+            <div class="user-video" id="chat-remote-video"></div>
             <div class="chat-user-remote">{{ "ChatWithXUser"|get_lang|format(chat_user.complete_name) }}</div>
         </div>
     </div>

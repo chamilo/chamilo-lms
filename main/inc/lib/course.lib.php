@@ -1838,11 +1838,12 @@ class CourseManager
     public static function get_teacher_list_from_course_code_to_string(
         $course_code,
         $separator = self::USER_SEPARATOR,
-        $add_link_to_profile = false
-    ) {
+        $add_link_to_profile = false,
+        $orderList = false    
+    ) {     
         $teacher_list = self::get_teacher_list_from_course_code($course_code);
-
         $teacher_string = '';
+        $html = '';
         $list = array();
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -1863,11 +1864,21 @@ class CourseManager
                 }
                 $list[] = $teacher_name;
             }
+            
             if (!empty($list)) {
-                $teacher_string = array_to_string($list, $separator);
+                if ($orderList === true){
+                    $html .= '<ul class="user-teacher">';
+                    foreach ($list as $teacher){
+                        $html .= Display::tag('li', Display::return_icon('teacher.png', $teacher, null, ICON_SIZE_TINY) . ' ' . $teacher);
+                    }
+                    $html .= '</ul>';
+                }else{
+                    $html .= array_to_string($list, $separator);
+                }
             }
         }
-        return $teacher_string;
+        
+        return $html;
     }
 
     /**
@@ -1930,11 +1941,12 @@ class CourseManager
         $session_id = 0,
         $courseId = null,
         $separator = self::USER_SEPARATOR,
-        $add_link_to_profile = false
+        $add_link_to_profile = false,
+        $orderList = false    
     ) {
         $coachs_course = self::get_coachs_from_course($session_id, $courseId);
         $course_coachs = array();
-
+        $html = '';
         if (is_array($coachs_course)) {
             foreach ($coachs_course as $coach_course) {
                 $coach_name = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
@@ -1953,10 +1965,21 @@ class CourseManager
             }
         }
         $coaches_to_string = null;
-        if (is_array($course_coachs) && count($course_coachs) > 0) {
-            $coaches_to_string = array_to_string($course_coachs, $separator);
+        
+        if (!empty($course_coachs)) {
+            if ($orderList === true){
+                $html .= '<ul class="user-coachs">';
+                    foreach ($course_coachs as $coachs){
+                        $html .= Display::tag('li', Display::return_icon('teacher.png', $coachs, null, ICON_SIZE_TINY) . ' ' . $coachs);
+                    }
+                $html .= '</ul>';
+            } else {
+                $coaches_to_string = array_to_string($course_coachs, $separator);
+            }
+            
         }
-        return $coaches_to_string;
+        
+        return $html;
     }
 
     /**

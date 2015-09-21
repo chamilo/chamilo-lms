@@ -164,7 +164,9 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 return '
+                        <label {label-for}>{label}</label>
                         <div class="input-group">
+                            
                             {icon}
                             {element}
                         </div>';
@@ -236,7 +238,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            return '<input' . $this->_getAttrString($this->_attributes) . ' />';
+            return '<input ' . $this->_getAttrString($this->_attributes) . ' />';
         }
     }
 }

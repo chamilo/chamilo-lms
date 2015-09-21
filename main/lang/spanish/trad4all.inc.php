@@ -7539,4 +7539,6 @@ $CreatedBy = "Creado por";
 $UploadMyAssignment = "Enviar mi tarea";
 $Inserted = "Añadido";
 $YourBroswerDoesNotSupportWebRTC = "Su navegador no soporta nativamente la transmisión por videoconferencia.";
+$OtherTeachers = "Otros profesores";
+$CourseCategory = "Categoría de curso";
 ?>

@@ -539,9 +539,11 @@ $link_add_group = Display::url(
 );
 
 $newLinks = Display::url(
+    Display::return_icon('teacher.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).    
     get_lang('EnrollTrainersFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$id_session
 );
 $newLinks .= Display::url(
+    Display::return_icon('user.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).    
     get_lang('EnrollStudentsFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$id_session
 );
 ?>
@@ -553,7 +555,7 @@ $newLinks .= Display::url(
     echo $newLinks;
     ?>
 </div>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if(!empty($addProcess)) echo '&add=true' ; ?>" style="margin:0px;" <?php if ($ajax_search) { echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if(!empty($addProcess)) echo '&add=true' ; ?>"  <?php if ($ajax_search) { echo ' onsubmit="valide();"';}?>>
 <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
 <?php
 if ($add_type=='multiple') {
@@ -592,16 +594,14 @@ if (!empty($errorMsg)) {
 }
 ?>
 <div id="multiple-add-session" class="row">
-    <div class="col-md-5">
-        <div class="multiple_select_header">
-            <label><?php echo get_lang('UserListInPlatform') ?> :</label>
-        </div>
-            <div id="content_source">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label><?php echo get_lang('UserListInPlatform') ?> </label>
             <?php
             if (!($add_type=='multiple')) {
               ?>
               <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" class="form-control" />
-              <div id="ajax_list_users_single"></div>
+              <div id="ajax_list_users_single" class="select-list-ajax"></div>
               <?php
             } else {
             ?>
@@ -634,7 +634,7 @@ if (!empty($errorMsg)) {
         </div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-4">
         <?php if ($add_type=='multiple') { ?>
             <?php echo get_lang('FirstLetterUser'); ?> :
 
@@ -651,33 +651,35 @@ if (!empty($errorMsg)) {
         <?php
             if ($ajax_search) {
             ?>
-              <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
+            <div class="separate-action">
+                <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
                   <i class="fa fa-chevron-left"></i>
-              </button>
+                </button>
+            </div>
+              
             <?php
         } else {
             ?>
+            <div class="separate-action">
                 <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
                     <i class="fa fa-chevron-right"></i>
                 </button>
-                <br />
-                <br />
+            </div>
+            <div class="separate-action">
                 <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
                     <i class="fa fa-chevron-left"></i>
                 </button>
+            </div>
+               
               <?php
+            }
+            if (!empty($addProcess)) {
+		echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
+            } else {
+                echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
             }
         ?>
         </div>
-        <br />
-        <br />
-		<?php
-		if (!empty($addProcess)) {
-			echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
-        } else {
-			echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
-        }
-		?>
     </div>
 
     <div class="col-md-4">

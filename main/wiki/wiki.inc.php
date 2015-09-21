@@ -949,15 +949,15 @@ class Wiki
             $icon_task=Display::return_icon('wiki_task.png', get_lang('StandardTask'),'',ICON_SIZE_SMALL);
         }
 
-        //Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
+        // Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
         if ($KeyVisibility == "1" ||
-            api_is_allowed_to_edit(false,true) ||
+            api_is_allowed_to_edit(false, true) ||
             api_is_platform_admin() ||
-            ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id() == $row['user_id']))
+            ($row['assignment'] == 2 && $KeyVisibility=="0" && (api_get_user_id() == $row['user_id']))
         ) {
             echo '<div class="actions">';
-            if (api_is_allowed_to_session_edit(false, true) &&
-                api_is_allowed_to_edit() ||
+
+            if (api_is_allowed_in_course() ||
                 GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
             ) {
                 // menu edit page
@@ -981,7 +981,7 @@ class Wiki
             }
 
             if ($row['id']) {
-                echo '<a href="index.php?action=showpage&actionpage='.$lock_unlock_protect.'&title='.api_htmlentities(urlencode($page)).'">'.
+                echo '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_protect.'&title='.api_htmlentities(urlencode($page)).'">'.
                         $protect_page.'</a>';
             }
 
@@ -990,17 +990,17 @@ class Wiki
             //page action: visibility
             if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                 if (self::check_visibility_page() == 1) {
-                    $visibility_page= Display::return_icon('visible.png', get_lang('ShowPageExtra'),'', ICON_SIZE_MEDIUM);
-                    $lock_unlock_visibility='invisible';
+                    $visibility_page = Display::return_icon('visible.png', get_lang('ShowPageExtra'),'', ICON_SIZE_MEDIUM);
+                    $lock_unlock_visibility = 'invisible';
 
                 } else {
-                    $visibility_page= Display::return_icon('invisible.png', get_lang('HidePageExtra'),'', ICON_SIZE_MEDIUM);
-                    $lock_unlock_visibility='visible';
+                    $visibility_page = Display::return_icon('invisible.png', get_lang('HidePageExtra'),'', ICON_SIZE_MEDIUM);
+                    $lock_unlock_visibility = 'visible';
                 }
             }
 
             if ($row['id']) {
-                echo '<a href="index.php?action=showpage&actionpage='.$lock_unlock_visibility.'&title='.api_htmlentities(urlencode($page)).'">'.
+                echo '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_visibility.'&title='.api_htmlentities(urlencode($page)).'">'.
                     $visibility_page.'</a>';
             }
 
@@ -1261,11 +1261,11 @@ class Wiki
 
         ///change status
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-            if (isset($_GET['actionpage']) && $_GET['actionpage']=='lock' && $status_editlock==0) {
-                $status_editlock=1;
+            if (isset($_GET['actionpage']) && $_GET['actionpage'] == 'lock' && $status_editlock == 0) {
+                $status_editlock = 1;
             }
-            if (isset($_GET['actionpage']) && $_GET['actionpage']=='unlock' && $status_editlock==1) {
-                $status_editlock=0;
+            if (isset($_GET['actionpage']) && $_GET['actionpage'] == 'unlock' && $status_editlock == 1) {
+                $status_editlock = 0;
             }
 
             $sql = 'UPDATE '.$tbl_wiki.' SET editlock="'.Database::escape_string($status_editlock).'"

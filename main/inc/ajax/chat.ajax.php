@@ -74,11 +74,7 @@ switch ($action) {
 
         if ($room !== false) {
             $videoChatLink = Display::url(
-                Display::tag(
-                    'i',
-                    null,
-                    ['class' => 'fa fa-video-camera']
-                ) . "&nbsp;" . get_lang('StartVideoChat'),
+                Display::returnFontAswesomeIcon('video-camera') . get_lang('StartVideoChat'),
                 api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room={$room['room_name']}"
             );
 
@@ -128,13 +124,10 @@ switch ($action) {
             break;
         }
 
+        $videoChatUrl = api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room=$roomName";
         $videoChatLink = Display::url(
-            Display::tag(
-                'i',
-                null,
-                ['class' => 'fa fa-video-camera']
-            ) . "&nbsp;" . get_lang('StartVideoChat'),
-            api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room=$roomName"
+            Display::returnFontAswesomeIcon('video-camera') . get_lang('StartVideoChat'),
+            $videoChatUrl
         );
 
         $chat->send(
@@ -145,7 +138,10 @@ switch ($action) {
             false
         );
 
-        echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
+        echo json_encode([
+            'name' => $roomName,
+            'url' =>  $videoChatUrl
+        ]);
         break;
     case 'notify_not_support':
         $chat->send(api_get_user_id(), $to_user_id, get_lang('TheXUserBrowserDoesNotSupportWebRTC'));

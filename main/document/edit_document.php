@@ -159,7 +159,10 @@ if (!empty($group_id)) {
 }
 
 if (!$is_certificate_mode) {
-	$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($currentDirPath).'&'.api_get_cidreq(), "name"=> get_lang('Documents'));
+    $interbreadcrumb[] = array(
+        "url" => "./document.php?curdirpath=".urlencode($currentDirPath).'&'.api_get_cidreq(),
+        "name" => get_lang('Documents'),
+    );
 } else {
     $interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }

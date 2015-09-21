@@ -313,6 +313,12 @@ if ($encryptPassForm == '1') {
     <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH)?>javascript/bootstrap-select.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
+
+            $("#details_button").click(function() {
+                $( "#details" ).toggle("slow", function() {
+                });
+            });
+
             $("#button_please_wait").hide();
             $("button").addClass('btn btn-default');
 
@@ -715,12 +721,16 @@ if (@$_POST['step2']) {
                 Database::query("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
                 Database::query("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
 
+                echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
+                echo '<div id="details" style="display:none">';
                 // Migrate using the migration files located in:
                 // src/Chamilo/CoreBundle/Migrations/Schema/V110
                 migrate(
                     110,
                     $manager
                 );
+
+                echo '</div>';
 
                 fixIds($manager);
 

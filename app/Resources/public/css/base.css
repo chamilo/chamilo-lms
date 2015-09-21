@@ -6242,6 +6242,129 @@ a.sessionView {
 .actions label{
     display: none;
 }
+#my_timeline {
+    width: 900px;
+    height: 350px;
+    overflow: hidden;
+    margin: 20px auto;
+    position: relative;
+    background: url('../../main/img/timeline/dot.gif') left 45px repeat-x;
+}
+#dates {
+    width: 800px;
+    height: 60px;
+    overflow: hidden;
+}
+#dates li {
+    list-style: none;
+    float: left;
+    width: 120px;
+    height: 50px;
+    font-size: 16px;
+    text-align: center;
+    background: url('../../main/img/timeline/biggerdot.png') center bottom no-repeat;
+}
+#dates a {
+    line-height: 38px;
+    padding-bottom: 10px;
+    color: #cecece;
+}
+#dates .selected {
+    font-size: 20px;
+    color: #666666;
+}
+#issues {
+    width: 800px;
+    height: 350px;
+    overflow: hidden;
+}	
+#issues li {
+    width: 800px;
+    height: 350px;
+    list-style: none;
+    float: left;
+}
+#issues li.selected img {
+    -webkit-transform: scale(1.1,1.1);
+    -moz-transform: scale(1.1,1.1);
+    -o-transform: scale(1.1,1.1);
+    -ms-transform: scale(1.1,1.1);
+    transform: scale(1.1,1.1);
+}
+#issues li img {
+    float: left;
+    margin: 10px 30px 10px 50px;
+    background: transparent;
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE 8 */   
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);/* IE 6 & 7 */      
+    zoom: 1;
+    -webkit-transition: all 2s ease-in-out;
+    -moz-transition: all 2s ease-in-out;
+    -o-transition: all 2s ease-in-out;
+    -ms-transition: all 2s ease-in-out; 
+    transition: all 2s ease-in-out;
+    -webkit-transform: scale(0.7,0.7);
+    -moz-transform: scale(0.7,0.7);
+    -o-transform: scale(0.7,0.7);
+    -ms-transform: scale(0.7,0.7);
+    transform: scale(0.7,0.7);
+}
+#issues li h1 {
+    color: #ffcc00;
+    font-size: 48px;
+    margin: 20px 0;
+    text-shadow: #000 1px 1px 2px;
+}
+#issues li p {
+    font-size: 16px;
+    margin-right: 70px;
+    font-weight: normal;
+    line-height: 22px;
+}
+#grad_left,
+#grad_right {
+    width: 100px;
+    height: 350px;
+    position: absolute;
+    top: 0;
+}
+#grad_left {
+    left: 0;
+     /* background: url('../../main/img/timeline/grad_left.png') repeat-y; */
+}
+#grad_right {
+    right: 0;
+    /* background: url('../../main/img/timeline/grad_right.png') repeat-y; */
+}
+#next,
+#prev {
+    position: absolute;
+    top: 0;
+    font-size: 70px;
+    top: 170px;
+    width: 22px;
+    height: 38px;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+    overflow: hidden;
+}
+#next:hover,
+#prev:hover {
+    background-position: 0 -76px;
+}
+#next {
+    right: 0;
+    background-image: url('../../main/img/timeline/next.png');
+}
+#prev {
+    left: 0;
+    background-image: url('../../main/img/timeline/prev.png');
+}
+#next.disabled,
+#prev.disabled {
+    opacity: 0.2;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
@@ -6414,126 +6537,12 @@ a.sessionView {
     font-size: 20px;
   }
 }
-#my_timeline {
-    width: 900px;
-    height: 350px;
-    overflow: hidden;
-    margin: 20px auto;
-    position: relative;
-    background: url('../../main/img/timeline/dot.gif') left 45px repeat-x;
-}
-#dates {
-    width: 800px;
-    height: 60px;
-    overflow: hidden;
-}
-#dates li {
-    list-style: none;
-    float: left;
-    width: 120px;
-    height: 50px;
-    font-size: 16px;
-    text-align: center;
-    background: url('../../main/img/timeline/biggerdot.png') center bottom no-repeat;
-}
-#dates a {
-    line-height: 38px;
-    padding-bottom: 10px;
-    color: #cecece;
-}
-#dates .selected {
-    font-size: 20px;
-    color: #666666;
-}
-#issues {
-    width: 800px;
-    height: 350px;
-    overflow: hidden;
-}	
-#issues li {
-    width: 800px;
-    height: 350px;
-    list-style: none;
-    float: left;
-}
-#issues li.selected img {
-    -webkit-transform: scale(1.1,1.1);
-    -moz-transform: scale(1.1,1.1);
-    -o-transform: scale(1.1,1.1);
-    -ms-transform: scale(1.1,1.1);
-    transform: scale(1.1,1.1);
-}
-#issues li img {
-    float: left;
-    margin: 10px 30px 10px 50px;
-    background: transparent;
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE 8 */   
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);/* IE 6 & 7 */      
-    zoom: 1;
-    -webkit-transition: all 2s ease-in-out;
-    -moz-transition: all 2s ease-in-out;
-    -o-transition: all 2s ease-in-out;
-    -ms-transition: all 2s ease-in-out; 
-    transition: all 2s ease-in-out;
-    -webkit-transform: scale(0.7,0.7);
-    -moz-transform: scale(0.7,0.7);
-    -o-transform: scale(0.7,0.7);
-    -ms-transform: scale(0.7,0.7);
-    transform: scale(0.7,0.7);
-}
-#issues li h1 {
-    color: #ffcc00;
-    font-size: 48px;
-    margin: 20px 0;
-    text-shadow: #000 1px 1px 2px;
-}
-#issues li p {
-    font-size: 16px;
-    margin-right: 70px;
-    font-weight: normal;
-    line-height: 22px;
-}
-#grad_left,
-#grad_right {
-    width: 100px;
-    height: 350px;
-    position: absolute;
-    top: 0;
-}
-#grad_left {
-    left: 0;
-     /* background: url('../../main/img/timeline/grad_left.png') repeat-y; */
-}
-#grad_right {
-    right: 0;
-    /* background: url('../../main/img/timeline/grad_right.png') repeat-y; */
-}
-#next,
-#prev {
-    position: absolute;
-    top: 0;
-    font-size: 70px;
-    top: 170px;
-    width: 22px;
-    height: 38px;
-    background-position: 0 0;
-    background-repeat: no-repeat;
-    text-indent: -9999px;
-    overflow: hidden;
-}
-#next:hover,
-#prev:hover {
-    background-position: 0 -76px;
-}
-#next {
-    right: 0;
-    background-image: url('../../main/img/timeline/next.png');
-}
-#prev {
-    left: 0;
-    background-image: url('../../main/img/timeline/prev.png');
-}
-#next.disabled,
-#prev.disabled {
-    opacity: 0.2;
+@media (min-width:320px) and (max-width: 479px){
+    footer {
+        height: 12em;
+        padding-top: 15px;
+    }
+    footer #footer_right{
+        text-align: center;
+    }
 }

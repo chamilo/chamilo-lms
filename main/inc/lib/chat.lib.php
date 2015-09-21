@@ -219,6 +219,7 @@ class Chat extends Model
             $_SESSION['chatHistory'][$to_user_id]['items'][] = $item;
             $_SESSION['chatHistory'][$to_user_id]['user_info']['user_name'] = $user_info['complete_name'];
             $_SESSION['chatHistory'][$to_user_id]['user_info']['online'] = $user_info['user_is_online'];
+            $_SESSION['chatHistory'][$to_user_id]['user_info']['avatar'] = $user_info['avatar_small'];
 
             unset($_SESSION['tsChatBoxes'][$to_user_id]);
 

@@ -6191,13 +6191,12 @@ a.sessionView {
   font-size: 20px;
   border-bottom: 1px solid #E5E5E5;
 }
-#chat-video-panel #chat-remote-video.user-video{
-    background: url(../../main/img/icons/128/camera-webrtc.png) no-repeat center center #ECF0F1;
-    min-height: 560px;
-}
-#chat-video-panel #chat-local-video.user-video{
-    background: url(../../main/img/icons/128/camera-webrtc.png) no-repeat center center #ECF0F1;
-    min-height: 250px;
+#chat-video-panel #chat-local-video video,
+#chat-video-panel #chat-remote-video video {
+    background-color: #FFF;
+    background-image: url("../../main/img/icons/128/camera-webrtc.png");
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 #listFriends .list-group-item{
   border: none;

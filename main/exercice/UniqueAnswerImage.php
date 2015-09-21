@@ -55,7 +55,7 @@ class UniqueAnswerImage extends UniqueAnswer
                     <th>' . get_lang('Answer') . '</th>
                         ' . $commentTitle . '
                         ' . $feedbackTitle . '
-                    <th width="10">' . get_lang('Weighting') . '</th>
+                    <th width="15">' . get_lang('Weighting') . '</th>
                 </tr>
             </thead>
             <tbody>';

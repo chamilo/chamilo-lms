@@ -953,12 +953,11 @@ class Wiki
         if ($KeyVisibility == "1" ||
             api_is_allowed_to_edit(false,true) ||
             api_is_platform_admin() ||
-            ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))
+            ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id() == $row['user_id']))
         ) {
             echo '<div class="actions">';
-
-
-            if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit() ||
+            if (api_is_allowed_to_session_edit(false, true) &&
+                api_is_allowed_to_edit() ||
                 GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
             ) {
                 // menu edit page
@@ -1016,13 +1015,8 @@ class Wiki
                 }
             }
 
-            // ONly available if row['id'] is set
+            // Only available if row['id'] is set
             if ($row['id']) {
-
-                // Menu show page
-                /*echo '<a href="index.php?'.api_get_cidreq().'&action=showpage&title='.api_htmlentities(urlencode($page)).'" '.self::is_active_navigation_tab('showpage').'>'.
-                    Display::return_icon('page.png', get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';*/
-
                 if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit() ||
                     GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
                 ) {
@@ -1306,11 +1300,14 @@ class Wiki
         $course_id = api_get_course_int_id();
 
         $sql = 'SELECT * FROM '.$tbl_wiki.'
-                WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.'
+                WHERE
+                    c_id = '.$course_id.' AND
+                    reflink="'.Database::escape_string($page).'" AND
+                    '.$groupfilter.$condition_session.'
                 ORDER BY id ASC';
-        $result=Database::query($sql);
-        $row=Database::fetch_array($result);
-        $status_visibility=$row['visibility'];
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        $status_visibility = $row['visibility'];
         //change status
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
             if (isset($_GET['actionpage']) && $_GET['actionpage']=='visible' && $status_visibility==0) {
@@ -1321,11 +1318,14 @@ class Wiki
                 $status_visibility=0;
             }
 
-            $sql='UPDATE '.$tbl_wiki.' SET visibility="'.Database::escape_string($status_visibility).'"
-                 WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session;
+            $sql = 'UPDATE '.$tbl_wiki.' SET visibility="'.Database::escape_string($status_visibility).'"
+                    WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session;
             Database::query($sql);
 
-            // Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
+            // Although the value now is assigned to all (not only the first),
+            // these three lines remain necessary.
+            // They do that by changing the page state is
+            // made when you press the button and not have to wait to change his page
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$course_id.' AND
@@ -1385,7 +1385,10 @@ class Wiki
                         '.$groupfilter.$condition_session;
             Database::query($sql);
 
-            //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
+            // Although the value now is assigned to all (not only the first),
+            // these three lines remain necessary.
+            // They do that by changing the page state is made when you press
+            // the button and not have to wait to change his page
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$course_id.' AND
@@ -1425,10 +1428,10 @@ class Wiki
         //change status
         if (api_is_allowed_to_edit() || api_is_platform_admin()) {
             if (isset($_GET['actionpage']) && $_GET['actionpage'] =='lockdisc' && $status_addlock_disc==0) {
-                $status_addlock_disc=1;
+                $status_addlock_disc = 1;
             }
             if (isset($_GET['actionpage']) && $_GET['actionpage'] =='unlockdisc' && $status_addlock_disc==1) {
-                $status_addlock_disc=0;
+                $status_addlock_disc = 0;
             }
 
             $sql = 'UPDATE '.$tbl_wiki.' SET
@@ -1439,7 +1442,10 @@ class Wiki
                          '.$groupfilter.$condition_session;
             Database::query($sql);
 
-            //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
+            // Although the value now is assigned to all (not only the first),
+            // these three lines remain necessary.
+            // They do that by changing the page state is made when you press
+            // the button and not have to wait to change his page
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$course_id.' AND
@@ -1494,7 +1500,10 @@ class Wiki
             //Visibility. Value to all,not only for the first
             Database::query($sql);
 
-            //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
+            // Although the value now is assigned to all (not only the first),
+            // these three lines remain necessary. They do that by changing the
+            // page state is made when you press the button and not have to wait
+            // to change his page
             $sql='SELECT * FROM '.$tbl_wiki.'
                   WHERE
                     c_id = '.$course_id.' AND
@@ -1594,7 +1603,7 @@ class Wiki
         $row=Database::fetch_array($result);
         $id=$row['id'];
         $sql = 'SELECT * FROM '.$tbl_wiki_mailcue.'
-             WHERE c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"';
+                WHERE c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"';
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $idm = $row['id'];
@@ -1659,7 +1668,11 @@ class Wiki
             $status_notify_all=1;
         }
 
-        if (isset($_GET['actionpage']) && isset($_GET['actionpage']) && $_GET['actionpage']  =='unlocknotifyall' && $status_notify_all==1) {
+        if (isset($_GET['actionpage']) &&
+            isset($_GET['actionpage']) &&
+            $_GET['actionpage']  =='unlocknotifyall' &&
+            $status_notify_all == 1
+        ) {
             $sql ='DELETE FROM '.$tbl_wiki_mailcue.'
                    WHERE
                     c_id = '.$course_id.' AND
@@ -1795,9 +1808,9 @@ class Wiki
             $year = substr($row['dtime'], 0, 4);
             $month = substr($row['dtime'], 5, 2);
             $day = substr($row['dtime'], 8, 2);
-            $hours=substr($row['dtime'], 11,2);
-            $minutes=substr($row['dtime'], 14,2);
-            $seconds=substr($row['dtime'], 17,2);
+            $hours = substr($row['dtime'], 11, 2);
+            $minutes = substr($row['dtime'], 14, 2);
+            $seconds = substr($row['dtime'], 17, 2);
             $email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;
 
             if($row['assignment']==0) {
@@ -2332,6 +2345,7 @@ class Wiki
                 if ($all_vers=='1') {
                     $row[] = $obj->version;
                 } else {
+                    $showdelete = '';
                     if (api_is_allowed_to_edit(false,true)|| api_is_platform_admin()) {
                         $showdelete=' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
                             Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
@@ -3627,9 +3641,9 @@ class Wiki
                     $row[] = get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
                 }
                 $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());
-
+                $showdelete = '';
                 if (api_is_allowed_to_edit(false,true)|| api_is_platform_admin()) {
-                    $showdelete=' <a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
+                    $showdelete =' <a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
                         Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
                 }
                 if (api_is_allowed_to_session_edit(false,true) ) {

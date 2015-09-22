@@ -178,7 +178,7 @@ class HTML_QuickForm_RuleRegistry
      */
     function validate($ruleName, $values, $options = null, $multiple = false)
     {
-        $rule =& $this->getRule($ruleName);
+        $rule = $this->getRule($ruleName);
         if (is_array($values) && !$multiple) {
             $result = 0;
             foreach ($values as $value) {

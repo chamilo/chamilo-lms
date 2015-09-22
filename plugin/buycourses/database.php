@@ -104,7 +104,7 @@ $saleTable->addColumn(
     ['autoincrement' => true, 'unsigned' => true]
 );
 $saleTable->addColumn('reference', \Doctrine\DBAL\Types\Type::STRING);
-$saleTable->addColumn('date', \Doctrine\DBAL\Types\Type::DATE);
+$saleTable->addColumn('date', \Doctrine\DBAL\Types\Type::DATETIME);
 $saleTable->addColumn(
     'user_id',
     \Doctrine\DBAL\Types\Type::INTEGER,

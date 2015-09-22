@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * List of pending payments of the Buy Courses plugin
@@ -35,7 +36,7 @@ if (isset($_GET['order'])) {
 
             $urlToRedirect .= http_build_query([
                 'status' => BuyCoursesPlugin::SALE_STATUS_COMPLETED,
-                'sale' =>  $sale['id']
+                'sale' => $sale['id']
             ]);
             break;
         case 'cancel':
@@ -50,7 +51,7 @@ if (isset($_GET['order'])) {
 
             $urlToRedirect .= http_build_query([
                 'status' => BuyCoursesPlugin::SALE_STATUS_CANCELED,
-                'sale' =>  $sale['id']
+                'sale' => $sale['id']
             ]);
             break;
     }

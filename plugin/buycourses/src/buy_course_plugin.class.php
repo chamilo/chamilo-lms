@@ -44,7 +44,7 @@ class BuyCoursesPlugin extends Plugin
                 Jose Angel Ruiz - NoSoloRed (original author),
                 Francis Gonzales and Yannick Warnier - BeezNest (integration),
                 Alex Aragón - BeezNest (Design icons and css styles),
-                Imanol Losada - BeezNest (introduction of sessions purchase)
+                Imanol Losada - BeezNest (introduction of sessions purchase),
                 Angel Fernando Quiroz Campos - BeezNest
             ",
             array(
@@ -542,10 +542,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Lists current user course details
-     * @return array
-     */
-    /**
-     * Lists current user course details
      * @param string $name Optional. The name filter
      * @param int $min Optional. The minimum price filter
      * @param int $max Optional. The maximum price filter
@@ -915,8 +911,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Get a list of sales by the status
-     * @param type $status
-     * @return type
+     * @param int $status The status to filter
+     * @return array The sale list. Otherwise return false
      */
     public function getSaleListByStatus($status = self::SALE_STATUS_PENDING)
     {
@@ -925,10 +921,8 @@ class BuyCoursesPlugin extends Plugin
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $innerJoins = "
-            INNER JOIN $currencyTable c
-                ON s.currency_id = c.id
-            INNER JOIN $userTable u
-                ON s.user_id = u.id
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
         ";
 
         return Database::select(

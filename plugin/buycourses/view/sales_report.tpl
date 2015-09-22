@@ -11,7 +11,7 @@
                 <th class="text-center">{{ 'ProductType'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th>{{ 'Name'|get_lang }}</th>
                 <th>{{ 'UserName'|get_lang }}</th>
-                    <th class="text-center">{{ 'Options'|get_lang }}</th>
+                <th class="text-center">{{ 'Options'|get_lang }}</th>
             </tr>
         </thead>
         <tbody>
@@ -32,16 +32,16 @@
                     <td class="text-center">{{ sale.product_type }}</td>
                     <td>{{ sale.product_name }}</td>
                     <td>{{ sale.complete_user_name }}</td>
-                        <td class="text-center">
-                            {% if sale.status == sale_status_pending %}
-                                <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}" class="btn btn-success btn-sm">
-                                    <i class="fa fa-user-plus fa-fw"></i> {{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}
-                                </a>
-                                <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode() }}" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-times fa-fw"></i> {{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}
-                                </a>
-                            {% endif %}
-                        </td>
+                    <td class="text-center">
+                        {% if sale.status == sale_status_pending %}
+                            <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}" class="btn btn-success btn-sm">
+                                <i class="fa fa-user-plus fa-fw"></i> {{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </a>
+                            <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode() }}" class="btn btn-danger btn-sm">
+                                <i class="fa fa-times fa-fw"></i> {{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -1,25 +1,18 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
-
-/* For licensing terms, see /license.txt */
-/**
- * 	Code library for login process
- *
- * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
- * @author Julio Montoya		<gugli100@gmail.com>
- * @package chamilo.login
- */
 
 use Chamilo\UserBundle\Entity\User;
 
 /**
- * Class
+ * Class Login
+ * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
+ * @author Julio Montoya <gugli100@gmail.com>
  * @package chamilo.login
  */
 class Login
 {
-
     /**
      * Get user account list
      *
@@ -121,7 +114,10 @@ class Login
                 )
             );
 
-            return sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
+            return sprintf(
+                get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'),
+                $admin_email
+            );
         }
     }
 
@@ -358,7 +354,7 @@ class Login
      * @global object $_user
      * @global int $_cid
      * @global array $_course
-     * @global type $_real_cid
+     * @global int $_real_cid
      * @global type $_courseUser
      * @global type $is_courseAdmin
      * @global type $is_courseTutor
@@ -525,8 +521,6 @@ class Login
                           } */
 
                         $session_lifetime = 3600; // 1 hour
-
-                        $course_code = $_course['sysCode'];
                         $time = api_get_utc_datetime();
 
                         if (isset($_user['user_id']) && !empty($_user['user_id'])) {
@@ -545,12 +539,13 @@ class Login
                             if (Database::num_rows($result) > 0) {
                                 $i_course_access_id = Database::result($result, 0, 0);
                                 //We update the course tracking table
-                                $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
+                                $sql = "UPDATE $course_tracking_table
+                                        SET logout_course_date = '$time', counter = counter+1
                                         WHERE course_access_id = " . intval($i_course_access_id) . " AND session_id = " . api_get_session_id();
                                 Database::query($sql);
                             } else {
                                 $sql = "INSERT INTO $course_tracking_table (c_id, user_id, login_course_date, logout_course_date, counter, session_id)" .
-                                    "VALUES('" . api_get_course_int_id() . "', '" . $_user['user_id'] . "', '$time', '$time', '1','" . api_get_session_id() . "')";
+                                        "VALUES('" . api_get_course_int_id() . "', '" . $_user['user_id'] . "', '$time', '$time', '1','" . api_get_session_id() . "')";
                                 Database::query($sql);
                             }
                         }

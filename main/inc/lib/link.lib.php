@@ -731,29 +731,14 @@ class Link extends Model
         $id = intval($id);
 
         // This is used to put the modified info of the category-form into the database.
-
         $params = [
             'category_title' => $values['category_title'],
             'description' => $values['description']
         ];
-        Database::update($tbl_categories, $params, ['c_id = ? AND id = ?' => [$course_id, $id] ]);
-
+        Database::update($tbl_categories, $params, ['c_id = ? AND id = ?' => [$course_id, $id]]);
         Display::addFlash(Display::return_message(get_lang('CategoryModded')));
 
         return true;
-    }
-
-    /**
-     * Creates a correct $view for in the URL
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     */
-    public static function makedefaultviewcode($locatie)
-    {
-        global $aantalcategories, $view;
-        for ($j = 0; $j <= $aantalcategories - 1; $j++) {
-            $view[$j] = 0;
-        }
-        $view[intval($locatie)] = '1';
     }
 
     /**

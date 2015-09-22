@@ -322,7 +322,7 @@ if ($intro_dispCommand) {
     if (empty($intro_content)) {
         // Displays "Add intro" commands
         $toolbar = '<div class="btn-group pull-right" rol="group">';
-        if (!empty ($GLOBALS['_cid'])) {
+        if (!empty($courseId)) {
             $textIntro  = '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&intro_cmdAdd=1">';
             $textIntro .= '<i class="fa fa-file-text"></i> ';
             $textIntro .= "</a>";
@@ -336,7 +336,7 @@ if ($intro_dispCommand) {
     } else {
         // Displays "edit intro && delete intro" commands
         $toolbar .= '<div class="btn-group pull-right" rol="group">';
-        if (!empty ($GLOBALS['_cid'])) {
+        if (!empty($courseId)) {
             $toolbar .=
                 '<a  class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <i class="fa fa-pencil"></i></a>';

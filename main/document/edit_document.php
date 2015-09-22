@@ -566,9 +566,6 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
 		update_db_info('update', $source_file, $new_full_file_name); // fileManage API
         Display::addFlash(Display::return_message(get_lang('fileModified')));
 
-		$GLOBALS['file_name'] = $rename_to;
-		$GLOBALS['doc'] = $rename_to;
-
 		return true;
 	} else {
         Display::addFlash(Display::return_message(get_lang('FileExists')));

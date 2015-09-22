@@ -11,9 +11,7 @@
                 <th class="text-center">{{ 'ProductType'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th>{{ 'Name'|get_lang }}</th>
                 <th>{{ 'UserName'|get_lang }}</th>
-                {% if selected_status == sale_status_pending %}
                     <th class="text-center">{{ 'Options'|get_lang }}</th>
-                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -34,7 +32,6 @@
                     <td class="text-center">{{ sale.product_type }}</td>
                     <td>{{ sale.product_name }}</td>
                     <td>{{ sale.complete_user_name }}</td>
-                    {% if selected_status == sale_status_pending %}
                         <td class="text-center">
                             {% if sale.status == sale_status_pending %}
                                 <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}" class="btn btn-success btn-sm">
@@ -45,9 +42,24 @@
                                 </a>
                             {% endif %}
                         </td>
-                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
+<script>
+    $(document).on('ready', function () {
+        $('[name="filter_type"]').on('change', function () {
+            var self = $(this);
+
+            if (self.val() === '0') {
+                $('#report-by-user').hide();
+                $('#report-by-status').show();
+            } else {
+                $('#report-by-status').hide();
+                $('#report-by-user').show();
+            }
+        });
+    });
+</script>

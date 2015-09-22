@@ -1127,4 +1127,40 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
+    /**
+     * Get a list of sales by the user
+     * @param string $term The search term
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSaleListByUser($term)
+    {
+        $term = trim($term);
+
+        if (empty($term)) {
+            return [];
+        }
+
+        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
+        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => [
+                    'u.username LIKE %?% OR ' => $term,
+                    'u.lastname LIKE %?% OR ' => $term,
+                    'u.firstname LIKE %?%' => $term
+                ],
+                'order' => 'id DESC'
+            ]
+        );
+    }
+
 }

@@ -61,24 +61,54 @@ if (isset($_GET['order'])) {
 
 $productTypes = $plugin->getProductTypes();
 $saleStatuses = $plugin->getSaleStatuses();
+
+$selectedFilterType = '0';
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
 $selectedSale = isset($_GET['sale']) ? intval($_GET['sale']) : 0;
+$searchTerm = '';
 
 $form = new FormValidator('search', 'get');
 
 if ($form->validate()) {
+    $selectedFilterType = $form->getSubmitValue('filter_type');
     $selectedStatus = $form->getSubmitValue('status');
+    $searchTerm = $form->getSubmitValue('user');
 
     if ($selectedStatus === false) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
+
+    if ($selectedFilterType === false) {
+        $selectedFilterType = '0';
+    }
 }
 
+$form->addRadio(
+    'filter_type',
+    get_lang('FilterBy'),
+    [$plugin->get_lang('ByStatus'), $plugin->get_lang('ByUser')]
+);
+$form->addHtml('<div id="report-by-status" ' . ($selectedFilterType !== '0' ? 'style="display:none"' : '') . '>');
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
+$form->addHtml('</div>');
+$form->addHtml('<div id="report-by-user" ' . ($selectedFilterType !== '1' ? 'style="display:none"' : '') . '>');
+$form->addText('user', get_lang('UserName'), false);
+$form->addHtml('</div>');
 $form->addButtonFilter($plugin->get_lang('SearchByStatus'));
-$form->setDefaults(['status' => $selectedStatus]);
+$form->setDefaults([
+    'filter_type' => $selectedFilterType,
+    'status' => $selectedStatus
+]);
 
-$sales = $plugin->getSaleListByStatus($selectedStatus);
+switch ($selectedFilterType) {
+    case '0':
+        $sales = $plugin->getSaleListByStatus($selectedStatus);
+        break;
+    case '1':
+        $sales = $plugin->getSaleListByUser($searchTerm);
+        break;
+}
+
 $saleList = [];
 
 foreach ($sales as $sale) {

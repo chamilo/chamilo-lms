@@ -7516,4 +7516,5 @@ $Inserted = "Inserted";
 $YourBroswerDoesNotSupportWebRTC = "Your browser does not support native video transmission.";
 $OtherTeachers = "Other teachers";
 $CourseCategory = "Course category";
+$VideoChatBetweenUserXAndUserY = "Video chat between %s and %s";
 ?>

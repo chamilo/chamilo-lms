@@ -7541,4 +7541,5 @@ $Inserted = "Añadido";
 $YourBroswerDoesNotSupportWebRTC = "Su navegador no soporta nativamente la transmisión por videoconferencia.";
 $OtherTeachers = "Otros profesores";
 $CourseCategory = "Categoría de curso";
+$VideoChatBetweenUserXAndUserY = "Videollamada entre %s y %s";
 ?>

@@ -41,20 +41,26 @@ class VideoChat
 
     /**
      * Create a video chat
-     * @param string $name The video chat name
      * @param int $fromUser The sender user
      * @param int $toUser The receiver user
-     *
      * @return int The created video chat id. Otherwise return false
      */
-    public static function createRoom($name, $fromUser, $toUser)
+    public static function createRoom($fromUser, $toUser)
     {
+        $fromUserInfo = api_get_user_info($fromUser);
+        $toUserInfo = api_get_user_info($toUser);
+
+        $chatName = vsprintf(
+            get_lang('VideoChatBetweenUserXAndUserY'),
+            [$fromUserInfo['firstname'], $toUserInfo['firstname']]
+        );
+
         return Database::insert(
             Database::get_main_table(TABLE_MAIN_CHAT_VIDEO),
             [
                 'from_user' => intval($fromUser),
                 'to_user' => intval($toUser),
-                'room_name' => $name,
+                'room_name' => $chatName,
                 'datetime' => api_get_utc_datetime()
             ]
         );

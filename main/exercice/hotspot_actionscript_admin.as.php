@@ -2,16 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	This file generates the ActionScript variables code used by the HotSpot .swf
-*	@package chamilo.exercise
-* 	@author Toon Keppens
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
+* This file generates the ActionScript variables code used by the HotSpot .swf
+* @package chamilo.exercise
+* @author Toon Keppens
 */
 require_once '../inc/global.inc.php';
 
 // set vars
 $questionId = intval($_GET['modifyAnswers']);
-error_log($questionId);
 $objQuestion = Question::read($questionId);
 $_course = api_get_course_info();
 
@@ -37,35 +35,35 @@ $answers = $_SESSION['tmp_answers'];
 $nbrAnswers = count($answers['answer']);
 
 for ($i=1;$i <= $nbrAnswers; $i++) {
-   	$output .= "&hotspot_".$i."=true";
-	$output .= "&hotspot_".$i."_answer=".$answers['answer'][$i];
+    $output .= "&hotspot_".$i."=true";
+    $output .= "&hotspot_".$i."_answer=".$answers['answer'][$i];
 
-	if ($answer_type == HOT_SPOT_DELINEATION) {
-		if ($i==1) {
-		    $output .= "&hotspot_".$i."_type=delineation";
-		} else
-			{$output .= "&hotspot_".$i."_type=oar";}
-	} else {
-		// Square or rectancle
-		if ($answers['hotspot_type'][$i] == 'square') {
-			$output .= "&hotspot_".$i."_type=square";
-		}
+    if ($answer_type == HOT_SPOT_DELINEATION) {
+        if ($i==1) {
+            $output .= "&hotspot_".$i."_type=delineation";
+        } else
+            {$output .= "&hotspot_".$i."_type=oar";}
+    } else {
+        // Square or rectancle
+        if ($answers['hotspot_type'][$i] == 'square') {
+            $output .= "&hotspot_".$i."_type=square";
+        }
 
-		// Circle or ovale
-		if ($answers['hotspot_type'][$i] == 'circle') {
-			$output .= "&hotspot_".$i."_type=circle";
-		}
+        // Circle or ovale
+        if ($answers['hotspot_type'][$i] == 'circle') {
+            $output .= "&hotspot_".$i."_type=circle";
+        }
 
-		// Polygon
-		if ($answers['hotspot_type'][$i] == 'poly') {
-			$output .= "&hotspot_".$i."_type=poly";
-		}
-		/*// Delineation
-		if ($answers['hotspot_type'][$i] == 'delineation')
-		{
-			$output .= "&hotspot_".$i."_type=delineation";
-		}*/
-	}
+        // Polygon
+        if ($answers['hotspot_type'][$i] == 'poly') {
+            $output .= "&hotspot_".$i."_type=poly";
+        }
+        /*// Delineation
+        if ($answers['hotspot_type'][$i] == 'delineation')
+        {
+            $output .= "&hotspot_".$i."_type=delineation";
+        }*/
+    }
 
 	// This is a good answer, count + 1 for nmbr of clicks
 	if ($answers['weighting'][$i] > 0) {

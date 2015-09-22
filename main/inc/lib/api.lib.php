@@ -538,6 +538,8 @@ define ('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
 define('SHORTCUTS_HORIZONTAL', 0);
 define('SHORTCUTS_VERTICAL', 1);
 
+// Image class
+define('IMAGE_PROCESSOR', 'gd'); // 'imagick' or 'gd' strings
 
 /**
  * Inclusion of internationalization libraries

@@ -2035,7 +2035,13 @@ function migrate($chamiloVersion, EntityManager $manager)
  */
 function fixIds(EntityManager $em)
 {
+    $debug = true;
     $connection = $em->getConnection();
+
+    if ($debug) {
+        error_log('fixIds');
+        error_log('Update tools');
+    }
 
     $sql = "SELECT * FROM c_lp_item";
     $result = $connection->fetchAll($sql);
@@ -2094,6 +2100,7 @@ function fixIds(EntityManager $em)
 
         if (!empty($sql) && !empty($newId) && !empty($iid)) {
             $sql = "UPDATE c_lp_item SET ref = $newId WHERE iid = $iid";
+
             $connection->executeQuery($sql);
         }
     }
@@ -2121,6 +2128,10 @@ function fixIds(EntityManager $em)
     $connection->executeQuery($sql);
 
     // This updates the group_id with c_group_info.iid instead of c_group_info.id
+
+    if ($debug) {
+        error_log('update iids');
+    }
 
     $groupTableToFix = [
         'c_group_rel_user',
@@ -2160,7 +2171,9 @@ function fixIds(EntityManager $em)
     }
 
     // Fix c_item_property
-
+    if ($debug) {
+        error_log('update c_item_property');
+    }
     $sql = "SELECT * FROM c_item_property";
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
@@ -2221,6 +2234,10 @@ function fixIds(EntityManager $em)
         }
     }
 
+    if ($debug) {
+        error_log('update gradebook_link');
+    }
+
     // Fix gradebook_link
     $sql = "SELECT * FROM gradebook_link";
     $result = $connection->fetchAll($sql);
@@ -2263,6 +2280,10 @@ function fixIds(EntityManager $em)
                 $connection->executeQuery($sql);
             }
         }
+    }
+
+    if ($debug) {
+        error_log('update groups');
     }
 
     $sql = "SELECT * FROM groups";
@@ -2364,6 +2385,10 @@ function fixIds(EntityManager $em)
                 }
             }
         }
+    }
+
+    if ($debug) {
+        error_log('update extra fields');
     }
 
     // Extra fields

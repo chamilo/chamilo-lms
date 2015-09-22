@@ -62,6 +62,7 @@ if (isset($_GET['order'])) {
 
 $productTypes = $plugin->getProductTypes();
 $saleStatuses = $plugin->getSaleStatuses();
+$paymentTypes = $plugin->getPaymentTypes();
 
 $selectedFilterType = '0';
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
@@ -122,7 +123,8 @@ foreach ($sales as $sale) {
         'price' => $sale['price'],
         'product_name' => $sale['product_name'],
         'product_type' => $productTypes[$sale['product_type']],
-        'complete_user_name' => api_get_person_name($sale['firstname'], $sale['lastname'])
+        'complete_user_name' => api_get_person_name($sale['firstname'], $sale['lastname']),
+        'payment_type' => $paymentTypes[$sale['payment_type']]
     ];
 }
 

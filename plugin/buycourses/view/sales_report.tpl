@@ -7,6 +7,7 @@
                 <th class="text-center">{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-center">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-center">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th class="text-center">{{ 'PaymentMethod'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-center">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-center">{{ 'ProductType'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th>{{ 'Name'|get_lang }}</th>
@@ -28,6 +29,7 @@
                         {% endif %}
                     </td>
                     <td class="text-center">{{ sale.date }}</td>
+                    <td class="text-center">{{ sale.payment_type }}</td>
                     <td class="text-right">{{ sale.currency ~ ' ' ~ sale.price }}</td>
                     <td class="text-center">{{ sale.product_type }}</td>
                     <td>{{ sale.product_name }}</td>

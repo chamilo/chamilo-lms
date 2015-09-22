@@ -273,12 +273,11 @@ if ($showCourses && $action != 'display_sessions') {
         }
     }
 }
-echo $cataloguePagination;
-
 ?>
 </div>
-
 <?php
+
+echo $cataloguePagination;
 
 /**
  * Display the course catalog image of a course
@@ -302,13 +301,13 @@ function return_thumbnail($course, $icon_title)
 
     $html .= '<div class="items-course-image">';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        $html .= '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';
+        $html .= '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';
         $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'" />';
         $html .= '</a>';
     } else {
         $html .= '<img class="img-responsive" src="'.$course_medium_image.'" alt="'.api_htmlentities($title).'"/>';
     }
-    $html .= '</div>';  // thumbail
+    $html .= '</div>';
 
     return $html;
 }
@@ -324,7 +323,7 @@ function return_title($course)
     $title = cut($course['title'], 70);
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
-    $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);
+    $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&course_id='.$course['real_id'], $course['point_info']);
     $html .=  '<h4 class="title"><a href="' . $linkCourse . '">' . cut($title, 60) . '</a></h4>';
     $html .= '<div class="teachers">'.$teachers.'</div>';
     $html .= '<div class="ranking">'. $rating . '</div>';
@@ -342,7 +341,7 @@ function return_description_button($course, $icon_title)
     $title = $course['title'];
     $html = '';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        $html = '<a data-title="' . $title . '" class="ajax btn btn-default btn-sm btn-block" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
+        $html = '<a data-title="' . $title . '" class="ajax btn btn-default btn-sm btn-block" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
     }
 
     return $html;
@@ -383,7 +382,7 @@ function return_already_registered_label($in_status)
  */
 function return_register_button($course, $stok, $code, $search_term)
 {
-    $html = ' <a class="btn btn-success btn-block btn-sm" href="'.api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
+    $html = ' <a class="btn btn-success btn-block btn-sm" href="'.api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">'.get_lang('Subscribe').'</a>';
     return $html;
 }
 
@@ -396,6 +395,6 @@ function return_register_button($course, $stok, $code, $search_term)
  */
 function return_unregister_button($course, $stok, $search_term, $code)
 {
-    $html = ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&amp;sec_token='.$stok.'&amp;unsubscribe='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
+    $html = ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&sec_token='.$stok.'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
     return $html;
 }

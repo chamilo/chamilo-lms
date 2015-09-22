@@ -156,9 +156,10 @@ class Wiki
      **/
     public function detect_mail_link($input)
     {
-        $maillink='href="mailto';
-        $maillinkStyle='class="wiki_mail_link" href="mailto';
-        $output=str_replace($maillink, $maillinkStyle, $input);
+        $maillink = 'href="mailto';
+        $maillinkStyle = 'class="wiki_mail_link" href="mailto';
+        $output = str_replace($maillink, $maillinkStyle, $input);
+
         return $output;
     }
 
@@ -169,8 +170,9 @@ class Wiki
     public function detect_ftp_link($input)
     {
         $ftplink='href="ftp';
-        $ftplinkStyle='class="wiki_ftp_link" href="ftp';
-        $output=str_replace($ftplink, $ftplinkStyle, $input);
+        $ftplinkStyle = 'class="wiki_ftp_link" href="ftp';
+        $output = str_replace($ftplink, $ftplinkStyle, $input);
+
         return $output;
     }
 
@@ -180,9 +182,10 @@ class Wiki
      **/
     public function detect_news_link($input)
     {
-        $newslink='href="news';
-        $newslinkStyle='class="wiki_news_link" href="news';
-        $output=str_replace($newslink, $newslinkStyle, $input);
+        $newslink = 'href="news';
+        $newslinkStyle = 'class="wiki_news_link" href="news';
+        $output = str_replace($newslink, $newslinkStyle, $input);
+
         return $output;
     }
 
@@ -192,9 +195,9 @@ class Wiki
      **/
     public function detect_irc_link($input)
     {
-        $irclink='href="irc';
-        $irclinkStyle='class="wiki_irc_link" href="irc';
-        $output=str_replace($irclink, $irclinkStyle, $input);
+        $irclink = 'href="irc';
+        $irclinkStyle = 'class="wiki_irc_link" href="irc';
+        $output = str_replace($irclink, $irclinkStyle, $input);
 
         return $output;
     }
@@ -677,35 +680,36 @@ class Wiki
                         api_get_user_id(),
                         $groupId
                     );
+
+
+                    $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'"
+                            WHERE c_id = '.$course_id.' AND id = "'.$Id.'"';
+                    Database::query($sql);
+
+                    // insert wiki config
+                    $params = [
+                        'c_id' => $course_id,
+                        'page_id' => $Id,
+                        'task' => $_clean['task'],
+                        'feedback1' => $_clean['feedback1'],
+                        'feedback2' => $_clean['feedback2'],
+                        'feedback3' => $_clean['feedback3'],
+                        'fprogress1' => $_clean['fprogress1'],
+                        'fprogress2' => $_clean['fprogress2'],
+                        'fprogress3' => $_clean['fprogress3'],
+                        'max_text' => $_clean['max_text'],
+                        'max_version' => $_clean['max_version'],
+                        'startdate_assig' => $_clean['startdate_assig'],
+                        'enddate_assig' => $_clean['enddate_assig'],
+                        'delayedsubmit' => $_clean['delayedsubmit']
+                    ];
+
+                    Database::insert($tbl_wiki_conf, $params);
+
+                    $this->setWikiData($Id);
+                    self::check_emailcue(0, 'A');
+                    return get_lang('NewWikiSaved');
                 }
-
-                $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'"
-                        WHERE c_id = '.$course_id.' AND id = "'.$Id.'"';
-                Database::query($sql);
-
-                // insert wiki config
-                $params = [
-                    'c_id' => $course_id,
-                    'page_id' => $Id,
-                    'task' => $_clean['task'],
-                    'feedback1' => $_clean['feedback1'],
-                    'feedback2' => $_clean['feedback2'],
-                    'feedback3' => $_clean['feedback3'],
-                    'fprogress1' => $_clean['fprogress1'],
-                    'fprogress2' => $_clean['fprogress2'],
-                    'fprogress3' => $_clean['fprogress3'],
-                    'max_text' => $_clean['max_text'],
-                    'max_version' => $_clean['max_version'],
-                    'startdate_assig' => $_clean['startdate_assig'],
-                    'enddate_assig' => $_clean['enddate_assig'],
-                    'delayedsubmit' => $_clean['delayedsubmit']
-                ];
-
-                Database::insert($tbl_wiki_conf, $params);
-
-                $this->setWikiData($Id);
-                self::check_emailcue(0, 'A');
-                return get_lang('NewWikiSaved');
             }
         }
     }
@@ -882,7 +886,7 @@ class Wiki
                     c_id = '.$course_id.' AND
                     reflink="'.Database::escape_string($pageMIX).'" AND
                    '.$groupfilter.$condition_session.'
-              ORDER BY id ASC';
+                ORDER BY id ASC';
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
 
@@ -1176,7 +1180,8 @@ class Wiki
     /**
      * Checks if this navigation tab has to be set to active
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-     * @return html code
+     *
+     * @return string html code
      */
     public function is_active_navigation_tab($paramwk)
     {
@@ -2197,9 +2202,10 @@ class Wiki
         $condition_session = $this->condition_session;
         $groupfilter = $this->groupfilter;
         $_course = $this->courseInfo;
-
-        echo '<legend>'.get_lang('WikiSearchResults').'</legend>';
         $course_id = api_get_course_int_id();
+
+        echo '<legend>'.get_lang('WikiSearchResults').': '.Security::remove_XSS($search_term);
+        echo '</legend>';
 
         //only by professors when page is hidden
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
@@ -2252,8 +2258,8 @@ class Wiki
                 }
             }
         } else {
-            if($all_vers=='1') {
-                if ($search_content=='1') {
+            if ($all_vers == '1') {
+                if ($search_content == '1') {
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
                                 c_id = $course_id AND
@@ -2312,23 +2318,23 @@ class Wiki
                 $userinfo = api_get_user_info($obj->user_id);
 
                 //get time
-                $year 	 = substr($obj->dtime, 0, 4);
-                $month	 = substr($obj->dtime, 5, 2);
-                $day 	 = substr($obj->dtime, 8, 2);
-                $hours   = substr($obj->dtime, 11,2);
-                $minutes = substr($obj->dtime, 14,2);
-                $seconds = substr($obj->dtime, 17,2);
+                $year = substr($obj->dtime, 0, 4);
+                $month = substr($obj->dtime, 5, 2);
+                $day = substr($obj->dtime, 8, 2);
+                $hours = substr($obj->dtime, 11, 2);
+                $minutes = substr($obj->dtime, 14, 2);
+                $seconds = substr($obj->dtime, 17, 2);
 
                 //get type assignment icon
                 if($obj->assignment==1) {
-                    $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',ICON_SIZE_SMALL);
+                    $ShowAssignment = Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',ICON_SIZE_SMALL);
                 } elseif ($obj->assignment==2) {
-                    $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',ICON_SIZE_SMALL);
+                    $ShowAssignment = Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',ICON_SIZE_SMALL);
                 } elseif ($obj->assignment==0) {
-                    $ShowAssignment= Display::return_icon('px_transparent.gif');
+                    $ShowAssignment = Display::return_icon('px_transparent.gif');
                 }
                 $row = array();
-                $row[] =$ShowAssignment;
+                $row[] = $ShowAssignment;
 
                 if($all_vers=='1') {
                     $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&view='.$obj->id.'&session_id='.api_htmlentities(urlencode($_GET['$session_id'])).'&group_id='.api_htmlentities(urlencode($_GET['group_id'])).'">'.
@@ -2339,7 +2345,6 @@ class Wiki
                 }
 
                 $row[] = $obj->user_id != 0 ? UserManager::getUserProfileLink($userinfo) : get_lang('Anonymous').' ('.$obj->user_ip.')';
-
                 $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 
                 if ($all_vers=='1') {
@@ -2361,21 +2366,29 @@ class Wiki
                 $rows[] = $row;
             }
 
-            $table = new SortableTableFromArrayConfig($rows, 1, 10,'SearchPages_table','','','ASC');
+            $table = new SortableTableFromArrayConfig(
+                $rows,
+                1,
+                10,
+                'SearchPages_table',
+                '',
+                '',
+                'ASC'
+            );
             $table->set_additional_parameters(
                 array(
                     'cidReq' => $_GET['cidReq'],
-                    'action'=> $_GET['action'],
-                    'group_id'=>Security::remove_XSS($_GET['group_id']),
-                    'mode_table'=>'yes2',
-                    'search_term'=>$search_term,
-                    'search_content'=>$search_content,
-                    'all_vers'=>$all_vers
+                    'action' => $_GET['action'],
+                    'group_id' => intval($_GET['group_id']),
+                    'mode_table' => 'yes2',
+                    'search_term' => $search_term,
+                    'search_content' => $search_content,
+                    'all_vers' => $all_vers,
                 )
             );
             $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
             $table->set_header(1,get_lang('Title'), true);
-            if ($all_vers=='1') {
+            if ($all_vers == '1') {
                 $table->set_header(2,get_lang('Author'), true);
                 $table->set_header(3,get_lang('Date'), true);
                 $table->set_header(4,get_lang('Version'), true);
@@ -2423,7 +2436,17 @@ class Wiki
         array_unshift($minute,'00','01','02','03','04','05','06','07','08','09');
         $date_form = self::make_select($prefix.'_day', array_combine(range(1,31),range(1,31)), $d_day);
         $date_form .= self::make_select($prefix.'_month', $month_list, $d_month);
-        $date_form .= self::make_select($prefix.'_year', array($d_year-2=>$d_year-2, $d_year-1=>$d_year-1, $d_year=> $d_year, $d_year+1=>$d_year+1, $d_year+2=>$d_year+2), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
+        $date_form .= self::make_select(
+                $prefix.'_year',
+                array(
+                    $d_year - 2 => $d_year - 2,
+                    $d_year - 1 => $d_year - 1,
+                    $d_year => $d_year,
+                    $d_year + 1 => $d_year + 1,
+                    $d_year + 2 => $d_year + 2,
+                ),
+                $d_year
+            ).'&nbsp;&nbsp;&nbsp;&nbsp;';
         $date_form .= self::make_select($prefix.'_hour', array_combine(range(0,23),range(0,23)), $d_hour).' : ';
         $date_form .= self::make_select($prefix.'_minute', $minute, $d_minute);
 
@@ -2478,7 +2501,7 @@ class Wiki
         $id = intval($id);
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE c_id = '.$course_id.' AND id = '.$id.' ';
-        $result=Database::query($sql);
+        $result = Database::query($sql);
         $data = array();
         while ($row=Database::fetch_array($result,'ASSOC'))   {
             $data = $row;
@@ -2505,6 +2528,7 @@ class Wiki
                 ORDER BY id DESC';
 
         $result = Database::query($sql);
+
         return Database::fetch_array($result);
     }
 
@@ -2535,6 +2559,7 @@ class Wiki
         if (Database::num_rows($result)) {
             $data = Database::fetch_array($result,'ASSOC');
         }
+
         return $data;
     }
 
@@ -2571,8 +2596,10 @@ class Wiki
                     WHERE c_id = '.$courseId.' AND id = '.$pageId.' AND '.$groupfilter.$condition_session.'';
             Database::query($sql);
             self::check_emailcue(0, 'E');
+
             return true;
         }
+
         return false;
     }
 
@@ -2590,6 +2617,7 @@ class Wiki
                     c_id = $course_id AND
                     is_editing != '0' ".$condition_session;
         $result = Database::query($sql);
+
         return Database::store_result($result, 'ASSOC');
     }
 
@@ -2604,7 +2632,7 @@ class Wiki
         $isEditing = Database::escape_string($isEditing);
 
         $sql = 'UPDATE '.$tbl_wiki.' SET
-                is_editing="0",
+                is_editing = "0",
                 time_edit="0000-00-00 00:00:00"
                 WHERE
                     c_id = '.$course_id.' AND
@@ -2627,14 +2655,14 @@ class Wiki
                 $timestamp_edit	= strtotime($is_editing_block['time_edit']);
                 $time_editing	= time()-$timestamp_edit;
 
-                //first prevent concurrent users and double version
+                // First prevent concurrent users and double version
                 if ($is_editing_block['is_editing'] == $userId) {
                     $_SESSION['_version'] = $is_editing_block['version'];
                 } else {
                     unset($_SESSION['_version']);
                 }
-                //second checks if has exceeded the time that a page may be available or if a page was edited and saved by its author
-                if ($time_editing>$max_edit_time || ($is_editing_block['is_editing']==$userId && $action!='edit')) {
+                // Second checks if has exceeded the time that a page may be available or if a page was edited and saved by its author
+                if ($time_editing > $max_edit_time || ($is_editing_block['is_editing'] == $userId && $action!='edit')) {
                     self::updateWikiIsEditing($is_editing_block['is_editing']);
                 }
             }
@@ -2752,7 +2780,11 @@ class Wiki
         $sql = 'SELECT * FROM  '.$tbl_wiki.' s1
                 WHERE s1.c_id = '.$course_id.' AND id=(
                     SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
-                    WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.'
+                    WHERE
+                        s2.c_id = '.$course_id.' AND
+                        s1.reflink = s2.reflink AND
+                        '.$groupfilter.' AND
+                        session_id='.$session_id.'
                 )';
         $allpages = Database::query($sql);
 
@@ -2977,7 +3009,8 @@ class Wiki
         $sql = "SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki."
                 WHERE c_id = $course_id AND ".$groupfilter.$condition_session."
                 GROUP BY reflink ";
-        //group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
+        //group by because mark in all versions, then always is ok.
+        // Do not use "count" because using "group by", would give a wrong value
         $allpages = Database::query($sql);
         $total_score = 0;
         while ($row=Database::fetch_array($allpages)) {
@@ -2985,7 +3018,8 @@ class Wiki
         }
 
         if (!empty($total_pages)) {
-            $media_score = $total_score/$total_pages;//put always this line alfter check num all pages
+            $media_score = $total_score/$total_pages;
+            //put always this line alfter check num all pages
         }
 
         // Average user progress in his pages.
@@ -2994,16 +3028,22 @@ class Wiki
         $sql = 'SELECT  *, SUM(progress) AS TOTAL_PROGRESS
                 FROM  '.$tbl_wiki.' s1
                 WHERE s1.c_id = '.$course_id.' AND id=
-                (SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
-                 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
-        //As the value is only the latest version I can not use group by
-        $allpages=Database::query($sql);
-        while ($row=Database::fetch_array($allpages)) {
+                (
+                    SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
+                    WHERE
+                        s2.c_id = '.$course_id.' AND
+                        s1.reflink = s2.reflink AND
+                        '.$groupfilter.' AND
+                        session_id='.$session_id.')';
+        // As the value is only the latest version I can not use group by
+        $allpages = Database::query($sql);
+        while ($row = Database::fetch_array($allpages)) {
             $total_progress	= $row['TOTAL_PROGRESS'];
         }
 
         if (!empty($total_pages)) {
-            $media_progress=$total_progress/$total_pages;//put always this line alfter check num all pages
+            $media_progress=$total_progress/$total_pages;
+            //put always this line alfter check num all pages
         }
 
         //Total users that have participated in the Wiki
@@ -3019,8 +3059,8 @@ class Wiki
         }
 
         // Total of different IP addresses that have participated in the wiki
-        $total_ip=0;
-        $sql='SELECT * FROM '.$tbl_wiki.'
+        $total_ip = 0;
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
               WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
               GROUP BY user_ip';
         $allpages=Database::query($sql);
@@ -3724,7 +3764,6 @@ class Wiki
             while ($obj = Database::fetch_object($allpages)) {
                 //get author
                 $userinfo = api_get_user_info($obj->user_id);
-                $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
                 //get type assignment icon
                 if ($obj->assignment==1) {
@@ -3800,7 +3839,7 @@ class Wiki
             $row = Database::fetch_array($result);
 
             //get type assignment icon
-
+            $ShowAssignment = '';
             if ($row['assignment']==1) {
                 $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',ICON_SIZE_SMALL);
             } elseif ($row['assignment']==2) {
@@ -3881,12 +3920,31 @@ class Wiki
                     $rows[] = $row;
                 }
 
-                $table = new SortableTableFromArrayConfig($rows,1,10,'AllPages_table','','','ASC');
-                $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action),'group_id'=>Security::remove_XSS($_GET['group_id'])));
-                $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
-                $table->set_header(1,get_lang('Title'), true);
-                $table->set_header(2,get_lang('Author'), true);
-                $table->set_header(3,get_lang('Date'), true);
+                $table = new SortableTableFromArrayConfig(
+                    $rows,
+                    1,
+                    10,
+                    'AllPages_table',
+                    '',
+                    '',
+                    'ASC'
+                );
+                $table->set_additional_parameters(
+                    array(
+                        'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                        'action' => Security::remove_XSS($action),
+                        'group_id' => intval($_GET['group_id']),
+                    )
+                );
+                $table->set_header(
+                    0,
+                    get_lang('Type'),
+                    true,
+                    array('style' => 'width:30px;')
+                );
+                $table->set_header(1, get_lang('Title'), true);
+                $table->set_header(2, get_lang('Author'), true);
+                $table->set_header(3, get_lang('Date'), true);
                 $table->display();
             }
         }
@@ -3900,9 +3958,9 @@ class Wiki
         echo '<div class="actions">'.get_lang('SearchPages').'</div>';
         if (isset($_GET['mode_table'])) {
             if (!isset($_GET['SearchPages_table_page_nr'])) {
-                $_GET['search_term'] = $_POST['search_term'];
-                $_GET['search_content'] = $_POST['search_content'];
-                $_GET['all_vers'] = $_POST['all_vers'];
+                $_GET['search_term'] = isset($_POST['search_term']) ? $_POST['search_term'] : '';
+                $_GET['search_content'] = isset($_POST['search_content']) ? $_POST['search_content'] : '';
+                $_GET['all_vers'] = isset($_POST['all_vers']) ? $_POST['all_vers'] : '';
             }
             self::display_wiki_search_results(
                 $_GET['search_term'],
@@ -3914,7 +3972,7 @@ class Wiki
             // initiate the object
             $form = new FormValidator('wiki_search',
                 'post',
-                api_get_self().'?cidReq='.api_get_course_id().'&action='.api_htmlentities($action).'&session_id='.api_get_session_id().'&group_id='.api_get_group_id().'&mode_table=yes1&search_term='.api_htmlentities($_GET['search_term']).'&search_content='.api_htmlentities($_GET['search_content']).'&all_vers='.api_htmlentities($_GET['all_vers'])
+                api_get_self().'?cidReq='.api_get_course_id().'&action='.api_htmlentities($action).'&session_id='.api_get_session_id().'&group_id='.api_get_group_id().'&mode_table=yes1'
             );
 
             // Setting the form elements
@@ -3955,7 +4013,6 @@ class Wiki
 
         $userId = intval($userId);
         $userinfo = api_get_user_info($userId);
-        $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
         echo '<div class="actions">'.get_lang('UserContributions').': '.UserManager::getUserProfileLink($userinfo).
             '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.$userId.
@@ -3993,6 +4050,7 @@ class Wiki
                 $seconds = substr($obj->dtime, 17,2);
 
                 //get type assignment icon
+                $ShowAssignment = '';
                 if ($obj->assignment==1) {
                     $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',ICON_SIZE_SMALL);
                 } elseif ($obj->assignment==2) {
@@ -4017,11 +4075,11 @@ class Wiki
             $table = new SortableTableFromArrayConfig($rows,2,10,'UsersContributions_table','','','ASC');
             $table->set_additional_parameters(
                 array(
-                    'cidReq' =>Security::remove_XSS($_GET['cidReq']),
-                    'action'=>Security::remove_XSS($action),
-                    'user_id'=>Security::remove_XSS($userId),
-                    'session_id'=>Security::remove_XSS($_GET['session_id']),
-                    'group_id'=>Security::remove_XSS($_GET['group_id'])
+                    'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                    'action' => Security::remove_XSS($action),
+                    'user_id' => intval($userId),
+                    'session_id' => intval($_GET['session_id']),
+                    'group_id' => intval($_GET['group_id']),
                 )
             );
             $table->set_header(0,get_lang('Date'), true, array ('style' => 'width:200px;'));
@@ -4050,12 +4108,12 @@ class Wiki
 
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
             $sql = 'SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'
-                WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
-                GROUP BY reflink';//TODO:check MAX and group by return last version
+                    WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
+                    GROUP BY reflink';//TODO:check MAX and group by return last version
         } else {
             $sql = 'SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'
-                WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND visibility=1
-                GROUP BY reflink'; //TODO:check MAX and group by return last version
+                    WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND visibility=1
+                    GROUP BY reflink'; //TODO:check MAX and group by return last version
         }
 
         $allpages = Database::query($sql);
@@ -4065,6 +4123,7 @@ class Wiki
             $rows = array();
             while ($obj = Database::fetch_object($allpages)) {
                 //get type assignment icon
+                $ShowAssignment = '';
                 if ($obj->assignment==1) {
                     $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',ICON_SIZE_SMALL);
                 } elseif ($obj->assignment==2) {
@@ -4081,13 +4140,21 @@ class Wiki
                 $rows[] = $row;
             }
 
-            $table = new SortableTableFromArrayConfig($rows,2,10,'MostChangedPages_table','','','DESC');
+            $table = new SortableTableFromArrayConfig(
+                $rows,
+                2,
+                10,
+                'MostChangedPages_table',
+                '',
+                '',
+                'DESC'
+            );
             $table->set_additional_parameters(
                 array(
-                    'cidReq' =>Security::remove_XSS($_GET['cidReq']),
-                    'action'=>Security::remove_XSS($action),
-                    'session_id'=>Security::remove_XSS($_GET['session_id']),
-                    'group_id'=>Security::remove_XSS($_GET['group_id'])
+                    'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                    'action' => Security::remove_XSS($action),
+                    'session_id' => intval($_GET['session_id']),
+                    'group_id' => intval($_GET['group_id']),
                 )
             );
             $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
@@ -4124,7 +4191,7 @@ class Wiki
             );
         } else {
 
-            //check if is a wiki group
+            // check if is a wiki group
             if ($current_row['group_id'] != 0) {
                 //Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false,true) ||
@@ -4331,10 +4398,10 @@ class Wiki
         $table = new SortableTableFromArrayConfig($rows,0,10,'LinkedPages_table','','','DESC');
         $table->set_additional_parameters(
             array(
-                'cidReq' =>Security::remove_XSS($_GET['cidReq']),
-                'action'=>Security::remove_XSS($this->action),
-                'session_id'=>Security::remove_XSS($_GET['session_id']),
-                'group_id'=>Security::remove_XSS($_GET['group_id'])
+                'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                'action' => Security::remove_XSS($this->action),
+                'session_id' => intval($_GET['session_id']),
+                'group_id' => intval($_GET['group_id']),
             )
         );
         $table->set_header(0,get_lang('Title'), true);
@@ -4435,10 +4502,10 @@ class Wiki
         $table = new SortableTableFromArrayConfig($rows,1, 10, 'OrphanedPages_table','','','DESC');
         $table->set_additional_parameters(
             array(
-                'cidReq' =>Security::remove_XSS($_GET['cidReq']),
-                'action'=>Security::remove_XSS($this->action),
-                'session_id'=>Security::remove_XSS($_GET['session_id']),
-                'group_id'=>Security::remove_XSS($_GET['group_id'])
+                'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                'action' => Security::remove_XSS($this->action),
+                'session_id' => intval($_GET['session_id']),
+                'group_id' => intval($_GET['group_id']),
             )
         );
         $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
@@ -4552,6 +4619,7 @@ class Wiki
             $rows = array();
             while ($obj = Database::fetch_object($allpages)) {
                 //get type assignment icon
+                $ShowAssignment = '';
                 if ($obj->assignment==1) {
                     $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',ICON_SIZE_SMALL);
                 } elseif ($obj->assignment==2) {
@@ -4561,18 +4629,33 @@ class Wiki
                 }
 
                 $row = array();
-                $row[] =$ShowAssignment;
+                $row[] = $ShowAssignment;
                 $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
                     api_htmlentities($obj->title).'</a>';
                 $row[] = $obj->tsum;
                 $rows[] = $row;
             }
 
-            $table = new SortableTableFromArrayConfig($rows,2,10,'MostVisitedPages_table','','','DESC');
-            $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($this->action),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+            $table = new SortableTableFromArrayConfig(
+                $rows,
+                2,
+                10,
+                'MostVisitedPages_table',
+                '',
+                '',
+                'DESC'
+            );
+            $table->set_additional_parameters(
+                array(
+                    'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                    'action' => Security::remove_XSS($this->action),
+                    'session_id' => intval($_GET['session_id']),
+                    'group_id' => intval($_GET['group_id']),
+                )
+            );
             $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
-            $table->set_header(1,get_lang('Title'), true);
-            $table->set_header(2,get_lang('Visits'), true);
+            $table->set_header(1, get_lang('Title'), true);
+            $table->set_header(2, get_lang('Visits'), true);
             $table->display();
         }
     }
@@ -5138,8 +5221,8 @@ class Wiki
             } else { // We show the differences between two versions
                 $version_old = array();
                 if (isset($_POST['old'])) {
-                    $sql_old= "SELECT * FROM $tbl_wiki
-                           WHERE c_id = $course_id AND id='".Database::escape_string($_POST['old'])."'";
+                    $sql_old = "SELECT * FROM $tbl_wiki
+                                WHERE c_id = $course_id AND id='".Database::escape_string($_POST['old'])."'";
                     $result_old = Database::query($sql_old);
                     $version_old = Database::fetch_array($result_old);
                 }

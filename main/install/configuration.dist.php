@@ -321,4 +321,4 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // 1 = Default. Works as it is now (default is to link to the special session page)
 // 0 = No link (not clickable)
 // 2 = Link to the course if there is only one course
-$_configuration['courses_list_session_title_link'] = 1;
+//$_configuration['courses_list_session_title_link'] = 1;

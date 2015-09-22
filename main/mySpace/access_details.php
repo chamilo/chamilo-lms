@@ -139,10 +139,10 @@ $form->display();
     <div id="cev_cont_stats">
     <?php
     if ($result_to_print != "")  {
-        $rst                = get_stats($user_id, $courseId);
-        $foo_stats           = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
-        $foo_stats          .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
-        $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
+        $rst = get_stats($user_id, $courseId);
+        $foo_stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
+        $foo_stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
+        $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
         echo $foo_stats;
     } else {
         echo Display::display_warning_message(get_lang('NoDataAvailable'));

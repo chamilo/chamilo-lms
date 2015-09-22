@@ -13,13 +13,14 @@ class GradeModel extends Model
     /**
      * Constructor
      */
-	public function __construct()
+    public function __construct()
     {
         $this->table =  Database::get_main_table(TABLE_GRADE_MODEL);
-	}
+    }
 
     /**
      * @param array $where_conditions
+     *
      * @return array
      */
     public function get_all($where_conditions = array())

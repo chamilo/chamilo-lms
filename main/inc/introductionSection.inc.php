@@ -44,7 +44,11 @@ $intro_cmdAdd = empty($_GET['intro_cmdAdd']) ? '' : $_GET['intro_cmdAdd'];
 $courseId = api_get_course_id();
 
 if (!empty($courseId)) {
-    $form = new FormValidator('introduction_text', 'post', api_get_self().'?'.api_get_cidreq());
+    $form = new FormValidator(
+        'introduction_text',
+        'post',
+        api_get_self().'?'.api_get_cidreq()
+    );
 } else {
     $form = new FormValidator('introduction_text');
 }

@@ -115,13 +115,17 @@ if (isset($_GET['f']) && $_GET['f'] == 'social' || api_get_setting('allow_social
     $actions = null;
     //Comes from normal profile
     if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
+        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
+            Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
     }
 
     if (api_get_setting('allow_message_tool') == 'true') {
-        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
-        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
+        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+            Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
+        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+            Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
+        $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+            Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
     }
 }
 
@@ -137,8 +141,10 @@ $social_right_content = null;
 if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .= '<div class="col-md-12">';
     $social_right_content .= '<div class="actions">';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';
+    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.
+        Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
+    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.
+        Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';
     $social_right_content .= '</div>';
     $social_right_content .= '</div>';
     $social_right_content .= '<div class="col-md-12">';

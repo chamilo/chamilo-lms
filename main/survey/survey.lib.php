@@ -4374,8 +4374,6 @@ class SurveyUtil
 
     static function get_number_of_surveys_for_coach()
     {
-        // Ugly fix
-        require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
         $survey_tree = new SurveyTree();
         return count($survey_tree->get_last_children_from_branch($survey_tree->surveylist));
     }
@@ -4486,7 +4484,6 @@ class SurveyUtil
 
     static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
     {
-        require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
         $survey_tree = new SurveyTree();
         $last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);
         $list = array();

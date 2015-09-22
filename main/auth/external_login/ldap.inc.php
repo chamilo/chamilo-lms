@@ -7,7 +7,6 @@
  * */
 //Includes the configuration file
 require_once dirname(__FILE__).'/../../inc/global.inc.php';
-require_once dirname(__FILE__).'/../../inc/conf/auth.conf.php';
 
 /**
  * Returns a transcoded and trimmed string

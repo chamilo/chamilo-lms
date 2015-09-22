@@ -317,4 +317,8 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['lp_replace_http_to_https'] = false;
 // Fix embedded videos inside lps, adding an optional popup
 //$_configuration['lp_fix_embed_content'] = false;
-
+// Manage the links to Session Index page
+// 1 = Default. Works as it is now (default is to link to the special session page)
+// 0 = No link (not clickable)
+// 2 = Link to the course if there is only one course
+$_configuration['courses_list_session_title_link'] = 1;

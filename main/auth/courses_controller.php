@@ -234,7 +234,6 @@ class CoursesController
         $result = $this->model->store_course_category($category_title);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('CourseCategoryStored')));
-
         } else {
             Display::addFlash(Display::return_message(get_lang('ACourseCategoryWithThisNameAlreadyExists'), 'error'));
         }

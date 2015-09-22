@@ -17,7 +17,7 @@ $courses_without_category = isset($courses_in_category[0]) ? $courses_in_categor
 <!-- Actions: The menu with the different options in cathe course management -->
 <div id="actions" class="actions">
     <?php if ($action != 'createcoursecategory') { ?>
-	&nbsp;<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'),'','32'); ?></a>
+	<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'),'','32'); ?></a>
     <?php } ?>
 </div>
 

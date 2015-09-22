@@ -61,7 +61,6 @@ function show_folder_up() {
  * @param $folder
  */
 function show_documents($folder) {
-    global $_course;
     global $source_id, $action, $learnpath_id, $chapter_id, $originalresource;
 
     // Documents are a special case: The teacher can add an invisible document (it will be viewable by the user)

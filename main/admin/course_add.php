@@ -14,19 +14,21 @@ $tool_name = get_lang('AddCourse');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
 
-/* MAIN CODE */
-global $_configuration;
 
 // Get all possible teachers.
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1".$order_clause;
+$sql = "SELECT user_id,lastname,firstname
+        FROM $table_user
+        WHERE status=1".$order_clause;
 // Filtering teachers when creating a course.
 if (api_is_multiple_url_enabled()) {
     $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
+    $sql = "SELECT u.user_id,lastname,firstname
+            FROM $table_user as u
             INNER JOIN $access_url_rel_user_table url_rel_user
-            ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
+            ON (u.user_id=url_rel_user.user_id)
+            WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 }
 
 $res = Database::query($sql);
@@ -117,7 +119,7 @@ $form->addGroup($group,'', get_lang('Subscription'), '<br />');
 $group = array();
 $group[]= $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
 $group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
-$form->addGroup($group,'', get_lang('Unsubscription'), '<br />');
+$form->addGroup($group, '', get_lang('Unsubscription'), '<br />');
 
 $form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_lang('MB')));
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');

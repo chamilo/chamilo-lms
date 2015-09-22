@@ -28,7 +28,7 @@ class Accessurledituserstourl
      */
     function search_users($needle, $id)
     {
-        global $tbl_user;
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $xajax_response = new xajaxResponse();
         $return = '';
 

@@ -3100,7 +3100,6 @@ class learnpath
      */
     public function get_html_toc($toc_list = null)
     {
-        global $_configuration;
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
 
         if ($this->debug > 0) {
@@ -3111,7 +3110,7 @@ class learnpath
         }
         //$html = '<div id="scorm_title" class="scorm-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
         $html = '<div class="scorm-body">';
-        $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
+        $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
 
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
             $gradebook = Security :: remove_XSS($_GET['gradebook']);

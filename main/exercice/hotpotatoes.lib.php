@@ -98,13 +98,14 @@ function GetComment($path, $course_code = '')
  */
 function SetComment($path, $comment)
 {
-    global $dbTable;
+    $dbTable = Database::get_course_table(TABLE_DOCUMENT);
     $path = Database::escape_string($path);
     $comment = Database::escape_string($comment);
     $course_id = api_get_course_int_id();
     $query = "UPDATE $dbTable SET comment='$comment'
               WHERE $course_id AND path='$path'";
     $result = Database::query($query);
+
     return $result;
 }
 

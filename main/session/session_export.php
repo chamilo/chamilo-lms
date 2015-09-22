@@ -32,8 +32,6 @@ $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
 $tool_name = get_lang('ExportSessionListXMLCSV');
 
-global $_configuration;
-
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 set_time_limit(0);

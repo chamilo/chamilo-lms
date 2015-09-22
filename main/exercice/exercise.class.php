@@ -94,7 +94,6 @@ class Exercise
      */
     public function read($id)
     {
-        global $_configuration;
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
@@ -146,7 +145,7 @@ class Exercise
                 $this->lpList = Database::store_result($result, 'ASSOC');
             }
 
-            $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : false;
+            $this->force_edit_exercise_in_lp = api_get_configuration_value('force_edit_exercise_in_lp');
 
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;
@@ -1032,10 +1031,8 @@ class Exercise
      */
     public function createForm($form, $type='full')
     {
-        global $id;
-
-        if (empty($type)){
-            $type='full';
+        if (empty($type)) {
+            $type = 'full';
         }
 
         // form title

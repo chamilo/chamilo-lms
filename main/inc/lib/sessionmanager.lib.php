@@ -1154,8 +1154,6 @@ class SessionManager
         $date_to = '',
         $options
     ) {
-        global $_configuration;
-
         //escaping variables
         $sessionId = intval($sessionId);
         $courseId = intval($courseId);
@@ -3116,19 +3114,19 @@ class SessionManager
             $imageFieldId = Database::fetch_assoc($resultField);
 
             while ($row = Database::fetch_array($result)) {
-                
+
                 $row['image'] =  null;
                 $sessionImage = $sysUploadPath . $imageFieldId['id'] . '_' . $row['id'] . '.png';
-                
+
                 if (is_file($sessionImage)) {
                     $sessionImage = $webUploadPath . $imageFieldId['id'] . '_' . $row['id'] . '.png';
                     $row['image'] = $sessionImage;
                 } else {
                     $row['image'] =  $imgPath;
                 }
-                
+
                 $sessions[$row['id']] = $row;
-                
+
             }
         }
 
@@ -5506,14 +5504,7 @@ class SessionManager
      */
     public static function durationPerUserIsEnabled()
     {
-        global $_configuration;
-        if (isset($_configuration['session_duration_feature']) &&
-            $_configuration['session_duration_feature']
-        ) {
-            return true;
-        }
-
-        return false;
+        return api_get_configuration_value('session_duration_feature');
     }
 
     /**

@@ -62,7 +62,11 @@ if($allowTutors == 'true') {
 
     function search_users($needle, $type)
     {
-    	global $tbl_user,$tbl_session_rel_user,$id_session;
+    	global $id_session;
+
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
     	$xajax_response = new xajaxResponse();
     	$return = '';
 

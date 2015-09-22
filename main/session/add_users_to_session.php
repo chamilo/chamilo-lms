@@ -63,7 +63,10 @@ if (is_array($extra_field_list)) {
 
 function search_users($needle, $type)
 {
-    global $tbl_user, $tbl_session_rel_user, $id_session;
+    global $id_session;
+
+    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+    $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
     $xajax_response = new xajaxResponse();
     $return = '';
@@ -539,11 +542,11 @@ $link_add_group = Display::url(
 );
 
 $newLinks = Display::url(
-    Display::return_icon('teacher.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).    
+    Display::return_icon('teacher.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).
     get_lang('EnrollTrainersFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$id_session
 );
 $newLinks .= Display::url(
-    Display::return_icon('user.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).    
+    Display::return_icon('user.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).
     get_lang('EnrollStudentsFromExistingSessions'), api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$id_session
 );
 ?>
@@ -656,7 +659,7 @@ if (!empty($errorMsg)) {
                   <i class="fa fa-chevron-left"></i>
                 </button>
             </div>
-              
+
             <?php
         } else {
             ?>
@@ -670,7 +673,7 @@ if (!empty($errorMsg)) {
                     <i class="fa fa-chevron-left"></i>
                 </button>
             </div>
-               
+
               <?php
             }
             if (!empty($addProcess)) {

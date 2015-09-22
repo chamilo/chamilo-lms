@@ -728,7 +728,8 @@ class Template
      */
     private function set_header_parameters($sendHeaders)
     {
-        global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $_configuration, $this_section;
+        global $httpHeadXtra, $interbreadcrumb, $language_file, $_configuration, $this_section;
+        $_course = api_get_course_info();
         $help = $this->help;
         $nameTools             = $this->title;
         $navigation            = return_navigation_array();
@@ -810,7 +811,7 @@ class Template
         //If exist pick the current chamilo theme favicon
         if (is_file($favicoThemeUrl . 'favicon.ico')) {
             $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_CSS_PATH)
-                . 'themes/' . $this->theme . '/images/favicon.ico" type="image/x-icon" />';  
+                . 'themes/' . $this->theme . '/images/favicon.ico" type="image/x-icon" />';
         }
 
         if (api_is_multiple_url_enabled()) {

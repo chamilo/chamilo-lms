@@ -918,11 +918,11 @@ class Link extends Model
                             'class' => 'check-link'
                             )
                     );
-                    
+
                 }
-                
+
                 if (api_is_allowed_to_edit(null, true)) {
-                    
+
                     if ($session_id == $myrow['session_id']) {
                         $url = api_get_self() . '?' . api_get_cidreq() .
                             '&action=editlink&category=' . (!empty ($category) ? $category : '') .
@@ -934,7 +934,7 @@ class Link extends Model
                                 'pencil',
                                 'default btn-sm'
                                 );
-                        
+
                         // DISPLAY MOVE UP COMMAND only if it is not the top link.
                         /* commented at least since 2014-10-11
                         if ($i != 1) {
@@ -961,7 +961,7 @@ class Link extends Model
                                     'eye',
                                     'default btn-sm'
                                     );
-                           
+
                         }
                         if ($myrow['visibility'] == '0') {
                             $url .= 'link.php?' . api_get_cidreq() .'&sec_token=' . $token .'&action=visible&id=' . $myrow['id'] .'&scope=link&category_id=' . $myrow['category_id'];
@@ -970,13 +970,13 @@ class Link extends Model
                                     $url,
                                     'eye-slash',
                                     'primary btn-sm'
-                                    );   
+                                    );
                         }
-                        
+
                         $url .= api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=deletelink&id=' . $myrow['id'] .'&category_id=' . $myrow['category_id'];
                         $event = "javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "'))return false;";
                         $title = get_lang('Delete');
-                        
+
                         $toolbar .= Display::toolbarButton(
                                 '',
                                 $url,
@@ -986,8 +986,8 @@ class Link extends Model
                                     'onclick' => $event,
                                     'title' => $title
                                     )
-                                ); 
-                    
+                                );
+
 
                     } else {
                         $title = get_lang('EditionNotAvailableFromSession');
@@ -999,9 +999,9 @@ class Link extends Model
                                 array(
                                     'title' => $title
                                     )
-                                ); 
+                                );
                     }
-                    
+
                 }
                 $iconLink = Display::return_icon(
                         'url.png',
@@ -1009,7 +1009,7 @@ class Link extends Model
                         null,
                         ICON_SIZE_SMALL
                         );
-                    
+
                 if ($myrow['visibility'] == '1') {
                     $content .= '<div class="list-group-item">';
                     $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
@@ -1027,7 +1027,7 @@ class Link extends Model
                     $content .= $link_validator;
                     $content .= $session_img;
                     $content .= '</h4>';
-                    
+
                     $content .= '<p class="list-group-item-text">' . $myrow['description'] . '</p>';
                     $content .= '</div>';
                 } else {
@@ -1270,14 +1270,17 @@ class Link extends Model
      */
     public static function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
     {
+        $_course = api_get_course_info();
+        $_user = api_get_user_info();
+
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
 
         $urleq = "url='" . Database:: escape_string($url) . "'";
         $cateq = "category_id=" . intval($cat);
 
-        $result = Database:: query(
-            "SELECT id FROM $tbl_link
+        $result = Database:: query("
+            SELECT id FROM $tbl_link
             WHERE c_id = $course_id AND " . $urleq . ' AND ' . $cateq
         );
 
@@ -1321,7 +1324,6 @@ class Link extends Model
             $ipu = 'LinkAdded';
             $rv = 2; // 2 = new
         }
-        global $_course, $_user;
         api_item_property_update(
             $_course,
             TOOL_LINK,

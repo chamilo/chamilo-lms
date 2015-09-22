@@ -4937,9 +4937,9 @@ function api_get_version() {
  * @return string
  */
 function api_get_software_name() {
-    global $_configuration;
-    if (isset($_configuration['software_name']) && !empty($_configuration['software_name'])) {
-        return $_configuration['software_name'];
+    $name = api_get_configuration_value('software_name');
+    if (!empty($name)) {
+        return $name;
     } else {
         return 'Chamilo';
     }
@@ -6907,8 +6907,7 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseIn
  * @return string
  */
 function api_get_security_key() {
-    global $_configuration;
-    return $_configuration['security_key'];
+    return api_get_configuration_value('security_key');
 }
 
 /**

@@ -725,38 +725,43 @@ if (@$_POST['step2']) {
                 echo '<div id="details" style="display:none">';
                 // Migrate using the migration files located in:
                 // src/Chamilo/CoreBundle/Migrations/Schema/V110
-                migrate(
+                $result = migrate(
                     110,
                     $manager
                 );
 
                 echo '</div>';
 
-                fixIds($manager);
+                if ($result) {
+                    error_log('Migrations files were executed.');
 
-                include 'update-files-1.9.0-1.10.0.inc.php';
-                // Only updates the configuration.inc.php with the new version
-                include 'update-configuration.inc.php';
+                    fixIds($manager);
 
-                $configurationFiles = array(
-                    'mail.conf.php',
-                    'profile.conf.php',
-                    'course_info.conf.php',
-                    'add_course.conf.php',
-                    'events.conf.php',
-                    'auth.conf.php',
-                    'portfolio.conf.php'
-                );
+                    include 'update-files-1.9.0-1.10.0.inc.php';
+                    // Only updates the configuration.inc.php with the new version
+                    include 'update-configuration.inc.php';
 
-                foreach ($configurationFiles as $file) {
-                    if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
-                        copy(
-                            api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
-                            api_get_path(CONFIGURATION_PATH).$file
-                        );
+                    $configurationFiles = array(
+                        'mail.conf.php',
+                        'profile.conf.php',
+                        'course_info.conf.php',
+                        'add_course.conf.php',
+                        'events.conf.php',
+                        'auth.conf.php',
+                        'portfolio.conf.php'
+                    );
+
+                    foreach ($configurationFiles as $file) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
+                            copy(
+                                api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
+                                api_get_path(CONFIGURATION_PATH).$file
+                            );
+                        }
                     }
+                } else {
+                    error_log('There was an error during running migrations. Check error.log');
                 }
-
                 break;
             default:
                 break;

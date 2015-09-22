@@ -2021,11 +2021,14 @@ function migrate($chamiloVersion, EntityManager $manager)
         if ($debug) {
             echo 'DONE'.$nl;
         }
+        return true;
     } catch (Exception $ex) {
         if ($debug) {
             echo 'ERROR: '.$ex->getMessage().$nl;
         }
     }
+
+    return false;
 }
 
 /**

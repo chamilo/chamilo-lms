@@ -8,11 +8,7 @@
  */
 function isMultipleUrlSupport()
 {
-    global $_configuration;
-    if (isset($_configuration['enable_multiple_url_support_for_course_category'])) {
-        return $_configuration['enable_multiple_url_support_for_course_category'];
-    }
-    return false;
+    return api_get_configuration_value('enable_multiple_url_support_for_course_category');
 }
 
 /**
@@ -469,7 +465,9 @@ function getCategoriesToDisplayInHomePage()
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $sql = "SELECT name FROM $tbl_category
-            WHERE parent_id IS NULL ORDER BY tree_pos";
+            WHERE parent_id IS NULL
+            ORDER BY tree_pos";
+
     return Database::store_result(Database::query($sql));
 }
 
@@ -488,6 +486,7 @@ function addToUrl($id)
 
 /**
  * @param string $categoryCode
+ *
  * @return array
  */
 function getCategoriesCanBeAddedInCourse($categoryCode)
@@ -867,6 +866,7 @@ function getCourseCategoryNotInList($list)
     $sql = "SELECT * FROM $table
             WHERE id NOT IN ('$listToString') AND (parent_id IS NULL) ";
     $result = Database::query($sql);
+
     return Database::store_result($result, 'ASSOC');
 }
 
@@ -1011,15 +1011,13 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
             $pageDiv .= getPageNumberItem($pageTop + 1, $pageLength, null, '...');
         }
         $pageDiv .= getPageNumberItem($pageTotal, $pageLength);
-    } else {
-        // Nothing to do
     }
 
     // Complete pagination html
-    $pageDiv = Display::tag('ul',$pageDiv,array('class' => 'pagination'));
+    $pageDiv = Display::tag('ul', $pageDiv, array('class' => 'pagination'));
 
 
-    $html.='<nav>'.$pageDiv.'</nav>';
+    $html .= '<nav>'.$pageDiv.'</nav>';
     return $html;
 }
 

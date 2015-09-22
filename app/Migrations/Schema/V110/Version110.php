@@ -73,6 +73,11 @@ class Version110 extends AbstractMigrationChamilo
         if (!$table->hasColumn('session_id')) {
             $this->addSql("ALTER TABLE track_e_default ADD COLUMN session_id int NOT NULL");
         }
+
+        if (!$table->hasColumn('c_id')) {
+            $this->addSql("ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL");
+        }
+
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN user_ip varchar(39) NOT NULL default ''");
         $this->addSql("ALTER TABLE track_e_exercices ADD COLUMN user_ip varchar(39) NOT NULL default ''");
         $this->addSql("ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL default ''");

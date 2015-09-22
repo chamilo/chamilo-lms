@@ -7,59 +7,57 @@
 * 	@author Toon Keppens
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // set vars
-$questionId    = intval($_GET['modifyAnswers']);
-$objQuestion   = Question::read($questionId);
+$questionId = intval($_GET['modifyAnswers']);
+error_log($questionId);
+$objQuestion = Question::read($questionId);
+$_course = api_get_course_info();
 
 $documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
-$picturePath   = $documentPath.'/images';
-$pictureName   = $objQuestion->selectPicture();
-$pictureSize   = getimagesize($picturePath.'/'.$objQuestion->selectPicture());
-$pictureWidth  = $pictureSize[0];
+$picturePath = $documentPath.'/images';
+$pictureName = $objQuestion->selectPicture();
+$pictureSize = getimagesize($picturePath.'/'.$objQuestion->selectPicture());
+$pictureWidth = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 
-$courseLang    = $_course['language'];
-$courseCode    = $_course['sysCode'];
-$coursePath    = $_course['path'];
-
+$courseLang = $_course['language'];
+$courseCode = $_course['code'];
+$coursePath = $_course['path'];
 
 // Init
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
 $i = 0;
 $nmbrTries = 0;
-
+$answer_type = $objQuestion->type;
 
 $answers = $_SESSION['tmp_answers'];
 $nbrAnswers = count($answers['answer']);
 
-for($i=1;$i <= $nbrAnswers;$i++) {
+for ($i=1;$i <= $nbrAnswers; $i++) {
    	$output .= "&hotspot_".$i."=true";
 	$output .= "&hotspot_".$i."_answer=".$answers['answer'][$i];
 
-	if ($answer_type==HOT_SPOT_DELINEATION) {
-		if ($i==1)
-			$output .= "&hotspot_".$i."_type=delineation";
-		else
-			$output .= "&hotspot_".$i."_type=oar";
+	if ($answer_type == HOT_SPOT_DELINEATION) {
+		if ($i==1) {
+		    $output .= "&hotspot_".$i."_type=delineation";
+		} else
+			{$output .= "&hotspot_".$i."_type=oar";}
 	} else {
 		// Square or rectancle
-		if ($answers['hotspot_type'][$i] == 'square' )
-		{
+		if ($answers['hotspot_type'][$i] == 'square') {
 			$output .= "&hotspot_".$i."_type=square";
 		}
 
 		// Circle or ovale
-		if ($answers['hotspot_type'][$i] == 'circle')
-		{
+		if ($answers['hotspot_type'][$i] == 'circle') {
 			$output .= "&hotspot_".$i."_type=circle";
 		}
 
 		// Polygon
-		if ($answers['hotspot_type'][$i] == 'poly')
-		{
+		if ($answers['hotspot_type'][$i] == 'poly') {
 			$output .= "&hotspot_".$i."_type=poly";
 		}
 		/*// Delineation
@@ -70,8 +68,7 @@ for($i=1;$i <= $nbrAnswers;$i++) {
 	}
 
 	// This is a good answer, count + 1 for nmbr of clicks
-	if ($answers['weighting'][$i] > 0)
-	{
+	if ($answers['weighting'][$i] > 0) {
 		$nmbrTries++;
 	}
 

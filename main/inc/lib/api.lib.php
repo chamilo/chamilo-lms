@@ -534,6 +534,11 @@ define('TIMELINE_STATUS_INACTIVE', '2');
 define ('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
 define ('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
 
+// Course home
+define('SHORTCUTS_HORIZONTAL', 0);
+define('SHORTCUTS_VERTICAL', 1);
+
+
 /**
  * Inclusion of internationalization libraries
  */

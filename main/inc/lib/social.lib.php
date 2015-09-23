@@ -1019,7 +1019,6 @@ class SocialManager extends UserManager
         }
         $column_size = '12';
         $add_row = false;
-        //var_dump(api_set_anonymous());
         if (api_is_anonymous()) {
             $add_row = true;
         }
@@ -1058,10 +1057,8 @@ class SocialManager extends UserManager
                 } else {
                     $url = '?id='.$uid.$course_url;
                 }
-
             } else {
                 $url = null;
-
             }
             $name = '<a href="'.$url.'">'.$firstname.'<br>'.$lastname.'</a>';
 
@@ -1088,6 +1085,7 @@ class SocialManager extends UserManager
         if ($wrap && $add_row) {
             $html .= '</div>';
         }
+
         return $html;
     }
 

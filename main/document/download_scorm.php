@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	This file is responsible for  passing requested documents to the browser.
+ *	This file is responsible for passing requested documents to the browser.
  *
  *	@package chamilo.document
  */
@@ -44,8 +44,6 @@ if (strpos($doc_url,'../') OR strpos($doc_url,'/..')) {
 }
 
 $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/scorm';
-
-//var_dump($sys_course_path);
 
 if (is_dir($sys_course_path.$doc_url)) {
     api_not_allowed();

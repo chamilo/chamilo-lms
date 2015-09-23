@@ -2,13 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Draggable
+ * Class Draggable
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class Draggable extends Question
 {
-
     static $typePicture = 'ordering.png';
     static $explanationLangVar = 'Draggable';
 
@@ -193,7 +192,13 @@ class Draggable extends Question
             $matches = $form->getSubmitValue('matches[' . $i . ']');
             $weighting = $form->getSubmitValue('weighting[' . $i . ']');
             $this->weighting += $weighting;
-            $objAnswer->createAnswer($answer, $matches, '', $weighting, $position);
+            $objAnswer->createAnswer(
+                $answer,
+                $matches,
+                '',
+                $weighting,
+                $position
+            );
         }
 
         $objAnswer->save();

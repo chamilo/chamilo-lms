@@ -132,6 +132,28 @@ class Answer
         $this->nbrAnswers = $i-1;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getAnswerByAutoId($id)
+    {
+        foreach ($this->autoId as $key => $autoId) {
+            if ($autoId == $id) {
+                $result =  [
+                    'answer' => $this->answer[$key],
+                    'correct' => $this->correct[$key],
+                    'comment' => $this->comment[$key],
+                ];
+
+                return $result;
+            }
+        }
+
+        return [];
+    }
+
      /**
      * returns all answer ids from this question Id
      *
@@ -562,7 +584,7 @@ class Answer
 			$destination = $this->new_destination[$i];
             $autoId = $this->selectAutoId($i);
 
-            if (!(isset($this->position[$i]))) {
+            if (!isset($this->position[$i])) {
                 $params = [
                     'c_id' => $c_id,
                     'question_id' => $questionId,
@@ -607,22 +629,18 @@ class Answer
 
         $questionType = self::getQuestionType();
 
-        if ($questionType == MATCHING) {
+        if ($questionType == DRAGGABLE) {
+            foreach ($this->new_correct as $value => $status) {
+                if (!empty($status)) {
+                    $correct = $answerList[$status];
+                    $myAutoId = $answerList[$value];
 
-            if (!empty($correctList)) {
-                foreach ($correctList as $autoId => $status) {
-                    /*$correct = $data['correct'];
-
-                    if (isset($answerList[$correct])) {
-                        $correct = $answerList[$correct];
-                    }*/
-
-                    /*$sql = "UPDATE $answerTable
-                        SET correct = $autoId
-                        WHERE
-                            id_auto = $autoId
-                        ";
-                    Database::query($sql);*/
+                    $sql = "UPDATE $answerTable
+                            SET correct = '$correct'
+                            WHERE
+                                id_auto = $myAutoId
+                            ";
+                    Database::query($sql);
                 }
             }
         }

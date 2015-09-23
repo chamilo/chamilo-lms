@@ -3310,8 +3310,9 @@ class learnpath
             $lp_item_type = $row['litype'];
             $lp_item_path = $row['lipath'];
             $lp_item_params = $row['liparams'];
-            if (empty ($lp_item_params) && strpos($lp_item_path, '?') !== false) {
-                list ($lp_item_path, $lp_item_params) = explode('?', $lp_item_path);
+
+            if (empty($lp_item_params) && strpos($lp_item_path, '?') !== false) {
+                list($lp_item_path, $lp_item_params) = explode('?', $lp_item_path);
             }
             $sys_course_path = api_get_path(SYS_COURSE_PATH) . api_get_course_path();
             if ($type == 'http') {

@@ -7536,10 +7536,14 @@ $ShowFullSkillNameOnSkillWheelTitle = "Mostrar nombre completo de la competencia
 $ShowFullSkillNameOnSkillWheelComment = "En la rueda de competencias, permite mostrar el nombre de la competencia cuando ésta tiene código corto.";
 $DBPort = "Puerto";
 $CreatedBy = "Creado por";
+$DropboxHideGeneralCoachTitle = "Esconder tutor general en compartir documentos";
+$DropboxHideGeneralCoachComment = "Esconder el nombre del tutor general en la herramienta Compartir Documentos cuando es quien ha subido el documento.";
 $UploadMyAssignment = "Enviar mi tarea";
 $Inserted = "Añadido";
 $YourBroswerDoesNotSupportWebRTC = "Su navegador no soporta nativamente la transmisión por videoconferencia.";
 $OtherTeachers = "Otros profesores";
 $CourseCategory = "Categoría de curso";
 $VideoChatBetweenUserXAndUserY = "Videollamada entre %s y %s";
+$Enable = "Activar";
+$Disable = "Desactivar";
 ?>

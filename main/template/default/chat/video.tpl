@@ -47,26 +47,26 @@
     </div>
 </div>
 <script>
-    (function() {
+    (function () {
         var VideoChat = {
-            init: function() {
+            init: function () {
                 var isCompatible = !!Modernizr.prefixed('RTCPeerConnection', window);
 
-                var notifyNotSupport = function() {
+                var notifyNotSupport = function () {
                     $.get('{{ _p.web_ajax }}chat.ajax.php', {
                         action: 'notify_not_support',
-                        to: {{ chat_user.id }}
+                        to:{{ chat_user.id }}
                     });
                 };
 
-                var startVideoChat = function() {
+                var startVideoChat = function () {
                     var webRTC = new SimpleWebRTC({
                         localVideoEl: 'chat-local-video',
                         remoteVideosEl: '',
                         autoRequestMedia: true
                     });
 
-                    webRTC.on('readyToCall', function() {
+                    webRTC.on('readyToCall', function () {
                         webRTC.joinRoom('{{ room_name }}');
                     });
                     webRTC.on('videoAdded', function (video, peer) {
@@ -76,7 +76,7 @@
                         if (peer && peer.pc) {
                             peer.pc.on('iceConnectionStateChange', function () {
                                 var alertDiv = $('<div>')
-                                    .addClass('alert');
+                                        .addClass('alert');
 
                                 switch (peer.pc.iceConnectionState) {
                                     case 'checking':
@@ -148,7 +148,7 @@
             }
         };
 
-        $(document).on('ready', function() {
+        $(document).on('ready', function () {
             VideoChat.init();
         });
     })();

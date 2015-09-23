@@ -55,4 +55,3 @@ $template->assign(
     Display::return_message(get_lang('YourBroswerDoesNotSupportWebRTC'), 'warning')
 );
 $template->display_one_col_template();
-//$template->display_no_layout_template();

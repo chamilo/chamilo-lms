@@ -38,6 +38,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'
     . '"></script>' . "\n";
 
 $template = new Template();
+$template->assign('room_name', $chatVideo->getRoomName());
 $template->assign('chat_user', $chatUser);
 $template->assign('user_local', $userLocal);
 $template->assign('block_friends', $friend_html);

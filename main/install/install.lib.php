@@ -2025,6 +2025,7 @@ function migrate($chamiloVersion, EntityManager $manager)
     } catch (Exception $ex) {
         if ($debug) {
             echo 'ERROR: '.$ex->getMessage().$nl;
+            return false;
         }
     }
 

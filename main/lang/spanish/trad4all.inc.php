@@ -7546,4 +7546,11 @@ $CourseCategory = "Categoría de curso";
 $VideoChatBetweenUserXAndUserY = "Videollamada entre %s y %s";
 $Enable = "Activar";
 $Disable = "Desactivar";
+$AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession = "Evite cambiar de página ya que esto puede cortar tu videollamada actual";
+$ConnectingToPeer = "Conectando";
+$ConnectionEstablished = "Conexión establecida";
+$ConnectionFailed = "Conexión fallida";
+$ConnectionClosed = "Conexión cerrada";
+$LocalConnectionFailed = "Conexión local fallida";
+$RemoteConnectionFailed = "Conexión remota fallida";
 ?>

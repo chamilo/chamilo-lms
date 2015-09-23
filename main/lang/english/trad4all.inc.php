@@ -7521,4 +7521,11 @@ $CourseCategory = "Course category";
 $VideoChatBetweenUserXAndUserY = "Video chat between %s and %s";
 $Enable = "Enable";
 $Disable = "Disable";
+$AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession = "Avoid changing page as this will cut your current video chat session";
+$ConnectingToPeer = "Connecting to peer";
+$ConnectionEstablished = "Connection established";
+$ConnectionFailed = "Connection failed";
+$ConnectionClosed = "Connection closed";
+$LocalConnectionFailed = "Local connection failed";
+$RemoteConnectionFailed = "Remote connection failed";
 ?>

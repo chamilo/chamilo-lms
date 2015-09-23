@@ -83,7 +83,7 @@ switch ($action) {
             $room = VideoChat::getChatRoomByUsers(api_get_user_id(), $to_user_id);
         }
 
-        $videoChatUrl = api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room={$room['room_name']}";
+        $videoChatUrl = api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room={$room['id']}";
         $videoChatLink = Display::url(
             Display::returnFontAswesomeIcon('video-camera') . get_lang('StartVideoChat'),
             $videoChatUrl
@@ -95,11 +95,6 @@ switch ($action) {
             $videoChatLink,
             false,
             false
-        );
-
-        $videoChatLink = Display::url(
-            Display::returnFontAswesomeIcon('video-camera') . get_lang('StartVideoChat'),
-            api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room={$room['room_name']}"
         );
 
         echo Display::tag('p', $videoChatLink, ['class' => 'lead']);

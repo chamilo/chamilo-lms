@@ -6,19 +6,20 @@ if (api_is_anonymous()) {
     api_not_allowed(true);
 }
 
-$roomName = isset($_GET['room']) ? $_GET['room'] : null;
+$roomId = isset($_GET['room']) ? $_GET['room'] : null;
 
-$room = VideoChat::getChatRoomByName($roomName);
+$entityManager = Database::getManager();
 
-if ($room === false) {
+$chatVideo = $entityManager->find('ChamiloCoreBundle:ChatVideo', $roomId);
+
+if (!$chatVideo) {
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 
 $friend_html = SocialManager::listMyFriendsBlock($user_id, '', false);
-
-$isSender = $room['from_user'] == api_get_user_id();
-$isReceiver = $room['to_user'] == api_get_user_id();
+$isSender = $chatVideo->getFromUser() === api_get_user_id();
+$isReceiver = $chatVideo->getToUser() === api_get_user_id();
 
 if (!$isSender && !$isReceiver) {
     header('Location: '.api_get_path(WEB_PATH));
@@ -26,9 +27,9 @@ if (!$isSender && !$isReceiver) {
 }
 
 if ($isSender) {
-    $chatUser = api_get_user_info($room['to_user']);
+    $chatUser = api_get_user_info($chatVideo->getToUser());
 } elseif ($isReceiver) {
-    $chatUser = api_get_user_info($room['from_user']);
+    $chatUser = api_get_user_info($chatVideo->getFromUser());
 }
 $idUserLocal = api_get_user_id();
 $userLocal = api_get_user_info($idUserLocal, true);
@@ -37,7 +38,6 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'
     . '"></script>' . "\n";
 
 $template = new Template();
-$template->assign('room', $room);
 $template->assign('chat_user', $chatUser);
 $template->assign('user_local', $userLocal);
 $template->assign('block_friends', $friend_html);
@@ -45,7 +45,7 @@ $template->assign('block_friends', $friend_html);
 $content = $template->fetch('default/chat/video.tpl');
 
 $templateHeader = Display::returnFontAswesomeIcon('video-camera', true, 'lg')
-    . $room['room_name'];
+    . $chatVideo->getRoomName();
 
 $template->assign('header', $templateHeader);
 $template->assign('content', $content);

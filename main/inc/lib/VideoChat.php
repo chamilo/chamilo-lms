@@ -90,22 +90,4 @@ class VideoChat
         return false;
     }
 
-    /**
-     * Get the video chat info by its room name
-     * @param string $name The video chat name
-     *
-     * @return array The video chat info. Otherwise return false
-     */
-    public static function getChatRoomByName($name)
-    {
-        return Database::select(
-            '*',
-            Database::get_main_table(TABLE_MAIN_CHAT_VIDEO),
-            [
-                'where' => ['room_name = ?' => $name]
-            ],
-            'first'
-        );
-    }
-
 }

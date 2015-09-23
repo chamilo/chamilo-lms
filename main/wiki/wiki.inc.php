@@ -961,12 +961,20 @@ class Wiki
         ) {
             echo '<div class="actions">';
 
-            if (api_is_allowed_in_course() ||
-                GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
-            ) {
-                // menu edit page
-                echo '<a href="index.php?'.api_get_cidreq().'&action=edit&title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('edit').'>'.
-                    Display::return_icon('edit.png', get_lang('EditThisPage'), '', ICON_SIZE_MEDIUM).'</a>';
+            // menu edit page
+            $editLink = '<a href="index.php?'.api_get_cidreq().'&action=edit&title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('edit').'>'.
+                Display::return_icon('edit.png', get_lang('EditThisPage'), '', ICON_SIZE_MEDIUM).'</a>';
+
+            if (api_is_allowed_to_edit(false, true)) {
+                echo $editLink;
+            } else {
+                if ((api_is_allowed_in_course() ||
+                    GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())) && $page != 'index'
+                ) {
+                    echo $editLink;
+                } else {
+                    echo '&nbsp;';
+                }
             }
 
             echo '<div class="pull-right">';

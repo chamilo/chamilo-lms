@@ -1,14 +1,18 @@
 <div id="chat-video-panel">
     <div class="row">
         <div class="col-md-4">
-            <div id="chat-local-video"></div>
-            <div class="username-local">
-                {% if user_local.user_is_online_in_chat == 1 %}
-                    <img src="{{ 'online.png' | icon(16) }}" />
-                {% else %}
-                <img src="{{ 'offline.png' | icon(16) }}" />
-                {% endif %}
-                {{ user_local.complete_name }} ( {{ user_local.username }} )
+            <div class="thumbnail">
+                <div id="chat-local-video"></div>
+                <div class="caption">
+                    <p class="text-muted text-center">
+                        {% if user_local.user_is_online_in_chat == 1 %}
+                            <img src="{{ 'online.png' | icon(16) }}" />
+                        {% else %}
+                            <img src="{{ 'offline.png' | icon(16) }}" />
+                        {% endif %}
+                        {{ user_local.complete_name }} ( {{ user_local.username }} )
+                    </p>
+                </div>
             </div>
 
             <div class="chat-friends">
@@ -31,8 +35,15 @@
             </div>
         </div>
         <div class="col-md-8">
-            <div id="chat-remote-video"></div>
-            <div class="chat-user-remote">{{ "ChatWithXUser"|get_lang|format(chat_user.complete_name) }}</div>
+            <div class="thumbnail video-chat-user">
+                <div id="chat-remote-video"></div>
+                <div class="caption">
+                    <p class="text-muted text-center">{{ "ChatWithXUser"|get_lang|format(chat_user.complete_name) }}</p>
+                </div>
+            </div>
+            <div class="alert alert-warning">
+                <i class="fa fa-warning"></i> <strong>{{ 'Warning'|get_lang }}</strong> {{ 'AvoidChangingPageAsThisWillCutConference'|get_lang }}
+            </div>
         </div>
     </div>
 </div>

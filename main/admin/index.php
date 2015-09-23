@@ -481,7 +481,6 @@ if (api_is_platform_admin()) {
 
         if (!empty($extraData['block'])) {
             if (!is_dir($adminExtraContentDir)) {
-                var_dump($adminExtraContentDir);
                 mkdir(
                     $adminExtraContentDir,
                     api_get_permissions_for_new_directories(),

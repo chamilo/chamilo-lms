@@ -709,37 +709,89 @@ class SocialManager extends UserManager
         $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
 
+        $filesIcon = Display::return_icon('sn-files.png', get_lang('MyFiles'), '', ICON_SIZE_SMALL);
+        $friendsIcon = Display::return_icon('sn-friends.png', get_lang('Friends'), '', ICON_SIZE_SMALL);
+        $groupsIcon = Display::return_icon('sn-groups.png', get_lang('SocialGroups'), '', ICON_SIZE_SMALL);
+        $homeIcon = Display::return_icon('sn-home.png', get_lang('Home'), '', ICON_SIZE_SMALL);
+        $invitationsIcon = Display::return_icon('sn-invitations.png', get_lang('Invitations'), '', ICON_SIZE_SMALL);
+        $messagesIcon = Display::return_icon('sn-message.png', get_lang('Messages'), '', ICON_SIZE_SMALL);
+        $sharedProfileIcon = Display::return_icon('sn-profile.png', get_lang('ViewMySharedProfile'));
+        $searchIcon = Display::return_icon('sn-search.png', get_lang('Search'), '', ICON_SIZE_SMALL);
+
         $html = '';
         $active = null;
-        if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends'))) {
+        if (!in_array(
+            $show,
+            array('shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends')
+        )) {
 
             $html .= '<div class="panel panel-default sidebar-nav">';
             $html .= '<div class="panel-body">';
             $html .= '<ul class="nav nav-pills nav-stacked">';
             $active = $show == 'home' ? 'active' : null;
-            $html .= '<li class="home-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.Display::return_icon('social-home.png',get_lang('Home'),'',ICON_SIZE_SMALL).' '.get_lang('Home').'</a></li>';
+            $html .= '
+                <li class="home-icon ' . $active . '">
+                    <a href="' . api_get_path(WEB_CODE_PATH) . 'social/home.php">
+                        ' . $homeIcon . ' ' . get_lang('Home') . '
+                    </a>
+                </li>';
             $active = $show == 'messages' ? 'active' : null;
-            $html .= '<li class="messages-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social">'.Display::return_icon('social-message.png',get_lang('Messages'),'',ICON_SIZE_SMALL).' '.get_lang('Messages').$count_unread_message.'</a></li>';
+            $html .= '
+                <li class="messages-icon ' . $active . '">
+                    <a href="' . api_get_path(WEB_CODE_PATH) . 'messages/inbox.php?f=social">
+                        ' . $messagesIcon . ' ' . get_lang('Messages') . $count_unread_message . '
+                    </a>
+                </li>';
 
             //Invitations
             $active = $show == 'invitations' ? 'active' : null;
-            $html .= '<li class="invitations-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.Display::return_icon('social-invitations.png',get_lang('Invitations'),'',ICON_SIZE_SMALL).' '.get_lang('Invitations').$total_invitations.'</a></li>';
+            $html .= '
+                <li class="invitations-icon ' . $active . '">
+                    <a href="' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php">
+                        ' . $invitationsIcon . ' ' . get_lang('Invitations') . $total_invitations . '
+                    </a>
+                </li>';
 
             //Shared profile and groups
             $active = $show == 'shared_profile' ? 'active' : null;
-            $html .= '<li class="shared-profile-icon'.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">'.Display::return_icon('social-profile.png',get_lang('ViewMySharedProfile'),'',ICON_SIZE_SMALL).' '.get_lang('ViewMySharedProfile').'</a></li>';
+            $html .= '
+                <li class="shared-profile-icon' . $active . '">
+                    <a href="' . api_get_path(WEB_CODE_PATH) . 'social/profile.php">
+                        ' . $sharedProfileIcon . ' ' . get_lang('ViewMySharedProfile') . '
+                    </a>
+                </li>';
             $active = $show == 'friends' ? 'active' : null;
-            $html .= '<li class="friends-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">'.Display::return_icon('social-friends.png',get_lang('Friends'),'',ICON_SIZE_SMALL).' '.get_lang('Friends').'</a></li>';
+            $html .= '
+                <li class="friends-icon ' . $active . '">
+                    <a href="' . api_get_path(WEB_CODE_PATH) . 'social/friends.php">
+                        ' . $friendsIcon . ' ' . get_lang('Friends') . '
+                    </a>
+                </li>';
             $active = $show == 'browse_groups' ? 'active' : null;
-            $html .= '<li class="browse-groups-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php">'.Display::return_icon('social-groups.png',get_lang('SocialGroups'),'',ICON_SIZE_SMALL).' '.get_lang('SocialGroups').'</a></li>';
+            $html .= '
+                <li class="browse-groups-icon ' . $active . '">
+                    <a href="' . api_get_path(WEB_CODE_PATH) . 'social/groups.php">
+                        ' . $groupsIcon . ' ' . get_lang('SocialGroups') . '
+                    </a>
+                </li>';
 
             //Search users
             $active = $show == 'search' ? 'active' : null;
-            $html .= '<li class="search-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">'.Display::return_icon('social-search.png',get_lang('Search'),'',ICON_SIZE_SMALL).' '.get_lang('Search').'</a></li>';
+            $html .= '
+                <li class="search-icon ' . $active . '">
+                    <a href="' . api_get_path(WEB_CODE_PATH) . 'social/search.php">
+                        ' . $searchIcon . ' ' . get_lang('Search') . '
+                    </a>
+                </li>';
 
             //My files
             $active = $show == 'myfiles' ? 'active' : null;
-            $html .= '<li class="myfiles-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">'.Display::return_icon('social-files.png',get_lang('MyFiles'),'',ICON_SIZE_SMALL).' '.get_lang('MyFiles').'</span></a></li>';
+            $html .= '
+                <li class="myfiles-icon ' . $active . '">
+                    <a href="' . api_get_path(WEB_CODE_PATH) . 'social/myfiles.php">
+                        ' . $filesIcon . ' ' . get_lang('MyFiles') . '
+                    </a>
+                </li>';
             $html .='</ul></div></div>';
         }
 
@@ -758,18 +810,55 @@ class SocialManager extends UserManager
 
             // My own profile
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
-                $html .= '<li class="home-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.Display::return_icon('social-home.png',get_lang('Home'),'',ICON_SIZE_SMALL).' '.get_lang('Home').'</a></li>
-                          <li class="messages-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social">'.Display::return_icon('social-message.png',get_lang('Messages'),'',ICON_SIZE_SMALL).' '.get_lang('Messages').$count_unread_message.'</a></li>';
+                $html .= '
+                    <li class="home-icon ' . $active . '">
+                        <a href="' . api_get_path(WEB_CODE_PATH) . 'social/home.php">
+                            ' . $homeIcon . ' ' . get_lang('Home') . '
+                        </a>
+                    </li>
+                    <li class="messages-icon ' . $active . '">
+                        <a href="' . api_get_path(WEB_CODE_PATH) . 'messages/inbox.php?f=social">
+                            ' . $messagesIcon . ' ' . get_lang('Messages') . $count_unread_message . '
+                        </a>
+                    </li>';
                 $active = $show == 'invitations' ? 'active' : null;
-                $html .= '<li class="invitations-icon'.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.Display::return_icon('social-invitations.png',get_lang('Invitations'),'',ICON_SIZE_SMALL).' '.get_lang('Invitations').$total_invitations.'</a></li>';
+                $html .= '
+                    <li class="invitations-icon' . $active . '">
+                        <a href="' . api_get_path(WEB_CODE_PATH) . 'social/invitations.php">
+                            ' . $invitationsIcon . ' ' . get_lang('Invitations') . $total_invitations . '
+                        </a>
+                    </li>';
 
-                $html .= '<li class="shared-profile-icon active"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">'.Display::return_icon('social-profile.png',get_lang('ViewMySharedProfile'),'',ICON_SIZE_SMALL).' '.get_lang('ViewMySharedProfile').'</a></li>
-                          <li class="friends-icon"><a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">'.Display::return_icon('social-friends.png',get_lang('Friends'),'',ICON_SIZE_SMALL).' '.get_lang('Friends').'</a></li>
-                          <li class="browse-groups-icon"><a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php">'.Display::return_icon('social-groups.png',get_lang('SocialGroups'),'',ICON_SIZE_SMALL).' '.get_lang('SocialGroups').'</a></li>';
+                $html .= '
+                    <li class="shared-profile-icon active">
+                        <a href="' . api_get_path(WEB_CODE_PATH) . 'social/profile.php">
+                            ' . $sharedProfileIcon . ' ' . get_lang('ViewMySharedProfile') . '
+                        </a>
+                    </li>
+                    <li class="friends-icon">
+                        <a href="' . api_get_path(WEB_CODE_PATH) . 'social/friends.php">
+                            ' . $friendsIcon . ' ' . get_lang('Friends') . '
+                        </a>
+                    </li>
+                    <li class="browse-groups-icon">
+                        <a href="' . api_get_path(WEB_CODE_PATH) . 'social/groups.php">
+                            ' . $groupsIcon . ' ' . get_lang('SocialGroups') . '
+                        </a>
+                    </li>';
                 $active = $show == 'search' ? 'active' : null;
-                $html .= '<li class="search-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">'.Display::return_icon('social-search.png',get_lang('Search'),'',ICON_SIZE_SMALL).' '.get_lang('Search').'</a></li>';
+                $html .= '
+                    <li class="search-icon ' . $active . '">
+                        <a href="' . api_get_path(WEB_CODE_PATH) . 'social/search.php">
+                            ' . $searchIcon . ' ' . get_lang('Search') . '
+                        </a>
+                    </li>';
                 $active = $show == 'myfiles' ? 'active' : null;
-                $html .= '<li class="myfiles-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">'.Display::return_icon('social-files.png',get_lang('MyFiles'),'',ICON_SIZE_SMALL).' '.get_lang('MyFiles').'</a></li>';
+                $html .= '
+                    <li class="myfiles-icon ' . $active . '">
+                     <a href="' . api_get_path(WEB_CODE_PATH) . 'social/myfiles.php">
+                            ' . $filesIcon . ' ' . get_lang('MyFiles') . '
+                        </a>
+                    </li>';
             }
 
             // My friend profile.
@@ -930,7 +1019,6 @@ class SocialManager extends UserManager
         }
         $column_size = '12';
         $add_row = false;
-        //var_dump(api_set_anonymous());
         if (api_is_anonymous()) {
             $add_row = true;
         }
@@ -969,10 +1057,8 @@ class SocialManager extends UserManager
                 } else {
                     $url = '?id='.$uid.$course_url;
                 }
-
             } else {
                 $url = null;
-
             }
             $name = '<a href="'.$url.'">'.$firstname.'<br>'.$lastname.'</a>';
 
@@ -999,6 +1085,7 @@ class SocialManager extends UserManager
         if ($wrap && $add_row) {
             $html .= '</div>';
         }
+
         return $html;
     }
 
@@ -1163,7 +1250,6 @@ class SocialManager extends UserManager
 
         //Just in case we replace the and \n and \n\r while saving in the DB
         $messageContent = str_replace(array("\n", "\n\r"), '<br />', $messageContent);
-        $cleanMessageContent = Database::escape_string($messageContent);
 
         $attributes = array(
             'user_sender_id' => $userId,
@@ -1171,7 +1257,7 @@ class SocialManager extends UserManager
             'msg_status' => $messageStatus,
             'send_date' => api_get_utc_datetime(),
             'title' => '',
-            'content' => $cleanMessageContent,
+            'content' => $messageContent,
             'parent_id' => $messageId
         );
 
@@ -1462,7 +1548,7 @@ class SocialManager extends UserManager
         $html .= '<div class="img-post">';
         $html .= $wallImage;
         $html .= '</div>';
-        $html .= '<p>'. Security::remove_XSS(self::readContentWithOpenGraph($message['content'])).'</p>';
+        $html .= '<p>'. Security::remove_XSS($message['content']).'</p>';
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost
 
@@ -1479,19 +1565,14 @@ class SocialManager extends UserManager
         // search link in first line
         $regExUrl = "/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
         $newText = '';
-        $count = 0;
-        if(preg_match($regExUrl, $text, $url)) {
+        if (preg_match($regExUrl, $text, $url)) {
             // make the urls hyper links
             $newText .= preg_replace($regExUrl, "<a target=\"_blank\" href=" . $url[0] . ">".$url[0]."</a> ", $text);
-            if ($count == 0) {
-                // Comment this line to disable OpenGraph
-                //$newText .= self::getHtmlByLink($url[0]);
-            }
-            $count++;
+            // Comment this line to disable OpenGraph
+            $newText .= self::getHtmlByLink($url[0]);
         } else {
             $newText .= $text;
         }
-
         return $newText;
     }
 
@@ -1503,14 +1584,49 @@ class SocialManager extends UserManager
     public static function getHtmlByLink($link)
     {
         $graph = OpenGraph::fetch($link);
+        $url = $graph->url;
+        $image = $graph->image;
+        $domain = empty($url) ? parse_url($link) : parse_url($url);
+        $domain = $domain['scheme'].'://'.$domain['host'];
+        // Trick to verify if the Image Url Exist because of some bad metatag dev
+        if (self::verifyUrl($image) == false){
+            if (!($image[0] == '/')){
+                $domain = $domain . '/';
+            }
+            $image = $domain . $image;
+        }
         $title = $graph->title;
-        $html = '<div>';
+        $html = '<div class="thumbnail">';
         $html .= '<a target="_blank" href="'.$link.'"><h3>'.$title.'</h3>';
-        $html .= empty($graph->image) ? '' : '<img alt="" src="'.$graph->image.'" height="160" ></a>';
+        $html .= empty($image) ? '' : '<img alt="" src="'.$image.'" height="160" ></a>';
         $html .= empty($graph->description) ? '' : '<div>'.$graph->description.'</div>';
         $html .= "</div>";
-
         return $html;
+    }
+
+    /**
+     * verify if Url Exist - Using Curl
+     * @param $uri url
+     *
+     * @return boolean
+     */
+    public static function verifyUrl($uri)
+    {
+        $curl = curl_init($uri);
+        curl_setopt($curl, CURLOPT_FAILONERROR, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 15);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        if (!empty($response)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -1754,7 +1870,15 @@ class SocialManager extends UserManager
             array('enctype' => 'multipart/form-data')
         );
 
-        $form->addTextarea('social_wall_new_msg_main', null, array('placeholder' => get_lang('SocialWallWhatAreYouThinkingAbout')));
+        $form->addTextarea(
+            'social_wall_new_msg_main',
+            null,
+            [
+                'placeholder' => get_lang('SocialWallWhatAreYouThinkingAbout'),
+                'style' => 'width : 100%'
+            ]
+        );
+        $form->addHidden('url_content', '');
         $form->addButtonSend(get_lang('Post'));
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 

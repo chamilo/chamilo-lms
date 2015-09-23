@@ -384,34 +384,18 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
             (online === '1' || online === 1)
         ) {
 		$('<a>')
-			.addClass('btn btn-xs')
+			.addClass('btn btn-xs ajax')
 			.attr({
-				href: '#'
+				href: ajax_url + '?action=create_room&to=' + user_id
 			})
+                        .data({
+                            title: '<i class="fa fa-video-camera"></i>',
+                            size: 'sm'
+                        })
+                        .on('click', function () {
+                            $(this).data('title', $('.chatboxtitle').text());
+                        })
 			.html('<i class="fa fa-video-camera"></i>')
-			.on('click', function(e) {
-				e.preventDefault();
-
-				var createForm = $.get(
-					ajax_url,
-					{
-						action: 'start_video',
-						to: user_id
-					}
-				);
-
-				$.when(createForm).done(function(response) {
-					$('#global-modal')
-						.find('.modal-dialog')
-						.removeClass('modal-lg');
-
-					$('#global-modal')
-						.find('.modal-body')
-						.html(response);
-
-					$('#global-modal').modal('show');
-				});
-			})
 			.appendTo(chatboxoptions);
 	}
 

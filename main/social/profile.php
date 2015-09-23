@@ -36,10 +36,14 @@ $social_session_block = null;
 
 if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
     $messageId = 0;
+    $messageContent = $_POST['social_wall_new_msg_main'];
+    if (!empty($_POST['url_content'])) {
+        $messageContent = $_POST['social_wall_new_msg_main'].'<br><br>'.$_POST['url_content'];
+    }
     $idMessage = SocialManager::sendWallMessage(
         api_get_user_id(),
         $friendId,
-        $_POST['social_wall_new_msg_main'],
+        $messageContent,
         $messageId,
         MESSAGE_STATUS_WALL_POST
     );
@@ -61,10 +65,12 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
 
 } else if (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
     $messageId = intval($_POST['messageId']);
+    $messageContent = $_POST['social_wall_new_msg'];
+
     $res = SocialManager::sendWallMessage(
         api_get_user_id(),
         $friendId,
-        $_POST['social_wall_new_msg'],
+        $messageContent,
         $messageId,
         MESSAGE_STATUS_WALL
     );
@@ -284,6 +290,28 @@ $socialAutoExtendLink = Display::url(
         'class' => 'nextPage next',
     )
 );
+
+// Added a Jquery Function to return the Preview of OpenGraph URL Content
+$htmlHeadXtra[] = '<script>
+$(document).ready(function() {
+    $("label").remove();
+    $("[name=\'social_wall_new_msg_main\']").on("paste", function(e) {
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            beforeSend: function() {
+                $(".url_preview").html("<i class=\'fa fa-spinner fa-pulse fa-1x\'></i>");
+            },
+            type: "POST",
+            url: "'. api_get_path(WEB_AJAX_PATH) .'social.ajax.php?a=readUrlWithOpenGraph",
+            data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
+            success: function(response) {
+                $(".url_preview").html(response);
+                $("[name=\'url_content\']").val(response);
+            }
+        });
+    });
+});
+</script>';
 
 $socialRightInformation = null;
 $social_right_content = null;

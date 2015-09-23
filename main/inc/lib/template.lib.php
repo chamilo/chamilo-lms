@@ -524,7 +524,7 @@ class Template
         foreach ($bowerCSSFiles as $file) {
             $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
         }
-        $css[] = api_get_path(WEB_CSS_PATH) . 'bootstrap-select.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/bootstrap-select/css/bootstrap-select.min.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css';
 
@@ -614,10 +614,14 @@ class Template
     public function set_js_files()
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
+        
+        $isoCode = api_get_language_isocode();
 
         //JS files
         $js_files = array(
             'chosen/chosen.jquery.min.js',
+            'bootstrap-select/js/bootstrap-select.min.js',
+            'bootstrap-select/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js'
         );
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
@@ -640,7 +644,6 @@ class Template
         $js_files[] = 'tag/jquery.fcbkcomplete.js';
 
         $js_file_to_string = null;
-        $isoCode = api_get_language_isocode();
 
         $bowerJsFiles = [
             'modernizr/modernizr.js',
@@ -668,7 +671,6 @@ class Template
         foreach ($bowerJsFiles as $file) {
             $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
         }
-        $js_file_to_string .= '<script type="text/javascript" src="'.  api_get_path(WEB_LIBRARY_PATH) . 'javascript/bootstrap-select.min.js"></script>'."\n";
 
         foreach ($js_files as $file) {
             $js_file_to_string .= api_get_js($file);

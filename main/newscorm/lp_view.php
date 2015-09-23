@@ -70,7 +70,7 @@ if ($debug) {
 
 $_SESSION['oLP']->error = '';
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
-$lp_type = $_SESSION['oLP']->get_type();
+$lpType = $_SESSION['oLP']->get_type();
 
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
@@ -131,7 +131,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></scrip
  */
 if ($debug) {
     error_log(" src: $src ");
-    error_log(" lp_type: $lp_type ");
+    error_log(" lp_type: $lpType ");
 }
 
 $get_toc_list = $_SESSION['oLP']->get_toc();
@@ -144,12 +144,12 @@ foreach ($get_toc_list as $toc) {
 
 if (!isset($src)) {
     $src = null;
-    switch ($lp_type) {
+    switch ($lpType) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
-            $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {
+            $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+            if ($preReqCheck === true) {
                 $src = $_SESSION['oLP']->get_link(
                     'http',
                     $lp_item_id,
@@ -180,8 +180,8 @@ if (!isset($src)) {
             // save old if asset
             $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
-            $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {
+            $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+            if ($preReqCheck === true) {
                 $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
@@ -192,8 +192,8 @@ if (!isset($src)) {
             // aicc
             $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
             $htmlHeadXtra[] = '<script src="' . $_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
-            $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {
+            $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+            if ($preReqCheck === true) {
                 $src = $_SESSION['oLP']->get_link(
                     'http',
                     $lp_item_id,

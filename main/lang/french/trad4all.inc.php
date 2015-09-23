@@ -7498,7 +7498,14 @@ $ShowFullSkillNameOnSkillWheelTitle = "Montrer nom complet sur roue de compéten
 $ShowFullSkillNameOnSkillWheelComment = "Dans la roue des compétences, montrer le titre complet de la compétence même si celle-ci dispose d'un code court (peut rendre la roue moins lisible selon la quantité de compétences)";
 $DBPort = "Port";
 $CreatedBy = "Créé par";
+$DropboxHideGeneralCoachTitle = "Cacher le tuteur général dans partage de documents";
+$DropboxHideGeneralCoachComment = "Cacher le nom du tuteur général de la session lorsque c'est lui qui a envoyé le document dans le partage de documents";
 $UploadMyAssignment = "Envoyer mon travail";
 $Inserted = "Inséré";
 $YourBroswerDoesNotSupportWebRTC = "Votre navigateur ne supporte pas nativement la transmission de vidéo.";
+$OtherTeachers = "Autres enseignants";
+$CourseCategory = "Catégorie de cours";
+$VideoChatBetweenUserXAndUserY = "Appel vidéo entre %s et %s";
+$Enable = "Activer";
+$Disable = "Désactiver";
 ?>

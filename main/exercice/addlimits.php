@@ -1,68 +1,53 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	Adding limits
-*	@package chamilo.exercise
-* 	@author
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
-*/
-/**
- *	including the global file
+ * Adding limits
+ * @package chamilo.exercise
+ * @deprecated ?
  */
 require_once '../inc/global.inc.php';
 
-/*	section (for the tabs) */
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
 $dsp_percent = false;
-$debug=0;
-if($debug>0) {
-	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);
+$debug = 0;
+if ($debug > 0) {
+    echo str_repeat('&nbsp;', 0).'Entered exercise_result.php'."<br />\n";
 }
 // general parameters passed via POST/GET
-if ( empty ( $origin ) )
-{
+if (empty ($origin)) {
     $origin = $_REQUEST['origin'];
 }
-if ( empty ( $learnpath_id ) )
-{
-    $learnpath_id       = $_REQUEST['learnpath_id'];
+if (empty ($learnpath_id)) {
+    $learnpath_id = $_REQUEST['learnpath_id'];
 }
-if ( empty ( $learnpath_item_id ) )
-{
-    $learnpath_item_id  = $_REQUEST['learnpath_item_id'];
+if (empty ($learnpath_item_id)) {
+    $learnpath_item_id = $_REQUEST['learnpath_item_id'];
 }
-if ( empty ( $formSent ) )
-{
-    $formSent= $_REQUEST['formSent'];
+if (empty ($formSent)) {
+    $formSent = $_REQUEST['formSent'];
 }
-if ( empty ( $exerciseResult ) )
-{
+if (empty ($exerciseResult)) {
     $exerciseResult = $_SESSION['exerciseResult'];
 }
-if ( empty ( $questionId ) )
-{
+if (empty ($questionId)) {
     $questionId = $_REQUEST['questionId'];
 }
-if ( empty ( $choice ) ) {
+if (empty ($choice)) {
     $choice = $_REQUEST['choice'];
 }
-if ( empty ( $questionNum ) )
-{
-    $questionNum    = $_REQUEST['questionNum'];
+if (empty ($questionNum)) {
+    $questionNum = $_REQUEST['questionNum'];
 }
-if ( empty ( $nbrQuestions ) )
-{
-    $nbrQuestions   = $_REQUEST['nbrQuestions'];
+if (empty ($nbrQuestions)) {
+    $nbrQuestions = $_REQUEST['nbrQuestions'];
 }
-if ( empty ( $questionList ) )
-{
+if (empty ($questionList)) {
     $questionList = $_SESSION['questionList'];
 }
-if ( empty ( $objExercise ) )
-{
+if (empty ($objExercise)) {
     $objExercise = $_SESSION['objExercise'];
 }
 $exercise_id = intval($_GET['exercise_id']);
@@ -79,7 +64,10 @@ if (!empty($gradebook) && $gradebook=='view') {
 		);
 }
 $nameTools=get_lang('Exercises');
-$interbreadcrumb[]=array("url" => "exercise.php","name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php",
+    "name" => get_lang('Exercises'),
+);
 Display::display_header($nameTools,"Exercises");
 
 if (isset($_POST['ok'])) {
@@ -87,16 +75,14 @@ if (isset($_POST['ok'])) {
 	Display::display_normal_message($message);
 }
 ?>
-  <script type="text/javascript">
-  function selectlimited()
-  {
-  	document.getElementById('limited').checked="checked";
-  }
-   function selectattempts()
-  {
-  	document.getElementById('attemptlimited').checked="checked";
-  }
-  </script>
+<script type="text/javascript">
+    function selectlimited() {
+    document.getElementById('limited').checked="checked";
+    }
+    function selectattempts() {
+    document.getElementById('attemptlimited').checked="checked";
+    }
+</script>
   <h3><?php  echo get_lang('AddLimits'); ?></h3>
 <br>
 <form action="addlimits.php" name="frmlimit" method="post">
@@ -172,4 +158,3 @@ if (isset($_POST['ok'])) {
 		Database::query($query);
 	}
 }
-?>

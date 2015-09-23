@@ -2021,11 +2021,15 @@ function migrate($chamiloVersion, EntityManager $manager)
         if ($debug) {
             echo 'DONE'.$nl;
         }
+        return true;
     } catch (Exception $ex) {
         if ($debug) {
             echo 'ERROR: '.$ex->getMessage().$nl;
+            return false;
         }
     }
+
+    return false;
 }
 
 /**
@@ -2176,6 +2180,9 @@ function fixIds(EntityManager $em)
     }
     $sql = "SELECT * FROM c_item_property";
     $result = $connection->fetchAll($sql);
+    $counter = 0;
+    error_log("Items to process: ".count($result));
+
     foreach ($result as $item) {
         $courseId = $item['c_id'];
         $sessionId = intval($item['session_id']);
@@ -2230,8 +2237,11 @@ function fixIds(EntityManager $em)
                 $newId = $data['iid'];
             }
             $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
+            error_log($sql);
             $connection->executeQuery($sql);
         }
+        error_log("Process item #$counter");
+        $counter++;
     }
 
     if ($debug) {

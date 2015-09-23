@@ -65,7 +65,8 @@ class Draggable extends Question
                         $nb_matches++;
                         $defaults['answer[' . $nb_matches . ']'] = $answer->selectAnswer($i);
                         $defaults['weighting[' . $nb_matches . ']'] = float_format($answer->selectWeighting($i), 1);
-                        $defaults['matches[' . $nb_matches . ']'] = $answer->correct[$i];
+                        $answerInfo = $answer->getAnswerByAutoId($answer->correct[$i]);
+                        $defaults['matches[' . $nb_matches . ']'] = isset($answerInfo['answer']) ? $answerInfo['answer'] : '';
                     } else {
                         $nb_options++;
                         $defaults['option[' . $nb_options . ']'] = $answer->selectAnswer($i);

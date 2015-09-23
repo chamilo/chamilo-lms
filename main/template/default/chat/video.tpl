@@ -5,7 +5,7 @@
         </button>
         <h4>{{ 'Warning'|get_lang }}</h4>
         <p>
-            <i class="fa fa-warning"></i> {{ 'AvoidChangingOfPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}
+            <i class="fa fa-warning"></i> {{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}
         </p>
     </div>
     <div class="row">
@@ -143,7 +143,7 @@
                 startVideoChat();
 
                 window.onbeforeunload = function () {
-                    return "{{ 'AvoidChangingOfPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}";
+                    return "{{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}";
                 };
             }
         };

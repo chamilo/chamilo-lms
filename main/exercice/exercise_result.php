@@ -59,12 +59,18 @@ if (isset($_SESSION['gradebook'])) {
 	$gradebook=	$_SESSION['gradebook'];
 }
 if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
+    $interbreadcrumb[] = array(
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook'),
+    );
 }
 
 $nameTools = get_lang('Exercises');
 
-$interbreadcrumb[]= array("url" => "exercise.php?gradebook=$gradebook","name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php?".api_get_cidreq(),
+    "name" => get_lang('Exercises'),
+);
 
 if ($origin != 'learnpath') {
 	// So we are not in learnpath tool
@@ -78,8 +84,10 @@ if ($origin != 'learnpath') {
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '<div class="actions">';
-	echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
-	echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
+	echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
+	echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+        Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
 	echo '</div>';
 }
 

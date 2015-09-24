@@ -71,6 +71,7 @@ class Answer
         $objExercise = new Exercise($this->course_id);
         $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
         $objExercise->read($exerciseId);
+
         if ($objExercise->random_answers == '1') {
             $this->readOrderedBy('rand()', '');// randomize answers
         } else {
@@ -198,8 +199,8 @@ class Answer
 			$order = 'ASC';
 		}
 
-		$TBL_ANSWER   = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		$TBL_QUIZ     = Database::get_course_table(TABLE_QUIZ_QUESTION);
+		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+		$TBL_QUIZ = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$questionId = intval($this->questionId);
 
 		$sql = "SELECT type FROM $TBL_QUIZ
@@ -207,8 +208,20 @@ class Answer
 		$result_question = Database::query($sql);
 		$question_type = Database::fetch_array($result_question);
 
-		$sql = "SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto
-                FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'
+		$sql = "SELECT
+		            answer,
+		            correct,
+		            comment,
+		            ponderation,
+		            position,
+		            hotspot_coordinates,
+		            hotspot_type,
+		            destination,
+		            id_auto
+                FROM $TBL_ANSWER
+                WHERE
+                    c_id = {$this->course_id} AND
+                    question_id='".$questionId."'
                 ORDER BY $field $order";
 		$result=Database::query($sql);
 
@@ -312,7 +325,7 @@ class Answer
 		$rs = Database::query($sql);
 
 		if (Database::num_rows($rs) > 0) {
-			$row = Database::fetch_array($rs);
+			$row = Database::fetch_array($rs, 'ASSOC');
 
 			return $row;
 		}

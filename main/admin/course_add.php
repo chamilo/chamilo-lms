@@ -70,7 +70,10 @@ $form->addElement(
     'course_teachers',
     get_lang('CourseTeachers'),
     $teachers,
-    ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" '
+    [
+        'id' => 'course_teachers',
+        'multiple' => 'multiple'
+    ]
 );
 $form->applyFilter('course_teachers', 'html_filter');
 

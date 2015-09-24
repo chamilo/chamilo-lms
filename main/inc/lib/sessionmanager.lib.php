@@ -6483,7 +6483,6 @@ class SessionManager
                 [api_get_user_id() => $userInfo['complete_name']],
                 array(
                     'id' => 'coach_username',
-                    'class' => 'chzn-select',
                     'style' => 'width:370px;',
                 )
             );
@@ -6556,9 +6555,7 @@ class SessionManager
         $form->addElement('html','<div id="advanced_params_options" style="display:none">');
 
         $form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
-            'id' => 'session_category',
-            'class' => 'chzn-select',
-            'style' => 'width:370px;',
+            'id' => 'session_category'
         ));
 
         $form->addHtmlEditor(

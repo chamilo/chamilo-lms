@@ -682,8 +682,7 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
         $options,
         array(
             'multiple' => 'multiple',
-            'size' => '10',
-            'class' => 'chzn-select',
+            'size' => '10'
         )
     );
     $form->addButtonUpload(get_lang('Upload'), 'submitWork');

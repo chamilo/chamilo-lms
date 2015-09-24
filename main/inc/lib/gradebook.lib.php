@@ -184,8 +184,6 @@ class Gradebook extends Model
             get_lang('Skills'),
             $clean_skill_list,
             array(
-                'width' => '450px',
-                'class' => 'chzn-select',
                 'multiple' => 'multiple'
             )
         );

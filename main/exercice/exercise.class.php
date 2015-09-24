@@ -1187,7 +1187,7 @@ class Exercise
             $option = range(0,$max);
             $option[0] = get_lang('No');
             $option[-1] = get_lang('AllQuestionsShort');
-            $form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions','class'=>'chzn-select'));
+            $form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions'));
 
             // Random answers
             $radios_random_answers = array();
@@ -1219,7 +1219,7 @@ class Exercise
                 'exerciseAttempts',
                 get_lang('ExerciseAttempts'),
                 $attempt_option,
-                array('id' => 'exerciseAttempts', 'class' => 'chzn-select')
+                ['id' => 'exerciseAttempts']
             );
 
             // Exercise time limit

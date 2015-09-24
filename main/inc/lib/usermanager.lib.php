@@ -4526,7 +4526,7 @@ class UserManager
                         'extra_'.$field_details[1],
                         $field_details[3],
                         $options,
-                        array('class' => 'chzn-select', 'id' => 'extra_'.$field_details[1])
+                        array('id' => 'extra_' . $field_details[1])
                     );
 
                     if (!$admin_permissions) {

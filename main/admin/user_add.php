@@ -224,8 +224,7 @@ $form->addElement(
     $status,
     array(
         'id' => 'status_select',
-        'class' => 'chzn-select',
-        'onchange' => 'javascript: display_drh_list();',
+        'onchange' => 'javascript: display_drh_list();'
     )
 );
 

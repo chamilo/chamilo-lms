@@ -2143,11 +2143,6 @@ div.admin_section h4 {
     overflow:hidden;
 }
 
-/* chosen javascript checkbox select width fix */
-.chzn-select {
-    /*min-width: 173px; */
-}
-
 #lp_item_list {
     margin:0;
     padding: 0;

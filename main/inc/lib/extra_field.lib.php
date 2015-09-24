@@ -1700,7 +1700,7 @@ EOF;
             'field_type',
             get_lang('FieldType'),
             $types,
-            array('id' => 'field_type', 'class' => 'chzn-select', 'data-placeholder' => get_lang('Select'))
+            array('id' => 'field_type')
         );
         $form->addElement('label', get_lang('Example'), '<div id="example">-</div>');
         $form->addElement('text', 'variable', get_lang('FieldLabel'), array('class' => 'span5'));

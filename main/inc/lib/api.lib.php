@@ -4147,7 +4147,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
  * @return string
  */
 
-function api_get_languages_combo($name = 'language', $chozen=true) {
+function api_get_languages_combo($name = 'language') {
     $ret = '';
     $platformLanguage = api_get_setting('platformLanguage');
 
@@ -4168,7 +4168,7 @@ function api_get_languages_combo($name = 'language', $chozen=true) {
     $languages  = $language_list['name'];
     $folder     = $language_list['folder'];
 
-    $ret .= '<select name="'.$name.'" id="language_chosen" '.($chozen?'class="chzn-select"':'').' >';
+    $ret .= '<select name="' . $name . '" id="language_chosen">';
     foreach ($languages as $key => $value) {
         if ($folder[$key] == $default) {
             $selected = ' selected="selected"';

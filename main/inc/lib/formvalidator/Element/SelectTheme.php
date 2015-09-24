@@ -10,10 +10,6 @@ class SelectTheme extends HTML_QuickForm_select
 	 * Class constructor
 	 */
 	function SelectTheme($elementName=null, $elementLabel=null, $options=null, $attributes=null) {
-	    if (!isset($attributes['class'])) {
-	        //todo this was comment due a bug in infocours.php with jquery-ui
-            //$attributes['class'] = 'chzn-select';
-        }
 		parent::__construct($elementName, $elementLabel, $options, $attributes);
 		// Get all languages
 		$themes = api_get_themes();

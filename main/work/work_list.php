@@ -54,7 +54,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
     
     $actionsRight = Display::toolbarButton(get_lang('UploadMyAssignment'), $url, 'upload', 'success');
 }
-echo Display::toolbarAction('toolbar-work', array(0 => $actionsLeft, 1 => $actionsRight));
+echo Display::toolbarAction('toolbar-work', array(0 => $actionsLeft . $actionsRight));
 
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);

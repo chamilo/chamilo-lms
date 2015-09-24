@@ -25,36 +25,76 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[]=array('url' => 'promotions.php','name' => get_lang('Promotions'));
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+    $interbreadcrumb[] = array(
+        'url' => 'promotions.php',
+        'name' => get_lang('Promotions'),
+    );
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'promotions.php','name' => get_lang('Promotions'));
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+    $interbreadcrumb[] = array(
+        'url' => 'promotions.php',
+        'name' => get_lang('Promotions'),
+    );
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Promotions'));
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Promotions'));
 }
 
 // The header.
-Display::display_header($tool_name);
+Display::display_header('');
 
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $tool = 'Add';
-    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Promotion'));
+    $interbreadcrumb[] = array(
+        'url' => api_get_self(),
+        'name' => get_lang('Promotion'),
+    );
 }
 if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     $tool = 'Modify';
-    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Promotion'));
+    $interbreadcrumb[] = array(
+        'url' => api_get_self(),
+        'name' => get_lang('Promotion'),
+    );
 }
 
-$url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_promotions';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_promotions';
 //The order is important you need to check the model.ajax.php the $column variable
-$columns        = array(get_lang('Name'),get_lang('Career'),get_lang('Description'),get_lang('Actions'));
-$column_model   = array(
-    array('name'=>'name',           'index'=>'name',        'width'=>'180',   'align'=>'left'),
-    array('name'=>'career',         'index'=>'career',      'width'=>'100',  'align'=>'left'),
-    array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
-    array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false'),
+$columns = array(
+    get_lang('Name'),
+    get_lang('Career'),
+    get_lang('Description'),
+    get_lang('Actions'),
+);
+$column_model = array(
+    array(
+        'name' => 'name',
+        'index' => 'name',
+        'width' => '180',
+        'align' => 'left',
+    ),
+    array(
+        'name' => 'career',
+        'index' => 'career',
+        'width' => '100',
+        'align' => 'left',
+    ),
+    array(
+        'name' => 'description',
+        'index' => 'description',
+        'width' => '500',
+        'align' => 'left',
+        'sortable' => 'false',
+    ),
+    array(
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '100',
+        'align' => 'left',
+        'formatter' => 'action_formatter',
+        'sortable' => 'false',
+    ),
 );
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['editurl'] = $url; //use the width of the parent
@@ -65,15 +105,15 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'">'.Display::return_icon('session_to_promotion.png',get_lang('SubscribeSessionsToPromotions'),'',ICON_SIZE_SMALL).'</a>'.
     '&nbsp;<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a> \'; 
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a> \';
 }';
 
 ?>
 <script>
 $(function() {
-    <?php
-         echo Display::grid_js('promotions',  $url,$columns,$column_model,$extra_params,array(), $action_links, true);
-    ?>
+<?php
+     echo Display::grid_js('promotions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+?>
 });
 </script>
 <?php
@@ -118,7 +158,7 @@ switch ($action) {
         }
         break;
     case 'edit':
-        //Editing 
+        //Editing
         $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $promotion->return_form($url, 'edit');
 
@@ -127,15 +167,23 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();
                 $res    = $promotion->update($values);
-                $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);  
+                $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);
                 if ($res) {
                     Display::display_confirmation_message(get_lang('PromotionUpdated'), $values['name']);
                 }
-            }            
+            }
             $promotion->display();
         } else {
             echo '<div class="actions">';
-            echo Display::url(Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM), api_get_self());
+            echo Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('Back'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                api_get_self()
+            );
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
@@ -159,7 +207,11 @@ switch ($action) {
         if ($check) {
             $res = $promotion->copy($_GET['id'], null, true);
             if ($res) {
-                Display::display_confirmation_message(get_lang('ItemCopied').' - '.get_lang('ExerciseAndLPsAreInvisibleInTheNewCourse'));
+                Display::display_confirmation_message(
+                    get_lang('ItemCopied').' - '.get_lang(
+                        'ExerciseAndLPsAreInvisibleInTheNewCourse'
+                    )
+                );
             }
         }
         $promotion->display();

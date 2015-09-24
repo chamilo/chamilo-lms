@@ -16,6 +16,7 @@ class BuyCoursesPlugin extends Plugin
     const TABLE_PAYPAL = 'plugin_buycourses_paypal_account';
     const TABLE_CURRENCY = 'plugin_buycourses_currency';
     const TABLE_ITEM = 'plugin_buycourses_item';
+    const TABLE_ITEM_BENEFICIARY = 'plugin_buycourses_item_rel_beneficiary';
     const TABLE_SALE = 'plugin_buycourses_sale';
     const TABLE_TRANSFER = 'plugin_buycourses_transfer';
     const PRODUCT_TYPE_COURSE = 1;
@@ -75,7 +76,8 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_TRANSFER,
             self::TABLE_ITEM,
             self::TABLE_SALE,
-            self::TABLE_CURRENCY
+            self::TABLE_CURRENCY,
+            self::TABLE_ITEM_BENEFICIARY
         );
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
@@ -285,26 +287,7 @@ class BuyCoursesPlugin extends Plugin
         $currency = $this->getSelectedCurrency();
 
         foreach ($courses as $course) {
-            $courseItem = [
-                'course_id' => $course->getId(),
-                'course_visual_code' => $course->getVisualCode(),
-                'course_code' => $course->getCode(),
-                'course_title' => $course->getTitle(),
-                'course_visibility' => $course->getVisibility(),
-                'visible' => false,
-                'currency' =>  empty($currency) ? null : $currency['iso_code'],
-                'price' => 0.00
-            ];
-
-            $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
-
-            if ($item !== false) {
-                $courseItem['visible'] = true;
-                $courseItem['currency'] = $item['iso_code'];
-                $courseItem['price'] = $item['price'];
-            }
-
-            $configurationCourses[] = $courseItem;
+            $configurationCourses[] = $this->getCourseForConfiguration($course, $currency);
         }
 
         return $configurationCourses;
@@ -316,9 +299,6 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getSessionsForConfiguration()
     {
-        $buyItemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
-        $buyCurrencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
-
         $auth = new Auth();
         $sessions = $auth->browseSessions();
 
@@ -326,55 +306,8 @@ class BuyCoursesPlugin extends Plugin
 
         $items = [];
 
-        $fakeItemFrom = "
-            $buyItemTable i
-            INNER JOIN $buyCurrencyTable c
-                ON i.currency_id = c.id
-        ";
-
         foreach ($sessions as $session) {
-            $sessionItem = [
-                'session_id' => $session->getId(),
-                'session_name' => $session->getName(),
-                'session_visibility' => $session->getVisibility(),
-                'session_display_start_date' => null,
-                'session_display_end_date' => null,
-                'visible' => false,
-                'currency' =>  empty($currency) ? null : $currency['iso_code'],
-                'price' => 0.00
-            ];
-
-            if (!empty($session->getDisplayStartDate())) {
-                $sessionItem['session_display_start_date'] = api_format_date(
-                    $session->getDisplayStartDate()->format('Y-m-d h:i:s')
-                );
-            }
-
-            if (!empty($session->getDisplayEndDate())) {
-                $sessionItem['session_display_end_date'] = api_format_date(
-                    $session->getDisplayEndDate()->format('Y-m-d h:i:s')
-                );
-            }
-
-            $item = Database::select(
-                ['i.*', 'c.iso_code'],
-                $fakeItemFrom,
-                [
-                    'where' => [
-                        'i.product_id = ? AND ' => $session->getId(),
-                        'i.product_type = ?' => self::PRODUCT_TYPE_SESSION
-                    ]
-                ],
-                'first'
-            );
-
-            if ($item !== false) {
-                $sessionItem['visible'] = true;
-                $sessionItem['currency'] = $item['iso_code'];
-                $sessionItem['price'] = $item['price'];
-            }
-
-            $items[] = $sessionItem;
+            $items[] = $this->getSessionForConfiguration($session, $currency);
         }
 
         return $items;
@@ -1155,6 +1088,228 @@ class BuyCoursesPlugin extends Plugin
                 'order' => 'id DESC'
             ]
         );
+    }
+
+    /**
+     * Convert the course info to array with necessary course data for save item
+     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @param array $defaultCurrency Optional. Currency data
+     * @return array
+     */
+    public function getCourseForConfiguration(\Chamilo\CoreBundle\Entity\Course $course, $defaultCurrency = null)
+    {
+        $courseItem = [
+            'item_id' => null,
+            'course_id' => $course->getId(),
+            'course_visual_code' => $course->getVisualCode(),
+            'course_code' => $course->getCode(),
+            'course_title' => $course->getTitle(),
+            'course_visibility' => $course->getVisibility(),
+            'visible' => false,
+            'currency' =>  empty($defaultCurrency) ? null : $defaultCurrency['iso_code'],
+            'price' => 0.00
+        ];
+
+        $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
+
+        if ($item !== false) {
+            $courseItem['item_id'] = $item['id'];
+            $courseItem['visible'] = true;
+            $courseItem['currency'] = $item['iso_code'];
+            $courseItem['price'] = $item['price'];
+        }
+
+        return $courseItem;
+    }
+
+    /**
+     * Convert the session info to array with necessary session data for save item
+     * @param Chamilo\CoreBundle\Entity\Session $session The session data
+     * @param array $defaultCurrency Optional. Currency data
+     * @return array
+     */
+    public function getSessionForConfiguration(Chamilo\CoreBundle\Entity\Session $session, $defaultCurrency = null)
+    {
+        $buyItemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+        $buyCurrencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+
+        $fakeItemFrom = "
+            $buyItemTable i
+            INNER JOIN $buyCurrencyTable c ON i.currency_id = c.id
+        ";
+
+        $sessionItem = [
+            'item_id' => null,
+            'session_id' => $session->getId(),
+            'session_name' => $session->getName(),
+            'session_visibility' => $session->getVisibility(),
+            'session_display_start_date' => null,
+            'session_display_end_date' => null,
+            'visible' => false,
+            'currency' =>  empty($defaultCurrency) ? null : $defaultCurrency['iso_code'],
+            'price' => 0.00
+        ];
+
+        if (!empty($session->getDisplayStartDate())) {
+            $sessionItem['session_display_start_date'] = api_format_date(
+                $session->getDisplayStartDate()->format('Y-m-d h:i:s')
+            );
+        }
+
+        if (!empty($session->getDisplayEndDate())) {
+            $sessionItem['session_display_end_date'] = api_format_date(
+                $session->getDisplayEndDate()->format('Y-m-d h:i:s'),
+                DATE_TIME_FORMAT_LONG_24H
+            );
+        }
+
+        $item = Database::select(
+            ['i.*', 'c.iso_code'],
+            $fakeItemFrom,
+            [
+                'where' => [
+                    'i.product_id = ? AND ' => $session->getId(),
+                    'i.product_type = ?' => self::PRODUCT_TYPE_SESSION
+                ]
+            ],
+            'first'
+        );
+
+        if ($item !== false) {
+            $sessionItem['item_id'] = $item['id'];
+            $sessionItem['visible'] = true;
+            $sessionItem['currency'] = $item['iso_code'];
+            $sessionItem['price'] = $item['price'];
+        }
+
+        return $sessionItem;
+    }
+
+    /**
+     * Get all beneficiaries for a item
+     * @param int $itemId The item ID
+     * @return array The beneficiries. Otherwise return false
+     */
+    public function getItemBeneficiaries($itemId)
+    {
+        $beneficiaryTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
+
+        return Database::select(
+            '*',
+            $beneficiaryTable,
+            ['where' => [
+                'item_id = ?' => intval($itemId)
+            ]]
+        );
+    }
+
+    /**
+     * Delete a item with its beneficiaries
+     * @param int $itemId The item ID
+     * @return int The number of affected rows. Otherwise return false
+     */
+    public function deleteItem($itemId)
+    {
+        $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+
+        $affectedRows = Database::delete(
+            $itemTable,
+            ['id = ?' => intval($itemId)]
+        );
+
+        if (!$affectedRows) {
+            return false;
+        }
+
+        return $this->deleteItemBeneficiaries($itemId);
+    }
+
+    /**
+     * Register a item
+     * @param array $itemData The item data
+     * @return int The item ID. Otherwise return false
+     */
+    public function registerItem(array $itemData)
+    {
+        $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+
+        return Database::insert($itemTable, $itemData);
+    }
+
+    /**
+     * Update the item data by product
+     * @param array $itemData The item data to be updated
+     * @param int $productId The product ID
+     * @param int $productType The type of product
+     * @return int The number of affected rows. Otherwise return false
+     */
+    public function updateItem(array $itemData, $productId, $productType)
+    {
+        $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
+
+        return Database::update(
+            $itemTable,
+            $itemData,
+            [
+                'product_id = ? AND ' => intval($productId),
+                'product_type' => $productType
+            ]
+        );
+    }
+
+    /**
+     * Remove all beneficiaries for a item
+     * @param int $itemId The user ID
+     * @return int The number of affected rows. Otherwise return false
+     */
+    public function deleteItemBeneficiaries($itemId)
+    {
+        $beneficiaryTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY);
+
+        return Database::delete(
+            $beneficiaryTable,
+            ['item_id = ?' => intval($itemId)]
+        );
+    }
+
+    /**
+     * Register the beneficiaries users with the sale of item
+     * @param int $itemId The item ID
+     * @param array $userIds The beneficiary user ID
+     */
+    public function registerItemBeneficiaries($itemId, array $userIds)
+    {
+        $beneficiaryTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY);
+
+        $this->deleteItemBeneficiaries($itemId);
+
+        foreach ($userIds as $userId) {
+            Database::insert(
+                $beneficiaryTable,
+                [
+                    'item_id' => intval($itemId),
+                    'user_id' => intval($userId)
+                ]
+            );
+        }
+    }
+
+    /**
+     * Check if a course is valid for sale
+     * @param Chamilo\CoreBundle\Entity\Course $course The course
+     * @return boolean
+     */
+    public function isValidCourse(Chamilo\CoreBundle\Entity\Course $course)
+    {
+        $courses = $this->getCourses();
+
+        foreach ($courses as $_c) {
+            if ($_c->getCode() === $course->getCode()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

@@ -67,6 +67,9 @@
                                 {% endif %}
                             </td>
                             <td class="text-right">
+                                <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.course_id, 't':product_type_course}|url_encode() }}" class="btn btn-info btn-sm">
+                                    <i class="fa fa-wrench fa-fw"></i> {{ 'Configure'|get_lang }}
+                                </a>
                                 <button class="btn btn-success btn-sm bc-button-save" type="button">
                                     <i class="fa fa-save"></i> {{ 'Save'|get_lang }}
                                 </button>
@@ -133,7 +136,10 @@
                                         <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" class="text-right form-control">
                                     {% endif %}
                                 </td>
-                                <td class=" text-center" id="session{{ item.session_id }}">
+                                <td class="text-right" id="session{{ item.session_id }}">
+                                    <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.session_id, 't': product_type_session}|url_encode() }}" class="btn btn-info btn-sm">
+                                        <i class="fa fa-wrench fa-fw"></i> {{ 'Configure'|get_lang }}
+                                    </a>
                                     <button class="btn btn-success btn-sm bc-button-save" type="button">
                                         <i class="fa fa-save"></i> {{ 'Save'|get_lang }}
                                     </button>

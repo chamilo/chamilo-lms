@@ -24,48 +24,25 @@ if ($_REQUEST['tab'] == 'save_mod') {
     }
 
     $affectedRows = false;
+    $item = $plugin->getItemByProduct($productId, $productType);
 
     if ($_POST['visible'] == 1) {
-        $item = Database::select(
-            'COUNT(1) AS qty',
-            $itemTable,
-            [
-                'where' => [
-                    'product_id = ? AND ' => intval($productId),
-                    'product_type = ?' => $productType
-                ]
-            ],
-            'first'
-        );
-
-        if ($item['qty'] > 0) {
-            $affectedRows = Database::update(
-                $itemTable,
+        if (!empty($item)) {
+            $affectedRows = $plugin->updateItem(
                 ['price' => floatval($_POST['price'])],
-                [
-                    'product_id = ? AND ' => intval($productId),
-                    'product_type' => $productType
-                ]
+                $productId,
+                $productType
             );
         } else {
-            $affectedRows = Database::insert(
-                $itemTable,
-                [
-                    'currency_id' => $currency['id'],
-                    'product_type' => $productType,
-                    'product_id' => intval($productId),
-                    'price' => floatval($_POST['price'])
-                ]
-            );
+            $affectedRows = $plugin->registerItem([
+                'currency_id' => $currency['id'],
+                'product_type' => $productType,
+                'product_id' => intval($productId),
+                'price' => floatval($_POST['price'])
+            ]);
         }
     } else {
-        $affectedRows = Database::delete(
-            $itemTable,
-            [
-                'product_id = ? AND ' => intval($productId),
-                'product_type = ?' => $productType
-            ]
-        );
+        $affectedRows = $plugin->deleteItem($item['id']);
     }
 
     if ($affectedRows > 0) {

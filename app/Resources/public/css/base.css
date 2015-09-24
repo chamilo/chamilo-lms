@@ -100,7 +100,15 @@ a.thumbnail:hover{
     font-size:22px;
     margin-top:5px;
 }
-#announcements-slider .left, #announcements-slider .right{
+#carousel-announcement{
+    min-height: 300px;
+}
+#carousel-announcement img{
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+#carousel-announcement .left, #carousel-announcement .right{
   position: absolute;
   top: 50%;
   background: #00829C;
@@ -115,26 +123,23 @@ a.thumbnail:hover{
   -webkit-border-radius: 4px;
   opacity: 0.8;
 }
-#announcements-slider .left{
+#carousel-announcement .left{
   left: 10px;
 }
-#announcements-slider .right{
+#carousel-announcement .right{
   right: 10px;
 }
-#announcements-slider .carousel-indicators li{
+#carousel-announcement .carousel-indicators li{
   width: 20px;
   height: 20px;
   background-color: #fff;
   margin: 0px 15px 0px 0px;
   position: relative;
 }
-#announcements-slider .carousel-indicators .active{
+#carousel-announcement .carousel-indicators .active{
   background: #C52D2F;
 }
-#announcements-slider .carousel-inner img {
-    height: auto;
-    width: 100%;
-}
+
 #notice_block p, #notice-block p{
     color: #666;
     font-size: 12px;

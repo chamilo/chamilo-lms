@@ -80,8 +80,8 @@ $(document).ready(function(){
     check_brand();
     //if exists the toolbar admin
 
-    if($('#toolbar').length){
-        var heigthToolBar= $('#toolbar').height();
+    if($('#toolbar-admin').length){
+        var heigthToolBar= $('#toolbar-admin').height();
         $('header').css('margin-top', heigthToolBar+'px');
         $('#page-back').css('padding-top', heigthToolBar+20+'px');
     }

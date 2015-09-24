@@ -6,15 +6,15 @@
         </p>
         <ul class="list-unstyled user-details">
             <li>
-                <a href="{{ vcard_user_link }}">
-                    <img src="{{ "vcard.png" | icon(22) }}" alt="{{ "UserInfo" | get_lang }}">
-                    {{ "UserInfo" | get_lang }}
-                </a>
-            </li>
-            <li>
                 <a href="{{ _p.web }}main/messages/new_message.php">
                     <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
                     {{ user.email}}
+                </a>
+            </li>
+            <li>
+                <a href="{{ vcard_user_link }}">
+                    <img src="{{ "vcard.png" | icon(22) }}" alt="{{ "UserInfo" | get_lang }}" width="22" height="22">
+                    {{ "UserInfo" | get_lang }}
                 </a>
             </li>
             {% if chat_enabled == 1 %}

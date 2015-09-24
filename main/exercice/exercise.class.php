@@ -2866,6 +2866,7 @@ class Exercise
                                         exe_id = '$exeId' AND
                                         question_id = '$questionId' AND
                                         position = '$i_answer_id_auto'";
+
                             $res_user_answer = Database::query($sql);
 
                             if (Database::num_rows($res_user_answer) > 0) {
@@ -2879,19 +2880,22 @@ class Exercise
 
                             $user_answer = '';
                             if (!empty($s_user_answer)) {
-                                if ($s_user_answer == $i_answer_correct_answer) {
-                                    $questionScore += $i_answerWeighting;
-                                    $totalScore += $i_answerWeighting;
-                                    if ($answerType == DRAGGABLE) {
+                                if ($answerType == DRAGGABLE) {
+                                    if ($s_user_answer == $i_answer_correct_answer) {
+                                        $questionScore += $i_answerWeighting;
+                                        $totalScore += $i_answerWeighting;
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
                                     } else {
+                                        $user_answer = Display::label(get_lang('Incorrect'), 'danger');
+                                    }
+                                } else {
+                                    if ($s_user_answer == $i_answer_correct_answer) {
+                                        $questionScore += $i_answerWeighting;
+                                        $totalScore += $i_answerWeighting;
+
                                         if (isset($real_list[$i_answer_id])) {
                                             $user_answer = Display::span($real_list[$i_answer_id]);
                                         }
-                                    }
-                                } else {
-                                    if ($answerType == DRAGGABLE) {
-                                        $user_answer = Display::label(get_lang('Incorrect'), 'danger');
                                     } else {
                                         $user_answer = Display::span(
                                             $real_list[$s_user_answer],

@@ -206,7 +206,14 @@ class Answer
 		$sql = "SELECT type FROM $TBL_QUIZ
 		        WHERE c_id = {$this->course_id} AND id = $questionId";
 		$result_question = Database::query($sql);
-		$question_type = Database::fetch_array($result_question);
+		$questionType = Database::fetch_array($result_question);
+
+        if ($questionType['type'] == DRAGGABLE) {
+            // Random is done by submit.js.tpl
+            $this->read();
+
+            return true;
+        }
 
 		$sql = "SELECT
 		            answer,
@@ -229,7 +236,7 @@ class Answer
 		// while a record is found
 		$doubt_data = null;
 		while ($object = Database::fetch_object($result)) {
-		    if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && $object->position == 666) {
+		    if ($questionType['type'] == UNIQUE_ANSWER_NO_OPTION && $object->position == 666) {
 		        $doubt_data = $object;
                 continue;
 		    }
@@ -243,7 +250,7 @@ class Answer
             $i++;
 		}
 
-		if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
+		if ($questionType['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
             $this->answer[$i] = $doubt_data->answer;
             $this->correct[$i] = $doubt_data->correct;
             $this->comment[$i] = $doubt_data->comment;

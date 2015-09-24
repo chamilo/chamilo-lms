@@ -62,8 +62,6 @@ $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 
 $template = new Template();
 
-$htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
-
 // General parameters passed via POST/GET
 
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
@@ -94,7 +92,7 @@ $exercise_attempt_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATT
 /*  Teacher takes an exam and want to see a preview,
     we delete the objExercise from the session in order to get the latest
     changes in the exercise */
-if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['preview'] == 1 ) {
+if (api_is_allowed_to_edit(null, true) && isset($_GET['preview']) && $_GET['preview'] == 1 ) {
     Session::erase('objExercise');
 }
 
@@ -145,6 +143,8 @@ if ($objExercise->review_answers) {
         exit;
     }
 }
+$template->assign('shuffle_answers', $objExercise->random_answers);
+$htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
 
 $current_timestamp = time();
 $my_remind_list = array();

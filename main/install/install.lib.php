@@ -1688,8 +1688,13 @@ function display_configuration_settings_form(
     $html .= '<div class="form-group">';
     $html .= '<label class="col-sm-6 control-label">'. get_lang('AllowSelfRegProf') .'</label>
         <div class="col-sm-6">';
-    if ($installType == 'update'){
-        $html .= '<input type="hidden" name="allowSelfRegProf" value="'. $allowSelfRegProf.'" />'. $allowSelfRegProf? get_lang('Yes') : get_lang('No');
+    if ($installType == 'update') {
+        if ($allowSelfRegProf == 'true') {
+            $label = get_lang('Yes');
+        } else {
+            $label = get_lang('No');
+        }
+        $html .= '<input type="hidden" name="allowSelfRegProf" value="'. $allowSelfRegProf.'" />'. $label;
     } else {
         $html .= '<div class="control-group">
                 <label class="checkbox-inline">

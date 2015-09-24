@@ -17,44 +17,46 @@ class Version20150608104600 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $extraFieldRelTag = $schema->createTable('extra_field_rel_tag');
-        $extraFieldRelTag->addColumn(
-            'id',
-            TableColumnType::INTEGER,
-            ['unsigned' => true, 'autoincrement' => true, 'notnull' => true]
-        );
-        $extraFieldRelTag->addColumn(
-            'field_id',
-            TableColumnType::INTEGER,
-            ['unsigned' => true, 'notnull' => true]
-        );
-        $extraFieldRelTag->addColumn(
-            'item_id',
-            TableColumnType::INTEGER,
-            ['unsigned' => true, 'notnull' => true]
-        );
-        $extraFieldRelTag->addColumn(
-            'tag_id',
-            TableColumnType::INTEGER,
-            ['unsigned' => true, 'notnull' => true]
-        );
-        $extraFieldRelTag->setPrimaryKey(['id']);
-        $extraFieldRelTag->addIndex(
-            ['field_id'],
-            'idx_frt_field'
-        );
-        $extraFieldRelTag->addIndex(
-            ['item_id'],
-            'idx_frt_item'
-        );
-        $extraFieldRelTag->addIndex(
-            ['tag_id'],
-            'idx_frt_tag'
-        );
-        $extraFieldRelTag->addIndex(
-            ['field_id', 'item_id', 'tag_id'],
-            'idx_frt_field_item_tag'
-        );
+        if (!$schema->hasTable('extra_field_rel_tag')) {
+            $extraFieldRelTag = $schema->createTable('extra_field_rel_tag');
+            $extraFieldRelTag->addColumn(
+                'id',
+                TableColumnType::INTEGER,
+                ['unsigned' => true, 'autoincrement' => true, 'notnull' => true]
+            );
+            $extraFieldRelTag->addColumn(
+                'field_id',
+                TableColumnType::INTEGER,
+                ['unsigned' => true, 'notnull' => true]
+            );
+            $extraFieldRelTag->addColumn(
+                'item_id',
+                TableColumnType::INTEGER,
+                ['unsigned' => true, 'notnull' => true]
+            );
+            $extraFieldRelTag->addColumn(
+                'tag_id',
+                TableColumnType::INTEGER,
+                ['unsigned' => true, 'notnull' => true]
+            );
+            $extraFieldRelTag->setPrimaryKey(['id']);
+            $extraFieldRelTag->addIndex(
+                ['field_id'],
+                'idx_frt_field'
+            );
+            $extraFieldRelTag->addIndex(
+                ['item_id'],
+                'idx_frt_item'
+            );
+            $extraFieldRelTag->addIndex(
+                ['tag_id'],
+                'idx_frt_tag'
+            );
+            $extraFieldRelTag->addIndex(
+                ['field_id', 'item_id', 'tag_id'],
+                'idx_frt_field_item_tag'
+            );
+        }
     }
 
     /**

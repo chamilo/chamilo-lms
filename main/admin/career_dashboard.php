@@ -119,8 +119,8 @@ foreach($career_array as $career_id => $data) {
     $career     = $data['name'];
     $promotions = $data['promotions'];
     $career = Display::url($career,'careers.php?action=edit&id='.$career_id);
-    $career = Display::tag('h3',$career);
-    echo '<tr><td style="background-color:#eee" colspan="3">'.$career.'</td></tr>';
+    $career = Display::tag('h4',$career);
+    echo '<tr><td style="background-color:#ECF0F1" colspan="3">'.$career.'</td></tr>';
     foreach($promotions as $promotion_id => $promotion) {
     	$promotion_name = $promotion['name'];
         $promotion_url  = Display::url($promotion_name,'promotions.php?action=edit&id='.$promotion_id);
@@ -133,7 +133,7 @@ foreach($career_array as $career_id => $data) {
         	$rowspan = 'rowspan="'.$count.'"';
         }
         echo '<td '.$rowspan.'>';
-        echo Display::tag('h4',$promotion_url);
+        echo Display::tag('h5',$promotion_url);
         echo '</td>';
         echo '</tr>';
 

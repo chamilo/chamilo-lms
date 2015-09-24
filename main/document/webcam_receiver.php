@@ -1,9 +1,11 @@
 <?php
 
-/* JPEGCam Script */
+/* JPEGCam Script *****UPDATED to lib webcamJS 2015-09-04***** */
 /* Receives JPEG webcam submission and saves to local file. */
 /* Make sure your directory has permission to write files as your web server user! */
-require_once '../../../inc/global.inc.php';
+
+//Changes on directory because move the proper script to the new lib upgrade directory
+require_once '../inc/global.inc.php';
 ////Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
@@ -46,11 +48,11 @@ if($ext!= 'jpg'){
 //Do not use here check Fileinfo method because return: text/plain                //CHECK THIS BEFORE COMMIT
 
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$saveDir=$dirBaseDocuments.$webcamdir;
+$saveDir = $dirBaseDocuments.$webcamdir;
 $current_session_id = api_get_session_id();
 $groupId = api_get_group_id();
 
-//avoid duplicates
+//Avoid duplicates
 $webcamname_to_save=$webcamname;
 $title_to_save=str_replace('_',' ',$webcamname);
 $webcamname_noex=basename($webcamname, ".jpg");
@@ -62,29 +64,19 @@ if (file_exists($saveDir.'/'.$webcamname_noex.'.'.$ext)){
 		$title_to_save = str_replace('_',' ',$title_to_save);
 }
 
-
 $documentPath = $saveDir.'/'.$webcamname_to_save;
 
-
 //read content
-$content = file_get_contents('php://input');
+//Change to move_uploaded_file() function instead file_get_contents() to adapt the new lib
+$content = move_uploaded_file($_FILES['webcam']['tmp_name'], $documentPath);
 if (!$content) {
-	print "ERROR: Failed to read data\n";
+	print "PHP ERROR: Failed to read data\n";
 	exit();
 }
 
-//add to disk
-$fh = fopen($documentPath, 'w') or die("can't open file");
-fwrite($fh, $content);
-fclose($fh);
-
-
-//
 //add document to database
 	$doc_id = add_document($_course, $webcamdir.'/'.$webcamname_to_save, 'file', filesize($documentPath), $title_to_save);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
 ///
 $url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . '/' . $documentPath;
-print "$url\n";
-
-?>
+print get_lang('ClipSent');

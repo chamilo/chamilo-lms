@@ -38,6 +38,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'
     . '"></script>' . "\n";
 
 $template = new Template();
+$template->assign('room_name', $chatVideo->getRoomName());
 $template->assign('chat_user', $chatUser);
 $template->assign('user_local', $userLocal);
 $template->assign('block_friends', $friend_html);
@@ -54,4 +55,3 @@ $template->assign(
     Display::return_message(get_lang('YourBroswerDoesNotSupportWebRTC'), 'warning')
 );
 $template->display_one_col_template();
-//$template->display_no_layout_template();

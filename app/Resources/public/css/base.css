@@ -6126,52 +6126,17 @@ a.sessionView {
     width: auto;
 }
 /* video chat */
-#chat-local-video video,
-#chat-remote-video video{
-  border-radius: 5px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  box-shadow: 0 2px 3px #C8C8C8;
-  border: 1px solid #e6e6e6;
-  background-color:#fff;
-  padding: 5px;
+#chat-video-panel .thumbnail .caption p {
+    margin-bottom: 0;
 }
-#chat-local-video video,
-#chat-remote-video video{
-  width: 100%;
+#chat-video-panel .thumbnail video {
+  background-color: #FFF;
+  background-image: url("../../main/img/icons/128/camera-webrtc.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: block;
   min-width: 100%;
-  display: block;
-}
-#chat-video-panel .username-local{
-  text-align: center;
-  padding-bottom: 5px;
-  padding-top:5px;
-  margin-top:10px;
-  margin-bottom:10px;
-  color: #666666;
-}
-#chat-video-panel .chat-user-remote{
-  text-align: center;
-  padding-bottom: 5px;
-  padding-top:5px;
-  color: #666666;
-}
-#chat-video-panel .title{
-  display: block;
-  color: #52606F;
-  padding: 0;
-  margin: 0;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  font-size: 20px;
-  border-bottom: 1px solid #E5E5E5;
-}
-#chat-video-panel #chat-local-video video,
-#chat-video-panel #chat-remote-video video {
-    background-color: #FFF;
-    background-image: url("../../main/img/icons/128/camera-webrtc.png");
-    background-position: center center;
-    background-repeat: no-repeat;
+  width: 100%;
 }
 #listFriends .list-group-item{
   border: none;
@@ -6364,6 +6329,13 @@ a.sessionView {
 #next.disabled,
 #prev.disabled {
     opacity: 0.2;
+}
+.webcamclip_bg{
+    width:340px;
+    height:260px;
+    border:10px solid;
+    border-radius: 25px;
+    border-color: #00677C;
 }
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */

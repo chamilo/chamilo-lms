@@ -1657,20 +1657,29 @@ function display_configuration_settings_form(
     }
     $html .= '</div></div>';
 
-
     $html .= '<div class="form-group">
             <label class="col-sm-6 control-label">' . get_lang('AllowSelfReg') . '</label>
             <div class="col-sm-6">';
     if ($installType == 'update') {
-        $html .= '<input type="hidden" name="allowSelfReg" value="'. $allowSelfReg .'" />'. $allowSelfReg ? get_lang('Yes') : get_lang('No');
+        if ($allowSelfReg == 'true') {
+            $label = get_lang('Yes');
+        } elseif ($allowSelfReg == 'false') {
+            $label = get_lang('No');
+        } else {
+            $label = get_lang('AfterApproval');
+        }
+        $html .= '<input type="hidden" name="allowSelfReg" value="'. $allowSelfReg .'" />'. $label;
     } else {
         $html .= '<div class="control-group">';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" '. ($allowSelfReg ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
+                        <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" '. ($allowSelfReg == 'true' ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
+                        <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
                     </label>';
+         $html .= '<label class="checkbox-inline">
+                    <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ') .' /> '. get_lang('AfterApproval') .'
+                </label>';
         $html .= '</div>';
     }
     $html .= '</div>';

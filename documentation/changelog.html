@@ -54,6 +54,9 @@
 <h3>Release name</h3>
 <p>San Juan (or the "Old San Juan") was the main (old) harbour of Puerto Rico island. A frequent stop-over harbour for Europe's immigrants to the "new world" (be it Latin America or North America). Chamilo 1.10.0 marks a very strong intermediate step between the "old" Chamilo, inheriting over 14 years of code and experiences, and the "new" Chamilo, still maintaining its history of user experiences, but reworking the building bricks in a way that will make new developments possible faster, so that Chamilo can spread to the rest of the world in a rapid but stable way. Chamilo 1.10.0 integrates several new techniques of development that should improve is reliability, speed and flexibility. Welcome to the New World of learning, welcome to Chamilo 1.10.0! (so to speak)</p>
 <h3>Security fixes</h3>
+  <ul>
+    <li>There were no specific security flaws detected during the development of 1.10.0 but standard development procedures and criterias were followed during the development to ensure a very high security level.</li>
+  </ul>
 <h3>Possibly breaking changes</h3>
   <ul>
     <li>Dropped support for PHP 5.3 and inferior (now REQUIRES PHP 5.4 or more)</li>
@@ -961,6 +964,10 @@
   <li>Tables "userinfo_def" and "userinfo_def_content" were removed as well as the code.</li>
   <li>Dropped support for IE8</li>
   <li>Dropped support for PHP 5.3 and inferior</li>
+</ul>
+<h3>Known issues</h3>
+<ul>
+  <li>The hotspot question type is broken due to changes in the underlying Chamilo code. Given the fact this question type is developed in Flash and none of the developers at the time of release had Adobe CS available (proprietary technology that requires compilation) we have been unable to update the corresponding Flash code. Work is under way to provide the same feature using only HTML5, but it is likely to appear in a corrective version for 1.10.0. If you have an urgent need for this feature, please contact an official provider to get this sorted: providers@chamilo.org</li>
 </ul>
 
 <a  name="1.9.10.2"></a>

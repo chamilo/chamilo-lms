@@ -715,7 +715,10 @@ class Answer
             self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE
         ) {
             // Selecting origin options
-            $origin_options = Question::readQuestionOption($this->selectQuestionId(), $this->course['real_id']);
+            $origin_options = Question::readQuestionOption(
+                $this->selectQuestionId(),
+                $this->course['real_id']
+            );
 
             if (!empty($origin_options)) {
                 foreach ($origin_options as $item) {
@@ -770,7 +773,7 @@ class Answer
 
                 $params = [
                     'c_id' => $c_id,
-                    'question_id' =>$newQuestionId,
+                    'question_id' => $newQuestionId,
                     'answer' => $answer,
                     'correct' => $correct,
                     'comment' => $comment,
@@ -783,7 +786,7 @@ class Answer
                 $id = Database::insert($TBL_REPONSES, $params);
 
                 if ($id) {
-                    $sql = "UPDATE $TBL_REPONSES SET id = id_auto WHERE id_auto = $id";
+                    $sql = "UPDATE $TBL_REPONSES SET id = iid, id_auto = iid WHERE iid = $id";
                     Database::query($sql);
                 }
 			}

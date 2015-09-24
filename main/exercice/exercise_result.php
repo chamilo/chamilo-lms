@@ -33,7 +33,10 @@ if ($debug) {
 if (empty($origin)) {
     $origin = Security::remove_XSS($_REQUEST['origin']);
 }
+
+/** @var Exercise $objExercise */
 if (empty($objExercise)) {
+
     $objExercise = $_SESSION['objExercise'];
 }
 if (empty($remind_list)) {
@@ -74,7 +77,7 @@ $interbreadcrumb[] = array(
 
 if ($origin != 'learnpath') {
 	// So we are not in learnpath tool
-	Display::display_header($nameTools,get_lang('Exercise'));
+	Display::display_header($nameTools, get_lang('Exercise'));
 } else {
     Display::display_reduced_header();
 }

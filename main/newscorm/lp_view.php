@@ -238,7 +238,7 @@ if (
         $safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))
     ) {
-        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting
+        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id
                 FROM ' . $TBL_TRACK_EXERCICES . '
                 WHERE exe_id = ' . $safe_exe_id;
         $res = Database::query($sql);
@@ -268,8 +268,25 @@ if (
         if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
             $row_last_attempt = Database::fetch_row($res_last_attempt);
             $lp_item_view_id = $row_last_attempt[0];
+
+            $exercise = new Exercise(api_get_course_int_id());
+            $exercise->read($row_dates['exe_exo_id']);
+            $status = 'completed';
+
+            if (!empty($exercise->pass_percentage)) {
+                $status = 'failed';
+                $success = ExerciseLib::is_success_exercise_result(
+                    $score,
+                    $max_score,
+                    $exercise->pass_percentage
+                );
+                if ($success) {
+                    $status = 'passed';
+                }
+            }
+
             $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
-                        status = 'completed' ,
+                        status = '$status',
                         score = $score,
                         total_time = $mytime
                     WHERE id='" . $lp_item_view_id . "' AND c_id = $course_id ";
@@ -289,7 +306,7 @@ if (
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
-        $src = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?origin=learnpath&id=' . $safe_exe_id;
+        $src = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?origin=learnpath&id=' . $safe_exe_id.'&'.api_get_cidreq();
 
         if ($debug) {
             error_log('Calling URL: ' . $src);

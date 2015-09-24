@@ -69,10 +69,10 @@ class Exercise
         $this->expired_time = '0000-00-00 00:00:00';
         $this->propagate_neg = 0;
         $this->review_answers = false;
-        $this->randomByCat = 0;    //
-        $this->text_when_finished = ""; //
+        $this->randomByCat = 0;
+        $this->text_when_finished = '';
         $this->display_category_name = 0;
-        $this->pass_percentage = null;
+        $this->pass_percentage = '';
 
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -1286,7 +1286,12 @@ class Exercise
             );
             $form->addElement('html','</div>');
 
-            $form->addElement('text', 'pass_percentage', array(get_lang('PassPercentage'), null, '%'),  array('id' => 'pass_percentage'));
+            $form->addElement(
+                'text',
+                'pass_percentage',
+                array(get_lang('PassPercentage'), null, '%'),
+                array('id' => 'pass_percentage')
+            );
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
 
             // add the text_when_finished textbox
@@ -4749,6 +4754,10 @@ class Exercise
         return $new_question_list;
     }
 
+    /**
+     * @param int $exe_id
+     * @return array|mixed
+     */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
         $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

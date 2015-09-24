@@ -138,24 +138,24 @@ foreach($career_array as $career_id => $data) {
         echo '</tr>';
 
         if (!empty($sessions))
-        foreach($sessions as $session) {
+        foreach ($sessions as $session) {
             $course_list = $session['courses'];
 
             $url = Display::url($session['data']['name'], 'resume_session.php?id_session='.$session['data']['id']);
             echo '<tr>';
                 //Session name
-                echo Display::tag('td',$url);
+                echo Display::tag('td', $url);
                 echo '<td>';
                     //Courses
                     echo '<table>';
-                    foreach($course_list as $course) {
+                    foreach ($course_list as $course) {
                        echo '<tr>';
 
                        $url = Display::url(
                            $course['title'],
-                           api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session='.$session['data']['id']
+                           api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$session['data']['id']
                        );
-                       echo Display::tag('td',$url);
+                       echo Display::tag('td', $url);
                        echo '</tr>';
                     }
                     echo '</table>';

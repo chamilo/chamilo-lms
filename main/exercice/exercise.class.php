@@ -69,10 +69,10 @@ class Exercise
         $this->expired_time = '0000-00-00 00:00:00';
         $this->propagate_neg = 0;
         $this->review_answers = false;
-        $this->randomByCat = 0;    //
-        $this->text_when_finished = ""; //
+        $this->randomByCat = 0;
+        $this->text_when_finished = '';
         $this->display_category_name = 0;
-        $this->pass_percentage = null;
+        $this->pass_percentage = '';
 
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -1286,7 +1286,12 @@ class Exercise
             );
             $form->addElement('html','</div>');
 
-            $form->addElement('text', 'pass_percentage', array(get_lang('PassPercentage'), null, '%'),  array('id' => 'pass_percentage'));
+            $form->addElement(
+                'text',
+                'pass_percentage',
+                array(get_lang('PassPercentage'), null, '%'),
+                array('id' => 'pass_percentage')
+            );
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
 
             // add the text_when_finished textbox
@@ -2866,6 +2871,7 @@ class Exercise
                                         exe_id = '$exeId' AND
                                         question_id = '$questionId' AND
                                         position = '$i_answer_id_auto'";
+
                             $res_user_answer = Database::query($sql);
 
                             if (Database::num_rows($res_user_answer) > 0) {
@@ -2879,19 +2885,22 @@ class Exercise
 
                             $user_answer = '';
                             if (!empty($s_user_answer)) {
-                                if ($s_user_answer == $i_answer_correct_answer) {
-                                    $questionScore += $i_answerWeighting;
-                                    $totalScore += $i_answerWeighting;
-                                    if ($answerType == DRAGGABLE) {
+                                if ($answerType == DRAGGABLE) {
+                                    if ($s_user_answer == $i_answer_correct_answer) {
+                                        $questionScore += $i_answerWeighting;
+                                        $totalScore += $i_answerWeighting;
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
                                     } else {
+                                        $user_answer = Display::label(get_lang('Incorrect'), 'danger');
+                                    }
+                                } else {
+                                    if ($s_user_answer == $i_answer_correct_answer) {
+                                        $questionScore += $i_answerWeighting;
+                                        $totalScore += $i_answerWeighting;
+
                                         if (isset($real_list[$i_answer_id])) {
                                             $user_answer = Display::span($real_list[$i_answer_id]);
                                         }
-                                    }
-                                } else {
-                                    if ($answerType == DRAGGABLE) {
-                                        $user_answer = Display::label(get_lang('Incorrect'), 'danger');
                                     } else {
                                         $user_answer = Display::span(
                                             $real_list[$s_user_answer],
@@ -4745,6 +4754,10 @@ class Exercise
         return $new_question_list;
     }
 
+    /**
+     * @param int $exe_id
+     * @return array|mixed
+     */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
         $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

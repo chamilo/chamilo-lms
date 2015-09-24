@@ -3113,7 +3113,10 @@ class learnpath
         $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
 
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
-            $gradebook = Security :: remove_XSS($_GET['gradebook']);
+            $gradebook = '';
+            if (!empty($_GET['gradebook'])) {
+                $gradebook = Security:: remove_XSS($_GET['gradebook']);
+            }
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp">';
                 $html .= '<div class="btn-group">';

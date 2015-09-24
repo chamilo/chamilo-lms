@@ -614,7 +614,7 @@ class Template
     public function set_js_files()
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
-        
+
         $isoCode = api_get_language_isocode();
 
         //JS files
@@ -1092,12 +1092,12 @@ class Template
     }
 
     /**
-     * @param $tpl_var
-     * @param null $value
+     * @param string $variable
+     * @param mixed $value
      */
-    public function assign($tpl_var, $value = null)
+    public function assign($variable, $value = '')
     {
-        $this->params[$tpl_var] = $value;
+        $this->params[$variable] = $value;
     }
 
     /**

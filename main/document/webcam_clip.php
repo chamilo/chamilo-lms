@@ -8,6 +8,7 @@
  *
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net
  * @since 7/jun/2012
+ * @Updated 04/09/2015 Upgrade to WebCamJS
 */
 require_once '../inc/global.inc.php';
 
@@ -127,78 +128,77 @@ echo '</div>';
 <div align="center">
     <h2><?php echo get_lang('TakeYourPhotos'); ?></h2>
 </div>
-<div align="center" style="padding-left:50px;">
-<table><tr><td valign=top>
-<h3><?php echo get_lang('LocalInputImage'); ?></h3>
-<!-- First, include the JPEGCam JavaScript Library -->
-	<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam/webcam.js"></script>
-
-	<!-- Configure a few settings -->
+<div align="center">
+<table><tr><td valign='top' align='center'>
+<h3 align='center'><?php echo get_lang('LocalInputImage'); ?></h3>
+    <!-- Including New Lib WebCamJS upgrading from JPEGCam -->
+    <script type="text/javascript" src="<?php echo api_get_path(WEB_PATH); ?>web/assets/webcamjs/webcam.js"></script>
+    <!-- Adding a div container for the new live camera with some cool style options-->
+    <div class="webcamclip_bg">
+        <div id="chamilo-camera"></div>
+    </div>
+	<!-- Configure a few settings and attach the camera to the div container -->
 	<script language="JavaScript">
-		var clip_filename='video_clip.jpg';
-		//var clip_filename='<?php //echo date('YmdHis') . '.jpg'; ?>';
-		webcam.set_swf_url ( '<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam//webcam.swf?blackboard.png' );
-		webcam.set_shutter_sound( true,'<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam/shutter.mp3' ); // true play shutter click sound
-		webcam.set_quality( 90 ); // JPEG quality (1 - 100)
-		webcam.set_api_url( '<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam/webcam_receiver.php?webcamname='+escape(clip_filename)+'&webcamdir=<?php echo $webcamdir; ?>&webcamuserid=<?php echo $webcamuserid; ?>' );
-
+		Webcam.set({
+            width: 320,
+            height: 240,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+        Webcam.attach( '#chamilo-camera' );
+        //This line Fix a minor bug that made a conflict with a videochat feature in another module file
+        $('video').addClass('skip');
 	</script>
 
-	<!-- Next, write the movie to the page at 320x240 -->
+	<!-- Using now Jquery to do the webcamJS Functions and handle the server response (see webcam_receiver.php now in webcamJS directory) -->
 	<script language="JavaScript">
-		document.write( webcam.get_html(320, 240) );
-	</script>
-
-	<!-- Some buttons for controlling things -->
-	<br/>
-    <form>
-    <br/>
-		<input type=button value="<?php echo get_lang('Snapshot'); ?>" onClick="webcam.freeze()">
-		<input type=button value="<?php echo get_lang('Clean'); ?>" onClick="webcam.reset()">
-        <input type=button value="<?php echo get_lang('Send'); ?>" onClick="do_upload()">
-        &nbsp;&nbsp;||&nbsp;&nbsp;
-        <input type=button value="<?php echo get_lang('Auto'); ?>" onClick="start_video();">
-		<input type=button value="<?php echo get_lang('Stop'); ?>" onClick="stop_video()">
-        <br/>
-        <input type=button value="<?php echo get_lang('Configure'); ?>" onClick="webcam.configure()">
-
-	</form>
-
-	<!-- Code to handle the server response (see webcam_receiver.php) -->
-	<script language="JavaScript">
-		webcam.set_hook( 'onComplete', 'my_completion_handler' );
-
-		function do_upload() {
-			// upload to server
-			if (this.loaded){
-				document.getElementById('upload_results').innerHTML = '<h3><?php echo get_lang('Uploading'); ?></h3>';
-			}
-			webcam.upload();
-		}
-
-		function my_completion_handler(msg) {
-			// extract URL out of PHP output
-			if (msg.match(/(http\:\/\/\S+)/)) {
-				var image_url = RegExp.$1;
-
-				image_url=image_url.replace(/\\/g,'/').replace( /.*\//, '' );// extract basename
-				image_url='<?php echo api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'.$dir;?>'+image_url+'<?php echo '?'.api_get_cidreq(); ?>';
-
-				// show JPEG image in page
-				document.getElementById('upload_results').innerHTML =
-				'<div style="width: 320px;">' +
-					'<h3><?php echo get_lang('ClipSent'); ?></h3>' +
-					'<img src="' + image_url + '">' +
-					'</div>';
-				// reset camera for another shot
-				webcam.reset();
-			}
-			else alert("PHP Error: " + msg);
-		}
+		$(document).ready(function() {
+           $('#btnCapture').click(function() {
+               Webcam.freeze();
+               return false;
+           });
+           
+           $('#btnClean').click(function() {
+               Webcam.unfreeze();
+               return false;
+           });
+           
+           $('#btnSave').click(function() {
+               snap();
+               return false;
+           });
+           
+           $('#btnAuto').click(function() {
+               start_video();
+               return false;
+           });
+           
+           $('#btnStop').click(function() {
+               stop_video();
+               return false;
+           });
+        });
+        
+        function snap() {
+            Webcam.snap( function(data_uri) {
+                  var clip_filename='video_clip.jpg';
+                  var url = 'webcam_receiver.php?webcamname='+escape(clip_filename)+'&webcamdir=<?php echo $webcamdir; ?>&webcamuserid=<?php echo $webcamuserid; ?>';
+                  Webcam.upload(data_uri, url, function(code, response){
+                      $('#upload_results').html(
+                          '<h3>'+response+'</h3>' +
+                          '<div>'+
+                          '<img src="' + data_uri + '" class="webcamclip_bg">' +
+                          '</div>'+
+                          '</div>'+
+                          '<p hidden="true">'+code+'</p>'
+                      );
+                  });
+              });
+        }
 	</script>
 
      <script language=javascript>
-	   var internaval=null;
+	   var interval=null;
 	   var timeout=null;
 	   var counter=0;
 	   var fps=1000;//one frame per second
@@ -207,18 +207,18 @@ echo '</div>';
 
 	   function stop_video() {
 			interval=window.clearInterval(interval);
+            return false;
 	   }
 
 	   function start_video() {
-		   	webcam.set_stealth( true ); // do not freeze image upon capture
 		 	interval=window.setInterval("clip_send_video()",fps);
 	   }
 
 	   function clip_send_video() {
-		   counter++
+		   counter++;
 		   timeout=setTimeout('stop_video()',maxtime);
 		   if(maxclip>=counter){
-		       webcam.snap();// clip and upload
+		       snap();// clip and upload
 		   }
 		   else {
 			   interval=window.clearInterval(interval);
@@ -227,9 +227,38 @@ echo '</div>';
  </script>
 
 
-	</td><td width=50>&nbsp;</td><td valign=top>
+	</td><td width=50></td><td valign='top' align='center'>
 		<div id="upload_results" style="background-color:#ffffff;"></div>
 	</td></tr></table>
+    
+    <!-- Implementing Button html5 Tags instead Inputs and some cool bootstrap button styles -->
+    <div>
+        <br/>
+            <form>
+                <br/>
+                <button id="btnCapture" class="btn btn-danger">
+                <i class="fa fa-camera"></i>
+                <?php echo get_lang('Snapshot'); ?>
+                </button>
+                <button id="btnClean" class="btn btn-success">
+                <i class="fa fa-refresh"></i>
+                <?php echo get_lang('Clean'); ?>
+                </button>
+                <button id="btnSave" class="btn btn-primary">
+                <i class="fa fa-save"></i>
+                <?php echo get_lang('Save'); ?>
+                </button>
+                &nbsp;&nbsp;||&nbsp;&nbsp;
+                <button id="btnAuto" class="btn btn-default">
+                <?php echo get_lang('Auto'); ?>
+                </button>
+                <button id="btnStop" class="btn btn-default">
+                <?php echo get_lang('Stop'); ?>
+                </button>
+                <br/>
+            </form>
+        <br/>
+   </div>
 </div>
 
 <?php

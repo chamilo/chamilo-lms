@@ -1327,9 +1327,12 @@ abstract class Question
                     $item['c_id'] = $course_id;
                     unset($item['id']);
                     $id = Database::insert($TBL_QUESTION_OPTIONS, $item);
+                    if ($id) {
 
-                    $sql = "UPDATE $TBL_QUESTION_OPTIONS SET id = iid WHERE iid = $id";
-                    Database::query($sql);
+                        $sql = "UPDATE $TBL_QUESTION_OPTIONS SET id = iid
+                                WHERE iid = $id";
+                        Database::query($sql);
+                    }
                 }
             }
 

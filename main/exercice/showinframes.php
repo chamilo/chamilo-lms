@@ -83,7 +83,6 @@ $htmlHeadXtra[] = '
             height  = "95%";
         }
         $("#hotpotatoe").css("height", height);
-        console.log(height);
     });
 </script>';
 

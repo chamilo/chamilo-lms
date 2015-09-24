@@ -1,5 +1,5 @@
 /*!
- * CSS Sober Brown - v. 2.0
+ * CSS Steel Grey - v. 2.0
  * 2015 - Alex Aragón (aragonc@beeznest.com)
  * Licensed GPL
  * Based on Bootstrap
@@ -47,7 +47,7 @@ a:hover{
 }
 
 .navbar-default {
-background: #521804;
+background: #5C6B6A;
 }
 .navbar-default .navbar-brand {
   color: #ffffff;
@@ -63,7 +63,7 @@ background: #521804;
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
 color: #FFFFFF;
-background: #6B1F05; /* Old browsers */
+background: #677877; /* Old browsers */
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
   background-color: #B83609;
@@ -81,7 +81,7 @@ background: #6B1F05; /* Old browsers */
 }
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
 color: #FFFFFF;
-background: #F7490C;
+background: #465251;
 }
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
 color: #FFFFFF;
@@ -126,13 +126,16 @@ background: #F7490C;
 .nav li a:hover{
     background: transparent;
 }
-.panel-default .panel-heading{
-    background-color: #F9F9F9;
+.menu-column .panel-default .panel-heading{
+    background-color: #9EB8B6;
+}
+.menu-column .panel-default .panel-heading a:hover{
+    color: #111;
 }
 footer{
-  background: #782306;
-  color: #F7490C;
-  border-top: 4px solid #F7490C;
+  background: #465251;
+  color: #111;
+  border:none;
 }
 footer a{
   color: #ffffff;
@@ -144,5 +147,8 @@ footer a:hover{
     background-color: #F7490C;
 }
 #carousel-announcement .left, #carousel-announcement .right{
-    background: #F7490C;
+    background: #5C6B6A;
+}
+#carousel-announcement .carousel-indicators .active{
+    background: #9EB8B6;
 }

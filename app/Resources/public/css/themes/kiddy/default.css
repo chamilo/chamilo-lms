@@ -6,23 +6,24 @@
 */
 
 @font-face {
-  font-family: 'Lato';
+  font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 300;
-  src: local('Lato Light'), local('Lato-Light'), url(fonts/Lato-Light.woff2) format('woff2');
+  src: local('Roboto Condensed Light'), local('RobotoCondensed-Light'), url(fonts/RobotoCondensed-Light.woff2) format('woff2');
 }
 @font-face {
-  font-family: 'Lato';
+  font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'), url(fonts/RobotoCondensed-Regular.woff2) format('woff2');
 }
 @font-face {
-  font-family: 'Lato';
+  font-family: 'Roboto Condensed';
   font-style: normal;
   font-weight: 700;
-  src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(fonts/RobotoCondensed-Bold.woff2) format('woff2');
 }
+
 
 html {
   -ms-text-size-adjust: 100%;
@@ -30,7 +31,7 @@ html {
 }
 body {
   margin: 0;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
   line-height: 1.72222;
 }
 a{

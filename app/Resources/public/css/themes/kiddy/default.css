@@ -1,9 +1,10 @@
 /*!
- * CSS Simplex - v. 2.0
+ * CSS Kiddy - v. 2.0
  * 2015 - Alex Aragón (aragonc@beeznest.com)
  * Licensed GPL
  * Based on Bootstrap
 */
+
 @font-face {
   font-family: 'Lato';
   font-style: normal;
@@ -47,7 +48,7 @@ background: #FBD232;
 border: none;
 }
 header{
-    background: url(images/background.png) #D3D3D3;
+    background: #D3D3D3;
 }
 .navbar{
     margin-bottom: 0;

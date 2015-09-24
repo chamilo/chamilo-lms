@@ -1,5 +1,5 @@
 /*!
- * CSS Simplex - v. 2.0
+ * CSS Medical - v. 2.0
  * 2015 - Alex Aragón (aragonc@beeznest.com)
  * Licensed GPL
  * Based on Bootstrap
@@ -122,13 +122,13 @@ color: #FFFFFF;
 background: #F38A1E;
 }
 .navbar-default .navbar-toggle {
-  border-color: #111;
+  border-color: #fff;
 }
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
   background-color: #111111;
 }
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #666;
+  background-color: #fff;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {

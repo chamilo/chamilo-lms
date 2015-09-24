@@ -1878,6 +1878,7 @@ class SocialManager extends UserManager
                 'style' => 'width : 100%'
             ]
         );
+        $form->addHtml('<div class="form-group "><div class="url_preview col-md-9 panel-body"></div></div>');
         $form->addHidden('url_content', '');
         $form->addButtonSend(get_lang('Post'));
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));

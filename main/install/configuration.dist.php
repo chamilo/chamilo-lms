@@ -147,7 +147,7 @@ $_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
 //$_configuration['multiple_access_urls'] = true;
 $_configuration['software_name'] = 'Chamilo';
-$_configuration['software_url'] = 'http://www.chamilo.org/';
+$_configuration['software_url'] = 'https://chamilo.org/';
 //Deny the elimination of users
 $_configuration['deny_delete_users'] = false;
 // Version settings

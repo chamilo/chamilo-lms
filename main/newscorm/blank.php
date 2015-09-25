@@ -41,9 +41,9 @@ if (isset($_GET['error'])) {
         case 'x_frames_options':
             if (isset($_SESSION['x_frame_source'])) {
                 $src = $_SESSION['x_frame_source'];
-                $icon = '<i class="icon-external-link icon-2x"></i>&nbsp;';
+                $icon = '&nbsp;<i class="icon-external-link icon-2x"></i>';
                 echo Display::return_message(
-                    Display::url($icon.$src, $src, ['class' => 'btn', 'target' => '_blank']),
+                    Display::url($src.$icon, $src, ['class' => 'btn', 'target' => '_blank']),
                     'normal',
                     false
                 );

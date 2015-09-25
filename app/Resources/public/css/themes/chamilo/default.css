@@ -44,8 +44,6 @@ body {
 a {
   color: #00829C;
   text-decoration: none;
-  -webkit-transition: .25s;
-  transition: .25s;
 }
 a:hover,
 a:focus {

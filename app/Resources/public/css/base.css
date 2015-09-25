@@ -111,28 +111,13 @@ a.thumbnail:hover{
 #carousel-announcement .carousel-control.right, #carousel-announcement .carousel-control.left{
     background-image: none;
 }
-/*
-#carousel-announcement .left, #carousel-announcement .right{
-  position: absolute;
-  top: 50%;
-  background: #00829C;
-  color: #fff;
-  margin-top: -25px;
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
-  text-align: center;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  opacity: 0.8;
-}
+
 #carousel-announcement .left{
-  left: 10px;
+  left: 0px;
 }
 #carousel-announcement .right{
-  right: 10px;
-}
+  right: 0px;
+} 
 #carousel-announcement .carousel-indicators li{
   width: 20px;
   height: 20px;
@@ -143,7 +128,7 @@ a.thumbnail:hover{
 #carousel-announcement .carousel-indicators .active{
   background: #C52D2F;
 }
-*/
+
 #notice_block p, #notice-block p{
     color: #666;
     font-size: 12px;

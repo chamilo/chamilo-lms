@@ -74,10 +74,10 @@ class BuyCoursesPlugin extends Plugin
         $tablesToBeDeleted = array(
             self::TABLE_PAYPAL,
             self::TABLE_TRANSFER,
+            self::TABLE_ITEM_BENEFICIARY,
             self::TABLE_ITEM,
             self::TABLE_SALE,
-            self::TABLE_CURRENCY,
-            self::TABLE_ITEM_BENEFICIARY
+            self::TABLE_CURRENCY
         );
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {

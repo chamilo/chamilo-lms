@@ -11,12 +11,14 @@ $language_file = array('learnpath', 'document','exercice');
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 require_once '../inc/global.inc.php';
-Display::display_reduced_header();
+
 $htmlHeadXtra[] = "
 <style>
 body { background: none;}
 </style>
 ";
+
+Display::display_reduced_header();
 
 if (isset($_GET['error'])) {
     switch ($_GET['error']){

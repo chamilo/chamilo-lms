@@ -7508,4 +7508,11 @@ $CourseCategory = "Catégorie de cours";
 $VideoChatBetweenUserXAndUserY = "Appel vidéo entre %s et %s";
 $Enable = "Activer";
 $Disable = "Désactiver";
+$AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession = "Évitez de changer de page durant la conférence pour éviter de couper la communication (vous pouvez toutefois ouvrir de nouveaux onglets).";
+$ConnectingToPeer = "En cours de connexion...";
+$ConnectionEstablished = "Connexion établie";
+$ConnectionFailed = "Connexion échouée";
+$ConnectionClosed = "Connexion terminée";
+$LocalConnectionFailed = "Échec de la connexion locale";
+$RemoteConnectionFailed = "Échec de la connexion distante";
 ?>

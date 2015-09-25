@@ -384,6 +384,9 @@ class IndexManager
                 case 'unrecognize_sso_origin':
                     //$message = get_lang('SSOError');
                     break;
+                case 'user_doesnt_exist':
+                    $message = get_lang("UserDoesntExist");
+                    break;
             }
         }
         return Display::return_message($message, 'error');

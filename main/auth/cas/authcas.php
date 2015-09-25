@@ -38,19 +38,18 @@ function cas_is_authenticated()
 	global $logout;
 
     if (!cas_configured()) {
-        return;
+        return false;
     }
 
-
-	if (!is_object($PHPCAS_CLIENT) ) 
-	{
+	if (!is_object($PHPCAS_CLIENT) ) {
 		phpCAS::client($cas_auth_ver,$cas_auth_server,$cas_auth_port,$cas_auth_uri);
 		phpCAS::setNoCasServerValidation();
 	}
+
 	$auth = phpCAS::checkAuthentication(); 
   
 	if ($auth) {
-		$login= trim(phpCAS::getUser());
+		$login = trim(phpCAS::getUser());
 		/*
 		   Get user  attributes. Here are the attributes for crdp platform
 		   sn => name
@@ -86,51 +85,57 @@ function cas_is_authenticated()
 		    // get user info from username
 		    $tab_user_info = UserManager::get_user_info($login);
 		    
-		    // user found in the chamilo database
 		    if (is_array($tab_user_info)) {
-		        // if option is on we update user automatically from ldap server
+                // user found in the chamilo database
+                // if option is on we update user automatically from ldap server
 		        if (api_get_setting("update_user_info_cas_with_ldap") == "true") {
                     $ldapuser = extldap_authenticate($login, 'nopass', true);
-                    if ($ldap_user !== false) {
+                    if ($ldapuser !== false) {
                         $chamilo_user = extldap_get_chamilo_user($ldapuser);
                         $chamilo_user['user_id'] = $tab_user_info['user_id'];
                         $chamilo_user['status'] = $tab_user_info['status'];
         				UserManager::update_user ($chamilo_user["user_id"], $chamilo_user["firstname"], $chamilo_user["lastname"], $login, null, null, $chamilo_user["email"], $chamilo_user["status"], '', '', '', '', 1, null, 0, null,'') ;
 		            }
 		        }
+
 		        return $login;
 		    }
-		    // user not found
 		    else {
-		        // if option is on we can ADD user automatically from ldap server or by modify own profil
+                // user not found
+                // if option is on we can ADD user automatically from ldap server or by modify own profil
 		        $user_added = false;
 		        switch (api_get_setting("cas_add_user_activate")) {
 		            case PLATFORM_AUTH_SOURCE : 
 		                // user will have to modify firstname, lastname, email in chamilo profil edit
-		                $userdata = get_lang("EditInProfil");
+		                $userdata = "";
           				UserManager::create_user($userdata, $userdata, '5', $userdata, $login, 'casplaceholder', '','','','',CAS_AUTH_SOURCE);
+                        // user'll have to fill his profile
+                        $_SESSION['forceUpdateProfile'] = 1;
           				$user_added = $login;
-		                break;
+                        break;
 		            case LDAP_AUTH_SOURCE : 
 		                // user info are read from ldap connexion
 	                    // get user info from ldap server
 	                    // user has already been authenticated by CAS
 	                    // If user not found in LDAP, user not created
 	                    $ldapuser = extldap_authenticate($login, 'nopass', true);
-	                    if ($ldap_user !== false) {
+	                    if ($ldapuser !== false) {
 	                        $chamilo_user = extldap_get_chamilo_user($ldapuser);
                             $chamilo_user['username'] = $login;
                             $chamilo_user['auth_source'] = CAS_AUTH_SOURCE;
                             $chamilo_uid = external_add_user($chamilo_user);
           				    $user_added = $login;
           				}
-		                break;
-		            default : break;
+                        break;
+		            default :
+                        $logout = true;
+                        Header('Location: '.api_get_path(WEB_PATH).'?loginFailed=1&error=user_doesnt_exist');
+                        break;
 		        }
 		        return $user_added;
 		    }
 		}
-//		//If the user is in the dokeos database and we are ,not in a logout request, we upgrade his infomration by ldap
+//		If the user is in the dokeos database and we are ,not in a logout request, we upgrade his infomration by ldap
 //		if (! $logout){
 //			$user_table = Database::get_main_table(TABLE_MAIN_USER);
 //			$sql = "SELECT user_id, username, password, auth_source, active, expiration_date ".
@@ -168,7 +173,7 @@ function cas_is_authenticated()
  *
  * @see online_logout()
  */
-function cas_logout($uinfo=null, $location=null)
+function cas_logout($uinfo = null, $location = null)
 {
     global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
     global $PHPCAS_CLIENT;

@@ -322,3 +322,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // 0 = No link (not clickable)
 // 2 = Link to the course if there is only one course
 //$_configuration['courses_list_session_title_link'] = 1;
+// If user profile is incomplete (firstname or lastname or email empty) go to profile edit at loggin
+//$_configuration['force_update_incomplete_profile'] = false;

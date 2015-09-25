@@ -86,5 +86,5 @@ $strings['InfoApiStepThree'] = "In Option 2 (Request API credentials to create y
 $strings['ErrorOccurred'] = "<strong>An error ocurred</strong>. Code: %s. Message: %s. Please contact to platform admin";
 $strings['VisibleInCatalog'] = "Visible in catalog";
 $strings['Beneficiaries'] = "Beneficiaries";
-$strings['AvailableCourse'] = "Curso disponible";
+$strings['AvailableCourse'] = "Available course";
 $strings['ShowOnCourseCatalog'] = "Show on course catalog";

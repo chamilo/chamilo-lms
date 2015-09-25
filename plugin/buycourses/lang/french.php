@@ -87,4 +87,4 @@ $strings['ErrorOccurred'] = "<strong>Une erreur est survenue</strong>. Code: %s.
 $strings['VisibleInCatalog'] = "Visible dans le catalogue";
 $strings['Beneficiaries'] = "Bénéficiaires";
 $strings['AvailableCourse'] = "Cours disponibles";
-$strings['ShowOnCourseCatalog'] = "Afficher sur le catalogue des cours";
+$strings['ShowOnCourseCatalog'] = "Afficher dans le catalogue de cours";

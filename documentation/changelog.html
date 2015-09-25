@@ -1068,6 +1068,8 @@ All security issues are published and patches are attached on <a href="https://s
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d64a02c156c7adf3983807be860a7848311dbfb3">d64a02c1</a> - <a href="https://support.chamilo.org/issues/7272">#7272</a>) Fix SQL injection threats and replace SESSION variable with api_get_user_id</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/587961662a8f9d035e52f14cd0aa4fee3aee68d8">58796166</a> - <a href="https://support.chamilo.org/issues/7275">#7275</a>) Add security token to course copy tool</li>
   <li>(<a href="https://support.chamilo.org/issues/7440">#7440</a>) Fix a series of SQL injection vulnerabilities due to integer filtering</li>
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1307b662d2b5ba011b98518caa91e6714d8e3367">1307b662</a> - <a href="https://task.beeznest.com/issues/10295">BT#10295</a>) Remove XSS when add/edit career</li>
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1b320e57725135eb8c8eff9a8367de90addd0ece">1b320e57</a> - <a href="https://task.beeznest.com/issues/10298">BT#10298</a>) Avoid XSS when event is created on agenda</li>
 </ul>
 
 <h3>Possibly breaking changes</h3>
@@ -1131,6 +1133,24 @@ All security issues are published and patches are attached on <a href="https://s
 
 <h3>Improvements (minor features) and debug</h3>
 <ul>
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e406e2ee8cfb597951ccac4f1ec2b77875b1f77d">e406e2ee</a> - <a href="https://support.chamilo.org/issues/7768">#7768</a>) Fix install process to avoid re-install plugin</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/edf83bdc0d778d347dcf3e37425369eaaecb1335">edf83bdc</a> - <a href="https://support.chamilo.org/issues/7768">#7768</a>) Add filter by user on sales report</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/fa29e02ac31a3461ed002e32ec04b650b0ba1479">fa29e02a</a> - <a href="https://support.chamilo.org/issues/7841">#7841</a>) Remove chat button from elfinder popup file selector for 1.10.x</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/90e2852223d5aad04802f282b7919379084ec624">90e28522</a>) If chamilo exercise added in LP has pass % then change status to passed/failed</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/fa9b35e8d0a0c2b3aa40a3447dc8e24c33c379dd">fa9b35e8</a> - <a href="https://support.chamilo.org/issues/7558">#7558</a>) Show messages for status from  video chat connection</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4c9a8d4a65ff1331d7a21714678969f07b0f957c">4c9a8d4a</a>) Update FontAwesome version</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d357cb23264f02fc73d532cdd96cba68fabfd52a">d357cb23</a> - <a href="https://support.chamilo.org/issues/7181">#7181</a>) Added new lib to upgrade to webcamJS from JPEGCam</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b91733cc167c69e09bfd49c63308e338fa8fa41d">b91733cc</a> - <a href="https://support.chamilo.org/issues/7835">#7835</a>) Avoid blocked icons by ad blockers</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0829fd8804aed5dd612d4dcfef32ec339f7ded3b">0829fd88</a>) Move constant in api.lib.php</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d1aa7a96feef449f8e4811f674e35c107c306420">d1aa7a96</a> - <a href="https://support.chamilo.org/issues/279">#279</a>) Added new lib for vCard Exports</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ed50ffd65266b047ad193a5b887ad11f44c8bfa5">ed50ffd6</a> - <a href="https://task.beeznest.com/issues/10311">BT#10311</a>) add jquery.timelinr and img</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/249f7c9cd3a7343a68e1c6f54434a6c0610c1703">249f7c9c</a> - <a href="https://task.beeznest.com/issues/10311">BT#10311</a>) fix timeline panel</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a20b8fc767010b5593a43d93df49d48afc406bb2">a20b8fc7</a> - <a href="https://task.beeznest.com/issues/10281">BT#10281</a>) Apply format to session dates on session list</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/fdb647460c957d6f69fbcc362e645b2bff9627ab">fdb64746</a> - <a href="https://task.beeznest.com/issues/10308">BT#10308</a>) Improve send message on social network</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f2a03393774e8dd02f1d33acc69022f3cd6fb133">f2a03393</a> - <a href="https://support.chamilo.org/issues/7558">#7558</a>) Add method to get a HTML code for a icon by Font Awesome</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/e94602ec57b374c05e4acc78142889fbea36fdb3">e94602ec</a> - <a href="https://support.chamilo.org/issues/7837">#7837</a>) Replace old code with api_get_user_info</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4e0fb4a3087664a5431c481035af83c00371e781">4e0fb4a3</a> - <a href="https://task.beeznest.com/issues/10217">BT#10217</a>) Replace http with https</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/57f99efbdc9224512a242096482998bef0df4cf7">57f99efb</a> - <a href="https://task.beeznest.com/issues/10253">BT#10253</a>) Add dropbox_hide_general_coach setting</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/110060be24244a8f8cfb9837bf9500aaddf2bc3a">110060be</a> - <a href="https://support.chamilo.org/issues/7462">#7462</a>) Fix pages blocked due to course restriction</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/299ba994390549c0193348c498760e727236609c">299ba994</a> - <a href="https://support.chamilo.org/issues/7477">#7477</a>) Restore admin view in reports (was lost in 1.9.8)</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7f55f83751bd8d0e641afb85f05093f5e42c8bd6">7f55f837</a>) Rename the custompages php files in order to avoid overwrites</li>

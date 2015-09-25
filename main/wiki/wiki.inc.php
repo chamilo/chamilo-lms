@@ -959,25 +959,25 @@ class Wiki
             api_is_platform_admin() ||
             ($row['assignment'] == 2 && $KeyVisibility=="0" && (api_get_user_id() == $row['user_id']))
         ) {
-            echo '<div class="actions">';
+            $actionsLeft = '';
 
             // menu edit page
             $editLink = '<a href="index.php?'.api_get_cidreq().'&action=edit&title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('edit').'>'.
                 Display::return_icon('edit.png', get_lang('EditThisPage'), '', ICON_SIZE_MEDIUM).'</a>';
 
             if (api_is_allowed_to_edit(false, true)) {
-                echo $editLink;
+                $actionsLeft .= $editLink;
             } else {
                 if ((api_is_allowed_in_course() ||
                     GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())) && $page != 'index'
                 ) {
-                    echo $editLink;
+                    $actionsLeft .= $editLink;
                 } else {
-                    echo '&nbsp;';
+                    $actionsLeft .= '';
                 }
             }
 
-            echo '<div class="pull-right">';
+            $actionsRight = '';
 
             $protect_page = null;
             $lock_unlock_protect = null;
@@ -993,7 +993,7 @@ class Wiki
             }
 
             if ($row['id']) {
-                echo '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_protect.'&title='.api_htmlentities(urlencode($page)).'">'.
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_protect.'&title='.api_htmlentities(urlencode($page)).'">'.
                         $protect_page.'</a>';
             }
 
@@ -1012,7 +1012,7 @@ class Wiki
             }
 
             if ($row['id']) {
-                echo '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_visibility.'&title='.api_htmlentities(urlencode($page)).'">'.
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_visibility.'&title='.api_htmlentities(urlencode($page)).'">'.
                     $visibility_page.'</a>';
             }
 
@@ -1033,38 +1033,38 @@ class Wiki
                     GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
                 ) {
                     // menu discuss page
-                    echo '<a href="index.php?'.api_get_cidreq().'&action=discuss&title='.api_htmlentities(urlencode($page)).'" '.self::is_active_navigation_tab('discuss').'>'.
+                    $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=discuss&title='.api_htmlentities(urlencode($page)).'" '.self::is_active_navigation_tab('discuss').'>'.
                         Display::return_icon('discuss.png',get_lang('DiscussThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
                 }
 
                 //menu history
-                echo '<a href="index.php?'.api_get_cidreq().'&action=history&title='.api_htmlentities(urlencode($page)).'" '.self::is_active_navigation_tab('history').'>'.
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=history&title='.api_htmlentities(urlencode($page)).'" '.self::is_active_navigation_tab('history').'>'.
                     Display::return_icon('history.png',get_lang('ShowPageHistory'),'',ICON_SIZE_MEDIUM).'</a>';
                 //menu linkspages
-                echo '<a href="index.php?'.api_get_cidreq().'action=links&title='.api_htmlentities(urlencode($page)).'" '.self::is_active_navigation_tab('links').'>'.
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'action=links&title='.api_htmlentities(urlencode($page)).'" '.self::is_active_navigation_tab('links').'>'.
                     Display::return_icon('what_link_here.png',get_lang('LinksPages'),'',ICON_SIZE_MEDIUM).'</a>';
 
                 //menu delete wikipage
                 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-                    echo '<a href="index.php?action=delete&'.api_get_cidreq().'&title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('delete').'>'.
+                    $actionsRight .= '<a href="index.php?action=delete&'.api_get_cidreq().'&title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('delete').'>'.
                         Display::return_icon('delete.png',get_lang('DeleteThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
                 }
 
-                echo '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_notify_page.'&title='.api_htmlentities(urlencode($page)).'">'.
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=showpage&actionpage='.$lock_unlock_notify_page.'&title='.api_htmlentities(urlencode($page)).'">'.
                     $notify_page.'</a>';
 
                 // Page action: copy last version to doc area
                 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-                    echo '<a href="index.php?'.api_get_cidreq().'&action=export2doc&wiki_id='.$row['id'].'">'.
+                    $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=export2doc&wiki_id='.$row['id'].'">'.
                         Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
 
-                echo '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf&wiki_id='.$row['id'].'">'.
+                $actionsRight .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf&wiki_id='.$row['id'].'">'.
                     Display::return_icon('pdf.png',get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
 
                 $unoconv = api_get_configuration_value('unoconv.binaries');
                 if ($unoconv) {
-                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?action=export_to_doc_file&id='.$row['id'].'&'.api_get_cidreq().'">'.
+                    $actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?action=export_to_doc_file&id='.$row['id'].'&'.api_get_cidreq().'">'.
                         Display::return_icon('export_doc.png', get_lang('ExportToDoc'), array(), ICON_SIZE_MEDIUM).'</a>';
                 }
 
@@ -1080,29 +1080,29 @@ class Wiki
                     }
                 </script>
                 <?php
-                echo Display::url(
+                $actionsRight .= Display::url(
                     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM),
                     '#',
                     array('onclick' => "javascript: goprint();")
                 );
             }
-            echo '</div>';
-            echo '</div>';
+                        
+            echo Display::toolbarAction('toolbar-wikistudent', array(0 => $actionsLeft, 1 => $actionsRight));
 
-            echo '<div id="wikititle">';
+            
 
             if (empty($title)) {
-                $title = get_lang('DefaultTitle');
+                $pageTitle = get_lang('DefaultTitle');
             }
 
             if (self::wiki_exist($title)) {
-                echo $icon_assignment.'&nbsp;'.$icon_task.'&nbsp;'.api_htmlentities($title);
+                $pageTitle = $icon_assignment.'&nbsp;'.$icon_task.'&nbsp;'.api_htmlentities($title);
             } else {
-                echo api_htmlentities($title);
+                $pageTitle = api_htmlentities($title);
             }
-            echo '</div>';
+           
 
-            echo '<div id="wikicontent">'. self::make_wiki_link_clickable(
+            $pageWiki = self::make_wiki_link_clickable(
                     self::detect_external_link(
                         self::detect_anchor_link(
                             self::detect_mail_link(
@@ -1114,8 +1114,11 @@ class Wiki
                             )
                         )
                     )
-                ).'</div>';
-            echo '<div id="wikifooter">'.get_lang('Progress').': '.($row['progress']*10).'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.get_lang('Words').': '.self::word_count($content).'</div>';
+                );
+            
+            $footerWiki = '<div id="wikifooter">'.get_lang('Progress').': '.($row['progress']*10).'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.get_lang('Words').': '.self::word_count($content).'</div>';
+            
+            echo Display::panel($pageWiki, $pageTitle, $footerWiki);
         } //end filter visibility
     }
 
@@ -4679,14 +4682,14 @@ class Wiki
         $groupId = $this->group_id;
         $page = $this->page;
 
-        echo '<div class="actions">';
-
-        echo '<a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.
+        
+        $actionsLeft = '';
+        $actionsLeft .= '<a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.
             Display::return_icon('home.png', get_lang('Home'), '', ICON_SIZE_MEDIUM).'</a>';
 
         if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit()) {
             // menu add page
-            echo '<a href="index.php?cidReq=' . $_course['id'] . '&action=addnew&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('addnew').'>'
+            $actionsLeft .= '<a href="index.php?cidReq=' . $_course['id'] . '&action=addnew&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('addnew').'>'
             . Display::return_icon('add.png', get_lang('AddNew'), '', ICON_SIZE_MEDIUM) . '</a>';
         }
 
@@ -4705,20 +4708,22 @@ class Wiki
         }
 
         // menu find
-        echo '<a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('searchpages').'>'.
+        $actionsLeft .= '<a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('searchpages').'>'.
             Display::return_icon('search.png', get_lang('SearchPages'), '', ICON_SIZE_MEDIUM).'</a></li>';
 
         ///menu more
-        echo '<a href="index.php?action=more&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('more').'>'.
+        $actionsLeft .= '<a href="index.php?action=more&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('more').'>'.
             Display::return_icon('stats.png', get_lang('Statistics'), '', ICON_SIZE_MEDIUM).'</a></li>';
 
         // menu all pages
-        echo '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('allpages').'>'.
+        $actionsLeft .= '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('allpages').'>'.
             get_lang('AllPages').'</a>';
         // menu recent changes
-        echo '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.
+        $actionsLeft .= '<a class="btn btn-default" href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.
             get_lang('RecentChanges').'</a>';
-        echo '</div>';
+        
+        
+        echo Display::toolbarAction('toolbar-wiki', array( 0 => $actionsLeft));
     }
 
     /**

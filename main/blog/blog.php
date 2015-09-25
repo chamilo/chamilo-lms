@@ -307,7 +307,7 @@ echo '</div>';
 Display::display_introduction_section(TOOL_BLOGS);
 
 ?>
-<div class="sectiontitle"><?php echo Blog::get_blog_title($blog_id); ?></div>
+<div class="blog-title"><h1><?php echo Blog::get_blog_title($blog_id); ?></h1></div>
 <div class="sectioncomment"><?php echo Blog::get_blog_subtitle($blog_id); ?></div>
 
 <div class="row">

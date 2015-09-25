@@ -146,9 +146,6 @@ footer a:hover{
 .badge{
     background-color: #F7490C;
 }
-#carousel-announcement .left, #carousel-announcement .right{
-    background: #5C6B6A;
-}
 #carousel-announcement .carousel-indicators .active{
     background: #9EB8B6;
 }

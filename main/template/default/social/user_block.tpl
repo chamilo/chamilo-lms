@@ -19,7 +19,10 @@
             </li>
             {% if chat_enabled == 1 %}
                 <li>
-                    {% if user.user_is_online_in_chat != 0 %}
+                    {% if user.id == _u.id %}
+                        <img src="{{ "online.png" | icon }}" alt="{{ "Online" | get_lang }}">
+                        {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
+                    {% elseif user.user_is_online_in_chat != 0 %}
                         <a onclick="javascript:chatWith('{{ user.id }}', '{{ user.complete_name }}', '{{ user.user_is_online }}','{{ user.avatar_small }}')" href="javascript:void(0);">
                             <img src="{{ "online.png" | icon }}" alt="{{ "Online" | get_lang }}">
                             {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})

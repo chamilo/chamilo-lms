@@ -2145,7 +2145,7 @@ function attach_glossary_into_scorm(type) {
                     var dialogId = this.id +'_dialog';
                     var openerId = this.id +'_opener';
 
-                    var link = '<a id="'+openerId+'" href="#">If video does not work, try clicking here.</a>';
+                    var link = '<a id="'+openerId+'" href="#" class="btn"><i class="icon-youtube-play"></i>&nbsp;If video does not work, try clicking here.</a>';
                     var embed = $("iframe").contents().find("#"+this.id).find('embed').first();
 
                     var height = embed.attr('height');

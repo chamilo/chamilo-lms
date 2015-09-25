@@ -172,7 +172,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     $count = get_count_work($workId);
     if ($count > 0) {
         $display_output .= '<a href="downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq().'">'.
-            Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('save_pack.png', get_lang('Save'), null, ICON_SIZE_MEDIUM).'</a>';
     }
     $actionsLeft .= $display_output;
 

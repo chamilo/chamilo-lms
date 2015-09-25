@@ -21,9 +21,9 @@
                     <tr>
                         <th>{{ 'Title'|get_lang }}</th>
                         <th class="text-center">{{ 'OfficialCode'|get_lang }}</th>
-                        <th class="text-center">{{ 'Visible'|get_lang }}</th>
+                        <th class="text-center">{{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                         <th class="text-right" width="200">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                        <th class="text-right">{{ 'Option'|get_lang }}</th>
+                        <th class="text-right">{{ 'Options  '|get_lang }}</th>
                     </tr>
                 </thead>
 
@@ -50,29 +50,19 @@
                                 {{ item.course_code }}
                             </td>
                             <td class="text-center">
-                                {% if item.visible == 1 %}
-                                    <input type="checkbox" name="visible" value="1" checked="checked" size="6">
+                                {% if item.visible %}
+                                    <i class="fa fa-fw fa-check-square-o"></i>
                                 {% else %}
-                                    <input type="checkbox" name="visible" value="1" size="6">
+                                    <i class="fa fa-fw fa-square-o"></i>
                                 {% endif %}
                             </td>
-                            <td width="200">
-                                {% if item.currency %}
-                                    <div class="input-group">
-                                        <span class="input-group-addon" id="price-{{ item.course_id }}">{{ item.currency }}</span>
-                                        <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" class="text-right form-control" aria-describedby="price-{{ item.course_id }}">
-                                    </div>
-                                {% else %}
-                                    <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" class="text-right form-control">
-                                {% endif %}
+                            <td width="200" class="text-right">
+                                {{ "#{item.price} #{tem.currency ?: item.currency}" }}
                             </td>
                             <td class="text-right">
                                 <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.course_id, 't':product_type_course}|url_encode() }}" class="btn btn-info btn-sm">
                                     <i class="fa fa-wrench fa-fw"></i> {{ 'Configure'|get_lang }}
                                 </a>
-                                <button class="btn btn-success btn-sm bc-button-save" type="button">
-                                    <i class="fa fa-save"></i> {{ 'Save'|get_lang }}
-                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -90,9 +80,9 @@
                             <th>{{ 'Title'|get_lang }}</th>
                             <th class="text-center">{{ 'StartDate'|get_lang }}</th>
                             <th class="text-center">{{ 'EndDate'|get_lang }}</th>
-                            <th class="text-center">{{ 'Visible'|get_lang }}</th>
+                            <th class="text-center">{{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                             <th class="text-right">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                            <th class="text-right">{{ 'Option'|get_lang }}</th>
+                            <th class="text-right">{{ 'Options'|get_lang }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -121,28 +111,18 @@
                                 </td>
                                 <td class="text-center">
                                     {% if item.visible %}
-                                        <input type="checkbox" name="visible" value="1" checked="checked" size="6" />
+                                        <i class="fa fa-fw fa-check-square-o"></i>
                                     {% else %}
-                                        <input type="checkbox" name="visible" value="1" size="6" />
+                                        <i class="fa fa-fw fa-square-o"></i>
                                     {% endif %}
                                 </td>
                                 <td class="text-right" width="200">
-                                    {% if item.currency %}
-                                        <div class="input-group">
-                                            <span class="input-group-addon" id="price-{{ item.session_id }}">{{ item.currency }}</span>
-                                            <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" class="text-right form-control" aria-describedby="price-{{ item.session_id }}">
-                                        </div>
-                                    {% else %}
-                                        <input type="number" name="price" value="{{ item.price }}" step="0.01" min="0" class="text-right form-control">
-                                    {% endif %}
+                                    {{ "#{item.price} #{tem.currency ?: item.currency}" }}
                                 </td>
-                                <td class="text-right" id="session{{ item.session_id }}">
+                                <td class="text-right">
                                     <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.session_id, 't': product_type_session}|url_encode() }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-wrench fa-fw"></i> {{ 'Configure'|get_lang }}
                                     </a>
-                                    <button class="btn btn-success btn-sm bc-button-save" type="button">
-                                        <i class="fa fa-save"></i> {{ 'Save'|get_lang }}
-                                    </button>
                                 </td>
                             </tr>
                         {% endfor %}

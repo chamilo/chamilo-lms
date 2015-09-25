@@ -66,6 +66,7 @@ if ($editingCourse) {
 
     $currencyIso = $courseItem['currency'];
     $formDefaults = [
+        'product_type' => get_lang('Course'),
         'i' => $courseItem['course_id'],
         't' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
         'name' => $courseItem['course_title'],
@@ -120,6 +121,7 @@ if ($editingCourse) {
 
     $currencyIso = $sessionItem['currency'];
     $formDefaults = [
+        'product_type' => get_lang('Session'),
         'i' => $session->getId(),
         't' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION,
         'name' => $sessionItem['session_name'],
@@ -132,8 +134,13 @@ if ($editingCourse) {
 }
 
 $form = new FormValidator('beneficiaries');
+$form->addText('product_type', $plugin->get_lang('ProductType'), false);
 $form->addText('name', get_lang('Name'), false);
-$visibleCheckbox = $form->addCheckBox('visible', get_lang('Visible'), 'Mostrar en el catálogo de cursos');
+$visibleCheckbox = $form->addCheckBox(
+    'visible',
+    $plugin->get_lang('VisibleInCatalog'),
+    $plugin->get_lang('ShowOnCourseCatalog')
+);
 $form->addElement(
     'number',
     'price',
@@ -157,7 +164,7 @@ if ($editingCourse) {
 $form->addHidden('t', null);
 $form->addHidden('i', null);
 $form->addButtonSave(get_lang('Save'));
-$form->freeze(['name']);
+$form->freeze(['product_type', 'name']);
 
 if ($form->validate()) {
     $formValues = $form->exportValues();

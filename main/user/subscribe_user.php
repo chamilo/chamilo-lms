@@ -255,10 +255,6 @@ $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAY
 $form->addText('keyword', '', false);
 $form->addElement('hidden', 'type', $type);
 $form->addButtonSearch(get_lang('Search'));
-$form->addElement('static', 'additionalactions', null, $actions);
-
-
-
 echo Display::toolbarAction('toolbar-subscriber', array(0 => $actionsLeft, 1 => $form->returnForm()));
 
 $option = $type == COURSEMANAGER ? 2 : 1;

@@ -6,6 +6,11 @@
  */
 class ch_open extends survey_question
 {
+    /**
+     * @param FormValidator $form
+     * @param array $questionData
+     * @param string $answers
+     */
     public function render(FormValidator $form, $questionData = array(), $answers = '')
     {
         if (is_array($answers)) {
@@ -16,6 +21,6 @@ class ch_open extends survey_question
 
         $name = 'question'.$questionData['question_id'];
         $form->addTextarea($name, null);
-        $form->setDefaults([$name => $answers]);
+        $form->setDefaults([$name => $content]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 $strings['plugin_title'] = "Vente de cours";
-$strings['plugin_comment'] = "Vendez vos cours directement depuis votre portail Chamilo, au travers d'un compte PayPal. Plugin en version beta, à utiliser avec précaution. Ni l'association Chamilo ni les développeurs impliqués dans le développement de ce plugin ne sauraient être tenus responsables d'un quelconque inconvénient causé par celui-ci.";
+$strings['plugin_comment'] = "Vendez vos cours directement depuis votre portail Chamilo, au travers d'un compte PayPal. Ni l'association Chamilo ni les développeurs impliqués dans le développement de ce plugin ne sauraient être tenus responsables d'un quelconque inconvénient causé par celui-ci.";
 $strings['show_main_menu_tab'] = "Montrer l'onglet dans le menu principal";
 $strings['show_main_menu_tab_help'] = "Dans le cas où vous ne souhaitez pas montrer l'onglet, il est possible de rajouter le lien suivant à votre portail Chamilo: %s";
 $strings['include_sessions'] = "Inclure les sessions";
@@ -18,7 +18,7 @@ $strings['Price'] = "Prix";
 $strings['SearchFilter'] = "Filtre de recherche";
 $strings['MinimumPrice'] = "Prix minimum";
 $strings['MaximumPrice'] = "Prix maximum";
-$strings['AvailableCourses'] = "Configuration des cours disponibles";
+$strings['AvailableCoursesConfiguration'] = "Configuration des cours disponibles";
 $strings['PaymentsConfiguration'] = "Configuration des paiements";
 $strings['TheUserIsAlreadyRegisteredInTheCourse'] = "L'utilisateur est déjà inscrit au cours";
 $strings['SeeDescription'] = "Voir description";
@@ -84,3 +84,7 @@ $strings['InfoApiStepOne'] = "Aller dans l\'option <strong>profil</strong> de Pa
 $strings['InfoApiStepTwo'] = "Dans la section <strong>API d\'accès</strong>, cloquer sur l\'option <strong>Mettre à jour</strong>";
 $strings['InfoApiStepThree'] = "Dans l\'option 2 de Configuration des données et permissions API, cliquer sur <strong>Voir signature API</strong>. Copier ces donées dans le formulaire de configuration de ce plugin";
 $strings['ErrorOccurred'] = "<strong>Une erreur est survenue</strong>. Code: %s. Message: %s. Veuillez contacter l'administrateur de la plateforme";
+$strings['VisibleInCatalog'] = "Visible dans le catalogue";
+$strings['Beneficiaries'] = "Bénéficiaires";
+$strings['AvailableCourse'] = "Cours disponibles";
+$strings['ShowOnCourseCatalog'] = "Afficher dans le catalogue de cours";

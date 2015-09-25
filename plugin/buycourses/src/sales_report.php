@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 /**
  * List of pending payments of the Buy Courses plugin
@@ -35,7 +36,7 @@ if (isset($_GET['order'])) {
 
             $urlToRedirect .= http_build_query([
                 'status' => BuyCoursesPlugin::SALE_STATUS_COMPLETED,
-                'sale' =>  $sale['id']
+                'sale' => $sale['id']
             ]);
             break;
         case 'cancel':
@@ -50,7 +51,7 @@ if (isset($_GET['order'])) {
 
             $urlToRedirect .= http_build_query([
                 'status' => BuyCoursesPlugin::SALE_STATUS_CANCELED,
-                'sale' =>  $sale['id']
+                'sale' => $sale['id']
             ]);
             break;
     }
@@ -61,24 +62,55 @@ if (isset($_GET['order'])) {
 
 $productTypes = $plugin->getProductTypes();
 $saleStatuses = $plugin->getSaleStatuses();
+$paymentTypes = $plugin->getPaymentTypes();
+
+$selectedFilterType = '0';
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
 $selectedSale = isset($_GET['sale']) ? intval($_GET['sale']) : 0;
+$searchTerm = '';
 
 $form = new FormValidator('search', 'get');
 
 if ($form->validate()) {
+    $selectedFilterType = $form->getSubmitValue('filter_type');
     $selectedStatus = $form->getSubmitValue('status');
+    $searchTerm = $form->getSubmitValue('user');
 
     if ($selectedStatus === false) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
+
+    if ($selectedFilterType === false) {
+        $selectedFilterType = '0';
+    }
 }
 
+$form->addRadio(
+    'filter_type',
+    get_lang('FilterBy'),
+    [$plugin->get_lang('ByStatus'), $plugin->get_lang('ByUser')]
+);
+$form->addHtml('<div id="report-by-status" ' . ($selectedFilterType !== '0' ? 'style="display:none"' : '') . '>');
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
+$form->addHtml('</div>');
+$form->addHtml('<div id="report-by-user" ' . ($selectedFilterType !== '1' ? 'style="display:none"' : '') . '>');
+$form->addText('user', get_lang('UserName'), false);
+$form->addHtml('</div>');
 $form->addButtonFilter($plugin->get_lang('SearchByStatus'));
-$form->setDefaults(['status' => $selectedStatus]);
+$form->setDefaults([
+    'filter_type' => $selectedFilterType,
+    'status' => $selectedStatus
+]);
 
-$sales = $plugin->getSaleListByStatus($selectedStatus);
+switch ($selectedFilterType) {
+    case '0':
+        $sales = $plugin->getSaleListByStatus($selectedStatus);
+        break;
+    case '1':
+        $sales = $plugin->getSaleListByUser($searchTerm);
+        break;
+}
+
 $saleList = [];
 
 foreach ($sales as $sale) {
@@ -86,12 +118,13 @@ foreach ($sales as $sale) {
         'id' => $sale['id'],
         'reference' => $sale['reference'],
         'status' => $sale['status'],
-        'date' => api_format_date($sale['date'], DATE_FORMAT_LONG_NO_DAY),
+        'date' => api_format_date($sale['date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $sale['iso_code'],
         'price' => $sale['price'],
         'product_name' => $sale['product_name'],
         'product_type' => $productTypes[$sale['product_type']],
-        'complete_user_name' => api_get_person_name($sale['firstname'], $sale['lastname'])
+        'complete_user_name' => api_get_person_name($sale['firstname'], $sale['lastname']),
+        'payment_type' => $paymentTypes[$sale['payment_type']]
     ];
 }
 

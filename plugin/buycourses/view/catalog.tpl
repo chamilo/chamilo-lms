@@ -23,7 +23,7 @@
                         {% if showing_courses %}
                             {% for course in courses %}
                                 <div class="col-md-4 col-sm-6">
-                                    <div class="thumbnail">
+                                    <article class="thumbnail">
                                         <img alt="{{ course.title }}" class="img-responsive" src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                                         <div class="caption">
                                             {% set course_description_url = _p.web_ajax ~ 'course_home.ajax.php?' ~ {'code': course.code, 'a': 'show_course_information'}|url_encode() %}
@@ -53,7 +53,7 @@
                                                 <div class="alert alert-info">{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                             {% endif %}
                                         </div>
-                                    </div>
+                                    </article>
                                 </div>
                             {% endfor %}
                         {% endif %}
@@ -61,7 +61,7 @@
                         {% if showing_sessions %}
                             {% for session in sessions %}
                                 <div class="col-md-4 col-sm-6">
-                                    <div class="thumbnail">
+                                    <article class="thumbnail">
                                         <img alt="{{ session.name }}" class="img-responsive" src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                                         <div class="caption">
                                             <h3>
@@ -100,7 +100,7 @@
                                                 <div class="alert alert-info">{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</div>
                                             {% endif %}
                                         </div>
-                                    </div>
+                                    </article>
                                 </div>
                             {% endfor %}
                         {% endif %}

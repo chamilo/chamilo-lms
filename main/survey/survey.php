@@ -53,7 +53,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
 
 // Getting the survey information
-if (isset($_GET['survey_id'])) {
+if (!empty($_GET['survey_id'])) {
 	$course_code = api_get_course_id();
 	if ($course_code!=-1) {
 		$survey_data = SurveyManager::get_survey($survey_id);
@@ -63,6 +63,11 @@ if (isset($_GET['survey_id'])) {
 		Display :: display_footer();
 		exit;
 	}
+} else {
+    Display :: display_header(get_lang('ToolSurvey'));
+    Display :: display_error_message(get_lang('NotAllowed'), false);
+    Display :: display_footer();
+    exit;
 }
 
 $tool_name = strip_tags($survey_data['title']);

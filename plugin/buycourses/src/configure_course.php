@@ -43,7 +43,7 @@ if ($editingCourse) {
     }
 
     $courseItem = $plugin->getCourseForConfiguration($course, $currency);
-
+    $defaultBeneficiaries = [];
     $teachers = $course->getTeachers();
     $teachersOptions = [];
 
@@ -54,9 +54,16 @@ if ($editingCourse) {
             'text' => $teacher->getCompleteName(),
             'value' => $teacher->getId()
         ];
+
+        $defaultBeneficiaries[] = $teacher->getId();
     }
 
-    $beneficiaries = $plugin->getItemBeneficiaries($courseItem['item_id']);
+    $currentBeneficiaries = $plugin->getItemBeneficiaries($courseItem['item_id']);
+
+    if (!empty($currentBeneficiaries)) {
+        $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
+    }
+
     $currencyIso = $courseItem['currency'];
     $formDefaults = [
         'i' => $courseItem['course_id'],
@@ -64,7 +71,7 @@ if ($editingCourse) {
         'name' => $courseItem['course_title'],
         'visible' => $courseItem['visible'],
         'price' => $courseItem['price'],
-        'beneficiaries' => array_column($beneficiaries, 'user_id')
+        'beneficiaries' => $defaultBeneficiaries
     ];
 } elseif ($editingSession) {
     if (!$includeSession) {
@@ -83,6 +90,9 @@ if ($editingCourse) {
         'text' => $generalCoach->getCompleteName(),
         'value' => $generalCoach->getId()
     ];
+    $defaultBeneficiaries = [
+        $generalCoach->getId()
+    ];
     $courseCoachesOptions = [];
     $sessionCourses = $session->getCourses();
 
@@ -98,10 +108,15 @@ if ($editingCourse) {
                 'text' => $courseCoach->getCompleteName(),
                 'value' => $courseCoach->getId()
             ];
+            $defaultBeneficiaries[] = $courseCoach->getId();
         }
     }
 
-    $beneficiaries = $plugin->getItemBeneficiaries($sessionItem['item_id']);
+    $currentBeneficiaries = $plugin->getItemBeneficiaries($sessionItem['item_id']);
+
+    if (!empty($currentBeneficiaries)) {
+        $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
+    }
 
     $currencyIso = $sessionItem['currency'];
     $formDefaults = [
@@ -110,7 +125,7 @@ if ($editingCourse) {
         'name' => $sessionItem['session_name'],
         'visible' => $sessionItem['visible'],
         'price' => $sessionItem['price'],
-        'beneficiaries' => array_column($beneficiaries, 'user_id')
+        'beneficiaries' => $defaultBeneficiaries
     ];
 } else {
     api_not_allowed(true);

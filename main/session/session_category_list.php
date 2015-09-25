@@ -18,14 +18,11 @@ api_protect_limit_for_session_admin();
 $this_section = SECTION_PLATFORM_ADMIN;
 $htmlHeadXtra[] = '<script>
 function selectAll(idCheck,numRows,action) {
-    for(i=0;i<numRows;i++) {
-        idcheck = document.getElementById(idCheck+"_"+i);
-        if (action == "true"){
-            idcheck.checked = true;
-        } else {
-            idcheck.checked = false;
-        }
+    for(i = 0; i < numRows; i++) {
+        idcheck = document.getElementById(idCheck + "_" + i);
+        idcheck.checked = action == "true";
     }
+}
 </script>';
 
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -186,8 +183,8 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                     <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
                     <td><?php echo api_htmlentities($enreg['name'], ENT_QUOTES, $charset); ?></td>
                     <td><?php echo "<a href=\"session_list.php?id_category=".$enreg['id']."\">".$nb_courses." Session(s) </a>"; ?></td>
-                    <td><?php echo api_htmlentities($enreg['date_start'], ENT_QUOTES, $charset); ?></td>
-                    <td><?php echo api_htmlentities($enreg['date_end'], ENT_QUOTES, $charset); ?></td>
+                    <td><?php echo api_format_date($enreg['date_start'], DATE_FORMAT_SHORT); ?></td>
+                    <td><?php echo api_format_date($enreg['date_end'], DATE_FORMAT_SHORT); ?></td>
                     <td>
                         <a href="session_category_edit.php?&id=<?php echo $enreg['id']; ?>">
                             <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
@@ -237,7 +234,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll') ?></a>
         </div>
         <div class="list-category">
-            <select class="chzn-select" name="action">
+            <select class="selectpicker show-tick form-control" name="action">
                 <option value="delete_off_session" selected="selected"><?php echo get_lang('DeleteSelectedSessionCategory'); ?></option>
                 <option value="delete_on_session"><?php echo get_lang('DeleteSelectedFullSessionCategory'); ?></option>
             </select>

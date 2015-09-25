@@ -230,7 +230,7 @@ class GlossaryManager
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
      */
-    public static function glossary_exists($term,$not_id='')
+    public static function glossary_exists($term, $not_id='')
     {
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
@@ -241,7 +241,7 @@ class GlossaryManager
                     c_id = $course_id AND
                     name = '".Database::escape_string($term)."'";
         if ($not_id<>'') {
-            $sql .= " AND glossary_id <> '".Database::escape_string($not_id)."'";
+            $sql .= " AND glossary_id <> '".intval($not_id)."'";
         }
         $result = Database::query($sql);
         $count = Database::num_rows($result);
@@ -311,7 +311,13 @@ class GlossaryManager
         $result = Database::query($sql);
         if ($result === false or Database::affected_rows($result) < 1) { return false; }
         //update item_property (delete)
-        api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, intval($glossary_id), 'delete', api_get_user_id());
+        api_item_property_update(
+            api_get_course_info(),
+            TOOL_GLOSSARY,
+            intval($glossary_id),
+            'delete',
+            api_get_user_id()
+        );
 
         // reorder the remaining terms
         GlossaryManager::reorder_glossary();
@@ -324,7 +330,8 @@ class GlossaryManager
     /**
      * This is the main function that displays the list or the table with all
      * the glossary terms
-     * @param  string  View ('table' or 'list'). Optional parameter. Defaults to 'table' and prefers glossary_view from the session by default.
+     * @param  string  View ('table' or 'list'). Optional parameter.
+     * Defaults to 'table' and prefers glossary_view from the session by default.
      * @return void
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
@@ -392,12 +399,12 @@ class GlossaryManager
     public static function display_glossary_list()
     {
         $glossary_data = self::get_glossary_data(0,1000,0,'ASC');
-        foreach($glossary_data as $key=>$glossary_item) {
-            echo '<div class="sectiontitle">'.$glossary_item[0].'</div>';
-            echo '<div class="sectioncomment">'.$glossary_item[1].'</div>';
+        foreach ($glossary_data as $key => $glossary_item) {
+            $actions = '';
             if (api_is_allowed_to_edit(null,true)) {
-                echo '<div>'.self::actions_filter($glossary_item[2], '',$glossary_item).'</div>';
+                $actions = '<div class="pull-right">'.self::actions_filter($glossary_item[2], '',$glossary_item).'</div>';
             }
+            echo Display::panel($glossary_item[1], $glossary_item[0].' '.$actions);
         }
         return true;
     }
@@ -455,19 +462,25 @@ class GlossaryManager
         }
 
         //condition for the session
-        $session_id         = api_get_session_id();
-        $condition_session  = api_get_session_condition($session_id, true, true, 'glossary.session_id');
-        $column             = intval($column);
+        $session_id = api_get_session_id();
+        $condition_session = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'glossary.session_id'
+        );
+        $column = intval($column);
         if (!in_array($direction,array('DESC', 'ASC'))) {
             $direction          = 'ASC';
         }
         $from = intval($from);
         $number_of_items = intval($number_of_items);
 
-        $sql = "SELECT glossary.name 			as col0,
-					   glossary.description 	as col1,
-					   $col2
-					   glossary.session_id
+        $sql = "SELECT
+                    glossary.name 			as col0,
+					glossary.description 	as col1,
+					$col2
+					glossary.session_id
 				FROM $t_glossary glossary, $t_item_propery ip
 				WHERE
 				    glossary.glossary_id = ip.ref AND
@@ -481,7 +494,7 @@ class GlossaryManager
         $return = array();
         $array = array();
         while ($data = Database::fetch_array($res)) {
-            //validacion when belongs to a session
+            // Validation when belongs to a session
             $session_img = api_get_session_image($data['session_id'], $_user['status']);
             $array[0] = $data[0] . $session_img;
 
@@ -560,13 +573,15 @@ class GlossaryManager
         // Database table definition
         $t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM $t_glossary WHERE c_id = $course_id ORDER by display_order ASC";
+        $sql = "SELECT * FROM $t_glossary
+                WHERE c_id = $course_id
+                ORDER by display_order ASC";
         $res = Database::query($sql);
 
         $i = 1;
         while ($data = Database::fetch_array($res)) {
             $sql = "UPDATE $t_glossary SET display_order = $i
-                    WHERE c_id = $course_id  AND glossary_id = '".intval($data['glossary_id'])."'";
+                    WHERE c_id = $course_id AND glossary_id = '".intval($data['glossary_id'])."'";
             Database::query($sql);
             $i++;
         }
@@ -594,7 +609,9 @@ class GlossaryManager
         }
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $t_glossary WHERE c_id = $course_id ORDER BY display_order $sortorder";
+        $sql = "SELECT * FROM $t_glossary
+                WHERE c_id = $course_id
+                ORDER BY display_order $sortorder";
         $res = Database::query($sql);
         $found = false;
         while ($row = Database::fetch_array($res)) {
@@ -610,9 +627,9 @@ class GlossaryManager
             }
         }
         $sql1 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($next_display_order)."'
-                WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($current_id)."'";
+                 WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($current_id)."'";
         $sql2 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($current_display_order)."'
-                WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($next_id)."'";
+                 WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($next_id)."'";
         Database::query($sql1);
         Database::query($sql2);
         if ($message)
@@ -642,6 +659,6 @@ class GlossaryManager
         } else {
             $css = '';
         }*/
-        $pdf->content_to_pdf($html, $css, get_lang('Glossary').'_'.$course_code, $course_code);
+        $pdf->content_to_pdf($html, '', get_lang('Glossary').'_'.$course_code, $course_code);
     }
 }

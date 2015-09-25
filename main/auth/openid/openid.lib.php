@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * OpenID utility functions. Taken from Drupal 6 code (from dries)
  * @package chamilo.auth.openid
@@ -48,7 +48,7 @@ function openid_redirect($url, $message) {
     $output .= '<form method="post" action="' . $url . '" id="openid-redirect-form">';
     foreach ($message as $key => $value) {
         $output .='<input type="hidden" name="' . $key . '" value="' . $value . '">';
-    }    
+    }
     $output .= '<noscript><input type="submit" name="submit" value="' . get_lang('Send') . '"/></noscript>';
     $output .= '</form>';
     $output .= '<script type="text/javascript">document.getElementById("openid-redirect-form").submit();</script>';

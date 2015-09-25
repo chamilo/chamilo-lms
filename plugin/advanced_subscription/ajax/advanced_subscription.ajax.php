@@ -156,7 +156,7 @@ if ($verified) {
                             if (isset($result['mailIds']['render'])) {
                                 // Render mail
                                 $url = $plugin->getRenderMailUrl(array('queueId' => $result['mailIds']['render']));
-                                Header::location($url);
+                                header('Location: '.$url);
                                 exit;
                             }
                         }
@@ -180,7 +180,7 @@ if ($verified) {
                         if (isset($result['mailIds']['render'])) {
                             // Render mail
                             $url = $plugin->getRenderMailUrl(array('queueId' => $result['mailIds']['render']));
-                            Header::location($url);
+                            header('Location: '.$url);
                             exit;
                         }
                     }
@@ -190,7 +190,7 @@ if ($verified) {
                 if ($lastMessageId !== false) {
                     // Render mail
                     $url = $plugin->getRenderMailUrl(array('queueId' => $lastMessageId));
-                    Header::location($url);
+                    header('Location: '.$url);
                     exit;
                 } else {
                     if (is_string($res)) {
@@ -200,7 +200,8 @@ if ($verified) {
                     }
                     $result['pass'] = false;
                     $url = $plugin->getTermsUrl($data, ADVANCED_SUBSCRIPTION_TERMS_MODE_FINAL);
-                    Header::location($url);
+                    header('Location: '.$url);
+                    exit;
                 }
             }
 
@@ -329,7 +330,7 @@ if ($verified) {
                         if (isset($result['mailIds']['render'])) {
                             // Render mail
                             $url = $plugin->getRenderMailUrl(array('queueId' => $result['mailIds']['render']));
-                            Header::location($url);
+                            header('Location: '.$url);
                             exit;
                         }
                     }

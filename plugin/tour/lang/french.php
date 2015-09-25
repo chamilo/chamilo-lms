@@ -39,19 +39,19 @@ $strings['TheHomePageStep'] = 'Ceci est la page d\'accueil du portail. On y retr
 $strings['YourCoursesList'] = 'Cette zone affiche les différents cours (ou sessions) auxquels vous avez accès. Si aucun cours ne s\'affiche, rendez-vous sur le catalogue de cours (voir menu) ou parlez-en à votre administrateur de portail';
 
 // if body class = section-myagenda
-$strings['AgendaAllowsYouToSeeWhatsHappening'] = 'The agenda tool allows you to see what events are scheduled for the upcoming days, weeks or months.';
-$strings['AgendaTheActionBar'] = 'You can decide to show the events as a list, rather than in a calendar view, using the action icons provided';
-$strings['AgendaTodayButton'] = 'Click the "today" button to see only today\'s schedule';
-$strings['AgendaTheMonthIsAlwaysInEvidence'] = 'The current month is always shown in evidence in the calendar view';
-$strings['AgendaButtonsAllowYouToChangePeriod'] = 'You can switch the view to daily, weekly or monthly by clicking one of these buttons';
+$strings['AgendaAllowsYouToSeeWhatsHappening'] = 'L\'outil d\'agenda vous permet de voir les événements qui sont programmés pour les prochains jours, semaines ou mois.';
+$strings['AgendaTheActionBar'] = 'Vous pouvez décider de montrer les événements sous forme de liste, plutôt qu\'en vue calendrier, en utilisant les icônes d\'action fournis';
+$strings['AgendaTodayButton'] = 'Cliquez sur le bouton "Aujourd\'hui pour voir seulement le programme d\'aujourd\'hui';
+$strings['AgendaTheMonthIsAlwaysInEvidence'] = 'Le mois actuel est toujours mis en évidence dans la vue calendrier';
+$strings['AgendaButtonsAllowYouToChangePeriod'] = 'Vous pouvez changer la vue à quotidien, semanal ou mensuel en cliquant sur l\'un de ces boutons';
 
 // if body class = section-session_my_space
-$strings['MySpaceAllowsYouToKeepTrackOfProgress'] = 'This area allows you to check your progress if you\'re a student, or the progress of your students if you are a teacher';
-$strings['MySpaceSectionsGiveYouImportantInsight'] = 'The reports provided on this screen are extensible and can provide you very valuable insight on your learning or teaching';
+$strings['MySpaceAllowsYouToKeepTrackOfProgress'] = 'Cette zone vous permet de vérifier votre progrès si vous êtes étudiant, ou le progrès de vos étudiants si vous êtes enseignant';
+$strings['MySpaceSectionsGiveYouImportantInsight'] = 'Les rapports fournis sur cet écran sont extensibles et peuvent vous fournir un détail intéressant sur votre apprentissage ou la façon dont vous enseignez.';
 
-// if body class = section-social
-$strings['SocialAllowsYouToGetInTouchWithOtherUsersOfThePlatform'] = 'The social area allows you to get in touch with other users on the platform';
-$strings['SocialMenuGivesAccessToDifferentToolsToGetInTouchOrPublishStuff'] = 'The menu gives you access to a series of screens allowing you to participate in private messaging, chat, interest groups, etc';
+// if body class = section-social-network
+$strings['SocialAllowsYouToGetInTouchWithOtherUsersOfThePlatform'] = 'La zone sociale vous permet de vous maintenir au courant de ce que font les autres utilisateurs de la plateforme';
+$strings['SocialMenuGivesAccessToDifferentToolsToGetInTouchOrPublishStuff'] = 'Le menu vous donne accès à une série d\'écrans vous permettant de participer à de la messagerie privée, du chat, des groupes d\'intérêt, etc';
 
 // if body class = section-dashboard
 $strings['DashboardAllowsYouToGetVerySpecificInformationInAnIllustratedCondensedFormat'] = 'The dashboard allows you to get very specific information in an illustrated and condensed format. Only administrators have access to this feature at this time';

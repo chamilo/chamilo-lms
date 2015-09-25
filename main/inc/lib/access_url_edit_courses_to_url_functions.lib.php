@@ -27,7 +27,7 @@ class Accessurleditcoursestourl
      */
     function search_courses($needle, $id)
     {
-        global $tbl_course;
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $xajax_response = new xajaxResponse();
         $return = '';
 

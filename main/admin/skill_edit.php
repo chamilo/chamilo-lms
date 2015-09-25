@@ -94,7 +94,8 @@ if ($editForm->validate()) {
         );
     }
 
-    Header::location(api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php');
+    exit;
 }
 
 /* view */

@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-define('SHORTCUTS_HORIZONTAL', 0);
-define('SHORTCUTS_VERTICAL', 1);
-
 /**
  * Class CourseHome
  */
@@ -299,10 +296,6 @@ class CourseHome
             foreach ($all_tools_list as & $tool) {
 
                 if ($tool['image'] == 'scormbuilder.gif') {
-                    // display links to lp only for current session
-                    /* if (api_get_session_id() != $tool['session_id']) {
-                      continue;
-                      } */
                     // check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
 

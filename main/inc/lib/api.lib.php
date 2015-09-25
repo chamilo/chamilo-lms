@@ -154,7 +154,7 @@ define('SECTION_COURSE_ADMIN', 'course_admin');
 define('SECTION_PLATFORM_ADMIN', 'platform_admin');
 define('SECTION_MYGRADEBOOK', 'mygradebook');
 define('SECTION_TRACKING', 'session_my_space');
-define('SECTION_SOCIAL', 'social');
+define('SECTION_SOCIAL', 'social-network');
 define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
@@ -533,6 +533,13 @@ define('TIMELINE_STATUS_INACTIVE', '2');
 // Event email template class
 define ('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
 define ('EVENT_EMAIL_TEMPLATE_INACTIVE', 0);
+
+// Course home
+define('SHORTCUTS_HORIZONTAL', 0);
+define('SHORTCUTS_VERTICAL', 1);
+
+// Image class
+define('IMAGE_PROCESSOR', 'gd'); // 'imagick' or 'gd' strings
 
 /**
  * Inclusion of internationalization libraries
@@ -4140,7 +4147,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
  * @return string
  */
 
-function api_get_languages_combo($name = 'language', $chozen=true) {
+function api_get_languages_combo($name = 'language') {
     $ret = '';
     $platformLanguage = api_get_setting('platformLanguage');
 
@@ -4161,7 +4168,7 @@ function api_get_languages_combo($name = 'language', $chozen=true) {
     $languages  = $language_list['name'];
     $folder     = $language_list['folder'];
 
-    $ret .= '<select name="'.$name.'" id="language_chosen" '.($chozen?'class="chzn-select"':'').' >';
+    $ret .= '<select name="' . $name . '" id="language_chosen">';
     foreach ($languages as $key => $value) {
         if ($folder[$key] == $default) {
             $selected = ' selected="selected"';
@@ -4209,7 +4216,7 @@ function api_display_language_form($hide_if_no_choice = false)
     </script>';
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
     $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
-    $html .=  '<select id="language_list" class="chzn-select" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';
+    $html .=  '<select id="language_list" class="selectpicker show-tick form-control" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';
 
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {
@@ -4932,9 +4939,9 @@ function api_get_version() {
  * @return string
  */
 function api_get_software_name() {
-    global $_configuration;
-    if (isset($_configuration['software_name']) && !empty($_configuration['software_name'])) {
-        return $_configuration['software_name'];
+    $name = api_get_configuration_value('software_name');
+    if (!empty($name)) {
+        return $name;
     } else {
         return 'Chamilo';
     }
@@ -5690,13 +5697,13 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
     return false;
 }
 
-
 /**
  * Replaces "forbidden" characters in a filename string.
  *
  * @param string $filename
  * @param int $length
  * @param bool $file_name
+ *
  * @return string
  */
 function api_replace_dangerous_char($filename)
@@ -6902,8 +6909,7 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseIn
  * @return string
  */
 function api_get_security_key() {
-    global $_configuration;
-    return $_configuration['security_key'];
+    return api_get_configuration_value('security_key');
 }
 
 /**
@@ -7234,8 +7240,8 @@ function api_get_password_checker_js($usernameInputId, $passwordInputid)
 
     var verdicts = ['".implode("','", $verdicts)."'];
     var errorMessages = {
-        password_to_short : '".get_lang('PasswordIsTooShort')."',
-        same_as_username : '".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."'
+        password_to_short : \"" . get_lang('PasswordIsTooShort')."\",
+        same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
     };
 
     $(document).ready(function() {
@@ -7249,9 +7255,9 @@ function api_get_password_checker_js($usernameInputId, $passwordInputid)
             },
             errorMessages : errorMessages,
             viewports: {
-                progress: '#password_progress'
-                //verdict: undefined,
-                //errors: undefined
+                progress: '#password_progress',
+                verdict: '#password-verdict',
+                errors: '#password-errors'
             },
             usernameField: '$usernameInputId'
         };

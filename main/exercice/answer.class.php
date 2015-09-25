@@ -71,6 +71,7 @@ class Answer
         $objExercise = new Exercise($this->course_id);
         $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
         $objExercise->read($exerciseId);
+
         if ($objExercise->random_answers == '1') {
             $this->readOrderedBy('rand()', '');// randomize answers
         } else {
@@ -132,6 +133,28 @@ class Answer
         $this->nbrAnswers = $i-1;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getAnswerByAutoId($id)
+    {
+        foreach ($this->autoId as $key => $autoId) {
+            if ($autoId == $id) {
+                $result =  [
+                    'answer' => $this->answer[$key],
+                    'correct' => $this->correct[$key],
+                    'comment' => $this->comment[$key],
+                ];
+
+                return $result;
+            }
+        }
+
+        return [];
+    }
+
      /**
      * returns all answer ids from this question Id
      *
@@ -176,17 +199,36 @@ class Answer
 			$order = 'ASC';
 		}
 
-		$TBL_ANSWER   = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		$TBL_QUIZ     = Database::get_course_table(TABLE_QUIZ_QUESTION);
+		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+		$TBL_QUIZ = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$questionId = intval($this->questionId);
 
 		$sql = "SELECT type FROM $TBL_QUIZ
 		        WHERE c_id = {$this->course_id} AND id = $questionId";
 		$result_question = Database::query($sql);
-		$question_type = Database::fetch_array($result_question);
+		$questionType = Database::fetch_array($result_question);
 
-		$sql = "SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto
-                FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'
+        if ($questionType['type'] == DRAGGABLE) {
+            // Random is done by submit.js.tpl
+            $this->read();
+
+            return true;
+        }
+
+		$sql = "SELECT
+		            answer,
+		            correct,
+		            comment,
+		            ponderation,
+		            position,
+		            hotspot_coordinates,
+		            hotspot_type,
+		            destination,
+		            id_auto
+                FROM $TBL_ANSWER
+                WHERE
+                    c_id = {$this->course_id} AND
+                    question_id='".$questionId."'
                 ORDER BY $field $order";
 		$result=Database::query($sql);
 
@@ -194,7 +236,7 @@ class Answer
 		// while a record is found
 		$doubt_data = null;
 		while ($object = Database::fetch_object($result)) {
-		    if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && $object->position == 666) {
+		    if ($questionType['type'] == UNIQUE_ANSWER_NO_OPTION && $object->position == 666) {
 		        $doubt_data = $object;
                 continue;
 		    }
@@ -208,7 +250,7 @@ class Answer
             $i++;
 		}
 
-		if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
+		if ($questionType['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
             $this->answer[$i] = $doubt_data->answer;
             $this->correct[$i] = $doubt_data->correct;
             $this->comment[$i] = $doubt_data->comment;
@@ -290,7 +332,7 @@ class Answer
 		$rs = Database::query($sql);
 
 		if (Database::num_rows($rs) > 0) {
-			$row = Database::fetch_array($rs);
+			$row = Database::fetch_array($rs, 'ASSOC');
 
 			return $row;
 		}
@@ -562,7 +604,7 @@ class Answer
 			$destination = $this->new_destination[$i];
             $autoId = $this->selectAutoId($i);
 
-            if (!(isset($this->position[$i]))) {
+            if (!isset($this->position[$i])) {
                 $params = [
                     'c_id' => $c_id,
                     'question_id' => $questionId,
@@ -607,22 +649,18 @@ class Answer
 
         $questionType = self::getQuestionType();
 
-        if ($questionType == MATCHING) {
+        if ($questionType == DRAGGABLE) {
+            foreach ($this->new_correct as $value => $status) {
+                if (!empty($status)) {
+                    $correct = $answerList[$status];
+                    $myAutoId = $answerList[$value];
 
-            if (!empty($correctList)) {
-                foreach ($correctList as $autoId => $status) {
-                    /*$correct = $data['correct'];
-
-                    if (isset($answerList[$correct])) {
-                        $correct = $answerList[$correct];
-                    }*/
-
-                    /*$sql = "UPDATE $answerTable
-                        SET correct = $autoId
-                        WHERE
-                            id_auto = $autoId
-                        ";
-                    Database::query($sql);*/
+                    $sql = "UPDATE $answerTable
+                            SET correct = '$correct'
+                            WHERE
+                                id_auto = $myAutoId
+                            ";
+                    Database::query($sql);
                 }
             }
         }
@@ -677,7 +715,10 @@ class Answer
             self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE
         ) {
             // Selecting origin options
-            $origin_options = Question::readQuestionOption($this->selectQuestionId(), $this->course['real_id']);
+            $origin_options = Question::readQuestionOption(
+                $this->selectQuestionId(),
+                $this->course['real_id']
+            );
 
             if (!empty($origin_options)) {
                 foreach ($origin_options as $item) {
@@ -732,7 +773,7 @@ class Answer
 
                 $params = [
                     'c_id' => $c_id,
-                    'question_id' =>$newQuestionId,
+                    'question_id' => $newQuestionId,
                     'answer' => $answer,
                     'correct' => $correct,
                     'comment' => $comment,
@@ -745,7 +786,7 @@ class Answer
                 $id = Database::insert($TBL_REPONSES, $params);
 
                 if ($id) {
-                    $sql = "UPDATE $TBL_REPONSES SET id = id_auto WHERE id_auto = $id";
+                    $sql = "UPDATE $TBL_REPONSES SET id = iid, id_auto = iid WHERE iid = $id";
                     Database::query($sql);
                 }
 			}

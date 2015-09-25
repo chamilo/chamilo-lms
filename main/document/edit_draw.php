@@ -22,13 +22,12 @@ $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_c
 if (empty($document_data)) {
     api_not_allowed();
 } else {
-    $document_id    = $document_data['id'];
-    $file_path      = $document_data['path'];
-    $dir            = dirname($document_data['path']);
-    $parent_id      = DocumentManager::get_document_id(api_get_course_info(), $dir);
+    $document_id = $document_data['id'];
+    $file_path = $document_data['path'];
+    $dir = dirname($document_data['path']);
+    $parent_id = DocumentManager::get_document_id(api_get_course_info(), $dir);
     $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
 }
-
 
 $dir= str_replace('\\', '/',$dir);//and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
 

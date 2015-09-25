@@ -10,7 +10,7 @@
  */
 if (defined('SYSTEM_INSTALLATION')) {
 
-    Log::notice("Starting " . basename(__FILE__));
+    error_log("Starting " . basename(__FILE__));
     $perm = api_get_permissions_for_new_files();
 
     $oldConfFile = api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';

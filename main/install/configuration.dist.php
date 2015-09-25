@@ -147,7 +147,7 @@ $_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
 //$_configuration['multiple_access_urls'] = true;
 $_configuration['software_name'] = 'Chamilo';
-$_configuration['software_url'] = 'http://www.chamilo.org/';
+$_configuration['software_url'] = 'https://chamilo.org/';
 //Deny the elimination of users
 $_configuration['deny_delete_users'] = false;
 // Version settings
@@ -217,3 +217,10 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 ];*/
 // Boost option to ignore encoding check for learning paths
 //$_configuration['lp_fixed_encoding'] = 'false';
+// Fix urls changing http with https in scorm packages.
+//$_configuration['lp_replace_http_to_https'] = false;
+// Manage the links to Session Index page
+// 1 = Default. Works as it is now (default is to link to the special session page)
+// 0 = No link (not clickable)
+// 2 = Link to the course if there is only one course
+//$_configuration['courses_list_session_title_link'] = 1;

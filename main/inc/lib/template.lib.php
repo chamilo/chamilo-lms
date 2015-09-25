@@ -524,7 +524,7 @@ class Template
         foreach ($bowerCSSFiles as $file) {
             $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
         }
-        $css[] = api_get_path(WEB_CSS_PATH) . 'bootstrap-select.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/bootstrap-select/css/bootstrap-select.min.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css';
 
@@ -615,9 +615,13 @@ class Template
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
 
+        $isoCode = api_get_language_isocode();
+
         //JS files
         $js_files = array(
             'chosen/chosen.jquery.min.js',
+            'bootstrap-select/js/bootstrap-select.min.js',
+            'bootstrap-select/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js'
         );
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
@@ -640,7 +644,6 @@ class Template
         $js_files[] = 'tag/jquery.fcbkcomplete.js';
 
         $js_file_to_string = null;
-        $isoCode = api_get_language_isocode();
 
         $bowerJsFiles = [
             'modernizr/modernizr.js',
@@ -668,7 +671,6 @@ class Template
         foreach ($bowerJsFiles as $file) {
             $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
         }
-        $js_file_to_string .= '<script type="text/javascript" src="'.  api_get_path(WEB_LIBRARY_PATH) . 'javascript/bootstrap-select.min.js"></script>'."\n";
 
         foreach ($js_files as $file) {
             $js_file_to_string .= api_get_js($file);
@@ -728,7 +730,8 @@ class Template
      */
     private function set_header_parameters($sendHeaders)
     {
-        global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $_configuration, $this_section;
+        global $httpHeadXtra, $interbreadcrumb, $language_file, $_configuration, $this_section;
+        $_course = api_get_course_info();
         $help = $this->help;
         $nameTools             = $this->title;
         $navigation            = return_navigation_array();
@@ -801,7 +804,17 @@ class Template
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
 
-        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+        //Defaul root chamilo favicon
+        $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_PATH) . 'favicon.ico" type="image/x-icon" />';
+
+        //Added to verify if in the current Chamilo Theme exist a favicon
+        $favicoThemeUrl = api_get_path(SYS_CSS_PATH) . 'themes/' . $this->theme . '/images/';
+
+        //If exist pick the current chamilo theme favicon
+        if (is_file($favicoThemeUrl . 'favicon.ico')) {
+            $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_CSS_PATH)
+                . 'themes/' . $this->theme . '/images/favicon.ico" type="image/x-icon" />';
+        }
 
         if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
@@ -1079,12 +1092,12 @@ class Template
     }
 
     /**
-     * @param $tpl_var
-     * @param null $value
+     * @param string $variable
+     * @param mixed $value
      */
-    public function assign($tpl_var, $value = null)
+    public function assign($variable, $value = '')
     {
-        $this->params[$tpl_var] = $value;
+        $this->params[$variable] = $value;
     }
 
     /**
@@ -1207,14 +1220,13 @@ class Template
             'login',
             get_lang('UserName'),
             true,
-            array('id' => 'login', 'autofocus' => 'autofocus', 'icon' => 'user')
-        );
+            array('id' => 'login', 'autofocus' => 'autofocus', 'icon' => 'user fa-fw', 'placeholder' => get_lang('UserName')));
 
         $form->addElement(
             'password',
             'password',
             get_lang('Pass'),
-            array('id' => 'password', 'icon' => 'lock')
+            array('id' => 'password', 'icon' => 'lock fa-fw', 'placeholder' => get_lang('Pass'))
         );
 
         // Captcha

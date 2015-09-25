@@ -731,29 +731,14 @@ class Link extends Model
         $id = intval($id);
 
         // This is used to put the modified info of the category-form into the database.
-
         $params = [
             'category_title' => $values['category_title'],
             'description' => $values['description']
         ];
-        Database::update($tbl_categories, $params, ['c_id = ? AND id = ?' => [$course_id, $id] ]);
-
+        Database::update($tbl_categories, $params, ['c_id = ? AND id = ?' => [$course_id, $id]]);
         Display::addFlash(Display::return_message(get_lang('CategoryModded')));
 
         return true;
-    }
-
-    /**
-     * Creates a correct $view for in the URL
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     */
-    public static function makedefaultviewcode($locatie)
-    {
-        global $aantalcategories, $view;
-        for ($j = 0; $j <= $aantalcategories - 1; $j++) {
-            $view[$j] = 0;
-        }
-        $view[intval($locatie)] = '1';
     }
 
     /**
@@ -890,7 +875,7 @@ class Link extends Model
         $result = Database:: query($sql);
         $numberoflinks = Database:: num_rows($result);
         if ($numberoflinks > 0) {
-            $content .= '<table class="data_table" width="100%">';
+            $content .= '<div class="link list-group">';
             $i = 1;
             while ($myrow = Database:: fetch_array($result)) {
                 // Validation when belongs to a session.
@@ -899,74 +884,41 @@ class Link extends Model
                     $_user['status']
                 );
 
-                $css_class = $i % 2 == 0 ? $css_class = 'row_odd' : $css_class = 'row_even';
-
+                //$css_class = $i % 2 == 0 ? $css_class = 'row_odd' : $css_class = 'row_even';
+                $toolbar = '';
                 $link_validator = '';
                 if (api_is_allowed_to_edit(null, true)) {
-                    $link_validator = Display::url(
-                        Display::return_icon(
-                            'preview_view.png',
-                            get_lang('CheckURL'),
-                            array(),
-                            16
-                        ),
-                        '#',
-                        array(
-                            'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes($myrow['url']) . "');"
-                        )
-                    );
+                    $toolbar .= Display::toolbarButton('',
+                            '#',
+                            'retweet',
+                            'default btn-sm',
+                            array(
+                                'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes($myrow['url']) . "');"
+                                )
+                            );
                     $link_validator .= Display::span(
                         '',
-                        array('id' => 'url_id_' . $myrow['id'])
+                        array(
+                            'id' => 'url_id_' . $myrow['id'],
+                            'class' => 'check-link'
+                            )
                     );
-                }
 
-                if ($myrow['visibility'] == '1') {
-                    $content .= '<tr class="' . $css_class . '">';
-                    $content .= '<td align="center" valign="middle" width="5%">';
-                    $content .= '<a href="link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] .'&link_url=' . urlencode($myrow['url']) . '" target="_blank">
-                        <img src="../../main/img/link.gif" border="0" alt="' . get_lang('Link') . '"/></a>
-                        </td>
-                        <td width="80%" valign="top">
-                        <a href="link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] .'&link_url=' . urlencode($myrow['url']) . '" target="' . $myrow['target'] . '">';
-                    $content .= Security:: remove_XSS($myrow['title']);
-                    $content .= '</a>';
-                    $content .= $link_validator;
-                    $content .= $session_img;
-                    $content .= '<br />' . $myrow['description'];
-                } else {
-                    if (api_is_allowed_to_edit(null, true)) {
-                        $content .= '<tr class="' . $css_class . '">';
-                        $content .= '<td align="center" valign="middle" width="5%">
-                            <a href="link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] . "&link_url=" . urlencode($myrow['url']) . '" target="_blank" class="invisible">';
-                        $content .= Display:: return_icon(
-                            'link_na.gif',
-                            get_lang('Link')
-                        ).'</a>';
-                        $content .= '</td><td width="80%" valign="top">
-                              <a href="link_goto.php?'.api_get_cidreq().'&link_id='.$myrow['id'].'&link_url='.urlencode($myrow['url']).'" target="'. $myrow['target']. '"  class="invisible">';
-                        $content .= Security:: remove_XSS($myrow['title']);
-                        $content .= "</a>";
-                        $content .= $link_validator;
-                        $content .= $session_img.'<br />'.$myrow['description'];
-                    }
                 }
 
                 if (api_is_allowed_to_edit(null, true)) {
-                    $content .= '<td style="text-align:center;">';
+
                     if ($session_id == $myrow['session_id']) {
                         $url = api_get_self() . '?' . api_get_cidreq() .
                             '&action=editlink&category=' . (!empty ($category) ? $category : '') .
                             '&id=' . $myrow['id'] .
                             '&category_id=' . $myrow['id'];
-
-                        $content .= '<a href="' .$url .'">'.
-                            Display:: return_icon(
-                                'edit.png',
-                                get_lang('Modify'),
-                                array(),
-                                ICON_SIZE_SMALL
-                            ) . '</a>';
+                        $toolbar .= Display::toolbarButton(
+                                '',
+                                $url,
+                                'pencil',
+                                'default btn-sm'
+                                );
 
                         // DISPLAY MOVE UP COMMAND only if it is not the top link.
                         /* commented at least since 2014-10-11
@@ -984,50 +936,111 @@ class Link extends Model
                         }*/
 
                         if ($myrow['visibility'] == '1') {
-                            $content .= '<a href="link.php?' . api_get_cidreq() .
+                            $url .= 'link.php?' . api_get_cidreq() .
                                 '&sec_token=' . $token .
                                 '&action=invisible&id=' . $myrow['id'] .
-                                '&scope=link&category_id=' . $myrow['category_id'] . '" title="' . get_lang('Hide') . '">' .
-                                Display:: return_icon(
-                                    'visible.png',
-                                    get_lang('Hide'),
-                                    array(),
-                                    ICON_SIZE_SMALL
-                                ) . '</a>';
+                                '&scope=link&category_id=' . $myrow['category_id'];
+                            $toolbar .= Display::toolbarButton(
+                                    '',
+                                    $url,
+                                    'eye',
+                                    'default btn-sm'
+                                    );
+
                         }
                         if ($myrow['visibility'] == '0') {
-                            $content .= ' <a href="link.php?' . api_get_cidreq() .'&sec_token=' . $token .'&action=visible&id=' . $myrow['id'] .'&scope=link&category_id=' . $myrow['category_id'] . '" title="' . get_lang('Show') . '">' .
-                                Display:: return_icon(
-                                    'invisible.png',
-                                    get_lang('Show'),
-                                    array(),
-                                    ICON_SIZE_SMALL
-                                ) . '</a>';
+                            $url .= 'link.php?' . api_get_cidreq() .'&sec_token=' . $token .'&action=visible&id=' . $myrow['id'] .'&scope=link&category_id=' . $myrow['category_id'];
+                            $toolbar .= Display::toolbarButton(
+                                    '',
+                                    $url,
+                                    'eye-slash',
+                                    'primary btn-sm'
+                                    );
                         }
-                        $content .= ' <a href="' . api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=deletelink&id=' . $myrow['id'] .'&category_id=' . $myrow['category_id'] . "\"
-                            onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "'))
-                            return false;\" title=\"" . get_lang('Delete') . '">' .
-                            Display:: return_icon(
-                                'delete.png',
-                                get_lang('Delete'),
-                                array(),
-                                ICON_SIZE_SMALL
-                            ) . '</a>';
+
+                        $url .= api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=deletelink&id=' . $myrow['id'] .'&category_id=' . $myrow['category_id'];
+                        $event = "javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "'))return false;";
+                        $title = get_lang('Delete');
+
+                        $toolbar .= Display::toolbarButton(
+                                '',
+                                $url,
+                                'trash',
+                                'default btn-sm',
+                                array(
+                                    'onclick' => $event,
+                                    'title' => $title
+                                    )
+                                );
+
 
                     } else {
-                        $content .= Display:: return_icon(
-                            'edit_na.png',
-                            get_lang('EditionNotAvailableFromSession'),
-                            array(),
-                            ICON_SIZE_SMALL
-                        ); //get_lang('EditionNotAvailableFromSession');
+                        $title = get_lang('EditionNotAvailableFromSession');
+                        $toolbar .= Display::toolbarButton(
+                                '',
+                                '#',
+                                'trash-o',
+                                'default btn-sm',
+                                array(
+                                    'title' => $title
+                                    )
+                                );
                     }
-                    $content .= '</td>';
+
                 }
-                $content .= '</tr>';
+                $iconLink = Display::return_icon(
+                        'url.png',
+                        get_lang('Link'),
+                        null,
+                        ICON_SIZE_SMALL
+                        );
+
+                if ($myrow['visibility'] == '1') {
+                    $content .= '<div class="list-group-item">';
+                    $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
+                    $content .= '<h4 class="list-group-item-heading">';
+                    $content .= $iconLink;
+                    $url =  'link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] .'&link_url=' . urlencode($myrow['url']);
+                    $content .= Display::tag(
+                            'a',
+                            Security:: remove_XSS($myrow['title']),
+                            array(
+                                'href' => $url,
+                                'target' => $myrow['target']
+                                    )
+                            );
+                    $content .= $link_validator;
+                    $content .= $session_img;
+                    $content .= '</h4>';
+
+                    $content .= '<p class="list-group-item-text">' . $myrow['description'] . '</p>';
+                    $content .= '</div>';
+                } else {
+                    if (api_is_allowed_to_edit(null, true)) {
+                        $content .= '<div class="list-group-item">';
+                        $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
+                        $content .= '<h4 class="list-group-item-heading">';
+                        $content .= $iconLink;
+                        $url = 'link_goto.php?' . api_get_cidreq() .'&link_id=' . $myrow['id'] . "&link_url=" . urlencode($myrow['url']);
+                        $content .= Display::tag(
+                                'a',
+                                Security:: remove_XSS($myrow['title']),
+                                array(
+                                    'href' => $url,
+                                    'target' => '_blank',
+                                    'class' => 'invisible'
+                                    )
+                                );
+                        $content .= $link_validator;
+                        $content .= $session_img;
+                        $content .= '</h4>';
+                        $content .= '<p class="list-group-item-text">' . $myrow['description'] . '</p>';
+                        $content .= '</div>';
+                    }
+                }
                 $i++;
             }
-            $content .= '</table>';
+            $content .= '</div>';
         }
 
         return $content;
@@ -1242,14 +1255,17 @@ class Link extends Model
      */
     public static function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
     {
+        $_course = api_get_course_info();
+        $_user = api_get_user_info();
+
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
 
         $urleq = "url='" . Database:: escape_string($url) . "'";
         $cateq = "category_id=" . intval($cat);
 
-        $result = Database:: query(
-            "SELECT id FROM $tbl_link
+        $result = Database:: query("
+            SELECT id FROM $tbl_link
             WHERE c_id = $course_id AND " . $urleq . ' AND ' . $cateq
         );
 
@@ -1293,7 +1309,6 @@ class Link extends Model
             $ipu = 'LinkAdded';
             $rv = 2; // 2 = new
         }
-        global $_course, $_user;
         api_item_property_update(
             $_course,
             TOOL_LINK,
@@ -1547,7 +1562,7 @@ class Link extends Model
             // Validation when belongs to a session
             $showChildren = $categoryId == $myrow['id'] || $show == 'all';
             $session_img = api_get_session_image($myrow['session_id'], $_user['status']);
-            $myrow['description'] = text_filter($myrow['description']);
+            $myrow['description'] = $myrow['description'];
 
             $strVisibility = '';
             $visibilityClass = null;
@@ -1563,10 +1578,10 @@ class Link extends Model
             $header = '';
             if ($showChildren) {
                 $header .= '<a class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id=">';
-                $header .= Display::return_icon('view_remove.png');
+                $header .= Display::return_icon('forum_nestedview.png');
             } else {
                 $header .= '<a class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$myrow['id'].'">';
-                $header .= Display::return_icon('view_tree.png');
+                $header .= Display::return_icon('forum_listview.png');
             }
 
             $header .= Security::remove_XSS($myrow['category_title']).'</a>';

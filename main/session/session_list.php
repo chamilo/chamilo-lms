@@ -288,14 +288,6 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                     });
                 });
             });
-
-            /*
-             $('.delete-rule').on('click', function(){
-             console.log('deleted');
-             $('.input-elm').each(function(){
-             $(this).find('option:first').attr('selected', 'selected');
-             });
-             });*/
         });
     </script>
     <div class="actions">

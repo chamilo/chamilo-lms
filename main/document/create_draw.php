@@ -40,7 +40,7 @@ if ($_SESSION['draw_dir']=='/'){
     $_SESSION['draw_dir']='';
 }
 
-$dir = isset($dir) ? Security::remove_XSS($dir) : Security::remove_XSS($_POST['dir']);
+$dir = isset($dir) ? Security::remove_XSS($dir) : (isset($_POST['dir']) ? Security::remove_XSS($_POST['dir']) : '/');
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 // Please, do not modify this dirname formatting
@@ -80,7 +80,7 @@ if (!empty($groupId)) {
 	}
 }
 
-$interbreadcrumb[] = array ("url" => "./document.php?id=".$parent_id."&".api_get_cidreq(), "name" => get_lang('Documents'));
+$interbreadcrumb[] = array ("url" => "./document.php?".api_get_cidreq(), "name" => get_lang('Documents'));
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);

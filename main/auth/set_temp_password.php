@@ -5,9 +5,7 @@
  * protected by password. If the password matches the course password, we
  * store the fact that user can access it during its session
  */
-/**
- * Initializing context
- */
+
 use ChamiloSession as Session;
 
 $cidReset = true;

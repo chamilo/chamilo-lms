@@ -70,7 +70,6 @@ class EventEmailTemplate extends Model
         $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);
-
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
         $form->addHtmlEditor(
             'description',

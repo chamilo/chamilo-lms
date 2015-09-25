@@ -250,6 +250,7 @@ class SessionManager
 
     /**
      * @param string $name
+     *
      * @return bool
      */
     public static function session_name_exists($name)
@@ -390,6 +391,7 @@ class SessionManager
     public static function get_sessions_admin($options = array(), $get_count = false)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
@@ -418,6 +420,8 @@ class SessionManager
         $order = $conditions['order'];
         $limit = $conditions['limit'];
 
+        $isMakingOrder = false;
+
         if ($get_count == true) {
             $select = " SELECT count(*) as total_rows";
         } else {
@@ -432,6 +436,22 @@ class SessionManager
                 " s.session_category_id, ".
                 " $inject_extra_fields ".
                 " s.id ";
+
+            $isMakingOrder = strpos($options['order'], 'category_name') === 0;
+        }
+
+        $isFilteringSessionCategory = strpos($where, 'category_name') !== false;
+
+        if ($isMakingOrder || $isFilteringSessionCategory) {
+            $inject_joins .= " LEFT JOIN $sessionCategoryTable sc ON s.session_category_id = sc.id ";
+
+            if ($isFilteringSessionCategory) {
+                $where = str_replace('category_name', 'sc.name', $where);
+            }
+
+            if ($isMakingOrder) {
+                $order = str_replace('category_name', 'sc.name', $order);
+            }
         }
 
         $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";
@@ -478,7 +498,7 @@ class SessionManager
                     $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
                 }
 
-                $session = self::convert_dates_to_local($session);
+                $session = self::convert_dates_to_local($session, true);
 
                 switch ($session['visibility']) {
                     case SESSION_VISIBLE_READ_ONLY: //1
@@ -554,7 +574,10 @@ class SessionManager
 
     /**
      * Gets the progress of learning paths in the given session
-     * @param int   session id
+     * @param int   $sessionId
+     * @param int $courseId
+     * @param string $date_from
+     * @param string $date_to
      * @param array options order and limit keys
      * @return array table with user name, lp name, progress
      */
@@ -677,9 +700,9 @@ class SessionManager
 
     /**
      * Gets the survey answers
-     * @param int   session id
-     * @param int   course id
-     * @param int   survey id
+     * @param int   $sessionId
+     * @param int   $courseId
+     * @param int   $surveyId
      * @param array options order and limit keys
      * @todo fix the query
      * @return array table with user name, lp name, progress
@@ -788,8 +811,10 @@ class SessionManager
 
     /**
      * Gets the progress of the given session
-     * @param int   session id
+     * @param int   $sessionId
+     * @param int   $courseId
      * @param array options order and limit keys
+     *
      * @return array table with user name, lp name, progress
      */
     public static function get_session_progress($sessionId, $courseId, $date_from, $date_to, $options)
@@ -807,8 +832,6 @@ class SessionManager
         $user = Database::get_main_table(TABLE_MAIN_USER);
         $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-        $forum = Database::get_course_table(TABLE_FORUM);
-        $forum_post = Database::get_course_table(TABLE_FORUM_POST);
         $tbl_course_lp = Database::get_course_table(TABLE_LP_MAIN);
         $wiki = Database::get_course_table(TABLE_WIKI);
         $table_stats_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
@@ -1135,8 +1158,6 @@ class SessionManager
         $date_to = '',
         $options
     ) {
-        global $_configuration;
-
         //escaping variables
         $sessionId = intval($sessionId);
         $courseId = intval($courseId);
@@ -1270,7 +1291,7 @@ class SessionManager
     /**
      * Creates a new course code based in given code
      *
-     * @param string	wanted code
+     * @param string	$session_name
      * <code>
      * $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3
      * if the course code doest not exist in the DB the same course code will be returned
@@ -1436,8 +1457,9 @@ class SessionManager
     /**
      * Delete session
      * @author Carlos Vargas  from existing code
-     * @param	array	id_checked an array to delete sessions
-     * @param   boolean  optional, true if the function is called by a webservice, false otherwise.
+     * @param	array	$id_checked an array to delete sessions
+     * @param   boolean  $from_ws optional, true if the function is called
+     * by a webservice, false otherwise.
      * @return	void	Nothing, or false on error
      * */
     public static function delete($id_checked, $from_ws = false)
@@ -1495,6 +1517,7 @@ class SessionManager
 
     /**
      * @param int $id_promotion
+     *
      * @return bool
      */
     public static function clear_session_ref_promotion($id_promotion)
@@ -1808,7 +1831,6 @@ class SessionManager
             return false;
         }
 
-        $courseCode = Database::escape_string($courseInfo['code']);
         $courseId = $courseInfo['real_id'];
 
         $statusCondition = null;
@@ -2170,7 +2192,11 @@ class SessionManager
                         }
 
                         // Create
-                        DocumentManager::generateDefaultCertificate($courseInfo, true, $sessionId);
+                        DocumentManager::generateDefaultCertificate(
+                            $courseInfo,
+                            true,
+                            $sessionId
+                        );
                     }
                 }
 
@@ -2380,8 +2406,15 @@ class SessionManager
      * @param 	integer		day_end
      * @return $id_session;
      * */
-    public static function create_category_session($sname, $syear_start, $smonth_start, $sday_start, $syear_end, $smonth_end, $sday_end)
-    {
+    public static function create_category_session(
+        $sname,
+        $syear_start,
+        $smonth_start,
+        $sday_start,
+        $syear_end,
+        $smonth_end,
+        $sday_end
+    ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $name = trim($sname);
         $year_start = intval($syear_start);
@@ -2445,8 +2478,16 @@ class SessionManager
      * @return $id;
      * The parameter id is a primary key
      * */
-    public static function edit_category_session($id, $sname, $syear_start, $smonth_start, $sday_start, $syear_end, $smonth_end, $sday_end)
-    {
+    public static function edit_category_session(
+        $id,
+        $sname,
+        $syear_start,
+        $smonth_start,
+        $sday_start,
+        $syear_end,
+        $smonth_end,
+        $sday_end
+    ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $name = trim($sname);
         $year_start = intval($syear_start);
@@ -2641,7 +2682,9 @@ class SessionManager
     {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $id = intval($id);
-        $sql = "SELECT id, name, date_start, date_end FROM $tbl_session_category WHERE id= $id";
+        $sql = "SELECT id, name, date_start, date_end
+                FROM $tbl_session_category
+                WHERE id= $id";
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         if ($num > 0) {
@@ -3086,30 +3129,30 @@ class SessionManager
 
         $sessions = array();
         if (Database::num_rows($result) > 0) {
-            $sessionImage = '';
             $sysUploadPath = api_get_path(SYS_UPLOAD_PATH). 'sessions/';
             $webUploadPath = api_get_path(WEB_UPLOAD_PATH). 'sessions/';
             $imgPath = api_get_path(WEB_IMG_PATH) . 'session_default_small.png';
 
             $tableExtraFields = Database::get_main_table(TABLE_EXTRA_FIELD);
-            $sql = "SELECT id FROM " . $tableExtraFields . " WHERE extra_field_type = 3 AND variable='image'";
+            $sql = "SELECT id FROM " . $tableExtraFields . "
+                    WHERE extra_field_type = 3 AND variable='image'";
             $resultField = Database::query($sql);
             $imageFieldId = Database::fetch_assoc($resultField);
 
             while ($row = Database::fetch_array($result)) {
-                
+
                 $row['image'] =  null;
                 $sessionImage = $sysUploadPath . $imageFieldId['id'] . '_' . $row['id'] . '.png';
-                
+
                 if (is_file($sessionImage)) {
                     $sessionImage = $webUploadPath . $imageFieldId['id'] . '_' . $row['id'] . '.png';
                     $row['image'] = $sessionImage;
                 } else {
                     $row['image'] =  $imgPath;
                 }
-                
+
                 $sessions[$row['id']] = $row;
-                
+
             }
         }
 
@@ -3269,8 +3312,8 @@ class SessionManager
 
     /**
      * Gets the list of courses by session filtered by access_url
-     * @param int session id
-     * @param string course_name
+     * @param int $session_id
+     * @param string $course_name
      * @return array list of courses
      */
     public static function get_course_list_by_session_id_like($session_id, $course_name = '')
@@ -3688,8 +3731,9 @@ class SessionManager
                                 $quiz_table = Database::get_course_table(TABLE_QUIZ_TEST);
                                 $course_id = $course_info['real_id'];
                                 //@todo check this query
-                                $sql = "UPDATE $quiz_table SET active = 0 WHERE c_id = $course_id AND session_id = $sid";
-                                $result = Database::query($sql);
+                                $sql = "UPDATE $quiz_table SET active = 0
+                                        WHERE c_id = $course_id AND session_id = $sid";
+                                Database::query($sql);
                             }
                             $new_short_courses[] = $course_info['real_id'];
                         }
@@ -4938,13 +4982,21 @@ class SessionManager
                                 continue;
                             }
                             $messages[] = Display::return_message(get_lang('StudentList') . '<br />' . $userToString, 'info', false);
-                            SessionManager::suscribe_users_to_session($sessionDestinationId, $newUserList, SESSION_VISIBLE_READ_ONLY, false);
+                            SessionManager::suscribe_users_to_session(
+                                $sessionDestinationId,
+                                $newUserList,
+                                SESSION_VISIBLE_READ_ONLY,
+                                false
+                            );
                         }
                     } else {
                         $messages[] = Display::return_message(get_lang('NoDestinationSessionProvided'), 'warning');
                     }
                 } else {
-                    $messages[] = Display::return_message(get_lang('NoStudentsFoundForSession') . ' #' . $sessionInfo['name'], 'warning');
+                    $messages[] = Display::return_message(
+                        get_lang('NoStudentsFoundForSession').' #'.$sessionInfo['name'],
+                        'warning'
+                    );
                 }
             }
         } else {
@@ -4987,7 +5039,10 @@ class SessionManager
         if (!empty($result)) {
             foreach ($result as $courseCode => $data) {
                 $url = api_get_course_url($courseCode);
-                $htmlResult .= sprintf(get_lang('CoachesSubscribedAsATeacherInCourseX'), Display::url($courseCode, $url, array('target' => '_blank')));
+                $htmlResult .= sprintf(
+                    get_lang('CoachesSubscribedAsATeacherInCourseX'),
+                    Display::url($courseCode, $url, array('target' => '_blank'))
+                );
                 foreach ($data as $sessionId => $coachList) {
                     $sessionInfo = self::fetch($sessionId);
                     $htmlResult .= '<br />';
@@ -5304,6 +5359,8 @@ class SessionManager
 
     /**
      * @param array $userSessionList format see self::importSessionDrhCSV()
+     *
+     * @return string
      */
     public static function checkSubscribeDrhToSessionList($userSessionList)
     {
@@ -5351,6 +5408,8 @@ class SessionManager
      * @param string $file
      * @param bool $sendEmail
      * @param bool $removeOldRelationShips
+     *
+     * @return string
      */
     public static function importSessionDrhCSV($file, $sendEmail, $removeOldRelationShips)
     {
@@ -5487,14 +5546,7 @@ class SessionManager
      */
     public static function durationPerUserIsEnabled()
     {
-        global $_configuration;
-        if (isset($_configuration['session_duration_feature']) &&
-            $_configuration['session_duration_feature']
-        ) {
-            return true;
-        }
-
-        return false;
+        return api_get_configuration_value('session_duration_feature');
     }
 
     /**
@@ -5554,6 +5606,7 @@ class SessionManager
      * Gets one row from the session_rel_user table
      * @param int $userId
      * @param int $sessionId
+     *
      * @return array
      */
     public static function getUserSession($userId, $sessionId)
@@ -5975,7 +6028,7 @@ class SessionManager
         );
 
         $sessionCategoryId = intval($sessionCategoryId);
-        // Check if sesssion category id is valid
+        // Check if session category id is valid
         if ($sessionCategoryId > 0) {
             // Get table names
             $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -6286,15 +6339,16 @@ class SessionManager
             $accessUrlId = api_get_current_access_url_id();
 
             if ($accessUrlId != -1) {
-                $sql = "SELECT DISTINCT s.* "
-                    . "FROM $sessionTable s "
-                    . "INNER JOIN $sessionUserTable sru ON s.id = sru.id_session "
-                    . "INNER JOIN $sessionAccessUrlTable srau ON s.id = srau.session_id "
-                    . "WHERE srau.access_url_id = $accessUrlId "
-                    . "AND ( "
-                    . "sru.id_user IN (" . implode(', ', $userIdList) . ") "
-                    . "AND sru.relation_type = 0"
-                    . ")";
+                $sql = "SELECT DISTINCT s.*
+                        FROM $sessionTable s
+                        INNER JOIN $sessionUserTable sru ON s.id = sru.id_session
+                        INNER JOIN $sessionAccessUrlTable srau ON s.id = srau.session_id
+                        WHERE
+                            srau.access_url_id = $accessUrlId
+                            AND (
+                                sru.id_user IN (" . implode(', ', $userIdList) . ")
+                                AND sru.relation_type = 0
+                            )";
             }
         }
 
@@ -6429,7 +6483,6 @@ class SessionManager
                 [api_get_user_id() => $userInfo['complete_name']],
                 array(
                     'id' => 'coach_username',
-                    'class' => 'chzn-select',
                     'style' => 'width:370px;',
                 )
             );
@@ -6502,9 +6555,7 @@ class SessionManager
         $form->addElement('html','<div id="advanced_params_options" style="display:none">');
 
         $form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
-            'id' => 'session_category',
-            'class' => 'chzn-select',
-            'style' => 'width:370px;',
+            'id' => 'session_category'
         ));
 
         $form->addHtmlEditor(
@@ -6828,13 +6879,12 @@ class SessionManager
     }
 
     /**
-     * Converts all dates sent through the param array (given form) to correct
-     * dates with timezones
-     * @param array The dates
+     * Converts all dates sent through the param array (given form) to correct dates with timezones
+     * @param array The dates The same array, with times converted
+     * @param boolean $applyFormat Whether apply the DATE_TIME_FORMAT_SHORT format for sessions
      * @return array The same array, with times converted
-     * @assert ('a') === false
      */
-    static function convert_dates_to_local($params)
+    static function convert_dates_to_local($params, $applyFormat = false)
     {
         if (!is_array($params)) {
             return false;
@@ -6847,6 +6897,33 @@ class SessionManager
 
         $params['coach_access_start_date'] = isset($params['coach_access_start_date']) ? api_get_local_time($params['coach_access_start_date'], null, null, true) : null;
         $params['coach_access_end_date'] = isset($params['coach_access_end_date']) ? api_get_local_time($params['coach_access_end_date'], null, null, true) : null;
+
+        if ($applyFormat) {
+            if (isset($params['display_start_date'])) {
+                $params['display_start_date'] = api_format_date($params['display_start_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['display_end_date'])) {
+                $params['display_end_date'] = api_format_date($params['display_end_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['access_start_date'])) {
+                $params[''] = api_format_date($params['access_start_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['access_end_date'])) {
+                $params['access_end_date'] = api_format_date($params['access_end_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['coach_access_start_date'])) {
+                $params['coach_access_start_date'] = api_format_date($params['coach_access_start_date'], DATE_TIME_FORMAT_SHORT);
+            }
+
+            if (isset($params['coach_access_end_date'])) {
+                $params['coach_access_end_date'] = api_format_date($params['coach_access_end_date'], DATE_TIME_FORMAT_SHORT);
+            }
+        }
+
         return $params;
     }
 
@@ -7241,7 +7318,7 @@ class SessionManager
     public static function isSessionDateOkForCoach($sessionId)
     {
         return api_get_session_visibility($sessionId);
-
+        /*
         $listSessionInfo = api_get_session_info($sessionId);
         $dateStart = $listSessionInfo['date_start'];
         $dateEnd = $listSessionInfo['date_end'];
@@ -7270,7 +7347,7 @@ class SessionManager
             }
         }
 
-        return false;
+        return false;*/
     }
 
     /**
@@ -7354,6 +7431,7 @@ class SessionManager
      *                              sessionName
      *
      * @param $userId
+     *
      * @return array
      *
      */

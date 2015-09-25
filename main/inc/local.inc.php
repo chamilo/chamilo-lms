@@ -270,7 +270,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     // Check captcha
                     $captchaText = $_POST['captcha'];
                     /** @var Text_CAPTCHA $obj */
-                    $obj = isset($_SESSION['userportal.lib']) ? $_SESSION['userportal.lib'] : null;
+                    $obj = isset($_SESSION['template.lib']) ? $_SESSION['template.lib'] : null;
                     if ($obj) {
                         $obj->getPhrase();
                         if ($obj->getPhrase() != $captchaText) {

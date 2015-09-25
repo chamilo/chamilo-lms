@@ -8,10 +8,9 @@
 * @package chamilo.reports
 */
 exit;
-// name of the language file that needs to be included
 $cidReset = true;
 
-// including files 
+// including files
 require_once '../inc/global.inc.php';
 require_once 'reports.lib.php';
 require_once 'multiquery.lib.php';
@@ -103,7 +102,7 @@ if (is_array($reports_template[$_REQUEST['type']])) {
 		die(var_export($query, true));
 
 	$result = multiquery_query($query);
-	
+
 
 	// check number of result
 	$numberOfResult = multiquery_num_rows($result);
@@ -148,7 +147,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 
 	// counting fields
 	$nfields = multiquery_num_fields($result);
-	$columns = array();	
+	$columns = array();
 	$columns_islink = array();
 	echo '<thead><tr>';
 	for ($i=0; $i < $nfields; $i++)	{
@@ -156,7 +155,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 		if (substr($columns[$i], -5, 5) != '_link') {
 			$column_islink[$i] = false;
 			echo '<th>'.$columns[$i].'</th>';
-		} else 
+		} else
 			$columns_islink[$i] = true;
 	}
 
@@ -175,10 +174,10 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 			if (!$columns_islink[$i]){ // ignore links
 				if ($columns_link[$i] != '') // link is defined
 					if (substr($columns_link[$i],0,10) == 'javascript') {
-						echo '<td><a href="#" onclick="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>'; 
+						echo '<td><a href="#" onclick="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>';
 					}
 					else {
-						echo '<td><a href="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>'; 
+						echo '<td><a href="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>';
 					}
 				else
 					echo '<td>'.$row[$i].'</td>';
@@ -196,18 +195,18 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 		</div>';
 
 		Display::display_footer();
-		
+
 	}
 } else if ($_REQUEST['format'] == 'csv') {
 	$nfields = multiquery_num_fields($result);
-	$columns = array();	
+	$columns = array();
 	$columns_islink = array();
 	for ($i=0; $i < $nfields; $i++)	{
 		$columns[$i] = multiquery_field_name($result, $i);
 		if (substr($columns[$i], -5, 5) != '_link') {
 			$column_islink[$i] = false;
 			echo csv_escaping($columns[$i]).',';
-		} else 
+		} else
 			$columns_islink[$i] = true;
 	}
 

@@ -1268,8 +1268,7 @@ class Display
 	        foreach($rows as $content) {
 	            $table->setCellContents($row, $column, $content);
                 $row++;
-                    //$column++;
-                }
+            }
         }
         return $table->toHtml();
     }
@@ -1341,8 +1340,9 @@ class Display
                     tet.to_group_id group_id,
                     ctt.image image,
                     ctt.link link
-                FROM $tool_edit_table tet INNER JOIN $course_tool_table ctt
-                ON  tet.c_id = ctt.c_id
+                FROM $tool_edit_table tet
+                INNER JOIN $course_tool_table ctt
+                ON tet.c_id = ctt.c_id
                 WHERE
                     tet.c_id = $course_id AND
                     tet.lastedit_date > '$oldestTrackDate' ".
@@ -1358,7 +1358,7 @@ class Display
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         // Filter all last edits of all tools of the course
-        while ($res && ($item_property = Database::fetch_array($res))) {
+        while ($res && ($item_property = Database::fetch_array($res, 'ASSOC'))) {
 
             // First thing to check is if the user never entered the tool
             // or if his last visit was earlier than the last modification.
@@ -1390,6 +1390,7 @@ class Display
                 ) {
                    continue;
                 }
+
                 // If it's a survey, make sure the user's invited. Otherwise drop it.
                 if ($item_property['tool'] == TOOL_SURVEY) {
                     $survey_info = SurveyManager::get_survey($item_property['ref'], 0, $course_code);
@@ -1403,13 +1404,21 @@ class Display
                         }
                     }
                 }
+
                 // If it's a learning path, ensure it is currently visible to the user
                 if ($item_property['tool'] == TOOL_LEARNPATH) {
                     if (!learnpath::is_lp_visible_for_student($item_property['ref'], $user_id, $course_code)) {
                         continue;
                     }
                 }
-                if ($item_property['tool'] == 'work' && $item_property['type'] == 'DirectoryCreated') {
+
+                if ($item_property['tool'] == TOOL_DROPBOX) {
+                    $item_property['link'] = 'dropbox/dropbox_download.php?id='.$item_property['ref'];
+                }
+
+                if ($item_property['tool'] == 'work' &&
+                    $item_property['type'] == 'DirectoryCreated'
+                ) {
                     $item_property['lastedit_type'] = 'WorkAdded';
                 }
                 $notifications[$item_property['tool']] = $item_property;
@@ -1417,16 +1426,28 @@ class Display
         }
 
         // Show all tool icons where there is something new.
-        $retvalue = '&nbsp;';
-        while (list($key, $notification) = each($notifications)) {
+        $return = '&nbsp;';
+        foreach($notifications as $notification) {
             $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
             $type = $notification['lastedit_type'];
             $label = get_lang('TitleNotification').": ".get_lang($type)." ($lastDate)";
-            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&ref='.$notification['ref'].'&gidReq='.$notification['to_group_id'].'&id_session='.$sessionId.'">'.
-                            Display::return_icon($notification['image'], $label).'</a>&nbsp;';
+
+            if (strpos($notification['link'], '?') === false) {
+                $notification['link'] = $notification['link'].'?notification=1';
+            } else {
+                $notification['link'] = $notification['link'].'&notification=1';
+            }
+            $return .= Display::url(
+                Display::return_icon($notification['image'], $label),
+                api_get_path(WEB_CODE_PATH).
+                $notification['link'].'&cidReq='.$course_code.
+                '&ref='.$notification['ref'].
+                '&gidReq='.$notification['to_group_id'].
+                '&id_session='.$sessionId
+            ).'&nbsp;';
         }
 
-        return $retvalue;
+        return $return;
     }
 
     /**
@@ -2050,6 +2071,17 @@ class Display
 
         return $editProfileUrl;
     }
+    
+    /**
+     * Get the vCard for a user
+     * @param int $userId The user id
+     * @return *.*vcf file
+     */
+    public static function getVCardUserLink($userId)
+    {      
+        $vCardUrl = api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.intval($userId);;
+        return $vCardUrl;
+    }
 
     /**
      * @param string $content
@@ -2142,4 +2174,77 @@ class Display
 
         return $html;
     }
+
+    /**
+     * Get a HTML code for a icon by Font Awesome
+     * @param string $name The icon name
+     * @param boolean $fixWidth Optional. Whether add the fw class
+     * @param int|string $size Optional. The size for the icon. 
+     * @param string $aditionalClass Optional. Additional class
+     * @return string
+     */
+    public static function returnFontAswesomeIcon(
+        $name,
+        $fixWidth = false,
+        $size = null,
+        $aditionalClass = null
+    )
+    {
+        $className = "fa fa-$name";
+
+        if ($fixWidth) {
+            $className .= ' fa-fw';
+        }
+
+        switch ($size) {
+            case 'lg':
+                $className .= ' fa-lg';
+                break;
+            case 2:
+                //no break
+            case 3:
+                //no break
+            case 4:
+                //no break
+            case 5:
+                $className .= " fa-{$size}x";
+                break;
+        }
+
+        if (!empty($aditionalClass)) {
+            $className .= " $aditionalClass";
+        }
+
+        $icon = self::tag('i', null, ['class' => $className]);
+
+        return "$icon ";
+    }
+    public static function panelCollapse($title, $content, $id = null, $params = null, $idAccordion = null, $idCollpase = null)
+    {
+        if (!empty($idAccordion)) {
+            $html = null;
+            $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;
+            $html .= '<div class="panel panel-default" id="'.$id.'">' . PHP_EOL;
+            $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">' . PHP_EOL;
+            $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollpase.'" aria-expanded="true" aria-controls="'.$idCollpase.'">'.$title.'</a>' . PHP_EOL;
+            $html .= '</h4></div>' . PHP_EOL;
+            $html .= '<div id="'.$idCollpase.'" class="panel-collapse collapse in" role="tabpanel">' . PHP_EOL;
+            $html .= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
+            $html .= '</div></div></div>' . PHP_EOL;
+
+        } else {
+            if (!empty($id)) {
+                $params['id'] = $id;
+            }
+            $params['class'] = 'panel panel-default';
+            $html = null;
+            if (!empty($title)) {
+                $html .= '<div class="panel-heading">'.$title.'</div>' . PHP_EOL;
+            }
+            $html.= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
+            $html = Display::div($html, $params);
+        }
+        return $html;
+    }
+
 }

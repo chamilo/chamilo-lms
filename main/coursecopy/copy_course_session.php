@@ -55,14 +55,14 @@ function make_select_session_list($name, $sessions, $attr = array())
             $attributes .= ' '.$key.'="'.$value.'"';
         }
     }
-    $output = '<select name="'.$name.'" '.$attributes.'>';
+    $output = '<select id="session" class="form-control" name="'.$name.'" '.$attributes.'>';
 
     if (count($sessions) == 0) {
         $output .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option>';
     } else {
         $output .= '<option value = "0">'.get_lang('SelectASession').'</option>';
     }
-
+ 
     if (is_array($sessions)) {
         foreach ($sessions as $session) {
             $categoryName = '';
@@ -86,50 +86,56 @@ function display_form()
     $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
     // Actions
-    $html .= '<div class="actions">';
+    
     // Link back to the documents overview
-    $html .= '<a href="../admin/index.php">'.
+    $actionsLeft = '<a href="../admin/index.php">'.
         Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).
         '</a>';
-    $html .= '</div>';
+    
+    
+    $html .= Display::toolbarAction('toolbar-copysession', array(0 => $actionsLeft));
 
-    $html .= Display::return_message(get_lang('CopyCourseFromSessionToSessionExplanation'));
+    $html .= Display::return_message(get_lang('CopyCourseFromSessionToSessionExplanation'), 'warning');
 
-    $html .= '<form name="formulaire" method="post" action="'.api_get_self().'" >';
-    $html .= '<table border="0" cellpadding="5" cellspacing="0" width="100%">';
+    $html .= '<form class="form-horizontal" name="formulaire" method="post" action="'.api_get_self().'" >';
+    $html .= '<div class="form-group">';
 
     // origin
-    $html .= '<tr><td width="15%"><b>'.get_lang('OriginCoursesFromSession').':</b></td>';
-    $html .= '<td width="10%" align="left">'.make_select_session_list('sessions_list_origin', $sessions, array('onchange' => 'javascript: xajax_search_courses(this.value,\'origin\');')).'</td>';
-    $html .= '<td width="50%"><div id="ajax_list_courses_origin">';
-    $html .= '<select id="origin" name="SessionCoursesListOrigin[]"  style="width:380px;"></select></div></td></tr>';
+    $html .= '<label class="col-sm-2 control-label">'.get_lang('OriginCoursesFromSession').': </label>';
+    $html .= '<div class="col-sm-5">'.make_select_session_list('sessions_list_origin', $sessions, array('onchange' => 'javascript: xajax_search_courses(this.value,\'origin\');')).'</div>';
+    $html .= '<div class="col-sm-5" id="ajax_list_courses_origin">';
+    $html .= '<select id="origin" class="form-control" name="SessionCoursesListOrigin[]" ></select>';
+    $html .= '</div></div>';
 
     //destination
-    $html .= '<tr><td width="15%"><b>'.get_lang('DestinationCoursesFromSession').':</b></td>';
-    $html .= '<td width="10%" align="left"><div id="ajax_sessions_list_destination">';
-    $html .= '<select name="sessions_list_destination" onchange="javascript: xajax_search_courses(this.value,\'destination\');">';
-    $html .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option></select ></div></td>';
+    $html .= '<div class="form-group">';
+    $html .= '<label class="col-sm-2 control-label">' . get_lang('DestinationCoursesFromSession') . ': </label>';
+    $html .= '<div class="col-sm-5" id="ajax_sessions_list_destination">';
+    $html .= '<select class="form-control" name="sessions_list_destination" onchange="javascript: xajax_search_courses(this.value,\'destination\');">';
+    $html .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option></select ></div>';
 
-    $html .= '<td width="50%">';
-    $html .= '<div id="ajax_list_courses_destination">';
-    $html .= '<select id="destination" name="SessionCoursesListDestination[]" style="width:380px;" ></select></div></td>';
-    $html .= '</tr></table>';
+    $html .= '<div class="col-sm-5" id="ajax_list_courses_destination">';
+    $html .= '<select id="destination" class="form-control" name="SessionCoursesListDestination[]" ></select>';
+    $html .= '</div></div>';
+    
+    $options = '<div class="radio"><label><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
+    $options .= get_lang('FullCopy').'</label></div>';
+    $options .= '<div class="radio"><label><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
+    $options .= ' '.get_lang('LetMeSelectItems').'</label></div>';
 
-    $html .= '<h4>'.get_lang('TypeOfCopy').'</h4>';
-    $html .= '<label class="radio"><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
-    $html .= get_lang('FullCopy').'</label><br/>';
-    $html .= '<label class="radio"><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
-    $html .= ' '.get_lang('LetMeSelectItems').'</label><br/>';
-
-    $html .= '<label class="checkbox"><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label><br /><br/>';
-
+    $options .= '<div class="checkbox"><label><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label></div>';
+     
+    $html .= Display::panel($options, get_lang('TypeOfCopy'));
+    
+    $html .= '<div class="form-group"><div class="col-sm-12">';
     $html .= '<button class="btn btn-success" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><i class="fa fa-files-o"></i> '.get_lang('CopyCourse').'</button>';
 
     // Add Security token
     $html .= '<input type="hidden" value="' . Security::get_token() . '" name="sec_token">';
+    $html .= '</div></div>';
 
     $html .= '</form>';
-
+    
     echo $html;
 }
 
@@ -145,7 +151,7 @@ function search_courses($id_session, $type)
         if ($type == 'origin') {
             $course_list = SessionManager::get_course_list_by_session_id($id_session);
             $temp_course_list = array();
-            $return .= '<select id="origin" name="SessionCoursesListOrigin[]" style="width:380px;" onclick="javascript: checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\');">';
+            $return .= '<select id="origin" name="SessionCoursesListOrigin[]" class="form-control" onclick="javascript: checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\');">';
 
             foreach ($course_list as $course) {
                 $temp_course_list[] = "'{$course['code']}'";
@@ -161,7 +167,7 @@ function search_courses($id_session, $type)
 
                 $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
-                $select_destination .= '<select name="sessions_list_destination" width="380px" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
+                $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';
                 foreach ($sessions as $session) {
                     if ($id_session == $session['id']) {
@@ -175,14 +181,14 @@ function search_courses($id_session, $type)
                 $select_destination .= '</select>';
                 $xajax_response -> addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));
             } else {
-                $select_destination .= '<select name="sessions_list_destination" width="380px" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
+                $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option>';
                 $select_destination .= '</select>';
                 $xajax_response -> addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));
             }
 
             // Select multiple destination empty
-            $select_multiple_empty = '<select id="destination" name="SessionCoursesListDestination[]" style="width:380px;"></select>';
+            $select_multiple_empty = '<select id="destination" name="SessionCoursesListDestination[]" class="form-control"></select>';
 
             // Send response by ajax
             $xajax_response -> addAssign('ajax_list_courses_origin', 'innerHTML', api_utf8_encode($return));
@@ -201,7 +207,7 @@ function search_courses($id_session, $type)
             $rs = Database::query($sql);
 
             $course_list_destination = array();
-            $return .= '<select id="destination" name="SessionCoursesListDestination[]" style="width:380px;" >';
+            $return .= '<select id="destination" name="SessionCoursesListDestination[]" class="form-control">';
             while ($course = Database :: fetch_array($rs)) {
                 $course_list_destination[] = $course['code'];
                 $return .= '<option value="'.$course['code'].'" title="'.@htmlspecialchars($course['title'].' ('.$course['visual_code'].')', ENT_QUOTES, api_get_system_encoding()).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
@@ -249,14 +255,6 @@ function checkSelected(id_select,id_radio,id_title,id_destination) {
                 }
             }
         }
-   }
-
-   if (num == 1) {
-      document.getElementById(id_radio).disabled = false;
-      document.getElementById(id_title).style.color = \'#000\';
-   } else {
-      document.getElementById(id_radio).disabled = true;
-      document.getElementById(id_title).style.color = \'#aaa\';
    }
 }
 </script>';

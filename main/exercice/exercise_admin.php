@@ -8,8 +8,6 @@
 * @author Olivier Brouckaert, Julio Montoya
 */
 
-// name of the language file that needs to be included
-
 use \ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
@@ -97,12 +95,20 @@ $course_id = api_get_course_int_id();
 
 //INIT FORM
 if (isset($_GET['exerciseId'])) {
-    $form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId']));
+    $form = new FormValidator(
+        'exercise_admin',
+        'post',
+        api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId'])
+    );
     $objExercise->read($_GET['exerciseId']);
-    $form->addElement('hidden','edit','true');
+    $form->addElement('hidden', 'edit', 'true');
 } else {
-    $form = new FormValidator('exercise_admin','post',api_get_self().'?'.api_get_cidreq());
-    $form->addElement('hidden','edit','false');
+    $form = new FormValidator(
+        'exercise_admin',
+        'post',
+        api_get_self().'?'.api_get_cidreq()
+    );
+    $form->addElement('hidden', 'edit', 'false');
 }
 
 $objExercise->createForm($form);
@@ -126,11 +132,20 @@ if ($form->validate()) {
     }
 
     if (!empty($gradebook) && $gradebook=='view') {
-        $interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
+        $interbreadcrumb[]= array (
+            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+            'name' => get_lang('ToolGradebook')
+        );
     }
     $nameTools = get_lang('ExerciseManagement');
-    $interbreadcrumb[] = array("url"=>'exercise.php', 'name'=> get_lang('Exercises'));
-    $interbreadcrumb[] = array("url"=>"admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
+    $interbreadcrumb[] = array(
+        "url" => 'exercise.php?'.api_get_cidreq(),
+        'name' => get_lang('Exercises'),
+    );
+    $interbreadcrumb[] = array(
+        "url" => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
+        "name" => $objExercise->name,
+    );
 
     Display::display_header($nameTools, get_lang('Exercise'));
 
@@ -142,21 +157,24 @@ if ($form->validate()) {
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){
             if (!empty($_POST['lp_id'])){
-                $lp_id = intval($_POST['lp_id']);//TODO:this remains to be implemented after press the first post
+                $lp_id = intval($_POST['lp_id']);
+                //TODO:this remains to be implemented after press the first post
             } else {
                 $lp_id = intval($_GET['lp_id']);
             }
             echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";
         } else {
-            echo '<a href="exercise.php">' .
-                Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).
+            echo '<a href="exercise.php?'.api_get_cidreq().'">' .
+                Display :: return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
                 '</a>';
         }
     }
     echo '</div>';
 
-    if ($objExercise->feedback_type==1)
-        Display::display_normal_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
+    if ($objExercise->feedback_type == 1)
+        Display::display_normal_message(
+            get_lang('DirectFeedbackCantModifyTypeQuestion')
+        );
 
     if (api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
         Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));

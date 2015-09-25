@@ -22,8 +22,6 @@
  */
 require_once '../inc/global.inc.php';
 
-/* ACCESS RIGHTS */
-
 // A notice for unauthorized people.
 api_protect_course_script(true);
 $nameTools = get_lang('ToolForum');
@@ -42,9 +40,14 @@ require_once 'forumfunction.inc.php';
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$current_thread=get_thread_information($_GET['thread']); // Note: this has to be validated that it is an existing thread.
-$current_forum=get_forum_information($current_thread['forum_id']); // Note: this has to be validated that it is an existing forum.
-$current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+$current_thread = get_thread_information(
+    $_GET['thread']
+); // Note: this has to be validated that it is an existing thread.
+$current_forum = get_forum_information($current_thread['forum_id']);
+// Note: this has to be validated that it is an existing forum.
+$current_forum_category = get_forumcategory_information(
+    $current_forum['forum_category']
+);
 
 /* Is the user allowed here? */
 

@@ -70,8 +70,6 @@ $(function() {
 });
 </script>';
 
-global $_configuration;
-
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tool_name = get_lang('ConfigureHomePage');
@@ -1007,7 +1005,7 @@ switch ($action) {
 <section id="page-home">
     <div class="row">
         <div class="col-md-3">
-            
+
             <!-- login block -->
             <div id="login_block" class="panel panel-default">
                 <div class="panel-body">
@@ -1029,10 +1027,10 @@ switch ($action) {
                     </ul>
                 </div>
             </div>
-            
+
             <!-- notice block -->
-            
-            
+
+
                 <div class="panel-group" id="notice-block" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingOne">
@@ -1062,8 +1060,8 @@ switch ($action) {
                     </div>
                 </div>
             <!-- insert link block -->
-            
-        
+
+
             <div class="panel-group" id="links-block" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingOne">
@@ -1077,7 +1075,7 @@ switch ($action) {
                         <div class="panel-body">
                             <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?>
                                 <?php echo get_lang('InsertLink'); ?>
-                            </a> 
+                            </a>
                             <ul class="menulist">
                                 <?php
                                     $home_menu = '';
@@ -1110,7 +1108,7 @@ switch ($action) {
                     </div>
                 </div>
             </div>
-       
+
         </div>
         <div class="col-md-9">
             <div class="actions">
@@ -1132,14 +1130,14 @@ switch ($action) {
                 echo $open;
                 ?>
             </section>
-            
+
             <?php
                 $access_url_id = 1;
                 // we only show the category options for the main chamilo installation
                 if (api_is_multiple_url_enabled()) {
                     $access_url_id = api_get_current_access_url_id();
                 }
-               
+
                 if ($access_url_id == 1) {
                     echo '<div class="actions">';
                     echo '<a href="course_category.php">'.Display::return_icon('edit.png', get_lang('Edit')).get_lang('EditCategories').'</a>';
@@ -1158,7 +1156,7 @@ switch ($action) {
                 }
                 echo '</ul>';
             ?>
-            
+
             <?php
 		if (file_exists($homep.$newsf.'_'.$lang.$ext)) {
                     $open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
@@ -1170,7 +1168,7 @@ switch ($action) {
                     echo $open;
 		}
             ?>
-            
+
             <?php
                 // Add new page
 		$home_menu = '';

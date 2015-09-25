@@ -204,7 +204,7 @@ abstract class Question
      */
     public function selectDescription()
     {
-        $this->description = text_filter($this->description);
+        $this->description = $this->description;
 
         return $this->description;
     }
@@ -431,16 +431,21 @@ abstract class Question
             $category_id = intval($category);
             $question_id = intval($this->id);
             $sql = "SELECT count(*) AS nb FROM $table
-                    WHERE question_id = $question_id AND c_id=" . api_get_course_int_id();
+                    WHERE
+                        question_id = $question_id AND
+                        c_id=" . api_get_course_int_id();
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
             if ($row['nb'] > 0) {
-                $sql = "UPDATE $table SET category_id = $category_id
-                        WHERE question_id = $question_id AND c_id = " . api_get_course_int_id();
+                $sql = "UPDATE $table
+                        SET category_id = $category_id
+                        WHERE
+                            question_id = $question_id AND
+                            c_id = " . api_get_course_int_id();
                 Database::query($sql);
             } else {
-                $sql = "INSERT INTO $table
-                        VALUES (" . api_get_course_int_id() . ", $question_id, $category_id)";
+                $sql = "INSERT INTO $table (c_id, question_id, category_id)
+                        VALUES (" . api_get_course_int_id().", $question_id, $category_id)";
                 Database::query($sql);
             }
         }
@@ -456,7 +461,9 @@ abstract class Question
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $question_id = intval($this->id);
         $sql = "DELETE FROM $table
-                WHERE question_id = $question_id AND c_id = " . api_get_course_int_id();
+                WHERE
+                    question_id = $question_id AND
+                    c_id = " . api_get_course_int_id();
         Database::query($sql);
     }
 
@@ -621,14 +628,12 @@ abstract class Question
 
             // Resize according to height or width, both should not be larger than $Max after resizing.
             if ($Dimension == "any") {
-                if ($current_height > $current_width || $current_height == $current_width)
-                {
+                if ($current_height > $current_width || $current_height == $current_width) {
                     $resize_scale = $current_height / $Max;
                     $new_height = $Max;
                     $new_width = ceil($current_width / $resize_scale);
                 }
-                if ($current_height < $current_width)
-                {
+                if ($current_height < $current_width) {
                     $resize_scale = $current_width / $Max;
                     $new_width = $Max;
                     $new_height = ceil($current_height / $resize_scale);
@@ -1218,13 +1223,16 @@ abstract class Question
                 }
             }
 
-            $sql = "DELETE FROM $TBL_EXERCISE_QUESTION WHERE c_id = $course_id AND question_id = " . intval($id) . "";
+            $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
+                    WHERE c_id = $course_id AND question_id = " . intval($id) . "";
             Database::query($sql);
 
-            $sql = "DELETE FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id = " . intval($id) . "";
+            $sql = "DELETE FROM $TBL_QUESTIONS
+                    WHERE c_id = $course_id AND id = " . intval($id) . "";
             Database::query($sql);
 
-            $sql = "DELETE FROM $TBL_REPONSES WHERE c_id = $course_id AND question_id = " . intval($id) . "";
+            $sql = "DELETE FROM $TBL_REPONSES
+                    WHERE c_id = $course_id AND question_id = " . intval($id) . "";
             Database::query($sql);
 
             // remove the category of this question in the question_rel_category table
@@ -1308,7 +1316,8 @@ abstract class Question
 
         if ($new_question_id) {
 
-            $sql = "UPDATE $TBL_QUESTIONS SET id = iid WHERE iid = $new_question_id";
+            $sql = "UPDATE $TBL_QUESTIONS SET id = iid
+                    WHERE iid = $new_question_id";
             Database::query($sql);
 
             if (!empty($options)) {
@@ -1318,9 +1327,12 @@ abstract class Question
                     $item['c_id'] = $course_id;
                     unset($item['id']);
                     $id = Database::insert($TBL_QUESTION_OPTIONS, $item);
+                    if ($id) {
 
-                    $sql = "UPDATE $TBL_QUESTION_OPTIONS SET id = iid WHERE iid = $id";
-                    Database::query($sql);
+                        $sql = "UPDATE $TBL_QUESTION_OPTIONS SET id = iid
+                                WHERE iid = $id";
+                        Database::query($sql);
+                    }
                 }
             }
 

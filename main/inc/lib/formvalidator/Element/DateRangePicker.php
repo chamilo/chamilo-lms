@@ -62,30 +62,34 @@ class DateRangePicker extends HTML_QuickForm_text
         }
 
         $minDate = null;
-        if (!empty($this->getAttribute('minDate'))) {
+        $minDateValue = $this->getAttribute('minDate');
+        if (!empty($minDateValue)) {
             $minDate = "
-                minDate: '{$this->getAttribute('minDate')}',
+                minDate: '{$minDateValue}',
             ";
         }
 
         $maxDate = null;
-        if (!empty($this->getAttribute('maxDate'))) {
+        $maxDateValue = $this->getAttribute('maxDate');
+        if (!empty($maxDateValue)) {
             $maxDate = "
-                maxDate: '{$this->getAttribute('maxDate')}',
+                maxDate: '{$maxDateValue}',
             ";
         }
 
         $format = 'YYYY-MM-DD HH:mm';
-        if (!empty($this->getAttribute('format'))) {
-            $format = $this->getAttribute('format');
+        $formatValue = $this->getAttribute('format');
+        if (!empty($formatValue)) {
+            $format = $formatValue;
         }
 
         $timePicker = 'true';
-        if (!empty($this->getAttribute('timePicker'))) {
-            $timePicker = $this->getAttribute('timePicker');
+        $timePickerValue =  $this->getAttribute('timePicker');
+        if (!empty($timePickerValue)) {
+            $timePicker = $timePickerValue;
         }
 
-        //timeFormat: 'hh:mm'
+        // timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
                 $('#$id').daterangepicker({

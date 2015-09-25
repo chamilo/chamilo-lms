@@ -3615,7 +3615,7 @@ class UserManager
             FormValidator::LAYOUT_HORIZONTAL
         );
 
-        $form->addText('q', get_lang('UsersGroups'));
+        $form->addText('q', get_lang('UsersGroups'), false);
         $options = array(
             0 => get_lang('Select'),
             1 => get_lang('User'),
@@ -4526,7 +4526,7 @@ class UserManager
                         'extra_'.$field_details[1],
                         $field_details[3],
                         $options,
-                        array('class' => 'chzn-select', 'id' => 'extra_'.$field_details[1])
+                        array('id' => 'extra_' . $field_details[1])
                     );
 
                     if (!$admin_permissions) {

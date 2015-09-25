@@ -8,7 +8,6 @@
  */
 class MatchingDraggable extends Question
 {
-
     public static $typePicture = 'matchingdrag.png';
     static $explanationLangVar = 'MatchingDraggable';
 
@@ -143,13 +142,10 @@ class MatchingDraggable extends Question
             );
 
             $form->addHtml('<tr>');
-
             $form->addHtml("<td>$i</td>");
             $form->addText("answer[$i]", null);
-
             $form->addSelect("matches[$i]", null, $matches);
-            $form->addText("weighting[$i]", null, true, ['value' => 10]);
-
+            $form->addText("weighting[$i]", null, true, ['style' => 'width: 60px;', 'value' => 10]);
             $form->addHtml('</tr>');
         }
 
@@ -190,10 +186,8 @@ class MatchingDraggable extends Question
             );
 
             $form->addHtml('<tr>');
-
             $form->addHtml('<td>' . chr(64 + $i) . '</td>');
             $form->addText("option[$i]", null);
-
             $form->addHtml('</tr>');
         }
 

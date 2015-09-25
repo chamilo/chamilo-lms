@@ -16,7 +16,8 @@ class AddCourseToSession
 	 */
 	public static function search_courses($needle, $type)
 	{
-		global $tbl_course, $tbl_session_rel_course, $id_session;
+		global $tbl_session_rel_course, $id_session;
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 		$course_title = null;
 		$xajax_response = new xajaxResponse();
 		$return = '';

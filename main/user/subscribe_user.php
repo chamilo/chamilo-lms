@@ -223,7 +223,6 @@ if (!empty($_POST['keyword'])) {
 Display :: display_header($tool_name, "User");
 
 // Build search-form
-echo '<div class="actions">';
 
 switch ($type) {
     case STUDENT:
@@ -233,18 +232,18 @@ switch ($type) {
         $url = api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
         break;
 }
-
-echo Display::url(
+$actionsLeft = '';
+$actionsLeft = Display::url(
     Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
     $url
 );
-$actions = '';
+
 if (isset($keyword)) {
-    $actions .= '<a href="subscribe_user.php?type='.$type.'&">'.
+    $actionsLeft .= '<a href="subscribe_user.php?type='.$type.'&">'.
         Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
 }
 if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])) {
-    $actions .= '<a href="subscribe_user.php?type='.$type.'">'.
+    $actionsLeft .= '<a href="subscribe_user.php?type='.$type.'">'.
         Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
 }
 if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
@@ -256,9 +255,7 @@ $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAY
 $form->addText('keyword', '', false);
 $form->addElement('hidden', 'type', $type);
 $form->addButtonSearch(get_lang('Search'));
-$form->addElement('static', 'additionalactions', null, $actions);
-$form->display();
-echo '</div>';
+echo Display::toolbarAction('toolbar-subscriber', array(0 => $actionsLeft, 1 => $form->returnForm()));
 
 $option = $type == COURSEMANAGER ? 2 : 1;
 echo UserManager::getUserSubscriptionTab($option);

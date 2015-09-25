@@ -4467,7 +4467,7 @@ function WSGetUserFromUsername($params) {
     $result = array();
 
     // Get user id
-    $user_data   = UserManager::get_user_info($params['username']);
+    $user_data = api_get_user_info($params['username']);
 
     if (empty($user_data)) {
         // If user was not found, there was a problem

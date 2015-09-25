@@ -25,6 +25,7 @@ $extendAttemptId = isset($_GET['extend_attempt_id']) ? $_GET['extend_attempt_id'
 $extendedAttempt = isset($_GET['extend_attempt']) ? $_GET['extend_attempt'] : null;
 $extendedAll = isset($_GET['extend_all']) ? $_GET['extend_all'] : null;
 $export = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$allowExtend = isset($_GET['allow_extend']) ? $_GET['allow_extend'] : 1;
 
 $lpReportType = api_get_setting('lp_show_reduced_report');
 $type = 'classic';
@@ -44,7 +45,8 @@ $output = Tracking::getLpStats(
     $extendAttemptId,
     $extendedAttempt,
     $extendedAll,
-    $type
+    $type,
+    $allowExtend
 );
 
 // Origin = tracking means that teachers see that info in the Reporting tool

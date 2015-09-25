@@ -8,106 +8,95 @@
  * Initialization
  */
 require_once '../config.php';
-require_once dirname(__FILE__) . '/buy_course.lib.php';
+
+$currentUserId = api_get_user_id();
+
+if (empty($currentUserId)) {
+    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'auth/inscription.php');
+    exit;
+}
 
 $plugin = BuyCoursesPlugin::create();
-$_cid = 0;
+$includeSession = $plugin->get('include_sessions') === 'true';
+$paypalEnabled = $plugin->get('paypal_enable') === 'true';
+$transferEnabled = $plugin->get('transfer_enable') === 'true';
+
+if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
+    die;
+}
+
+$buyingCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
+$buyingSession = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
+
+if ($buyingCourse) {
+    $courseInfo = $plugin->getCourseInfo($_REQUEST['i']);
+    $item = $plugin->getItemByProduct($_REQUEST['i'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
+} elseif ($buyingSession) {
+    $sessionInfo = $plugin->getSessionInfo($_REQUEST['i']);
+    $item = $plugin->getItemByProduct($_REQUEST['i'], BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+}
+
+$userInfo = api_get_user_info();
+
+$form = new FormValidator('confirm_sale');
+
+if ($form->validate()) {
+    $formValues = $form->getSubmitValues();
+
+    $saleId = $plugin->registerSale($item['id'], $formValues['payment_type']);
+
+    if ($saleId !== false) {
+        $_SESSION['bc_sale_id'] = $saleId;
+        header('Location: ' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/process_confirm.php');  
+    }
+
+    exit;
+}
+
+$form->addHeader($plugin->get_lang('UserInformation'));
+$form->addText('name', get_lang('Name'), false, ['cols-size' => [5, 7, 0]]);
+$form->addText('username', get_lang('Username'), false, ['cols-size' => [5, 7, 0]]);
+$form->addText('email', get_lang('EmailAddress'), false, ['cols-size' => [5, 7, 0]]);
+$form->addHeader($plugin->get_lang('PaymentMethods'));
+
+$paymentTypesOptions = $plugin->getPaymentTypes();
+
+if (!$paypalEnabled) {
+    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL]);
+}
+
+if (!$transferEnabled) {
+    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER]);
+}
+
+$form->addRadio('payment_type', null, $paymentTypesOptions);
+$form->addHidden('t', intval($_GET['t']));
+$form->addHidden('i', intval($_GET['i']));
+$form->freeze(['name', 'username', 'email']);
+$form->setDefaults([
+    'name' => $userInfo['complete_name'],
+    'username' => $userInfo['username'],
+    'email' => $userInfo['email']
+]);
+$form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
+
+// View
 $templateName = $plugin->get_lang('PaymentMethods');
-$interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
+$interbreadcrumb[] = array("url" => "course_catalog.php", "name" => $plugin->get_lang('CourseListOnSale'));
 
 $tpl = new Template($templateName);
+$tpl->assign('buying_course', $buyingCourse);
+$tpl->assign('buying_session', $buyingSession);
+$tpl->assign('user', api_get_user_info());
+$tpl->assign('form', $form->returnForm());
 
-if (!empty($_GET['code'])) {
-    $codeType = "COURSE";
-    $code = (int)$_GET['code'];
-} else if (!empty($_GET['scode'])) {
-    $codeType = "SESSION";
-    $code = (int)$_GET['scode'];
-} else {
-    $code = $_SESSION['bc_code'];
+if ($buyingCourse) {
+    $tpl->assign('course', $courseInfo);
+} elseif ($buyingSession) {
+    $tpl->assign('session', $sessionInfo);
 }
 
-$selectedValue = Database::select(
-    'selected_value',
-    Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT),
-    array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
-);
-$result = array_shift($selectedValue);
+$content = $tpl->fetch('buycourses/view/process.tpl');
 
-if ($codeType === 'SESSION' && $result['selected_value'] === 'true') {
-    $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
-    $tableBuySession = Database::get_main_table(TABLE_BUY_SESSION);
-    $sql = "SELECT a.session_id, a.name, a.date_start, a.date_end, a.price
-    FROM $tableBuySession a, $tableSession b
-    WHERE a.session_id = ".$code."
-    AND a.session_id = b.id;";
-    $res = Database::query($sql);
-    $row = Database::fetch_assoc($res);
-    $_SESSION['bc_title'] = $row['name'];
-    $_SESSION['bc_codetext'] = 'THIS_IS_A_SESSION';
-    $tpl->assign('session', sessionInfo($code));
-    $tpl->assign('isSession', 'YES');
-} else {
-    $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-    $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
-    $sql = "SELECT a.price, a.title, b.code
-    FROM $tableBuyCourse a, $tableCourse b
-    WHERE a.course_id = " . $code . "
-    AND a.course_id = b.id;";
-    $res = Database::query($sql);
-    $row = Database::fetch_assoc($res);
-    $_SESSION['bc_title'] = $row['title'];
-    $_SESSION['bc_codetext'] = $row['code'];
-    $tpl->assign('course', courseInfo($code));
-}
-$_SESSION['Payment_Amount'] = number_format($row['price'], 2, '.', '');
-$_SESSION['bc_code'] = $code;
-
-if (!isset($_SESSION['_user'])) {
-    //Needs to be Registered
-    if (!isset($_SESSION['bc_user'])) {
-        header('Location:inscription.php');
-        exit;
-    } else {
-        $_SESSION['bc_user_id'] = $_SESSION['bc_user']['user_id'];
-        $tpl->assign('name', $_SESSION['bc_user']['firstName'] . ' ' . $_SESSION['bc_user']['lastName']);
-        $tpl->assign('email', $_SESSION['bc_user']['mail']);
-        $tpl->assign('user', $_SESSION['bc_user']['username']);
-    }
-} else {
-    $_SESSION['bc_user_id'] = $_SESSION['_user']['user_id'];
-    $_SESSION['bc_user'] = $_SESSION['_user'];
-    $tpl->assign('name', $_SESSION['bc_user']['firstname'] . ' ' . $_SESSION['bc_user']['lastname']);
-    $tpl->assign('email', $_SESSION['bc_user']['email']);
-    $tpl->assign('user', $_SESSION['bc_user']['username']);
-}
-
-$currencyType = findCurrency();
-
-$paypalEnable = $plugin->get('paypal_enable');
-$transferEnable = $plugin->get('transfer_enable');
-
-
-if (checkUserBuy($_SESSION['bc_codetext'], $_SESSION['bc_user_id'], $codeType)) {
-    $_SESSION['bc_success'] = false;
-    $_SESSION['bc_message'] = 'AlreadyBuy';
-    header('Location: list.php');
-}
-
-if (checkUserBuyTransfer($_SESSION['bc_codetext'], $_SESSION['bc_user_id'], $codeType)) {
-    $_SESSION['bc_success'] = false;
-    $_SESSION['bc_message'] = 'bc_tmp_registered';
-    header('Location: list.php');
-}
-
-$tpl->assign('server', $_configuration['root_web']);
-$tpl->assign('paypal_enable', $paypalEnable);
-$tpl->assign('transfer_enable', $transferEnable);
-$tpl->assign('title', $_SESSION['bc_title']);
-$tpl->assign('price', $_SESSION['Payment_Amount']);
-$tpl->assign('currency', $currencyType);
-
-$listing_tpl = 'buycourses/view/process.tpl';
-$content = $tpl->fetch($listing_tpl);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

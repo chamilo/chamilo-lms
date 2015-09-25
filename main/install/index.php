@@ -313,6 +313,12 @@ if ($encryptPassForm == '1') {
     <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH)?>javascript/bootstrap-select.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
+
+            $("#details_button").click(function() {
+                $( "#details" ).toggle("slow", function() {
+                });
+            });
+
             $("#button_please_wait").hide();
             $("button").addClass('btn btn-default');
 
@@ -541,7 +547,7 @@ if (@$_POST['step2']) {
 
         // For version 1.9
         $urlForm = $_configuration['root_web'];
-        $encryptPassForm = get_config_param('userPasswordCrypted');
+        $encryptPassForm = get_config_param('password_encryption');
         // Managing the $encryptPassForm
         if ($encryptPassForm == '1') {
             $encryptPassForm = 'sha1';
@@ -690,7 +696,7 @@ if (@$_POST['step2']) {
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
 
-        Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
+        error_log('Starting migration process from '.$my_old_version.' ('.time().')');
 
         switch ($my_old_version) {
             case '1.9.0':
@@ -715,38 +721,47 @@ if (@$_POST['step2']) {
                 Database::query("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
                 Database::query("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
 
+                echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
+                echo '<div id="details" style="display:none">';
                 // Migrate using the migration files located in:
                 // src/Chamilo/CoreBundle/Migrations/Schema/V110
-                migrate(
+                $result = migrate(
                     110,
                     $manager
                 );
 
-                fixIds($manager);
+                echo '</div>';
 
-                include 'update-files-1.9.0-1.10.0.inc.php';
-                // Only updates the configuration.inc.php with the new version
-                include 'update-configuration.inc.php';
+                if ($result) {
+                    error_log('Migrations files were executed.');
 
-                $configurationFiles = array(
-                    'mail.conf.php',
-                    'profile.conf.php',
-                    'course_info.conf.php',
-                    'add_course.conf.php',
-                    'events.conf.php',
-                    'auth.conf.php',
-                    'portfolio.conf.php'
-                );
+                    fixIds($manager);
 
-                foreach ($configurationFiles as $file) {
-                    if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
-                        copy(
-                            api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
-                            api_get_path(CONFIGURATION_PATH).$file
-                        );
+                    include 'update-files-1.9.0-1.10.0.inc.php';
+                    // Only updates the configuration.inc.php with the new version
+                    include 'update-configuration.inc.php';
+
+                    $configurationFiles = array(
+                        'mail.conf.php',
+                        'profile.conf.php',
+                        'course_info.conf.php',
+                        'add_course.conf.php',
+                        'events.conf.php',
+                        'auth.conf.php',
+                        'portfolio.conf.php'
+                    );
+
+                    foreach ($configurationFiles as $file) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
+                            copy(
+                                api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
+                                api_get_path(CONFIGURATION_PATH).$file
+                            );
+                        }
                     }
+                } else {
+                    error_log('There was an error during running migrations. Check error.log');
                 }
-
                 break;
             default:
                 break;

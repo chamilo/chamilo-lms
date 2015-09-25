@@ -150,25 +150,22 @@ echo $message;
 
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
-echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
+$actionsLeft = '';
+$actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
 
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
     /*echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'">';
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';*/
+    
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
+    $actionsLeft .= Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId.'">';
-    echo Display::return_icon('upload_file.png', get_lang('UploadCorrections'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .=  '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
+    $actionsLeft .= Display::return_icon('addworkuser.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
-    echo Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
-
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
-    echo Display::return_icon('user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
-
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
-    echo Display::return_icon('pdf.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
+    $actionsLeft .= Display::return_icon('pdf.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $display_output = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&amp;id='.$workId.'&amp;list=without">'.
     Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'), '', ICON_SIZE_MEDIUM)."</a>";
@@ -177,12 +174,17 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
         $display_output .= '<a href="downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq().'">'.
             Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
     }
-    echo $display_output;
+    $actionsLeft .= $display_output;
 
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
-    echo Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
+    $actionsLeft .= Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
+    
+    $url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;    
+    $actionsLeft .= Display::toolbarButton(get_lang('UploadCorrections'), $url, 'upload', 'success');
 }
-echo '</div>';
+
+
+echo Display::toolbarAction('toolbar-worklist', array( 0 => $actionsLeft));
 
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);
@@ -195,8 +197,10 @@ if (!empty($error_message)) {
 }
 
 if (!empty($my_folder_data['description'])) {
-    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.
-        Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
+    $contentWork = Security::remove_XSS($my_folder_data['description']);
+    $html = '';
+    $html .= Display::panel($contentWork, get_lang('Description'));
+    echo $html;  
 }
 
 $check_qualification = intval($my_folder_data['qualification']);
@@ -388,7 +392,8 @@ $(function() {
 <?php
 
 echo $documentsAddedInWork;
-echo Display::grid_html('results');
+$tableWork = Display::grid_html('results');
+echo Display::panel($tableWork);
 echo '<div class="list-work-results">';
 echo '<div class="panel panel-default">';
 echo '<div class="panel-body">';

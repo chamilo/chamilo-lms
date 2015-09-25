@@ -199,11 +199,6 @@ class TestUserManager extends UnitTestCase {
 		$this->assertTrue(!(bool)$res);
 	}
 
-	function testGetUserInfo() {
-		$res=UserManager::get_user_info('arthur2');
-		$this->assertTrue(!(bool)$res);
-	}
-
 	function testGetUserList() {
 		$res=UserManager::get_user_list(null,null);
 		$this->assertTrue(is_array($res));

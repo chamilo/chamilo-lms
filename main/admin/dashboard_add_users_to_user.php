@@ -10,7 +10,6 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 
-global $_configuration;
 $ajax_search = false;
 // create an ajax object
 $xajax = new xajax();
@@ -409,12 +408,12 @@ if(!empty($msg)) {
                 </select>
                 </div>
             </div>
-        
+
         <!-- <div class="form-group">
             <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" onclick="moveItem(document.getElementById('user_to_add'), document.getElementById('destination'))" />
             <div id="ajax_list_users_single"></div>
         </div> -->
-        
+
         <?php } ?>
         <div class="form-group">
             <div class="col-sm-12">
@@ -430,8 +429,8 @@ if(!empty($msg)) {
                 </div>
             </div>
         </div>
-        
-        
+
+
     </div>
     <div class="col-md-4">
         <?php if ($ajax_search) { ?>
@@ -479,7 +478,7 @@ if(!empty($msg)) {
                     }?>
                 </select>
             </div>
-        </div>    
+        </div>
 
     </div>
 </div>

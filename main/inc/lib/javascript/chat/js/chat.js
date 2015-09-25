@@ -143,7 +143,7 @@ function startChatSession() {
                         if (item)    { // fix strange ie bug
                             //my_user_id        = item.f;
                             if ($("#chatbox_"+my_user_id).length <= 0) {
-                                createChatBox(my_user_id, user_items.user_info.user_name, 1, user_items.user_info.online);
+                                createChatBox(my_user_id, user_items.user_info.user_name, 1, user_items.user_info.online, user_items.user_info.avatar);
                             }
 
                             if (item.s == 1) {
@@ -242,7 +242,7 @@ function chatHeartbeat() {
 					if (item)	{ // fix strange ie bug
 
 						if ($("#chatbox_"+my_user_id).length <= 0) {
-							createChatBox(my_user_id, user_items.user_info.user_name, 0, user_items.user_info.online);
+							createChatBox(my_user_id, user_items.user_info.user_name, 0, user_items.user_info.online, user_items.user_info.avatar);
 						}
 						if ($("#chatbox_"+my_user_id).css('display') == 'none') {
 							$("#chatbox_"+my_user_id).css('display','block');
@@ -379,36 +379,23 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 		.addClass('chatboxoptions')
 		.appendTo(chatboxHead);
 
-	if (!!Modernizr.prefixed('RTCPeerConnection', window)) {
+	if (
+            !!Modernizr.prefixed('RTCPeerConnection', window) &&
+            (online === '1' || online === 1)
+        ) {
 		$('<a>')
-			.addClass('btn btn-xs')
+			.addClass('btn btn-xs ajax')
 			.attr({
-				href: '#'
+				href: ajax_url + '?action=create_room&to=' + user_id
 			})
+                        .data({
+                            title: '<i class="fa fa-video-camera"></i>',
+                            size: 'sm'
+                        })
+                        .on('click', function () {
+                            $(this).data('title', $('.chatboxtitle').text());
+                        })
 			.html('<i class="fa fa-video-camera"></i>')
-			.on('click', function(e) {
-				e.preventDefault();
-
-				var createForm = $.get(
-					ajax_url,
-					{
-						action: 'start_video',
-						to: user_id
-					}
-				);
-
-				$.when(createForm).done(function(response) {
-					$('#global-modal')
-						.find('.modal-dialog')
-						.removeClass('modal-lg');
-
-					$('#global-modal')
-						.find('.modal-body')
-						.html(response);
-
-					$('#global-modal').modal('show');
-				});
-			})
 			.appendTo(chatboxoptions);
 	}
 

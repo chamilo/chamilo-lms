@@ -6,31 +6,30 @@ if (api_is_anonymous()) {
     api_not_allowed(true);
 }
 
-$roomName = isset($_GET['room']) ? $_GET['room'] : null;
+$roomId = isset($_GET['room']) ? $_GET['room'] : null;
 
-$room = VideoChat::getChatRoomByName($roomName);
+$entityManager = Database::getManager();
 
-if ($room === false) {
-    Header::location(api_get_path(WEB_PATH));
+$chatVideo = $entityManager->find('ChamiloCoreBundle:ChatVideo', $roomId);
+
+if (!$chatVideo) {
+    header('Location: '.api_get_path(WEB_PATH));
+    exit;
 }
 
-$friend_html = SocialManager::listMyFriendsBlock(
-    $user_id,
-    $link_shared,
-    $show_full_profile
-);
-
-$isSender = $room['from_user'] == api_get_user_id();
-$isReceiver = $room['to_user'] == api_get_user_id();
+$friend_html = SocialManager::listMyFriendsBlock($user_id, '', false);
+$isSender = $chatVideo->getFromUser() === api_get_user_id();
+$isReceiver = $chatVideo->getToUser() === api_get_user_id();
 
 if (!$isSender && !$isReceiver) {
-    Header::location(api_get_path(WEB_PATH));
+    header('Location: '.api_get_path(WEB_PATH));
+    exit;
 }
 
 if ($isSender) {
-    $chatUser = api_get_user_info($room['to_user']);
+    $chatUser = api_get_user_info($chatVideo->getToUser());
 } elseif ($isReceiver) {
-    $chatUser = api_get_user_info($room['from_user']);
+    $chatUser = api_get_user_info($chatVideo->getFromUser());
 }
 $idUserLocal = api_get_user_id();
 $userLocal = api_get_user_info($idUserLocal, true);
@@ -39,15 +38,20 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'
     . '"></script>' . "\n";
 
 $template = new Template();
-$template->assign('room', $room);
+$template->assign('room_name', $chatVideo->getRoomName());
 $template->assign('chat_user', $chatUser);
 $template->assign('user_local', $userLocal);
 $template->assign('block_friends', $friend_html);
 
 $content = $template->fetch('default/chat/video.tpl');
 
-//$template->assign('header', $room['room_name']);
+$templateHeader = Display::returnFontAswesomeIcon('video-camera', true, 'lg')
+    . $chatVideo->getRoomName();
+
+$template->assign('header', $templateHeader);
 $template->assign('content', $content);
-$template->assign('message', Display::return_message(get_lang('BroswerDoesNotSupportWebRTC'), 'warning'));
+$template->assign(
+    'message',
+    Display::return_message(get_lang('YourBroswerDoesNotSupportWebRTC'), 'warning')
+);
 $template->display_one_col_template();
-//$template->display_no_layout_template();

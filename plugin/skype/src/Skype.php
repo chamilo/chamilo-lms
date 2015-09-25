@@ -50,7 +50,7 @@ class Skype extends Plugin implements HookPluginInterface
         );
 
         if (empty($result)) {
-            $extraField = new Extrafield('user');
+            $extraField = new ExtraField('user');
             $extraField->save(array(
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => 'skype',

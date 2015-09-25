@@ -220,6 +220,10 @@ class Career extends Model
      */
     public function save($params, $show_query = false)
     {
+        if (isset($params['description'])) {
+            $params['description'] = Security::remove_XSS($params['description']);
+        }
+
         $id = parent::save($params);
         if (!empty($id)) {
             Event::addEvent(
@@ -248,5 +252,13 @@ class Career extends Model
             api_get_utc_datetime(),
             api_get_user_id()
         );
+    }
+
+    public function update($params) {
+        if (isset($params['description'])) {
+            $params['description'] = Security::remove_XSS($params['description']);
+        }
+
+        parent::update($params);
     }
 }

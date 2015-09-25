@@ -729,7 +729,7 @@ class TestCategory
     public function displayCategories($courseId, $sessionId = 0)
     {
         $categories = $this->getCategories($courseId, $sessionId);
-        $html = null;
+        $html = '';
 
         foreach ($categories as $category) {
             $tmpobj = new TestCategory($category['id']);
@@ -737,20 +737,19 @@ class TestCategory
             $rowname = self::protectJSDialogQuote($category['title']);
             $nb_question_label = $nb_question == 1 ? $nb_question . ' ' . get_lang('Question') : $nb_question . ' ' . get_lang('Questions');
 
-            $html .= '<div class="sectiontitle" id="id_cat' . $category['id'] . '">';
-            $html .= "<span style='float:right'>" . $nb_question_label . "</span>";
-            $html .= $category['title'];
-            $html .= '</div>';
-            $html .= '<div class="sectioncomment">';
-            $html .= $category['description'];
-            $html .= '</div>';
-            $html .= '<div>';
-            $html .= '<a href="' . api_get_self() . '?action=editcategory&category_id=' . $category['id'] . '">' .
+            //$html .= '<div class="sectiontitle" id="id_cat' . $category['id'] . '">';
+            $content = "<span style='float:right'>" . $nb_question_label . "</span>";
+
+            $content .= '<div class="sectioncomment">';
+            $content .= $category['description'];
+            $content .= '</div>';
+
+            $links = '<a href="' . api_get_self() . '?action=editcategory&category_id=' . $category['id'] . '">' .
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
-            $html .= ' <a href="' . api_get_self() . '?action=deletecategory&category_id=' . $category['id'] . '" ';
-            $html .= 'onclick="return confirmDelete(\'' . self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure') . '[' . $rowname) . '] ?\', \'id_cat' . $category['id'] . '\');">';
-            $html .= Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
-            $html .= '</div>';
+            $links .= ' <a href="' . api_get_self() . '?action=deletecategory&category_id=' . $category['id'] . '" ';
+            $links .= 'onclick="return confirmDelete(\'' . self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure') . '[' . $rowname) . '] ?\', \'id_cat' . $category['id'] . '\');">';
+            $links .= Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+            $html .= Display::panel($content, $category['title'].$links);
         }
 
         return $html;

@@ -46,7 +46,7 @@ class SelectAjax extends HTML_QuickForm_select
         $defaultValues = empty($defaultValues) ? [] : $defaultValues;
 
         $width = 'element';
-        $givenWidth = '300';
+        $givenWidth = '100%';
         if (!empty($givenWidth)) {
             $width = $givenWidth;
         }
@@ -67,11 +67,10 @@ class SelectAjax extends HTML_QuickForm_select
                 $(function(){
                     $('#{$this->getAttribute('name')}').select2({
                         $languageCondition
-                        placeholder_: '$plHolder',
+                        placeholder: '$plHolder',
                         allowClear: true,
                         width: '$width',
                         minimumInputLength: '$minimumInputLength',
-                        // instead of writing the function to execute the request we use Select2s convenient helper
                         ajax: {
                             url: '{$this->getAttribute('url')}',
                             dataType: 'json',

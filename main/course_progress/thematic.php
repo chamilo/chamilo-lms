@@ -209,11 +209,8 @@ if ($action == 'thematic_list') {
                     }
 
                     $thematic_advance_item =  isset($thematic_advance_div[$thematic['id']][$thematic_advance['id']]) ? $thematic_advance_div[$thematic['id']][$thematic_advance['id']] : null;
-
                     echo Display::div($thematic_advance_item, array('id'=>'thematic_advance_'.$thematic_advance['id']));
-
                     echo $edit_link;
-
                     echo '</td>';
 
                     //if (api_is_allowed_to_edit(null, true) && api_get_session_id() == $thematic['session_id']) {

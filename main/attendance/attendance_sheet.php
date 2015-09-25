@@ -20,33 +20,16 @@ if (api_is_allowed_to_edit(null, true) ||
     api_is_coach(api_get_session_id(), api_get_course_int_id()) ||
     $isDrhOfCourse
 ) {
-    $param_gradebook = '';
-    if (isset($_SESSION['gradebook'])) {
-        $param_gradebook = '&gradebook='.$_SESSION['gradebook'];
-    }
-
     $groupId = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
-
-    /* $form = new FormValidator(
-        'filter',
-        'post',
-        'index.php?action=attendance_sheet_list&' . api_get_cidreq() . $param_gradebook . '&attendance_id=' . $attendance_id,
-        null,
-        array(),
-        FormValidator::LAYOUT_INLINE
-    );
-    */
-     
-    
     $form = new FormValidator(
             'filter',
             'post',
-            'index.php?action=attendance_sheet_list&' . api_get_cidreq() . $param_gradebook . '&attendance_id=' . $attendance_id,
+            'index.php?action=attendance_sheet_list&' . api_get_cidreq().'&attendance_id=' . $attendance_id,
             null,
             array(),
             'inline'
         );
-    
+
     $values = array(
         'all' => get_lang('All'),
         'today' => get_lang('Today'),
@@ -83,14 +66,14 @@ if (api_is_allowed_to_edit(null, true) ||
     if (!$exists_attendance_today) {
         Display::display_warning_message(get_lang('ThereIsNoClassScheduledTodayTryPickingAnotherDay'));
     }
-    
+
     $form->addSelect(
-            'filter',
-            get_lang('Filter'),
-            $values,
-            ['id' => 'filter_id', 'onchange' => 'submit();']
+        'filter',
+        get_lang('Filter'),
+        $values,
+        ['id' => 'filter_id', 'onchange' => 'submit();']
     );
-    
+
     //$form->addElement('select', 'filter', get_lang('Filter'), $values, array('id' => 'filter_id'));
 
     $groupList = GroupManager::get_group_list(null, null, 1);
@@ -102,8 +85,6 @@ if (api_is_allowed_to_edit(null, true) ||
     if (!empty($groupList)) {
         $form->addSelect('group_id', get_lang('Group'), $groupIdList);
     }
-
-    //$form->addButtonFilter(get_lang('Filter'));
 
     if (isset($_REQUEST['filter'])) {
         if (in_array($_REQUEST['filter'], array_keys($values))) {
@@ -124,7 +105,7 @@ if (api_is_allowed_to_edit(null, true) ||
     );
 
     if (!$is_locked_attendance || api_is_platform_admin()) {
-        
+
         $actionsLeft = '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.
             Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
@@ -132,7 +113,7 @@ if (api_is_allowed_to_edit(null, true) ||
         //if (count($users_in_course) > 0) {
         $actionsRight = $form->returnForm();
         //}
-        
+
         $toolbar = Display::toolbarAction('toolbar-attendance', array(0 => $actionsLeft, 1 => $actionsRight), 2 , false);
         echo $toolbar;
     }
@@ -371,7 +352,7 @@ if (api_is_allowed_to_edit(null, true) ||
 
                             echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
                             echo '<div class="check">';
-                           
+
                             if (api_is_allowed_to_edit(null, true)) {
                                 if (!$is_locked_attendance || api_is_platform_admin()) {
                                     echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
@@ -392,7 +373,7 @@ if (api_is_allowed_to_edit(null, true) ||
                                         break;
                                 }
                             }
-                            
+
                             echo '</div>';
                             echo '</td>';
                         }
@@ -413,7 +394,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 echo '</tbody></table>';
                 echo '</div></div>';
                 ?>
-               
+
                 <div class="row">
                     <div class="col-md-12">
                 <?php if (!$is_locked_attendance || api_is_platform_admin()) {

@@ -6,9 +6,6 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.course_info
  */
-/**
- * Code
- */
 
 require_once '../inc/global.inc.php';
 

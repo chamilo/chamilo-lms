@@ -356,7 +356,8 @@ function get_dropbox_category($id)
 /**
 * This functions stores a new dropboxcategory
 *
-* @var  it might not seem very elegant if you create a category in sent and in received with the same name that you get two entries in the
+* @var  it might not seem very elegant if you create a category in sent
+ * and in received with the same name that you get two entries in the
 *       dropbox_category table but it is the easiest solution. You get
 *       cat_name | received | sent | user_id
 *       test     |    1     |   0  |    237
@@ -570,16 +571,34 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
             );
         }
 
-        $hideCoach = api_get_setting('dropbox_hide_course_coach');
+        $complete_user_list2 = CourseManager::get_coach_list_from_course_code(
+            $course_info['code'],
+            api_get_session_id()
+        );
 
-        if ($hideCoach !== 'true') {
-            $complete_user_list2 = CourseManager::get_coach_list_from_course_code(
-                $course_info['code'],
-                api_get_session_id()
-            );
+        $generalCoachList = array();
+        $courseCoachList = array();
+        foreach ($complete_user_list2 as $coach) {
+            if ($coach['type'] == 'general_coach') {
+                $generalCoachList[] = $coach;
+            } else {
+                $courseCoachList[] = $coach;
+            }
+        }
+
+        $hideCourseCoach = api_get_setting('dropbox_hide_course_coach');
+        if ($hideCourseCoach == 'false') {
             $complete_user_list_for_dropbox = array_merge(
                 $complete_user_list_for_dropbox,
-                $complete_user_list2
+                $courseCoachList
+            );
+        }
+        $hideGeneralCoach = api_get_setting('dropbox_hide_general_coach');
+
+        if ($hideGeneralCoach == 'false') {
+            $complete_user_list_for_dropbox = array_merge(
+                $complete_user_list_for_dropbox,
+                $generalCoachList
             );
         }
     } else {
@@ -663,8 +682,7 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
         $options,
         array(
             'multiple' => 'multiple',
-            'size' => '10',
-            'class' => 'chzn-select',
+            'size' => '10'
         )
     );
     $form->addButtonUpload(get_lang('Upload'), 'submitWork');

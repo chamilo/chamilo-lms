@@ -25,8 +25,8 @@ We go to page api_not_allowed :
 > You are not allowed to see this page.
 > Sorry, you are not allowed to access this page, or maybe your connection has expired.
 > Please click your browser's \"Back\" button or follow the link below to return to the previous page
-If we click on the link to go to homepage, some datas are entered in $_SESSION and if we enter our CAS loggin, we go to api_not_allowad_page again
-and again
+If we click on the link to go to homepage, some datas are entered in $_SESSION and if we enter our CAS login,
+we go to api_not_allowad_page again and again
 As a result, if we are not logged on, we have to destroy the session variables, before calling CAS page
 */
 if (api_is_anonymous()) {
@@ -40,7 +40,12 @@ if (cas_configured()) {
         setcookie("GotoCourse", $firstpage);
     }
     if (!is_object($PHPCAS_CLIENT) ) {
-        phpCAS::client($cas_auth_ver,$cas_auth_server,$cas_auth_port,$cas_auth_uri);
+        phpCAS::client(
+            $cas_auth_ver,
+            $cas_auth_server,
+            $cas_auth_port,
+            $cas_auth_uri
+        );
         phpCAS::setNoCasServerValidation();
     }
     phpCAS::forceAuthentication();

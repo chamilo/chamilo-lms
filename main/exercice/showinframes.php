@@ -39,7 +39,6 @@ if ($content == '') {
             SaveScoreVariable = 1;
             if (C.ie) {
                 document.location.href = '".api_get_path(WEB_PATH)."main/exercice/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
-                //window.alert(Score);
             } else {
                 window.location.href = '".api_get_path(WEB_PATH)."main/exercice/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
             }
@@ -47,7 +46,7 @@ if ($content == '') {
     }
     function Finish() {
         mySaveScore();
-    // Code added - end
+        // Code added - end
     ";
 
     $newcontent = str_replace($mit, $js_content, $content);
@@ -65,9 +64,9 @@ if ($content == '') {
 WriteFileCont($full_file_path.$user_id.'.t.html', $newcontent);
 $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
 
-$documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $my_file = Security::remove_XSS($_GET['file']);
-$my_file = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''),urldecode($my_file));
+$my_file = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), urldecode($my_file));
 
 $title = GetQuizName($my_file, $documentPath);
 if ($title =='') {
@@ -79,18 +78,21 @@ $noPHP_SELF = true;
 $htmlHeadXtra[] = '
 <script>
     $(document).ready( function(){
-        var height = $(this).innerHeight() - 20;
-        $("#hotpotatoe").css("height", height)
+        var height = $(this).innerHeight( - 20;
+        if (height < 0) {
+            height  = "95%";
+        }
+        $("#hotpotatoe").css("height", height);
     });
 </script>';
 
 $interbreadcrumb[]= array ("url"=>"./exercise.php", "name"=> get_lang('Exercises'));
 if ($origin == 'learnpath') {
-    Display::display_reduced_header($nameTools,"Exercise");
+    Display::display_reduced_header($nameTools, "Exercise");
 } else {
-    Display::display_header($nameTools,"Exercise");
+    Display::display_header($nameTools, "Exercise");
 }
-$url = $document_web_path.$doc_url.$user_id.'.t.html?time='.Security::remove_XSS($time);
+$url = $document_web_path.$doc_url.$user_id.'.t.html?time='.intval($time);
 echo '<iframe id="hotpotatoe" width="100%" frameborder="0" src="'.$url.'"></iframe>';
 echo '</body></html>';
 exit;

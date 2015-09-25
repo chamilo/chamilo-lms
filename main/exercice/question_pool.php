@@ -11,8 +11,6 @@
 *   @author Modify by hubert borderiou 2011-10-21 Question's category
 */
 
-// name of the language file that needs to be included
-
 use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
@@ -53,7 +51,10 @@ $nameTools = get_lang('QuestionPool');
 $interbreadcrumb[] = array("url" => "exercise.php","name" => get_lang('Exercises'));
 
 if (!empty($objExercise)) {
-    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
+    $interbreadcrumb[] = array(
+        "url" => "admin.php?exerciseId=".$objExercise->id."&".api_get_cidreq(),
+        "name" => $objExercise->name
+    );
 }
 
 // message to be displayed if actions successful
@@ -242,7 +243,7 @@ echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 // Session list, if sessions are used.
 $sessionList = SessionManager::get_sessions_by_user(api_get_user_id(), api_is_platform_admin());
 
-$tabAttrParam = array('class'=>'chzn-select', 'onchange'=>'submit_form(this)');
+$tabAttrParam = array('onchange' => 'submit_form(this)');
 $labelFormRow = get_lang('Session');
 $session_select_list = array();
 foreach ($sessionList as $item) {
@@ -293,7 +294,7 @@ $select_course_html =  Display::select(
     'selected_course',
     $course_select_list,
     $selected_course,
-    array('class'=>'chzn-select','onchange'=>'mark_course_id_changed(); submit_form(this);')
+    array('onchange' => 'mark_course_id_changed(); submit_form(this);')
 );
 
 echo Display::form_row(get_lang('Course'), $select_course_html);
@@ -327,7 +328,7 @@ $selectCourseCategory = Display::select(
     'courseCategoryId',
     $categoryList,
     $courseCategoryId,
-    array('class'=>'chzn-select','onchange'=>'submit_form(this);'),
+    array('onchange' => 'submit_form(this);'),
     false
 );
 echo Display::form_row(get_lang("QuestionCategory"), $selectCourseCategory);
@@ -361,7 +362,7 @@ $select_exercise_html =  Display::select(
     'exerciseId',
     $my_exercise_list,
     $exerciseId,
-    array('class'=>'chzn-select','onchange'=>'mark_exercise_id_changed(); submit_form(this);'),
+    array('onchange' => 'mark_exercise_id_changed(); submit_form(this);'),
     false
 );
 
@@ -381,7 +382,7 @@ $select_difficulty_html = Display::select(
     'exerciseLevel',
     $levels,
     $exerciseLevel,
-    array('class'=>'chzn-select', 'onchange'=>'submit_form(this);'),
+    array('onchange' => 'submit_form(this);'),
     false
 );
 echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
@@ -413,7 +414,7 @@ $select_answer_html = Display::select(
     'answerType',
     $new_question_list,
     $answerType,
-    array('class'=>'chzn-select','onchange'=>'submit_form(this);'),
+    array('onchange' => 'submit_form(this);'),
     false
 );
 

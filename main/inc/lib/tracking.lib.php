@@ -95,6 +95,7 @@ class Tracking
      * @param string $extendedAttempt
      * @param string $extendedAll
      * @param string $type classic or simple
+     * @param boolean $allowExtend Optional. Allow or not extend te results
      * @return null|string
      */
     public static function getLpStats(
@@ -109,7 +110,8 @@ class Tracking
         $extendAttemptId = null,
         $extendedAttempt = null,
         $extendedAll = null,
-        $type = 'classic'
+        $type = 'classic',
+        $allowExtend =  true
     ) {
         if (empty($courseInfo) || empty($lp_id)) {
             return null;
@@ -164,8 +166,9 @@ class Tracking
         }
         $output .= '<div class="table-responsive">';
         $output .= '<table class="table tracking">
+            <thead>
             <tr class="table-header">
-                <th width="16">' . $extend_all_link . '</th>
+                <th width="16">' . ($allowExtend == true ? $extend_all_link : '&nbsp;') . '</th>
                 <th colspan="4">
                     ' . get_lang('ScormLessonTitle') .'
                 </th>
@@ -179,7 +182,10 @@ class Tracking
                     ' . get_lang('ScormTime') . '
                 </th>
                 '.$actionColumn.'
-           </tr>';
+                </tr>
+            </thead>
+            <tbody>
+        ';
 
         // Going through the items using the $items[] array instead of the database order ensures
         // we get them in the same order as in the imsmanifest file, which is rather random when using
@@ -1061,8 +1067,11 @@ class Tracking
                 '.$action.'
            </tr>';
 
-        $output .= "</table>";
-        $output .= '</div>';
+        $output .= '
+                    </tbody>
+                </table>
+            </div>
+        ';
 
         if (!empty($export_csv)) {
             $temp = array(

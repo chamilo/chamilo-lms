@@ -13,8 +13,6 @@
  * multiple functions
  */
 
-// name of the language file that needs to be included
-
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 

@@ -31,7 +31,13 @@ $courseId = $courseInfo['real_id'];
 $connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);
 $quote_simple = "'";
 
-$form = new FormValidator('myform', 'get', api_get_self(), null, array('id' => 'myform'));
+$form = new FormValidator(
+    'myform',
+    'get',
+    api_get_self(),
+    null,
+    array('id' => 'myform')
+);
 $form->addElement('text', 'from', get_lang('From'), array('id' => 'date_from'));
 $form->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to'));
 $form->addElement(
@@ -133,10 +139,10 @@ $form->display();
     <div id="cev_cont_stats">
     <?php
     if ($result_to_print != "")  {
-        $rst                = get_stats($user_id, $courseId);
-        $foo_stats           = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
-        $foo_stats          .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
-        $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
+        $rst = get_stats($user_id, $courseId);
+        $foo_stats = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
+        $foo_stats .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
+        $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
         echo $foo_stats;
     } else {
         echo Display::display_warning_message(get_lang('NoDataAvailable'));

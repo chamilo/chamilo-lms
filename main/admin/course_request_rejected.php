@@ -28,7 +28,6 @@ $delete_course_request = isset($_GET['delete_course_request']) ? intval($_GET['d
 $request_info = isset($_GET['request_info']) ? intval($_GET['request_info']) : '';
 $message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urldecode($_GET['message'])))) : '';
 $is_error_message = !empty($_GET['is_error_message']);
-$keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
 
 if ($course_validation_feature) {
 
@@ -107,8 +106,9 @@ function get_number_of_requests() {
 /**
  * Get course data to display
  */
-function get_request_data($from, $number_of_items, $column, $direction) {
-    global $keyword;
+function get_request_data($from, $number_of_items, $column, $direction)
+{
+    $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
     $from = intval($from);
@@ -128,7 +128,11 @@ function get_request_data($from, $number_of_items, $column, $direction) {
            WHERE status = ".COURSE_REQUEST_REJECTED;
 
     if ($keyword != '') {
-        $sql .= " AND (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";
+        $sql .= " AND (
+            title LIKE '%".$keyword."%' OR
+            code LIKE '%".$keyword."%' OR
+            visual_code LIKE '%".$keyword."%'
+        )";
     }
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";

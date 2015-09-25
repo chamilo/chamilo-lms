@@ -1,8 +1,8 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
-/* For licensing terms, see /license.txt */
 /**
  * This file contains the necessary elements to implement a Single Sign On
  * mechanism with an external Drupal application (on which the Chamilo module

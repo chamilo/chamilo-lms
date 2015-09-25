@@ -1,4 +1,6 @@
-<?php /* For licensing terms, see /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
+
 // External login module : WS (for Web Services)
 /**
  *
@@ -19,7 +21,7 @@ $isValid = loginWSAuthenticate($login, $password, $wsUrl);
 // if the authentication was successful, proceed
 if ($isValid === 1) {
     //error_log('WS authentication worked');
-    $chamiloUser = UserManager::get_user_info($login);
+    $chamiloUser = api_get_user_info($login);
     $loginFailed = false;
     $_user['user_id'] = $chamiloUser['user_id'];
     $_user['status'] = (isset($chamiloUser['status']) ? $chamiloUser['status'] : 5);
@@ -92,6 +94,7 @@ function loginWSAuthenticate($username, $password, $wsUrl) {
         }
         return 0;
     }
+
     return $response->validateUserResult;
 }
 

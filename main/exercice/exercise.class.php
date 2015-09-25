@@ -69,10 +69,10 @@ class Exercise
         $this->expired_time = '0000-00-00 00:00:00';
         $this->propagate_neg = 0;
         $this->review_answers = false;
-        $this->randomByCat = 0;    //
-        $this->text_when_finished = ""; //
+        $this->randomByCat = 0;
+        $this->text_when_finished = '';
         $this->display_category_name = 0;
-        $this->pass_percentage = null;
+        $this->pass_percentage = '';
 
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -94,7 +94,6 @@ class Exercise
      */
     public function read($id)
     {
-        global $_configuration;
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
@@ -146,7 +145,7 @@ class Exercise
                 $this->lpList = Database::store_result($result, 'ASSOC');
             }
 
-            $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : false;
+            $this->force_edit_exercise_in_lp = api_get_configuration_value('force_edit_exercise_in_lp');
 
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;
@@ -1032,10 +1031,8 @@ class Exercise
      */
     public function createForm($form, $type='full')
     {
-        global $id;
-
-        if (empty($type)){
-            $type='full';
+        if (empty($type)) {
+            $type = 'full';
         }
 
         // form title
@@ -1048,33 +1045,75 @@ class Exercise
         $form->addElement('header', $form_title);
 
         // Title.
-        $form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
+        $form->addElement(
+            'text',
+            'exerciseTitle',
+            get_lang('ExerciseName'),
+            array('id' => 'exercise_title')
+        );
 
         $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-        $editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
+        $editor_config = array(
+            'ToolbarSet' => 'TestQuestionDescription',
+            'Width' => '100%',
+            'Height' => '150',
+        );
         if (is_array($type)){
             $editor_config = array_merge($editor_config, $type);
         }
 
-        $form->addHtmlEditor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
+        $form->addHtmlEditor(
+            'exerciseDescription',
+            get_lang('ExerciseDescription'),
+            false,
+            false,
+            $editor_config
+        );
 
         if ($type == 'full') {
             //Can't modify a DirectFeedback question
-            if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT ) {
+            if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                 // feedback type
                 $radios_feedback = array();
-                $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('ExerciseAtTheEndOfTheTest'),'0',array('id' =>'exerciseType_0', 'onclick' => 'check_feedback()'));
+                $radios_feedback[] = $form->createElement(
+                    'radio',
+                    'exerciseFeedbackType',
+                    null,
+                    get_lang('ExerciseAtTheEndOfTheTest'),
+                    '0',
+                    array(
+                        'id' => 'exerciseType_0',
+                        'onclick' => 'check_feedback()',
+                    )
+                );
 
                 if (api_get_setting('enable_quiz_scenario') == 'true') {
                     //Can't convert a question from one feedback to another if there is more than 1 question already added
                     if ($this->selectNbrQuestions() == 0) {
-                        $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('DirectFeedback'),'1',array('id' =>'exerciseType_1' , 'onclick' => 'check_direct_feedback()'));
+                        $radios_feedback[] = $form->createElement(
+                            'radio',
+                            'exerciseFeedbackType',
+                            null,
+                            get_lang('DirectFeedback'),
+                            '1',
+                            array(
+                                'id' => 'exerciseType_1',
+                                'onclick' => 'check_direct_feedback()',
+                            )
+                        );
                     }
                 }
 
-                $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
+                $radios_feedback[] = $form->createElement(
+                    'radio',
+                    'exerciseFeedbackType',
+                    null,
+                    get_lang('NoFeedback'),
+                    '2',
+                    array('id' => 'exerciseType_2')
+                );
                 $form->addGroup($radios_feedback, null, array(get_lang('FeedbackType'),get_lang('FeedbackDisplayOptions')), '');
 
                 // Type of results display on the final page
@@ -1139,7 +1178,6 @@ class Exercise
 
                     $type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
                     $type_group->freeze();
-
                 }
             }
 
@@ -1149,15 +1187,15 @@ class Exercise
             $option = range(0,$max);
             $option[0] = get_lang('No');
             $option[-1] = get_lang('AllQuestionsShort');
-            $form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions','class'=>'chzn-select'));
+            $form->addElement('select', 'randomQuestions',array(get_lang('RandomQuestions'), get_lang('RandomQuestionsHelp')), $option, array('id'=>'randomQuestions'));
 
-            //random answers
+            // Random answers
             $radios_random_answers = array();
             $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'),'1');
             $radios_random_answers[] = $form->createElement('radio', 'randomAnswers', null, get_lang('No'),'0');
             $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'), '');
 
-            //randow by category
+            // Random by category
             $form->addElement('html','<div class="clear">&nbsp;</div>');
             $radiocat = array();
             $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesShuffled'),'1');
@@ -1168,15 +1206,21 @@ class Exercise
 
             // add the radio display the category name for student
             $radio_display_cat_name = array();
-            $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('Yes'),'1');
-            $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('No'),'0');
+            $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1');
+            $radio_display_cat_name[] = $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0');
             $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'), '');
 
-            //Attempts
-            $attempt_option=range(0,10);
-            $attempt_option[0]=get_lang('Infinite');
+            // Attempts
+            $attempt_option = range(0, 10);
+            $attempt_option[0] = get_lang('Infinite');
 
-            $form->addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option, array('id'=>'exerciseAttempts','class'=>'chzn-select'));
+            $form->addElement(
+                'select',
+                'exerciseAttempts',
+                get_lang('ExerciseAttempts'),
+                $attempt_option,
+                ['id' => 'exerciseAttempts']
+            );
 
             // Exercise time limit
             $form->addElement('checkbox', 'activate_start_date_check',null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
@@ -1213,7 +1257,17 @@ class Exercise
             //Timer control
             //$time_hours_option = range(0,12);
             //$time_minutes_option = range(0,59);
-            $form->addElement('checkbox', 'enabletimercontrol', null, get_lang('EnableTimerControl'), array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol','onload'=>'check_load_time()'));
+            $form->addElement(
+                'checkbox',
+                'enabletimercontrol',
+                null,
+                get_lang('EnableTimerControl'),
+                array(
+                    'onclick' => 'option_time_expired()',
+                    'id' => 'enabletimercontrol',
+                    'onload' => 'check_load_time()',
+                )
+            );
             $expired_date = (int)$this->selectExpiredTime();
 
             if (($expired_date!='0')) {
@@ -1221,14 +1275,33 @@ class Exercise
             } else {
                 $form->addElement('html','<div id="timercontrol" style="display:none;">');
             }
-            $form->addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
+            $form->addText(
+                'enabletimercontroltotalminutes',
+                get_lang('ExerciseTotalDurationInMinutes'),
+                false,
+                [
+                    'id' => 'enabletimercontroltotalminutes',
+                    'cols-size' => [2, 2, 8]
+                ]
+            );
             $form->addElement('html','</div>');
 
-            $form->addElement('text', 'pass_percentage', array(get_lang('PassPercentage'), null, '%'),  array('id' => 'pass_percentage'));
+            $form->addElement(
+                'text',
+                'pass_percentage',
+                array(get_lang('PassPercentage'), null, '%'),
+                array('id' => 'pass_percentage')
+            );
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
 
             // add the text_when_finished textbox
-            $form -> addHtmlEditor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
+            $form->addHtmlEditor(
+                'text_when_finished',
+                get_lang('TextWhenFinished'),
+                false,
+                false,
+                $editor_config
+            );
 
             $defaults = array();
 
@@ -1284,30 +1357,32 @@ class Exercise
                     $defaults['randomQuestions'] = $this->random;
                 }
 
-                $defaults['randomAnswers']          = $this->selectRandomAnswers();
-                $defaults['exerciseType']           = $this->selectType();
-                $defaults['exerciseTitle']          = $this->get_formated_title();
-                $defaults['exerciseDescription']    = $this->selectDescription();
-                $defaults['exerciseAttempts']       = $this->selectAttempts();
-                $defaults['exerciseFeedbackType']   = $this->selectFeedbackType();
-                $defaults['results_disabled']       = $this->selectResultsDisabled();
-                $defaults['propagate_neg']          = $this->selectPropagateNeg();
-                $defaults['review_answers']         = $this->review_answers;
-                $defaults['randomByCat']            = $this->selectRandomByCat(); //
-                $defaults['text_when_finished']     = $this->selectTextWhenFinished(); //
-                $defaults['display_category_name']  = $this->selectDisplayCategoryName(); //
-                $defaults['pass_percentage']        = $this->selectPassPercentage();
+                $defaults['randomAnswers'] = $this->selectRandomAnswers();
+                $defaults['exerciseType'] = $this->selectType();
+                $defaults['exerciseTitle'] = $this->get_formated_title();
+                $defaults['exerciseDescription'] = $this->selectDescription();
+                $defaults['exerciseAttempts'] = $this->selectAttempts();
+                $defaults['exerciseFeedbackType'] = $this->selectFeedbackType();
+                $defaults['results_disabled'] = $this->selectResultsDisabled();
+                $defaults['propagate_neg'] = $this->selectPropagateNeg();
+                $defaults['review_answers'] = $this->review_answers;
+                $defaults['randomByCat'] = $this->selectRandomByCat();
+                $defaults['text_when_finished'] = $this->selectTextWhenFinished();
+                $defaults['display_category_name'] = $this->selectDisplayCategoryName();
+                $defaults['pass_percentage'] = $this->selectPassPercentage();
 
-                if (($this->start_time != '0000-00-00 00:00:00'))
+                if (($this->start_time != '0000-00-00 00:00:00')) {
                     $defaults['activate_start_date_check'] = 1;
-                if ($this->end_time != '0000-00-00 00:00:00')
+                }
+                if ($this->end_time != '0000-00-00 00:00:00') {
                     $defaults['activate_end_date_check'] = 1;
+                }
 
                 $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00') ? api_get_local_time($this->start_time) : date('Y-m-d 12:00:00');
-                $defaults['end_time']   = ($this->end_time!='0000-00-00 00:00:00') ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
+                $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00') ? api_get_local_time($this->end_time) : date('Y-m-d 12:00:00', time()+84600);
 
-                //Get expired time
-                if($this->expired_time != '0') {
+                // Get expired time
+                if ($this->expired_time != '0') {
                     $defaults['enabletimercontrol'] = 1;
                     $defaults['enabletimercontroltotalminutes'] = $this->expired_time;
                 } else {
@@ -1321,11 +1396,11 @@ class Exercise
                 $defaults['exerciseDescription'] = '';
                 $defaults['exerciseFeedbackType'] = 0;
                 $defaults['results_disabled'] = 0;
-                $defaults['randomByCat'] = 0;	//
-                $defaults['text_when_finished'] = ""; //
+                $defaults['randomByCat'] = 0;
+                $defaults['text_when_finished'] = "";
                 $defaults['start_time'] = date('Y-m-d 12:00:00');
-                $defaults['display_category_name'] = 1; //
-                $defaults['end_time']   = date('Y-m-d 12:00:00',time()+84600);
+                $defaults['display_category_name'] = 1;
+                $defaults['end_time']   = date('Y-m-d 12:00:00', time()+84600);
                 $defaults['pass_percentage'] = '';
             }
         } else {
@@ -1355,8 +1430,6 @@ class Exercise
             }
 
             $radioCatGroup->freeze();
-
-            //$form->freeze();
         }
     }
 
@@ -1480,7 +1553,8 @@ class Exercise
         if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
             $course_id = api_get_course_id();
 
-            // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one
+            // actually, it consists on delete terms from db,
+            // insert new ones, create a new search engine document, and remove the old one
             // get search_did
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
@@ -2028,117 +2102,117 @@ class Exercise
     public function show_lp_javascript()
     {
         return "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
-                    <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
-                    <script language=\"JavaScript\" type=\"text/javascript\">
-                    <!--
-                    // -----------------------------------------------------------------------------
-                    // Globals
-                    // Major version of Flash required
-                    var requiredMajorVersion = 7;
-                    // Minor version of Flash required
-                    var requiredMinorVersion = 0;
-                    // Minor version of Flash required
-                    var requiredRevision = 0;
-                    // the version of javascript supported
-                    var jsVersion = 1.0;
-                    // -----------------------------------------------------------------------------
-                    // -->
-                    </script>
-                    <script language=\"VBScript\" type=\"text/vbscript\">
-                    <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
-                    Function VBGetSwfVer(i)
-                      on error resume next
-                      Dim swControl, swVersion
-                      swVersion = 0
+                <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
+                <script language=\"JavaScript\" type=\"text/javascript\">
+                <!--
+                // -----------------------------------------------------------------------------
+                // Globals
+                // Major version of Flash required
+                var requiredMajorVersion = 7;
+                // Minor version of Flash required
+                var requiredMinorVersion = 0;
+                // Minor version of Flash required
+                var requiredRevision = 0;
+                // the version of javascript supported
+                var jsVersion = 1.0;
+                // -----------------------------------------------------------------------------
+                // -->
+                </script>
+                <script language=\"VBScript\" type=\"text/vbscript\">
+                <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
+                Function VBGetSwfVer(i)
+                  on error resume next
+                  Dim swControl, swVersion
+                  swVersion = 0
 
-                      set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
-                      if (IsObject(swControl)) then
-                        swVersion = swControl.GetVariable(\"\$version\")
-                      end if
-                      VBGetSwfVer = swVersion
-                    End Function
-                    // -->
-                    </script>
+                  set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
+                  if (IsObject(swControl)) then
+                    swVersion = swControl.GetVariable(\"\$version\")
+                  end if
+                  VBGetSwfVer = swVersion
+                End Function
+                // -->
+                </script>
 
-                    <script language=\"JavaScript1.1\" type=\"text/javascript\">
-                    <!-- // Detect Client Browser type
-                    var isIE  = (navigator.appVersion.indexOf(\"MSIE\") != -1) ? true : false;
-                    var isWin = (navigator.appVersion.toLowerCase().indexOf(\"win\") != -1) ? true : false;
-                    var isOpera = (navigator.userAgent.indexOf(\"Opera\") != -1) ? true : false;
-                    jsVersion = 1.1;
-                    // JavaScript helper required to detect Flash Player PlugIn version information
-                    function JSGetSwfVer(i){
-                        // NS/Opera version >= 3 check for Flash plugin in plugin array
-                        if (navigator.plugins != null && navigator.plugins.length > 0) {
-                            if (navigator.plugins[\"Shockwave Flash 2.0\"] || navigator.plugins[\"Shockwave Flash\"]) {
-                                var swVer2 = navigator.plugins[\"Shockwave Flash 2.0\"] ? \" 2.0\" : \"\";
-                                var flashDescription = navigator.plugins[\"Shockwave Flash\" + swVer2].description;
-                                descArray = flashDescription.split(\" \");
-                                tempArrayMajor = descArray[2].split(\".\");
-                                versionMajor = tempArrayMajor[0];
-                                versionMinor = tempArrayMajor[1];
-                                if ( descArray[3] != \"\" ) {
-                                    tempArrayMinor = descArray[3].split(\"r\");
-                                } else {
-                                    tempArrayMinor = descArray[4].split(\"r\");
-                                }
-                                versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
-                                flashVer = versionMajor + \".\" + versionMinor + \".\" + versionRevision;
+                <script language=\"JavaScript1.1\" type=\"text/javascript\">
+                <!-- // Detect Client Browser type
+                var isIE  = (navigator.appVersion.indexOf(\"MSIE\") != -1) ? true : false;
+                var isWin = (navigator.appVersion.toLowerCase().indexOf(\"win\") != -1) ? true : false;
+                var isOpera = (navigator.userAgent.indexOf(\"Opera\") != -1) ? true : false;
+                jsVersion = 1.1;
+                // JavaScript helper required to detect Flash Player PlugIn version information
+                function JSGetSwfVer(i){
+                    // NS/Opera version >= 3 check for Flash plugin in plugin array
+                    if (navigator.plugins != null && navigator.plugins.length > 0) {
+                        if (navigator.plugins[\"Shockwave Flash 2.0\"] || navigator.plugins[\"Shockwave Flash\"]) {
+                            var swVer2 = navigator.plugins[\"Shockwave Flash 2.0\"] ? \" 2.0\" : \"\";
+                            var flashDescription = navigator.plugins[\"Shockwave Flash\" + swVer2].description;
+                            descArray = flashDescription.split(\" \");
+                            tempArrayMajor = descArray[2].split(\".\");
+                            versionMajor = tempArrayMajor[0];
+                            versionMinor = tempArrayMajor[1];
+                            if ( descArray[3] != \"\" ) {
+                                tempArrayMinor = descArray[3].split(\"r\");
                             } else {
-                                flashVer = -1;
+                                tempArrayMinor = descArray[4].split(\"r\");
                             }
-                        }
-                        // MSN/WebTV 2.6 supports Flash 4
-                        else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.6\") != -1) flashVer = 4;
-                        // WebTV 2.5 supports Flash 3
-                        else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.5\") != -1) flashVer = 3;
-                        // older WebTV supports Flash 2
-                        else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
-                        // Can't detect in all other cases
-                        else {
-
+                            versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
+                            flashVer = versionMajor + \".\" + versionMinor + \".\" + versionRevision;
+                        } else {
                             flashVer = -1;
                         }
-                        return flashVer;
                     }
-                    // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
-                    function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
-                    {
-                        reqVer = parseFloat(reqMajorVer + \".\" + reqRevision);
-                        // loop backwards through the versions until we find the newest version
-                        for (i=25;i>0;i--) {
-                            if (isIE && isWin && !isOpera) {
-                                versionStr = VBGetSwfVer(i);
-                            } else {
-                                versionStr = JSGetSwfVer(i);
-                            }
-                            if (versionStr == -1 ) {
-                                return false;
-                            } else if (versionStr != 0) {
-                                if(isIE && isWin && !isOpera) {
-                                    tempArray         = versionStr.split(\" \");
-                                    tempString        = tempArray[1];
-                                    versionArray      = tempString .split(\",\");
-                                } else {
-                                    versionArray      = versionStr.split(\".\");
-                                }
-                                versionMajor      = versionArray[0];
-                                versionMinor      = versionArray[1];
-                                versionRevision   = versionArray[2];
+                    // MSN/WebTV 2.6 supports Flash 4
+                    else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.6\") != -1) flashVer = 4;
+                    // WebTV 2.5 supports Flash 3
+                    else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.5\") != -1) flashVer = 3;
+                    // older WebTV supports Flash 2
+                    else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
+                    // Can't detect in all other cases
+                    else {
 
-                                versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
-                                versionNum        = parseFloat(versionString);
-                                // is the major.revision >= requested major.revision AND the minor version >= requested minor
-                                if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
-                                    return true;
-                                } else {
-                                    return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
-                                }
+                        flashVer = -1;
+                    }
+                    return flashVer;
+                }
+                // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
+                function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
+                {
+                    reqVer = parseFloat(reqMajorVer + \".\" + reqRevision);
+                    // loop backwards through the versions until we find the newest version
+                    for (i=25;i>0;i--) {
+                        if (isIE && isWin && !isOpera) {
+                            versionStr = VBGetSwfVer(i);
+                        } else {
+                            versionStr = JSGetSwfVer(i);
+                        }
+                        if (versionStr == -1 ) {
+                            return false;
+                        } else if (versionStr != 0) {
+                            if(isIE && isWin && !isOpera) {
+                                tempArray         = versionStr.split(\" \");
+                                tempString        = tempArray[1];
+                                versionArray      = tempString .split(\",\");
+                            } else {
+                                versionArray      = versionStr.split(\".\");
+                            }
+                            versionMajor      = versionArray[0];
+                            versionMinor      = versionArray[1];
+                            versionRevision   = versionArray[2];
+
+                            versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
+                            versionNum        = parseFloat(versionString);
+                            // is the major.revision >= requested major.revision AND the minor version >= requested minor
+                            if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
+                                return true;
+                            } else {
+                                return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
                             }
                         }
                     }
-                    // -->
-                    </script>";
+                }
+                // -->
+                </script>";
     }
 
     /**
@@ -2797,6 +2871,7 @@ class Exercise
                                         exe_id = '$exeId' AND
                                         question_id = '$questionId' AND
                                         position = '$i_answer_id_auto'";
+
                             $res_user_answer = Database::query($sql);
 
                             if (Database::num_rows($res_user_answer) > 0) {
@@ -2810,19 +2885,22 @@ class Exercise
 
                             $user_answer = '';
                             if (!empty($s_user_answer)) {
-                                if ($s_user_answer == $i_answer_correct_answer) {
-                                    $questionScore += $i_answerWeighting;
-                                    $totalScore += $i_answerWeighting;
-                                    if ($answerType == DRAGGABLE) {
+                                if ($answerType == DRAGGABLE) {
+                                    if ($s_user_answer == $i_answer_correct_answer) {
+                                        $questionScore += $i_answerWeighting;
+                                        $totalScore += $i_answerWeighting;
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
                                     } else {
+                                        $user_answer = Display::label(get_lang('Incorrect'), 'danger');
+                                    }
+                                } else {
+                                    if ($s_user_answer == $i_answer_correct_answer) {
+                                        $questionScore += $i_answerWeighting;
+                                        $totalScore += $i_answerWeighting;
+
                                         if (isset($real_list[$i_answer_id])) {
                                             $user_answer = Display::span($real_list[$i_answer_id]);
                                         }
-                                    }
-                                } else {
-                                    if ($answerType == DRAGGABLE) {
-                                        $user_answer = Display::label(get_lang('Incorrect'), 'danger');
                                     } else {
                                         $user_answer = Display::span(
                                             $real_list[$s_user_answer],
@@ -2920,10 +2998,10 @@ class Exercise
                                         hotspot_question_id= '".$questionId."' AND
                                         hotspot_answer_id='1'";
                         //by default we take 1 because it's a delineation
-                        $resq    = Database::query($query);
-                        $row     = Database::fetch_array($resq,'ASSOC');
+                        $resq = Database::query($query);
+                        $row = Database::fetch_array($resq,'ASSOC');
 
-                        $choice      = $row['hotspot_correct'];
+                        $choice = $row['hotspot_correct'];
                         $user_answer = $row['hotspot_coordinate'];
 
                         // THIS is very important otherwise the poly_compile will throw an error!!
@@ -2937,15 +3015,15 @@ class Exercise
                         $user_array = substr($user_array,0,-1);
                     } else {
                         if (!empty($studentChoice)) {
-                            $newquestionList[]=$questionId;
+                            $newquestionList[] = $questionId;
                         }
 
-                        if ($answerId===1) {
-                            $studentChoice	=$choice[$answerId];
-                            $questionScore	+=$answerWeighting;
+                        if ($answerId === 1) {
+                            $studentChoice = $choice[$answerId];
+                            $questionScore += $answerWeighting;
 
                             if ($hotspot_delineation_result[1]==1) {
-                                $totalScore +=$answerWeighting; //adding the total
+                                $totalScore += $answerWeighting; //adding the total
                             }
                         }
                     }
@@ -4676,6 +4754,10 @@ class Exercise
         return $new_question_list;
     }
 
+    /**
+     * @param int $exe_id
+     * @return array|mixed
+     */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
         $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

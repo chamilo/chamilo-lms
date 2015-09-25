@@ -13,20 +13,20 @@ api_block_anonymous_users();
 $stok = Security::get_token();
 
 ?>
-
 <!-- Actions: The menu with the different options in cathe course management -->
 <div id="actions" class="actions">
-    
-	&nbsp;<a href="<?php echo api_get_self() ?>?action=sortmycourses"><?php echo Display::return_icon('back.png', get_lang('Back'),'','32'); ?></a>
-    
+    <a href="<?php echo api_get_self() ?>?action=sortmycourses">
+        <?php echo Display::return_icon('back.png', get_lang('Back'),'','32'); ?>
+    </a>
 </div>
 
 <?php
-    if (!empty($message)) { Display::display_confirmation_message($message, false); }
-    if (!empty($error)) { Display::display_error_message($error, false); }
-?>
-    <form name="create_course_category" method="post" action="<?php echo api_get_self() ?>?action=createcoursecategory">
-        <input type="hidden" name="sec_token" value="<?php echo $stok ?>">
-        <input type="text" name="title_course_category" />
-        <button type="submit" class="save" name="create_course_category"><?php echo get_lang('AddCategory') ?></button>
-    </form>
+$form = new FormValidator(
+    'create_course_category',
+    'post',
+    api_get_self().'?createcoursecategory'
+);
+$form->addHidden('sec_token', $stok);
+$form->addText('title_course_category', get_lang('Name'));
+$form->addButtonSave(get_lang('AddCategory'), 'create_course_category');
+$form->display();

@@ -239,20 +239,19 @@ if (!api_is_allowed_to_session_edit()) {
 $entityManager = Database::getManager();
 $session = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
 
-if (!empty($session)) {
+$sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
+
+if ($sessionTitleLink == 2 && $session->getNbrCourses() === 1) {
     $sessionCourses = $session->getCourses();
+    $sessionCourse = $sessionCourses[0]->getCourse();
 
-    if (count($sessionCourses) === 1) {
-        $sessionCourse = $sessionCourses[0]->getCourse();
+    $courseUrl = $sessionCourse->getDirectory() . '/index.php?';
+    $courseUrl .= http_build_query([
+        'id_session' => $session->getId()
+    ]);
 
-        $courseUrl = $sessionCourse->getDirectory() . '/index.php?';
-        $courseUrl .= http_build_query([
-            'id_session' => $session->getId()
-        ]);
-
-        header('Location: ' . api_get_path(WEB_COURSE_PATH) . $courseUrl);
-        exit;
-    }
+    header('Location: ' . api_get_path(WEB_COURSE_PATH) . $courseUrl);
+    exit;
 }
 
 Display::display_header(get_lang('Session'));

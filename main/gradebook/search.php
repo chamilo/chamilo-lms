@@ -24,8 +24,8 @@ $userId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $userList = $userInfo = $courseList = $sessionList = [];
 
 $searchForm = new FormValidator('search_form', 'post', null, null);
-$searchForm->addText('firstname', get_lang('Firstname'));
-$searchForm->addText('lastname', get_lang('Lastname'));
+$searchForm->addText('firstname', get_lang('FirstName'));
+$searchForm->addText('lastname', get_lang('LastName'));
 $searchForm->addButtonSearch();
 
 if ($searchForm->validate()) {
@@ -37,15 +37,16 @@ if ($searchForm->validate()) {
     if (empty($userList)) {
         Session::write('message', Display::return_message(get_lang('NoResults'), 'warning'));
 
-        Header::location(api_get_self());
+        header('Location: '.api_get_self());
+        exit;
     }
 } elseif ($userId > 0) {
     $userInfo = api_get_user_info($userId);
 
     if (empty($userInfo)) {
         Session::write('message', Display::return_message(get_lang('NoUser'), 'warning'));
-
-        Header::location(api_get_self());
+        header('Location: '.api_get_self());
+        exit;
     }
 
     $courseList = GradebookUtils::getUserCertificatesInCourses($userId, false);
@@ -60,7 +61,8 @@ if ($searchForm->validate()) {
             )
         );
 
-        Header::location(api_get_self());
+        header('Location: '.api_get_self());
+        exit;
     }
 }
 

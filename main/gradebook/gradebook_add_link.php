@@ -23,7 +23,14 @@ $session_id = api_get_session_id();
 $typeSelected = isset($_GET['typeselected']) ? intval($_GET['typeselected']) : null;
 
 if ($session_id == 0) {
-    $all_categories = Category::load(null, null, api_get_course_id(), null, null, $session_id);
+    $all_categories = Category::load(
+        null,
+        null,
+        api_get_course_id(),
+        null,
+        null,
+        $session_id
+    );
 } else {
     $all_categories = Category::load_session_categories(null, $session_id);
 }

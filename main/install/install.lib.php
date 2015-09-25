@@ -140,6 +140,8 @@ function remove_memory_and_time_limits()
     if (function_exists('ini_set')) {
         ini_set('memory_limit', -1);
         ini_set('max_execution_time', 0);
+        error_log('Update-db script: memory_limit set to -1', 0);
+        error_log('Update-db script: max_execution_time 0', 0);
     } else {
         error_log('Update-db script: could not change memory and time limits', 0);
     }
@@ -1655,20 +1657,29 @@ function display_configuration_settings_form(
     }
     $html .= '</div></div>';
 
-
     $html .= '<div class="form-group">
             <label class="col-sm-6 control-label">' . get_lang('AllowSelfReg') . '</label>
             <div class="col-sm-6">';
     if ($installType == 'update') {
-        $html .= '<input type="hidden" name="allowSelfReg" value="'. $allowSelfReg .'" />'. $allowSelfReg ? get_lang('Yes') : get_lang('No');
+        if ($allowSelfReg == 'true') {
+            $label = get_lang('Yes');
+        } elseif ($allowSelfReg == 'false') {
+            $label = get_lang('No');
+        } else {
+            $label = get_lang('AfterApproval');
+        }
+        $html .= '<input type="hidden" name="allowSelfReg" value="'. $allowSelfReg .'" />'. $label;
     } else {
         $html .= '<div class="control-group">';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" '. ($allowSelfReg ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
+                        <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" '. ($allowSelfReg == 'true' ? 'checked="checked" ' : '') . ' /> '. get_lang('Yes') .'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
+                        <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ') .' /> '. get_lang('No') .'
                     </label>';
+         $html .= '<label class="checkbox-inline">
+                    <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ') .' /> '. get_lang('AfterApproval') .'
+                </label>';
         $html .= '</div>';
     }
     $html .= '</div>';
@@ -1677,8 +1688,13 @@ function display_configuration_settings_form(
     $html .= '<div class="form-group">';
     $html .= '<label class="col-sm-6 control-label">'. get_lang('AllowSelfRegProf') .'</label>
         <div class="col-sm-6">';
-    if ($installType == 'update'){
-        $html .= '<input type="hidden" name="allowSelfRegProf" value="'. $allowSelfRegProf.'" />'. $allowSelfRegProf? get_lang('Yes') : get_lang('No');
+    if ($installType == 'update') {
+        if ($allowSelfRegProf == 'true') {
+            $label = get_lang('Yes');
+        } else {
+            $label = get_lang('No');
+        }
+        $html .= '<input type="hidden" name="allowSelfRegProf" value="'. $allowSelfRegProf.'" />'. $label;
     } else {
         $html .= '<div class="control-group">
                 <label class="checkbox-inline">
@@ -2019,11 +2035,15 @@ function migrate($chamiloVersion, EntityManager $manager)
         if ($debug) {
             echo 'DONE'.$nl;
         }
+        return true;
     } catch (Exception $ex) {
         if ($debug) {
             echo 'ERROR: '.$ex->getMessage().$nl;
+            return false;
         }
     }
+
+    return false;
 }
 
 /**
@@ -2033,14 +2053,20 @@ function migrate($chamiloVersion, EntityManager $manager)
  */
 function fixIds(EntityManager $em)
 {
+    $debug = true;
     $connection = $em->getConnection();
+
+    if ($debug) {
+        error_log('fixIds');
+        error_log('Update tools');
+    }
 
     $sql = "SELECT * FROM c_lp_item";
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
         $courseId = $item['c_id'];
-        $iid = isset($item['iid']) ? $item['iid'] : 0;
-        $ref = isset($item['ref']) ? $item['ref'] : 0;
+        $iid = isset($item['iid']) ? intval($item['iid']) : 0;
+        $ref = isset($item['ref']) ? intval($item['ref']) : 0;
         $sql = null;
 
         $newId = '';
@@ -2075,14 +2101,14 @@ function fixIds(EntityManager $em)
                 }
                 break;
             case TOOL_FORUM:
-                $sql = "SELECT * FROM c_forum_forum WHERE c_id = $courseId AND id = $ref";
+                $sql = "SELECT * FROM c_forum_forum WHERE c_id = $courseId AND forum_id = $ref";
                 $data = $connection->fetchAssoc($sql);
                 if ($data) {
                     $newId = $data['iid'];
                 }
                 break;
             case 'thread':
-                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND thread_id = $ref";
                 $data = $connection->fetchAssoc($sql);
                 if ($data) {
                     $newId = $data['iid'];
@@ -2092,6 +2118,7 @@ function fixIds(EntityManager $em)
 
         if (!empty($sql) && !empty($newId) && !empty($iid)) {
             $sql = "UPDATE c_lp_item SET ref = $newId WHERE iid = $iid";
+
             $connection->executeQuery($sql);
         }
     }
@@ -2119,6 +2146,10 @@ function fixIds(EntityManager $em)
     $connection->executeQuery($sql);
 
     // This updates the group_id with c_group_info.iid instead of c_group_info.id
+
+    if ($debug) {
+        error_log('update iids');
+    }
 
     $groupTableToFix = [
         'c_group_rel_user',
@@ -2158,9 +2189,14 @@ function fixIds(EntityManager $em)
     }
 
     // Fix c_item_property
-
+    if ($debug) {
+        error_log('update c_item_property');
+    }
     $sql = "SELECT * FROM c_item_property";
     $result = $connection->fetchAll($sql);
+    $counter = 0;
+    error_log("Items to process: ".count($result));
+
     foreach ($result as $item) {
         $courseId = $item['c_id'];
         $sessionId = intval($item['session_id']);
@@ -2215,8 +2251,15 @@ function fixIds(EntityManager $em)
                 $newId = $data['iid'];
             }
             $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
+            error_log($sql);
             $connection->executeQuery($sql);
         }
+        error_log("Process item #$counter");
+        $counter++;
+    }
+
+    if ($debug) {
+        error_log('update gradebook_link');
     }
 
     // Fix gradebook_link
@@ -2261,6 +2304,10 @@ function fixIds(EntityManager $em)
                 $connection->executeQuery($sql);
             }
         }
+    }
+
+    if ($debug) {
+        error_log('update groups');
     }
 
     $sql = "SELECT * FROM groups";
@@ -2362,6 +2409,10 @@ function fixIds(EntityManager $em)
                 }
             }
         }
+    }
+
+    if ($debug) {
+        error_log('update extra fields');
     }
 
     // Extra fields

@@ -38,49 +38,6 @@ function validate(form, list) {
 </script>';
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function () {
-    $("#users").fcbkcomplete({
-        json_url: "'.api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users",
-        cache: false,
-        filter_case: false,
-        filter_hide: true,
-        complete_text:"'.get_lang('StartToType').'",
-    	firstselected: true,
-        //onremove: "testme",
-    	onselect:"check_users",
-        filter_selected: true,
-        newel: true
-    });
-});
-
-function check_users() {
-    //selecting only selected users
-    $("#users option:selected").each(function() {
-        var user_id = $(this).val();
-        if (user_id != "" ) {
-            $.ajax({
-                url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_id_exists",
-                data: "user_id="+user_id,
-                success: function(return_value) {
-                    if (return_value == 0 ) {
-                        alert("'.get_lang('UserDoesNotExist').'");
-
-                        //Deleting select option tag
-                        $("#users option[value="+user_id+"]").remove();
-
-                        //Deleting holder
-                        $(".holder li").each(function () {
-                            if ($(this).attr("rel") == user_id) {
-                                $(this).remove();
-                            }
-                        });
-                    }
-                }
-            });
-        }
-    });
-}
-
 var counter_image = 1;
 /*
 function remove_image_form(id_elem1) {
@@ -179,7 +136,16 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
             }
             if (empty($default['users'])) {
                 //fb select
-                $form->addElement('select', 'users', get_lang('SendMessageTo'), array(), array('id' => 'users'));
+                $form->addElement(
+                    'select_ajax',
+                    'users',
+                    get_lang('SendMessageTo'),
+                    array(),
+                    [
+                        'multiple' => 'multiple',
+                        'url' => api_get_path(WEB_AJAX_PATH) . 'message.ajax.php?a=find_users'
+                    ]
+                );
             } else {
                 $form->addElement('hidden','hidden_user',$default['users'][0],array('id'=>'hidden_user'));
             }

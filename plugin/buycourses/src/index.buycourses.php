@@ -21,7 +21,6 @@ if ($guess_enable == "true" || isset($_SESSION['_user'])) {
 
     $content = $tpl->fetch('buycourses/view/index.tpl');
 
-    $tpl->assign('header', $plugin->get_lang('plugin_title'));
     $tpl->assign('content', $content);
 
     $tpl->display_one_col_template();

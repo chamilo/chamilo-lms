@@ -1,6 +1,6 @@
 <?php
 $strings['plugin_title'] = "Sell courses";
-$strings['plugin_comment'] = "Sell courses directly through your Chamilo portal, using a PayPal account to receive funds. This plugin is in beta version. Neither the Chamilo association nor the developers involved could be considered responsible of any issue you might suffer using this plugin.";
+$strings['plugin_comment'] = "Sell courses directly through your Chamilo portal, using a PayPal account to receive funds. Neither the Chamilo association nor the developers involved could be considered responsible of any issue you might suffer using this plugin.";
 $strings['show_main_menu_tab'] = "Show tab in main menu";
 $strings['show_main_menu_tab_help'] = "In case of not wanting to show the tab, you can create this link in your Chamilo homepage : %s";
 $strings['include_sessions'] = "Include sessions";
@@ -84,3 +84,7 @@ $strings['InfoApiStepOne'] = "Go to your PayPal account, <strong>Summary</strong
 $strings['InfoApiStepTwo'] = "In paragraph <strong>API access</strong>, click <strong>Update</strong>";
 $strings['InfoApiStepThree'] = "In Option 2 (Request API credentials to create your own API username and password), click the <strong>View API Signature</strong> link, and copy the credentials shown right into the BuyCourses plugin form";
 $strings['ErrorOccurred'] = "<strong>An error ocurred</strong>. Code: %s. Message: %s. Please contact to platform admin";
+$strings['VisibleInCatalog'] = "Visible in catalog";
+$strings['Beneficiaries'] = "Beneficiaries";
+$strings['AvailableCourse'] = "Curso disponible";
+$strings['ShowOnCourseCatalog'] = "Show on course catalog";

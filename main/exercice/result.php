@@ -7,9 +7,6 @@
  *
  */
 
-/**
- * Code
- */
 // name of the language file that needs to be included
 $language_file = array('exercice');
 
@@ -71,6 +68,11 @@ if ($show_headers) {
 	$this_section = SECTION_COURSES;
 	Display::display_header();
 } else {
+	$htmlHeadXtra[] = "
+    <style>
+    body { background: none;}
+    </style>
+    ";
 	Display::display_reduced_header();
 }
 

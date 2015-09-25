@@ -7553,4 +7553,5 @@ $ConnectionFailed = "Conexión fallida";
 $ConnectionClosed = "Conexión cerrada";
 $LocalConnectionFailed = "Conexión local fallida";
 $RemoteConnectionFailed = "Conexión remota fallida";
+$ViewStudents = "Ver estudiantes";
 ?>

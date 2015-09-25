@@ -142,7 +142,7 @@ $form->addElement(
 );
 $beneficiariesSelect = $form->addSelect(
     'beneficiaries',
-    get_lang('Beneficiaries'),
+    $plugin->get_lang('Beneficiaries'),
     null,
     ['multiple' => 'multiple']
 );

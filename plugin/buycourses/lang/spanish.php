@@ -84,3 +84,7 @@ $strings['InfoApiStepOne'] = "Ir a la opción de <strong>Perfil de PayPal</stron
 $strings['InfoApiStepTwo'] = "En el apartado <strong>Acceso API</strong>, dar clic en la opción <strong>Actualizar</strong>";
 $strings['InfoApiStepThree'] = "En la opción 2, de Configuración de credenciales y permisos de API, dar clic en <strong>Ver firma de API</strong>. Copiar los datos de las credenciales en el formulario de configuración de este plugin";
 $strings['ErrorOccurred'] = "<strong>Ocurrio un error</strong>. Codigo: %s. Mensaje: %s. Por favor, contacta al administrador de la plataforma.";
+$strings['VisibleInCatalog'] = "Visible en el catálogo";
+$strings['Beneficiaries'] = "Beneficiarios";
+$strings['AvailableCourse'] = "Curso disponible";
+$strings['ShowOnCourseCatalog'] = "Mostrar en el catálogo de cursos";

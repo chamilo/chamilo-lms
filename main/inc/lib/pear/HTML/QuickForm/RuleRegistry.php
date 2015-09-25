@@ -207,7 +207,7 @@ class HTML_QuickForm_RuleRegistry
     function getValidationScript(&$element, $elementName, $ruleData)
     {
         $reset =  (isset($ruleData['reset'])) ? $ruleData['reset'] : false;
-        $rule  =& $this->getRule($ruleData['type']);
+        $rule  = $this->getRule($ruleData['type']);
         if (!is_array($element)) {
             list($jsValue, $jsReset) = $this->_getJsValue($element, $elementName, $reset, null);
         } else {

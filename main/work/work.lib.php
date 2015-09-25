@@ -70,11 +70,12 @@ function display_action_links($id, $cur_dir_path, $action)
 }
 
 /**
- * Displays all options for this tool.
+ * Returns a form displaying all options for this tool.
  * These are
  * - make all files visible / invisible
  * - set the default visibility of uploaded files
  * @param $defaults
+ * @return string The HTML form
  */
 function settingsForm($defaults)
 {

@@ -44,31 +44,18 @@ a{
 a:hover{
   color: #418A00;
 }
-.navbar-default .navbar-nav li a{
-  color: #ffffff;
-}
-.navbar-default .navbar-nav li a:hover{
-  color: #ffd555;
-}
-.navbar-default .navbar-nav .active a,
-.navbar-default .navbar-nav .active a:focus,
-.navbar-default .navbar-nav .active > a:hover{
-  background: #F15000;
-  color: #ffffff;
-}
 header{
-  background: url("images/bg-green.png") repeat-x center -50px;
+  background: url("images/bg-green.png") repeat-x center -25px;
 }
 .navbar-default {
-  background: #8cbf00; /* Old browsers */
-  background: -moz-linear-gradient(top, #8cbf00 0%, #398500 99%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8cbf00), color-stop(99%,#398500)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #8cbf00 0%,#398500 99%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #8cbf00 0%,#398500 99%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #8cbf00 0%,#398500 99%); /* IE10+ */
-  background: linear-gradient(to bottom, #8cbf00 0%,#398500 99%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8cbf00', endColorstr='#398500',GradientType=0 ); /* IE6-9 */
-  border-color: #8cbf00;
+background: -moz-linear-gradient(top, rgba(139,190,0,0.29) 0%, rgba(107,168,0,0.84) 84%, rgba(58,134,0,0.94) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(139,190,0,0.29)), color-stop(84%,rgba(107,168,0,0.84)), color-stop(100%,rgba(58,134,0,0.94))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(139,190,0,0.29) 0%,rgba(107,168,0,0.84) 84%,rgba(58,134,0,0.94) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(139,190,0,0.29) 0%,rgba(107,168,0,0.84) 84%,rgba(58,134,0,0.94) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(139,190,0,0.29) 0%,rgba(107,168,0,0.84) 84%,rgba(58,134,0,0.94) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(139,190,0,0.29) 0%,rgba(107,168,0,0.84) 84%,rgba(58,134,0,0.94) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4a8bbe00', endColorstr='#f03a8600',GradientType=0 ); /* IE6-9 */
+border-color: #8cbf00;
 }
 .navbar-default .navbar-brand {
   color: #ffffff;

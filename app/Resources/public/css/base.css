@@ -108,6 +108,10 @@ a.thumbnail:hover{
     max-width: 100%;
     height: auto;
 }
+#carousel-announcement .carousel-control.right, #carousel-announcement .carousel-control.left{
+    background-image: none;
+}
+/*
 #carousel-announcement .left, #carousel-announcement .right{
   position: absolute;
   top: 50%;
@@ -139,7 +143,7 @@ a.thumbnail:hover{
 #carousel-announcement .carousel-indicators .active{
   background: #C52D2F;
 }
-
+*/
 #notice_block p, #notice-block p{
     color: #666;
     font-size: 12px;

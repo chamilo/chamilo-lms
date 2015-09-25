@@ -1,9 +1,10 @@
 /*!
- * CSS Simplex - v. 2.0
+ * CSS Medical - v. 2.0
  * 2015 - Alex Aragón (aragonc@beeznest.com)
  * Licensed GPL
  * Based on Bootstrap
 */
+
 @font-face {
   font-family: 'Lato';
   font-style: normal;
@@ -23,6 +24,17 @@
   src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
 }
 
+@font-face {
+    font-family: 'DIN Next Rounded LT Pro';
+    src: url('fonts/DINNextRoundedLTPro-Regular.otf');
+}
+
+@font-face {
+    font-family: 'DIN Next Rounded LT Pro';
+    src: url('fonts/DINNextRoundedLTPro-Medium.otf');
+    font-weight: bold;
+}
+
 html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -33,7 +45,7 @@ body {
   line-height: 1.72222;
 }
 a{
-  color: #111111;
+  color: #2D9DB5;
 }
 a:hover{
   color: #34495E;
@@ -43,11 +55,12 @@ a:hover{
 padding: 15px 10px;
 }
 .navbar-default {
-background: #FBD232;
+background: #2C9BB6;
 border: none;
+font-family: 'DIN Next Rounded LT Pro', sans-serif;
 }
 header{
-    background: url(images/background.png) #D3D3D3;
+    background: url(images/background.png);
 }
 .navbar{
     margin-bottom: 0;
@@ -66,19 +79,20 @@ header{
   color: #ffffff;
 }
 .navbar-default .navbar-nav > li > a {
-  color: #111;
-  text-transform: uppercase;
+  color: #FFF;
+  /* text-transform: uppercase; */
   font-weight: bold;
+  font-size: 1.25em;
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
 color: #FFFFFF;
-background: #111111;
+background: #F38A1E;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
-  background: #FBD232;
+  background: #2C9BB6;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a {
-  color: #111111;
+  color: #fff;
   padding: 5px;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li{
@@ -87,27 +101,34 @@ background: #111111;
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
 .navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
   color: #ffffff;
-  background-color: #111111;
+  background-color: #F38A1E;
 }
 .navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
   background-color: #0099c0;
 }
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
 color: #FFFFFF;
-background: #111111;
+background: rgb(243,138,30); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(243,138,30,1) 0%, rgba(241,119,0,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(243,138,30,1)), color-stop(100%,rgba(241,119,0,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(243,138,30,1) 0%,rgba(241,119,0,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(243,138,30,1) 0%,rgba(241,119,0,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(243,138,30,1) 0%,rgba(241,119,0,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(243,138,30,1) 0%,rgba(241,119,0,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f38a1e', endColorstr='#f17700',GradientType=0 ); /* IE6-9 */
 }
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
 color: #FFFFFF;
-background: #111111;
+background: #F38A1E;
 }
 .navbar-default .navbar-toggle {
-  border-color: #111;
+  border-color: #fff;
 }
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
   background-color: #111111;
 }
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #666;
+  background-color: #fff;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
@@ -120,7 +141,7 @@ background: #111111;
   color: #ededed;
 }
 .badge{
-    background-color: #222222;
+    background-color: #F28414;
 }
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
@@ -143,25 +164,32 @@ background: #111111;
     background: transparent;
 }
 .panel-default .panel-heading{
-    background-color: #EBECF2;
+    background-color: #EDEDED;
 }
 .panel-default{
     border-color: #F3F3F4;
 }
 footer{
-background: #111111;
-color: #FBD232;
-border-top: 5px solid #FBD232;
+background: #2C9BB6;
+color: #FFF;
+border-top: 10px solid #EFEFEF;
 }
 footer a{
-  color: #ffffff;
+  color: #FFFF00;
+  font-weight: bold;
 }
 footer a:hover{
   color: #CCC;
 }
+.menu-column .panel-body{
+    font-family: 'DIN Next Rounded LT Pro', sans-serif;
+}
+.menu-column .nav li a{
+    font-size: 14px;
+}
 .menu-column .panel-heading{
     text-transform: uppercase;
-    background-color: #FBD232;
+    background-color: #EDEDED;
 }
 .menu-column .panel-heading a{
     font-weight: bold;

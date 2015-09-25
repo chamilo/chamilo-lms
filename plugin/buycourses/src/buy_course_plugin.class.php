@@ -63,6 +63,13 @@ class BuyCoursesPlugin extends Plugin
      */
     function install()
     {
+        $appPlugin = new AppPlugin();
+        $installedPlugins = $appPlugin->get_installed_plugins();
+
+        if (in_array($this->get_name(), $installedPlugins)) {
+            return false;
+        }
+
         require_once api_get_path(SYS_PLUGIN_PATH) . 'buycourses/database.php';
     }
 

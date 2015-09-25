@@ -1,0 +1,35 @@
+{
+    "name":         "knplabs/knp-menu-bundle",
+    "description":  "This bundle provides an integration of the KnpMenu library",
+    "keywords":     ["menu"],
+    "type":         "symfony-bundle",
+    "license":      "MIT",
+    "authors":      [
+        {
+            "name":     "Knplabs",
+            "homepage": "http://knplabs.com"
+        },
+        {
+            "name":     "Christophe Coevoet",
+            "email":    "stof@notk.org"
+        },
+        {
+            "name":     "Symfony Community",
+            "homepage": "https://github.com/KnpLabs/KnpMenuBundle/contributors"
+        }
+    ],
+    "require":      {
+        "knplabs/knp-menu":         "~2.0",
+        "symfony/framework-bundle": "~2.0"
+    },
+    "autoload":     {
+        "psr-0": { "Knp\\Bundle\\MenuBundle": "" }
+    },
+    "target-dir": "Knp/Bundle/MenuBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

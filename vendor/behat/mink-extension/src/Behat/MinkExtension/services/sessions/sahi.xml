@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+
+        <parameter key="behat.mink.driver.sahi.class">Behat\Mink\Driver\SahiDriver</parameter>
+        <parameter key="behat.mink.sahi.class">Behat\SahiClient\Client</parameter>
+        <parameter key="behat.mink.sahi.connection.class">Behat\SahiClient\Connection</parameter>
+
+        <parameter key="behat.mink.sahi.sid">null</parameter>
+        <parameter key="behat.mink.sahi.host">localhost</parameter>
+        <parameter key="behat.mink.sahi.port">9999</parameter>
+        <parameter key="behat.mink.sahi.browser">null</parameter>
+        <parameter key="behat.mink.sahi.limit">600</parameter>
+
+    </parameters>
+    <services>
+
+        <service id="behat.mink.session.sahi" class="%behat.mink.session.class%">
+            <argument type="service">
+                <service class="%behat.mink.driver.sahi.class%">
+                    <argument>%behat.mink.browser_name%</argument>
+                    <argument type="service" id="behat.mink.sahi" />
+                </service>
+            </argument>
+            <argument type="service" id="behat.mink.selector.handler" />
+            <tag name="behat.mink.session" alias="sahi" />
+        </service>
+
+        <service id="behat.mink.sahi" class="%behat.mink.sahi.class%">
+            <argument type="service">
+                <service class="%behat.mink.sahi.connection.class%">
+                    <argument>%behat.mink.sahi.sid%</argument>
+                    <argument>%behat.mink.sahi.host%</argument>
+                    <argument>%behat.mink.sahi.port%</argument>
+                    <argument>%behat.mink.sahi.browser%</argument>
+                    <argument>%behat.mink.sahi.limit%</argument>
+                </service>
+            </argument>
+        </service>
+
+    </services>
+</container>

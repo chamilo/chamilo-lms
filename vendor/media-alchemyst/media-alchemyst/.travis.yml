@@ -1,0 +1,23 @@
+language: php
+
+services: []
+
+before_script:
+  - sudo apt-get update
+  - sudo apt-get install -y ffmpeg libavcodec-extra-53 openoffice.org openoffice.org-writer unoconv ghostscript gsfonts ufraw graphicsmagick libgraphicsmagick1-dev libfreetype6-dev libjpeg-dev libgif-dev libtiff-dev libdjvulibre-dev libwmf-dev libmagickcore-dev libmagickwand-dev libpng-dev xpdf libexpat-dev gettext zlib1g-dev build-essential libfaac-dev libmp3lame0 libx264-dev libvpx-dev libtheora-dev libvorbis-dev gpac dcraw ufraw
+  - sudo apt-get clean
+  - wget http://www.swftools.org/swftools-0.9.1.tar.gz
+  - sh -c "tar xzvf swftools-0.9.1.tar.gz && cd swftools-0.9.1 && ./configure && make && sudo make install"
+  - wget http://pecl.php.net/get/imagick-3.1.0RC2.tgz
+  - tar -xzf imagick-3.1.0RC2.tgz
+  - sh -c "cd imagick-3.1.0RC2 && phpize && ./configure --with-imagick=/usr/local && make -j && sudo make install"
+  - echo "extension=imagick.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - composer self-update
+  - composer install --dev --prefer-source
+
+php:
+  - 5.3.3
+  - 5.3
+  - 5.4
+  - 5.5
+

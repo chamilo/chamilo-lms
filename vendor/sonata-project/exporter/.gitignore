@@ -1,0 +1,8 @@
+phpunit.xml
+/nbproject/
+/coverage/
+/vendor/
+/docs/_build
+composer.lock
+composer.phar
+.php_cs.cache

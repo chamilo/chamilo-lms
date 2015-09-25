@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+
+        <parameter key="behat.mink.driver.saucelabs.class">Behat\Mink\Driver\Selenium2Driver</parameter>
+
+        <parameter key="behat.mink.saucelabs.browser">%behat.mink.browser_name%</parameter>
+        <parameter key="behat.mink.saucelabs.capabilities" type="collection">
+            <parameter key="name" type="string">Behat feature suite</parameter>
+            <parameter key="version" type="string">21</parameter>
+            <parameter key="platform" type="string">Linux</parameter>
+            <parameter key="selenium-version" type="string">2.31.0</parameter>
+            <parameter key="max-duration">300</parameter>
+        </parameter>
+        <parameter key="behat.mink.saucelabs.wd_host">https://USERNAME:ACCESS_KEY@ondemand.saucelabs.com/wd/hub</parameter>
+
+    </parameters>
+    <services>
+
+        <service id="behat.mink.session.saucelabs" class="%behat.mink.session.class%">
+            <argument type="service">
+                <service class="%behat.mink.driver.saucelabs.class%">
+                    <argument>%behat.mink.saucelabs.browser%</argument>
+                    <argument>%behat.mink.saucelabs.capabilities%</argument>
+                    <argument>%behat.mink.saucelabs.wd_host%</argument>
+                </service>
+            </argument>
+            <argument type="service" id="behat.mink.selector.handler" />
+            <tag name="behat.mink.session" alias="saucelabs" />
+        </service>
+
+    </services>
+</container>

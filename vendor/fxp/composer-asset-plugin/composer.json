@@ -1,0 +1,38 @@
+{
+    "name": "fxp/composer-asset-plugin",
+    "description": "NPM/Bower Dependency Manager for Composer",
+    "keywords": ["npm", "bower", "dependency manager", "package", "asset", "composer", "nodejs"],
+    "homepage": "https://github.com/francoispluchino/composer-asset-plugin",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "François Pluchino",
+            "email": "francois.pluchino@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "composer-plugin-api": "^1.0"
+    },
+    "require-dev": {
+        "composer/composer": "~1.0@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fxp\\Composer\\AssetPlugin\\": ""
+        }
+    },
+    "autoload-dev": {
+        "psr-0": { "Composer\\Test": "vendor/composer/composer/tests/" }
+    },
+    "extra": {
+        "class": "Fxp\\Composer\\AssetPlugin\\FxpAssetPlugin",
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

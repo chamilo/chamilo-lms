@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- profile form -->
+        <service id="sonata.user.profile.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument>%sonata.user.profile.form.name%</argument>
+            <argument>%sonata.user.profile.form.type%</argument>
+            <argument>null</argument>
+            <argument type="collection">
+                <argument key="validation_groups">%sonata.user.profile.form.validation_groups%</argument>
+                <argument key="translation_domain">SonataUserBundle</argument>
+            </argument>
+        </service>
+
+        <service id="sonata.user.profile.form.type" class="Sonata\UserBundle\Form\Type\ProfileType">
+            <argument>%fos_user.model.user.class%</argument>
+            <tag name="form.type" alias="sonata_user_profile" />
+        </service>
+
+        <service id="sonata.user.profile.form.handler.default" class="Sonata\UserBundle\Form\Handler\ProfileFormHandler" scope="request" public="false">
+            <argument type="service" id="sonata.user.profile.form" />
+            <argument type="service" id="request" />
+            <argument type="service" id="fos_user.user_manager" />
+        </service>
+
+        <service id="sonata.user.form.gender_list" class="Sonata\CoreBundle\Form\Type\StatusType">
+            <argument>%fos_user.model.user.class%</argument>
+            <argument>getGenderList</argument>
+            <argument>sonata_user_gender</argument>
+
+            <tag name="form.type" alias="sonata_user_gender" />
+        </service>
+    </services>
+
+</container>

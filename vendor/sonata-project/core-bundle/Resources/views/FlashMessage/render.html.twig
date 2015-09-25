@@ -1,0 +1,19 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+{% for type in sonata_flashmessages_types() %}
+    {% set domain = domain is defined ? domain : null %}
+    {% for message in sonata_flashmessages_get(type, domain) %}
+        <div class="alert alert-{{ type|sonata_status_class }} alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ message|raw }}
+        </div>
+    {% endfor %}
+{% endfor %}

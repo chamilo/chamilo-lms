@@ -1,0 +1,86 @@
+<?php
+
+/*
+ * This file is part of the Sonata Project package.
+ *
+ * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Sonata\AdminBundle\Security\Handler;
+
+use Sonata\AdminBundle\Admin\AdminInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
+use Symfony\Component\Security\Core\SecurityContextInterface;
+
+class RoleSecurityHandler implements SecurityHandlerInterface
+{
+    protected $securityContext;
+
+    protected $superAdminRoles;
+
+    /**
+     * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     * @param array                                                     $superAdminRoles
+     */
+    public function __construct(SecurityContextInterface $securityContext, array $superAdminRoles)
+    {
+        $this->securityContext = $securityContext;
+        $this->superAdminRoles = $superAdminRoles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isGranted(AdminInterface $admin, $attributes, $object = null)
+    {
+        if (!is_array($attributes)) {
+            $attributes = array($attributes);
+        }
+
+        foreach ($attributes as $pos => $attribute) {
+            $attributes[$pos] = sprintf($this->getBaseRole($admin), $attribute);
+        }
+
+        try {
+            return $this->securityContext->isGranted($this->superAdminRoles)
+                || $this->securityContext->isGranted($attributes, $object);
+        } catch (AuthenticationCredentialsNotFoundException $e) {
+            return false;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBaseRole(AdminInterface $admin)
+    {
+        return 'ROLE_'.str_replace('.', '_', strtoupper($admin->getCode())).'_%s';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildSecurityInformation(AdminInterface $admin)
+    {
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createObjectSecurity(AdminInterface $admin, $object)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteObjectSecurity(AdminInterface $admin, $object)
+    {
+    }
+}

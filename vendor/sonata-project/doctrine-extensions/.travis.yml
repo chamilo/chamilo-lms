@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - hhvm
+
+env:
+  - DOCTRINE_VERSION=2.1.*
+  - DOCTRINE_VERSION=2.2.*
+  - DOCTRINE_VERSION=2.3.*
+  - DOCTRINE_VERSION=2.4.*
+  - DOCTRINE_VERSION=dev-master
+
+before_script:
+  - composer require doctrine/dbal:${DOCTRINE_VERSION} --no-update
+  - composer install --dev --prefer-source
+
+script: phpunit
+
+matrix:
+  allow_failures:
+    - php: hhvm

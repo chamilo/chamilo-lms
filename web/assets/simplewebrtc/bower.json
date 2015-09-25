@@ -1,0 +1,26 @@
+{
+  "name": "SimpleWebRTC",
+  "main": "latest.js",
+  "version": "1.15.3",
+  "homepage": "https://github.com/sylvaindumont/SimpleWebRTC",
+  "authors": [
+    "Henrik Joreteg"
+  ],
+  "description": "You can build cool stuff with WebRTC in five minutes.",
+  "keywords": [
+    "webrtc",
+    "simplewebrtc",
+    "video",
+    "audio",
+    "p2p",
+    "peertopeer"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

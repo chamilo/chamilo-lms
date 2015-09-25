@@ -1,0 +1,40 @@
+{
+    "name":         "behat/mink",
+    "description":  "Web acceptance testing framework for PHP 5.3",
+    "keywords":     ["web", "testing", "browser"],
+    "homepage":     "http://mink.behat.org/",
+    "type":         "library",
+    "license":      "MIT",
+
+    "authors": [
+        {
+            "name":      "Konstantin Kudryashov",
+            "email":     "ever.zet@gmail.com",
+            "homepage":  "http://everzet.com"
+        }
+    ],
+
+    "require": {
+        "php":                   ">=5.3.1",
+        "symfony/css-selector":  ">=2.0,<2.4-dev"
+    },
+
+    "suggest": {
+        "behat/mink-browserkit-driver": "extremely fast headless driver for Symfony\\Kernel-based apps (Sf2, Silex)",
+        "behat/mink-goutte-driver":     "fast headless driver for any app without JS emulation",
+        "behat/mink-selenium2-driver":  "slow, but JS-enabled driver for any app (requires Selenium2)",
+        "behat/mink-zombie-driver":     "fast and JS-enabled headless driver for any app (requires node.js)"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Behat\\Mink": "src/"
+        }
+    },
+
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.4.x-dev"
+        }
+    }
+}

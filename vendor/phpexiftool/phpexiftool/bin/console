@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ * This file is part of PHPExifTool.
+ *
+ * (c) 2012 Romain Neutron <imprec@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+use Symfony\Component\Console\Application;
+use PHPExiftool\Tool\Command\ClassesBuilder;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+if (!class_exists('Symfony\Component\DomCrawler\Crawler')) {
+    echo "You must install composer developer packages to use the commandline dev tool\n";
+    exit(1);
+}
+
+$cli = new Application('PHPExiftool', '0.3.0');
+$cli->addCommands(array(new ClassesBuilder()));
+
+$cli->run();

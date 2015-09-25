@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+
+        <parameter key="behat.mink.driver.selenium2.class">Behat\Mink\Driver\Selenium2Driver</parameter>
+
+        <parameter key="behat.mink.selenium2.browser">%behat.mink.browser_name%</parameter>
+        <parameter key="behat.mink.selenium2.capabilities" type="collection">
+            <parameter key="browserName" type="string">firefox</parameter>
+            <parameter key="version" type="string">8</parameter>
+            <parameter key="platform" type="string">ANY</parameter>
+            <parameter key="browserVersion" type="string">8</parameter>
+            <parameter key="browser" type="string">firefox</parameter>
+            <parameter key="name" type="string">Behat test</parameter>
+            <parameter key="deviceOrientation" type="string">portrait</parameter>
+            <parameter key="deviceType" type="string">tablet</parameter>
+            <parameter key="selenium-version" type="string">2.31.0</parameter>
+            <parameter key="max-duration">300</parameter>
+        </parameter>
+        <parameter key="behat.mink.selenium2.wd_host">http://localhost:4444/wd/hub</parameter>
+
+    </parameters>
+    <services>
+
+        <service id="behat.mink.session.selenium2" class="%behat.mink.session.class%">
+            <argument type="service">
+                <service class="%behat.mink.driver.selenium2.class%">
+                    <argument>%behat.mink.selenium2.browser%</argument>
+                    <argument>%behat.mink.selenium2.capabilities%</argument>
+                    <argument>%behat.mink.selenium2.wd_host%</argument>
+                </service>
+            </argument>
+            <argument type="service" id="behat.mink.selector.handler" />
+            <tag name="behat.mink.session" alias="selenium2" />
+        </service>
+
+    </services>
+</container>

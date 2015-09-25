@@ -1,0 +1,36 @@
+{
+    "name": "sonata-project/easy-extends-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony SonataEasyExtendsBundle",
+    "keywords": ["sonata", "easy extends"],
+    "homepage": "http://sonata-project.org/bundles/easy-extends",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@sonata-project.org",
+            "homepage": "http://sonata-project.org"
+        },
+        {
+            "name": "Sonata Community",
+            "homepage": "https://github.com/sonata-project/SonataEasyExtendsBundle/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "~2",
+        "symfony/console": "~2",
+        "symfony/finder": "~2"
+    },
+    "require-dev": {
+        "doctrine/orm": "~2"
+    },
+    "autoload": {
+        "psr-4": { "Sonata\\EasyExtendsBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.1.x-dev"
+        }
+    }
+}

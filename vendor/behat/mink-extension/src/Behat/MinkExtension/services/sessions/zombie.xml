@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+
+        <parameter key="behat.mink.driver.zombie.class">Behat\Mink\Driver\ZombieDriver</parameter>
+        <parameter key="behat.mink.zombie.connection.class">Behat\Mink\Driver\NodeJS\Connection</parameter>
+        <parameter key="behat.mink.zombie.server.class">Behat\Mink\Driver\NodeJS\Server\ZombieServer</parameter>
+
+        <parameter key="behat.mink.zombie.host">127.0.0.1</parameter>
+        <parameter key="behat.mink.zombie.port">8124</parameter>
+        <parameter key="behat.mink.zombie.auto_server">true</parameter>
+        <parameter key="behat.mink.zombie.node_bin">node</parameter>
+        <parameter key="behat.mink.zombie.server_path">null</parameter>
+        <parameter key="behat.mink.zombie.threshold">2000000</parameter>
+        <parameter key="behat.mink.zombie.node_modules_path"></parameter>
+
+    </parameters>
+    <services>
+
+        <service id="behat.mink.session.zombie" class="%behat.mink.session.class%">
+            <argument type="service">
+                <service class="%behat.mink.driver.zombie.class%">
+                    <argument type="service" id="behat.mink.zombie.server" />
+                    <argument type="service" id="behat.mink.zombie.connection" />
+                    <argument>%behat.mink.zombie.auto_server%</argument>
+                </service>
+            </argument>
+            <argument type="service" id="behat.mink.selector.handler" />
+            <tag name="behat.mink.session" alias="zombie" />
+        </service>
+
+        <service id="behat.mink.zombie.connection" class="%behat.mink.zombie.connection.class%">
+            <argument>%behat.mink.zombie.host%</argument>
+            <argument>%behat.mink.zombie.port%</argument>
+        </service>
+
+        <service id="behat.mink.zombie.server" class="%behat.mink.zombie.server.class%">
+            <argument>%behat.mink.zombie.host%</argument>
+            <argument>%behat.mink.zombie.port%</argument>
+            <argument>%behat.mink.zombie.node_bin%</argument>
+            <argument>%behat.mink.zombie.server_path%</argument>
+            <argument>%behat.mink.zombie.threshold%</argument>
+            <argument>%behat.mink.zombie.node_modules_path%</argument>
+        </service>
+
+    </services>
+</container>

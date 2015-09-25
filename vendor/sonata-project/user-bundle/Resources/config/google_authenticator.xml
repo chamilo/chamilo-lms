@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sonata.user.google.authenticator" class="Google\Authenticator\GoogleAuthenticator">
+
+        </service>
+
+        <service id="sonata.user.google.authenticator.provider" class="Sonata\UserBundle\GoogleAuthenticator\Helper">
+            <argument />
+            <argument type="service" id="sonata.user.google.authenticator" />
+        </service>
+
+        <service id="sonata.user.google.authenticator.interactive_login_listener" class="Sonata\UserBundle\GoogleAuthenticator\InteractiveLoginListener">
+            <tag name="kernel.event_listener" event="security.interactive_login" method="onSecurityInteractiveLogin" />
+
+            <argument type="service" id="sonata.user.google.authenticator.provider" />
+        </service>
+
+        <service id="sonata.user.google.authenticator.request_listener" class="Sonata\UserBundle\GoogleAuthenticator\RequestListener">
+            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="-1"/>
+
+            <argument type="service" id="sonata.user.google.authenticator.provider" />
+            <argument type="service" id="security.context" />
+            <argument type="service" id="templating" />
+        </service>
+
+    </services>
+</container>

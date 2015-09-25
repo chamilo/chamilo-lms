@@ -1,0 +1,7 @@
+tests/phpunit.xml
+tests/temp/*.php
+/vendor
+/bin
+/composer.lock
+/composer.phar
+.idea

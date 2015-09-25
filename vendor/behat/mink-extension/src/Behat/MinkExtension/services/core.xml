@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+
+        <parameter key="mink.paths.lib">null</parameter>
+        <parameter key="behat.mink.parameters" type="collection"></parameter>
+        <parameter key="behat.mink.class">Behat\Mink\Mink</parameter>
+        <parameter key="behat.mink.session.class">Behat\Mink\Session</parameter>
+        <parameter key="behat.mink.selector.handler.class">Behat\Mink\Selector\SelectorsHandler</parameter>
+        <parameter key="behat.mink.selector.css.class">Behat\Mink\Selector\CssSelector</parameter>
+        <parameter key="behat.mink.selector.named.class">Behat\Mink\Selector\NamedSelector</parameter>
+
+        <parameter key="behat.mink.context.class_guesser.class">Behat\MinkExtension\Context\ClassGuesser\MinkContextClassGuesser</parameter>
+        <parameter key="behat.mink.context.initializer.class">Behat\MinkExtension\Context\Initializer\MinkAwareInitializer</parameter>
+        <parameter key="behat.mink.listener.sessions_listener.class">Behat\MinkExtension\Listener\SessionsListener</parameter>
+
+        <parameter key="behat.mink.default_session">goutte</parameter>
+        <parameter key="behat.mink.javascript_session">selenium2</parameter>
+        <parameter key="behat.mink.base_url">null</parameter>
+        <parameter key="behat.mink.show_cmd">null</parameter>
+        <parameter key="behat.mink.show_tmp_dir">null</parameter>
+        <parameter key="behat.mink.browser_name">firefox</parameter>
+
+    </parameters>
+    <services>
+
+        <service id="behat.mink" class="%behat.mink.class%" />
+
+        <service id="behat.mink.selector.handler" class="%behat.mink.selector.handler.class%" />
+        <service id="behat.mink.selector.css" class="%behat.mink.selector.css.class%">
+            <tag name="behat.mink.selector" alias="css" />
+        </service>
+        <service id="behat.mink.selector.named" class="%behat.mink.selector.named.class%">
+            <tag name="behat.mink.selector" alias="named" />
+        </service>
+
+        <service id="behat.mink.context.class_guesser" class="%behat.mink.context.class_guesser.class%">
+            <tag name="behat.context.class_guesser" priority="0" />
+        </service>
+
+        <service id="behat.mink.context.initializer" class="%behat.mink.context.initializer.class%">
+            <argument type="service" id="behat.mink" />
+            <argument>%behat.mink.parameters%</argument>
+            <tag name="behat.context.initializer" />
+        </service>
+
+        <service id="behat.mink.listener.sessions_listener" class="%behat.mink.listener.sessions_listener.class%">
+            <argument type="service" id="behat.mink" />
+            <argument>%behat.mink.parameters%</argument>
+            <tag name="behat.event_subscriber" priority="0" />
+        </service>
+
+    </services>
+</container>

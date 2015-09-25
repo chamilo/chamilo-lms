@@ -38,19 +38,22 @@ if (!api_is_allowed_to_edit(false, true) ||
 }
 
 // Database table definitions
-$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
-$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_survey_question_group    = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-$table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database:: get_course_table(TABLE_SURVEY);
+$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_survey_question_group = Database:: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
+$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
 $survey_id = intval($_GET['survey_id']);
 $course_id = api_get_course_int_id();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Breadcrumbs
-$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array(
+		'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+		'name' => get_lang('SurveyList'),
+);
 
 // Getting the survey information
 if (!empty($_GET['survey_id'])) {

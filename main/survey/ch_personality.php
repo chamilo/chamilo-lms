@@ -6,7 +6,6 @@
  */
 class ch_personality extends survey_question
 {
-
     /**
      * This function creates the form elements for the multiple response questions
      *

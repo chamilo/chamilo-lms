@@ -158,7 +158,3 @@ footer a{
 footer a:hover{
   color: #CCC;
 }
-#carousel-announcement .left, #carousel-announcement .right,
-#carousel-announcement .carousel-indicators .active{
-    background: #4A8480;
-}

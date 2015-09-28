@@ -324,3 +324,6 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['courses_list_session_title_link'] = 1;
 // If user profile is incomplete (firstname or lastname or email empty) go to profile edit at loggin
 //$_configuration['force_update_incomplete_profile'] = false;
+// Manage deleted files marked with "DELETED" (by course and only by allowed by admin)
+//$_configuration['document_manage_deleted_files'] = false;
+

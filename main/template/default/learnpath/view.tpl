@@ -54,7 +54,7 @@
                                     {% if lp_author == '' %}
                                        <div class="col-md-12">
                                             {{ lp_preview_image }}
-                                        </div> 
+                                        </div>
                                     {% else %}
                                         <div class="col-md-4">
                                             {{ lp_preview_image }}
@@ -63,7 +63,7 @@
                                             <div class="description-autor"> {{ lp_author }} </div>
                                         </div>
                                     {% endif %}
-                                    
+
                                 </div>
                             </div>
                             <div id="progress_bar">
@@ -151,7 +151,8 @@
                                 { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
                                 { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"}
+                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                {{ fix_link }}
                             ]
                         }
                     );
@@ -166,14 +167,30 @@
                                 { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
                                 { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"}
+                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                {{ fix_link }}
+                            ]
+                        }
+                    );
+                {% elseif fix_link != '' %}
+                    $.frameReady(
+                        function(){
+                            //  $("<div>I am a div courses</div>").prependTo("body");
+                        },
+                        "top.content_name",
+                        {
+                            load: [
+                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
+                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                                {{ fix_link }}
                             ]
                         }
                     );
                 {% endif %}
         {% endif %}
     };
-    
+
     $(document).ready(function() {
         updateContentHeight();
 
@@ -184,11 +201,8 @@
         $(window).resize(function() {
             updateContentHeight();
         });
-        
-        
     });
-    
-    
+
     window.onload = updateContentHeight();
     window.onresize = updateContentHeight();
 
@@ -210,5 +224,4 @@
             });
         });
     });
-     
 </script>

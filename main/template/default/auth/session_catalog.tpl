@@ -105,21 +105,26 @@
                                 </ul>
 
                                 <div class="options">
+                                    {% if not _u.logged %}
+                                        <p>
+                                            <a class="btn btn-info btn-block btn-sm" href="{{ "#{_p.web}session/#{session.id}/about/" }}" title="{{ session.name }}">{{ 'SeeCourseInformationAndRequirements'|get_lang }}</a>
+                                        </p>
+                                    {% else %}
                                     <p>
                                         <a class="btn btn-info btn-block btn-sm" role="button" data-toggle="popover" id="session-{{ session.id }}-sequences">{{ 'SeeSequences'|get_lang }}</a>
                                     </p>
                                     <p class="buttom-subscribed">
                                         {% if session.is_subscribed %}
                                             {{ already_subscribed_label }}
-                                        {% elseif _u.logged == 0 %}
-                                            {{ '' }}
                                         {% else %}
                                             {{ session.subscribe_button }}
                                         {% endif %}
                                     </p>
+                                    {% endif %}
                                 </div>
                             </div>
 
+                            {% if _u.logged %}
                             <script>
                                 $('#session-{{ session.id }}-sequences').popover({
                                     placement: 'bottom',
@@ -170,6 +175,7 @@
                                     }
                                 });
                             </script>
+                            {% endif %}
                         </div>
                     </div>
                 {% else %}

@@ -25,8 +25,8 @@ if ($checkPass == 'true') {
     $htmlHeadXtra[] = '
     <script>
     $(document).ready(function() {
-        $("input[name=\'password[password_auto]\']").each(function(index, value) {
-            $(this).click(function() {
+        $("#password").keypress(function() {
+            $("#password").each(function(index, value) {
                 var value = $(this).attr("value");
                 if (value == 0) {
                     $("#password_progress").show();

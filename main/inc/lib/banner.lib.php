@@ -246,12 +246,6 @@ function return_notification_menu()
         //}
     }
 
-    if (api_get_setting('accessibility_font_resize') == 'true') {
-        $html .= '<li class="resize_font">';
-        $html .= '<span class="decrease_font" title="'.get_lang('DecreaseFontSize').'">A</span> <span class="reset_font" title="'.get_lang('ResetFontSize').'">A</span> <span class="increase_font" title="'.get_lang('IncreaseFontSize').'">A</span>';
-        $html .= '</li>';
-    }
-
     return $html;
 }
 

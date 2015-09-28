@@ -420,6 +420,26 @@ ul#navigation .report a {
 .select-list-ajax{
     padding: 10px;
 }
+.resize_font{
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+}
+.resize_font .btn{
+    padding: 5px 8px;
+}
+.decrease_font .fa{
+    font-size: 9px;
+}
+.reset_font .fa{
+    font-size: 12px;
+}
+.increase_font .fa{
+    font-size: 16px;
+}
+#exercise-description.panel-default{
+    border: 1px solid #DDD;
+}
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/

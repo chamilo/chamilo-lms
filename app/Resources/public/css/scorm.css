@@ -360,7 +360,8 @@ See https://support.chamilo.org/issues/6976
   padding: 5px;
 }
 #scorm-info #progress_bar .progress{
-  margin-bottom: 5px;  
+  margin-bottom: 5px;
+  padding-left: 5px;
 }
 .scorm-body .scorm-title{
     font-size: 18px;

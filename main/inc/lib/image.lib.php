@@ -1,21 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
+ * Image class
  * This class provides a layer to manage images
  * @author Julio Montoya <gugli100@gmail.com>
  * @package chamilo.include.image
  * @todo move in a DB configuration setting
  */
-define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
-/**
- * Image class
- * @package chamilo.include.image
- */
 class Image
 {
     public $image_wrapper = null;
 
-    function __construct($path)
+    /**
+     * Image constructor.
+     * @param string $path
+     */
+    public function __construct($path)
     {
         $path = preg_match(VALID_WEB_PATH, $path) ? (api_is_internal_path(
             $path
@@ -76,13 +77,13 @@ class Image
  */
 abstract class ImageWrapper
 {
-    var $debug = true;
-    var $path;
-    var $width;
-    var $height;
-    var $type;
-    var $allowed_extensions = array('jpeg', 'jpg', 'png', 'gif');
-    var $image_validated = false;
+    public $debug = true;
+    public $path;
+    public $width;
+    public $height;
+    public $type;
+    public $allowed_extensions = array('jpeg', 'jpg', 'png', 'gif');
+    public $image_validated = false;
 
     public function __construct($path)
     {
@@ -118,13 +119,16 @@ abstract class ImageWrapper
  */
 class ImagickWrapper extends ImageWrapper
 {
-    var $image;
-    var $filter = Imagick::FILTER_LANCZOS;
+    public $image;
+    public $filter = Imagick::FILTER_LANCZOS;
 
-    public function __construct($path) {
+    public function __construct($path)
+    {
           parent::__construct($path);
     }
-    public function set_image_wrapper() {
+
+    public function set_image_wrapper()
+    {
         if ($this->debug) error_log('Image::set_image_wrapper loaded');
         try {
             if (file_exists($this->path)) {
@@ -141,7 +145,8 @@ class ImagickWrapper extends ImageWrapper
         }
     }
 
-    public function fill_image_info() {
+    public function fill_image_info()
+    {
         $image_info      = $this->image->identifyImage();
 
         $this->width     = $image_info['geometry']['width'];
@@ -154,7 +159,8 @@ class ImagickWrapper extends ImageWrapper
         }
     }
 
-	public function get_image_size() {
+	public function get_image_size()
+    {
 		$imagesize = array('width'=>0,'height'=>0);
 	    if ($this->image_validated) {
             $imagesize = $this->image->getImageGeometry();
@@ -163,7 +169,8 @@ class ImagickWrapper extends ImageWrapper
 	}
 
 	//@todo implement border logic case for Imagick
-	public function resize($thumbw, $thumbh, $border, $specific_size = false) {
+	public function resize($thumbw, $thumbh, $border, $specific_size = false)
+    {
 	    if (!$this->image_validated) return false;
 
         if ($specific_size) {
@@ -179,7 +186,8 @@ class ImagickWrapper extends ImageWrapper
 		$this->height = $thumbh;
 	}
 
-    public function send_image($file = '', $compress = -1, $convert_file_to = null) {
+    public function send_image($file = '', $compress = -1, $convert_file_to = null)
+    {
         if (!$this->image_validated) return false;
         $type = $this->type;
         if (!empty($convert_file_to) && in_array($convert_file_to, $this->allowed_extensions)) {
@@ -223,7 +231,7 @@ class ImagickWrapper extends ImageWrapper
  */
 class GDWrapper extends ImageWrapper
 {
-    var $bg;
+    public $bg;
 
     function __construct($path) {
         parent::__construct($path);
@@ -327,7 +335,8 @@ class GDWrapper extends ImageWrapper
 		@imagedestroy($src_img);
 	}
 
-	public function send_image($file = '', $compress = -1, $convert_file_to = null) {
+	public function send_image($file = '', $compress = -1, $convert_file_to = null)
+    {
 	    if (!$this->image_validated) return false;
         $compress = (int)$compress;
         $type = $this->type;

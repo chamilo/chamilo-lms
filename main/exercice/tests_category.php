@@ -33,7 +33,10 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 // breadcrumbs
-$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
+$interbreadcrumb[] = array(
+    "url" => "exercise.php?".api_get_cidreq(),
+    "name" => get_lang('Exercises'),
+);
 Display::display_header(get_lang('Category'));
 
 // Action handling: add, edit and remove
@@ -52,19 +55,23 @@ echo $category->displayCategories($courseId, $sessionId);
 
 Display::display_footer();
 
-// FUNCTIONS
-// form to edit a category
+
 /**
+ * Form to edit a category
  * @todo move to TestCategory.class.php
- * @param string $in_action
+ * @param string $action
  */
-function edit_category_form($in_action) {
-    $in_action = Security::remove_XSS($in_action);
+function edit_category_form($action) {
+    $action = Security::remove_XSS($action);
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = Security::remove_XSS($_GET['category_id']);
         $objcat = new TestCategory($category_id);
 
-        $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $in_action . '&category_id=' . $category_id);
+        $form = new FormValidator(
+            'note',
+            'post',
+            api_get_self().'?action='.$action.'&category_id='.$category_id
+        );
 
         // Setting the form elements
         $form->addElement('header', get_lang('EditCategory'));
@@ -118,7 +125,7 @@ function edit_category_form($in_action) {
 }
 
 // process to delete a category
-function delete_category_form($in_action) {
+function delete_category_form($action) {
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = Security::remove_XSS($_GET['category_id']);
         $catobject = new TestCategory($category_id);
@@ -135,16 +142,22 @@ function delete_category_form($in_action) {
 /**
  * form to add a category
  * @todo move to TestCategory.class.php
- * @param string $in_action
+ * @param string $action
  */
-function add_category_form($in_action) {
-    $in_action = Security::remove_XSS($in_action);
+function add_category_form($action) {
+    $action = Security::remove_XSS($action);
     // initiate the object
-    $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $in_action);
+    $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $action);
     // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
     $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
-    $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Height' => '200'));
+    $form->addHtmlEditor(
+        'category_description',
+        get_lang('CategoryDescription'),
+        false,
+        false,
+        array('ToolbarSet' => 'test_category', 'Height' => '200')
+    );
     $form->addButtonCreate(get_lang('AddTestCategory'), 'SubmitNote');
     // setting the rules
     $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
@@ -176,8 +189,10 @@ function add_category_form($in_action) {
 
 function display_add_category() {
     echo '<div class="actions">';
-    echo '<a href="exercise.php?' . api_get_cidreq() . '">' . Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM) . '</a>';
-    echo '<a href="' . api_get_self() . '?action=addcategory">' . Display::return_icon('question_category.gif', get_lang('AddACategory')) . '</a>';
+    echo '<a href="exercise.php?' . api_get_cidreq() . '">' .
+            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM) . '</a>';
+    echo '<a href="' . api_get_self() . '?action=addcategory">' .
+        Display::return_icon('question_category.gif', get_lang('AddACategory')) . '</a>';
     echo '</div>';
     echo "<br/>";
     echo "<fieldset><legend>" . get_lang('QuestionCategory') . "</legend></fieldset>";
@@ -186,6 +201,7 @@ function display_add_category() {
 // display goback to category list page link
 function display_goback() {
     echo '<div class="actions">';
-    echo '<a href="' . api_get_self() . '">' . Display::return_icon('back.png', get_lang('BackToCategoryList'), array(), 32) . '</a>';
+    echo '<a href="' . api_get_self() . '">' .
+        Display::return_icon('back.png', get_lang('BackToCategoryList'), array(), 32) . '</a>';
     echo '</div>';
 }

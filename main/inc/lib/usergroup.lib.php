@@ -66,6 +66,8 @@ class UserGroup extends Model
     }
 
     /**
+     * @param int $type
+     *
      * @return int
      */
     public function get_count($type = -1)
@@ -389,7 +391,14 @@ class UserGroup extends Model
     {
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
-            $options = array('where' => array('c.course_id = ? AND access_url_id = ?' => array($course_id, $urlId)));
+            $options = array(
+                'where' => array(
+                    'c.course_id = ? AND access_url_id = ?' => array(
+                        $course_id,
+                        $urlId,
+                    ),
+                ),
+            );
             $from = $this->usergroup_rel_course_table." as c INNER JOIN ".$this->access_url_rel_usergroup." a
                     ON c.usergroup_id = a.usergroup_id";
         } else {
@@ -463,7 +472,12 @@ class UserGroup extends Model
         } else {
             $conditions = array('where' => array('usergroup_id = ?' => $id));
         }
-        $results = Database::select('user_id', $this->usergroup_rel_user_table, $conditions, true);
+        $results = Database::select(
+            'user_id',
+            $this->usergroup_rel_user_table,
+            $conditions,
+            true
+        );
         $array = array();
         if (!empty($results)) {
             foreach ($results as $row) {
@@ -482,7 +496,12 @@ class UserGroup extends Model
     public function getUsersByUsergroupAndRelation($id, $relation = '')
     {
         $conditions = array('where' => array('usergroup_id = ? AND relation_type = ?' => [$id, $relation]));
-        $results = Database::select('user_id', $this->usergroup_rel_user_table, $conditions, true);
+        $results = Database::select(
+            'user_id',
+            $this->usergroup_rel_user_table,
+            $conditions,
+            true
+        );
         $array = array();
         if (!empty($results)) {
             foreach ($results as $row) {

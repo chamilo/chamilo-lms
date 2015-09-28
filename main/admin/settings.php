@@ -85,12 +85,14 @@ $url_id = api_get_current_access_url_id();
 
 $settings = null;
 
-function get_settings($category = null) {
+function get_settings($category = null)
+{
     $url_id = api_get_current_access_url_id();
     $settings_by_access_list = array();
 
     if ($url_id == 1) {
         $settings = api_get_settings($category, 'group', $url_id);
+
     } else {
         $url_info = api_get_access_url($url_id);
         if ($url_info['active'] == 1) {
@@ -119,6 +121,7 @@ function get_settings($category = null) {
             }
         }
     }
+
     if (isset($category) && $category== 'search_setting') {
         if (!empty($_REQUEST['search_field'])) {
             $settings = search_setting($_REQUEST['search_field']);
@@ -398,7 +401,7 @@ $action_images['tools'] = 'tools.png';
 $action_images['user'] = 'user.png';
 $action_images['gradebook'] = 'gradebook.png';
 $action_images['ldap'] = 'ldap.png';
-$action_images['cas'] = 'user_access.png';
+$action_images['cas'] = 'cas.png';
 $action_images['security'] = 'security.png';
 $action_images['languages'] = 'languages.png';
 $action_images['tuning'] = 'tuning.png';
@@ -415,7 +418,7 @@ $action_images['templates'] = 'template.png';
 $action_images['plugins'] = 'plugins.png';
 $action_images['shibboleth'] = 'shibboleth.png';
 $action_images['facebook'] = 'facebook.png';
-$action_images['crons'] = 'platform_event.png';
+$action_images['crons'] = 'crons.png';
 
 $action_array = array();
 $resultcategories = array();

@@ -71,10 +71,16 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
 
-    $link_info = GradebookUtils::is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
+    $link_info = GradebookUtils::is_resource_in_course_gradebook(
+        $course_id,
+        $gradebook_link_type,
+        $survey_id,
+        $session_id
+    );
     $gradebook_link_id = $link_info['id'];
 
     if ($link_info) {
+        $defaults['category_id'] = $link_info['category_id'];
         if ($sql_result_array = Database::fetch_array(Database::query('SELECT weight FROM '.$table_gradebook_link.' WHERE id='.$gradebook_link_id))) {
             $defaults['survey_qualify_gradebook'] = $gradebook_link_id;
             $defaults['survey_weight'] = number_format($sql_result_array['weight'], 2, '.', '');
@@ -97,7 +103,7 @@ $form = new FormValidator(
     api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id
 );
 
-$form->addElement('header', '', $tool_name);
+$form->addElement('header', $tool_name);
 
 // Setting the form elements
 if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
@@ -116,8 +122,25 @@ if ($_GET['action'] == 'edit') {
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
 
-$form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200'));
-$form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '100', 'ToolbarStartExpanded' => false));
+$form->addElement(
+    'html_editor',
+    'survey_title',
+    get_lang('SurveyTitle'),
+    null,
+    array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200')
+);
+$form->addElement(
+    'html_editor',
+    'survey_subtitle',
+    get_lang('SurveySubTitle'),
+    null,
+    array(
+        'ToolbarSet' => 'Survey',
+        'Width' => '100%',
+        'Height' => '100',
+        'ToolbarStartExpanded' => false,
+    )
+);
 
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
@@ -145,6 +168,15 @@ if (Gradebook::is_active()) {
     $form->addElement('html', '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
     $form->addElement('text', 'survey_weight', get_lang('QualifyWeight'), 'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"');
     $form->applyFilter('survey_weight', 'html_filter');
+
+    // Loading Gradebook select
+    GradebookUtils::load_gradebook_select_in_tool($form);
+
+    if ($_GET['action'] == 'edit') {
+        $element = $form->getElement('category_id');
+        $element->freeze();
+    }
+
     $form->addElement('html', '</div>');
 }
 
@@ -235,73 +267,12 @@ $form->setDefaults($defaults);
 // The validation or display
 if ($form->validate()) {
     // Exporting the values
-    $values = $form->exportValues();
+    $values = $form->getSubmitValues();
     // Storing the survey
     $return = SurveyManager::store_survey($values);
 
-    /* // Deleting the shared survey if the survey is getting unshared (this only happens when editing)
-      if (is_numeric($survey_data['survey_share']) && $values['survey_share']['survey_share'] == 0 && $values['survey_id'] != '') {
-      SurveyManager::delete_survey($survey_data['survey_share'], true);
-      }
-      // Storing the already existing questions and options of a survey that gets shared (this only happens when editing)
-      if ($survey_data['survey_share'] == 0 && $values['survey_share']['survey_share'] !== 0 && $values['survey_id'] != '') {
-      SurveyManager::get_complete_survey_structure($return['id']);
-      }
-     */
-    if ($return['type'] == 'error') {
-        // Display the error
-        Display::display_error_message(get_lang($return['message']), false);
-
-        // Displaying the header
-        Display::display_header($tool_name);
-
-        // Display the form
-        $form->display();
-    } else {
-        $gradebook_option = false;
-        if (isset($values['survey_qualify_gradebook'])) {
-            $gradebook_option = $values['survey_qualify_gradebook'] > 0;
-        }
-
-        if ($gradebook_option) {
-            $survey_id = intval($return['id']);
-            if ($survey_id > 0) {
-                $title_gradebook = ''; // Not needed here.
-                $description_gradebook = ''; // Not needed here.
-                $survey_weight = floatval($_POST['survey_weight']);
-                $max_score = 1;
-                $date = time(); // TODO: Maybe time zones implementation is needed here.
-                $visible = 1; // 1 = visible
-
-                $link_info = GradebookUtils::is_resource_in_course_gradebook(
-                    $course_id,
-                    $gradebook_link_type,
-                    $survey_id,
-                    $session_id
-                );
-                $gradebook_link_id = $link_info['id'];
-                if (!$gradebook_link_id) {
-                    GradebookUtils::add_resource_to_course_gradebook(
-                        $course_id,
-                        $gradebook_link_type,
-                        $survey_id,
-                        $title_gradebook,
-                        $survey_weight,
-                        $max_score,
-                        $description_gradebook,
-                        1,
-                        $session_id
-                    );
-                } else {
-                    Database::query('UPDATE '.$table_gradebook_link.' SET weight='.$survey_weight.' WHERE id='.$gradebook_link_id);
-                }
-            }
-        }
-    }
-
-    Display::addFlash(Display::return_message(($return['message']=='SurveyUpdatedSuccesfully'?get_lang($return['message']):$return['message']), false));
     // Redirecting to the survey page (whilst showing the return message)
-    header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&message='.$return['message'].'&'.api_get_cidreq());
+    header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&'.api_get_cidreq());
     exit;
 } else {
     // Displaying the header

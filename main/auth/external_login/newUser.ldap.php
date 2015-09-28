@@ -62,7 +62,6 @@ if ($ldap_user !== false) {
         }
         Event::event_login($chamilo_uid);
     }
-
 } else {
     $loginFailed = true;
     $uidReset = false;

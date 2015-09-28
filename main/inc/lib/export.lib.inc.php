@@ -29,16 +29,16 @@ class Export
     /**
      * Constructor
      */
-	private function __construct()
+    public function __construct()
     {
-	}
+    }
 
-	/**
-	 * Export tabular data to CSV-file
-	 * @param array $data
-	 * @param string $filename
-	 */
-	public static function arrayToCsv($data, $filename = 'export')
+    /**
+     * Export tabular data to CSV-file
+     * @param array $data
+     * @param string $filename
+     */
+    public static function arrayToCsv($data, $filename = 'export')
     {
         if (empty($data)) {
             return false;
@@ -126,27 +126,27 @@ class Export
         $wrapper_tagname = null,
         $encoding = null
     ) {
-		if (empty($encoding)) {
-			$encoding = api_get_system_encoding();
-		}
-		$file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';
-		$handle = fopen($file, 'a+');
-		fwrite($handle, '<?xml version="1.0" encoding="'.$encoding.'"?>'."\n");
-		if (!is_null($wrapper_tagname)) {
-			fwrite($handle, "\t".'<'.$wrapper_tagname.'>'."\n");
-		}
-		foreach ($data as $row) {
-			fwrite($handle, '<'.$item_tagname.'>'."\n");
-			foreach ($row as $key => $value) {
-				fwrite($handle, "\t\t".'<'.$key.'>'.$value.'</'.$key.'>'."\n");
-			}
-			fwrite($handle, "\t".'</'.$item_tagname.'>'."\n");
-		}
-		if (!is_null($wrapper_tagname)) {
-			fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
-		}
-		fclose($handle);
-		DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
+        if (empty($encoding)) {
+            $encoding = api_get_system_encoding();
+        }
+        $file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';
+        $handle = fopen($file, 'a+');
+        fwrite($handle, '<?xml version="1.0" encoding="'.$encoding.'"?>'."\n");
+        if (!is_null($wrapper_tagname)) {
+            fwrite($handle, "\t".'<'.$wrapper_tagname.'>'."\n");
+        }
+        foreach ($data as $row) {
+            fwrite($handle, '<'.$item_tagname.'>'."\n");
+            foreach ($row as $key => $value) {
+                fwrite($handle, "\t\t".'<'.$key.'>'.$value.'</'.$key.'>'."\n");
+            }
+            fwrite($handle, "\t".'</'.$item_tagname.'>'."\n");
+        }
+        if (!is_null($wrapper_tagname)) {
+            fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
+        }
+        fclose($handle);
+        DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
         exit;
 	}
 

@@ -332,8 +332,8 @@ class CourseManager
     {
 
         $result = Database::fetch_array(
-            Database::query(
-                "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
+            Database::query("
+                SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
                 WHERE
                     c_id  = '" . intval($courseId). "' AND
                     user_id = " . intval($userId)
@@ -347,6 +347,7 @@ class CourseManager
      * @param int  $userId
      * @param int  $courseId
      * @param bool $isTutor
+     *
      * @return bool
      */
     public static function updateUserCourseTutor($userId, $courseId, $isTutor)
@@ -373,14 +374,18 @@ class CourseManager
     /**
      * @param int $user_id
      * @param string $course_code
+     *
      * @return mixed
      */
     public static function get_tutor_in_course_status($user_id, $course_code)
     {
         $result = Database::fetch_array(
-            Database::query(
-                "SELECT is_tutor FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-                WHERE course_code = '" . Database::escape_string($course_code) . "' AND user_id = " . intval($user_id)
+            Database::query("
+                SELECT is_tutor
+                FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
+                WHERE
+                    course_code = '" . Database::escape_string($course_code) . "' AND
+                    user_id = " . intval($user_id)
             )
         );
 
@@ -812,9 +817,11 @@ class CourseManager
     public static function course_code_exists($wanted_course_code)
     {
         $wanted_course_code = Database::escape_string($wanted_course_code);
-        $sql = "SELECT COUNT(*) as number FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
+        $sql = "SELECT COUNT(*) as number
+                FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
                 WHERE code = '$wanted_course_code' OR visual_code = '$wanted_course_code'";
         $result = Database::fetch_array(Database::query($sql));
+
         return $result['number'] > 0;
     }
 
@@ -1232,7 +1239,8 @@ class CourseManager
             }
         }
 
-        // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
+        // if the $order_by does not contain 'ORDER BY'
+        // we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by, 'ORDER BY')) {
             if (!empty($order_by)) {
                 $order_by = 'ORDER BY ' . $order_by;
@@ -1625,7 +1633,8 @@ class CourseManager
 
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
-            $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER) . '  au ON (au.user_id = user.user_id) ';
+            $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER) . '  au
+                      ON (au.user_id = user.user_id) ';
         }
 
         $sql .= ' WHERE ' . implode(' OR ', $where);
@@ -1711,7 +1720,6 @@ class CourseManager
         $includeInvitedUsers = true,
         $groupId = 0
     ) {
-
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
@@ -1722,7 +1730,8 @@ class CourseManager
         if ($session_id == 0) {
             if (empty($groupId)) {
                 // students directly subscribed to the course
-                $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
+                $sql = "SELECT *
+                        FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
                         INNER JOIN $userTable u
                         ON cu.user_id = u.user_id
                         WHERE c_id = '$courseId' AND cu.status = ".STUDENT;
@@ -1756,7 +1765,8 @@ class CourseManager
                 $joinSession = "INNER JOIN " . Database::get_main_table(TABLE_MAIN_SESSION) . " s";
             }
 
-            $sql_query = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . " scu
+            $sql_query = "SELECT *
+                          FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . " scu
                           $joinSession
                           INNER JOIN $userTable u ON scu.user_id = u.user_id
                           WHERE scu.c_id = '$courseId' AND scu.status <> 2";
@@ -1828,11 +1838,12 @@ class CourseManager
     public static function get_teacher_list_from_course_code_to_string(
         $course_code,
         $separator = self::USER_SEPARATOR,
-        $add_link_to_profile = false
-    ) {
+        $add_link_to_profile = false,
+        $orderList = false    
+    ) {     
         $teacher_list = self::get_teacher_list_from_course_code($course_code);
-
         $teacher_string = '';
+        $html = '';
         $list = array();
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -1853,17 +1864,28 @@ class CourseManager
                 }
                 $list[] = $teacher_name;
             }
+            
             if (!empty($list)) {
-                $teacher_string = array_to_string($list, $separator);
+                if ($orderList === true){
+                    $html .= '<ul class="user-teacher">';
+                    foreach ($list as $teacher){
+                        $html .= Display::tag('li', Display::return_icon('teacher.png', $teacher, null, ICON_SIZE_TINY) . ' ' . $teacher);
+                    }
+                    $html .= '</ul>';
+                }else{
+                    $html .= array_to_string($list, $separator);
+                }
             }
         }
-        return $teacher_string;
+        
+        return $html;
     }
 
     /**
      * This function returns information about coachs from a course in session
      * @param int $session_id
      * @param int $courseId
+     *
      * @return array    - array containing user_id, lastname, firstname, username
      *
      */
@@ -1919,11 +1941,12 @@ class CourseManager
         $session_id = 0,
         $courseId = null,
         $separator = self::USER_SEPARATOR,
-        $add_link_to_profile = false
+        $add_link_to_profile = false,
+        $orderList = false    
     ) {
         $coachs_course = self::get_coachs_from_course($session_id, $courseId);
         $course_coachs = array();
-
+        $html = '';
         if (is_array($coachs_course)) {
             foreach ($coachs_course as $coach_course) {
                 $coach_name = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
@@ -1942,32 +1965,21 @@ class CourseManager
             }
         }
         $coaches_to_string = null;
-        if (is_array($course_coachs) && count($course_coachs) > 0) {
-            $coaches_to_string = array_to_string($course_coachs, $separator);
-        }
-        return $coaches_to_string;
-    }
-
-    /**
-     * @param int $courseId
-     * @param int $session_id
-     * @return string
-     * @deprecated seem not to be use
-     */
-    public static function get_coach_list_from_course_code_to_string($courseId, $session_id)
-    {
-        $tutor_data = '';
-        if ($session_id != 0) {
-            $coaches = self::get_email_of_tutor_to_session($session_id, $courseId);
-            $coach_list = array();
-            foreach ($coaches as $coach) {
-                $coach_list[] = $coach['complete_name'];
+        
+        if (!empty($course_coachs)) {
+            if ($orderList === true){
+                $html .= '<ul class="user-coachs">';
+                    foreach ($course_coachs as $coachs){
+                        $html .= Display::tag('li', Display::return_icon('teacher.png', $coachs, null, ICON_SIZE_TINY) . ' ' . $coachs);
+                    }
+                $html .= '</ul>';
+            } else {
+                $coaches_to_string = array_to_string($course_coachs, $separator);
             }
-            if (!empty($coach_list)) {
-                $tutor_data = implode(self::USER_SEPARATOR, $coach_list);
-            }
+            
         }
-        return $tutor_data;
+        
+        return $html;
     }
 
     /**
@@ -2088,7 +2100,8 @@ class CourseManager
             return;
         }
 
-        $sql = "SELECT * FROM $table_course WHERE code = '" . $codeFiltered . "'";
+        $sql = "SELECT * FROM $table_course
+                WHERE code = '" . $codeFiltered . "'";
         $res = Database::query($sql);
         $course = Database::fetch_array($res);
         $courseId = $course['id'];
@@ -2109,7 +2122,6 @@ class CourseManager
             $course_tables = AddCourse::get_course_tables();
 
             // Cleaning group categories
-
             $groupCategories = GroupManager::get_categories($course['code']);
 
             if (!empty($groupCategories)) {
@@ -2140,9 +2152,6 @@ class CourseManager
                 rename($course_dir, $archive_dir);
             }
 
-            // Unsubscribe all classes from the course
-            /*$sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
-            Database::query($sql);*/
             // Unsubscribe all users from the course
             $sql = "DELETE FROM $table_course_user WHERE c_id='" . $courseId . "'";
             Database::query($sql);
@@ -2348,10 +2357,13 @@ class CourseManager
     public static function course_exists($course_code, $accept_virtual = false)
     {
         if ($accept_virtual === true) {
-            $sql = 'SELECT 1 FROM ' . Database::get_main_table(TABLE_MAIN_COURSE) . ' WHERE code="' . Database::escape_string($course_code) . '" OR visual_code="' . Database::escape_string($course_code) . '"';
+            $sql = 'SELECT 1 FROM ' . Database::get_main_table(TABLE_MAIN_COURSE) . '
+                    WHERE code="' . Database::escape_string($course_code) . '" OR visual_code="' . Database::escape_string($course_code) . '"';
         } else {
-            $sql = 'SELECT 1 FROM ' . Database::get_main_table(TABLE_MAIN_COURSE) . ' WHERE code="' . Database::escape_string($course_code) . '"';
+            $sql = 'SELECT 1 FROM ' . Database::get_main_table(TABLE_MAIN_COURSE) . '
+                    WHERE code="' . Database::escape_string($course_code) . '"';
         }
+
         return Database::num_rows(Database::query($sql));
     }
 
@@ -2581,6 +2593,7 @@ class CourseManager
             return false;
         }
         $row = Database::fetch_array($res);
+
         return $row['code'];
     }
 
@@ -3129,6 +3142,7 @@ class CourseManager
             $medium->resize(100, 85, 0, false);
             $medium->send_image($store_path . '/course-pic85x85.png', -1, 'png');
         }
+
         return $result;
     }
 
@@ -4092,6 +4106,7 @@ class CourseManager
                 }
             }
         }
+
         return false;
     }
 
@@ -4110,7 +4125,9 @@ class CourseManager
             $wanted_code = CourseManager::generate_course_code($wanted_code);
             $table = Database::get_main_table(TABLE_MAIN_COURSE);
             $wanted_code = Database::escape_string($wanted_code);
-            $sql = "SELECT count(*) as count FROM $table WHERE code LIKE '$wanted_code%'";
+            $sql = "SELECT count(*) as count
+                    FROM $table
+                    WHERE code LIKE '$wanted_code%'";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_array($result);
@@ -4121,6 +4138,7 @@ class CourseManager
                     return $wanted_code;
                 }
             }
+
             return false;
         }
 
@@ -4498,8 +4516,6 @@ class CourseManager
      */
     public static function return_hot_courses($days = 30, $limit = 5)
     {
-        global $_configuration;
-
         if (api_is_invitee()) {
             return array();
         }
@@ -4524,15 +4540,6 @@ class CourseManager
         $table_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
-        //@todo all dates in the tracking_course_access, last_access are in the DB time (NOW) not UTC
-        /*
-        $today                    = api_get_utc_datetime();
-        $today_diff                = time() -intval($days)*24*60*60;
-        $today_diff                = api_get_utc_datetime($today_diff);
-         * */
-
-        //WHERE login_course_date <= '$today' AND login_course_date >= '$today_diff'
 
         //$table_course_access table uses the now() and interval ...
         $now = api_get_utc_datetime(time());
@@ -4719,7 +4726,6 @@ class CourseManager
      */
     public static function countAvailableCourses($accessUrlId = null)
     {
-        global $_configuration;
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $specialCourseList = self::get_special_course_list();
@@ -5129,12 +5135,12 @@ class CourseManager
         $forum = Database::get_course_table(TABLE_FORUM);
         if ($getAllSessions) {
             $sql = "SELECT count(*) as count
-            FROM $forum f
-            where f.c_id = %s";
+                    FROM $forum f
+                    WHERE f.c_id = %s";
         } else {
             $sql = "SELECT count(*) as count
-            FROM $forum f
-            where f.c_id = %s and f.session_id = %s";
+                    FROM $forum f
+                    WHERE f.c_id = %s and f.session_id = %s";
         }
 
         $sql = sprintf($sql, intval($courseId), intval($sessionId));
@@ -5511,12 +5517,12 @@ class CourseManager
         }
 
         $sql = "SELECT DISTINCT(c.id), c.title
-            FROM $courseTable c
-            INNER JOIN $courseUserTable cru ON c.id = cru.c_id
-            WHERE (
-                cru.user_id IN (" . implode(', ', $userIdList) . ")
-                AND cru.relation_type = 0
-            )";
+                FROM $courseTable c
+                INNER JOIN $courseUserTable cru ON c.id = cru.c_id
+                WHERE (
+                    cru.user_id IN (" . implode(', ', $userIdList) . ")
+                    AND cru.relation_type = 0
+                )";
 
         if (api_is_multiple_url_enabled()) {
             $courseAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -5634,7 +5640,7 @@ class CourseManager
         $current_url_id = api_get_current_access_url_id();
 
         // Get course list auto-register
-        $special_course_list            = self::get_special_course_list();
+        $special_course_list = self::get_special_course_list();
 
         $without_special_courses = '';
         if (!empty($special_course_list)) {
@@ -5644,13 +5650,16 @@ class CourseManager
         //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
         $sql = "SELECT course.id, course.title, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
                 course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                FROM    $TABLECOURS      course,
-                        $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
-                WHERE   course.id=".intval($courseId)."
-                        AND course.id = course_rel_user.c_id
-                        AND url.c_id = course.id
-                        AND course_rel_user.user_id = ".intval($user_id)."
-                        $without_special_courses ";
+                FROM
+                $TABLECOURS course,
+                $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
+                WHERE
+                    course.id=".intval($courseId)." AND
+                    course.id = course_rel_user.c_id AND
+                    url.c_id = course.id AND
+                    course_rel_user.user_id = ".intval($user_id)."
+                    $without_special_courses
+                ";
 
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
@@ -5662,19 +5671,29 @@ class CourseManager
 
         $result = Database::query($sql);
 
-        // Browse through all courses. We can only have one course because of the  course.id=".intval($courseId) in sql query
+        // Browse through all courses. We can only have one course because
+        // of the  course.id=".intval($courseId) in sql query
         $course = Database::fetch_array($result);
-        $course_info = api_get_course_info($course['code']);
+        $course_info = api_get_course_info_by_id($courseId);
+        if (empty($course_info)) {
+            return '';
+        }
+
         //$course['id_session'] = null;
         $course_info['id_session'] = null;
         $course_info['status'] = $course['status'];
 
         // For each course, get if there is any notification icon to show
         // (something that would have changed since the user's last visit).
-        $show_notification = Display :: show_notification($course_info);
+        $show_notification = Display::show_notification($course_info);
 
         // New code displaying the user's status in respect to this course.
-        $status_icon = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
+        $status_icon = Display::return_icon(
+            'blackboard.png',
+            $course_info['title'],
+            array(),
+            ICON_SIZE_LARGE
+        );
 
         $params = array();
         $params['right_actions'] = '';
@@ -5730,6 +5749,4 @@ class CourseManager
 
         return $params;
     }
-
-
 }

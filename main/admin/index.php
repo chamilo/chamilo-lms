@@ -19,7 +19,7 @@ api_protect_admin_script(true);
 $nameTools = get_lang('PlatformAdmin');
 
 $accessUrlId = 0;
-$adminExtraContentDir = api_get_path(SYS_PATH) . "home/admin/";
+$adminExtraContentDir = api_get_path(SYS_APP_PATH) . "home/admin/";
 
 if (api_is_multiple_url_enabled()) {
     $accessUrlId = api_get_current_access_url_id();
@@ -28,7 +28,7 @@ if (api_is_multiple_url_enabled()) {
         $urlInfo = api_get_access_url($accessUrlId);
         $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
         $cleanUrl = str_replace('/', '-', $url);
-        $adminExtraContentDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
+        $adminExtraContentDir = api_get_path(SYS_APP_PATH) . "home/$cleanUrl/admin/";
     }
 }
 
@@ -36,7 +36,9 @@ if (api_is_multiple_url_enabled()) {
 $message = '';
 
 if (api_is_platform_admin()) {
-    if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+    if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) &&
+        !is_writable(api_get_path(SYS_ARCHIVE_PATH))
+    ) {
         $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'warning');
     }
 
@@ -76,7 +78,6 @@ if (!empty($hook)) {
 }
 
 /* Users */
-
 $blocks['users']['icon'] = Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_MEDIUM, false);
 $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 $blocks['users']['class'] = 'block-admin-users';
@@ -364,7 +365,7 @@ if (api_is_platform_admin()) {
     // Skills
     if (api_get_setting('allow_skills_tool') == 'true') {
         $blocks['skills']['icon'] = Display::return_icon(
-            'logo.png',
+            'skill-badges.png',
             get_lang('Skills'),
             array(),
             ICON_SIZE_MEDIUM,
@@ -496,7 +497,8 @@ if (api_is_platform_admin()) {
 
             file_put_contents($fullFilePath, $extraData['extra_content']);
 
-            Header::location(api_get_self());
+            header('Location: '.api_get_self());
+            exit;
         }
     }
 

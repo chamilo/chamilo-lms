@@ -2,13 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Draggable
+ * Class Draggable
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class Draggable extends Question
 {
-
     static $typePicture = 'ordering.png';
     static $explanationLangVar = 'Draggable';
 
@@ -66,7 +65,8 @@ class Draggable extends Question
                         $nb_matches++;
                         $defaults['answer[' . $nb_matches . ']'] = $answer->selectAnswer($i);
                         $defaults['weighting[' . $nb_matches . ']'] = float_format($answer->selectWeighting($i), 1);
-                        $defaults['matches[' . $nb_matches . ']'] = $answer->correct[$i];
+                        $answerInfo = $answer->getAnswerByAutoId($answer->correct[$i]);
+                        $defaults['matches[' . $nb_matches . ']'] = isset($answerInfo['answer']) ? $answerInfo['answer'] : '';
                     } else {
                         $nb_options++;
                         $defaults['option[' . $nb_options . ']'] = $answer->selectAnswer($i);
@@ -128,7 +128,7 @@ class Draggable extends Question
             $form->addHtml('<tr>');
             $form->addText("answer[$i]", null);
             $form->addSelect("matches[$i]", null, $matches);
-            $form->addText("weighting[$i]", null, true, ['value' => 10]);
+            $form->addText("weighting[$i]", null, true, ['value' => 10, 'style' => 'width: 60px;']);
             $form->addHtml('</tr>');
         }
 
@@ -193,7 +193,13 @@ class Draggable extends Question
             $matches = $form->getSubmitValue('matches[' . $i . ']');
             $weighting = $form->getSubmitValue('weighting[' . $i . ']');
             $this->weighting += $weighting;
-            $objAnswer->createAnswer($answer, $matches, '', $weighting, $position);
+            $objAnswer->createAnswer(
+                $answer,
+                $matches,
+                '',
+                $weighting,
+                $position
+            );
         }
 
         $objAnswer->save();

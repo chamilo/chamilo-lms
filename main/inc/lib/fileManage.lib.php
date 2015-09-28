@@ -158,7 +158,6 @@ function folder_is_empty($in_folder)
     return $folder_is_empty;
 }
 
-
 /**
  * Renames a file or a directory
  *
@@ -345,7 +344,6 @@ function dirsize($root, $recursive = true) {
 */
 class FileManager
 {
-
 	/**
 		Returns a list of all directories, except the base dir,
 		of the current course. This function uses recursion.
@@ -355,8 +353,8 @@ class FileManager
 		@author Roan Embrechts
 		@version 1.0.1
 	*/
-	function list_all_directories($path) {
-
+	function list_all_directories($path)
+    {
 		$result_array = array();
 		if (is_dir($path)) {
 			$save_dir = getcwd();
@@ -393,8 +391,8 @@ class FileManager
 		@author Roan Embrechts
 		@version 1.0
 	*/
-	function list_all_files($dir_array) {
-
+	function list_all_files($dir_array)
+    {
 		$element_array = array();
 		if (is_dir($dir_array)) {
 
@@ -403,7 +401,8 @@ class FileManager
 				chdir($directory);
 				$handle = opendir($directory);
 			   	while ($element = readdir($handle)) {
-					if ($element == '.' || $element == '..' || $element == '.htaccess') continue; // Skip the current and parent directories
+					if ($element == '.' || $element == '..' || $element == '.htaccess') continue;
+                    // Skip the current and parent directories
 					if (!is_dir($element)) {
 						$element_array[] = $directory.'/'.$element;
 					}
@@ -413,6 +412,7 @@ class FileManager
 				chdir($save_dir);
 			}
 		}
+
 		return $element_array;
 	}
 
@@ -421,7 +421,8 @@ class FileManager
 		Function kept for compatibility with older PHP versions.
 		Function is binary safe (is needed on Windows)
 	*/
-	function compat_load_file($file_name) {
+	function compat_load_file($file_name)
+    {
 		$buffer = '';
 		if (file_exists($file_name)) {
 			$fp = fopen($file_name, 'rb');
@@ -461,7 +462,6 @@ class FileManager
 		}
 
 		$full_file_name = $upload_path.'/'.$filename;
-		//$upload_path = str_replace("//", '/', $upload_path);
 		$full_file_name = str_replace("//", '/', $full_file_name);
 
 		$sql_query = "SELECT count(*) as number_existing FROM $glued_table WHERE path='$full_file_name'";
@@ -478,29 +478,5 @@ class FileManager
 			          VALUES ('$full_file_name','$default_visibility','$filetype')";
 		}
 		Database::query($query);
-	}
-} //end class FileManager
-
-/*	DEPRECATED FUNCTIONS */
-
-/**
- * Like in Java, creates the directory named by this abstract pathname,
- * including any necessary but nonexistent parent directories.
- *
- * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
- *
- * @param  string $path - path to create
- * @param  string $mode - directory permission (default is '770')
- *
- * @return boolean TRUE if succeeds FALSE otherwise
- */
-function mkdirs($path, $mode = '0770') {
-	if (file_exists($path)) {
-		return false;
-	} else {
-		FileManager :: mkdirs(dirname($path), $mode);
-	 	//mkdir($path, $mode);
-		return true;
 	}
 }

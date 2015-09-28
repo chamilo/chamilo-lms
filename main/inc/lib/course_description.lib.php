@@ -339,7 +339,8 @@ class CourseDescription
 
     /**
      * Get description id by description type
-     * @param int description type
+     * @param int $description_type
+     *
      * @return int description id
      */
     public function get_id_by_description_type($description_type)
@@ -352,6 +353,7 @@ class CourseDescription
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
         $description_id = $row['id'];
+
         return $description_id;
     }
 
@@ -369,8 +371,8 @@ class CourseDescription
         $default_description_titles[5] = get_lang('CourseMaterial');
         $default_description_titles[6] = get_lang('HumanAndTechnicalResources');
         $default_description_titles[7] = get_lang('Assessment');
-
         $default_description_titles[8] = get_lang('Other');
+
         return $default_description_titles;
     }
 
@@ -389,6 +391,7 @@ class CourseDescription
         $default_description_title_editable[6] = true;
         $default_description_title_editable[7] = true;
         //$default_description_title_editable[8] = true;
+
         return $default_description_title_editable;
     }
 
@@ -408,6 +411,7 @@ class CourseDescription
         $default_description_icon[7] = 'assessment.png';
         //$default_description_icon[8]= 'porcent.png';
         $default_description_icon[8] = 'wizard.png';
+
         return $default_description_icon;
     }
 
@@ -426,6 +430,7 @@ class CourseDescription
         $question[6] = get_lang('HumanAndTechnicalResourcesQuestions');
         $question[7] = get_lang('AssessmentQuestions');
         //$question[8]= get_lang('ThematicAdvanceQuestions');
+
         return $question;
     }
 

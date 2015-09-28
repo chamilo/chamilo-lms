@@ -86,7 +86,8 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             if (!empty($attributes['class'])) {
                 $oldClass = $attributes['class'];
             }
-            $attributes['class'] = $oldClass.' form-control';
+            $attributes['class'] = $oldClass . ' selectpicker show-tick form-control';
+            $attributes['data-live-search'] = 'true';
         }
         $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
         $this->setColumnsSize($columnsSize);
@@ -550,7 +551,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $this->setName($myName);
             }
 
-            $strHtml .= $tabs . '<select class="selectpicker show-tick form-control"' . $attrString . ">\n";
+            $strHtml .= $tabs . '<select ' . $attrString . ">\n";
 
             $strValues = is_array($this->_values)? array_map('strval', $this->_values): array();
 
@@ -563,10 +564,15 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                     $option['text'] . "</option>";
             }
             foreach ($this->_optgroups as $optgroup) {
-                $strHtml .= $tabs . "<optgroup label=" . $optgroup['label'].">";
+                $strHtml .= $tabs . '<optgroup label="' . $optgroup['label'] . '">';
                 foreach ($optgroup['options'] as $option) {
                     $text = $option['text'];
                     unset($option['text']);
+
+                    if (!empty($strValues) && in_array($option['value'], $strValues)) {
+                        $option['selected'] = 'selected';
+                    }
+
                     $strHtml .= $tabs . " <option" . $this->_getAttrString($option) . '>' .$text . "</option>";
                 }
                 $strHtml .= "</optgroup>";

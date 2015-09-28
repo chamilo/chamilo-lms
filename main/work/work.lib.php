@@ -49,8 +49,8 @@ function display_action_links($id, $cur_dir_path, $action)
             $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=settings&origin='.$origin.'&gradebook='.$gradebook.'">';
             $display_output .= Display::return_icon('settings.png', get_lang('EditToolOptions'),'',ICON_SIZE_MEDIUM).'</a>';
         }
-        $display_output .= '<a id="open-view-list" href="#">' . Display::return_icon('listwork.png', get_lang('viewStudents'),'',ICON_SIZE_MEDIUM) . '</a>';
-        
+        $display_output .= '<a id="open-view-list" href="#">' . Display::return_icon('listwork.png', get_lang('ViewStudents'),'',ICON_SIZE_MEDIUM) . '</a>';
+
     }
 
     if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false, true)) {
@@ -70,11 +70,12 @@ function display_action_links($id, $cur_dir_path, $action)
 }
 
 /**
- * Displays all options for this tool.
+ * Returns a form displaying all options for this tool.
  * These are
  * - make all files visible / invisible
  * - set the default visibility of uploaded files
  * @param $defaults
+ * @return string The HTML form
  */
 function settingsForm($defaults)
 {
@@ -1564,6 +1565,11 @@ function getWorkListTeacher(
                 api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
             );
 
+            $correctionLink = Display::url(
+                Display::return_icon('upload_file.png', get_lang('UploadCorrections'), '', ICON_SIZE_SMALL),
+                api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId
+            );
+
             if ($countUniqueAttempts > 0) {
                 $downloadLink = Display::url(
                     Display::return_icon(
@@ -1598,7 +1604,7 @@ function getWorkListTeacher(
                 $deleteLink = null;
                 $editLink = null;
             }
-            $work['actions'] = $visibilityLink.$downloadLink.$editLink.$deleteLink;
+            $work['actions'] = $visibilityLink.$correctionLink.$downloadLink.$editLink.$deleteLink;
             $works[] = $work;
         }
     }
@@ -1895,7 +1901,9 @@ function get_work_user_list(
                         u.username,
                         parent_id,
                         accepted,
-                        qualificator_id';
+                        qualificator_id,
+                        url_correction
+                        ';
         if ($getCount) {
             $select = "SELECT DISTINCT count(u.user_id) as count ";
         }
@@ -2048,15 +2056,22 @@ function get_work_user_list(
                 $work_date = api_convert_and_format_date($work['sent_date']);
 
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . '<br />' . $work_date;
+                $work['sent_date'] = '<div class="date-time">' . date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . ' ' . $work_date . '</div>';
 
                 // Actions.
                 $correction = '';
 
                 $action = '';
                 if (api_is_allowed_to_edit()) {
+                    if (!empty($work['url_correction'])) {
+                        $action .= Display::url(
+                            Display::return_icon('check-circle.png', get_lang('Correction'), null, ICON_SIZE_SMALL),
+                            api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
+                        );
+                    }
+
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
+                        Display::return_icon('default.png', get_lang('View'), array(), ICON_SIZE_SMALL).'</a> ';
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .=  '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
@@ -2169,6 +2184,7 @@ function get_work_user_list(
                 $work['qualificator_id'] = $qualificator_id;
                 $work['actions'] = $send_to.$link_to_download.$action;
                 $work['correction'] = $correction;
+
                 $works[] = $work;
             }
         }
@@ -2422,48 +2438,50 @@ function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = 
  */
 function get_list_users_without_publication($task_id, $studentId = null)
 {
-    $work_table              = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $table_course_user       = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $table_user              = Database::get_main_table(TABLE_MAIN_USER);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-    //condition for the session
-    $session_id    = api_get_session_id();
-    $course_id     = api_get_course_int_id();
+    $users = getAllUserToWork($task_id, api_get_course_int_id());
+    $users = array_column($users, 'user_id');
 
+    // Condition for the session
+    $session_id = api_get_session_id();
+    $course_id = api_get_course_int_id();
     $task_id = intval($task_id);
 
     if ($session_id == 0) {
         $sql = "SELECT user_id as id FROM $work_table
                 WHERE
                     c_id = $course_id AND
-                    parent_id='$task_id' AND
+                    parent_id = '$task_id' AND
                     active IN (0, 1)";
     } else {
         $sql = "SELECT user_id as id FROM $work_table
                 WHERE
                     c_id = $course_id AND
-                    parent_id='$task_id' AND
-                    session_id='".$session_id."' AND
+                    parent_id = '$task_id' AND
+                    session_id = '".$session_id."' AND
                     active IN (0, 1)";
     }
 
     $result = Database::query($sql);
     $users_with_tasks = array();
-    while($row = Database::fetch_array($result)) {
+    while ($row = Database::fetch_array($result)) {
         $users_with_tasks[] = $row['id'];
     }
 
     if ($session_id == 0) {
         $sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email
                       FROM $table_course_user AS cu, $table_user AS u
-                      WHERE u.status != 1 and cu.c_id='".api_get_course_int_id()."' AND u.user_id = cu.user_id";
+                      WHERE u.status != 1 and cu.c_id='".$course_id."' AND u.user_id = cu.user_id";
     } else {
         $sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email
                       FROM $session_course_rel_user AS cu, $table_user AS u
                       WHERE
                         u.status != 1 AND
-                        cu.c_id='".api_get_course_int_id()."' AND
+                        cu.c_id='".$course_id."' AND
                         u.user_id = cu.user_id AND
                         cu.session_id = '".$session_id."'";
     }
@@ -2487,22 +2505,30 @@ function get_list_users_without_publication($task_id, $studentId = null)
 
     $result_users = Database::query($sql_users);
     $users_without_tasks = array();
-    while ($row_users = Database::fetch_row($result_users)) {
-
-        if (in_array($row_users[0], $users_with_tasks)) {
+    while ($rowUsers = Database::fetch_array($result_users)) {
+        $userId = $rowUsers['user_id'];
+        if (in_array($userId, $users_with_tasks)) {
             continue;
         }
 
-        if ($group_id && !in_array($row_users[0], $new_group_user_list)) {
+        if ($group_id && !in_array($userId, $new_group_user_list)) {
             continue;
         }
-        $userId = $row_users[0];
-        $row_users[0] = $row_users[1];
-        $row_users[1] = $row_users[2];
-        $row_users[2] = Display::encrypted_mailto_link($row_users[3]);
+
+        if (!empty($users)) {
+            if (!in_array($userId, $users)) {
+                continue;
+            }
+        }
+
+        $row_users = [];
+        $row_users[0] = $rowUsers['lastname'];
+        $row_users[1] = $rowUsers['firstname'];
+        $row_users[2] = Display::encrypted_mailto_link($rowUsers['email']);
         $row_users[3] = $userId;
         $users_without_tasks[] = $row_users;
     }
+
     return $users_without_tasks;
 }
 
@@ -2529,9 +2555,6 @@ function display_list_users_without_publication($task_id, $studentId = null)
     $paging_options = array();
     $my_params = array();
 
-    if (isset($_GET['curdirpath'])) {
-        $my_params['curdirpath'] = Security::remove_XSS($_GET['curdirpath']);
-    }
     if (isset($_GET['edit_dir'])) {
         $my_params['edit_dir'] = Security::remove_XSS($_GET['edit_dir']);
     }
@@ -4337,8 +4360,19 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
 function showStudentList($workId)
 {
     $columnModel = array(
-        array('name'=>'student', 'index'=>'student', 'width'=>'350px', 'align'=>'left', 'sortable' => 'false'),
-        array('name'=>'works', 'index'=>'works', 'align'=>'center', 'sortable' => 'false')
+        array(
+            'name' => 'student',
+            'index' => 'student',
+            'width' => '350px',
+            'align' => 'left',
+            'sortable' => 'false',
+        ),
+        array(
+            'name' => 'works',
+            'index' => 'works',
+            'align' => 'center',
+            'sortable' => 'false',
+        ),
     );
     $token = null;
 
@@ -4511,7 +4545,10 @@ function getWorkUserListData(
                 );
             }
             $works = $userWorks." / ".count($workParents);
-            $results[] = array('student' => $url, 'works' => $works);
+            $results[] = array(
+                'student' => $url,
+                'works' => Display::url($works, $link),
+            );
         }
     }
     return $results;
@@ -4873,7 +4910,6 @@ function downloadAllFilesPerUser($userId, $courseInfo)
         return false;
     }
 
-    require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
     $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
     $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work/';
 

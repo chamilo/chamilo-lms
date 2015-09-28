@@ -22,7 +22,7 @@ $group_id = api_get_group_id();
 $current_group = GroupManager :: get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
-$interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array ('url' => 'group.php?'.api_get_cidReq(), 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidReq(), 'name' => $current_group['name']);
 
 $is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $group_id);
@@ -152,7 +152,13 @@ if (!empty($complete_user_list)) {
     }
 }
 
-$group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 280px;"');
+$group_tutors_element = $form->addElement(
+    'advmultiselect',
+    'group_tutors',
+    get_lang('GroupTutors'),
+    $possible_users,
+    'style="width: 280px;"'
+);
 
 // submit button
 $form->addButtonSave(get_lang('SaveSettings'));
@@ -192,8 +198,6 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 }
 
 Display :: display_header($nameTools, 'Group');
-
-
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('tutor');
 $form->display();

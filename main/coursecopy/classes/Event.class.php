@@ -10,53 +10,63 @@ require_once 'Resource.class.php';
  */
 class CalendarEvent extends Resource
 {
-	/**
-	 * The title
-	 */
-	public $title;
-	/**
-	 * The content
-	 */
-	public $content;
-	/**
-	 * The start date
-	 */
-	public $start_date;
-	/**
-	 * The end date
-	 */
-	public $end_date;
-	/**
-	 * The attachment path
-	 */
-	public $attachment_path;
+    /**
+     * The title
+     */
+    public $title;
+    /**
+     * The content
+     */
+    public $content;
+    /**
+     * The start date
+     */
+    public $start_date;
+    /**
+     * The end date
+     */
+    public $end_date;
+    /**
+     * The attachment path
+     */
+    public $attachment_path;
 
-	/**
-	 * The attachment filename
-	 */
-	public $attachment_filename;
-	/**
-	 * The attachment size
-	 */
-	public $attachment_size;
+    /**
+     * The attachment filename
+     */
+    public $attachment_filename;
+    /**
+     * The attachment size
+     */
+    public $attachment_size;
 
-	/**
-	 * The attachment comment
-	 */
-	public $attachment_comment;
+    /**
+     * The attachment comment
+     */
+    public $attachment_comment;
 
 
-	/**
-	 * Create a new Event
-	 * @param int $id
-	 * @param string $title
-	 * @param string $content
-	 * @param string $date
-	 * @param string $hour
-	 * @param int $duration
-	 */
-	function __construct($id, $title, $content, $start_date, $end_date, $attachment_path = null, $attachment_filename= null, $attachment_size= null, $attachment_comment= null, $all_day = 0)
-	{
+    /**
+     * Create a new Event
+     * @param int $id
+     * @param string $title
+     * @param string $content
+     * @param string $date
+     * @param string $hour
+     * @param int $duration
+     */
+    public function __construct(
+        $id,
+        $title,
+        $content,
+        $start_date,
+        $end_date,
+        $attachment_path = null,
+        $attachment_filename = null,
+        $attachment_size = null,
+        $attachment_comment = null,
+        $all_day = 0
+    ) {
 		parent::__construct($id, RESOURCE_EVENT);
 
 		$this->title = $title;
@@ -71,11 +81,12 @@ class CalendarEvent extends Resource
 		$this->attachment_comment = $attachment_comment;
 	}
 
-	/**
-	 * Show this Event
-	 */
-	function show() {
-		parent::show();
-		echo $this->title.' ('.$this->start_date.' -> '.$this->end_date.')';
-	}
+    /**
+     * Show this Event
+     */
+    function show()
+    {
+        parent::show();
+        echo $this->title.' ('.$this->start_date.' -> '.$this->end_date.')';
+    }
 }

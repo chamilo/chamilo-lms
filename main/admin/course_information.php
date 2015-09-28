@@ -170,33 +170,4 @@ if (!empty($session_list)) {
 /*$group = new UserGroup();
 $usegroups = $group->get_usergroup_by_course($course->id);*/
 
-/*@todo This should be dissapear classes are a deprecated feature*/
-/*
-//Show all classes subscribed in this course
-
-$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
-$table_class 		= Database :: get_main_table(TABLE_MAIN_CLASS);
-$sql = "SELECT * FROM $table_course_class cc, $table_class c WHERE cc.class_id = c.id AND cc.course_code = '".$code."'";
-$res = Database::query($sql);
-if (Database::num_rows($res) > 0) {
-	$data = array ();
-	while ($class = Database::fetch_object($res)) {
-		$row = array ();
-		$row[] = $class->name;
-		$row[] = '<a href="class_information.php?id='.$class->id.'">'.Display::return_icon('synthese_view.gif', get_lang('Edit')).'</a>';
-		$data[] = $row;
-	}
-	echo '<p><b>'.get_lang('AdminClasses').'</b></p>';
-	echo '<blockquote>';
-	$table = new SortableTableFromArray($data,0,20,'class_table');
-	$table->set_additional_parameters(array ('code' => $_GET['code']));
-	$table->set_other_tables(array('usage_table','user_table'));
-	$table->set_header(0,get_lang('Title'));
-	$table->set_header(1,'');
-	$table->display();
-	echo '</blockquote>';
-} else {
-	echo '<p>'.get_lang('NoClassesForThisCourse').'</p>';
-}*/
-/*	FOOTER	*/
 Display::display_footer();

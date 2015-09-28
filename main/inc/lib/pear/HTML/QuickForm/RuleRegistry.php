@@ -91,22 +91,14 @@ class HTML_QuickForm_RuleRegistry
             // Regular expression
             $rule =& $this->getRule('regex');
             $rule->addData($ruleName, $data1);
-            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['regex'];
 
         } elseif ($type == 'function' || $type == 'callback') {
             // Callback function
             $rule =& $this->getRule('callback');
             $rule->addData($ruleName, $data1, $data2, 'function' == $type);
-            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['callback'];
-
         } elseif (is_object($data1)) {
             // An instance of HTML_QuickForm_Rule
             $this->_rules[strtolower(get_class($data1))] = $data1;
-            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower(get_class($data1)), null);
-
-        } else {
-            // Rule class name
-            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower($data1), $data2);
         }
     }
 
@@ -117,7 +109,7 @@ class HTML_QuickForm_RuleRegistry
      * @access    public
      * @return    HTML_QuickForm_Rule
      */
-    function &getRule($ruleName)
+    function getRule($ruleName)
     {
         if (empty($ruleName)) {
             return false;
@@ -186,7 +178,7 @@ class HTML_QuickForm_RuleRegistry
      */
     function validate($ruleName, $values, $options = null, $multiple = false)
     {
-        $rule =& $this->getRule($ruleName);
+        $rule = $this->getRule($ruleName);
         if (is_array($values) && !$multiple) {
             $result = 0;
             foreach ($values as $value) {
@@ -215,7 +207,7 @@ class HTML_QuickForm_RuleRegistry
     function getValidationScript(&$element, $elementName, $ruleData)
     {
         $reset =  (isset($ruleData['reset'])) ? $ruleData['reset'] : false;
-        $rule  =& $this->getRule($ruleData['type']);
+        $rule  = $this->getRule($ruleData['type']);
         if (!is_array($element)) {
             list($jsValue, $jsReset) = $this->_getJsValue($element, $elementName, $reset, null);
         } else {

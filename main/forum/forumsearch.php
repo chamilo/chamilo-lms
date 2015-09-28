@@ -69,7 +69,6 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => 'forumsearch.php?'.api_get_cidreq(),'name' => get_lang('ForumSearch'));
 } else {
     $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => $nameTools);
-    //$interbreadcrumb[] = array('url' => 'forumsearch.php', 'name' => );
     $nameTools = get_lang('ForumSearch');
 }
 

@@ -63,21 +63,6 @@ switch ($action) {
         $userId = isset($_GET['user_id']) && $_GET['user_id'] ? $_GET['user_id'] : null;
         GradebookUtils::generateTable($userId, $cat_id);
         break;
-    /*case 'generate_all_certificates':
-        $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
-        if (!empty($user_list)) {
-            foreach ($user_list as $user_info) {
-                if ($user_info['status'] == INVITEE) {
-                    continue;
-                }
-
-                Category::register_user_certificate($cat_id, $user_info['user_id']);
-            }
-        }
-        break;
-    case 'delete_all_certificates':
-        Category::deleteAllCertificates($cat_id);
-        break;*/
 }
 
 $course_code = api_get_course_id();
@@ -94,12 +79,6 @@ $token = Security::get_token();
 echo Display::page_header(get_lang('GradebookListOfStudentsReports'));
 
 echo '<div class="btn-group">';
-/*$url = api_get_self().'?action=generate_all_certificates'.'&'.api_get_cidReq().'&selectcat='.$cat_id;
-echo Display::url(get_lang('GenerateCertificates'), $url, array('class' => 'btn'));
-*/
-/*$url = api_get_self().'?action=delete_all_certificates'.'&'.api_get_cidReq().'&selectcat='.$cat_id;
-echo Display::url(get_lang('DeleteAllCertificates'), $url, array('class' => 'btn'));*/
-
 if (count($userList) > 0) {
     $url = api_get_self().'?action=export_all&'.api_get_cidReq().'&selectcat='.$cat_id;
     echo Display::url(get_lang('ExportAllToPDF'), $url, array('class' => 'btn btn-default'));

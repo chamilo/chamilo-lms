@@ -63,6 +63,7 @@ if (isset($_GET['editres'])) {
         null,
         api_get_self() . '?editres=' . $resultedit[0]->get_id() . '&selecteval=' . $select_eval_edit.'&'.api_get_cidreq()
     );
+
     if ($edit_res_form->validate()) {
 
         $values = $edit_res_form->exportValues();
@@ -125,7 +126,11 @@ if (isset($_GET['import'])) {
                                 exit;
                                 break;
                             } else {
-                                GradebookUtils::overwritescore($allresult->get_id(), $importedresult['score'], $eval[0]->get_max());
+                                GradebookUtils::overwritescore(
+                                    $allresult->get_id(),
+                                    $importedresult['score'],
+                                    $eval[0]->get_max()
+                                );
                                 $overwritescore++;
                                 $added = '1';
                             }

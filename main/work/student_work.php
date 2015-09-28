@@ -191,7 +191,7 @@ foreach ($workPerUser as $work) {
         $column = 0;
     }
 }
-
+echo Display::page_subheader($userInfo['complete_name']);
 echo $table->toHtml();
 
 Display :: display_footer();

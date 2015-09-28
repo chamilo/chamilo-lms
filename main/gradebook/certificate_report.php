@@ -187,7 +187,8 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
     if (empty($selectedStudentInfo)) {
         Session::write('reportErrorMessage', get_lang('NoUser'));
 
-        Header::location($selfUrl);
+        header('Location: '.$selfUrl);
+        exit;
     }
 
     $sessionList = SessionManager::getSessionsFollowedByUser($selectedStudent);

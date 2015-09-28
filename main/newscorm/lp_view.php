@@ -70,7 +70,7 @@ if ($debug) {
 
 $_SESSION['oLP']->error = '';
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
-$lp_type = $_SESSION['oLP']->get_type();
+$lpType = $_SESSION['oLP']->get_type();
 
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
@@ -78,8 +78,13 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
 
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) .
-    'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+<!--
+var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
+-->
+</script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) .'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     $("div#log_content_cleaner").bind("click", function() {
@@ -131,7 +136,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></scrip
  */
 if ($debug) {
     error_log(" src: $src ");
-    error_log(" lp_type: $lp_type ");
+    error_log(" lp_type: $lpType ");
 }
 
 $get_toc_list = $_SESSION['oLP']->get_toc();
@@ -144,25 +149,33 @@ foreach ($get_toc_list as $toc) {
 
 if (!isset($src)) {
     $src = null;
-    switch ($lp_type) {
+    switch ($lpType) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
-            $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
+            $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+            if ($preReqCheck === true) {
+                $src = $_SESSION['oLP']->get_link(
+                    'http',
+                    $lp_item_id,
+                    $get_toc_list
+                );
 
                 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
-                $file_info = pathinfo($file_info['path']);
+                if (isset($file_info['path'])) {
+                    $file_info = pathinfo($file_info['path']);
+                }
+
                 if (
                     isset($file_info['extension']) &&
                     api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
                 ) {
-                    $src = api_get_path(WEB_CODE_PATH)
-                        . 'newscorm/lp_view_item.php?lp_item_id=' . $lp_item_id
-                        . '&' . api_get_cidreq();
+                    $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
+
+                $src = $_SESSION['oLP']->fixBlockedLinks($src);
+
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -172,8 +185,8 @@ if (!isset($src)) {
             // save old if asset
             $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
             $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
-            $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {
+            $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+            if ($preReqCheck === true) {
                 $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
@@ -183,11 +196,14 @@ if (!isset($src)) {
         case 3:
             // aicc
             $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="' . $_SESSION['oLP']->get_js_lib()
-                . '" type="text/javascript" language="javascript"></script>';
-            $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-            if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id, $get_toc_list);
+            $htmlHeadXtra[] = '<script src="' . $_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
+            $preReqCheck = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+            if ($preReqCheck === true) {
+                $src = $_SESSION['oLP']->get_link(
+                    'http',
+                    $lp_item_id,
+                    $get_toc_list
+                );
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php';
@@ -227,7 +243,7 @@ if (
         $safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))
     ) {
-        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting
+        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id
                 FROM ' . $TBL_TRACK_EXERCICES . '
                 WHERE exe_id = ' . $safe_exe_id;
         $res = Database::query($sql);
@@ -257,8 +273,25 @@ if (
         if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
             $row_last_attempt = Database::fetch_row($res_last_attempt);
             $lp_item_view_id = $row_last_attempt[0];
+
+            $exercise = new Exercise(api_get_course_int_id());
+            $exercise->read($row_dates['exe_exo_id']);
+            $status = 'completed';
+
+            if (!empty($exercise->pass_percentage)) {
+                $status = 'failed';
+                $success = ExerciseLib::is_success_exercise_result(
+                    $score,
+                    $max_score,
+                    $exercise->pass_percentage
+                );
+                if ($success) {
+                    $status = 'passed';
+                }
+            }
+
             $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
-                        status = 'completed' ,
+                        status = '$status',
                         score = $score,
                         total_time = $mytime
                     WHERE id='" . $lp_item_view_id . "' AND c_id = $course_id ";
@@ -278,7 +311,7 @@ if (
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
-        $src = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?origin=learnpath&id=' . $safe_exe_id;
+        $src = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?origin=learnpath&id=' . $safe_exe_id.'&'.api_get_cidreq();
 
         if ($debug) {
             error_log('Calling URL: ' . $src);
@@ -294,7 +327,8 @@ $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;
 $_setting['show_navigation_menu'] = 'false';
 $scorm_css_header = true;
-$lp_theme_css = $_SESSION['oLP']->get_theme(); // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
+$lp_theme_css = $_SESSION['oLP']->get_theme();
+// Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
 
 if ($_SESSION['oLP']->mode == 'fullscreen') {
     $htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
@@ -391,8 +425,7 @@ if (api_get_course_setting('lp_return_link') == 1) {
     $buttonHomeText = get_lang('LearningPathList');
 }
 
-$lpPreviewImagePath = 'unknown.png';
-
+$lpPreviewImagePath = api_get_path(WEB_CODE_PATH).'img/icons/64/unknown.png';
 if ($_SESSION['oLP']->get_preview_image()) {
     $lpPreviewImagePath = $_SESSION['oLP']->get_preview_image_path();
 }
@@ -401,6 +434,14 @@ $gamificationMode = api_get_setting('gamification_mode');
 
 $template = new Template('title', false, false, true, true, false);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
+
+$fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
+$fixLink = '';
+if ($fixLinkSetting) {
+    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
+}
+
+$template->assign('fix_link', $fixLink);
 $template->assign(
     'glossary_tool_availables',
     ['true', 'lp', 'exercise_and_lp']

@@ -213,6 +213,15 @@ switch ($action) {
             echo $html;
         }
         break;
+        // Read the Url using OpenGraph and returns the hyperlinks content
+    case 'readUrlWithOpenGraph':
+        $url = isset($_POST['social_wall_new_msg_main']) ? $_POST['social_wall_new_msg_main'] : '';
+        $html = '';
+        if (SocialManager::verifyUrl($url) == true){
+            $html = Security::remove_XSS(SocialManager::readContentWithOpenGraph($url));
+        }
+        echo $html;
+        break;
     default:
         echo '';
 }

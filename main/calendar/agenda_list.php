@@ -11,13 +11,15 @@ $interbreadcrumb[] = array(
     'name' => get_lang('Agenda')
 );
 
+$currentCourseId = api_get_course_int_id();
+
 $agenda = new Agenda();
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 $agenda->setType($type);
 $events = $agenda->getEvents(
     null,
     null,
-    api_get_course_int_id(),
+    $currentCourseId,
     api_get_group_id(),
     null,
     'array'
@@ -25,7 +27,7 @@ $events = $agenda->getEvents(
 
 $this_section = SECTION_MYAGENDA;
 
-if (!empty($GLOBALS['_cid']) && $GLOBALS['_cid'] != -1) {
+if (!empty($currentCourseId) && $currentCourseId != -1) {
     // Agenda is inside a course tool
     $url = api_get_self() . '?' . api_get_cidreq();
     $this_section = SECTION_COURSES;
@@ -38,11 +40,10 @@ if (!empty($GLOBALS['_cid']) && $GLOBALS['_cid'] != -1) {
     }
 }
 
-$tpl = new Template(get_lang('Events'));
-
-$tpl->assign('agenda_events', $events);
-
 $actions = $agenda->displayActions('list');
+
+$tpl = new Template(get_lang('Events'));
+$tpl->assign('agenda_events', $events);
 $tpl->assign('url', $url);
 $tpl->assign('actions', $actions);
 $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());

@@ -22,7 +22,7 @@ class WSCMForum extends WSCM
         if($this->verifyUserPass($username, $password) == "valid")
         {
             $course_db = CourseManager::get_course_information($course_code);
-            $foruns_info = get_forums($id='', $course_db['db_name']);
+            $foruns_info = get_forums($id='', $course_db['code']);
             $foruns_id = '#';
             foreach ($foruns_info as $forum)
             {

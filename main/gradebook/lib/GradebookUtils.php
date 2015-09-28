@@ -321,16 +321,6 @@ class GradebookUtils
                     Display::return_icon('history.png', get_lang('GradebookQualifyLog'), '', ICON_SIZE_SMALL) . '</a>';
             }
 
-            /*
-              if ($locked_status == 0){
-              $modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&selectcat=' . $selectcat . ' &cidReq='.$eval->get_course_code()."'; }\">".Display::return_icon('unlock.png',get_lang('LockEvaluation'), array(), ICON_SIZE_SMALL)."</a>";
-              } else {
-              if (api_is_platform_admin()){
-              $modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToUnLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&typelocked=&selectcat=' . $selectcat . ' &cidReq='.$eval->get_course_code()."';\">".Display::return_icon('lock.png',get_lang('UnLockEvaluation'), array(), ICON_SIZE_SMALL)."</a>";
-              } else {
-              $modify_icons .= '&nbsp;<img src="../img/locked_na.png" border="0" title="' . get_lang('TheEvaluationIsLocked') . '" alt="" />';
-              }
-              } */
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
             } else {
@@ -396,9 +386,9 @@ class GradebookUtils
      */
     public static function is_resource_in_course_gradebook($course_code, $resource_type, $resource_id, $session_id = 0)
     {
-        $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $course_code = Database::escape_string($course_code);
-        $sql = "SELECT * FROM $l l
+        $sql = "SELECT * FROM $table l
                 WHERE
                     course_code = '$course_code' AND
                     type = ".(int)$resource_type . " AND
@@ -941,8 +931,6 @@ class GradebookUtils
         $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $page_format, $pdfParams);
         $pdf->html_to_pdf_with_template($flatviewtable->return_table());
-        // Default
-        //$pdf->html_to_pdf_with_template($table->toHtml());
         exit;
     }
 

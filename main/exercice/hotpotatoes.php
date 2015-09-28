@@ -7,9 +7,6 @@
  */
 
 require_once '../inc/global.inc.php';
-
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 require_once 'hotpotatoes.lib.php';
 
 // Section (for the tabs).
@@ -72,7 +69,13 @@ if (api_is_allowed_to_edit(null, true)) {
             api_get_user_id()
         );
         // Make invisible (in any case) - why?
-        api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
+        api_item_property_update(
+            $_course,
+            TOOL_DOCUMENT,
+            $doc_id,
+            'invisible',
+            api_get_user_id()
+        );
     }
 }
 
@@ -126,12 +129,15 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 // Generate new test folder if on first step of file upload.
                 $filename = api_replace_dangerous_char(trim($_FILES['userFile']['name']));
                 $fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');
-
-                //$doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
-                //api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
                 @mkdir($document_sys_path.$uploadPath.'/'.$fld, api_get_permissions_for_new_directories());
                 $doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
-                api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $doc_id,
+                    'FolderCreated',
+                    api_get_user_id()
+                );
             } else {
                 // It is not the first step... get the filename directly from the system params.
                 $filename = $_FILES['userFile']['name'];
@@ -179,12 +185,25 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     }
                 }
 
-                $title = @htmlspecialchars(GetQuizName($filename, $document_sys_path.$uploadPath.'/'.$fld.'/'), ENT_COMPAT, api_get_system_encoding());
+                $title = @htmlspecialchars(
+                    GetQuizName(
+                        $filename,
+                        $document_sys_path.$uploadPath.'/'.$fld.'/'
+                    ),
+                    ENT_COMPAT,
+                    api_get_system_encoding()
+                );
                 $query = "UPDATE $dbTable
                           SET comment='".Database::escape_string($title)."'
                           WHERE c_id = $course_id AND path=\"".$uploadPath."/".$fld."/".$filename."\"";
                 Database::query($query);
-                api_item_property_update($_course, TOOL_QUIZ, $id, 'QuizAdded', api_get_user_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_QUIZ,
+                    $id,
+                    'QuizAdded',
+                    api_get_user_id()
+                );
 
             } else {
                 if ($finish == 2) {
@@ -201,7 +220,9 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
             }
         }
     }
-    if ($finish == 1) { /** ok -> send to main exercises page */
+
+    if ($finish == 1) {
+        /** ok -> send to main exercises page */
         header('Location: exercise.php?'.api_get_cidreq());
         exit;
     }

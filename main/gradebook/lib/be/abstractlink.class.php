@@ -10,7 +10,6 @@
  * @author Bert Steppé
  * @author Julio Montoya <gugli100@gmail.com> security improvements
  * @package chamilo.gradebook
- * @package chamilo.gradebook
  */
 abstract class AbstractLink implements GradebookItem
 {
@@ -168,19 +167,17 @@ abstract class AbstractLink implements GradebookItem
         $this->course_id = $course_info['real_id'];
     }
 
-
-
-    public function set_date ($date)
+    public function set_date($date)
     {
         $this->created_at = $date;
     }
 
-    public function set_weight ($weight)
+    public function set_weight($weight)
     {
         $this->weight = $weight;
     }
 
-    public function set_visible ($visible)
+    public function set_visible($visible)
     {
         $this->visible = $visible;
     }
@@ -218,8 +215,7 @@ abstract class AbstractLink implements GradebookItem
         $course_code = null,
         $category_id = null,
         $visible = null
-    )
-    {
+    ) {
         $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sql = 'SELECT * FROM '.$tbl_grade_links;
         $paramcount = 0;
@@ -421,7 +417,8 @@ abstract class AbstractLink implements GradebookItem
     {
         $this->delete_linked_data();
         $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = 'DELETE FROM '.$tbl_grade_links.' WHERE id = '.intval($this->id);
+        $sql = 'DELETE FROM '.$tbl_grade_links.'
+                WHERE id = '.intval($this->id);
         Database::query($sql);
     }
 
@@ -517,8 +514,6 @@ abstract class AbstractLink implements GradebookItem
     abstract function needs_results();
     abstract function is_allowed_to_change_name();
 
-    /* TRIVIAL FUNCTIONS - to be overwritten by subclass if needed */
-
     /* Seems to be not used anywhere */
     public function get_not_created_links()
     {
@@ -579,7 +574,8 @@ abstract class AbstractLink implements GradebookItem
     public function lock($locked)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".$this->id."'";
+        $sql = "UPDATE $table SET locked = '".intval($locked)."'
+                WHERE id='".$this->id."'";
         Database::query($sql);
     }
 

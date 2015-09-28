@@ -48,23 +48,19 @@ if ($course_validation_feature) {
         // Course category.
         $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 
-        $categoryList = array();
-
-        if (!empty($course_request_info['category_code'])) {
-            $data = getCategory($course_request_info['category_code']);
-            $categoryList[$data['code']] = $data['name'];
-        }
-
-        $form->addElement(
+        $courseSelect = $form->addElement(
             'select_ajax',
             'category_code',
             get_lang('CourseFaculty'),
             null,
-            array(
-                'url' => $url,
-                'defaults' => $categoryList
-            )
+            array('url' => $url)
         );
+
+        if (!empty($course_request_info['category_code'])) {
+            $data = getCategory($course_request_info['category_code']);
+
+            $courseSelect->addOption($data['name'], $data['code'], ['selected' => 'selected']);
+        }
 
         // Course code.
         $form->addText('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
@@ -110,7 +106,6 @@ if ($course_validation_feature) {
         // Hidden form fields.
         $form->addElement('hidden', 'user_id');
         $form->addElement('hidden', 'directory');
-        $form->addElement('hidden', 'db_name');
         $form->addElement('hidden', 'visual_code');
         $form->addElement('hidden', 'request_date');
         $form->addElement('hidden', 'status');
@@ -120,7 +115,6 @@ if ($course_validation_feature) {
         $values['wanted_code'] = $course_request_info['code'];
         $values['user_id'] = $course_request_info['user_id'];
         $values['directory'] = $course_request_info['directory'];
-        $values['db_name'] = $course_request_info['db_name'];
         $values['course_language'] = $course_request_info['course_language'];
         $values['title'] = $course_request_info['title'];
         $values['description'] = $course_request_info['description'];

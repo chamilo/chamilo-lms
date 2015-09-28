@@ -194,12 +194,8 @@ if (api_is_allowed_to_edit(false, true)) {
 
 
 $actionsRight = GroupManager::getSearchForm();
-
-
 $toolbar = Display::toolbarAction('toolbar-groups', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
-
 $group_cats = GroupManager::get_categories(api_get_course_id());
-
 
 echo $toolbar;
 

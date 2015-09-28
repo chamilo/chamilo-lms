@@ -79,7 +79,7 @@ function search_sessions($needle, $type)
                     WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
         }
         $rs	= Database::query($sql);
-        $return .= '<select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">';
+        $return .= '<select class="form-control" id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20">';
         while($session = Database :: fetch_array($rs)) {
             $return .= '<option value="'.$session['id'].'" title="'.htmlspecialchars($session['name'],ENT_QUOTES).'">'.$session['name'].'</option>';
         }

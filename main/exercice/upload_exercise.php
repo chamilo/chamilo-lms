@@ -74,7 +74,13 @@ function lp_upload_quiz_main() {
     // variable initialisation
     $lp_id = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
 
-    $form = new FormValidator('upload', 'POST', api_get_self() . '?' . api_get_cidreq() . '&lp_id='.$lp_id, '', array('enctype' => 'multipart/form-data'));
+    $form = new FormValidator(
+        'upload',
+        'POST',
+        api_get_self().'?'.api_get_cidreq().'&lp_id='.$lp_id,
+        '',
+        array('enctype' => 'multipart/form-data')
+    );
     $form->addElement('header', get_lang('ImportExcelQuiz'));
     $form->addElement('file', 'user_upload_quiz', get_lang('FileUpload'));
 

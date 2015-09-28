@@ -331,12 +331,13 @@ class Notification extends Model
     /**
      * Formats the content in order to add the welcome message,
      * the notification preference, etc
-     * @param   string 	$content
-     * @param   array	$sender_info result of api_get_user_info() or
+     * @param string $content
+     * @param array	 $senderInfo result of api_get_user_info() or
      * GroupPortalManager:get_group_data()
+     *
      * @return string
      * */
-    public function formatContent($content, $sender_info)
+    public function formatContent($content, $senderInfo)
     {
         $hook = HookNotificationContent::create();
         if (!empty($hook)) {
@@ -346,77 +347,78 @@ class Notification extends Model
                 $content = $data['content'];
             }
         }
-        $new_message_text = $link_to_new_message = '';
+
+        $newMessageText = $linkToNewMessage = '';
 
         switch ($this->type) {
             case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
-                $new_message_text = $content;
-                $link_to_new_message = Display::url(
+                $newMessageText = $content;
+                $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
                     api_get_path(WEB_CODE_PATH) . 'messages/inbox.php'
                 );
                 break;
             case self::NOTIFICATION_TYPE_MESSAGE:
-                if (!empty($sender_info)) {
+                if (!empty($senderInfo)) {
                     $senderName = api_get_person_name(
-                        $sender_info['firstname'],
-                        $sender_info['lastname'],
+                        $senderInfo['firstname'],
+                        $senderInfo['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $new_message_text = sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
+                    $newMessageText = sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
                 }
-                $link_to_new_message = Display::url(
+                $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
                     api_get_path(WEB_CODE_PATH) . 'messages/inbox.php'
                 );
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
-                if (!empty($sender_info)) {
+                if (!empty($senderInfo)) {
                     $senderName = api_get_person_name(
-                        $sender_info['firstname'],
-                        $sender_info['lastname'],
+                        $senderInfo['firstname'],
+                        $senderInfo['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $new_message_text = sprintf(get_lang('YouHaveANewInvitationFromX'), $senderName);
+                    $newMessageText = sprintf(get_lang('YouHaveANewInvitationFromX'), $senderName);
                 }
-                $link_to_new_message = Display::url(
+                $linkToNewMessage = Display::url(
                     get_lang('SeeInvitation'),
                     api_get_path(WEB_CODE_PATH) . 'social/invitations.php'
                 );
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
                 $topic_page = intval($_REQUEST['topics_page_nr']);
-                if (!empty($sender_info)) {
-                    $senderName = $sender_info['group_info']['name'];
-                    $new_message_text = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
+                if (!empty($senderInfo)) {
+                    $senderName = $senderInfo['group_info']['name'];
+                    $newMessageText = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
                     $senderName = api_get_person_name(
-                        $sender_info['user_info']['firstname'],
-                        $sender_info['user_info']['lastname'],
+                        $senderInfo['user_info']['firstname'],
+                        $senderInfo['user_info']['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
                     $senderName = Display::url(
                         $senderName,
-                        api_get_path(WEB_CODE_PATH).'social/profile.php?'.$sender_info['user_info']['user_id']
+                        api_get_path(WEB_CODE_PATH).'social/profile.php?'.$senderInfo['user_info']['user_id']
                     );
-                    $new_message_text .= '<br />'.get_lang('User').': '.$senderName;
+                    $newMessageText .= '<br />'.get_lang('User').': '.$senderName;
                 }
-                $group_url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$sender_info['group_info']['id'].'&topic_id='.$sender_info['group_info']['topic_id'].'&msg_id='.$sender_info['group_info']['msg_id'].'&topics_page_nr='.$topic_page;
-                $link_to_new_message = Display::url(get_lang('SeeMessage'), $group_url);
+                $group_url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$senderInfo['group_info']['id'].'&topic_id='.$senderInfo['group_info']['topic_id'].'&msg_id='.$senderInfo['group_info']['msg_id'].'&topics_page_nr='.$topic_page;
+                $linkToNewMessage = Display::url(get_lang('SeeMessage'), $group_url);
                 break;
         }
         $preference_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
 
         // You have received a new message text
-        if (!empty($new_message_text)) {
-            $content = $new_message_text.'<br /><hr><br />'.$content;
+        if (!empty($newMessageText)) {
+            $content = $newMessageText.'<br /><hr><br />'.$content;
         }
 
         // See message with link text
-        if (!empty($link_to_new_message)) {
-            $content = $content.'<br /><br />'.$link_to_new_message;
+        if (!empty($linkToNewMessage) && api_get_setting('allow_message_tool') == 'true') {
+            $content = $content.'<br /><br />'.$linkToNewMessage;
         }
 
         // You have received this message because you are subscribed text

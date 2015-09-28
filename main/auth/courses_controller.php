@@ -198,6 +198,16 @@ class CoursesController
     public function subscribe_user($course_code, $search_term, $category_code)
     {
         $courseInfo = api_get_course_info($course_code);
+
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $message = '';
+        $error = '';
+        $content = '';
+        $result = [];
+
         // The course must be open in order to access the auto subscription
         if (in_array(
             $courseInfo['visibility'],
@@ -210,8 +220,8 @@ class CoursesController
                 $error = get_lang('CourseRegistrationCodeIncorrect');
             } else {
                 // Redirect directly to the course after subscription
-                $message = $result['message'];
-                $content = $result['content'];
+                $message = isset($result['message']) ? $result['message'] : '';
+                $content = isset($result['content']) ? $result['content'] : '';
             }
         }
 
@@ -234,7 +244,6 @@ class CoursesController
         $result = $this->model->store_course_category($category_title);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('CourseCategoryStored')));
-
         } else {
             Display::addFlash(Display::return_message(get_lang('ACourseCategoryWithThisNameAlreadyExists'), 'error'));
         }

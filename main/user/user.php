@@ -34,6 +34,7 @@ $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
 $course_info = api_get_course_info();
 $user_id = api_get_user_id();
+$_user = api_get_user_info();
 $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 
@@ -52,7 +53,9 @@ if (api_is_allowed_to_edit(null, true)) {
                     $user_ids = array_diff($_POST['user'], array($user_id));
                     if (count($user_ids) > 0) {
                         CourseManager::unsubscribe_user($user_ids, $courseCode);
-                        Display::addFlash(Display::return_message(get_lang('UsersUnsubscribed')));
+                        Display::addFlash(
+                            Display::return_message(get_lang('UsersUnsubscribed'))
+                        );
                     }
                 }
         }
@@ -209,7 +212,8 @@ if (api_is_allowed_to_edit(null, true)) {
                                 user.official_code,
                                 active
                                 $legal
-                            FROM $table_session_course_user as session_course_user, $table_users as user ";
+                            FROM $table_session_course_user as session_course_user,
+                            $table_users as user ";
                     if (api_is_multiple_url_enabled()) {
                         $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
@@ -250,7 +254,11 @@ if (api_is_allowed_to_edit(null, true)) {
                         $data[] = $user;
                         if ($_GET['type'] == 'pdf') {
                             $user_info = api_get_user_info($user['user_id']);
-                            $user_image = Display::img($user_info['avatar'], null, array('width' => $user_image_pdf_size.'px'));
+                            $user_image = Display::img(
+                                $user_info['avatar'],
+                                null,
+                                array('width' => $user_image_pdf_size.'px')
+                            );
                             if ($is_western_name_order) {
                                 $user_pdf = array(
                                     $counter,
@@ -737,8 +745,8 @@ function active_filter($active, $urlParams, $row)
 
     /* you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is
         locked out and nobody can change it anymore.*/
-    if ($row[count($row)-1] <> $userId) {
-        $result = '<center><img src="../img/icons/16/'.$image.'.png" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
+    if ($row[0] <> $userId) {
+        $result = '<center><img src="../img/icons/16/'.$image.'.png" border="0" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
     }
 
     return $result;
@@ -876,9 +884,9 @@ if (api_is_allowed_to_edit(null, true)) {
     $table->set_header($header_nr++, get_lang('Status'), false);
     $table->set_header($header_nr++, get_lang('Active'), false);
     if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-        $table->set_column_filter(9, 'active_filter');
+        $table->set_column_filter(8, 'active_filter');
     } else {
-        $table->set_column_filter(9, 'active_filter');
+        $table->set_column_filter(8, 'active_filter');
     }
 
     foreach ($extraFields as $extraField) {

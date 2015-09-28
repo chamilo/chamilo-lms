@@ -346,6 +346,26 @@ switch ($action) {
             echo 0;
         }
         break;
+    case 'search_skills':
+        $skills = $skill->find(
+            'all',
+            [
+                'where' => ['name LIKE %?% ' => $_REQUEST['q']]
+            ]
+        );
+        $returnSkills = [];
+
+        foreach ($skills as $skill) {
+            $returnSkills[] = [
+                'id' => $skill['id'],
+                'text' => $skill['name']
+            ];
+        }
+
+        echo json_encode([
+            'items' => $returnSkills
+        ]);
+        break;
     default:
         echo '';
 }

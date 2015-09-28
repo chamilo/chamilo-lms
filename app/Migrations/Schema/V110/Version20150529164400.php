@@ -17,41 +17,43 @@ class Version20150529164400 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $gradebookScoreLog = $schema->createTable('gradebook_score_log');
-        $gradebookScoreLog->addColumn(
-            'id',
-            TableColumnType::INTEGER,
-            ['unsigned' => true, 'autoincrement' => true, 'notnull' => true]
-        );
-        $gradebookScoreLog->addColumn(
-            'category_id',
-            TableColumnType::INTEGER,
-            ['unsigned' => true, 'notnull' => true]
-        );
-        $gradebookScoreLog->addColumn(
-            'user_id',
-            TableColumnType::INTEGER,
-            ['unsigned' => true, 'notnull' => true]
-        );
-        $gradebookScoreLog->addColumn(
-            'score',
-            TableColumnType::FLOAT,
-            ['notnull' => true, 'scale' => 0, 'precision' => 10]
-        );
-        $gradebookScoreLog->addColumn(
-            'registered_at',
-            TableColumnType::DATETIME,
-            ['notnull' => true]
-        );
-        $gradebookScoreLog->setPrimaryKey(['id']);
-        $gradebookScoreLog->addIndex(
-            ['user_id'],
-            'idx_gradebook_score_log_user'
-        );
-        $gradebookScoreLog->addIndex(
-            ['user_id', 'category_id'],
-            'idx_gradebook_score_log_user_category'
-        );
+        if (!$schema->hasTable('gradebook_score_log')) {
+            $gradebookScoreLog = $schema->createTable('gradebook_score_log');
+            $gradebookScoreLog->addColumn(
+                'id',
+                TableColumnType::INTEGER,
+                ['unsigned' => true, 'autoincrement' => true, 'notnull' => true]
+            );
+            $gradebookScoreLog->addColumn(
+                'category_id',
+                TableColumnType::INTEGER,
+                ['unsigned' => true, 'notnull' => true]
+            );
+            $gradebookScoreLog->addColumn(
+                'user_id',
+                TableColumnType::INTEGER,
+                ['unsigned' => true, 'notnull' => true]
+            );
+            $gradebookScoreLog->addColumn(
+                'score',
+                TableColumnType::FLOAT,
+                ['notnull' => true, 'scale' => 0, 'precision' => 10]
+            );
+            $gradebookScoreLog->addColumn(
+                'registered_at',
+                TableColumnType::DATETIME,
+                ['notnull' => true]
+            );
+            $gradebookScoreLog->setPrimaryKey(['id']);
+            $gradebookScoreLog->addIndex(
+                ['user_id'],
+                'idx_gradebook_score_log_user'
+            );
+            $gradebookScoreLog->addIndex(
+                ['user_id', 'category_id'],
+                'idx_gradebook_score_log_user_category'
+            );
+        }
     }
 
     /**

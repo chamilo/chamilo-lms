@@ -276,7 +276,6 @@ function set_skill_style(d, attribute, searched_skill_id) {
 
 /* When you click a skill partition */
 function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
-    //console.log(d.depth);
     if (debug) {
         console.log('Clicking a partition skill id: '+d.id);
         console.log(d);

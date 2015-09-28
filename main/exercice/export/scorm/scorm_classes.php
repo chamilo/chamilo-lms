@@ -733,14 +733,12 @@ class ScormAnswerHotspot extends Answer
 		{
 			$s="<tr>
 			  <td valign='top' colspan='2'>&nbsp;";
-			$questionName=text_filter($questionName);
 			$s.=$questionName;
 			$s.="</td>
 			</tr>
 			<tr>
 			  <td valign='top' colspan='2'>
 				<i>";
-			$questionDescription=text_filter($questionDescription);
 			$s.=$questionDescription;
 			$s.="</i>
 			  </td>

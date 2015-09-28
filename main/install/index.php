@@ -213,6 +213,7 @@ if (!isset($_GET['running'])) {
     $dbUsernameForm = 'root';
     $dbPassForm = '';
     $dbNameForm = 'chamilo';
+    $dbPortForm = 3306;
 
     // Extract the path to append to the url if Chamilo is not installed on the web root directory.
     $urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));
@@ -302,13 +303,22 @@ if ($encryptPassForm == '1') {
     <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
     <style type="text/css" media="screen, projection">
         @import "../../web/assets/bootstrap/dist/css/bootstrap.min.css";
+        @import "<?php echo api_get_path(WEB_CSS_PATH)?>bootstrap-select.css";
         @import "../../web/assets/fontawesome/css/font-awesome.min.css";
         @import "../../web/css/base.css";
         @import "../../web/css/themes/chamilo/default.css";
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH)?>javascript/bootstrap-select.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
+
+            $("#details_button").click(function() {
+                $( "#details" ).toggle("slow", function() {
+                });
+            });
+
             $("#button_please_wait").hide();
             $("button").addClass('btn btn-default');
 
@@ -439,6 +449,7 @@ if (empty($installationProfile)) {
     <input type="hidden" name="pathForm"           value="<?php echo api_htmlentities($pathForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="urlForm"            value="<?php echo api_htmlentities($urlForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="dbHostForm"         value="<?php echo api_htmlentities($dbHostForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="dbPortForm"         value="<?php echo api_htmlentities($dbPortForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="dbUsernameForm"     value="<?php echo api_htmlentities($dbUsernameForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="dbPassForm"         value="<?php echo api_htmlentities($dbPassForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="dbNameForm"         value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES); ?>" />
@@ -476,6 +487,7 @@ if (@$_POST['step2']) {
         $dbUsernameForm,
         $dbPassForm,
         $dbNameForm,
+        $dbPortForm,
         $installationProfile
     );
 } elseif (@$_POST['step4']) {
@@ -489,7 +501,8 @@ if (@$_POST['step2']) {
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
-            $dbNameForm
+            $dbNameForm,
+            $dbPortForm
         );
 
         $tmp = get_config_param_from_db('platformLanguage');
@@ -534,7 +547,7 @@ if (@$_POST['step2']) {
 
         // For version 1.9
         $urlForm = $_configuration['root_web'];
-        $encryptPassForm = get_config_param('userPasswordCrypted');
+        $encryptPassForm = get_config_param('password_encryption');
         // Managing the $encryptPassForm
         if ($encryptPassForm == '1') {
             $encryptPassForm = 'sha1';
@@ -594,6 +607,7 @@ if (@$_POST['step2']) {
     <?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
     <?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
     <?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
+    <?php echo get_lang('DBPort').' : '.$dbPortForm; ?><br />
     <?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
     <?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
     <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
@@ -675,13 +689,14 @@ if (@$_POST['step2']) {
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
-            $dbNameForm
+            $dbNameForm,
+            $dbPortForm
         );
 
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
 
-        Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
+        error_log('Starting migration process from '.$my_old_version.' ('.time().')');
 
         switch ($my_old_version) {
             case '1.9.0':
@@ -706,38 +721,47 @@ if (@$_POST['step2']) {
                 Database::query("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
                 Database::query("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
 
+                echo '<a class="btn btn-default" href="javascript:void(0)" id="details_button">'.get_lang('Details').'</a><br />';
+                echo '<div id="details" style="display:none">';
                 // Migrate using the migration files located in:
                 // src/Chamilo/CoreBundle/Migrations/Schema/V110
-                migrate(
+                $result = migrate(
                     110,
                     $manager
                 );
 
-                fixIds($manager);
+                echo '</div>';
 
-                include 'update-files-1.9.0-1.10.0.inc.php';
-                // Only updates the configuration.inc.php with the new version
-                include 'update-configuration.inc.php';
+                if ($result) {
+                    error_log('Migrations files were executed.');
 
-                $configurationFiles = array(
-                    'mail.conf.php',
-                    'profile.conf.php',
-                    'course_info.conf.php',
-                    'add_course.conf.php',
-                    'events.conf.php',
-                    'auth.conf.php',
-                    'portfolio.conf.php'
-                );
+                    fixIds($manager);
 
-                foreach ($configurationFiles as $file) {
-                    if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
-                        copy(
-                            api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
-                            api_get_path(CONFIGURATION_PATH).$file
-                        );
+                    include 'update-files-1.9.0-1.10.0.inc.php';
+                    // Only updates the configuration.inc.php with the new version
+                    include 'update-configuration.inc.php';
+
+                    $configurationFiles = array(
+                        'mail.conf.php',
+                        'profile.conf.php',
+                        'course_info.conf.php',
+                        'add_course.conf.php',
+                        'events.conf.php',
+                        'auth.conf.php',
+                        'portfolio.conf.php'
+                    );
+
+                    foreach ($configurationFiles as $file) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
+                            copy(
+                                api_get_path(SYS_CODE_PATH).'inc/conf/'.$file,
+                                api_get_path(CONFIGURATION_PATH).$file
+                            );
+                        }
                     }
+                } else {
+                    error_log('There was an error during running migrations. Check error.log');
                 }
-
                 break;
             default:
                 break;
@@ -749,7 +773,8 @@ if (@$_POST['step2']) {
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
-            null
+            null,
+            $dbPortForm
         );
 
         $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
@@ -761,7 +786,8 @@ if (@$_POST['step2']) {
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
-            $dbNameForm
+            $dbNameForm,
+            $dbPortForm
         );
 
         $metadataList = $manager->getMetadataFactory()->getAllMetadata();

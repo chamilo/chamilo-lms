@@ -340,6 +340,7 @@ function LMSInitialize() {
 
         <?php
         $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+        $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
         $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
         if ($showGlossary) {
             if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
@@ -352,6 +353,10 @@ function LMSInitialize() {
                 <?php } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { ?>
                 attach_glossary_into_scorm('automatic');
             <?php } ?>
+        <?php } ?>
+
+        <?php if ($fixLinkSetting) { ?>
+            attach_glossary_into_scorm('fix_links');
         <?php } ?>
         return('true');
     }
@@ -1171,8 +1176,17 @@ function chamilo_void_save_asset(score, max, min, status) {
         min = 0;
     }
 
-    //assume a default of 100, otherwise the score will not get saved (see lpi->set_score())
-    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, score, max, min, status);
+    // Assume a default of 100, otherwise the score will not get saved (see lpi->set_score())
+    xajax_save_item(
+        olms.lms_lp_id,
+        olms.lms_user_id,
+        olms.lms_view_id,
+        olms.lms_item_id,
+        score,
+        max,
+        min,
+        status
+    );
 }
 
 /**
@@ -1444,6 +1458,7 @@ function switch_item(current_item, next_item){
             olms.lesson_location,
             olms.interactions,
             olms.lms_item_core_exit,
+            orig_item_type,
             olms.session_id,
             olms.course_id,
             olms.finishSignalReceived,
@@ -1538,6 +1553,7 @@ function switch_item(current_item, next_item){
         olms.lesson_location,
         olms.interactions,
         olms.lms_item_core_exit,
+        orig_item_type,
         olms.session_id,
         olms.course_id,
         olms.finishSignalReceived,
@@ -1588,7 +1604,7 @@ function switch_item(current_item, next_item){
             break;
     }
 
-    var mysrc = 'lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
+    var mysrc = '<?php echo api_get_path(WEB_CODE_PATH); ?>newscorm/lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
                 '&item_id=' + next_item + '&cidReq=' + olms.lms_course_code + '&id_session=' + olms.lms_session_id;
     var cont_f = $("#content_id");
 
@@ -1609,7 +1625,6 @@ function switch_item(current_item, next_item){
     if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
         xajax_start_timer();
     }
-
 
     //(4) refresh the audio player if needed
     $.ajax({
@@ -1741,7 +1756,7 @@ function xajax_save_item(
     params += '&statusSignalReceived='+statusSignalReceived;
 
     // console.info(session_time);
-    if (olms.lms_lp_type == 1 || item_type == 'document') {
+    if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
         logit_lms('xajax_save_item with params:' + params,3);
         $.ajax({
             type:"POST",
@@ -2109,7 +2124,7 @@ function attach_glossary_into_scorm(type) {
             }
         });
     } else {
-        if ('manual') {
+        if (type == 'manual') {
             $("iframe").contents().find("body").on("click", ".glossary", function() {
                 is_glossary_name = $(this).html();
 
@@ -2154,5 +2169,49 @@ function attach_glossary_into_scorm(type) {
                 });
             });
         }
+
+if (type == 'fix_links') {
+$(document).ready(function() {
+var objects = $("iframe").contents().find('object');
+
+var pathname = location.pathname;
+var coursePath = pathname.substr(0, pathname.indexOf('/main/'));
+var url = "http://"+location.host + coursePath+"/courses/proxy.php?";
+
+objects.each(function (value, obj) {
+
+var dialogId = this.id +'_dialog';
+var openerId = this.id +'_opener';
+
+var link = '<a id="'+openerId+'" href="#" class="btn">'+
+    '<div style="text-align: center"><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/play-circle-8x.png'; ?>"/><br />If video does not work, try clicking here.</div></a>';
+var embed = $("iframe").contents().find("#"+this.id).find('embed').first();
+
+var height = embed.attr('height');
+var width = embed.attr('width');
+var src = embed.attr('src').replace('https', 'http');
+
+var completeUrl =  url + 'width='+embed.attr('width')+
+'&height='+height+
+'&id='+this.id+
+'&flashvars='+encodeURIComponent(embed.attr('flashvars'))+
+'&src='+src+
+'&width='+width;
+
+var iframe = '<iframe ' +
+'style="border: 0px;"  width="100%" height="100%" ' +
+'src="'+completeUrl+
+'">' +
+'</iframe>';
+
+
+$("iframe").contents().find("#"+this.id).append('<br />' + link);
+$("iframe").contents().find('#' + openerId).click(function() {
+var w = window.open(completeUrl, "Video", "width="+width+", "+"height="+height+"");
+w = window.document.title = 'Video';
+});
+});
+});
+}
     }
 }

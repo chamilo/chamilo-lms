@@ -9,6 +9,7 @@ class ch_dropdown extends survey_question
     /**
      * @param array $survey_data
      * @param $formData
+     *
      * @return FormValidator
      */
     public function createForm($survey_data, $formData)
@@ -32,8 +33,8 @@ class ch_dropdown extends survey_question
     public function render(FormValidator $form, $questionData = array(), $answers = '')
     {
         $name = 'question' . $questionData['question_id'];
+        array_unshift($questionData['options'], '--');
         $form->addSelect($name, null, $questionData['options']);
-
         if (!empty($answers)) {
             $form->setDefaults([$name => $answers]);
         }

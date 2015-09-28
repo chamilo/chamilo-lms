@@ -8,11 +8,7 @@
  */
 function isMultipleUrlSupport()
 {
-    global $_configuration;
-    if (isset($_configuration['enable_multiple_url_support_for_course_category'])) {
-        return $_configuration['enable_multiple_url_support_for_course_category'];
-    }
-    return false;
+    return api_get_configuration_value('enable_multiple_url_support_for_course_category');
 }
 
 /**
@@ -29,6 +25,7 @@ function getCategoryById($categoryId)
     if (Database::num_rows($result)) {
         return Database::fetch_array($result, 'ASSOC');
     }
+
     return array();
 }
 
@@ -46,6 +43,7 @@ function getCategory($category)
     if (Database::num_rows($result)) {
         return Database::fetch_array($result, 'ASSOC');
     }
+
     return array();
 }
 
@@ -107,7 +105,6 @@ function getCategories($category)
     return $categories;
 }
 
-
 /**
  * @param string $code
  * @param string $name
@@ -140,7 +137,8 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
         'parent_id' => empty($parent_id) ? '' : $parent_id,
         'tree_pos' => $tree_pos,
         'children_count' => 0,
-        'auth_course_child' => $canHaveCourses
+        'auth_course_child' => $canHaveCourses,
+        'auth_cat_child' => 'TRUE'
     ];
 
     $categoryId = Database::insert($tbl_category, $params);
@@ -242,8 +240,10 @@ function editNode($code, $name, $canHaveCourses, $old_code)
     Database::query($sql);
 
     // Updating course category
-    $sql = "UPDATE $tbl_course SET category_code = '$code' WHERE category_code = '$old_code' ";
+    $sql = "UPDATE $tbl_course SET category_code = '$code'
+            WHERE category_code = '$old_code' ";
     Database::query($sql);
+
     return true;
 }
 
@@ -324,6 +324,7 @@ function courseCategoryChildrenCount($categoryId)
     }
     $sql = "UPDATE $tbl_category SET children_count = $count WHERE id = $categoryId";
     Database::query($sql);
+
     return $count + 1;
 }
 
@@ -371,6 +372,7 @@ function getParents($categoryCode)
         $subChildren = getParents($parent['code']);
         $children = array_merge($children, $subChildren);
     }
+
     return $children;
 }
 
@@ -392,11 +394,13 @@ function getParentsToString($categoryCode)
 
         return $categoriesInString;
     }
+
     return null;
 }
 
 /**
  * @param string $categorySource
+ *
  * @return string
  */
 function listCategories($categorySource)
@@ -460,12 +464,16 @@ function listCategories($categorySource)
 function getCategoriesToDisplayInHomePage()
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $sql = "SELECT name FROM $tbl_category WHERE parent_id IS NULL ORDER BY tree_pos";
+    $sql = "SELECT name FROM $tbl_category
+            WHERE parent_id IS NULL
+            ORDER BY tree_pos";
+
     return Database::store_result(Database::query($sql));
 }
 
 /**
  * @param int $id
+ *
  * @return bool
  */
 function addToUrl($id)
@@ -478,6 +486,7 @@ function addToUrl($id)
 
 /**
  * @param string $categoryCode
+ *
  * @return array
  */
 function getCategoriesCanBeAddedInCourse($categoryCode)
@@ -576,7 +585,6 @@ function browseCourseCategories()
  */
 function countCoursesInCategory($category_code="", $searchTerm = '')
 {
-    global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $categoryCode = Database::escape_string($category_code);
     $searchTerm = Database::escape_string($searchTerm);
@@ -654,7 +662,6 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
  */
 function browseCoursesInCategory($category_code, $random_value = null, $limit = array())
 {
-    global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $specialCourseList = CourseManager::get_special_course_list();
@@ -856,8 +863,10 @@ function getCourseCategoryNotInList($list)
     $list = array_map('intval', $list);
     $listToString = implode("','", $list);
 
-    $sql = "SELECT * FROM $table WHERE id NOT IN ('$listToString') AND (parent_id IS NULL) ";
+    $sql = "SELECT * FROM $table
+            WHERE id NOT IN ('$listToString') AND (parent_id IS NULL) ";
     $result = Database::query($sql);
+
     return Database::store_result($result, 'ASSOC');
 }
 
@@ -1002,15 +1011,13 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
             $pageDiv .= getPageNumberItem($pageTop + 1, $pageLength, null, '...');
         }
         $pageDiv .= getPageNumberItem($pageTotal, $pageLength);
-    } else {
-        // Nothing to do
     }
 
     // Complete pagination html
-    $pageDiv = Display::tag('ul',$pageDiv,array('class' => 'pagination'));
+    $pageDiv = Display::tag('ul', $pageDiv, array('class' => 'pagination'));
 
 
-    $html.='<nav>'.$pageDiv.'</nav>';
+    $html .= '<nav>'.$pageDiv.'</nav>';
     return $html;
 }
 
@@ -1108,8 +1115,6 @@ function getPageNumberItem($pageNumber, $pageLength, $liAttributes = array(), $c
  */
 function getCourseCatalogNameTools($action)
 {
-
-
     $nameTools = get_lang('SortMyCourses');
     if (empty($action)) {
         return $nameTools; //should never happen

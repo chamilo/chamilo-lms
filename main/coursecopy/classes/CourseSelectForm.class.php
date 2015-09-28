@@ -19,24 +19,24 @@ class CourseSelectForm
 	static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
     {
         global $charset;
-		$resource_titles[RESOURCE_EVENT]                = get_lang('Events');
-		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
-		$resource_titles[RESOURCE_DOCUMENT] 			= get_lang('Documents');
-		$resource_titles[RESOURCE_LINK] 				= get_lang('Links');
-		$resource_titles[RESOURCE_COURSEDESCRIPTION]	= get_lang('CourseDescription');
-		$resource_titles[RESOURCE_FORUM]                = get_lang('Forums');
-        $resource_titles[RESOURCE_FORUMCATEGORY]        = get_lang('ForumCategory');
-		$resource_titles[RESOURCE_QUIZ] 				= get_lang('Tests');
-        $resource_titles[RESOURCE_TEST_CATEGORY] 		= get_lang('QuestionCategory');
-		$resource_titles[RESOURCE_LEARNPATH]            = get_lang('ToolLearnpath');
-		$resource_titles[RESOURCE_SCORM]                = 'SCORM';
-		$resource_titles[RESOURCE_TOOL_INTRO]           = get_lang('ToolIntro');
-		$resource_titles[RESOURCE_SURVEY]               = get_lang('Survey');
-		$resource_titles[RESOURCE_GLOSSARY] 			= get_lang('Glossary');
-		$resource_titles[RESOURCE_WIKI]                 = get_lang('Wiki');
-		$resource_titles[RESOURCE_THEMATIC]             = get_lang('Thematic');
-		$resource_titles[RESOURCE_ATTENDANCE]           = get_lang('Attendance');
-        $resource_titles[RESOURCE_WORK]                 = get_lang('ToolStudentPublication');
+        $resource_titles[RESOURCE_EVENT] = get_lang('Events');
+        $resource_titles[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
+        $resource_titles[RESOURCE_DOCUMENT] = get_lang('Documents');
+        $resource_titles[RESOURCE_LINK] = get_lang('Links');
+        $resource_titles[RESOURCE_COURSEDESCRIPTION] = get_lang('CourseDescription');
+        $resource_titles[RESOURCE_FORUM] = get_lang('Forums');
+        $resource_titles[RESOURCE_FORUMCATEGORY] = get_lang('ForumCategory');
+        $resource_titles[RESOURCE_QUIZ] = get_lang('Tests');
+        $resource_titles[RESOURCE_TEST_CATEGORY] = get_lang('QuestionCategory');
+        $resource_titles[RESOURCE_LEARNPATH] = get_lang('ToolLearnpath');
+        $resource_titles[RESOURCE_SCORM] = 'SCORM';
+        $resource_titles[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
+        $resource_titles[RESOURCE_SURVEY] = get_lang('Survey');
+        $resource_titles[RESOURCE_GLOSSARY] = get_lang('Glossary');
+        $resource_titles[RESOURCE_WIKI] = get_lang('Wiki');
+        $resource_titles[RESOURCE_THEMATIC] = get_lang('Thematic');
+        $resource_titles[RESOURCE_ATTENDANCE] = get_lang('Attendance');
+        $resource_titles[RESOURCE_WORK] = get_lang('ToolStudentPublication');
 ?>
 		<script>
 			function exp(item) {
@@ -394,15 +394,13 @@ class CourseSelectForm
 		// Loading the results from the checkboxes of ethe javascript
 		$resource = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
 
-		$course_info 	= api_get_course_info($course_code);
-		$table_doc 		= Database::get_course_table(TABLE_DOCUMENT);
-		$table_prop 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-		$course_id 		= $course_info['real_id'];
+		$course_info = api_get_course_info($course_code);
+		$table_doc = Database::get_course_table(TABLE_DOCUMENT);
+		$table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
+		$course_id = $course_info['real_id'];
 
 		/* Searching the documents resource that have been set to null because
         $avoid_serialize is true in the display_form() function*/
-
 		if ($from == 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
@@ -420,13 +418,20 @@ class CourseSelectForm
 							WHERE
 							    d.c_id = '.$course_id.' AND
                                 p.c_id = '.$course_id.' AND
-                                tool 	= \''.TOOL_DOCUMENT.'\' AND
-                                p.ref 	= d.id AND p.visibility != 2 AND
-                                d.id 	= '.$resource_item.$condition_session.'
+                                tool = \''.TOOL_DOCUMENT.'\' AND
+                                p.ref = d.id AND p.visibility != 2 AND
+                                d.id = '.$resource_item.$condition_session.'
 							ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
-						$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
+                        $doc = new Document(
+                            $obj->id,
+                            $obj->path,
+                            $obj->comment,
+                            $obj->title,
+                            $obj->filetype,
+                            $obj->size
+                        );
                         if ($doc) {
                             $course->add_resource($doc);
                             // adding item property
@@ -449,6 +454,7 @@ class CourseSelectForm
 
 		if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
+
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
 						foreach($resources as $id => $obj) {

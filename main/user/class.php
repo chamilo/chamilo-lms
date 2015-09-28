@@ -37,16 +37,16 @@ $(document).ready( function() {
 });
 </script>';
 
-Display :: display_header($tool_name, "User");
+$actions = '';
 $usergroup = new UserGroup();
 if (api_is_allowed_to_edit()) {
-    echo '<div class="actions">';
+    $actions .= '<div class="actions">';
     if ($type == 'registered') {
-        echo '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
+        $actions .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
             Display::return_icon('add.png', get_lang("AddClassesToACourse"), array(), ICON_SIZE_MEDIUM).'</a>';
     } else {
-        echo '<a href="class.php?'.api_get_cidreq().'&type=registered">'.
-            Display::return_icon('empty_evaluation.png', get_lang("Classes"), array(), ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="class.php?'.api_get_cidreq().'&type=registered">'.
+            Display::return_icon('back.png', get_lang("Classes"), array(), ICON_SIZE_MEDIUM).'</a>';
 
         $form = new FormValidator('groups', 'post', api_get_self(), '', '', FormValidator::LAYOUT_INLINE);
         $options = [
@@ -56,12 +56,10 @@ if (api_is_allowed_to_edit()) {
         ];
         $form->addSelect('group_filter', get_lang('Groups'), $options, ['id' => 'group_filter']);
         $form->setDefaults(['group_filter' => $groupFilter]);
-        $form->display();
+        $actions .= $form->returnForm();
     }
-    echo '</div>';
+    $actions .= '</div>';
 }
-
-echo UserManager::getUserSubscriptionTab(4);
 
 if (api_is_allowed_to_edit()) {
     $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -74,6 +72,7 @@ if (api_is_allowed_to_edit()) {
                     array(api_get_course_int_id()),
                     false
                 );
+                Display::addFlash(Display::return_message(get_lang('Added')));
             }
             break;
         case 'remove_class_from_course':
@@ -83,6 +82,7 @@ if (api_is_allowed_to_edit()) {
                     $id,
                     array(api_get_course_int_id())
                 );
+                Display::addFlash(Display::return_message(get_lang('Deleted')));
             }
             break;
     }
@@ -101,8 +101,8 @@ $columns = array(
     get_lang('Actions'),
 );
 
-//Column config
-$column_model = array(
+// Column config
+$columnModel = array(
     array('name'=>'name',
         'index' => 'name',
         'width' => '35',
@@ -135,26 +135,25 @@ $column_model = array(
     ),
 );
 // Autowidth
-$extra_params['autowidth'] = 'true';
+$extraParams['autowidth'] = 'true';
 // height auto
-$extra_params['height'] = 'auto';
+$extraParams['height'] = 'auto';
 
-// With this function we can add actions to the jgrid
-$action_links = 'function action_formatter (cellvalue, options, rowObject) {
-    return \''
-    .' <a href="class.php?action=add_class&id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
-    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
-}';
+Display :: display_header($tool_name, "User");
+
 ?>
 <script>
 $(function() {
 <?php
     // grid definition see the $usergroup>display() function
-    echo Display::grid_js('usergroups',  $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+    echo Display::grid_js('usergroups',  $url, $columns, $columnModel, $extraParams, array(), '', true);
 ?>
 });
 </script>
 <?php
+
+echo $actions;
+echo UserManager::getUserSubscriptionTab(4);
 
 $usergroup->display_teacher_view();
 Display :: display_footer();

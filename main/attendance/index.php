@@ -106,7 +106,7 @@ $(function() {
 			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9",   "border-left":"none","border-right":"none"});
 			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	 "border-left":"none","border-right":"none"});
 			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);
-			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif");
+			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/icons/22/lock-closed.png");
 			$(this).attr("title","'.get_lang('DateUnLock').'");
 			$(this).attr("alt","'.get_lang('DateUnLock').'");
 			$(this).attr("class","img_lock");
@@ -134,7 +134,7 @@ $(function() {
 			});
 
 			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);
-			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
+			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/icons/22/lock-open.png");
 			$(this).attr("title","'.get_lang('DateLock').'");
 			$(this).attr("alt","'.get_lang('DateLock').'");
 			$(this).attr("class","img_unlock");
@@ -176,10 +176,7 @@ if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
     unset($_SESSION['gradebook']);
     $gradebook = '';
 }
-$param_gradebook = '';
-if (isset($_SESSION['gradebook'])) {
-    $param_gradebook = '&gradebook='.$gradebook;
-}
+
 $student_param = '';
 $student_id = null;
 if (api_is_drh() && isset($_GET['student_id'])) {
@@ -194,7 +191,7 @@ if (api_is_drh() && isset($_GET['student_id'])) {
 if (!empty($gradebook)) {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php', 'name' => get_lang('ToolGradebook'));
 }
-$interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=attendance_list'.$param_gradebook.$student_param, 'name' => get_lang('ToolAttendance'));
+$interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=attendance_list&'.$student_param, 'name' => get_lang('ToolAttendance'));
 if ($action == 'attendance_add') {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateANewAttendance'));
 }
@@ -205,11 +202,11 @@ if ($action == 'attendance_sheet_list' || $action == 'attendance_sheet_add') {
     $interbreadcrumb[] = array('url' => '#', 'name' => $attendance_data['name']);
 }
 if ($action == 'calendar_list' || $action == 'calendar_edit' || $action == 'calendar_delete' || $action == 'calendar_all_delete') {
-    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook, 'name' => $attendance_data['name']);
+    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id, 'name' => $attendance_data['name']);
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AttendanceCalendar'));
 }
 if ($action == 'calendar_add') {
-    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook, 'name' => $attendance_data['name']);
+    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id, 'name' => $attendance_data['name']);
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AddDateAndTime'));
 }
 

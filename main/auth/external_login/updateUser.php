@@ -2,8 +2,8 @@
 
 //Script loaded by local.inc.php providing update user information of type external_logininfo.
 /*
-  This script must not exit.
- */
+This script must not exit.
+*/
 
 use ChamiloSession as Session;
 
@@ -32,10 +32,10 @@ if ($new_user !== false) { //User can login
     $_user['uidReset'] = true;
     $uidReset = true;
     Session::write('_user', $_user);
-} else { //User cannot login
+} else {
+    //User cannot login
     $loginFailed = true;
     Session::erase('_uid');
     header('Location: ' . api_get_path(WEB_PATH) . 'index.php?loginFailed=1&error=user_password_incorrect');
     exit;
 }
-?>

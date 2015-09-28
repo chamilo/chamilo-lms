@@ -1,25 +1,18 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
-
-/* For licensing terms, see /license.txt */
-/**
- * 	Code library for login process
- *
- * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
- * @author Julio Montoya		<gugli100@gmail.com>
- * @package chamilo.login
- */
 
 use Chamilo\UserBundle\Entity\User;
 
 /**
- * Class
+ * Class Login
+ * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
+ * @author Julio Montoya <gugli100@gmail.com>
  * @package chamilo.login
  */
 class Login
 {
-
     /**
      * Get user account list
      *
@@ -121,7 +114,10 @@ class Login
                 )
             );
 
-            return sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
+            return sprintf(
+                get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'),
+                $admin_email
+            );
         }
     }
 
@@ -333,18 +329,6 @@ class Login
                     UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
                     Session::write('is_platformAdmin', $is_platformAdmin);
                     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
-
-//
-//
-//                    // If request_uri is setted we have to go further to have course permissions
-//                    if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
-//                        if (isset($_SESSION['noredirection'])) {
-//                            //If we just want to reset info without redirecting user
-//                            unset($_SESSION['noredirection']);
-//                        } else {
-//                            LoginRedirection::redirect();
-//                        }
-//                    }
                 } else {
                     header('location:' . api_get_path(WEB_PATH));
                     //exit("WARNING UNDEFINED UID !! ");
@@ -370,7 +354,7 @@ class Login
      * @global object $_user
      * @global int $_cid
      * @global array $_course
-     * @global type $_real_cid
+     * @global int $_real_cid
      * @global type $_courseUser
      * @global type $is_courseAdmin
      * @global type $is_courseTutor
@@ -427,8 +411,6 @@ class Login
                     $_course['official_code'] = $course_data['visual_code']; // use in echo
                     $_course['sysCode'] = $course_data['code']; // use as key in db
                     $_course['path'] = $course_data['directory']; // use as key in path
-                    $_course['dbName'] = $course_data['db_name']; // use as key in db list
-                    $_course['db_name'] = $course_data['db_name']; // not needed in Chamilo 1.9
                     $_course['titular'] = $course_data['tutor_name']; // this should be deprecated and use the table course_rel_user
                     $_course['language'] = $course_data['course_language'];
                     $_course['extLink']['url'] = $course_data['department_url'];
@@ -539,8 +521,6 @@ class Login
                           } */
 
                         $session_lifetime = 3600; // 1 hour
-
-                        $course_code = $_course['sysCode'];
                         $time = api_get_utc_datetime();
 
                         if (isset($_user['user_id']) && !empty($_user['user_id'])) {
@@ -559,12 +539,13 @@ class Login
                             if (Database::num_rows($result) > 0) {
                                 $i_course_access_id = Database::result($result, 0, 0);
                                 //We update the course tracking table
-                                $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
+                                $sql = "UPDATE $course_tracking_table
+                                        SET logout_course_date = '$time', counter = counter+1
                                         WHERE course_access_id = " . intval($i_course_access_id) . " AND session_id = " . api_get_session_id();
                                 Database::query($sql);
                             } else {
                                 $sql = "INSERT INTO $course_tracking_table (c_id, user_id, login_course_date, logout_course_date, counter, session_id)" .
-                                    "VALUES('" . api_get_course_int_id() . "', '" . $_user['user_id'] . "', '$time', '$time', '1','" . api_get_session_id() . "')";
+                                        "VALUES('" . api_get_course_int_id() . "', '" . $_user['user_id'] . "', '$time', '$time', '1','" . api_get_session_id() . "')";
                                 Database::query($sql);
                             }
                         }

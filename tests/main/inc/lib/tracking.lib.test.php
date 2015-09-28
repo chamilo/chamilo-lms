@@ -131,17 +131,6 @@ class TestTracking extends UnitTestCase {
 		//var_dump($res);
 	 }
 
-	 function testget_average_test_scorm_and_lp () {
-	 	global $_user,$_course;
-	 	$user_id=$_user;
-	 	$course_id=$_course;
-	 	$this->tracking = new Tracking();
-	 	$res=$this->tracking->get_average_test_scorm_and_lp($user_id,$course_id);
-	 	$this->assertTrue(is_object($this->tracking));
-
-		if(!is_numeric($res))$this->assertTrue(is_null($res));
-		//var_dump($res);
-	 }
 
 	 function testget_avg_student_exercise_score() {
 	 	global $_user,$_course;

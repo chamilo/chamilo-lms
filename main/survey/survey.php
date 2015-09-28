@@ -38,22 +38,25 @@ if (!api_is_allowed_to_edit(false, true) ||
 }
 
 // Database table definitions
-$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
-$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_survey_question_group    = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-$table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database:: get_course_table(TABLE_SURVEY);
+$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_survey_question_group = Database:: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
+$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
 $survey_id = intval($_GET['survey_id']);
 $course_id = api_get_course_int_id();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Breadcrumbs
-$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array(
+		'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+		'name' => get_lang('SurveyList'),
+);
 
 // Getting the survey information
-if (isset($_GET['survey_id'])) {
+if (!empty($_GET['survey_id'])) {
 	$course_code = api_get_course_id();
 	if ($course_code!=-1) {
 		$survey_data = SurveyManager::get_survey($survey_id);
@@ -63,6 +66,11 @@ if (isset($_GET['survey_id'])) {
 		Display :: display_footer();
 		exit;
 	}
+} else {
+    Display :: display_header(get_lang('ToolSurvey'));
+    Display :: display_error_message(get_lang('NotAllowed'), false);
+    Display :: display_footer();
+    exit;
 }
 
 $tool_name = strip_tags($survey_data['title']);
@@ -116,21 +124,6 @@ if (isset($action)) {
 	}
 }
 
-if (isset($_GET['message'])) {
-	// We have created the survey or updated the survey
-	if (in_array($_GET['message'], array('SurveyUpdatedSuccesfully','SurveyCreatedSuccesfully'))) {
-		Display::display_confirmation_message(get_lang($message_information).', '.PHP_EOL.api_strtolower(get_lang('YouCanNowAddQuestionToYourSurvey')));
-	}
-	// We have added a question
-	if (in_array($_GET['message'], array('QuestionAdded', 'QuestionUpdated'))) {
-		Display::display_confirmation_message(get_lang($message_information));
-	}
-
-	if (in_array($_GET['message'], array('YouNeedToCreateGroups'))) {
-		Display::display_warning_message(get_lang($message_information), false);
-	}
-}
-
 if (!empty($survey_data['survey_version'])) echo '<b>'.get_lang('Version').': '.$survey_data['survey_version'].'</b>';
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
@@ -146,21 +139,25 @@ $survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php
 echo '<div class="actions">'.$survey_actions.'</div>';
 
 if ($survey_data['survey_type'] == 0) {
-	echo '<div class="well actions">';
-	echo '<a style="padding-left:0px;" href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$survey_id.'">'.Display::return_icon('yesno.png', get_lang('YesNo'), null, ICON_SIZE_BIG).'</a>';
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$survey_id.'">'.Display::return_icon('mcua.png', get_lang('UniqueSelect'), null, ICON_SIZE_BIG).'<br /></a>';
+	echo '<div class="panel panel-default">';
+        echo '<div class="panel-body">';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$survey_id.'">'.Display::return_icon('yesno.png', get_lang('YesNo'), null, ICON_SIZE_BIG).'</a>';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$survey_id.'">'.Display::return_icon('mcua.png', get_lang('UniqueSelect'), null, ICON_SIZE_BIG).'</a>';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$survey_id.'">'.Display::return_icon('mcma.png', get_lang('MultipleResponse'), null, ICON_SIZE_BIG).'</a>';
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$survey_id.'">'.Display::return_icon('open_answer.png', get_lang('Open'), null, ICON_SIZE_BIG).'<br /></a>';
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$survey_id.'">'.Display::return_icon('dropdown.png', get_lang('Dropdown'), null, ICON_SIZE_BIG).'<br /></a>';
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$survey_id.'">'.Display::return_icon('percentagequestion.png', get_lang('Percentage'), null, ICON_SIZE_BIG).'<br /></a>';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$survey_id.'">'.Display::return_icon('open_answer.png', get_lang('Open'), null, ICON_SIZE_BIG).'</a>';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$survey_id.'">'.Display::return_icon('dropdown.png', get_lang('Dropdown'), null, ICON_SIZE_BIG).'</a>';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$survey_id.'">'.Display::return_icon('percentagequestion.png', get_lang('Percentage'), null, ICON_SIZE_BIG).'</a>';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=score&amp;survey_id='.$survey_id.'">'.Display::return_icon('scorequestion.png', get_lang('Score'), null, ICON_SIZE_BIG).'</a>';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=comment&amp;survey_id='.$survey_id.'">'.Display::return_icon('commentquestion.png', get_lang('Comment'), null, ICON_SIZE_BIG).'</a>';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$survey_id.'">'.Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG).'</a>';
 	echo '</div>';
+        echo '</div>';
 } else {
-	echo '<div class="well actions">';
-	echo '<a style="padding-left:0px;" href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$survey_id.'"><img src="../img/yesno.gif" /></a></div>';
+	echo '<div class="panel panel-default">';
+        echo '<div class="panel-body">';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$survey_id.'"><img src="../img/yesno.gif" /></a></div>';
 	echo '</div>';
+        echo '</div>';
 }
 
 // Displaying the table header with all the questions

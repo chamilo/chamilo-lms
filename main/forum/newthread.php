@@ -47,10 +47,7 @@ if (isset($_GET['origin'])) {
 }
 
 /* MAIN DISPLAY SECTION */
-
-/* Retrieving forum and forum category information */
-
-$current_forum = get_forum_information($_GET['forum']); // Note: This has to be validated that it is an existing forum.
+$current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
 /* Breadcrumbs */

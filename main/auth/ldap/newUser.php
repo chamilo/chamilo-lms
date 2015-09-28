@@ -1,8 +1,8 @@
-<?php # $Id: newUser.php 14965 2008-04-20 23:01:17Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 * Users trying to login, who do not yet exist in the Chamilo database,
-* can be added by this script which tries to retrieve ldap information 
+* can be added by this script which tries to retrieve ldap information
 * about them.
 * @author Roan Embrechts
 * @package chamilo.auth.ldap
@@ -29,12 +29,9 @@ if ($ldap_login_success)
 	*/
 	$info_array = ldap_find_user_info($login);
 	ldap_put_user_info_locally($login, $info_array);
-}
-else
-{
-	//error_log('Could not find '.$login.' on LDAP server',0);
+} else {
+    //error_log('Could not find '.$login.' on LDAP server',0);
 	$loginFailed = true;
 	unset($_user['user_id']);
 	$uidReset = false;
 }
-?>

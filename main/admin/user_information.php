@@ -51,6 +51,13 @@ if (api_is_platform_admin()) {
         ),
         api_get_self().'?user_id='.$user['user_id'].'&action=export'
     );
+    $vCardExportLink = Display::url(
+        Display::return_icon(
+            'vcard.png', get_lang('UserInfo'),'', ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$user['user_id']
+    );
+    
 }
 
 // Show info about who created this user and when
@@ -407,13 +414,14 @@ if (isset($_GET['action'])) {
 Display::display_header($tool_name);
 
 echo '<div class="actions">
-    <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.
-    Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_MEDIUM).'
-    </a>
-    '.$login_as_icon.'
-    '.$editUser.'
-    '.$exportLink.'
-</div>';
+        <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.
+        Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_MEDIUM).'
+        </a>
+        '.$login_as_icon.'
+        '.$editUser.'
+        '.$exportLink.'
+        '.$vCardExportLink.'
+    </div>';
 
 echo Display::page_header($tool_name);
 

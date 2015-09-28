@@ -50,9 +50,9 @@ switch ($action) {
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
             $cleanUrl = str_replace('/', '-', $url);
 
-            $newUrlDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
+            $newUrlDir = api_get_path(SYS_APP_PATH) . "home/$cleanUrl/admin/";
         } else {
-            $newUrlDir = api_get_path(SYS_PATH) . "home/admin/";
+            $newUrlDir = api_get_path(SYS_APP_PATH) . "home/admin/";
         }
 
         if (!file_exists($newUrlDir)) {

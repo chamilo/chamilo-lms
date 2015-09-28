@@ -26,6 +26,7 @@ if (isset($_GET['action'])) {
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LEARNPATH;
+$_course = api_get_course_info();
 
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
@@ -333,7 +334,6 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 if (isset($_SESSION['oLP'])) {
     $_SESSION['oLP']->update_queue = array(); // Reinitialises array used by javascript to update items in the TOC.
-    $_SESSION['oLP']->message = ''; // Should use ->clear_message() method but doesn't work.
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
@@ -390,6 +390,15 @@ switch ($action) {
                 } else {
 
                     $_SESSION['post_time'] = $_POST['post_time'];
+
+                    $parent = isset($_POST['parent']) ? $_POST['parent'] : '';
+                    $previous = isset($_POST['previous']) ? $_POST['previous'] : '';
+                    $type = isset($_POST['type']) ? $_POST['type'] : '';
+                    $path = isset($_POST['path']) ? $_POST['path'] : '';
+                    $description = isset($_POST['description']) ? $_POST['description'] : '';
+                    $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
+                    $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
+
                     if ($_POST['type'] == TOOL_DOCUMENT) {
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {
                             $document_id = $_POST['path'];
@@ -397,25 +406,25 @@ switch ($action) {
                             $document_id = $_SESSION['oLP']->create_document($_course);
                         }
                         $new_item_id = $_SESSION['oLP']->add_item(
-                            $_POST['parent'],
-                            $_POST['previous'],
-                            $_POST['type'],
+                            $parent,
+                            $previous,
+                            $type,
                             $document_id,
                             $post_title,
-                            $_POST['description'],
-                            $_POST['prerequisites']
+                            $description,
+                            $prerequisites
                         );
                     } else {
                         // For all other item types than documents, load the item using the item type and path rather than its ID.
                         $new_item_id = $_SESSION['oLP']->add_item(
-                            $_POST['parent'],
-                            $_POST['previous'],
-                            $_POST['type'],
-                            $_POST['path'],
+                            $parent,
+                            $previous,
+                            $type,
+                            $path,
                             $post_title,
-                            $_POST['description'],
-                            $_POST['prerequisites'],
-                            $_POST['maxTimeAllowed']
+                            $description,
+                            $prerequisites,
+                            $maxTimeAllowed
                         );
                     }
                     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
@@ -624,16 +633,22 @@ switch ($action) {
                 if (isset($_FILES['mp3'])) {
                     $audio = $_FILES['mp3'];
                 }
+
+                $description = isset($_POST['description']) ? $_POST['description'] : '';
+                $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
+                $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
+                $url = isset($_POST['url']) ? $_POST['url'] : '';
+
                 $_SESSION['oLP']->edit_item(
                     $_REQUEST['id'],
                     $_POST['parent'],
                     $_POST['previous'],
                     $post_title,
-                    $_POST['description'],
-                    $_POST['prerequisites'],
+                    $description,
+                    $prerequisites,
                     $audio,
-                    $_POST['maxTimeAllowed'],
-                    $_POST['url']
+                    $maxTimeAllowed,
+                    $url
                 );
 
                 if (isset($_POST['content_lp'])) {
@@ -1319,6 +1334,9 @@ switch ($action) {
             'type' => 'step',
             'lp_id' => $_SESSION['oLP']->lp_id
         ]));
+        break;
+    case 'report':
+        require 'lp_report.php';
         break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);

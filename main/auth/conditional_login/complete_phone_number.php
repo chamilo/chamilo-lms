@@ -45,7 +45,6 @@ if (isset($_POST['submit'])){
         ''
     );
     if ($updated) {
-    ConditionalLogin::login();
+        ConditionalLogin::login();
     }
 }
-?>

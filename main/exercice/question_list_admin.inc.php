@@ -171,13 +171,8 @@ if (!$inATest) {
                 $objQuestionTmp = Question::read($id);
                 $question_class = get_class($objQuestionTmp);
 
-                $clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.Display::return_icon('cd.gif',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
-                /*$edit_link  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
-
-                if ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()) {
-                    $edit_link  = '<a>'.Display::return_icon('edit_na.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
-                }*/
-
+                $clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.
+                    Display::return_icon('cd.gif',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
                 $edit_link = ($objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()) ?
                     '<a>'.Display::return_icon(
                         'edit_na.png',
@@ -198,8 +193,8 @@ if (!$inATest) {
                     $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
                 }
 
-                $edit_link   = Display::tag('div', $edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
-                $clone_link  = Display::tag('div', $clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
+                $edit_link = Display::tag('div', $edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
+                $clone_link = Display::tag('div', $clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
                 $delete_link = Display::tag('div', $delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
                 $actions = Display::tag(
                     'div',

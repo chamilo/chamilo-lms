@@ -41,7 +41,7 @@ switch ($action) {
         $tbl_my_user_friend      = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_user 			     = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $search				     = Database::escape_string($_REQUEST['tag']);
+        $search				     = Database::escape_string($_REQUEST['q']);
 
         $access_url_id           = api_get_multiple_access_url() == 'true' ? api_get_current_access_url_id() : 1;
         $user_id                 = api_get_user_id();
@@ -128,9 +128,9 @@ switch ($action) {
                 if ($showEmail == 'true') {
                     $name .= ' ('.$row['email'].')';
                 }
-                $return[] = array(
-                    'caption' => $name,
-                    'value' => $row['id']
+                $return['items'][] = array(
+                    'text' => $name,
+                    'id' => $row['id']
                 );
             }
         }

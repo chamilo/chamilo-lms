@@ -5,10 +5,6 @@
  * @package chamilo.admin
  */
 
-/**
- * Validate the imported data.
- */
-
 $cidReset = true;
 require '../inc/global.inc.php';
 
@@ -149,7 +145,7 @@ function complete_missing_data($user)
     }
 
     if (empty($user['ExpiryDate'])) {
-        $user['ExpiryDate'] = '0000-00-00 00:00:00';
+        $user['ExpiryDate'] = '';
     }
 
     return $user;
@@ -203,18 +199,6 @@ function save_data($users)
                         CourseManager::subscribe_user($user_id, $course, $user['Status']);
                         $course_info = CourseManager::get_course_information($course);
                         $inserted_in_course[$course] = $course_info['title'];
-                    }
-                    if (CourseManager :: course_exists($course, true)) {
-                        // Also subscribe to virtual courses through check on visual code.
-                        $list = CourseManager :: get_courses_info_from_visual_code($course);
-                        foreach ($list as $vcourse) {
-                            if ($vcourse['code'] == $course) {
-                                // Ignore, this has already been inserted.
-                            } else {
-                                CourseManager :: subscribe_user($user_id, $vcourse['code'], $user['Status']);
-                                $inserted_in_course[$vcourse['code']] = $vcourse['title'];
-                            }
-                        }
                     }
                 }
             }

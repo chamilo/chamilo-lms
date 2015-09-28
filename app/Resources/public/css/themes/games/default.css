@@ -506,6 +506,8 @@ footer .media{
 }
 #about-session .categories .cat-body{
   padding: 20px;
+  width: 100%;
+  display: inline-block;
 }
 #about-session .categories .list-inline li{
   width: 50%;

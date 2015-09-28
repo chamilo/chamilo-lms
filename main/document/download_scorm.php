@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	This file is responsible for  passing requested documents to the browser.
+ *	This file is responsible for passing requested documents to the browser.
  *
  *	@package chamilo.document
- */
-/**
- * Code
  */
 
 session_cache_limiter('none');
@@ -16,6 +13,8 @@ $this_section = SECTION_COURSES;
 
 // Protection
 api_protect_course_script();
+
+$_course = api_get_course_info();
 
 if (!isset($_course)) {
     api_not_allowed(true);
@@ -48,8 +47,6 @@ if (strpos($doc_url,'../') OR strpos($doc_url,'/..')) {
 
 $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/scorm';
 
-//var_dump($sys_course_path);
-
 if (is_dir($sys_course_path.$doc_url)) {
     api_not_allowed();
 }
@@ -59,6 +56,7 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     // Launch event
     Event::event_download($doc_url);
 
-    DocumentManager::file_send_for_download($full_file_name);
+    $fixLinks = api_get_configuration_value('lp_replace_http_to_https');
+    DocumentManager::file_send_for_download($full_file_name, false, '', $fixLinks);
 }
 exit;

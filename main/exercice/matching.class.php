@@ -5,7 +5,8 @@
  *  Class Matching
  *  Matching questions type class
  *
- *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
+ *  This class allows to instantiate an object of
+ *  type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER)
  *	extending the class question
  *
  *	@author Eric Marguin
@@ -111,10 +112,10 @@ class Matching extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="10">' . get_lang('Number') . '</th>
-                    <th width="85%">' . get_lang('Answer') . '</th>
+                    <th width="5%">' . get_lang('Number') . '</th>
+                    <th width="70%">' . get_lang('Answer') . '</th>
                     <th width="15%">' . get_lang('MatchesTo') . '</th>
-                    <th width="10">' . get_lang('Weighting') . '</th>
+                    <th width="10%">' . get_lang('Weighting') . '</th>
                 </tr>
             </thead>
             <tbody>';
@@ -254,6 +255,7 @@ class Matching extends Question
             $matches = $form->getSubmitValue('matches['.$i.']');
             $weighting = $form->getSubmitValue('weighting['.$i.']');
             $this->weighting += $weighting;
+
             $objAnswer->createAnswer(
                 $answer,
                 $matches,
@@ -262,7 +264,6 @@ class Matching extends Question
                 $position
             );
         }
-
         $objAnswer->save();
         $this->save();
     }

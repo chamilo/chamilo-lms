@@ -11,14 +11,13 @@ switch ($action) {
         $user_info = api_get_user_info($_REQUEST['user_id']);
         $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 
-        echo '<div class="well">';
         echo '<div class="row">';
-        echo '<div class="span2">';
+        echo '<div class="col-sm-5">';
         echo '<div class="thumbnail">';
         echo '<img src="'.$user_info['avatar'].'" /> ';
         echo '</div>';
         echo '</div>';
-        echo '<div class="span3">';
+        echo '<div class="col-sm-7">';
         if (api_get_setting('show_email_addresses') == 'false') {
             $user_info['mail'] = ' ';
         } else {
@@ -55,9 +54,15 @@ switch ($action) {
                 'block'
             );
 
-            echo '<a class="btn btn-primary" id="send_message_link">'.
-                get_lang('Send').
-                '</a>';
+            echo '
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <a class="btn btn-primary" id="send_message_link">
+                            <i class="fa fa-envelope"></i> ' . get_lang('Send') . '
+                        </a>
+                    </div>
+                </div>
+            ';
         }
         break;
     case 'user_id_exists':

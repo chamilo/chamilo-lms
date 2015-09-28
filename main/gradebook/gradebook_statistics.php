@@ -61,7 +61,7 @@ if (!$displayscore->is_custom() || empty($displays)) {
     // find the region with the most scores, this is 100% of the bar
 
     $highest_ratio = 0;
-    foreach($keys as $key) {
+    foreach ($keys as $key) {
         if ($nr_items[$key] > $highest_ratio) {
             $highest_ratio = $nr_items[$key];
         }

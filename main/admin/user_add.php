@@ -25,8 +25,8 @@ if ($checkPass == 'true') {
     $htmlHeadXtra[] = '
     <script>
     $(document).ready(function() {
-        $("input[name=\'password[password_auto]\']").each(function(index, value) {
-            $(this).click(function() {
+        $("#password").keypress(function() {
+            $("#password").each(function(index, value) {
                 var value = $(this).attr("value");
                 if (value == 0) {
                     $("#password_progress").show();
@@ -176,7 +176,13 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
     }
 }
 
-$group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
+$group[] = $form->createElement(
+    'radio',
+    'password_auto',
+    get_lang('Password'),
+    get_lang('AutoGeneratePassword').'<br />',
+    1
+);
 $group[] = $form->createElement(
     'radio',
     'password_auto',
@@ -197,10 +203,15 @@ $group[] = $form->createElement(
 );
 
 $form->addGroup($group, 'password', get_lang('Password'), '');
-$form->addGroupRule('password', 'password', 'required', null, 2);
+$form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 if ($checkPass) {
-    $form->addElement('label', null, '<div id="password_progress" style="display:none"></div>');
+    $passwordStrengthLabels = '
+        <div id="password-verdict"></div>
+        <div id="password-errors"></div>
+        <div id="password_progress" style="display:none"></div>
+    ';
+    $form->addElement('label', null, $passwordStrengthLabels);
 }
 
 // Status
@@ -219,8 +230,7 @@ $form->addElement(
     $status,
     array(
         'id' => 'status_select',
-        'class' => 'chzn-select',
-        'onchange' => 'javascript: display_drh_list();',
+        'onchange' => 'javascript: display_drh_list();'
     )
 );
 

@@ -29,9 +29,9 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("CREATE TABLE IF NOT EXISTS hook_observer( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, path varchar(255) NOT NULL, plugin_name varchar(255) NULL, PRIMARY KEY PK_hook_management_hook_observer(id))");
         $this->addSql("CREATE TABLE IF NOT EXISTS hook_event( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, description varchar(255), PRIMARY KEY PK_hook_management_hook_event(id))");
         $this->addSql("CREATE TABLE IF NOT EXISTS hook_call( id int UNSIGNED NOT NULL AUTO_INCREMENT, hook_event_id int UNSIGNED NOT NULL, hook_observer_id int UNSIGNED NOT NULL, type tinyint NOT NULL, hook_order int UNSIGNED NOT NULL, enabled tinyint NOT NULL, PRIMARY KEY PK_hook_management_hook_call(id))");
-        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (iid INT PRIMARY KEY NOT NULL AUTO_INCREMENT, id INT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL)");
-        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (iid INT PRIMARY KEY NOT NULL AUTO_INCREMENT, id INT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL)");
-        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_comment (iid INT PRIMARY KEY NOT NULL AUTO_INCREMENT, id INT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL)");
+        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id INT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL)");
+        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (id INT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL)");
+        $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL)");
         $this->addSql("CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (iid int NOT NULL auto_increment PRIMARY KEY, id INT, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL)");
 
         //$this->addSql("ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id");
@@ -69,7 +69,15 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_course_access ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_online ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_attempt ADD COLUMN c_id int NOT NULL");
-        $this->addSql("ALTER TABLE track_e_default ADD COLUMN session_id int NOT NULL");
+        $table = $schema->getTable('track_e_default');
+        if (!$table->hasColumn('session_id')) {
+            $this->addSql("ALTER TABLE track_e_default ADD COLUMN session_id int NOT NULL");
+        }
+
+        if (!$table->hasColumn('c_id')) {
+            $this->addSql("ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL");
+        }
+
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN user_ip varchar(39) NOT NULL default ''");
         $this->addSql("ALTER TABLE track_e_exercices ADD COLUMN user_ip varchar(39) NOT NULL default ''");
         $this->addSql("ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL default ''");
@@ -78,7 +86,10 @@ class Version110 extends AbstractMigrationChamilo
 
         $this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT null");
         $this->addSql("ALTER TABLE user DROP PRIMARY KEY");
-        $this->addSql("ALTER TABLE user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT AFTER user_id");
+        $this->addSql("ALTER TABLE user ADD COLUMN id int unsigned DEFAULT null");
+        $this->addSql("UPDATE user SET id = user_id");
+        $this->addSql("ALTER TABLE user MODIFY COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT AFTER user_id");
+
         $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_date datetime default NULL");
         $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_text varchar(50) default NULL");
         $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default 0");
@@ -416,7 +427,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
         $this->addSql("ALTER TABLE c_course_setting MODIFY COLUMN value varchar(255) default ''");
 
-        $this->addSql("UPDATE user SET id = user_id");
         $this->addSql("UPDATE course_field SET field_type = 1 WHERE field_variable = 'special_course'");
         $this->addSql("UPDATE user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE user SET expiration_date = NULL WHERE expiration_date = '0000-00-00 00:00:00'");
@@ -473,7 +483,10 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("UPDATE c_student_publication_assignment SET expires_on = NULL WHERE expires_on = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE c_student_publication_assignment SET ends_on = NULL WHERE ends_on = '0000-00-00 00:00:00'");
 
+        $this->addSql("UPDATE settings_current SET type = 'checkbox' WHERE variable = 'registration' AND category = 'User'");
+
         $this->addSql("UPDATE settings_current SET selected_value = 'UTF-8' WHERE variable = 'platform_charset'");
+
     }
 
     /**

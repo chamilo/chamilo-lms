@@ -52,11 +52,22 @@ if (isset ($_GET['exportpdf'])) {
     $html .= get_lang('Results').' : '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')';
 
     if ($displayscore->is_custom()) {
-        $header_names= array (
-            get_lang('Evaluation'), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'),get_lang('Display'));
+        $header_names = array(
+            get_lang('Evaluation'),
+            get_lang('Course'),
+            get_lang('Category'),
+            get_lang('EvaluationAverage'),
+            get_lang('Result'),
+            get_lang('Display'),
+        );
     } else {
-        $header_names= array (
-            get_lang('Evaluation'), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'));
+        $header_names = array(
+            get_lang('Evaluation'),
+            get_lang('Course'),
+            get_lang('Category'),
+            get_lang('EvaluationAverage'),
+            get_lang('Result'),
+        );
     }
 
     $table = new HTML_Table(array('class' => 'data_table'));

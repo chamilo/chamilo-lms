@@ -368,6 +368,9 @@ if (!isset($_POST['compose'])) {
             }
         }
     }
+
+    Display::display_footer();
+
 } else {
     $ticket_id = $_POST['ticket_id'];
     $content = $_POST['content'];
@@ -377,6 +380,7 @@ if (!isset($_POST['compose'])) {
     $user_id = api_get_user_id();
     TicketManager::insert_message($ticket_id, $subject, $content, $file_attachments, $user_id, 'NOL', $mensajeconfirmacion);
     header("location:" . api_get_self() . "?ticket_id=" . $ticket_id);
+    exit;
 }
 
 function show_form_send_message()
@@ -459,5 +463,3 @@ function show_form_send_message()
 
     $form->display();
 }
-
-Display::display_footer();

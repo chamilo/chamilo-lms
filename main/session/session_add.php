@@ -33,9 +33,9 @@ $interbreadcrumb[] = array(
 );
 
 
-function search_coachs($needle) {
-	global $tbl_user;
-
+function search_coachs($needle)
+{
+    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 	$xajax_response = new xajaxResponse();
 	$return = '';
 

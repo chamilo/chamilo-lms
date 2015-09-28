@@ -15,7 +15,10 @@ if (api_get_setting('allow_skills_tool') != 'true') {
     api_not_allowed();
 }
 
-$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    "name" => get_lang('PlatformAdmin'),
+);
 
 $skill           = new Skill();
 $skill_profile   = new SkillProfile();
@@ -70,14 +73,16 @@ if (!empty($users)) {
         $my_user_skills = $skill_rel_user->get_user_skills($user['user_id']);
         $user_skills = array();
         $found_counts = 0 ;
-        foreach($my_user_skills as $my_skill) {
-
+        foreach ($my_user_skills as $my_skill) {
             $found = false;
             if (in_array($my_skill['skill_id'], $skills)) {
                 $found = true;
                 $found_counts++;
             }
-            $user_skills[] = array('skill_id' => $my_skill['skill_id'], 'found' => $found);
+            $user_skills[] = array(
+                'skill_id' => $my_skill['skill_id'],
+                'found' => $found,
+            );
             $total_skills_to_search[$my_skill['skill_id']] = $my_skill['skill_id'];
         }
         $user_list[$user['user_id']]['skills'] = $user_skills;
@@ -140,14 +145,9 @@ foreach ($total_skills_to_search as $skill_info) {
 
 $tpl->assign('skill_list', $skill_list);
 $tpl->assign('search_skill_list', $skills);
-
 $form_to_html = $form->return_form();
-
-//var_dump($total_skills_to_search);
-
 $tpl->assign('form', $form_to_html);
 $tpl->assign('url', $url);
-
 $content = $tpl->fetch('default/skill/profile.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

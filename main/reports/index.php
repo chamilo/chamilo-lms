@@ -7,10 +7,9 @@
 * @package chamilo.reports
 */
 exit;
-// name of the language file that needs to be included
 $cidReset = true;
 
-// including files 
+// including files
 require_once '../inc/global.inc.php';
 require_once 'reports.lib.php';
 
@@ -46,7 +45,7 @@ $htmlHeadXtra[] = '    <style type="text/css">
 				margin-right : 1em;
 				text-align: right;
 			}
-			
+
 			#data {
 				font-size : 0.7em;
 			}
@@ -93,7 +92,7 @@ $htmlHeadXtra[] = '    <style type="text/css">
 			.navigation_button {
 				width : 70px;
 			}
-			
+
 			#data {
 				overflow : auto;
 				display: none;
@@ -164,7 +163,7 @@ foreach ($reports_template as $key => $value) {
     </div>
     <div id="wizardShowButton">
         <?php echo get_lang('ShowWizard'); ?>
-    </div>		
+    </div>
     <p id="data"></p>
 </div>
 <div id="result" class="result">
@@ -182,7 +181,7 @@ foreach ($reports_template as $key => $value) {
 					$("#wizardContent").show();
 					$("#wizardShowButton").hide();
 				});
-				$("#reportsBuilderWizardForm").formwizard({ 
+				$("#reportsBuilderWizardForm").formwizard({
 				 	formPluginEnabled: true,
 				 	validationEnabled: true,
 				 	focusFirstInput : true,
@@ -195,7 +194,7 @@ foreach ($reports_template as $key => $value) {
 						},
 						beforeSubmit: function(data){$("#data").html("data sent to the server: " + $.param(data));},
 						resetForm: false
-				 	}	
+				 	}
 				 }
 				);
   		});

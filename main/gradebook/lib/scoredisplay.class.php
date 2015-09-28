@@ -124,7 +124,7 @@ class ScoreDisplay
     /**
      * Is coloring enabled ?
      */
-    public function is_coloring_enabled ()
+    public function is_coloring_enabled()
     {
         return $this->coloring_enabled;
     }
@@ -132,14 +132,15 @@ class ScoreDisplay
     /**
      * Is custom score display enabled ?
      */
-    public function is_custom() {
+    public function is_custom()
+    {
         return $this->custom_enabled;
     }
 
     /**
      * Is upperlimit included ?
      */
-    public function is_upperlimit_included ()
+    public function is_upperlimit_included()
     {
         return $this->upperlimit_included;
     }
@@ -151,6 +152,7 @@ class ScoreDisplay
      */
     public function get_custom_score_display_settings()
     {
+
         return $this->custom_display;
     }
 
@@ -170,8 +172,8 @@ class ScoreDisplay
     private function get_current_gradebook_category_id()
     {
         $tbl_gradebook_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $curr_course_code       = api_get_course_id();
-        $curr_session_id        = api_get_session_id();
+        $curr_course_code = api_get_course_id();
+        $curr_session_id = api_get_session_id();
 
         if (empty($curr_session_id)) {
             $session_condition = ' AND session_id is null ';
@@ -179,13 +181,15 @@ class ScoreDisplay
             $session_condition = ' AND session_id = '.$curr_session_id;
         }
 
-        $sql = 'SELECT id FROM '.$tbl_gradebook_category.' WHERE course_code = "'.$curr_course_code.'" '. $session_condition;
+        $sql = 'SELECT id FROM '.$tbl_gradebook_category.'
+                WHERE course_code = "'.$curr_course_code.'" '. $session_condition;
         $rs  = Database::query($sql);
         $category_id = 0;
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_row($rs);
             $category_id = $row[0];
         }
+
         return $category_id;
     }
 
@@ -267,6 +271,7 @@ class ScoreDisplay
         if (!isset($number_decimals)) {
             $number_decimals = 0;
         }
+
         return $number_decimals;
     }
 
@@ -303,6 +308,7 @@ class ScoreDisplay
 
         if ($type == SCORE_BAR) {
             $percentage = $my_score[0]/$my_score[1]*100;
+
             return Display::bar_progress($percentage);
         }
 
@@ -325,6 +331,7 @@ class ScoreDisplay
                 $display = Display::tag('font', $display, array('color'=>'red'));
             }
         }
+
         return $display;
     }
 
@@ -404,6 +411,7 @@ class ScoreDisplay
     private function display_as_decimal($score)
     {
         $score_denom = ($score[1]==0) ? 1 : $score[1];
+
         return $this->format_score($score[0]/$score_denom);
     }
 
@@ -413,13 +421,15 @@ class ScoreDisplay
     private function display_as_percent($score)
     {
         $score_denom = ($score[1]==0) ? 1 : $score[1];
+
         return $this->format_score($score[0]/$score_denom*100) . ' %';
     }
 
     /**
-     *
      * Returns 10.00 / 10.00 for array("100", "100");
      * @param array $score
+     *
+     * @return string
      */
     private function display_as_div($score)
     {
@@ -471,20 +481,23 @@ class ScoreDisplay
             $category_id = $this->get_current_gradebook_category_id();
         }
 
-        $sql = 'SELECT score_color_percent FROM '.$tbl_display.' WHERE category_id = '.$category_id.' LIMIT 1';
+        $sql = 'SELECT score_color_percent FROM '.$tbl_display.'
+                WHERE category_id = '.$category_id.'
+                LIMIT 1';
         $result = Database::query($sql);
         $score = 0;
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_row($result);
             $score = $row[0];
         }
+
         return $score;
     }
 
     /**
      * Get current custom score display settings
-         * @param   int     Gradebook category id
-     * @return  array   2-dimensional array - every element contains 3 subelements (id, score, display)
+     * @param   int     Gradebook category id
+     * @return  array   2-dimensional array every element contains 3 subelements (id, score, display)
      */
     private function get_custom_displays($category_id = null)
     {
@@ -498,6 +511,7 @@ class ScoreDisplay
                 WHERE category_id = '.$category_id.'
                 ORDER BY score';
         $result = Database::query($sql);
+
         return Database::store_result($result,'ASSOC');
     }
 

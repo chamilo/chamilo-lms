@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Class LoginRedirection
  * When a user login, the function LoginRedirection::redirect is called.
- * When this function is called all user info has already been registered in $_user session variable
+ * When this function is called all user info has already
+ * been registered in $_user session variable
  * */
 class LoginRedirection
 {
@@ -50,5 +52,4 @@ class LoginRedirection
         header('location: ' . api_get_path(WEB_PATH) . api_get_setting('page_after_login') . $param);
         exit();
     }
-
 }

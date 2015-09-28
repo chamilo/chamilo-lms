@@ -1,8 +1,8 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
-/* For licensing terms, see /license.txt */
 /**
  * This file contains the necessary elements to implement a Single Sign On
  * mechanism with an arbitrary external web application (given some light
@@ -15,7 +15,8 @@ use ChamiloSession as Session;
 /**
  * The SSO class allows for management or remote Single Sign On resources
  */
-class sso {
+class sso
+{
     public $protocol; //    'http://',
     public $domain; //    'localhost/project/drupal5',
     public $auth_uri; //    '/?q=user',
@@ -36,16 +37,16 @@ class sso {
         $this->protocol   = api_get_setting('sso_authentication_protocol');
         // There can be multiple domains, so make sure to take only the first
         // This might be later extended with a decision process
-        $domains          = split(',',api_get_setting('sso_authentication_domain'));
-        $this->domain     = trim($domains[0]);
-        $this->auth_uri   = api_get_setting('sso_authentication_auth_uri');
+        $domains = explode(',', api_get_setting('sso_authentication_domain'));
+        $this->domain = trim($domains[0]);
+        $this->auth_uri = api_get_setting('sso_authentication_auth_uri');
         $this->deauth_uri = api_get_setting('sso_authentication_unauth_uri');
         //cut the string to avoid recursive URL construction in case of failure
-        $this->referer    = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'],0,strpos($_SERVER['REQUEST_URI'],'sso'));
+        $this->referer = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'],0,strpos($_SERVER['REQUEST_URI'],'sso'));
         $this->deauth_url = $this->protocol.$this->domain.$this->deauth_uri;
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->referrer_uri = base64_encode($_SERVER['REQUEST_URI']);
-        $this->target     = api_get_path(WEB_PATH);
+        $this->target = api_get_path(WEB_PATH);
     }
 
     /**
@@ -290,5 +291,4 @@ class sso {
 
         return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
     }
-
 }

@@ -123,6 +123,11 @@ $this_section = SECTION_COURSES;
 if ($origin != 'learnpath') {
 	Display::display_header('');
 } else {
+    $htmlHeadXtra[] = "
+    <style>
+    body { background: none;}
+    </style>
+    ";
 	Display::display_reduced_header();
 }
 ?>
@@ -776,8 +781,7 @@ if ($origin != 'learnpath') {
 		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
 		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
 		echo '<script type="text/javascript">'.$href.'</script>';
-
-		//Record the results in the learning path, using the SCORM interface (API)
+		// Record the results in the learning path, using the SCORM interface (API)
 		echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting', 0, 'completed'); </script>";
 		echo '</body></html>';
 	} else {

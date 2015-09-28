@@ -10,6 +10,7 @@
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> lot of bugfixes + improvements
+ *
  * @package chamilo.attendance
  */
 class AttendanceController
@@ -31,7 +32,6 @@ class AttendanceController
      */
     public function attendance_list($history = false, $messages = array())
     {
-        $attendance = new Attendance();
         $data = array();
 
         // render to the view
@@ -71,7 +71,6 @@ class AttendanceController
                 if (isset($_SESSION['gradebook'])) {
                     $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
                 }
-                //header('location:index.php?action=attendance_sheet_list&attendance_id='.$last_id.'&'.api_get_cidreq().$param_gradebook);
                 header('location:index.php?action=calendar_add&attendance_id='.$last_id.'&'.api_get_cidreq().$param_gradebook);
                 exit;
             } else {
@@ -112,17 +111,14 @@ class AttendanceController
 
                     $attendance->category_id = $_POST['category_id'];
                     $link_to_gradebook = false;
-                    if ( isset($_POST['attendance_qualify_gradebook']) && $_POST['attendance_qualify_gradebook'] == 1 ) {
+                    if (isset($_POST['attendance_qualify_gradebook']) &&
+                        $_POST['attendance_qualify_gradebook'] == 1
+                    ) {
                         $link_to_gradebook = true;
                     }
-                    $last_id = $attendance->attendance_edit($attendance_id,$link_to_gradebook);
+                    $attendance->attendance_edit($attendance_id,$link_to_gradebook);
                     Security::clear_token();
-
-                    $param_gradebook = '';
-                    if (isset($_SESSION['gradebook'])) {
-                        $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
-                    }
-                    header('location:index.php?action=attendance_list&'.api_get_cidreq().$param_gradebook);
+                    header('location:index.php?action=attendance_list&'.api_get_cidreq());
                     exit;
                 }
             } else {
@@ -135,10 +131,12 @@ class AttendanceController
             }
         } else {
             // default values
-            $attendance_data 		= $attendance->get_attendance_by_id($attendance_id);
-            $data['attendance_id'] 	= $attendance_data['id'];
-            $data['title'] 			= $attendance_data['name'];
-            $data['description'] 	= $attendance_data['description'];
+            $attendance_data = $attendance->get_attendance_by_id(
+                $attendance_id
+            );
+            $data['attendance_id'] = $attendance_data['id'];
+            $data['title'] = $attendance_data['name'];
+            $data['description'] = $attendance_data['description'];
             $data['attendance_qualify_title'] = $attendance_data['attendance_qualify_title'];
             $data['attendance_weight'] = $attendance_data['attendance_weight'];
 
@@ -159,12 +157,15 @@ class AttendanceController
         $allowDeleteAttendance = api_get_setting('allow_delete_attendance');
         if ($allowDeleteAttendance !== 'true') {
             $this->attendance_list();
+
             return false;
         }
+
         $attendance = new Attendance();
         if (!empty($attendance_id)) {
             $affected_rows = $attendance->attendance_delete($attendance_id);
         }
+
         if ($affected_rows) {
             $message['message_attendance_delete'] = true;
         }
@@ -174,7 +175,7 @@ class AttendanceController
     /**
      * It's used for make attendance visible
      * render to attendance_list view
-     * @param int	attendance id
+     * @param int	$attendanceId
      */
     public function attendanceSetVisible($attendanceId)
     {
@@ -192,7 +193,7 @@ class AttendanceController
     /**
      * It's used for make attendance invisible
      * render to attendance_list view
-     * @param int	attendance id
+     * @param int	$attendanceId
      */
     public function attendanceSetInvisible($attendanceId)
     {
@@ -209,7 +210,7 @@ class AttendanceController
 
     /**
      * Restores an attendance entry and fallback to attendances rendering
-     * @param int	attendance id
+     * @param int	$attendanceId
      */
     public function attendance_restore($attendance_id)
     {
@@ -249,16 +250,15 @@ class AttendanceController
     public function export($id, $type = 'pdf')
     {
         $attendance = new Attendance();
-        $attendance_id = intval($attendance_id);
     }
 
     /**
      * It's used for controlling attendance sheet (list, add),
      * render to attendance_sheet view
      * @param string $action
-     * @param int	 $attendance_id
-     * @param int $student_id
-     * @param bool $edit
+     * @param int    $attendance_id
+     * @param int    $student_id
+     * @param bool   $edit
      */
     public function attendance_sheet($action, $attendance_id, $student_id = 0, $edit = true)
     {
@@ -427,10 +427,10 @@ class AttendanceController
                 }
             }
         } else if ($action == 'calendar_delete') {
-            $affected_rows = $attendance->attendance_calendar_delete($calendar_id, $attendance_id);
+            $attendance->attendance_calendar_delete($calendar_id, $attendance_id);
             $action = 'calendar_list';
         } else if ($action == 'calendar_all_delete') {
-            $affected_rows = $attendance->attendance_calendar_delete(0, $attendance_id, true);
+            $attendance->attendance_calendar_delete(0, $attendance_id, true);
             $action = 'calendar_list';
         }
 
@@ -521,8 +521,6 @@ class AttendanceController
                 api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT);
         }
         $data_table[] = $head_table;
-        $dataClass = array();
-        $max_dates_per_page = 10;
         $data_attendant_calendar = $data_array['attendant_calendar'];
         $data_users_presence = $data_array['users_presence'];
         $count = 1;
@@ -640,7 +638,7 @@ class AttendanceController
                 $startDate = api_get_utc_datetime($values['range_start']);
                 $endDate = api_get_utc_datetime($values['range_end']);
             }
-            $formToDisplay = $form->return_form();
+            $formToDisplay = $form->returnForm();
         } else {
            if (!empty($sessionId)) {
                $sessionInfo = api_get_session_info($sessionId);

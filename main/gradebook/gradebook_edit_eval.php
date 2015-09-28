@@ -5,7 +5,7 @@
  * Script
  * @package chamilo.gradebook
  */
-//$cidReset = true;
+
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
@@ -33,15 +33,6 @@ if ($form->validate()) {
     $eval->set_category_id($values['hid_category_id']);
 
     $parent_cat = Category :: load($values['hid_category_id']);
-
-    /*$final_weight = null;
-    if ($parent_cat[0]->get_parent_id() == 0) {
-        $final_weight = $values['weight_mask'];
-    } else {
-        $cat = Category :: load($parent_cat[0]->get_parent_id());
-        $global_weight = $cat[0]->get_weight();
-        $final_weight = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
-    }*/
     $final_weight = $values['weight_mask'];
 
     $eval->set_weight($final_weight);

@@ -487,7 +487,6 @@ class Event
         }
 
         $session_id = api_get_session_id();
-        $courseInfo = api_get_course_info_by_id($course_id);
 
         if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
             $attempt = array(
@@ -1227,7 +1226,7 @@ class Event
                 $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
             }
         }
-        //echo '<pre>'; print_r($list);
+
         return $list;
     }
 
@@ -1272,6 +1271,7 @@ class Event
                 $list[$exe_id]['question_list'][$row_q['question_id']] = $row_q;
             }
         }
+
         return $list;
     }
 
@@ -1612,7 +1612,7 @@ class Event
     /**
      * This function gets the comments of an exercise
      *
-     * @param int $id
+     * @param int $exe_id
      * @param int $question_id
      *
      * @return string the comment
@@ -1621,10 +1621,13 @@ class Event
     {
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $sql = "SELECT teacher_comment FROM ".$table_track_attempt."
-                WHERE exe_id='".Database::escape_string($exe_id)."' AND question_id = '".Database::escape_string($question_id)."'
+                WHERE
+                    exe_id='".Database::escape_string($exe_id)."' AND
+                    question_id = '".Database::escape_string($question_id)."'
                 ORDER by question_id";
         $sqlres = Database::query($sql);
         $comm = Database::result($sqlres, 0, "teacher_comment");
+
         return $comm;
     }
 
@@ -1640,7 +1643,8 @@ class Event
         $list = array();
 
         $sql = "SELECT * FROM $table_track_attempt
-                WHERE exe_id = $exe_id ORDER BY position";
+                WHERE exe_id = $exe_id
+                ORDER BY position";
         $res_question = Database::query($sql);
         if (Database::num_rows($res_question)) {
             while ($row = Database::fetch_array($res_question, 'ASSOC')) {
@@ -1803,7 +1807,7 @@ class Event
      */
     function user_registration_event_send_mail_filter_func(&$values)
     {
-        $res = _event_send_mail_filter_func($values);
+        $res = self::event_send_mail_filter_func($values);
         // proper logic for this filter
         return $res;
     }

@@ -296,18 +296,18 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             // default size is ten item on each select box (left and right)
             $this->updateAttributes(array('size' => 10));
         }
-        if (is_null($this->getAttribute('style'))) {
+        if (is_null($this->getAttribute('class'))) {
             // default width of each select box
-            $this->updateAttributes(array('style' => 'min-width:180px;'));
+            $this->updateAttributes(array('class' => 'form-control'));
         }
-        $this->_tableAttributes = $this->getAttribute('class');
+        /* $this->_tableAttributes = $this->getAttribute('class');
         $attr = null;
         if (is_null($this->_tableAttributes)) {
             $this->updateAttributes(array('class' => 'col-md-4'));
         } else {
             $attr = array('class' => $this->_tableAttributes);
             $this->_removeAttr('class', $this->_attributes);
-        }
+        }*/
 
         $this->_tableAttributes = $this->_getAttrString($attr);
 
@@ -798,7 +798,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             }
             $strHtmlUnselected .= '</select>';
 
-            $strHtmlUnselected = '<input placeholder="'.get_lang('Search').'" id="'.$selectId.'-f-filter" type="text" class="search-query select_class_filter"><br /><br />'.$strHtmlUnselected;
+            $strHtmlUnselected = '<input placeholder="'.get_lang('Search').'" id="'.$selectId.'-f-filter" type="text" class="form-control search-query select_class_filter"><br />'.$strHtmlUnselected;
             // The 'selected' multi-select which appears on the right
             $selected_count = count($arrHtmlSelected);
 
@@ -830,7 +830,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             }
             $strHtmlSelected .= '</select>';
 
-            $strHtmlSelected = '<input placeholder="'.get_lang('Search').'" id="'.$selectId.'-t-filter" type="text" class="search-query select_class_filter"><br /><br />'.$strHtmlSelected;
+            $strHtmlSelected = '<input placeholder="'.get_lang('Search').'" id="'.$selectId.'-t-filter" type="text" class="form-control search-query select_class_filter"><br />'.$strHtmlSelected;
 
             // The 'hidden' multi-select
             $strHtmlHidden = "<select$attrHidden>". PHP_EOL;

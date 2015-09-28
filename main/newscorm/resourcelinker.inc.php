@@ -9,10 +9,6 @@
  *	@todo use the constants for the tools
  *	@todo use Database API instead of creating table names locally.
  */
-/**
- * Code
- */
-/* INIT SECTION */
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 
@@ -65,7 +61,6 @@ function show_folder_up() {
  * @param $folder
  */
 function show_documents($folder) {
-    global $_course;
     global $source_id, $action, $learnpath_id, $chapter_id, $originalresource;
 
     // Documents are a special case: The teacher can add an invisible document (it will be viewable by the user)
@@ -176,7 +171,6 @@ function show_documents($folder) {
  */
 function file_or_folder($filefolder) {
     global $_course;
-    global $baseServDir;
     $courseDir   = $_course['path'].'/document';
     $baseWorkDir = api_get_path(SYS_COURSE_PATH).$courseDir;
     return (is_dir($baseWorkDir.$filefolder) ? 1 : 0);
@@ -188,8 +182,8 @@ function file_or_folder($filefolder) {
  * @param $source_type
  * @param $source_id
  */
-function store_resources($source_type, $source_id) {
-    global $_course;
+function store_resources($source_type, $source_id)
+{
     $resource_table = Database::get_course_table(TABLE_LINKED_RESOURCES);
     $course_id = api_get_course_int_id();
 
@@ -218,8 +212,8 @@ function store_resources($source_type, $source_id) {
  * @param $style this is used to style the link (for instance when a resource is hidden => the added resources should also be styled like they are hidden)
  * @todo use the constants for the type definitions.
  */
-function display_addedresource_link($type, $id, $style = '') {
-    global $_course;
+function display_addedresource_link($type, $id, $style = '')
+{
     $course_id = api_get_course_int_id();
 
     // Styling the link of the added resource.
@@ -329,8 +323,8 @@ function display_addedresource_link($type, $id, $style = '') {
  * @todo this function is too long, rewrite
  */
 function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_path, $builder, $icon, $level = 0) {
-    global $_course, $learnpath_id, $tbl_learnpath_item, $items;
-    global $curDirPath, $_configuration, $enableDocumentParsing, $_course, $_user, $_cid;
+    global $learnpath_id, $items;
+    global $enableDocumentParsing, $_course, $_user, $_cid;
 
     $course_id = api_get_course_int_id();
 
@@ -1042,9 +1036,10 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
  * @param id          - that is the correspondent id in the mirror tool (like Agenda item 2)
  * @param id_in_path  - the unique index in the items table
  */
-function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
-    global $_course, $learnpath_id, $tbl_learnpath_item, $items;
-    global $curDirPath, $_configuration, $enableDocumentParsing, $_user, $_cid;
+function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
+{
+    global $_course, $learnpath_id;
+    global $enableDocumentParsing, $_user, $_cid;
 
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     $course_id = api_get_course_int_id();
@@ -1320,11 +1315,12 @@ function delete_one_added_resource($source_type, $source_id, $resource_type, $re
 /**
  * This function is to delete the resources that were added to a specific item
  */
-function delete_added_resource($type, $id) {
-    global $_course;
+function delete_added_resource($type, $id)
+{
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
-    $sql = "DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id='$id'";
+    $sql = "DELETE FROM $TABLERESOURCE
+            WHERE c_id = $course_id AND source_type='$type' and source_id='$id'";
     Database::query($sql);
 }
 
@@ -1332,8 +1328,8 @@ function delete_added_resource($type, $id) {
  * This function is te delete all resources of a specific type (only used in announcements -- delete all)
  * Author : Frederik Vermeire <frederik.vermeire@pandora.be>
  */
-function delete_all_resources_type($type) {
-  global $_course;
+function delete_all_resources_type($type)
+{
   $course_id = api_get_course_int_id();
   $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
   $sql = "DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type'";
@@ -1344,10 +1340,10 @@ function delete_all_resources_type($type) {
  * This function checks wether there are added resources or not
  */
 function check_added_resources($type, $id) {
-    global $_course, $origin;
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
-    $sql = "SELECT * FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id='$id'";
+    $sql = "SELECT * FROM $TABLERESOURCE
+            WHERE c_id = $course_id AND source_type='$type' and source_id='$id'";
     $result = Database::query($sql);
     $number_added = Database::num_rows($result);
     if ($number_added != 0)
@@ -1360,20 +1356,21 @@ function check_added_resources($type, $id) {
  * this function is to load the resources that were added to a specific item
  * into the session variables
  */
-function edit_added_resources($type, $id) {
-    global $_course;
+function edit_added_resources($type, $id)
+{
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
 
-    $sql="SELECT * FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id=$id";
+    $sql = "SELECT * FROM $TABLERESOURCE
+            WHERE c_id = $course_id AND source_type='$type' and source_id=$id";
     $result=Database::query($sql);
     while ($row=Database::fetch_array($result))
     {
         $addedresource[]=$row["resource_type"];
         $addedresourceid[]=$row["resource_id"];
     }
-    $_SESSION['addedresource']=$addedresource;
-    $_SESSION['addedresourceid']=$addedresourceid;
+    $_SESSION['addedresource'] = $addedresource;
+    $_SESSION['addedresourceid'] = $addedresourceid;
 }
 
 /**
@@ -1381,12 +1378,13 @@ function edit_added_resources($type, $id) {
  * first we delete all the added resources in the database,
  * then we add all the resources from the session object.
  */
-function update_added_resources($type, $id) {
-    global $_course;
+function update_added_resources($type, $id)
+{
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
     // delete all the added resources for this item in the database;
-    $sql="DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' AND source_id='$id'";
+    $sql = "DELETE FROM $TABLERESOURCE
+            WHERE c_id = $course_id AND source_type='$type' AND source_id='$id'";
     //echo $sql;
     Database::query($sql);
 
@@ -1403,9 +1401,14 @@ function update_added_resources($type, $id) {
 function display_added_resources($type, $id, $style = '') {
     $course_id = api_get_course_int_id();
     // The array containing the icons
-    $arr_icons = array('Agenda'=>'../img/agenda.gif', 'Ad Valvas'=>'../img/valves.gif', 'Link'=>'../img/links.gif', 'Exercise'=>'../img/quiz.gif' );
+    $arr_icons = array(
+        'Agenda' => '../img/agenda.gif',
+        'Ad Valvas' => '../img/valves.gif',
+        'Link' => '../img/links.gif',
+        'Exercise' => '../img/quiz.gif',
+    );
 
-    global $_course, $origin;
+    global $origin;
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
 
     $sql = "SELECT * FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id='$id'";

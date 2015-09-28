@@ -224,6 +224,8 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     $my_group_content = null;
     if (count($grid_my_groups) > 0) {
         $my_group_content = Display::return_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
+    } else {
+        $my_group_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
     }
     if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
         $create_group_item =  '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
@@ -235,9 +237,13 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     }
     if (count($grid_newest_groups) > 0) {
         $newest_content = Display::return_sortable_grid('mygroups', array(), $grid_newest_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+    } else {
+        $newest_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
     }
     if (count($grid_pop_groups) > 0) {
         $popular_content = Display::return_sortable_grid('mygroups', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
+    } else {
+        $popular_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
     }
 }
 

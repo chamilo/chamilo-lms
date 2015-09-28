@@ -280,7 +280,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     {
         $name = $element->getName();
         $label = $element->getLabel();
-        $labelForId = $element->getLabelFor();
+        $labelForId = $element->getAttribute('id');        
         $icon = $element->getIconToHtml();
 
         if (is_array($label)) {
@@ -289,7 +289,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
             $nameLabel = $label;
         }
 
-        $labelFor = !empty($labelForId) ? 'for="' . $labelForId . '"' : '';
+        $labelFor = !empty($labelForId) ? 'for="' . $labelForId . '"' : 'for="' . $element->getName() . '"';
 
         if (isset($this->_templates[$name])) {
             // Custom template

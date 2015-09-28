@@ -9,8 +9,6 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'database.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 /**
  * Get all categories and users ids from gradebook

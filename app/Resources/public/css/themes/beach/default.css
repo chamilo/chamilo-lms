@@ -1,6 +1,6 @@
 /*!
  * CSS BEACH - Default v. 1.0
- * Copyright 2015 Alex Aragón (aragonc@beeznest.com)
+ * 2015 - Alex Aragón (aragonc@beeznest.com)
  * Licensed GPL
  * Based on Bootstrap
 */
@@ -43,8 +43,6 @@ body {
 a {
   color: #2E75A3;
   text-decoration: none;
-  -webkit-transition: .25s;
-  transition: .25s;
 }
 a:hover,
 a:focus {

@@ -1,10 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * 	Saving the scores.
  * 	@package chamilo.exercise
- * 	@author
- * 	@version $Id: savescores.php 15602 2008-06-18 08:52:24Z pcool $
  */
 require_once '../inc/global.inc.php';
 $courseInfo = api_get_course_info();
@@ -39,7 +38,9 @@ $jscript2run = '';
  */
 function save_scores($file, $score)
 {
-    global $origin, $_user, $TABLETRACK_HOTPOTATOES;
+    global $origin;
+    $TABLETRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+    $_user = api_get_user_info();
     // if tracking is disabled record nothing
     $weighting = 100; // 100%
     $date = api_get_utc_datetime();

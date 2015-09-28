@@ -159,7 +159,10 @@ if (!empty($group_id)) {
 }
 
 if (!$is_certificate_mode) {
-	$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($currentDirPath).'&'.api_get_cidreq(), "name"=> get_lang('Documents'));
+    $interbreadcrumb[] = array(
+        "url" => "./document.php?curdirpath=".urlencode($currentDirPath).'&'.api_get_cidreq(),
+        "name" => get_lang('Documents'),
+    );
 } else {
     $interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
@@ -562,9 +565,6 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
 
 		update_db_info('update', $source_file, $new_full_file_name); // fileManage API
         Display::addFlash(Display::return_message(get_lang('fileModified')));
-
-		$GLOBALS['file_name'] = $rename_to;
-		$GLOBALS['doc'] = $rename_to;
 
 		return true;
 	} else {

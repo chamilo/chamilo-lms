@@ -259,7 +259,9 @@ class UserManager
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
                 api_warn_hosting_contact('hosting_limit_users');
-                return api_set_failure('portal users limit reached');
+                Display::addFlash(Display::return_message(get_lang('PortalUsersLimitReached'), 'warning'));
+
+                return false;
             }
         }
 
@@ -270,13 +272,17 @@ class UserManager
         ) {
             $num = self::get_number_of_users(1);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
+                Display::addFlash(Display::return_message(get_lang('PortalTeachersLimitReached'), 'warning'));
                 api_warn_hosting_contact('hosting_limit_teachers');
-                return api_set_failure('portal teachers limit reached');
+
+                return false;
             }
         }
 
         if (empty($password)) {
-            return api_set_failure('ThisFieldIsRequired');
+            Display::addFlash(Display::return_message(get_lang('ThisFieldIsRequired').': '.get_lang('Password') , 'warning'));
+
+            return false;
         }
 
         // database table definition
@@ -575,7 +581,7 @@ class UserManager
         a user has 4 different sized photos to be deleted. */
         $user_info = api_get_user_info($user_id);
         if (strlen($user_info['picture_uri']) > 0) {
-            $path = self::getUserPathById($user_id);
+            $path = self::getUserPathById($user_id, 'system');
             $img_path = $path.$user_info['picture_uri'];
             if (file_exists($img_path))
                 unlink($img_path);
@@ -1322,24 +1328,6 @@ class UserManager
             $return_array[] = $result;
         }
         return $return_array;
-    }
-
-    /**
-     * Get user information
-     * @param     string     The username
-     * @deprecated use api_get_user_info
-     * @return array All user information as an associative array
-     */
-    public static function get_user_info($username)
-    {
-        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-        $username = Database::escape_string($username);
-        $sql = "SELECT * FROM $user_table WHERE username='".$username."'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            return Database::fetch_array($res);
-        }
-        return false;
     }
 
     /**
@@ -3633,7 +3621,7 @@ class UserManager
             FormValidator::LAYOUT_HORIZONTAL
         );
 
-        $form->addText('q', get_lang('UsersGroups'));
+        $form->addText('q', get_lang('UsersGroups'), false);
         $options = array(
             0 => get_lang('Select'),
             1 => get_lang('User'),
@@ -4544,7 +4532,7 @@ class UserManager
                         'extra_'.$field_details[1],
                         $field_details[3],
                         $options,
-                        array('class' => 'chzn-select', 'id' => 'extra_'.$field_details[1])
+                        array('id' => 'extra_' . $field_details[1])
                     );
 
                     if (!$admin_permissions) {

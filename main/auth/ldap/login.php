@@ -1,4 +1,4 @@
-<?php // $Id: login.php 22201 2009-07-17 19:57:03Z cfasanando $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	Users trying to login, who already exist in the Chamilo database

@@ -289,6 +289,7 @@ foreach ($categories as $item) {
             $dsp_build = '';
             $dsp_delete = '';
             $dsp_visible = '';
+            $trackingAction = '';
             $dsp_default_view = '';
             $dsp_debug = '';
             $dsp_order = '';
@@ -389,6 +390,19 @@ foreach ($categories as $item) {
                         );
                     }
                 }
+
+                //Tracking command
+                $trackingActionUrl = 'lp_controller.php?'
+                    . api_get_cidreq() . '&'
+                    . http_build_query([
+                        'action' => 'report',
+                        'lp_id' => $id
+                    ]);
+
+                $trackingAction = Display::url(
+                    Display::return_icon('test_results.png', get_lang('Results'), array(), ICON_SIZE_SMALL),
+                    $trackingActionUrl
+                );
 
                 /* PUBLISH COMMAND */
                 if ($current_session == $details['lp_session']) {
@@ -772,6 +786,7 @@ foreach ($categories as $item) {
                 'dsp_progress' => $dsp_progress,
                 'action_build' => $dsp_build,
                 'action_edit' => $dsp_edit_lp,
+                'action_tracking' => $trackingAction,
                 'action_visible' => $dsp_visible,
                 'action_publish' => $dsp_publish,
                 'action_reinit' => $dsp_reinit,

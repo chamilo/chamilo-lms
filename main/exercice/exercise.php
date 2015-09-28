@@ -11,8 +11,6 @@
  * Modified by hubert.borderiou (question category)
  */
 
-// name of the language file that needs to be included
-
 use \ChamiloSession as Session;
 
 // including the global library
@@ -118,7 +116,6 @@ $nameTools = get_lang('Exercises');
 $errorXmlExport = null;
 if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
     require_once api_get_path(SYS_CODE_PATH).'exercice/export/qti2/qti2_export.php';
-    require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 
     $export = export_exercise_to_qti($exerciseId, true);
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
@@ -527,6 +524,7 @@ if (!empty($exercise_list)) {
                 $time_limits = true;
             }
 
+            $is_actived_time = false;
             if ($time_limits) {
                 // check if start time
                 $start_time = false;
@@ -538,7 +536,6 @@ if (!empty($exercise_list)) {
                     $end_time = api_strtotime($row['end_time'], 'UTC');
                 }
                 $now = time();
-                $is_actived_time = false;
 
                 //If both "clocks" are enable
                 if ($start_time && $end_time) {
@@ -806,7 +803,8 @@ if (!empty($exercise_list)) {
                                 $attempt_text = get_lang('NotAttempted');
                             }
                         } else {
-                            $attempt_text = get_lang('CantShowResults');
+                            //$attempt_text = get_lang('CantShowResults');
+                            $attempt_text = '-';
                         }
                     } else {
                         //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
@@ -845,7 +843,8 @@ if (!empty($exercise_list)) {
                             $attempt_text = get_lang('NotAttempted');
                         }
                     } else {
-                        $attempt_text = get_lang('CantShowResults');
+                        //$attempt_text = get_lang('CantShowResults');
+                        $attempt_text = '-';
                     }
                 }
 

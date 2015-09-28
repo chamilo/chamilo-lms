@@ -120,6 +120,7 @@ function facebookGetLoginUrl()
     $loginUrl =   $helper->getLoginUrl(
         array('scope' => 'email')
     );
+
     return $loginUrl;
 }
 
@@ -151,6 +152,7 @@ function facebookPluginGetLanguage($language = 'en_US')
         $result = Database::fetch_array($sqlResult);
         return $result['english_name'];
     }
+
     return false;
-} 
+}
 

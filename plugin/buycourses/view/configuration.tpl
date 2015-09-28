@@ -2,107 +2,133 @@
 
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 
-<script>
-$(function() {
-/* Binds a tab id in the url */
-    $("#tabs").bind('tabsselect', function(event, ui) {
-        window.location.href=ui.tab;
-    });
-    // Generate tabs with jquery-ui
-    $('#tabs').tabs();
-    $( "#sub_tab" ).tabs();
-});
-</script>
-
-{% if sessionsAreIncluded == "YES" %}
-    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs"> <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"> <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"> <a href="#tabs-1">{{ 'Courses'|get_lang }}</a></li><li class="ui-state-default ui-corner-top"> <a href="#tabs-2">{{ 'Sessions'|get_lang }}</a></li></ul>
+{% if sessions_are_included %}
+    <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#courses" aria-controls="courses" role="tab" data-toggle="tab">{{ 'Courses'|get_lang }}</a>
+        </li>
+        <li role="presentation">
+            <a href="#sessions" aria-controls="sessions" role="tab" data-toggle="tab">{{ 'Sessions'|get_lang }}</a>
+        </li>
+    </ul>
 {% endif %}
 
-<div id="tabs-1" class="row">
-    <div class="span12">
-        <table id="courses_table" class="data_table">
-            <tr class="row_odd">
-                <th class="bg-color">{{ 'Title'|get_lang }}</th>
-                <th class="bg-color">{{ 'OfficialCode'|get_lang }}</th>
-                <th class="ta-center bg-color">{{ 'Visible'|get_lang }}</th>
-                <th class="span2 bg-color">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th class="span1 ta-center bg-color">{{ 'Option'|get_lang }}</th>
-            </tr>
-            {% set i = 0 %}
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="courses">
+        <div class="table-responsive">
+            <table id="courses_table" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>{{ 'Title'|get_lang }}</th>
+                        <th class="text-center">{{ 'OfficialCode'|get_lang }}</th>
+                        <th class="text-center">{{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                        <th class="text-right" width="200">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                        <th class="text-right">{{ 'Options  '|get_lang }}</th>
+                    </tr>
+                </thead>
 
-            {% for course in courses %}
-                {{ i%2 == 0 ? '<tr class="row_even">' : '<tr class="row_odd">' }}
-                    {% set i = i + 1 %}
-                    <td>
-                        {{ visibility[course.visibility] }}
-                        <a href="{{ server }}courses/{{course.code}}/index.php">{{course.title}}</a>
-                        <span class="label label-info">{{ course.visual_code }}</span>
-                    </td>
-                    <td>
-                        {{course.code}}
-                    </td>
-                    <td class="ta-center">
-                        {% if course.visible == 1 %}
-                            <input type="checkbox" name="visible" value="1" checked="checked" size="6" />
-                        {% else %}
-                            <input type="checkbox" name="visible" value="1" size="6" />
-                        {% endif %}
-                    </td>
-                    <td><input type="text" name="price" value="{{course.price}}" class="span1 price" /> {{ currency }}</td>
-                    <td class=" ta-center" id="course{{ course.id }}">
-                        <div class="confirmed"><img src="{{ confirmation_img }}" alt="ok"/></div>
-                        <div class="modified" style="display:none"><img id="{{course.course_id}}" src="{{ save_img }}" alt="save" class="cursor save"/></div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
-<div class="cleared"></div>
-</div>
-{% if sessionsAreIncluded == "YES" %}
-<div id="tabs-2" class="row">
-    <div class="span12">
-        <table id="courses_table" class="data_table">
-            <tr class="row_odd">
-                <th class="bg-color">{{ 'Title'|get_lang }}</th>
-                <th class="bg-color">{{ 'StartDate'|get_lang }}</th>
-                <th class="bg-color">{{ 'EndDate'|get_lang }}</th>
-                <th class="bg-color ta-center">{{ 'Visible'|get_lang }}</th>
-                <th class="bg-color span2">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th class="bg-color span1 ta-center">{{ 'Option'|get_lang }}</th>
-            </tr>
-            {% set i = 0 %}
+                <tbody>
+                    {% for item in courses %}
+                        <tr data-item="{{ item.course_id }}" data-type="course">
+                            <td>
+                                {% if item.course_visibility == 0 %}
+                                    <img src="{{ 'bullet_red.gif'|icon() }}" alt="{{ 'CourseVisibilityClosed'|get_lang }}" title="{{ 'CourseVisibilityClosed'|get_lang }}">
+                                {% elseif item.course_visibility == 1 %}
+                                    <img src="{{ 'bullet_orange.gif'|icon() }}" alt="{{ 'Private'|get_lang }}" title="{{ 'Private'|get_lang }}">
+                                {% elseif item.course_visibility == 2 %}
+                                    <img src="{{ 'bullet_green.gif'|icon() }}" alt="{{ 'OpenToThePlatform'|get_lang }}" title="{{ 'OpenToThePlatform'|get_lang }}">
+                                {% elseif item.course_visibility == 3 %}
+                                    <img src="{{ 'bullet_blue.gif'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}" title="{{ 'OpenToTheWorld'|get_lang }}">
+                                {% elseif item.course_visibility == 4 %}
+                                    <img src="{{ 'bullet_gray.gif'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
+                                {% endif %}
 
-            {% for session in sessions %}
-                {{ i%2 == 0 ? '<tr class="row_even">' : '<tr class="row_odd">' }}
-                    {% set i = i + 1 %}
-                    <td>
-                        {{ visibility[session.visibility] }}
-                        <a href="{{ server }}main/session/index.php?session_id={{ session.id }}">{{session.name}}</a>
-                    </td>
-                    <td>
-                        {{ session.access_start_date }}
-                    </td>
-                    <td>
-                        {{ session.access_end_date }}
-                    </td>
-                    <td class="ta-center">
-                        {% if session.visible == 1 %}
-                            <input type="checkbox" name="visible" value="1" checked="checked" size="6" />
-                        {% else %}
-                            <input type="checkbox" name="visible" value="1" size="6" />
-                        {% endif %}
-                    </td>
-                    <td><input type="text" name="price" value="{{session.price}}" class="span1 price" /> {{ currency }}</td>
-                    <td class=" ta-center" id="session{{ session.id }}">
-                        <div class="confirmed"><img src="{{ confirmation_img }}" alt="ok"/></div>
-                        <div class="modified" style="display:none"><img id="{{session.id}}" src="{{ save_img }}" alt="save" class="cursor save"/></div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+                                <a href="{{ _p.web_course ~ item.course_code ~ '/index.php' }}">{{ item.course_title }}</a>
+                                <span class="label label-info">{{ item.course_visual_code }}</span>
+                            </td>
+                            <td class="text-center">
+                                {{ item.course_code }}
+                            </td>
+                            <td class="text-center">
+                                {% if item.visible %}
+                                    <i class="fa fa-fw fa-check-square-o"></i>
+                                {% else %}
+                                    <i class="fa fa-fw fa-square-o"></i>
+                                {% endif %}
+                            </td>
+                            <td width="200" class="text-right">
+                                {{ "#{item.price} #{tem.currency ?: item.currency}" }}
+                            </td>
+                            <td class="text-right">
+                                <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.course_id, 't':product_type_course}|url_encode() }}" class="btn btn-info btn-sm">
+                                    <i class="fa fa-wrench fa-fw"></i> {{ 'Configure'|get_lang }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-<div class="cleared"></div>
+
+    {% if sessions_are_included %}
+        <div role="tabpanel" class="tab-pane" id="sessions">
+            <div class="table-responsive">
+                <table id="courses_table" class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'Title'|get_lang }}</th>
+                            <th class="text-center">{{ 'StartDate'|get_lang }}</th>
+                            <th class="text-center">{{ 'EndDate'|get_lang }}</th>
+                            <th class="text-center">{{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="text-right">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                            <th class="text-right">{{ 'Options'|get_lang }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in sessions %}
+                            <tr data-item="{{ item.session_id }}" data-type="session">
+                                <td>
+                                    {% if item.session_visibility == 0 %}
+                                        <img src="{{ 'bullet_red.gif'|icon() }}" alt="{{ 'CourseVisibilityClosed'|get_lang }}" title="{{ 'CourseVisibilityClosed'|get_lang }}">
+                                    {% elseif item.session_visibility == 1 %}
+                                        <img src="{{ 'bullet_orange.gif'|icon() }}" alt="{{ 'Private'|get_lang }}" title="{{ 'Private'|get_lang }}">
+                                    {% elseif item.session_visibility == 2 %}
+                                        <img src="{{ 'bullet_green.gif'|icon() }}" alt="{{ 'OpenToThePlatform'|get_lang }}" title="{{ 'OpenToThePlatform'|get_lang }}">
+                                    {% elseif item.session_visibility == 3 %}
+                                        <img src="{{ 'bullet_blue.gif'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}" title="{{ 'OpenToTheWorld'|get_lang }}">
+                                    {% elseif item.session_visibility == 4 %}
+                                        <img src="{{ 'bullet_gray.gif'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}" title="{{ 'CourseVisibilityHidden'|get_lang }}">
+                                    {% endif %}
+
+                                    <a href="{{ _p.web_main ~ 'session/index.php?' ~ {'session_id': item.session_id}|url_encode() }}">{{ item.session_name }}</a>
+                                </td>
+                                <td class="text-center">
+                                    {{ item.session_display_start_date }}
+                                </td>
+                                <td class="text-center">
+                                    {{ item.session_display_end_date }}
+                                </td>
+                                <td class="text-center">
+                                    {% if item.visible %}
+                                        <i class="fa fa-fw fa-check-square-o"></i>
+                                    {% else %}
+                                        <i class="fa fa-fw fa-square-o"></i>
+                                    {% endif %}
+                                </td>
+                                <td class="text-right" width="200">
+                                    {{ "#{item.price} #{tem.currency ?: item.currency}" }}
+                                </td>
+                                <td class="text-right">
+                                    <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.session_id, 't': product_type_session}|url_encode() }}" class="btn btn-info btn-sm">
+                                        <i class="fa fa-wrench fa-fw"></i> {{ 'Configure'|get_lang }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
 </div>
-</div>
-{% endif %}

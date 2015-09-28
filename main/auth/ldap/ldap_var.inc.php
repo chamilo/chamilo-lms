@@ -1,4 +1,4 @@
-<?php // $Id: ldap_var.inc.php 14966 2008-04-20 23:03:11Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	LDAP settings

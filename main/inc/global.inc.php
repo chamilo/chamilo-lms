@@ -126,10 +126,13 @@ $dbParams = array(
     'user' => $_configuration['db_user'],
     'password' => $_configuration['db_password'],
     'dbname' => $_configuration['main_database'],
+    // Only relevant for pdo_sqlite, specifies the path to the SQLite database.
+    'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
+    // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
+    'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : ''
 );
 try {
     $database = new \Database();
-
     $database->connect($dbParams);
 } catch (Exception $e) {
     $global_error_code = 3;

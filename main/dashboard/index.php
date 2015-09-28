@@ -41,15 +41,15 @@ if (isset($_GET['path'])) {
 
 // distpacher actions to controller
 switch ($action) {
-	case 'listing':
-		$dashboard_controller->display();
-		break;
-	case 'store_user_block':
-		$dashboard_controller->store_user_block();
-		break;
-	case 'disable_block':
-		$dashboard_controller->close_user_block($path);
-		break;
-	default :
-		$dashboard_controller->display();
+    case 'listing':
+        $dashboard_controller->display();
+        break;
+    case 'store_user_block':
+        $dashboard_controller->store_user_block();
+        break;
+    case 'disable_block':
+        $dashboard_controller->close_user_block($path);
+        break;
+    default :
+        $dashboard_controller->display();
 }

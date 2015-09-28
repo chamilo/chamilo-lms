@@ -21,9 +21,9 @@ class AddManySessionToCategoryFunctions
      * @assert () !== ''
      * @assert ('abc','single') !== ''
      */
-    function search_courses($needle,$type) {
-
-		global $tbl_course, $tbl_session, $id_session;
+    function search_courses($needle,$type)
+    {
+        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 		$xajax_response = new xajaxResponse();
 		$return = '';
 		if(!empty($needle) && !empty($type)) {

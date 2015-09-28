@@ -269,6 +269,7 @@ class Category implements GradebookItem
         } else {
             $skills = $this->skills;
         }
+
         return $skills;
     }
 
@@ -337,7 +338,6 @@ class Category implements GradebookItem
                     if ($data_session['course_code'] == $courseCode) {
                         $categories = Category::load($parent_id);
                         $categoryList = array_merge($categoryList, $categories);
-                        //$allSubCategories = Category::load(null,null,null, $parent_id, null, $session_id, null);
                     }
                 }
 
@@ -687,7 +687,7 @@ class Category implements GradebookItem
         $gradebook->update_skills_to_gradebook(
             $this->id,
             $this->get_skills(false),
-            false
+            true
         );
     }
 

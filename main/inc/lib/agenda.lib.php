@@ -145,7 +145,7 @@ class Agenda
         $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
         $id = null;
-        $content = nl2br($content);
+        $content = Security::remove_XSS($content);
         $eventComment = nl2br($eventComment);
 
         switch ($this->type) {
@@ -522,7 +522,8 @@ class Agenda
 
         // Get the agenda item.
         $item_id = intval($item_id);
-        $sql = "SELECT * FROM $table_agenda WHERE c_id = $course_id AND id = ".$item_id;
+        $sql = "SELECT * FROM $table_agenda
+                WHERE c_id = $course_id AND id = ".$item_id;
         $res = Database::query($sql);
 
         if (Database::num_rows($res) > 0) {
@@ -538,9 +539,11 @@ class Agenda
                     $row['end_date']
                 );
                 AnnouncementManager::send_email($id);
+
+                return $id;
             }
-            return $id;
         }
+
         return -1;
     }
 
@@ -1088,17 +1091,20 @@ class Agenda
         if (!empty($event)) {
             switch ($this->type) {
                 case 'personal':
-                    $sql = "UPDATE $this->tbl_personal_agenda SET all_day = 0, enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
+                    $sql = "UPDATE $this->tbl_personal_agenda SET
+                            all_day = 0, enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
                     Database::query($sql);
                     break;
                 case 'course':
-                    $sql = "UPDATE $this->tbl_course_agenda SET all_day = 0,  end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+                    $sql = "UPDATE $this->tbl_course_agenda SET
+                            all_day = 0,  end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE c_id = ".$this->course['real_id']." AND id=".intval($id);
                     Database::query($sql);
                     break;
                 case 'admin':
-                    $sql = "UPDATE $this->tbl_global_agenda SET all_day = 0, end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+                    $sql = "UPDATE $this->tbl_global_agenda SET
+                            all_day = 0, end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
                     Database::query($sql);
                     break;
@@ -1129,19 +1135,26 @@ class Agenda
         if (!empty($event)) {
             switch ($this->type) {
                 case 'personal':
-                    $sql = "UPDATE $this->tbl_personal_agenda SET all_day = $allDay, date = DATE_ADD(date, INTERVAL $delta MINUTE), enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
+                    $sql = "UPDATE $this->tbl_personal_agenda SET
+                            all_day = $allDay, date = DATE_ADD(date, INTERVAL $delta MINUTE),
+                            enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
-                    $result = Database::query($sql);
+                    Database::query($sql);
                     break;
                 case 'course':
-                    $sql = "UPDATE $this->tbl_course_agenda SET all_day = $allDay, start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE), end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+                    $sql = "UPDATE $this->tbl_course_agenda SET
+                            all_day = $allDay, start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE),
+                            end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE c_id = ".$this->course['real_id']." AND id=".intval($id);
-                    $result = Database::query($sql);
+                    Database::query($sql);
                     break;
                 case 'admin':
-                    $sql = "UPDATE $this->tbl_global_agenda SET all_day = $allDay, start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE), end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
+                    $sql = "UPDATE $this->tbl_global_agenda SET
+                            all_day = $allDay,
+                            start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE),
+                            end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
 							WHERE id=".intval($id);
-                    $result = Database::query($sql);
+                    Database::query($sql);
                     break;
             }
         }
@@ -1541,7 +1554,7 @@ class Agenda
         }
 
         if (Database::num_rows($result)) {
-            $eventsAdded = array_column($this->events, 'id');
+            $eventsAdded = array_column($this->events, 'unique_id');
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $eventId = $row['ref'];
                 $items = $this->getUsersAndGroupSubscribedToEvent(
@@ -1553,13 +1566,14 @@ class Agenda
                 $user_to_array = $items['users'];
                 $event = array();
                 $event['id'] = 'course_'.$row['id'];
+                $event['unique_id']  = 'course_'.$row['id'].intval($row['session_id']);
 
                 // To avoid doubles
-                if (in_array($event['id'], $eventsAdded)) {
+                if (in_array($event['unique_id'], $eventsAdded)) {
                     continue;
                 }
 
-                $eventsAdded[] = $row['id'];
+                $eventsAdded[] = $event['unique_id'];
                 $attachment = $this->getAttachment($row['id'], $courseInfo);
 
                 if (!empty($attachment)) {
@@ -2480,10 +2494,15 @@ class Agenda
             GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
             GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
         ) {
-            $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=course'>".
-                    Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
-            $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=course'>".
-                    Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";
+            $actionsLeft .= Display::url(
+                Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=".$this->type
+            );
+
+            $actionsLeft .= Display::url(
+                Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=".$this->type
+            );
 
             if ($this->type == 'course') {
 
@@ -2542,19 +2561,24 @@ class Agenda
                     //$form->addButtonFilter(get_lang('Filter'));
                     //$renderer = $form->defaultRenderer();
                     //$renderer->setCustomElementTemplate('<div class="col-md-6">{element}</div>');
-                    
+
                     $form->addButtonReset(get_lang('Reset'));
                     $form = $form->returnForm();
                 }
             }
         }
 
-        
+        $actionsRight = '';
         if ($view == 'calendar') {
             $actionsRight .= $form;
         }
-        
-        $toolbar = Display::toolbarAction('toolbar-agenda', array( 0 => $actionsLeft, 1 => $actionsRight), 2, false);
+
+        $toolbar = Display::toolbarAction(
+            'toolbar-agenda',
+            array(0 => $actionsLeft, 1 => $actionsRight),
+            2,
+            false
+        );
         return $toolbar;
     }
 

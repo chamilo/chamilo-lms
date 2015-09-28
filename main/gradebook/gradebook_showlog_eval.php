@@ -4,7 +4,7 @@
  * Script
  * @package chamilo.gradebook
  */
-//$cidReset = true;
+
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
@@ -27,16 +27,19 @@ Display :: display_header('');
 echo Display::page_header(get_lang('GradebookQualifyLog'));
 
 $t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-$t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
+$t_user = Database :: get_main_table(TABLE_MAIN_USER);
 $visible_log=Security::remove_XSS($_GET['visiblelog']);
 
 $evaledit = Evaluation :: load($visible_log);
-$sql="SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at,us.username FROM ".$t_linkeval_log." le INNER JOIN ".$t_user." us
-      ON le.user_id_log=us.user_id where id_linkeval_log=".$evaledit[0]->get_id()." and type='evaluation';";
-$result=Database::query($sql);
-$list_info=array();
-while ($row=Database::fetch_row($result)) {
-    $list_info[]=$row;
+$sql = "SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at,us.username
+        FROM ".$t_linkeval_log." le
+        INNER JOIN ".$t_user." us
+        ON le.user_id_log=us.user_id
+        WHERE id_linkeval_log=".$evaledit[0]->get_id()." AND type='evaluation';";
+$result = Database::query($sql);
+$list_info = array();
+while ($row = Database::fetch_row($result)) {
+    $list_info[] = $row;
 }
 
 foreach($list_info as $key => $info_log) {
@@ -44,8 +47,11 @@ foreach($list_info as $key => $info_log) {
     $list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 
-$parameters=array('visiblelog'=>$visible_log,'selectcat'=>intval($_GET['selectcat']));
-$table = new SortableTableFromArrayConfig($list_info, 1,20,'gradebookeval');
+$parameters = array(
+    'visiblelog' => $visible_log,
+    'selectcat' => intval($_GET['selectcat']),
+);
+$table = new SortableTableFromArrayConfig($list_info, 1, 20, 'gradebookeval');
 $table->set_additional_parameters($parameters);
 
 $table->set_header(0, get_lang('GradebookNameLog'));

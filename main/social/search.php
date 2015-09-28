@@ -87,8 +87,23 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                 $send_inv = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="' . $user['user_id'] . '">
                              <i class="fa fa-user"></i> '.get_lang('SendInvitation').'</a>';
             }
-            $send_msg = '<a href="#" class="btn-to-send-message '.$buttonClass.'" data-send-to="' . $user['user_id'] . '">
-                        <i class="fa fa-envelope"></i> '.get_lang('SendMessage').'</a>';
+
+            $sendMesssageUrl = api_get_path(WEB_AJAX_PATH)
+                . 'user_manager.ajax.php?'
+                . http_build_query([
+                    'a' => 'get_user_popup',
+                    'user_id' => $user['user_id']
+                ]);
+            $send_msg = Display::toolbarButton(
+                get_lang('SendMessage'),
+                $sendMesssageUrl,
+                'envelope',
+                'default',
+                [
+                    'class' => 'ajax btn-sm',
+                    'data-title' => get_lang('SendMessage')
+                ]
+            );
 
             $img = '<img src="'.$user_info['avatar'].'" width="100" height="100">';
 
@@ -205,11 +220,11 @@ $tpl->assign('social_right_content', $social_right_content);
 $tpl->assign('search_form', $searchForm);
 
 $formModalTpl =  new Template();
-$formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
-$formModalTpl->assign('invitationForm', MessageManager::generate_invitation_form('send_invitation'));
+//$formModalTpl->assign('message_form', MessageManager::generate_message_form('send_message'));
+$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 
-$tpl->assign('formModals', $formModals);
+$tpl->assign('form_modals', $formModals);
 
 $social_layout = $tpl->get_template('social/search.tpl');
 $tpl->display($social_layout);

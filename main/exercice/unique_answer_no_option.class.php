@@ -195,7 +195,7 @@ class UniqueAnswerNoOption extends Question
             $form->addElement('html_editor', 'answer[' . $i . ']', null, array(), $editor_config);
 
             $form->addElement('html_editor', 'comment[' . $i . ']', null, array(), $editor_config);
-            $form->addElement('text', 'weighting[' . $i . ']', null, array('class' => "span1", 'value' => '0'));
+            $form->addElement('text', 'weighting[' . $i . ']', null, array('style' => 'width: 60px;', 'value' => '0'));
             $form->addElement('html', '</tr>');
             $i++;
         }
@@ -248,7 +248,7 @@ class UniqueAnswerNoOption extends Question
 
         //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
-        $form->addText("weighting[$i]", null, false, ['value' => 0, 'readonly' => 'readonly']);
+        $form->addText("weighting[$i]", null, false, ['style' => 'width: 60px;', 'value' => 0, 'readonly' => 'readonly']);
 
         $form->addHTml('</tr>');
         $form->addHtml('</tbody></table>');

@@ -45,14 +45,16 @@ $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 Display :: display_header(null);
 
-echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'">'.
+$actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'">'.
     Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
+
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee() ) {
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'">';
-    echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';
+    $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin;
+    //$actionsRight .= Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).' ' . get_lang('UploadADocument') . '</a>';
+    
+    $actionsRight = Display::toolbarButton(get_lang('UploadMyAssignment'), $url, 'upload', 'success');
 }
-echo '</div>';
+echo Display::toolbarAction('toolbar-work', array(0 => $actionsLeft . $actionsRight));
 
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);
@@ -65,8 +67,10 @@ if (!empty($error_message)) {
 }
 
 if (!empty($my_folder_data['description'])) {
-    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.
-        Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
+    $contentWork = Security::remove_XSS($my_folder_data['description']);
+    $html = '';
+    $html .= Display::panel($contentWork, get_lang('Description'));
+    echo $html;    
 }
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
@@ -139,13 +143,17 @@ if (!api_is_invitee()) {
     ?>
         <script>
             $(function() {
-                <?php
+            <?php
                 echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
             ?>
             });
         </script>
     <?php
-    echo Display::grid_html('results');
+    
+    $html = '';
+    $tableWork = Display::grid_html('results');
+    $html = Display::panel($tableWork); 
+    echo $html;
 }
 
 Display :: display_footer();

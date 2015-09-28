@@ -104,9 +104,9 @@ class CourseDescriptionController
 
                     if (!empty($thematic_advance)) {
                         $course_description->set_id($id);
-                        $affected_rows = $course_description->update();
+                        $course_description->update();
                     } else {
-                        $affected_rows = $course_description->insert();
+                        $course_description->insert();
                     }
                     Security::clear_token();
 
@@ -203,7 +203,7 @@ class CourseDescriptionController
                         $course_description->set_description_type($description_type);
                         $course_description->set_title($title);
                         $course_description->set_content($content);
-                        $affected_rows = $course_description->insert(api_get_course_int_id());
+                        $course_description->insert(api_get_course_int_id());
                     }
                     Security::clear_token();
 

@@ -5,7 +5,7 @@
         <div class="col-md-3">
             {{ social_avatar_block }}
 
-            <div class="social-menu">
+            <div class="social-network-menu">
             {{ social_menu_block }}
             </div>
         </div>
@@ -31,9 +31,7 @@
                             </h4>
                         </div>
                         <div id="listFriends" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                            <div class="panel-body">
-                                {{ social_friend_block }}
-                            </div>
+                            {{ social_friend_block }}
                         </div>
                     </div>
                 </div>

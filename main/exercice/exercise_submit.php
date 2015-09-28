@@ -62,8 +62,6 @@ $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 
 $template = new Template();
 
-$htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
-
 // General parameters passed via POST/GET
 
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
@@ -94,13 +92,15 @@ $exercise_attempt_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATT
 /*  Teacher takes an exam and want to see a preview,
     we delete the objExercise from the session in order to get the latest
     changes in the exercise */
-if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['preview'] == 1 ) {
+if (api_is_allowed_to_edit(null, true) && isset($_GET['preview']) && $_GET['preview'] == 1 ) {
     Session::erase('objExercise');
 }
 
 // 1. Loading the $objExercise variable
 
-if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
+if (!isset($_SESSION['objExercise']) ||
+    $_SESSION['objExercise']->id != $_REQUEST['exerciseId']
+) {
     // Construction of Exercise
     $objExercise = new Exercise();
     Session::write('firstTime', true);
@@ -143,6 +143,8 @@ if ($objExercise->review_answers) {
         exit;
     }
 }
+$template->assign('shuffle_answers', $objExercise->random_answers);
+$htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
 
 $current_timestamp = time();
 $my_remind_list = array();
@@ -190,9 +192,20 @@ if ($objExercise->selectAttempts() > 0) {
                 if (!empty($exercise_stat_info)) {
                     $max_exe_id = max(array_keys($exercise_stat_info));
                     $last_attempt_info = $exercise_stat_info[$max_exe_id];
-                    $attempt_html .= Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>''));
+                    $attempt_html .= Display::div(
+                        get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']),
+                        array('id' => '')
+                    );
 
-                    $attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
+                    $attempt_html .= Display::return_message(
+                        sprintf(
+                            get_lang('ReachedMaxAttempts'),
+                            $exercise_title,
+                            $objExercise->selectAttempts()
+                        ),
+                        'warning',
+                        false
+                    );
 
                     if (!empty($last_attempt_info['question_list'])) {
                         foreach($last_attempt_info['question_list'] as $question_data) {
@@ -734,7 +747,16 @@ if (!empty($objExercise->description)) {
             });
          });
         </script>";
-    echo Display::generate_accordion(array(array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => $objExercise->description)), 'jquery', 'description_content');
+    echo Display::generate_accordion(
+        array(
+            array(
+                'title' => get_lang('ExerciseDescriptionLabel'),
+                'content' => $objExercise->description,
+            ),
+        ),
+        'jquery',
+        'description_content'
+    );
 }
 
 if ($origin != 'learnpath') {
@@ -1039,7 +1061,6 @@ if (!empty($error)) {
     }
 
     foreach ($questionList as $questionId) {
-
         // for sequential exercises
         if ($objExercise->type == ONE_PER_PAGE) {
             // if it is not the right question, goes to the next loop iteration
@@ -1088,7 +1109,16 @@ if (!empty($error)) {
         echo '<div id="question_div_'.$questionId.'" class="main-question '.$remind_highlight.'" >';
 
         // Shows the question and its answers
-        ExerciseLib::showQuestion($questionId, false, $origin, $i, true, false, $user_choice, false);
+        ExerciseLib::showQuestion(
+            $questionId,
+            false,
+            $origin,
+            $i,
+            true,
+            false,
+            $user_choice,
+            false
+        );
 
         // Button save and continue
         switch ($objExercise->type) {

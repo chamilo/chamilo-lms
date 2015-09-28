@@ -80,7 +80,7 @@ $(document).ready( function() {
 });
  </script>';
 
-$interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidReq(), 'name' => get_lang('Groups'));
 
 $course_id = api_get_course_int_id();
 
@@ -88,7 +88,11 @@ $course_id = api_get_course_int_id();
 if (isset($_GET['id'])) {
 	// Update settings of existing category
 	$action = 'update_settings';
-	$form = new FormValidator('group_category', 'post', '?id='.$category['id']);
+    $form = new FormValidator(
+        'group_category',
+        'post',
+        api_get_self().'?id='.$category['id'].'&'.api_get_cidReq()
+    );
 	$form->addElement('hidden', 'id');
 } else {
     // Checks if the field was created in the table Category. It creates it if is neccesary

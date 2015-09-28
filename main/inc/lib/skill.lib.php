@@ -116,7 +116,7 @@ class SkillRelProfile extends Model
     public function get_skills_by_profile($profileId)
     {
         $profileId = intval($profileId);
-        $skills       = $this->get_all(array('where' => array('profile_id = ? ' => $profileId)));
+        $skills = $this->get_all(array('where' => array('profile_id = ? ' => $profileId)));
         $return = array();
         if (!empty($skills)) {
             foreach ($skills as $skill_data) {

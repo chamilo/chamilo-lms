@@ -1043,6 +1043,9 @@ class IndexManager
         $sessions_with_category = '';
         $sessions_with_no_category = '';
 
+        $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
+        $sessionTitleLink = $sessionTitleLink === false ? 1 : $sessionTitleLink;
+
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
@@ -1147,7 +1150,7 @@ class IndexManager
                                 : null;
 
                             $params['extra_fields'] = $session_box['extra_fields'];
-                            $params['show_link_to_session'] = api_is_drh() ? false : true;
+                            $params['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
                             $params['title'] = $session_box['title'];
                             $params['subtitle'] = $extra_info;
                             $params['show_actions'] = api_is_platform_admin() ? true : false;
@@ -1260,7 +1263,7 @@ class IndexManager
                             if ($count > 0) {
                                 $session_box = Display:: get_session_title_box($session_id);
                                 $sessionParams['id'] = $session_id;
-                                $sessionParams['show_link_to_session'] = !api_is_drh();
+                                $sessionParams['show_link_to_session'] = !api_is_drh() && $sessionTitleLink;
                                 $sessionParams['title'] = $session_box['title'];
                                 $sessionParams['subtitle'] = (!empty($session_box['coach'])
                                     ? $session_box['coach'] . ' | '

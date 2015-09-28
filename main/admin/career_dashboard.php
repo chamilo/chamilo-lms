@@ -47,7 +47,7 @@ $form->addSelect(
     'filter',
     get_lang('Career'),
     $career_select_list,
-    array('id' => 'filter_1', 'class' => 'chzn-select')
+    array('id' => 'filter_1')
 );
 $form->addButtonSearch(get_lang('Filter'));
 
@@ -119,8 +119,8 @@ foreach($career_array as $career_id => $data) {
     $career     = $data['name'];
     $promotions = $data['promotions'];
     $career = Display::url($career,'careers.php?action=edit&id='.$career_id);
-    $career = Display::tag('h3',$career);
-    echo '<tr><td style="background-color:#eee" colspan="3">'.$career.'</td></tr>';
+    $career = Display::tag('h4',$career);
+    echo '<tr><td style="background-color:#ECF0F1" colspan="3">'.$career.'</td></tr>';
     foreach($promotions as $promotion_id => $promotion) {
     	$promotion_name = $promotion['name'];
         $promotion_url  = Display::url($promotion_name,'promotions.php?action=edit&id='.$promotion_id);
@@ -133,29 +133,29 @@ foreach($career_array as $career_id => $data) {
         	$rowspan = 'rowspan="'.$count.'"';
         }
         echo '<td '.$rowspan.'>';
-        echo Display::tag('h4',$promotion_url);
+        echo Display::tag('h5',$promotion_url);
         echo '</td>';
         echo '</tr>';
 
         if (!empty($sessions))
-        foreach($sessions as $session) {
+        foreach ($sessions as $session) {
             $course_list = $session['courses'];
 
             $url = Display::url($session['data']['name'], 'resume_session.php?id_session='.$session['data']['id']);
             echo '<tr>';
                 //Session name
-                echo Display::tag('td',$url);
+                echo Display::tag('td', $url);
                 echo '<td>';
                     //Courses
                     echo '<table>';
-                    foreach($course_list as $course) {
+                    foreach ($course_list as $course) {
                        echo '<tr>';
 
                        $url = Display::url(
                            $course['title'],
-                           api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session='.$session['data']['id']
+                           api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$session['data']['id']
                        );
-                       echo Display::tag('td',$url);
+                       echo Display::tag('td', $url);
                        echo '</tr>';
                     }
                     echo '</table>';

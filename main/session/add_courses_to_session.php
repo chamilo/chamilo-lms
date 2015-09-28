@@ -216,7 +216,7 @@ unset($Courses);
         }
         ?>
         <div id="multiple-add-session" class="row">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <label><?php echo get_lang('CourseListInPlatform') ?> :</label>
                 <?php
                 if (!($add_type == 'multiple')) {
@@ -240,12 +240,12 @@ unset($Courses);
                 unset($nosessionCourses);
                 ?>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <?php if($add_type == 'multiple') { ?>
                     <div class="code-course">
                         <?php echo get_lang('FirstLetterCourse'); ?> :
-                        <br /><br />
-                        <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')" class="form-control">
+                        
+                        <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')" class="selectpicker show-tick form-control">
                             <option value="%">--</option>
                             <?php
                             echo Display :: get_alphabet_options();
@@ -255,46 +255,52 @@ unset($Courses);
                     </div>
                 <?php } ?>
                 <div class="control-course">
-                    <br /><br />
+                    
                 <?php
                 if ($ajax_search) {
                     ?>
-                    <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))">
-                        <i class="fa fa-chevron-left"></i>
-                    </button>
-                    <br /><br />
+                    <div class="separate-action">
+                        <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                    </div>
                 <?php
                 } else {
                     ?>
-                    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
-                        <i class="fa fa-chevron-right"></i>
-                    </button>
-                    <br /><br />
-                    <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-                        <i class="fa fa-chevron-left"></i>
-                    </button>
-                    <br /><br />
+                    <div class="separate-action">
+                        <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="separate-action">
+                        <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                    </div>    
+                    
                 <?php
                 }
                 ?>
-                    <br />
-                    <label>
-                        <input type="checkbox" name="copy_evaluation">
-                        <?php echo get_lang('ImportGradebookInCourse'); ?>
-                    </label>
-                    <br />
+                    <div class="separate-action">
+                        <label>
+                            <input type="checkbox" name="copy_evaluation">
+                            <?php echo get_lang('ImportGradebookInCourse'); ?>
+                        </label>
+                    </div>
+                    
                 <?php
-
+                echo '<div class="separate-action">';
                 if (isset($_GET['add'])) {
                     echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
                 } else {
                     echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
                 }
+                echo '</div>';
                 ?>
 
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <label><?php echo get_lang('CourseListInSession') ?> :</label>
                 <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" class="form-control">
 

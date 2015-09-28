@@ -11,8 +11,6 @@
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
-// Include OpenGraph NOT AVAILABLE
-require_once api_get_path(LIBRARY_PATH).'opengraph/OpenGraph.php';
 
 if (api_get_setting('allow_social_tool') !='true') {
     $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
@@ -38,10 +36,14 @@ $social_session_block = null;
 
 if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
     $messageId = 0;
+    $messageContent = $_POST['social_wall_new_msg_main'];
+    if (!empty($_POST['url_content'])) {
+        $messageContent = $_POST['social_wall_new_msg_main'].'<br><br>'.$_POST['url_content'];
+    }
     $idMessage = SocialManager::sendWallMessage(
         api_get_user_id(),
         $friendId,
-        $_POST['social_wall_new_msg_main'],
+        $messageContent,
         $messageId,
         MESSAGE_STATUS_WALL_POST
     );
@@ -54,6 +56,8 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
         );
     }
 
+    Display::addFlash(Display::return_message(get_lang('MessageSent')));
+
     $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
     $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: ' . $url);
@@ -61,13 +65,16 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
 
 } else if (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
     $messageId = intval($_POST['messageId']);
+    $messageContent = $_POST['social_wall_new_msg'];
+
     $res = SocialManager::sendWallMessage(
         api_get_user_id(),
         $friendId,
-        $_POST['social_wall_new_msg'],
+        $messageContent,
         $messageId,
         MESSAGE_STATUS_WALL
     );
+    Display::addFlash(Display::return_message(get_lang('MessageSent')));
     $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
     $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: ' . $url);
@@ -76,6 +83,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
 } else if (isset($_GET['messageId'])) {
     $messageId = Security::remove_XSS($_GET['messageId']);
     $status = SocialManager::deleteMessage($messageId);
+    Display::addFlash(Display::return_message(get_lang('MessageDeleted')));
     header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/profile.php');
     exit;
 
@@ -282,6 +290,28 @@ $socialAutoExtendLink = Display::url(
         'class' => 'nextPage next',
     )
 );
+
+// Added a Jquery Function to return the Preview of OpenGraph URL Content
+$htmlHeadXtra[] = '<script>
+$(document).ready(function() {
+    $("label").remove();
+    $("[name=\'social_wall_new_msg_main\']").on("paste", function(e) {
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            beforeSend: function() {
+                $(".url_preview").html("<i class=\'fa fa-spinner fa-pulse fa-1x\'></i>");
+            },
+            type: "POST",
+            url: "'. api_get_path(WEB_AJAX_PATH) .'social.ajax.php?a=readUrlWithOpenGraph",
+            data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
+            success: function(response) {
+                $(".url_preview").html(response);
+                $("[name=\'url_content\']").val(response);
+            }
+        });
+    });
+});
+</script>';
 
 $socialRightInformation = null;
 $social_right_content = null;
@@ -639,11 +669,11 @@ $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 
 $formModalTpl =  new Template();
-$formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
-$formModalTpl->assign('invitationForm', MessageManager::generate_invitation_form('send_invitation'));
+//$formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
+$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 
-$tpl->assign('formModals', $formModals);
+$tpl->assign('form_modals', $formModals);
 $social_layout = $tpl->get_template('social/profile.tpl');
 $tpl->display($social_layout);
 

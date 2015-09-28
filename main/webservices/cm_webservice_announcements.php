@@ -71,8 +71,6 @@ class WSCMAnnouncements extends WSCM
 
         }else
             return get_lang('InvalidId');
-
-
     }
 
 
@@ -84,11 +82,8 @@ class WSCMAnnouncements extends WSCM
         $announcement_id = ($announcement_id == 0) ? "" : "AND announcement.id=".$announcement_id;
         $user_id = UserManager::get_user_id_from_username($username);
         $course_info = CourseManager::get_course_information($course_code);
-
-        $course_db = $course_info['db_name'];
-
-        $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
-        $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
+        $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
         $maximum 	= '12';
 
         $group_memberships=GroupManager::get_group_ids($course_info['real_id'], $user_id);
@@ -106,7 +101,6 @@ class WSCMAnnouncements extends WSCM
                 ip.to_group_id IS NULL
             ) ";
         }
-
 
         // the user is member of several groups => display personal
         // announcements AND his group announcements AND the general announcements
@@ -178,6 +172,7 @@ class WSCMAnnouncements extends WSCM
         }
 
         $result = Database::query($sql);
+
         return $result;
     }
 

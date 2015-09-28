@@ -377,6 +377,7 @@ $tpl = new Template(get_lang('Session'));
 $tpl->assign('session_header', $sessionHeader);
 $tpl->assign('title', $sessionTitle);
 $tpl->assign('general_coach', $generalCoach);
+$tpl->assign('session_admin', api_get_user_info($session->getSessionAdminId()));
 $tpl->assign('session', $sessionInfo);
 $tpl->assign('session_category', is_null($sessionCategory) ? null : $sessionCategory->getName());
 $tpl->assign('session_dates', SessionManager::parseSessionDates($sessionInfo));

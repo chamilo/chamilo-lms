@@ -27,15 +27,6 @@ if (!api_is_allowed_to_edit(false, true)) {
 
 // Is valid request
 $is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
-/*if ($request_index != $is_valid_request) {
-	if ($request_index == 'save_question') {
-		unset($_POST[$request_index]);
-	} elseif ($request_index == 'add_answer') {
-		unset($_POST[$request_index]);
-	} elseif($request_index == 'remove_answer') {
-		unset($_POST[$request_index]);
-	}
-}*/
 
 // Database table definitions
 $table_survey = Database:: get_course_table(TABLE_SURVEY);
@@ -69,14 +60,23 @@ if ($surveyData['survey_type'] == 1) {
                 survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
 	$rs = Database::query($sql);
 	if (Database::num_rows($rs)===0) {
-		header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');
+        Display::addFlash(
+            Display::return_message(get_lang('YouNeedToCreateGroups'))
+        );
+		header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int)$_GET['survey_id']);
 		exit;
 	}
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']), 'name' => strip_tags($urlname));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'name' => get_lang('SurveyList'),
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']),
+    'name' => strip_tags($urlname),
+);
 
 // Tool name
 if ($_GET['action'] == 'add') {

@@ -9,15 +9,17 @@
  */
 class NotebookManager
 {
-
-    private function __construct()
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
     }
 
     /**
      * a little bit of javascript to display a prettier warning when deleting a note
      *
-     * @return unknown
+     * @return string
      *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
      * @version januari 2009, dokeos 1.8.6
@@ -85,6 +87,10 @@ class NotebookManager
         }
     }
 
+    /**
+     * @param int $notebook_id
+     * @return array|mixed
+     */
     static function get_note_information($notebook_id)
     {
         if (empty($notebook_id)) {
@@ -159,7 +165,6 @@ class NotebookManager
         );
 
         return true;
-
     }
 
     static function delete_note($notebook_id)
@@ -196,7 +201,7 @@ class NotebookManager
     /**
      * Display notes
      */
-    static function display_notes()
+    public static function display_notes()
     {
         $_user = api_get_user_info();
         if (!isset($_GET['direction'])) {
@@ -224,9 +229,12 @@ class NotebookManager
             echo '<a href="javascript:void(0)">' . Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32') . '</a>';
         }
 
-        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=creation_date&direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_new.png', get_lang('OrderByCreationDate'), '', '32') . '</a>';
-        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=update_date&direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_date_mod.png', get_lang('OrderByModificationDate'), '', '32') . '</a>';
-        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=title&direction=' . $link_sort_direction . '">' . Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32') . '</a>';
+        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=creation_date&direction=' . $link_sort_direction . '">' .
+            Display::return_icon('notes_order_by_date_new.png', get_lang('OrderByCreationDate'), '', '32') . '</a>';
+        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=update_date&direction=' . $link_sort_direction . '">' .
+            Display::return_icon('notes_order_by_date_mod.png', get_lang('OrderByModificationDate'), '', '32') . '</a>';
+        echo '<a href="index.php?' . api_get_cidreq() . '&action=changeview&view=title&direction=' . $link_sort_direction . '">' .
+            Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32') . '</a>';
         echo '</div>';
 
         if (!in_array($_SESSION['notebook_view'], array('creation_date', 'update_date', 'title'))) {
@@ -249,26 +257,35 @@ class NotebookManager
         $cond_extra = ($_SESSION['notebook_view'] == 'update_date') ? " AND update_date <> '0000-00-00 00:00:00'" : " ";
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $t_notebook WHERE c_id = $course_id AND user_id = '" . api_get_user_id() . "' $condition_session $cond_extra $order_by";
+        $sql = "SELECT * FROM $t_notebook
+                WHERE
+                    c_id = $course_id AND
+                    user_id = '" . api_get_user_id() . "'
+                    $condition_session
+                    $cond_extra $order_by
+                ";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            //validacion when belongs to a session
+            // Validation when belongs to a session
             $session_img = api_get_session_image($row['session_id'], $_user['status']);
             $creation_date = api_get_local_time($row['creation_date'], null, date_default_timezone_get());
             $update_date = api_get_local_time($row['update_date'], null, date_default_timezone_get());
-            echo '<div class="sectiontitle">';
-            echo '<span style="float: right;"> (' . get_lang('CreationDate') . ': ' . date_to_str_ago($creation_date) . '&nbsp;&nbsp;<span class="dropbox_date">' . $creation_date . '</span>';
+
+            $updateValue = '';
             if ($row['update_date'] <> $row['creation_date']) {
-                echo ', ' . get_lang('UpdateDate') . ': ' . date_to_str_ago($update_date) . '&nbsp;&nbsp;<span class="dropbox_date">' . $update_date . '</span>';
+                $updateValue = ', ' . get_lang('UpdateDate') . ': ' . date_to_str_ago($update_date) . '&nbsp;&nbsp;<span class="dropbox_date">' . $update_date . '</span>';
             }
-            echo ')</span>';
-            echo $row['title'] . $session_img;
-            echo '</div>';
-            echo '<div class="sectioncomment">' . $row['description'] . '</div>';
-            echo '<div>';
-            echo '<a href="' . api_get_self() . '?action=editnote&notebook_id=' . $row['notebook_id'] . '">' . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . '</a>';
-            echo '<a href="' . api_get_self() . '?action=deletenote&notebook_id=' . $row['notebook_id'] . '" onclick="return confirmation(\'' . $row['title'] . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
-            echo '</div>';
+
+            $actions = '<a href="' . api_get_self() . '?action=editnote&notebook_id=' . $row['notebook_id'] . '">' .
+                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . '</a>';
+            $actions .= '<a href="' . api_get_self() . '?action=deletenote&notebook_id=' . $row['notebook_id'] . '" onclick="return confirmation(\'' . $row['title'] . '\');">' .
+                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
+
+            echo Display::panel(
+                $row['description'],
+                $row['title'] . $session_img.' <div class="pull-right">'.$actions.'</div>',
+                get_lang('CreationDate') . ': ' . date_to_str_ago($creation_date) . '&nbsp;&nbsp;<span class="dropbox_date">' . $creation_date . $updateValue."</span>"
+            );
         }
     }
 }

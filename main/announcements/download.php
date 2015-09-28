@@ -69,7 +69,7 @@ if (Database::num_rows($result) > 0) {
     if (Security::check_abs_path($full_file_name,
         api_get_path(SYS_COURSE_PATH) . api_get_course_path() . '/upload/announcements/')
     ) {
-        DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
+        DocumentManager::file_send_for_download($full_file_name, true, $title);
     }
 }
 exit;

@@ -15,25 +15,34 @@ if (isset($error)) {
     Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
 }
 
-$param_gradebook = '';
-if (isset($_SESSION['gradebook'])) {
-    $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
-}
-
 if (!isset($error)) {
     $token = Security::get_token();
 }
 
 $attendance_weight = floatval($attendance_weight);
 // display form
-$form = new FormValidator('attendance_edit','POST','index.php?action=attendance_edit&'.api_get_cidreq().'&attendance_id='.$attendance_id.$param_gradebook);
+$form = new FormValidator(
+    'attendance_edit',
+    'POST',
+    'index.php?action=attendance_edit&'.api_get_cidreq().'&attendance_id='.$attendance_id
+);
 $form->addElement('header', '', get_lang('Edit'));
-$form->addElement('hidden', 'sec_token',$token);
+$form->addElement('hidden', 'sec_token', $token);
 $form->addElement('hidden', 'attendance_id', $attendance_id);
 
-$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
+$form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title','html_filter');
-$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
+$form->addHtmlEditor(
+    'description',
+    get_lang('Description'),
+    false,
+    false,
+    array(
+        'ToolbarSet' => 'TrainingDescription',
+        'Width' => '100%',
+        'Height' => '200',
+    )
+);
 
 // Adavanced Parameters
 
@@ -55,7 +64,6 @@ if (Gradebook::is_active()) {
     $form->addElement('text', 'attendance_weight', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="javascript: this.select();"');
     $form->applyFilter('attendance_weight', 'html_filter');
     $form->addElement('html','</div>');
-
     $form->addElement('html','</div>');
 }
 $form->addButtonUpdate(get_lang('Save'));

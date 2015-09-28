@@ -26,12 +26,12 @@ switch ($action) {
         }
 
         // 1. Setting variables needed by jqgrid
-        $action         = $_GET['a'];
-        $exercise_id    = intval($_GET['exercise_id']);
-        $page           = intval($_REQUEST['page']); //page
-        $limit          = intval($_REQUEST['rows']); //quantity of rows
-        $sidx           = $_REQUEST['sidx'];         //index to filter
-        $sord           = $_REQUEST['sord'];         //asc or desc
+        $action = $_GET['a'];
+        $exercise_id = intval($_GET['exercise_id']);
+        $page = intval($_REQUEST['page']); //page
+        $limit = intval($_REQUEST['rows']); //quantity of rows
+        $sidx = $_REQUEST['sidx'];         //index to filter
+        $sord = $_REQUEST['sord'];         //asc or desc
 
         if (!in_array($sord, array('asc','desc'))) {
             $sord = 'desc';
@@ -51,13 +51,14 @@ switch ($action) {
         $now = api_get_utc_datetime($now);
 
         $where_condition = " orig_lp_id = 0 AND exe_exo_id = $exercise_id AND start_date > '$now' ";
-        $sql    = "SELECT COUNT(DISTINCT exe_id) FROM $track_exercise WHERE $where_condition ";
+        $sql = "SELECT COUNT(DISTINCT exe_id)
+                FROM $track_exercise
+                WHERE $where_condition ";
         $result = Database::query($sql);
         $count  = Database::fetch_row($result);
         $count  = $count[0];
 
         //3. Calculating first, end, etc
-
         $total_pages = 0;
         if ($count > 0) {
             if (!empty($limit)) {
@@ -90,19 +91,19 @@ switch ($action) {
                 FROM $user_table u
                 INNER JOIN (
                     SELECT
-                    t.exe_id,
-                    t.exe_user_id,
-                    status,
-                    start_date,
-                    exe_result,
-                    exe_weighting,
-                    exe_result/exe_weighting as score,
-                    exe_duration,
-                    questions_to_check,
-                    orig_lp_id
+                        t.exe_id,
+                        t.exe_user_id,
+                        status,
+                        start_date,
+                        exe_result,
+                        exe_weighting,
+                        exe_result/exe_weighting as score,
+                        exe_duration,
+                        questions_to_check,
+                        orig_lp_id
                     FROM  $track_exercise  t
                     LEFT JOIN $track_attempt a
-                    ON (a.exe_id = t.exe_id AND t.exe_user_id = a.user_id )
+                    ON (a.exe_id = t.exe_id AND t.exe_user_id = a.user_id)
                     WHERE t.status = 'incomplete' AND $where_condition
                     GROUP BY exe_user_id
                 ) as aa
@@ -120,9 +121,9 @@ switch ($action) {
         $oExe->read($exercise_id);
 
         $response = new stdClass();
-        $response->page     = $page;
-        $response->total    = $total_pages;
-        $response->records  = $count;
+        $response->page = $page;
+        $response->total = $total_pages;
+        $response->records = $count;
         $i=0;
 
         if (!empty($results)) {
@@ -333,8 +334,8 @@ switch ($action) {
 
             if ($type == 'simple') {
                 foreach ($question_list as $my_question_id) {
-                    $objQuestionTmp  = Question::read($my_question_id, $course_id);
-                    $total_weight   += $objQuestionTmp->selectWeighting();
+                    $objQuestionTmp = Question::read($my_question_id, $course_id);
+                    $total_weight += $objQuestionTmp->selectWeighting();
                 }
             }
             unset($objQuestionTmp);

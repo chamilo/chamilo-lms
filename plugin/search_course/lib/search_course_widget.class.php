@@ -220,8 +220,7 @@ EOT;
      */
     function display_list($courses)
     {
-        if (empty($courses))
-        {
+        if (empty($courses)) {
             return false;
         }
 
@@ -231,15 +230,12 @@ EOT;
         $display_teacher = (api_get_setting('display_teacher_in_courselist') == 'true');
 
         echo '<table cellpadding="4">';
-        foreach ($courses as $key => $course)
-        {
+        foreach ($courses as $key => $course) {
             $details = array();
-            if ($display_coursecode)
-            {
+            if ($display_coursecode) {
                 $details[] = $course['visual_code'];
             }
-            if ($display_teacher)
-            {
+            if ($display_teacher) {
                 $details[] = $course['tutor'];
             }
             $details = implode(' - ', $details);
@@ -247,17 +243,20 @@ EOT;
 
             $href = api_get_path(WEB_COURSE_PATH).$course['code'] .'/index.php';
             echo '<tr><td><b><a href="' . $href . '">' . "$title</a></b><br/>$details</td><td>";
-            if (!api_is_anonymous())
-            {
-                if ($course['registration_code'])
-                {
-                    Display::display_icon('passwordprotected.png', '', array('style' => 'float:left;'));
+            if (!api_is_anonymous()) {
+                if ($course['registration_code']) {
+                    Display::display_icon(
+                        'passwordprotected.png',
+                        '',
+                        array('style' => 'float:left;')
+                    );
                 }
                 $this->display_subscribe_icon($course, $user_courses);
             }
             echo '</td></tr>';
         }
         echo '</table>';
+
         return true;
     }
 
@@ -283,8 +282,7 @@ EOT;
         }
 
         //Not authorized to subscribe
-        if ($current_course['subscribe'] != SUBSCRIBE_ALLOWED)
-        {
+        if ($current_course['subscribe'] != SUBSCRIBE_ALLOWED) {
             echo self::get_lang('SubscribingNotAllowed');
             return false;
         }
@@ -360,7 +358,6 @@ EOT;
             $result[$code] = array(
                 'code' => $code,
                 'directory' => $row['directory'],
-                'db' => $row['db_name'],
                 'visual_code' => $row['visual_code'],
                 'title' => $row['title'],
                 'tutor' => $row['tutor_name'],
@@ -368,6 +365,7 @@ EOT;
                 'unsubscribe' => $row['unsubscribe']
             );
         }
+
         return $result;
     }
 

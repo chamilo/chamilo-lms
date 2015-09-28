@@ -30,6 +30,7 @@ class CustomPages
      * Returns the path to a custom page.
      *
      * @param string $name
+     *
      * @return string
      */
     public static function path($name = '')
@@ -61,7 +62,8 @@ class CustomPages
     /**
      * Does not look like this function is being used is being used
      *
-     * @param type $url_id
+     * @param int $url_id
+     *
      * @return string
      */
     public static function getURLImages($url_id = null)

@@ -5,8 +5,8 @@
  */
 
 // Database table definitions
-$table_sf     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-$table_sf_val   = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+$table_sf = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+$table_sf_val = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
 
 /**
  * Add a specific field
@@ -66,7 +66,7 @@ function edit_specific_field($id, $name)
     }
     $sql = 'UPDATE %s SET name = \'%s\' WHERE id = %s LIMIT 1';
     $sql = sprintf($sql, $table_sf, $name, $id);
-    $result = Database::query($sql);
+    Database::query($sql);
 }
 
 /**
@@ -278,25 +278,32 @@ function get_specific_field_code_from_name($name) {
         'X',
         'Y',
     );
-    $table_sf = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
+    $table_sf = Database:: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $sql = "SELECT code FROM $table_sf ORDER BY code";
     $res = Database::query($sql);
-    $code = strtoupper(substr($name,0,1));
+    $code = strtoupper(substr($name, 0, 1));
     //if no code exists in DB, return current one
-    if (Database::num_rows($res)<1) { return $code;}
+    if (Database::num_rows($res) < 1) {
+        return $code;
+    }
 
     $existing_list = array();
     while ($row = Database::fetch_array($res)) {
-    	$existing_list[] = $row['code'];
+        $existing_list[] = $row['code'];
     }
     //if the current code doesn't exist in DB, return current one
-    if (!in_array($code,$existing_list)) { return $code;}
-
-    $idx = array_search($code,$list);
-    $c = count($list);
-    for ($i = $idx+1, $j=0 ; $j<$c ; $i++, $j++) {
-        if (!in_array($list[$i],$existing_list)) { return $idx[$i]; }
+    if (!in_array($code, $existing_list)) {
+        return $code;
     }
+
+    $idx = array_search($code, $list);
+    $c = count($list);
+    for ($i = $idx + 1, $j = 0; $j < $c; $i++, $j++) {
+        if (!in_array($list[$i], $existing_list)) {
+            return $idx[$i];
+        }
+    }
+
     // all 26 codes are used
     return false;
 }

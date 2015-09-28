@@ -46,6 +46,9 @@ if (!isset($_SESSION['openChatBoxes'])) {
 }
 
 $chat = new Chat();
+if (chat::disableChat()){
+    exit;
+}
 if ($chat->is_chat_blocked_by_exercises()) {
     // Disconnecting the user
     $chat->setUserStatus(0);
@@ -69,69 +72,33 @@ switch ($action) {
         $status = isset($_REQUEST['status']) ? intval($_REQUEST['status']) : 0;
         $chat->setUserStatus($status);
         break;
-    case 'start_video':
-        $room = VideoChat::getChatRoomByUsers(api_get_user_id(), $to_user_id);
-
-        if ($room !== false) {
-            $videoChatLink = Display::url(
-                Display::tag(
-                    'i',
-                    null,
-                    ['class' => 'fa fa-video-camera']
-                ) . "&nbsp;" . get_lang('StartVideoChat'),
-                api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room={$room['room_name']}"
-            );
-
-            $chat->send(api_get_user_id(), $to_user_id, $videoChatLink, false);
-
-            echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
-            break;
-        }
-
-        $form = new FormValidator('start_video_chat');
-        $form->addText('chat_room_name', get_lang('ChatRoomName'), false);
-        $form->addHidden('to', $to_user_id);
-        $form->addButtonSend(get_lang('Create'));
-
-        $template = new Template();
-        $template->assign('form', $form->returnForm());
-
-        echo $template->fetch('default/javascript/chat/start_video.tpl');
-        break;
     case 'create_room':
         $room = VideoChat::getChatRoomByUsers(api_get_user_id(), $to_user_id);
-        $createdRoom = false;
 
         if ($room === false) {
-            $roomName = isset($_REQUEST['room_name']) ? Security::remove_XSS($_REQUEST['room_name']) : null;
+            $createdRoom = VideoChat::createRoom(api_get_user_id(), $to_user_id);
 
-            if (VideoChat::nameExists($roomName)) {
-                echo Display::return_message(get_lang('TheVideoChatRoomXNameAlreadyExists'), 'error');
-
+            if ($createdRoom === false) {
+                echo Display::return_message(get_lang('ChatRoomNotCreated'), 'error');
                 break;
             }
 
-            $createdRoom = VideoChat::createRoom($roomName, api_get_user_id(), $to_user_id);
-        } else {
-            $roomName = $room['room_name'];
-            $createdRoom = true;
+            $room = VideoChat::getChatRoomByUsers(api_get_user_id(), $to_user_id);
         }
 
-        if ($createdRoom === false) {
-            echo Display::return_message(get_lang('ChatRoomNotCreated'), 'error');
-            break;
-        }
-
+        $videoChatUrl = api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room={$room['id']}";
         $videoChatLink = Display::url(
-            Display::tag(
-                'i',
-                null,
-                ['class' => 'fa fa-video-camera']
-            ) . "&nbsp;" . get_lang('StartVideoChat'),
-            api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room=$roomName"
+            Display::returnFontAswesomeIcon('video-camera') . get_lang('StartVideoChat'),
+            $videoChatUrl
         );
 
-        $chat->send(api_get_user_id(), $to_user_id, $videoChatLink, false);
+        $chat->send(
+            api_get_user_id(),
+            $to_user_id,
+            $videoChatLink,
+            false,
+            false
+        );
 
         echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
         break;

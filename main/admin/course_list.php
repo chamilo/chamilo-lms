@@ -373,38 +373,36 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     // Create a filter by session
     $sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
     $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
-    $sessionList = array();
-    if (!empty($sessionId)) {
-        $sessionList = array();
-        $sessionInfo = SessionManager::fetch($sessionId);
-        $sessionList[$sessionInfo['id']] = $sessionInfo['name'];
-    }
-    $sessionFilter->addElement(
+    $sessionSelect = $sessionFilter->addElement(
         'select_ajax',
         'session_name',
         get_lang('SearchCourseBySession'),
         null,
-        array(
-            'url' => $url,
-            'defaults' => $sessionList
-        )
+        array('url' => $url)
     );
+
+    if (!empty($sessionId)) {
+        $sessionInfo = SessionManager::fetch($sessionId);
+        $sessionSelect->addOption($sessionInfo['name'], $sessionInfo['id'], ['selected' => 'selected']);
+    }
+    
     $courseListUrl = api_get_self();
     $actions .= '<div class="row">';
+    $actions .= '<div class="col-md-2">';
+    $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
+    if (api_get_setting('course_validation') == 'true') {
+        $actions .= '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'',ICON_SIZE_MEDIUM).'</a>';
+    }
+    $actions .= '</div>';
     $actions .= '<div class="col-md-4">';
     $actions .= $form->return_form();
     $actions .= '</div>';
     $actions .= '<div class="col-md-4">';
     $actions .= $sessionFilter->return_form();
     $actions .= '</div>';
-    $actions .= '<div class="col-md-4">';
-
-    $actions .= $advanced;
+    $actions .= '<div class="col-md-2">';
     $actions .= '<div class="pull-right">';
-    $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
-    if (api_get_setting('course_validation') == 'true') {
-        $actions .= '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'',ICON_SIZE_MEDIUM).'</a>';
-    }
+    $actions .= $advanced;
     $actions .= '</div>';
     $actions .= '</div>';
     $actions .= '</div>';
@@ -412,8 +410,13 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     <script>
     $(function() {
         $("#session_name").on("change", function() {
-           var sessionId = $(this).val();
-           window.location = "'.$courseListUrl.'?session_id="+sessionId;
+            var sessionId = $(this).val();
+
+            if (!sessionId) {
+                return;
+            }
+
+            window.location = "'.$courseListUrl.'?session_id="+sessionId;
         });
     });
     </script>';

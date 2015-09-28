@@ -296,7 +296,7 @@ if (
             )."</a>";
     }
 
-    display_visible_invisible_icon(
+    echo return_visible_invisible_icon(
         'post',
         $rows[$display_post_id]['post_id'],
         $rows[$display_post_id]['visible'],

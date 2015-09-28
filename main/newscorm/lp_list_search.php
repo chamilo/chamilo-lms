@@ -6,12 +6,10 @@
  * @package chamilo.learnpath
  * @author Diego Escalante Urrelo <diegoe@gmail.com>
  * @author Marco Antonio Villegas Vega <marvil07@gmail.com>
- * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixing
+ * @author Julio Montoya <gugli100@gmail.com> bug fixing
  *
  */
-/**
- * Code
- */
+
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
@@ -26,9 +24,9 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[]= array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[] = array('url' => './index.php', 'name' => get_lang(ucfirst(TOOL_SEARCH)));
@@ -82,7 +80,8 @@ foreach ($specific_fields as $specific_field) {
         $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);
         foreach ($sf_terms_for_code as $term) {
             if (!empty($term)) {
-                $term_array[] = chamilo_get_boolean_query($term['name']); // Here name includes prefix.
+                // Here name includes prefix.
+                $term_array[] = chamilo_get_boolean_query($term['name']);
             }
         }
     }
@@ -90,7 +89,7 @@ foreach ($specific_fields as $specific_field) {
 
 // Get right group of terms to show on multiple select.
 $fixed_queries = array();
-$course_filter = NULL;
+$course_filter = null;
 if ( ($cid=api_get_course_id()) != -1 ) {
     // Results only from actual course.
     $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
@@ -99,8 +98,12 @@ if ( ($cid=api_get_course_id()) != -1 ) {
 if (count($term_array)) {
     $fixed_queries = chamilo_join_queries($term_array, null, $op);
 
-    if ($course_filter != NULL) {
-        $fixed_queries = chamilo_join_queries($fixed_queries, $course_filter, 'and');
+    if ($course_filter != null) {
+        $fixed_queries = chamilo_join_queries(
+            $fixed_queries,
+            $course_filter,
+            'and'
+        );
     }
 } else {
     if (!empty($query)) {
@@ -108,7 +111,12 @@ if (count($term_array)) {
     }
 }
 
-list($count, $results) = chamilo_query_query(api_convert_encoding($query, 'UTF-8', $charset), 0, 1000, $fixed_queries);
+list($count, $results) = chamilo_query_query(
+    api_convert_encoding($query, 'UTF-8', $charset),
+    0,
+    1000,
+    $fixed_queries
+);
 
 // Prepare blocks to show.
 $blocks = array();

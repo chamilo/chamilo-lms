@@ -11,22 +11,22 @@
  */
 class MultipleAnswerTrueFalse extends Question
 {
-	static $typePicture = 'mcmao.png';
-	static $explanationLangVar = 'MultipleAnswerTrueFalse';
+    static $typePicture = 'mcmao.png';
+    static $explanationLangVar = 'MultipleAnswerTrueFalse';
     public $options;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-		parent::__construct();
-		$this->type = MULTIPLE_ANSWER_TRUE_FALSE;
-		$this->isContent = $this-> getIsContent();
+        parent::__construct();
+        $this->type = MULTIPLE_ANSWER_TRUE_FALSE;
+        $this->isContent = $this-> getIsContent();
         $this->options = array(1 => 'True', 2 => 'False', 3 => 'DoubtScore');
-	}
+    }
 
-	/**
+    /**
      * function which redefines Question::createAnswersForm
      * @param FormValidator $form
      */

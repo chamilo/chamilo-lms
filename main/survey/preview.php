@@ -7,7 +7,6 @@
  * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  *	@author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modifications
  * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
- *
  */
 
 require_once '../inc/global.inc.php';

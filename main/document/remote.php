@@ -43,7 +43,6 @@ $_course = CourseManager::get_course_information($cidReq);
 if ($_course == null) die ("problem when fetching course information");
 // stupid variable initialisation for old version of DocumentManager functions.
 $_course['path'] = $_course['directory'];
-$_course['dbName'] = $_course['db_name'];
 $is_manager = (CourseManager::get_user_in_course_status($user_id, $cidReq) == COURSEMANAGER);
 if ($debug>0) { error_log($coursePath, 0); }
 // FIXME: check security around $_REQUEST["cwd"]

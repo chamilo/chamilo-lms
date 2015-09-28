@@ -29,7 +29,7 @@ class Accessurleditsessionstourl
      */
     function search_sessions($needle, $id)
     {
-        global $tbl_session;
+        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $xajax_response = new xajaxResponse();
         $return = '';
 

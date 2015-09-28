@@ -85,8 +85,14 @@ if ($action == 'thematic_plan_list') {
     }
 
     // display form
-    $form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_edit&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
-    //$form->addElement('header', '', $header_form);
+    $form = new FormValidator(
+        'thematic_plan_add',
+        'POST',
+        'index.php?action=thematic_plan_edit&thematic_id='.$thematic_id.'&'.api_get_cidreq(
+        ).$param_gradebook,
+        '',
+        'style="width: 100%;"'
+    );
     $form->addElement('hidden', 'action', $action);
     $form->addElement('hidden', 'thematic_plan_token', $token);
 
@@ -98,7 +104,18 @@ if ($action == 'thematic_plan_list') {
     }
 
     $form->addText('title', get_lang('Title'), true, array('size'=>'50'));
-    $form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
+    $form->addHtmlEditor(
+        'description',
+        get_lang('Description'),
+        false,
+        false,
+        array(
+            'ToolbarStartExpanded' => 'false',
+            'ToolbarSet' => 'TrainingDescription',
+            'Width' => '80%',
+            'Height' => '150',
+        )
+    );
     $form->addButtonSave(get_lang('Save'));
 
     if ($description_type < ADD_THEMATIC_PLAN) {

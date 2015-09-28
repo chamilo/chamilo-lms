@@ -62,6 +62,11 @@ if ($show_headers) {
 	$this_section = SECTION_COURSES;
 	Display::display_header();
 } else {
+    $htmlHeadXtra[] = "
+    <style>
+    body { background: none;}
+    </style>
+    ";
 	Display::display_reduced_header();
 }
 

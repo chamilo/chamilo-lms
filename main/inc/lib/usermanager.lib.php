@@ -259,7 +259,9 @@ class UserManager
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
                 api_warn_hosting_contact('hosting_limit_users');
-                return api_set_failure('portal users limit reached');
+                Display::addFlash(Display::return_message(get_lang('PortalUsersLimitReached'), 'warning'));
+
+                return false;
             }
         }
 
@@ -270,13 +272,17 @@ class UserManager
         ) {
             $num = self::get_number_of_users(1);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
+                Display::addFlash(Display::return_message(get_lang('PortalTeachersLimitReached'), 'warning'));
                 api_warn_hosting_contact('hosting_limit_teachers');
-                return api_set_failure('portal teachers limit reached');
+
+                return false;
             }
         }
 
         if (empty($password)) {
-            return api_set_failure('ThisFieldIsRequired');
+            Display::addFlash(Display::return_message(get_lang('ThisFieldIsRequired').': '.get_lang('Password') , 'warning'));
+
+            return false;
         }
 
         // database table definition

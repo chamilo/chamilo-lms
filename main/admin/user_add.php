@@ -176,7 +176,13 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
     }
 }
 
-$group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
+$group[] = $form->createElement(
+    'radio',
+    'password_auto',
+    get_lang('Password'),
+    get_lang('AutoGeneratePassword').'<br />',
+    1
+);
 $group[] = $form->createElement(
     'radio',
     'password_auto',
@@ -197,7 +203,7 @@ $group[] = $form->createElement(
 );
 
 $form->addGroup($group, 'password', get_lang('Password'), '');
-$form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 2);
+$form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 if ($checkPass) {
     $passwordStrengthLabels = '

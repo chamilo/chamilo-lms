@@ -503,7 +503,9 @@ class SurveyManager
         } else {
             // Delete everything of the gradebook for this $linkId
             GradebookUtils::remove_resource_from_course_gradebook($gradebook_link_id);
-            exit;
+
+            //comenting this line to correctly return the function msg
+            //exit;
         }
 
         return $return;

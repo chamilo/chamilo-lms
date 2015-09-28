@@ -3356,10 +3356,10 @@ class learnpath
                         if ($lp_item_type == 'link') {
                             if (Link::is_youtube_link($file)) {
                                 $src  = Link::get_youtube_video_id($file);
-                                $file = 'embed.php?type=youtube&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=youtube&source='.$src;
                             } elseif (Link::isVimeoLink($file)) {
                                 $src  = Link::getVimeoLinkId($file);
-                                $file = 'embed.php?type=vimeo&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=vimeo&source='.$src;
                             } else {
                                 // If the current site is HTTPS and the link is
                                 // HTTP, browsers will refuse opening the link
@@ -3370,7 +3370,7 @@ class learnpath
                                     $linkProtocol = substr($file, 0, 5);
                                     if ($linkProtocol === 'http:') {
                                         //this is the special intervention case
-                                        $file = 'embed.php?type=nonhttps&source=' .  urlencode($file);
+                                        $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=nonhttps&source=' .  urlencode($file);
                                     }
                                 }
                             }

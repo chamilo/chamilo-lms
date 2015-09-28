@@ -1808,7 +1808,7 @@ class SocialManager extends UserManager
 
         if ($number_friends != 0) {
 
-            $friendHtml.= '<ul class="list-group">';
+            $friendHtml.= '<div class="list-group">';
             $j = 1;
             for ($k=0; $k < $number_friends; $k++) {
                 if ($j > $number_of_images) break;
@@ -1826,7 +1826,6 @@ class SocialManager extends UserManager
                         $status=0;
                     }
 
-                    $friendHtml.= '<li class="list-group-item">';
                     $friendAvatarMedium = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_MEDIUM);
                     $friendAvatarSmall = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_SMALL);
                     $friend_avatar = '<img src="'.$friendAvatarMedium.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" class="user-image"/>';
@@ -1834,21 +1833,20 @@ class SocialManager extends UserManager
                         $friend['friend_user_id'] != api_get_user_id();
 
                     if ($showLinkToChat){
-                        $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);">';
+                        $friendHtml .= '<a onclick="javascript:chatWith(\''.$friend['friend_user_id'].'\', \''.$name_user.'\', \''.$status.'\',\''.$friendAvatarSmall.'\')" href="javascript:void(0);" class="list-group-item">';
                         $friendHtml .=  $friend_avatar.' <span class="username">' . $name_user . '</span>';
                         $friendHtml .= '<span class="status">' . $statusIcon . '</span>';
                     } else {
                         $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
-                        $friendHtml .= '<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">';
+                        $friendHtml .= '<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '" class="list-group-item">';
                         $friendHtml .=  $friend_avatar.' <span class="username-all">' . $name_user . '</span>';
                     }
 
                     $friendHtml .= '</a>';
-                    $friendHtml.= '</li>';
                 }
                 $j++;
             }
-            $friendHtml.='</ul>';
+            $friendHtml.='</div>';
         } else {
             $friendHtml.= '<div class="help">'.get_lang('NoFriendsInYourContactList').' '
                 .'<a href="'.api_get_path(WEB_PATH).'whoisonline.php"><i class="fa fa-search"></i> '. get_lang('TryAndFindSomeFriends').'</a></div>';

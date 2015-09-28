@@ -617,11 +617,16 @@ class Template
 
         $isoCode = api_get_language_isocode();
 
-        //JS files
+        $selectLink = 'bootstrap-select/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js';
+
+        if ($isoCode == 'en') {
+            $selectLink = 'bootstrap-select/js/i18n/defaults-' . $isoCode . '_US.min.js';
+        }
+        // JS files
         $js_files = array(
             'chosen/chosen.jquery.min.js',
             'bootstrap-select/js/bootstrap-select.min.js',
-            'bootstrap-select/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js'
+            $selectLink
         );
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';

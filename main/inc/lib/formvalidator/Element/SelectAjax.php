@@ -62,10 +62,17 @@ class SelectAjax extends HTML_QuickForm_select
             $plHolder = get_lang('SelectAnOption');
         }
 
+        $id = $this->getAttribute('id');
+
+        if (empty($id)) {
+            $id = $this->getAttribute('name');
+            $this->setAttribute('id', $id);
+        }
+
         $html .= <<<JS
             <script>
                 $(function(){
-                    $('#{$this->getAttribute('name')}').select2({
+                    $('#{$this->getAttribute('id')}').select2({
                         $languageCondition
                         placeholder: '$plHolder',
                         allowClear: true,
@@ -93,14 +100,22 @@ class SelectAjax extends HTML_QuickForm_select
             </script>
 JS;
 
+        $this->removeAttribute('class');
+        $this->removeAttribute('url');
+        $this->setAttribute('style', 'width: 100%;');
+        $attrs = $this->getAttributes();
+
+        $selectName = $this->getAttribute('name');
+
+        if ($this->getAttribute('multiple')) {
+            $selectName = "{$this->getAttribute('name')}[]";
+        }
+
         $html .= Display::select(
-            $this->getAttribute('name'),
+            $selectName,
             $defaultValues,
             array_keys($defaultValues),
-            [
-                'id' =>  $this->getAttribute('name'),
-                'style' => 'width: 100%;'
-            ],
+            $attrs,
             false
         );
         return $html;

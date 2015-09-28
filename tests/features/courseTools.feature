@@ -5,6 +5,13 @@ Feature: Course tools basic testing
   As a teacher
   I need to be able to enter a course and each of its tools
 
+  Scenario: Create a course before testing
+    Given I am a platform administrator
+    And I am on "/main/admin/course_add.php"
+    When I fill in "title" with "TEMP"
+    And I press "submit"
+    Then I should see "Course list"
+
   Scenario: Make sure the course exists
     Given I am a platform administrator
     Given course "TEMP" exists

@@ -172,7 +172,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
         $auth = new Auth();
         $msg = $auth->subscribe_user($course_code);
         if (!empty($msg)) {
-            $show_message .= Display::return_message(get_lang($msg));
+            $show_message .= Display::return_message(
+                get_lang($msg['message']),
+                'info',
+                false
+            );
         }
     }
 }

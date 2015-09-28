@@ -25,10 +25,10 @@ if (!api_is_anonymous()) {
 }
 
 // Facebook connexion, if activated
-/*if (api_is_facebook_auth_activated() && !api_get_user_id()) {
+/* if (api_is_facebook_auth_activated() && !api_get_user_id()) {
     facebookConnect();
-}
-*/
+} */
+
 $controller = new IndexManager($header_title);
 
 //Actions
@@ -166,6 +166,7 @@ $controller->tpl->assign('navigation_course_links', $controller->return_navigati
 $controller->tpl->assign('notice_block', $controller->return_notice());
 $controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
 $controller->tpl->assign('help_block', $controller->return_help());
+$controller->tpl->assign('is_homepage', true);
 
 if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block', $controller->return_skills_links());

@@ -108,7 +108,7 @@ if (count($friends) == 0) {
     for ($k = 0; $k < $number_friends; $k++) {
         while ($j < $number_friends) {
             if (isset($friends[$j])) {
-                $friend_html.='<div class="card">';
+                $friend_html.='<div class="card-social">';
                 $friend = $friends[$j];
                 $user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
 				$userPicture = UserManager::getUserPicture($friend['friend_user_id']);

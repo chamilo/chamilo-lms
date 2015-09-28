@@ -37,15 +37,7 @@ if ($action == 'delete') {
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
 
-$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course';
-
-$courseList = array();
 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
-if (!empty($courseId)) {
-    $courseInfo = api_get_course_info_by_id($courseId);
-    $parents = getParentsToString($courseInfo['categoryCode']);
-    $courseList[$courseInfo['code']] = $parents . $courseInfo['title'];
-}
 
 $sessionFilter = new FormValidator(
     'course_filter',
@@ -55,13 +47,20 @@ $sessionFilter = new FormValidator(
     array(),
     FormValidator::LAYOUT_INLINE
 );
-$sessionFilter->addElement(
+$courseSelect = $sessionFilter->addElement(
     'select_ajax',
     'course_name',
     get_lang('SearchCourse'),
     null,
-    array('url' => $url, 'defaults' => $courseList)
+    array('url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course')
 );
+
+if (!empty($courseId)) {
+    $courseInfo = api_get_course_info_by_id($courseId);
+    $parents = getParentsToString($courseInfo['categoryCode']);
+
+    $courseSelect->addOption($parents . $courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
+}
 
 $url = api_get_self();
 $actions = '
@@ -69,6 +68,11 @@ $actions = '
 $(function() {
     $("#course_name").on("change", function() {
        var courseId = $(this).val();
+
+       if (!courseId) {
+        return;
+       }
+
        window.location = "'.$url.'?course_id="+courseId;
     });
 });

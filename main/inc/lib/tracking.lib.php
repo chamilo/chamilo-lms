@@ -322,7 +322,7 @@ class Tracking
                     }
 
                     if (in_array($row['item_type'], $chapterTypes)) {
-                        $title = "<h4> $title </h4>";
+                        $title;
                     }
                     $lesson_status = $row['mystatus'];
                     $title = Security::remove_XSS($title);
@@ -712,7 +712,7 @@ class Tracking
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
                                 <td colspan="4">
-                                <h4>'.$title.'</h4>
+                                '.$title.'
                                 </td>
                                 <td colspan="2">'.learnpathitem::humanize_status($lesson_status).'</td>
                                 <td colspan="2"></td>
@@ -2113,18 +2113,17 @@ class Tracking
     }
 
     /**
-     * Returns the average student progress in the learning paths of the given
-     * course.
-     * @param int|array $studentId
-     * @param string    $courseCode
-     * @param array     $lPIds Limit average to listed lp ids
-     * @param int       $sessionId     Session id (optional),
-     * if parameter $session_id is null(default) it'll return results including
+     * Returns the average student progress in the learning paths of the given course
+     * @param int|array $studentId The student ID or an array of student IDs
+     * @param string $courseCode Optional. The course code
+     * @param array $lPIds Optional. Limit average to listed lp ids
+     * @param int $sessionId Optional. The session ID.
+     * If parameter $session_id is null(default) it'll return results including
      * sessions, 0 = session is not filtered
-     * @param bool      $returnArray Will return an array of the type:
+     * @param boolean $returnArray Optional. Will return an array of the type:
      * [sum_of_progresses, number] if it is set to true
      * @param boolean $onlySeriousGame Optional. Limit average to lp on seriousgame mode
-     * @return double   Average progress of the user in this course
+     * @return double Average progress of the user in this course. Otherwise return 0
      */
     public static function get_avg_student_progress(
         $studentId,
@@ -2148,6 +2147,7 @@ class Tracking
 
         $lPTable = Database::get_course_table(TABLE_LP_MAIN);
         $lPViewTable = Database::get_course_table(TABLE_LP_VIEW);
+
         $lPConditions = [];
         $lPConditions['c_id = ? '] = $courseInfo['real_id'];
 
@@ -2159,12 +2159,15 @@ class Tracking
 
         if (is_array($lPIds) && count($lPIds) > 0) {
             $placeHolders = [];
+
             for ($i = 0; $i < count($lPIds); $i++) {
                 $placeHolders[] = '?';
             }
+
             $lPConditions['AND id IN(' . implode(', ', $placeHolders) . ') '] = $lPIds;
         }
 
+  
         if ($onlySeriousGame) {
             $lPConditions['AND seriousgame_mode = ? '] = true;
         }
@@ -2174,6 +2177,7 @@ class Tracking
             $lPTable,
             ['where' => $lPConditions]
         );
+
         $filteredLP = array_keys($resultLP);
 
         if (empty($filteredLP)) {
@@ -2202,6 +2206,7 @@ class Tracking
         }
 
         $conditionToString = implode('AND', $conditions);
+
         // Get last view for each student (in case of multi-attempt)
         // Also filter on LPs of this session
         $sql = " SELECT

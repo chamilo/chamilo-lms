@@ -7007,38 +7007,40 @@ $ResourceLockedByGradebook = "Questa opzione non è disponibile perché l'attivi
 $GradebookLockedAlert = "Questa valutazione è stata bloccata. Non puoi sbloccarla. Se hai veramente bisogno di sbloccarla, contatta l'amministratore spiegando le vere ragioni della richiesta (altrimenti potrebbe essere considerata un tentativo di frode).";
 $GradebookEnableLockingTitle = "Abilita il blocco delle valutazioni da parte dei docenti";
 $GradebookEnableLockingComment = "Se attivata, questa opzione consentirà il blocco di una valutazione da parte degli insegnanti del corso corrispondente. Questo, a sua volta, impedirà qualsiasi modifica dei risultati da parte del docente all'interno delle risorse utilizzate nella valutazione: esami, percorsi di apprendimento, compiti, ecc. L'unico ruolo autorizzato per sbloccare una valutazione è l'amministratore. Il docente sarà informato di questa possibilità. Il blocco e lo sblocco dei Registri di classe saranno inseriti nella relazione delle attività importanti del Sistema.";
-$LdapDescriptionComment = "I. Configirazione LDAP
+$LdapDescriptionComment = "<h4>I. Configirazione LDAP</h4>
 
-Modifica del file main/inc/conf/auth.conf.php
+<h5>Modifica del file main/inc/conf/auth.conf.php</h5>
 
--> Modifica valori array $extldap_config 
+-&gt; Modifica valori array <code>$extldap_config</code><br /><br />
 
-I parametri sono 
-base domain string (ex : 'base_dn' => 'DC=cblue,DC=be')
-admin distinguished name (ex : 'admin_dn' =>'CN=admin,dc=cblue,dc=be')
-admin password (ex : 'admin_password' => '123456')
-ldap host (ex : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))
-filter (ex : 'filter' => '')
-port (ex : 'port' => 389)
-protocol version (2 or 3) (ex : 'protocol_version' => 3)
-user_search (ex : 'user_search' => 'sAMAccountName=%username%')
-encoding (ex : 'encoding' => 'UTF-8')
-update_userinfo (ex : 'update_userinfo' => true)
--> To update correspondences between user and LDAP attributes, edit array $extldap_user_correspondance 
-Array values are <chamilo_field> => >ldap_field> 
-Array structure is explained in file main/auth/external_login/ldap.conf.php
+I parametri sono <br />
+<ul>
+<li>base domain string (ex : 'base_dn' =&gt; 'DC=chamilo,DC=org')</li>
+<li>admin distinguished name (ex : 'admin_dn' =&gt;'CN=admin,dc=chamilo,dc=org')</li>
+<li>admin password (ex : 'admin_password' =&gt; '123456')</li>
+<li>ldap host (ex : 'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'))</li>
+<li>filter (ex : 'filter' =&gt; '')</li>
+<li>port (ex : 'port' =&gt; 389)</li>
+<li>protocol version (2 or 3) (ex : 'protocol_version' =&gt; 3)</li>
+<li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%')</li>
+<li>encoding (ex : 'encoding' =&gt; 'UTF-8')</li>
+<li>update_userinfo (ex : 'update_userinfo' =&gt; true)</li>
+</ul>
+-&gt; To update correspondences between user and LDAP attributes, edit array  <code>&#36;extldap_user_correspondance  </code><br />
+Array values are &lt;chamilo_field&gt; =&gt; &lt;ldap_field&gt;<br />
+Array structure is explained in file main/auth/external_login/ldap.conf.php<br /><br /><br />
 
 
-II. Attica autenticazione LDAP
+<h4>II. Attica autenticazione LDAP</h4>
 
-Modifica file main/inc/conf/configuration.php
+<h5>Modifica file main/inc/conf/configuration.php</h5>
 
--> Togli commento alle linee 
-$extAuthSource[\"extldap\"][\"login\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
-$extAuthSource[\"extldap\"][\"newUser\"] =$_configuration['root_sys'].$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
-
-N.B. : utenti LDAP usano gli stessi campi degli altri utenti. 
-N.B. : l'attivazione LDAP aggiunge al menù External authentication [LDAP] nelle pagine \"aggiungi o modifica\" utente.";
+-&gt; Togli commento alle linee <br />
+&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/login.ldap.php&quot;;<br />
+&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;<br />
+<br /><br />
+N.B. : utenti LDAP usano gli stessi campi degli altri utenti. <br />
+N.B. : l'attivazione LDAP aggiunge al menù External authentication <[LDAP] nelle pagine &quot;aggiungi o modifica&quot; utente.";
 $ShibbolethMainActivateTitle = "Autenticazione Shibboleth";
 $ShibbolethMainActivateComment = "Per iniziare, devi configurare Shibboleth sul server web.
 

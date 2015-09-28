@@ -47,7 +47,7 @@ $form->addSelect(
     'filter',
     get_lang('Career'),
     $career_select_list,
-    array('id' => 'filter_1', 'class' => 'chzn-select')
+    array('id' => 'filter_1')
 );
 $form->addButtonSearch(get_lang('Filter'));
 

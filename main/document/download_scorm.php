@@ -14,6 +14,8 @@ $this_section = SECTION_COURSES;
 // Protection
 api_protect_course_script();
 
+$_course = api_get_course_info();
+
 if (!isset($_course)) {
     api_not_allowed(true);
 }

@@ -542,6 +542,7 @@ class SessionManager
                 $formatted_sessions[$session_id]['category_name'] = $categoryName;
             }
         }
+
         return $formatted_sessions;
     }
 
@@ -1411,6 +1412,7 @@ class SessionManager
                 if (!empty($sessionAdminId)) {
                     $values['session_admin_id'] = $sessionAdminId;
                 }
+                $values['duration'] = $duration;
 
                 if (!empty($startDate)) {
                     $values['access_start_date'] = $startDate;
@@ -3218,7 +3220,7 @@ class SessionManager
                 return intval($count[0]);
             }
 
-            while ($row = Database::fetch_array($result,'ASSOC'))	{
+            while ($row = Database::fetch_assoc($result)) {
                 $courses[$row['real_id']] = $row;
             }
         }
@@ -6483,7 +6485,6 @@ class SessionManager
                 [api_get_user_id() => $userInfo['complete_name']],
                 array(
                     'id' => 'coach_username',
-                    'class' => 'chzn-select',
                     'style' => 'width:370px;',
                 )
             );
@@ -6556,9 +6557,7 @@ class SessionManager
         $form->addElement('html','<div id="advanced_params_options" style="display:none">');
 
         $form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
-            'id' => 'session_category',
-            'class' => 'chzn-select',
-            'style' => 'width:370px;',
+            'id' => 'session_category'
         ));
 
         $form->addHtmlEditor(
@@ -6820,7 +6819,6 @@ class SessionManager
                     get_lang('SessionDisplayEndDate'),
                     //get_lang('Coach'),
                     //get_lang('Status'),
-                    //get_lang('CourseTitle'),
                     get_lang('Visibility'),
                 );
                 $column_model = array (

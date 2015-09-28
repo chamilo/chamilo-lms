@@ -234,7 +234,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll') ?></a>
         </div>
         <div class="list-category">
-            <select class="chzn-select" name="action">
+            <select class="selectpicker show-tick form-control" name="action">
                 <option value="delete_off_session" selected="selected"><?php echo get_lang('DeleteSelectedSessionCategory'); ?></option>
                 <option value="delete_on_session"><?php echo get_lang('DeleteSelectedFullSessionCategory'); ?></option>
             </select>

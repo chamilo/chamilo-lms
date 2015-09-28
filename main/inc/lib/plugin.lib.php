@@ -22,6 +22,7 @@ class AppPlugin
         'footer_left',
         'footer_center',
         'footer_right',
+        'homepage_bottom',
         'course_tool_plugin'
     );
 

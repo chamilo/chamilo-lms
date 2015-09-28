@@ -9,7 +9,7 @@
  * - consistent and integrated forum administration
  * - forum options:     are students allowed to edit their post?
  *                         moderation of posts (approval)
- *                         reply only forums (students cannot create new threads)
+ *  <                    reply only forums (students cannot create new threads)
  *                         multiple forums per group
  * - sticky messages
  * - new view option: nested view
@@ -734,6 +734,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
     } else {
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
+            $sql_image = $new_file_name;
         }
 
         $params = [
@@ -2371,6 +2372,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 'thread_weight' => isset($values['weight_calification']) ? $values['weight_calification'] : '',
                 'thread_peer_qualify' => isset($values['thread_peer_qualify']) ? $values['thread_peer_qualify'] : '',
                 'session_id' => api_get_session_id(),
+                'lp_item_id' => isset($values['lp_item_id']) ? intval($values['lp_item_id']) : 0
             ]
         );
 
@@ -3514,18 +3516,19 @@ function display_user_link($user_id, $name, $origin = '', $in_title = '')
  * This function displays the user image from the profile, with a link to the user's details.
  * @param   int     User's database ID
  * @param   str     User's name
+ * @param   array
  * @return  string  An HTML with the anchor and the image of the user
  * @author Julio Montoya <gugli100@gmail.com>
  */
-function display_user_image($user_id, $name, $origin = '')
+function display_user_image($user_id, $name, $origin = '', $attributes = array())
 {
     $userInfo = api_get_user_info($user_id);
     $link = '<a href="'.$userInfo['profile_url'].'" '.(!empty($origin) ? 'target="_self"' : '').'>';
     if ($user_id != 0) {
 
-        return $link.'<img src="'.$userInfo['avatar'].'"  alt="'.$name.'"  title="'.$name.'" /></a>';
+        return $link.'<img src="'.$userInfo['avatar'].'"  alt="'.$name.'"  title="'.$name.'"  class="'. $attributes['class'] .'" /></a>';
     } else {
-        return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'" /></a>';
+        return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'" class="'. $attributes['class'] . '" /></a>';
     }
 }
 
@@ -5662,4 +5665,53 @@ function getAttachmentIdsByPostId($postId, $courseId = null)
         }
     }
     return $array;
+}
+
+/**
+ * Check if the forum category exists looking for its title
+ * @param string $title The forum category title
+ * @param int $courseId The course ID
+ * @param int $sessionId Optional. The session ID
+ * @return boolean
+ */
+function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
+{
+    $sessionId = intval($sessionId);
+
+    $forumCategoryTable = Database::get_course_table(TABLE_FORUM_CATEGORY);
+    $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+    $fakeFrom = "$forumCategoryTable fc
+        INNER JOIN $itemProperty ip ";
+
+    if ($sessionId === 0) {
+        $fakeFrom .= "ON (
+                fc.cat_id = ip.ref AND fc.c_id = ip.c_id AND (fc.session_id = ip.session_id OR ip.session_id IS NULL)
+            ) ";
+    } else {
+        $fakeFrom .= "ON (
+                fc.cat_id = ip.ref AND fc.c_id = ip.c_id AND fc.session_id = ip.session_id
+            ) ";
+    }
+
+    $resultData = Database::select(
+        'fc.*',
+        $fakeFrom,
+        [
+            'where' => [
+                'ip.visibility != ? AND ' => 2,
+                'ip.tool = ? AND ' => TOOL_FORUM_CATEGORY,
+                'fc.session_id = ? AND ' => $sessionId,
+                'fc.cat_title = ? AND ' => $title,
+                'fc.c_id = ?' => intval($courseId)
+            ]
+        ],
+        'first'
+    );
+
+    if (empty($resultData)) {
+        return false;
+    }
+
+    return $resultData;
 }

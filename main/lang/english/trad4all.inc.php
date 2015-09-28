@@ -7528,4 +7528,5 @@ $ConnectionFailed = "Connection failed";
 $ConnectionClosed = "Connection closed";
 $LocalConnectionFailed = "Local connection failed";
 $RemoteConnectionFailed = "Remote connection failed";
+$ViewStudents = "View students";
 ?>

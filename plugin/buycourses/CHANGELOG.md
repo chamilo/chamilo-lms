@@ -12,6 +12,7 @@ in a currency other than the others courses or sessions
 Allowing filter the sales by its status
 - The plugin Registration page was removed. Instead the Chamilo LMS
 registrarion page is used.
+- Added the ability to record beneficiaries with the sale of courses/sessions
 
 ##Changes in database structure
 
@@ -40,6 +41,7 @@ The __new database__ structure is formed for the tables:
 
 - `plugin_buycourses_currency` The list of countries with their currencies
 - `plugin_buycourses_item` The registered courses and sessions in the platform
+- `plugin_buycourses_item_re_beneficiary` The beneficiaries users with the sale of courses
 - `plugin_buycourses_paypal_account` The PayPal account info
 - `plugin_buycourses_sale` The sales of courses and sessions that were made
 - `plugin_buycourses_transfer` The bank accounts for transfers

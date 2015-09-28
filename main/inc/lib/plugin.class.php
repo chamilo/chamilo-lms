@@ -321,7 +321,7 @@ class Plugin
 
             $interfaceLanguageId = api_get_language_id($language_interface);
             $interfaceLanguageInfo = api_get_language_info($interfaceLanguageId);
-            $languageParentId = intval($interfaceLanguageInfo['parent_id']);
+            $languageParentId = (!empty($interfaceLanguageInfo['parent_id'])?intval($interfaceLanguageInfo['parent_id']):0);
 
             //1. Loading english if exists
             $english_path = $root.$plugin_name."/lang/english.php";
@@ -746,4 +746,6 @@ class Plugin
             }
         }
     }
+
+
 }

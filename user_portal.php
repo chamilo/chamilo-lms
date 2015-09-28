@@ -238,6 +238,7 @@ $controller->tpl->assign('search_block', $controller->return_search_block());
 $controller->tpl->assign('classes_block', $controller->return_classes_block());
 //if (api_is_platform_admin() || api_is_drh()) {
 $controller->tpl->assign('skills_block', $controller->return_skills_links());
+$controller->tpl->assign('history', isset($_GET['history']));
 //}
 $historyClass = '';
 if (!empty($_GET['history'])) {

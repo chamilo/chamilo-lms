@@ -1636,12 +1636,14 @@ if (in_array($action, $allowed_actions)) {
             }
             $array = array();
             foreach ($columns as $col) {
-                $array[] = isset($row[$col]) ? $row[$col] : null;
+                $array[] = isset($row[$col]) ? Security::remove_XSS($row[$col]) : '';
             }
             $response->rows[$i]['cell']=$array;
             $i++;
         }
     }
+
+    header('Content-Type: application/json;charset=utf-8');
     echo json_encode($response);
 }
 exit;

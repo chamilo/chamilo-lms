@@ -17,64 +17,6 @@ GradebookUtils::block_students();
 
 $edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
 
-$htmlHeadXtra[] = '<script>
-$(document).ready(function () {
-    $("#skills").fcbkcomplete({
-        json_url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=find_skills",
-        cache: false,
-        filter_case: false,
-        filter_hide: true,
-        complete_text:"'.get_lang('StartToType').'",
-        firstselected: true,
-        //onremove: "testme",
-        onselect:"check_skills",
-        filter_selected: true,
-        newel: true
-    });
-
-    $(".closebutton").click(function() {
-        var skill_id = ($(this).attr("id")).split("_")[1];
-        if (skill_id) {
-            $.ajax({
-                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=remove_skill",
-                data: "gradebook_id=' . $edit_cat . '&skill_id="+skill_id,
-                success: function(return_value) {
-                    if (return_value == 1 ) {
-                            $("#skill_"+skill_id).remove();
-                    }
-                }
-            });
-        }
-    });
-});
-
-function check_skills() {
-    // selecting only selected users
-    $("#skills option:selected").each(function() {
-        var skill_id = $(this).val();
-        if (skill_id != "" ) {
-            $.ajax({
-                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=skill_exists",
-                data: "skill_id="+skill_id,
-                success: function(return_value) {
-                if (return_value == 0 ) {
-                        alert("'.get_lang('SkillDoesNotExist').'");
-                        //Deleting select option tag
-                        $("#skills option[value="+skill_id+"]").remove();
-                        //Deleting holder
-                        $(".holder li").each(function () {
-                            if ($(this).attr("rel") == skill_id) {
-                                $(this).remove();
-                            }
-                        });
-                    }
-                }
-            });
-        }
-    });
-}
-</script>';
-
 $get_select_cat = intval($_GET['selectcat']);
 
 $catadd = new Category();

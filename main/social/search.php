@@ -118,7 +118,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             $invitations = $user['tag'].$send_inv.$send_msg;
 
             $results .= '<div class="col-md-4">
-                            <div class="card">
+                            <div class="card-social">
                                 <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
                                 <div class="avatar">
                                 '.$img.'

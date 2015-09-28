@@ -97,6 +97,30 @@ $itemTable->addForeignKeyConstraint(
     ['onDelete' => 'CASCADE']
 );
 
+$itemBeneficiary = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY);
+$itemBeneficiary->addColumn(
+    'id',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['autoincrement' => true, 'unsigned' => true]
+);
+$itemBeneficiary->addColumn(
+    'item_id',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true]
+);
+$itemBeneficiary->addColumn(
+    'user_id',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true]
+);
+$itemBeneficiary->setPrimaryKey(['id']);
+$itemBeneficiary->addForeignKeyConstraint(
+    $itemTable,
+    ['item_id'],
+    ['id'],
+    ['onDelete' => 'CASCADE']
+);
+
 $saleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SALE);
 $saleTable->addColumn(
     'id',
@@ -104,7 +128,7 @@ $saleTable->addColumn(
     ['autoincrement' => true, 'unsigned' => true]
 );
 $saleTable->addColumn('reference', \Doctrine\DBAL\Types\Type::STRING);
-$saleTable->addColumn('date', \Doctrine\DBAL\Types\Type::DATE);
+$saleTable->addColumn('date', \Doctrine\DBAL\Types\Type::DATETIME);
 $saleTable->addColumn(
     'user_id',
     \Doctrine\DBAL\Types\Type::INTEGER,

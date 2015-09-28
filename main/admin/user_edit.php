@@ -72,8 +72,8 @@ $libpath = api_get_path(LIBRARY_PATH);
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 
-$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => "user_list.php","name" => get_lang('UserList'));
+$interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => "user_list.php", "name" => get_lang('UserList'));
 
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -102,7 +102,7 @@ $form = new FormValidator(
     api_get_self().'?user_id='.$user_id,
     ''
 );
-$form->addElement('header', '', $tool_name);
+$form->addElement('header', $tool_name);
 $form->addElement('hidden', 'user_id', $user_id);
 
 if (api_is_western_name_order()) {
@@ -157,14 +157,19 @@ $form->addElement('text', 'phone', get_lang('PhoneNumber'));
 // Picture
 $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+$form->addRule(
+	'picture',
+	get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+	'filetype',
+	$allowed_picture_types
+);
 if (strlen($user_data['picture_uri']) > 0) {
 	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
+	$form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
@@ -228,8 +233,7 @@ $form->addElement(
     $status,
     array(
         'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();',
-        'class' => 'chzn-select'
+        'onchange' => 'javascript: display_drh_list();'
     )
 );
 
@@ -417,8 +421,8 @@ if ($error_drh) {
 
 $content = null;
 
-$bigImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);
-$normalImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
+$bigImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
+$normalImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
 $content .= '<a class="expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
 
 // Display form

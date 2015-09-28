@@ -3859,6 +3859,24 @@ class CourseManager
             ICON_SIZE_LARGE
         );
 
+        $entityManager = Database::getManager();
+        $courseDescriptionTools = $entityManager->getRepository('ChamiloCourseBundle:CCourseDescription')
+            ->findOneBy(
+                [
+                    'cId' => $course_info['real_id'],
+                    'sessionId' => 0,
+                    'descriptionType' => Chamilo\CourseBundle\Entity\CCourseDescription::TYPE_DESCRIPTION
+                ],
+                [
+                    'id' => 'DESC',
+                    'descriptionType' => 'ASC'
+                ]
+            );
+
+        if (!is_null($courseDescriptionTools)) {
+            $params['description'] = $courseDescriptionTools->getContent();
+        }
+
         // Display the "what's new" icons
         $notifications = '';
         if ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) {

@@ -79,6 +79,11 @@ if ($origin != 'learnpath') {
 	// So we are not in learnpath tool
 	Display::display_header($nameTools, get_lang('Exercise'));
 } else {
+    $htmlHeadXtra[] = "
+    <style>
+    body { background: none;}
+    </style>
+    ";
     Display::display_reduced_header();
 }
 

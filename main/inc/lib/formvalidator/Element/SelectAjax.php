@@ -42,9 +42,6 @@ class SelectAjax extends HTML_QuickForm_select
                 templateSelection : '.$formatResult;
         }
 
-        $defaultValues = $this->getAttribute('defaults');
-        $defaultValues = empty($defaultValues) ? [] : $defaultValues;
-
         $width = 'element';
         $givenWidth = '100%';
         if (!empty($givenWidth)) {
@@ -62,16 +59,22 @@ class SelectAjax extends HTML_QuickForm_select
             $plHolder = get_lang('SelectAnOption');
         }
 
+        $id = $this->getAttribute('id');
+
+        if (empty($id)) {
+            $id = $this->getAttribute('name');
+            $this->setAttribute('id', $id);
+        }
+
         $html .= <<<JS
             <script>
                 $(function(){
-                    $('#{$this->getAttribute('name')}').select2({
+                    $('#{$this->getAttribute('id')}').select2({
                         $languageCondition
-                        placeholder_: '$plHolder',
+                        placeholder: '$plHolder',
                         allowClear: true,
                         width: '$width',
                         minimumInputLength: '$minimumInputLength',
-                        // instead of writing the function to execute the request we use Select2s convenient helper
                         ajax: {
                             url: '{$this->getAttribute('url')}',
                             dataType: 'json',
@@ -94,16 +97,13 @@ class SelectAjax extends HTML_QuickForm_select
             </script>
 JS;
 
-        $html .= Display::select(
-            $this->getAttribute('name'),
-            $defaultValues,
-            array_keys($defaultValues),
-            [
-                'id' =>  $this->getAttribute('name'),
-                'style' => 'width: 100%;'
-            ],
-            false
-        );
-        return $html;
+        $this->removeAttribute('formatResult');
+        $this->removeAttribute('minimumInputLength');
+        $this->removeAttribute('placeholder');
+        $this->removeAttribute('class');
+        $this->removeAttribute('url');
+        $this->setAttribute('style', 'width: 100%;');
+
+        return parent::toHtml() . $html;
     }
 }

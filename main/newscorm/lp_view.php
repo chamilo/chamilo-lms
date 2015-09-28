@@ -78,8 +78,13 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
 
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) .
-    'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+<!--
+var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
+-->
+</script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) .'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     $("div#log_content_cleaner").bind("click", function() {
@@ -429,6 +434,14 @@ $gamificationMode = api_get_setting('gamification_mode');
 
 $template = new Template('title', false, false, true, true, false);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
+
+$fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
+$fixLink = '';
+if ($fixLinkSetting) {
+    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
+}
+
+$template->assign('fix_link', $fixLink);
 $template->assign(
     'glossary_tool_availables',
     ['true', 'lp', 'exercise_and_lp']
@@ -481,7 +494,12 @@ $template->assign(
 $template->assign('lp_id', $_SESSION['oLP']->lp_id);
 $template->assign('lp_current_item_id', $_SESSION['oLP']->get_current_item_id());
 
-$content = $template->fetch('default/learnpath/view.tpl');
+$templateFolder = api_get_configuration_value('default_template');
+if(!empty($templateFolder)){
+    $content = $template->fetch($templateFolder.'/learnpath/view.tpl');
+}else{
+    $content = $template->fetch('default/learnpath/view.tpl');
+}
 
 $template->assign('content', $content);
 $template->display_no_layout_template();

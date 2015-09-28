@@ -3082,6 +3082,58 @@ class learnpath
     }
 
     /**
+     * Gets a flat list of item IDs ordered for display (level by level ordered by order_display)
+     * This method can be used as abstract and is recursive
+     * @param   integer Learnpath ID
+     * @param   integer Parent ID of the items to look for
+     * @return  mixed   Ordered list of item IDs or false on error
+     */
+    public static function get_tree_ordered_items_list($lp, $parent = 0, $course_id = null, $level = 0) {
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = intval($course_id);
+        }
+        $list = array();
+
+        if (empty($lp)) {
+            return false;
+        }
+
+        $learnpath = new learnpath(api_get_course_id(), $lp, api_get_user_id());
+
+        $list = [];
+
+        foreach ($learnpath->items as $item) {
+            if (empty($item->parent)) {
+                continue;
+            }
+
+            $list[$item->parent]['tree'][] = [
+                'id' => $item->db_id,
+                'title' => $item->title,
+                'level' => $item->level,
+                'status' => $item->status,
+                'type' => $item->type
+            ];
+        }
+
+        foreach ($learnpath->items as $item) {
+            if (!empty($item->parent)) {
+                continue;
+            }
+
+            $list[$item->db_id]['id'] = $item->db_id;
+            $list[$item->db_id]['title'] = $item->title;
+            $list[$item->db_id]['level'] = $item->level;
+            $list[$item->db_id]['status'] = $item->status;
+            $list[$item->db_id]['type'] = $item->type;
+        }
+
+        return $list;
+    }
+
+    /**
      * @return array
      */
     public static function getChapterTypes()
@@ -3092,6 +3144,128 @@ class learnpath
             'chapter',
             'dir'
         );
+    }
+
+    /**
+     * Get the minified HTML for the table of content
+     * @param array $tree
+     * @return string
+     */
+    public function getMiniHtmlToc($tree)
+    {
+        $html = '';
+        $count = 0;
+        foreach ($tree as $key => $subtree) {
+            $html .= '<div class="panel panel-default">';
+            if ($subtree['type'] == 'dokeos_chapter') {
+                
+                    $html .= '<div class="panel-heading" role="tab" id="heading' . $subtree['id'] . '">';   
+                    $html .= '<h4 class="panel-title">';
+
+                if ($count == 0) {
+                    $html .= '<a role="button" data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
+                        . $subtree['id'] . '" aria-expanded="true" aria-controls="collapse' . $subtree['id'] . '">';
+                } else {
+                    $html .= '<a role="button" data-toggle="collapse" data-parent="#scorm-accordion" href="#collapse'
+                        . $subtree['id'] . '" aria-expanded="false" aria-controls="collapse' . $subtree['id'] . '">';
+                }
+                $html .= $subtree['title'];
+                $html .= '</a></h4>';
+                $html .= '</div>';
+
+                $panelCollapseClass= 'panel-collapse collapse';
+
+                if (!empty($subtree['tree'])) {
+                    foreach ($subtree['tree'] as $subItem) {
+                        if ($subItem['id'] == $this->current) {
+                            $panelCollapseClass = 'panel-collapse collapse in';
+                            break;
+                        }
+                    }
+                }
+
+                $html .= '<div id="collapse' . $subtree['id']
+                    . '" class="' . $panelCollapseClass . '" role="tabpanel" aria-labelledby="heading'
+                    . $subtree['id'] . '">';
+            }
+
+            $html .= '<div class="panel-body">';
+            $count++;
+
+            if (!empty($subtree['tree'])) {
+                $html .= $this->getMiniHtmlTocSubtree($subtree['tree']);
+            } else {
+                if ($subtree['type'] != 'dokeos_chapter') {
+                    $html .= $this->getMiniHtmlTocSubtree([$subtree]);
+                }
+            }
+
+            $html .= '</div>';
+
+            if ($subtree['type'] == 'dokeos_chapter') {
+                $html .= '</div>';
+            }
+
+            $html .= '</div>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * Get the minified HTML fot table of content subtree
+     * @param array $tree
+     * @return string
+     */
+    public function getMiniHtmlTocSubtree($tree)
+    {
+        $mycurrentitemid = $this->get_current_item_id();
+        $class_name = array(
+            'not attempted' => 'scorm_not_attempted',
+            'incomplete' => 'scorm_not_attempted',
+            'failed' => 'scorm_failed',
+            'completed' => 'scorm_completed',
+            'passed' => 'scorm_completed',
+            'succeeded' => 'scorm_completed',
+            'browsed' => 'scorm_completed',
+        );
+        $dirTypes = self::getChapterTypes();
+        $html = '';
+
+        $html .= '<ul class="scorm-items-accordion">';
+        foreach ($tree as $key => $subtree) {
+            $title = $subtree['title'];
+            if (empty($title)) {
+                $title = rl_get_resource_name(api_get_course_id(), $this->get_id(), $subtree['id']);
+            }
+            $title = Security::remove_XSS($title);
+
+
+            if ($subtree['id'] == $this->current) {
+                $scorm_active = 'scorm_item_normal scorm_highlight';
+            } elseif (!in_array($subtree['type'], $dirTypes)) {
+                $scorm_active = 'scorm_item_normal';
+            }
+
+            $html .= '<li id="toc_' . $subtree['id'] . '" class="scorm_level_' . $subtree['level'] . ' scorm_type_'
+                . learnpath::format_scorm_type_item($subtree['type'])
+                . ' ' . $scorm_active . ' ' . $class_name[$subtree['status']] . ' " >';
+            if ($subtree['type'] != 'dokeos_chapter') {
+                $this->get_link('http', $subtree['id'], $tree);
+                $html .= Display::url(
+                    $title,
+                    '#',
+                    ['onclick' => "switch_item({$mycurrentitemid}, {$subtree['id']}); return false;"]
+                );
+            } else {
+                $html .= '';
+            }
+            $html .= '</li>';
+        }
+
+        $html .= '</ul>';
+
+        return $html;
     }
 
     /**
@@ -3108,119 +3282,147 @@ class learnpath
         if (empty($toc_list)) {
             $toc_list = $this->get_toc();
         }
-        //$html = '<div id="scorm_title" class="scorm-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
-        $html = '<div class="scorm-body">';
-        $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
+        if ($_configuration['new_scorm'] == 1) {
+            // Temporary variables.
+            $mycurrentitemid = $this->get_current_item_id();
+            //$color_counter = 0;
+            //$i = 0;
 
-        if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
-            $gradebook = '';
-            if (!empty($_GET['gradebook'])) {
+            $html = '';
+
+            //$contItem = count($toc_list);
+            //echo $contItem;
+
+            $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
+
+            if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
                 $gradebook = Security:: remove_XSS($_GET['gradebook']);
+                if ($this->get_lp_session_id() == api_get_session_id()) {
+                    $html .= '<div id="actions_lp" class="actions_lp">';
+                    $html .= '<div class="btn-group">';
+                    $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq() . "&gradebook=$gradebook&action=build&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Overview') . "</a>";
+                    $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq() . "&action=add_item&type=step&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Edit') . "</a>";
+                    $html .= '<a class="btn btn-default" href="lp_controller.php?' . api_get_cidreq() . "&gradebook=$gradebook&action=edit&lp_id=" . $this->lp_id . '">' . get_lang('Settings') . '</a>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                }
             }
-            if ($this->get_lp_session_id() == api_get_session_id()) {
-                $html .= '<div id="actions_lp" class="actions_lp">';
-                $html .= '<div class="btn-group">';
-                $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq()."&gradebook=$gradebook&action=build&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Overview') . "</a>";
-                $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq()."&action=add_item&type=step&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Edit') . "</a>";
-                $html .= '<a class="btn btn-default" href="lp_controller.php?'.api_get_cidreq()."&gradebook=$gradebook&action=edit&lp_id=" . $this->lp_id.'">'.get_lang('Settings').'</a>';
-                $html .= '</div>';
-                $html .= '</div>';
+            $html .= '<div class="panel-group" id="scorm-accordion" role="tablist" aria-multiselectable="true">';
+
+            $toc_list = $this->get_tree_ordered_items_list($this->lp_id);
+            $html .= $this->getMiniHtmlToc($toc_list);
+            $html .= '</div>';
+
+        } else {
+            //$html = '<div id="scorm_title" class="scorm-heading">' . Security::remove_XSS($this->get_name()) . '</div>';
+            $html .= '<div class="scorm-body">';
+            $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
+
+            if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
+                $gradebook = Security:: remove_XSS($_GET['gradebook']);
+                if ($this->get_lp_session_id() == api_get_session_id()) {
+                    $html .= '<div id="actions_lp" class="actions_lp">';
+                    $html .= '<div class="btn-group">';
+                    $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq() . "&gradebook=$gradebook&action=build&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Overview') . "</a>";
+                    $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq() . "&action=add_item&type=step&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Edit') . "</a>";
+                    $html .= '<a class="btn btn-default" href="lp_controller.php?' . api_get_cidreq() . "&gradebook=$gradebook&action=edit&lp_id=" . $this->lp_id . '">' . get_lang('Settings') . '</a>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                }
             }
-        }
+            $html .= '<div id="inner_lp_toc" class="inner_lp_toc">';
+            require_once 'resourcelinker.inc.php';
 
-        $html .= '<div id="inner_lp_toc" class="inner_lp_toc">';
-        require_once 'resourcelinker.inc.php';
+            // Temporary variables.
+            $mycurrentitemid = $this->get_current_item_id();
+            $color_counter = 0;
+            $i = 0;
 
-        // Temporary variables.
-        $mycurrentitemid = $this->get_current_item_id();
-        $color_counter = 0;
-        $i = 0;
+            foreach ($toc_list as $item) {
+                // TODO: Complete this
+                $icon_name = array(
+                    'not attempted' => '../img/notattempted.gif',
+                    'incomplete' => '../img/incomplete.png',
+                    'failed' => '../img/delete.png',
+                    'completed' => '../img/completed.png',
+                    'passed' => '../img/passed.png',
+                    'succeeded' => '../img/succeeded.png',
+                    'browsed' => '../img/completed.png',
+                );
 
-        foreach ($toc_list as $item) {
-            // TODO: Complete this
-            $icon_name = array (
-                'not attempted' => '../img/notattempted.gif',
-                'incomplete'    => '../img/incomplete.png',
-                'failed'        => '../img/delete.png',
-                'completed'     => '../img/completed.png',
-                'passed'        => '../img/passed.png',
-                'succeeded'     => '../img/succeeded.png',
-                'browsed'       => '../img/completed.png',
-            );
+                // Style Status
+                $class_name = array(
+                    'not attempted' => 'scorm_not_attempted',
+                    'incomplete' => 'scorm_not_attempted',
+                    'failed' => 'scorm_failed',
+                    'completed' => 'scorm_completed',
+                    'passed' => 'scorm_completed',
+                    'succeeded' => 'scorm_completed',
+                    'browsed' => 'scorm_completed',
+                );
 
-            // Style Status
-
-            $class_name = array (
-                'not attempted' => 'scorm_not_attempted',
-                'incomplete'    => 'scorm_not_attempted',
-                'failed'        => 'scorm_failed',
-                'completed'     => 'scorm_completed',
-                'passed'        => 'scorm_completed',
-                'succeeded'     => 'scorm_completed',
-                'browsed'       => 'scorm_completed',
-            );
-
-            $scorm_color_background = 'row_odd';
-            $style_item = '';
-
-            if ($color_counter % 2 == 0) {
-                $scorm_color_background = 'row_even';
-            }
-
-            $dirTypes = self::getChapterTypes();
-
-            if (in_array($item['type'], $dirTypes)) {
-                $scorm_color_background ='scorm_item_section ';
+                $scorm_color_background = 'row_odd';
                 $style_item = '';
-            }
-            if ($item['id'] == $this->current) {
-                $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' scorm_highlight';
-            } elseif (!in_array($item['type'], $dirTypes)) {
-                $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' ';
-            }
 
-            $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';
+                if ($color_counter % 2 == 0) {
+                    $scorm_color_background = 'row_even';
+                }
 
-            // Learning path title
-            $title = $item['title'];
-            if (empty ($title)) {
-                $title = rl_get_resource_name(api_get_course_id(), $this->get_id(), $item['id']);
-            }
-            $title = Security::remove_XSS($title);
+                $dirTypes = self::getChapterTypes();
 
-            // Learning path personalization
-            // build the LP tree
-            // The anchor atoc_ will let us center the TOC on the currently viewed item &^D
-            $description = $item['description'];
-            if (empty($description)) {
-                $description = $title;
-            }
-            if (in_array($item['type'], $dirTypes)) {
-                // Chapters
-                $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$description.'" >';
-            } else {
-                $html .= '<div class="'.$style_item.' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
-                $html .= '<a name="atoc_'.$item['id'].'" />';
-            }
+                if (in_array($item['type'], $dirTypes)) {
+                    $scorm_color_background = 'scorm_item_section ';
+                    $style_item = '';
+                }
+                if ($item['id'] == $this->current) {
+                    $scorm_color_background = 'scorm_item_normal scorm_highlight ' . $scorm_color_background . ' ';
+                } elseif (!in_array($item['type'], $dirTypes)) {
+                    $scorm_color_background = 'scorm_item_normal ' . $scorm_color_background . ' ';
+                }
 
-            if (in_array($item['type'], $dirTypes)) {
-                // Chapter
-                // if you want to put an image before, you should use css
-                $html .= stripslashes($title);
-            } else {
-                $this->get_link('http', $item['id'], $toc_list);
-                $html .= '<a class="items-list" href="" onClick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
+                $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' ' . $class_name[$item['status']] . ' ">';
+
+                // Learning path title
+                $title = $item['title'];
+                if (empty ($title)) {
+                    $title = rl_get_resource_name(api_get_course_id(), $this->get_id(), $item['id']);
+                }
+                $title = Security::remove_XSS($title);
+
+                // Learning path personalization
+                // build the LP tree
+                // The anchor atoc_ will let us center the TOC on the currently viewed item &^D
+                $description = $item['description'];
+                if (empty($description)) {
+                    $description = $title;
+                }
+                if (in_array($item['type'], $dirTypes)) {
+                    // Chapters
+                    $html .= '<div class="' . $style_item . ' scorm_section_level_' . $item['level'] . '" title="' . $description . '" >';
+                } else {
+                    $html .= '<div class="' . $style_item . ' scorm_item_level_' . $item['level'] . ' scorm_type_' . learnpath::format_scorm_type_item($item['type']) . '" title="' . $description . '" >';
+                    $html .= '<a name="atoc_' . $item['id'] . '" />';
+                }
+
+                if (in_array($item['type'], $dirTypes)) {
+                    // Chapter
+                    // if you want to put an image before, you should use css
+                    $html .= stripslashes($title);
+                } else {
+                    $this->get_link('http', $item['id'], $toc_list);
+                    $html .= '<a class="items-list" href="" onClick="switch_item(' . $mycurrentitemid . ',' . $item['id'] . ');' . 'return false;" >' . stripslashes($title) . '</a>';
+                }
+                $html .= "</div>";
+
+                if ($scorm_color_background != '') {
+                    $html .= '</div>';
+                }
+
+                $color_counter++;
             }
             $html .= "</div>";
-
-            if ($scorm_color_background != '') {
-                $html .= '</div>';
-            }
-
-            $color_counter++;
+            $html .= "</div>";
         }
-        $html .= "</div>";
-        $html .= "</div>";
         return $html;
     }
 
@@ -3356,10 +3558,10 @@ class learnpath
                         if ($lp_item_type == 'link') {
                             if (Link::is_youtube_link($file)) {
                                 $src  = Link::get_youtube_video_id($file);
-                                $file = 'embed.php?type=youtube&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=youtube&source='.$src;
                             } elseif (Link::isVimeoLink($file)) {
                                 $src  = Link::getVimeoLinkId($file);
-                                $file = 'embed.php?type=vimeo&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=vimeo&source='.$src;
                             } else {
                                 // If the current site is HTTPS and the link is
                                 // HTTP, browsers will refuse opening the link
@@ -3370,7 +3572,7 @@ class learnpath
                                     $linkProtocol = substr($file, 0, 5);
                                     if ($linkProtocol === 'http:') {
                                         //this is the special intervention case
-                                        $file = 'embed.php?type=nonhttps&source=' .  urlencode($file);
+                                        $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=nonhttps&source=' .  urlencode($file);
                                     }
                                 }
                             }
@@ -5579,43 +5781,136 @@ class learnpath
             $delete_icon = '';
             $audio_icon = '';
             $prerequisities_icon = '';
+            $forumIcon = '';
 
             if ($is_allowed_to_edit) {
                 if (!$update_audio || $update_audio <> 'true') {
-                    $move_icon .= '<a class="moved" href="#">';
-                    $move_icon .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
-                    $move_icon .= '</a>';
+                    $move_icon .= Display::toolbarButton(
+                        null,
+                        '#',
+                        'arrows',
+                        'link',
+                        [
+                            'title' => get_lang('Move'),
+                            'style' => 'color: #00B800;',
+                            'class' => 'moved btn-xs'
+                        ]
+                    );
                 }
 
                 // No edit for this item types
                 if (!in_array($arrLP[$i]['item_type'], array('sco', 'asset'))) {
                     if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module'))) {
-                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&view=build&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '">';
-                        $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
-                        $edit_icon .= '</a>';
+                        $edit_icon .= Display::toolbarButton(
+                            null,
+                            api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                                'action' => 'edit_item',
+                                'view' => 'build',
+                                'id' => $arrLP[$i]['id'],
+                                'lp_id' => $this->lp_id,
+                                'path_item' => $arrLP[$i]['path']
+                            ]),
+                            'pencil',
+                            'default',
+                            ['title' => get_lang('LearnpathEditModule')]
+                        );
+
+                        if ($this->items[$arrLP[$i]['id']]->getForumThread(
+                            $this->course_int_id,
+                            $this->lp_session_id
+                        )) {
+                            $forumIcon .= Display::toolbarButton(
+                                null,
+                                '#',
+                                'comments-o',
+                                'success',
+                                [
+                                    'title' => get_lang('CreateForum'),
+                                    'class' => 'disabled'
+                                ]
+                            );
+                        } else {
+                            $forumIconUrl = api_get_self() . '?'
+                                . api_get_cidreq() . '&'
+                                . http_build_query([
+                                    'action' => 'create_forum',
+                                    'id' => $arrLP[$i]['id'],
+                                    'lp_id' => $this->lp_id
+                                ]);
+                            $forumIcon .= Display::toolbarButton(
+                                null,
+                                $forumIconUrl,
+                                'comments-o',
+                                'default',
+                                ['title' => get_lang('CreateForum')]
+                            );
+                        }
                     } else {
-                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '">';
-                        $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
-                        $edit_icon .= '</a>';
+                        $edit_icon .= Display::toolbarButton(
+                            null,
+                            api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                                'action' => 'edit_item',
+                                'id' => $arrLP[$i]['id'],
+                                'lp_id' => $this->lp_id,
+                                'path_item' => $arrLP[$i]['path']
+                            ]),
+                            'pencil',
+                            'default',
+                            ['title' => get_lang('LearnpathEditModule')]
+                        );
                     }
                 }
 
-                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
-                $delete_icon .= Display::return_icon('delete.png', get_lang('LearnpathDeleteModule'), array(), ICON_SIZE_TINY);
-                $delete_icon .= '</a>';
+                $delete_icon .= Display::toolbarButton(
+                    null,
+                    api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                        'action' => 'delete_item',
+                        'id' => $arrLP[$i]['id'],
+                        'lp_id' => $this->lp_id,
+                        'onclick' => "return confirmation('" . addslashes($title) . "');"
+                    ]),
+                    'times',
+                    'default',
+                    ['title' => get_lang('LearnpathDeleteModule')]
+                );
 
                 $url = api_get_self() . '?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
 
                 if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module', 'dir'))) {
-                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq');
-                    $move_item_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item');
-                    $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio');
+                    $prerequisities_icon = Display::toolbarButton(
+                        null,
+                        "$url&action=edit_item_prereq",
+                        'check',
+                        'default',
+                        ['title' => get_lang('LearnpathPrerequisites')]
+                    );
+                    $move_item_icon = Display::toolbarButton(
+                        null,
+                        "$url&action=move_item",
+                        'arrow-right',
+                        'default',
+                        ['title' => get_lang('Move')]
+                    );
+                    $audio_icon = Display::toolbarButton(
+                        null,
+                        "$url&action=add_audio",
+                        'volume-up',
+                        'default',
+                        ['title' => get_lang('UplUpload')]
+                    );
                 }
             }
             if ($update_audio != 'true') {
-                $row = $move_icon.' '.$icon.Display::span($title_cut).Display::span($audio.$edit_icon.$prerequisities_icon.$move_item_icon.$audio_icon.$delete_icon, array('class'=>'button_actions'));
+                $row = "$move_icon $icon " . Display::span($title_cut);
+                $row .= Display::span(
+                    "$audio $edit_icon $forumIcon $prerequisities_icon $move_item_icon $audio_icon $delete_icon",
+                    array('class' => 'button_actions btn-group btn-group-xs')
+                );
             } else {
-                $row = Display::span($title.$icon).Display::span($audio, array('class'=>'button_actions'));
+                $row = Display::span("$title $icon ") . Display::span(
+                    $audio,
+                    array('class' => 'button_actions btn-group btn-group-xs')
+                );
             }
             $parent_id = $arrLP[$i]['parent_item_id'];
 
@@ -7364,8 +7659,10 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
-        unset ($this->arrMenu);
+        if (isset($this->arrMenu)) {
+            $arrLP = $this->arrMenu;
+            unset ($this->arrMenu);
+        }
 
         if ($action == 'add') {
             $return .= get_lang('CreateTheDocument');
@@ -7431,7 +7728,7 @@ class learnpath
 
         if (!empty($id)) {
             $parent_select->setSelected($parent);
-        } else {
+        } else if (isset($_SESSION['parent_item_id'])) {
             $parent_item_id = $_SESSION['parent_item_id'];
             $parent_select->setSelected($parent_item_id);
         }
@@ -10312,6 +10609,80 @@ EOD;
         }
 
         return $totalExercisesResult + $totalEvaluationResult;
+    }
+
+    /**
+     * Get the forum for this learning path
+     * @return boolean
+     */
+    public function getForum($sessionId = 0)
+    {
+        $forumTable = Database::get_course_table(TABLE_FORUM);
+        $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+        $fakeFrom = "$forumTable f
+            INNER JOIN $itemProperty ip ";
+
+        if ($this->lp_session_id == 0) {
+            $fakeFrom .= "ON (
+                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND (
+                        f.session_id = ip.session_id OR ip.session_id IS NULL
+                    )
+                ) ";
+        } else {
+            $fakeFrom .= "ON (
+                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND f.session_id = ip.session_id
+                ) ";
+        }
+
+        $resultData = Database::select(
+            'f.*',
+            $fakeFrom,
+            [
+                'where' => [
+                    'ip.visibility != ? AND ' => 2,
+                    'ip.tool = ? AND ' => TOOL_FORUM,
+                    'f.session_id = ? AND ' => $sessionId,
+                    'f.c_id = ? AND ' => intval($this->course_int_id),
+                    'f.lp_id = ?' => intval($this->lp_id)
+                ]
+            ],
+            'first'
+        );
+
+        if (empty($resultData)) {
+            return false;
+        }
+
+        return $resultData;
+    }
+
+    /**
+     * Create a forum for this learning path
+     * @param type $forumCategoryId
+     * @return int The forum ID if was created. Otherwise return false
+     */
+    public function createForum($forumCategoryId)
+    {
+        require_once api_get_path(SYS_CODE_PATH) . '/forum/forumfunction.inc.php';
+
+        $forumId = store_forum(
+            [
+                'lp_id' => $this->lp_id,
+                'forum_title' => $this->name,
+                'forum_comment' => null,
+                'forum_category' => intval($forumCategoryId),
+                'students_can_edit_group' => ['students_can_edit' => 0],
+                'allow_new_threads_group' => ['allow_new_threads' => 0],
+                'default_view_type_group' => ['default_view_type' => 'flat'],
+                'group_forum' => 0,
+                'public_private_group_forum_group' => ['public_private_group_forum' => 'public']
+            ],
+            [],
+            true
+        );
+
+        return $forumId;
     }
 
     /**

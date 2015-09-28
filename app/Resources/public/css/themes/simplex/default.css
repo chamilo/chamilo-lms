@@ -4,7 +4,6 @@
  * Licensed GPL
  * Based on Bootstrap
 */
-
 @font-face {
   font-family: 'Lato';
   font-style: normal;
@@ -48,7 +47,7 @@ background: #FBD232;
 border: none;
 }
 header{
-    background: #D3D3D3;
+    background: url(images/background.png) #D3D3D3;
 }
 .navbar{
     margin-bottom: 0;

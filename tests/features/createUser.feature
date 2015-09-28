@@ -27,7 +27,7 @@ Feature: Users management as admin
   Scenario: Search and delete a user
     Given I am a platform administrator
     And I am on "/main/admin/user_list.php"
-    And I fill in "user-search-keyword" with "smarshall"
+    And I fill in "keyword" with "smarshall"
     And I press "submit"
     When I follow "Delete"
     Then I should see "The user has been deleted"

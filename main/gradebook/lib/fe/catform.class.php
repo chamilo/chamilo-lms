@@ -227,51 +227,33 @@ class CatForm extends FormValidator
         );
         $this->addRule('weight', get_lang('ThisFieldIsRequired'), 'required');
 
+        $skillsDefaults = [];
+
         if (api_is_platform_admin() || api_is_drh()) {
             if (api_get_setting('allow_skills_tool') == 'true') {
-
-                // The magic should be here
-                $skills = $this->category_object->get_skills();
-
-                $skillToSelect = array();
-                foreach ($skills as $skill) {
-                    $skillToSelect[$skill['id']] = $skill['name'];
-                }
-
-                $this->addElement(
-                    'select',
+                $skillSelect = $this->addElement(
+                    'select_ajax',
                     'skills',
                     array(
                         get_lang('Skills'),
                         get_lang('SkillsAchievedWhenAchievingThisGradebook')
                     ),
-                    $skillToSelect,
-                    array('id' => 'skills', 'multiple' => 'multiple')
-                );
-
-                $content = '';
-                if (!empty($skills)) {
-                    foreach ($skills as $skill) {
-                        $content .= Display::tag(
-                            'li',
-                            $skill['name'] . '<a id="deleteskill_' . $skill['id'] . '" class="closebutton" href="#"></a>',
-                            array(
-                                'id' => 'skill_' . $skill['id'],
-                                'class' => 'bit-box'
-                            )
-                        );
-                    }
-                }
-
-                $this->addElement(
-                    'label',
                     null,
-                    Display::tag(
-                        'ul',
-                        $content,
-                        array('class' => 'holder holder_simple')
-                    )
+                    [
+                        'id' => 'skills',
+                        'multiple' => 'multiple',
+                        'url' => api_get_path(WEB_AJAX_PATH) . 'skill.ajax.php?a=search_skills'
+                    ]
                 );
+
+                // The magic should be here
+                $skills = $this->category_object->get_skills();
+
+                foreach ($skills as $skill) {
+                    $skillsDefaults[] = $skill['id'];
+
+                    $skillSelect->addOption($skill['name'], $skill['id']);
+                }
             }
         }
 
@@ -399,7 +381,7 @@ class CatForm extends FormValidator
         if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
             $visibility_default = 0;
         }
-        $this->setDefaults(array('visible' => $visibility_default));
+        $this->setDefaults(array('visible' => $visibility_default, 'skills' => $skillsDefaults));
     }
 
     /**

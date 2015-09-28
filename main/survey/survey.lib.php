@@ -503,7 +503,9 @@ class SurveyManager
         } else {
             // Delete everything of the gradebook for this $linkId
             GradebookUtils::remove_resource_from_course_gradebook($gradebook_link_id);
-            exit;
+
+            //comenting this line to correctly return the function msg
+            //exit;
         }
 
         return $return;
@@ -658,6 +660,7 @@ class SurveyManager
             unset($params['survey_id']);
             $params['session_id'] = api_get_session_id();
             $params['title'] = $params['title'] . ' ' . get_lang('Copy');
+            unset($params['iid']);
             Database::insert($table_survey, $params);
             $new_survey_id = Database::insert_id();
 
@@ -665,7 +668,7 @@ class SurveyManager
                 $sql = "UPDATE $table_survey SET survey_id = $new_survey_id
                         WHERE iid = $new_survey_id";
                 Database::query($sql);
-
+                
                 // Insert into item_property
                 api_item_property_update(
                     api_get_course_info(),
@@ -678,7 +681,7 @@ class SurveyManager
         } else {
             $new_survey_id = intval($new_survey_id);
         }
-
+        
         $sql = "SELECT * FROM $table_survey_question_group
                 WHERE c_id = $course_id AND  survey_id='".$survey_id."'";
         $res = Database::query($sql);
@@ -718,17 +721,16 @@ class SurveyManager
                 'survey_group_sec2' => $row['survey_group_sec2']
             );
             $insertId = Database::insert($table_survey_question, $params);
-
-            $sql = "UPDATE $table_survey_question SET id = iid WHERE iid = $insertId";
+            $sql = "UPDATE $table_survey_question SET question_id = iid WHERE iid = $insertId";
             Database::query($sql);
-
+            
             $question_id[$row['question_id']] = $insertId;
         }
 
         // Get questions options
         $sql = "SELECT * FROM $table_survey_options
                 WHERE c_id = $course_id AND survey_id='".$survey_id."'";
-
+        
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res ,'ASSOC')) {
             $params = array(

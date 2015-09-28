@@ -11,9 +11,6 @@ class SelectLanguage extends HTML_QuickForm_select
 	 */
 	function SelectLanguage($elementName=null, $elementLabel=null, $options=null, $attributes=null)
 	{
-		if (!isset($attributes['class'])) {
-			$attributes['class'] = 'chzn-select';
-		}
 		parent::__construct($elementName, $elementLabel, $options, $attributes);
 		// Get all languages
 		$languages = api_get_languages();

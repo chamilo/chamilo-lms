@@ -108,27 +108,16 @@ a.thumbnail:hover{
     max-width: 100%;
     height: auto;
 }
-#carousel-announcement .left, #carousel-announcement .right{
-  position: absolute;
-  top: 50%;
-  background: #00829C;
-  color: #fff;
-  margin-top: -25px;
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
-  text-align: center;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  opacity: 0.8;
+#carousel-announcement .carousel-control.right, #carousel-announcement .carousel-control.left{
+    background-image: none;
 }
+
 #carousel-announcement .left{
-  left: 10px;
+  left: 0px;
 }
 #carousel-announcement .right{
-  right: 10px;
-}
+  right: 0px;
+} 
 #carousel-announcement .carousel-indicators li{
   width: 20px;
   height: 20px;
@@ -2143,11 +2132,6 @@ div.admin_section h4 {
     overflow:hidden;
 }
 
-/* chosen javascript checkbox select width fix */
-.chzn-select {
-    /*min-width: 173px; */
-}
-
 #lp_item_list {
     margin:0;
     padding: 0;
@@ -2169,6 +2153,12 @@ div.admin_section h4 {
 #lp_item_list .item_data {
     padding:5px 0px 5px 0px;
     /* float:left;*/
+}
+#lp_item_list .item_data .button_actions {
+    display: none;
+}
+#lp_item_list .item_data:hover .button_actions {
+    display: block;
 }
 
 #lp_item_list .item {
@@ -4958,6 +4948,9 @@ ul.holder li.bit-box{
   -webkit-border-radius: 4px;
   padding: 5px;
 }
+.current-item .thumbnail{
+  background: none;
+}
 #panel-thematic .views ul li{
   font-size: 12px;
 }
@@ -5525,8 +5518,8 @@ div#chat-remote-video video {
   -webkit-border-radius: 5px;
 }
 #about-session .info-course{
-  margin-top: 20px;
-  padding-top: 20px;
+  margin-top: 10px;
+  padding-top: 10px;
 }
 #about-session .info-course .panel-heading h4{
   margin: 0px;
@@ -5546,10 +5539,66 @@ div#chat-remote-video video {
   width: 100px;
   height: 100px;
 }
-/* Catalog session */
-#session-list .col-md-4:nth-child(3n+1) {
-  clear: left;
+/* FORUM DISQUSS */
+.forum-disqus{
+  padding: 10px;
 }
+.forum-disqus .reply-disqus, .forum-disqus .reply-disqus:hover{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.forum-disqus .post-disqus{
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+.forum-disqus .tools-disqus{
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.forum-disqus .username-disqus{
+  margin-top: 0;
+}
+.forum-disqus .username-disqus a{
+  color: #1977CA;
+  font-size: 14px;
+  font-weight: 700;
+}
+.forum-disqus .username-disqus .fa-calendar{
+  color: #666666;
+  font-size: 14px;
+}
+.forum-disqus .description-disqus{
+  font-size: 14px;
+  line-height: 21px;
+  color: #3F4549;
+  text-align: justify;
+}
+.forum-disqus .time{
+  font-size: 12px;
+  color:rgba(0, 39, 59, 0.5);
+}
+.forum-disqus .reply-post {
+  font-size: 12px;
+  color: rgba(0, 39, 59, 0.5);
+}
+.forum-disqus .reply-post a{
+  font-size: 12px;
+  color: rgba(0, 39, 59, 0.5);
+}
+.forum-disqus .thumbnail{
+  padding: 0px;
+  width: 45px;
+  height: 45px;
+  margin-bottom: 0px;
+}
+.top-disqus{
+  border: 1px solid #dddddd;
+  padding: 10px;
+}
+.forum-disqus .info-disqus{
+ display: none;
+}
+/* Catalog session */
 .section-title-catalog{
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
@@ -5557,7 +5606,7 @@ div#chat-remote-video video {
   text-transform: uppercase;
 }
 #session-list .title-session{
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.2;
   margin-top: 5px;
 }
@@ -6473,6 +6522,19 @@ a.sessionView {
   }
   #show_graph{
    text-align: center;
+  }
+  .forum-disqus .description-disqus{
+    text-align: justify;
+  }
+  .forum-disqus .username-disqus{
+    display: none;
+  }
+  .forum-disqus .thumbnail{
+    display: inline-block;
+    margin-bottom: 0px;
+  }
+  .forum-disqus .info-disqus{
+    display: inline-block;
   }
 }
 @media (min-width : 480px) and (max-width: 767px) {

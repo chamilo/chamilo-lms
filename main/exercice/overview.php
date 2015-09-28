@@ -62,6 +62,11 @@ if ($time_control) {
 if ($origin != 'learnpath') {
     Display::display_header();
 } else {
+    $htmlHeadXtra[] = "
+    <style>
+    body { background: none;}
+    </style>
+    ";
     Display::display_reduced_header();
 }
 

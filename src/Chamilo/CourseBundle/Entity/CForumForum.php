@@ -178,7 +178,7 @@ class CForumForum
 
     /**
      * @var integer
-     * 
+     *
      * @ORM\Column(name="lp_id", type="integer", options={"unsigned":true})
      */
     private $lpId;

@@ -9,7 +9,15 @@
         </p>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8 col-sm-7">
+            <div class="thumbnail video-chat-user">
+                <div id="chat-remote-video"></div>
+                <div class="caption">
+                    <p class="text-muted text-center">{{ "ChatWithXUser"|get_lang|format(chat_user.complete_name) }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-5">
             <div class="thumbnail">
                 <div id="chat-local-video"></div>
                 <div class="caption">
@@ -28,19 +36,9 @@
                             </h4>
                         </div>
                         <div id="listFriends" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                            <div class="panel-body">
-                                {{ block_friends }}
-                            </div>
+                            {{ block_friends }}
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="thumbnail video-chat-user">
-                <div id="chat-remote-video"></div>
-                <div class="caption">
-                    <p class="text-muted text-center">{{ "ChatWithXUser"|get_lang|format(chat_user.complete_name) }}</p>
                 </div>
             </div>
         </div>

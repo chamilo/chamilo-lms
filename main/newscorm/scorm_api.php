@@ -41,7 +41,9 @@ $userId = api_get_user_id();
 
 header('Content-type: text/javascript');
 
-?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+?>
+
+var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
 // API Object initialization (eases access later on)
@@ -338,6 +340,7 @@ function LMSInitialize() {
 
         <?php
         $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+        $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
         $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
         if ($showGlossary) {
             if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
@@ -350,6 +353,10 @@ function LMSInitialize() {
                 <?php } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { ?>
                 attach_glossary_into_scorm('automatic');
             <?php } ?>
+        <?php } ?>
+
+        <?php if ($fixLinkSetting) { ?>
+            attach_glossary_into_scorm('fix_links');
         <?php } ?>
         return('true');
     }
@@ -1638,8 +1645,46 @@ function switch_item(current_item, next_item){
     });
     olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
+    loadForumThead(olms.lms_lp_id, next_item);
+
     return true;
 }
+
+/**
+ * Get a forum info when the learning path item has a associated forum
+ */
+var loadForumThead = function(lpId, lpItemId) {
+    var loadForum = $.getJSON(
+        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php',
+        {
+            a: 'get_forum_thread',
+            lp: lpId,
+            lp_item: lpItemId
+        }
+    );
+
+    $.when(loadForum).done(function(forumThreadData) {
+        if (forumThreadData.error) {
+            $('#forum-container').hide();
+            return;
+        }
+
+        $('#forum-container').show();
+        var forumIframe = $('<iframe>').attr({
+            width:'100%',
+            frameborder:'0',
+            scrolling:'no',
+            tabindex:'0',
+
+            id:'chamilo-disqus',
+            src: '<?php echo api_get_path(WEB_CODE_PATH) ?>forum/viewthread.php?<?php echo api_get_cidreq() ?>&gradebook=0&origin=learnpath&forum=' + forumThreadData.forumId +'&thread=' + forumThreadData.threadId + '&posts_order=desc'
+        });
+
+        $('#forum-container .panel-body').html(forumIframe);
+    });
+
+};
+
 
 /**
  * Save a specific item (with its interactions, if any) into the LMS through
@@ -2079,7 +2124,7 @@ function attach_glossary_into_scorm(type) {
             }
         });
     } else {
-        if ('manual') {
+        if (type == 'manual') {
             $("iframe").contents().find("body").on("click", ".glossary", function() {
                 is_glossary_name = $(this).html();
 
@@ -2124,5 +2169,49 @@ function attach_glossary_into_scorm(type) {
                 });
             });
         }
+
+if (type == 'fix_links') {
+$(document).ready(function() {
+var objects = $("iframe").contents().find('object');
+
+var pathname = location.pathname;
+var coursePath = pathname.substr(0, pathname.indexOf('/main/'));
+var url = "http://"+location.host + coursePath+"/courses/proxy.php?";
+
+objects.each(function (value, obj) {
+
+var dialogId = this.id +'_dialog';
+var openerId = this.id +'_opener';
+
+var link = '<a id="'+openerId+'" href="#" class="btn">'+
+    '<div style="text-align: center"><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/play-circle-8x.png'; ?>"/><br />If video does not work, try clicking here.</div></a>';
+var embed = $("iframe").contents().find("#"+this.id).find('embed').first();
+
+var height = embed.attr('height');
+var width = embed.attr('width');
+var src = embed.attr('src').replace('https', 'http');
+
+var completeUrl =  url + 'width='+embed.attr('width')+
+'&height='+height+
+'&id='+this.id+
+'&flashvars='+encodeURIComponent(embed.attr('flashvars'))+
+'&src='+src+
+'&width='+width;
+
+var iframe = '<iframe ' +
+'style="border: 0px;"  width="100%" height="100%" ' +
+'src="'+completeUrl+
+'">' +
+'</iframe>';
+
+
+$("iframe").contents().find("#"+this.id).append('<br />' + link);
+$("iframe").contents().find('#' + openerId).click(function() {
+var w = window.open(completeUrl, "Video", "width="+width+", "+"height="+height+"");
+w = window.document.title = 'Video';
+});
+});
+});
+}
     }
 }

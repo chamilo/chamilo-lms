@@ -46,18 +46,19 @@ a:hover{
   color: #3F9BC7;
 }
 header{
-  background: url("images/bg-blue.png") repeat-x center -50px;
+  background: url("images/bg-blue.png") repeat-x center -25px;
 }
 .navbar-default {
-  background: #0099c0; /* Old browsers */
-  background: -moz-linear-gradient(top, #0099c0 0%, #006a84 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0099c0), color-stop(100%,#006a84)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #0099c0 0%,#006a84 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #0099c0 0%,#006a84 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #0099c0 0%,#006a84 100%); /* IE10+ */        
-  background: linear-gradient(to bottom, #0099c0 0%,#006a84 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0099c0', endColorstr='#006a84',GradientType=0 ); /* IE6-9 */
-  border-color: #0099c0;
+background: #0099c0;
+background: -moz-linear-gradient(top, #0099c0 0%, #046e89 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0099c0), color-stop(100%,#046e89));
+background: -webkit-linear-gradient(top, #0099c0 0%,#046e89 100%);
+background: -o-linear-gradient(top, #0099c0 0%,#046e89 100%);
+background: -ms-linear-gradient(top, #0099c0 0%,#046e89 100%);
+background: linear-gradient(to bottom, #0099c0 0%,#046e89 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0099c0', endColorstr='#046e89',GradientType=0 );
+border-color: #0099c0;
+border-radius: 0px;
 }
 .navbar-default .navbar-brand {
   color: #ffffff;

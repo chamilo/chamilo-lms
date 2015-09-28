@@ -24,17 +24,21 @@ switch ($type) {
         $iframe .= '</div>';
         break;
     case 'nonhttps':
-        $iframe = '<a href="' . $src . '" target="_blank" style="font-family: arial; color: #666;">' . $src . '</a>';
+        $icon = '&nbsp;<i class="icon-external-link icon-2x"></i>';
+        $iframe = Display::return_message(
+            Display::url($src.$icon, $src, ['class' => 'btn', 'target' => '_blank']),
+            'normal',
+            false
+        );
         break;
 }
-?>
-<!doctype html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
-        <?php echo $iframe; ?>
-    </body>
-</html>
+
+$htmlHeadXtra[] = "
+<style>
+body { background: none;}
+</style>
+";
+
+Display::display_reduced_header();
+echo $iframe;
+Display::display_footer();

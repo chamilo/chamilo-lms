@@ -42,9 +42,6 @@ class SelectAjax extends HTML_QuickForm_select
                 templateSelection : '.$formatResult;
         }
 
-        $defaultValues = $this->getAttribute('defaults');
-        $defaultValues = empty($defaultValues) ? [] : $defaultValues;
-
         $width = 'element';
         $givenWidth = '100%';
         if (!empty($givenWidth)) {
@@ -100,24 +97,13 @@ class SelectAjax extends HTML_QuickForm_select
             </script>
 JS;
 
+        $this->removeAttribute('formatResult');
+        $this->removeAttribute('minimumInputLength');
+        $this->removeAttribute('placeholder');
         $this->removeAttribute('class');
         $this->removeAttribute('url');
         $this->setAttribute('style', 'width: 100%;');
-        $attrs = $this->getAttributes();
 
-        $selectName = $this->getAttribute('name');
-
-        if ($this->getAttribute('multiple')) {
-            $selectName = "{$this->getAttribute('name')}[]";
-        }
-
-        $html .= Display::select(
-            $selectName,
-            $defaultValues,
-            array_keys($defaultValues),
-            $attrs,
-            false
-        );
-        return $html;
+        return parent::toHtml() . $html;
     }
 }

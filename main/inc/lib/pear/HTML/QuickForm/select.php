@@ -87,6 +87,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $oldClass = $attributes['class'];
             }
             $attributes['class'] = $oldClass . ' selectpicker show-tick form-control';
+            $attributes['data-live-search'] = 'true';
         }
         $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
         $this->setColumnsSize($columnsSize);
@@ -550,7 +551,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $this->setName($myName);
             }
 
-            $strHtml .= $tabs . '<select data-live-search="true" ' . $attrString . ">\n";
+            $strHtml .= $tabs . '<select ' . $attrString . ">\n";
 
             $strValues = is_array($this->_values)? array_map('strval', $this->_values): array();
 

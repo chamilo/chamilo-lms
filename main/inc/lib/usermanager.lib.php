@@ -581,7 +581,7 @@ class UserManager
         a user has 4 different sized photos to be deleted. */
         $user_info = api_get_user_info($user_id);
         if (strlen($user_info['picture_uri']) > 0) {
-            $path = self::getUserPathById($user_id);
+            $path = self::getUserPathById($user_id, 'system');
             $img_path = $path.$user_info['picture_uri'];
             if (file_exists($img_path))
                 unlink($img_path);

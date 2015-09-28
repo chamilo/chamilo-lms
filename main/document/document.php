@@ -352,7 +352,7 @@ switch ($action) {
                 );
             }
             $parent_id = $document_info['parent_id'];
-            $my_path = UserManager::getUserPathById(api_get_user_id());
+            $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');
             $user_folder = $my_path.'my_files/';
             $my_path = null;
 

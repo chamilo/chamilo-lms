@@ -229,27 +229,32 @@ class Statistics
         }
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT ".
-                "default_event_type  as col0, ".
-                "default_value_type    as col1, ".
-                "default_value        as col2, ".
-                "user.username         as col3, ".
-                "user.user_id         as col4, ".
-                "default_date         as col5 ".
-                "FROM $track_e_default as track_default, $table_user as user, $access_url_rel_user_table as url
-                WHERE   track_default.default_user_id = user.user_id AND
+            $sql = "SELECT
+                    default_event_type  as col0,
+                    default_value_type    as col1,
+                    default_value        as col2,
+                    c_id         as col3,
+                    session_id as col4,
+                    user.username         as col5,
+                    user.user_id         as col6,
+                    default_date         as col7
+                    FROM $track_e_default as track_default, $table_user as user, $access_url_rel_user_table as url
+                    WHERE
+                        track_default.default_user_id = user.user_id AND
                         url.user_id = user.user_id AND
                         access_url_id='".$current_url_id."'";
         } else {
-            $sql = "SELECT ".
-                   "default_event_type  as col0, ".
-                   "default_value_type    as col1, ".
-                   "default_value        as col2, ".
-                   "user.username         as col3, ".
-                   "user.user_id         as col4, ".
-                   "default_date         as col5 ".
-                   "FROM $track_e_default track_default, $table_user user ".
-                   "WHERE track_default.default_user_id = user.user_id ";
+            $sql = "SELECT
+                   default_event_type  as col0,
+                   default_value_type    as col1,
+                   default_value        as col2,
+                   c_id         as col3,
+                   session_id as col4,
+                   user.username         as col5,
+                   user.user_id         as col6,
+                   default_date         as col7
+                   FROM $track_e_default track_default, $table_user user
+                   WHERE track_default.default_user_id = user.user_id ";
         }
 
         if (isset($_GET['keyword'])) {
@@ -284,23 +289,39 @@ class Statistics
                     }
                 }
             }
+
             if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {
                 $row['default_date'] = api_get_local_time($row['default_date']);
             } else {
                 $row['default_date'] = '-';
             }
 
-            if (!empty($row[4])) {
+            if (!empty($row[5])) {
+
+                //course
+                if (!empty($row[3])) {
+                    $row[3] = Display::url($row[3], api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id='.$row[3]);
+                } else {
+                    $row[3] = '-';
+                }
+
+                // session
+                if (!empty($row[4])) {
+                    $row[4] = Display::url($row[4], api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$row[4]);
+                } else {
+                    $row[4] = '-';
+                }
+
                 // User id.
-                $row[3] = Display::url(
-                    $row[3],
-                    api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$row[4],
+                $row[5] = Display::url(
+                    $row[5],
+                    api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$row[6],
                     array('title' => get_lang('UserInfo'))
                 );
 
-                $row[4] = TrackingUserLog::get_ip_from_user_event($row[4], $row[5], true);
-                if (empty($row[4])) {
-                    $row[4] = get_lang('Unknown');
+                $row[6] = TrackingUserLog::get_ip_from_user_event($row[6], $row[7], true);
+                if (empty($row[6])) {
+                    $row[6] = get_lang('Unknown');
                 }
             }
             $activities[] = $row;
@@ -646,7 +667,7 @@ class Statistics
         $table = new SortableTable(
             'activities',
             array('Statistics', 'getNumberOfActivities'),
-            array('Statistics','getActivitiesData'),
+            array('Statistics', 'getActivitiesData'),
             5,
             50,
             'DESC'
@@ -662,9 +683,11 @@ class Statistics
         $table->set_header(0, get_lang('EventType'));
         $table->set_header(1, get_lang('DataType'));
         $table->set_header(2, get_lang('Value'));
-        $table->set_header(3, get_lang('UserName'));
-        $table->set_header(4, get_lang('IPAddress'));
-        $table->set_header(5, get_lang('Date'));
+        $table->set_header(3, get_lang('Course'));
+        $table->set_header(4, get_lang('Session'));
+        $table->set_header(5, get_lang('UserName'));
+        $table->set_header(6, get_lang('IPAddress'));
+        $table->set_header(7, get_lang('Date'));
         $table->display();
     }
 

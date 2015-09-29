@@ -190,16 +190,18 @@ class SessionsSliderBlockPlugin extends Plugin
             return [];
         }
 
-        $userInfo = api_get_user_info();
+        if (!api_is_anonymous()) {
+            $userInfo = api_get_user_info();
 
-        $userSessions = SessionManager::getSessionsFollowedByUser(
-            $userInfo['id'],
-            $userInfo['status']
-        );
+            $userSessions = SessionManager::getSessionsFollowedByUser(
+                $userInfo['id'],
+                $userInfo['status']
+            );
 
-        $userSessionsId = array_keys($userSessions);
-
-        $sessions = array_diff($sessions, $userSessionsId);
+            $userSessionsId = array_keys($userSessions);
+            $sessions = array_diff($sessions, $userSessionsId);
+            $sessions = array_slice($sessions, 0, $this->maxSessionToShowForLoggedUser);
+        }
 
         $sessionToShow = [];
 
@@ -408,13 +410,8 @@ SQL;
 
         if (count($sessionToShow) < $this->maxSessionToShowForLoggedUser) {
             $sessionsDiff = array_diff($sessionsIdList, $sessionToShow);
-            $sessionsToAppend = array_slice(
-                $sessionsDiff,
-                0,
-                $this->maxSessionToShowForLoggedUser - count($sessionToShow)
-            );
 
-            $sessionToShow = array_merge($sessionToShow, $sessionsToAppend);
+            $sessionToShow = array_merge($sessionToShow, $sessionsDiff);
         }
 
         return $sessionToShow;

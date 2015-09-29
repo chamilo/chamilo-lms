@@ -1,4 +1,6 @@
-<legend><h1>{{ "ManageSkills" | get_lang }}</h1></legend>
+<legend>
+    <h1>{{ "ManageSkills" | get_lang }}</h1>
+</legend>
 
 <div class="table table-responsive">
     <table class="table table-hover table-striped">

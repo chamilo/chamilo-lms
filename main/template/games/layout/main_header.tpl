@@ -59,11 +59,7 @@
                         <!-- Collect the nav links, forms, and other content for toggling -->
                         <div class="collapse navbar-collapse" id="menu-bar-top">
                             <ul class="nav navbar-nav navbar-right">
-                                {% for item in list %}
-                                    {% if item['key'] == 'homepage' or item['key'] == 'my-course' %}
-                                        <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
-                                    {% endif %}
-                                {% endfor %}
+                                <li><a href="{{ _p.web_main ~ 'auth/courses.php' }}"> {{ "AdminCourses"|get_lang }} </a></li>      
                                 {% if user_notifications is not null %}
                                     <li><a class="new-messages" href="{{ message_url }}">{{ user_notifications }}</a></li>
                                 {% endif %}
@@ -91,10 +87,11 @@
                                         {{ _u.complete_name }}<span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
-
+                                        
                                         {% for item in list %}
-                                            {% if item['key'] != 'my-space' and item['key'] != 'dashboard' and item['key'] != 'homepage' and item['key'] != 'my-course' %}
+                                            {% if item['key'] != 'my-space' and item['key'] != 'dashboard' and item['key'] != 'homepage' %}
                                                 <li><a href="{{ item['url'] }}">{{ item['title'] }}</a></li>
+                                                
                                             {% endif %}
                                         {% endfor %}
                                         {% include template ~ "/layout/menu.tpl" %}
@@ -120,7 +117,7 @@
                             <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                         </div>
                         <input type="hidden" name="action" value="search_session" >
-                        <input class="form-control" placeholder="Search" name="q" type="text">
+                        <input class="form-control" placeholder="{{ "SearchCourse"|get_lang }}" name="q" type="text">
                     </div>
                 </form>
             </div>

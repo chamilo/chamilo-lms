@@ -1176,7 +1176,7 @@ class IndexManager
                                 $params['progress'] = GamificationUtils::getSessionProgress($params['id'], $this->user_id);
                                 $params['points'] = GamificationUtils::getSessionPoints($params['id'], $this->user_id);
                             }
-
+                                                       
                             $this->tpl->assign('session', $params);
                             $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
 
@@ -1278,7 +1278,7 @@ class IndexManager
                                 ) {
                                     $sessionParams['show_simple_session_info'] = true;
                                 }
-
+                                
                                 $this->tpl->assign('session', $sessionParams);
                                 $html_sessions .= $this->tpl->fetch(
                                     "{$this->tpl->templateFolder}/user_portal/session.tpl"

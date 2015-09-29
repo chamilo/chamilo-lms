@@ -106,13 +106,22 @@ body{
   font-weight: bold;
   color: #333;
   text-align: left;
+  padding-top: 10px;
+}
+.welcome-home-top-temp{
+  width: 97%;
+  padding-left: 3%;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 #slider-sessions .btn-primary{
   background-color: #35a8c9;
   border-radius: 15px;
   border-color: #35a8c9;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 4px;
+  padding-top: 4px;
   font-size: 12px;
 }
 #slider-sessions .btn-primary:hover{
@@ -208,6 +217,8 @@ body{
 	box-sizing:border-box;
 	margin-bottom: 20px;
         min-height: 285px;
+        width: 280px;
+        margin: auto;
 }
 .my-home .items-home .image-home{
 	text-align: center;
@@ -215,7 +226,7 @@ body{
 	padding-top: 20px;
 }
 .my-home .items-home .title{
-	font-size: 18px;
+	font-size: 16px;
 	color: #35A8C9;
 	text-transform: uppercase;
 	text-align: center;
@@ -422,6 +433,10 @@ footer .media{
   margin: 0;
   list-style: none;
 }
+#about-session .sequence ul li{
+    text-indent: -10px;
+    margin-left: 20px;
+}
 #about-session .sequence ul li .fa-square{
   color: #E3C200;
   font-size: 9px;
@@ -506,6 +521,8 @@ footer .media{
 }
 #about-session .categories .cat-body{
   padding: 20px;
+  width: 100%;
+  display: inline-block;
 }
 #about-session .categories .list-inline li{
   width: 50%;
@@ -534,6 +551,7 @@ footer .media{
   border-radius: 50%;
   font-size: 26px;
   color: #ffffff;
+  padding-top: 2px;
 }
 #about-session .btn-social:hover{
   background-color: #d9b800;
@@ -559,6 +577,28 @@ footer .media{
 #about-session .teachers .teachers-dates .extras-field{
   color: #666;
   font-size: 12px;
+}
+.title-requirements{
+    color: #35A8C9;
+    font-size: 18px;
+    padding-left: 15px;
+}
+.section-sequence{
+    color: #E73858;
+    font-size: 18px;
+    padding-left: 15px;
+}
+#parents .parent .big-icon .sequence-course{
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#parents .parent .big-icon .sequence-course:hover{
+    text-overflow: inherit;
+    overflow: visible;
+    cursor: pointer;
+    white-space: normal;
 }
 #session-list .date-session, #session-list .tags-session{
     font-size: 12px;

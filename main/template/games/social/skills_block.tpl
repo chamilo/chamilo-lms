@@ -10,9 +10,6 @@
             </ul>
         {% else %}
             <p>{{ 'WithoutAchievedSkills'|get_lang }}</p>
-            <p>
-                <a href="{{ _p.web_main ~ 'social/skills_wheel.php' }}">{{ 'SkillsWheel'|get_lang }}</a>
-            </p>
         {% endif %}
 
 </div>

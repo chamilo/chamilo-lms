@@ -3838,6 +3838,7 @@ class SurveyUtil
                         WHERE iid = $insertId";
                 Database::query($sql);
             }
+            return $insertId;
         }
         return false;
     }

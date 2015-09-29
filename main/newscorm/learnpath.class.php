@@ -3282,7 +3282,7 @@ class learnpath
         if (empty($toc_list)) {
             $toc_list = $this->get_toc();
         }
-        if ($_configuration['new_scorm'] == 1) {
+        if (api_get_configuration_value('new_scorm') === 1) {
             // Temporary variables.
             $mycurrentitemid = $this->get_current_item_id();
             //$color_counter = 0;

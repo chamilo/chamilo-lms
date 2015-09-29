@@ -105,71 +105,77 @@
                                 </ul>
 
                                 <div class="options">
-                                    <p>
-                                        <a class="btn btn-info btn-block btn-sm" role="button" data-toggle="popover" id="session-{{ session.id }}-sequences">{{ 'SeeSequences'|get_lang }}</a>
-                                    </p>
-                                    <p class="buttom-subscribed">
-                                        {% if session.is_subscribed %}
-                                            {{ already_subscribed_label }}
-                                        {% elseif _u.logged == 0 %}
-                                            {{ '' }}
-                                        {% else %}
-                                            {{ session.subscribe_button }}
-                                        {% endif %}
-                                    </p>
+                                    {% if not _u.logged %}
+                                        <p>
+                                            <a class="btn btn-info btn-block btn-sm" href="{{ "#{_p.web}session/#{session.id}/about/" }}" title="{{ session.name }}">{{ 'SeeCourseInformationAndRequirements'|get_lang }}</a>
+                                        </p>
+                                    {% else %}
+                                        <p>
+                                            <a class="btn btn-info btn-block btn-sm" role="button" data-toggle="popover" id="session-{{ session.id }}-sequences">{{ 'SeeSequences'|get_lang }}</a>
+                                        </p>
+                                        <p class="buttom-subscribed">
+                                            {% if session.is_subscribed %}
+                                                {{ already_subscribed_label }}
+                                            {% else %}
+                                                {{ session.subscribe_button }}
+                                            {% endif %}
+                                        </p>
+                                    {% endif %}
                                 </div>
                             </div>
 
-                            <script>
-                                $('#session-{{ session.id }}-sequences').popover({
-                                    placement: 'bottom',
-                                    html: true,
-                                    trigger: 'click',
-                                    content: function () {
-                                        var content = '';
+                            {% if _u.logged %}
+                                <script>
+                                    $('#session-{{ session.id }}-sequences').popover({
+                                        placement: 'bottom',
+                                        html: true,
+                                        trigger: 'click',
+                                        content: function () {
+                                            var content = '';
 
-                                        {% if session.sequences %}
-                                            {% for sequence in session.sequences %}
-                                                content += '<p class="lead">{{ sequence.name }}</p>';
+                                            {% if session.sequences %}
+                                                {% for sequence in session.sequences %}
+                                                    content += '<p class="lead">{{ sequence.name }}</p>';
 
-                                                {% if sequence.requirements %}
-                                                    content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'RequiredSessions'|get_lang }}</p>';
-                                                    content += '<ul>';
+                                                    {% if sequence.requirements %}
+                                                        content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'RequiredSessions'|get_lang }}</p>';
+                                                        content += '<ul>';
 
-                                                    {% for requirement in sequence.requirements %}
-                                                        content += '<li>';
-                                                        content += '<a href="{{ _p.web ~ 'session/' ~ requirement.id ~ '/about/' }}">{{ requirement.name }}</a>';
-                                                        content += '</li>';
-                                                    {% endfor %}
+                                                        {% for requirement in sequence.requirements %}
+                                                            content += '<li>';
+                                                            content += '<a href="{{ _p.web ~ 'session/' ~ requirement.id ~ '/about/' }}">{{ requirement.name }}</a>';
+                                                            content += '</li>';
+                                                        {% endfor %}
 
-                                                    content += '</ul>';
-                                                {% endif %}
+                                                        content += '</ul>';
+                                                    {% endif %}
 
-                                                {% if sequence.dependencies %}
-                                                    content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'DependentSessions'|get_lang }}</p>';
-                                                    content += '<ul>';
+                                                    {% if sequence.dependencies %}
+                                                        content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'DependentSessions'|get_lang }}</p>';
+                                                        content += '<ul>';
 
-                                                    {% for dependency in sequence.dependencies %}
-                                                        content += '<li>';
-                                                        content += '<a href="{{ _p.web ~ 'session/' ~ dependency.id ~ '/about/' }}">{{ dependency.name }}</a>';
-                                                        content += '</li>';
-                                                    {% endfor %}
+                                                        {% for dependency in sequence.dependencies %}
+                                                            content += '<li>';
+                                                            content += '<a href="{{ _p.web ~ 'session/' ~ dependency.id ~ '/about/' }}">{{ dependency.name }}</a>';
+                                                            content += '</li>';
+                                                        {% endfor %}
 
-                                                    content += '</ul>';
-                                                {% endif %}
+                                                        content += '</ul>';
+                                                    {% endif %}
 
-                                                {% if session.sequences|length > 1 %}
-                                                    content += '<hr>';
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% else %}
-                                            content = "{{ 'NoDependencies'|get_lang }}";
-                                        {% endif %}
+                                                    {% if session.sequences|length > 1 %}
+                                                        content += '<hr>';
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                content = "{{ 'NoDependencies'|get_lang }}";
+                                            {% endif %}
 
-                                        return content;
-                                    }
-                                });
-                            </script>
+                                            return content;
+                                        }
+                                    });
+                                </script>
+                            {% endif %}
                         </div>
                     </div>
                 {% else %}

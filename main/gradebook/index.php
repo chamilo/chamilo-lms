@@ -96,13 +96,13 @@ $tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
-$cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
+$cats = Category :: load(null, null, $course_code, 0, null, $session_id, false);
 
 $first_time = null;
 
 if (empty($cats)) {
     //first time
-    $cats = Category :: load(0, null, $course_code, null, null, $session_id, false);
+    $cats = Category :: load(0, null, $course_code, 0, null, $session_id, false);
     $first_time = 1;
 }
 

@@ -27,16 +27,15 @@
  * @package chamilo.document
  */
 
-use ChamiloSession as Session;
-
 require_once '../inc/global.inc.php';
+
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 $to_user_id = null;
 $parent_id = null;
 
 $lib_path = api_get_path(LIBRARY_PATH);
-
+$actionsRight = '';
 api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
 
@@ -1648,7 +1647,7 @@ if (api_is_allowed_to_edit(null, true)) {
         api_get_path(WEB_CODE_PATH).'document/document_quota.php?'.api_get_cidreq()
     );
 }
-$actionsRight = '';
+
 if (!$is_certificate_mode) {
     /* BUILD SEARCH FORM */
     $form = new FormValidator(
@@ -1759,7 +1758,6 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 $invisibility_span_close;
 
             // Last edit date
-
             $last_edit_date = api_get_local_time($document_data['lastedit_date']);
             $display_date = date_to_str_ago($last_edit_date).
                 ' <div class="muted"><small>'.$last_edit_date."</small></div>";
@@ -1839,6 +1837,17 @@ if (!is_null($documentAndFolders)) {
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&action=downloadfolder&id='.$document_id
             );
         }
+    }
+}
+
+
+if (api_is_platform_admin()) {
+    if (api_get_configuration_value('document_manage_deleted_files')) {
+        $actionsLeft .= Display::url(
+            get_lang('Recycle'),
+            api_get_path(WEB_CODE_PATH).'document/recycle.php?'.api_get_cidreq(),
+            array('class' => 'btn btn-default')
+        );
     }
 }
 

@@ -1,7 +1,7 @@
-<h2 class="page-header">{{ 'SessionRequirements'|get_lang }}</h2>
+<p class="title-requirements">{{ 'SessionRequirements'|get_lang }}</p>
 
 {% for item in sequences %}
-    <h4>{{ item.name }}</h4>
+    <h5 class="section-sequence">{{ item.name }}</h5>
 
     <div id="parents">
         {% for session in item.requirements %}

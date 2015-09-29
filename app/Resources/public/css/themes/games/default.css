@@ -578,6 +578,28 @@ footer .media{
   color: #666;
   font-size: 12px;
 }
+.title-requirements{
+    color: #35A8C9;
+    font-size: 18px;
+    padding-left: 15px;
+}
+.section-sequence{
+    color: #E73858;
+    font-size: 18px;
+    padding-left: 15px;
+}
+#parents .parent .big-icon .sequence-course{
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#parents .parent .big-icon .sequence-course:hover{
+    text-overflow: inherit;
+    overflow: visible;
+    cursor: pointer;
+    white-space: normal;
+}
 #session-list .date-session, #session-list .tags-session{
     font-size: 12px;
     color:#666;

@@ -131,13 +131,3 @@
         });
     };
 </script>
-<script type="text/javascript" src="{{ _p.web_css_theme }}js/flip.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".card").flip({
-            axis: "y", // y or x
-            trigger: "hover", // click or hover
-         
-        });
-    });
-</script>

@@ -142,6 +142,7 @@ class CourseManager
                     }
 
                     $params['course_code'] = $course_info['code'];
+                    $params['item_id'] = $course_info['real_id'];
 
                     $courseFieldValue = new ExtraFieldValue('course');
                     $courseFieldValue->saveFieldValues($params);

@@ -54,7 +54,7 @@ if (!empty($course_user_list)) {
         }
         $course_info = api_get_course_info_by_id($result['c_id']);
         $course_image = '<img src="'.$course_info['course_image_large'].'">';
-        $dates .= '<li><a href="#'.$login.'">' . gmdate('Y - m - d', $login) . '</a></li>';
+        $dates .= '<li><a href="#'.$login.'">' . api_convert_and_format_date($login, DATE_FORMAT_SHORT) . '</a></li>';
         $issues .= '<li id ="'.$login.'">';
         $issues .= '<div class="img-course">'.$course_image.'</div>';
         

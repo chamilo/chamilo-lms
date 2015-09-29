@@ -226,3 +226,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['courses_list_session_title_link'] = 1;
 // Fix embedded videos inside lps, adding an optional popup
 //$_configuration['lp_fix_embed_content'] = false;
+// Manage deleted files marked with "DELETED" (by course and only by allowed by admin)
+//$_configuration['document_manage_deleted_files'] = false;

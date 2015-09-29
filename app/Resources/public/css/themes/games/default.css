@@ -433,6 +433,10 @@ footer .media{
   margin: 0;
   list-style: none;
 }
+#about-session .sequence ul li{
+    text-indent: -10px;
+    margin-left: 20px;
+}
 #about-session .sequence ul li .fa-square{
   color: #E3C200;
   font-size: 9px;
@@ -547,6 +551,7 @@ footer .media{
   border-radius: 50%;
   font-size: 26px;
   color: #ffffff;
+  padding-top: 2px;
 }
 #about-session .btn-social:hover{
   background-color: #d9b800;

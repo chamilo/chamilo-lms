@@ -37,7 +37,7 @@
         {% endif %}
 
 	    {#  Right column #}
-	    <div class="col-md-12 menu-column">
+	    <div class="menu-column">
         {% if plugin_menu_top %}
             <div id="plugin_menu_top">
                 {{plugin_menu_top}}
@@ -54,7 +54,7 @@
         {% endif %}
 	</div>
 
-	<div class="col-md-12">
+	<div class="page">
         {# Plugin bottom #}
 
 

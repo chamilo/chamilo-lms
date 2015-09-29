@@ -128,12 +128,12 @@
                 <div class="panel-forum">
                     <div class="open-forum">
                         <h4 class="comments-title">{{ "Comments"|get_lang }}</h4>
-                        <i class="fa fa-chevron-up"></i>
+                        <i class="fa fa-chevron-down"></i>
                     </div>
                     <div class="closed-forum" style="display: none;">
                         <h4 class="comments-title">{{ "Comments"|get_lang }}</h4>
                         
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </div>
                     <div id="body-forum">
                         <div id="forum-container">

@@ -26,11 +26,12 @@
 
 <div class="current-item">
     {% if session.show_simple_session_info %}
-
+    
     {% else %}
         <div class="row">
             <div class="col-md-4">
                 {% for field_value in session.extra_fields %}
+                
                     {% if field_value.field.variable == 'image' %}
                         <div class="thumbnail">
                             <img src="{{ _p.web_upload ~ field_value.value }}" class="media-gris">

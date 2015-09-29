@@ -420,6 +420,26 @@ ul#navigation .report a {
 .select-list-ajax{
     padding: 10px;
 }
+.resize_font{
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+}
+.resize_font .btn{
+    padding: 5px 8px;
+}
+.decrease_font .fa{
+    font-size: 9px;
+}
+.reset_font .fa{
+    font-size: 12px;
+}
+.increase_font .fa{
+    font-size: 16px;
+}
+#exercise-description.panel-default{
+    border: 1px solid #DDD;
+}
 /*****************************************************
  *              AGENDA                               *
  *****************************************************/
@@ -644,7 +664,7 @@ ul#navigation .report a {
 #smallcalendar .weekdays {
     background-color: #dcdcdc;
     text-align: center;
-    font-size: 11px;
+    font-size: 9px;
     font-weight: bold;
     border: 1px solid #fff;
     border-collapse: collapse;
@@ -652,25 +672,27 @@ ul#navigation .report a {
 #smallcalendar .days_week {
     background-color: #f5f5f5;
     text-align: center;
-    font-size: 11px;
+    font-size: 9px;
     border-collapse: collapse;
 }
 #smallcalendar .days_weekend {
     background-color: #e6e6e6;
     text-align: center;
-    font-size: 11px;
+    font-size: 9px;
     border: 1px solid #fff;
     border-collapse: collapse;
 }
 #smallcalendar .days_today {
     width: 12%;
     text-align: center;
-    font-size: 11px;
+    font-size: 9px;
     border: 1px solid #FA8500;
     border-collapse: collapse;
     background-color: #FFCA8D;
 }
-
+#smallcalendar tbody tr td{
+    padding: 5px;
+}
 /* ---------------------------------------------------
     styles for the personal agenda
 -----------------------------------------------------*/

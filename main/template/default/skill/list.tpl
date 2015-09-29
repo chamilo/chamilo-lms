@@ -1,6 +1,6 @@
-<header class="page-header">
+<legend>
     <h1>{{ "ManageSkills" | get_lang }}</h1>
-</header>
+</legend>
 
 <div class="table table-responsive">
     <table class="table table-hover table-striped">

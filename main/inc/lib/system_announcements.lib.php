@@ -590,6 +590,10 @@ class SystemAnnouncementManager
         }
 
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+        $url_condition = '';
+
+        $now = api_get_utc_datetime();
+
         if (api_is_multiple_url_enabled()) {
             $current_access_url_id = api_get_current_access_url_id();
             $url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -618,6 +622,9 @@ class SystemAnnouncementManager
 
         // Sent to active users.
         $sql .= " AND email <>'' AND active = 1 ";
+
+        // Expiration date
+        $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
 		if ((empty($teacher) or $teacher == '0') AND  (empty($student) or $student == '0')) {
 			return true;

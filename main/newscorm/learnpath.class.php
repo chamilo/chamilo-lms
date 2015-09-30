@@ -3377,11 +3377,23 @@ class learnpath
                             require_once api_get_path(LIBRARY_PATH).'link.lib.php';
                             if (is_youtube_link($file)) {
                                 $src  = get_youtube_video_id($file);
-                                $file = 'embed.php?type=youtube&src='.$src;
-                            }
-                            if (isVimeoLink($file)) {
+                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=youtube&src='.$src;
+                            } elseif (isVimeoLink($file)) {
                                 $src  = getVimeoLinkId($file);
-                                $file = 'embed.php?type=vimeo&src='.$src;
+                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=vimeo&src='.$src;
+                            } else {
+                                // If the current site is HTTPS and the link is
+                                // HTTP, browsers will refuse opening the link
+                                $urlId = api_get_current_access_url_id();
+                                $url = api_get_access_url($urlId, false);
+                                $protocol = substr($url['url'], 0, 5);
+                                if ($protocol === 'https') {
+                                    $linkProtocol = substr($file, 0, 5);
+                                    if ($linkProtocol === 'http:') {
+                                        //this is the special intervention case
+                                        $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=nonhttps&src=' .  urlencode($file);
+                                    }
+                                }
                             }
                         } else {
                             // Check how much attempts of a exercise exits in lp
@@ -4867,10 +4879,10 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::start_current_item()', 0);
         }
-        if ($this->current != 0 AND is_object($this->items[$this->current])) {
+        if ($this->current != 0 && is_object($this->items[$this->current])) {
             $type = $this->get_type();
             $item_type = $this->items[$this->current]->get_type();
-            if (($type == 2 && $item_type != 'sco') OR ($type == 3 && $item_type != 'au') OR
+            if (($type == 2 && $item_type != 'sco') || ($type == 3 && $item_type != 'au') ||
                 ($type == 1 && $item_type != TOOL_QUIZ && $item_type != TOOL_HOTPOTATOES)
             ) {
                 $this->items[$this->current]->open($allow_new_attempt);
@@ -9879,38 +9891,55 @@ EOD;
      *
      * @return string
      */
-    public function checkXFrameOptions($src)
+    public function fixBlockedLinks($src)
     {
-        if (strpos($src, api_get_path(WEB_CODE_PATH)) === false) {
-            // Check X-Frame-Options
-            $ch = curl_init();
+        $urlInfo = parse_url($src);
+        //$platformProtocol = api_get_protocol();
 
-            $options = array(
-                CURLOPT_URL => $src,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_AUTOREFERER => true,
-                CURLOPT_CONNECTTIMEOUT => 120,
-                CURLOPT_TIMEOUT => 120,
-                CURLOPT_MAXREDIRS => 10,
-            );
-            curl_setopt_array($ch, $options);
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch);
-            $headers = substr($response, 0, $httpCode['header_size']);
+        $platformProtocol = 'https';
+        if (strpos(api_get_path(WEB_CODE_PATH), 'https') === false) {
+            $platformProtocol = 'http';
+        }
 
-            $error = false;
-            if (stripos($headers, 'X-Frame-Options: DENY') > -1 ||
-                stripos($headers, 'X-Frame-Options: SAMEORIGIN')>-1
-            ) {
-                $error = true;
-            }
+        $protocolFixApplied = false;
+        if ($platformProtocol != $urlInfo['scheme']) {
+            $_SESSION['x_frame_source'] = $src;
+            $src = 'blank.php?error=x_frames_options';
+            $protocolFixApplied = true;
+        }
 
-            if ($error) {
-                $_SESSION['x_frame_source'] = $src;
-                $src = 'blank.php?error=x_frames_options';
+        if ($protocolFixApplied == false) {
+            if (strpos($src, api_get_path(WEB_CODE_PATH)) === false) {
+                // Check X-Frame-Options
+                $ch = curl_init();
+
+                $options = array(
+                    CURLOPT_URL => $src,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_HEADER => true,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_AUTOREFERER => true,
+                    CURLOPT_CONNECTTIMEOUT => 120,
+                    CURLOPT_TIMEOUT => 120,
+                    CURLOPT_MAXREDIRS => 10,
+                );
+                curl_setopt_array($ch, $options);
+                $response = curl_exec($ch);
+                $httpCode = curl_getinfo($ch);
+                $headers = substr($response, 0, $httpCode['header_size']);
+
+                $error = false;
+                if (stripos($headers, 'X-Frame-Options: DENY') > -1 ||
+                    stripos($headers, 'X-Frame-Options: SAMEORIGIN') > -1
+                ) {
+                    $error = true;
+                }
+
+                if ($error) {
+                    $_SESSION['x_frame_source'] = $src;
+                    $src = 'blank.php?error=x_frames_options';
+                }
             }
         }
 

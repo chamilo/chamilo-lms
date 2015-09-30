@@ -638,6 +638,11 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
         Display :: display_warning_message(get_lang('SessionIsReadOnly'));
     }
 } else {
+    $htmlHeadXtra[] = "
+    <style>
+    body { background: none;}
+    </style>
+    ";
     Display::display_reduced_header();
     echo '<div style="height:10px">&nbsp;</div>';
 }

@@ -819,7 +819,8 @@ if (!empty($exercise_list)) {
                                 $attempt_text = get_lang('NotAttempted');
                             }
                         } else {
-                            $attempt_text = get_lang('CantShowResults');
+                            //$attempt_text = get_lang('CantShowResults');
+                            $attempt_text = '-';
                         }
                     } else {
                         // Display visibility message for test in exercise page
@@ -838,7 +839,8 @@ if (!empty($exercise_list)) {
                             $attempt_text = get_lang('NotAttempted');
                         }
                     } else {
-                        $attempt_text = get_lang('CantShowResults');
+                        //$attempt_text = get_lang('CantShowResults');
+                        $attempt_text = '-';
                     }
                 }
 

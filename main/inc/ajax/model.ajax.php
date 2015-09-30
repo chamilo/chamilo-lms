@@ -621,6 +621,7 @@ switch ($action) {
                 );
             }
         }
+
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $whereCondition);
         break;
     case 'get_work_user_list_others':
@@ -1384,18 +1385,20 @@ if (in_array($action, $allowed_actions)) {
         foreach ($result as $row) {
             // if results tab give not id, set id to $i otherwise id="null" for all <tr> of the jqgrid - ref #4235
             if (!isset($row['id']) || isset($row['id']) && $row['id'] == '') {
-                $response->rows[$i]['id']= $i;
+                $response->rows[$i]['id'] = $i;
             } else {
-                $response->rows[$i]['id']= $row['id'];
+                $response->rows[$i]['id'] = $row['id'];
             }
             $array = array();
             foreach ($columns as $col) {
-                $array[] = isset($row[$col]) ? $row[$col] : null;
+                $array[] = isset($row[$col]) ? Security::remove_XSS($row[$col]) : null;
             }
-            $response->rows[$i]['cell']=$array;
+            $response->rows[$i]['cell'] = $array;
             $i++;
         }
     }
+
+    header('Content-Type: application/json;charset=utf-8');
     echo json_encode($response);
 }
 exit;

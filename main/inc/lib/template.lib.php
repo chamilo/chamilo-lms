@@ -565,14 +565,17 @@ class Template
         );
 
         // add chat.js for View by Session, we need the $.cookie library included in it
-        // @todo : replace $_configuration with setting parameter
-        if (api_is_global_chat_enabled() || (isset($_configuration['my_courses_view_by_session']) && $_configuration['my_courses_view_by_session'])) {
-            //Do not include the global chat in LP
-            if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
+        $viewBySession = api_get_configuration_value('my_courses_view_by_session');
+
+        if (api_is_global_chat_enabled() || $viewBySession) {
+            // Do not include the global chat in LP
+            if ($this->show_learnpath == false &&
+                $this->show_footer == true &&
+                $this->hide_global_chat == false
+            ) {
                 $js_files[] = 'chat/js/chat.js';
             }
         }
-
 
         if (api_get_setting('accessibility_font_resize') == 'true') {
             $js_files[] = 'fontresize.js';

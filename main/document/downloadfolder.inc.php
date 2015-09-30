@@ -102,7 +102,14 @@ function fixDocumentNameCallback($p_event, &$p_header)
         $documentNameFixed
     );
 
-    $documentNameFixed = str_replace($remove_dir, '/', $documentNameFixed);
+    if ($remove_dir != '/') {
+        $documentNameFixed = str_replace($remove_dir, '/', $documentNameFixed);
+        if (substr($documentNameFixed, 0, 1) == '/') {
+            $documentNameFixed = substr($documentNameFixed, 1, api_strlen($documentNameFixed));
+        }
+    } else {
+        $documentNameFixed = ltrim($documentNameFixed, '/');
+    }
     $p_header['stored_filename'] = $documentNameFixed;
 
     return 1;

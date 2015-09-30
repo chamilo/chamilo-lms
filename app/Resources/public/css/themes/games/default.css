@@ -1177,10 +1177,27 @@ img.g1-effect-grayscale:hover {
 	.red-social{
 		text-align: left;
 	}
+        footer .media{
+            width: 40px;
+        }
+        footer .media img{
+            width: 30px;
+        }
+        .current-block .col-sm-4{
+            width: 100%;
+        }
+        .current-block .card{
+                width: 350px;
+                height: 200px;
+        }
+        .my-home .items-home{
+            width: 225px;
+            min-height: 325px;
+        }
 }
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
-
+    
 }
 @media (min-width : 480px) and (max-width: 767px) {
   .courses-history .trophy{
@@ -1219,6 +1236,7 @@ img.g1-effect-grayscale:hover {
 	.red-social{
 		text-align: center;
 	}
+        
   .carousel-inner .item img{
     width: 100%;
     /*display: inline;*/

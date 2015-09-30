@@ -1843,7 +1843,8 @@ class SocialManager extends UserManager
             'post',
             api_get_path(WEB_CODE_PATH).'social/profile.php',
             null,
-            array('enctype' => 'multipart/form-data')
+            array('enctype' => 'multipart/form-data') ,
+            FormValidator::LAYOUT_HORIZONTAL    
         );
 
         $form->addTextarea(
@@ -1851,12 +1852,12 @@ class SocialManager extends UserManager
             null,
             [
                 'placeholder' => get_lang('SocialWallWhatAreYouThinkingAbout'),
-                'style' => 'width : 100%'
+                'cols-size' => [1, 10, 1]
             ]
         );
         $form->addHtml('<div class="form-group "><div class="url_preview col-md-9 panel-body"></div></div>');
         $form->addHidden('url_content', '');
-        $form->addButtonSend(get_lang('Post'));
+        $form->addButtonSend(get_lang('Post'), null, false, ['cols-size' => [1, 10, 1]]);
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 
         return $html;

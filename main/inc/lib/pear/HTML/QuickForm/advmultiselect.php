@@ -309,7 +309,9 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->_removeAttr('class', $this->_attributes);
         }*/
 
-        $this->_tableAttributes = $this->_getAttrString($attr);
+        //$this->_tableAttributes = $this->_getAttrString($attr);
+        $this->removeAttribute('class');
+        $this->setAttribute('class','form-control');
 
         // set default add button attributes
         $this->setButtonAttributes('add');

@@ -5893,7 +5893,7 @@ $CourseSettingsRegisterDirectLink = "Si su curso es público o abierto, puede us
 $DirectLink = "Enlace directo";
 $here = "aqui";
 $GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Adelante, pulsa %s para acceder al catálogo de cursos e inscribirte en un curso que te interese. Una vez inscrito/a, el curso aparecerá en esta pantalla en lugar de este mensaje.";
-$HelloXAsYouCanSeeYourCourseListIsEmpty = "Hola %s, te damos la bienvenida,<br />
+$HelloXAsYouCanSeeYourCourseListIsEmpty = "<h3>Hola %s, te damos la bienvenida,</h3>
 Como puedes ver, tu lista de cursos todavía está vacía. Esto es porque todavía no estás inscrito/a en ningún curso.";
 $UnsubscribeUsersAlreadyAddedInCourse = "Desinscribir todos los alumnos ya inscritos";
 $ImportUsers = "Importar usuarios";

@@ -18,8 +18,8 @@ api_protect_admin_script(true);
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 
-$form = new FormValidator('archive_cleanup_form');
-$form->addButtonSend( get_lang('ArchiveDirCleanupProceedButton'));
+$form = new FormValidator('archive_cleanup_form', 'post', '', '', array(), FormValidator::LAYOUT_BOX);
+$form->addButtonSend(get_lang('ArchiveDirCleanupProceedButton'));
 
 $message = null;
 

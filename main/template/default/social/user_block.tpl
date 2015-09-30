@@ -12,23 +12,25 @@
                     <div class="panel-body">
                         
                         {{ social_avatar_block }}
-                        {{ user.complete_name }}
                         
-                        <ul class="list-unstyled user-details">
-                            <li>
+                        <ul class="list-user-data">
+                            <li class="item name">
+                                {{ user.complete_name }}
+                            </li>
+                            <li class="item">
                                 <a href="{{ _p.web }}main/messages/new_message.php">
                                 <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
                                 {{ user.email}}
                                 </a>
                             </li>
-                            <li>
+                            <li class="item">
                                 <a href="{{ vcard_user_link }}">
-                                <img src="{{ "vcard.png" | icon(22) }}" alt="{{ "UserInfo" | get_lang }}" width="22" height="22">
+                                <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "UserInfo" | get_lang }}" width="16" height="16">
                                 {{ "UserInfo" | get_lang }}
                                 </a>
                             </li>
                         {% if chat_enabled == 1 %}
-                            <li>
+                            <li class="item">
                                 {% if user.id == _u.id %}
                                     <img src="{{ "online.png" | icon }}" alt="{{ "Online" | get_lang }}">
                                     {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
@@ -43,15 +45,20 @@
                                 {% endif %}
                             </li>
                         {% endif %}
-                        </ul>
+                        
                         {% if not profile_edition_link is empty %}
-                        <a class="btn btn-default btn-sm" href="{{ profile_edition_link }}">
+                        <li class="item">
+                            <a class="btn btn-primary btn-sm btn-block" href="{{ profile_edition_link }}">
                             <i class="fa fa-edit"></i>{{ "EditProfile" | get_lang }}
-                        </a>
+                            </a>
+                        </li>
                         {% endif %}
+                        
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+                        
 

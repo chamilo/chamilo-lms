@@ -4226,29 +4226,23 @@ i.size-32.icon-new-work{
 }
 /* Social Profile */
 
-.social-avatar{
+.social-profile{
   text-align: center;
 }
-.social-avatar .user-details {
-    font-size: 12px;
-}
-.social-avatar .img-profile{
-  margin-bottom: 5px;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-top: 20px;
-}
-.social-avatar .social-profile{
-  text-align: center;
-  padding-top: 20px;
-}
-.social-avatar .social-profile .img-responsive{
+.social-profile .expand-image {
   display: inline-block;
-  margin: auto;
 }
-.social-avatar .edit-profile{
-  margin-top: 15px;
-  margin-bottom: 15px;
+.list-user-data{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.list-user-data .item{
+    font-size: 12px;
+    padding-top: 5px;
+}
+.list-user-data .item.name{
+    text-align: center;
 }
 .social-search form{
   margin-bottom: 0px;

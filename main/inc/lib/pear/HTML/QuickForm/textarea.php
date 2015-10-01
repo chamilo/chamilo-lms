@@ -228,21 +228,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     /**
      * @return null
      */
-    public function getInputSize()
-    {
-        return $this->inputSize;
-    }
-
-    /**
-     * @param null $inputSize
-     */
-    public function setInputSize($inputSize)
-    {
-        $this->inputSize = $inputSize;
-    }
-    /**
-     * @return null
-     */
     public function getColumnsSize()
     {
         return $this->columnsSize;
@@ -265,28 +250,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         $size = $this->getColumnsSize();
         $this->removeAttribute('cols-size');
-
-        if (empty($size)) {
-            $sizeTemp = $this->getInputSize();
-            if (empty($size)) {
-                $sizeTemp = 8;
-            }
-            $size = array(2, $sizeTemp, 2);
-        } else {
-            if (is_array($size)) {
-                if (count($size) != 3) {
-                    $sizeTemp = $this->getInputSize();
-                    if (empty($size)) {
-                        $sizeTemp = 8;
-                    }
-                    $size = array(2, $sizeTemp, 2);
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = array(2, intval($size), 2);
-            }
-        }
-        
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:

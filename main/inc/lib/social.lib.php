@@ -726,7 +726,7 @@ class SocialManager extends UserManager
         )) {
 
             
-            $links .= '<ul class="nav nav-pills nav-stacked">';
+            $links = '<ul class="nav nav-pills nav-stacked">';
             
             $active = $show == 'home' ? 'active' : null;
             $links .= '
@@ -814,7 +814,7 @@ class SocialManager extends UserManager
 
         if ($show == 'shared_profile') {
             
-            $links .=  '<ul class="nav nav-pills nav-stacked">';
+            $links =  '<ul class="nav nav-pills nav-stacked">';
 
             // My own profile
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {

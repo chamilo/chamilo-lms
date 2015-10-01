@@ -165,11 +165,7 @@ class Login
         );
 
         if ($result == 1) {
-            if (CustomPages::enabled()) {
-                return get_lang('YourPasswordHasBeenEmailed');
-            } else {
-                return Display::return_message(get_lang('YourPasswordHasBeenEmailed'));
-            }
+            return get_lang('YourPasswordHasBeenEmailed');
         } else {
             $admin_email = Display:: encrypted_mailto_link(
                 api_get_setting('emailAdministrator'),
@@ -180,18 +176,14 @@ class Login
             );
             $message = sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
 
-            if (CustomPages::enabled()) {
-                return $message;
-            } else {
-                return Display::return_message($message, 'error');
-            }
+            return $message;
         }
     }
 
     /**
      * @param User $user
      */
-    public function sendResetEmail(User $user)
+    public static function sendResetEmail(User $user)
     {
         //if (null === $user->getConfirmationToken()) {
             $uniqueId = api_get_unique_id();
@@ -861,7 +853,7 @@ class Login
 		$result = Database::query($query);
         $num_rows = Database::num_rows($result);
         if ($result && $num_rows > 0) {
-            return Database::store_result($result);
+            return Database::fetch_assoc($result);
         }
         return false;
     }

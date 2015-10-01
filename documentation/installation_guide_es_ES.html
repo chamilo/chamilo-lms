@@ -795,13 +795,22 @@ por ejemplo. El efecto debería ser inmediato.
 <pre>
 server {
   listen 80;
-  server_name my.chamilo10.net;
-  rewrite_log off;
-  access_log /var/log/nginx/my.chamilo10.net-access.log;
-  error_log /var/log/nginx/my.chamilo10.net-error.log debug;
-  root /var/www/my.chamilo10.net/www;
+  server_name my.chamilo110.net;
+  rewrite_log on;
+  access_log /var/log/nginx/my.chamilo110.net-access.log;
+  error_log /var/log/nginx/my.chamilo110.net-error.log debug;
+  root /var/www/chamilo110x;
   index index.php;
   port_in_redirect off;
+
+  location @rewrite{
+    rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/upload/(.*)$ /app/courses/$1/upload/$2 last;
+    try_files $uri /index.php;
+    break;
+  }
 
   location / {
     #client_max_body_size 20M;
@@ -822,32 +831,46 @@ server {
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     fastcgi_param HTTPS off;
-    # Prevents URIs that include the front controller. This will 404:
-    # http://domain.tld/app.php/some-path
-    # Remove the internal directive to allow URIs like this
-    #internal;
   }
 
   location ~ \.php$ {
     client_max_body_size 20M;
     try_files $uri /index.php$is_args$args;
-
     rewrite ^/certificates/$ /certificates/index.php?id=%1  last;
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
-    rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
-    rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
-    rewrite ^/courses/([^/]+)/upload/(.*)$ /app/courses/$1/upload/$2 last;
-    rewrite ^/courses/([^/]+)/course-pic85x85.png$ /app/courses/$1/course-pic85x85.png last;
-    rewrite ^/courses/([^/]+)/course-pic.png$ /app/courses/$1/course-pic.png last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
-
     fastcgi_pass unix:/var/run/php5-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     fastcgi_param HTTPS off;
+  }
+
+  # Serve static files directly
+  location ~* \.(png|jpe?g|gif|ico)$ {
+    expires 1y;
+    access_log off;
+    #log_not_found off;
+    rewrite ^/courses/([^/]+)/course-pic85x85.png$ /app/courses/$1/course-pic85x85.png last;
+    rewrite ^/courses/([^/]+)/course-pic.png$ /app/courses/$1/course-pic.png last;
+    try_files $uri @rewrite;
+  }
+  location ~* \.(mp3)$ {
+    expires 1y;
+    access_log off;
+    #log_not_found off;
+    gzip off;
+  }
+  location ~* \.(css)$ {
+    expires 1d;
+    #access_log off;
+    #log_not_found off;
+  }
+  location ~* \.(js)$ {
+    expires 1h;
+    access_log off;
+    #log_not_found off;
   }
   location ~ ~\.(ht|git){
     deny all;
@@ -856,6 +879,7 @@ server {
     deny all;
   }
 }
+
 </pre>
 
 Apache2: La configuración para nuestro sitio de ejemplo my.chamilo10.net sería la siguiente:

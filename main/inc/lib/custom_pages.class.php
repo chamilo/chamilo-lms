@@ -83,4 +83,16 @@ class CustomPages
         return $images;
     }
 
+    /**
+     * Check if exists the file for custom page
+     * @param string $pageName The name of custom page
+     * @return boolean
+     */
+    public static function exists($pageName)
+    {
+        $fileName = self::path("$pageName.php");
+
+        return file_exists($fileName);
+    }
+
 }

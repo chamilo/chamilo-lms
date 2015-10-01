@@ -5895,7 +5895,7 @@ $CourseSettingsRegisterDirectLink = "If your course is public or open, you can u
 $DirectLink = "Direct link";
 $here = "here";
 $GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "<p>Go ahead and browse our course catalog %s to register to any course you like. Once registered, you will see the course appear right %s, instead of this message.</p>";
-$HelloXAsYouCanSeeYourCourseListIsEmpty = "<h3>Hello %s and welcome,</h3>
+$HelloXAsYouCanSeeYourCourseListIsEmpty = "<p>Hello <strong>%s</strong> and welcome,</p>
 <p>As you can see, your courses list is still empty. That's because you are not registered to any course yet! </p>";
 $UnsubscribeUsersAlreadyAddedInCourse = "Unsubscribe users already added";
 $ImportUsers = "Import users";

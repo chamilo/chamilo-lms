@@ -6135,7 +6135,7 @@ $CourseSettingsRegisterDirectLink = "Si el seu curs és públic o obert, podeu u
 $DirectLink = "Enllaç directe";
 $here = "aquí";
 $GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Endavant, aneu al catàleg de cursos %s per inscriure's a un curs que li interessi. Un cop inscrit/a, el curs apareixerà %s, en lloc d'aquest missatge.";
-$HelloXAsYouCanSeeYourCourseListIsEmpty = "<h3>Hola %s, li donem la benvinguda</h3>
+$HelloXAsYouCanSeeYourCourseListIsEmpty = "Hola %s, li donem la benvinguda,
 Com pot veure, la seva llista de cursos encara està buida. Això és perquè encara no esteu inscrits a cap curs!";
 $UnsubscribeUsersAlreadyAddedInCourse = "Dóna de baixa els usuaris ja inscrits";
 $ImportUsers = "Importa usuaris";

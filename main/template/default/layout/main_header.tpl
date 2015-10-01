@@ -54,6 +54,7 @@
         {% endif %}
     {% endblock %}
         <header>
+            <div class="extra-header">{{ header_extra_content }}</div>
             <section id="main" class="container">
                 {% if plugin_header_main %}
                 <div class="row">

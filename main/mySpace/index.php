@@ -203,6 +203,7 @@ $numberTeachers = 0;
 $countHumanResourcesUsers = 0;
 $daysAgo = 7;
 $studentIds = array();
+$avg_courses_per_student = null;
 if (!empty($students)) {
     // Students
     $nb_students = count($students);

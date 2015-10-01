@@ -1440,7 +1440,9 @@ function generate_settings_form($settings, $settings_by_access_list)
     if (!empty($settings)) {
         $form->setDefaults($default_values);
     }
+    $form->addHtml('<div class="bottom_actions">');
     $form->addButtonSave(get_lang('SaveSettings'));
+    $form->addHtml('</div>');
     return $form;
 }
 

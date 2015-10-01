@@ -294,7 +294,7 @@ $socialAutoExtendLink = Display::url(
 // Added a Jquery Function to return the Preview of OpenGraph URL Content
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
-    $("label").remove();
+    
     $("[name=\'social_wall_new_msg_main\']").on("paste", function(e) {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
@@ -307,6 +307,7 @@ $(document).ready(function() {
             success: function(response) {
                 $(".url_preview").html(response);
                 $("[name=\'url_content\']").val(response);
+                $(".url_preview img").addCSS("img-responsive");
             }
         });
     });

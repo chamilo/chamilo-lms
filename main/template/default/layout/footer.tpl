@@ -53,11 +53,11 @@
                 &nbsp;
             </div><!-- end of #footer_right -->
         </div><!-- end of #row -->
+        <div class="extra-footer">
+            {{ footer_extra_content }}
+        </div>
     </div><!-- end of #container -->
 </footer>
-
-{# Extra footer configured in admin section, only shown to non-admins #}
-{{ footer_extra_content }}
 
 <div class="modal fade" id="expand-image-modal" tabindex="-1" role="dialog" aria-labelledby="expand-image-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-lg">

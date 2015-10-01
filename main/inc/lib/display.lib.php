@@ -2221,7 +2221,6 @@ class Display
     }
     public static function panelCollapse($title, $content, $id = null, $params = null, $idAccordion = null, $idCollpase = null)
     {   
-        $params['open'] = 'in';
         if (!empty($idAccordion)) {
             $html = null;
             $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;
@@ -2229,7 +2228,7 @@ class Display
             $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">' . PHP_EOL;
             $html .= '<a role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollpase.'" aria-expanded="true" aria-controls="'.$idCollpase.'">'.$title.'</a>' . PHP_EOL;
             $html .= '</h4></div>' . PHP_EOL;
-            $html .= '<div id="'.$idCollpase.'" class="panel-collapse collapse ' . $params['open'] . '" role="tabpanel">' . PHP_EOL;
+            $html .= '<div id="'.$idCollpase.'" class="panel-collapse collapse in" role="tabpanel">' . PHP_EOL;
             $html .= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
             $html .= '</div></div></div>' . PHP_EOL;
 

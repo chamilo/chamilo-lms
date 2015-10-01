@@ -736,7 +736,7 @@ if ($time_control) {
 }
 
 if (!empty($objExercise->description)){
-    echo Display::panelCollapse(get_lang('ExerciseDescriptionLabel'), $objExercise->description, 'exercise-description', $params['open'] = '', 'description', 'exercise-collapse');
+    echo Display::panelCollapse(get_lang('ExerciseDescriptionLabel'), $objExercise->description, 'exercise-description', null, 'description', 'exercise-collapse');
 }
 
 if ($origin != 'learnpath') {

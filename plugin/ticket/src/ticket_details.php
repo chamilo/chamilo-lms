@@ -312,7 +312,7 @@ if (!isset($_POST['compose'])) {
 
     $admins = UserManager::get_user_list_like(array("status" => "1"), array("username"), true);
     foreach ($admins as $admin) {
-        $select_admins.= "<option value = '" . $admin['user_id'] . "' " . (($user_id == $admin['user_id']) ? ("selected='selected'") : "") . ">" . $admin['lastname'] . " ," . $admin['firstname'] . "</option>";
+        $select_admins.= "<option value = '" . $admin['user_id'] . "' " . (($user_id == $admin['user_id']) ? ("selected='selected'") : "") . ">" . $admin['lastname'] . ", " . $admin['firstname'] . "</option>";
     }
     $select_admins .= "</select>";
     echo '<div id="dialog-form" title="' . $plugin->get_lang('AssignTicket') . '" >';

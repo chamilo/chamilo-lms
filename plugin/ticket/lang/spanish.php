@@ -84,8 +84,8 @@ $strings['Untill'] = "Hasta";
 $strings['TicketWasThisAnswerSatisfying'] = "¿Fué la respuesta al Ticket satisfactoria?";
 $strings['TicketDetail'] = "Detalle del Ticket";
 $strings['AreYouSure'] = "¿Está seguro?";
-
 $strings['allow_student_add'] = "Permitir al studiante generar Tickets";
 $strings['PleaseBeforeRegisterATicketSelectOneUser'] = "Por favor, antes de registrar un Ticket seleccione un usuario.";
 $strings['RequestConfirmation'] = "Solicitar confirmación";
-
+$strings['TicketUpdated'] = "Ticket actualizado";
+$strings['TicketClosed'] = "Ticket cerrado";

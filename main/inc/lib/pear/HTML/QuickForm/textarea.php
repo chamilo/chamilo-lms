@@ -250,6 +250,10 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         $size = $this->getColumnsSize();
         $this->removeAttribute('cols-size');
+        
+        if (empty($size)) {
+            $size = [2, 8, 2];
+        }
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:

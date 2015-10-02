@@ -150,7 +150,7 @@ class ImportCsv
                 'subscribe-static',
                 'unsubscribe-static'
             );
-
+            $teacherBackup = array();
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import $section --");
 
@@ -162,7 +162,11 @@ class ImportCsv
 
                         echo 'File: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
-                        $this->$method($file, true);
+                        if ($method == 'importSessions') {
+                            $this->$method($file, true, $teacherBackup);
+                        } else {
+                            $this->$method($file, true);
+                        }
                     }
                 }
             }
@@ -1237,8 +1241,9 @@ class ImportCsv
     /**
      * @param string $file
      * @param bool   $moveFile
+     * @param array $teacherBackup
      */
-    private function importSessions($file, $moveFile = true)
+    private function importSessions($file, $moveFile = true, &$teacherBackup = array())
     {
         $avoid =  null;
         if (isset($this->conditions['importSessions']) &&
@@ -1262,7 +1267,8 @@ class ImportCsv
             true, // sessionWithCoursesModifier
             true, //$addOriginalCourseTeachersAsCourseSessionCoaches
             true, //$removeAllTeachersFromCourse
-            1 // $showDescription
+            1, // $showDescription,
+            $teacherBackup
         );
 
         if (!empty($result['error_message'])) {

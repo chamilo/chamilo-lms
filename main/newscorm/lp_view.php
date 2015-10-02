@@ -444,7 +444,7 @@ if ($_SESSION['oLP']->current == $_SESSION['oLP']->get_last()) {
             $gradebookLinks[0]->get_ref_id() == $_SESSION['oLP']->lp_id
         ) {
             $gradebookMinScore = $categories[0]->get_certificate_min_score();
-            $userScore = $gradebookLinks[0]->calc_score($user_id, 'average');
+            $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
 
             if ($userScore[0] >= $gradebookMinScore) {
                 Category::register_user_certificate($categories[0]->get_id(), $user_id);

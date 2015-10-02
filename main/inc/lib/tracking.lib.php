@@ -1102,6 +1102,7 @@ class Tracking
      */
     public static function getStats($userId)
     {
+        $courses = array();
         $assignedCourses = array();
         if (api_is_drh() && api_drh_can_access_all_session_content()) {
             $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -1172,8 +1173,7 @@ class Tracking
                 null,
                 null,
                 null
-            );
-            $courses = array();
+            );  
             foreach ($platformCourses as $course) {
                 $courses[$course['code']] = $course['code'];
             }

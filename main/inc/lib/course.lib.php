@@ -5147,7 +5147,7 @@ class CourseManager
 
             // Delete only teacher relations that doesn't match the selected teachers
             $cond = null;
-            if (count($teachers)>0) {
+            if (count($teachers) > 0) {
                 foreach ($teachers as $key) {
                     $key = Database::escape_string($key);
                     $cond.= " AND user_id <> '".$key."'";
@@ -5155,7 +5155,11 @@ class CourseManager
             }
 
             $sql = 'DELETE FROM '.$course_user_table.'
-                    WHERE course_code="'.Database::escape_string($course_code).'" AND relation_type = 0  AND status="1"'.$cond;
+                    WHERE
+                        course_code = "'.Database::escape_string($course_code).'" AND
+                        relation_type = 0  AND
+                        status = "1"
+                    '.$cond;
             Database::query($sql);
         }
 
@@ -5164,10 +5168,13 @@ class CourseManager
                 $userId = intval($userId);
                 // We check if the teacher is already subscribed in this course
                 $sql = 'SELECT 1 FROM '.$course_user_table.'
-                        HERE user_id = "'.$userId.'" AND course_code = "'.$course_code.'" ';
+                        WHERE
+                            user_id = "'.$userId.'" AND
+                            course_code = "'.$course_code.'" ';
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
-                    $sql = 'UPDATE '.$course_user_table.' SET status = "1"
+                    $sql = 'UPDATE '.$course_user_table.'
+                            SET status = "1"
                             WHERE course_code = "'.$course_code.'" AND user_id = "'.$userId.'"  ';
                 } else {
                     $sql = "INSERT INTO ".$course_user_table . " SET

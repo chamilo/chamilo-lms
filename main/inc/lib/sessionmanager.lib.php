@@ -4273,6 +4273,17 @@ class SessionManager
                                 if (!empty($teacherList)) {
                                     foreach ($teacherList as $teacher) {
                                         if ($teacherToAdd != $teacher['user_id']) {
+
+                                            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                                                    WHERE
+                                                        user_id = ".$teacher['user_id']." AND
+                                                        course_code = '".$course_code."'
+                                                    ";
+
+                                            $result = Database::query($sql);
+                                            $userCourseData = Database::fetch_array($result, 'ASSOC');
+                                            $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+
                                             CourseManager::unsubscribe_user(
                                                 $teacher['user_id'],
                                                 $course_code
@@ -4283,10 +4294,21 @@ class SessionManager
 
                                 if (!empty($teacherToAdd)) {
                                     SessionManager::updateCoaches($session_id, $course_code, array($teacherToAdd), true);
+
+                                    $userCourseCategory = '';
+                                    if (isset($teacherBackupList[$teacherToAdd]) &&
+                                        isset($teacherBackupList[$teacherToAdd][$course_code])
+                                    ) {
+                                        $courseUserData = $teacherBackupList[$teacherToAdd][$course_code];
+                                        $userCourseCategory = $courseUserData['user_course_cat'];
+                                    }
+
                                     CourseManager::subscribe_user(
                                         $teacherToAdd,
                                         $course_code,
-                                        COURSEMANAGER
+                                        COURSEMANAGER,
+                                        0,
+                                        $userCourseCategory
                                     );
                                 }
                             }

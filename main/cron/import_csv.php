@@ -95,6 +95,7 @@ class ImportCsv
         $files = scandir($path);
         $fileToProcess = array();
         $fileToProcessStatic = array();
+        $teacherBackup = array();
 
         if (!empty($files)) {
             foreach ($files as $file) {
@@ -150,7 +151,6 @@ class ImportCsv
                 'subscribe-static',
                 'unsubscribe-static'
             );
-            $teacherBackup = array();
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import $section --");
 
@@ -1376,7 +1376,22 @@ class ImportCsv
                     continue;
                 }
 
-                CourseManager::unsubscribe_user($userId, $courseInfo['code'], $chamiloSessionId);
+                $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                        WHERE
+                            user_id = ".$userId." AND
+                            course_code = '".$courseInfo['code']."'
+                        ";
+
+                global $teacherBackup;
+                $result = Database::query($sql);
+                $userCourseData = Database::fetch_array($result, 'ASSOC');
+                $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
+
+                CourseManager::unsubscribe_user(
+                    $userId,
+                    $courseInfo['code'],
+                    $chamiloSessionId
+                );
                 $this->logger->addError(
                     "User '$chamiloUserName' was removed from session: #$chamiloSessionId, Course: ".$courseInfo['code']
                 );

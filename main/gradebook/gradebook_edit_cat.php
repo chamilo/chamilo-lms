@@ -58,6 +58,8 @@ if ($form->validate()) {
 
     if (isset($values['generate_certificates'])) {
         $cat->setGenerateCertificates($values['generate_certificates']);
+    } else {
+        $cat->setGenerateCertificates(false);
     }
 
     if ($values['hid_parent_id'] == 0 ) {

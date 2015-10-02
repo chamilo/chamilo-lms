@@ -296,10 +296,14 @@ class TicketManager
      * @return bool
      */
     public static function insert_message(
-        $ticket_id, $subject, $content, $file_attachments,
-        $user_id, $status = 'NOL', $sendConfirmation = false
-    )
-    {
+        $ticket_id,
+        $subject,
+        $content,
+        $file_attachments,
+        $user_id,
+        $status = 'NOL',
+        $sendConfirmation = false
+    ) {
         global $data_files, $plugin;
         $ticket_id = intval($ticket_id);
         $subject = Database::escape_string($subject);
@@ -368,6 +372,13 @@ class TicketManager
                 WHERE ticket_id ='$ticket_id' AND message_id = '$message_id'";
         $result = Database::query($sql_message_att_id);
         $obj = Database::fetch_object($result);
+
+        self::sendNotification(
+            $ticket_id,
+            $user_id,
+            $plugin->get_lang('TicketUpdated'),
+            $plugin->get_lang('TicketUpdated')
+        );
 
         $message_attch_id = $obj->total_attach + 1;
         if (is_array($file_attachments)) {

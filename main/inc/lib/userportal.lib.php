@@ -1121,7 +1121,9 @@ class IndexManager
                                         $this->load_directories_preview
                                     );
                                     if (isset($c[1])) {
-                                        $html_courses_session[] = $c['1'];
+                                        $course_session = $c[1];
+                                        $course_session['skill'] = $c['skill'];
+                                        $html_courses_session[] = $course_session;
                                     }
                                 }
                                 $count_courses_session++;

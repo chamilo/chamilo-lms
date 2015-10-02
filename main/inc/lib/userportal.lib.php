@@ -1181,7 +1181,7 @@ class IndexManager
                             $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
 
                             $sessions_with_no_category .= $this->tpl->fetch(
-                                "{$this->tpl->templateFolder}/user_portal/session.tpl"
+                                $this->tpl->get_template('/user_portal/session.tpl')
                             );
 
                             $sessionCount++;
@@ -1281,7 +1281,7 @@ class IndexManager
 
                                 $this->tpl->assign('session', $sessionParams);
                                 $html_sessions .= $this->tpl->fetch(
-                                    "{$this->tpl->templateFolder}/user_portal/session.tpl"
+                                    $this->tpl->get_template('user_portal/session.tpl')
                                 );
 
                                 $sessionCount++;

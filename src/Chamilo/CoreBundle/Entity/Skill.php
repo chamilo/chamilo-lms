@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Skill
  *
  * @ORM\Table(name="skill")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SkillRepository")
  */
 class Skill
 {

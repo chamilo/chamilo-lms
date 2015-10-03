@@ -7516,4 +7516,17 @@ $ConnectionClosed = "Connexion terminée";
 $LocalConnectionFailed = "Échec de la connexion locale";
 $RemoteConnectionFailed = "Échec de la connexion distante";
 $ViewStudents = "Voir apprenants";
+$Into = "dans";
+$Sequence = "Séquence";
+$Invitee = "Invité";
+$DateRange = "Rang de dates";
+$EditIcon = "Éditer icône";
+$CustomIcon = "Icône personalisée";
+$CurrentIcon = "Icône actuelle";
+$ConvertFormats = "Convertir le format";
+$AreYouSureToDeleteX = "Êtes-vous certains de vouloir supprimer %s?";
+$AttachmentList = "Liste de pièces jointes";
+$SeeCourseInformationAndRequirements = "Voir pré-requis";
+$DownloadAll = "Tout télécharger";
+$DeletedDocuments = "Supprimer les documents";
 ?>

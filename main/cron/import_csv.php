@@ -191,7 +191,7 @@ class ImportCsv
                         $file = $fileInfo['file'];
                         echo 'Static file: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading static file: $file");
-                        $this->$method($file, true);
+                        $this->$method($file, true, $teacherBackup);
                     }
                 }
             }
@@ -640,9 +640,9 @@ class ImportCsv
     /**
      * @param string $file
      */
-    private function importCoursesStatic($file)
+    private function importCoursesStatic($file, $moveFile, &$teacherBackup = array())
     {
-        $this->importCourses($file, false);
+        $this->importCourses($file, false, $teacherBackup);
     }
 
     /**
@@ -934,11 +934,11 @@ class ImportCsv
     /**
      * @param string $file
      * @param bool $moveFile
+     * @param array $teacherBackup
      */
-    private function importCourses($file, $moveFile = true)
+    private function importCourses($file, $moveFile = true, &$teacherBackup = array())
     {
         $data = Import::csv_to_array($file);
-        global $teacherBackup;
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
@@ -991,9 +991,23 @@ class ImportCsv
                     $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
 
                     if ($addTeacherToSession) {
-                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false, $teacherBackup);
+                        CourseManager::updateTeachers(
+                            $courseInfo['id'],
+                            $row['teachers'],
+                            false,
+                            true,
+                            false,
+                            $teacherBackup
+                        );
                     } else {
-                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, false, false, $teacherBackup);
+                        CourseManager::updateTeachers(
+                            $courseInfo['id'],
+                            $row['teachers'],
+                            false,
+                            false,
+                            false,
+                            $teacherBackup
+                        );
                     }
 
                     if ($result) {
@@ -1157,7 +1171,6 @@ class ImportCsv
                     }
 
                     // Courses
-
                     $courses = explode('|', $session['Courses']);
                     $courseList = array();
                     foreach ($courses as $course) {
@@ -1346,7 +1359,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    private function importUnsubscribeStatic($file)
+    private function importUnsubscribeStatic($file, $moveFile = false, &$teacherBackup = array())
     {
         $data = Import::csv_reader($file);
 
@@ -1383,7 +1396,6 @@ class ImportCsv
                             course_code = '".$courseInfo['code']."'
                         ";
 
-                global $teacherBackup;
                 $result = Database::query($sql);
                 $userCourseData = Database::fetch_array($result, 'ASSOC');
                 $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;

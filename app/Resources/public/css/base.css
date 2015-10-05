@@ -103,6 +103,17 @@ a.thumbnail:hover{
 #carousel-announcement{
     min-height: 300px;
 }
+#carousel-announcement .carousel-caption{
+    left: 0;
+    right: 0;
+    bottom: auto;
+    padding: 5px;
+    background-color: #fff;
+    position: relative;
+    text-align: left;
+    text-shadow: none;
+    color: #666;
+}
 #carousel-announcement img{
     display: block;
     max-width: 100%;

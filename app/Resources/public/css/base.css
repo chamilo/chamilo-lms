@@ -4251,8 +4251,6 @@ i.size-32.icon-new-work{
 .list-user-data .item{
     font-size: 12px;
     padding-top: 5px;
-}
-.list-user-data .item.name{
     text-align: center;
 }
 .social-search form{

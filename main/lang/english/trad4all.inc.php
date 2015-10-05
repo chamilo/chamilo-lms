@@ -7539,7 +7539,7 @@ $CurrentIcon = "Current icon";
 $ConvertFormats = "Convert format";
 $AreYouSureToDeleteX = "Are you sure you want to delete %s?";
 $AttachmentList = "Attachments list";
-$SeeCourseInformationAndRequirements = "Check requirements";
+$SeeCourseInformationAndRequirements = "See course information and requirements";
 $DownloadAll = "Download all";
 $DeletedDocuments = "Deleted documents";
 ?>

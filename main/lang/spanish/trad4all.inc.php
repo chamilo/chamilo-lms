@@ -7564,7 +7564,7 @@ $CurrentIcon = "Icono actual";
 $ConvertFormats = "Convertir formato";
 $AreYouSureToDeleteX = "¿Está seguro de querer borrar %s?";
 $AttachmentList = "Lista de archivos adjuntos";
-$SeeCourseInformationAndRequirements = "Ver requerimientos";
+$SeeCourseInformationAndRequirements = "Ver información y requerimientos del curso";
 $DownloadAll = "Descargar todo";
 $DeletedDocuments = "Documentos borrados";
 ?>

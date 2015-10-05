@@ -685,7 +685,7 @@ $tool_visibility = $tool_row['visibility'];*/
 
 $htmlHeadXtra[] = '<script>
 function confirmation (name) {
-    if (confirm(" '.get_lang('AreYouSureToDelete').' "+ name + " ?")) {
+    if (confirm(" '.get_lang('AreYouSureToDeleteJS').' "+ name + " ?")) {
         return true;
     } else {
         return false;
@@ -2021,7 +2021,7 @@ echo '
             <p>' . get_lang('ConvertFormats') . '&hellip;</p>
             <select id="convertSelect" class="input-lg text-center">
                 <option value="">
-                    ' . get_lang('SelectConvertFormat') . '
+                    ' . get_lang('Select') . '
                 </option>
                 <option value="pdf">
                     PDF - Portable Document File

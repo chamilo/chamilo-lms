@@ -60,7 +60,7 @@ function show_image(image,width,height) {
 }
 
 function confirmation(name) {
-    if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?")) {
+    if (confirm("'.get_lang('AreYouSureToDeleteJS', '').' " + name + " ?")) {
             document.forms["profile"].submit();
     } else {
         return false;

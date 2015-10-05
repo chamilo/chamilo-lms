@@ -93,7 +93,7 @@ class GradebookTable extends SortableTable
             $this->set_header($column++, get_lang('Weight'), false);
             $this->set_header($column++, get_lang('Result'), false);
             $this->set_header($column++, get_lang('Ranking'), false);
-            $this->set_header($column++, get_lang('Best'), false);
+            $this->set_header($column++, get_lang('BestScore'), false);
             $this->set_header($column++, get_lang('Average'), false);
 
             if (!empty($cats)) {

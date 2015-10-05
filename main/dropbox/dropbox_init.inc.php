@@ -283,7 +283,7 @@ $htmlHeadXtra[] =
 "<script type=\"text/javascript\">
 function confirmation (name)
 {
-	if (confirm(\" ". get_lang("AreYouSureToDelete") ." \"+ name + \" ?\"))
+	if (confirm(\" ". get_lang("AreYouSureToDeleteJS") ." \"+ name + \" ?\"))
 		{return true;}
 	else
 		{return false;}

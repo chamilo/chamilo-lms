@@ -72,7 +72,7 @@ $lp_theme_css = $lp->get_theme();
 
 Display::display_header(get_lang('LearnpathPrerequisites'), 'Path');
 
-$suredel = trim(get_lang('AreYouSureToDelete'));
+$suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
 <script>
     function stripslashes(str) {

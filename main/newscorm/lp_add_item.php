@@ -117,7 +117,7 @@ $lp_theme_css = $learnPath->get_theme();
 
 Display::display_header(null, 'Path');
 
-$suredel = trim(get_lang('AreYouSureToDelete'));
+$suredel = trim(get_lang('AreYouSureToDeleteJS'));
 //@todo move this somewhere else css/fix.css
 ?>
 <style>

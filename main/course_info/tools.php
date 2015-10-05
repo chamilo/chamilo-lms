@@ -53,8 +53,11 @@ switch ($action) {
         $form->addElement(
             'select',
             'target',
-            get_lang('Target'),
-            array('_self' => '_self', '_blank' => '_blank')
+            get_lang('LinkTarget'),
+            [
+                '_self' => get_lang('LinkOpenSelf'),
+                '_blank' => get_lang('LinkOpenBlank')
+            ]
         );
         $form->addElement(
             'select',
@@ -73,7 +76,7 @@ switch ($action) {
         $form->addHtml('<div class="col-md-5">');
         if (isset($tool['custom_icon']) && !empty($tool['custom_icon'])) {
             $form->addLabel(
-                get_lang('Icon'),
+                get_lang('CurrentIcon'),
                 Display::img(
                     CourseHome::getCustomWebIconPath().$tool['custom_icon']
                 )

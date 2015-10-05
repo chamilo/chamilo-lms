@@ -62,7 +62,7 @@ if (Database::num_rows($result_course) > 0) {
 	}
 	echo '</table>';
 	echo "<br /><br />";
-	echo "<form method='post'><input type='submit' name='export' value='".get_lang('exportExcel')."'/><form>";
+	echo "<form method='post'><input type='submit' name='export' value='".get_lang('ExportExcel')."'/><form>";
 } else {
 	echo get_lang('NoCourse');
 }

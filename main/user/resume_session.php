@@ -170,7 +170,7 @@ if ($allowTutors == 'true') {
     <!-- show nb_days_before and nb_days_after only if they are different from 0 -->
     <tr>
     	<td>
-    		<?php echo api_ucfirst(get_lang('CoachSessionAccessStartDate')) ?> :
+    		<?php echo api_ucfirst(get_lang('SessionCoachStartDate')) ?> :
     	</td>
     	<td>
     		<?php echo intval($session['coach_access_start_date']) ?>
@@ -178,7 +178,7 @@ if ($allowTutors == 'true') {
     </tr>
     <tr>
     	<td>
-    		<?php echo api_ucfirst(get_lang('CoachSessionAccessEndDate')) ?> :
+    		<?php echo api_ucfirst(get_lang('SessionCoachEndDate')) ?> :
     	</td>
     	<td>
     		<?php echo intval($session['coach_session_access_end_date']) ?>

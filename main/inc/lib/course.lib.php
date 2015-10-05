@@ -5124,6 +5124,8 @@ class CourseManager
      * @param bool $deleteTeachersNotInList
      * @param bool $editTeacherInSessions
      * @param bool $deleteSessionTeacherNotInList
+     * @param array $teacherBackup
+     *
      * @return bool
      */
     public static function updateTeachers(
@@ -5131,7 +5133,8 @@ class CourseManager
         $teachers,
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
-        $deleteSessionTeacherNotInList = false
+        $deleteSessionTeacherNotInList = false,
+        $teacherBackup = array()
     ) {
         if (empty($teachers)) {
             return false;
@@ -5177,6 +5180,14 @@ class CourseManager
                             SET status = "1"
                             WHERE course_code = "'.$course_code.'" AND user_id = "'.$userId.'"  ';
                 } else {
+                    $userCourseCategory = '0';
+                    if (isset($teacherBackup[$userId]) &&
+                        isset($teacherBackup[$userId][$course_code])
+                    ) {
+                        $courseUserData = $teacherBackup[$userId][$course_code];
+                        $userCourseCategory = $courseUserData['user_course_cat'];
+                    }
+
                     $sql = "INSERT INTO ".$course_user_table . " SET
                         course_code = '".Database::escape_string($course_code). "',
                         user_id = '".$userId."',
@@ -5185,7 +5196,8 @@ class CourseManager
                         tutor_id = '0',
                         sort = '0',
                         relation_type = '0',
-                        user_course_cat='0'";
+                        user_course_cat = '$userCourseCategory'
+                    ";
                 }
                 Database::query($sql);
             }

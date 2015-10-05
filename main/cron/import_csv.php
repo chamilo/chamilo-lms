@@ -938,6 +938,7 @@ class ImportCsv
     private function importCourses($file, $moveFile = true)
     {
         $data = Import::csv_to_array($file);
+        global $teacherBackup;
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
@@ -990,9 +991,9 @@ class ImportCsv
                     $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
 
                     if ($addTeacherToSession) {
-                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false);
+                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false, $teacherBackup);
                     } else {
-                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, false);
+                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, false, false, $teacherBackup);
                     }
 
                     if ($result) {

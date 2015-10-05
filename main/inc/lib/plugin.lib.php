@@ -387,7 +387,7 @@ class AppPlugin
                             if (!empty($plugin_tpl)) {
                                 //$template_plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/$plugin_tpl"; //for smarty
                                 $template_plugin_file = "$plugin_name/$plugin_tpl"; // for twig
-                                $template->display($template_plugin_file);
+                                $template->display($template_plugin_file, false);
                             }
                         }
                     }

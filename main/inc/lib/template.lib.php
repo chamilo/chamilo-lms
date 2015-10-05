@@ -1118,12 +1118,18 @@ class Template
     }
 
     /**
-     * @param string $template
+     * Render the template
+     * @param string $template The template path
+     * @param boolean $clearFlashMessages Clear the $_SESSION variables for flash messages
      */
-    public function display($template)
+    public function display($template, $clearFlashMessages = true)
     {
         $this->assign('flash_messages', Display::getFlashToString());
-        Display::cleanFlashMessages();
+
+        if ($clearFlashMessages) {
+            Display::cleanFlashMessages();
+        }
+
         echo $this->twig->render($template, $this->params);
     }
 

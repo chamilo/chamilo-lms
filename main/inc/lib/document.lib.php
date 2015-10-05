@@ -5034,7 +5034,7 @@ class DocumentManager
 
         $form = new FormValidator('selector', 'GET', api_get_self() . '?' . api_get_cidreq());
         $form->addElement('hidden', 'cidReq', api_get_course_id());
-        $parent_select = $form->addElement('select', 'id', get_lang('CurrentDirectory'), '', 'onchange="javascript: document.selector.submit();"');
+        $parent_select = $form->addSelect('id', get_lang('CurrentDirectory'), '', array('onchange' => 'javascript: document.selector.submit();'));
 
         if ($change_renderer) {
             $renderer = $form->defaultRenderer();

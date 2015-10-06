@@ -5,7 +5,6 @@ $(document).ready(function() {
     var url = "http://"+location.host + coursePath+"/courses/proxy.php?";
 
     objects.each(function (value, obj) {
-        var dialogId = this.id +'_dialog';
         var openerId = this.id +'_opener';
         var link = '<a id="'+openerId+'" href="#">If video does not work, try clicking here.</a>';
         var embed = $("#"+this.id).find('embed').first();
@@ -21,21 +20,42 @@ $(document).ready(function() {
             '&src='+src+
             '&width='+width;
 
-        /*var iframe = '<iframe ' +
-            'style="border: 0px;"  width="100%" height="100%" ' +
-            'src="'+completeUrl+
-            '">' +
-            '</iframe>';
-
-        var content = '<div id="'+dialogId+'">' + iframe+'</div>';*/
         var result = $("#"+this.id).find('#'+openerId);
-
         if (result.length == 0) {
             $("#" + this.id).append('<br />' + link);
 
             $('#' + openerId).click(function () {
                 var window = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
                 window.document.title = 'Video';
+            });
+        }
+    });
+
+    var iframes = $(document).find('iframe');
+    iframes.each(function (value, obj) {
+        var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+        var uniqid = randLetter + Date.now();
+        var openerId = uniqid +'_opener';
+        var link = '<a id="'+openerId+'" href="#">If iframe does not work, try clicking here.</a>';
+        var embed = $(this);
+        var height = embed.attr('height');
+        var width = embed.attr('width');
+        var src = embed.attr('src');
+        var completeUrl =  url + 'width='+embed.attr('width')+
+            '&height='+height+
+            '&type=iframe'+
+            '&id='+uniqid+
+            '&src='+src+
+            '&width='+width;
+        var result = $(this).find('#'+openerId);
+
+        if (result.length == 0) {
+            $(this).parent().append('<br />' + link);
+            $('#' + openerId).click(function () {
+                width = 1024;
+                height = 640;
+                var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
+                win.document.title = 'Video';
             });
         }
     });

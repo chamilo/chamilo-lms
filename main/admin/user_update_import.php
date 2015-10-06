@@ -385,8 +385,6 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['
     $inserted_in_course = array();
     if (strcmp($file_type, 'csv') === 0) {
         updateUsers($users_to_insert);
-    } else {
-        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption1');
     }
 
     if (count($errors) > 0) {

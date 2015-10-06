@@ -433,7 +433,7 @@ switch ($action) {
         $fileInfo = pathinfo($file);
         if ($fileInfo['extension'] == $formatTarget) {
             Display::addFlash(Display::return_message(
-                get_lang('ErrorSameFormat'),
+                get_lang('ConversionToSameFileFormat'),
                 'warning'
             ));
         } elseif (
@@ -456,7 +456,7 @@ switch ($action) {
             )
         ) {
             Display::addFlash(Display::return_message(
-                get_lang('FormatNotSupported'),
+                get_lang('FileFormatNotSupported'),
                 'warning'
             ));
         } else {
@@ -2008,40 +2008,42 @@ if (!empty($table_footer)) {
 
 echo '
     <div id="convertModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header" style="text-align: center;">
-            <button type="button" class="close" data-dismiss="modal">
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">' . get_lang('Close') . '</span>
-            </button>
-            <h4 class="modal-title">' . get_lang('PleaseSelectConvertFormat') . '</h4>
-          </div>
-          <div class="modal-body" style="text-align: center;">
-            <p>' . get_lang('ConvertFormats') . '&hellip;</p>
-            <select id="convertSelect" class="input-lg text-center">
-                <option value="">
-                    ' . get_lang('Select') . '
-                </option>
-                <option value="pdf">
-                    PDF - Portable Document File
-                </option>
-                <option value="odt" style="display:none;" class="textFormatType">
-                    ODT - Open Document Text
-                </option>
-                <option value="odp" style="display:none;" class="presentationFormatType">
-                    ODP - Open Document Portable
-                </option>
-                <option value="ods" style="display:none;" class="spreadsheetFormatType">
-                    ODS - Open Document Spreadsheet
-                </option>
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">' . get_lang('Close') . '</button>
-          </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="text-align: center;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="' . get_lang('Close') . '">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">' . get_lang('Convert') . '</h4>
+            </div>
+            <div class="modal-body">
+              <form action="#" class="form-horizontal">
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label" for="convertSelect">' . get_lang('ConvertFormats') . '</label>
+                      <div class="col-sm-8">
+                          <select id="convertSelect">
+                              <option value="">' . get_lang('Select') . '</option>
+                              <option value="pdf">
+                                  PDF - Portable Document File
+                              </option>
+                              <option value="odt" style="display:none;" class="textFormatType">
+                                  ODT - Open Document Text
+                              </option>
+                              <option value="odp" style="display:none;" class="presentationFormatType">
+                                  ODP - Open Document Portable
+                              </option>
+                              <option value="ods" style="display:none;" class="spreadsheetFormatType">
+                                  ODS - Open Document Spreadsheet
+                              </option>
+                          </select>
+                      </div>
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">' . get_lang('Close') . '</button>
+            </div>
         </div>
-      </div>
     </div>';
 
 // Footer

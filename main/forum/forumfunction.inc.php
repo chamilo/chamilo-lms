@@ -70,7 +70,7 @@ $(function () {
                     file.delete + '<\/td>' +
                     '<input type=\"hidden\" value=\"' + file.id +'\" name=\"file_ids[]\">' + '<\/tr>');
             } else {
-                alert('" . get_lang('ErrorUploadAttachment') . "');
+                alert('" . get_lang('UploadError') . "');
             }
         }
     });

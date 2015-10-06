@@ -2429,10 +2429,6 @@ form .formw .freeze {
     vertical-align: middle;
 }
 
-.hide {
-    display: none;
-}
-
 .show_element {
     display: block !important;
 }

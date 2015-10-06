@@ -6,6 +6,12 @@ require_once '../inc/global.inc.php';
 // The section for the tabs
 $this_section = SECTION_COURSES;
 
+$sessionId = api_get_session_id();
+
+if (!empty($sessionId)) {
+    api_not_allowed();
+}
+
 api_protect_course_script(true);
 
 if (!api_is_allowed_to_edit()) {
@@ -114,9 +120,9 @@ switch ($action) {
         foreach ($toolList as $tool) {
 
             if ($tool['id']>20) {
-                $toolName = $tool['name'];
+                $toolIconName = $tool['name'];
             } else {
-                $toolName = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
+                $toolIconName = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
             }
 
             $iconsTools .= '<div class="col-md-2">';
@@ -124,12 +130,12 @@ switch ($action) {
 
             if (!empty($tool['custom_icon'])) {
                 $image = getCustomWebIconPath().$tool['custom_icon'];
-                $icon = Display::img($image, $toolName);
+                $icon = Display::img($image, $toolIconName);
             } else {
                 $image = (substr($tool['image'], 0, strpos($tool['image'], '.'))).'.png';
                 $icon = Display::return_icon(
                     $image,
-                    $toolName,
+                    $toolIconName,
                     array('id' => 'tool_'.$tool['id']),
                     ICON_SIZE_BIG,
                     false
@@ -143,7 +149,7 @@ switch ($action) {
             $edit = '<a class="btn btn-default" href="' . api_get_self() . '?action=edit_icon&id=' . $tool['iid'] . '&'.api_get_cidreq().'"><i class="fa fa-pencil"></i></a>';
 
             $iconsTools .= '<div class="icon-tools">'. $icon . '</div>';
-            $iconsTools .= '<div class="name-tools">' . $toolName . '</div>';
+            $iconsTools .= '<div class="name-tools">' . $toolIconName . '</div>';
             $iconsTools .= '<div class="toolbar">' . $edit . $delete . '</div>';
             $iconsTools .= '</div>';
             $iconsTools .= '</div>';

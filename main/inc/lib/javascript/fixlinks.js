@@ -59,4 +59,13 @@ $(document).ready(function() {
             });
         }
     });
+
+    var anchors = $(document).find('a');
+    anchors.each(function (value, obj) {
+        var src = $(this).attr('href');
+        src = src.replace('https', 'http');
+        var myAnchor = $('<a>(Alternative link)</a>').attr("href", src).attr('target', '_blank');
+        $(this).after(myAnchor);
+        $(this).after('-');
+    });
 });

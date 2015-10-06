@@ -1534,40 +1534,20 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Get schedule html (with data openGrap)
-     * @param   string  $text       Content text
-     * @return  string  $newText    Content text with OpenGraph
-     */
-    public static function readContentWithOpenGraph($text)
-    {
-        // search link in first line
-        $regExUrl = "/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-        $newText = '';
-        if (preg_match($regExUrl, $text, $url)) {
-            // Comment this line to disable OpenGraph
-            $newText .= self::getHtmlByLink($url[0]);
-            // make the urls hyper links
-            //$newText .= preg_replace($regExUrl, "<a target=\"_blank\" href=" . $url[0] . ">".$url[0]."</a> ", $text);
-            
-        } else {
-            $newText = $text;
-        }
-        return $newText;
-    }
-
-    /**
-     * html with data OpenGrap
+     * get html data with OpenGrap passing the Url
      * @param $link url
      * @return string data html
      */
-    public static function getHtmlByLink($link)
+    public static function readContentWithOpenGraph($link)
     {
         $graph = OpenGraph::fetch($link);
+        if (!$graph) {
+            return false;
+        }
         $url = $graph->url;
         $image = $graph->image;
-        $domain = empty($url) ? '' : parse_url($url);
+        $domain = empty($url) ? parse_url($link) : parse_url($url);
         $domain = $domain['scheme'].'://'.$domain['host'];
-        $html = '';
         // Trick to verify if the Image Url Exist because of some bad metatag dev
         if (self::verifyUrl($image) == false){
             if (!($image[0] == '/')){
@@ -1577,11 +1557,12 @@ class SocialManager extends UserManager
         }
         $title = $graph->title;
         
-        $html .= '<div class="post-open-graph">';
-        $html .= '<h4><a target="_blank" href="'.$link.'">'.$title.'</a></h4>';
-        $html .= empty($image) ? '' : '<img alt="" src="'.$image.'" />';
-        $html .= empty($graph->description) ? '' : '<p class="description">'.$graph->description.'<a href="'.$link.'">'.$link.'</a></p>';
-        $html .= "</div>";
+        $html  = '<div class="thumbnail">';
+        $html .= '<a target="_blank" href="'.$link.'"><h3>'.$title.'</h3>';
+        $html .= empty($image) ? '' : '<img alt="" src="'.$image.'" /></a>';
+        $html .= empty($graph->description) ? '' : '<p class="description">'.$graph->description.'</p>';
+        $html .= '<a href="'.$link.'">'.$link.'</a>';
+        $html .= '</div>';
         return $html;
     }
 
@@ -1858,7 +1839,6 @@ class SocialManager extends UserManager
                 'cols-size' => [1, 10, 1]
             ]
         );
-        $form->addHtml('<div class="url_preview"></div>');
         $form->addHidden('url_content', '');
         $form->addButtonSend(get_lang('Post'), null, false, ['cols-size' => [1, 10, 1]]);
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));

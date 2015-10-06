@@ -299,15 +299,27 @@ $(document).ready(function() {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function() {
-                $(".url_preview").html("<i class=\'fa fa-spinner fa-pulse fa-1x\'></i>");
+                $(".panel-preview").hide();
+                $(".spinner").html("'.
+                    '<div class=\'text-center\'>'.
+                        '<i class=\'fa fa-spinner fa-pulse fa-1x\'></i>'.
+                        '<p>'. get_lang('Loading') . ' ' . get_lang('Preview') .'</p>'.
+                    '</div>'.
+                '");
             },
             type: "POST",
             url: "'. api_get_path(WEB_AJAX_PATH) .'social.ajax.php?a=readUrlWithOpenGraph",
             data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
             success: function(response) {
-                $(".url_preview").html(response);
-                $("[name=\'url_content\']").val(response);
-                $(".url_preview img").addCSS("img-responsive");
+                if (!response == false) {
+                    $(".spinner").html("");
+                    $(".panel-preview").show();
+                    $(".url_preview").html(response);
+                    $("[name=\'url_content\']").val(response);
+                    $(".url_preview img").addClass("img-responsive");
+                } else {
+                    $(".spinner").html("");
+                }
             }
         });
     });

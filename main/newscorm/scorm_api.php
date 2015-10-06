@@ -2145,7 +2145,7 @@ function attach_glossary_into_scorm(type) {
                     var dialogId = this.id +'_dialog';
                     var openerId = this.id +'_opener';
 
-                    var link = '<a id="'+openerId+'" href="#" class="btn">'+
+                    var link = '<a id="'+openerId+'" href="#" class="generated btn">'+
                     '<div style="text-align: center"><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/play-circle-8x.png'; ?>"/><br />If video does not work, try clicking here.</div></a>';
                     var embed = $("iframe").contents().find("#"+this.id).find('embed').first();
 
@@ -2173,6 +2173,46 @@ function attach_glossary_into_scorm(type) {
                         w = window.document.title = 'Video';
                     });
                 });
+
+
+                var iframes =$("iframe").contents().find('iframe');
+                    iframes.each(function (value, obj) {
+                    var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                    var uniqid = randLetter + Date.now();
+                    var openerId = uniqid +'_opener';
+                    var link = '<a id="'+openerId+'" class="generated" href="#">If iframe does not work, try clicking here.</a>';
+                    var embed = $(this);
+                    var height = embed.attr('height');
+                    var width = embed.attr('width');
+                    var src = embed.attr('src');
+                    var completeUrl =  url + 'width='+embed.attr('width')+
+                        '&height='+height+
+                        '&type=iframe'+
+                        '&id='+uniqid+
+                        '&src='+src+
+                        '&width='+width;
+                    var result = $("iframe").contents().find('#'+openerId);
+
+                    if (result.length == 0) {
+                        $(this).parent().append(link + '<br />');
+                        $("iframe").contents().find('#' + openerId).click(function() {
+                            width = 1024;
+                            height = 640;
+                            var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
+                            win.document.title = 'Video';
+                        });
+                    }
+                });
+
+                var anchors = $("iframe").contents().find('a').not('.generated');
+                    anchors.each(function (value, obj) {
+                        var src = $(this).attr('href');
+                        src = src.replace('https', 'http');
+                        var myAnchor = $('<a>(Alternative link)</a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
+                        $(this).after(myAnchor);
+                        $(this).after('-');
+                });
+
             });
         }
     }

@@ -36,7 +36,7 @@ $(document).ready(function() {
         var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
         var uniqid = randLetter + Date.now();
         var openerId = uniqid +'_opener';
-        var link = '<a id="'+openerId+'" href="#">If iframe does not work, try clicking here.</a>';
+        var link = '<a id="'+openerId+'" class="generated" href="#">If iframe does not work, try clicking here.</a>';
         var embed = $(this);
         var height = embed.attr('height');
         var width = embed.attr('width');
@@ -51,21 +51,27 @@ $(document).ready(function() {
 
         if (result.length == 0) {
             $(this).parent().append('<br />' + link);
-            $('#' + openerId).click(function () {
-                width = 1024;
-                height = 640;
-                var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
-                win.document.title = 'Video';
-            });
+            if ($(this).next().attr('class') != 'generated') {
+
+                $('#' + openerId).click(function () {
+                    width = 1024;
+                    height = 640;
+                    var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
+                    win.document.title = 'Video';
+                });
+            }
         }
     });
 
-    var anchors = $(document).find('a');
+    var anchors = $(document).find('a').not('.generated');
     anchors.each(function (value, obj) {
-        var src = $(this).attr('href');
-        src = src.replace('https', 'http');
-        var myAnchor = $('<a>(Alternative link)</a>').attr("href", src).attr('target', '_blank');
-        $(this).after(myAnchor);
-        $(this).after('-');
+
+        if ($(this).next().attr('class') != 'generated') {
+            var src = $(this).attr('href');
+            src = src.replace('https', 'http');
+            var myAnchor = $('<a>(Alternative link)</a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
+            $(this).after(myAnchor);
+            $(this).after('-');
+        }
     });
 });

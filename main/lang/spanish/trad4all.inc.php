@@ -7578,4 +7578,5 @@ $AreYouSureToDeleteJS = "Está seguro de eliminar";
 $ConversionToSameFileFormat = "Conversión al mismo formato de archivo. Por favor, selecciones otro.";
 $FileFormatNotSupported = "Formato de archivo no soportado.";
 $FileConvertedFromXToY = "Archivo convertido de %s a %s";
+$XDays = "%s días";
 ?>

@@ -7553,4 +7553,5 @@ $AreYouSureToDeleteJS = "Are you sure to delete";
 $ConversionToSameFileFormat = "Conversion to same file format. Please choose another.";
 $FileFormatNotSupported = "File format not supported";
 $FileConvertedFromXToY = "File converted from %s to %s";
+$XDays = "%s days";
 ?>

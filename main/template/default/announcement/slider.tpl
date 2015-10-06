@@ -12,13 +12,15 @@
   <div class="carousel-inner" role="listbox">
       {% for announcement in announcements %}
         <div class="item {% if loop.index0 == 0 %} active {% endif %}">
-          {{ announcement.content }}
+          <div class="carousel-caption">
+              {{ announcement.title }}
+          </div>
+          <div class="carousel-content">
+              {{ announcement.content }}
+          </div>
             {% if announcement.readMore %}
                 <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | get_lang }}</a>
             {% endif %}
-          <div class="carousel-caption">
-              <h3>{{ announcement.title }}</h3>
-          </div>
         </div>
     {% endfor %}
   </div>

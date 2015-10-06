@@ -14,7 +14,7 @@
                         {{ social_avatar_block }}
                         
                         <ul class="list-user-data">
-                            <li class="item name">
+                            <li class="item">
                                 {{ user.complete_name }}
                             </li>
                             <li class="item">
@@ -48,7 +48,7 @@
                         
                         {% if not profile_edition_link is empty %}
                         <li class="item">
-                            <a class="btn btn-primary btn-sm btn-block" href="{{ profile_edition_link }}">
+                            <a class="btn link btn-sm btn-block" href="{{ profile_edition_link }}">
                             <i class="fa fa-edit"></i>{{ "EditProfile" | get_lang }}
                             </a>
                         </li>

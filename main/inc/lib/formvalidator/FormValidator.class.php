@@ -116,7 +116,6 @@ EOT;
         return '<form{attributes}>
         <fieldset>
             {content}
-            <div class="clear"></div>
         </fieldset>
         {hidden}
         </form>';

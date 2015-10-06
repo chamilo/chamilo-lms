@@ -3133,7 +3133,7 @@ $NameOfLang['portuguese'] = "portuguese";
 $NameOfLang['russian'] = "russian";
 $NameOfLang['simpl_chinese'] = "simpl_chinese";
 $NameOfLang['spanish'] = "spanish";
-$Close = "close";
+$Close = "Close";
 $Platform = "Portal";
 $localLangName = "language";
 $email = "e-mail";
@@ -7550,4 +7550,7 @@ $PortalLimitType = "Portal's limit type";
 $PortalName = "Portal name";
 $BestScore = "Best score";
 $AreYouSureToDeleteJS = "Are you sure to delete";
+$ConversionToSameFileFormat = "Conversion to same file format. Please choose another.";
+$FileFormatNotSupported = "File format not supported";
+$FileConvertedFromXToY = "File converted from %s to %s";
 ?>

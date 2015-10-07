@@ -2130,48 +2130,91 @@ function attach_glossary_into_scorm(type) {
             });
         }
 
-if (type == 'fix_links') {
-$(document).ready(function() {
-var objects = $("iframe").contents().find('object');
 
-var pathname = location.pathname;
-var coursePath = pathname.substr(0, pathname.indexOf('/main/'));
-var url = "http://"+location.host + coursePath+"/courses/proxy.php?";
+        if (type == 'fix_links') {
+            $(document).ready(function() {
+                var objects = $("iframe").contents().find('object');
 
-objects.each(function (value, obj) {
+                var pathname = location.pathname;
+                var coursePath = pathname.substr(0, pathname.indexOf('/main/'));
+                var url = "http://"+location.host + coursePath+"/courses/proxy.php?";
 
-var dialogId = this.id +'_dialog';
-var openerId = this.id +'_opener';
+                objects.each(function (value, obj) {
 
-var link = '<a id="'+openerId+'" href="#" class="btn">'+
-    '<div style="text-align: center"><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/play-circle-8x.png'; ?>"/><br />If video does not work, try clicking here.</div></a>';
-var embed = $("iframe").contents().find("#"+this.id).find('embed').first();
+                    var dialogId = this.id +'_dialog';
+                    var openerId = this.id +'_opener';
 
-var height = embed.attr('height');
-var width = embed.attr('width');
-var src = embed.attr('src').replace('https', 'http');
+                    var link = '<a id="'+openerId+'" href="#" class="generated btn">'+
+                        '<div style="text-align: center"><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/play-circle-8x.png'; ?>"/><br />If video does not work, try clicking here.</div></a>';
+                    var embed = $("iframe").contents().find("#"+this.id).find('embed').first();
 
-var completeUrl =  url + 'width='+embed.attr('width')+
-'&height='+height+
-'&id='+this.id+
-'&flashvars='+encodeURIComponent(embed.attr('flashvars'))+
-'&src='+src+
-'&width='+width;
+                    var height = embed.attr('height');
+                    var width = embed.attr('width');
+                    var src = embed.attr('src').replace('https', 'http');
 
-var iframe = '<iframe ' +
-'style="border: 0px;"  width="100%" height="100%" ' +
-'src="'+completeUrl+
-'">' +
-'</iframe>';
+                    var completeUrl =  url + 'width='+embed.attr('width')+
+                        '&height='+height+
+                        '&id='+this.id+
+                        '&flashvars='+encodeURIComponent(embed.attr('flashvars'))+
+                        '&src='+src+
+                        '&width='+width;
+
+                    var iframe = '<iframe ' +
+                        'style="border: 0px;"  width="100%" height="100%" ' +
+                        'src="'+completeUrl+
+                        '">' +
+                        '</iframe>';
+
+                    $("iframe").contents().find("#"+this.id).append(link + '<br />');
+                    $("iframe").contents().find('#' + openerId).click(function() {
+                        var w = window.open(completeUrl, "Video", "width="+width+", "+"height="+height+"");
+                        w = window.document.title = 'Video';
+                    });
+                });
+
+                var iframes = $("iframe").contents().find('iframe');
+
+                iframes.each(function (value, obj) {
+                    var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                    var uniqid = randLetter + Date.now();
+                    var openerId = uniqid +'_opener';
+                    var link = '<a id="'+openerId+'" class="generated" href="#">If iframe does not work, try clicking here. <img src="<?php echo api_get_path(WEB_CODE_PATH).'img/link-external.png'; ?>"/></a>';
+                    var embed = $(this);
+                    var height = embed.attr('height');
+                    var width = embed.attr('width');
+                    var src = embed.attr('src');
+                    var completeUrl =  url + 'width='+embed.attr('width')+
+                        '&height='+height+
+                        '&type=iframe'+
+                        '&id='+uniqid+
+                        '&src='+src+
+                        '&width='+width;
+                    var result = $("iframe").contents().find('#'+openerId);
+
+                    if (result.length == 0) {
+                        if (embed.next().attr('class') != 'generated') {
+                            $(this).parent().append(link + '<br />');
+                            $("iframe").contents().find('#' + openerId).click(function() {
+                                width = 1024;
+                                height = 640;
+                                var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
+                                win.document.title = 'Video';
+                            });
+                        }
+                    }
+                });
+
+                var anchors = $("iframe").contents().find('a').not('.generated');
+                anchors.each(function (value, obj) {
+                    var src = $(this).attr('href');
+                    src = src.replace('https', 'http');
+                    var myAnchor = $('<a><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/link-external.png'; ?>"/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
+                    $(this).after(myAnchor);
+                    $(this).after('-');
+                });
+            });
+        }
 
 
-$("iframe").contents().find("#"+this.id).append('<br />' + link);
-$("iframe").contents().find('#' + openerId).click(function() {
-var w = window.open(completeUrl, "Video", "width="+width+", "+"height="+height+"");
-w = window.document.title = 'Video';
-});
-});
-});
-}
     }
 }

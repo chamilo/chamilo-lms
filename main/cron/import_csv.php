@@ -79,6 +79,10 @@ class ImportCsv
      */
     public function run()
     {
+         /*
+        global $_configuration;
+        $_configuration['access_url'] = 2;
+        */
         $path = api_get_path(SYS_CODE_PATH).'cron/incoming/';
         if (!is_dir($path)) {
             echo "The folder! $path does not exits";
@@ -451,7 +455,6 @@ class ImportCsv
         }
     }
 
-
     /**
      * @param string $file
      */
@@ -472,10 +475,13 @@ class ImportCsv
          * Another users import.
         Unique identifier: official code and username . ok
         Password should never get updated. ok
-        If an update should need to occur (because it changed in the .csv), we’ll want that logged. We will handle this manually in that case.
+        If an update should need to occur (because it changed in the .csv),
+        we’ll want that logged. We will handle this manually in that case.
         All other fields should be updateable, though passwords should of course not get updated. ok
         If a user gets deleted (not there anymore),
-        He should be set inactive one year after the current date. So I presume you’ll just update the expiration date. We want to grant access to courses up to a year after deletion.
+        He should be set inactive one year after the current date.
+        So I presume you’ll just update the expiration date.
+        We want to grant access to courses up to a year after deletion.
          */
 
         if (!empty($data)) {

@@ -2213,7 +2213,9 @@ function attach_glossary_into_scorm(type) {
                     anchors.each(function (value, obj) {
                         if ($(this).next().attr('class') != 'generated' ) {
                             var src = $(this).attr('href');
+                            src = url+'&type=link&src='+src;
                             src = src.replace('https', 'http');
+                            $(this).attr('href', src);
                             var myAnchor = $('<a><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/link-external.png'; ?>"/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
                             $(this).after(myAnchor);
                             $(this).after('-');

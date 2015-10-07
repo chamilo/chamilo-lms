@@ -2140,13 +2140,18 @@ function attach_glossary_into_scorm(type) {
                 var url = "http://"+location.host + coursePath+"/courses/proxy.php?";
 
                 objects.each(function (value, obj) {
-
                     var dialogId = this.id +'_dialog';
                     var openerId = this.id +'_opener';
 
                     var link = '<a id="'+openerId+'" href="#" class="generated btn">'+
                     '<div style="text-align: center"><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/play-circle-8x.png'; ?>"/><br />If video does not work, try clicking here.</div></a>';
                     var embed = $("iframe").contents().find("#"+this.id).find('embed').first();
+
+                    var hasHttp = embed.attr('src').indexOf("http");
+
+                    if (hasHttp < 0) {
+                        return true;
+                    }
 
                     var height = embed.attr('height');
                     var width = embed.attr('width');
@@ -2212,6 +2217,10 @@ function attach_glossary_into_scorm(type) {
                 var anchors = $("iframe").contents().find('a').not('.generated');
                     anchors.each(function (value, obj) {
                         if ($(this).next().attr('class') != 'generated' ) {
+                            var content = $.trim($(this).val());
+                            if (content == '') {
+                                return true;
+                            }
                             var src = $(this).attr('href');
                             src = url+'&type=link&src='+src;
                             src = src.replace('https', 'http');

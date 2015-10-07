@@ -10,6 +10,12 @@ $(document).ready(function() {
         var link = '<a id="'+openerId+'" href="#">If video does not work, try clicking here.</a>';
         var embed = $("#"+this.id).find('embed').first();
 
+        var hasHttp = embed.attr('src').indexOf("http");
+
+        if (hasHttp < 0) {
+            return true;
+        }
+
         var height = embed.attr('height');
         var width = embed.attr('width');
         var src = embed.attr('src').replace('https', 'http');
@@ -71,6 +77,10 @@ $(document).ready(function() {
     var anchors = $(document).find('a').not('.generated');
     anchors.each(function (value, obj) {
         if ($(this).next().attr('class') != 'generated' ) {
+            var content = $.trim($(this).val());
+            if (content == '') {
+                return true;
+            }
             var src = $(this).attr('href');
             src = url+'&type=link&src='+src;
             src = src.replace('https', 'http');

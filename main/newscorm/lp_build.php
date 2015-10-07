@@ -85,7 +85,7 @@ $interbreadcrumb[] = array('url' => '#', "name" => $therow['name']);
 $lp_theme_css=$_SESSION['oLP']->get_theme();
 $show_learn_path = true;
 Display::display_header('', 'Path');
-$suredel = trim(get_lang('AreYouSureToDelete'));
+$suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
 ?>
 <script type='text/javascript'>

@@ -103,6 +103,17 @@ a.thumbnail:hover{
 #carousel-announcement{
     min-height: 300px;
 }
+#carousel-announcement .carousel-caption{
+    left: 0;
+    right: 0;
+    bottom: auto;
+    padding: 5px;
+    background-color: #fff;
+    position: relative;
+    text-align: left;
+    text-shadow: none;
+    color: #666;
+}
 #carousel-announcement img{
     display: block;
     max-width: 100%;
@@ -2418,10 +2429,6 @@ form .formw .freeze {
     vertical-align: middle;
 }
 
-.hide {
-    display: none;
-}
-
 .show_element {
     display: block !important;
 }
@@ -4240,8 +4247,6 @@ i.size-32.icon-new-work{
 .list-user-data .item{
     font-size: 12px;
     padding-top: 5px;
-}
-.list-user-data .item.name{
     text-align: center;
 }
 .social-search form{

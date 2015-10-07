@@ -312,7 +312,7 @@ if (!empty($thematic_advance_info)) {
     $introduction_section .= '</div>';
 }
 $editIconButton = '';
-if (api_is_allowed_to_edit()) {
+if (api_is_allowed_to_edit() && empty($session_id)) {
     $editIconButton = Display::url(
         '<i class="fa fa-wrench"></i> ',
         api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
@@ -325,7 +325,7 @@ $textIntro = '';
 if ($intro_dispCommand) {
     if (empty($intro_content)) {
         // Displays "Add intro" commands
-        $toolbar = '<div class="btn-group pull-right" rol="group">';
+        $toolbar = '<div class="btn-group pull-right" role="group">';
         if (!empty($courseId)) {
             $textIntro  = '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&intro_cmdAdd=1">';
             $textIntro .= '<i class="fa fa-file-text"></i> ';

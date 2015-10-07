@@ -29,7 +29,7 @@ $baseWordDir = $courseDir;
 $htmlHeadXtra[] =
     "<script>
 function confirmation(name) {
-    if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." \"+name+\"?\"))
+    if (confirm(\" ".trim(get_lang('AreYouSureToDeleteJS'))." \"+name+\"?\"))
         {return true;}
     else
         {return false;}

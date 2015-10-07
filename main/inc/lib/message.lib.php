@@ -420,7 +420,7 @@ class MessageManager
             if (!empty($drhList)) {
                 foreach ($drhList as $drhInfo) {
                     $message = sprintf(
-                            get_lang('CopyOfOriginalMessageSentToX'),
+                            get_lang('CopyOfMessageSentToXUser'),
                             $userInfo['complete_name']
                         ).' <br />'.$message;
 

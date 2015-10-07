@@ -218,7 +218,9 @@ switch ($action) {
         $url = isset($_POST['social_wall_new_msg_main']) ? $_POST['social_wall_new_msg_main'] : '';
         $html = '';
         if (SocialManager::verifyUrl($url) == true){
-            $html = Security::remove_XSS(SocialManager::readContentWithOpenGraph($url));
+            $html = Security::remove_XSS(
+                SocialManager::readContentWithOpenGraph($url)
+            );
         }
         echo $html;
         break;

@@ -185,7 +185,7 @@ if (api_is_platform_admin()) {
     $defaults['use_max_score'] = $_SESSION['oLP']->use_max_score;
 }
 
-$form->addElement('checkbox', 'subscribe_users', null, get_lang('SubscribeUsersToLP'));
+$form->addElement('checkbox', 'subscribe_users', null, get_lang('SubscribeUsersToLp'));
 
 $enableLpExtraFields = false;
 

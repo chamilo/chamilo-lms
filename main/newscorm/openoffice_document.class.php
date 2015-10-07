@@ -311,7 +311,7 @@ abstract class OpenofficeDocument extends learnpath
                 filesize($this->base_work_dir . '/' . $this->created_dir),
                 $convertedTitle,
                 sprintf(
-                    get_lang('ConvertedFromXToY'),
+                    get_lang('FileConvertedFromXToY'),
                     strtoupper($originalPathInfo['extension']),
                     strtoupper($convertedPathInfo['extension'])
                 ),

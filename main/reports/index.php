@@ -6,7 +6,7 @@
 * @copyrights CBLUE SPRL 2011
 * @package chamilo.reports
 */
-exit;
+//exit;
 $cidReset = true;
 
 // including files

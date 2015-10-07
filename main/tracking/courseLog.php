@@ -88,7 +88,7 @@ if ($export_csv) {
     ob_start();
 }
 $columnsToHideFromSetting = api_get_configuration_value('course_log_hide_columns');
-$columnsToHide = empty($columnsToHideFromSetting) ? array(1, 9, 10, 11, 12) : $columnsToHideFromSetting;
+$columnsToHide = empty($columnsToHideFromSetting) ? array(0, 8, 9, 10, 11) : $columnsToHideFromSetting;
 $columnsToHide = json_encode($columnsToHide);
 
 $csv_content = array();
@@ -96,23 +96,22 @@ $csv_content = array();
 $js = "<script>
         // hide column and display the button to unhide it
         function foldup(in_id) {
-            $('#reporting_table .data_table tr td:nth-child('+in_id+')').fadeToggle();
-            $('#reporting_table .data_table tr th:nth-child('+in_id+')').fadeToggle();
-            $('div#unhideButtons span:nth-child('+in_id+')').fadeToggle();
+            $('#reporting_table .data_table tr td:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
+            $('#reporting_table .data_table tr th:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
+            $('div#unhideButtons a:nth-child(' + (in_id + 1) + ')').toggleClass('hide');
         }
 
         // add the red cross on top of each column
         function init_hide() {
             $('#reporting_table .data_table tr th').each(
                 function(index) {
-                    num_index = index + 1;
                     $(this).prepend(
-                        '<div style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display::return_icon(
+                        '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">" . Display::return_icon(
                             'visible.png',
                             get_lang('HideColumn'),
                             array('align' => 'absmiddle', 'hspace' => '3px'),
                             ICON_SIZE_SMALL
-                         )."</div>'
+                         ) . "</div>'
                     );
                 }
             );
@@ -135,15 +134,6 @@ $htmlHeadXtra[] = "<style type='text/css'>
     .secLine {background-color : #E6E6E6;}
     .content {padding-left : 15px;padding-right : 15px; }
     .specialLink{color : #0000FF;}
-    /* Style for reporting array hide/show columns */
-    .unhide_button {
-        cursor : pointer;
-        border:1px solid black;
-        background-color: #FAFAFA;
-        padding: 5px;
-        border-radius : 3px;
-        margin-right:3px;
-    }
     div#reporting_table table th {
       vertical-align:top;
     }
@@ -266,8 +256,6 @@ $form_search = new FormValidator(
     array(),
     FormValidator::LAYOUT_INLINE
 );
-$renderer = $form_search->defaultRenderer();
-$renderer->setCustomElementTemplate('<span>{element}</span>');
 $form_search->addElement('hidden', 'from', Security::remove_XSS($from));
 $form_search->addElement('hidden', 'session_id', $sessionId);
 $form_search->addElement('hidden', 'id_session', $sessionId);
@@ -335,30 +323,32 @@ $html .= Display::page_subheader2(get_lang('StudentList'));
 $is_western_name_order = api_is_western_name_order();
 
 if (count($a_students) > 0) {
+    $getLangXDays = get_lang('XDays');
     $form = new FormValidator(
         'reminder_form',
         'get',
-        api_get_path(REL_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq()
+        api_get_path(REL_CODE_PATH).'announcements/announcements.php?' . api_get_cidreq(),
+        null,
+        ['style' => 'margin-bottom: 10px'],
+        FormValidator::LAYOUT_INLINE
     );
     $options = array (
-        2 => '2 '.get_lang('Days'),
-        3 => '3 '.get_lang('Days'),
-        4 => '4 '.get_lang('Days'),
-        5 => '5 '.get_lang('Days'),
-        6 => '6 '.get_lang('Days'),
-        7 => '7 '.get_lang('Days'),
-        15 => '15 '.get_lang('Days'),
-        30 => '30 '.get_lang('Days'),
+        2 => sprintf($getLangXDays, 2),
+        3 => sprintf($getLangXDays, 3),
+        4 => sprintf($getLangXDays, 4),
+        5 => sprintf($getLangXDays, 5),
+        6 => sprintf($getLangXDays, 6),
+        7 => sprintf($getLangXDays, 7),
+        15 => sprintf($getLangXDays, 15),
+        30 => sprintf($getLangXDays, 30),
         'never' => get_lang('Never')
     );
-    $el = $form->addSelect('since', get_lang('RemindInactivesLearnersSince'), $options);
-    /* $el = $form->addElement(
-        'select',
+    $el = $form->addSelect(
         'since',
-        '<img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.
-        get_lang('RemindInactivesLearnersSince'),
-        $options
-    ); */
+        Display::returnFontAswesomeIcon('warning') . get_lang('RemindInactivesLearnersSince'),
+        $options,
+        ['class' => 'col-sm-3']
+    );
     $el->setSelected(7);
 
     $form->addElement('hidden', 'action', 'add');
@@ -416,7 +406,7 @@ if (count($a_students) > 0) {
     $headers['login'] = get_lang('Login');
 
     $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('TrainingTimeInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $headers['training_time'] = get_lang('TrainingTime');
     $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
@@ -469,16 +459,22 @@ if (count($a_students) > 0) {
         }
     }
     // display buttons to un hide hidden columns
-    $html .= "<div id='unhideButtons'>";
+    $html .= '<div id="unhideButtons" class="btn-toolbar">';
     $index = 0;
+    $getLangDisplayColumn = get_lang('DisplayColumn');
     foreach ($headers as $header) {
-        $html .= "<span title='".get_lang('DisplayColumn')." ".$header."' class='unhide_button hide' onclick='foldup($index)'>".
-            Display :: return_icon(
-                'move.png',
-                get_lang('DisplayColumn'),
-                array('align'=>'absmiddle', 'hspace'=>'3px'),
-                16
-            )." ".$header."</span>";
+        $html .= Display::toolbarButton(
+            $header,
+            '#',
+            'arrow-right',
+            'default',
+            [
+                'title' => htmlentities("$getLangDisplayColumn \"$header\"", ENT_QUOTES),
+                'class' => 'hide',
+                'onclick' => "foldup($index); return false;"
+            ]
+        );
+
         $index++;
     }
     $html .= "</div>";

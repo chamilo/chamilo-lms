@@ -43,10 +43,10 @@ $surveys = SurveyManager::get_surveys(api_get_course_id(), api_get_session_id())
 $courses = CourseManager::get_courses_list();
 $form = new FormValidator('copy_survey', 'post', 'copy_survey.php?'.api_get_cidreq());
 if (!$surveys) {
-    Display::display_error_message(get_lang('NoSurveysAvailable'));
+    Display::display_error_message(get_lang('NoSurveyAvailable'));
 }
 if (count($courses) <= 1) {
-    Display::display_error_message(get_lang('NoCoursesAvailable'));
+    Display::display_error_message(get_lang('CourseListNotAvailable'));
 }
 if ($surveys && count($courses) > 1) {
     // Surveys select

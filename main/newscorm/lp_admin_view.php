@@ -160,7 +160,7 @@ if (isset($_POST['save_audio'])) {
 
 Display::display_header(null, 'Path');
 
-$suredel = trim(get_lang('AreYouSureToDelete'));
+$suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
 ?>
 <script>

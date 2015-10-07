@@ -629,8 +629,8 @@ class AttendanceController
                 api_get_self() . '?' . api_get_cidreq(
                 ) . '&action=calendar_logins'
             );
-            $form->addDateRangePicker('range', get_lang('Range'));
-            $form->addButton('submit', get_lang('submit'));
+            $form->addDateRangePicker('range', get_lang('DateRange'));
+            $form->addButton('submit', get_lang('Submit'));
 
             if ($form->validate()) {
                 $values = $form->getSubmitValues();

@@ -14,10 +14,10 @@
         </thead>
         <tfoot>
             <tr>
-                <th width="200">{{ "Name" | get_lang }}</th>
-                <th class="text-center">{{ "ShortName" | get_lang }}</th>
-                <th width="300">{{ "Description" | get_lang }}</th>
-                <th class="text-right">{{ "Options" | get_lang }}</th>
+                <th>{{ "Name" | get_lang }}</th>
+                <th>{{ "ShortCode" | get_lang }}</th>
+                <th>{{ "Description" | get_lang }}</th>
+                <th>{{ "Options" | get_lang }}</th>
             </tr>
         </tfoot>
         <tbody>

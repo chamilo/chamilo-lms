@@ -2037,7 +2037,6 @@ function attach_glossary_into_scorm(type) {
 
                 var complex_array = new Array();
 
-                //$("iframe").contents().find("body .glossary-ajax").on("click", ".glossary-ajax", function() {
                 $("iframe").contents().find("body").on("click", ".glossary-ajax", function() {
 
                 div_show_id="div_show_id";
@@ -2166,17 +2165,16 @@ function attach_glossary_into_scorm(type) {
                         '">' +
                         '</iframe>';
 
-
-                    $("iframe").contents().find("#"+this.id).append('<br />' + link);
+                    $("iframe").contents().find("#"+this.id).append(link + '<br />');
                     $("iframe").contents().find('#' + openerId).click(function() {
                         var w = window.open(completeUrl, "Video", "width="+width+", "+"height="+height+"");
                         w = window.document.title = 'Video';
                     });
                 });
 
+                var iframes = $("iframe").contents().find('iframe');
 
-                var iframes =$("iframe").contents().find('iframe');
-                    iframes.each(function (value, obj) {
+                iframes.each(function (value, obj) {
                     var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
                     var uniqid = randLetter + Date.now();
                     var openerId = uniqid +'_opener';
@@ -2194,13 +2192,15 @@ function attach_glossary_into_scorm(type) {
                     var result = $("iframe").contents().find('#'+openerId);
 
                     if (result.length == 0) {
-                        $(this).parent().append(link + '<br />');
-                        $("iframe").contents().find('#' + openerId).click(function() {
-                            width = 1024;
-                            height = 640;
-                            var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
-                            win.document.title = 'Video';
-                        });
+                        if (embed.next().attr('class') != 'generated') {
+                            $(this).parent().append(link + '<br />');
+                            $("iframe").contents().find('#' + openerId).click(function() {
+                                width = 1024;
+                                height = 640;
+                                var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
+                                win.document.title = 'Video';
+                            });
+                        }
                     }
                 });
 
@@ -2208,11 +2208,10 @@ function attach_glossary_into_scorm(type) {
                     anchors.each(function (value, obj) {
                         var src = $(this).attr('href');
                         src = src.replace('https', 'http');
-                        var myAnchor = $('<a>(Alternative link)</a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
+                        var myAnchor = $('<a><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/link-external.png'; ?>"/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
                         $(this).after(myAnchor);
                         $(this).after('-');
                 });
-
             });
         }
     }

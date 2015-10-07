@@ -13,7 +13,7 @@ $(document).ready(function() {
         var width = embed.attr('width');
         var src = embed.attr('src').replace('https', 'http');
 
-        var completeUrl =  url + 'width='+embed.attr('width')+
+        var completeUrl = url + 'width='+embed.attr('width')+
             '&height='+height+
             '&id='+this.id+
             '&flashvars='+encodeURIComponent(embed.attr('flashvars'))+
@@ -23,7 +23,6 @@ $(document).ready(function() {
         var result = $("#"+this.id).find('#'+openerId);
         if (result.length == 0) {
             $("#" + this.id).append('<br />' + link);
-
             $('#' + openerId).click(function () {
                 var window = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
                 window.document.title = 'Video';
@@ -50,9 +49,8 @@ $(document).ready(function() {
         var result = $(this).find('#'+openerId);
 
         if (result.length == 0) {
-            $(this).parent().append('<br />' + link);
-            if ($(this).next().attr('class') != 'generated') {
-
+            if (embed.next().attr('class') != 'generated') {
+                $(this).parent().append(link + '<br />');
                 $('#' + openerId).click(function () {
                     width = 1024;
                     height = 640;
@@ -65,11 +63,10 @@ $(document).ready(function() {
 
     var anchors = $(document).find('a').not('.generated');
     anchors.each(function (value, obj) {
-
         if ($(this).next().attr('class') != 'generated') {
             var src = $(this).attr('href');
             src = src.replace('https', 'http');
-            var myAnchor = $('<a>(Alternative link)</a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
+            var myAnchor = $('<a><img src="../../../img/link-external.png "/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
             $(this).after(myAnchor);
             $(this).after('-');
         }

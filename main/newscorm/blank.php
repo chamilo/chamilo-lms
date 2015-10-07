@@ -43,7 +43,7 @@ if (isset($_GET['error'])) {
                 $src = $_SESSION['x_frame_source'];
                 $icon = '&nbsp;<i class="icon-external-link icon-2x"></i>';
                 echo Display::return_message(
-                    Display::url($src.$icon, $src, ['class' => 'btn', 'target' => '_blank']),
+                    Display::url($src.$icon, $src, ['class' => 'btn generated', 'target' => '_blank']),
                     'normal',
                     false
                 );

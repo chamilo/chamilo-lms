@@ -157,11 +157,6 @@ while($row = Database::fetch_array($rs)){
 	$listActiveServices[] = $row['variable'];
 }
 
-/*$javascript_service_displayed = '';
-if (isset($_GET['display'])) {
-	$javascript_service_displayed = 'document.getElementById("extension_content_'.$_GET['display'].'").style.display = "block"';
-}*/
-
 // javascript to handle accordion behaviour
 $javascript_message = '';
 if(!empty($message)){
@@ -191,7 +186,6 @@ function loadTables(){
 			extensionsContent.push(listeDiv[i]);
 		}
 	}
-'.$javascript_service_displayed.'
 }
 
 function hideMessage(){

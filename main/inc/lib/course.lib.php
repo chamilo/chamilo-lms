@@ -1806,6 +1806,9 @@ class CourseManager
     {
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
+        if (empty($courseId)) {
+            return false;
+        }
 
         $sql = "SELECT DISTINCT
                     u.id as user_id,

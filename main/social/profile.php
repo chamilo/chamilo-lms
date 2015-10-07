@@ -403,7 +403,7 @@ if ($show_full_profile) {
                             if ($extra_field_title == 'Skype') {
                                 $data = '<a href="skype:' . $data . '?chat">' . get_lang('Chat') . '</a>';
                             }
-                            $extra_information_value .= '<li class="list-group-item"><strong>'.ucfirst($extraFieldInfo['display_text']).':</strong> '.$data.'</li>';
+                            $extra_information_value .= '<li class="list-group-item">'.Display::return_icon('skype.png', $extraFieldInfo['display_text'], null, ICON_SIZE_TINY, false) . ' ' . $data.'</li>';
                         }
                     break;
                 }

@@ -2200,7 +2200,7 @@ function attach_glossary_into_scorm(type) {
                         if (embed.prev().attr('class') != 'generated') {
                             $(this).parent().prepend(link + '<br />');
                             $("iframe").contents().find('#' + openerId).click(function() {
-                                width = 1024;
+                                width = 1280;
                                 height = 640;
                                 var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
                                 win.document.title = 'Video';

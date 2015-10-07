@@ -43,7 +43,6 @@ $(document).ready(function() {
         var src = embed.attr('src');
 
         var n = src.indexOf("youtube.com");
-        console.log(n);
         if (n > 0) {
             return true;
         }
@@ -60,7 +59,7 @@ $(document).ready(function() {
             if (embed.next().attr('class') != 'generated') {
                 $(this).prepend(link + '<br />');
                 $('#' + openerId).click(function () {
-                    width = 1024;
+                    width = 1280;
                     height = 640;
                     var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
                     win.document.title = 'Video';

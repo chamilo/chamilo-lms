@@ -2217,7 +2217,10 @@ function attach_glossary_into_scorm(type) {
                 var anchors = $("iframe").contents().find('a').not('.generated');
                     anchors.each(function (value, obj) {
                         if ($(this).next().attr('class') != 'generated' ) {
-                            var content = $.trim($(this).val());
+                            var content = $(this).html();
+                            content = content.replace('<br />', '');
+                            content = content.replace('<br>', '');
+                            content = $.trim(content);
                             if (content == '') {
                                 return true;
                             }

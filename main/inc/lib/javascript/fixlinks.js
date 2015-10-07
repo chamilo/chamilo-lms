@@ -77,7 +77,10 @@ $(document).ready(function() {
     var anchors = $(document).find('a').not('.generated');
     anchors.each(function (value, obj) {
         if ($(this).next().attr('class') != 'generated' ) {
-            var content = $.trim($(this).val());
+            var content = $(this).html();
+            content = content.replace('<br />', '');
+            content = content.replace('<br>', '');
+            content = $.trim(content);
             if (content == '') {
                 return true;
             }

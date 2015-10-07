@@ -324,7 +324,7 @@ if ($show_full_profile) {
 
     $extra_information = '';
     if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
-        $extra_information_value = '';
+        $extra_information_value = '<ul class="list-group">';
         $extraField = new ExtraField('user');
         foreach ($extra_user_data as $key => $data) {
             // Avoiding parameters
@@ -350,8 +350,8 @@ if ($show_full_profile) {
             }
 
             if (is_array($data)) {
-                $extra_information_value .= '<dt>'.ucfirst($extraFieldInfo['display_text']).'</dt>'
-                    .'<dd> '.implode(',', $data).'</dd>';
+                $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).' '
+                    .' '.implode(',', $data).'</li>';
             } else {
                 switch ($extraFieldInfo['field_type']) {
                     case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
@@ -364,8 +364,8 @@ if ($show_full_profile) {
                             $row_options = Database::fetch_row($res_options);
                             $value_options[] = $row_options[0];
                         }
-                        $extra_information_value .= '<dt>'.ucfirst($extraFieldInfo['display_text']).':</dt>'
-                            .'<dd>'.implode(' ', $value_options).'</dd>';
+                        $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '
+                            .' '.implode(' ', $value_options).'</li>';
                         break;
                     case ExtraField::FIELD_TYPE_TAG:
                         $user_tags = UserManager::get_user_tags($user_id, $extraFieldInfo['id']);
@@ -378,8 +378,8 @@ if ($show_full_profile) {
                                 .'</a>';
                         }
                         if (is_array($user_tags) && count($user_tags)>0) {
-                            $extra_information_value .= '<dt>'.ucfirst($extraFieldInfo['display_text']).':</dt>'
-                                .'<dd>'.implode('', $tag_tmp).'</dd>';
+                            $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '
+                                .' '.implode('', $tag_tmp).'</li>';
                         }
                         break;
                     case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
@@ -395,7 +395,7 @@ if ($show_full_profile) {
                             .' style="margin-right:0.5em;margin-bottom:'.$bottom.'em;" />'
                             .$extraFieldInfo['display_text']
                             .'</a>';
-                        $extra_information_value .= '<dd>'.$data.'</dd>';
+                        $extra_information_value .= '<li class="list-group-item">'.$data.'</li>';
                         break;
                     default:
                         if (!empty($data)) {
@@ -403,19 +403,23 @@ if ($show_full_profile) {
                             if ($extra_field_title == 'Skype') {
                                 $data = '<a href="skype:' . $data . '?chat">' . get_lang('Chat') . '</a>';
                             }
-                            $extra_information_value .= '<dt>' . ucfirst($extraFieldInfo['display_text']) . ':</dt><dd>' . $data . '</dd>';
+                            $extra_information_value .= '<li class="list-group-item"><strong>'.ucfirst($extraFieldInfo['display_text']).':</strong> '.$data.'</li>';
                         }
                     break;
                 }
             }
         }
+        $extra_information_value .= '</ul>';
 
         // if there are information to show
         if (!empty($extra_information_value)) {
-            $extra_information .= Display::panel(
-                $extra_information_value,
-                get_lang('ExtraInformation')
-            );
+            $extra_information .= Display::panelCollapse(
+                    get_lang('ExtraInformation'),
+                    $extra_information_value,
+                    'sn-extra-information',
+                    null, 'sn-extra-accordion',
+                    'sn-extra-collapse'
+                    );
         }
     }
 

@@ -2178,7 +2178,7 @@ function attach_glossary_into_scorm(type) {
                     var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
                     var uniqid = randLetter + Date.now();
                     var openerId = uniqid +'_opener';
-                    var link = '<a id="'+openerId+'" class="generated" href="#">If iframe does not work, try clicking here.</a>';
+                    var link = '<a id="'+openerId+'" class="generated" href="#">If iframe does not work, try clicking here. <img src="<?php echo api_get_path(WEB_CODE_PATH).'img/link-external.png'; ?>"/></a>';
                     var embed = $(this);
                     var height = embed.attr('height');
                     var width = embed.attr('width');

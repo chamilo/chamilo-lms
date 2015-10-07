@@ -2,6 +2,7 @@ $(document).ready(function() {
     var objects = $(document).find('object');
     var pathname = location.pathname;
     var coursePath = pathname.substr(0, pathname.indexOf('/courses/'));
+    var iconPath = location.protocol +  '//' + location.host+ coursePath + '/main/img/';
     var url = "http://"+location.host + coursePath+"/courses/proxy.php?";
 
     objects.each(function (value, obj) {
@@ -35,7 +36,7 @@ $(document).ready(function() {
         var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
         var uniqid = randLetter + Date.now();
         var openerId = uniqid +'_opener';
-        var link = '<a id="'+openerId+'" class="generated" href="#">If iframe does not work, try clicking here.</a>';
+        var link = '<a id="'+openerId+'" class="generated" href="#">If iframe does not work, try clicking here.<img src="'+iconPath+'link-external.png "/></a>';
         var embed = $(this);
         var height = embed.attr('height');
         var width = embed.attr('width');
@@ -66,7 +67,7 @@ $(document).ready(function() {
         if ($(this).next().attr('class') != 'generated') {
             var src = $(this).attr('href');
             src = src.replace('https', 'http');
-            var myAnchor = $('<a><img src="../../../img/link-external.png "/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
+            var myAnchor = $('<a><img src="'+iconPath+'link-external.png "/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
             $(this).after(myAnchor);
             $(this).after('-');
         }

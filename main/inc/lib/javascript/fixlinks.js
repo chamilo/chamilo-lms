@@ -96,6 +96,11 @@ $(document).ready(function() {
                 return true;
             }
 
+            var hasAccordion = $(this).attr('class').indexOf('accordion-toggle');
+            if (hasAccordion >= 0) {
+                return true;
+            }
+
             var src = $(this).attr('href');
             src = url+'&type=link&src='+src;
             src = src.replace('https', 'http');

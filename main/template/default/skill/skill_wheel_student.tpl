@@ -174,7 +174,7 @@
                                 {% if skill.icon is empty %}
                                     <img src="{{ 'badges.png' | icon(32) }}" width="32" height="32" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% else %}
-                                    <img src="{{ skill.web_icon_thumb_path }}" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                    <img src="{{ skill.web_icon_thumb_path }}" width="32" height="32" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% endif %}
                             {% endfor %}
                         {% endif %}

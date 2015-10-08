@@ -84,6 +84,13 @@ $(document).ready(function() {
             if (content == '') {
                 return true;
             }
+
+            var hasLocalhost = $(this).attr('href').indexOf(location.host);
+
+            if (hasLocalhost > 0) {
+                return true;
+            }
+
             var src = $(this).attr('href');
             src = url+'&type=link&src='+src;
             src = src.replace('https', 'http');

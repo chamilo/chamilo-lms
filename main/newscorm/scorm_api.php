@@ -2216,7 +2216,7 @@ function attach_glossary_into_scorm(type) {
 
                 var anchors = $("iframe").contents().find('a').not('.generated');
                     anchors.each(function (value, obj) {
-                        if ($(this).next().attr('class') != 'generated' ) {
+                        if ($(this).next().attr('class') != 'generated') {
                             var content = $(this).html();
                             content = content.replace('<br />', '');
                             content = content.replace('<br>', '');
@@ -2224,6 +2224,14 @@ function attach_glossary_into_scorm(type) {
                             if (content == '') {
                                 return true;
                             }
+
+
+                            var hasLocalhost = $(this).attr('href').indexOf(location.host);
+
+                            if (hasLocalhost > 0) {
+                                return true;
+                            }
+
                             var src = $(this).attr('href');
                             src = url+'&type=link&src='+src;
                             src = src.replace('https', 'http');

@@ -79,7 +79,7 @@ class ImportCsv
      */
     public function run()
     {
-         /*
+        /*
         global $_configuration;
         $_configuration['access_url'] = 2;
         */
@@ -100,6 +100,7 @@ class ImportCsv
         $fileToProcess = array();
         $fileToProcessStatic = array();
         $teacherBackup = array();
+        $groupBackup = array();
 
         if (!empty($files)) {
             foreach ($files as $file) {
@@ -167,7 +168,7 @@ class ImportCsv
                         echo 'File: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
                         if ($method == 'importSessions') {
-                            $this->$method($file, true, $teacherBackup);
+                            $this->$method($file, true, $teacherBackup, $groupBackup);
                         } else {
                             $this->$method($file, true);
                         }
@@ -195,7 +196,7 @@ class ImportCsv
                         $file = $fileInfo['file'];
                         echo 'Static file: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading static file: $file");
-                        $this->$method($file, true, $teacherBackup);
+                        $this->$method($file, true, $teacherBackup, $groupBackup);
                     }
                 }
             }
@@ -646,9 +647,9 @@ class ImportCsv
     /**
      * @param string $file
      */
-    private function importCoursesStatic($file, $moveFile, &$teacherBackup = array())
+    private function importCoursesStatic($file, $moveFile, &$teacherBackup = array(), &$groupBackup = array())
     {
-        $this->importCourses($file, false, $teacherBackup);
+        $this->importCourses($file, false, $teacherBackup, $groupBackup);
     }
 
     /**
@@ -941,8 +942,9 @@ class ImportCsv
      * @param string $file
      * @param bool $moveFile
      * @param array $teacherBackup
+     * @param array $groupBackup
      */
-    private function importCourses($file, $moveFile = true, &$teacherBackup = array())
+    private function importCourses($file, $moveFile = true, &$teacherBackup = array(), &$groupBackup = array())
     {
         $data = Import::csv_to_array($file);
 
@@ -996,6 +998,11 @@ class ImportCsv
 
                     $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
 
+                    $teachers = $row['teachers'];
+                    if (!is_array($teachers)) {
+                        $teachers = array($teachers);
+                    }
+
                     if ($addTeacherToSession) {
                         CourseManager::updateTeachers(
                             $courseInfo['id'],
@@ -1014,6 +1021,33 @@ class ImportCsv
                             false,
                             $teacherBackup
                         );
+                    }
+
+                    foreach ($teachers as $teacherId) {
+                        if (isset($groupBackup['tutor'][$teacherId]) &&
+                            isset($groupBackup['tutor'][$teacherId][$courseInfo['code']])
+                        ) {
+                            foreach ($groupBackup['tutor'][$teacherId][$courseInfo['code']] as $data) {
+                                GroupManager::subscribe_tutors(
+                                    array($teacherId),
+                                    $data['group_id'],
+                                    $data['c_id']
+                                );
+                            }
+                        }
+
+                        if (isset($groupBackup['user'][$teacherId]) &&
+                            isset($groupBackup['user'][$teacherId][$courseInfo['code']]) &&
+                            !empty($groupBackup['user'][$teacherId][$courseInfo['code']])
+                        ) {
+                            foreach ($groupBackup['user'][$teacherId][$courseInfo['code']] as $data) {
+                                GroupManager::subscribe_users(
+                                    array($teacherId),
+                                    $data['group_id'],
+                                    $data['c_id']
+                                );
+                            }
+                        }
                     }
 
                     if ($result) {
@@ -1262,8 +1296,9 @@ class ImportCsv
      * @param string $file
      * @param bool   $moveFile
      * @param array $teacherBackup
+     * @param array $groupBackup
      */
-    private function importSessions($file, $moveFile = true, &$teacherBackup = array())
+    private function importSessions($file, $moveFile = true, &$teacherBackup = array(), &$groupBackup = array())
     {
         $avoid =  null;
         if (isset($this->conditions['importSessions']) &&
@@ -1288,7 +1323,8 @@ class ImportCsv
             true, //$addOriginalCourseTeachersAsCourseSessionCoaches
             true, //$removeAllTeachersFromCourse
             1, // $showDescription,
-            $teacherBackup
+            $teacherBackup,
+            $groupBackup
         );
 
         if (!empty($result['error_message'])) {
@@ -1365,7 +1401,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    private function importUnsubscribeStatic($file, $moveFile = false, &$teacherBackup = array())
+    private function importUnsubscribeStatic($file, $moveFile = false, &$teacherBackup = array(), $groupBackup = array())
     {
         $data = Import::csv_reader($file);
 
@@ -1405,6 +1441,28 @@ class ImportCsv
                 $result = Database::query($sql);
                 $userCourseData = Database::fetch_array($result, 'ASSOC');
                 $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
+
+                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
+                        WHERE
+                            user_id = ".$userId." AND
+                            c_id = '".$courseInfo['real_id']."'
+                        ";
+
+                $result = Database::query($sql);
+                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                    $groupBackup['user'][$userId][$courseInfo['code']][$groupData['group_id']] = $groupData;
+                }
+
+                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
+                        WHERE
+                            user_id = ".$userId." AND
+                            c_id = '".$courseInfo['real_id']."'
+                        ";
+
+                $result = Database::query($sql);
+                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                    $groupBackup['tutor'][$userId][$courseInfo['code']][$groupData['group_id']] = $groupData;
+                }
 
                 CourseManager::unsubscribe_user(
                     $userId,

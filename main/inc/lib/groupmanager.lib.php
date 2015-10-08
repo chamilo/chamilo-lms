@@ -1551,11 +1551,11 @@ class GroupManager
      * @param int $group_id
      * @return bool TRUE if successful
      */
-    public static function subscribe_users($user_ids, $group_id)
+    public static function subscribe_users($user_ids, $group_id, $course_id = null)
     {
         $user_ids = is_array($user_ids) ? $user_ids : array($user_ids);
         $result = true;
-        $course_id = api_get_course_int_id();
+        $course_id = isset($course_id) && !empty($course_id) ? intval($course_id) : api_get_course_int_id();
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
             foreach ($user_ids as $user_id) {
@@ -1579,11 +1579,12 @@ class GroupManager
      * @see subscribe_users. This function is almost an exact copy of that function.
      * @return bool TRUE if successful
      */
-    public static function subscribe_tutors($user_ids, $group_id)
+    public static function subscribe_tutors($user_ids, $group_id, $course_id = null)
     {
         $user_ids = is_array($user_ids) ? $user_ids : array($user_ids);
         $result = true;
-        $course_id = api_get_course_int_id();
+
+        $course_id = isset($course_id) && !empty($course_id) ? intval($course_id) : api_get_course_int_id();
         $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
 
         foreach ($user_ids as $user_id) {

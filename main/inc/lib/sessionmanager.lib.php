@@ -3763,6 +3763,9 @@ class SessionManager
      * @param bool $updateCourseCoaches
      * @param bool $sessionWithCoursesModifier
      * @param int $showDescription
+     * @param array $teacherBackupList
+     * @param array $groupBackup
+     *
      * @return array
      */
     static function importCSV(
@@ -3782,7 +3785,8 @@ class SessionManager
         $addOriginalCourseTeachersAsCourseSessionCoaches = true,
         $removeAllTeachersFromCourse = true,
         $showDescription = null,
-        &$teacherBackupList = array()
+        &$teacherBackupList = array(),
+        &$groupBackup = array()
     ) {
         $content = file($file);
 
@@ -4180,8 +4184,7 @@ class SessionManager
                                 SET course_code = '$course_code', id_session='$session_id'";
                         Database::query($sql);
 
-                        $course_info = api_get_course_info($course_code);
-                        SessionManager::installCourse($session_id, $course_info['real_id']);
+                        SessionManager::installCourse($session_id, $courseInfo['real_id']);
 
                         if ($debug) {
                             $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
@@ -4284,6 +4287,28 @@ class SessionManager
                                             $userCourseData = Database::fetch_array($result, 'ASSOC');
                                             $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
 
+                                            $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
+                                                    WHERE
+                                                        user_id = ".$teacher['user_id']." AND
+                                                        c_id = '".$courseInfo['real_id']."'
+                                                    ";
+
+                                            $result = Database::query($sql);
+                                            while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                $groupBackup['user'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
+                                            }
+
+                                            $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
+                                                    WHERE
+                                                        user_id = ".$teacher['user_id']." AND
+                                                        c_id = '".$courseInfo['real_id']."'
+                                                    ";
+
+                                            $result = Database::query($sql);
+                                            while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                $groupBackup['tutor'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
+                                            }
+
                                             CourseManager::unsubscribe_user(
                                                 $teacher['user_id'],
                                                 $course_code
@@ -4310,6 +4335,32 @@ class SessionManager
                                         0,
                                         $userCourseCategory
                                     );
+
+                                    if (isset($groupBackup['user'][$teacherToAdd]) &&
+                                        isset($groupBackup['user'][$teacherToAdd][$course_code]) &&
+                                        !empty($groupBackup['user'][$teacherToAdd][$course_code])
+                                    ) {
+                                        foreach ($groupBackup['user'][$teacherToAdd][$course_code] as $data) {
+                                            GroupManager::subscribe_users(
+                                                $teacherToAdd,
+                                                $data['group_id'],
+                                                $data['c_id']
+                                            );
+                                        }
+                                    }
+
+                                    if (isset($groupBackup['tutor'][$teacherToAdd]) &&
+                                        isset($groupBackup['tutor'][$teacherToAdd][$course_code]) &&
+                                        !empty($groupBackup['tutor'][$teacherToAdd][$course_code])
+                                    ) {
+                                        foreach ($groupBackup['tutor'][$teacherToAdd][$course_code] as $data) {
+                                            GroupManager::subscribe_tutors(
+                                                $teacherToAdd,
+                                                $data['group_id'],
+                                                $data['c_id']
+                                            );
+                                        }
+                                    }
                                 }
                             }
 
@@ -4341,6 +4392,28 @@ class SessionManager
                                                 $result = Database::query($sql);
                                                 $userCourseData = Database::fetch_array($result, 'ASSOC');
                                                 $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+
+                                                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
+                                                    WHERE
+                                                        user_id = ".$teacher['user_id']." AND
+                                                        c_id = '".$courseInfo['real_id']."'
+                                                    ";
+
+                                                $result = Database::query($sql);
+                                                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                    $groupBackup['user'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
+                                                }
+
+                                                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
+                                                        WHERE
+                                                            user_id = ".$teacher['user_id']." AND
+                                                            c_id = '".$courseInfo['real_id']."'
+                                                        ";
+
+                                                $result = Database::query($sql);
+                                                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                    $groupBackup['tutor'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
+                                                }
 
                                                 CourseManager::unsubscribe_user(
                                                     $teacher['user_id'],

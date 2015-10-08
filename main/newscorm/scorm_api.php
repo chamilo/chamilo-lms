@@ -2231,7 +2231,7 @@ function attach_glossary_into_scorm(type) {
                             }
 
                             var hasJs = $(this).attr('href').indexOf('javascript');
-                            if (hasJs > 0) {
+                            if (hasJs >= 0) {
                                 return true;
                             }
 

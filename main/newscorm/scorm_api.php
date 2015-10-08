@@ -2225,19 +2225,23 @@ function attach_glossary_into_scorm(type) {
                                 return true;
                             }
 
-                            var hasLocalhost = $(this).attr('href').indexOf(location.host);
-                            if (hasLocalhost > 0) {
-                                return true;
+                            if ($(this).attr('href')) {
+                                var hasLocalhost = $(this).attr('href').indexOf(location.host);
+                                if (hasLocalhost > 0) {
+                                    return true;
+                                }
+
+                                var hasJs = $(this).attr('href').indexOf('javascript');
+                                if (hasJs >= 0) {
+                                    return true;
+                                }
                             }
 
-                            var hasJs = $(this).attr('href').indexOf('javascript');
-                            if (hasJs >= 0) {
-                                return true;
-                            }
-
-                            var hasAccordion = $(this).attr('class').indexOf('accordion-toggle');
-                            if (hasAccordion >= 0) {
-                                return true;
+                            if ($(this).attr('class')) {
+                                var hasAccordion = $(this).attr('class').indexOf('accordion-toggle');
+                                if (hasAccordion >= 0) {
+                                    return true;
+                                }
                             }
 
                             var src = $(this).attr('href');

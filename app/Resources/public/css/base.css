@@ -30,7 +30,6 @@ header{
   clear: both;
 }
 footer {
-  height: 7em;
   padding-top: 15px;
 }
 footer #footer_right{
@@ -932,7 +931,10 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .message-attach {
     float:left;
 }
-
+#sn-extra-information .list-group-item{
+    padding: 5px 10px;
+    border: none;
+}
 
 /** BUTTONS **/
 

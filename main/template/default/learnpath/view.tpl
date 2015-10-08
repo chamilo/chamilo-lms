@@ -11,31 +11,38 @@
         <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 {% if gamification_mode == 1 %}
-                    <div class="row">
-                        <div class="col-xs-8">
-                            {% if gamification_stars > 0 %}
-                                {% for i in 1..gamification_stars %}
-                                    <i class="fa fa-star fa-2x"></i>
-                                {% endfor %}
-                            {% endif %}
+                <div id="scorm-gamification">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                {% if gamification_stars > 0 %}
+                                    {% for i in 1..gamification_stars %}
+                                        <i class="fa fa-star fa-2x"></i>
+                                    {% endfor %}
+                                {% endif %}
 
-                            {% if gamification_stars < 4 %}
-                                {% for i in 1..4 - gamification_stars %}
-                                    <i class="fa fa-star-o fa-2x"></i>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="col-xs-4 text-right">
-                            {{ "XPoints"|get_lang|format(gamification_points) }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 navegation-bar" id="lp_navigation_elem">
-                            <div id="progress_bar">
-                                {{ progress_bar }}
+                                {% if gamification_stars < 4 %}
+                                    {% for i in 1..4 - gamification_stars %}
+                                        <i class="fa fa-star-o fa-2x"></i>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-xs-4 text-right">
+                                {{ "XPoints"|get_lang|format(gamification_points) }}
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xs-12 navegation-bar" id="lp_navigation_elem">
+                                <div id="progress_bar">
+                                    {{ progress_bar }}
+                                </div>
+                            </div>
+                        </div>
+                        </div>        
                     </div>
+                </div>
+                    
                 {% else %}
                     <div id="scorm-info" class="panel panel-default">
                         <div class="panel-heading">

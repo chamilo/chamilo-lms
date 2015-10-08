@@ -1401,7 +1401,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    private function importUnsubscribeStatic($file, $moveFile = false, &$teacherBackup = array(), $groupBackup = array())
+    private function importUnsubscribeStatic($file, $moveFile = false, &$teacherBackup = array(), &$groupBackup = array())
     {
         $data = Import::csv_reader($file);
 

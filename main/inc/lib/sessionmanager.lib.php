@@ -4438,6 +4438,32 @@ class SessionManager
                                             0,
                                             $userCourseCategory
                                         );
+
+                                        if (isset($groupBackup['user'][$teacherId]) &&
+                                            isset($groupBackup['user'][$teacherId][$course_code]) &&
+                                            !empty($groupBackup['user'][$teacherId][$course_code])
+                                        ) {
+                                            foreach ($groupBackup['user'][$teacherId][$course_code] as $data) {
+                                                GroupManager::subscribe_users(
+                                                    $teacherId,
+                                                    $data['group_id'],
+                                                    $data['c_id']
+                                                );
+                                            }
+                                        }
+
+                                        if (isset($groupBackup['tutor'][$teacherId]) &&
+                                            isset($groupBackup['tutor'][$teacherId][$course_code]) &&
+                                            !empty($groupBackup['tutor'][$teacherId][$course_code])
+                                        ) {
+                                            foreach ($groupBackup['tutor'][$teacherId][$course_code] as $data) {
+                                                GroupManager::subscribe_tutors(
+                                                    $teacherId,
+                                                    $data['group_id'],
+                                                    $data['c_id']
+                                                );
+                                            }
+                                        }
                                     }
                                 }
                             }

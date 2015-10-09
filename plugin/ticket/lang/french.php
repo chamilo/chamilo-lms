@@ -83,4 +83,5 @@ $strings['AreYouSure'] = "Êtes-vous certain?";
 $strings['allow_student_add'] = "Permettre à l'étudiant de générer des tickets";
 $strings['PleaseBeforeRegisterATicketSelectOneUser'] = "Veuillez sélectionner un utilisateur avant d'enregistrer un ticket.";
 $strings['RequestConfirmation'] = "Demander confirmation";
-
+$strings['TicketUpdated'] = "Ticket modifié";
+$strings['TicketClosed'] = "Ticket fermé";

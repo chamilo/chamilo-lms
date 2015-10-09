@@ -1114,6 +1114,65 @@ class TicketManager
     }
 
     /**
+     * @param int $ticketId
+     * @param int $userId
+     * @param string $title
+     * @param string $message
+     */
+    public static function sendNotification($ticketId, $userId, $title, $message)
+    {
+        global $plugin;
+        $userInfo = api_get_user_info($userId);
+        $ticketInfo = self::get_ticket_detail_by_id($ticketId, $userId);
+        $requestUserInfo = $ticketInfo['usuario'];
+        $ticketCode = $ticketInfo['ticket']['ticket_code'];
+        $status = $ticketInfo['ticket']['status'];
+        $priority = $ticketInfo['ticket']['priority'];
+
+        $titleEmail = "[$ticketCode] $title";
+        $messageEmail = $plugin->get_lang('TicketNum').": $ticketCode <br />";
+        $messageEmail .= $plugin->get_lang('Status').": $status <br />";
+        $messageEmail .= $plugin->get_lang('Priority').": $priority <br />";
+        $messageEmail .= '<hr /><br />';
+        $messageEmail .= $message;
+
+        /*MessageManager::send_message_simple(
+            $requestUserInfo['user_id'],
+            $titleEmail,
+            $messageEmail
+        );
+
+        MessageManager::send_message_simple(
+            $userInfo['user_id'],
+            $titleEmail,
+            $messageEmail
+        );*/
+
+        api_mail_html(
+            $requestUserInfo['complete_name'],
+            $requestUserInfo['email'],
+            $titleEmail,
+            $messageEmail,
+            null,
+            null,
+            array(),
+            null
+        );
+
+        // Admin
+        api_mail_html(
+            $userInfo['complete_name'],
+            $userInfo['email'],
+            $titleEmail,
+            $messageEmail,
+            null,
+            null,
+            array(),
+            null
+        );
+    }
+
+    /**
      * @param $status_id
      * @param $ticket_id
      * @param $user_id
@@ -1124,6 +1183,7 @@ class TicketManager
         $ticket_id,
         $user_id
     ) {
+        global $plugin;
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
 
         $ticket_id = intval($ticket_id);
@@ -1139,6 +1199,12 @@ class TicketManager
         $result = Database::query($sql);
 
         if (Database::affected_rows($result) > 0) {
+            self::sendNotification(
+                $ticket_id,
+                $user_id,
+                $plugin->get_lang('TicketUpdated'),
+                $plugin->get_lang('TicketUpdated')
+            );
             return true;
         } else {
             return false;
@@ -1204,6 +1270,7 @@ class TicketManager
      */
     public static function close_ticket($ticket_id, $user_id)
     {
+        global $plugin;
         $ticket_id = intval($ticket_id);
         $user_id = intval($user_id);
 
@@ -1216,6 +1283,13 @@ class TicketManager
                     end_date ='$now'
                 WHERE ticket_id ='$ticket_id'";
         Database::query($sql);
+
+        self::sendNotification(
+            $ticket_id,
+            $user_id,
+            $plugin->get_lang('TicketClosed'),
+            $plugin->get_lang('TicketClosed')
+        );
     }
 
     /**

@@ -2130,7 +2130,6 @@ function attach_glossary_into_scorm(type) {
             });
         }
 
-
         if (type == 'fix_links') {
             $(document).ready(function() {
                 var objects = $("iframe").contents().find('object');
@@ -2140,13 +2139,18 @@ function attach_glossary_into_scorm(type) {
                 var url = "http://"+location.host + coursePath+"/courses/proxy.php?";
 
                 objects.each(function (value, obj) {
-
                     var dialogId = this.id +'_dialog';
                     var openerId = this.id +'_opener';
 
                     var link = '<a id="'+openerId+'" href="#" class="generated btn">'+
                         '<div style="text-align: center"><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/play-circle-8x.png'; ?>"/><br />If video does not work, try clicking here.</div></a>';
                     var embed = $("iframe").contents().find("#"+this.id).find('embed').first();
+
+                    var hasHttp = embed.attr('src').indexOf("http");
+
+                    if (hasHttp < 0) {
+                        return true;
+                    }
 
                     var height = embed.attr('height');
                     var width = embed.attr('width');
@@ -2178,7 +2182,7 @@ function attach_glossary_into_scorm(type) {
                     var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
                     var uniqid = randLetter + Date.now();
                     var openerId = uniqid +'_opener';
-                    var link = '<a id="'+openerId+'" class="generated" href="#">If iframe does not work, try clicking here. <img src="<?php echo api_get_path(WEB_CODE_PATH).'img/link-external.png'; ?>"/></a>';
+                    var link = '<a id="'+openerId+'" class="generated" href="#">Open website <img src="<?php echo api_get_path(WEB_CODE_PATH).'img/link-external.png'; ?>"/></a>';
                     var embed = $(this);
                     var height = embed.attr('height');
                     var width = embed.attr('width');
@@ -2191,11 +2195,16 @@ function attach_glossary_into_scorm(type) {
                         '&width='+width;
                     var result = $("iframe").contents().find('#'+openerId);
 
+                    var n = src.indexOf("youtube.com");
+                    if (n > 0) {
+                        return true;
+                    }
+
                     if (result.length == 0) {
-                        if (embed.next().attr('class') != 'generated') {
-                            $(this).parent().append(link + '<br />');
+                        if (embed.prev().attr('class') != 'generated') {
+                            $(this).parent().prepend(link + '<br />');
                             $("iframe").contents().find('#' + openerId).click(function() {
-                                width = 1024;
+                                width = 1280;
                                 height = 640;
                                 var win = window.open(completeUrl, "Video", "width=" + width + ", " + "height=" + height + "");
                                 win.document.title = 'Video';
@@ -2206,15 +2215,45 @@ function attach_glossary_into_scorm(type) {
 
                 var anchors = $("iframe").contents().find('a').not('.generated');
                 anchors.each(function (value, obj) {
-                    var src = $(this).attr('href');
-                    src = src.replace('https', 'http');
-                    var myAnchor = $('<a><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/link-external.png'; ?>"/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
-                    $(this).after(myAnchor);
-                    $(this).after('-');
+                    if ($(this).next().attr('class') != 'generated') {
+                        var content = $(this).html();
+                        content = content.replace('<br />', '');
+                        content = content.replace('<br>', '');
+                        content = $.trim(content);
+                        if (content == '') {
+                            return true;
+                        }
+
+                        if ($(this).attr('href')) {
+                            var hasLocalhost = $(this).attr('href').indexOf(location.host);
+                            if (hasLocalhost > 0) {
+                                return true;
+                            }
+
+                            var hasJs = $(this).attr('href').indexOf('javascript');
+                            if (hasJs >= 0) {
+                                return true;
+                            }
+                        }
+
+                        if ($(this).attr('class')) {
+                            var hasAccordion = $(this).attr('class').indexOf('accordion-toggle');
+                            if (hasAccordion >= 0) {
+                                return true;
+                            }
+                        }
+
+                        var src = $(this).attr('href');
+                        src = url+'&type=link&src='+src;
+                        src = src.replace('https', 'http');
+                        $(this).attr('href', src);
+                        var myAnchor = $('<a><img src="<?php echo api_get_path(WEB_CODE_PATH).'img/link-external.png'; ?>"/></a>').attr("href", src).attr('target', '_blank').attr('class', 'generated');
+                        $(this).after(myAnchor);
+                        $(this).after('-');
+                    }
                 });
             });
         }
-
 
     }
 }

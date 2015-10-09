@@ -1843,8 +1843,8 @@ class CourseManager
         $course_code,
         $separator = self::USER_SEPARATOR,
         $add_link_to_profile = false,
-        $orderList = false    
-    ) {     
+        $orderList = false
+    ) {
         $teacher_list = self::get_teacher_list_from_course_code($course_code);
         $teacher_string = '';
         $html = '';
@@ -1868,7 +1868,7 @@ class CourseManager
                 }
                 $list[] = $teacher_name;
             }
-            
+
             if (!empty($list)) {
                 if ($orderList === true){
                     $html .= '<ul class="user-teacher">';
@@ -1881,7 +1881,7 @@ class CourseManager
                 }
             }
         }
-        
+
         return $html;
     }
 
@@ -1946,7 +1946,7 @@ class CourseManager
         $courseId = null,
         $separator = self::USER_SEPARATOR,
         $add_link_to_profile = false,
-        $orderList = false    
+        $orderList = false
     ) {
         $coachs_course = self::get_coachs_from_course($session_id, $courseId);
         $course_coachs = array();
@@ -1969,7 +1969,7 @@ class CourseManager
             }
         }
         $coaches_to_string = null;
-        
+
         if (!empty($course_coachs)) {
             if ($orderList === true){
                 $html .= '<ul class="user-coachs">';
@@ -1980,9 +1980,9 @@ class CourseManager
             } else {
                 $coaches_to_string = array_to_string($course_coachs, $separator);
             }
-            
+
         }
-        
+
         return $html;
     }
 
@@ -4846,7 +4846,8 @@ class CourseManager
         $teachers,
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
-        $deleteSessionTeacherNotInList = false
+        $deleteSessionTeacherNotInList = false,
+        $teacherBackup = array()
     ) {
         if (empty($teachers)) {
             return false;
@@ -4888,6 +4889,14 @@ class CourseManager
                     $sql = 'UPDATE ' . $course_user_table . ' SET status = "1"
                             WHERE c_id = "' . $courseId . '" AND user_id = "' . $userId . '"  ';
                 } else {
+                    $userCourseCategory = '0';
+                    if (isset($teacherBackup[$userId]) &&
+                        isset($teacherBackup[$userId][$course_code])
+                    ) {
+                        $courseUserData = $teacherBackup[$userId][$course_code];
+                        $userCourseCategory = $courseUserData['user_course_cat'];
+                    }
+
                     $sql = "INSERT INTO " . $course_user_table . " SET
                             c_id = " . $courseId . ",
                             user_id = " . $userId . ",
@@ -4895,7 +4904,8 @@ class CourseManager
                             is_tutor = '0',
                             sort = '0',
                             relation_type = '0',
-                            user_course_cat='0'";
+                            user_course_cat = '$userCourseCategory'
+                    ";
                 }
                 Database::query($sql);
             }

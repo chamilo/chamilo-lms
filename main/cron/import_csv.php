@@ -1491,76 +1491,21 @@ class ImportCsv
         Database::query($sql);
         echo $sql.PHP_EOL;
 
-        // Course
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        // Sessions
-        $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        // Extra fields
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        // Remove all calendar items
+        // Truncate tables
         $truncateTables = array(
+            Database::get_main_table(TABLE_MAIN_COURSE),
+            Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE),
+            Database::get_main_table(TABLE_MAIN_COURSE_USER),
+            Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER),
+            Database::get_main_table(TABLE_MAIN_SESSION),
+            Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY),
+            Database::get_main_table(TABLE_MAIN_SESSION_COURSE),
+            Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER),
+            Database::get_main_table(TABLE_MAIN_SESSION_USER),
+            Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION),
+            Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES),
+            Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES),
+            Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES),
             Database::get_course_table(TABLE_AGENDA),
             Database::get_course_table(TABLE_AGENDA_ATTACHMENT),
             Database::get_course_table(TABLE_AGENDA_REPEAT),
@@ -1569,8 +1514,53 @@ class ImportCsv
             Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT_NOT),
             Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT),
             Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_VALUES),
-            Database::get_main_table(TABLE_TOOL_LIST),
-            Database::get_main_table(TABLE_TOOL_INTRO),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE),
+            Database::get_course_table(TABLE_STUDENT_PUBLICATION),
+            Database::get_course_table(TABLE_QUIZ_QUESTION),
+            Database::get_course_table(TABLE_QUIZ_TEST),
+            Database::get_course_table(TABLE_QUIZ_ORDER),
+            Database::get_course_table(TABLE_QUIZ_ANSWER),
+            Database::get_course_table(TABLE_QUIZ_TEST_QUESTION),
+            Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION),
+            Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY),
+            Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY),
+            Database::get_course_table(TABLE_LP_MAIN),
+            Database::get_course_table(TABLE_LP_ITEM),
+            Database::get_course_table(TABLE_LP_VIEW),
+            Database::get_course_table(TABLE_LP_ITEM_VIEW),
+            Database::get_course_table(TABLE_DOCUMENT),
+            Database::get_course_table(TABLE_ITEM_PROPERTY),
+            Database::get_course_table(TABLE_TOOL_LIST),
+            Database::get_course_table(TABLE_TOOL_INTRO),
+            Database::get_course_table(TABLE_COURSE_SETTING),
+            Database::get_course_table(TABLE_SURVEY),
+            Database::get_course_table(TABLE_SURVEY_QUESTION),
+            Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION),
+            Database::get_course_table(TABLE_SURVEY_INVITATION),
+            Database::get_course_table(TABLE_SURVEY_ANSWER),
+            Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP),
+            Database::get_course_table(TABLE_SURVEY_REPORT),
+            Database::get_course_table(TABLE_GLOSSARY),
+            Database::get_course_table(TABLE_LINK),
+            Database::get_course_table(TABLE_LINK_CATEGORY)
         );
 
         foreach ($truncateTables as $table) {
@@ -1578,11 +1568,6 @@ class ImportCsv
             Database::query($sql);
             echo $sql.PHP_EOL;
         }
-
-        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $sql = "DELETE FROM $table WHERE tool = 'calendar_event'";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
     }
 }
 

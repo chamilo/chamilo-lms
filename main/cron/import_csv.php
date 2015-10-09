@@ -1560,8 +1560,17 @@ class ImportCsv
             Database::get_course_table(TABLE_SURVEY_REPORT),
             Database::get_course_table(TABLE_GLOSSARY),
             Database::get_course_table(TABLE_LINK),
-            Database::get_course_table(TABLE_LINK_CATEGORY)
-        );
+            Database::get_course_table(TABLE_LINK_CATEGORY),
+            Database::get_course_table(TABLE_GROUP),
+            Database::get_course_table(TABLE_GROUP_USER),
+            Database::get_course_table(TABLE_GROUP_TUTOR),
+            Database::get_course_table(TABLE_GROUP_CATEGORY),
+            Database::get_course_table(TABLE_DROPBOX_CATEGORY),
+            Database::get_course_table(TABLE_DROPBOX_FEEDBACK),
+            Database::get_course_table(TABLE_DROPBOX_POST),
+            Database::get_course_table(TABLE_DROPBOX_FILE),
+            Database::get_course_table(TABLE_DROPBOX_PERSON)
+    );
 
         foreach ($truncateTables as $table) {
             $sql = "TRUNCATE $table";

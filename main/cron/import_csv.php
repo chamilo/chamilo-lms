@@ -1494,8 +1494,10 @@ class ImportCsv
         // Truncate tables
         $truncateTables = array(
             Database::get_main_table(TABLE_MAIN_COURSE),
-            Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE),
             Database::get_main_table(TABLE_MAIN_COURSE_USER),
+            Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE),
+            Database::get_main_table(TABLE_MAIN_CATEGORY),
+            Database::get_main_table(TABLE_MAIN_COURSE_MODULE),
             Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER),
             Database::get_main_table(TABLE_MAIN_SESSION),
             Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY),
@@ -1506,6 +1508,12 @@ class ImportCsv
             Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES),
             Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES),
             Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES),
+            Database::get_main_table(TABLE_MAIN_USER_FIELD),
+            Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS),
+            Database::get_main_table(TABLE_MAIN_COURSE_FIELD),
+            Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES),
+            Database::get_main_table(TABLE_MAIN_SESSION_FIELD),
+            Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES),
             Database::get_course_table(TABLE_AGENDA),
             Database::get_course_table(TABLE_AGENDA_ATTACHMENT),
             Database::get_course_table(TABLE_AGENDA_REPEAT),
@@ -1570,7 +1578,7 @@ class ImportCsv
             Database::get_course_table(TABLE_DROPBOX_POST),
             Database::get_course_table(TABLE_DROPBOX_FILE),
             Database::get_course_table(TABLE_DROPBOX_PERSON)
-    );
+        );
 
         foreach ($truncateTables as $table) {
             $sql = "TRUNCATE $table";

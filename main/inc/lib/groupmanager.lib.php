@@ -517,7 +517,8 @@ class GroupManager
         $name = Database::escape_string($name);
         $table_group = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $table_group
-                WHERE c_id = $course_id AND name = '$name' LIMIT 1";
+                WHERE c_id = $course_id AND name = '$name'
+                LIMIT 1";
         $res = Database::query($sql);
         $group = array();
         if (Database::num_rows($res)) {
@@ -593,7 +594,6 @@ class GroupManager
         $table_group = Database :: get_course_table(TABLE_GROUP);
         $table_forum = Database :: get_course_table(TABLE_FORUM);
         $categoryId = intval($categoryId);
-
         $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
 
@@ -686,6 +686,7 @@ class GroupManager
         $sql = "SELECT * FROM $table_group_cat
                 WHERE c_id = $course_id AND id = $id LIMIT 1";
         $res = Database::query($sql);
+
         return Database::fetch_array($res);
     }
 
@@ -708,7 +709,8 @@ class GroupManager
         $title = Database::escape_string($title);
         $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $sql = "SELECT * FROM $table_group_cat
-                WHERE c_id = $course_id AND title = '$title' LIMIT 1";
+                WHERE c_id = $course_id AND title = '$title'
+                LIMIT 1";
         $res = Database::query($sql);
         $category = array();
         if (Database::num_rows($res)) {
@@ -1049,6 +1051,7 @@ class GroupManager
                 $users[] = $obj->user_id;
             }
         }
+
         return $users;
     }
 
@@ -1284,7 +1287,8 @@ class GroupManager
         } else {
             $course_id = intval($course_id);
         }
-        $sql = "SELECT  COUNT(*) AS number_of_students FROM $table_group_user
+        $sql = "SELECT  COUNT(*) AS number_of_students
+                FROM $table_group_user
                 WHERE c_id = $course_id AND group_id = $group_id";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
@@ -1316,10 +1320,10 @@ class GroupManager
      */
     public static function user_in_number_of_groups($user_id, $cat_id = null)
     {
-        $table_group_user     = Database :: get_course_table(TABLE_GROUP_USER);
-        $table_group         = Database :: get_course_table(TABLE_GROUP);
-        $user_id             = intval($user_id);
-        $cat_id             = intval($cat_id);
+        $table_group_user = Database:: get_course_table(TABLE_GROUP_USER);
+        $table_group = Database:: get_course_table(TABLE_GROUP);
+        $user_id = intval($user_id);
+        $cat_id = intval($cat_id);
 
         $course_id = api_get_course_int_id();
         $cat_condition = '';
@@ -1336,6 +1340,7 @@ class GroupManager
                     g.id         = gu.group_id  $cat_condition";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
+
         return $db_object->number_of_groups;
     }
 
@@ -1359,6 +1364,7 @@ class GroupManager
                     WHERE c_id = $course_id AND id = $group_id";
             $db_result = Database::query($sql);
             $db_object = Database::fetch_object($db_result);
+
             return $db_object->self_registration_allowed == 1 && self :: can_user_subscribe($user_id, $group_id);
         } else {
             return false;
@@ -1509,6 +1515,7 @@ class GroupManager
                 'username'  => $user->username
             );
         }
+
         return $users;
     }
 
@@ -1552,6 +1559,7 @@ class GroupManager
                 $users[] = $user->user_id;
             }
         }
+
         return $users;
     }
 
@@ -1559,19 +1567,20 @@ class GroupManager
      * Subscribe user(s) to a specified group in current course (as a student)
      * @param mixed $user_ids Can be an array with user-id's or a single user-id
      * @param int $group_id
+     * @param int $course_id
      * @return bool TRUE if successful
      */
-    public static function subscribe_users($user_ids, $group_id)
+    public static function subscribe_users($user_ids, $group_id, $course_id = null)
     {
         $user_ids = is_array($user_ids) ? $user_ids : array($user_ids);
-        $result = true;
-        $course_id = api_get_course_int_id();
+        $course_id = isset($course_id) && !empty($course_id) ? intval($course_id) : api_get_course_int_id();
+        $group_id = intval($group_id);
+
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
             foreach ($user_ids as $user_id) {
                 if (self::can_user_subscribe($user_id, $group_id)) {
                     $user_id = intval($user_id);
-                    $group_id = intval($group_id);
                     $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id)
                             VALUES ('$course_id', '".$user_id."', '".$group_id."')";
                     Database::query($sql);
@@ -1586,20 +1595,22 @@ class GroupManager
      * Subscribe tutor(s) to a specified group in current course
      * @param mixed $user_ids Can be an array with user-id's or a single user-id
      * @param int $group_id
+     * @param int $course_id
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @see subscribe_users. This function is almost an exact copy of that function.
      * @return bool TRUE if successful
      */
-    public static function subscribe_tutors($user_ids, $group_id)
+    public static function subscribe_tutors($user_ids, $group_id, $course_id = null)
     {
         $user_ids = is_array($user_ids) ? $user_ids : array($user_ids);
         $result = true;
-        $course_id = api_get_course_int_id();
+        $course_id = isset($course_id) && !empty($course_id) ? intval($course_id) : api_get_course_int_id();
         $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
+        $group_id = intval($group_id);
 
         foreach ($user_ids as $user_id) {
             $user_id = intval($user_id);
-            $group_id = intval($group_id);
             if (self::can_user_subscribe($user_id, $group_id, false)) {
                 $sql = "INSERT INTO " . $table_group_tutor . " (c_id, user_id, group_id)
                         VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
@@ -1623,7 +1634,11 @@ class GroupManager
         $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
         $sql = 'DELETE FROM '.$table_group_user.'
-                WHERE c_id = '.$course_id.' AND group_id = '.$group_id.' AND user_id IN ('.implode(',', $user_ids).')';
+                WHERE
+                    c_id = '.$course_id.' AND
+                    group_id = '.$group_id.' AND
+                    user_id IN ('.implode(',', $user_ids).')
+                ';
         Database::query($sql);
     }
 
@@ -1651,7 +1666,8 @@ class GroupManager
                 }
             }
             $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
-            $sql = 'DELETE FROM '.$table_group_user.' WHERE group_id IN ('.implode(',', $group_ids).') AND c_id = '.$course_id;
+            $sql = 'DELETE FROM '.$table_group_user.'
+                    WHERE group_id IN ('.implode(',', $group_ids).') AND c_id = '.$course_id;
             $result = Database::query($sql);
             return $result;
         }
@@ -1743,7 +1759,8 @@ class GroupManager
         $user_id = intval($user_id);
         $course_id = intval($course_id);
 
-        $sql = "SELECT group_id FROM $tbl_group WHERE c_id = $course_id AND user_id = '$user_id'";
+        $sql = "SELECT group_id FROM $tbl_group
+                WHERE c_id = $course_id AND user_id = '$user_id'";
         $groupres = Database::query($sql);
 
         if ($groupres) {
@@ -1753,7 +1770,8 @@ class GroupManager
         }
 
         //Also loading if i'm the tutor
-        $sql = "SELECT group_id FROM $tbl_group_tutor WHERE c_id = $course_id AND user_id = '$user_id'";
+        $sql = "SELECT group_id FROM $tbl_group_tutor
+                WHERE c_id = $course_id AND user_id = '$user_id'";
         $groupres = Database::query($sql);
         if ($groupres) {
             while ($myrow = Database::fetch_array($groupres)) {
@@ -1787,13 +1805,11 @@ class GroupManager
     public static function get_complete_list_of_users_that_can_be_added_to_group($course_code, $group_id)
     {
         $_course = api_get_course_info();
-        $_user = api_get_user_info();
 
         $category = self :: get_category_from_group($group_id, $course_code);
         $number_of_groups_limit = $category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $category['groups_per_user'];
         $real_course_code = $_course['sysCode'];
         $real_course_info = api_get_course_info($real_course_code);
-        $real_course_user_list = CourseManager :: get_user_list_from_course_code($real_course_code);
 
         // add real course to the list
         $user_subscribed_course_list = array($real_course_info);
@@ -1828,19 +1844,20 @@ class GroupManager
                 }
             }
         }
+
         if (is_array($complete_user_list)) {
             //sort once, on array field "full_name"
             $complete_user_list = TableSort :: sort_table($complete_user_list, "full_name");
             //filter out duplicates, based on field "user_id"
             $complete_user_list = self :: filter_duplicates($complete_user_list, "user_id");
             $complete_user_list = self :: filter_users_already_in_group($complete_user_list, $group_id);
-
         }
+
         return $complete_user_list;
     }
     /**
-     *    Filter out duplicates in a multidimensional array
-     *    by comparing field $compare_field.
+     * Filter out duplicates in a multidimensional array
+     * by comparing field $compare_field.
      *
      * @param $user_array_in list of users (must be sorted).
      * @param string $compare_field, the field to be compared
@@ -1859,7 +1876,7 @@ class GroupManager
         return $user_array_out;
     }
     /**
-     *    Filters from the array $user_array_in the users already in the group $group_id.
+     * Filters from the array $user_array_in the users already in the group $group_id.
      */
     public static function filter_users_already_in_group($user_array_in, $group_id)
     {
@@ -1981,6 +1998,7 @@ class GroupManager
     /**
      * @param int $userId
      * @param array $groupInfo
+     * @param int $sessionId
      *
      * @return bool
      */
@@ -2172,6 +2190,7 @@ class GroupManager
         //$complete_user_list = self :: filter_only_students($complete_user_list);
         //now sort by # of group left
         $complete_user_list = TableSort::sort_table($complete_user_list, 'number_groups_left', SORT_DESC);
+
         return $complete_user_list;
     }
 
@@ -2545,6 +2564,7 @@ class GroupManager
                 }
             }
         }
+
         return $result;
     }
 
@@ -2713,7 +2733,7 @@ class GroupManager
                     '.Display::return_icon('teacher.png').' '.get_lang('GroupTutors').'
                     </a>
                 </li>
-        </ul>';
+            </ul>';
     }
 
     /**
@@ -2791,7 +2811,14 @@ class GroupManager
     public static function getSearchForm()
     {
         $url = api_get_path(WEB_CODE_PATH).'group/group_overview.php?'.api_get_cidreq();
-        $form = new FormValidator('search_groups', 'get', $url, null, array('class' => 'form-search'), FormValidator::LAYOUT_INLINE);
+        $form = new FormValidator(
+            'search_groups',
+            'get',
+            $url,
+            null,
+            array('class' => 'form-search'),
+            FormValidator::LAYOUT_INLINE
+        );
         $form->addElement('text', 'keyword');
         $form->addButtonSearch();
         return $form->toHtml();

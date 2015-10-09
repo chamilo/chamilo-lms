@@ -1418,23 +1418,42 @@ class GroupManager
      * Can a user subscribe to a specified group in a course
      * @param int $user_id
      * @param int $group_id
+     * @param bool $checkMaxNumberStudents
+     *
      * @return bool TRUE if given user  can be subscribed in given group
      */
-    public static function can_user_subscribe($user_id, $group_id)
+    public static function can_user_subscribe($user_id, $group_id, $checkMaxNumberStudents = true)
     {
-        $category = self::get_category_from_group($group_id);
-        $result = !self:: is_subscribed($user_id, $group_id);
-        $result = self :: number_of_students($group_id) < self :: maximum_number_of_students($group_id);
-        if ($category) {
-            if ($category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT) {
-                $category['groups_per_user'] = self::INFINITE;
+        if ($checkMaxNumberStudents) {
+            $category = self:: get_category_from_group($group_id);
+            if ($category) {
+                if ($category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT) {
+                    $category['groups_per_user'] = self::INFINITE;
+                }
+                $result = self:: user_in_number_of_groups($user_id, $category['id'] ) < $category['groups_per_user'];
+                if ($result == false) {
+                    return false;
+                }
             }
-            $result = (self::user_in_number_of_groups($user_id, $category['id']) < $category['groups_per_user']);
+
+            $result = self:: number_of_students($group_id) < self:: maximum_number_of_students($group_id);
+
+            if ($result == false) {
+                return false;
+            }
         }
 
-        $result = !self::is_tutor_of_group($user_id, $group_id);
+        $result = self :: is_tutor_of_group($user_id, $group_id);
+        if ($result) {
+            return false;
+        }
 
-        return $result;
+        $result = self :: is_subscribed($user_id, $group_id);
+        if ($result) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -1581,12 +1600,13 @@ class GroupManager
         foreach ($user_ids as $user_id) {
             $user_id = intval($user_id);
             $group_id = intval($group_id);
-            if (self::can_user_subscribe($user_id, $group_id)) {
+            if (self::can_user_subscribe($user_id, $group_id, false)) {
                 $sql = "INSERT INTO " . $table_group_tutor . " (c_id, user_id, group_id)
                         VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
                 $result &= Database::query($sql);
             }
         }
+
         return $result;
     }
 

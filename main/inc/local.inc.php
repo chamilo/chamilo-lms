@@ -1372,9 +1372,10 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
     api_delete_firstpage_parameter();    // delete the cookie
 
     if (!isset($_SESSION['request_uri'])) {
-        if (CourseManager::get_course_id_from_path($course)) {
+        $courseInfo = api_get_course_info($course);
+        if ($courseInfo) {
             $_SESSION['noredirection'] = false;
-            $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $course . '?id_session=' . $session;
+            $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $courseInfo['directory'] . '?id_session=' . $session;
         }
     }
 } elseif (api_user_is_login() && exist_firstpage_parameter()) {
@@ -1388,9 +1389,10 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
         $course = $redirectCourseDir;
     }
     api_delete_firstpage_parameter(); // delete the cookie
-    if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
+    $courseInfo = api_get_course_info($course);
+    if (is_array($courseInfo)) {
         $_SESSION['noredirection'] = false;
-        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $course . '?id_session=' . $session;
+        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $courseInfo['directory'] . '?id_session=' . $session;
     }
 }
 

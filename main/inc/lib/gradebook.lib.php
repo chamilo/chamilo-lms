@@ -106,22 +106,23 @@ class Gradebook extends Model
         $skill_list,
         $deleteSkillNotInList = true
     ) {
-        if (!empty($skill_list)) {
+        $skill_gradebook = new SkillRelGradebook();
+        $skill_gradebooks_source = $skill_gradebook->get_all(
+            array('where' => array('gradebook_id = ?' => $gradebook_id))
+        );
+        $clean_gradebook = array();
 
-            //Cleaning skills
-            $skill_list = array_map('intval', $skill_list);
-            $skill_list = array_filter($skill_list);
-            $skill_gradebook = new SkillRelGradebook();
-            $skill_gradebooks_source = $skill_gradebook->get_all(
-                array('where' => array('gradebook_id = ?' => $gradebook_id))
-            );
-            $clean_gradebook = array();
-
-            if (!empty($skill_gradebooks_source)) {
-                foreach($skill_gradebooks_source as $source) {
-                    $clean_gradebook[]= $source['skill_id'];
-                }
+        if (!empty($skill_gradebooks_source)) {
+            foreach($skill_gradebooks_source as $source) {
+                $clean_gradebook[] = $source['skill_id'];
             }
+        }
+
+        //Cleaning skills
+        $skill_list = array_map('intval', $skill_list);
+        $skill_list = array_filter($skill_list);
+
+        if (!empty($skill_list)) {
 
             if (!empty($clean_gradebook)) {
                 $skill_to_remove = array_diff($clean_gradebook, $skill_list);
@@ -135,20 +136,20 @@ class Gradebook extends Model
                     $skill_gradebook->save($params);
                 }
             }
+        } else {
+            $skill_to_remove = $clean_gradebook;
+        }
 
-            if ($deleteSkillNotInList) {
-                if (!empty($skill_to_remove)) {
-                    foreach ($skill_to_remove as $remove) {
-                        $skill_item = $skill_gradebook->get_skill_info(
-                            $remove,
-                            $gradebook_id
-                        );
-                        $skill_gradebook->delete($skill_item['id']);
-                    }
+        if ($deleteSkillNotInList) {
+            if (!empty($skill_to_remove)) {
+                foreach ($skill_to_remove as $remove) {
+                    $skill_item = $skill_gradebook->get_skill_info(
+                        $remove,
+                        $gradebook_id
+                    );
+                    $skill_gradebook->delete($skill_item['id']);
                 }
             }
-
-            return true;
         }
 
         return false;

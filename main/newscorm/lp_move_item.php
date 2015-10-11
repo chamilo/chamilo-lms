@@ -99,7 +99,7 @@ $lp_theme_css = $_SESSION['oLP']->get_theme();
 
 Display::display_header(get_lang('Move'), 'Path');
 
-$suredel = trim(get_lang('AreYouSureToDelete'));
+$suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
 <script type='text/javascript'>
 /* <![CDATA[ */

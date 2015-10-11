@@ -93,7 +93,7 @@ class GradebookTable extends SortableTable
             $this->set_header($column++, get_lang('Weight'), false);
             $this->set_header($column++, get_lang('Result'), false);
             $this->set_header($column++, get_lang('Ranking'), false);
-            $this->set_header($column++, get_lang('Best'), false);
+            $this->set_header($column++, get_lang('BestScore'), false);
             $this->set_header($column++, get_lang('Average'), false);
 
             if (!empty($cats)) {
@@ -113,7 +113,7 @@ class GradebookTable extends SortableTable
             $this->set_form_actions(array(
                     'setvisible' => get_lang('SetVisible'),
                     'setinvisible' => get_lang('SetInvisible'),
-                    'deleted' => get_lang('DeleteSelected')
+                    'deleted' => get_lang('DeleteSelected'),
                 )
             );
         } else {
@@ -289,7 +289,7 @@ class GradebookTable extends SortableTable
             $weight = $scoredisplay->display_score(
                 array(
                     $data['3'],
-                    $this->currentcat->get_weight()
+                    $this->currentcat->get_weight(),
                 ),
                 SCORE_SIMPLE,
                 SCORE_BOTH,
@@ -303,7 +303,6 @@ class GradebookTable extends SortableTable
             }
 
             $category_weight = $item->get_weight();
-            $mainCategoryWeight = $main_cat[0]->get_weight();
 
             if ($this->teacherView) {
                 $weight_total_links += $data[3];
@@ -343,7 +342,7 @@ class GradebookTable extends SortableTable
 
                     $totalResult = [
                         $totalResult[0] + $data['result_score_weight'][0],
-                        $totalResult[1] + $data['result_score_weight'][1]
+                        $totalResult[1] + $data['result_score_weight'][1],
                     ];
 
                     $totalBest = [
@@ -518,7 +517,7 @@ class GradebookTable extends SortableTable
                                 $total = GradebookUtils::score_badges(
                                     array(
                                         $total_weight.' / '.$category_weight,
-                                        '100'
+                                        '100',
                                     )
                                 );
                             } else {
@@ -534,7 +533,7 @@ class GradebookTable extends SortableTable
                                 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5>".get_lang('SubTotal').'</h5>',
                                 null,
                                 $total.' '.$label,
-                                'child_of' => $parent_id
+                                'child_of' => $parent_id,
                             );
                             $sortable_data[] = $row;
                         }
@@ -543,10 +542,20 @@ class GradebookTable extends SortableTable
             }
         } //end looping categories
 
+        $main_weight = 0;
+        if (count($main_cat) > 1) {
+            /** @var Category $myCat */
+            foreach ($main_cat as $myCat) {
+                $myParentId = $myCat->get_parent_id();
+                if ($myParentId == 0) {
+                    $main_weight = intval($myCat->get_weight());
+                }
+            }
+        }
+
         if ($this->teacherView) {
             // Total for teacher.
             if (count($main_cat) > 1) {
-                $main_weight = intval($main_cat[0]->get_weight());
 
                 if (intval($total_categories_weight) == $main_weight) {
                     $total = GradebookUtils::score_badges(
@@ -560,7 +569,7 @@ class GradebookTable extends SortableTable
                     null,
                     '<h3>' . get_lang('Total') . '</h3>',
                     null,
-                    $total
+                    $total,
                 );
                 $sortable_data[] = $row;
             }
@@ -762,7 +771,7 @@ class GradebookTable extends SortableTable
             $pChart->setFontProperties(
                 array(
                     'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 10
+                    'FontSize' => 10,
                 )
             );
 

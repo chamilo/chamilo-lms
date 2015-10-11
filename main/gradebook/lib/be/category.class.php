@@ -687,7 +687,7 @@ class Category implements GradebookItem
         $gradebook->update_skills_to_gradebook(
             $this->id,
             $this->get_skills(false),
-            false
+            true
         );
     }
 

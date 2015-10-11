@@ -308,45 +308,43 @@ Display::display_introduction_section(TOOL_BLOGS);
 
 ?>
 <div class="blog-title"><h1><?php echo Blog::get_blog_title($blog_id); ?></h1></div>
-<div class="sectioncomment"><?php echo Blog::get_blog_subtitle($blog_id); ?></div>
+<div class="sectioncomment"><p><?php echo Blog::get_blog_subtitle($blog_id); ?></p></div>
 
 <div class="row">
 	<div class="col-md-3">
-		<?php
-
-$month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
-$year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
-
-Blog::display_minimonthcalendar($month, $year, $blog_id);
-?>
-		<br />
-		<br />
-		<table width="100%">
-			<tr>
-				<td class="sectiontitle"><?php echo get_lang('Search') ?></td>
-			</tr>
-			<tr>
-				<td class="blog_menu">
-					<form action="blog.php" method="get" enctype="multipart/form-data">
-						<input type="hidden" name="blog_id" value="<?php echo $blog_id ?>" />
-						<input type="hidden" name="action" value="view_search_result" />
-						<input type="text" size="20" name="q" value="<?php echo isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : ''; ?>" /><button class="btn btn-success" type="submit"><i class="fa fa-search"></i> <?php echo get_lang('Search'); ?></button>
-					</form>
-				</td>
-			</tr>
-		</table>
-		<br />
-		<table width="100%">
-			<tr>
-				<td class="sectiontitle"><?php echo get_lang('MyTasks') ?></td>
-			</tr>
-			<tr>
-				<td class="blog_menu">
-					<?php Blog::get_personal_task_list(); ?>
-				</td>
-			</tr>
-		</table>
-	</td>
+            
+            <div class="panel panel-default">
+                <div class="panel-heading"><?php echo get_lang('Calendar') ?></div>
+                <div class="panel-body">
+                    <?php
+                        $month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
+                        $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+                        Blog::display_minimonthcalendar($month, $year, $blog_id);
+                    ?>
+                </div>
+            </div>
+		
+            <div class="panel panel-default">
+                <div class="panel-heading"><?php echo get_lang('Search') ?></div>
+                <div class="panel-body">
+                    <form action="blog.php" method="get" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="hidden" name="blog_id" value="<?php echo $blog_id ?>" />
+                            <input type="hidden" name="action" value="view_search_result" />
+                            <input type="text" class="form-control" size="20" name="q" value="<?php echo isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : ''; ?>" />
+                        </div>
+			<button class="btn btn-default btn-block" type="submit"><i class="fa fa-search"></i> <?php echo get_lang('Search'); ?></button>
+                    </form>
+                </div>
+            </div>
+		
+            <div class="panel panel-default">
+                <div class="panel-heading"><?php echo get_lang('MyTasks') ?></div>
+                <div class="panel-body">
+                    <?php Blog::get_personal_task_list(); ?>
+                </div>
+            </div>
+		
 	</div>
 	<div class="col-md-9">
 		<?php

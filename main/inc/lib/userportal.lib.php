@@ -936,7 +936,7 @@ class IndexManager
         if ($show_create_link) {
             $my_account_content .= '<li class="add-course"><a href="main/create_course/add_course.php">';
             if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
-                $my_account_content .= Display::return_icon('new-course.png',get_lang('CourseCreateRequest'),null,ICON_SIZE_SMALL);
+                $my_account_content .= Display::return_icon('new-course.png',get_lang('CreateCourseRequest'),null,ICON_SIZE_SMALL);
                 $my_account_content .= get_lang('CreateCourseRequest');
             } else {
                 $my_account_content .= Display::return_icon('new-course.png',get_lang('CourseCreate'),null,ICON_SIZE_SMALL);
@@ -1121,7 +1121,9 @@ class IndexManager
                                         $this->load_directories_preview
                                     );
                                     if (isset($c[1])) {
-                                        $html_courses_session[] = $c['1'];
+                                        $course_session = $c[1];
+                                        $course_session['skill'] = $c['skill'];
+                                        $html_courses_session[] = $course_session;
                                     }
                                 }
                                 $count_courses_session++;
@@ -1181,7 +1183,7 @@ class IndexManager
                             $this->tpl->assign('gamification_mode', $gamificationModeIsActive);
 
                             $sessions_with_no_category .= $this->tpl->fetch(
-                                "{$this->tpl->templateFolder}/user_portal/session.tpl"
+                                $this->tpl->get_template('/user_portal/session.tpl')
                             );
 
                             $sessionCount++;
@@ -1281,7 +1283,7 @@ class IndexManager
 
                                 $this->tpl->assign('session', $sessionParams);
                                 $html_sessions .= $this->tpl->fetch(
-                                    "{$this->tpl->templateFolder}/user_portal/session.tpl"
+                                    $this->tpl->get_template('user_portal/session.tpl')
                                 );
 
                                 $sessionCount++;

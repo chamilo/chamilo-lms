@@ -27,16 +27,15 @@
  * @package chamilo.document
  */
 
-use ChamiloSession as Session;
-
 require_once '../inc/global.inc.php';
+
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 $to_user_id = null;
 $parent_id = null;
 
 $lib_path = api_get_path(LIBRARY_PATH);
-
+$actionsRight = '';
 api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
 
@@ -352,7 +351,7 @@ switch ($action) {
                 );
             }
             $parent_id = $document_info['parent_id'];
-            $my_path = UserManager::getUserPathById(api_get_user_id());
+            $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');
             $user_folder = $my_path.'my_files/';
             $my_path = null;
 
@@ -434,7 +433,7 @@ switch ($action) {
         $fileInfo = pathinfo($file);
         if ($fileInfo['extension'] == $formatTarget) {
             Display::addFlash(Display::return_message(
-                get_lang('ErrorSameFormat'),
+                get_lang('ConversionToSameFileFormat'),
                 'warning'
             ));
         } elseif (
@@ -457,7 +456,7 @@ switch ($action) {
             )
         ) {
             Display::addFlash(Display::return_message(
-                get_lang('FormatNotSupported'),
+                get_lang('FileFormatNotSupported'),
                 'warning'
             ));
         } else {
@@ -686,7 +685,7 @@ $tool_visibility = $tool_row['visibility'];*/
 
 $htmlHeadXtra[] = '<script>
 function confirmation (name) {
-    if (confirm(" '.get_lang('AreYouSureToDelete').' "+ name + " ?")) {
+    if (confirm(" '.get_lang('AreYouSureToDeleteJS').' "+ name + " ?")) {
         return true;
     } else {
         return false;
@@ -1648,7 +1647,7 @@ if (api_is_allowed_to_edit(null, true)) {
         api_get_path(WEB_CODE_PATH).'document/document_quota.php?'.api_get_cidreq()
     );
 }
-$actionsRight = '';
+
 if (!$is_certificate_mode) {
     /* BUILD SEARCH FORM */
     $form = new FormValidator(
@@ -1759,7 +1758,6 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 $invisibility_span_close;
 
             // Last edit date
-
             $last_edit_date = api_get_local_time($document_data['lastedit_date']);
             $display_date = date_to_str_ago($last_edit_date).
                 ' <div class="muted"><small>'.$last_edit_date."</small></div>";
@@ -1839,6 +1837,17 @@ if (!is_null($documentAndFolders)) {
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&action=downloadfolder&id='.$document_id
             );
         }
+    }
+}
+
+
+if (api_is_platform_admin()) {
+    if (api_get_configuration_value('document_manage_deleted_files')) {
+        $actionsLeft .= Display::url(
+            get_lang('Recycle'),
+            api_get_path(WEB_CODE_PATH).'document/recycle.php?'.api_get_cidreq(),
+            array('class' => 'btn btn-default')
+        );
     }
 }
 
@@ -1999,40 +2008,42 @@ if (!empty($table_footer)) {
 
 echo '
     <div id="convertModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header" style="text-align: center;">
-            <button type="button" class="close" data-dismiss="modal">
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">' . get_lang('Close') . '</span>
-            </button>
-            <h4 class="modal-title">' . get_lang('PleaseSelectConvertFormat') . '</h4>
-          </div>
-          <div class="modal-body" style="text-align: center;">
-            <p>' . get_lang('ConvertFormats') . '&hellip;</p>
-            <select id="convertSelect" class="input-lg text-center">
-                <option value="">
-                    ' . get_lang('SelectConvertFormat') . '
-                </option>
-                <option value="pdf">
-                    PDF - Portable Document File
-                </option>
-                <option value="odt" style="display:none;" class="textFormatType">
-                    ODT - Open Document Text
-                </option>
-                <option value="odp" style="display:none;" class="presentationFormatType">
-                    ODP - Open Document Portable
-                </option>
-                <option value="ods" style="display:none;" class="spreadsheetFormatType">
-                    ODS - Open Document Spreadsheet
-                </option>
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">' . get_lang('Close') . '</button>
-          </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="text-align: center;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="' . get_lang('Close') . '">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">' . get_lang('Convert') . '</h4>
+            </div>
+            <div class="modal-body">
+              <form action="#" class="form-horizontal">
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label" for="convertSelect">' . get_lang('ConvertFormats') . '</label>
+                      <div class="col-sm-8">
+                          <select id="convertSelect">
+                              <option value="">' . get_lang('Select') . '</option>
+                              <option value="pdf">
+                                  PDF - Portable Document File
+                              </option>
+                              <option value="odt" style="display:none;" class="textFormatType">
+                                  ODT - Open Document Text
+                              </option>
+                              <option value="odp" style="display:none;" class="presentationFormatType">
+                                  ODP - Open Document Portable
+                              </option>
+                              <option value="ods" style="display:none;" class="spreadsheetFormatType">
+                                  ODS - Open Document Spreadsheet
+                              </option>
+                          </select>
+                      </div>
+                  </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">' . get_lang('Close') . '</button>
+            </div>
         </div>
-      </div>
     </div>';
 
 // Footer

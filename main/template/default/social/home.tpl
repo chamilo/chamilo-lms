@@ -31,7 +31,9 @@
                             </h4>
                         </div>
                         <div id="listFriends" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                            {{ social_friend_block }}
+                            <div class="panel-body">
+                                {{ social_friend_block }}
+                            </div>
                         </div>
                     </div>
                 </div>

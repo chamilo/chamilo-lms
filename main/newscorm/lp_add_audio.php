@@ -83,7 +83,7 @@ $form = new FormValidator(
     null,
     array('enctype' => 'multipart/form-data')
 );
-$suredel = trim(get_lang('AreYouSureToDelete'));
+$suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
 $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
 

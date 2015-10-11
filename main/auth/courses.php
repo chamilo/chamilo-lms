@@ -156,8 +156,9 @@ if (isset($_REQUEST['subscribe_course'])) {
 }
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
+    $search_term = isset($_GET['search_term']) ? $_GET['search_term'] : null;
     if ($ctok == $_GET['sec_token']) {
-        $courses_controller->unsubscribe_user_from_course($_GET['unsubscribe'], $_GET['search_term'], $categoryCode);
+        $courses_controller->unsubscribe_user_from_course($_GET['unsubscribe'], $search_term, $categoryCode);
             //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
     }
 }
@@ -192,14 +193,18 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $courses_controller->courses_categories(
-            $action,
-            $categoryCode,
-            null,
-            null,
-            null,
-            $limit
-        );
+        if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
+            $courses_controller->courses_categories(
+                $action,
+                $categoryCode,
+                null,
+                null,
+                null,
+                $limit
+            );
+        } else {
+            header('Location: ' . api_get_self());
+        }
         break;
     case 'display_random_courses':
         if (!$user_can_view_page) {

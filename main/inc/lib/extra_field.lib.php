@@ -1169,6 +1169,14 @@ class ExtraField extends Model
                             $field_details['display_text'] = get_lang($field_details['display_text']);
                         }
 
+                        $tagsSelect = $form->addSelect(
+                            "extra_{$field_details['variable']}",
+                            $field_details['display_text']
+                        );
+                        $tagsSelect->setAttribute('class', null);
+                        $tagsSelect->setAttribute('id', "extra_{$field_details['variable']}");
+                        $tagsSelect->setMultiple(true);
+
                         if ($this->type == 'user') {
 
                            /* //the magic should be here
@@ -1208,15 +1216,17 @@ EOF;
                             // The magic should be here
                             $user_tags = UserManager::get_user_tags($itemId, $field_details['id']);
 
-                            $tag_list = '';
                             if (is_array($user_tags) && count($user_tags) > 0) {
                                 foreach ($user_tags as $tag) {
-                                    $tag_list .= '<option value="'.$tag['tag'].'" class="selected">'.$tag['tag'].'</option>';
+                                    $tagsSelect->addOption(
+                                        $tag['tag'],
+                                        $tag['tag'],
+                                        ['selected' => 'selected', 'class' => 'selected']
+                                    );
                                 }
                             }
                             $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
                         } else {
-                            $tag_list = '';
                             $em = Database::getManager();
 
                             $fieldTags = $em
@@ -1233,26 +1243,16 @@ EOF;
                                     continue;
                                 }
 
-                                $tag_list .= Display::tag(
-                                    'option',
+                                $tagsSelect->addOption(
                                     $tag->getTag(),
-                                    [
-                                        'value' => $tag->getTag(),
-                                        'class' => 'selected'
-                                    ]
+                                    $tag->getTag(),
+                                    ['selected' => 'selected', 'class' => 'selected']
                                 );
                             }
 
                             $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                         }
 
-                        $form->addElement('hidden', 'extra_'.$field_details['variable'].'__persist__', 1);
-
-                        $multiSelect = '<select id="extra_'.$field_details['variable'].'" name="extra_'.$field_details['variable'].'">
-                                        '.$tag_list.'
-                                        </select>';
-
-                        $form->addElement('label', $field_details['display_text'], $multiSelect);
                         $complete_text = get_lang('StartToType');
 
                         //if cache is set to true the jquery will be called 1 time

@@ -617,11 +617,16 @@ class Template
 
         $isoCode = api_get_language_isocode();
 
-        //JS files
+        $selectLink = 'bootstrap-select/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js';
+
+        if ($isoCode == 'en') {
+            $selectLink = 'bootstrap-select/js/i18n/defaults-' . $isoCode . '_US.min.js';
+        }
+        // JS files
         $js_files = array(
             'chosen/chosen.jquery.min.js',
             'bootstrap-select/js/bootstrap-select.min.js',
-            'bootstrap-select/js/i18n/defaults-' . $isoCode . '_' . strtoupper($isoCode) . '.min.js'
+            $selectLink
         );
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
@@ -850,7 +855,19 @@ class Template
 
         $notification = return_notification_menu();
         $this->assign('notification_menu', $notification);
-
+        
+        $resize = '';
+        if (api_get_setting('accessibility_font_resize') == 'true') {
+            $resize .= '<div class="resize_font">';
+            $resize .= '<div class="btn-group">';
+            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><i class="fa fa-font"></i></a>';
+            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><i class="fa fa-font"></i></a>';
+            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><i class="fa fa-font"></i></a>';
+            $resize .= '</div>';
+            $resize .= '</div>';
+        }
+        $this->assign('accessibility', $resize);
+        
         // Preparing values for the menu
 
         // Logout link
@@ -1101,12 +1118,18 @@ class Template
     }
 
     /**
-     * @param string $template
+     * Render the template
+     * @param string $template The template path
+     * @param boolean $clearFlashMessages Clear the $_SESSION variables for flash messages
      */
-    public function display($template)
+    public function display($template, $clearFlashMessages = true)
     {
         $this->assign('flash_messages', Display::getFlashToString());
-        Display::cleanFlashMessages();
+
+        if ($clearFlashMessages) {
+            Display::cleanFlashMessages();
+        }
+
         echo $this->twig->render($template, $this->params);
     }
 

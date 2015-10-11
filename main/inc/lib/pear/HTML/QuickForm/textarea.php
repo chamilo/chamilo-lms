@@ -43,7 +43,8 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    private
      */
     public $_value = null;
-
+    
+    private $columnsSize;
     // }}}
     // {{{ constructor
 
@@ -60,6 +61,8 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     public function __construct($elementName=null, $elementLabel=null, $attributes=null)
     {
         $attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'form-control';
+        $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
+        $this->setColumnsSize($columnsSize);
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'textarea';
@@ -129,7 +132,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
 
     // }}}
     // {{{ setWrap()
-
+    
     /**
      * Sets wrap type for textarea element
      *
@@ -221,5 +224,86 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         }
         return $html . $this->_getPersistantData();
     }
+    
+    /**
+     * @return null
+     */
+    public function getColumnsSize()
+    {
+        return $this->columnsSize;
+    }
 
+    /**
+     * @param null $columnsSize
+     */
+    public function setColumnsSize($columnsSize)
+    {
+        $this->columnsSize = $columnsSize;
+    }
+    
+    /**
+     * @param string $layout
+     *
+     * @return string
+     */
+    public function getTemplate($layout)
+    {
+        $size = $this->getColumnsSize();
+        $this->removeAttribute('cols-size');
+        
+        if (empty($size)) {
+            $size = [2, 8, 2];
+        }
+
+        switch ($layout) {
+            case FormValidator::LAYOUT_INLINE:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    {element}
+                </div>';
+                break;
+            case FormValidator::LAYOUT_HORIZONTAL:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    <div class="col-sm-'.$size[1].'">
+                        {icon}
+                        {element}
+
+                        <!-- BEGIN label_2 -->
+                            <p class="help-block">{label_2}</p>
+                        <!-- END label_2 -->
+
+                        <!-- BEGIN error -->
+                            <span class="help-inline">{error}</span>
+                        <!-- END error -->
+                    </div>
+                    <div class="col-sm-'.$size[2].'">
+                        <!-- BEGIN label_3 -->
+                            {label_3}
+                        <!-- END label_3 -->
+                    </div>
+                </div>';
+                
+                break;
+            case FormValidator::LAYOUT_BOX_NO_LABEL:
+                return '
+                        <label {label-for}>{label}</label>
+                        <div class="input-group">
+                            
+                            {icon}
+                            {element}
+                        </div>';
+                break;
+        }
+    }
+    
+ 
 }

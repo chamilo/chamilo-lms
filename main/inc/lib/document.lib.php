@@ -5034,7 +5034,7 @@ class DocumentManager
 
         $form = new FormValidator('selector', 'GET', api_get_self() . '?' . api_get_cidreq());
         $form->addElement('hidden', 'cidReq', api_get_course_id());
-        $parent_select = $form->addElement('select', 'id', get_lang('CurrentDirectory'), '', 'onchange="javascript: document.selector.submit();"');
+        $parent_select = $form->addSelect('id', get_lang('CurrentDirectory'), '', array('onchange' => 'javascript: document.selector.submit();'));
 
         if ($change_renderer) {
             $renderer = $form->defaultRenderer();
@@ -5951,7 +5951,7 @@ class DocumentManager
 
     /**
      * Check if the file name or folder searched exist
-     * @return return bool Return true when exist
+     * @return bool Return true when exist
      */
     public static function search_keyword($document_name, $keyword)
     {
@@ -6029,5 +6029,154 @@ class DocumentManager
         return $result;
     }
 
+    /**
+     * @param array $courseInfo
+     * @param int $sessionId
+     *
+     * @return array
+     */
+    public static function getDeletedDocuments($courseInfo, $sessionId = 0)
+    {
+        $table = Database::get_course_table(TABLE_DOCUMENT);
+        $courseId = $courseInfo['real_id'];
+        $sessionCondition = api_get_session_condition($sessionId);
+        $sql = "SELECT * FROM $table
+                WHERE
+                  path LIKE '%DELETED%' AND
+                  c_id = $courseId
+                  $sessionCondition
+                ORDER BY path
+        ";
 
+        $result = Database::query($sql);
+        $files = array();
+        while ($document = Database::fetch_array($result, 'ASSOC')) {
+            $files[] = $document;
+        }
+
+        return $files;
+    }
+
+    /**
+     * @param int $id
+     * @param array $courseInfo
+     * @param int $sessionId
+     *
+     * @return array
+     */
+    public static function getDeletedDocument($id, $courseInfo, $sessionId = 0)
+    {
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $table = Database::get_course_table(TABLE_DOCUMENT);
+        $courseId = $courseInfo['real_id'];
+        $sessionCondition = api_get_session_condition($sessionId);
+        $sql = "SELECT * FROM $table
+                WHERE
+                  path LIKE '%DELETED%' AND
+                  id = $id AND
+                  c_id = $courseId
+                  $sessionCondition
+                LIMIT 1
+        ";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $result = Database::fetch_array($result, 'ASSOC');
+
+            return $result;
+        }
+
+        return array();
+    }
+
+    /**
+     * @param int $id
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @return bool
+     */
+    public static function purgeDocument($id, $courseInfo, $sessionId = 0)
+    {
+        $document = self::getDeletedDocument($id, $courseInfo, $sessionId);
+        if (!empty($document)) {
+            $path = $document['path'];
+            $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
+            my_delete($coursePath.$path);
+            // Hard delete.
+            self::deleteDocumentFromDb($id, $courseInfo, $sessionId, true);
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param array $courseInfo
+     * @param int $sessionId
+     */
+    public static function purgeDocuments($courseInfo, $sessionId)
+    {
+        $files = self::getDeletedDocuments($courseInfo, $sessionId);
+        foreach ($files as $file) {
+            self::purgeDocument($file['id'], $courseInfo, $sessionId);
+        }
+    }
+
+    /**
+     * @param int $id
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @return bool
+     */
+    public static function downloadDeletedDocument($id, $courseInfo, $sessionId)
+    {
+        $document = self::getDeletedDocument($id, $courseInfo, $sessionId);
+        if (!empty($document)) {
+            $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
+
+            if (Security::check_abs_path($coursePath.$document['path'], $coursePath)) {
+                self::file_send_for_download($coursePath.$document['path']);
+                exit;
+            }
+        }
+    }
+
+    /**
+     * @param array $courseInfo
+     * @param int $sessionId
+     *
+     * @return bool
+     */
+    public static function downloadAllDeletedDocument($courseInfo, $sessionId)
+    {
+        // Zip library for creation of the zip file.
+        require api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
+
+        $files = self::getDeletedDocuments($courseInfo, $sessionId);
+
+        if (empty($files)) {
+            return false;
+        }
+
+        $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+
+        // Creating a ZIP file.
+        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
+        $zip = new PclZip($tempZipFile);
+        foreach ($files as $file) {
+            $zip->add(
+                $coursePath.$file['path'],
+                PCLZIP_OPT_REMOVE_PATH,
+                $coursePath
+            );
+        }
+
+        if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
+            DocumentManager::file_send_for_download($tempZipFile, true);
+            @unlink($tempZipFile);
+            exit;
+        }
+    }
 }

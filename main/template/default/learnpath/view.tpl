@@ -11,31 +11,38 @@
         <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 {% if gamification_mode == 1 %}
-                    <div class="row">
-                        <div class="col-xs-8">
-                            {% if gamification_stars > 0 %}
-                                {% for i in 1..gamification_stars %}
-                                    <i class="fa fa-star fa-2x"></i>
-                                {% endfor %}
-                            {% endif %}
+                <div id="scorm-gamification">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                {% if gamification_stars > 0 %}
+                                    {% for i in 1..gamification_stars %}
+                                        <i class="fa fa-star fa-2x"></i>
+                                    {% endfor %}
+                                {% endif %}
 
-                            {% if gamification_stars < 4 %}
-                                {% for i in 1..4 - gamification_stars %}
-                                    <i class="fa fa-star-o fa-2x"></i>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="col-xs-4 text-right">
-                            {{ "XPoints"|get_lang|format(gamification_points) }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 navegation-bar" id="lp_navigation_elem">
-                            <div id="progress_bar">
-                                {{ progress_bar }}
+                                {% if gamification_stars < 4 %}
+                                    {% for i in 1..4 - gamification_stars %}
+                                        <i class="fa fa-star-o fa-2x"></i>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-xs-4 text-right">
+                                {{ "XPoints"|get_lang|format(gamification_points) }}
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xs-12 navegation-bar" id="lp_navigation_elem">
+                                <div id="progress_bar">
+                                    {{ progress_bar }}
+                                </div>
+                            </div>
+                        </div>
+                        </div>        
                     </div>
+                </div>
+                    
                 {% else %}
                     <div id="scorm-info" class="panel panel-default">
                         <div class="panel-heading">
@@ -54,7 +61,7 @@
                                     {% if lp_author == '' %}
                                        <div class="col-md-12">
                                             {{ lp_preview_image }}
-                                        </div> 
+                                        </div>
                                     {% else %}
                                         <div class="col-md-4">
                                             {{ lp_preview_image }}
@@ -63,7 +70,7 @@
                                             <div class="description-autor"> {{ lp_author }} </div>
                                         </div>
                                     {% endif %}
-                                    
+
                                 </div>
                             </div>
                             <div id="progress_bar">
@@ -151,7 +158,8 @@
                                 { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
                                 { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"}
+                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                {{ fix_link }}
                             ]
                         }
                     );
@@ -166,14 +174,30 @@
                                 { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
                                 { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"}
+                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                {{ fix_link }}
+                            ]
+                        }
+                    );
+                {% elseif fix_link != '' %}
+                    $.frameReady(
+                        function(){
+                            //  $("<div>I am a div courses</div>").prependTo("body");
+                        },
+                        "top.content_name",
+                        {
+                            load: [
+                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
+                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                                {{ fix_link }}
                             ]
                         }
                     );
                 {% endif %}
         {% endif %}
     };
-    
+
     $(document).ready(function() {
         updateContentHeight();
 
@@ -184,11 +208,8 @@
         $(window).resize(function() {
             updateContentHeight();
         });
-        
-        
     });
-    
-    
+
     window.onload = updateContentHeight();
     window.onresize = updateContentHeight();
 
@@ -210,5 +231,4 @@
             });
         });
     });
-     
 </script>

@@ -68,7 +68,7 @@ $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
 // url
-$form->addElement('text', 'url', get_lang('URL'), array('size' => 35));
+$form->addElement('text', 'url', get_lang('Url'), array('size' => 35));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 // Picture

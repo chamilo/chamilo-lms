@@ -11,6 +11,15 @@
     </div>
     <div id="wallMessages" class="col-md-6">
         {{ social_wall_block }}
+        <div class="spinner"></div>
+        <div class="panel panel-preview panel-default" hidden="true">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ "Url" | get_lang }} - {{ "Preview" | get_lang }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="url_preview"></div>
+            </div>
+        </div>
         {{ social_post_wall_block }}
         {{ social_auto_extend_link }}
     </div>
@@ -26,7 +35,9 @@
                             </h4>
                         </div>
                     <div id="listFriends" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                        {{ social_friend_block }}
+                        <div class="panel-body">
+                            {{ social_friend_block }}
+                        </div>
                     </div>
                 </div>
             </div>

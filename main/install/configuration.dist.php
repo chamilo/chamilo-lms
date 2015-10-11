@@ -224,3 +224,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // 0 = No link (not clickable)
 // 2 = Link to the course if there is only one course
 //$_configuration['courses_list_session_title_link'] = 1;
+// Fix embedded videos inside lps, adding an optional popup
+//$_configuration['lp_fix_embed_content'] = false;
+// Manage deleted files marked with "DELETED" (by course and only by allowed by admin)
+//$_configuration['document_manage_deleted_files'] = false;

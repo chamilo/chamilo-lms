@@ -78,8 +78,13 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Platform's css.
 $my_style = $platform_theme;
 
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) .
-    'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+<!--
+var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
+-->
+</script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) .'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     $("div#log_content_cleaner").bind("click", function() {
@@ -425,10 +430,41 @@ if ($_SESSION['oLP']->get_preview_image()) {
     $lpPreviewImagePath = $_SESSION['oLP']->get_preview_image_path();
 }
 
+if ($_SESSION['oLP']->current == $_SESSION['oLP']->get_last()) {
+    $categories = Category::load(null, null, $course_code, null, null, $sessionId);
+
+    if (!empty($categories)) {
+        $gradebookEvaluations = $categories[0]->get_evaluations();
+        $gradebookLinks = $categories[0]->get_links();
+
+        if (
+            count($gradebookEvaluations) === 0 &&
+            count($gradebookLinks) === 1 &&
+            $gradebookLinks[0]->get_type() == LINK_LEARNPATH &&
+            $gradebookLinks[0]->get_ref_id() == $_SESSION['oLP']->lp_id
+        ) {
+            $gradebookMinScore = $categories[0]->get_certificate_min_score();
+            $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
+
+            if ($userScore[0] >= $gradebookMinScore) {
+                Category::register_user_certificate($categories[0]->get_id(), $user_id);
+            }
+        }
+    }
+}
+
 $gamificationMode = api_get_setting('gamification_mode');
 
 $template = new Template('title', false, false, true, true, false);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
+
+$fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
+$fixLink = '';
+if ($fixLinkSetting) {
+    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
+}
+
+$template->assign('fix_link', $fixLink);
 $template->assign(
     'glossary_tool_availables',
     ['true', 'lp', 'exercise_and_lp']

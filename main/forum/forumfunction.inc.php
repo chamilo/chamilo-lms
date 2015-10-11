@@ -70,7 +70,7 @@ $(function () {
                     file.delete + '<\/td>' +
                     '<input type=\"hidden\" value=\"' + file.id +'\" name=\"file_ids[]\">' + '<\/tr>');
             } else {
-                alert('" . get_lang('ErrorUploadAttachment') . "');
+                alert('" . get_lang('UploadError') . "');
             }
         }
     });
@@ -90,7 +90,7 @@ $htmlHeadXtra[] = '<script>
             var l = $(this);
             var id = l.closest("tr").attr("id");
             var filename = l.closest("tr").find(".attachFilename").html();
-            if (confirm("' . get_lang('AreYouSureToDeleteFileX') . '".replace("%s", filename))) {
+            if (confirm("' . get_lang('AreYouSureToDeleteJS') . '", filename)) {
                 $.ajax({
                     type: "POST",
                     url: "'.api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId .'&forum='.$forumId .'",
@@ -5483,7 +5483,7 @@ function getAttachmentsAjaxTable($postId = null)
     // Forum attachment Ajax table
     $fileData = '
     <div class="control-group " style="'. $style . '">
-        <label class="control-label">'.get_lang('AttachmentFilesList').'</label>
+        <label class="control-label">'.get_lang('AttachmentList').'</label>
         <div class="controls">
             <table id="attachmentFileList" class="files data_table span10">
                 <tr>

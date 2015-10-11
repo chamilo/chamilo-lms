@@ -232,8 +232,8 @@ class Display
                 foreach ($header as $index => $header_item) {
                     $table->set_header(
                         $index,
-                        $header_item[0],
-                        $header_item[1],
+                        isset($header_item[0]) ? $header_item[0] : null,
+                        isset($header_item[1]) ? $header_item[1] : null,
                         isset($header_item[2]) ? $header_item[2] : null,
                         isset($header_item[3]) ? $header_item[3] : null
                     );
@@ -2220,7 +2220,7 @@ class Display
         return "$icon ";
     }
     public static function panelCollapse($title, $content, $id = null, $params = null, $idAccordion = null, $idCollpase = null)
-    {
+    {   
         if (!empty($idAccordion)) {
             $html = null;
             $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;

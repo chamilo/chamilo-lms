@@ -735,28 +735,8 @@ if ($time_control) {
 	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciseExpiredTimeMessage').'</div>';
 }
 
-if (!empty($objExercise->description)) {
-    echo "<script>
-        $(function() {
-            $('#description_content').accordion({
-                changestart: function(event, ui) {
-                    //var clicked = $(this).find('.ui-state-active').attr('id');
-                    //$('#'+clicked).load('/widgets/'+clicked);
-                    $('#collapse1').html(".json_encode($objExercise->description).");
-                }
-            });
-         });
-        </script>";
-    echo Display::generate_accordion(
-        array(
-            array(
-                'title' => get_lang('ExerciseDescriptionLabel'),
-                'content' => $objExercise->description,
-            ),
-        ),
-        'jquery',
-        'description_content'
-    );
+if (!empty($objExercise->description)){
+    echo Display::panelCollapse(get_lang('ExerciseDescriptionLabel'), $objExercise->description, 'exercise-description', null, 'description', 'exercise-collapse');
 }
 
 if ($origin != 'learnpath') {

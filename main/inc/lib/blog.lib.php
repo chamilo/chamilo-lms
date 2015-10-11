@@ -2371,7 +2371,7 @@ class Blog
 			}
 		}
 
-		echo 	'<table id="smallcalendar" class="data_table">',
+		echo 	'<table id="smallcalendar" class="table table-responsive">',
 				"<tr id=\"title\">\n",
 				"<th width=\"10%\"><a href=\"", $backwardsURL, "\">&laquo;</a></th>\n",
 				"<th align=\"center\" width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>\n",

@@ -51,7 +51,7 @@ if (UserManager::is_admin($user_id)) {
 }
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!='') {
+if (isset($_GET['add_type']) && $_GET['add_type']!='') {
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -326,6 +326,8 @@ echo Display::page_header(
     sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
         null, $size = 'h3'
 );
+
+$assigned_users_to_hrm = array();
 
 switch ($userStatus) {
     case DRH:

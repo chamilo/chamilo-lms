@@ -1319,7 +1319,7 @@ class UserGroup extends Model
         }
 
         // url
-        $form->addElement('text', 'url', get_lang('URL'));
+        $form->addElement('text', 'url', get_lang('Url'));
         $form->applyFilter('url', 'html_filter');
         $form->applyFilter('url', 'trim');
 

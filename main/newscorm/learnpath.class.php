@@ -3356,10 +3356,10 @@ class learnpath
                         if ($lp_item_type == 'link') {
                             if (Link::is_youtube_link($file)) {
                                 $src  = Link::get_youtube_video_id($file);
-                                $file = 'embed.php?type=youtube&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=youtube&source='.$src;
                             } elseif (Link::isVimeoLink($file)) {
                                 $src  = Link::getVimeoLinkId($file);
-                                $file = 'embed.php?type=vimeo&source='.$src;
+                                $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=vimeo&source='.$src;
                             } else {
                                 // If the current site is HTTPS and the link is
                                 // HTTP, browsers will refuse opening the link
@@ -3370,7 +3370,7 @@ class learnpath
                                     $linkProtocol = substr($file, 0, 5);
                                     if ($linkProtocol === 'http:') {
                                         //this is the special intervention case
-                                        $file = 'embed.php?type=nonhttps&source=' .  urlencode($file);
+                                        $file = api_get_path(WEB_CODE_PATH).'newscorm/embed.php?type=nonhttps&source=' .  urlencode($file);
                                     }
                                 }
                             }
@@ -6391,11 +6391,15 @@ class learnpath
         $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
-                if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+                if (is_array($extra_info)) {
+                    if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
+                        $selected = 'selected="selected" ';
+                    }
+                } elseif ($action == 'add') {
                     $selected = 'selected="selected" ';
-                elseif ($action == 'add') $selected = 'selected="selected" ';
-                else
+                } else {
                     $selected = '';
+                }
                 $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
             }
         }
@@ -6416,9 +6420,13 @@ class learnpath
             $arrHide = array ();
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter') {
-                    if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
-                        $s_selected_position = $arrLP[$i]['id'];
-                    elseif ($action == 'add') $s_selected_position = 0;
+                    if (is_array($extra_info)) {
+                        if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
+                            $s_selected_position = $arrLP[$i]['id'];
+                        }
+                    } elseif ($action == 'add') {
+                        $s_selected_position = 0;
+                    }
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                 }
             }

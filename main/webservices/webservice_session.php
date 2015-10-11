@@ -52,7 +52,7 @@ class WSSession extends WS
 		}
 
 		$coachStartDate = null;
-		if (!empty($nb_days_access_before) {
+		if (!empty($nb_days_access_before)) {
 			$day = intval($nb_days_access_before);
 			$coachStartDate = date('Y-m-d ', strtotime($start_date. ' + '.$day.' days'));
 		}
@@ -210,7 +210,7 @@ class WSSession extends WS
 			}
 
             $coachStartDate = null;
-            if (!empty($nb_days_access_before) {
+            if (!empty($nb_days_access_before)) {
                 $day = intval($nb_days_access_before);
                 $coachStartDate = date('Y-m-d ', strtotime($start_date. ' + '.$day.' days'));
             }

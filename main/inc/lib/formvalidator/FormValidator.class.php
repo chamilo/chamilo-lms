@@ -116,7 +116,6 @@ EOT;
         return '<form{attributes}>
         <fieldset>
             {content}
-            <div class="clear"></div>
         </fieldset>
         {hidden}
         </form>';
@@ -418,7 +417,7 @@ EOT;
      *
      * @return HTML_QuickForm_button
      */
-    public function addButtonSend($label, $name = 'submit', $createElement = false)
+    public function addButtonSend($label, $name = 'submit', $createElement = false, $attributes = array())
     {
         return $this->addButton(
             $name,
@@ -427,7 +426,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            $attributes,
             $createElement
         );
     }

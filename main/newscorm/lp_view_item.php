@@ -105,7 +105,7 @@ if ($mode == 'fullpage') {
     Display::display_header(get_lang('Item'), 'Path');
 }
 
-$suredel = trim(get_lang('AreYouSureToDelete'));
+$suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
 <script>
 /* <![CDATA[ */

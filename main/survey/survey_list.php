@@ -74,7 +74,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
 if ($action == 'copy_survey') {
     if (api_is_allowed_to_edit()) {
         SurveyManager::copy_survey($_GET['survey_id']);
-        $message = get_lang('Copied');
+        $message = get_lang('SurveyCopied');
         header('Location: ' . api_get_path(WEB_CODE_PATH) . 'survey/survey_list.php?' . api_get_cidreq());
         exit;
     }

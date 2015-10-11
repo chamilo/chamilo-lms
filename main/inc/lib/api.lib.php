@@ -7587,8 +7587,8 @@ function api_warn_hosting_contact($limitName)
 
     if (!empty($email)) {
         $subject = get_lang('HostingWarningReached');
-        $body = get_lang('Portal').': '.api_get_path(WEB_PATH)." \n ";
-        $body .= get_lang('Limit').': '.$limitName." \n ";
+        $body = get_lang('PortalName').': '.api_get_path(WEB_PATH)." \n ";
+        $body .= get_lang('PortalLimitType').': '.$limitName." \n ";
         if (isset($hostingParams[$limitName])) {
             $body .= get_lang('Value') . ': ' . $hostingParams[$limitName];
         }

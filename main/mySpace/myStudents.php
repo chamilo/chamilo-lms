@@ -353,13 +353,10 @@ if (!empty($student_id)) {
 
     // get average of score and average of progress by student
     $avg_student_progress = $avg_student_score = 0;
-    $course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : '';
+    $course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : null;
 
-    if (!CourseManager :: is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
-        if (isset($courses[$key])) {
-            unset($courses[$key]);
-        }
-    } else {
+    if (CourseManager :: is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
+        
         $avg_student_progress = Tracking::get_avg_student_progress(
             $user_info['user_id'],
             $course_code,

@@ -39,26 +39,14 @@ require_once('language.php');
 		<div id="header">
 			<img src="../../custompages/images/header.png" alt="Ambassador logo" />
 		</div> <!-- #header -->
-      <div id="registration-form-info" class="form-info">
-        <?php if(isset($content['error']) && !empty($content['error'])){
-          echo $content['info'];
-        } else {
-          echo custompages_get_lang('EnterEmailAndWeWillSendYouYourPassword');
-        }?>
-      </div>
 		<div id="lostpassword-form-box" class="form-box">
-		<?php if (isset($content['error']) && !empty($content['error'])) {
-			echo '<div id="registration-form-error" class="form-error"><ul>'.$content['error'].'</ul></div>';
-		}?>
-			<form id="lostpassword-form" class="form" action="lostPassword.php" method="post">
-				<div>
-                    <label for="user">*<?php echo custompages_get_lang('LoginOrEmailAddress');?></label>
-					<input name="user" type="text" /><br />
-				</div>
-			</form>
-			<div id="lostpassword-form-submit" class="form-submit" onclick="document.forms['lostpassword-form'].submit();">
-      <span><?php echo custompages_get_lang('Send'); ?> </span>
-			</div> <!-- #form-submit -->
+            <?php
+            if (isset($content['info']) && !empty($content['info'])) {
+                echo '<div id="registration-form-error" class="form-error"><ul>' . $content['info'] . '</ul></div>';
+            }
+
+            echo isset($content['form']) ? $content['form'] : ''
+            ?>
 		</div> <!-- #form -->
 		<div id="footer">
 			<img src="../../custompages/images/footer.png" />

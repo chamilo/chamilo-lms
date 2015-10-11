@@ -39,7 +39,7 @@ if (isset($_GET['error'])) {
                 $icon = '<i class="icon-play-sign icon-2x"></i>&nbsp;';
 
                 echo Display::return_message(
-                    Display::url($icon.$src, $src, ['target' => '_blank']),
+                    Display::url($icon.$src, $src, ['class' => 'btn generated', 'target' => '_blank']),
                     'normal',
                     false
                 );

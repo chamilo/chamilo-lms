@@ -1,6 +1,6 @@
 <script>
     function confirmation(name) {
-        if (confirm(" {{ "AreYouSureToDelete"|get_lang }} name ?")) {
+        if (confirm("{{ "AreYouSureToDeleteJS"|get_lang }} \"" + name + "\" ?")) {
             return true;
         } else {
             return false;

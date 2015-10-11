@@ -1543,7 +1543,7 @@ function getWorkListTeacher(
                 $class = '';
             } else {
                 $icon = 'invisible.png';
-                $text = get_lang('invisible');
+                $text = get_lang('Invisible');
                 $action = 'visible';
                 $class = 'muted';
             }
@@ -4802,13 +4802,13 @@ function exportAllStudentWorkFromPublication(
 
     $header .= '<br />'.get_lang('Teachers').': '.$teachers.'<br />';
     $header .= '<br />'.get_lang('Date').': '.api_get_local_time().'<br />';
-    $header .= '<br />'.get_lang('StudentPublication').': '.$workData['title'].'<br />';
+    $header .= '<br />'.get_lang('WorkName').': '.$workData['title'].'<br />';
 
     $content = null;
     $expiresOn = null;
 
     if (!empty($assignment) && isset($assignment['expires_on'])) {
-        $content .= '<br /><strong>' . get_lang('ExpiryDate') . '</strong>: ' . api_get_local_time($assignment['expires_on']);
+        $content .= '<br /><strong>' . get_lang('ExpirationDate') . '</strong>: ' . api_get_local_time($assignment['expires_on']);
         $expiresOn = api_get_local_time($assignment['expires_on']);
     }
 

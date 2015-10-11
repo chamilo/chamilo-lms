@@ -1,0 +1,28 @@
+/*
+    Theme Name: Frame Scorm
+    URI Project: http://www.chamilo.org
+    Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 3.0.x
+    Author:
+        alex.aragon@beeznest.com
+    Version: 1.0
+*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,300italic,400italic);
+body{
+    color: #666;
+    font-family: 'Open Sans', sans-serif;
+    padding: 20px;
+    line-height: 30px;
+}
+a{
+    text-decoration: none;
+    color: #00829C;
+}
+a:hover{
+    text-decoration: underline;
+}
+img{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    background: #fff;
+}

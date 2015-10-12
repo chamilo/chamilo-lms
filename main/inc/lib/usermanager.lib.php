@@ -1492,23 +1492,24 @@ class UserManager
 
         $gravatarEnabled = api_get_setting('gravatar_enabled');
 
-        if ($gravatarEnabled === 'true') {
-            $file = self::getGravatar(
-                $imageWebPath['email'],
-                $gravatarSize,
-                api_get_setting('gravatar_type')
-            );
-
-            if ($addRandomId) {
-                $file .= '&rand='.uniqid();
-            }
-            return $file;
-        }
-
         $anonymousPath = api_get_path(WEB_CODE_PATH).'img/'.$pictureAnonymous;
 
         if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {
-
+            
+            if ($gravatarEnabled === 'true') {
+                $file = self::getGravatar(
+                    $imageWebPath['email'],
+                    $gravatarSize,
+                    api_get_setting('gravatar_type')
+                );
+                
+                if ($addRandomId) {
+                    $file .= '&rand='.uniqid();
+                }
+                
+                return $file;
+            }
+            
             return $anonymousPath;
         }
 

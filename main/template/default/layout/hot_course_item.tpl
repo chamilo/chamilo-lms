@@ -3,7 +3,7 @@
                     <div class="col-md-4">
                         <div class="items-course">
                             <div class="items-course-image">
-                                <img class="img-responsive" src="{{ hot_course.extra_info.course_image_large }}" alt="{{ hot_course.extra_info.title|e }}"/>
+                                <a href="{{ hot_course.extra_info.course_public_url }}"><img class="img-responsive" src="{{ hot_course.extra_info.course_image_large }}" alt="{{ hot_course.extra_info.title|e }}"/></a>
                             </div>
                             <div class="items-course-info">
                                 <h4 class="title">

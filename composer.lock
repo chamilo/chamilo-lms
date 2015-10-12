@@ -218,16 +218,16 @@
         },
         {
             "name": "behat/transliterator",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Transliterator.git",
-                "reference": "c93521d3462a554332d1ef5bb0e9b5b8ca4106c4"
+                "reference": "868e05be3a9f25ba6424c2dd4849567f50715003"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Transliterator/zipball/c93521d3462a554332d1ef5bb0e9b5b8ca4106c4",
-                "reference": "c93521d3462a554332d1ef5bb0e9b5b8ca4106c4",
+                "url": "https://api.github.com/repos/Behat/Transliterator/zipball/868e05be3a9f25ba6424c2dd4849567f50715003",
+                "reference": "868e05be3a9f25ba6424c2dd4849567f50715003",
                 "shasum": ""
             },
             "require": {
@@ -236,7 +236,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.1-dev"
                 }
             },
             "autoload": {
@@ -254,7 +254,7 @@
                 "slug",
                 "transliterator"
             ],
-            "time": "2014-05-15 22:08:22"
+            "time": "2015-09-28 16:26:35"
         },
         {
             "name": "bower-asset/MathJax",
@@ -373,16 +373,16 @@
         },
         {
             "name": "bower-asset/ckeditor",
-            "version": "4.5.3",
+            "version": "4.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ckeditor/ckeditor-releases.git",
-                "reference": "a93cb51eb1fc85a13892706dd61eccfd4c999947"
+                "reference": "a84a972a367bc6c59bafb3e5fd503ec317d47daa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/a93cb51eb1fc85a13892706dd61eccfd4c999947",
-                "reference": "a93cb51eb1fc85a13892706dd61eccfd4c999947",
+                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/a84a972a367bc6c59bafb3e5fd503ec317d47daa",
+                "reference": "a84a972a367bc6c59bafb3e5fd503ec317d47daa",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -663,16 +663,16 @@
         },
         {
             "name": "bower-asset/mediaelement",
-            "version": "2.18.1",
+            "version": "2.18.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johndyer/mediaelement.git",
-                "reference": "64dcb191894f4caeb76d5743ceb93c495d60cd37"
+                "reference": "86b5dd51ede0554c55913f48aa342450ec6a0b2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johndyer/mediaelement/zipball/64dcb191894f4caeb76d5743ceb93c495d60cd37",
-                "reference": "64dcb191894f4caeb76d5743ceb93c495d60cd37",
+                "url": "https://api.github.com/repos/johndyer/mediaelement/zipball/86b5dd51ede0554c55913f48aa342450ec6a0b2c",
+                "reference": "86b5dd51ede0554c55913f48aa342450ec6a0b2c",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -894,16 +894,16 @@
         },
         {
             "name": "cocur/slugify",
-            "version": "v1.3",
+            "version": "v1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cocur/slugify.git",
-                "reference": "6bf38846ecb34d24288cdea7195122b6452c1882"
+                "reference": "05f00fa75f1c53edfcf4d0425e7e62e95b8888dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cocur/slugify/zipball/6bf38846ecb34d24288cdea7195122b6452c1882",
-                "reference": "6bf38846ecb34d24288cdea7195122b6452c1882",
+                "url": "https://api.github.com/repos/cocur/slugify/zipball/05f00fa75f1c53edfcf4d0425e7e62e95b8888dd",
+                "reference": "05f00fa75f1c53edfcf4d0425e7e62e95b8888dd",
                 "shasum": ""
             },
             "require": {
@@ -953,7 +953,7 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2015-09-02 20:14:32"
+            "time": "2015-09-29 18:26:32"
         },
         {
             "name": "ddeboer/data-import",
@@ -1495,16 +1495,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "6c527d8ccbccec5257bb2c92bca973653b1e3976"
+                "reference": "3a787de7c4a64460436dc2eb2e3cde8920d5fadd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/6c527d8ccbccec5257bb2c92bca973653b1e3976",
-                "reference": "6c527d8ccbccec5257bb2c92bca973653b1e3976",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/3a787de7c4a64460436dc2eb2e3cde8920d5fadd",
+                "reference": "3a787de7c4a64460436dc2eb2e3cde8920d5fadd",
                 "shasum": ""
             },
             "require": {
@@ -1530,12 +1530,12 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "v1.0.x-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Doctrine\\DBAL\\Migrations\\": "lib/Doctrine/DBAL/Migrations"
+                "psr-0": {
+                    "Doctrine\\DBAL\\Migrations": "lib"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1558,7 +1558,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2015-09-21 09:51:07"
+            "time": "2015-07-29 20:43:19"
         },
         {
             "name": "doctrine/orm",
@@ -2013,16 +2013,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.6",
+            "version": "v2.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "5d330411e27ab0ced67e1e5383ccae975c23c17d"
+                "reference": "1a86ba1c7426238b4f765089e0af51174a38af7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/5d330411e27ab0ced67e1e5383ccae975c23c17d",
-                "reference": "5d330411e27ab0ced67e1e5383ccae975c23c17d",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/1a86ba1c7426238b4f765089e0af51174a38af7f",
+                "reference": "1a86ba1c7426238b4f765089e0af51174a38af7f",
                 "shasum": ""
             },
             "require": {
@@ -2032,7 +2032,7 @@
             },
             "require-dev": {
                 "doctrine/common": ">=2.5.0",
-                "doctrine/mongodb-odm": "dev-master",
+                "doctrine/mongodb-odm": ">=1.0.2",
                 "doctrine/orm": ">=2.5.0",
                 "phpunit/phpunit": "~4.4",
                 "phpunit/phpunit-mock-objects": "~2.3",
@@ -2088,7 +2088,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2015-08-28 11:07:14"
+            "time": "2015-09-28 16:39:27"
         },
         {
             "name": "graphp/algorithms",
@@ -2452,32 +2452,35 @@
         },
         {
             "name": "knplabs/knp-menu-bundle",
-            "version": "v2.0.0",
-            "target-dir": "Knp/Bundle/MenuBundle",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
-                "reference": "bdfc95da5ff7e4e67f948aaa9ea5da835a3a9088"
+                "reference": "2246a70109bdd313a105d2a7ef464a763aacf0cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/bdfc95da5ff7e4e67f948aaa9ea5da835a3a9088",
-                "reference": "bdfc95da5ff7e4e67f948aaa9ea5da835a3a9088",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/2246a70109bdd313a105d2a7ef464a763aacf0cd",
+                "reference": "2246a70109bdd313a105d2a7ef464a763aacf0cd",
                 "shasum": ""
             },
             "require": {
-                "knplabs/knp-menu": "~2.0",
-                "symfony/framework-bundle": "~2.0"
+                "knplabs/knp-menu": "~2.1",
+                "symfony/framework-bundle": "~2.3"
+            },
+            "require-dev": {
+                "symfony/expression-language": "~2.4",
+                "symfony/phpunit-bridge": "~2.7"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Knp\\Bundle\\MenuBundle": ""
+                "psr-4": {
+                    "Knp\\Bundle\\MenuBundle\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2502,7 +2505,7 @@
             "keywords": [
                 "menu"
             ],
-            "time": "2014-08-01 09:57:23"
+            "time": "2015-09-28 15:23:54"
         },
         {
             "name": "media-alchemyst/media-alchemyst",
@@ -6503,16 +6506,16 @@
         },
         {
             "name": "willdurand/negotiation",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/willdurand/Negotiation.git",
-                "reference": "8a84c5956e765f432542fc52a8c6e9aff4508eb3"
+                "reference": "2a59f2376557303e3fa91465ab691abb82945edf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/8a84c5956e765f432542fc52a8c6e9aff4508eb3",
-                "reference": "8a84c5956e765f432542fc52a8c6e9aff4508eb3",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/2a59f2376557303e3fa91465ab691abb82945edf",
+                "reference": "2a59f2376557303e3fa91465ab691abb82945edf",
                 "shasum": ""
             },
             "require": {
@@ -6521,7 +6524,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -6548,7 +6551,7 @@
                 "header",
                 "negotiation"
             ],
-            "time": "2015-07-28 13:10:50"
+            "time": "2015-10-01 07:42:40"
         },
         {
             "name": "winzou/state-machine",

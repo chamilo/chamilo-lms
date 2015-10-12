@@ -159,6 +159,7 @@ footer{
   background: #272727;
   color: #9DD0F1;
   border-top: 4px solid #546667;
+  height: auto;
 }
 footer a{
   color: #ffffff;

@@ -582,6 +582,15 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $users  = Database::store_result($result, 'ASSOC');
+
+        foreach ($users as &$user) {
+            if (!$user['icon']) {
+                continue;
+            }
+
+            $user['icon_small'] = sprintf("badges/%s-small.png", sha1($user['name']));
+        }
+
         return $users;
     }
 

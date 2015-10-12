@@ -48,8 +48,18 @@ $(document).ready(function() {
         var width = embed.attr('width');
         var src = embed.attr('src');
 
-        var n = src.indexOf("youtube.com");
-        if (n > 0) {
+        var urlToAvoid = src.indexOf("youtube.com");
+        if (urlToAvoid >= 0) {
+            return true;
+        }
+
+        urlToAvoid = src.indexOf("/main/inc/lib/fckeditor/editor/fckeditor.html");
+        if (urlToAvoid >= 0) {
+            return true;
+        }
+
+        urlToAvoid = src.indexOf("javascript:void(0)");
+        if (urlToAvoid >= 0) {
             return true;
         }
 
@@ -96,6 +106,12 @@ $(document).ready(function() {
                 if (hasJs >= 0) {
                     return true;
                 }
+
+                hasJs = $(this).attr('href').indexOf('#collapse');
+                if (hasJs >= 0) {
+                    return true;
+                }
+
             }
 
             if ($(this).attr('class')) {

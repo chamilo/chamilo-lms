@@ -2196,10 +2196,21 @@ function attach_glossary_into_scorm(type) {
                         '&width='+width;
                     var result = $("iframe").contents().find('#'+openerId);
 
-                    var n = src.indexOf("youtube.com");
-                    if (n > 0) {
+                    var urlToAvoid = src.indexOf("youtube.com");
+                    if (urlToAvoid >= 0) {
                         return true;
                     }
+
+                    urlToAvoid = src.indexOf("/main/inc/lib/fckeditor/editor/fckeditor.html");
+                    if (urlToAvoid >= 0) {
+                        return true;
+                    }
+
+                    urlToAvoid = src.indexOf("javascript:void(0)");
+                    if (urlToAvoid >= 0) {
+                        return true;
+                    }
+
 
                     if (result.length == 0) {
                         if (embed.prev().attr('class') != 'generated') {
@@ -2232,6 +2243,10 @@ function attach_glossary_into_scorm(type) {
                                 }
 
                                 var hasJs = $(this).attr('href').indexOf('javascript');
+                                if (hasJs >= 0) {
+                                    return true;
+                                }
+                                var hasJs = $(this).attr('href').indexOf('#collapse');
                                 if (hasJs >= 0) {
                                     return true;
                                 }

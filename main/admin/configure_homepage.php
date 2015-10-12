@@ -594,7 +594,6 @@ if (!empty($action)) {
 			case 'edit_top':
 				// This request is only the preparation for the update of the home_top
 				$home_top = '';
-				error_log($homep.$topf.'_'.$lang.$ext);
 				if (is_file($homep.$topf.'_'.$lang.$ext) && is_readable($homep.$topf.'_'.$lang.$ext)) {
 					$home_top = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
 				} elseif (is_file($homep.$topf.$lang.$ext) && is_readable($homep.$topf.$lang.$ext)) {

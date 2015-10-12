@@ -1797,6 +1797,36 @@ class Category implements GradebookItem
         /** @var Category $category */
         $category = $cats_course[0];
 
+        //@todo move these in a function
+        $sum_categories_weight_array = array();
+        if (isset($cats_course) && !empty($cats_course)) {
+            $categories = Category::load(null, null, null, $category_id);
+            if (!empty($categories)) {
+                foreach ($categories as $category) {
+                    $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
+                }
+            } else {
+                $sum_categories_weight_array[$category_id] = $cats_course[0]->get_weight();
+            }
+        }
+
+        $main_weight = $cats_course[0]->get_weight();
+
+        $cattotal = Category::load($category_id);
+        $scoretotal = $cattotal[0]->calc_score($user_id);
+
+        // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
+        // file load this variable as a global
+        $scoredisplay = ScoreDisplay::instance();
+        $my_score_in_gradebook = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
+
+        // A student always sees only the teacher's repartition
+        $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
+
+        if (!self::userFinishedCourse($user_id, $cats_course[0])) {
+            return false;
+        }
+
         $skillToolEnabled = api_get_setting('allow_skills_tool') == 'true';
         $userHasSkills = false;
 
@@ -1827,36 +1857,6 @@ class Category implements GradebookItem
                     )
                 ];
             }
-        }
-
-        //@todo move these in a function
-        $sum_categories_weight_array = array();
-        if (isset($cats_course) && !empty($cats_course)) {
-            $categories = Category::load(null, null, null, $category_id);
-            if (!empty($categories)) {
-                foreach ($categories as $category) {
-                    $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
-                }
-            } else {
-                $sum_categories_weight_array[$category_id] = $cats_course[0]->get_weight();
-            }
-        }
-
-        $main_weight = $cats_course[0]->get_weight();
-
-        $cattotal = Category::load($category_id);
-        $scoretotal = $cattotal[0]->calc_score($user_id);
-
-        // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
-        // file load this variable as a global
-        $scoredisplay = ScoreDisplay::instance();
-        $my_score_in_gradebook = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
-
-        // A student always sees only the teacher's repartition
-        $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
-
-        if (!self::userFinishedCourse($user_id, $cats_course[0])) {
-            return false;
         }
 
         $my_certificate = GradebookUtils::get_certificate_by_user_id(

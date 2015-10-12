@@ -4297,8 +4297,6 @@ function api_get_language_id($language)
  **/
 function api_get_language_from_type($lang_type)
 {
-    $_user = api_get_user_info();
-    $_course = api_get_course_info();
     $return = false;
 
     switch ($lang_type) {
@@ -4308,6 +4306,7 @@ function api_get_language_from_type($lang_type)
                 $return = $temp_lang;
             break;
         case 'user_profil_lang':
+            $_user = api_get_user_info();
             if (isset($_user['language']) && !empty($_user['language']))
                 $return = $_user['language'];
             break;
@@ -4316,6 +4315,21 @@ function api_get_language_from_type($lang_type)
                 $return = $_SESSION['user_language_choice'];
             break;
         case 'course_lang':
+            global $_course;
+            $cidReq = null;
+            if (empty($_course)) {
+                // Code modified because the local.inc.php file it's declarated after this work
+                // causing the function api_get_course_info() returns a null value
+                $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : null;
+                $cDir = (!empty($_GET['cDir']) ? $_GET['cDir'] : null);
+                if (empty($cidReq) && !empty($cDir)) {
+                    $c = CourseManager::get_course_id_from_path($cDir);
+                    if ($c) {
+                        $cidReq = $c;
+                    }
+                } 
+            }
+            $_course = api_get_course_info($cidReq);
             if (isset($_course['language']) && !empty($_course['language']))
                 $return = $_course['language'];
             break;

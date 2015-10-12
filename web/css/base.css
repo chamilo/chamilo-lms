@@ -2650,18 +2650,6 @@ form .formw .freeze {
   margin-top: 1em;
   background-color: #FFFFFF;
 }
-.skill-options .legend .title-skill,
-.skill-options .saved_profiles .title-skill
-{
-  color: #666655;
-  padding-bottom: 1em;
-  font-size: 16px;
-}
-.skill-options .skill-profile .title-skill{
-  color: #666655;
-  padding-bottom: .5em;
-  font-size: 18px;
-}
 .skill-options .skill-home{
   margin-top: 1em;
   margin-bottom: 1em;
@@ -2673,41 +2661,10 @@ form .formw .freeze {
   padding-right: 0;
   width: 100%;
 }
-.skill-options .accordion-heading {
-  border-bottom: 0px none;
-  background: #3FA5C3;
-}
-.skill-options .accordion-heading a{
-  color: #FFFFFF;
-}
-.skill-options .button-skill{
-  margin-top: 1em;
-}
-.skill-options .form-search .holder{
-  padding-left: .5em;
-  padding-right: .5em;
-}
 .skill-options .accordion-inner {
   padding: 9px 15px;
   /*border: 1px solid #dadada;*/
   background-color: #FFFFFF;
-}
-.skill-options .items_save{
-  margin-top: .5em;
-  margin-bottom: .5em;
-  display: inline-block;
-  height: auto !important;
-  clear: both;
-  width: 100%;
-}
-.skill-options .accordion-group {
-  margin-bottom: 2px;
-  border: 1px solid #3FA5C3;
-  border-radius: 4px;
-}
-.skill-options .accordion-inner {
-  padding: 9px 15px;
-  border-top: 1px solid #3FA5C3;
 }
 .skill-options .load_wheel{
   -moz-border-radius:6px;
@@ -2717,11 +2674,6 @@ form .formw .freeze {
   background:#FCF8E3;
   padding:1px 5px 2px;
   color:#333;
-}
-.skill-options .skill-items{
-  padding-bottom: 1em;
-  margin-bottom: .5em;
-  margin-top: .5em;
 }
 .skill-options .skill-winner{
   list-style: none;
@@ -2738,91 +2690,20 @@ form .formw .freeze {
   padding-left: 1.5em;
   padding-bottom: 1em;
 }
-.skill-options .skill-profile{
-  width: 100%;
-  display: block;
-  border: 1px solid #CCC;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  margin-top: 1em;
-  background-color: #FFFFFF;
-  padding-top: .5em;
-  padding-bottom: .5em;
-  margin-bottom: 1em;
-}
-.skill-options .section-info-skill{
-  display: inline-block;
-  padding-top: .5em;
-  padding-bottom: .5em;
-  width: 100%;
-  clear: both;
-}
-.skill-options .skill-profile .avatar{
-  display: block;
-  width: auto;
-  text-align: center;
-}
-.skill-options .skill-profile .info-user{
-  display: block;
-  width: auto;
-  margin-left: 1em;
-  padding: 1em;
-}
-.skill-options .button-skill{
-  margin-bottom: .5em;
-}
 .search-skill ul.holder li.bit-input input{
   width: 100%;
 }
-.page-items-profile{
-  padding: .5em;
-}
-.page-items-profile .title-skill{
-  margin-bottom: .5em;
-  font-size: 18px;
-  color: #333333;
-  margin-top: .5em;
-}
-.page-items-profile .block-items{
-  display: block;
-  width: 22.5%;
-  margin:10px;
-  float: left;
-}
-.page-items-profile .award-items{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 12px;
-}
-.page-items-profile .number-skill{
-  background-color: #FFFFFF;
-  padding-top: .5em;
-  padding-bottom: .5em;
-  padding-left: .5em;
-  margin-bottom: 1em;
-  font-size: 12px;
-  border: 1px solid #cccccc;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-.page-items-profile .block-items .border-items{
-  background-color: #ffffff;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  border: 1px solid #cccccc;
+.skill-legend-basic {
+  color: #31A354;
 }
 .skill-legend-add{
-  background-color: #F89406;
+  color: #F89406;
 }
 .skill-legend-search{
-  background-color: #B94A48;
+  color: #B94A48;
 }
 .skill-legend-badges{
-  background-color: #3A87AD;
+  color: #3A87AD;
 }
 .page-skill .panel-heading a{
   color: #ffffff;
@@ -2830,40 +2711,17 @@ form .formw .freeze {
 .page-skill .btn-default{
   background-color: #F6F6F6;
 }
-.page-skill .text, .page-skill #saved_profiles h4{
-  font-size: 12px;
-}
 .page-skill .btn-default:hover {
   background-color: #E6E6E6;
 }
 .page-skill #skill_info{
   font-size: 12px;
 }
-.page-skill .items_save .holder_simple{
-  padding: 0;
-}
 .page-skill #skill_wheel tspan{
   font-size: 12px;
 }
 .page-skill .holder_simple li.bit-box a{
   color: #8A6D3B;
-}
-.page-items-profile .items-info{
-  padding:1em;
-}
-.page-items-profile .info-profile{
-  margin-top: 1em;
-  margin-bottom: .5em;
-}
-.page-items-profile .items-info .avatar-profile{
-  text-align: center;
-  background: #FFFFFF;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  padding-bottom: 5px;
-  padding-top: 5px;
-  border: 1px solid #cccccc;
 }
 .skill_partition {
   cursor: pointer;

@@ -1781,6 +1781,7 @@ class Category implements GradebookItem
      */
     public static function register_user_certificate($category_id, $user_id)
     {
+        $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
         // Generating the total score for a course
         $cats_course = Category::load(
@@ -1796,26 +1797,13 @@ class Category implements GradebookItem
         /** @var Category $category */
         $category = $cats_course[0];
 
-        if (!$category->getGenerateCertificates()) {
-
-            $skill = new Skill();
-            $skill->add_skill_to_user(
-                $user_id,
-                $category_id,
-                api_get_course_int_id(),
-                $sessionId
-            );
-
-            return false;
-        }
-
         //@todo move these in a function
         $sum_categories_weight_array = array();
         if (isset($cats_course) && !empty($cats_course)) {
             $categories = Category::load(null, null, null, $category_id);
             if (!empty($categories)) {
-                foreach ($categories as $category) {
-                    $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
+                foreach ($categories as $subCategory) {
+                    $sum_categories_weight_array[$subCategory->get_id()] = $subCategory->get_weight();
                 }
             } else {
                 $sum_categories_weight_array[$category_id] = $cats_course[0]->get_weight();
@@ -1837,6 +1825,38 @@ class Category implements GradebookItem
 
         if (!self::userFinishedCourse($user_id, $cats_course[0])) {
             return false;
+        }
+
+        $skillToolEnabled = api_get_setting('allow_skills_tool') == 'true';
+        $userHasSkills = false;
+
+        if ($skillToolEnabled) {
+            if (!$category->getGenerateCertificates()) {
+                $skill = new Skill();
+                $skill->add_skill_to_user(
+                    $user_id,
+                    $category_id,
+                    $courseId,
+                    $sessionId
+                );
+            }
+
+            $objSkillRelUser = new SkillRelUser();
+            $userSkills = $objSkillRelUser->get_user_skills($user_id, $courseId, $sessionId);
+            $userHasSkills = !empty($userSkills);
+
+            if (!$category->getGenerateCertificates() && $userHasSkills) {
+                return [
+                    'badge_link' => Display::url(
+                        get_lang('DownloadBadges'),
+                        api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
+                        array(
+                            'target' => '_blank',
+                            'class' => 'btn btn-default'
+                        )
+                    )
+                ];
+            }
         }
 
         $my_certificate = GradebookUtils::get_certificate_by_user_id(
@@ -1896,23 +1916,15 @@ class Category implements GradebookItem
                     'pdf_url' => "$url&action=export"
                 );
 
-                if (api_get_setting('allow_skills_tool') == 'true') {
-                    $courseId = api_get_course_int_id();
-                    $sessionId = api_get_session_id();
-
-                    $objSkillRelUser = new SkillRelUser();
-                    $userSkills = $objSkillRelUser->get_user_skills($user_id, $courseId, $sessionId);
-
-                    if (!empty($userSkills)) {
-                        $html['badge_link'] = Display::url(
-                            get_lang('DownloadBadges'),
-                            api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
-                            array(
-                                'target' => '_blank',
-                                'class' => 'btn'
-                            )
-                        );
-                    }
+                if ($skillToolEnabled && $userHasSkills) {
+                    $html['badge_link'] = Display::url(
+                        get_lang('DownloadBadges'),
+                        api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
+                        array(
+                            'target' => '_blank',
+                            'class' => 'btn btn-default'
+                        )
+                    );
                 }
             }
             return $html;

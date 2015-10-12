@@ -87,7 +87,7 @@
         });
 
         /* URL link when searching skills */
-        $("#skill_search").on("click", "a.load_root", function () {
+        $("a.load_root").on("click", function () {
             skill_id = $(this).attr('rel');
             skill_to_load_from_get = 0;
             load_nodes(skill_id, main_depth);
@@ -112,20 +112,12 @@
         });
 
         /* change background color */
-        $("#celestial").click(function () {
-            $("#page-back").css("background", "#A9E2F3");
-        });
-        $("#white").click(function () {
-            $("#page-back").css("background", "#FFFFFF");
-        });
-        $("#black").click(function () {
-            $("#page-back").css("background", "#000000");
-        });
-        $("#lead").click(function () {
-            $("#page-back").css("background", "#848484");
-        });
-        $("#light-yellow").click(function () {
-            $("#page-back").css("background", "#F7F8E0");
+        $('#skill-change-background-options li a').on('click', function (e) {
+            e.preventDefault();
+
+            var newBackgroundColor = $(this).data('color') || '#FFF';
+
+            $("#page-back").css("background", newBackgroundColor);
         });
 
         /* Wheel skill popup form */
@@ -135,7 +127,7 @@
             cache: false,
             filter_case: false,
             filter_hide: true,
-            complete_text: "{{ 'StartToType' | get_lang }}",
+            complete_text: "{{ 'EnterTheSkillNameToSearch'|get_lang }}",
             firstselected: true,
             //onremove: "testme",
             onselect: "check_skills_sidebar",
@@ -155,33 +147,35 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 skill-options">
-                <div class="skill-home">
+                <p class="skill-home">
                     <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">
                         <i class="fa fa-home"></i> {{ "ReturnToCourseList"|get_lang }}
                     </a>
-                </div>
-                <div class="skill-profile">
-                    <div class="avatar">
-                        <img width="100px" src="{{ user_info.avatar }}" style="text-align: center">
-                    </div>
-                    <div class="info-user">
-                        <h4 class="title-skill">{{ user_info.complete_name }}</h4>
-                        <p>
-                            <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default btn-block" target="_blank">{{ 'YourSkillRankingX' | get_lang | format(ranking) }}</a>
+                </p>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <figure class="text-center">
+                            <img width="100px" src="{{ user_info.avatar }}" class="center-block">
+                            <figcaption class="lead">{{ user_info.complete_name }}</figcaption>
+                        </figure>
+                        <p class="text-center">
+                            <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default" target="_blank">{{ 'YourSkillRankingX'|get_lang|format(ranking) }}</a>
                         </p>
-                        {% if skills is not empty %}
-                            {% for skill in skills %}
-                                {% if skill.icon is empty %}
-                                    <img src="{{ 'badges.png' | icon(32) }}" width="32" height="32" alt="{{ skill.name }}" title="{{ skill.name }}">
-                                {% else %}
-                                    <img src="{{ skill.web_icon_thumb_path }}" width="32" height="32" alt="{{ skill.name }}" title="{{ skill.name }}">
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
+                        <div class="text-center">
+                            {% if skills is not empty %}
+                                {% for skill in skills %}
+                                    {% if skill.icon is empty %}
+                                        <img src="{{ 'badges.png'|icon(32) }}" width="32" height="32" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                    {% else %}
+                                        <img src="{{ skill.web_icon_thumb_path }}" width="32" height="32" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
 
-                        {% for i in 1..(9 - ranking) %}
-                            <img src="{{ 'badges-default.png' | icon(32) }}" width="32" height="32">
-                        {% endfor %}
+                            {% for i in 1..(5 - ranking) %}
+                                <img src="{{ 'badges-default.png'|icon(32) }}" width="32" height="32">
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
 
@@ -190,65 +184,76 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                {{ 'GetNewSkills' | get_lang }}
+                                {{ 'GetNewSkills'|get_lang }}
                             </a>
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <!-- SEARCH -->
                                 <div class="search-skill">
-                                    <p class="text">{{ 'EnterTheSkillNameToSearch' | get_lang }}</p>
+                                    <h5 class="page-header">{{ 'SkillsSearch'|get_lang }}</h5>
                                     <form id="skill_search" class="form-search">
                                         <select id="skill_id" name="skill_id" /></select>
-                                        <div class="button-skill">
-                                            <a class="btn btn-default btn-block load_root" rel="0" href="#">
-                                                <i class="fa fa-eye"></i> {{ "ViewSkillsWheel"|get_lang }}
-                                            </a>
-                                            <!-- <a id="clear_selection" class="btn btn-danger">{{ "Clear"|get_lang }}</a> -->
-                                        </div>
-                                        <ul id="skill_holder" class="holder_simple"></ul>
+                                        <ul id="skill_holder" class="holder_simple clearfix"></ul>
                                     </form>
                                 </div>
                                 <!-- END SEARCH -->
                                 <!-- INFO SKILL -->
-                                <div class="section-info-skill">
-                                    <p class="text">{{ 'SkillInfo'|get_lang }}</p>
-                                    <div id="skill_info"></div>
-                                </div>
+                                <h5 class="page-header">{{ 'SkillInfo'|get_lang }}</h5>
+                                <div id="skill_info"></div>
                                 <!-- END INFO SKILL -->
+                                <p>
+                                    <a class="btn btn-default btn-block load_root" rel="0" href="#">
+                                        <i class="fa fa-eye"></i> {{ "ViewSkillsWheel"|get_lang }}
+                                    </a>
+                                </p>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="panel-group" id="wheel-second-accordion" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                                {{ 'DisplayOptions' | get_lang }}
-                            </a>
+                        <div class="panel-heading" role="tab" id="wheel-legend-heading">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-legend-collapse" aria-expanded="true" aria-controls="wheel-legend-collapse">
+                                    {{ "Legend"|get_lang }}
+                                </a>
+                            </h4>
                         </div>
-                        <div id="collapseThree" class="panel-collapse collapse">
+                        <div id="wheel-legend-collapse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="wheel-legend-heading">
                             <div class="panel-body">
-                                <p class="text">{{ 'ChooseABackgroundColor' | get_lang }}</p>
-                                <ul>
-                                    <li><a href="#" id="white">{{ 'White' | get_lang }}</a></li>
-                                    <li><a href="#" id="black">{{ 'Black' | get_lang }}</a></li>
-                                    <li><a href="#" id="celestial">{{ 'LightBlue' }}</a></li>
-                                    <li><a href="#" id="lead">{{ 'Gray' | get_lang }}</a></li>
-                                    <li><a href="#" id="light-yellow">{{ 'Corn' | get_lang }}</a></li>
+                                <ul class="fa-ul">
+                                    <li>
+                                        <i class="fa fa-li fa-square skill-legend-badges"></i> {{ "SkillsYouAcquired"|get_lang }}
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-li fa-square skill-legend-add"></i> {{ "SkillsYouCanLearn"|get_lang }}
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-li fa-square skill-legend-search"></i> {{ "SkillsSearchedFor"|get_lang }}
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <a   data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                                {{ "Legend"|get_lang }}
-                            </a>
+                        <div class="panel-heading" role="tab" id="wheel-display-heading">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-display-collapse" aria-expanded="false" aria-controls="wheel-display-collapse">
+                                    {{ 'DisplayOptions'|get_lang }}
+                                </a>
+                            </h4>
                         </div>
-                        <div id="collapseFour" class="panel-collapse collapse">
+                        <div id="wheel-display-collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="wheel-display-heading">
                             <div class="panel-body">
-                                <p class="text"><span class="skill-legend-badges">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouAcquired"|get_lang }}</p>
-                                <p class="text"><span class="skill-legend-add">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
-                                <p class="text"><span class="skill-legend-search">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>
+                                <p>{{ 'ChooseABackgroundColor'|get_lang }}</p>
+                                <ul class="list-unstyled" id="skill-change-background-options">
+                                    <li><a href="#" data-color="#FFFFFF">{{ 'White'|get_lang }}</a></li>
+                                    <li><a href="#" data-color="#000000">{{ 'Black'|get_lang }}</a></li>
+                                    <li><a href="#" data-color="#A9E2F3">{{ 'LightBlue' }}</a></li>
+                                    <li><a href="#" data-color="#848484">{{ 'Gray'|get_lang }}</a></li>
+                                    <li><a href="#" data-color="#F7F8E0">{{ 'Corn'|get_lang }}</a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>

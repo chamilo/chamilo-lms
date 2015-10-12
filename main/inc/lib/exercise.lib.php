@@ -1009,7 +1009,7 @@ HTML;
                                         <td colspan="2"></td>
                                         <td>
                                             <strong>{$select_items[$lines_count]['letter']}</strong>
-                                            $select_items[$lines_count]['answer']
+                                            {$select_items[$lines_count]['answer']}
                                         </td>
                                     </tr>
 HTML;

@@ -682,7 +682,10 @@ class AddCourse
             'email_alert_students_on_new_homework' => ['default' => 0, 'category' =>'work'],
             'enable_lp_auto_launch' => ['default' => 0, 'category' =>'learning_path'],
             'pdf_export_watermark_text' => ['default' =>'', 'category' =>'learning_path'],
-            'allow_public_certificates' => ['default' => '', 'category' =>'certificates'],
+            'allow_public_certificates' => [
+                'default' => api_get_setting('allow_public_certificates') === 'true' ? 1 : '',
+                'category' =>'certificates'
+            ],
             'documents_default_visibility' => ['default' =>'visible', 'category' =>'document']
         ];
 

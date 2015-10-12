@@ -2464,7 +2464,7 @@ class CourseManager
             if ($access_url_id != -1) {
                 $tbl_url_course = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course
-                                    ON url_rel_course.c_id = tcfv.c_id ";
+                                    ON url_rel_course.c_id = tcfv.item_id ";
                 $where_access_url = " AND access_url_id = $access_url_id ";
             }
         }

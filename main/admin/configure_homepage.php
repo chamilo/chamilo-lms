@@ -153,7 +153,7 @@ if (api_is_multiple_url_enabled()) {
 		$clean_url .= '/';
 
 		$homep = $homePath; //homep for Home Path
-		$homep_new = $homePath.'home/'.$clean_url; //homep for Home Path added the url
+		$homep_new = $homePath.$clean_url; //homep for Home Path added the url
 		$new_url_dir = $homePath.$clean_url;
 		//we create the new dir for the new sites
 		if (!is_dir($new_url_dir)) {

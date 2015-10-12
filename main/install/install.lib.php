@@ -1101,11 +1101,6 @@ function display_license_agreement()
                     <?php echo get_lang('IAccept'); ?>
                 </label>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <p class="alert alert-info"><?php echo get_lang('LMSMediaLicense'); ?></p>
             <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" >
                 <i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?>
             </button>
@@ -1113,6 +1108,12 @@ function display_license_agreement()
             <button type="submit" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
                 <i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?>
             </button>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="alert alert-info"><?php echo get_lang('LMSMediaLicense'); ?></p>
         </div>
     </div>
 

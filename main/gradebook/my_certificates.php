@@ -19,18 +19,17 @@ $userId = api_get_user_id();
 $courseList = GradebookUtils::getUserCertificatesInCourses($userId);
 $sessionList = GradebookUtils::getUserCertificatesInSessions($userId);
 
+if (empty($courseList) && empty($sessionList)) {
+    Display::addFlash(
+        Display::return_message(get_lang('YouNotYetAchievedCertificates'), 'warning')
+    );
+}
+
 $template = new Template(get_lang('MyCertificates'));
 
 $template->assign('course_list', $courseList);
 $template->assign('session_list', $sessionList);
 $content = $template->fetch('default/gradebook/my_certificates.tpl');
-
-if (empty($courseList) || empty($sessionList)) {
-    $template->assign(
-        'message',
-        Display::return_message(get_lang('YouNotYetAchievedCertificates'), 'warning')
-    );
-}
 
 if (api_get_setting('allow_public_certificates') == 'true') {
     $template->assign(

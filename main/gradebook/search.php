@@ -35,7 +35,9 @@ if ($searchForm->validate()) {
     $userList = UserManager::getUserByName($firstname, $lastname);
 
     if (empty($userList)) {
-        Session::write('message', Display::return_message(get_lang('NoResults'), 'warning'));
+        Display::addFlash(
+            Display::return_message(get_lang('NoResults'), 'warning')
+        );
 
         header('Location: '.api_get_self());
         exit;
@@ -44,7 +46,10 @@ if ($searchForm->validate()) {
     $userInfo = api_get_user_info($userId);
 
     if (empty($userInfo)) {
-        Session::write('message', Display::return_message(get_lang('NoUser'), 'warning'));
+        Display::addFlash(
+            Display::return_message(get_lang('NoUser'), 'warning')
+        );
+
         header('Location: '.api_get_self());
         exit;
     }
@@ -53,8 +58,7 @@ if ($searchForm->validate()) {
     $sessionList = GradebookUtils::getUserCertificatesInSessions($userId, false);
 
     if (empty($courseList) && empty($sessionList)) {
-        Session::write(
-            'message',
+        Display::addFlash(
             Display::return_message(
                 sprintf(get_lang('TheUserXNotYetAchievedCertificates'), $userInfo['complete_name']),
                 'warning'
@@ -73,11 +77,6 @@ $template->assign('user_list', $userList);
 $template->assign('user_info', $userInfo);
 $template->assign('course_list', $courseList);
 $template->assign('session_list', $sessionList);
-
-if (Session::has('message')) {
-    $template->assign('message', Session::read('message'));
-    Session::erase('message');
-}
 
 $content = $template->fetch('default/gradebook/search.tpl');
 

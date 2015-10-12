@@ -1802,8 +1802,8 @@ class Category implements GradebookItem
         if (isset($cats_course) && !empty($cats_course)) {
             $categories = Category::load(null, null, null, $category_id);
             if (!empty($categories)) {
-                foreach ($categories as $category) {
-                    $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
+                foreach ($categories as $subCategory) {
+                    $sum_categories_weight_array[$subCategory->get_id()] = $subCategory->get_weight();
                 }
             } else {
                 $sum_categories_weight_array[$category_id] = $cats_course[0]->get_weight();

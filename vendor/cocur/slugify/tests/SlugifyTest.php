@@ -198,7 +198,7 @@ class SlugifyTest extends \PHPUnit_Framework_TestCase
             array('Â â Ê ê Ô ô Û û', 'a-a-e-e-o-o-u-u'),
             array('Â â Ê ê Ô ô Û 1', 'a-a-e-e-o-o-u-1'),
             array('°¹²³⁴⁵⁶⁷⁸⁹@₀₁₂₃₄₅₆₇₈₉', '0123456789at0123456789'),
-            array('Mórë thån wørds', 'more-than-words'),
+            array('Mórë thån wørds', 'more-thaan-woerds'),
             array('Блоґ їжачка', 'blog-jizhachka'),
             array('фильм', 'film'),
             array('драма', 'drama'),
@@ -211,7 +211,8 @@ class SlugifyTest extends \PHPUnit_Framework_TestCase
             array('Nguyễn Đăng Khoa', 'nguyen-dang-khoa'),
             array('နှစ်သစ်ကူးတွင် သတ္တဝါတွေ စိတ်ချမ်းသာ ကိုယ်ကျန်းမာ၍ ကောင်းခြင်း အနန္တနှင့် ပြည့်စုံကြပါစေ', 'nhitthitkutwin-thttwatwe-seikkhyaantha-koekyaanmaywae-kaungkhyin-anntnhin-pyisonkypase'),
             array('Zażółć żółcią gęślą jaźń', 'zazolc-zolcia-gesla-jazn'),
-            array('Mężny bądź chroń pułk twój i sześć flag', 'mezny-badz-chron-pulk-twoj-i-szesc-flag')
+            array('Mężny bądź chroń pułk twój i sześć flag', 'mezny-badz-chron-pulk-twoj-i-szesc-flag'),
+            array('ერთი ორი სამი ოთხი ხუთი', 'erti-ori-sami-otkhi-khuti')
         );
     }
 }

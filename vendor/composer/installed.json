@@ -1613,40 +1613,6 @@
         ]
     },
     {
-        "name": "webit/eval-math",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/dbojdo/eval-math.git",
-            "reference": "62c424796b4ba7fd12e67d6ef621525b4c168bdd"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/dbojdo/eval-math/zipball/62c424796b4ba7fd12e67d6ef621525b4c168bdd",
-            "reference": "62c424796b4ba7fd12e67d6ef621525b4c168bdd",
-            "shasum": ""
-        },
-        "time": "2015-05-07 12:21:12",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-4": {
-                "Webit\\Util\\EvalMath\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "description": "EvalMath",
-        "keywords": [
-            "EvalMath"
-        ]
-    },
-    {
         "name": "bower-asset/fontawesome",
         "version": "v4.4.0",
         "version_normalized": "4.4.0.0",
@@ -3511,198 +3477,6 @@
         ]
     },
     {
-        "name": "doctrine/migrations",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/doctrine/migrations.git",
-            "reference": "6c527d8ccbccec5257bb2c92bca973653b1e3976"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/doctrine/migrations/zipball/6c527d8ccbccec5257bb2c92bca973653b1e3976",
-            "reference": "6c527d8ccbccec5257bb2c92bca973653b1e3976",
-            "shasum": ""
-        },
-        "require": {
-            "doctrine/dbal": "~2.2",
-            "php": ">=5.4.0",
-            "symfony/console": "~2.3",
-            "symfony/yaml": "~2.3"
-        },
-        "require-dev": {
-            "doctrine/coding-standard": "dev-master",
-            "doctrine/orm": "2.*",
-            "johnkary/phpunit-speedtrap": "~1.0@dev",
-            "mockery/mockery": "^0.9.4",
-            "phpunit/phpunit": "~4.7",
-            "satooshi/php-coveralls": "0.6.*"
-        },
-        "suggest": {
-            "symfony/console": "to run the migration from the console"
-        },
-        "time": "2015-09-21 09:51:07",
-        "bin": [
-            "bin/doctrine-migrations"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "v1.0.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-4": {
-                "Doctrine\\DBAL\\Migrations\\": "lib/Doctrine/DBAL/Migrations"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-2.1"
-        ],
-        "authors": [
-            {
-                "name": "Benjamin Eberlei",
-                "email": "kontakt@beberlei.de"
-            },
-            {
-                "name": "Jonathan Wage",
-                "email": "jonwage@gmail.com"
-            }
-        ],
-        "description": "Database Schema migrations using Doctrine DBAL",
-        "homepage": "http://www.doctrine-project.org",
-        "keywords": [
-            "database",
-            "migrations"
-        ]
-    },
-    {
-        "name": "behat/transliterator",
-        "version": "v1.0.1",
-        "version_normalized": "1.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Behat/Transliterator.git",
-            "reference": "c93521d3462a554332d1ef5bb0e9b5b8ca4106c4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Behat/Transliterator/zipball/c93521d3462a554332d1ef5bb0e9b5b8ca4106c4",
-            "reference": "c93521d3462a554332d1ef5bb0e9b5b8ca4106c4",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2014-05-15 22:08:22",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Behat\\Transliterator": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Artistic-1.0"
-        ],
-        "description": "String transliterator",
-        "keywords": [
-            "i18n",
-            "slug",
-            "transliterator"
-        ]
-    },
-    {
-        "name": "gedmo/doctrine-extensions",
-        "version": "v2.4.6",
-        "version_normalized": "2.4.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-            "reference": "5d330411e27ab0ced67e1e5383ccae975c23c17d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/5d330411e27ab0ced67e1e5383ccae975c23c17d",
-            "reference": "5d330411e27ab0ced67e1e5383ccae975c23c17d",
-            "shasum": ""
-        },
-        "require": {
-            "behat/transliterator": "~1.0",
-            "doctrine/common": "~2.4",
-            "php": ">=5.3.2"
-        },
-        "require-dev": {
-            "doctrine/common": ">=2.5.0",
-            "doctrine/mongodb-odm": "dev-master",
-            "doctrine/orm": ">=2.5.0",
-            "phpunit/phpunit": "~4.4",
-            "phpunit/phpunit-mock-objects": "~2.3",
-            "symfony/yaml": "~2.6"
-        },
-        "suggest": {
-            "doctrine/mongodb-odm": "to use the extensions with the MongoDB ODM",
-            "doctrine/orm": "to use the extensions with the ORM"
-        },
-        "time": "2015-08-28 11:07:14",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.4.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Gedmo\\": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "David Buchmann",
-                "email": "david@liip.ch"
-            },
-            {
-                "name": "Gediminas Morkevicius",
-                "email": "gediminas.morkevicius@gmail.com"
-            },
-            {
-                "name": "Gustavo Falco",
-                "email": "comfortablynumb84@gmail.com"
-            }
-        ],
-        "description": "Doctrine2 behavioral extensions",
-        "homepage": "http://gediminasm.org/",
-        "keywords": [
-            "Blameable",
-            "behaviors",
-            "doctrine2",
-            "extensions",
-            "gedmo",
-            "loggable",
-            "nestedset",
-            "sluggable",
-            "sortable",
-            "timestampable",
-            "translatable",
-            "tree",
-            "uploadable"
-        ]
-    },
-    {
         "name": "symfony/debug",
         "version": "v2.7.5",
         "version_normalized": "2.7.5.0",
@@ -4770,57 +4544,6 @@
         "description": "JSONP callback validator."
     },
     {
-        "name": "willdurand/negotiation",
-        "version": "1.4.0",
-        "version_normalized": "1.4.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/willdurand/Negotiation.git",
-            "reference": "8a84c5956e765f432542fc52a8c6e9aff4508eb3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/8a84c5956e765f432542fc52a8c6e9aff4508eb3",
-            "reference": "8a84c5956e765f432542fc52a8c6e9aff4508eb3",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2015-07-28 13:10:50",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Negotiation\\": "src/Negotiation"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "William Durand",
-                "email": "william.durand1@gmail.com"
-            }
-        ],
-        "description": "Content Negotiation tools for PHP provided as a standalone library.",
-        "homepage": "http://williamdurand.fr/Negotiation/",
-        "keywords": [
-            "accept",
-            "content",
-            "format",
-            "header",
-            "negotiation"
-        ]
-    },
-    {
         "name": "friendsofsymfony/rest-bundle",
         "version": "1.7.1",
         "version_normalized": "1.7.1.0",
@@ -5324,127 +5047,6 @@
         "keywords": [
             "menu",
             "tree"
-        ]
-    },
-    {
-        "name": "knplabs/knp-menu-bundle",
-        "version": "v2.0.0",
-        "version_normalized": "2.0.0.0",
-        "target-dir": "Knp/Bundle/MenuBundle",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
-            "reference": "bdfc95da5ff7e4e67f948aaa9ea5da835a3a9088"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/bdfc95da5ff7e4e67f948aaa9ea5da835a3a9088",
-            "reference": "bdfc95da5ff7e4e67f948aaa9ea5da835a3a9088",
-            "shasum": ""
-        },
-        "require": {
-            "knplabs/knp-menu": "~2.0",
-            "symfony/framework-bundle": "~2.0"
-        },
-        "time": "2014-08-01 09:57:23",
-        "type": "symfony-bundle",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Knp\\Bundle\\MenuBundle": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Christophe Coevoet",
-                "email": "stof@notk.org"
-            },
-            {
-                "name": "Knplabs",
-                "homepage": "http://knplabs.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://github.com/KnpLabs/KnpMenuBundle/contributors"
-            }
-        ],
-        "description": "This bundle provides an integration of the KnpMenu library",
-        "keywords": [
-            "menu"
-        ]
-    },
-    {
-        "name": "cocur/slugify",
-        "version": "v1.3",
-        "version_normalized": "1.3.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/cocur/slugify.git",
-            "reference": "6bf38846ecb34d24288cdea7195122b6452c1882"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/cocur/slugify/zipball/6bf38846ecb34d24288cdea7195122b6452c1882",
-            "reference": "6bf38846ecb34d24288cdea7195122b6452c1882",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "codeclimate/php-test-reporter": "dev-master",
-            "laravel/framework": "~4.1",
-            "latte/latte": "~2.2",
-            "mockery/mockery": "~0.9",
-            "nette/di": "~2.2",
-            "phpunit/phpunit": "~4.6",
-            "plumphp/plum": "~0.1",
-            "sami/sami": "~1.3",
-            "satooshi/php-coveralls": "0.6.*",
-            "silex/silex": "~1.2",
-            "symfony/dependency-injection": "~2.4",
-            "symfony/http-kernel": "~2.4",
-            "twig/twig": "~1",
-            "zendframework/zend-modulemanager": "~2.2",
-            "zendframework/zend-servicemanager": "~2.2",
-            "zendframework/zend-view": "~2.2"
-        },
-        "time": "2015-09-02 20:14:32",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Cocur\\Slugify\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Ivo Bathke",
-                "email": "ivo.bathke@gmail.com"
-            },
-            {
-                "name": "Florian Eckerstorfer",
-                "email": "florian@eckerstorfer.co",
-                "homepage": "https://florian.ec"
-            }
-        ],
-        "description": "Converts a string into a slug.",
-        "keywords": [
-            "slug",
-            "slugify"
         ]
     },
     {
@@ -6582,38 +6184,6 @@
         "installation-source": "dist"
     },
     {
-        "name": "bower-asset/ckeditor",
-        "version": "4.5.3",
-        "version_normalized": "4.5.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ckeditor/ckeditor-releases.git",
-            "reference": "a93cb51eb1fc85a13892706dd61eccfd4c999947"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/a93cb51eb1fc85a13892706dd61eccfd4c999947",
-            "reference": "a93cb51eb1fc85a13892706dd61eccfd4c999947",
-            "shasum": ""
-        },
-        "type": "bower-asset-library",
-        "installation-source": "dist",
-        "license": [
-            "For licensing, see LICENSE.md or http://ckeditor.com/license."
-        ],
-        "description": "JavaScript WYSIWYG web text editor.",
-        "keywords": [
-            "ckeditor",
-            "editor",
-            "fckeditor",
-            "html",
-            "javascript",
-            "richtext",
-            "text",
-            "wysiwyg"
-        ]
-    },
-    {
         "name": "bower-asset/jquery-timeago",
         "version": "v1.4.3",
         "version_normalized": "1.4.3.0",
@@ -6642,47 +6212,6 @@
         "installation-source": "dist",
         "license": [
             "MIT"
-        ]
-    },
-    {
-        "name": "bower-asset/mediaelement",
-        "version": "2.18.1",
-        "version_normalized": "2.18.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/johndyer/mediaelement.git",
-            "reference": "64dcb191894f4caeb76d5743ceb93c495d60cd37"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/johndyer/mediaelement/zipball/64dcb191894f4caeb76d5743ceb93c495d60cd37",
-            "reference": "64dcb191894f4caeb76d5743ceb93c495d60cd37",
-            "shasum": ""
-        },
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": [
-                "./build/mediaelement-and-player.js",
-                "./build/mediaelementplayer.css"
-            ],
-            "bower-asset-ignore": [
-                "**",
-                "!/build/**",
-                "!/bower.json",
-                "!/README*",
-                "!/changelog*"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "MIT"
-        ],
-        "description": "HTML5 <video> and <audio> made easy.",
-        "keywords": [
-            "audio",
-            "html5",
-            "shim",
-            "video"
         ]
     },
     {
@@ -7851,6 +7380,480 @@
             "selenium",
             "testing",
             "webdriver"
+        ]
+    },
+    {
+        "name": "behat/transliterator",
+        "version": "v1.1.0",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Behat/Transliterator.git",
+            "reference": "868e05be3a9f25ba6424c2dd4849567f50715003"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Behat/Transliterator/zipball/868e05be3a9f25ba6424c2dd4849567f50715003",
+            "reference": "868e05be3a9f25ba6424c2dd4849567f50715003",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2015-09-28 16:26:35",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.1-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Behat\\Transliterator": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Artistic-1.0"
+        ],
+        "description": "String transliterator",
+        "keywords": [
+            "i18n",
+            "slug",
+            "transliterator"
+        ]
+    },
+    {
+        "name": "gedmo/doctrine-extensions",
+        "version": "v2.4.7",
+        "version_normalized": "2.4.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
+            "reference": "1a86ba1c7426238b4f765089e0af51174a38af7f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/1a86ba1c7426238b4f765089e0af51174a38af7f",
+            "reference": "1a86ba1c7426238b4f765089e0af51174a38af7f",
+            "shasum": ""
+        },
+        "require": {
+            "behat/transliterator": "~1.0",
+            "doctrine/common": "~2.4",
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "doctrine/common": ">=2.5.0",
+            "doctrine/mongodb-odm": ">=1.0.2",
+            "doctrine/orm": ">=2.5.0",
+            "phpunit/phpunit": "~4.4",
+            "phpunit/phpunit-mock-objects": "~2.3",
+            "symfony/yaml": "~2.6"
+        },
+        "suggest": {
+            "doctrine/mongodb-odm": "to use the extensions with the MongoDB ODM",
+            "doctrine/orm": "to use the extensions with the ORM"
+        },
+        "time": "2015-09-28 16:39:27",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Gedmo\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "David Buchmann",
+                "email": "david@liip.ch"
+            },
+            {
+                "name": "Gediminas Morkevicius",
+                "email": "gediminas.morkevicius@gmail.com"
+            },
+            {
+                "name": "Gustavo Falco",
+                "email": "comfortablynumb84@gmail.com"
+            }
+        ],
+        "description": "Doctrine2 behavioral extensions",
+        "homepage": "http://gediminasm.org/",
+        "keywords": [
+            "Blameable",
+            "behaviors",
+            "doctrine2",
+            "extensions",
+            "gedmo",
+            "loggable",
+            "nestedset",
+            "sluggable",
+            "sortable",
+            "timestampable",
+            "translatable",
+            "tree",
+            "uploadable"
+        ]
+    },
+    {
+        "name": "bower-asset/ckeditor",
+        "version": "4.5.4",
+        "version_normalized": "4.5.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ckeditor/ckeditor-releases.git",
+            "reference": "a84a972a367bc6c59bafb3e5fd503ec317d47daa"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/a84a972a367bc6c59bafb3e5fd503ec317d47daa",
+            "reference": "a84a972a367bc6c59bafb3e5fd503ec317d47daa",
+            "shasum": ""
+        },
+        "type": "bower-asset-library",
+        "installation-source": "dist",
+        "license": [
+            "For licensing, see LICENSE.md or http://ckeditor.com/license."
+        ],
+        "description": "JavaScript WYSIWYG web text editor.",
+        "keywords": [
+            "ckeditor",
+            "editor",
+            "fckeditor",
+            "html",
+            "javascript",
+            "richtext",
+            "text",
+            "wysiwyg"
+        ]
+    },
+    {
+        "name": "bower-asset/mediaelement",
+        "version": "2.18.2",
+        "version_normalized": "2.18.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/johndyer/mediaelement.git",
+            "reference": "86b5dd51ede0554c55913f48aa342450ec6a0b2c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/johndyer/mediaelement/zipball/86b5dd51ede0554c55913f48aa342450ec6a0b2c",
+            "reference": "86b5dd51ede0554c55913f48aa342450ec6a0b2c",
+            "shasum": ""
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "./build/mediaelement-and-player.js",
+                "./build/mediaelementplayer.css"
+            ],
+            "bower-asset-ignore": [
+                "**",
+                "!/build/**",
+                "!/bower.json",
+                "!/README*",
+                "!/changelog*"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "description": "HTML5 <video> and <audio> made easy.",
+        "keywords": [
+            "audio",
+            "html5",
+            "shim",
+            "video"
+        ]
+    },
+    {
+        "name": "willdurand/negotiation",
+        "version": "1.5.0",
+        "version_normalized": "1.5.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/willdurand/Negotiation.git",
+            "reference": "2a59f2376557303e3fa91465ab691abb82945edf"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/2a59f2376557303e3fa91465ab691abb82945edf",
+            "reference": "2a59f2376557303e3fa91465ab691abb82945edf",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2015-10-01 07:42:40",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.5-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Negotiation\\": "src/Negotiation"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "William Durand",
+                "email": "william.durand1@gmail.com"
+            }
+        ],
+        "description": "Content Negotiation tools for PHP provided as a standalone library.",
+        "homepage": "http://williamdurand.fr/Negotiation/",
+        "keywords": [
+            "accept",
+            "content",
+            "format",
+            "header",
+            "negotiation"
+        ]
+    },
+    {
+        "name": "cocur/slugify",
+        "version": "v1.4",
+        "version_normalized": "1.4.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/cocur/slugify.git",
+            "reference": "05f00fa75f1c53edfcf4d0425e7e62e95b8888dd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/cocur/slugify/zipball/05f00fa75f1c53edfcf4d0425e7e62e95b8888dd",
+            "reference": "05f00fa75f1c53edfcf4d0425e7e62e95b8888dd",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "codeclimate/php-test-reporter": "dev-master",
+            "laravel/framework": "~4.1",
+            "latte/latte": "~2.2",
+            "mockery/mockery": "~0.9",
+            "nette/di": "~2.2",
+            "phpunit/phpunit": "~4.6",
+            "plumphp/plum": "~0.1",
+            "sami/sami": "~1.3",
+            "satooshi/php-coveralls": "0.6.*",
+            "silex/silex": "~1.2",
+            "symfony/dependency-injection": "~2.4",
+            "symfony/http-kernel": "~2.4",
+            "twig/twig": "~1",
+            "zendframework/zend-modulemanager": "~2.2",
+            "zendframework/zend-servicemanager": "~2.2",
+            "zendframework/zend-view": "~2.2"
+        },
+        "time": "2015-09-29 18:26:32",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Cocur\\Slugify\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Ivo Bathke",
+                "email": "ivo.bathke@gmail.com"
+            },
+            {
+                "name": "Florian Eckerstorfer",
+                "email": "florian@eckerstorfer.co",
+                "homepage": "https://florian.ec"
+            }
+        ],
+        "description": "Converts a string into a slug.",
+        "keywords": [
+            "slug",
+            "slugify"
+        ]
+    },
+    {
+        "name": "knplabs/knp-menu-bundle",
+        "version": "v2.1.0",
+        "version_normalized": "2.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
+            "reference": "2246a70109bdd313a105d2a7ef464a763aacf0cd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/2246a70109bdd313a105d2a7ef464a763aacf0cd",
+            "reference": "2246a70109bdd313a105d2a7ef464a763aacf0cd",
+            "shasum": ""
+        },
+        "require": {
+            "knplabs/knp-menu": "~2.1",
+            "symfony/framework-bundle": "~2.3"
+        },
+        "require-dev": {
+            "symfony/expression-language": "~2.4",
+            "symfony/phpunit-bridge": "~2.7"
+        },
+        "time": "2015-09-28 15:23:54",
+        "type": "symfony-bundle",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Knp\\Bundle\\MenuBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Christophe Coevoet",
+                "email": "stof@notk.org"
+            },
+            {
+                "name": "Knplabs",
+                "homepage": "http://knplabs.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://github.com/KnpLabs/KnpMenuBundle/contributors"
+            }
+        ],
+        "description": "This bundle provides an integration of the KnpMenu library",
+        "keywords": [
+            "menu"
+        ]
+    },
+    {
+        "name": "doctrine/migrations",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/migrations.git",
+            "reference": "3a787de7c4a64460436dc2eb2e3cde8920d5fadd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/doctrine/migrations/zipball/3a787de7c4a64460436dc2eb2e3cde8920d5fadd",
+            "reference": "3a787de7c4a64460436dc2eb2e3cde8920d5fadd",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/dbal": "~2.2",
+            "php": ">=5.4.0",
+            "symfony/console": "~2.3",
+            "symfony/yaml": "~2.3"
+        },
+        "require-dev": {
+            "doctrine/coding-standard": "dev-master",
+            "doctrine/orm": "2.*",
+            "johnkary/phpunit-speedtrap": "~1.0@dev",
+            "mockery/mockery": "^0.9.4",
+            "phpunit/phpunit": "~4.7",
+            "satooshi/php-coveralls": "0.6.*"
+        },
+        "suggest": {
+            "symfony/console": "to run the migration from the console"
+        },
+        "time": "2015-07-29 20:43:19",
+        "bin": [
+            "bin/doctrine-migrations"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\DBAL\\Migrations": "lib"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            },
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com"
+            }
+        ],
+        "description": "Database Schema migrations using Doctrine DBAL",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "migrations"
+        ]
+    },
+    {
+        "name": "webit/eval-math",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dbojdo/eval-math.git",
+            "reference": "62c424796b4ba7fd12e67d6ef621525b4c168bdd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/dbojdo/eval-math/zipball/62c424796b4ba7fd12e67d6ef621525b4c168bdd",
+            "reference": "62c424796b4ba7fd12e67d6ef621525b4c168bdd",
+            "shasum": ""
+        },
+        "time": "2015-05-07 12:21:12",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "Webit\\Util\\EvalMath\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "description": "EvalMath",
+        "keywords": [
+            "EvalMath"
         ]
     }
 ]

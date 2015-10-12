@@ -770,7 +770,7 @@ if ($category != '0') {
                 $category_id,
                 $stud_id
             );
-            if (!empty($certificate)) {
+            if (isset($certificate['pdf_url'])) {
                 echo Display::url(
                     get_lang('DownloadCertificatePdf'),
                     $certificate['pdf_url'],

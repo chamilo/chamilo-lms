@@ -197,6 +197,15 @@ if (defined('SYSTEM_INSTALLATION')) {
     // Remove archive
     @rrmdir(api_get_path(SYS_PATH).'archive');
 
+    // Remove old "courses" folder if empty
+    $dirs = $finder->directories()->in(api_get_path(SYS_PATH).'courses');
+    $files = $finder->directories()->in(api_get_path(SYS_PATH).'courses');
+    $dirCount = $dirs->count();
+    $fileCount = $dirs->count();
+    if ($fileCount == 0 && $dirCount == 0) {
+        @rrmdir(api_get_path(SYS_PATH).'courses');
+    }
+
 } else {
     echo 'You are not allowed here !'. __FILE__;
 }

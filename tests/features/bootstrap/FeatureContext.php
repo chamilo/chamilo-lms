@@ -178,4 +178,14 @@ class FeatureContext extends MinkContext
             new Given('I should not see an ".alert-danger" element')
         );
     }
+    /**
+     * @Given /^I am a "([^"]*)" user$/
+     */
+    public function iAmAXUser($argument)
+    {
+        return array(
+            new Given('I am on "/main/auth/profile.php"'),
+            new Given('the "language" field should contain "' . $argument . '"')
+        );
+    }
 }

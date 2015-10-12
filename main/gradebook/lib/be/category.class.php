@@ -1781,6 +1781,7 @@ class Category implements GradebookItem
      */
     public static function register_user_certificate($category_id, $user_id)
     {
+        $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
         // Generating the total score for a course
         $cats_course = Category::load(
@@ -1796,17 +1797,36 @@ class Category implements GradebookItem
         /** @var Category $category */
         $category = $cats_course[0];
 
-        if (!$category->getGenerateCertificates()) {
+        $skillToolEnabled = api_get_setting('allow_skills_tool') == 'true';
+        $userHasSkills = false;
 
-            $skill = new Skill();
-            $skill->add_skill_to_user(
-                $user_id,
-                $category_id,
-                api_get_course_int_id(),
-                $sessionId
-            );
+        if ($skillToolEnabled) {
+            if (!$category->getGenerateCertificates()) {
+                $skill = new Skill();
+                $skill->add_skill_to_user(
+                    $user_id,
+                    $category_id,
+                    $courseId,
+                    $sessionId
+                );
+            }
 
-            return false;
+            $objSkillRelUser = new SkillRelUser();
+            $userSkills = $objSkillRelUser->get_user_skills($user_id, $courseId, $sessionId);
+            $userHasSkills = !empty($userSkills);
+
+            if (!$category->getGenerateCertificates() && $userHasSkills) {
+                return [
+                    'badge_link' => Display::url(
+                        get_lang('DownloadBadges'),
+                        api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
+                        array(
+                            'target' => '_blank',
+                            'class' => 'btn btn-default'
+                        )
+                    )
+                ];
+            }
         }
 
         //@todo move these in a function
@@ -1896,23 +1916,15 @@ class Category implements GradebookItem
                     'pdf_url' => "$url&action=export"
                 );
 
-                if (api_get_setting('allow_skills_tool') == 'true') {
-                    $courseId = api_get_course_int_id();
-                    $sessionId = api_get_session_id();
-
-                    $objSkillRelUser = new SkillRelUser();
-                    $userSkills = $objSkillRelUser->get_user_skills($user_id, $courseId, $sessionId);
-
-                    if (!empty($userSkills)) {
-                        $html['badge_link'] = Display::url(
-                            get_lang('DownloadBadges'),
-                            api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
-                            array(
-                                'target' => '_blank',
-                                'class' => 'btn'
-                            )
-                        );
-                    }
+                if ($skillToolEnabled && $userHasSkills) {
+                    $html['badge_link'] = Display::url(
+                        get_lang('DownloadBadges'),
+                        api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
+                        array(
+                            'target' => '_blank',
+                            'class' => 'btn btn-default'
+                        )
+                    );
                 }
             }
             return $html;

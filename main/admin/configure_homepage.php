@@ -153,7 +153,7 @@ if (api_is_multiple_url_enabled()) {
 		$clean_url .= '/';
 
 		$homep = $homePath; //homep for Home Path
-		$homep_new = $homePath.'home/'.$clean_url; //homep for Home Path added the url
+		$homep_new = $homePath.$clean_url; //homep for Home Path added the url
 		$new_url_dir = $homePath.$clean_url;
 		//we create the new dir for the new sites
 		if (!is_dir($new_url_dir)) {
@@ -594,6 +594,7 @@ if (!empty($action)) {
 			case 'edit_top':
 				// This request is only the preparation for the update of the home_top
 				$home_top = '';
+				error_log($homep.$topf.'_'.$lang.$ext);
 				if (is_file($homep.$topf.'_'.$lang.$ext) && is_readable($homep.$topf.'_'.$lang.$ext)) {
 					$home_top = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
 				} elseif (is_file($homep.$topf.$lang.$ext) && is_readable($homep.$topf.$lang.$ext)) {

@@ -1492,8 +1492,6 @@ class UserManager
 
         $gravatarEnabled = api_get_setting('gravatar_enabled');
 
-        
-
         $anonymousPath = api_get_path(WEB_CODE_PATH).'img/'.$pictureAnonymous;
 
         if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {
@@ -1508,7 +1506,8 @@ class UserManager
                 if ($addRandomId) {
                     $file .= '&rand='.uniqid();
                 }
-            return $file;
+                
+                return $file;
             }
             
             return $anonymousPath;

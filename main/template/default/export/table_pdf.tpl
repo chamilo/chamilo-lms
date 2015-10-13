@@ -9,65 +9,72 @@
 
 <table align="center" width="100%">
     {% if pdf_student_info %}
+    <tr>
+        <td>
+            <strong>{{ "Student" | get_lang }}:</strong>  {{ pdf_student_info.complete_name }}
+        </td>
+    </tr>
+    {% endif %}
+
+
+    {% if pdf_teachers %}
         <tr>
             <td>
-                <strong>{{ "Student" | get_lang }}:</strong>  {{ pdf_student_info.complete_name }}
+                <strong>{{ "Teacher" | get_lang }}:</strong> {{ pdf_teachers }}
             </td>
         </tr>
     {% endif %}
 
-    <tr>
-        <td>
-         <strong>{{ "Teacher" | get_lang }}:</strong> {{ pdf_teachers }}
-        </td>
-    </tr>
-
     {% if pdf_session_info %}
         <tr>
             <td>
-              <strong>{{ "Session" | get_lang }}:</strong> {{ pdf_session_info.name }}
+                <strong>{{ "Session" | get_lang }}:</strong> {{ pdf_session_info.name }}
             </td>
 
             {% if pdf_session_info.description %}
-                <td>
-                    <strong>{{ "Description" | get_lang }}:</strong> {{ pdf_session_info.description }}
-                </td>
+            <td>
+                <strong>{{ "Description" | get_lang }}:</strong> {{ pdf_session_info.description }}
+            </td>
             {% endif %}
         </tr>
 
         {% if pdf_session_info.access_start_date != '' and pdf_session_info.access_end_date != '0000-00-00' %}
-            <tr>
+        <tr>
             <td>
                 <strong>{{ "PeriodToDisplay" | get_lang }}:</strong> {{ "FromDateXToDateY"| get_lang | format(pdf_session_info.access_start_date, pdf_session_info.access_end_date ) }}
             </td>
-            </tr>
+        </tr>
         {% endif %}
     {% endif %}
 
     {% if pdf_course_info %}
     <tr>
         <td>
-         <strong>{{ "Course" | get_lang }}:</strong> {{ pdf_course_info.title }} ({{ pdf_course_info.code }})
+            <strong>{{ "Course" | get_lang }}:</strong> {{ pdf_course_info.title }} ({{ pdf_course_info.code }})
 
-         {% if pdf_course_category %}
+            {% if pdf_course_category %}
             <strong>{{ "Category" | get_lang }}:</strong> {{ pdf_course_category }}
-         {% endif %}
+            {% endif %}
 
         </td>
     </tr>
     {% endif %}
+
+    {% if pdf_date %}
     <tr>
         <td>
-         <strong>{{ "Date" | get_lang }}:</strong> {{ pdf_date }}
+            <strong>{{ "Date" | get_lang }}:</strong> {{ pdf_date }}
         </td>
     </tr>
+    {% endif %}
+
 </table>
 
 
 {% if show_grade_generated_date == true %}
-    <h5 align="right">
-        {{ 'GradeGeneratedOnX' | get_lang | format(date('d/m/Y')) }}
-    </h5>
+<h5 align="right">
+    {{ 'GradeGeneratedOnX' | get_lang | format("now"| date("d/m/Y")) }}
+</h5>
 {% endif %}
 
 <br />
@@ -89,7 +96,7 @@
                 _____________________________
                 <br />
                 {{ "Teacher" | get_lang }}
-                </td>
+            </td>
             <td>
                 _____________________________
                 <br />

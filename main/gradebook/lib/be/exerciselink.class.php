@@ -206,7 +206,9 @@ class ExerciseLink extends AbstractLink
 			            orig_lp_id = 0 AND
 			            orig_lp_item_id = 0 AND
 			            status <> 'incomplete' AND
-			            session_id = $session_id";
+			            session_id = $session_id AND
+                                    c_id = $courseId 
+                                ";
 		    } else {
 		        $lpId = null;
 		        if (!empty($exercise->lpList)) {
@@ -220,11 +222,13 @@ class ExerciseLink extends AbstractLink
 		                    exe_exo_id = ".intval($this->get_ref_id())." AND
 		                    orig_lp_id = $lpId AND
 		                    status <> 'incomplete' AND
-		                    session_id = $session_id";
+		                    session_id = $session_id AND
+                                    c_id = $courseId 
+                                ";
 		    }
 
-            if (isset($stud_id)) {
-                $sql .= " AND c_id = $courseId AND exe_user_id = $stud_id ";
+            if (!empty($stud_id) && $type != 'ranking') {
+                $sql .= " AND exe_user_id = $stud_id ";
             }
             $sql .= ' ORDER BY exe_id DESC';
 
@@ -240,7 +244,7 @@ class ExerciseLink extends AbstractLink
 
         $scores = Database::query($sql);
 
-        if (isset($stud_id)) {
+        if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
                 return array($data['exe_result'], $data['exe_weighting']);
@@ -281,7 +285,11 @@ class ExerciseLink extends AbstractLink
                         return array($bestResult, $weight);
                         break;
                     case 'average':
-                        return array($sumResult/$student_count, $weight);
+                        $count = count($this->getStudentList());
+                        /*if (empty($count)) {
+                            return null;
+                        }*/
+                        return array($sumResult/$count , $weight);
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);

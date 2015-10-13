@@ -17,5 +17,7 @@ interface GradebookItem
 	public function get_date();
 	public function is_visible();
 	public function get_icon_name();
+	public function getStudentList();
+	public function setStudentList($list);
 	public function calc_score($stud_id = null, $type = null);
 }

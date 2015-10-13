@@ -2319,16 +2319,18 @@ class Exercise
                         if ($studentChoice == $answerCorrect) {
                             $questionScore += $true_score;
                         } else {
-                            if ($quiz_question_options[$studentChoice]['name'] != "Don't know") {
-                                $questionScore += $false_score;
-                            } else {
+                            if ($quiz_question_options[$studentChoice]['name'] == "Don't know" ||
+                                $quiz_question_options[$studentChoice]['name'] == "DoubtScore"
+                            ) {
                                 $questionScore += $doubt_score;
+                            } else {
+                                $questionScore += $false_score;
                             }
                         }
                     } else {
                         // If no result then the user just hit don't know
                         $studentChoice = 3;
-                        $questionScore  +=  $doubt_score;
+                        $questionScore +=  $doubt_score;
                     }
                     $totalScore = $questionScore;
                     break;

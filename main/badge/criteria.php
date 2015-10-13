@@ -10,6 +10,14 @@ require_once '../inc/global.inc.php';
 $entityManager = Database::getManager();
 $skill = $entityManager->find('ChamiloCoreBundle:Skill', $_GET['id']);
 
+if (!$skill) {
+    Display::addFlash(
+        Display::return_message(get_lang('SkillNotFound'), 'error')
+    );
+
+    header('Location: ' . api_get_path(WEB_PATH));
+}
+
 $skillInfo = [
     'name' => $skill->getName(),
     'short_code' => $skill->getShortCode(),

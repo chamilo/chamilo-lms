@@ -42,7 +42,7 @@
                         </div>        
                     </div>
                 </div>
-                    
+                {{ teacher_toc_buttons }}    
                 {% else %}
                     <div id="scorm-info" class="panel panel-default">
                         <div class="panel-heading">
@@ -84,6 +84,7 @@
                                     {{ media_player }}
                                 </div>
                             {% endif %}
+                            {{ teacher_toc_buttons }}
                        </div>
                     </div>
                 {% endif %}
@@ -119,6 +120,7 @@
 
 <script>
     // Resize right and left pane to full height (HUB 20-05-2010).
+    
     var updateContentHeight = function () {
         document.body.style.overflow = 'hidden';
         var IE = window.navigator.appName.match(/microsoft/i);
@@ -130,20 +132,22 @@
         var heightScormInfo = $('#scorm-info').height();
 
         var heightTop = heightScormInfo + 100;
-
+        
+        jQuery('.scrollbar-light').scrollbar();
+        
         //heightTop = (heightTop > 300)? heightTop : 300;
 
         var innerHeight = $(window).height();
 
         if (innerHeight <= 640) {
-            $('#inner_lp_toc').css('height', innerHeight - heightTop + "px");
+            $('.scrollbar-light').css('height', innerHeight - heightTop + "px");
             $('#content_id').css('height', innerHeight - heightControl + "px");
         } else {
-            $('#inner_lp_toc').css('height', innerHeight - heightBreadcrumb - heightTop + "px");
+            $('.scrollbar-light').css('height', innerHeight - heightBreadcrumb - heightTop + "px");
             $('#content_id').css('height', innerHeight - heightControl + "px");
         }
-
-        //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
+        
+              //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
 
         // Loads the glossary library.
         {% if glossary_extra_tools in glossary_tool_availables %}

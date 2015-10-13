@@ -3372,15 +3372,8 @@ a.forum_group_link {
 
 /* actions */
 .actions_lp {
-    background:#F8F8F8;
-    margin: 0px;
-    padding:9px 0px 9px 0px;
     width:100%;
     text-align: center;
-
-}
-.actions_lp .btn-group {
-    margin-left: 25px;
 }
 .actions_lp img {
     vertical-align:middle;

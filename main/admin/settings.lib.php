@@ -349,15 +349,17 @@ function handle_stylesheets()
         }
         if (isset($_POST['download'])) {
             $arch = api_get_path(SYS_ARCHIVE_PATH).$safe_style_dir.'.zip';
-            $dir = api_get_path(SYS_CODE_PATH).'css/'.$safe_style_dir;
+            $dir = api_get_path(SYS_CSS_PATH).'themes/'.$safe_style_dir;
             if (is_dir($dir)) {
                 $zip = new PclZip($arch);
                 // Remove path prefix except the style name and put file on disk
                 $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($safe_style_dir)));
+                //@TODO: use more generic script to download.
+                $str = '<a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+                Display::display_normal_message($str, false);
+            } else {
+                Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
             }
-            //@TODO: use more generic script to download.
-            $str = '<a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
-            Display::display_normal_message($str,false);
         }
     }
 

@@ -118,7 +118,7 @@ class Documents extends Basic
                 'BGColor',
                 'Source',
             ],
-            ['Toolbarswitch', 'ShowBlocks']
+            ['Toolbarswitch']
         ];
     }
 }

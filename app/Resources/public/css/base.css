@@ -2794,6 +2794,10 @@ form .formw .freeze {
   height:550px;
   position:relative;
 }
+.items-templates{
+  display:block;
+  height:750px;
+}
 .editor-lp{
   margin-bottom: 20px;
 }

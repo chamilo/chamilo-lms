@@ -10,40 +10,6 @@
     <div class="container-fluid">
         <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">
-                {% if gamification_mode == 1 %}
-                <div id="scorm-gamification">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                        <div class="row">
-                            <div class="col-xs-8">
-                                {% if gamification_stars > 0 %}
-                                    {% for i in 1..gamification_stars %}
-                                        <i class="fa fa-star fa-2x"></i>
-                                    {% endfor %}
-                                {% endif %}
-
-                                {% if gamification_stars < 4 %}
-                                    {% for i in 1..4 - gamification_stars %}
-                                        <i class="fa fa-star-o fa-2x"></i>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="col-xs-4 text-right">
-                                {{ "XPoints"|get_lang|format(gamification_points) }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 navegation-bar" id="lp_navigation_elem">
-                                <div id="progress_bar">
-                                    {{ progress_bar }}
-                                </div>
-                            </div>
-                        </div>
-                        </div>        
-                    </div>
-                </div>
-                    
-                {% else %}
                     <div id="scorm-info" class="panel panel-default">
                         <div class="panel-heading">
                             <a id="ui-option">
@@ -73,20 +39,54 @@
 
                                 </div>
                             </div>
+                            <div id="lp_navigation_elem" class="navegation-bar">
+                                {{ navigation_bar }}
+                            </div>        
+                             {% if gamification_mode == 1 %}
+                            <!--- gamification -->    
+                            <div id="scorm-gamification">
+                                    <div class="row">
+                                        <div class="col-xs-8">
+                                            {% if gamification_stars > 0 %}
+                                                {% for i in 1..gamification_stars %}
+                                                    <i class="fa fa-star level"></i>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                            {% if gamification_stars < 4 %}
+                                                {% for i in 1..4 - gamification_stars %}
+                                                    <i class="fa fa-star"></i>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-xs-4 text-right">
+                                            {{ "XPoints"|get_lang|format(gamification_points) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 navegation-bar" id="lp_navigation_elem">
+                                            <div id="progress_bar">
+                                                {{ progress_bar }}
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                           <!--- end gamification -->          
+                             {% else %}         
                             <div id="progress_bar">
                                 {{ progress_bar }}
                             </div>
-                            <div id="lp_navigation_elem" class="navegation-bar">
-                                {{ navigation_bar }}
-                            </div>
+                             {% endif %}
+                            
                             {% if show_audio_player %}
                                 <div id="lp_media_file">
                                     {{ media_player }}
                                 </div>
                             {% endif %}
+                            {{ teacher_toc_buttons }}
                        </div>
                     </div>
-                {% endif %}
+               
 
                 {# TOC layout #}
                 <div id="toc_id" class="scorm-body" name="toc_name">
@@ -119,6 +119,7 @@
 
 <script>
     // Resize right and left pane to full height (HUB 20-05-2010).
+    
     var updateContentHeight = function () {
         document.body.style.overflow = 'hidden';
         var IE = window.navigator.appName.match(/microsoft/i);
@@ -130,20 +131,22 @@
         var heightScormInfo = $('#scorm-info').height();
 
         var heightTop = heightScormInfo + 100;
-
+        
+        jQuery('.scrollbar-light').scrollbar();
+        
         //heightTop = (heightTop > 300)? heightTop : 300;
 
         var innerHeight = $(window).height();
 
         if (innerHeight <= 640) {
-            $('#inner_lp_toc').css('height', innerHeight - heightTop + "px");
+            $('.scrollbar-light').css('height', innerHeight - heightTop + "px");
             $('#content_id').css('height', innerHeight - heightControl + "px");
         } else {
-            $('#inner_lp_toc').css('height', innerHeight - heightBreadcrumb - heightTop + "px");
+            $('.scrollbar-light').css('height', innerHeight - heightBreadcrumb - heightTop + "px");
             $('#content_id').css('height', innerHeight - heightControl + "px");
         }
-
-        //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
+        
+              //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
 
         // Loads the glossary library.
         {% if glossary_extra_tools in glossary_tool_availables %}

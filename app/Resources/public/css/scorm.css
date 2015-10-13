@@ -55,8 +55,21 @@ See https://support.chamilo.org/issues/6976
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   margin-top: 5px;
+}
+#learning_path_left_zone #scorm-gamification{
+    padding: 10px;
+    border: 1px solid #DDD;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+#scorm-gamification .fa-star{
+    font-size: 20px;
+    color: #C2C2C2;
+}
+#scorm-gamification .fa-star.level{
+    color: #D9534F;
 }
 #learning_path_left_zone .navegation-bar .buttons{
   text-align: center;

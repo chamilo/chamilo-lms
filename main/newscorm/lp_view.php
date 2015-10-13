@@ -140,6 +140,8 @@ if ($debug) {
 }
 
 $get_toc_list = $_SESSION['oLP']->get_toc();
+$get_teacher_buttons = $_SESSION['oLP']->get_teacher_toc_buttons();
+
 $type_quiz = false;
 foreach ($get_toc_list as $toc) {
     if ($toc['id'] == $lp_item_id && $toc['type'] == 'quiz') {
@@ -483,6 +485,8 @@ $template->assign('progress_bar', $progress_bar);
 $template->assign('show_audio_player', $show_audioplayer);
 $template->assign('media_player', $mediaplayer);
 $template->assign('toc_list', $get_toc_list);
+$template->assign('teacher_toc_buttons', $get_teacher_buttons);
+
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 

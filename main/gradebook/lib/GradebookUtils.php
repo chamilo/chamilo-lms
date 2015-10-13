@@ -953,7 +953,7 @@ class GradebookUtils
         $counter = 1;
         $badges = array();
         foreach ($list_values as $value) {
-            $class = 'info';
+            $class = 'warning';
             if ($counter == 1) {
                 $class = 'success';
             }

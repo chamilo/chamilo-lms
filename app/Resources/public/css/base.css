@@ -2794,6 +2794,10 @@ form .formw .freeze {
   height:550px;
   position:relative;
 }
+.items-templates{
+  display:block;
+  height:750px;
+}
 .editor-lp{
   margin-bottom: 20px;
 }
@@ -5628,6 +5632,10 @@ a.sessionView {
 #gradebook_list .centered {
     text-align:center;
     vertical-align:middle;
+}
+#gradebook_list .score{
+    font-weight: bold;
+    color: #8A6E4E;
 }
 #gradebook_list .centered .badge-group {
     width: auto;

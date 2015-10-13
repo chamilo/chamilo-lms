@@ -755,7 +755,7 @@ $no_qualification = false;
 // Show certificate link.
 $certificate = array();
 
-echo '<div class="actions" align="right">';
+$actionsLeft = '';
 
 if ($category != '0') {
     $cat = new Category();
@@ -771,7 +771,7 @@ if ($category != '0') {
                 $stud_id
             );
             if (isset($certificate['pdf_url'])) {
-                echo Display::url(
+                $actionsLeft .= Display::url(Display::returnFontAswesomeIcon('file-pdf-o') . 
                     get_lang('DownloadCertificatePdf'),
                     $certificate['pdf_url'],
                     ['class' => 'btn btn-default']
@@ -785,14 +785,14 @@ if ($category != '0') {
 }
 
 if (!api_is_allowed_to_edit(null, true)) {
-    echo Display::url(
-        get_lang('DownloadReportPdf'),
-        api_get_self()."?".api_get_self()."&action=export_table",
-        ['class' => 'btn btn-default']
+    $actionsLeft .= Display::url(
+            Display::returnFontAswesomeIcon('file-pdf-o') . get_lang('DownloadReportPdf'),
+            api_get_self()."?".api_get_self()."&action=export_table",
+            ['class' => 'btn btn-default']
     );
 }
 
-echo '</div>';
+echo $toolbar = Display::toolbarAction('gradebook-student-actions', array(0 => $actionsLeft, 1 => ''));
 
 if (api_is_allowed_to_edit(null, true)) {
     // Tool introduction

@@ -284,7 +284,7 @@ function document_exists($filename)
 
 // Add group to the form
 if ($is_certificate_mode) {
-    $form->addText('title', get_lang('CertificateName'), true, array('autofocus'));
+    $form->addText('title', get_lang('CertificateName'), true, array('cols-size' => [2, 10, 0], 'autofocus'));
 } else {
 	$form->addText('title', get_lang('Title'), true, array('cols-size' => [2, 10, 0], 'autofocus'));
 }

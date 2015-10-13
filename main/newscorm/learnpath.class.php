@@ -2402,7 +2402,7 @@ class learnpath
     {
         $text = $percentage . $text_add;
         $output = '<div class="progress">
-                        <div id="progress_bar_value" class="progress-bar" role="progressbar" aria-valuenow="' .$percentage. '" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
+                        <div id="progress_bar_value" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="' .$percentage. '" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
                         '. $text .'
                         </div>
                     </div>';
@@ -3115,25 +3115,9 @@ class learnpath
         }
         //$html = '<div id="scorm_title" class="scorm-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
         $html = '<div class="scorm-body">';
-        $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
+        
 
-        if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
-            $gradebook = '';
-            if (!empty($_GET['gradebook'])) {
-                $gradebook = Security:: remove_XSS($_GET['gradebook']);
-            }
-            if ($this->get_lp_session_id() == api_get_session_id()) {
-                $html .= '<div id="actions_lp" class="actions_lp">';
-                $html .= '<div class="btn-group">';
-                $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq()."&gradebook=$gradebook&action=build&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Overview') . "</a>";
-                $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq()."&action=add_item&type=step&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Edit') . "</a>";
-                $html .= '<a class="btn btn-default" href="lp_controller.php?'.api_get_cidreq()."&gradebook=$gradebook&action=edit&lp_id=" . $this->lp_id.'">'.get_lang('Settings').'</a>';
-                $html .= '</div>';
-                $html .= '</div>';
-            }
-        }
-
-        $html .= '<div id="inner_lp_toc" class="inner_lp_toc">';
+        $html .= '<div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">';
         require_once 'resourcelinker.inc.php';
 
         // Temporary variables.
@@ -3228,7 +3212,36 @@ class learnpath
         $html .= "</div>";
         return $html;
     }
-
+    
+     /**
+     * Returns an HTML-formatted string ready to display with teacher buttons
+     * in LP view menu
+     * @return	string	HTML TOC ready to display
+     */
+    public function get_teacher_toc_buttons()
+    {   
+        $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
+        $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
+        $html = '';
+        
+        if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
+            $gradebook = '';
+            if (!empty($_GET['gradebook'])) {
+                $gradebook = Security:: remove_XSS($_GET['gradebook']);
+            }
+            if ($this->get_lp_session_id() == api_get_session_id()) {
+                $html .= '<div id="actions_lp" class="actions_lp">';
+                $html .= '<div class="btn-group">';
+                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?" . api_get_cidreq()."&gradebook=$gradebook&action=build&lp_id=" . $this->lp_id . "' target='_parent'>" . Display::returnFontAswesomeIcon('street-view') . get_lang('Overview') . "</a>";
+                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?" . api_get_cidreq()."&action=add_item&type=step&lp_id=" . $this->lp_id . "' target='_parent'>" . Display::returnFontAswesomeIcon('pencil') . get_lang('Edit') . "</a>";
+                $html .= '<a class="btn btn-sm btn-default" href="lp_controller.php?'.api_get_cidreq()."&gradebook=$gradebook&action=edit&lp_id=" . $this->lp_id.'">' . Display::returnFontAswesomeIcon('cog') . get_lang('Settings').'</a>';
+                $html .= '</div>';
+                $html .= '</div>';
+            }
+        }
+        return $html;
+        
+    }
     /**
      * Gets the learnpath maker name - generally the editor's name
      * @return	string	Learnpath maker name

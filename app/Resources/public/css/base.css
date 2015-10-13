@@ -5633,6 +5633,10 @@ a.sessionView {
     text-align:center;
     vertical-align:middle;
 }
+#gradebook_list .score{
+    font-weight: bold;
+    color: #8A6E4E;
+}
 #gradebook_list .centered .badge-group {
     width: auto;
 }

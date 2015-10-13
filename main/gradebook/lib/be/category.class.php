@@ -1998,11 +1998,11 @@ class Category implements GradebookItem
                 $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
 
                 $certificates = Display::url(
-                    '&nbsp;'.get_lang('DownloadCertificate'),
+                    Display::returnFontAswesomeIcon('download').' '.get_lang('DownloadCertificate'),
                     $url,
                     array(
                         'target' => '_blank',
-                        'class' => 'btn btn-default'
+                        'class' => 'btn btn-sm btn-primary'
                     )
                 );
 

@@ -5687,7 +5687,8 @@ class learnpath
         }
         $list .= '</ul>';
 
-        $return .= Display::panel($list, $this->name);
+        //$return .= Display::panel($list, $this->name);
+        $return .= Display::panelCollapse($this->name, $list, 'scorm-list', null, 'scorm-list-accordion', 'scorm-list-collapse');
 
         if ($update_audio == 'true') {
             $return = $return_audio;
@@ -7401,7 +7402,7 @@ class learnpath
         $defaults['description'] = $item_description;
         $form->addElement('html', $return);
         if ($action != 'move') {
-            $form->addElement('text', 'title', get_lang('Title'), array('id' => 'idTitle', 'class' => 'span4'));
+            $form->addElement('text', 'title', get_lang('Title'), array('id' => 'idTitle', 'class' => 'col-md-4'));
             $form->applyFilter('title', 'html_filter');
         }
 
@@ -7428,7 +7429,7 @@ class learnpath
             }
         }
 
-        $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" id="idParent" style="width:40%;" onchange="javascript: load_cbo(this.value);"');
+        $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="form-control" id="idParent" " onchange="javascript: load_cbo(this.value);"');
         $my_count=0;
         foreach ($arrHide as $key => $value) {
             if ($my_count!=0) {
@@ -7466,7 +7467,7 @@ class learnpath
             }
         }
 
-        $position = $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_item_form" style="width:40%;"');
+        $position = $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="form-control"');
         $position->addOption(get_lang('FirstPosition'), 0);
 
         foreach ($arrHide as $key => $value) {

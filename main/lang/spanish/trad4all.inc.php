@@ -5872,7 +5872,7 @@ $StartDateMustBeBeforeTheEndDate = "La fecha de inicio tiene que ser anterior a 
 $SessionPageEnabledComment = "Cuando esta opción es activada, el título de la sesión es un enlace a una página especial de sesión. Cuando es desactivada, es solo un texto, sin enlace. La página de sesión a la cual apunta puede provocar confusión para ciertos usuarios, por lo que podría querer desactivarla para simplificar.";
 $SessionPageEnabledTitle = "Activar el enlace de sesión en la lista de cursos";
 $SkillRoot = "Raíz";
-$SkillInfo = "Info competencia";
+$SkillInfo = "Información de competencia";
 $GetNewSkills = "Obtener nuevas competencias";
 $ViewSkillsWheel = "Ver la rueda de competencias";
 $MissingOneStepToMatch = "Falta <b>una</b> competencia para corresponder";
@@ -7579,4 +7579,7 @@ $ConversionToSameFileFormat = "Conversión al mismo formato de archivo. Por favo
 $FileFormatNotSupported = "Formato de archivo no soportado.";
 $FileConvertedFromXToY = "Archivo convertido de %s a %s";
 $XDays = "%s días";
+$SkillProfile = "Perfil de competencias";
+$AchievedSkills = "Competencias logradas";
+$BusinessCard = "Tarjeta personal";
 ?>

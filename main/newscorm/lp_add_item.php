@@ -150,11 +150,27 @@ function confirmation(name) {
     }
 }
 
+jQuery(document).ready(function(){
+    jQuery('.scrollbar-inner').scrollbar();
+});
+
 $(document).ready(function() {
+    $("#doc_form").removeClass( "col-md-8" ).addClass( "col-md-7" );
+    
     $("#hide_bar_template").click(function() {
         $("#lp_sidebar").toggleClass("hide");
+        
+        if ($('#doc_form').is('.col-md-7')) {
+            $('#doc_form').removeClass('col-md-7');
+            $('#doc_form').addClass('col-md-11');
+        } else {
+            $('#doc_form').removeClass('col-md-11');
+            $('#doc_form').addClass('col-md-7');
+        }
+       
         $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
     });
+    
 });
 </script>
 <?php
@@ -164,7 +180,8 @@ $(document).ready(function() {
 echo $learnPath->build_action_menu();
 
 echo '<div class="row" style="overflow:hidden">';
-echo '<div id="lp_sidebar" class="col-md-3">';
+
+echo '<div id="lp_sidebar" class="col-md-4">';
 
 echo $learnPath->return_new_tree(null, true);
 
@@ -173,7 +190,7 @@ $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 // Show the template list.
 if ($type == 'document' && !isset($_GET['file'])) {
     // Show the template list.
-    echo '<div id="frmModel" class="lp-add-item"></div>';
+    echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
 }
 
 echo '</div>';

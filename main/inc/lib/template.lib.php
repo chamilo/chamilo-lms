@@ -525,6 +525,7 @@ class Template
             $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
         }
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/bootstrap-select/css/bootstrap-select.min.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/jquery-scrollbar/jquery.scrollbar.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css';
 
@@ -625,6 +626,7 @@ class Template
         // JS files
         $js_files = array(
             'chosen/chosen.jquery.min.js',
+            'jquery-scrollbar/jquery.scrollbar.min.js',
             'bootstrap-select/js/bootstrap-select.min.js',
             $selectLink
         );

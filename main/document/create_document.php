@@ -25,6 +25,7 @@ $(document).ready(function() {
     if ($(window).width() <= 785 ) {
         hide_bar();
     }
+    $("#doc_form").removeClass( "col-md-8" ).addClass( "col-md-7" );
 
     $("#hide_bar_template").click(function() {
         $("#template_col").toggleClass("hide");

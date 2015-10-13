@@ -32,10 +32,12 @@
                     <ul class="list-unstyled list-badges">
                         {% for skill in skills %}
                             <li class="thumbnail">
-                                <img title="{{ skill.name }}" class="img-responsive" src="{{ skill.icon ? skill.web_icon_thumb_path : 'badges-default.png'|icon(64) }}" width="64" height="64" alt="{{ skill.name }}">
-                                <div class="caption">
-                                    <p class="text-center">{{ skill.name }}</p>
-                                </div>
+                                <a href="{{ _p.web_main ~ 'badge/criteria.php?' ~ {'id': skill.id}|url_encode() }}" data-title="{{ skill.name }}" class="ajax">
+                                    <img title="{{ skill.name }}" class="img-responsive" src="{{ skill.icon ? skill.web_icon_thumb_path : 'badges-default.png'|icon(64) }}" width="64" height="64" alt="{{ skill.name }}">
+                                    <div class="caption">
+                                        <p class="text-center">{{ skill.name }}</p>
+                                    </div>
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>

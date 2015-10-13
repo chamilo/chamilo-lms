@@ -5,13 +5,33 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.badge
  */
-header('Content-Type: text/plain');
-
 require_once '../inc/global.inc.php';
 
-$skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$entityManager = Database::getManager();
+$skill = $entityManager->find('ChamiloCoreBundle:Skill', $_GET['id']);
 
-$objSkill = new Skill();
-$skill = $objSkill->get($skillId);
+if (!$skill) {
+    Display::addFlash(
+        Display::return_message(get_lang('SkillNotFound'), 'error')
+    );
 
-echo $skill['criteria'];
+    header('Location: ' . api_get_path(WEB_PATH));
+}
+
+$skillInfo = [
+    'name' => $skill->getName(),
+    'short_code' => $skill->getShortCode(),
+    'description' => $skill->getDescription(),
+    'criteria' => $skill->getCriteria(),
+    'badge_image' => $skill->getWebIconPath()
+];
+
+$template = new Template();
+$template->assign('skill_info', $skillInfo);
+
+$content = $template->fetch(
+    $template->get_template('skill/criteria.tpl')
+);
+
+$template->assign('content', $content);
+$template->display_one_col_template();

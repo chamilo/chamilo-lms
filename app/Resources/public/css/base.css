@@ -5562,7 +5562,7 @@ div#chat-remote-video video {
 }
 
 img.sessionView {
-  padding-right: 10px;
+  margin-right: 10px;
 }
 
 a.sessionView {

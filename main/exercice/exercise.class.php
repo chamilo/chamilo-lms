@@ -4035,26 +4035,26 @@ class Exercise
             . '&action=qualify';
         $user_info = api_get_user_info(api_get_user_id());
 
-        $msg = '<p>'.get_lang('ExerciseAttempted').' :</p>
-                    <p>'.get_lang('AttemptDetails').' : </p>
-                    <table class="data_table">
-                        <tr>
-                            <td><h3>'.get_lang('CourseName').'</h3></td>
-                            <td><h3>#course#</h3></td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('TestAttempted').'</span></td>
-                            <td>#exercise#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentName').'</td>
-                            <td>#firstName# #lastName#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentEmail').'</td>
-                            <td>#email#</td>
-                        </tr>
-                    </table>';
+        $msg = get_lang('ExerciseAttempted').'<br /><br />'
+                    .get_lang('AttemptDetails').' : <br /><br />'.
+                    '<table>'
+                        .'<tr>'
+                            .'<td><em>'.get_lang('CourseName').'</em></td>'
+                            .'<td><b>#course#</b></td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('TestAttempted').'</td>'
+                            .'<td>#exercise#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentName').'</td>'
+                            .'<td>#firstName# #lastName#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentEmail').'</td>'
+                            .'<td>#email#</td>'
+                        .'</tr>'
+                    .'</table>';
         $open_question_list = null;
 
         $msg = str_replace("#email#", $user_info['email'], $msg);
@@ -4064,8 +4064,7 @@ class Exercise
         $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
         if ($origin != 'learnpath') {
-            $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
-                        <a href="#url#">#url#</a>';
+            $msg.= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
         }
         $msg1 = str_replace("#url#", $url_email, $msg);
         $mail_content = $msg1;
@@ -4111,26 +4110,26 @@ class Exercise
             . '&action=qualify';
         $user_info = api_get_user_info(api_get_user_id());
 
-        $msg = '<p>'.get_lang('OpenQuestionsAttempted').' :</p>
-                    <p>'.get_lang('AttemptDetails').' : </p>
-                    <table class="data_table">
-                        <tr>
-                            <td><h3>'.get_lang('CourseName').'</h3></td>
-                            <td><h3>#course#</h3></td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('TestAttempted').'</span></td>
-                            <td>#exercise#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentName').'</td>
-                            <td>#firstName# #lastName#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentEmail').'</td>
-                            <td>#mail#</td>
-                        </tr>
-                    </table>';
+        $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
+                    .get_lang('AttemptDetails').' : <br /><br />'
+                    .'<table>'
+                        .'<tr>'
+                            .'<td><em>'.get_lang('CourseName').'</em></td>'
+                            .'<td><b>#course#</b></td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('TestAttempted').'</td>'
+                            .'<td>#exercise#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentName').'</td>'
+                            .'<td>#firstName# #lastName#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentEmail').'</td>'
+                            .'<td>#mail#</td>'
+                        .'</tr>'
+                    .'</table>';
         $open_question_list = null;
         foreach ($question_list_answers as $item) {
             $question    = $item['question'];
@@ -4138,21 +4137,21 @@ class Exercise
             $answer_type = $item['answer_type'];
 
             if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
-                $open_question_list.='
-                    <tr>
-                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
-                        <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
-                    </tr>
-                    <tr>
-                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
-                        <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
-                    </tr>';
+                $open_question_list .=
+                    '<tr>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
+                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
+                    .'</tr>'
+                    .'<tr>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
+                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
+                    .'</tr>';
             }
         }
 
         if (!empty($open_question_list)) {
-            $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
-                    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+            $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>'.
+                    '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
             $msg .= '</table><br />';
 
@@ -4164,8 +4163,7 @@ class Exercise
             $msg    = str_replace("#course#",      $course_info['name'],$msg1);
 
             if ($origin != 'learnpath') {
-                $msg .= get_lang('ClickToCommentAndGiveFeedback').', <br />
-                            <a href="#url#">#url#</a>';
+                $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             }
             $msg1 = str_replace("#url#", $url_email, $msg);
             $mail_content = $msg1;
@@ -4215,39 +4213,39 @@ class Exercise
             $answer_type = $item['answer_type'];
 
             if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
-                $oral_question_list.='<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-                    <tr>
-                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
-                        <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
-                    </tr>
-                    <tr>
-                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
-                        <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
-                    </tr></table>';
+                $oral_question_list.='<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
+                    .'<tr>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
+                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
+                    .'</tr>'
+                    .'<tr>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
+                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
+                    .'</tr></table>';
             }
         }
 
         if (!empty($oral_question_list)) {
-            $msg = '<p>'.get_lang('OralQuestionsAttempted').' :</p>
-                    <p>'.get_lang('AttemptDetails').' : </p>
-                    <table class="data_table">
-                        <tr>
-                            <td><h3>'.get_lang('CourseName').'</h3></td>
-                            <td><h3>#course#</h3></td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('TestAttempted').'</span></td>
-                            <td>#exercise#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentName').'</td>
-                            <td>#firstName# #lastName#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentEmail').'</td>
-                            <td>#mail#</td>
-                        </tr>
-                    </table>';
+            $msg = get_lang('OralQuestionsAttempted').'<br /><br />
+                    '.get_lang('AttemptDetails').' : <br /><br />'
+                    .'<table>'
+                        .'<tr>'
+                            .'<td><em>'.get_lang('CourseName').'</em></td>'
+                            .'<td><b>#course#</b></td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('TestAttempted').'</td>'
+                            .'<td>#exercise#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentName').'</td>'
+                            .'<td>#firstName# #lastName#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentEmail').'</td>'
+                            .'<td>#mail#</td>'
+                        .'</tr>'
+                    .'</table>';
             $msg .=  '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'),$oral_question_list).'<br />';
             $msg1 = str_replace("#exercise#", $this->exercise, $msg);
             $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
@@ -4256,8 +4254,7 @@ class Exercise
             $msg = str_replace("#course#", $course_info['name'], $msg1);
 
             if ($origin != 'learnpath') {
-                $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
-                            <a href="#url#">#url#</a>';
+                $msg.= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
             }
             $msg1 = str_replace("#url#", $url_email, $msg);
             $mail_content = $msg1;

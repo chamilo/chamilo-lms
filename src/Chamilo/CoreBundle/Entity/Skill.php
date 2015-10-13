@@ -195,6 +195,18 @@ class Skill
     }
 
     /**
+     * Get the icon URL
+     * @return string
+     */
+    public function getWebIconPath(){
+        if ($this->getIcon()) {
+            return api_get_path(WEB_UPLOAD_PATH) . "badges/{$this->getIcon()}";
+        }
+
+        return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
+    }
+
+    /**
      * Set criteria
      *
      * @param string $criteria

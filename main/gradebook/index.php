@@ -95,14 +95,14 @@ $tbl_attendance   = Database :: get_course_table(TABLE_ATTENDANCE);
 $tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
+$courseInfo = api_get_course_info();
 
-$cats = Category :: load(null, null, $course_code, 0, null, $session_id, false);
-
+$cats = Category :: load(null, null, $course_code, null, null, $session_id, 'ORDER By id');
 $first_time = null;
 
 if (empty($cats)) {
     //first time
-    $cats = Category :: load(0, null, $course_code, 0, null, $session_id, false);
+    $cats = Category :: load(0, null, $course_code, null, null, $session_id, 'ORDER By id');
     $first_time = 1;
 }
 
@@ -117,7 +117,7 @@ if (isset($_GET['isStudentView'])) {
 if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) &&
     (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')
 ) {
-    Display :: display_header();
+    /*Display :: display_header();
     //Introduction tool: student view
     Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
     $category = $_GET['selectcat'];
@@ -129,7 +129,7 @@ if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) &&
     $gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
     $gradebooktable->display();
     Display :: display_footer();
-    exit;
+    exit;*/
 } else {
     if (!isset($_GET['selectcat']) &&
         ($_SESSION['studentview']=='studentview') ||
@@ -630,7 +630,7 @@ if (isset($_GET['studentoverview'])) {
     //@todo this code also seems to be deprecated ...
     $cats = Category :: load($category);
     $stud_id= (api_is_allowed_to_edit() ? null : $stud_id);
-    $allcat= array ();
+    $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
     $alleval= $cats[0]->get_evaluations($stud_id, true);
     $alllink= $cats[0]->get_links($stud_id, true);
     if (isset ($_GET['exportpdf'])) {
@@ -844,7 +844,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                 if (!empty($grade_models)) {
                     $form_grade = new FormValidator('grade_model_settings');
                     $obj->fill_grade_model_select_in_form($form_grade, 'grade_model_id', $grade_model_id);
-                    $form->addButtonSave(get_lang('Save'));
+                    $form_grade->addButtonSave(get_lang('Save'));
 
                     if ($form_grade->validate()) {
                         $value = $form_grade->exportValue('grade_model_id');
@@ -940,6 +940,10 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                         6 => 'class=centered',
                         7 => 'class=centered'
                     ];
+
+                    if ($action == 'export_table') {
+                        unset($gradebooktable->td_attributes[7]);
+                    }
                 }
 
                 $table = $gradebooktable->return_table();
@@ -947,21 +951,38 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 
                 if ($action == 'export_table') {
                     ob_clean();
+                    $sessionName = api_get_session_name(api_get_session_id());
+                    $sessionName = !empty($sessionName) ? " - $sessionName" : '';
                     $params = array(
-                        //'filename' => get_lang('FlatView') . '_' . api_get_utc_datetime(),
-                        'pdf_title' => get_lang('Report'),
+                        'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['department_name']),
                         'course_code' => api_get_course_id(),
-                        'session_info' => api_get_session_info(api_get_session_id()),
+                        'session_info' => '',
+                        'course_info' => '',
+                        'pdf_date' => '',
                         'add_signatures' => false,
-                        'student_info' => api_get_user_info()
+                        'student_info' => api_get_user_info(),
+                        'show_grade_generated_date' => true,
+                        'show_real_course_teachers' => false,
+                        'show_teacher_as_myself' => false
                     );
+
                     $pdf = new PDF('A4', $params['orientation'], $params);
-                    $pdf->html_to_pdf_with_template($table.$graph);
+
+                    $address = api_get_setting('institution_address');
+                    $phone = api_get_setting('administratorTelephone');
+                    $address = str_replace('\n', '<br />', $address);
+                    $pdf->custom_header = array('html' => "<h5  align='right'>$address <br />$phone</h5>");
+
+                    $pdf->html_to_pdf_with_template(
+                        $table.
+                        $graph.
+                        '<br />'.get_lang('Feedback').'<br />
+                        <textarea rows="5" cols="100" ></textarea>'
+                    );
                 } else {
                     echo $table;
                     echo $graph;
                 }
-
             }
         }
     }

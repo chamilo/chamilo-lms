@@ -110,7 +110,8 @@ class FlatViewDataGenerator
 
         $parent_id = $this->category->get_parent_id();
 
-        if ($parent_id == 0 or
+        if ($parent_id == 0 ||
+            isset($this->params['only_subcat']) &&
             $this->params['only_subcat'] == $this->category->get_id()
         ) {
             $main_weight  = $this->category->get_weight();

@@ -1113,16 +1113,16 @@ class IndexManager
                                 $atLeastOneCourseIsVisible = true;
 
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                    $c = CourseManager::get_logged_user_course_html(
+                                    $courseUserHtml = CourseManager::get_logged_user_course_html(
                                         $course,
                                         $session_id,
                                         'session_course_item',
                                         true,
                                         $this->load_directories_preview
                                     );
-                                    if (isset($c[1])) {
-                                        $course_session = $c[1];
-                                        $course_session['skill'] = $c['skill'];
+                                    if (isset($courseUserHtml[1])) {
+                                        $course_session = $courseUserHtml[1];
+                                        $course_session['skill'] = isset($courseUserHtml['skill']) ? $courseUserHtml['skill'] : '';
                                         $html_courses_session[] = $course_session;
                                     }
                                 }

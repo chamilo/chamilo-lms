@@ -2417,7 +2417,7 @@ class CourseManager
                 $emailbody .= get_lang('LastName') . ': ' . $student['lastname'] . "\n";
                 $emailbody .= get_lang('FirstName') . ': ' . $student['firstname'] . "\n";
             }
-            $emailbody .= get_lang('Email') . ': ' . $student['email'] . "\n\n";
+            $emailbody .= get_lang('Email') . ': <a href="mailto:' . $student['email'] . '">' . $student['email'] ."</a>\n\n";
             $recipient_name = api_get_person_name($tutor['firstname'], $tutor['lastname'], null,
                 PERSON_NAME_EMAIL_ADDRESS);
             $sender_name = api_get_person_name(api_get_setting('administratorName'),

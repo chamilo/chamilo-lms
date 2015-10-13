@@ -621,6 +621,25 @@ class Answer
                 if ($autoId) {
                     $sql = "UPDATE $answerTable SET id = iid, id_auto = iid WHERE iid = $autoId";
                     Database::query($sql);
+
+                    $questionType = $this->getQuestionType();
+
+                    if (in_array(
+                        $questionType,
+                        [MATCHING, MATCHING_DRAGGABLE]
+                    )) {
+                        $answer = new Answer($this->questionId);
+                        $answer->read();
+
+                        $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
+                        $correctAnswerAutoId = $answer->selectAutoId($correctAnswerId);
+
+                        Database::update(
+                            $answerTable,
+                            ['correct' => $correctAnswerAutoId ? $correctAnswerAutoId : 0],
+                            ['iid = ?' => $autoId]
+                        );
+                    }
                 }
             } else {
                 // https://support.chamilo.org/issues/6558

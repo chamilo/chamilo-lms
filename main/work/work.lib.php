@@ -3610,7 +3610,7 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
             $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
             $url = api_get_path(WEB_CODE_PATH)."work/work.php?cidReq=".$courseInfo['code']."&id_session=".$session_id."&id=".$workData['id'];
             $message .= get_lang('WorkName')." : ".$workData['title']."\n\n".'<a href="'.$url.'">'.get_lang('DownloadLink')."</a>\n";
-            $message .= $url;
+            //$message .= $url;
             MessageManager::send_message_simple($to_user_id, $subject, $message);
             api_mail_html(
                 api_get_person_name(

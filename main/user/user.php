@@ -546,6 +546,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $sessionId = api_get_session_id();
     $course_code = $course_info['code'];
     $a_users = array();
+    $limit = null;
 
     // limit
     if (!isset($_GET['keyword']) || empty($_GET['keyword'])) {
@@ -1003,6 +1004,6 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-if ($origin != 'learnpath') {
+if (!isset($origin) || $origin != 'learnpath') {
     Display::display_footer();
 }

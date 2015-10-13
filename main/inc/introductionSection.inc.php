@@ -261,7 +261,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                     </div>';
         
         
-        $thematicItemOne .= '<div class="col-md-6 items-progress">
+        $thematicItemOne = '<div class="col-md-6 items-progress">
                                     <div class="thematic-cont '.$class1.'">
                                     <div class="topics">' . $subTitle1 . '</div>
                                     <h4 class="title-topics">' . Display::returnFontAswesomeIcon('book') . $thematic_info['title'] . '</h4>
@@ -276,7 +276,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
             $thematic_advance_info2['start_date'] = api_get_local_time($thematic_advance_info2['start_date']);
             $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
-            $thematicItemTwo .= '
+            $thematicItemTwo = '
                 <div class="col-md-6 items-progress">
                     <div class="thematic-cont">
                     <div class="topics">'.$subTitle2.'</div>

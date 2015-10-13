@@ -22,8 +22,6 @@ class LearnpathLink extends AbstractLink
 		$this->set_type(LINK_LEARNPATH);
 	}
 
-	// FUNCTIONS IMPLEMENTING ABSTRACTLINK
-
 	/**
 	 * Generate an array of learnpaths that a teacher hasn't created a link for.
 	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)

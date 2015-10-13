@@ -39,7 +39,7 @@
                     <tr>
                         <th>{{ "Course"|get_lang }}</th>
                         <th class="text-right">{{ "Score"|get_lang }}</th>
-                        <th class="text-center">{{ "Fecha"|get_lang }}</th>
+                        <th class="text-center">{{ "Date"|get_lang }}</th>
                         <th class="text-right">&nbsp;</th>
                     </tr>
                 </thead>
@@ -71,7 +71,7 @@
                         <th>{{ "Session"|get_lang }}</th>
                         <th>{{ "Course"|get_lang }}</th>
                         <th class="text-right">{{ "Score"|get_lang }}</th>
-                        <th class="text-center">{{ "Fecha"|get_lang }}</th>
+                        <th class="text-center">{{ "Date"|get_lang }}</th>
                         <th class="text-right">&nbsp;</th>
                     </tr>
                 </thead>

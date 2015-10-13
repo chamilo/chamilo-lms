@@ -6,7 +6,7 @@
  * @package chamilo.gradebook
  */
 
-$language_file = 'gradebook';
+use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
@@ -36,32 +36,78 @@ switch ($action) {
         $pdf = new PDF('A4', 'P', $params);
 
         $pdfList = array();
+        $cats = Category::load($cat_id, null, null, null, null, null, false);
+
+        $session_id = api_get_session_id();
+        if (empty($session_id)) {
+            $statusToFilter = STUDENT;
+        } else {
+            $statusToFilter = 0;
+        }
+
+        $studentList = CourseManager::get_user_list_from_course_code(
+            api_get_course_id(),
+            $session_id,
+            null,
+            null,
+            $statusToFilter
+        );
+
+        $tpl = new Template('', false, false, false);
+
+        $courseInfo = api_get_course_info();
+        $params = array(
+            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['department_name']),
+            'session_info' => '',
+            'course_info' => '',
+            'pdf_date' => '',
+            'course_code' => api_get_course_id(),
+            'add_signatures' => false,
+            'student_info' => null,
+            'show_grade_generated_date' => true,
+            'show_real_course_teachers' => false,
+            'show_teacher_as_myself' => false
+        );
+
+        $pdf = new PDF('A4', $params['orientation'], $params, $tpl);
+
         foreach ($userList as $index => $value) {
             $pdfList[] = GradebookUtils::generateTable(
                 $value['user_id'],
-                $cat_id,
+                $cats,
                 false,
-                true
+                true,
+                $studentList,
+                $pdf
             );
         }
 
         if (!empty($pdfList)) {
             // Print certificates (without the common header/footer/watermark
             //  stuff) and return as one multiple-pages PDF
+            $address = api_get_setting('institution_address');
+            $phone = api_get_setting('administratorTelephone');
+            $address = str_replace('\n', '<br />', $address);
+            $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");
+            //  stuff) and return as one multiple-pages PDF
             $pdf->html_to_pdf(
                 $pdfList,
                 null,
                 null,
                 false,
-                false,
+                true,
                 true
             );
         }
 
+        // Delete calc_score session data
+        Session::erase('calc_score');
+
         break;
     case 'download':
         $userId = isset($_GET['user_id']) && $_GET['user_id'] ? $_GET['user_id'] : null;
-        GradebookUtils::generateTable($userId, $cat_id);
+        $cats = Category::load($cat_id, null, null, null, null, null, false);
+        GradebookUtils::generateTable($userId, $cats);
         break;
 }
 

@@ -5875,7 +5875,7 @@ $StartDateMustBeBeforeTheEndDate = "Start date must be before the end date";
 $SessionPageEnabledComment = "When this option is enabled, the session title is a link to a special session page. When disabled, it is only a text title, without link. The session page linked to might be confusing for some users, which is why you might want to disable it.";
 $SessionPageEnabledTitle = "Enable session link in courses list";
 $SkillRoot = "Root";
-$SkillInfo = "Skill info";
+$SkillInfo = "Skill information";
 $GetNewSkills = "Get new skills";
 $ViewSkillsWheel = "View skills wheel";
 $MissingOneStepToMatch = "Missing <b>one</b> step to match";
@@ -7554,4 +7554,7 @@ $ConversionToSameFileFormat = "Conversion to same file format. Please choose ano
 $FileFormatNotSupported = "File format not supported";
 $FileConvertedFromXToY = "File converted from %s to %s";
 $XDays = "%s days";
+$SkillProfile = "Skill profile";
+$AchievedSkills = "Achieved skills";
+$BusinessCard = "Business card";
 ?>

@@ -1894,8 +1894,13 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_last()', 0);
         }
-        $this->index = count($this->ordered_items) - 1;
-        return $this->ordered_items[$this->index];
+        //This is just in case the lesson doesn't cointain a valid scheme, just to avoid "Notices"
+        if ($this->index > 0) {
+            $this->index = count($this->ordered_items) - 1;
+            return $this->ordered_items[$this->index];
+        }
+        
+        return false;
     }
 
     /**
@@ -5497,7 +5502,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
         $default_data = null;
         $default_content = null;
@@ -6321,7 +6326,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         if ($action == 'add') {
@@ -6739,7 +6744,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset($this->arrMenu);
 
         if ($action == 'add')
@@ -6930,7 +6935,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         $return .= '<form method="POST">';
@@ -7373,7 +7378,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         if ($action == 'add') {
@@ -7662,7 +7667,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         if ($action == 'add')
@@ -7855,7 +7860,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         if ($action == 'add') {
@@ -8296,7 +8301,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset($this->arrMenu);
 
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -10340,7 +10345,9 @@ EOD;
         }
 
         $protocolFixApplied = false;
-        if ($platformProtocol != $urlInfo['scheme']) {
+        //Scheme validation to avoid "Notices" when the lesson doesn't contain a valid scheme
+        $scheme = isset($urlInfo['scheme']) ? $urlInfo['scheme'] : null;
+        if ($platformProtocol != $scheme) {
             $_SESSION['x_frame_source'] = $src;
             $src = 'blank.php?error=x_frames_options';
             $protocolFixApplied = true;

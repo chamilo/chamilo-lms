@@ -85,6 +85,7 @@ class Result
         $tbl_course_rel_course = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_rel_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sessionId = api_get_session_id();
+        $list_user_course_list = array();
 
         if (is_null($id) && is_null($user_id) && !is_null($evaluation_id)) {
             // Verified_if_exist_evaluation
@@ -95,8 +96,6 @@ class Result
             $existEvaluation = Database::result($result, 0, 0);
 
             if ($existEvaluation != 0) {
-
-                $sql_course_rel_user = '';
                 if ($sessionId) {
                     $sql = 'SELECT c_id, user_id as user_id, status
                             FROM ' . $tbl_session_rel_course_user . '
@@ -111,8 +110,6 @@ class Result
                 }
 
                 $res_course_rel_user = Database::query($sql);
-
-                $list_user_course_list = array();
                 while ($row_course_rel_user = Database::fetch_array($res_course_rel_user, 'ASSOC')) {
                     $list_user_course_list[] = $row_course_rel_user;
                 }
@@ -134,9 +131,21 @@ class Result
             }
         }
 
-        $sql = "SELECT gr.id, gr.user_id, gr.evaluation_id, gr.created_at, gr.score
+        $userIdList = array();
+        foreach ($list_user_course_list as $data) {
+            $userIdList[] = $data['user_id'];
+        }
+        $userIdListToString = implode("', '", $userIdList);
+
+        $sql = "SELECT lastname, gr.id, gr.user_id, gr.evaluation_id, gr.created_at, gr.score
                 FROM $tbl_grade_results gr
-                LEFT JOIN $tbl_user u ON gr.user_id = u.user_id ";
+                INNER JOIN $tbl_user u
+                ON gr.user_id = u.user_id ";
+
+        if (!empty($userIdList)) {
+            $sql .= " AND u.user_id IN ('$userIdListToString')";
+        }
+
         $paramcount = 0;
         if (!empty($id)) {
             $sql.= ' WHERE gr.id = ' . intval($id);
@@ -171,6 +180,7 @@ class Result
             $res->set_score($data['score']);
             $allres[] = $res;
         }
+
         return $allres;
     }
 

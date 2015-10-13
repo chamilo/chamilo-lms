@@ -25,6 +25,7 @@ abstract class AbstractLink implements GradebookItem
     protected $visible;
     protected $session_id;
     public $course_id;
+    public $studentList;
 
     /**
      * Constructor
@@ -165,6 +166,16 @@ abstract class AbstractLink implements GradebookItem
         $this->course_code = $course_code;
         $course_info = api_get_course_info($course_code);
         $this->course_id = $course_info['real_id'];
+    }
+
+    public function getStudentList()
+    {
+        return $this->studentList;
+    }
+
+    public function setStudentList($list)
+    {
+        $this->studentList = $list;
     }
 
     public function set_date($date)
@@ -591,6 +602,7 @@ abstract class AbstractLink implements GradebookItem
         $ranking = null;
         $currentUserId = $userId;
         if (!empty($studentList) && !empty($currentUserId)) {
+            $studentList = array_map('floatval', $studentList);
             asort($studentList);
             $ranking = $count = count($studentList);
 

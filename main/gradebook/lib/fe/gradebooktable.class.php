@@ -279,7 +279,7 @@ class GradebookTable extends SortableTable
 
             // Name.
             if (get_class($item) == 'Category') {
-                $row[] = $invisibility_span_open.'<h3>'.$item->get_name().'</h3>'.$invisibility_span_close;
+                $row[] = $invisibility_span_open.'<strong>'.$item->get_name().'</strong>'.$invisibility_span_close;
                 $main_categories[$item->get_id()]['name'] = $item->get_name();
             } else {
                 $name = $this->build_name_link($item, $type);
@@ -309,7 +309,7 @@ class GradebookTable extends SortableTable
             );
 
             if ($this->teacherView) {
-                $row[] = $invisibility_span_open .Display::tag('h4', $weight).$invisibility_span_close;
+                $row[] = $invisibility_span_open .Display::tag('p', $weight, array('class' => 'score')).$invisibility_span_close;
             } else {
                 $row[] = $invisibility_span_open .$weight.$invisibility_span_close;
             }
@@ -593,7 +593,7 @@ class GradebookTable extends SortableTable
                 $row = array(
                     null,
                     null,
-                    '<h3>' . get_lang('Total') . '</h3>',
+                    '<strong>' . get_lang('Total') . '</strong>',
                     null,
                     $total
                 );
@@ -708,7 +708,7 @@ class GradebookTable extends SortableTable
                     $weight_total_links > $weight_category
                 ) {
                     $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $weight_category);
-                    $modify_icons  = '<a class="right_link" href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'&id_session='.api_get_session_id().'">'.
+                    $modify_icons  = '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'&id_session='.api_get_session_id().'">'.
                         Display::return_icon('edit.png', $warning_message, array(), ICON_SIZE_SMALL).'</a>';
                     $warning_message .= $modify_icons;
                     Display::display_warning_message($warning_message, false);

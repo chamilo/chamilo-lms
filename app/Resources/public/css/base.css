@@ -3567,51 +3567,6 @@ a.forum_group_link {
     box-shadow:none;
 }
 
-.announcement {
-    border: 1px solid #D3D3D3;
-    color: #555555;
-    font-weight: normal;
-    border-spacing: 0;
-    margin-bottom: 15px;
-    margin-top: 8px;
-    text-align: left;
-    width: 100%;
-}
-.announcement .title{
-    background: none repeat scroll 0 0 #F2F2F2;
-    color:black;
-}
-
-.announcement .title a:link,
-.announcement .title a:active,
-.announcement .title a:visited{
-    color: #555555;
-}
-
-.announcement .icon.attachement{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:16px;
-    height:16px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-image:  url('../../main/img/attachment.gif');
-    background-repeat: no-repeat;
-    background-position:center center;
-    box-shadow:none;
-}
-
-li.annoucement{
-    min-height: 76px;
-}
-
-.announcement .details{
-    font-style: italic;
-    text-align: right;
-}
-
 .control-text{
     padding-top: 5px;
     display:inline-block;
@@ -5845,6 +5800,7 @@ a.sessionView {
     border-radius: 25px;
     border-color: #00677C;
 }
+
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

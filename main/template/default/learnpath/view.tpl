@@ -39,6 +39,9 @@
 
                                 </div>
                             </div>
+                            <div id="lp_navigation_elem" class="navegation-bar">
+                                {{ navigation_bar }}
+                            </div>        
                              {% if gamification_mode == 1 %}
                             <!--- gamification -->    
                             <div id="scorm-gamification">
@@ -46,13 +49,13 @@
                                         <div class="col-xs-8">
                                             {% if gamification_stars > 0 %}
                                                 {% for i in 1..gamification_stars %}
-                                                    <i class="fa fa-star fa-2x"></i>
+                                                    <i class="fa fa-star level"></i>
                                                 {% endfor %}
                                             {% endif %}
 
                                             {% if gamification_stars < 4 %}
                                                 {% for i in 1..4 - gamification_stars %}
-                                                    <i class="fa fa-star-o fa-2x"></i>
+                                                    <i class="fa fa-star"></i>
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
@@ -74,9 +77,7 @@
                                 {{ progress_bar }}
                             </div>
                              {% endif %}
-                            <div id="lp_navigation_elem" class="navegation-bar">
-                                {{ navigation_bar }}
-                            </div>
+                            
                             {% if show_audio_player %}
                                 <div id="lp_media_file">
                                     {{ media_player }}

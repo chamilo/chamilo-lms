@@ -1010,7 +1010,7 @@ function store_add_dropbox()
                 ),
                 $recipent_temp['email'],
                 get_lang('NewDropboxFileUploaded'),
-                get_lang('NewDropboxFileUploadedContent').' <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode'].'">'.get_lang('SeeFile').'</a>'.
+                get_lang('NewDropboxFileUploadedContent').' <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?' . api_get_cidreq() . '">'.get_lang('SeeFile').'</a>'.
                 "\n\n".
                 api_get_person_name(
                     $_user['firstName'],

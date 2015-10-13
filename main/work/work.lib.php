@@ -2227,19 +2227,23 @@ function send_reminder_users_without_publication($task_data)
 /**
  * Sends an email to the students of a course when a homework is created
  *
- * @param string course_id
+ * @param int $courseId course_id
+ * @param int $sessionId session_id
+ * @param int $workId work_id
+ *
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @author Julio Montoya <gugli100@gmail.com> Adding session support - 2011
  */
-function send_email_on_homework_creation($course_id)
+function send_email_on_homework_creation($courseId, $sessionId = 0, $workId)
 {
+    $courseInfo = api_get_course_info_by_id($courseId);
+    $courseCode = $courseInfo['code'];
     // Get the students of the course
-    $session_id = api_get_session_id();
     if (empty($session_id)) {
-        $students = CourseManager::get_student_list_from_course_code($course_id);
+        $students = CourseManager::get_student_list_from_course_code($courseCode);
     } else {
-        $students = CourseManager::get_student_list_from_course_code($course_id, true, $session_id);
+        $students = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionId);
     }
     $emailsubject = '[' . api_get_setting('siteName') . '] '.get_lang('HomeworkCreated');
     $currentUser = api_get_user_info(api_get_user_id());
@@ -2253,14 +2257,16 @@ function send_email_on_homework_creation($course_id)
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
                 );
+                $link = api_get_path(WEB_CODE_PATH) . 'work/work_list_all.php?' . api_get_cidreq() . '&id=' . $workId;
                 $emailbody = get_lang('Dear')." ".$name_user.",\n\n";
-                $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
+                $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$courseCode.". "."\n\n".
+                    '<a href="'. $link . '">' . get_lang('PleaseCheckHomeworkPage') . '</a>';
                 $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
 
                 $additionalParameters = array(
                     'smsType' => SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
                     'userId' => $student["user_id"],
-                    'courseTitle' => $course_id
+                    'courseTitle' => $courseCode
                 );
 
                 api_mail_html(
@@ -3798,7 +3804,7 @@ function addDir($formValues, $user_id, $courseInfo, $group_id, $session_id)
             updatePublicationAssignment($id, $formValues, $courseInfo, $group_id);
 
             if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
-                send_email_on_homework_creation(api_get_course_id());
+                send_email_on_homework_creation($course_id, $session_id, $id);
             }
 
             return $id;

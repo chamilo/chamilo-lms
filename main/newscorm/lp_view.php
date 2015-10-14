@@ -455,7 +455,8 @@ if ($_SESSION['oLP']->current == $_SESSION['oLP']->get_last()) {
     }
 }
 
-$gamificationMode = api_get_setting('gamification_mode');
+
+
 
 $template = new Template('title', false, false, true, true, false);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
@@ -471,6 +472,12 @@ $template->assign(
     'glossary_tool_availables',
     ['true', 'lp', 'exercise_and_lp']
 );
+
+// If the global gamification mode is enabled...
+$gamificationMode = api_get_setting('gamification_mode');
+// ...AND this learning path is set in gamification mode, then change the display
+$gamificationMode = $gamificationMode && $_SESSION['oLP']->seriousgame_mode;
+
 $template->assign('show_glossary_in_documents', api_get_setting('show_glossary_in_documents'));
 $template->assign('jquery_web_path', api_get_jquery_web_path());
 $template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());

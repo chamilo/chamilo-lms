@@ -7563,4 +7563,6 @@ $IssuedBadgeInformation = "Issued badge information";
 $RecipientDetails = "Recipient details";
 $SkillAcquiredAt = "Skill acquired at";
 $BasicSkills = "Basic skills";
+$TimeXThroughCourseY = "<strong>%s</strong> through <em>%s</em>";
+$ExportBadge = "Export badge";
 ?>

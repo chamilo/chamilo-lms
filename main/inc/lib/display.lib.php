@@ -2215,7 +2215,7 @@ class Display
             $className .= " $aditionalClass";
         }
 
-        $icon = self::tag('i', null, ['class' => $className]);
+        $icon = self::tag('em', null, ['class' => $className]);
 
         return "$icon ";
     }

@@ -4048,6 +4048,9 @@ i.size-32.icon-new-work{
 .name-badge{
   font-size: 16px;
 }
+.issued .thumbnail{
+    border: none;
+}
 /* Social Profile */
 
 .social-profile{

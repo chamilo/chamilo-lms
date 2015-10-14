@@ -40,14 +40,7 @@ if (empty($content_type)) {
 }
 
 if (Security::check_abs_path($archive_path.$archive_file, $archive_path)) {
-    header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-    header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-    header('Cache-Control: public');
-    header('Pragma: no-cache');
-    header('Content-Type: '.$content_type);
-    header('Content-Length: '.filesize($archive_path.$archive_file));
-    header('Content-Disposition: attachment; filename='.$archive_file);
-    readfile($archive_path.$archive_file);
+    DocumentManager::file_send_for_download($archive_path.$archive_file, true, $archive_file);
     exit;
 } else {
     api_not_allowed(true);

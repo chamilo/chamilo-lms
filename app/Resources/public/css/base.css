@@ -176,26 +176,6 @@ ul#navigation li a {
   filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
   -webkit-box-shadow: 0px 4px 3px #000;
 }
-/* 
-#touch-button.btn-touch:hover{
-  background-color: #35890B;
-}
-#touch-button.btn-touch{
-  background-color: #4CAE4C;
-  -webkit-border-top-right-radius: 5px;
-  -webkit-border-bottom-right-radius: 5px;
-  -moz-border-radius-topright: 5px;
-  -moz-border-radius-bottomright: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  background-image: url('../../main/img/touch-left.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-#touch-button.show-touch{
-  background-image: url('../../main/img/touch-right.png');
-}
-*/
 #touch-button.btn-touch{
   background-color: #C2C2C2;
 }
@@ -1852,26 +1832,17 @@ div.admin_section h4 {
 }
 
 
-.ui-state-highlight {
+#lp_item_list .ui-state-highlight {
     height:25px;
+    background: #EEEEEE;
+    border-radius: 5px;
+    border: 1px dashed #B0B0B0
 }
 
 #question_list .header_operations {
     height:45px;
     margin-bottom:5px;
     clear: both;
-}
-/*.question-list-description-block {
-    margin-bottom:10px !important;
-    margin-top: -6px !important;
-}*/
-
-.thematic_advance_content {
-    padding:10px;
-}
-
-.thematic_advance_actions {
-    width:100px;
 }
 
 .document_preview_container {
@@ -2730,7 +2701,7 @@ form .formw .freeze {
 }
 
 #skill_holder li {
-  float:left;
+  float: none;
   padding-right: 10px;
   margin-bottom: .5em;
 }
@@ -2798,12 +2769,7 @@ form .formw .freeze {
  **************************************************** */
 
 /* list template document */
-#frmModel{
-  height: 700px;
-  min-height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden
-}
+
 #frmModel ul{
   list-style: none;
   margin: 0;
@@ -2825,9 +2791,15 @@ form .formw .freeze {
 }
 .lp-add-item{
   display:block;
-  height:890px;
-  width:250px;
+  height:550px;
   position:relative;
+}
+.items-templates{
+  display:block;
+  height:750px;
+}
+.editor-lp{
+  margin-bottom: 20px;
 }
 /* end list template document */
 
@@ -3400,15 +3372,8 @@ a.forum_group_link {
 
 /* actions */
 .actions_lp {
-    background:#F8F8F8;
-    margin: 0px;
-    padding:9px 0px 9px 0px;
     width:100%;
     text-align: center;
-
-}
-.actions_lp .btn-group {
-    margin-left: 25px;
 }
 .actions_lp img {
     vertical-align:middle;
@@ -3600,51 +3565,6 @@ a.forum_group_link {
     background-repeat: no-repeat;
     background-position:center center;
     box-shadow:none;
-}
-
-.announcement {
-    border: 1px solid #D3D3D3;
-    color: #555555;
-    font-weight: normal;
-    border-spacing: 0;
-    margin-bottom: 15px;
-    margin-top: 8px;
-    text-align: left;
-    width: 100%;
-}
-.announcement .title{
-    background: none repeat scroll 0 0 #F2F2F2;
-    color:black;
-}
-
-.announcement .title a:link,
-.announcement .title a:active,
-.announcement .title a:visited{
-    color: #555555;
-}
-
-.announcement .icon.attachement{
-    border:none;
-    border-radius: 0;
-    background-color: transparent;
-    width:16px;
-    height:16px;
-    margin:0;
-    padding:0;
-    display:inline-block;
-    background-image:  url('../../main/img/attachment.gif');
-    background-repeat: no-repeat;
-    background-position:center center;
-    box-shadow:none;
-}
-
-li.annoucement{
-    min-height: 76px;
-}
-
-.announcement .details{
-    font-style: italic;
-    text-align: right;
 }
 
 .control-text{
@@ -4152,40 +4072,23 @@ i.size-32.icon-new-work{
   margin-bottom: 10px;
   margin-top: 10px;
 }
-#skillList .list-badges{
-  list-style: none;
-  padding-left: 8px;
-  margin:0px;
-}
-#skillList .list-badges li{
-  margin-top: 10px;
+#skillList .list-badges .thumbnail{
+  border-color: #bce8f1;
   display: inline-block;
-  width: 120px;
-  margin-right: 5px;
-  font-size: 11px;
-  text-align: center;
-  border: 1px solid #bce8f1;
-  border-radius: 5px;
-  box-sizing: border-box;
+  margin-right: 15px;
+  padding: 0;
   vertical-align: top;
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.09);
+  width: 120px;
 }
-#skillList .list-badges li img{
-  height: 100%;
-  max-height: 64px;
-  width: 100%;
-  max-width: 64px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+#skillList .list-badges .thumbnail img{
+  margin-bottom: 4px;
+  margin-top: 4px;
 }
-#skillList .list-badges .badges-name{
+#skillList .list-badges .thumbnail .caption{
   background: #D9EDF7;
-  min-height: 35px;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  color: #31708F;
-  padding-left: 5px;
-  padding-right: 5px;
+}
+#skillList .list-badges .thumbnail .caption p{
+  margin-bottom: 0;
 }
 #skillList .dropdown-menu{
   top: 30px;
@@ -4437,7 +4340,7 @@ ul.holder li.bit-input input{
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
 ul.holder li.bit-box{
-  padding: 5px;
+  padding-right: 15px;
   margin-bottom: 5px;
   color: #8a6d3b;
   background-color:#FCF8E3;
@@ -4472,30 +4375,47 @@ ul.holder li.bit-box{
   display: none;
 }
 /* thematic progress */
-#panel-thematic .title-topics{
+#thematic .title-topics{
   font-size: 15px;
   color:#00829C;
   font-weight: bold;
 }
-#panel-thematic .current{
-  background-color: #E7F1F7;
+#thematic .thematic-cont{
+    padding:15px;
+    border: 1px solid #EEEEEE;
+    border-radius: 5px;
 }
-#panel-thematic .separate{
-  margin-bottom: 10px;
+#thematic .thematic-avatar{
+    text-align: center;
+    margin-bottom: 20px;
 }
-#panel-thematic .date{
-  font-size: 11px;
-  color: #8A6D3B;
-  background: #FCF8E3;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  padding: 5px;
+#thematic .thematic-avatar .img-responsive{
+    display: inline-block;
 }
-#panel-thematic .views ul li{
+#thematic .current{
+  background-color: #EEEEEE;
+  border: 1px dashed #B0B0B0;
+  border-radius: 5px;
+}
+#thematic .panel-heading{
+    padding: 0px;
+}
+#thematic .panel-heading a{
+    padding: 10px 15px;
+    display: block;
+}
+#thematic .date{
   font-size: 12px;
 }
-
+#thematic .views ul li{
+  font-size: 12px;
+}
+#thematic .arrow{
+    background: url("../../main/img/icons/22/arrow-up-collapse.png") no-repeat 99% center;
+}
+#thematic .arrow.collapsed{
+    background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat 99% center;
+}
 .question_options .exercise-unique-answer-image .radio{
   padding-left: 10px;
   margin-left: 0px;
@@ -5597,7 +5517,7 @@ div#chat-remote-video video {
 }
 
 img.sessionView {
-  padding-right: 10px;
+  margin-right: 10px;
 }
 
 a.sessionView {
@@ -5660,6 +5580,10 @@ a.sessionView {
 #gradebook_list .centered {
     text-align:center;
     vertical-align:middle;
+}
+#gradebook_list .score{
+    font-weight: bold;
+    color: #8A6E4E;
 }
 #gradebook_list .centered .badge-group {
     width: auto;
@@ -5876,6 +5800,7 @@ a.sessionView {
     border-radius: 25px;
     border-color: #00677C;
 }
+
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

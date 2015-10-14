@@ -3297,7 +3297,7 @@ function api_is_anonymous($user_id = null, $db_check = false) {
         return true;
     }
 
-    return isset($_user['is_anonymous']) && $_user['is_anonymous'] === true;
+    return ((isset($_user['is_anonymous']) && $_user['is_anonymous'] === true) || $_user === false);
 }
 
 /**

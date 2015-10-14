@@ -20,6 +20,7 @@
   <li><a href="#2.Keeping-up-to-date">Keeping up to date</a></li>
   <li><a href="#3.Using-safe-browsers">Using safe browsers</a></li>
   <li><a href="#4.Moving-config-file">Moving your configuration file out of the web directory</a></li>
+  <li><a href="#5.Files-permissions">Restricting files permissions</a></li>
 </ol>
 
 <h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
@@ -57,7 +58,21 @@ require '/etc/chamilo/configuration.php';
 This will prevent direct access to your settings and make it seem totally the same to Chamilo.
 </p>
 
-<hr />
+<h2><a name="5.Files-permissions"></a>5. Restricting files permissions</h2>
+        Making all the Chamilo files world-writeable will help you install quickly, and it solves many
+        issues for people without much admin experience. However, it's more
+        secure to make a distinct user owner of all the chamilo files and folders,
+        and only give read access to the web server to all files, and write access
+        only to the directories previously mentioned. This way, these files need
+        only be readable and writeable by the Apache process owner, not by the
+        entire world. It would also be adviseable to make all writeable directory
+        refuse the interpretation of PHP files (except for the root of the courses
+        directories). Don't hesitate to hire an experienced administrator to do that,
+        it might be a bit more expensive now, but you'll be happy not to have to loose
+        all of your data to a hacker who attacked your site.</li>
+
+
+    <hr />
 <h2>Authors</h2>
 <ul>
 <li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:yannick.warnier@beeznest.com">yannick.warnier@beeznest.com</a></li>

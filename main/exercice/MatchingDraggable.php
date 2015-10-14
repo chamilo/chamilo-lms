@@ -53,16 +53,12 @@ class MatchingDraggable extends Question
         if ($form->isSubmitted()) {
             $nb_matches = $form->getSubmitValue('nb_matches');
             $nb_options = $form->getSubmitValue('nb_options');
-            if (isset($_POST['lessMatches'])) {
-                $nb_matches--;
-            }
-            if (isset($_POST['moreMatches'])) {
-                $nb_matches++;
-            }
             if (isset($_POST['lessOptions'])) {
+                $nb_matches--;
                 $nb_options--;
             }
             if (isset($_POST['moreOptions'])) {
+                $nb_matches++;
                 $nb_options++;
             }
         } else if (!empty($this->id)) {
@@ -151,12 +147,6 @@ class MatchingDraggable extends Question
 
         $form->addHtml('</tbody></table>');
         $group = array();
-
-        $renderer->setElementTemplate('<div class="form-group"><div class="col-sm-offset-2">{element}', 'lessMatches');
-        $renderer->setElementTemplate('{element}</div></div>', 'moreMatches');
-
-        $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessMatches', true);
-        $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreMatches', true);
 
         $form->addGroup($group);
 

@@ -821,8 +821,16 @@ class GradebookUtils
      * @param array $params
      * @param null $mainCourseCategory
      */
-    public static function export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params = array(), $mainCourseCategory = null)
-    {
+    public static function export_pdf_flatview(
+        $flatviewtable,
+        $cat,
+        $users,
+        $alleval,
+        $alllinks,
+        $params = array(),
+        $mainCourseCategory = null
+    ) {
+
         // Getting data
         $printable_data = self::get_printable_data($cat[0], $users, $alleval, $alllinks, $params, $mainCourseCategory);
 
@@ -837,7 +845,7 @@ class GradebookUtils
             foreach ($customdisplays as $custom) {
                 $total[$custom['display']] = 0;
             }
-            $user_results = $flatviewtable->datagen->get_data_to_graph2();
+            $user_results = $flatviewtable->datagen->get_data_to_graph2(false);
             foreach ($user_results as $user_result) {
                 $total[$user_result[count($user_result) - 1][1]]++;
             }
@@ -882,7 +890,9 @@ class GradebookUtils
         $table->setHeaderContents($row, $column, get_lang('NumberAbbreviation'));
         $column++;
         foreach ($printable_data[0] as $printable_data_cell) {
-            $printable_data_cell = strip_tags($printable_data_cell);
+            if (!is_array($printable_data_cell)) {
+                $printable_data_cell = strip_tags($printable_data_cell);
+            }
             $table->setHeaderContents($row, $column, $printable_data_cell);
             $column++;
         }
@@ -943,7 +953,7 @@ class GradebookUtils
         $counter = 1;
         $badges = array();
         foreach ($list_values as $value) {
-            $class = 'info';
+            $class = 'warning';
             if ($counter == 1) {
                 $class = 'success';
             }
@@ -1302,18 +1312,25 @@ class GradebookUtils
 
     /**
      * @param int $userId
-     * @param int $categoryId
+     * @param array $cats
      * @param bool $saveToFile
      * @param bool $saveToHtmlFile
+     * @param array $studentList
+     * @param PDF $pdf
      *
      * @return string
      */
-    public static function generateTable($userId, $categoryId, $saveToFile = false, $saveToHtmlFile = false)
-    {
+    public static function generateTable(
+        $userId,
+        $cats,
+        $saveToFile = false,
+        $saveToHtmlFile = false,
+        $studentList = array(),
+        $pdf = null
+    ) {
         $courseInfo = api_get_course_info();
         $userInfo = api_get_user_info($userId);
 
-        $cats = Category::load($categoryId, null, null, null, null, null, false);
         $cat = $cats[0];
 
         $allcat = $cats[0]->get_subcategories(
@@ -1332,8 +1349,11 @@ class GradebookUtils
             null, // params
             true, // $exportToPdf
             false, // showteacher
-            $userId
+            $userId,
+            $studentList
         );
+
+        $gradebooktable->userId = $userId;
 
         if (api_is_allowed_to_edit()) {
             $gradebooktable->td_attributes = [
@@ -1354,16 +1374,26 @@ class GradebookUtils
 
         $sessionName = api_get_session_name(api_get_session_id());
         $sessionName = !empty($sessionName) ? " - $sessionName" : '';
+
         $params = array(
-            //'filename' => get_lang('FlatView') . '_' . api_get_utc_datetime(),
-            'pdf_title' => $courseInfo['title'].$sessionName,
+            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['department_name']),
+            'session_info' => '',
+            'course_info' => '',
+            'pdf_date' => '',
             'course_code' => api_get_course_id(),
-            'session_info' => api_get_session_info(api_get_session_id()),
             'add_signatures' => false,
             'student_info' => $userInfo,
             'show_grade_generated_date' => true,
-            'show_real_course_teachers' => true
+            'show_real_course_teachers' => false,
+            'show_teacher_as_myself' => false,
+            'orientation' => 'P'
         );
+
+        if (empty($pdf)) {
+            $pdf = new PDF('A4', $params['orientation'], $params);
+        }
+
+        $pdf->params['student_info'] = $userInfo;
 
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid().'.html';
 
@@ -1373,7 +1403,11 @@ class GradebookUtils
             '<br />'.get_lang('Feedback').'<br />
             <textarea rows="5" cols="100" ></textarea>';
 
-        $pdf = new PDF('A4', $params['orientation'], $params);
+        $address = api_get_setting('institution_address');
+        $phone = api_get_setting('administratorTelephone');
+        $address = str_replace('\n', '<br />', $address);
+
+        $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");
 
         $result = $pdf->html_to_pdf_with_template(
             $content,

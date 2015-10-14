@@ -12,18 +12,22 @@ class PDF
     public $custom_header = '';
     public $custom_footer = '';
     public $params = array();
+    public $template;
 
     /**
      * Creates the mPDF object
      * @param string  $pageFormat format A4 A4-L see  http://mpdf1.com/manual/index.php?tid=184&searchstring=format
      * @param string  $orientation orientation "P" = Portrait "L" = Landscape
      * @param array $params
+     * @param Template $template
      */
     public function __construct(
         $pageFormat = 'A4',
         $orientation = 'P',
-        $params = array()
+        $params = array(),
+        $template = null
     ) {
+        $this->template = $template;
         /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
          * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
          */
@@ -47,6 +51,8 @@ class PDF
         $this->params['show_real_course_teachers'] = isset($params['show_real_course_teachers']) ? $params['show_real_course_teachers'] : false;
         $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
         $this->params['show_grade_generated_date'] = isset($params['show_grade_generated_date']) ? $params['show_grade_generated_date'] : false;
+        $this->params['show_teacher_as_myself'] = isset($params['show_teacher_as_myself']) ? $params['show_teacher_as_myself'] : true;
+        $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date(api_get_local_time(), DATE_TIME_FORMAT_LONG);
 
         $this->pdf = new mPDF(
             'UTF-8',
@@ -76,10 +82,14 @@ class PDF
      */
     public function html_to_pdf_with_template($content, $saveToFile = false, $returnHtml = false)
     {
-        Display :: display_no_header();
-
+        if (empty($this->template)) {
+            $tpl = new Template('', false, false, false);
+        } else {
+            $tpl = $this->template;
+        }
         // Assignments
-        Display::$global_template->assign('pdf_content', $content);
+        // Assignments
+        $tpl->assign('pdf_content', $content);
 
         $organization = api_get_setting('Institution');
         $img = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
@@ -106,7 +116,7 @@ class PDF
             }
         }
 
-        Display::$global_template->assign('organization', $organization);
+        $tpl->assign('organization', $organization);
 
         //Showing only the current teacher/admin instead the all teacher list name see BT#4080
 
@@ -128,22 +138,25 @@ class PDF
             }
         } else {
             $user_info = api_get_user_info();
-            $teacher_list = $user_info['complete_name'];
+
+            if ($this->params['show_teacher_as_myself']) {
+                $teacher_list = $user_info['complete_name'];
+            }
         }
 
-        Display::$global_template->assign('pdf_course', $this->params['course_code']);
-        Display::$global_template->assign('pdf_course_info', $this->params['course_info']);
-        Display::$global_template->assign('pdf_session_info', $this->params['session_info']);
-        Display::$global_template->assign('pdf_date', api_format_date(api_get_local_time(), DATE_TIME_FORMAT_LONG));
-        Display::$global_template->assign('pdf_teachers', $teacher_list);
-        Display::$global_template->assign('pdf_title', $this->params['pdf_title']);
-        Display::$global_template->assign('pdf_student_info', $this->params['student_info']);
-        Display::$global_template->assign('show_grade_generated_date', $this->params['show_grade_generated_date']);
-        Display::$global_template->assign('add_signatures', $this->params['add_signatures']);
+        $tpl->assign('pdf_course', $this->params['course_code']);
+        $tpl->assign('pdf_course_info', $this->params['course_info']);
+        $tpl->assign('pdf_session_info', $this->params['session_info']);
+        $tpl->assign('pdf_date', $this->params['pdf_date']);
+        $tpl->assign('pdf_teachers', $teacher_list);
+        $tpl->assign('pdf_title', $this->params['pdf_title']);
+        $tpl->assign('pdf_student_info', $this->params['student_info']);
+        $tpl->assign('show_grade_generated_date', $this->params['show_grade_generated_date']);
+        $tpl->assign('add_signatures', $this->params['add_signatures']);
 
         // Getting template
-        $tpl = Display::$global_template->get_template('export/table_pdf.tpl');
-        $html = Display::$global_template->fetch($tpl);
+        $tableTemplate = $tpl->get_template('export/table_pdf.tpl');
+        $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
 
         $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';

@@ -1042,7 +1042,7 @@ class SocialManager extends UserManager
 
             $html .= '<div class="col-xs-6 col-md-2">
                         <div class="items-user">
-                            <div class="items-user-avatar">'.$img.'</div>
+                            <div class="items-user-avatar"><a href="'.$url.'">'.$img.'</a></div>
                             <div class="items-user-name">
                             '.$name.'
                             </div>

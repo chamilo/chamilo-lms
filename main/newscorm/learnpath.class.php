@@ -1894,8 +1894,13 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_last()', 0);
         }
-        $this->index = count($this->ordered_items) - 1;
-        return $this->ordered_items[$this->index];
+        //This is just in case the lesson doesn't cointain a valid scheme, just to avoid "Notices"
+        if ($this->index > 0) {
+            $this->index = count($this->ordered_items) - 1;
+            return $this->ordered_items[$this->index];
+        }
+        
+        return false;
     }
 
     /**
@@ -2397,7 +2402,7 @@ class learnpath
     {
         $text = $percentage . $text_add;
         $output = '<div class="progress">
-                        <div id="progress_bar_value" class="progress-bar" role="progressbar" aria-valuenow="' .$percentage. '" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
+                        <div id="progress_bar_value" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="' .$percentage. '" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
                         '. $text .'
                         </div>
                     </div>';
@@ -3110,25 +3115,9 @@ class learnpath
         }
         //$html = '<div id="scorm_title" class="scorm-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
         $html = '<div class="scorm-body">';
-        $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
+        
 
-        if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
-            $gradebook = '';
-            if (!empty($_GET['gradebook'])) {
-                $gradebook = Security:: remove_XSS($_GET['gradebook']);
-            }
-            if ($this->get_lp_session_id() == api_get_session_id()) {
-                $html .= '<div id="actions_lp" class="actions_lp">';
-                $html .= '<div class="btn-group">';
-                $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq()."&gradebook=$gradebook&action=build&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Overview') . "</a>";
-                $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq()."&action=add_item&type=step&lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Edit') . "</a>";
-                $html .= '<a class="btn btn-default" href="lp_controller.php?'.api_get_cidreq()."&gradebook=$gradebook&action=edit&lp_id=" . $this->lp_id.'">'.get_lang('Settings').'</a>';
-                $html .= '</div>';
-                $html .= '</div>';
-            }
-        }
-
-        $html .= '<div id="inner_lp_toc" class="inner_lp_toc">';
+        $html .= '<div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">';
         require_once 'resourcelinker.inc.php';
 
         // Temporary variables.
@@ -3223,7 +3212,36 @@ class learnpath
         $html .= "</div>";
         return $html;
     }
-
+    
+     /**
+     * Returns an HTML-formatted string ready to display with teacher buttons
+     * in LP view menu
+     * @return	string	HTML TOC ready to display
+     */
+    public function get_teacher_toc_buttons()
+    {   
+        $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
+        $hide_teacher_icons_lp = api_get_configuration_value('hide_teacher_icons_lp');
+        $html = '';
+        
+        if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
+            $gradebook = '';
+            if (!empty($_GET['gradebook'])) {
+                $gradebook = Security:: remove_XSS($_GET['gradebook']);
+            }
+            if ($this->get_lp_session_id() == api_get_session_id()) {
+                $html .= '<div id="actions_lp" class="actions_lp">';
+                $html .= '<div class="btn-group">';
+                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?" . api_get_cidreq()."&gradebook=$gradebook&action=build&lp_id=" . $this->lp_id . "' target='_parent'>" . Display::returnFontAswesomeIcon('street-view') . get_lang('Overview') . "</a>";
+                $html .= "<a class='btn btn-sm btn-default' href='lp_controller.php?" . api_get_cidreq()."&action=add_item&type=step&lp_id=" . $this->lp_id . "' target='_parent'>" . Display::returnFontAswesomeIcon('pencil') . get_lang('Edit') . "</a>";
+                $html .= '<a class="btn btn-sm btn-default" href="lp_controller.php?'.api_get_cidreq()."&gradebook=$gradebook&action=edit&lp_id=" . $this->lp_id.'">' . Display::returnFontAswesomeIcon('cog') . get_lang('Settings').'</a>';
+                $html .= '</div>';
+                $html .= '</div>';
+            }
+        }
+        return $html;
+        
+    }
     /**
      * Gets the learnpath maker name - generally the editor's name
      * @return	string	Learnpath maker name
@@ -5497,7 +5515,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
         $default_data = null;
         $default_content = null;
@@ -5682,7 +5700,8 @@ class learnpath
         }
         $list .= '</ul>';
 
-        $return .= Display::panel($list, $this->name);
+        //$return .= Display::panel($list, $this->name);
+        $return .= Display::panelCollapse($this->name, $list, 'scorm-list', null, 'scorm-list-accordion', 'scorm-list-collapse');
 
         if ($update_audio == 'true') {
             $return = $return_audio;
@@ -6320,7 +6339,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         if ($action == 'add') {
@@ -6738,7 +6757,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset($this->arrMenu);
 
         if ($action == 'add')
@@ -6929,7 +6948,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         $return .= '<form method="POST">';
@@ -7372,7 +7391,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         if ($action == 'add') {
@@ -7396,7 +7415,7 @@ class learnpath
         $defaults['description'] = $item_description;
         $form->addElement('html', $return);
         if ($action != 'move') {
-            $form->addElement('text', 'title', get_lang('Title'), array('id' => 'idTitle', 'class' => 'span4'));
+            $form->addElement('text', 'title', get_lang('Title'), array('id' => 'idTitle', 'class' => 'col-md-4'));
             $form->applyFilter('title', 'html_filter');
         }
 
@@ -7423,7 +7442,7 @@ class learnpath
             }
         }
 
-        $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" id="idParent" style="width:40%;" onchange="javascript: load_cbo(this.value);"');
+        $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="form-control" id="idParent" " onchange="javascript: load_cbo(this.value);"');
         $my_count=0;
         foreach ($arrHide as $key => $value) {
             if ($my_count!=0) {
@@ -7461,7 +7480,7 @@ class learnpath
             }
         }
 
-        $position = $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_item_form" style="width:40%;"');
+        $position = $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="form-control"');
         $position->addOption(get_lang('FirstPosition'), 0);
 
         foreach ($arrHide as $key => $value) {
@@ -7661,7 +7680,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         if ($action == 'add')
@@ -7854,7 +7873,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
         if ($action == 'add') {
@@ -8295,7 +8314,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset($this->arrMenu);
 
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -10339,7 +10358,9 @@ EOD;
         }
 
         $protocolFixApplied = false;
-        if ($platformProtocol != $urlInfo['scheme']) {
+        //Scheme validation to avoid "Notices" when the lesson doesn't contain a valid scheme
+        $scheme = isset($urlInfo['scheme']) ? $urlInfo['scheme'] : null;
+        if ($platformProtocol != $scheme) {
             $_SESSION['x_frame_source'] = $src;
             $src = 'blank.php?error=x_frames_options';
             $protocolFixApplied = true;

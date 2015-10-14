@@ -7550,4 +7550,6 @@ $IssuedBadgeInformation = "Information du badge délivré";
 $RecipientDetails = "Données du bénéficiaire";
 $SkillAcquiredAt = "Compétence acquise le";
 $BasicSkills = "Compétences simples";
+$TimeXThroughCourseY = "%s par le cours %s";
+$ExportBadge = "Exporter ce badge";
 ?>

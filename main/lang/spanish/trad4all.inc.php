@@ -7588,4 +7588,6 @@ $IssuedBadgeInformation = "Información de la insignia emitida";
 $RecipientDetails = "Datos del beneficiario";
 $SkillAcquiredAt = "Competencia adquirida el";
 $BasicSkills = "Competencias simples";
+$TimeXThroughCourseY = "%s en el curso %s";
+$ExportBadge = "Exportar la insignia";
 ?>

@@ -63,13 +63,23 @@ class BuyCoursesPlugin extends Plugin
      */
     function install()
     {
-        $appPlugin = new AppPlugin();
-        $installedPlugins = $appPlugin->get_installed_plugins();
-
-        if (in_array($this->get_name(), $installedPlugins)) {
+        $tablesToBeCompared = array(
+            self::TABLE_PAYPAL,
+            self::TABLE_TRANSFER,
+            self::TABLE_ITEM_BENEFICIARY,
+            self::TABLE_ITEM,
+            self::TABLE_SALE,
+            self::TABLE_CURRENCY
+        );
+        $em = Database::getManager();
+        $cn = $em -> getConnection();
+        $sm = $cn -> getSchemaManager();
+        $tables = $sm ->tablesExist($tablesToBeCompared);
+        
+        if ($tables) {
             return false;
         }
-
+        
         require_once api_get_path(SYS_PLUGIN_PATH) . 'buycourses/database.php';
     }
 

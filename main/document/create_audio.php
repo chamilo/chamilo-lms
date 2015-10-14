@@ -221,7 +221,7 @@ if (Security::remove_XSS($_GET['dt2a']) == 'google') {
 	$form->addElement('hidden', 'id', $document_id);
 	$form->addElement('text', 'title', get_lang('Title'));
 	$form->addElement('select', 'lang', get_lang('Language'), $options);
-	$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_google', 'class' =>'span6' ));
+	$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_google'));
 	//echo Display :: return_icon('info3.gif', get_lang('HelpGoogleAudio'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
 	$form->addButtonSave(get_lang('SaveMP3'));
 	$defaults = array();
@@ -253,7 +253,7 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
 	$speed_options['1.6']   = get_lang('SlowDown');
 
 	$form->addElement('select', 'speed', get_lang('Speed'), $speed_options, array());
-	$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_pediaphon', 'class' =>'span6'));
+	$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_pediaphon'));
 	//echo Display :: return_icon('info3.gif', get_lang('HelpPediaphon'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
 	$form->addButtonSave(get_lang('SaveMP3'));
 	$defaults = array();

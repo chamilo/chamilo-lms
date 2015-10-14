@@ -130,7 +130,7 @@ $form->addElement('hidden', 'referer');
 $form->addText('name', get_lang('GroupName'));
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
+$form->addElement('textarea', 'description', get_lang('Description'), array ('rows' => 6));
 
 $complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
 usort($complete_user_list, 'sort_users');

@@ -105,7 +105,7 @@ if ($form->validate()) {
     $form->setConstants(array('sec_token' => $token));
 }
 
-$form->addElement('text', 'url', 'URL', array('class' => 'span6'));
+$form->addElement('text', 'url', 'URL');
 $form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('url', '', 'maxlength', 254);
 $form->addElement('textarea', 'description', get_lang('Description'));

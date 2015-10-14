@@ -454,7 +454,7 @@ $(document).ready(function() {
             <div class="control-group">            
                 <label class="control-label" for="name">{{'Description'|get_lang}}</label>            
                 <div class="controls">
-                    <textarea name="description" id="description" class="span3" rows="7"></textarea>
+                    <textarea name="description" id="description" rows="7"></textarea>
                 </div>
             </div>  
         </fieldset>

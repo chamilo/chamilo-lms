@@ -861,7 +861,7 @@ class AnnouncementManager
         $userList = array(),
         $to_already_selected = array()
     ) {
-        echo '<select id="not_selected_form" name="not_selected_form[]" size="7" class="span4" multiple>';
+        echo '<select id="not_selected_form" name="not_selected_form[]" size="7" class="form-control" multiple>';
         // adding the groups to the select form
         if (!empty($groupList)) {
             foreach ($groupList as $this_group) {
@@ -920,7 +920,7 @@ class AnnouncementManager
         $ref_array_users = self::get_course_users();
 
         // we construct the form of the already selected groups / users
-        echo '<select id="selectedform" name="selectedform[]" size="7" multiple class="span4">';
+        echo '<select id="selectedform" name="selectedform[]" size="7" multiple class="form-control">';
         if (is_array($to_already_selected)) {
             foreach ($to_already_selected as $groupuser) {
                 list($type, $id) = explode(":", $groupuser);

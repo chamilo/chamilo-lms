@@ -122,10 +122,10 @@ class GradeModel extends Model
 
         for ($i = 0; $i <= $max; $i++) {
             $counter = $i;
-            $form->addElement('text', 'components['.$i.'][percentage]', null, array('class' => 'span1'));
-            $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1'));
-            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span3'));
-            $form->addElement('hidden', 'components['.$i.'][id]',       null, array('class' => 'span3'));
+            $form->addElement('text', 'components['.$i.'][percentage]', null);
+            $form->addElement('text', 'components['.$i.'][acronym]',    null);
+            $form->addElement('text', 'components['.$i.'][title]',      null);
+            $form->addElement('hidden', 'components['.$i.'][id]',       null);
 
              $template_percentage =
             '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">

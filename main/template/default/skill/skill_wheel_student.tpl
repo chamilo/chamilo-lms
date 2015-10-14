@@ -96,7 +96,9 @@
         });
 
         /* URL link when searching skills */
-        $("a.load_root").on("click", function () {
+        $("a.load_root").on("click", function (e) {
+            e.preventDefault();
+
             skill_id = $(this).attr('rel');
             skill_to_load_from_get = 0;
             load_nodes(skill_id, main_depth);

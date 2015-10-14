@@ -330,7 +330,7 @@ if ($slide_id == 'all') {
 	for ($k = 0; $k < $number_iteration; $k++) {
 		for ($i = 0; $i < $number_image; $i++) {
 			if (isset($image_tag[$p])) {
-				echo '<li class="span4">
+				echo '<li class="col-md-4">
                       <div class="thumbnail">';
 				echo '<a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">'.$image_tag[$p].'</a>';
 				echo '</div>';

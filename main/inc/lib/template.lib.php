@@ -752,8 +752,8 @@ class Template
             }
         }
 
-        $this->assign('online_button', Display::return_icon('statusonline.png'));
-        $this->assign('offline_button',Display::return_icon('statusoffline.png'));
+        $this->assign('online_button', Display::return_icon('statusonline.png', null, null, ICON_SIZE_ATOM));
+        $this->assign('offline_button',Display::return_icon('statusoffline.png', null, null, ICON_SIZE_ATOM));
 
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());

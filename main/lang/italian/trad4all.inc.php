@@ -7050,21 +7050,22 @@ La configurazione per Chamilo
 
 modifica file main/auth/shibboleth/config/aai.class.php
 
-Modifica object $result values with the name of your Shibboleth attributes
+Modifica object &#36;result values with the name of your Shibboleth attributes
 
-$result->unique_id = 'mail';
-$result->firstname = 'cn';
-$result->lastname = 'uid';
-$result->email = 'mail';
-$result->language = '-';
-$result->gender = '-';
-$result->address = '-';
-$result->staff_category = '-';
-$result->home_organization_type = '-';
-$result->home_organization = '-';
-$result->affiliation = '-';
-$result->persistent_id = '-';
-...
+<ul>
+<li>&#36;result-&gt;unique_id = 'mail';</li>
+<li>&#36;result-&gt;firstname = 'cn';</li>
+<li>&#36;result-&gt;lastname = 'uid';</li>
+<li>&#36;result-&gt;email = 'mail';</li>
+<li>&#36;result-&gt;language = '-';</li>
+<li>&#36;result-&gt;gender = '-';</li>
+<li>&#36;result-&gt;address = '-';</li>
+<li>&#36;result-&gt;staff_category = '-';</li>
+<li>&#36;result-&gt;home_organization_type = '-';</li>
+<li>&#36;result-&gt;home_organization = '-';</li>
+<li>&#36;result-&gt;affiliation = '-';</li>
+<li>&#36;result-&gt;persistent_id = '-';</li>
+<li>...</li>
 
 Vai ai Plugin per aggiungere un pulsante 'Shibboleth Login'in questo campus.";
 $LdapDescriptionTitle = "Autenticazione LDAP";
@@ -7074,7 +7075,7 @@ $FacebookMainActivateComment = "Per iniziare, devi creare una Facebook Applicati
 Poi,
 modifica il file main/auth/external_login/facebook.conf.php
 
-e inserisci i valori di 'appId' and 'secret' nella riga $facebook_config.
+e inserisci i valori di 'appId' and 'secret' nella riga &#36;facebook_config.
 
 Vai su Plugin e aggiungi un pulsante 'Facebook Login' per questo campus.";
 $AnnouncementForGroup = "Avviso per un gruppo";

@@ -4029,6 +4029,19 @@ i.size-32.icon-new-work{
 .openbadges-text{
   text-align: center;
 }
+.title-badge{
+  font-weight: bold;
+  color: #2C3E50;
+}
+.code-badge{
+  font-size: 12px;
+}
+.name-badge{
+  font-size: 16px;
+}
+.issued .thumbnail{
+    border: none;
+}
 /* Social Profile */
 
 .social-profile{

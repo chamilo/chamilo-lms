@@ -99,7 +99,7 @@ $form->addElement('header', get_lang('Course') . '  #' . $courseInfo['real_id'] 
 $form->addElement('hidden', 'code', $course_code);
 
 //title
-$form->addText('title', get_lang('Title'), true, array('class' => 'span6'));
+$form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 

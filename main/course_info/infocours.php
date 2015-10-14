@@ -211,7 +211,7 @@ $form->addGroup($group, '', array(get_lang("Unsubscription")), '');
 $form->addText('course_registration_password', get_lang('CourseRegistrationPassword'), false, array('size' => '60'));
 
 $form->addElement('checkbox', 'activate_legal', array(null, get_lang('ShowALegalNoticeWhenEnteringTheCourse')), get_lang('ActivateLegal'));
-$form->addElement('textarea', 'legal', get_lang('CourseLegalAgreement'), array('class'=>'span6', 'rows' => 8));
+$form->addElement('textarea', 'legal', get_lang('CourseLegalAgreement'), array('rows' => 8));
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 
 $form->addElement('html', '</div></div>');

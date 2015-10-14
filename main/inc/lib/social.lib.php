@@ -1885,6 +1885,7 @@ class SocialManager extends UserManager
         $template = new Template(null, false, false, false, false, false);
         $template->assign('ranking', $ranking);
         $template->assign('skills', $skills);
+        $template->assign('user_id', $userId);
         $template->assign(
             'show_skills_report_link',
             api_is_student() || api_is_student_boss() || api_is_drh()

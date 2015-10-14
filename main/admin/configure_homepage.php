@@ -472,7 +472,7 @@ if (!empty($action)) {
 					// If the requested action is to create a link, make some room
 					// for the new link in the home_menu array at the requested place
 					// and insert the new link there
-                    $icon = '<i class="fa fa-external-link"></i>';
+                    $icon = '<em class="fa fa-external-link"></em>';
 					if ($action == 'insert_link' || $action == 'insert_tabs') {
 						for ($i = sizeof($home_menu); $i; $i--) {
 							if ($i > $insert_where) {
@@ -1012,11 +1012,11 @@ switch ($action) {
                     <?php echo api_display_language_form(); ?>
                     <form id="formLogin" class="form-horizontal">
                         <div class="input-group">
-                            <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                            <div class="input-group-addon"><em class="fa fa-user"></em></div>
                             <input class="form-control" type="text" id="login" value="" disabled="disabled" />
                         </div>
                     	<div class="input-group">
-                            <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                            <div class="input-group-addon"><em class="fa fa-lock"></em></div>
                             <input type="password" id="password"class="form-control" value="" disabled="disabled" />
                         </div>
 			<button class="btn btn-primary btn-block" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button>

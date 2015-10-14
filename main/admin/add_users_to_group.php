@@ -441,13 +441,13 @@ if (!empty($errorMsg)) {
   <?php
   if ($ajax_search) {
   ?>
-    <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" ><i class="fa fa-arrow-left"></i></button>
+    <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" ><em class="fa fa-arrow-left"></em></button>
   <?php
   } else {
   ?>
-  	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"><i class="fa fa-arrow-right"></i></button>
+  	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"><em class="fa fa-arrow-right"></em></button>
 	<br /><br />
-	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"><i class="fa fa-arrow-left"></i></button>
+	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"><em class="fa fa-arrow-left"></em></button>
 	<?php
   }
   ?>
@@ -473,7 +473,7 @@ if (!empty($errorMsg)) {
 	<td colspan="3" align="center">
 		<br />
 		<?php
-		echo '<button class="btn btn-success" type="button" value="" onclick="valide()" ><i class="fa fa-floppy-o"></i> '.get_lang('SubscribeUsersToGroup').'</button>';
+		echo '<button class="btn btn-success" type="button" value="" onclick="valide()" ><em class="fa fa-floppy-o"></em> '.get_lang('SubscribeUsersToGroup').'</button>';
 		?>
 	</td>
 </tr>

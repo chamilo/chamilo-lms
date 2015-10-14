@@ -24,7 +24,7 @@ switch ($type) {
         $iframe .= '</div>';
         break;
     case 'nonhttps':
-        $icon = '&nbsp;<i class="icon-external-link icon-2x"></i>';
+        $icon = '&nbsp;<em class="icon-external-link icon-2x"></em>';
         $iframe = Display::return_message(
             Display::url($src.$icon, $src, ['class' => 'btn', 'target' => '_blank']),
             'normal',

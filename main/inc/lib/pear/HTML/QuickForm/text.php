@@ -90,7 +90,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
 
         return '
                 <div class="input-group-addon">
-                <i class="fa fa-'.$icon.'"></i>
+                <em class="fa fa-'.$icon.'"></em>
                 </div>';
     }
 

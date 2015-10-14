@@ -13,7 +13,7 @@
             <img src="{{ _p.web_img }}icons/64/info.png"/>
             <div class="caption">
                 <a href="{{ _p.web_main }}course_description/?cidReq={{ course_id }}" class="btn btn-default">
-                    <i class="fa fa-info-circle"></i> {{'AddCourseDescription'|get_lang}}
+                    <em class="fa fa-info-circle"></em> {{'AddCourseDescription'|get_lang}}
                 </a>
             </div>
         </div>
@@ -23,7 +23,7 @@
             <img src="{{ _p.web_img }}icons/64/folder_document.png"/>
             <div class="caption">
                 <a href="{{ _p.web_main }}document/document.php?cidReq={{ course_id }}" class="btn btn-default">
-                    <i class="fa fa-paper-plane"></i> {{'UploadADocument'|get_lang}}
+                    <em class="fa fa-paper-plane"></em> {{'UploadADocument'|get_lang}}
                 </a>
             </div>
         </div>
@@ -33,7 +33,7 @@
             <img src="{{ _p.web_img }}icons/64/forum.png"/>
             <div class="caption">
                 <a href="{{ _p.web_main }}forum/index.php?cidReq={{ course_id }}" class="btn btn-default">
-                    <i class="fa fa-users"></i> {{ 'AddForum'|get_lang }}
+                    <em class="fa fa-users"></em> {{ 'AddForum'|get_lang }}
                 </a>
             </div>
         </div>
@@ -44,7 +44,7 @@
         <img src="{{ _p.web_img }}icons/64/user.png"/>
             <div class="caption">
             <a href="{{ _p.web_main }}user/subscribe_user.php?cidReq={{ course_id }}" class="btn btn-default">
-                <i class="fa fa-user-plus"></i> {{ 'SubscribeUserToCourse'|get_lang }}
+                <em class="fa fa-user-plus"></em> {{ 'SubscribeUserToCourse'|get_lang }}
             </a>
             </div>
         </div>

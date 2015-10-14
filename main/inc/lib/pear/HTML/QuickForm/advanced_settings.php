@@ -50,7 +50,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
                     <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-10">
                         <a id="'.$name.'" class="btn btn-default advanced_options" href="#">
-                        <i class="fa fa-bars"></i>  '.$text.'
+                        <em class="fa fa-bars"></em>  '.$text.'
                         </a>
                     </div>
                  </div>';

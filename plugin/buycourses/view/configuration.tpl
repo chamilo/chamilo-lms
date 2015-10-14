@@ -51,9 +51,9 @@
                             </td>
                             <td class="text-center">
                                 {% if item.visible %}
-                                    <i class="fa fa-fw fa-check-square-o"></i>
+                                    <em class="fa fa-fw fa-check-square-o"></em>
                                 {% else %}
-                                    <i class="fa fa-fw fa-square-o"></i>
+                                    <em class="fa fa-fw fa-square-o"></em>
                                 {% endif %}
                             </td>
                             <td width="200" class="text-right">
@@ -61,7 +61,7 @@
                             </td>
                             <td class="text-right">
                                 <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.course_id, 't':product_type_course}|url_encode() }}" class="btn btn-info btn-sm">
-                                    <i class="fa fa-wrench fa-fw"></i> {{ 'Configure'|get_lang }}
+                                    <em class="fa fa-wrench fa-fw"></em> {{ 'Configure'|get_lang }}
                                 </a>
                             </td>
                         </tr>
@@ -111,9 +111,9 @@
                                 </td>
                                 <td class="text-center">
                                     {% if item.visible %}
-                                        <i class="fa fa-fw fa-check-square-o"></i>
+                                        <em class="fa fa-fw fa-check-square-o"></em>
                                     {% else %}
-                                        <i class="fa fa-fw fa-square-o"></i>
+                                        <em class="fa fa-fw fa-square-o"></em>
                                     {% endif %}
                                 </td>
                                 <td class="text-right" width="200">
@@ -121,7 +121,7 @@
                                 </td>
                                 <td class="text-right">
                                     <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.session_id, 't': product_type_session}|url_encode() }}" class="btn btn-info btn-sm">
-                                        <i class="fa fa-wrench fa-fw"></i> {{ 'Configure'|get_lang }}
+                                        <em class="fa fa-wrench fa-fw"></em> {{ 'Configure'|get_lang }}
                                     </a>
                                 </td>
                             </tr>

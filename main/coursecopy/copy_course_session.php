@@ -128,7 +128,7 @@ function display_form()
     $html .= Display::panel($options, get_lang('TypeOfCopy'));
     
     $html .= '<div class="form-group"><div class="col-sm-12">';
-    $html .= '<button class="btn btn-success" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><i class="fa fa-files-o"></i> '.get_lang('CopyCourse').'</button>';
+    $html .= '<button class="btn btn-success" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><em class="fa fa-files-o"></em> '.get_lang('CopyCourse').'</button>';
 
     // Add Security token
     $html .= '<input type="hidden" value="' . Security::get_token() . '" name="sec_token">';

@@ -77,7 +77,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $results .= '<div class="row">';
         $buttonClass = 'btn btn-default btn-sm';
         foreach ($users as $user) {
-            $send_inv = '<button class="'.$buttonClass.' disabled "><i class="fa fa-user"></i> '.get_lang('SendInvitation').'</button>';
+            $send_inv = '<button class="'.$buttonClass.' disabled "><em class="fa fa-user"></em> '.get_lang('SendInvitation').'</button>';
             $relation_type = intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user['user_id']));
             $user_info = api_get_user_info($user['user_id'], true);
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
@@ -85,7 +85,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             // Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user['user_id'] != api_get_user_id()) {
                 $send_inv = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="' . $user['user_id'] . '">
-                             <i class="fa fa-user"></i> '.get_lang('SendInvitation').'</a>';
+                             <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</a>';
             }
 
             $sendMesssageUrl = api_get_path(WEB_AJAX_PATH)

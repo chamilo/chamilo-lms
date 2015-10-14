@@ -656,7 +656,7 @@ if (!empty($errorMsg)) {
             ?>
             <div class="separate-action">
                 <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
-                  <i class="fa fa-chevron-left"></i>
+                  <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
 
@@ -665,12 +665,12 @@ if (!empty($errorMsg)) {
             ?>
             <div class="separate-action">
                 <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
-                    <i class="fa fa-chevron-right"></i>
+                    <em class="fa fa-chevron-right"></em>
                 </button>
             </div>
             <div class="separate-action">
                 <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
-                    <i class="fa fa-chevron-left"></i>
+                    <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
 

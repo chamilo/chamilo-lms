@@ -309,7 +309,7 @@ if (!empty($thematic_advance_info)) {
 $editIconButton = '';
 if (api_is_allowed_to_edit() && empty($session_id)) {
     $editIconButton = Display::url(
-        '<i class="fa fa-wrench"></i> ',
+        '<em class="fa fa-wrench"></em> ',
         api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
         ['class' => 'btn btn-default', 'title' => get_lang('CustomizeIcons') ]
     );
@@ -323,7 +323,7 @@ if ($intro_dispCommand) {
         $toolbar = '<div class="btn-group pull-right" role="group">';
         if (!empty($courseId)) {
             $textIntro  = '<a class="btn btn-default" title="' . get_lang('AddIntro') . '" href="'.api_get_self().'?' . api_get_cidreq().'&intro_cmdAdd=1">';
-            $textIntro .= '<i class="fa fa-file-text"></i> ';
+            $textIntro .= '<em class="fa fa-file-text"></em> ';
             $textIntro .= "</a>";
             $toolbar .= $textIntro . $editIconButton;
         } else {
@@ -338,21 +338,21 @@ if ($intro_dispCommand) {
         if (!empty($courseId)) {
             $toolbar .=
                 '<a  class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
-                <i class="fa fa-pencil"></i></a>';
+                <em class="fa fa-pencil"></em></a>';
             $toolbar .= $editIconButton;
             $toolbar .="<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\"><i class=\"fa fa-trash-o\"></i></a>";
+                "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
 
         } else {
             $toolbar .=
                 '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdEdit=1" title="'.get_lang('Modify').'">
-                <i class="fa fa-pencil"></i>
+                <em class="fa fa-pencil"></em>
                 </a>"';
             $toolbar .= $editIconButton;
             $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\"><i class=\"fa fa-trash-o\"></i></a>";
+                "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
         }
         $toolbar .=  "</div>";
         // Fix for chrome XSS filter for videos in iframes - BT#7930

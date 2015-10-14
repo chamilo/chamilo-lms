@@ -427,11 +427,11 @@ echo Display::input('hidden', 'add_type', null);
     <div class="col-md-2">
         <div style="padding-top:54px;width:auto;text-align: center;">
         <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
-            <i class="fa fa-arrow-right"></i>
+            <em class="fa fa-arrow-right"></em>
         </button>
         <br /><br />
         <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
-            <i class="fa fa-arrow-left"></i>
+            <em class="fa fa-arrow-left"></em>
         </button>
         </div>
     </div>
@@ -453,7 +453,7 @@ echo Display::input('hidden', 'add_type', null);
 </div>
 
 <?php
-    echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" ><i class="fa fa-check"></i>'.
+    echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" ><em class="fa fa-check"></em>'.
         get_lang('SubscribeUsersToClass').'</button>';
 ?>
 </form>

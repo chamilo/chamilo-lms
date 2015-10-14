@@ -32,21 +32,21 @@
                                             </h3>
                                             <ul class="list-unstyled">
                                                 {% for teacher in course.teachers %}
-                                                    <li><i class="fa fa-user"></i> {{ teacher }}</li>
+                                                    <li><em class="fa fa-user"></em> {{ teacher }}</li>
                                                     {% endfor %}
                                             </ul>
                                             <p class="lead text-right">{{ course.currency }} {{ course.price }}</p>
                                             {% if course.enrolled == "YES" %}
                                                 <div class="alert alert-success">
-                                                    <i class="fa fa-check-square-o fa-fw"></i> {{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                    <em class="fa fa-check-square-o fa-fw"></em> {{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </div>
                                             {% elseif course.enrolled == "NO" %}
                                                 <div class="text-center">
                                                     <a class="ajax btn btn-primary" title="" href="{{ course_description_url }}" data-title="{{ course.title }}">
-                                                        <i class="fa fa-file-text"></i> {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                        <em class="fa fa-file-text"></em> {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                     <a class="btn btn-success" title="" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}">
-                                                        <i class="fa fa-shopping-cart"></i> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 </div>
                                             {% elseif course.enrolled == "TMP" %}
@@ -68,14 +68,14 @@
                                                 <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}">{{ session.name }}</a>
                                             </h3>
                                             {% if 'show_session_coach'|get_setting == 'true' %}
-                                                <p><i class="fa fa-user fa-fw"></i> {{ session.coach }}</p>
+                                                <p><em class="fa fa-user fa-fw"></em> {{ session.coach }}</p>
                                             {% endif %}
-                                            <p><i class="fa fa-calendar fa-fw"></i> {{ session.dates.display }}</p>
+                                            <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
                                             <p class="lead text-right">{{ session.currency }} {{ session.price }}</p>
                                             <ul class="list-unstyled">
                                                 {% for course in session.courses %}
                                                     <li>
-                                                        <i class="fa fa-book fa-fw"></i> {{ course.title }}
+                                                        <em class="fa fa-book fa-fw"></em> {{ course.title }}
                                                         {% if course.coaches|length %}
                                                             <ul>
                                                                 {% for coach in course.coaches %}
@@ -88,12 +88,12 @@
                                             </ul>
                                             {% if session.enrolled == "YES" %}
                                                 <div class="alert alert-success">
-                                                    <i class="fa fa-check-square-o fa-fw"></i> {{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                    <em class="fa fa-check-square-o fa-fw"></em> {{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </div>
                                             {% elseif session.enrolled == "NO" %}
                                                 <div class="text-center">
                                                     <a class="btn btn-success" href="{{ _p.web_plugin ~ 'buycourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
-                                                        <i class="fa fa-shopping-cart"></i> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
+                                                        <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 </div>
                                             {% elseif session.enrolled == "TMP" %}

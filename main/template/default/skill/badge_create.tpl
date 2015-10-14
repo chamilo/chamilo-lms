@@ -98,7 +98,7 @@
                             </fieldset>
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-primary btn-large"><i class="fa fa-floppy-o"></i> {{ 'SaveBadge'| get_lang }}</button>
+                                    <button type="submit" class="btn btn-primary btn-large"><em class="fa fa-floppy-o"></em> {{ 'SaveBadge'| get_lang }}</button>
                                 </div>
                             </div>
                         </form>
@@ -106,7 +106,7 @@
                     <div class="col-md-3">
                         <div class="create-openbadges">
                             <button id="btn-open-designer" class="help-badges btn btn-primary btn-large btn-block" data-toggle="tooltip" data-placement="bottom" title="{{ 'DesignANewBadgeComment' | get_lang }}" type="button">
-                                <i class="fa fa-plus"></i> {{ 'DesignNewBadge' | get_lang }}
+                                <em class="fa fa-plus"></em> {{ 'DesignNewBadge' | get_lang }}
                             </button>
                         </div>
                         <p class="openbadges-text">{{'BadgePreview' | get_lang }}</p>

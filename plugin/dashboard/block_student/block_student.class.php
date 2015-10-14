@@ -62,7 +62,7 @@ class BlockStudent extends Block
                     <div class="panel-heading">
                         '.get_lang('StudentsInformationsList').'
                         <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
-                            <i class="fa fa-times"></i>
+                            <em class="fa fa-times"></em>
                         </a>
                         </div>
                     </div>

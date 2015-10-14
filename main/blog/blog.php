@@ -333,7 +333,7 @@ Display::display_introduction_section(TOOL_BLOGS);
                             <input type="hidden" name="action" value="view_search_result" />
                             <input type="text" class="form-control" size="20" name="q" value="<?php echo isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : ''; ?>" />
                         </div>
-			<button class="btn btn-default btn-block" type="submit"><i class="fa fa-search"></i> <?php echo get_lang('Search'); ?></button>
+			<button class="btn btn-default btn-block" type="submit"><em class="fa fa-search"></em> <?php echo get_lang('Search'); ?></button>
                     </form>
                 </div>
             </div>

@@ -5461,7 +5461,7 @@ class learnpath
             // We need to close the form when we are updating the mp3 files.
             if ($update_audio == 'true') {
                 $return .= '<div class="footer-audio">';
-                $return .= Display::button('save_audio','<i class="fa fa-file-audio-o"></i> '. get_lang('SaveAudioAndOrganization'),array('class'=>'btn btn-primary','type'=>'submit'));
+                $return .= Display::button('save_audio','<em class="fa fa-file-audio-o"></em> '. get_lang('SaveAudioAndOrganization'),array('class'=>'btn btn-primary','type'=>'submit'));
                 $return .= '</div>';
                 //$return .= '<div><button class="btn btn-primary" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
             }

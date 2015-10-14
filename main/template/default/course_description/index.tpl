@@ -60,13 +60,13 @@
         </div>
         <div class="btn-group edit">
             <a href="{{root}}&amp;action=import_csv" class="btn btn-default" title="{{'ImportCSV'|get_lang}}">
-                <i class="size-32 icon-import-csv"></i>
+                <em class="size-32 icon-import-csv"></em>
             </a>
             <a href="{{root}}&amp;action=export_csv" class="btn btn-default" title="{{'ExportAsCSV'|get_lang}}">
-                <i class="size-32 icon-export-csv"></i>
+                <em class="size-32 icon-export-csv"></em>
             </a>
             <a href="javascript:void(0)" onclick="delete_all();return false;" class="btn btn-default" title="{{'DeleteAll'|get_lang}}">
-                <i class="size-32 icon-delete-all"></i>
+                <em class="size-32 icon-delete-all"></em>
             </a>
         </div>
     </div>
@@ -82,12 +82,12 @@
                     <a href="{{root}}&amp;action=delete&amp;id={{description.id}}" 
                        onclick="delete_entry('description_{{description.id}}', this); return false;"
                        title="{{'Delete'|get_lang}}">
-                        <i class="size-22 icon-delete"></i>
+                        <em class="size-22 icon-delete"></em>
                     </a>
 
                     <a href="{{root}}&amp;action=edit&amp;id={{description.id}}" 
                        title="{{'Edit'|get_lang}}">
-                        <i class="size-22 icon-edit"></i>
+                        <em class="size-22 icon-edit"></em>
                     </a>
                 {% else %}
                     <img title="{{'EditionNotAvailableFromSession'|get_lang}}" 

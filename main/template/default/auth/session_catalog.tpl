@@ -23,7 +23,7 @@
                                     <div class="input-group">
                                         <input type="text" name="search_term" class="form-control" />
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
+                                            <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
                                         </span>
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
                                         <div class="input-group">
                                             <input type="date" name="date" id="date" class="form-control" value="{{ search_date }}" readonly>
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
+                                                <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
                                             </span>
                                         </div>
                                     </div>
@@ -61,7 +61,7 @@
                                         <div class="input-group">
                                             <input type="text" name="search_tag" class="form-control" value="{{ search_tag }}" />
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search'|get_lang }}</button>
+                                                <button class="btn btn-default" type="submit"><em class="fa fa-search"></em> {{ 'Search'|get_lang }}</button>
                                             </span>
                                         </div>
                                     </div>
@@ -91,15 +91,15 @@
                                 <ul class="list-unstyled">
                                     {% if show_tutor %}
                                         <li class="author-session">
-                                            <i class="fa fa-user"></i> {{ session.coach_name }}
+                                            <em class="fa fa-user"></em> {{ session.coach_name }}
                                         </li>
                                     {% endif %}
                                     <li class="date-session">
-                                        <i class="fa fa-calendar-o"></i> {{ session.date }}
+                                        <em class="fa fa-calendar-o"></em> {{ session.date }}
                                     </li>
                                     {% if session.tags %}
                                         <li class="tags-session">
-                                            <i class="fa fa-tags"></i> {{ session.tags|join(', ')}}
+                                            <em class="fa fa-tags"></em> {{ session.tags|join(', ')}}
                                         </li>
                                     {% endif %}
                                 </ul>
@@ -138,7 +138,7 @@
                                                     content += '<p class="lead">{{ sequence.name }}</p>';
 
                                                     {% if sequence.requirements %}
-                                                        content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'RequiredSessions'|get_lang }}</p>';
+                                                        content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'RequiredSessions'|get_lang }}</p>';
                                                         content += '<ul>';
 
                                                         {% for requirement in sequence.requirements %}
@@ -151,7 +151,7 @@
                                                     {% endif %}
 
                                                     {% if sequence.dependencies %}
-                                                        content += '<p><i class="fa fa-sort-amount-desc"></i> {{ 'DependentSessions'|get_lang }}</p>';
+                                                        content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'DependentSessions'|get_lang }}</p>';
                                                         content += '<ul>';
 
                                                         {% for dependency in sequence.dependencies %}

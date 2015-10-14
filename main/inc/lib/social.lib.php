@@ -1411,7 +1411,7 @@ class SocialManager extends UserManager
                 <textarea placeholder="'.get_lang('SocialWriteNewComment').
                 '" name="social_wall_new_msg" rows="1" style="width:80%;" ></textarea>
                 <button type="submit" name="social_wall_new_msg_submit"
-                class="pull-right btn btn-default" /><i class="fa fa-pencil"></i> '.get_lang('Post').'</button>
+                class="pull-right btn btn-default" /><em class="fa fa-pencil"></em> '.get_lang('Post').'</button>
                 </form>';
         $formattedList .= '</div>';
 
@@ -1746,7 +1746,7 @@ class SocialManager extends UserManager
             $friendHtml.='</ul>';
         } else {
             $friendHtml.= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
-                .'<a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php"><i class="fa fa-search"></i> '. get_lang('TryAndFindSomeFriends').'</a></div>';
+                .'<a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php"><em class="fa fa-search"></em> '. get_lang('TryAndFindSomeFriends').'</a></div>';
         }
 
         $friendHtml = Display::panel($friendHtml, get_lang('SocialFriend').' (' . $number_friends . ')' );
@@ -1811,7 +1811,7 @@ class SocialManager extends UserManager
             $friendHtml.='</div>';
         } else {
             $friendHtml.= '<div class="help">'.get_lang('NoFriendsInYourContactList').' '
-                .'<a href="'.api_get_path(WEB_PATH).'whoisonline.php"><i class="fa fa-search"></i> '. get_lang('TryAndFindSomeFriends').'</a></div>';
+                .'<a href="'.api_get_path(WEB_PATH).'whoisonline.php"><em class="fa fa-search"></em> '. get_lang('TryAndFindSomeFriends').'</a></div>';
         }
 
         return $friendHtml;

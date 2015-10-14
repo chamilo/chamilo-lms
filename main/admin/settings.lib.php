@@ -173,13 +173,13 @@ function handle_plugins()
 
             echo '<div class="btn-group">';
             if (in_array($plugin, $installed_plugins)) {
-                echo Display::url('<i class="fa fa-cogs"></i> '.get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn btn-default'));
-                echo Display::url('<i class="fa fa-th-large"></i> '.get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn btn-default'));
+                echo Display::url('<em class="fa fa-cogs"></em> '.get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn btn-default'));
+                echo Display::url('<em class="fa fa-th-large"></em> '.get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn btn-default'));
             }
 
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
                 echo Display::url(
-                    "<i class='fa fa-file-text-o'></i> readme.txt",
+                    "<em class='fa fa-file-text-o'></em> readme.txt",
                     api_get_path(WEB_PLUGIN_PATH) . $plugin . "/readme.txt",
                     [
                         'class' => 'btn btn-default ajax',

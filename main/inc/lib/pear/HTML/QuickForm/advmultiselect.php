@@ -865,7 +865,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->_removeButtonAttributes
                 = array_merge($this->_removeButtonAttributes, $attributes);
             $attrStrRemove = $this->_getAttrString($this->_removeButtonAttributes);
-            $strHtmlRemove = "<button $attrStrRemove  /> <i class='fa fa-arrow-left'></i></button>";
+            $strHtmlRemove = "<button $attrStrRemove  /> <em class='fa fa-arrow-left'></em></button>";
 
             // build the add button with all its attributes
             $attributes
@@ -877,7 +877,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 "'add', '{$this->_sort}'); return false;");
             $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
             $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
-            $strHtmlAdd = "<button $attrStrAdd  /> <i class='fa fa-arrow-right'></i></button><br /><br />";
+            $strHtmlAdd = "<button $attrStrAdd  /> <em class='fa fa-arrow-right'></em></button><br /><br />";
 
             // build the select all button with all its attributes
             $attributes

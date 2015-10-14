@@ -15,7 +15,7 @@
                     <h3 class="page-header">{{ course.title }}</h3>
                     <ul class="items-teacher list-unstyled">
                         {% for teacher in course.teachers %}
-                            <li><i class="fa fa-user"></i> {{ teacher }}</li>
+                            <li><em class="fa fa-user"></em> {{ teacher }}</li>
                         {% endfor %}
                     </ul>
                     <p>
@@ -38,7 +38,7 @@
                         {% for course in session.courses %}
                             <dt>{{ course.title }}</dt>
                             {% for coach in course.coaches %}
-                                <dd><i class="fa fa-user fa-fw"></i> {{ coach }}</dd>
+                                <dd><em class="fa fa-user fa-fw"></em> {{ coach }}</dd>
                             {% endfor %}
                         {% endfor %}
                     </dl>

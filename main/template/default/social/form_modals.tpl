@@ -13,7 +13,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="btn-send-invitation" class="btn btn-primary">
-                    <i class="fa fa-send"></i> {{ 'Send' | get_lang }}
+                    <em class="fa fa-send"></em> {{ 'Send' | get_lang }}
                 </button>
             </div>
         </div>

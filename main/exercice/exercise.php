@@ -1011,7 +1011,7 @@ if (empty($exercise_list) && $hotpotatoes_exist == false) {
         echo '<h3>'.get_lang('Quiz').'</h3>';
         echo Display::return_icon('quiz.png', '', array(), 64);
         echo '<div class="controls">';
-        echo Display::url('<i class="fa fa-plus"></i> '.get_lang('NewEx'), 'exercise_admin.php?'.api_get_cidreq(), array('class' => 'btn btn-primary'));
+        echo Display::url('<em class="fa fa-plus"></em> '.get_lang('NewEx'), 'exercise_admin.php?'.api_get_cidreq(), array('class' => 'btn btn-primary'));
         echo '</div>';
         echo '</div>';
     }

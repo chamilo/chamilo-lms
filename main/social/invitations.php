@@ -86,7 +86,7 @@ $total_invitations = $number_loop + count($list_get_invitation_sent) + count($pe
 if ($total_invitations == 0 && count($_GET) <= 0) {
     $socialInvitationsBlock .= '<div class="row">
         <div class="col-md-12">
-            <a class="btn btn-success" href="search.php"><i class="fa fa-search"></i> '.
+            <a class="btn btn-success" href="search.php"><em class="fa fa-search"></em> '.
                 get_lang('TryAndFindSomeFriends').'
             </a>
             </div>
@@ -116,9 +116,9 @@ if ($number_loop != 0) {
         $invitationHtml .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
         $invitationHtml .= '<div class="btn-group" role="group">
                             <button class="btn btn-success" type="submit" id="btn_accepted_'.$sender_user_id.'" onclick="javascript:register_friend(this)">
-                            <i class="fa fa-check"></i> '.get_lang('AcceptInvitation').'</button>
+                            <em class="fa fa-check"></em> '.get_lang('AcceptInvitation').'</button>
                             <button class="btn btn-danger" type="submit" id="btn_deniedst_'.$sender_user_id.' " onclick="javascript:denied_friend(this)" >
-                            <i class="fa fa-times"></i> '.get_lang('DenyInvitation').'</button>
+                            <em class="fa fa-times"></em> '.get_lang('DenyInvitation').'</button>
                             ';
         $invitationHtml .= '</div>';
         $invitationHtml .= '</div>';
@@ -174,8 +174,8 @@ if (count($pending_invitations) > 0) {
         $waitingInvitation .= '<h4 class="tittle-profile">'.$invitation['name'].'</h4>';
         $waitingInvitation .= '<div class="description-group">'.$invitation['description'].'</div>';
         $waitingInvitation .= '<div class="btn-group" role="group">';
-        $waitingInvitation .= '<a class="btn btn-success" href="invitations.php?accept='.$invitation['id'].'"><i class="fa fa-check"></i> '.get_lang('AcceptInvitation').'</a>';
-        $waitingInvitation .= '<a class="btn btn-danger" href="invitations.php?deny='.$invitation['id'].'"><i class="fa fa-times"></i> '.get_lang('DenyInvitation').'</a>';
+        $waitingInvitation .= '<a class="btn btn-success" href="invitations.php?accept='.$invitation['id'].'"><em class="fa fa-check"></em> '.get_lang('AcceptInvitation').'</a>';
+        $waitingInvitation .= '<a class="btn btn-danger" href="invitations.php?deny='.$invitation['id'].'"><em class="fa fa-times"></em> '.get_lang('DenyInvitation').'</a>';
         $waitingInvitation .='</div>';
         $waitingInvitation .= '</div></div>';
     }

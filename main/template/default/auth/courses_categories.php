@@ -118,7 +118,7 @@ $code = isset($code) ? $code : null;
                     <input class="form-control" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
                     <div class="input-group-btn">
                         <button class="btn btn-default" type="submit">
-                            <i class="fa fa-search"></i> <?php echo get_lang('Search'); ?>
+                            <em class="fa fa-search"></em> <?php echo get_lang('Search'); ?>
                         </button>
                     </div>
                 </div>

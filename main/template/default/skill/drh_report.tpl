@@ -31,7 +31,7 @@
                     <option value="{{ skill.id }}" {{ (skill.id == selectedSkill) ? 'selected' : '' }}>{{ skill.name }}</option>
                 {% endfor %}
             </select>
-            <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i>{{ 'Filter' | get_lang }}</button>
+            <button type="submit" class="btn btn-default"><em class="fa fa-filter"></em>{{ 'Filter' | get_lang }}</button>
         </form>
     </div>
 </div>

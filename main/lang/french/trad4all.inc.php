@@ -7544,4 +7544,10 @@ $XDays = "%s jours";
 $SkillProfile = "Profil de compétences";
 $AchievedSkills = "Compétences acquises";
 $BusinessCard = "Carte de visite";
+$BadgeDetails = "Détails du badge";
+$TheUserXNotYetAchievedTheSkillX = "L'utilisateur %s n'a pas encore obtenu la compétence \"%s\"";
+$IssuedBadgeInformation = "Information du badge délivré";
+$RecipientDetails = "Données du bénéficiaire";
+$SkillAcquiredAt = "Compétence acquise le";
+$BasicSkills = "Compétences simples";
 ?>

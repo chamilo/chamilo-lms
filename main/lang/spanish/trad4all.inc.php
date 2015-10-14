@@ -7582,4 +7582,10 @@ $XDays = "%s días";
 $SkillProfile = "Perfil de competencias";
 $AchievedSkills = "Competencias logradas";
 $BusinessCard = "Tarjeta personal";
+$BadgeDetails = "Detalles de la insignia";
+$TheUserXNotYetAchievedTheSkillX = "El usuario %s no ha obtenido la competencia \"%s\" todavía";
+$IssuedBadgeInformation = "Información de la insignia emitida";
+$RecipientDetails = "Datos del beneficiario";
+$SkillAcquiredAt = "Competencia adquirida el";
+$BasicSkills = "Competencias simples";
 ?>

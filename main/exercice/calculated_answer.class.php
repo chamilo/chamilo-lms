@@ -152,13 +152,13 @@ class CalculatedAnswer extends Question
 
         $form->addElement('label', null, get_lang('FormulaExample'));
 
-        $form->addElement('text', 'formula', get_lang('Formula'), array('id' => 'formula', 'class' => 'span4'));
+        $form->addElement('text', 'formula', get_lang('Formula'), array('id' => 'formula'));
         $form->addRule('formula', get_lang('GiveFormula'), 'required');
 
-        $form->addElement('text', 'weighting', get_lang('Weighting'), array('id' => 'weighting', 'class' => 'span1'));
+        $form->addElement('text', 'weighting', get_lang('Weighting'), array('id' => 'weighting'));
         $form->setDefaults(array('weighting' => '10'));
 
-        $form->addElement('text', 'answerVariations', get_lang('AnswerVariations'), array('class' => 'span1'));
+        $form->addElement('text', 'answerVariations', get_lang('AnswerVariations'));
         $form->addRule('answerVariations', get_lang('GiveAnswerVariations'),'required');
         $form->setDefaults(array('answerVariations' => '1'));
 

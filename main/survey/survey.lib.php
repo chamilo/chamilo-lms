@@ -2299,7 +2299,7 @@ class SurveyUtil
                     array_push($chartData, array('option' => $optionText, 'votes' => $votes));
                 }
                 $chartContainerId = 'chartContainer'.$question['question_id'];
-                echo '<div id="'.$chartContainerId.'" class="span12">';
+                echo '<div id="'.$chartContainerId.'" class="col-md-12">';
                 echo self::drawChart($chartData, false, $chartContainerId);
 
                 // displaying the table: headers
@@ -2446,7 +2446,7 @@ class SurveyUtil
                 );
             }
         }
-        echo '<div id="chartContainer" class="span12">';
+        echo '<div id="chartContainer" class="col-md-12">';
         echo self::drawChart($chartData, true);
         echo '</div>';
 
@@ -3517,7 +3517,7 @@ class SurveyUtil
                 }
             }
             $tableHtml .=  '</table>';
-            echo '<div id="chartContainer" class="span12">';
+            echo '<div id="chartContainer" class="col-md-12">';
             echo self::drawChart($chartData, true);
             echo '</div>';
             echo $tableHtml;

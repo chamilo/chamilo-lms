@@ -303,7 +303,6 @@ class CourseRestorer
         $course_info = api_get_course_info($destination_course_code);
 
         if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
-
 			$table = Database :: get_course_table(TABLE_DOCUMENT);
 			$resources = $this->course->resources;
             $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
@@ -318,12 +317,6 @@ class CourseRestorer
 
 		    	if ($document->file_type == FOLDER) {
 		    		$visibility = $document->item_properties[0]['visibility'];
-
-		    		/*if (!empty($document->title))  {
-		    		    $title  = $document->title;
-		    		} else {
-		    		    $title  = basename($document->path);
-		    		}*/
 
 		    		$new = substr($document->path, 8);
 
@@ -451,8 +444,7 @@ class CourseRestorer
                                             'size' => self::DBUTF8($document->size),
                                             'session_id' => $my_session_id
                                         ];
-                                        error_log('1');
-                                        error_log(print_r($params, 1));
+
     									$document_id = Database::insert($table, $params, true);
 
                                         if ($document_id) {
@@ -485,8 +477,7 @@ class CourseRestorer
                                             'size' => self::DBUTF8($document->size),
                                             'session_id' => $my_session_id
                                         ];
-                                        error_log('2');
-                                        error_log(print_r($params, 1));
+
                                         Database::update(
                                             $table,
                                             $params,
@@ -740,8 +731,6 @@ class CourseRestorer
                                                 $my_session_id
                                             );
                                         }
-
-
 									}
 								} else {
 
@@ -1996,8 +1985,7 @@ class CourseRestorer
         $course_id = api_get_course_int_id();
         // Let's restore the categories
         $tab_test_category_id_old_new = array(); // used to build the quiz_question_rel_category table
-        if ($this->course->has_resources(RESOURCE_TEST_CATEGORY))
-        {
+        if ($this->course->has_resources(RESOURCE_TEST_CATEGORY)) {
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $CourseCopyTestcategory ) {
                 $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $id;
@@ -2235,7 +2223,6 @@ class CourseRestorer
                         }
                     }
 				}
-
 			}
 		}
 	}
@@ -2318,7 +2305,8 @@ class CourseRestorer
                     ];
                     $answerId = Database::insert($table_ans, $params);
                     if ($answerId) {
-                        $sql = "UPDATE $table_ans SET question_option_id = iid WHERE iid = $answerId";
+                        $sql = "UPDATE $table_ans SET question_option_id = iid
+                                WHERE iid = $answerId";
                         Database::query($sql);
                     }
                 }
@@ -2488,8 +2476,9 @@ class CourseRestorer
 					// we set the ref code here and then we update in a for loop
 					$ref = $item['ref'];
 
-					//Dealing with path the same way as ref as some data has been put into path when it's a local resource
-					//Only fix the path for no scos
+					// Dealing with path the same way as ref as some data has
+                    // been put into path when it's a local resource
+					// Only fix the path for no scos
                     if ($item['item_type'] == 'sco') {
                         $path = $item['path'];
                     } else {
@@ -2623,7 +2612,7 @@ class CourseRestorer
     {
         $sessionId = intval($sessionId);
 		$work_assignment_table  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-		$work_table    			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+		$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 		$item_property_table  	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 		// Query in student publication

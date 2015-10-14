@@ -52,6 +52,16 @@ $(document).ready(function() {
     });
 });
 
+$(document).on("click", ".dropdown-menu li a", function () {
+    var textValue = $(this).text();
+    $.ajax({
+        contentType: "application/x-www-form-urlencoded",
+        data: "textValue="+textValue,
+        url: "' . api_get_path(WEB_AJAX_PATH) . 'document.ajax.php?a=documentDestination",
+        type: "POST"
+    });
+});
+
 function setFocus() {
    $("#document_title").focus();
 }
@@ -432,6 +442,20 @@ if ($form->validate()) {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
 	$values['title'] = trim($values['title']);
+    
+    $textValue = $_SESSION['textValue'];
+    $homeDirectory = get_lang('HomeDirectory');
+    if ($textValue === $homeDirectory){
+        $dir = "/";
+    } else if ($dir != "/") {
+        $posTextValue = strpos($textValue, '—');
+        $textValue = substr($textValue, ($posTextValue + 4));
+        foreach ($folder_titles as $dirValue => $dirText) {
+            if ($dirText === $textValue) {
+                $dir = $dirValue;
+            }
+        }
+    }
 
     if ($dir[strlen($dir) - 1] != '/') {
 		$dir .= '/';

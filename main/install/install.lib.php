@@ -1242,7 +1242,7 @@ function get_contact_registration_form()
     <div class="clear"></div>
     <div class="form-group">
             <div class="col-sm-3">&nbsp;</div>
-            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"> </i> '.get_lang('SendInformation').'</button></div>
+            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"></em> '.get_lang('SendInformation').'</button></div>
     </div>
     <div class="form-group">
             <div class="col-sm-3">&nbsp;</div>

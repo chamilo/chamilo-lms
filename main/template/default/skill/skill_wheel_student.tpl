@@ -59,11 +59,6 @@
                     </button>\n\
                 </td>\n\
             </tr>';
-        return '<li>' + 
-            '<a id="skill_to_select_id_' + skill_id + '" href="#" class="load_wheel" rel="' + skill_id + '">' +
-                skill_name +
-            '</a>' +
-            '</li>';
     }
 
     function load_skill_info(skill_id) {
@@ -234,6 +229,9 @@
                         <div id="wheel-legend-collapse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="wheel-legend-heading">
                             <div class="panel-body">
                                 <ul class="fa-ul">
+                                    <li>
+                                        <em class="fa fa-li fa-square skill-legend-basic"></em> {{ "BasicSkills"|get_lang }}
+                                    </li>
                                     <li>
                                         <em class="fa fa-li fa-square skill-legend-badges"></em> {{ "SkillsYouAcquired"|get_lang }}
                                     </li>

@@ -2701,7 +2701,7 @@ form .formw .freeze {
 }
 
 #skill_holder li {
-  float:left;
+  float: none;
   padding-right: 10px;
   margin-bottom: .5em;
 }
@@ -4340,7 +4340,7 @@ ul.holder li.bit-input input{
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
 ul.holder li.bit-box{
-  padding: 5px;
+  padding-right: 15px;
   margin-bottom: 5px;
   color: #8a6d3b;
   background-color:#FCF8E3;

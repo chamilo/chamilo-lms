@@ -389,13 +389,13 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 				href: ajax_url + '?action=create_room&to=' + user_id
 			})
                         .data({
-                            title: '<i class="fa fa-video-camera"></i>',
+                            title: '<em class="fa fa-video-camera"></em>',
                             size: 'sm'
                         })
                         .on('click', function () {
                             $(this).data('title', $('.chatboxtitle').text());
                         })
-			.html('<i class="fa fa-video-camera"></i>')
+			.html('<em class="fa fa-video-camera"></em>')
 			.appendTo(chatboxoptions);
 	}
 
@@ -405,7 +405,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 			href: 'javascript:void(0)',
 			rel: user_id
 		})
-		.html('<i class="fa fa-toggle-down"></i>')
+		.html('<em class="fa fa-toggle-down"></em>')
 		.appendTo(chatboxoptions);
 
 	$('<a>')
@@ -414,7 +414,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 			href: 'javascript:void(0)',
 			rel: user_id
 		})
-		.html('<i class="fa fa-close"></i>')
+		.html('<em class="fa fa-close"></em>')
 		.appendTo(chatboxoptions);
 
 	$('<br>')
@@ -471,7 +471,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 		}
 
 		if (minimize == 1) {
-                        $('.togglelink').html('<i class="fa fa-toggle-up"></i>');
+                        $('.togglelink').html('<em class="fa fa-toggle-up"></em>');
 			$('#chatbox_'+user_id+' .chatboxcontent').css('display','none');
 			$('#chatbox_'+user_id+' .chatboxinput').css('display','none');
 		}
@@ -556,7 +556,7 @@ function toggleChatBoxGrowth(user_id) {
 		$('#chatbox_'+user_id+' .chatboxinput').css('display','block');
 		$("#chatbox_"+user_id+" .chatboxcontent").scrollTop($("#chatbox_"+user_id+" .chatboxcontent")[0].scrollHeight);
 
-                $('.togglelink').html('<i class="fa fa-toggle-down"></i>');
+                $('.togglelink').html('<em class="fa fa-toggle-down"></em>');
 	} else {
 		var newCookie = user_id;
 		if ($.cookie('chatbox_minimized')) {
@@ -566,7 +566,7 @@ function toggleChatBoxGrowth(user_id) {
 		$('#chatbox_'+user_id+' .chatboxcontent').css('display','none');
 		$('#chatbox_'+user_id+' .chatboxinput').css('display','none');
 
-                $('.togglelink').html('<i class="fa fa-toggle-up"></i>');
+                $('.togglelink').html('<em class="fa fa-toggle-up"></em>');
 	}
 }
 

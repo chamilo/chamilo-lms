@@ -179,7 +179,7 @@ foreach ($rows as $post) {
 
                 $buttonReply = Display::tag(
                     'a',
-                    '<i class="fa fa-reply"></i> ' . get_lang('ReplyToMessage'),
+                    '<em class="fa fa-reply"></em> ' . get_lang('ReplyToMessage'),
                     array(
                         'href' => 'reply.php?' . api_get_cidreq()
                             . "&forum=$clean_forum_id'&thread=$clean_thread_id"
@@ -190,7 +190,7 @@ foreach ($rows as $post) {
 
                 $buttonQuote = Display::tag(
                     'a',
-                    '<i class="fa fa-quote-left"></i> ' . get_lang('QuoteMessage'),
+                    '<em class="fa fa-quote-left"></em> ' . get_lang('QuoteMessage'),
                     array(
                         'href' => 'reply.php?' . api_get_cidreq()
                             . "&forum=$clean_forum_id&thread=$clean_thread_id"
@@ -204,21 +204,21 @@ foreach ($rows as $post) {
         if ($current_forum_category && $current_forum_category['locked'] == 1) {
             $closedPost = Display::tag(
                 'div',
-                '<i class="fa fa-exclamation-triangle"></i> ' . get_lang('ForumcategoryLocked'),
+                '<em class="fa fa-exclamation-triangle"></em> ' . get_lang('ForumcategoryLocked'),
                 array('class' => 'alert alert-warning post-closed')
             );
         }
         if ($current_forum['locked'] == 1) {
             $closedPost = Display::tag(
                 'div',
-                '<i class="fa fa-exclamation-triangle"></i> ' . get_lang('ForumLocked'),
+                '<em class="fa fa-exclamation-triangle"></em> ' . get_lang('ForumLocked'),
                 array('class' => 'alert alert-warning post-closed')
             );
         }
         if ($current_thread['locked'] == 1) {
             $closedPost = Display::tag(
                 'div',
-                '<i class="fa fa-exclamation-triangle"></i> ' . get_lang('ThreadLocked'),
+                '<em class="fa fa-exclamation-triangle"></em> ' . get_lang('ThreadLocked'),
                 array('class' => 'alert alert-warning post-closed')
             );
         }

@@ -219,17 +219,17 @@ if (!empty($errorMsg)) {
   if ($ajax_search) {
 	?>
 	<button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
-        <i class="fa fa-arrow-left"></i>
+        <em class="fa fa-arrow-left"></em>
 	</button>
   	<?php
   } else {
   	?>
 	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
-        <i class="fa fa-arrow-right"></i>
+        <em class="fa fa-arrow-right"></em>
 	</button>
 	<br /><br />
 	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
-        <i class="fa fa-arrow-left"></i>
+        <em class="fa fa-arrow-left"></em>
 	</button>
 	<?php
   }

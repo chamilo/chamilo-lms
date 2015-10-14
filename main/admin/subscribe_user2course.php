@@ -304,7 +304,7 @@ if (is_array($extra_field_list)) {
    </td>
    <td width="20%" valign="middle" align="center">
     <button type="submit" class="btn btn-primary" value="<?php echo get_lang('AddToThatCourse'); ?> &gt;&gt;">
-        <i class="fa fa-plus"></i> <?php echo get_lang('AddToThatCourse'); ?>
+        <em class="fa fa-plus"></em> <?php echo get_lang('AddToThatCourse'); ?>
     </button>
    </td>
    <td width="40%" align="center">

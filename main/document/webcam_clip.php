@@ -237,15 +237,15 @@ echo '</div>';
             <form>
                 <br/>
                 <button id="btnCapture" class="btn btn-danger">
-                <i class="fa fa-camera"></i>
+                <em class="fa fa-camera"></em>
                 <?php echo get_lang('Snapshot'); ?>
                 </button>
                 <button id="btnClean" class="btn btn-success">
-                <i class="fa fa-refresh"></i>
+                <em class="fa fa-refresh"></em>
                 <?php echo get_lang('Clean'); ?>
                 </button>
                 <button id="btnSave" class="btn btn-primary">
-                <i class="fa fa-save"></i>
+                <em class="fa fa-save"></em>
                 <?php echo get_lang('Save'); ?>
                 </button>
                 &nbsp;&nbsp;||&nbsp;&nbsp;

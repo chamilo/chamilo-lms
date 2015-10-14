@@ -38,22 +38,22 @@
                     <td width="500">{{ skill.description }}</td>
                     <td class="text-right">
                         <a href="{{ _p.web_main }}admin/skill_edit.php?id={{ skill.id }}" class="btn btn-primary btn-sm" title="{{ "Edit" | get_lang }}">
-                            <i class="fa fa-edit fa-fw"></i>
+                            <em class="fa fa-edit fa-fw"></em>
                         </a>
                         <a href="{{ _p.web_main }}admin/skill_create.php?parent={{ skill.id }}" class="btn btn-primary btn-sm" title="{{ "CreateChildSkill" | get_lang }}">
-                            <i class="fa fa-plus fa-fw"></i>
+                            <em class="fa fa-plus fa-fw"></em>
                         </a>
                         <a href="{{ _p.web_main }}admin/skill_badge_create.php?id={{ skill.id }}" class="btn btn-primary btn-sm" title="{{ "CreateBadge" | get_lang }}">
-                            <i class="fa fa-shield fa-fw"></i>
+                            <em class="fa fa-shield fa-fw"></em>
                         </a>
 
                         {% if skill.status == 0 %}
                             <a href="{{ _p.web_self ~ '?' ~ {"action": "enable", "id": skill.id}|url_encode() }}" class="btn btn-success btn-sm" title="{{ 'Enable' }}">
-                                <i class="fa fa-check-circle-o fa-fw"></i>
+                                <em class="fa fa-check-circle-o fa-fw"></em>
                             </a>
                         {% else %}
                             <a href="{{ _p.web_self ~ '?' ~ {"action": "disable", "id": skill.id}|url_encode() }}" class="btn btn-danger btn-sm" title="{{ 'Disable' }}">
-                                <i class="fa fa-ban fa-fw"></i>
+                                <em class="fa fa-ban fa-fw"></em>
                             </a>
                         {% endif %}
                     </td>

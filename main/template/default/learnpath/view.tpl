@@ -13,14 +13,14 @@
                     <div id="scorm-info" class="panel panel-default">
                         <div class="panel-heading">
                             <a id="ui-option">
-                                <i id="icon-down" class="fa fa-chevron-down hidden"></i>
-                                <i id="icon-up" class="fa fa-chevron-up"></i>
+                                <em id="icon-down" class="fa fa-chevron-down hidden"></em>
+                                <em id="icon-up" class="fa fa-chevron-up"></em>
                             </a>
                         </div>
                         {# Author image preview #}
                         <div id="panel-scorm" class="panel-body">
                             <a href="{{ button_home_url }}" class="btn btn-primary btn-block" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                                <i class="fa fa-home"></i> {{ button_home_text }}
+                                <em class="fa fa-home"></em> {{ button_home_text }}
                             </a>
                             <div class="image-avatar">
                                 <div class="row">
@@ -49,13 +49,13 @@
                                         <div class="col-xs-8">
                                             {% if gamification_stars > 0 %}
                                                 {% for i in 1..gamification_stars %}
-                                                    <i class="fa fa-star level"></i>
+                                                    <em class="fa fa-star level"></em>
                                                 {% endfor %}
                                             {% endif %}
 
                                             {% if gamification_stars < 4 %}
                                                 {% for i in 1..4 - gamification_stars %}
-                                                    <i class="fa fa-star"></i>
+                                                    <em class="fa fa-star"></em>
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
@@ -90,7 +90,7 @@
 
                 {# TOC layout #}
                 <div id="toc_id" class="scorm-body" name="toc_name">
-                    <div class="scorm-title"> <i class="fa fa-book"></i> {{ lp_title_scorm }}</div>
+                    <div class="scorm-title"> <em class="fa fa-book"></em> {{ lp_title_scorm }}</div>
                     <div id="learning_path_toc" class="scorm-list">
                         {{ lp_html_toc }}
                     </div>

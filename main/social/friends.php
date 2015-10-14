@@ -95,7 +95,7 @@ $social_right_content = '<div class="col-md-9">';
 if (count($friends) == 0) {
     $social_right_content .= get_lang('NoFriendsInYourContactList').'<br />';
     $social_right_content .= '<a class="btn btn-success" href="search.php">
-								<i class="fa fa-search"></i> '.get_lang('TryAndFindSomeFriends').'</a>';
+								<em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a>';
 } else {
     $social_right_content .= get_lang('Search').'&nbsp;&nbsp; : &nbsp;&nbsp;';
     $social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />';

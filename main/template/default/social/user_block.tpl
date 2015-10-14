@@ -49,7 +49,7 @@
                         {% if not profile_edition_link is empty %}
                         <li class="item">
                             <a class="btn link btn-sm btn-block" href="{{ profile_edition_link }}">
-                            <i class="fa fa-edit"></i>{{ "EditProfile" | get_lang }}
+                            <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
                             </a>
                         </li>
                         {% endif %}

@@ -34,7 +34,7 @@
                {% if logout_link is not null %}
                <li>
                    <a id="logout_button" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
-                       <i class="fa fa-sign-out"></i> {{ "Logout"|get_lang }}
+                       <em class="fa fa-sign-out"></em> {{ "Logout"|get_lang }}
                    </a>
                </li>
                {% endif %}

@@ -416,7 +416,7 @@ if ($encryptPassForm == '1') {
             </div>
             <div id="note">
                 <a class="btn btn-default" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                    <i class="fa fa-file-text-o"></i> <?php echo get_lang('ReadTheInstallationGuide'); ?>
+                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('ReadTheInstallationGuide'); ?>
                 </a>
             </div>
         </div>
@@ -636,14 +636,14 @@ if (@$_POST['step2']) {
         <tr>
             <td>
                 <button type="submit" class="btn btn-default" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" >
-                    <i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?>
+                    <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
                 </button>
             </td>
             <td align="right">
                 <input type="hidden" name="is_executable" id="is_executable" value="-" />
                 <input type="hidden" name="step6" value="1" />
                 <button id="button_step6" class="btn btn-success" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>">
-                    <i class="fa fa-floppy-o"> </i>
+                    <em class="fa fa-floppy-o"> </em>
                     <?php echo get_lang('InstallChamilo'); ?>
                 </button>
                 <button class="btn btn-save" id="button_please_wait"></button>

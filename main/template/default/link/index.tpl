@@ -191,28 +191,28 @@ function validate_link(name, btn){
     {% if is_allowed_to_edit %}
         <div class="btn-group edit">
             <a href="{{root}}&amp;action=add_category" class="btn new_folder" title="{{'AddCategory'|get_lang}}">
-                <i class="size-32 icon-new-folder"></i>
+                <em class="size-32 icon-new-folder"></em>
             </a>
             <a href="{{root}}&amp;action=add_link" class="btn new_link" title="{{'AddLink'|get_lang}}">
-                <i class="size-32 icon-new-link"></i>
+                <em class="size-32 icon-new-link"></em>
             </a>
             <a href="javascript:void(0)" onclick="delete_all();return false;" class="btn btn-default" title="{{'DeleteAll'|get_lang}}">
-                <i class="size-32 icon-delete-all"></i>
+                <em class="size-32 icon-delete-all"></em>
             </a>
             <a href="{{root}}&amp;action=import_csv" class="btn import_csv" title="{{'ImportCSV'|get_lang}}">
-                <i class="size-32 icon-import-csv"></i>
+                <em class="size-32 icon-import-csv"></em>
             </a>
             <a href="{{root}}&amp;action=export_csv" class="btn" title="{{'ExportAsCSV'|get_lang}}">
-                <i class="size-32 icon-export-csv"></i>
+                <em class="size-32 icon-export-csv"></em>
             </a>
         </div>
     {% endif %}
     <div class="btn-group">
         <a href="javascript:void(0)" onclick="expand_all();return false;" class="btn btn-default" title="{{'ShowAll'|get_lang}}">
-            <i class="size-32 icon-expand"></i>
+            <em class="size-32 icon-expand"></em>
         </a>
         <a href="javascript:void(0)" onclick="collapse_all();return false;" class="btn btn-default" title="{{'ShowNone'|get_lang}}">
-            <i class="size-32 icon-collapse"></i>
+            <em class="size-32 icon-collapse"></em>
         </a>
     </div>
 </div>
@@ -248,14 +248,14 @@ function validate_link(name, btn){
                         <a href="{{root}}&amp;action=edit_link&amp;id={{link.id}}&amp;c_id={{link.c_id}}" 
                         title="{{'Edit'|get_lang}}" 
                         class="">
-                            <i class="size-22 icon-edit"></i>
+                            <em class="size-22 icon-edit"></em>
                         </a>   
                         <a href="javascript:void(0)" onclick="switch_li_visibility('link_{{link.id}}', this);return false;" 
                         class="btn visibility {%if link.visibility == 1%}hide{%else%}show{%endif%}">
                             
                         </a>
                         <a href="javascript:void(0)" onclick="delete_link('link_{{link.id}}', this);return false;" title="{{'Delete'|get_lang}}" class="">
-                            <i class="size-22 icon-delete"></i>
+                            <em class="size-22 icon-delete"></em>
                         </a>
                     </div>
                 {% endif %}
@@ -274,13 +274,13 @@ function validate_link(name, btn){
                         onclick="event.stopPropagation();" 
                         title="{{'Edit'|get_lang}}"
                         class="">
-                            <i class="size-22 icon-edit"></i>
+                            <em class="size-22 icon-edit"></em>
                         </a>            
                         <a href="javascript:void(0)" 
                         onclick="delete_category('category_{{category.id}}');event.stopPropagation();return false;" 
                             title="{{'Delete'|get_lang}}"
                             class="">
-                            <i class="size-22 icon-delete"></i>
+                            <em class="size-22 icon-delete"></em>
                         </a>
                     </div>
                 {% endif %}
@@ -319,7 +319,7 @@ function validate_link(name, btn){
                                     onclick="" 
                                     title="{{'Edit'|get_lang}}"
                                     class="">
-                                        <i class="size-22 icon-edit"></i>
+                                        <em class="size-22 icon-edit"></em>
                                     </a>   
                                     <a href="javascript:void(0)" 
                                     onclick="switch_li_visibility('link_{{link.id}}', this);return false;" 
@@ -328,7 +328,7 @@ function validate_link(name, btn){
                                     onclick="delete_link('link_{{link.id}}', this);return false;" 
                                     title="{{'Delete'|get_lang}}"
                                     class="">
-                                        <i class="size-22 icon-delete"></i>
+                                        <em class="size-22 icon-delete"></em>
                                     </a>
                                 </div>
                             {% endif %}

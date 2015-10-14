@@ -452,7 +452,7 @@
             <div class="col-md-3 skill-options">
                 <div class="skill-home">
                     <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">
-                        <i class="fa fa-home"></i> {{ "ReturnToCourseList"|get_lang }}
+                        <em class="fa fa-home"></em> {{ "ReturnToCourseList"|get_lang }}
                     </a>
                 </div>
                 <div class="panel panel-primary">
@@ -469,13 +469,13 @@
                             <ul id="profile_search" class="holder holder_simple"></ul>
                             <form id="search_profile_form" class="form-search">
                                 <button class="btn btn-default btn-block" type="submit">
-                                    <i class="fa fa-search"></i> {{ "SearchProfileMatches"|get_lang }}
+                                    <em class="fa fa-search"></em> {{ "SearchProfileMatches"|get_lang }}
                                 </button>
                             </form>
                             <p class="text">{{ 'IsThisWhatYouWereLookingFor'|get_lang }}</p>
                             <form id="save_profile_form_button" class="form-search">
                                 <button class="btn btn-default btn-block" type="submit">
-                                    <i class="fa fa-floppy-o"></i> {{ "SaveThisSearch"|get_lang }}
+                                    <em class="fa fa-floppy-o"></em> {{ "SaveThisSearch"|get_lang }}
                                 </button>
                             </form>
                         </div>
@@ -483,7 +483,7 @@
                         
                         <p class="clearfix">
                             <a class="btn btn-block btn-default load_root" rel="0" href="#">
-                                <i class="fa fa-eye"></i> {{ "ViewSkillsWheel"|get_lang }}
+                                <em class="fa fa-eye"></em> {{ "ViewSkillsWheel"|get_lang }}
                             </a>
                         </p>
                     </div>
@@ -501,13 +501,13 @@
                             <div class="panel-body">
                                 <ul class="fa-ul">
                                     <li>
-                                        <i class="fa fa-li fa-square skill-legend-basic"></i> {{ "BasicSkills"|get_lang }}
+                                        <em class="fa fa-li fa-square skill-legend-basic"></em> {{ "BasicSkills"|get_lang }}
                                     </li>
                                     <li>
-                                        <i class="fa fa-li fa-square skill-legend-add"></i> {{ "SkillsYouCanLearn"|get_lang }}
+                                        <em class="fa fa-li fa-square skill-legend-add"></em> {{ "SkillsYouCanLearn"|get_lang }}
                                     </li>
                                     <li>
-                                        <i class="fa fa-li fa-square skill-legend-search"></i> {{ "SkillsSearchedFor"|get_lang }}
+                                        <em class="fa fa-li fa-square skill-legend-search"></em> {{ "SkillsSearchedFor"|get_lang }}
                                     </li>
                                 </ul>
                             </div>
@@ -559,16 +559,16 @@
             </div>
             <div class="modal-footer">
                 <button id="form-button-edit" class="btn btn-primary">
-                    <i class="fa fa-edit"></i> {{ "Edit" | get_lang }}
+                    <em class="fa fa-edit"></em> {{ "Edit" | get_lang }}
                 </button>
                 <button id="form-button-create-child" class="btn btn-primary">
-                    <i class="fa fa-plus"></i> {{ "CreateChildSkill" | get_lang }}
+                    <em class="fa fa-plus"></em> {{ "CreateChildSkill" | get_lang }}
                 </button>
                 <button id="form-button-add-to-profile" class="btn btn-primary">
-                    <i class="fa fa-check"></i> {{ "AddSkillToProfileSearch" | get_lang }}
+                    <em class="fa fa-check"></em> {{ "AddSkillToProfileSearch" | get_lang }}
                 </button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    <i class="fa fa-close"></i> {{ "Close" | get_lang }}
+                    <em class="fa fa-close"></em> {{ "Close" | get_lang }}
                 </button>
             </div>
         </div>
@@ -589,10 +589,10 @@
             </div>
             <div class="modal-footer">
                 <button id="form-button-save-profile" class="btn btn-primary">
-                    <i class="fa fa-save"></i> {{ "Save" | get_lang }}
+                    <em class="fa fa-save"></em> {{ "Save" | get_lang }}
                 </button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    <i class="fa fa-close"></i> {{ "Close" | get_lang }}
+                    <em class="fa fa-close"></em> {{ "Close" | get_lang }}
                 </button>
             </div>
         </div>

@@ -230,11 +230,11 @@ if (!empty($OkMsg)) {
   </td>
   <td width="10%" valign="middle" align="center">
       <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
-        <i class="fa fa-arrow-right"></i>
+        <em class="fa fa-arrow-right"></em>
     </button>
     <br /><br />
     <button class="btn  btn-default" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-        <i class="fa fa-arrow-left"></i>
+        <em class="fa fa-arrow-left"></em>
     </button>
     <br /><br /><br /><br /><br /><br />
     <?php

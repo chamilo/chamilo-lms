@@ -590,7 +590,7 @@ class CoursesController
      */
     public function getAlreadyRegisteredInSessionLabel()
     {
-        $icon = '<i class="fa fa-smile-o"></i>';
+        $icon = '<em class="fa fa-smile-o"></em>';
 
         return Display::div(
             $icon . ' ' . get_lang("AlreadyRegisteredToSession"),

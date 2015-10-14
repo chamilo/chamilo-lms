@@ -399,7 +399,7 @@ class DashboardManager
 
 			echo '</table>';
 			echo '<div class="row"><div class="col-md-12">';
-			echo '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><i class="fa fa-check-square"></i> '.
+			echo '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><em class="fa fa-check-square"></em> '.
                 get_lang('EnableDashboardBlock').'</button></form>';
 			echo '</div></div>';
 		} else {

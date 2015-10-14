@@ -313,7 +313,7 @@ if ($userStatus != STUDENT_BOSS) {
     );
 }
 
-$actionsRight = Display::url('<i class="fa fa-search"></i> ' . get_lang('AdvancedSearch'), '#', array('class' => 'btn btn-default advanced_options', 'id' => 'advanced_search'));
+$actionsRight = Display::url('<em class="fa fa-search"></em> ' . get_lang('AdvancedSearch'), '#', array('class' => 'btn btn-default advanced_options', 'id' => 'advanced_search'));
 
 $toolbar = Display::toolbarAction('toolbar-dashboard', $content = array( 0 => $actionsLeft, 1 => $actionsRight ));
 echo $toolbar;
@@ -439,11 +439,11 @@ if(!empty($msg)) {
             <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
           <?php } else { ?>
             <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
-                <i class="fa fa-chevron-right"></i>
+                <em class="fa fa-chevron-right"></em>
             </button>
             <br /><br />
             <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-                <i class="fa fa-chevron-left"></i>
+                <em class="fa fa-chevron-left"></em>
             </button>
           <?php
           }

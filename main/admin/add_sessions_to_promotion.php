@@ -227,17 +227,17 @@ if (!empty($errorMsg)) {
   if ($ajax_search) {
   ?>
     <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('session_in_promotion'))" >
-        <i class="fa fa-arrow-left"></i>
+        <em class="fa fa-arrow-left"></em>
     </button>
   <?php
   } else {
   ?>
     <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))">
-        <i class="fa fa-arrow-right"></i>
+        <em class="fa fa-arrow-right"></em>
     </button>
     <br /><br />
     <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))">
-        <i class="fa fa-arrow-left"></i>
+        <em class="fa fa-arrow-left"></em>
     </button>
     <?php
   }

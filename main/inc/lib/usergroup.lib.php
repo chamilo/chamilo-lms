@@ -2218,14 +2218,14 @@ class UserGroup extends Model
      * @param boolean $includeSubgroupsUsers Optional. Whether include the users from subgroups
      * @return array
      */
-    public static function getGroupUsersByUser(
+    public function getGroupUsersByUser(
         $userId,
         $relationType = GROUP_USER_PERMISSION_ADMIN,
         $includeSubgroupsUsers = true
     ) {
         $userId = intval($userId);
 
-        $groups = self::get_groups_by_user($userId, $relationType);
+        $groups = $this->get_groups_by_user($userId, $relationType);
 
         $groupsId = array_keys($groups);
         $subgroupsId = [];

@@ -396,6 +396,7 @@ define('SCORE_ONLY_CUSTOM', 3);
 // From display.lib.php
 
 define('MAX_LENGTH_BREADCRUMB', 100);
+define('ICON_SIZE_ATOM', 8);
 define('ICON_SIZE_TINY', 16);
 define('ICON_SIZE_SMALL', 22);
 define('ICON_SIZE_MEDIUM', 32);

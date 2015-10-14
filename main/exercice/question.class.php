@@ -1424,7 +1424,7 @@ abstract class Question
         </script>';
 
         // question name
-        $form->addElement('text', 'questionName', get_lang('Question'), array('class' => 'span6'));
+        $form->addElement('text', 'questionName', get_lang('Question'));
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
         // default content

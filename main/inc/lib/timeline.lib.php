@@ -138,12 +138,12 @@ class Timeline extends Model
         $parent_id = isset($_GET['parent_id']) ? intval($_GET['parent_id']) : '';
         $form->addElement('hidden', 'parent_id', $parent_id);
         $form->addElement('hidden', 'id', $id);
-        $form->addElement('text', 'headline', get_lang('Name'), array('class' => 'span4'));
+        $form->addElement('text', 'headline', get_lang('Name'));
 
         //@todo fix this
         $form->addElement('text', 'start_date', get_lang('StartDate'), array('size' => '70'));
         $form->addElement('text', 'end_date', get_lang('EndDate'), array('size' => '70'));
-        $form->addElement('textarea', 'text', get_lang('TimelineItemText'), array('class' => 'span3'));
+        $form->addElement('textarea', 'text', get_lang('TimelineItemText'));
         $form->addElement('text', 'media', get_lang('TimelineItemMedia'), array('size' => '70'));
         $form->addElement('text', 'media_caption', get_lang('TimelineItemMediaCaption'), array('size' => '70'));
         $form->addElement('text', 'media_credit', get_lang('TimelineItemMediaCredit'), array('size' => '70'));

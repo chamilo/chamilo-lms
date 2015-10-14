@@ -319,7 +319,7 @@ echo Display::actions($action_array);
 
     <div class="col-md-4">
         <h4><?php echo get_lang('Users'); ?></h4>
-        <select multiple="1" id="usersList" class="span3 registration_case"></select>
+        <select multiple="1" id="usersList" class="registration_case"></select>
     </div>
     <div class="col-md-4">
         <div class="registration_case">

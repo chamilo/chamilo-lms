@@ -199,7 +199,7 @@ class CatForm extends FormValidator
             'name',
             get_lang('CategoryName'),
             true,
-            array('class' => 'span3', 'maxlength' => '50')
+            array('maxlength' => '50')
         );
         $this->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 

@@ -10,7 +10,7 @@
 <h1 class="page-header">{{ 'Skills' | get_lang }}</h1>
 
 <div class="row">
-    <div class="span6">
+    <div class="col-md-6">
         <form class="form-inline" method="post" action="{{ _p.web_self }}">
             <label for="course">{{ 'Courses' | get_lang }}</label>
             <select name="course" id="course">
@@ -22,7 +22,7 @@
             <button type="submit" class="btn btn-default">{{ 'Filter' | get_lang }}</button>
         </form>
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         <form class="form-inline" method="post" action="{{ _p.web_self }}">
             <label for="skill">{{ 'Skills' | get_lang }}</label>
             <select name="skill" id="skill">

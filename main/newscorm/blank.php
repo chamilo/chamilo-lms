@@ -36,7 +36,7 @@ if (isset($_GET['error'])) {
         case 'x_frames_options':
             if (isset($_SESSION['x_frame_source'])) {
                 $src = $_SESSION['x_frame_source'];
-                $icon = '<i class="icon-play-sign icon-2x"></i>&nbsp;';
+                $icon = '<em class="icon-play-sign icon-2x"></em>&nbsp;';
 
                 echo Display::return_message(
                     Display::url($icon.$src, $src, ['class' => 'btn generated', 'target' => '_blank']),

@@ -5,7 +5,7 @@
         </button>
         <h4>{{ 'Warning'|get_lang }}</h4>
         <p>
-            <i class="fa fa-warning"></i> {{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}
+            <em class="fa fa-warning"></em> {{ 'AvoidChangingPageAsThisWillCutYourCurrentVideoChatSession'|get_lang }}
         </p>
     </div>
     <div class="row">
@@ -80,29 +80,29 @@
                                     case 'checking':
                                         alertDiv
                                             .addClass('alert-info')
-                                            .html('<i class="fa fa-spinner fa-spin"></i> ' + "{{ 'ConnectingToPeer'|get_lang }}");
+                                            .html('<em class="fa fa-spinner fa-spin"></em> ' + "{{ 'ConnectingToPeer'|get_lang }}");
                                         break;
                                     case 'connected':
                                         //no break
                                     case 'completed':
                                         alertDiv
                                             .addClass('alert-success')
-                                            .html('<i class="fa fa-commenting"></i> ' + "{{ 'ConnectionEstablished'|get_lang }}");
+                                            .html('<em class="fa fa-commenting"></em> ' + "{{ 'ConnectionEstablished'|get_lang }}");
                                         break;
                                     case 'disconnected':
                                         alertDiv
                                             .addClass('alert-info')
-                                            .html('<i class="fa fa-frown-o"></i> ' + "{{ 'Disconnected'|get_lang }}");
+                                            .html('<em class="fa fa-frown-o"></em> ' + "{{ 'Disconnected'|get_lang }}");
                                         break;
                                     case 'failed':
                                         alertDiv
                                             .addClass('alert-danger')
-                                            .html('<i class="fa fa-times"></i> ' + "{{ 'ConnectionFailed'|get_lang }}");
+                                            .html('<em class="fa fa-times"></em> ' + "{{ 'ConnectionFailed'|get_lang }}");
                                         break;
                                     case 'closed':
                                         alertDiv
                                             .addClass('alert-danger')
-                                            .html('<i class="fa fa-close"></i> ' + "{{ 'ConnectionClosed'|get_lang }}");
+                                            .html('<em class="fa fa-close"></em> ' + "{{ 'ConnectionClosed'|get_lang }}");
                                         break;
                                 }
 
@@ -116,14 +116,14 @@
                     webRTC.on('iceFailed', function (peer) {
                         var alertDiv = $('<div>')
                             .addClass('alert-danger')
-                            .html('<i class="fa fa-close"></i> ' + "{{ 'LocalConnectionFailed'|get_lang }}");
+                            .html('<em class="fa fa-close"></em> ' + "{{ 'LocalConnectionFailed'|get_lang }}");
 
                         $('#connection-status').html(alertDiv);
                     });
                     webRTC.on('connectivityError', function (peer) {
                         var alertDiv = $('<div>')
                             .addClass('alert-danger')
-                            .html('<i class="fa fa-close"></i> ' + "{{ 'RemoteConnectionFailed'|get_lang }}");
+                            .html('<em class="fa fa-close"></em> ' + "{{ 'RemoteConnectionFailed'|get_lang }}");
 
                         $('#connection-status').html(alertDiv);
                     });

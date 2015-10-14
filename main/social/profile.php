@@ -302,7 +302,7 @@ $(document).ready(function() {
                 $(".panel-preview").hide();
                 $(".spinner").html("'.
                     '<div class=\'text-center\'>'.
-                        '<i class=\'fa fa-spinner fa-pulse fa-1x\'></i>'.
+                        '<em class=\'fa fa-spinner fa-pulse fa-1x\'></em>'.
                         '<p>'. get_lang('Loading') . ' ' . get_lang('Preview') .'</p>'.
                     '</div>'.
                 '");

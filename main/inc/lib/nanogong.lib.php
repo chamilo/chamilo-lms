@@ -606,7 +606,7 @@ class Nanogong
 		//$html .= Display::return_message(get_lang('BrowserNotSupportNanogongSend'), 'warning');
 		$html .= '<form id="form_nanogong_simple" class="form-search" action="'.$url.'" name="form_nanogong" method="POST" enctype="multipart/form-data">';
 		$html .= '<input type="file" name="file">';
-		$html .= '<a href="#" class="btn btn-default"  onclick="upload_file()" /><i class="fa fa-upload"></i> '.get_lang('UploadFile').'</a>';
+		$html .= '<a href="#" class="btn btn-default"  onclick="upload_file()" /><em class="fa fa-upload"></em> '.get_lang('UploadFile').'</a>';
 		$html .= '</form>';
         $html .= '</div>';
 		$html .= '</center>';

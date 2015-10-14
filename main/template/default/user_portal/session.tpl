@@ -60,7 +60,7 @@
                 <div class="col-md-12">
                     {% if session.subtitle %}
                         <div class="subtitle-session">
-                            <i class="fa fa-clock-o"></i> {{ session.subtitle }}
+                            <em class="fa fa-clock-o"></em> {{ session.subtitle }}
                         </div>
                     {% endif %}
                     {% if session.show_description %}

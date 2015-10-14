@@ -182,7 +182,7 @@ api_display_tool_title($tool_name);
         </select>
         <div class="control">
         <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('AssignCoach') ?>">
-            <i class="fa fa-plus"></i>
+            <em class="fa fa-plus"></em>
             <?php echo get_lang('AssignCoach') ?>
         </button>
         </div>

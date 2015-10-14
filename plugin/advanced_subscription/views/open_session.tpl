@@ -34,7 +34,7 @@
         <a
             class="btn btn-success btn-advanced-subscription btn-accept"
             href="#" id="asp-close-window">
-            <i class="fa fa-check"></i>
+            <em class="fa fa-check"></em>
             {{ "AcceptInfinitive"|get_plugin_lang('AdvancedSubscriptionPlugin') }}
         </a>
     </div>
@@ -47,7 +47,7 @@
         <a
             class="btn btn-success btn-advanced-subscription btn-accept"
             href="#" id="asp-go-to">
-            <i class="fa fa-external-link"></i>
+            <em class="fa fa-external-link"></em>
             {{ "GoToSessionX"|get_plugin_lang('AdvancedSubscriptionPlugin')|format(session.name) }}
         </a>
     </div>

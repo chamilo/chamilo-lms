@@ -37,9 +37,7 @@ lp_upload_quiz_action_handling();
 
 $interbreadcrumb[]= array ("url"=>"exercise.php", "name"=> get_lang('Exercises'));
 
-// Display the header
-
-Display :: display_header(get_lang('ImportExcelQuiz'), 'Exercises');
+Display::display_header(get_lang('ImportExcelQuiz'), 'Exercises');
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], array('ExerciseEdited'))) {
@@ -61,18 +59,17 @@ function lp_upload_quiz_actions() {
     return $return;
 }
 
-function lp_upload_quiz_secondary_actions() {
-    $lp_id = Security::remove_XSS($_GET['lp_id']);
-    $return = '';
-    $return .= '<a href="exercise_report.php?' . api_get_cidreq() . '">' .
-                Display :: return_icon('reporting32.png', get_lang('Tracking')) . get_lang('Tracking') . '</a>';
+function lp_upload_quiz_secondary_actions()
+{
+    $return = '<a href="exercise_report.php?' . api_get_cidreq() . '">' .
+        Display :: return_icon('reporting32.png', get_lang('Tracking')) . get_lang('Tracking') . '</a>';
     return $return;
 }
 
 function lp_upload_quiz_main() {
 
     // variable initialisation
-    $lp_id = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
+    $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : null;
 
     $form = new FormValidator(
         'upload',
@@ -85,7 +82,7 @@ function lp_upload_quiz_main() {
     $form->addElement('file', 'user_upload_quiz', get_lang('FileUpload'));
 
     $link = '<a href="../exercice/quiz_template.xls">'.
-             Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
+        Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
     $form->addElement('label', '', $link);
     $form->addElement('checkbox', 'user_custom_score', null, get_lang('UseCustomScoreForAllQuestions'), array('id'=> 'user_custom_score'));
     $form->addElement('html', '<div id="options" style="display:none">');
@@ -150,6 +147,10 @@ function lp_upload_quiz_action_handling() {
     $feedback_false_index = array();
     $number_questions = 0;
     $question_description_index = array();
+    $noNegativeScoreIndex = array();
+    $questionTypeList = array();
+    $questionTypeIndex = array();
+
     // Reading all the first column items sequentially to create breakpoints
     for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
         if ($data->sheets[0]['cells'][$i][1] == 'Quiz' && $i == 1) {
@@ -167,6 +168,10 @@ function lp_upload_quiz_action_handling() {
             $feedback_false_index[] = $i; // FeedbackFalse position (line)
         } elseif ($data->sheets[0]['cells'][$i][1] == 'EnrichQuestion') {
             $question_description_index[] = $i;
+        } elseif ($data->sheets[0]['cells'][$i][1] == 'NoNegativeScore') {
+            $noNegativeScoreIndex[] = $i;
+        } elseif ($data->sheets[0]['cells'][$i][1] == 'QuestionType') {
+            $questionTypeIndex[] = $i;
         }
     }
 
@@ -178,9 +183,10 @@ function lp_upload_quiz_action_handling() {
     $feedback_true_list = array();
     $feedback_false_list = array();
     $question_description = array();
+    $noNegativeScoreList = array();
 
     // Getting questions.
-    $k = $z = $q = $l = $m = 0;
+    $k = $z = $q = $l = $m = $n = 0;
     for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
         if (is_array($data->sheets[0]['cells'][$i])) {
             $column_data = $data->sheets[0]['cells'][$i];
@@ -195,6 +201,7 @@ function lp_upload_quiz_action_handling() {
         } else {
             $column_data = '';
         }
+
         // Fill quiz data
         if ($quiz_index == $i) {
             // The title always in the first position
@@ -202,6 +209,18 @@ function lp_upload_quiz_action_handling() {
         } elseif (in_array($i, $question_title_index)) {
             //a complete line where 1st column is 'Question'
             $question[$k] = $column_data;
+
+            for ($counter = 0; $counter < 12; $counter++) {
+                $myData = isset($data->sheets[0]['cells'][$i + $counter]) ? $data->sheets[0]['cells'][$i + $counter] : null;
+                if (isset($myData[1]) && $myData[1] == 'QuestionType') {
+                    $questionTypeList[$k] = $myData[3];
+                }
+            }
+
+            if (!isset($questionTypeList[$k])) {
+                $questionTypeList[$k] = null;
+            }
+
             $k++;
         } elseif (in_array($i, $score_index)) {
             //a complete line where 1st column is 'Score'
@@ -219,6 +238,9 @@ function lp_upload_quiz_action_handling() {
             //a complete line where 1st column is 'EnrichQuestion'
             $question_description[$m] = $column_data;
             $m++;
+        } elseif (in_array($i, $noNegativeScoreIndex)) {
+            //a complete line where 1st column is 'NoNegativeScore'
+            $noNegativeScoreList[$z-1] = $column_data;
         }
     }
 
@@ -235,8 +257,8 @@ function lp_upload_quiz_action_handling() {
                 }
                 $column_data = $data->sheets[0]['cells'][$j];
                 // Array filled of data
-                if (is_array($data->sheets[0]['cells'][$j]) && count($data->sheets[0]['cells'][$j]) > 0) {
-                    $new_answer[$i][$j] = $data->sheets[0]['cells'][$j];
+                if (is_array($column_data) && count($column_data) > 0) {
+                    $new_answer[$i][$j] = $column_data;
                 }
             }
         }
@@ -283,21 +305,27 @@ function lp_upload_quiz_action_handling() {
             for ($i = 0; $i < $number_questions; $i++) {
                 // Question name
                 $question_title = $question[$i][2];
+                $description = isset($question_description[$i][2]) ? $question_description[$i][2] : '';
+
                 $question_description_text = "<p></p>";
-                if (isset($question_description[$i][2])) {
+                if (!empty($description)) {
                     // Question description.
-                    $question_description_text =  "<p>".$question_description[$i][2]."</p>";
+                    $question_description_text = "<p>".$description."</p>";
                 }
 
                 // Unique answers are the only question types available for now
                 // through xls-format import
+                $answerList = isset($new_answer[$i]) ? $new_answer[$i] : '';
 
                 $question_id = null;
-
-                $detectQuestionType = detectQuestionType(
-                    $new_answer[$i],
-                    $score_list
-                );
+                if (isset($questionTypeList[$i])) {
+                    $detectQuestionType = intval($questionTypeList[$i]);
+                } else {
+                    $detectQuestionType = detectQuestionType(
+                        $answerList,
+                        $score_list
+                    );
+                }
 
                 /** @var Question $answer */
                 switch ($detectQuestionType) {
@@ -309,6 +337,13 @@ function lp_upload_quiz_action_handling() {
                         break;
                     case MULTIPLE_ANSWER:
                         $answer = new MultipleAnswer();
+                        break;
+                    case FILL_IN_BLANKS:
+                        $answer = new FillBlanks();
+                        $question_description_text = '';
+                        break;
+                    case MATCHING:
+                        $answer = new Matching();
                         break;
                     case UNIQUE_ANSWER:
                     default:
@@ -326,93 +361,175 @@ function lp_upload_quiz_action_handling() {
                     );
                 }
 
-                $total = 0;
-                if (is_array($new_answer[$i]) && !empty($question_id)) {
-                    $id = 1;
-                    $answers_data = $new_answer[$i];
-                    $globalScore = null;
-                    $objAnswer = new Answer($question_id, $courseId);
-                    $globalScore = $score_list[$i][3];
+                switch ($detectQuestionType) {
+                    case GLOBAL_MULTIPLE_ANSWER:
+                    case MULTIPLE_ANSWER:
+                    case UNIQUE_ANSWER:
+                        $total = 0;
+                        if (is_array($answerList) && !empty($question_id)) {
+                            $id = 1;
+                            $globalScore = null;
+                            $objAnswer = new Answer($question_id, $courseId);
+                            $globalScore = $score_list[$i][3];
 
-                    // Calculate the number of correct answers to divide the
-                    // score between them when importing from CSV
-                    $numberRightAnswers = 0;
-                    foreach ($answers_data as $answer_data) {
-                        if (strtolower($answer_data[3]) == 'x') {
-                            $numberRightAnswers++;
-                        }
-                    }
-                    foreach ($answers_data as $answer_data) {
-                        $answerValue = $answer_data[2];
-                        $correct = 0;
-                        $score = 0;
-                        if (strtolower($answer_data[3]) == 'x') {
-                            $correct = 1;
-                            $score = $score_list[$i][3];
-                            $comment = $feedback_true_list[$i][2];
-                        } else {
-                            $comment = $feedback_false_list[$i][2];
-                            $floatVal = (float)$answer_data[3];
-                            if (is_numeric($floatVal)) {
-                                $score = $answer_data[3];
-                            }
-                        }
-
-                        if ($useCustomScore) {
-                            if ($correct) {
-                                $score = $correctScore;
-                            } else {
-                                $score = $incorrectScore;
-                            }
-                        }
-
-                        // Fixing scores:
-                        switch ($detectQuestionType) {
-                            case GLOBAL_MULTIPLE_ANSWER:
-                                $score /= $numberRightAnswers;
-                                break;
-                            case UNIQUE_ANSWER:
-                                break;
-                            case MULTIPLE_ANSWER:
-                                if (!$correct) {
-                                    //$total = $total - $score;
+                            // Calculate the number of correct answers to divide the
+                            // score between them when importing from CSV
+                            $numberRightAnswers = 0;
+                            foreach ($answerList as $answer_data) {
+                                if (strtolower($answer_data[3]) == 'x') {
+                                    $numberRightAnswers++;
                                 }
-                                break;
+                            }
+
+                            foreach ($answerList as $answer_data) {
+                                $answerValue = $answer_data[2];
+                                $correct = 0;
+                                $score = 0;
+                                if (strtolower($answer_data[3]) == 'x') {
+                                    $correct = 1;
+                                    $score = $score_list[$i][3];
+                                    $comment = $feedback_true_list[$i][2];
+                                } else {
+                                    $comment = $feedback_false_list[$i][2];
+                                    $floatVal = (float)$answer_data[3];
+                                    if (is_numeric($floatVal)) {
+                                        $score = $answer_data[3];
+                                    }
+                                }
+
+                                if ($useCustomScore) {
+                                    if ($correct) {
+                                        $score = $correctScore;
+                                    } else {
+                                        $score = $incorrectScore;
+                                    }
+                                }
+
+                                // Fixing scores:
+                                switch ($detectQuestionType) {
+                                    case GLOBAL_MULTIPLE_ANSWER:
+                                        if (isset($noNegativeScoreList[$i][3])) {
+                                            if (!(strtolower($noNegativeScoreList[$i][3]) == 'x') &&
+                                                !$correct
+                                            ) {
+                                                $score = $score_list[$i][3] * -1;
+                                            }
+                                        }
+                                        $score /= $numberRightAnswers;
+                                        break;
+                                    case UNIQUE_ANSWER:
+                                        break;
+                                    case MULTIPLE_ANSWER:
+                                        if (!$correct) {
+                                            //$total = $total - $score;
+                                        }
+                                        break;
+                                }
+
+                                $objAnswer->createAnswer(
+                                    $answerValue,
+                                    $correct,
+                                    $comment,
+                                    $score,
+                                    $id
+                                );
+
+                                $total += $score;
+                                $id++;
+                            }
+
+                            $objAnswer->save();
+
+                            $questionObj = Question::read(
+                                $question_id,
+                                $courseId
+                            );
+
+                            switch ($detectQuestionType) {
+                                case GLOBAL_MULTIPLE_ANSWER:
+                                    $questionObj->updateWeighting($globalScore);
+                                    break;
+                                case UNIQUE_ANSWER:
+                                case MULTIPLE_ANSWER:
+                                default:
+                                    $questionObj->updateWeighting($total);
+                                    break;
+                            }
+
+                            $questionObj->save();
+                        }
+                        break;
+                    case FREE_ANSWER:
+                        $questionObj = Question::read($question_id, $courseId);
+                        $globalScore = $score_list[$i][3];
+                        $questionObj->updateWeighting($globalScore);
+                        $questionObj->save();
+                        break;
+                    case FILL_IN_BLANKS:
+
+                        $scoreList = array();
+                        $size = array();
+
+                        $globalScore = 0;
+                        foreach($answerList as $data) {
+                            $score = isset($data[3]) ? $data[3] : 0;
+                            $globalScore += $score;
+                            $scoreList[] = $score;
+                            $size[] = 200;
                         }
 
+                        $scoreToString = implode(',', $scoreList);
+                        $sizeToString = implode(',', $size);
+
+                        //<p>Texte long avec les [mots] à [remplir] mis entre [crochets]</p>::10,10,10:200.36363999999998,200,200:0@'
+                        $answerValue  = $description.'::'.$scoreToString.':'.$sizeToString.':0@';
+                        $objAnswer = new Answer($question_id, $courseId);
                         $objAnswer->createAnswer(
                             $answerValue,
-                            $correct,
-                            $comment,
-                            $score,
-                            $id
+                            '', //$correct,
+                            '', //$comment,
+                            $globalScore,
+                            1
                         );
 
-                        $total += $score;
-                        $id++;
-                    }
+                        $objAnswer->save();
 
-                    $objAnswer->save();
+                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj->updateWeighting($globalScore);
+                        $questionObj->save();
+                        break;
+                    case MATCHING:
+                        $globalScore = $score_list[$i][3];
+                        $position = 1;
+                        $objAnswer = new Answer($question_id, $courseId);
+                        foreach ($answerList as $data) {
+                            $option = isset($data[3]) ? $data[3] : '';
+                            $objAnswer->createAnswer($option, 0, '', 0, $position);
+                            $position++;
+                        }
 
-                    $questionObj = Question::read($question_id, $courseId);
+                        $counter = 1;
+                        foreach ($answerList as $data) {
+                            $value = isset($data[2]) ? $data[2] : '';
+                            $position++;
 
-                    switch ($detectQuestionType) {
-                        case GLOBAL_MULTIPLE_ANSWER:
-                            $questionObj->updateWeighting($globalScore);
-                            break;
-                        case UNIQUE_ANSWER:
-                        case MULTIPLE_ANSWER:
-                        default:
-                            $questionObj->updateWeighting($total);
-                            break;
-                    }
+                            $objAnswer->createAnswer(
+                                $value,
+                                $counter,
+                                ' ',
+                                $globalScore,
+                                $position
+                            );
+                            $counter++;
+                        }
 
-                    $questionObj->save();
-                } else if ($detectQuestionType === FREE_ANSWER) {
-                    $questionObj = Question::read($question_id, $courseId);
-                    $globalScore = $score_list[$i][3];
-                    $questionObj->updateWeighting($globalScore);
-                    $questionObj->save();
+                        $objAnswer->save();
+
+                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj->updateWeighting($globalScore);
+                        $questionObj->save();
+
+                        break;
                 }
             }
         }
@@ -458,19 +575,19 @@ function lp_upload_quiz_action_handling() {
  * @param array $answers_data
  * @return int
  */
-function detectQuestionType($answers_data)
-{
+function detectQuestionType($answers_data) {
     $correct = 0;
     $isNumeric = false;
 
-    if (!empty($answers_data)) {
-        foreach ($answers_data as $answer_data) {
-            if (strtolower($answer_data[3]) == 'x') {
-                $correct++;
-            } else {
-                if (is_numeric($answer_data[3])) {
-                    $isNumeric = true;
-                }
+    if (empty($answers_data)) {
+        return FREE_ANSWER;
+    }
+    foreach ($answers_data as $answer_data) {
+        if (strtolower($answer_data[3]) == 'x') {
+            $correct++;
+        } else {
+            if (is_numeric($answer_data[3])) {
+                $isNumeric = true;
             }
         }
     }

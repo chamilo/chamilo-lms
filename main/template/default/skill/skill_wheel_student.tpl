@@ -149,7 +149,7 @@
             <div class="col-md-3 skill-options">
                 <p class="skill-home">
                     <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">
-                        <i class="fa fa-home"></i> {{ "ReturnToCourseList"|get_lang }}
+                        <em class="fa fa-home"></em> {{ "ReturnToCourseList"|get_lang }}
                     </a>
                 </p>
                 <div class="panel panel-default">
@@ -204,7 +204,7 @@
                                 <!-- END INFO SKILL -->
                                 <p>
                                     <a class="btn btn-default btn-block load_root" rel="0" href="#">
-                                        <i class="fa fa-eye"></i> {{ "ViewSkillsWheel"|get_lang }}
+                                        <em class="fa fa-eye"></em> {{ "ViewSkillsWheel"|get_lang }}
                                     </a>
                                 </p>
                             </div>
@@ -224,13 +224,13 @@
                             <div class="panel-body">
                                 <ul class="fa-ul">
                                     <li>
-                                        <i class="fa fa-li fa-square skill-legend-badges"></i> {{ "SkillsYouAcquired"|get_lang }}
+                                        <em class="fa fa-li fa-square skill-legend-badges"></em> {{ "SkillsYouAcquired"|get_lang }}
                                     </li>
                                     <li>
-                                        <i class="fa fa-li fa-square skill-legend-add"></i> {{ "SkillsYouCanLearn"|get_lang }}
+                                        <em class="fa fa-li fa-square skill-legend-add"></em> {{ "SkillsYouCanLearn"|get_lang }}
                                     </li>
                                     <li>
-                                        <i class="fa fa-li fa-square skill-legend-search"></i> {{ "SkillsSearchedFor"|get_lang }}
+                                        <em class="fa fa-li fa-square skill-legend-search"></em> {{ "SkillsSearchedFor"|get_lang }}
                                     </li>
                                 </ul>
                             </div>

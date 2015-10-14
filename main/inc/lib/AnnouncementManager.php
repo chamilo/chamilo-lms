@@ -801,9 +801,9 @@ class AnnouncementManager
 
         // the buttons for adding or removing groups/users
         echo '<td valign="middle">';
-        echo '<button class="btn btn-default" type="button" onClick="javascript: move(this.form.elements[1], this.form.elements[4])" onClick="javascript: move(this.form.elements[1], this.form.elements[4])"><i class="fa fa-arrow-right"></i></button>';
+        echo '<button class="btn btn-default" type="button" onClick="javascript: move(this.form.elements[1], this.form.elements[4])" onClick="javascript: move(this.form.elements[1], this.form.elements[4])"><em class="fa fa-arrow-right"></em></button>';
         echo '<br /> <br />';
-        echo '<button class="btn btn-default" type="button" onClick="javascript: move(this.form.elements[4], this.form.elements[1])" onClick="javascript: move(this.form.elements[4], this.form.elements[1])"><i class="fa fa-arrow-left"></i></button>';
+        echo '<button class="btn btn-default" type="button" onClick="javascript: move(this.form.elements[4], this.form.elements[1])" onClick="javascript: move(this.form.elements[4], this.form.elements[1])"><em class="fa fa-arrow-left"></em></button>';
         echo "</td>";
 
         echo "<td>";
@@ -836,9 +836,9 @@ class AnnouncementManager
 
         // the buttons for adding or removing groups/users
         echo "<td valign=\"middle\">";
-        echo '<button class="btn btn-default" type="button" onClick="javascript: move(this.form.elements[1], this.form.elements[4])" onClick="javascript: move(this.form.elements[1], this.form.elements[4])"><i class="fa fa-arrow-right"></i></button>';
+        echo '<button class="btn btn-default" type="button" onClick="javascript: move(this.form.elements[1], this.form.elements[4])" onClick="javascript: move(this.form.elements[1], this.form.elements[4])"><em class="fa fa-arrow-right"></em></button>';
         echo '<br /> <br />';
-        echo '<button class="btn btn-default" type="button" onClick="javascript: move(this.form.elements[4], this.form.elements[1])" onClick="javascript: move(this.form.elements[4], this.form.elements[1])"><i class="fa fa-arrow-left"></i></button>';
+        echo '<button class="btn btn-default" type="button" onClick="javascript: move(this.form.elements[4], this.form.elements[1])" onClick="javascript: move(this.form.elements[4], this.form.elements[1])"><em class="fa fa-arrow-left"></em></button>';
         echo "</td>";
         echo "<td>";
 

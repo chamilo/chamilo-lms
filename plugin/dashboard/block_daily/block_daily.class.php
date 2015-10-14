@@ -80,7 +80,7 @@ class BlockDaily extends Block
                     $charset
                 )
             ) . '\')) return false;" href="index.php?action=disable_block&path=' . $this->path . '">
-                    <i class="fa fa-times"></i>
+                    <em class="fa fa-times"></em>
                         </a></div>
 		                </div>
 		                <div class="panel-body">

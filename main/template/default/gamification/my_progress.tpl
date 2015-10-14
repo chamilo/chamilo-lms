@@ -10,13 +10,13 @@
 
                         {% if gamification_stars > 0 %}
                             {% for i in 1..gamification_stars %}
-                                <i class="fa fa-star"></i>
+                                <em class="fa fa-star"></em>
                             {% endfor %}
                         {% endif %}
 
                         {% if 4 - gamification_stars > 0 %}
                             {% for i in 1..(4 - gamification_stars) %}
-                                <i class="fa fa-star in"></i>
+                                <em class="fa fa-star in"></em>
                             {% endfor %}
                         {% endif %}
                     </div>
@@ -39,7 +39,7 @@
                 <ul class="list-course">
                     {% for session in sessions %}
                     <li><a href="{{ _p.self ~ '?' ~ {"session_id": session.getId}|url_encode() }}" class="list-course-item {{ current_session and session.getId == current_session.getId ? 'active' }}">
-                            <i class="fa fa-chevron-circle-right"></i> {{ session.getName }}
+                            <em class="fa fa-chevron-circle-right"></em> {{ session.getName }}
                         </a>
                     </li>
                     {% endfor %}
@@ -52,7 +52,7 @@
         {% if current_session %}
 
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-book"></i> {{ current_session.getName() }}</div>
+                <div class="panel-heading"><em class="fa fa-book"></em> {{ current_session.getName() }}</div>
                 <div class="panel-body">
                     {% for course_id, course in session_data %}
                     <h3><img src="{{ 'blackboard_blue.png'|icon(32) }}"/> {{ course.title }}</h3>

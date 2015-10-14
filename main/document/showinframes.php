@@ -350,7 +350,7 @@ if ($show_web_odf) {
     echo '</div>';
 } else {
     // ViewerJS already have download button
-    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank"><i class="fa fa-download"></i>
+    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank"><em class="fa fa-download"></em>
 '.get_lang('Download').'</a>';
 }
 
@@ -430,7 +430,7 @@ if ($is_freemind_available) {
 if ($is_nanogong_available) {
     $file_url_web = DocumentManager::generateAudioTempFolder($file_url_sys);
     echo '<div align="center">';
-    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank"><i class="fa fa-download"></i> '.get_lang('Download').'</a>';
+    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank"><em class="fa fa-download"></em> '.get_lang('Download').'</a>';
     echo '<br/>';
     echo '<br/>';
     echo DocumentManager::readNanogongFile($to_url);

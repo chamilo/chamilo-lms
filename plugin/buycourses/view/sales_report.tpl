@@ -37,10 +37,10 @@
                     <td class="text-center">
                         {% if sale.status == sale_status_pending %}
                             <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}" class="btn btn-success btn-sm">
-                                <i class="fa fa-user-plus fa-fw"></i> {{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}
+                                <em class="fa fa-user-plus fa-fw"></em> {{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}
                             </a>
                             <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode() }}" class="btn btn-danger btn-sm">
-                                <i class="fa fa-times fa-fw"></i> {{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}
+                                <em class="fa fa-times fa-fw"></em> {{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}
                             </a>
                         {% endif %}
                     </td>

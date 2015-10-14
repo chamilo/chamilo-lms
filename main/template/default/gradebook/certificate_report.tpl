@@ -43,7 +43,7 @@
     {% if not exportAllLink is null %}
         <div class="actions">
             <a href="{{ exportAllLink }}" class="btn btn-info">
-                <i class="fa fa-check"></i> {{ 'ExportAllCertificatesToPDF' | get_lang }}
+                <em class="fa fa-check"></em> {{ 'ExportAllCertificatesToPDF' | get_lang }}
             </a>
         </div>
     {% endif %}
@@ -80,7 +80,7 @@
                     </td>
                     <td>
                         {% for certificate in student.certificates %}
-                            <a href="{{ _p.web }}certificates/index.php?id={{ certificate.id }}" class="btn btn-default"><i class="fa fa-floppy-o"></i> {{ 'Certificate' | get_lang }}</a>
+                            <a href="{{ _p.web }}certificates/index.php?id={{ certificate.id }}" class="btn btn-default"><em class="fa fa-floppy-o"></em> {{ 'Certificate' | get_lang }}</a>
                         {% endfor %}
                     </td>
                 </tr>

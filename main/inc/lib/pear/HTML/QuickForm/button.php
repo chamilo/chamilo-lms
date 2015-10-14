@@ -94,7 +94,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
             $icon = $this->getIcon();
 
             if (!empty($icon)) {
-                $icon = '<i class="' . $this->getIcon() . '"></i> ';
+                $icon = '<em class="' . $this->getIcon() . '"></em> ';
             }
 
             $class = $this->getClass().' '.$this->getStyle().' '.$this->getSize();

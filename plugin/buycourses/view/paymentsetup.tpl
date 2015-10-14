@@ -61,7 +61,7 @@
                                         <td>{{ account.swift }}</td>
                                         <td>
                                             <a href="{{ _p.web_self ~ '?' ~ {'action':'delete_taccount', 'id': account.id}|url_encode() }}" class="btn btn-danger btn-sm">
-                                                <i class="fa fa-remove"></i> {{ 'Delete'|get_lang }}
+                                                <em class="fa fa-remove"></em> {{ 'Delete'|get_lang }}
                                             </a>
                                         </td>
                                     </tr>

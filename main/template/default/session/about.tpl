@@ -1,11 +1,11 @@
 <div id="about-session">
     <div class="row">
         <div class="col-xs-12">
-            <p><i class="fa fa-clock-o"></i> <em>{{ session_date.display }}</em></p>
+            <p><em class="fa fa-clock-o"></em> <em>{{ session_date.display }}</em></p>
 
             {% if show_tutor %}
                 <p>
-                    <i class="fa fa-user"></i> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em>
+                    <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|get_lang }}: <em>{{ session.generalCoach.getCompleteName() }}</em>
                 </p>
             {% endif %}
 
@@ -92,7 +92,7 @@
                     <div class="panel-body">
                         {% if course_data.objectives %}
                             <div class="objective-course">
-                                <h4 class="title-info"><i class="fa fa-book"></i> {{ "Objectives"|get_lang }}</h4>
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ "Objectives"|get_lang }}</h4>
                                 <div class="content-info">
                                     {{ course_data.objectives.getContent }}
                                 </div>
@@ -101,7 +101,7 @@
 
                         {% if course_data.topics %}
                             <div class="topics">
-                                <h4 class="title-info"><i class="fa fa-book"></i> {{ "Topics"|get_lang }}</h4>
+                                <h4 class="title-info"><em class="fa fa-book"></em> {{ "Topics"|get_lang }}</h4>
                                 <div class="content-info">
                                     {{ course_data.topics.getContent }}
                                 </div>
@@ -161,13 +161,13 @@
                     <div class="panel-body">
                         <div class="icons-social text-center">
                             <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': pageUrl}|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
-                                <i class="fa fa-facebook fa-2x"></i>
+                                <em class="fa fa-facebook fa-2x"></em>
                             </a>
                             <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
-                                <i class="fa fa-twitter fa-2x"></i>
+                                <em class="fa fa-twitter fa-2x"></em>
                             </a>
                             <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
-                                <i class="fa fa-linkedin fa-2x"></i>
+                                <em class="fa fa-linkedin fa-2x"></em>
                             </a>
                         </div>
                     </div>
@@ -185,7 +185,7 @@
             {% elseif not _u.logged %}
                 {% if 'allow_registration'|get_setting == 'true' %}
                     <a href="{{ _p.web_main ~ 'auth/inscription.php' }}" class="btn btn-info btn-lg">
-                        <i class="fa fa-sign-in fa-fw"></i> {{ 'SignUp'|get_lang }}
+                        <em class="fa fa-sign-in fa-fw"></em> {{ 'SignUp'|get_lang }}
                     </a>
                 {% endif %}
             {% endif %}

@@ -330,7 +330,7 @@ switch ($action) {
             $content .= '</div>';
             $content .= '</div>';
             $content .= '<div id="student-list-work" style="display: none" class="table-responsive">';
-            $content .= '<div class="toolbar"><a id="closed-view-list" href="#"><i class="fa fa-times-circle"></i> ' .get_lang('Close'). '</a></div>';
+            $content .= '<div class="toolbar"><a id="closed-view-list" href="#"><em class="fa fa-times-circle"></em> ' .get_lang('Close'). '</a></div>';
             $content .= showStudentList($work_id);
             $content .= '</div>';
         } else {

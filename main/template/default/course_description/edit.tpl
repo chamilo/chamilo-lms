@@ -8,7 +8,7 @@
     <div class="btn-toolbar actions-bar" >
         <div class="btn-group">
             <a href="{{root}}&amp;action=listing" class="btn btn-default" title="{{'ImportCSV'|get_lang}}">
-                <i class="size-32 icon-back"></i>
+                <em class="size-32 icon-back"></em>
             </a>
         </div>
         <div class="btn-group edit new">

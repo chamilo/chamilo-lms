@@ -96,7 +96,7 @@ if (api_is_platform_admin()) {
             <div class="form-group">
                 <input class="form-control" type="text" name="keyword" value="">
                 <button class="btn btn-default" type="submit">
-                    <i class="fa fa-search"></i> ' . get_lang('Search') . '
+                    <em class="fa fa-search"></em> ' . get_lang('Search') . '
                 </button>
             </div>
         </form>';
@@ -149,7 +149,7 @@ if (api_is_platform_admin()) {
             <div class="form-group">
                 <input class="form-control" type="text" name="keyword" value="">
                 <button class="btn btn-default" type="submit">
-                    <i class="fa fa-search"></i> ' . get_lang('Search') . '
+                    <em class="fa fa-search"></em> ' . get_lang('Search') . '
                 </button>
             </div>
         </form>';
@@ -209,7 +209,7 @@ if (api_is_platform_admin()) {
                 <input class="form-control" type="text" name="search_field" value="" >
                 <input type="hidden" value="search_setting" name="category">
                 <button class="btn btn-default" type="submit">
-                    <i class="fa fa-search"></i> ' . get_lang('Search') . '
+                    <em class="fa fa-search"></em> ' . get_lang('Search') . '
                 </button>
             </div>
         </form>';
@@ -282,7 +282,7 @@ $search_form = ' <form method="GET" class="form-inline" action="'.$sessionPath.'
                     <div class="form-group">
                         <input class="form-control" type="text" name="keyword" value="">
                         <button class="btn btn-default" type="submit">
-                            <i class="fa fa-search"></i> ' . get_lang('Search') . '
+                            <em class="fa fa-search"></em> ' . get_lang('Search') . '
                         </button>
                     </div>
                 </form>';

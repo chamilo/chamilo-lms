@@ -567,21 +567,21 @@ if ($modifyAnswers) {
             <div class="col-sm-12">
                 <?php if ($answerType == HOT_SPOT_DELINEATION) { ?>
                     <button type="submit" class="btn btn-danger" name="lessAnswers" value="lessAnswers">
-                        <i class="fa fa-trash"></i> <?php echo get_lang('LessOAR'); ?>
+                        <em class="fa fa-trash"></em> <?php echo get_lang('LessOAR'); ?>
                     </button>
                     <button type="submit" name="moreOARAnswers" value="moreOARAnswers">
-                        <i class="fa fa-plus"></i> <?php echo get_lang('MoreOAR'); ?>
+                        <em class="fa fa-plus"></em> <?php echo get_lang('MoreOAR'); ?>
                     </button>
                 <?php } else { ?>
                     <button type="submit" class="btn btn-danger" name="lessAnswers" value="lessAnswers">
-                        <i class="fa fa-trash"></i> <?php echo get_lang('LessHotspots'); ?>
+                        <em class="fa fa-trash"></em> <?php echo get_lang('LessHotspots'); ?>
                     </button>
                     <button type="submit" class="btn btn-primary" name="moreAnswers" value="moreAnswers">
-                        <i class="fa fa-plus"></i> <?php echo get_lang('MoreHotspots'); ?>
+                        <em class="fa fa-plus"></em> <?php echo get_lang('MoreHotspots'); ?>
                     </button>
                 <?php } ?>
                 <button type="submit" class="btn btn-primary" name="submitAnswers" value="submitAnswers">
-                    <i class="fa fa-save"></i> <?php echo get_lang('AddQuestionToExercise'); ?>
+                    <em class="fa fa-save"></em> <?php echo get_lang('AddQuestionToExercise'); ?>
                 </button>
             </div>
         </div>

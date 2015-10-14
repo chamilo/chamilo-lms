@@ -13,9 +13,9 @@
                     {% if _u.logged %}
                         <span class="label {{ session.status ? 'label-success' : 'label-danger' }}">
                             {% if session.status %}
-                                <i class="fa fa-check"></i> {{ 'Complete'|get_lang }}
+                                <em class="fa fa-check"></em> {{ 'Complete'|get_lang }}
                             {% else %}
-                                <i class="fa fa-exclamation-triangle"></i> {{ 'Incomplete'|get_lang }}
+                                <em class="fa fa-exclamation-triangle"></em> {{ 'Incomplete'|get_lang }}
                             {% endif %}
                         </span>
                     {% endif %}
@@ -23,7 +23,7 @@
             </div>
 
             {% if loop.index != item.requirements|length %}
-                <i class="fa fa-plus fa-3x sequence-plus-icon"></i>
+                <em class="fa fa-plus fa-3x sequence-plus-icon"></em>
             {% endif %}
         {% endfor %}
     </div>

@@ -323,10 +323,10 @@ echo Display::actions($action_array);
     </div>
     <div class="col-md-4">
         <div class="registration_case">
-            <button class="btn btn-default" onclick='moveUsers($("#usersList"),$("#usersSubList")); return false;'><i class="fa fa-arrow-left"></i></button>
+            <button class="btn btn-default" onclick='moveUsers($("#usersList"),$("#usersSubList")); return false;'><em class="fa fa-arrow-left"></em></button>
             <br />
             <br />
-            <button class="btn btn-default" onclick='moveUsers($("#usersSubList"),$("#usersList")); return false;'><i class="fa fa-arrow-right"></i></button>
+            <button class="btn btn-default" onclick='moveUsers($("#usersSubList"),$("#usersList")); return false;'><em class="fa fa-arrow-right"></em></button>
         </div>
     </div>
     <div class="col-md-4">

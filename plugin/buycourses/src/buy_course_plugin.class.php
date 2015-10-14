@@ -46,7 +46,7 @@ class BuyCoursesPlugin extends Plugin
                 Francis Gonzales and Yannick Warnier - BeezNest (integration),
                 Alex Aragón - BeezNest (Design icons and css styles),
                 Imanol Losada - BeezNest (introduction of sessions purchase),
-                Angel Fernando Quiroz Campos - BeezNest
+                Angel Fernando Quiroz Campos - BeezNest (cleanup and new reports)
             ",
             array(
                 'show_main_menu_tab' => 'boolean',

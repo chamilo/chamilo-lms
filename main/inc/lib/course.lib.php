@@ -2384,11 +2384,9 @@ class CourseManager
         if ($user_id != strval(intval($user_id))) {
             return false;
         }
-
         $courseId = intval($courseId);
         $information = api_get_course_info_by_id($courseId);
         $course_code = $information['code'];
-        $courseId = $information['id'];
 
         $student = api_get_user_info($user_id);
 
@@ -2419,7 +2417,7 @@ class CourseManager
                 $emailbody .= get_lang('LastName') . ': ' . $student['lastname'] . "\n";
                 $emailbody .= get_lang('FirstName') . ': ' . $student['firstname'] . "\n";
             }
-            $emailbody .= get_lang('Email') . ': ' . $student['email'] . "\n\n";
+            $emailbody .= get_lang('Email') . ': <a href="mailto:' . $student['email'] . '">' . $student['email'] ."</a>\n\n";
             $recipient_name = api_get_person_name($tutor['firstname'], $tutor['lastname'], null,
                 PERSON_NAME_EMAIL_ADDRESS);
             $sender_name = api_get_person_name(api_get_setting('administratorName'),
@@ -2432,7 +2430,6 @@ class CourseManager
                 'userUsername' => $student['username'],
                 'courseCode' => $course_code
             );
-
             api_mail_html(
                 $recipient_name,
                 $emailto,

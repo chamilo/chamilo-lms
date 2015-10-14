@@ -2638,13 +2638,6 @@ form .formw .freeze {
   background-color: #FFFFFF;
 }
 .skill-options .load_wheel{
-  -moz-border-radius:6px;
-  -webkit-border-radius:6px;
-  border-radius:6px;
-  border:1px solid #C09853;
-  background:#FCF8E3;
-  padding:1px 5px 2px;
-  color:#333;
 }
 .skill-options .skill-winner{
   list-style: none;
@@ -2700,10 +2693,8 @@ form .formw .freeze {
   stroke-width: 0.5px;
 }
 
-#skill_holder li {
-  float: none;
-  padding-right: 10px;
-  margin-bottom: .5em;
+table#skill_holder {
+  margin-top: 15px;
 }
 
 /* ****************************************************

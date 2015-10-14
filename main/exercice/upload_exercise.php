@@ -94,6 +94,32 @@ function lp_upload_quiz_main() {
     $link = '<a href="../exercice/quiz_template.xls">'.
              Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
     $form->addElement('advanced_settings', $link);
+
+    $table = new HTML_Table(array('class' => 'table'));
+
+    $tableList = array(
+        UNIQUE_ANSWER => get_lang('UniqueSelect'),
+        MULTIPLE_ANSWER => get_lang('MultipleSelect'),
+        FILL_IN_BLANKS => get_lang('FillBlanks'),
+        MATCHING => get_lang('Matching'),
+        FREE_ANSWER => get_lang('FreeAnswer'),
+        GLOBAL_MULTIPLE_ANSWER => get_lang('GlobalMultipleAnswer')
+    );
+
+    $table->setHeaderContents(0, 0, get_lang('QuestionType'));
+    $table->setHeaderContents(0, 1, '#');
+
+    $row = 1;
+    foreach ($tableList as $key => $label ) {
+        $table->setCellContents($row, 0, $label);
+        $table->setCellContents($row, 1, $key);
+        $row++;
+    }
+    $table = $table->toHtml();
+
+    $form->addElement('label', get_lang('QuestionType'), $table);
+
+
     $form->addElement('checkbox', 'user_custom_score', null, get_lang('UseCustomScoreForAllQuestions'), array('id'=> 'user_custom_score'));
     $form->addElement('html', '<div id="options" style="display:none">');
     $form->addElement('text', 'correct_score', get_lang('CorrectScore'));
@@ -491,7 +517,7 @@ function lp_upload_quiz_action_handling() {
                         $sizeToString = implode(',', $size);
 
                         //<p>Texte long avec les [mots] à [remplir] mis entre [crochets]</p>::10,10,10:200.36363999999998,200,200:0@'
-                        $answerValue  = $description.'::'.$scoreToString.':'.$sizeToString.':0@';
+                        $answerValue = $description.'::'.$scoreToString.':'.$sizeToString.':0@';
                         $objAnswer = new Answer($question_id, $courseId);
                         $objAnswer->createAnswer(
                             $answerValue,
@@ -513,14 +539,14 @@ function lp_upload_quiz_action_handling() {
                         $position = 1;
 
                         $objAnswer = new Answer($question_id, $courseId);
-                        foreach($answerList as $data) {
+                        foreach ($answerList as $data) {
                             $option = isset($data[3]) ? $data[3] : '';
                             $objAnswer->createAnswer($option, 0, '', 0, $position);
                             $position++;
                         }
 
                         $counter = 1;
-                        foreach($answerList as $data) {
+                        foreach ($answerList as $data) {
                             $value = isset($data[2]) ? $data[2] : '';
                             $position++;
 

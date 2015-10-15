@@ -5024,9 +5024,10 @@ div#chat-remote-video video {
   text-transform: uppercase;
 }
 #session-list .title-session{
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.2;
   margin-top: 5px;
+  min-height: 32px;
 }
 #session-list .session-col:nth-child(4n+1) {
     clear: left;
@@ -5036,6 +5037,7 @@ div#chat-remote-video video {
   padding: 0;
   border: 1px solid #dddddd;
   margin-bottom: 20px;
+  border-radius: 5px;
 }
 #session-list .item img{
   max-width: 100%;
@@ -5047,6 +5049,7 @@ div#chat-remote-video video {
 
 #session-list .information-item{
   padding: 10px;
+  min-height: 185px;
 }
 #session-list .information-item .requirements .fa-book{
   margin-right: 10px;

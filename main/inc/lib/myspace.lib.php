@@ -301,6 +301,8 @@ class MySpace
 
     public static function display_tracking_coach_overview($export_csv)
     {
+        global $charset;
+
         if ($export_csv) {
             $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
         } else {

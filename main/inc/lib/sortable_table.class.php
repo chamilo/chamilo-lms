@@ -901,7 +901,9 @@ class SortableTable extends HTML_Table
     {
         $url_params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
         foreach ($this->column_filters as $column => & $function) {
-            $row[$column] = call_user_func($function, $row[$column], $url_params, $row);
+            $firstParam = isset($row[$column]) ? $row[$column] : 0;
+
+            $row[$column] = call_user_func($function, $firstParam, $url_params, $row);
         }
         if (count($this->form_actions) > 0) {
             if (strlen($row[0]) > 0) {

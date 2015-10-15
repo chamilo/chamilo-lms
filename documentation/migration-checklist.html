@@ -14,7 +14,9 @@
 <div id="outerframe">
 <div id="main">
 
-<p>In seldom cases, Chamilo will generate a series of problems after a migration. This list is a helper designed mainly by <a href="http://www.beeznest.com/" target="_blank">BeezNest</a> after its many migration jobs assisting large companies to migrate this critical piece of software.</p>
+<p>In seldom cases, Chamilo will generate a series of problems after a migration
+    . This list is a helper designed mainly by <a href="http://www.beeznest.com/" target="_blank">BeezNest</a>
+    after its many migration jobs assisting large companies to migrate this critical piece of software.</p>
 
 
 <h2><b>Contents</b></h2>
@@ -27,14 +29,26 @@
 </ol>
 
 <h2><a name="1.Version-specific-issues"></a>1. Version specific issues</h2>
-<p>Sadly, some issues happen over certain migrations and, so far, the difficulty of fixing things is still less than the difficulty of knowing exactly what to do to improve the migration script for all scenarios</p>
+<p>Sadly, some issues happen over certain migrations and, so far, the difficulty of
+    fixing things is still less than the difficulty of knowing exactly what
+    to do to improve the migration script for all scenarios</p>
 <h2><a name="2.Documents"></a>2. Documents</h2>
     <ul>
-        <li>The worst that could happen is a change of codification while migrating from 1.8.5 to 1.8.8.4. Codification problems are nightmares because you generally get a limited number of characters you can freely change without affecting already existing files. Scrips can be made to ananlyse and fix most of the problems, but you will still need a lot of manual review before you can be sure you eliminated all problems</li>
+        <li>The worst that could happen is a change of codification while
+            migrating from 1.8.5 to 1.8.8.4. Codification problems are nightmares
+            because you generally get a limited number of characters you can
+            freely change without affecting already existing files. Scrips can
+            be made to ananlyse and fix most of the problems, but you will
+            still need a lot of manual review before you can be sure you
+            eliminated all problems</li>
     </ul>
 <h2><a name="3.Database-entries"></a>3. Database entries</h2>
     <ul>
-        <li>Some users reported problems with quizzes: when migrating from 1.8.5 to 1.8.8.4, the quiz_question table has a question_order field filled with 1's. This generates a bug when using exercises marked random, as you only ever get one question to the test. <b>Solution:</b> update the question_order field to have sequential numbers.</li>
+        <li>Some users reported problems with quizzes: when migrating from
+            1.8.5 to 1.8.8.4, the quiz_question table has a question_order
+            field filled with 1's. This generates a bug when using exercises
+            marked random, as you only ever get one question to the test.
+            <b>Solution:</b> update the question_order field to have sequential numbers.</li>
         <li></li>
     </ul>
 

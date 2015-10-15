@@ -893,7 +893,8 @@ class Link extends Model
                             'retweet',
                             'default btn-sm',
                             array(
-                                'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes($myrow['url']) . "');"
+                                'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes($myrow['url']) . "');",
+                                'title' => get_lang('CheckURL')
                                 )
                             );
                     $link_validator .= Display::span(
@@ -913,12 +914,16 @@ class Link extends Model
                             '&action=editlink&category=' . (!empty ($category) ? $category : '') .
                             '&id=' . $myrow['id'] .
                             '&category_id=' . $myrow['id'];
+                        $title = get_lang('Edit');
                         $toolbar .= Display::toolbarButton(
-                                '',
-                                $url,
-                                'pencil',
-                                'default btn-sm'
-                                );
+                            '',
+                            $url,
+                            'pencil',
+                            'default btn-sm',
+                            array(
+                                'title' => $title
+                            )
+                        );
 
                         // DISPLAY MOVE UP COMMAND only if it is not the top link.
                         /* commented at least since 2014-10-11
@@ -940,22 +945,30 @@ class Link extends Model
                                 '&sec_token=' . $token .
                                 '&action=invisible&id=' . $myrow['id'] .
                                 '&scope=link&category_id=' . $myrow['category_id'];
+                            $title = get_lang('MakeInvisible');
                             $toolbar .= Display::toolbarButton(
-                                    '',
-                                    $url,
-                                    'eye',
-                                    'default btn-sm'
-                                    );
+                                '',
+                                $url,
+                                'eye',
+                                'default btn-sm',
+                                array(
+                                    'title' => $title
+                                )
+                            );
 
                         }
                         if ($myrow['visibility'] == '0') {
                             $url .= 'link.php?' . api_get_cidreq() .'&sec_token=' . $token .'&action=visible&id=' . $myrow['id'] .'&scope=link&category_id=' . $myrow['category_id'];
+                            $title = get_lang('MakeVisible');
                             $toolbar .= Display::toolbarButton(
-                                    '',
-                                    $url,
-                                    'eye-slash',
-                                    'primary btn-sm'
-                                    );
+                                '',
+                                $url,
+                                'eye-slash',
+                                'primary btn-sm',
+                                array(
+                                    'title' => $title
+                                )
+                            );
                         }
 
                         $url .= api_get_self() . '?' . api_get_cidreq() .'&sec_token=' . $token .'&action=deletelink&id=' . $myrow['id'] .'&category_id=' . $myrow['category_id'];

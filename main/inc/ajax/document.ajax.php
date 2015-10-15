@@ -76,7 +76,7 @@ switch ($action) {
     case 'documentDestination':
         //obtained the bootstrap-select selected value via ajax
         $textValue = isset($_POST['textValue']) ? $_POST['textValue'] : null;
-        $_SESSION['textValue'] = $textValue;
+        echo $textValue;
         break;
 }
 exit;

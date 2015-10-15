@@ -542,6 +542,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
     $new_max = $row['sort_max'] + 1;
     $session_id = api_get_session_id();
     $clean_cat_title = $values['forum_category_title'];
+    $last_id = null;
 
     if (isset($values['forum_category_id'])) {
         // Storing after edition.
@@ -701,17 +702,17 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
         $params = [
             'forum_title'=> $values['forum_title'],
             'forum_image'=> $sql_image,
-            'forum_comment'=> $values['forum_comment'],
-            'forum_category'=> $values['forum_category'],
-            'allow_anonymous'=> $values['allow_anonymous_group']['allow_anonymous'],
-            'allow_edit'=> $values['students_can_edit_group']['students_can_edit'],
-            'approval_direct_post'=> $values['approval_direct_group']['approval_direct'],
-            'allow_attachments'=> $values['allow_attachments_group']['allow_attachments'],
-            'allow_new_threads'=>  $values['allow_new_threads_group']['allow_new_threads'],
-            'default_view'=> $values['default_view_type_group']['default_view_type'],
-            'forum_of_group'=> $values['group_forum'],
-            'forum_group_public_private'=> $values['public_private_group_forum_group']['public_private_group_forum'],
-            'forum_order'=> $new_max,
+            'forum_comment'=> isset($values['forum_comment']) ? $values['forum_comment'] : null,
+            'forum_category'=> isset($values['forum_category']) ? $values['forum_category'] : null,
+            'allow_anonymous'=> isset($values['allow_anonymous_group']['allow_anonymous']) ? $values['allow_anonymous_group']['allow_anonymous'] : null,
+            'allow_edit'=> isset($values['students_can_edit_group']['students_can_edit']) ? $values['students_can_edit_group']['students_can_edit'] : null,
+            'approval_direct_post'=> isset($values['approval_direct_group']['approval_direct']) ? $values['approval_direct_group']['approval_direct'] : null,
+            'allow_attachments'=> isset($values['allow_attachments_group']['allow_attachments']) ? $values['allow_attachments_group']['allow_attachments'] : null,
+            'allow_new_threads'=> isset($values['allow_new_threads_group']['allow_new_threads']) ? $values['allow_new_threads_group']['allow_new_threads'] : null,
+            'default_view'=> isset($values['default_view_type_group']['default_view_type']) ? $values['default_view_type_group']['default_view_type'] : null,
+            'forum_of_group'=> isset($values['group_forum']) ? $values['group_forum'] : null,
+            'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
+            'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
         ];
 

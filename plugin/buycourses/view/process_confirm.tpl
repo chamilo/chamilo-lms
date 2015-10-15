@@ -66,7 +66,7 @@
                     <tr>
                         <th>{{ 'Name'|get_lang }}</th>
                         <th class="text-center">{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                        <th class="text-center">{{ 'SWIFT'|get_lang }}</th>
+                        <th class="text-center">{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     </tr>
                 </thead>
                 <tbody>

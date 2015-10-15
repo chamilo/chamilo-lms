@@ -19,7 +19,7 @@
             <tr>
                 <th>{{ 'Name'|get_lang }}</th>
                 <th>{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th>{{ 'SWIFT'|get_lang }}</th>
+                <th>{{ 'SWIFT'|get_plugin_lang('BuyCoursesPlugin') }}</th>
             </tr>
         </thead>
         <tbody>

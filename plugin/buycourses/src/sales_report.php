@@ -87,7 +87,7 @@ if ($form->validate()) {
 
 $form->addRadio(
     'filter_type',
-    get_lang('FilterBy'),
+    get_lang('Filter'),
     [$plugin->get_lang('ByStatus'), $plugin->get_lang('ByUser')]
 );
 $form->addHtml('<div id="report-by-status" ' . ($selectedFilterType !== '0' ? 'style="display:none"' : '') . '>');
@@ -96,7 +96,7 @@ $form->addHtml('</div>');
 $form->addHtml('<div id="report-by-user" ' . ($selectedFilterType !== '1' ? 'style="display:none"' : '') . '>');
 $form->addText('user', get_lang('UserName'), false);
 $form->addHtml('</div>');
-$form->addButtonFilter($plugin->get_lang('SearchByStatus'));
+$form->addButtonFilter(get_lang('Search'));
 $form->setDefaults([
     'filter_type' => $selectedFilterType,
     'status' => $selectedStatus

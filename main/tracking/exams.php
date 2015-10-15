@@ -81,7 +81,7 @@ $form->setDefaults(array('score' => $filter_score));
 
 if (!$exportToXLS) {
     Display :: display_header(get_lang('Reporting'));
-    $actionsLeft = '';
+    $actionsLeft = $actionsRight ='';
     if ($global) {
 
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.

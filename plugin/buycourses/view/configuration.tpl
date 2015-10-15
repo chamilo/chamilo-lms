@@ -23,7 +23,7 @@
                         <th class="text-center">{{ 'OfficialCode'|get_lang }}</th>
                         <th class="text-center">{{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                         <th class="text-right" width="200">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                        <th class="text-right">{{ 'Options  '|get_lang }}</th>
+                        <th class="text-right">{{ 'Options'|get_lang }}</th>
                     </tr>
                 </thead>
 

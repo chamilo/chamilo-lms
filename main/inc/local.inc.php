@@ -1239,7 +1239,12 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 $is_allowed_in_course = true;
                 break;
             case COURSE_VISIBILITY_OPEN_PLATFORM: //2
-                if (isset($user_id) && !api_is_anonymous($user_id)) {
+                $courseCode = $_course['code'];
+                $isUserSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
+                    $user_id,
+                    $courseCode
+                );
+                if (isset($user_id) && $isUserSubscribedInCourse === true && !api_is_anonymous($user_id)) {
                     $is_allowed_in_course = true;
                 }
                 break;

@@ -171,6 +171,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
         Security::clear_token();
         $auth = new Auth();
         $msg = $auth->subscribe_user($course_code);
+        if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+            Session::write('is_allowed_in_course', true);
+        }
         if (!empty($msg)) {
             $show_message .= Display::return_message(
                 get_lang($msg['message']),

@@ -45,7 +45,7 @@ require_once 'classes/CourseSelectForm.class.php';
 echo Display::page_header($nameTools);
 
 /* MAIN CODE */
-
+$filename = '';
 if (Security::check_token('post') && (
         (
             isset($_POST['action']) &&

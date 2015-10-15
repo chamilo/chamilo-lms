@@ -4600,7 +4600,7 @@ class CourseManager
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
                 $my_course['extra_info']['register_button'] = Display::url(
-                    Display::returnFontAswesomeIcon('sign-in'),
+                    Display::returnFontAwesomeIcon('sign-in'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&sec_token=' . $stok,
                     array('class' => 'btn btn-success btn-sm', 'title' => get_lang('Subscribe')));
             }
@@ -4609,14 +4609,14 @@ class CourseManager
                     $access_link) || $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
             ) {
                 $my_course['extra_info']['go_to_course_button'] = Display::url(
-                    Display::returnFontAswesomeIcon('share'),
+                    Display::returnFontAwesomeIcon('share'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php',
                     array('class' => 'btn btn-default btn-sm', 'title' => get_lang('GoToCourse')));
             }
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
                 $my_course['extra_info']['unsubscribe_button'] = Display::url(
-                    Display::returnFontAswesomeIcon('sign-out'),
+                    Display::returnFontAwesomeIcon('sign-out'),
                     api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
                     array('class' => 'btn btn-danger btn-sm', 'title' => get_lang('Unreg')));
             }
@@ -4627,13 +4627,13 @@ class CourseManager
                     $my_course_code_list)
             ) { */
                 $my_course['extra_info']['description_button'] = Display::url(
-                    Display::returnFontAswesomeIcon('info-circle'),
+                    Display::returnFontAwesomeIcon('info-circle'),
                     api_get_path(WEB_AJAX_PATH) . 'course_home.ajax.php?a=show_course_information&code=' . $course_info['code'],
                     [
                         'class' => 'btn btn-default btn-sm ajax',
                         'data-title' => get_lang('Description'),
                         'title' => get_lang('Description')
-                    ]  
+                    ]
                 );
             //}
             /* get_lang('Description') */

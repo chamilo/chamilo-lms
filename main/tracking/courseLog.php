@@ -270,7 +270,7 @@ $course_name = get_lang('Course').' '.$courseInfo['name'];
 if ($session_id) {
     $titleSession = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id);
     $titleCourse =  Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name;
-    
+
 } else {
     $titleSession = Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$courseInfo['name'];
 }
@@ -280,7 +280,7 @@ $teacherList = CourseManager::get_teacher_list_from_course_code_to_string(
     $courseInfo['code'],
     ',',
     false,
-    true    
+    true
 );
 
 $coaches = null;
@@ -290,7 +290,7 @@ if (!empty($session_id)) {
         $courseInfo['real_id'],
         ',',
         false,
-        true    
+        true
     );
 }
 $html = '';
@@ -345,7 +345,7 @@ if (count($a_students) > 0) {
     );
     $el = $form->addSelect(
         'since',
-        Display::returnFontAswesomeIcon('warning') . get_lang('RemindInactivesLearnersSince'),
+        Display::returnFontAwesomeIcon('warning') . get_lang('RemindInactivesLearnersSince'),
         $options,
         ['class' => 'col-sm-3']
     );

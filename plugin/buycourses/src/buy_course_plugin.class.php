@@ -1,15 +1,12 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * Description of buy_courses_plugin
- * @package chamilo.plugin.buycourses
- * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
- * @author Imanol Losada      <imanol.losada@beeznest.com>
- * @author Alex Aragón      <alex.aragon@beeznest.com>
- * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- */
-/**
  * Plugin class for the BuyCourses plugin
+ * @package chamilo.plugin.buycourses
+ * @author Jose Angel Ruiz <jaruiz@nosolored.com>
+ * @author Imanol Losada <imanol.losada@beeznest.com>
+ * @author Alex Aragón <alex.aragon@beeznest.com>
+ * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class BuyCoursesPlugin extends Plugin
 {
@@ -72,14 +69,14 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_CURRENCY
         );
         $em = Database::getManager();
-        $cn = $em -> getConnection();
-        $sm = $cn -> getSchemaManager();
-        $tables = $sm ->tablesExist($tablesToBeCompared);
-        
+        $cn = $em->getConnection();
+        $sm = $cn->getSchemaManager();
+        $tables = $sm->tablesExist($tablesToBeCompared);
+
         if ($tables) {
             return false;
         }
-        
+
         require_once api_get_path(SYS_PLUGIN_PATH) . 'buycourses/database.php';
     }
 
@@ -237,7 +234,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $entityManager = Database::getManager();
         $query = $entityManager->createQueryBuilder();
-        
+
         $courses = $query
             ->select('c')
             ->from('ChamiloCoreBundle:Course', 'c')
@@ -419,7 +416,7 @@ class BuyCoursesPlugin extends Plugin
                     'title' => $course->getTitle(),
                     'coaches' => []
                 ];
-                
+
                 $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
                     $course,
                     Chamilo\CoreBundle\Entity\Session::COACH
@@ -602,7 +599,7 @@ class BuyCoursesPlugin extends Plugin
      * @param array $sessionId The session ID
      * @return array
      */
-    public function getSessionInfo($sessionId) 
+    public function getSessionInfo($sessionId)
     {
         $entityManager = Database::getManager();
         $session = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);

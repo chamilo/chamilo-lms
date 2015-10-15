@@ -198,7 +198,8 @@ class Skill
      * Get the icon URL
      * @return string
      */
-    public function getWebIconPath(){
+    public function getWebIconPath()
+    {
         if ($this->getIcon()) {
             return api_get_path(WEB_UPLOAD_PATH) . "badges/{$this->getIcon()}";
         }

@@ -52,15 +52,15 @@ $(document).ready(function() {
     });
 });
 
-$(document).on("click", ".dropdown-menu li a", function () {
-    var textValue = $(this).text();
+$(document).on("change", ".selectpicker", function () {
+    var dirValue = $(this).val();
     $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        data: "textValue="+textValue,
-        url: "' . api_get_path(WEB_AJAX_PATH) . 'document.ajax.php?a=documentDestination",
+        data: "dirValue="+dirValue,
+        url: "' . api_get_path(WEB_AJAX_PATH) . 'document.ajax.php?a=document_destination",
         type: "POST",
         success: function(response) {
-            $("[name=\'textValue\']").val(response)
+            $("[name=\'dirValue\']").val(response)
         }
     });
 });
@@ -432,7 +432,7 @@ if (!$is_certificate_mode &&
 	}
 }
 
-$form->addHidden('textValue', '');
+$form->addHidden('dirValue', '');
 
 if ($is_certificate_mode) {
 	$form->addButtonCreate(get_lang('CreateCertificate'));
@@ -448,18 +448,8 @@ if ($form->validate()) {
 	$readonly = isset($values['readonly']) ? 1 : 0;
 	$values['title'] = trim($values['title']);
     
-    $textValue = $values['textValue'];
-    $homeDirectory = get_lang('HomeDirectory');
-    if ($textValue === $homeDirectory){
-        $dir = "/";
-    } else {
-        $posTextValue = strpos($textValue, '—');
-        $textValue = substr($textValue, ($posTextValue + 4));
-        foreach ($folder_titles as $dirValue => $dirText) {
-            if ($dirText === $textValue) {
-                $dir = $dirValue;
-            }
-        }
+    if (!empty($values['dirValue'])) {
+        $dir = $values['dirValue'];
     }
 
     if ($dir[strlen($dir) - 1] != '/') {

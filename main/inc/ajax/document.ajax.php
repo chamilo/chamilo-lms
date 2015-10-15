@@ -73,10 +73,10 @@ switch ($action) {
             );
         }
         break;
-    case 'documentDestination':
+    case 'document_destination':
         //obtained the bootstrap-select selected value via ajax
-        $textValue = isset($_POST['textValue']) ? $_POST['textValue'] : null;
-        echo $textValue;
+        $dirValue = isset($_POST['dirValue']) ? $_POST['dirValue'] : null;
+        echo $dirValue;
         break;
 }
 exit;

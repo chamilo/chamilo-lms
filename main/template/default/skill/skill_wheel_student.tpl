@@ -50,11 +50,15 @@
         if (checked == 1) {
             checked_condition = 'checked=checked';
         }
-        return '<li>' + 
-            '<a id="skill_to_select_id_' + skill_id + '" href="#" class="load_wheel" rel="' + skill_id + '">' +
-                skill_name +
-            '</a>' +
-            '</li>';
+        return '\
+            <tr>\n\
+                <td>' + skill_name + '</td>\n\
+                <td class="text-right">\n\
+                    <button type="button" id="skill_to_select_id_' + skill_id + '" class="btn btn-warning btn-sm load_wheel" data-id="' + skill_id + '" title="{{ 'PlaceOnTheWheel'|get_lang }}" aria-label="{{ 'PlaceOnTheWheel'|get_lang }}">\n\
+                        <span class="fa fa-crosshairs fa-fw" aria-hidden="true"></span>\n\
+                    </button>\n\
+                </td>\n\
+            </tr>';
     }
 
     function load_skill_info(skill_id) {
@@ -79,15 +83,17 @@
         });
 
         /* URL link when searching skills */
-        $("#skill_holder").on("click", "a.load_wheel", function () {
-            skill_id = $(this).attr('rel');
+        $("#skill_holder").on("click", "button.load_wheel", function () {
+            skill_id = $(this).data('id') || 0;
             skill_to_load_from_get = 0;
             load_nodes(skill_id, main_depth);
             load_skill_info(skill_id);
         });
 
         /* URL link when searching skills */
-        $("a.load_root").on("click", function () {
+        $("a.load_root").on("click", function (e) {
+            e.preventDefault();
+
             skill_id = $(this).attr('rel');
             skill_to_load_from_get = 0;
             load_nodes(skill_id, main_depth);
@@ -194,7 +200,7 @@
                                     <h5 class="page-header">{{ 'SkillsSearch'|get_lang }}</h5>
                                     <form id="skill_search" class="form-search">
                                         <select id="skill_id" name="skill_id" /></select>
-                                        <ul id="skill_holder" class="holder_simple clearfix"></ul>
+                                        <table id="skill_holder" class="table table-condensed"></table>
                                     </form>
                                 </div>
                                 <!-- END SEARCH -->
@@ -223,6 +229,9 @@
                         <div id="wheel-legend-collapse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="wheel-legend-heading">
                             <div class="panel-body">
                                 <ul class="fa-ul">
+                                    <li>
+                                        <em class="fa fa-li fa-square skill-legend-basic"></em> {{ "BasicSkills"|get_lang }}
+                                    </li>
                                     <li>
                                         <em class="fa fa-li fa-square skill-legend-badges"></em> {{ "SkillsYouAcquired"|get_lang }}
                                     </li>

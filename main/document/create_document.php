@@ -58,7 +58,10 @@ $(document).on("click", ".dropdown-menu li a", function () {
         contentType: "application/x-www-form-urlencoded",
         data: "textValue="+textValue,
         url: "' . api_get_path(WEB_AJAX_PATH) . 'document.ajax.php?a=documentDestination",
-        type: "POST"
+        type: "POST",
+        success: function(response) {
+            $("[name=\'textValue\']").val(response)
+        }
     });
 });
 
@@ -199,7 +202,7 @@ if ($is_certificate_mode) {
     $editorConfig['BaseHref'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
-$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
+$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 if (!is_dir($filepath)) {
 	$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
@@ -429,6 +432,8 @@ if (!$is_certificate_mode &&
 	}
 }
 
+$form->addHidden('textValue', '');
+
 if ($is_certificate_mode) {
 	$form->addButtonCreate(get_lang('CreateCertificate'));
 } else {
@@ -443,11 +448,11 @@ if ($form->validate()) {
 	$readonly = isset($values['readonly']) ? 1 : 0;
 	$values['title'] = trim($values['title']);
     
-    $textValue = $_SESSION['textValue'];
+    $textValue = $values['textValue'];
     $homeDirectory = get_lang('HomeDirectory');
     if ($textValue === $homeDirectory){
         $dir = "/";
-    } else if ($dir != "/") {
+    } else {
         $posTextValue = strpos($textValue, '—');
         $textValue = substr($textValue, ($posTextValue + 4));
         foreach ($folder_titles as $dirValue => $dirText) {
@@ -460,6 +465,7 @@ if ($form->validate()) {
     if ($dir[strlen($dir) - 1] != '/') {
 		$dir .= '/';
 	}
+    $filepath = $filepath.$dir;
 
     // Setting the filename
 	$filename = $values['title'];

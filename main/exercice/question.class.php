@@ -1373,6 +1373,10 @@ abstract class Question
             self::$questionTypes[ORAL_EXPRESSION] = null;
             unset(self::$questionTypes[ORAL_EXPRESSION]);
         }
+        if (api_get_setting('enable_quiz_scenario') !== 'true') {
+            self::$questionTypes[HOT_SPOT_DELINEATION];
+            unset(self::$questionTypes[HOT_SPOT_DELINEATION]);
+        }
         return self::$questionTypes;
     }
 

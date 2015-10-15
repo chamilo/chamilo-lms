@@ -110,7 +110,7 @@ class DisplayGradebook
         }
         if ($page != 'statistics') {
             if (api_is_allowed_to_edit(null, true)) {
-                $evalinfo .= '<br /><a href="gradebook_statistics.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '"> ' . Display::return_icon(('statistics.png'), get_lang('ViewStatistics'), '', ICON_SIZE_MEDIUM) . '</a>';
+                $evalinfo .= '<br /><a href="gradebook_statistics.php?' . api_get_cidreq() . '&selecteval=' . Security::remove_XSS($_GET['selecteval']) . '"> ' . Display::return_icon(('statistics.png'), get_lang('ViewStatistics'), '', ICON_SIZE_MEDIUM) . '</a>';
             }
         }
         $evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></td></table>';

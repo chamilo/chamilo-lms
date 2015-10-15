@@ -977,20 +977,20 @@ class GradebookTable extends SortableTable
                             $extra = '';
                         }
                         return '&nbsp;'
-                        . '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
+                        . '<a href="gradebook_view_result.php?' . api_get_cidreq() . '&selecteval=' . $item->get_id() . '">'
                         . $item->get_name()
                         . '</a>&nbsp;'.$extra;
                     }
                 } elseif (ScoreDisplay :: instance()->is_custom() && $show_message===false) {
                     // students can go to the statistics page (if custom display enabled)
                     return '&nbsp;'
-                    . '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'
+                    . '<a href="gradebook_statistics.php?' . api_get_cidreq() . '&selecteval=' . $item->get_id() . '">'
                     . $item->get_name()
                     . '</a>';
 
                 } elseif ($show_message === false && !api_is_allowed_to_edit() && !ScoreDisplay :: instance()->is_custom()) {
                     return '&nbsp;'
-                    . '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'
+                    . '<a href="gradebook_statistics.php?' . api_get_cidreq() . '&selecteval=' . $item->get_id() . '">'
                     . $item->get_name()
                     . '</a>';
                 } else {

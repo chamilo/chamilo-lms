@@ -310,7 +310,6 @@ class CourseManager
     {
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-
         $result = Database::fetch_array(
             Database::query(
                 "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "

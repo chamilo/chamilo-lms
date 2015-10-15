@@ -47,10 +47,10 @@ abstract class EvalLink extends AbstractLink
         $eval = $this->get_evaluation();
         // course/platform admin can go to the view_results page
         if (api_is_allowed_to_edit()) {
-            return 'gradebook_view_result.php?selecteval=' . $eval->get_id();
+            return 'gradebook_view_result.php?' . api_get_cidreq() . '&selecteval=' . $eval->get_id();
         } // students can go to the statistics page (if custom display enabled)
         elseif (ScoreDisplay :: instance()->is_custom()) {
-            return 'gradebook_statistics.php?selecteval=' . $eval->get_id();
+            return 'gradebook_statistics.php?' . api_get_cidreq() . '&selecteval=' . $eval->get_id();
         } else {
             return null;
         }

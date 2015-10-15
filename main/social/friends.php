@@ -37,7 +37,7 @@ function delete_friend (element_div) {
 }
 
 function search_image_social()  {
-	var name_search = $("#id_search_image").attr("value");
+	var name_search = $("#id_search_image").val();
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		type: "POST",
@@ -90,17 +90,35 @@ if (isset($name_search) && $name_search != 'undefined') {
     $friends = SocialManager::get_friends($user_id);
 }
 
-$social_right_content = '<div class="col-md-9">';
+$social_right_content = '<div class="col-md-12">';
 
 if (count($friends) == 0) {
-    $social_right_content .= get_lang('NoFriendsInYourContactList').'<br />';
-    $social_right_content .= '<a class="btn btn-success" href="search.php">
-								<em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a>';
+    $social_right_content .= Display::return_message(
+        Display::tag('p', get_lang('NoFriendsInYourContactList')),
+        'warning',
+        false
+    );
+    $social_right_content .= Display::toolbarButton(
+        get_lang('TryAndFindSomeFriends'),
+        'search.php',
+        'search',
+        'success'
+    );
 } else {
-    $social_right_content .= get_lang('Search').'&nbsp;&nbsp; : &nbsp;&nbsp;';
-    $social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />';
+    $filterForm = new FormValidator('filter');
+    $filterForm->addText(
+        'id_search_image',
+        get_lang('Search'),
+        false,
+        [
+            'onkeyup' => 'search_image_social()',
+            'id' => 'id_search_image'
+        ]
+    );
 
-    $friend_html = '<div id="friends">';
+    $social_right_content .= $filterForm->returnForm();
+
+    $friend_html = '<div id="friends" class="row">';
 
     $number_friends = count($friends);
     $j = 0;
@@ -108,24 +126,32 @@ if (count($friends) == 0) {
     for ($k = 0; $k < $number_friends; $k++) {
         while ($j < $number_friends) {
             if (isset($friends[$j])) {
-                $friend_html.='<div class="card">';
                 $friend = $friends[$j];
                 $user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
 				$userPicture = UserManager::getUserPicture($friend['friend_user_id']);
-                $friend_html.='<div class="avatar" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
-                $friend_html.='<img src="'.$userPicture.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" />                                    ';
-				$friend_html.='</div>';
 
-                $friend_html.='<div class="content">
-                               <a href="profile.php?u='.$friend['friend_user_id'].'"> <h5>'.$user_name.'</h5></a>';
-                $friend_html.='<p><button onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'  />'.get_lang('Delete').'</button></p>
-                        		</div>';
-                $friend_html.='</div>';
+                $friend_html .= '
+                    <div class="col-md-3">
+                        <div class="thumbnail text-center" id="div_' . $friends[$j]['friend_user_id'] . '">
+                            <img src="' . $userPicture . '" class="img-responsive" id="imgfriend_' . $friend['friend_user_id'] . '" title="$user_name">
+                            <div class="caption">
+                                <h3>
+                                    <a href="profile.php?u=' . $friend['friend_user_id'] . '">' . $user_name . '</a>
+                                </h3>
+                                <p>
+                                    <button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'] . '>
+                                        ' . get_lang('Delete') . '
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ';
             }
             $j++;
         }
     }
-    $friend_html.='</div>';
+    $friend_html .= '</div>';
     $social_right_content .= $friend_html;
 }
 $social_right_content .= '</div>';

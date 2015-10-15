@@ -7554,4 +7554,5 @@ $TimeXThroughCourseY = "%s par le cours %s";
 $ExportBadge = "Exporter ce badge";
 $SelectToSearch = "Inclure dans la recherche";
 $PlaceOnTheWheel = "Localiser sur la roue";
+$Skill = "Compétence";
 ?>

@@ -7567,4 +7567,5 @@ $TimeXThroughCourseY = "<strong>%s</strong> through <em>%s</em>";
 $ExportBadge = "Export badge";
 $SelectToSearch = "Select to search";
 $PlaceOnTheWheel = "Place on the wheel";
+$Skill = "Skill";
 ?>

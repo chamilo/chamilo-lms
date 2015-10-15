@@ -445,7 +445,7 @@ class CourseRestorer
                                             'session_id' => $my_session_id
                                         ];
 
-    									$document_id = Database::insert($table, $params, true);
+    									$document_id = Database::insert($table, $params);
 
                                         if ($document_id) {
                                             $sql = "UPDATE $table SET id = iid WHERE iid = $document_id";

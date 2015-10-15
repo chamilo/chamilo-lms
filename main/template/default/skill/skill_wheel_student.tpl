@@ -154,14 +154,14 @@
         <div class="row">
             <div class="col-md-3 skill-options">
                 <p class="skill-home">
-                    <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">
+                    <a class="btn btn-large btn-block btn-primary" href="{{ _p.web }}user_portal.php">
                         <em class="fa fa-home"></em> {{ "ReturnToCourseList"|get_lang }}
                     </a>
                 </p>
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <figure class="text-center">
-                            <img width="100px" src="{{ user_info.avatar }}" class="center-block">
+                            <img width="100px" src="{{ user_info.avatar }}" class="img-circle center-block">
                             <figcaption class="lead">{{ user_info.complete_name }}</figcaption>
                         </figure>
                         <p class="text-center">
@@ -187,7 +187,7 @@
 
                 <!-- ACCORDION -->
                 <div class="accordion" id="accordion2">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-default">
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
                                 {{ 'GetNewSkills'|get_lang }}
@@ -218,7 +218,7 @@
                     </div>
                 </div>
                 <div class="panel-group" id="wheel-second-accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="wheel-legend-heading">
                             <h4 class="panel-title">
                                 <a role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-legend-collapse" aria-expanded="true" aria-controls="wheel-legend-collapse">
@@ -245,7 +245,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-primary">
+                    <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="wheel-display-heading">
                             <h4 class="panel-title">
                                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-display-collapse" aria-expanded="false" aria-controls="wheel-display-collapse">

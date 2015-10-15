@@ -459,7 +459,7 @@ define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final 
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
-// Question types
+// Question types (edit next array as well when adding values)
 // @todo move into a class
 define('UNIQUE_ANSWER', 1);
 define('MULTIPLE_ANSWER', 2);
@@ -480,6 +480,29 @@ define('CALCULATED_ANSWER', 16);
 define('UNIQUE_ANSWER_IMAGE', 17);
 define('DRAGGABLE', 18);
 define('MATCHING_DRAGGABLE', 19);
+
+// one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
+define('QUESTION_TYPES',
+    UNIQUE_ANSWER.':'.
+    MULTIPLE_ANSWER.':'.
+    FILL_IN_BLANKS.':'.
+    MATCHING.':'.
+    FREE_ANSWER.':'.
+    HOT_SPOT.':'.
+    HOT_SPOT_ORDER.':'.
+    HOT_SPOT_DELINEATION.':'.
+    MULTIPLE_ANSWER_COMBINATION.':'.
+    UNIQUE_ANSWER_NO_OPTION.':'.
+    MULTIPLE_ANSWER_TRUE_FALSE.':'.
+    MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE.':'.
+    ORAL_EXPRESSION.':'.
+    GLOBAL_MULTIPLE_ANSWER.':'.
+    MEDIA_QUESTION.':'.
+    CALCULATED_ANSWER.':'.
+    UNIQUE_ANSWER_IMAGE.':'.
+    DRAGGABLE.':'.
+    MATCHING_DRAGGABLE
+);
 
 //Some alias used in the QTI exports
 define('MCUA', 1);

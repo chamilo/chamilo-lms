@@ -94,7 +94,7 @@ class HTML_QuickForm_RuleRegistry
 
         } elseif ($type == 'function' || $type == 'callback') {
             // Callback function
-            $rule =& $this->getRule('callback');
+            $rule = $this->getRule('callback');
             $rule->addData($ruleName, $data1, $data2, 'function' == $type);
         } elseif (is_object($data1)) {
             // An instance of HTML_QuickForm_Rule
@@ -148,7 +148,9 @@ class HTML_QuickForm_RuleRegistry
             'uploadedfile' => 'HTML_QuickForm_Rule_UploadFile',
             'maxfilesize', 'HTML_QuickForm_Rule_MaxFileSize',
             'mimetype', 'HTML_QuickForm_Rule_MimeType',
-            'filename', 'HTML_QuickForm_Rule_FileName'
+            'filename', 'HTML_QuickForm_Rule_FileName',
+            'validquestiontype' => 'HTML_QuickForm_Rule_QuestionType',
+
         );
 
         $class = $rules[$ruleName];

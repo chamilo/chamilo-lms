@@ -60,11 +60,11 @@
                 <td>' + skill_name + '</td>\n\
                 <td class="text-right">\n\
                     <div class="btn-group btn-group-sm" data-toggle="buttons">\n\
-                        <label class="btn btn-info ' + activeCondition + '" aria-label="{{ 'Select'|get_lang }}" title="{{ 'SelectToSearch'|get_lang }}">\n\
+                        <label class="btn btn-default ' + activeCondition + '" aria-label="{{ 'Select'|get_lang }}" title="{{ 'SelectToSearch'|get_lang }}">\n\
                             <input id="skill_to_select_id_' + skill_id + '" data-id="' + skill_id + '" name="' + skill_name + '" class="skill_to_select" type="checkbox" autocomplete="off" ' + checked_condition + '>\n\
                             <span class="fa fa-check-square-o" aria-hidden="true"></span>\n\
                         </label>\n\
-                        <button class="btn btn-warning load_wheel" aria-label="{{ 'Search'|get_lang }}" title="{{ 'PlaceOnTheWheel'|get_lang }}" data-id="' + skill_id + '">\n\
+                        <button class="btn btn-default load_wheel" aria-label="{{ 'Search'|get_lang }}" title="{{ 'PlaceOnTheWheel'|get_lang }}" data-id="' + skill_id + '">\n\
                             <span class="fa fa-crosshairs fa-fw" aria-hidden="true"></span>\n\
                         </button>\n\
                     </div>\n\
@@ -478,11 +478,11 @@
         <div class="row">
             <div class="col-md-3 skill-options">
                 <div class="skill-home">
-                    <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">
+                    <a class="btn btn-large btn-block btn-primary" href="{{ _p.web }}user_portal.php">
                         <em class="fa fa-home"></em> {{ "ReturnToCourseList"|get_lang }}
                     </a>
                 </div>
-                <div class="panel panel-primary">
+                <div class="panel panel-default">
                     <div class="panel-body">
                         <div id="saved_profiles"></div>
                         <h4 class="page-header">{{ 'WhatSkillsAreYouLookingFor'|get_lang }}</h4>
@@ -515,7 +515,7 @@
                     </div>
                 </div>
                 <div class="panel-group" id="wheel-second-accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="wheel-legend-heading">
                             <h4 class="panel-title">
                                 <a role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-legend-collapse" aria-expanded="true" aria-controls="wheel-legend-collapse">
@@ -539,7 +539,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-primary">
+                    <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="wheel-display-heading">
                             <h4 class="panel-title">
                                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-display-collapse" aria-expanded="false" aria-controls="wheel-display-collapse">

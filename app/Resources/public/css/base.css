@@ -2669,8 +2669,8 @@ form .formw .freeze {
 .skill-legend-badges{
   color: #3A87AD;
 }
-.page-skill .panel-heading a{
-  color: #ffffff;
+.page-skill .panel-default{
+    border-color:#DDDDDD;
 }
 .page-skill .btn-default{
   background-color: #F6F6F6;
@@ -2692,7 +2692,17 @@ form .formw .freeze {
   stroke: #000000;
   stroke-width: 0.5px;
 }
-
+.items-user .avatar-user{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.items-user p{
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+.items-user .list-group{
+    font-size: 12px;
+}
 table#skill_holder {
   margin-top: 15px;
 }

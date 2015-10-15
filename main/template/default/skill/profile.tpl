@@ -46,16 +46,19 @@
 
         <div class="row">
             {% for user in user_list %}
-                <div class="col-sm-4 col-lg-3">
+                <div class="col-md-3">
+                    <div class="items-user">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <img width="96" src="{{ user.user.avatar }}" class="center-block">
-                            <h3 class="text-center">
+                            <div class="avatar-user">
+                                <img  class="img-circle" width="100" src="{{ user.user.avatar }}" class="center-block">
+                            </div>
+                            <p class="text-center"><em class="fa fa-user"></em> 
                                 <a href="{{ _p.web_main }}social/profile.php?u={{ user['user'].user_id }}" target="_blank">
                                     {{ user['user'].complete_name_with_username }}
                                 </a>
-                            </h3>
-                            <p class="lead text-center">{{ "AchievedSkills"|get_lang }} {{ user.total_found_skills }} / {{ total_search_skills }}</p>
+                            </p>
+                            <p class="text-center"><em class="fa fa-graduation-cap"></em> {{ "AchievedSkills"|get_lang }} {{ user.total_found_skills }} / {{ total_search_skills }}</p>
                         </div>
                         <ul class="list-group">
                             {% for skill_data in user.skills %}
@@ -75,6 +78,7 @@
                             {% endfor %}
                         </ul>
                     </div>
+                    </div>    
                 </div>
             {% endfor %}
         </div>

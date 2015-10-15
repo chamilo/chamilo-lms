@@ -77,10 +77,10 @@ if (!empty($_POST['new_task_submit'])) {
 		$blog_id,
 		$safe_task_name,
 		$safe_task_description,
-		$_POST['chkArticleDelete'],
-		$_POST['chkArticleEdit'],
-		$_POST['chkCommentsDelete'],
-		$_POST['task_color']
+		(isset($_POST['chkArticleDelete']) ? $_POST['chkArticleDelete'] : null),
+		(isset($_POST['chkArticleEdit']) ? $_POST['chkArticleEdit'] : null),
+		(isset($_POST['chkCommentsDelete']) ? $_POST['chkCommentsDelete'] : null),
+		(isset($_POST['task_color']) ? $_POST['task_color'] : null)
 	);
 	$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskCreated'));
 }

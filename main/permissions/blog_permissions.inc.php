@@ -53,7 +53,7 @@ while ($user = Database::fetch_assoc($result)) {
 }
 
 //$user_id=$userIdViewed;
-if ($mainUserInfo['status'] == 1) {
+if (isset($mainUserInfo) && isset($mainUserInfo['status']) && $mainUserInfo['status'] == 1) {
     $course_admin = 1;
 }
 
@@ -154,8 +154,7 @@ echo "\t<tr>\n";
 echo "\t</tr>\n";
 
 // the main area with the checkboxes or images
-foreach ($blog_users as $user_id => $user_name) // $blog_users contains all the users in this blog
-{
+foreach ($blog_users as $user_id => $user_name) { // $blog_users contains all the users in this blog
 	// ---------------------------------------------------
 	// 			RETRIEVING THE PERMISSIONS OF THE USER
 	// ---------------------------------------------------
@@ -164,16 +163,21 @@ foreach ($blog_users as $user_id => $user_name) // $blog_users contains all the 
 
 	echo "\t<tr>\n";
 	echo "\t\t<td>\n";
-		echo $user_name;
+	echo $user_name;
 	echo "\t\t</td>\n";
 
-	foreach ($rights_full as $key => $value)
-	{
+	foreach ($rights_full as $key => $value) {
 
 		echo "\t\t<td align='center'>\n";
-		if (in_array($value,$rights_blog))
-		{
-			display_image_matrix_for_blogs($current_user_permissions, $user_id, 'BLOG_'.$blog_id, $value,$inherited_permissions, $course_admin);
+		if (in_array($value,$rights_blog)) {
+			display_image_matrix_for_blogs(
+				$current_user_permissions,
+				$user_id,
+				'BLOG_'.$blog_id,
+				$value,
+				(isset($inherited_permissions) ? $inherited_permissions : null),
+				(isset($course_admin) ? $course_admin : null)
+			);
 		}
 		// note: in a later stage this part will be replaced by a function
 		// so that we can easily switch between a checkbox approach or an image approach

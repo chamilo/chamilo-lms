@@ -52,13 +52,16 @@ $(document).ready(function() {
     });
 });
 
-$(document).on("click", ".dropdown-menu li a", function () {
-    var textValue = $(this).text();
+$(document).on("change", ".selectpicker", function () {
+    var dirValue = $(this).val();
     $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        data: "textValue="+textValue,
-        url: "' . api_get_path(WEB_AJAX_PATH) . 'document.ajax.php?a=documentDestination",
-        type: "POST"
+        data: "dirValue="+dirValue,
+        url: "' . api_get_path(WEB_AJAX_PATH) . 'document.ajax.php?a=document_destination",
+        type: "POST",
+        success: function(response) {
+            $("[name=\'dirValue\']").val(response)
+        }
     });
 });
 
@@ -199,7 +202,7 @@ if ($is_certificate_mode) {
     $editorConfig['BaseHref'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
-$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
+$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 if (!is_dir($filepath)) {
 	$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
@@ -429,6 +432,8 @@ if (!$is_certificate_mode &&
 	}
 }
 
+$form->addHidden('dirValue', '');
+
 if ($is_certificate_mode) {
 	$form->addButtonCreate(get_lang('CreateCertificate'));
 } else {
@@ -443,23 +448,14 @@ if ($form->validate()) {
 	$readonly = isset($values['readonly']) ? 1 : 0;
 	$values['title'] = trim($values['title']);
     
-    $textValue = $_SESSION['textValue'];
-    $homeDirectory = get_lang('HomeDirectory');
-    if ($textValue === $homeDirectory){
-        $dir = "/";
-    } else if ($dir != "/") {
-        $posTextValue = strpos($textValue, '—');
-        $textValue = substr($textValue, ($posTextValue + 4));
-        foreach ($folder_titles as $dirValue => $dirText) {
-            if ($dirText === $textValue) {
-                $dir = $dirValue;
-            }
-        }
+    if (!empty($values['dirValue'])) {
+        $dir = $values['dirValue'];
     }
 
     if ($dir[strlen($dir) - 1] != '/') {
 		$dir .= '/';
 	}
+    $filepath = $filepath.$dir;
 
     // Setting the filename
 	$filename = $values['title'];

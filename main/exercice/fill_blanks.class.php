@@ -264,8 +264,18 @@ class FillBlanks extends Question
 
         //added multiple answers
         $form->addElement('checkbox','multiple_answer','', get_lang('FillInBlankSwitchable'));
-        $form->addElement('select', 'select_separator', get_lang("SelectFillTheBlankSeparator"), self::getAllowedSeparatorForSelect(), ' id="select_separator"   style="width:150px" onchange="changeBlankSeparator()" ');
-        $form->addElement('label', null, '<input type="button" onclick="updateBlanks()" value="'.get_lang('RefreshBlanks').'" class="btn" />');
+        $form->addElement(
+            'select',
+            'select_separator',
+            get_lang("SelectFillTheBlankSeparator"),
+            self::getAllowedSeparatorForSelect(),
+            ' id="select_separator"   style="width:150px" onchange="changeBlankSeparator()" '
+        );
+        $form->addElement(
+            'label',
+            null,
+            '<input type="button" onclick="updateBlanks()" value="'.get_lang('RefreshBlanks').'" class="btn btn-default" />'
+        );
         $form->addElement('html','<div id="blanks_weighting"></div>');
 
         global $text;

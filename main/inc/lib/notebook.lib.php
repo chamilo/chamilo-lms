@@ -237,7 +237,7 @@ class NotebookManager
             Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32') . '</a>';
         echo '</div>';
 
-        if (!in_array($_SESSION['notebook_view'], array('creation_date', 'update_date', 'title'))) {
+        if (!isset($_SESSION['notebook_view']) || !in_array($_SESSION['notebook_view'], array('creation_date', 'update_date', 'title'))) {
             $_SESSION['notebook_view'] = 'creation_date';
         }
 

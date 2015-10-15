@@ -396,6 +396,7 @@ define('SCORE_ONLY_CUSTOM', 3);
 // From display.lib.php
 
 define('MAX_LENGTH_BREADCRUMB', 100);
+define('ICON_SIZE_ATOM', 8);
 define('ICON_SIZE_TINY', 16);
 define('ICON_SIZE_SMALL', 22);
 define('ICON_SIZE_MEDIUM', 32);
@@ -458,7 +459,7 @@ define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final 
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
-// Question types
+// Question types (edit next array as well when adding values)
 // @todo move into a class
 define('UNIQUE_ANSWER', 1);
 define('MULTIPLE_ANSWER', 2);
@@ -479,6 +480,29 @@ define('CALCULATED_ANSWER', 16);
 define('UNIQUE_ANSWER_IMAGE', 17);
 define('DRAGGABLE', 18);
 define('MATCHING_DRAGGABLE', 19);
+
+// one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
+define('QUESTION_TYPES',
+    UNIQUE_ANSWER.':'.
+    MULTIPLE_ANSWER.':'.
+    FILL_IN_BLANKS.':'.
+    MATCHING.':'.
+    FREE_ANSWER.':'.
+    HOT_SPOT.':'.
+    HOT_SPOT_ORDER.':'.
+    HOT_SPOT_DELINEATION.':'.
+    MULTIPLE_ANSWER_COMBINATION.':'.
+    UNIQUE_ANSWER_NO_OPTION.':'.
+    MULTIPLE_ANSWER_TRUE_FALSE.':'.
+    MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE.':'.
+    ORAL_EXPRESSION.':'.
+    GLOBAL_MULTIPLE_ANSWER.':'.
+    MEDIA_QUESTION.':'.
+    CALCULATED_ANSWER.':'.
+    UNIQUE_ANSWER_IMAGE.':'.
+    DRAGGABLE.':'.
+    MATCHING_DRAGGABLE
+);
 
 //Some alias used in the QTI exports
 define('MCUA', 1);
@@ -1156,7 +1180,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
                 break;
             case COURSE_VISIBILITY_OPEN_PLATFORM:
                 // Open - access allowed for users registered on the platform - 2
-                if (api_get_user_id() && !api_is_anonymous()) {
+                if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
                     $is_visible = true;
                 }
                 break;
@@ -4208,6 +4232,12 @@ function api_display_language_form($hide_if_no_choice = false)
     $html = '
     <script type="text/javascript">
     <!--
+    $(document).ready(function() {
+        $("#language_list").change(function() {
+            jumpMenu("parent",this,0);
+        });
+    });
+    
     function jumpMenu(targ,selObj,restore){ // v3.0
         eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
         if (restore) selObj.selectedIndex=0;
@@ -4216,7 +4246,7 @@ function api_display_language_form($hide_if_no_choice = false)
     </script>';
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
     $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
-    $html .=  '<select id="language_list" class="selectpicker show-tick form-control" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';
+    $html .=  '<select id="language_list" class="selectpicker show-tick form-control" name="language_list" >';
 
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {

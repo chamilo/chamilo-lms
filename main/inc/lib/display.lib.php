@@ -1881,6 +1881,7 @@ class Display
      * Prints a tooltip
      * @param string $text
      * @param string $tip
+     *
      * @return string
      */
     public static function tip($text, $tip)
@@ -2071,15 +2072,16 @@ class Display
 
         return $editProfileUrl;
     }
-    
+
     /**
      * Get the vCard for a user
      * @param int $userId The user id
-     * @return *.*vcf file
+     * @return string *.*vcf file
      */
     public static function getVCardUserLink($userId)
-    {      
+    {
         $vCardUrl = api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.intval($userId);;
+
         return $vCardUrl;
     }
 
@@ -2128,8 +2130,13 @@ class Display
      * @param array $attributes The additional attributes
      * @return string The button HTML
      */
-    public static function toolbarButton($text, $url, $icon = 'check', $type = 'default', array $attributes = [])
-    {
+    public static function toolbarButton(
+        $text,
+        $url,
+        $icon = 'check',
+        $type = 'default',
+        array $attributes = []
+    ) {
         $buttonClass = "btn btn-$type";
         $icon = self::tag('i', null, ['class' => "fa fa-$icon"]);
         $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
@@ -2179,17 +2186,17 @@ class Display
      * Get a HTML code for a icon by Font Awesome
      * @param string $name The icon name
      * @param boolean $fixWidth Optional. Whether add the fw class
-     * @param int|string $size Optional. The size for the icon. 
-     * @param string $aditionalClass Optional. Additional class
+     * @param int|string $size Optional. The size for the icon.
+     * @param string $additionalClass Optional. Additional class
+     *
      * @return string
      */
-    public static function returnFontAswesomeIcon(
+    public static function returnFontAwesomeIcon(
         $name,
         $fixWidth = false,
         $size = null,
-        $aditionalClass = null
-    )
-    {
+        $additionalClass = null
+    ) {
         $className = "fa fa-$name";
 
         if ($fixWidth) {
@@ -2211,24 +2218,44 @@ class Display
                 break;
         }
 
-        if (!empty($aditionalClass)) {
-            $className .= " $aditionalClass";
+        if (!empty($additionalClass)) {
+            $className .= " $additionalClass";
         }
 
-        $icon = self::tag('i', null, ['class' => $className]);
+        $icon = self::tag('em', null, ['class' => $className]);
 
         return "$icon ";
     }
-    public static function panelCollapse($title, $content, $id = null, $params = null, $idAccordion = null, $idCollpase = null, $open = true, $arrow = false)
-    {   
+
+    /**
+     * @param string $title
+     * @param string $content
+     * @param null $id
+     * @param array $params
+     * @param null $idAccordion
+     * @param null $idCollapse
+     * @param bool|true $open
+     * @param bool|false $arrow
+     * @return null|string
+     */
+    public static function panelCollapse(
+        $title,
+        $content,
+        $id = null,
+        $params = array(),
+        $idAccordion = null,
+        $idCollapse = null,
+        $open = true,
+        $arrow = false
+    ) {
         if (!empty($idAccordion)) {
             $html = null;
             $html .= '<div class="panel-group" id="'.$idAccordion.'" role="tablist" aria-multiselectable="true">' . PHP_EOL;
             $html .= '<div class="panel panel-default" id="'.$id.'">' . PHP_EOL;
             $html .= '<div class="panel-heading" role="tab"><h4 class="panel-title">' . PHP_EOL;
-            $html .= '<a class="' . ($arrow===true?'arrow':'') . ' '.($open===true?'':'collapsed').'" role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollpase.'" aria-expanded="true" aria-controls="'.$idCollpase.'">'.$title.'</a>' . PHP_EOL;
+            $html .= '<a class="' . ($arrow===true?'arrow':'') . ' '.($open===true?'':'collapsed').'" role="button" data-toggle="collapse" data-parent="#'.$idAccordion.'" href="#'.$idCollapse.'" aria-expanded="true" aria-controls="'.$idCollapse.'">'.$title.'</a>' . PHP_EOL;
             $html .= '</h4></div>' . PHP_EOL;
-            $html .= '<div id="'.$idCollpase.'" class="panel-collapse collapse '.($open===true?'in':'').'" role="tabpanel">' . PHP_EOL;
+            $html .= '<div id="'.$idCollapse.'" class="panel-collapse collapse '.($open===true?'in':'').'" role="tabpanel">' . PHP_EOL;
             $html .= '<div class="panel-body">'.$content.'</div>' . PHP_EOL;
             $html .= '</div></div></div>' . PHP_EOL;
 

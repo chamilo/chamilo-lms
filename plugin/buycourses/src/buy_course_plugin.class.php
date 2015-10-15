@@ -1,15 +1,12 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * Description of buy_courses_plugin
- * @package chamilo.plugin.buycourses
- * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
- * @author Imanol Losada      <imanol.losada@beeznest.com>
- * @author Alex Aragón      <alex.aragon@beeznest.com>
- * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- */
-/**
  * Plugin class for the BuyCourses plugin
+ * @package chamilo.plugin.buycourses
+ * @author Jose Angel Ruiz <jaruiz@nosolored.com>
+ * @author Imanol Losada <imanol.losada@beeznest.com>
+ * @author Alex Aragón <alex.aragon@beeznest.com>
+ * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class BuyCoursesPlugin extends Plugin
 {
@@ -63,10 +60,20 @@ class BuyCoursesPlugin extends Plugin
      */
     function install()
     {
-        $appPlugin = new AppPlugin();
-        $installedPlugins = $appPlugin->get_installed_plugins();
+        $tablesToBeCompared = array(
+            self::TABLE_PAYPAL,
+            self::TABLE_TRANSFER,
+            self::TABLE_ITEM_BENEFICIARY,
+            self::TABLE_ITEM,
+            self::TABLE_SALE,
+            self::TABLE_CURRENCY
+        );
+        $em = Database::getManager();
+        $cn = $em->getConnection();
+        $sm = $cn->getSchemaManager();
+        $tables = $sm->tablesExist($tablesToBeCompared);
 
-        if (in_array($this->get_name(), $installedPlugins)) {
+        if ($tables) {
             return false;
         }
 
@@ -227,7 +234,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $entityManager = Database::getManager();
         $query = $entityManager->createQueryBuilder();
-        
+
         $courses = $query
             ->select('c')
             ->from('ChamiloCoreBundle:Course', 'c')
@@ -409,7 +416,7 @@ class BuyCoursesPlugin extends Plugin
                     'title' => $course->getTitle(),
                     'coaches' => []
                 ];
-                
+
                 $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
                     $course,
                     Chamilo\CoreBundle\Entity\Session::COACH
@@ -592,7 +599,7 @@ class BuyCoursesPlugin extends Plugin
      * @param array $sessionId The session ID
      * @return array
      */
-    public function getSessionInfo($sessionId) 
+    public function getSessionInfo($sessionId)
     {
         $entityManager = Database::getManager();
         $session = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);

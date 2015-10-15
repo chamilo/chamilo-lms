@@ -54,7 +54,10 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         null,
         get_lang('StartDateCustom'),
         '2',
-        array('onclick' => 'check_per_custom_date(this)', 'id' => 'custom_date')
+        array(
+            'onclick' => 'check_per_custom_date(this)',
+            'id' => 'custom_date'
+        )
     );
     $form->addGroup($radios, null, get_lang('StartDateOptions'));
 
@@ -149,7 +152,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         $default['content'] = isset($thematic_advance_data['content']) ? $thematic_advance_data['content'] : null;
         $default['duration_in_hours'] = isset($thematic_advance_data['duration']) ? $thematic_advance_data['duration'] : null;
         if (empty($thematic_advance_data['attendance_id'])) {
-            $default['start_date_type'] = 2;
+            $default['start_date_type'] = 1;
             $default['custom_start_date'] = null;
             if (isset($thematic_advance_data['start_date'])) {
                 $default['custom_start_date'] = date(

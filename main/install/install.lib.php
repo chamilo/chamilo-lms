@@ -1147,15 +1147,15 @@ function get_contact_registration_form()
     <div id="div_sent_information"></div>
     <div class="form-group">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Name').'</label>
-            <div class="col-sm-9"><input id="person_name" type="text" name="person_name" size="30" /></div>
+            <div class="col-sm-9"><input id="person_name" class="form-control" type="text" name="person_name" size="30" /></div>
     </div>
     <div class="form-group">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Email').'</label>
-            <div class="col-sm-9"><input id="person_email" type="text" name="person_email" size="30" /></div>
+            <div class="col-sm-9"><input id="person_email" class="form-control" type="text" name="person_email" size="30" /></div>
     </div>
     <div class="form-group">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyName').'</label>
-            <div class="col-sm-9"><input id="company_name" type="text" name="company_name" size="30" /></div>
+            <div class="col-sm-9"><input id="company_name" class="form-control" type="text" name="company_name" size="30" /></div>
     </div>
     <div class="form-group">
             <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</label>
@@ -1208,7 +1208,7 @@ function get_contact_registration_form()
     <div class="form-group">
             <label class="col-sm-3">'.get_lang('CompanyCity').'</label>
             <div class="col-sm-9">
-                    <input type="text" id="company_city" name="company_city" size="30" />
+                    <input type="text" class="form-control" id="company_city" name="company_city" size="30" />
             </div>
     </div>
     <div class="form-group">
@@ -1235,14 +1235,22 @@ function get_contact_registration_form()
     <div class="form-group">
             <label class="col-sm-3">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</label>
             <div class="col-sm-9">
-                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked />'.get_lang('Yes').'
-                    <input type="radio" name="financial_decision" id="financial_decision2" value="0" />'.get_lang('No').'
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked /> ' . get_lang('Yes') . '
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="financial_decision" id="financial_decision2" value="0" /> '.get_lang('No').'
+                    </label>
+                </div>
             </div>
     </div>
     <div class="clear"></div>
     <div class="form-group">
             <div class="col-sm-3">&nbsp;</div>
-            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"> </i> '.get_lang('SendInformation').'</button></div>
+            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"></em> '.get_lang('SendInformation').'</button></div>
     </div>
     <div class="form-group">
             <div class="col-sm-3">&nbsp;</div>
@@ -1288,7 +1296,7 @@ function displayDatabaseParameter(
             echo '<input type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />';
             echo api_htmlentities($parameterValue);
         } else {
-            echo '<div class="col-sm-5"><input type="'.$inputType.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxLength.'" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />'."</div>";
+            echo '<div class="col-sm-5"><input type="' . $inputType . '" class="form-control" size="' . DATABASE_FORM_FIELD_DISPLAY_LENGTH . '" maxlength="' . $maxLength . '" name="' . $formFieldName . '" id="' . $formFieldName . '" value="' . api_htmlentities($parameterValue) . '" />' . "</div>";
             echo '<div class="col-sm-3">' . $extra_notice . '</div>';
         }
 
@@ -1347,7 +1355,7 @@ function display_database_settings_form(
             <div class="col-sm-3"></div>
             <?php }else{ ?>
             <div class="col-sm-5">
-                <input type="text" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" />
+                <input type="text" class="form-control" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" />
             </div>
             <div class="col-sm-3"><?php echo get_lang('EG').' localhost'; ?></div>
             <?php } ?>
@@ -1361,7 +1369,7 @@ function display_database_settings_form(
             <div class="col-sm-3"></div>
             <?php }else{ ?>
             <div class="col-sm-5">
-                <input type="text" size="25" maxlength="50" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" />
+                <input type="text" class="form-control" size="25" maxlength="50" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" />
             </div>
             <div class="col-sm-3"><?php echo get_lang('EG').' 3306'; ?></div>
             <?php } ?>

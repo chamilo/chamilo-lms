@@ -771,7 +771,7 @@ if ($category != '0') {
                 $stud_id
             );
             if (isset($certificate['pdf_url'])) {
-                $actionsLeft .= Display::url(Display::returnFontAswesomeIcon('file-pdf-o') . 
+                $actionsLeft .= Display::url(Display::returnFontAwesomeIcon('file-pdf-o') .
                     get_lang('DownloadCertificatePdf'),
                     $certificate['pdf_url'],
                     ['class' => 'btn btn-default']
@@ -786,7 +786,7 @@ if ($category != '0') {
 
 if (!api_is_allowed_to_edit(null, true)) {
     $actionsLeft .= Display::url(
-            Display::returnFontAswesomeIcon('file-pdf-o') . get_lang('DownloadReportPdf'),
+            Display::returnFontAwesomeIcon('file-pdf-o') . get_lang('DownloadReportPdf'),
             api_get_self()."?".api_get_self()."&action=export_table",
             ['class' => 'btn btn-default']
     );

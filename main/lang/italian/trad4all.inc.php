@@ -3862,7 +3862,7 @@ $EussMenu = "Menù";
 $Opinio = "Opinione";
 $Intranet = "Intranet";
 $Englin = "Inglese";
-$InvalidForSelfRegistration = "Login fallito - se non sei registrato, puoi farlo usando il <a href=claroline/auth/inscription.php>modulo di registrazione</a>";
+$InvalidForSelfRegistration = "Login fallito - se non sei registrato, puoi farlo usando il <a href='main/auth/inscription.php'>modulo di registrazione</a>";
 $MenuGeneral = "In evidenza";
 $MenuUser = "Utente";
 $MenuAdmin = "Amministratore della piattaforma";
@@ -4161,7 +4161,7 @@ $EmailWikiPageDiscAdded = "Un nuovo intervento è stato inserito come discussion
 $FullNotifyByEmail = "Ricevi una notifica via email per ogni cambiamento del Wiki";
 $FullCancelNotifyByEmail = "Ferma la notifica via email dei cambiamenti effettuati sul Wiki";
 $EmailWikiChangesExt_1 = "La notifica è stata effettuata in base alla tua richiesta di monitoraggio dei cambiamenti dl Wiki, richiesta attivata attraverso la selezione di un'opzione del Wiki";
-$EmailWikiChangesExt_2 = "Se vuoi fermare la notifica dei cambiamenti del Wiki seleziona l'opzione opportuna in <strong> Modifiche recenti</ strong>, <strong>Pagina attiva</ strong>, <strong>Notifica</ strong>";
+$EmailWikiChangesExt_2 = "Se vuoi fermare la notifica dei cambiamenti del Wiki seleziona l'opzione opportuna in <strong> Modifiche recenti</strong>, <strong>Pagina attiva</strong>, <strong>Notifica</strong>";
 $OrphanedPages = "Pagine orfane";
 $WantedPages = "Pagine ricercate";
 $MostVisitedPages = "Pagine più visitate";
@@ -4324,7 +4324,7 @@ $AllRight = "Niente di strano qui.";
 $Defcon = "Ooops, c'è qualcosa di strano!!";
 $NULLValue = "Vuoto (or NULL)";
 $TrafficDetails = "Dettagli sul traffico";
-$SeeIndividualTracking = "Alle statistiche individuali si accede dalla sezione <a href=../user/user.php>Utenti</a>";
+$SeeIndividualTracking = "Alle statistiche individuali si accede dalla sezione <a href='../user/user.php'>Utenti</a>";
 $PathNeverOpenedByAnybody = "Questo modulo didattico non è stato aperto da nessuno.";
 $SynthesisView = "In sintesi";
 $Visited = "Visitato";
@@ -4748,7 +4748,7 @@ $HOnline = "Guida al sistema di videoconferenza";
 $OnlineContent = "NOTA: La descrizione sottostante è obsoletaIl sistema di Audio Conferenza online di Chamilo vi consente di essere in contatto con fino a 100 persone in modo semplice e rapido.<br> <ul>   <li><b>audio :</b> la voce dell'istruttore viene inviata in modalità sincrona ai partecipanti in qualità radio FM grazie allo streaming in formato MP3</li>   <li><b>contenuti :</b> i partecipanti seguono la presentazione in formato Power Point o da strumenti analoghi</li>   <li><b>interazione :</b> i partecipanti pongono le loro domande all'istruttore attraverso una chat in formato testo</li> </ul> Il sistema di audioconferenza Chamilo è il miglior compromesso tra ridotti requisiti tecnici (inclusi bassi costi, interoperabilità, alto numero di potenziali partecipanti) e un buon livello di interazione (sistema reale di domanda/risposta).<br><br> Il docente/istruttore necessita di:<br> <ul>   <li>un computer collegato a internet</li>   <li>una semplice cuffia con microfono</li>   <li>un browser</li>   <li>in ambiente Windows : il software  \tShoutcast(<a href=\"http://www.shoutcast.com\" target=\"_blank\">www.shoutcast.com</a>)</li>   <li>in ambiente Mac : il software Darwin (<a href=\"http://developer.apple.com/darwin\">Apple Darwin</a>)</li> </ul> I partecipanti necessitano di:<br> <ul>   <li>un computer collegato a internet</li>   <li>altoparlanti o cuffie</li>   <li>un browser</li>   <li>in ambiente Windows o Mac : Quicktime (<a href=\"http://www.quicktime.com\" target=\"_blank\">www.quicktime.com</a>)</li>   <li>in ambiente Linux : XMMS</li> </ul> In caso di problemi, si prega di contattare l'Assistenza Chamilo: <a href=\"http://www.chamilo.org\" target=\"_blank\">http://www.chamilo.org</a>.";
 $HClar = "Aiuto Chamilo";
 $HDoc = "'Documenti'";
-$DocContent = "<p>Lo strumento 'Documenti' ha un funzionamento simile alla Gestione risorse del vostro computer.</p><p>É possibile caricare file di qualsiasi formato (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, ecc.), prestando unicamente attenzione a che i vostri corsisti possiedano il software appropriato.Alcune tipologie di file possono contenere virus; è pertanto vostra responsabilità avere cura di verificare l'assenza di potenziali virus prima di effettuare il caricamento di qualsiasi documento sul server.</p><p>I documenti vengono elencati in ordine alfabetico.<br><b>Suggerimento : </b>se desiderate elencarli in ordine diverso, numerateli in modo consecutivo: 01, 02, 03...</p><p>É possibile :</p><h4>Creare un documento</h4><ul>        <li>Cliccate su crea un documento.</li>        <li>Date un nome al file (sarà salvato in formato html) .</li>        <li>Datene una eventuale descrizione nel campo commento.</li>        <li>Scrivete il documento sull'editor o eventualmente incollate un testo precedentemente copiato.</li>        <li>Cliccate su Conferma.</li></ul><h4>Caricare un documento</h4><ul>        <li>Selezionate il file nel vostro computer utilizzando il pulsante 'Sfoglia' <input type=submit value=Browse name=submit2>\t     situato alla destra del vostro schermo.</li>        <li>Inviate il file da trasmettere utilizzando il pulsante 'Carica' <input type=submit value=Upload name=submit2>.</li></ul><h4>Rinomina un documento (o una cartella)</h4><ul>\t\t<li>Cliccate sul pulsante <img src=../document/img/renommer.gif width=20 height=20 align=baseline>\t\t\tnella colonna 'Rinomina'</li>\t\t<li>Digitate il nuovo nome nel campo (in alto a sinistra)</li>\t\t<li>Confermate l'operazione cliccando sul pulsante 'Conferma' <input type=submit value=Ok name=submit24>.</li></ul><h4>Eliminare un documento (o una cartella)</h4><ul>\t\t<li>Cliccate sul pulsante <img src=../document/img/delete.gif width=20 height=20>\t\t\tnella colonna 'Elimina'.</li></ul><h4>Rendere un documento (o una cartella) invisibile ai corsisti</h4><ul>\t\t<li>Cliccate sul pulsante <img src=../document/img/visible.gif width=20 height=20>\t\t\tnella colonna 'Visibile/Invisibile'.</li>\t\t<li>Il documento (o cartella) è ancora presente ma non è più visibile ai corsisti.</li>\t\t<li>Per renderlo nuovamente visibile, cliccate sul pulsante <img src=../document/../document/img/invisible.gif width=24 height=20>\t\t\tnella colonna'Visibile/Invisibile'</li></ul><h4>Aggiungere o modificare un commento a un documento (o cartella)</h4><ul>\t\t<li>Cliccate sul pulsante <img src=../document/../document/img/comment.gif width=20 height=20> \t\t\tnella colonna 'Commento'</li>\t\t<li>Digitate il nuovo commento nel campo corrispondente (in alto a sinistra).</li>\t\t<li>Confermate l'operazione cliccando sul pulsante 'Conferma' <input type=submit value=OK name=submit2>.</li></ul>\t\t<p>\t\tPer eliminare un commento, cliccate sul pulsante <img src=../document/../document/img/comment.gif width=20 height=20>,\t\teliminate il vecchio commento nel campo corrispondente e confermate l'operazione cliccando sul pulsante 'Conferma' <input type=submit value=OK name=submit22>.<hr>\t\t<p>Potete organizzare il contenuto gestendo i documenti ripartiti in nuove cartelle. Per compiere questa operazione dovete preliminarmente:</p><h4><b>Creare una cartella</b></h4><ul>\t\t<li>Cliccando sul pulsante <img src=../document/../document/img/dossier.gif width=20 height=20>\t\t\t'Creare una cartella' (in alto a sinistra)</li>\t\t<li>Digitate il nome della nuova cartella nel campo corrispondente (in alto a sinistra)</li>\t\t<li>Confermate l'operazione cliccando sul pulsante 'Conferma' <input type=submit value=OK name=submit23>.</li></ul><h4><b>Spostare un documento (o una cartella)</b></h4><ul>\t\t<li>Cliccando sul pulsante  <img src=../document/../document/img/deplacer.gif width=34 height=16>\t\t\tnella colonna 'Sposta'</li>\t\t<li>Scegliete la cartella di destinazione in cui volete spostare il documento (o la cartella) nel corrispondente menù a scorrimento (in alto a sinistra)\t\t\t(NB: il termine ingl. 'root' - franc. 'racine' - significa che non potete proseguire ulteriormente nella struttura 'ad albero' del server).</li>\t\t<li>Confermate l'operazione cliccando sul pulsante 'Conferma' <input type=submit value=OK name=submit232>.</li></ul><center><p>";
+$DocContent = "<p>Lo strumento 'Documenti' ha un funzionamento simile alla Gestione risorse del vostro computer.</p><p>É possibile caricare file di qualsiasi formato (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, ecc.), prestando unicamente attenzione a che i vostri corsisti possiedano il software appropriato.Alcune tipologie di file possono contenere virus; è pertanto vostra responsabilità avere cura di verificare l'assenza di potenziali virus prima di effettuare il caricamento di qualsiasi documento sul server.</p><p>I documenti vengono elencati in ordine alfabetico.<br><b>Suggerimento : </b>se desiderate elencarli in ordine diverso, numerateli in modo consecutivo: 01, 02, 03...</p><p>É possibile :</p><h4>Creare un documento</h4><ul>        <li>Cliccate su crea un documento.</li>        <li>Date un nome al file (sarà salvato in formato html) .</li>        <li>Datene una eventuale descrizione nel campo commento.</li>        <li>Scrivete il documento sull'editor o eventualmente incollate un testo precedentemente copiato.</li>        <li>Cliccate su Conferma.</li></ul><h4>Caricare un documento</h4><ul>        <li>Selezionate il file nel vostro computer utilizzando il pulsante 'Sfoglia' <input type='submit' value='Browse' name='submit2'>\t     situato alla destra del vostro schermo.</li>        <li>Inviate il file da trasmettere utilizzando il pulsante 'Carica' <input type='submit' value='Upload' name='submit2'>.</li></ul><h4>Rinomina un documento (o una cartella)</h4><ul>\t\t<li>Cliccate sul pulsante <img src='/main/img/icons/22/edit.png' width='22' height='22' align='baseline'>\t\t\tnella colonna 'Rinomina'</li>\t\t<li>Digitate il nuovo nome nel campo (in alto a sinistra)</li>\t\t<li>Confermate l'operazione cliccando sul pulsante 'Conferma' <input type='submit' value='Ok' name='submit24'>.</li></ul><h4>Eliminare un documento (o una cartella)</h4><ul>\t\t<li>Cliccate sul pulsante <img src='/main/img/icons/22/delete.png' width='22' height='22'>\t\t\tnella colonna 'Elimina'.</li></ul><h4>Rendere un documento (o una cartella) invisibile ai corsisti</h4><ul>\t\t<li>Cliccate sul pulsante <img src='/main/img/icons/22/visible.png' width='22' height='22'>\t\t\tnella colonna 'Visibile/Invisibile'.</li>\t\t<li>Il documento (o cartella) è ancora presente ma non è più visibile ai corsisti.</li>\t\t<li>Per renderlo nuovamente visibile, cliccate sul pulsante <img src='/main/img/icons/22/invisible.png' width='22' height='22'>\t\t\tnella colonna'Visibile/Invisibile'</li></ul><h4>Aggiungere o modificare un commento a un documento (o cartella)</h4><ul>\t\t<li>Cliccate sul pulsante <img src='/main/img/icons/22/message.png' width='22' height='22'> \t\t\tnella colonna 'Commento'</li>\t\t<li>Digitate il nuovo commento nel campo corrispondente (in alto a sinistra).</li>\t\t<li>Confermate l'operazione cliccando sul pulsante 'Conferma' <input type='submit' value='OK' name='submit2'>.</li></ul>\t\t<p>\t\tPer eliminare un commento, cliccate sul pulsante <img src='/main/img/icons/22/message.png' width='22' height='22'>,\t\teliminate il vecchio commento nel campo corrispondente e confermate l'operazione cliccando sul pulsante 'Conferma' <input type='submit' value='OK' name='submit22'>.<hr>\t\t<p>Potete organizzare il contenuto gestendo i documenti ripartiti in nuove cartelle. Per compiere questa operazione dovete preliminarmente:</p><h4><b>Creare una cartella</b></h4><ul>\t\t<li>Cliccando sul pulsante <img src='/main/img/icons/22/folder.png' width='22' height='22'>\t\t\t'Creare una cartella' (in alto a sinistra)</li>\t\t<li>Digitate il nome della nuova cartella nel campo corrispondente (in alto a sinistra)</li>\t\t<li>Confermate l'operazione cliccando sul pulsante 'Conferma' <input type='submit' value='OK' name='submit23'>.</li></ul><h4><b>Spostare un documento (o una cartella)</b></h4><ul>\t\t<li>Cliccando sul pulsante  <img src='/main/img/icons/22/move.png' width='22' height='22'>\t\t\tnella colonna 'Sposta'</li>\t\t<li>Scegliete la cartella di destinazione in cui volete spostare il documento (o la cartella) nel corrispondente menù a scorrimento (in alto a sinistra)\t\t\t(NB: il termine ingl. 'root' - franc. 'racine' - significa che non potete proseguire ulteriormente nella struttura 'ad albero' del server).</li>\t\t<li>Confermate l'operazione cliccando sul pulsante 'Conferma' <input type='submit' value='OK' name='submit232'>.</li></ul><center><p>";
 $HUser = "'Utenti'";
 $HExercise = "Verifiche";
 $HPath = "I Moduli didattici";
@@ -7050,21 +7050,22 @@ La configurazione per Chamilo
 
 modifica file main/auth/shibboleth/config/aai.class.php
 
-Modifica object $result values with the name of your Shibboleth attributes
+Modifica object &#36;result values with the name of your Shibboleth attributes
 
-$result->unique_id = 'mail';
-$result->firstname = 'cn';
-$result->lastname = 'uid';
-$result->email = 'mail';
-$result->language = '-';
-$result->gender = '-';
-$result->address = '-';
-$result->staff_category = '-';
-$result->home_organization_type = '-';
-$result->home_organization = '-';
-$result->affiliation = '-';
-$result->persistent_id = '-';
-...
+<ul>
+<li>&#36;result-&gt;unique_id = 'mail';</li>
+<li>&#36;result-&gt;firstname = 'cn';</li>
+<li>&#36;result-&gt;lastname = 'uid';</li>
+<li>&#36;result-&gt;email = 'mail';</li>
+<li>&#36;result-&gt;language = '-';</li>
+<li>&#36;result-&gt;gender = '-';</li>
+<li>&#36;result-&gt;address = '-';</li>
+<li>&#36;result-&gt;staff_category = '-';</li>
+<li>&#36;result-&gt;home_organization_type = '-';</li>
+<li>&#36;result-&gt;home_organization = '-';</li>
+<li>&#36;result-&gt;affiliation = '-';</li>
+<li>&#36;result-&gt;persistent_id = '-';</li>
+<li>...</li>
 
 Vai ai Plugin per aggiungere un pulsante 'Shibboleth Login'in questo campus.";
 $LdapDescriptionTitle = "Autenticazione LDAP";
@@ -7074,7 +7075,7 @@ $FacebookMainActivateComment = "Per iniziare, devi creare una Facebook Applicati
 Poi,
 modifica il file main/auth/external_login/facebook.conf.php
 
-e inserisci i valori di 'appId' and 'secret' nella riga $facebook_config.
+e inserisci i valori di 'appId' and 'secret' nella riga &#36;facebook_config.
 
 Vai su Plugin e aggiungi un pulsante 'Facebook Login' per questo campus.";
 $AnnouncementForGroup = "Avviso per un gruppo";

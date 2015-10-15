@@ -14,9 +14,11 @@
                                     {{ hot_course.extra_info.rating_html }}
                                 </div>
                                 <div class="toolbar">
+                                    <div class="btn-group" role="group">
                                     {{ hot_course.extra_info.description_button }}
                                     {{ hot_course.extra_info.register_button }}
                                     {{ hot_course.extra_info.unsubscribe_button }}
+                                    </div>
                                 </div>
                             </div>
                         </div>

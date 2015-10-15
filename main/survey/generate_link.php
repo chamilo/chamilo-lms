@@ -37,10 +37,10 @@ $link = SurveyManager::generate_survey_link(
     api_get_group_id()
 );
 echo '<div class="row">';
-    echo '<div class="span12" style="text-align:center">';
+    echo '<div class="col-md-12">';
     echo Display::url(get_lang('GenerateSurveyAccessLink'), $link, array('class' => 'btn btn-primary btn-large'));
     echo '</div>';
-    echo '<div class="span12">';
+    echo '<div class="col-md-12">';
     echo get_lang('GenerateSurveyAccessLinkExplanation');
 
     echo '<pre>';

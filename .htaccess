@@ -37,3 +37,6 @@ RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,
 
 # About session
 RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
+
+# Issued badges friendly URL
+RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]

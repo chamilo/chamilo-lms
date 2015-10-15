@@ -3389,7 +3389,7 @@ function store_edit_post($values)
 
     $posts = getPosts($values['thread_id']);
     $first_post = null;
-    if (!empty($posts)) {
+    if (!empty($posts) && count($posts) > 0 && isset($posts[0])) {
         $first_post = $posts[0];
     }
 
@@ -4666,7 +4666,7 @@ function delete_attachment($post_id, $id_attach = 0, $display = true)
     api_item_property_update($_course, TOOL_FORUM_ATTACH, $id_attach, 'ForumAttachmentDelete', api_get_user_id());
 
     if (!empty($result) && !empty($id_attach) && $display) {
-        $message = get_lang(get_lang('AttachmentFileDeleteSuccess'));
+        $message = get_lang('AttachmentFileDeleteSuccess');
         Display::display_confirmation_message($message);
     }
 

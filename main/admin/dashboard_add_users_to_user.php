@@ -40,7 +40,9 @@ $userStatus = api_get_user_status($user_id);
 $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
 
 // setting the name of the tool
-if (UserManager::is_admin($user_id)) {
+$isAdmin = UserManager::is_admin($user_id);
+if ($isAdmin) {
+    $userStatus = PLATFORM_ADMIN;
     $tool_name= get_lang('AssignUsersToPlatformAdministrator');
 } else if ($user_info['status'] == SESSIONADMIN) {
     $tool_name= get_lang('AssignUsersToSessionsAdministrator');
@@ -59,7 +61,7 @@ if (!api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-function search_users($needle,$type)
+function search_users($needle, $type)
 {
     global $tbl_access_url_rel_user,  $tbl_user, $user_anonymous, $current_user_id, $user_id, $userStatus;
 
@@ -70,6 +72,8 @@ function search_users($needle,$type)
 
         switch ($userStatus) {
             case DRH:
+                //no break;
+            case PLATFORM_ADMIN:
                 $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
                 break;
             case STUDENT_BOSS:
@@ -284,9 +288,11 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 
     switch ($userStatus) {
         case DRH:
+            //no break;
+        case PLATFORM_ADMIN:
             $affected_rows = UserManager::suscribe_users_to_hr_manager($user_id, $user_list);
             break;
-        case STUDENT_BOSS;
+        case STUDENT_BOSS:
             $affected_rows = UserManager::subscribeUsersToBoss($user_id, $user_list);
             break;
         default:
@@ -331,9 +337,11 @@ $assigned_users_to_hrm = array();
 
 switch ($userStatus) {
     case DRH:
+        //no break;
+    case PLATFORM_ADMIN:
         $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
         break;
-    case STUDENT_BOSS;
+    case STUDENT_BOSS:
         $assigned_users_to_hrm = UserManager::getUsersFollowedByStudentBoss($user_id);
         break;
 }

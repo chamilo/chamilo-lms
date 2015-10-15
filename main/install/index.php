@@ -310,7 +310,7 @@ if ($encryptPassForm == '1') {
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH)?>javascript/bootstrap-select.min.js"></script>
+    <?php echo api_get_js('bootstrap-select/js/bootstrap-select.min.js') ?>
     <script type="text/javascript">
         $(document).ready( function() {
 

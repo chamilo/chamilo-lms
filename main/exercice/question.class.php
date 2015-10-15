@@ -1373,6 +1373,10 @@ abstract class Question
             self::$questionTypes[ORAL_EXPRESSION] = null;
             unset(self::$questionTypes[ORAL_EXPRESSION]);
         }
+        if (api_get_setting('enable_quiz_scenario') !== 'true') {
+            self::$questionTypes[HOT_SPOT_DELINEATION] = null;
+            unset(self::$questionTypes[HOT_SPOT_DELINEATION]);
+        }
         return self::$questionTypes;
     }
 
@@ -1424,7 +1428,7 @@ abstract class Question
         </script>';
 
         // question name
-        $form->addElement('text', 'questionName', get_lang('Question'), array('class' => 'span6'));
+        $form->addElement('text', 'questionName', get_lang('Question'));
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
         // default content

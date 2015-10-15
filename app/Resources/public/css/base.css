@@ -2638,13 +2638,6 @@ form .formw .freeze {
   background-color: #FFFFFF;
 }
 .skill-options .load_wheel{
-  -moz-border-radius:6px;
-  -webkit-border-radius:6px;
-  border-radius:6px;
-  border:1px solid #C09853;
-  background:#FCF8E3;
-  padding:1px 5px 2px;
-  color:#333;
 }
 .skill-options .skill-winner{
   list-style: none;
@@ -2676,8 +2669,8 @@ form .formw .freeze {
 .skill-legend-badges{
   color: #3A87AD;
 }
-.page-skill .panel-heading a{
-  color: #ffffff;
+.page-skill .panel-default{
+    border-color:#DDDDDD;
 }
 .page-skill .btn-default{
   background-color: #F6F6F6;
@@ -2699,11 +2692,19 @@ form .formw .freeze {
   stroke: #000000;
   stroke-width: 0.5px;
 }
-
-#skill_holder li {
-  float: none;
-  padding-right: 10px;
-  margin-bottom: .5em;
+.items-user .avatar-user{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.items-user p{
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+.items-user .list-group{
+    font-size: 12px;
+}
+table#skill_holder {
+  margin-top: 15px;
 }
 
 /* ****************************************************
@@ -4038,6 +4039,19 @@ i.size-32.icon-new-work{
 .openbadges-text{
   text-align: center;
 }
+.title-badge{
+  font-weight: bold;
+  color: #2C3E50;
+}
+.code-badge{
+  font-size: 12px;
+}
+.name-badge{
+  font-size: 16px;
+}
+.issued .thumbnail{
+    border: none;
+}
 /* Social Profile */
 
 .social-profile{
@@ -5011,9 +5025,10 @@ div#chat-remote-video video {
   text-transform: uppercase;
 }
 #session-list .title-session{
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.2;
   margin-top: 5px;
+  min-height: 32px;
 }
 #session-list .session-col:nth-child(4n+1) {
     clear: left;
@@ -5023,6 +5038,7 @@ div#chat-remote-video video {
   padding: 0;
   border: 1px solid #dddddd;
   margin-bottom: 20px;
+  border-radius: 5px;
 }
 #session-list .item img{
   max-width: 100%;
@@ -5034,6 +5050,7 @@ div#chat-remote-video video {
 
 #session-list .information-item{
   padding: 10px;
+  min-height: 185px;
 }
 #session-list .information-item .requirements .fa-book{
   margin-right: 10px;
@@ -5388,7 +5405,7 @@ div#chat-remote-video video {
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  min-height: 350px;
+  min-height: 320px;
   margin-bottom: 10px;
 }
 .items-course .items-course-info .title{
@@ -5416,6 +5433,13 @@ div#chat-remote-video video {
   padding-bottom: 5px;
   border-radius: 5px;
 
+}
+.items-course .items-course-info .toolbar{
+    text-align: center;
+    padding-top: 5px;
+}
+.items-course .items-course-info .vote_label_info{
+    margin-bottom: 5px;
 }
 .hot-course-head{
   padding-top: 10px;
@@ -5800,7 +5824,14 @@ a.sessionView {
     border-radius: 25px;
     border-color: #00677C;
 }
-
+.modal-body .sectiontitle{
+    font-size: 18px;
+    padding-bottom: 10px;
+    color: #00829C;
+}
+.modal-body .sectioncomment{
+    color: #666;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

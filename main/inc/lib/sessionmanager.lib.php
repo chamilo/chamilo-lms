@@ -2852,13 +2852,22 @@ class SessionManager
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
         if (empty($userInfo)) {
+
             return 0;
         }
 
         $userId = $userInfo['user_id'];
 
         // Only subscribe DRH users.
-        if ($userInfo['status'] != DRH) {
+        $rolesAllowed = array(
+            DRH,
+            SESSIONADMIN,
+            PLATFORM_ADMIN,
+            COURSE_TUTOR
+        );
+        $isAdmin = api_is_platform_admin_by_id($userInfo['user_id']);
+        if (!$isAdmin && !in_array($userInfo['status'], $rolesAllowed)) {
+
             return 0;
         }
 
@@ -2903,6 +2912,7 @@ class SessionManager
                             '" . SESSION_RELATION_TYPE_RRHH . "',
                             '" . api_get_utc_datetime() . "'
                         )";
+
                 Database::query($sql);
                 $affected_rows++;
             }

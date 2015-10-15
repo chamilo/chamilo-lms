@@ -277,7 +277,7 @@ class EvalForm extends FormValidator
 
             $element_name = 'score[' . $user[0] . ']';
 
-            $scoreColumnProperties = array('class' => 'span1', 'maxlength' => 5);
+            $scoreColumnProperties = array('maxlength' => 5);
             if ($firstUser) {
                 $scoreColumnProperties['autofocus'] = '';
                 $firstUser = false;
@@ -430,7 +430,6 @@ class EvalForm extends FormValidator
         $this->addElement('hidden', 'hid_course_code');
 
         $this->addText('name', get_lang('EvaluationName'), true, array(
-            'class' => 'span3',
             'maxlength' => '50',
             'id' => 'evaluation_title'
         ));

@@ -142,7 +142,7 @@ $transferForm->addText(
 );
 $transferForm->addText(
     'tswift',
-    get_lang('SWIFT'),
+    [$plugin->get_lang('SWIFT'), $plugin->get_lang('SWIFT_help')],
     false,
     ['cols-size' => [3, 8, 1]]
 );

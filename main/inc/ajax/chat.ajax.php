@@ -29,7 +29,6 @@ if ($action == 'preview') {
     );
 }
 
-
 if (api_get_setting('allow_global_chat') == 'false') {
     exit;
 }
@@ -88,7 +87,7 @@ switch ($action) {
 
         $videoChatUrl = api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room={$room['id']}";
         $videoChatLink = Display::url(
-            Display::returnFontAswesomeIcon('video-camera') . get_lang('StartVideoChat'),
+            Display::returnFontAwesomeIcon('video-camera') . get_lang('StartVideoChat'),
             $videoChatUrl
         );
 

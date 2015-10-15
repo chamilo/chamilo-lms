@@ -50,6 +50,7 @@ if ($showGlossary) {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 
+$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
@@ -841,6 +842,16 @@ if (!empty($error)) {
 
     echo '<script>
         $(function() {
+            //This pre-load the save.png icon
+            var saveImage = new Image();
+            saveImage.src = \'' .  Display::return_icon(
+                'save.png',
+                get_lang('Saved'),
+                array(),
+                ICON_SIZE_SMALL,
+                false,
+                true
+            ) . '\';
 
             // Block form submition on enter
             $(".block_on_enter").keypress(function(event) {
@@ -890,7 +901,7 @@ if (!empty($error)) {
             } else {
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
             }
-            //$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
+            //$("#save_for_now_"+question_id).html(\'' . Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL) . '\');
             window.location = url;
         }
 
@@ -922,7 +933,7 @@ if (!empty($error)) {
 
             // Only for the first time
 
-            $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");
+            $("#save_for_now_"+question_id).html(\'' . Display::returnFontAwesomeIcon('spinner', true, null, 'fa-spin') . '\');
             $.ajax({
                 type:"post",
                 async: false,
@@ -930,9 +941,9 @@ if (!empty($error)) {
                 data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
                 success: function(return_value) {
                     if (return_value == "ok") {
-                        $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
+                        $("#save_for_now_"+question_id).html(\'' . Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL) . '\');
                     } else if (return_value == "error") {
-                        $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL)).'");
+                        $("#save_for_now_"+question_id).html(\'' . Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL) . '\');
                     } else if (return_value == "one_per_page") {
                         var url = "";
                         if ('.$reminder.' == 1 ) {
@@ -947,13 +958,13 @@ if (!empty($error)) {
                             url = url_extra;
                         }
 
-                        $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
+                        $("#save_for_now_"+question_id).html(\'' . Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL) . '\');
 
                         window.location = url;
                     }
                 },
                 error: function() {
-                    $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL)).'");
+                    $("#save_for_now_"+question_id).html(\'' . Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL) . '\');
                 }
             });
             return false;
@@ -986,7 +997,7 @@ if (!empty($error)) {
 
             free_answers = $.param(free_answers);
 
-            $("#save_all_reponse").html("'.addslashes(Display::return_icon('loading1.gif')).'");
+            $("#save_all_reponse").html(\'' . Display::returnFontAwesomeIcon('spinner', true, null, 'fa-spin') . '\');
 
             $.ajax({
                 type:"post",
@@ -995,14 +1006,14 @@ if (!empty($error)) {
                 data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
                 success: function(return_value) {
                     if (return_value == "ok") {
-                        //$("#save_all_reponse").html("'.addslashes(Display::return_icon('accept.png')).'");
+                        //$("#save_all_reponse").html(\'' . Display::return_icon('accept.png') . '\');
                         if (validate == "validate") {
                             window.location = "'.$script_php.'?'.$params.'";
                         } else {
-                            $("#save_all_reponse").html("'.addslashes(Display::return_icon('accept.png')).'");
+                            $("#save_all_reponse").html(\'' . Display::return_icon('accept.png') . '\');
                         }
                     } else {
-                        $("#save_all_reponse").html("'.addslashes(Display::return_icon('wrong.gif')).'");
+                        $("#save_all_reponse").html(\'' . Display::return_icon('wrong.gif') . '\');
                     }
                 }
             });

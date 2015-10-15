@@ -223,6 +223,8 @@ class CourseSelectForm
 
 						foreach ($resources as $id => $resource) {
                             if ($resource) {
+								// Event obj in 1.9.x in 1.10.x the class is CalendarEvent
+                                Resource::setClassType($resource);
                                 echo '<label class="checkbox">';
                                 echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
                                 $resource->show();
@@ -480,7 +482,10 @@ class CourseSelectForm
                                 $forum_id = $obj->obj->forum_id;
                                 $title = $obj->obj->thread_title;
                                 foreach ($posts as $post_id => $post) {
-                                    if ($post->obj->thread_id == $thread_id && $forum_id == $post->obj->forum_id && $title == $post->obj->post_title) {
+                                    if ($post->obj->thread_id == $thread_id &&
+                                        $forum_id == $post->obj->forum_id &&
+                                        $title == $post->obj->post_title
+                                    ) {
                                         //unset($course->resources[RESOURCE_FORUMPOST][$post_id]);
                                         $posts_to_save[] = $post_id;
                                     }

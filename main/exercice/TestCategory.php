@@ -648,14 +648,16 @@ class TestCategory
      *
      * @return int is id of test category
      */
-    public static function get_category_id_for_title($in_title, $in_c_id = 0)
+    public static function get_category_id_for_title($title, $courseId = 0)
     {
         $out_res = 0;
-        if ($in_c_id == 0) {
-            $in_c_id = api_get_course_int_id();
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
         }
+        $courseId = intval($courseId);
         $tbl_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT id FROM $tbl_cat WHERE c_id=$in_c_id AND title = '".Database::escape_string($in_title)."'";
+        $sql = "SELECT id FROM $tbl_cat
+                WHERE c_id = $courseId AND title = '".Database::escape_string($title)."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);
@@ -666,23 +668,30 @@ class TestCategory
 
     /**
      * Add a relation between question and category in table c_quiz_question_rel_category
-     * @param int $in_category_id
-     * @param int $in_question_id
-     * @param int $in_course_c_id
+     * @param int $categoryId
+     * @param int $questionId
+     * @param int $courseId
+	 *
+	 * @return int
      */
-    public static function add_category_for_question_id($in_category_id, $in_question_id, $in_course_c_id)
+    public static function add_category_for_question_id($categoryId, $questionId, $courseId)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         // if question doesn't have a category
         // @todo change for 1.10 when a question can have several categories
-        if (TestCategory::getCategoryForQuestion($in_question_id, $in_course_c_id) == 0 &&
-            $in_question_id > 0 &&
-            $in_course_c_id > 0
+        if (TestCategory::getCategoryForQuestion($questionId, $courseId) == 0 &&
+			$questionId > 0 &&
+			$courseId > 0
         ) {
-            $sql = "INSERT INTO $table
-                    VALUES (".intval($in_course_c_id).", ".intval($in_question_id).", ".intval($in_category_id).")";
+            $sql = "INSERT INTO $table (c_id, question_id, category_id)
+                    VALUES (".intval($courseId).", ".intval($questionId).", ".intval($categoryId).")";
             Database::query($sql);
+			$id = Database::insert_id();
+
+			return $id;
         }
+
+		return false;
     }
 
     /**

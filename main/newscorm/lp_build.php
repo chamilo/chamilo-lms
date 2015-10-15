@@ -147,7 +147,7 @@ echo '</div>';
 
 
 function show_block($link, $title, $subtitle, $icon) {
-    $html = '<li class="span4">';
+    $html = '<li class="col-md-4">';
         $html .=  '<div class="thumbnail">';
         $html .=  '<a href="'.$link.'" title="'.$title.'">';
         $html .=  Display::return_icon($icon, $title, array(), ICON_SIZE_BIG);

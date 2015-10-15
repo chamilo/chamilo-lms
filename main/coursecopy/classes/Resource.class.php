@@ -101,6 +101,7 @@ class Resource
      */
     function links_to(& $resource)
     {
+        self::setClassType($resource);
         $type = $resource->get_type();
         if (isset($this->linked_resources[$type]) &&
             is_array($this->linked_resources[$type])
@@ -226,5 +227,31 @@ class Resource
     function show()
     {
         //echo 'RESOURCE: '.$this->get_id().' '.$type[$this->get_type()].' ';
+    }
+
+    /**
+     * Fix objects coming from  1.9.x to 1.10.x
+     * Example class Event to CalendarEvent
+     *
+     * @param Resource $resource
+     */
+    public static function setClassType(&$resource)
+    {
+        if (get_class($resource) == 'Event') {
+            /** @var $resource CalendarEvent */
+            $newResource = new CalendarEvent(
+                $resource->source_id,
+                $resource->title,
+                $resource->content,
+                $resource->start_date,
+                $resource->end_date,
+                $resource->attachment_path,
+                $resource->attachment_filename,
+                $resource->attachment_size,
+                $resource->attachment_comment,
+                $resource->all_day
+            );
+            $resource = $newResource;
+        }
     }
 }

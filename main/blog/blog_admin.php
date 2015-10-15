@@ -29,7 +29,7 @@ if (api_is_allowed_to_edit()) {
     // showing the header if we are not in the learning path, if we are in
     // the learning path, we do not include the banner so we have to explicitly
     // include the stylesheet, which is normally done in the header
-    if ($_GET['origin'] != 'learnpath') {
+    if (empty($_GET['origin']) || $_GET['origin'] != 'learnpath') {
         $interbreadcrumb[]= array ('url' => 'blog_admin.php?','name' => $nameTools);
         $my_url='';
         if (isset($_GET['action']) && $_GET['action']=='add') {

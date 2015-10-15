@@ -16,6 +16,7 @@ if (!$skill) {
     );
 
     header('Location: ' . api_get_path(WEB_PATH));
+    exit;
 }
 
 $skillInfo = [

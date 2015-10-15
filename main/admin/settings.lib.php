@@ -1276,7 +1276,7 @@ function generate_settings_form($settings, $settings_by_access_list)
                 } elseif ($row['variable'] == 'platform_charset') {
                     continue;
                 } else {
-                    $hideme['class'] = 'span4';
+                    $hideme['class'] = 'col-md-4';
                     $form->addElement(
                         'text',
                         $row['variable'],

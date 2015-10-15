@@ -27,8 +27,8 @@ if (isset($_GET['firstpage'])) {
     $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     $action = str_replace('&amp;', '&', $action);
     $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-    $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
-    $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
+    $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'autocapitalize_off')); //new
+    $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'))); //new
     $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
     // see same text in main_api.lib.php function api_not_allowed
     if (api_is_cas_activated()) {

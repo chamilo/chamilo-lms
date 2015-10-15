@@ -10,7 +10,7 @@
 // protect a course script
 api_protect_course_script(true);
 if (empty($id)) {
-	$id = intval($_REQUEST['id']);
+	$id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : '';
 	if (empty($id)) {
 		// If the ID was not provided, find the first matching description item given the item type
 		$course_description = new CourseDescription();
@@ -18,8 +18,8 @@ if (empty($id)) {
 		if (count($description) > 0) {
 			$id = $description['id'];
 		}
-		unset ($course_description);
 		// If no corresponding description is found, edit a new one
+		unset($course_description);
 	}
 }
 $original_id = $id;
@@ -70,8 +70,7 @@ if ($description_type >= ADD_BLOCK) {
 $form = new FormValidator(
 	'course_description',
 	'POST',
-	'index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq(
-	)
+	'index.php?action=edit&id='.$original_id.'&description_type='.$description_type.'&'.api_get_cidreq()
 );
 
 $form->addElement('header','',$header);

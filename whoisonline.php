@@ -65,7 +65,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
                     $social_search = UserManager::get_search_form($query);
                 }
             }
-            //$social_right_content .= SocialManager::display_user_list($user_list);
+            $social_right_content .= SocialManager::display_user_list($user_list);
         }
     }
 
@@ -94,8 +94,6 @@ if (api_get_setting('allow_social_tool') == 'true' && !api_is_anonymous()) {
     $tpl->display($social_layout);
 } else {
     $content = $social_right_content;
-    $tpl->assign('actions', $actions);
-    $tpl->assign('message', $show_message);
     $tpl->assign('header', get_lang('UsersOnLineList'));
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();

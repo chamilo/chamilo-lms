@@ -152,7 +152,7 @@
                 <li>Sur votre propre serveur, en le téléchargeant et l'installant manuellement</li>
                 <li>Sur votre ordinateur, à la maison ou au bureau, juste pour tester et développer</li>
             </ul>
-            This guide only covers these 2 last methods. For other methods, you can always ask more information from the provider you will choose.
+            Ce guide couvre uniquement les deux dernières méthodes. Pour les premières, veuillez consulter votre fournisseur de services pour plus d'infos.
             <br /><br />
             Pour installer Chamilo LMS, suivez ces 6 étapes :
             <ol>
@@ -161,7 +161,7 @@
                 <li>Copiez le répertoire de Chamilo dans le répertoire racine de votre serveur web.
                     Celui-ci peut se trouver dans <span style="font-weight: bold;">C:\xampp\htdocs\</span> sur
                     une machine Windows avec WAMP, ou dans <span style="font-weight: bold;">/var/www/html/</span> (ou /var/www/) sur un serveur Linux</li>
-                <li>Vérifiez que votre serveur web supporte les .htaccess (Voir la section Réécriture plus bas)</li>
+                <li>Vérifiez que votre serveur web supporte les .htaccess (Voir la section "Configuration de la réécriture" plus bas)</li>
                 <li>Ouvrez votre navigateur (Firefox, Chrome, ...) et tapez l'adresse suivante
                     <span style="font-weight: bold;">http://localhost/chamilo/</span> si vous l'avez installé localement ou
                     <span style="font-weight: bold;">http://www.domain.com/chamilo/</span> si vous l'avez installé à distance*
@@ -398,16 +398,15 @@
 
             <br />
 
-            <span class="text-muted">* Styles and images are located in the main/css or main/img
-                directories. You can still recover them from your backup if you have made it.
-                Any modified style or image that uses the default style/image name will be
-                overwritten by the next step. To avoid loosing your customisations, always
-                ensure you copy the styles/images under a new name and use and modify the
-                copy, not the original. The original will always be overwritten by newer
-                versions. In Dok€os 1.8.5, we have changed the name of several CSS themes.
-                Backwards compatibility is ensured by the fact that an upgrade only adds the
-                new themes, but you should try and use these new themes rather than sticking
-                to the old ones which will be deprecated shortly (not maintained).</span>
+            <span class="text-muted">* Les styles et images se trouvent dans les répertoires main/css ou main/img.
+                Vous pouvez les récupérer depuis la copie de sauvegarde (que vous n'avez pas manqué de prendre).
+                Toute image ou style modifié qui utilise le nom de l'image/style par défaut sera
+                écrasé lors de l'étape suivante. Pour éviter la perte de customisations, assurez-vous toujours
+                de copier les styles/images sous un nouveau nom et de modifier la copie et non l'original.
+                L'original sera toujours écrasé par la nouvelle version. Dans Dok€os 1.8.5, nous avons changé
+                le nom de quelques thèmes CSS. La compatibilité descendante est assurée par le fait que la mise à
+                jour ne fait qu'ajouter de nouveaux thèmes, mais essayez toujours d'utiliser de préférence les
+                nouveaux thèmes plutot que se conserver d'anciennes versions qui ne seront plus maintenues.</span>
             <br />
 
             <p></p>
@@ -460,11 +459,11 @@
             <hr style="width: 100%; height: 2px;" />
             <h2><a name="5._Administration_section"></a>5. Section d'administration</h2>
 
-            <p>To access the Chamilo administration section, open browser,
-                go to your Chamilo adress and log in with the admin user.
-                Then you will see a "Platform admin section" link in the header of the
-                web page. There you can manage users, courses, sessions, portal look
-                and feel, homepage content, course categories etc.&nbsp;</p>
+            <p>Pour accéder à la section d'administration, ouvrez un navigateur, chargez l'adresse de votre Chamilo
+                et connectez-vous avec l'utilisateur administrateur.
+                Vous verrez alors un onglet "Administration" dans le menu principal.
+                Vous pouvez y gérer les utilisateurs, les cours, les sessions et
+                l'apparence de votre site</p>
 
             <p></p>
             <hr style="width: 100%; height: 2px;" />

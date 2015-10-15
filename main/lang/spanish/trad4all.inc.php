@@ -7590,4 +7590,6 @@ $SkillAcquiredAt = "Competencia adquirida el";
 $BasicSkills = "Competencias simples";
 $TimeXThroughCourseY = "%s en el curso %s";
 $ExportBadge = "Exportar la insignia";
+$SelectToSearch = "Seleccionar para buscar";
+$PlaceOnTheWheel = "Ubicar en la rueda";
 ?>

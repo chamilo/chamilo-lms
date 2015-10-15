@@ -276,105 +276,103 @@ $html_results_enabled[] = $form-> createElement ('style_submit_button', 'submit'
 $form->addGroup($html_results_enabled);
 
 // Validate form
-if( $form->validate()) {
-	$check = Security::check_token('post');
-	if ($check) {
-		$user = $form->exportValues();
-		$lastname       = $user['lastname'];
-		$firstname      = $user['firstname'];
-		$official_code  = $user['official_code'];
-		$email          = $user['email'];
-		$phone          = $user['phone'];
-		$username       = $user['username'];
-		$status         = intval($user['status']);
-		$language       = $user['language'];
-		$picture        = $_FILES['picture'];
-		$platform_admin = intval($user['admin']['platform_admin']);
-		$send_mail      = intval($user['mail']['send_mail']);
-		$hr_dept_id     = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
+if ($form->validate()) {
+	$user = $form->exportValues();
+	$lastname       = $user['lastname'];
+	$firstname      = $user['firstname'];
+	$official_code  = $user['official_code'];
+	$email          = $user['email'];
+	$phone          = $user['phone'];
+	$username       = $user['username'];
+	$status         = intval($user['status']);
+	$language       = $user['language'];
+	$picture        = $_FILES['picture'];
+	$platform_admin = intval($user['admin']['platform_admin']);
+	$send_mail      = intval($user['mail']['send_mail']);
+	$hr_dept_id     = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
 
-		if (isset($extAuthSource) && count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
-			$auth_source = $user['password']['auth_source'];
-			$password = 'PLACEHOLDER';
-		} else {
-			$auth_source = PLATFORM_AUTH_SOURCE;
-			$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
-		}
+	if (isset($extAuthSource) && count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
+		$auth_source = $user['password']['auth_source'];
+		$password = 'PLACEHOLDER';
+	} else {
+		$auth_source = PLATFORM_AUTH_SOURCE;
+		$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
+	}
 
-		if ($user['radio_expiration_date'] == '1') {
-			$expiration_date = $user['expiration_date'];
-		} else {
-			$expiration_date = '0000-00-00 00:00:00';
-		}
+	if ($user['radio_expiration_date'] == '1') {
+		$expiration_date = $user['expiration_date'];
+	} else {
+		$expiration_date = '0000-00-00 00:00:00';
+	}
 
-		$active = intval($user['active']);
+	$active = intval($user['active']);
 
-        if (api_get_setting('login_is_email') == 'true') {
-            $username = $email;
-        }
+	if (api_get_setting('login_is_email') == 'true') {
+		$username = $email;
+	}
 
-        $extra = array();
-        foreach ($user as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') { //an extra field
-                $extra[substr($key, 6)] = $value;
-            }
-        }
-
-		$user_id = UserManager::create_user(
-            $firstname,
-            $lastname,
-            $status,
-            $email,
-            $username,
-            $password,
-            $official_code,
-            $language,
-            $phone,
-            null,
-            $auth_source,
-            $expiration_date,
-            $active,
-            $hr_dept_id,
-            $extra,
-            null,
-            $send_mail
-        );
-
-		Security::clear_token();
-		$tok = Security::get_token();
-		if ($user_id === false) {
-			//If any error ocurred during user creation, print it (api_failureList
-			// stores values as separate words, so rework it
-			$message = '';
-			$message_bits = explode(' ',api_get_last_failure());
-			foreach ($message_bits as $bit) {
-				$message .= ucfirst($bit);
-			}
-		} else {
- 			if (!empty($picture['name'])) {
-				$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
-				UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
-			}
-
-            foreach ($extra as $key => $value) {
-                UserManager::update_extra_field_value($user_id, $key, $value);
-            }
-
-			if ($platform_admin) {
-                UserManager::add_user_as_admin($user_id);
-			}
-			$message = get_lang('UserAdded');
-		}
-		if (isset($user['submit_plus'])) {
-			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
-			header('Location: user_add.php?message='.urlencode($message).'&sec_token='.$tok);
-			exit ();
-		} else {
-			$tok = Security::get_token();
-			header('Location: user_list.php?action=show_message&message='.urlencode($message).'&sec_token='.$tok);
-			exit ();
+	$extra = array();
+	foreach ($user as $key => $value) {
+		if (substr($key, 0, 6) == 'extra_') { //an extra field
+			$extra[substr($key, 6)] = $value;
 		}
 	}
+
+	$user_id = UserManager::create_user(
+		$firstname,
+		$lastname,
+		$status,
+		$email,
+		$username,
+		$password,
+		$official_code,
+		$language,
+		$phone,
+		null,
+		$auth_source,
+		$expiration_date,
+		$active,
+		$hr_dept_id,
+		$extra,
+		null,
+		$send_mail
+	);
+
+	Security::clear_token();
+	$tok = Security::get_token();
+	if ($user_id === false) {
+		//If any error ocurred during user creation, print it (api_failureList
+		// stores values as separate words, so rework it
+		$message = '';
+		$message_bits = explode(' ',api_get_last_failure());
+		foreach ($message_bits as $bit) {
+			$message .= ucfirst($bit);
+		}
+	} else {
+		if (!empty($picture['name'])) {
+			$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
+			UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
+		}
+
+		foreach ($extra as $key => $value) {
+			UserManager::update_extra_field_value($user_id, $key, $value);
+		}
+
+		if ($platform_admin) {
+			UserManager::add_user_as_admin($user_id);
+		}
+		$message = get_lang('UserAdded');
+	}
+	if (isset($user['submit_plus'])) {
+		//we want to add more. Prepare report message and redirect to the same page (to clean the form)
+		header('Location: user_add.php?message='.urlencode($message).'&sec_token='.$tok);
+		exit ();
+	} else {
+		$tok = Security::get_token();
+		header('Location: user_list.php?action=show_message&message='.urlencode($message).'&sec_token='.$tok);
+		exit ();
+	}
+
 } else {
 	if (isset($_POST['submit'])) {
 		Security::clear_token();

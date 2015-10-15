@@ -336,6 +336,7 @@ function multiple_answer_true_false_onchange(variable) {
 
 </script>';
 
+$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 
 $template = new Template();

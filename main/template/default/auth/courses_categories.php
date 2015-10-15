@@ -226,38 +226,42 @@ if ($showCourses && $action != 'display_sessions') {
             $html .= '<div class="items-course-info">';
             $html .= return_title($course);
             // display button line
-            $html .= '<div class="btn-toolbar">';
+            $html .= '<div class="toolbar">';
+            $html .= '<div class="btn-group">';
             // if user registered as student
+            
+            $html .= return_description_button($course, $icon_title);
+            
             if ($user_registerd_in_course_as_student) {
+                $html .= return_already_registered_label('student');
+                
                 if (!$course_closed) {
                     if ($course_unsubscribe_allowed) {
                         $html .= return_unregister_button($course, $stok, $search_term, $code);
                     }
-                    $html .= return_already_registered_label('student');
                 }
-                $html .= return_description_button($course, $icon_title);
             } elseif ($user_registerd_in_course_as_teacher) {
                 // if user registered as teacher
-                //$html .= return_goto_button($course);
+                $html .= return_goto_button($course);
 
                 if ($course_unsubscribe_allowed) {
                     $html .= return_unregister_button($course, $stok, $search_term, $code);
                 }
                 $html .= return_already_registered_label('teacher');
-                $html .= return_description_button($course, $icon_title);
+                
             } else {
                 // if user not registered in the course
                 if (!$course_closed) {
                     if (!$course_private) {
-                        //$html .= return_goto_button($course);
+                        $html .= return_goto_button($course);
                         if ($course_subscribe_allowed) {
                             $html .= return_register_button($course, $stok, $code, $search_term);
                         }
                     }
                 }
-                $html .= return_description_button($course, $icon_title);
+                
             }
-
+            $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';
@@ -341,7 +345,7 @@ function return_description_button($course, $icon_title)
     $title = $course['title'];
     $html = '';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        $html = '<a data-title="' . $title . '" class="ajax btn btn-default btn-sm btn-block" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
+        $html = '<a data-title="' . $title . '" class="ajax btn btn-default btn-sm" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'].'" title="' . get_lang('Description') . '">' . Display::returnFontAswesomeIcon('info-circle') . '</a>';
     }
 
     return $html;
@@ -353,7 +357,7 @@ function return_description_button($course, $icon_title)
  */
 function return_goto_button($course)
 {
-    $html = ' <a class="btn btn-primary" href="'.api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
+    $html = ' <a class="btn btn-default btn-sm" title="' . get_lang('GoToCourse') . '" href="'.api_get_course_url($course['code']).'">'.Display::returnFontAswesomeIcon('share').'</a>';
 
     return $html;
 }
@@ -368,7 +372,7 @@ function return_already_registered_label($in_status)
     if ($in_status == 'student') {
         $icon = Display::return_icon('user.png', get_lang('Student'), null, ICON_SIZE_TINY);
     }
-    $html = Display::div($icon.' '.get_lang("AlreadyRegisteredToCourse"), array('id' => 'register', 'class' => 'user-register'));
+    $html = Display::tag('button',$icon, array('id' => 'register', 'class' => 'btn btn-default btn-sm', 'title' => get_lang("AlreadyRegisteredToCourse")));
 
     return $html;
 }
@@ -382,7 +386,7 @@ function return_already_registered_label($in_status)
  */
 function return_register_button($course, $stok, $code, $search_term)
 {
-    $html = ' <a class="btn btn-success btn-block btn-sm" href="'.api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">'.get_lang('Subscribe').'</a>';
+    $html = ' <a class="btn btn-success btn-sm" title="' . get_lang('Subscribe') . '" href="'.api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">' . Display::returnFontAswesomeIcon('sign-in') . '</a>';
     return $html;
 }
 
@@ -395,6 +399,6 @@ function return_register_button($course, $stok, $code, $search_term)
  */
 function return_unregister_button($course, $stok, $search_term, $code)
 {
-    $html = ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&sec_token='.$stok.'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
+    $html = ' <a class="btn btn-danger btn-sm" title="' . get_lang('Unsubscribe') . '" href="'. api_get_self().'?action=unsubscribe&sec_token='.$stok.'&unsubscribe='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">' . Display::returnFontAswesomeIcon('sign-out') . '</a>';
     return $html;
 }

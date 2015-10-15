@@ -4599,40 +4599,44 @@ class CourseManager
 
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
-                $my_course['extra_info']['register_button'] = Display::url(get_lang('Subscribe'),
+                $my_course['extra_info']['register_button'] = Display::url(
+                    Display::returnFontAswesomeIcon('sign-in'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php?action=subscribe&sec_token=' . $stok,
-                    array('class' => 'btn btn-success btn-block btn-sm'));
+                    array('class' => 'btn btn-success btn-sm', 'title' => get_lang('Subscribe')));
             }
 
             if ($access_link && in_array('enter',
                     $access_link) || $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
             ) {
-                $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'),
+                $my_course['extra_info']['go_to_course_button'] = Display::url(
+                    Display::returnFontAswesomeIcon('share'),
                     api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/index.php',
-                    array('class' => 'btn btn-primary'));
+                    array('class' => 'btn btn-default btn-sm', 'title' => get_lang('GoToCourse')));
             }
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
-                $my_course['extra_info']['unsubscribe_button'] = Display::url(get_lang('Unsubscribe'),
+                $my_course['extra_info']['unsubscribe_button'] = Display::url(
+                    Display::returnFontAswesomeIcon('sign-out'),
                     api_get_path(WEB_CODE_PATH) . 'auth/courses.php?action=unsubscribe&unsubscribe=' . $courseCode . '&sec_token=' . $stok . '&category_code=' . $categoryCode,
-                    array('class' => 'btn btn-primary'));
+                    array('class' => 'btn btn-danger btn-sm', 'title' => get_lang('Unreg')));
             }
 
             //Description
             $my_course['extra_info']['description_button'] = '';
-            if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'],
+            /* if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'],
                     $my_course_code_list)
-            ) {
+            ) { */
                 $my_course['extra_info']['description_button'] = Display::url(
-                    get_lang('Description'),
+                    Display::returnFontAswesomeIcon('info-circle'),
                     api_get_path(WEB_AJAX_PATH) . 'course_home.ajax.php?a=show_course_information&code=' . $course_info['code'],
                     [
-                        'class' => 'btn btn-default btn-sm btn-block ajax',
-                        'data-title' => get_lang('Description')
-                    ]
+                        'class' => 'btn btn-default btn-sm ajax',
+                        'data-title' => get_lang('Description'),
+                        'title' => get_lang('Description')
+                    ]  
                 );
-            }
-
+            //}
+            /* get_lang('Description') */
             $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
             $my_course['extra_info']['rating_html'] = Display::return_rating_system('star_' . $course_info['real_id'],

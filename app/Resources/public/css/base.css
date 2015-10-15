@@ -5015,9 +5015,10 @@ div#chat-remote-video video {
   text-transform: uppercase;
 }
 #session-list .title-session{
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.2;
   margin-top: 5px;
+  min-height: 32px;
 }
 #session-list .session-col:nth-child(4n+1) {
     clear: left;
@@ -5027,6 +5028,7 @@ div#chat-remote-video video {
   padding: 0;
   border: 1px solid #dddddd;
   margin-bottom: 20px;
+  border-radius: 5px;
 }
 #session-list .item img{
   max-width: 100%;
@@ -5038,6 +5040,7 @@ div#chat-remote-video video {
 
 #session-list .information-item{
   padding: 10px;
+  min-height: 185px;
 }
 #session-list .information-item .requirements .fa-book{
   margin-right: 10px;
@@ -5392,7 +5395,7 @@ div#chat-remote-video video {
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  min-height: 350px;
+  min-height: 320px;
   margin-bottom: 10px;
 }
 .items-course .items-course-info .title{
@@ -5420,6 +5423,13 @@ div#chat-remote-video video {
   padding-bottom: 5px;
   border-radius: 5px;
 
+}
+.items-course .items-course-info .toolbar{
+    text-align: center;
+    padding-top: 5px;
+}
+.items-course .items-course-info .vote_label_info{
+    margin-bottom: 5px;
 }
 .hot-course-head{
   padding-top: 10px;
@@ -5804,7 +5814,14 @@ a.sessionView {
     border-radius: 25px;
     border-color: #00677C;
 }
-
+.modal-body .sectiontitle{
+    font-size: 18px;
+    padding-bottom: 10px;
+    color: #00829C;
+}
+.modal-body .sectioncomment{
+    color: #666;
+}
 /* CSS NEW TOP ******************************************************************************/
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

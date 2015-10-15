@@ -419,7 +419,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         Display :: return_icon('new_question.png', get_lang('AddQ'), '', ICON_SIZE_MEDIUM).'</a>';
     // Question category
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/tests_category.php?'.api_get_cidreq().'">';
-    echo Display::return_icon('question_category_show.gif', get_lang('QuestionCategory'));
+    echo Display::return_icon('green_open.png', get_lang('QuestionCategory'), '', ICON_SIZE_MEDIUM);
     echo '</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/question_pool.php?'.api_get_cidreq().'">';
     echo Display::return_icon('database.png', get_lang('QuestionPool'), '', ICON_SIZE_MEDIUM);

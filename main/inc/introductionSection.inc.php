@@ -250,26 +250,27 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $userInfo = $_SESSION['_user'];
         $courseInfo = api_get_course_info();
         $titleThematic = $thematic_advance .' : '. $courseInfo['name'] . ' <b>( '. $thematicScore .' )</b>';
-       
-            
-                        
+
+
+
         $infoUser = '<div class="thematic-avatar"><img src="' . $userInfo['avatar'] . '" class="img-circle img-responsive"></div>';
         $infoUser .= '<div class="progress">
                         <div class="progress-bar progress-bar-danger" role="progressbar" style="width: ' . $thematicScore . ';">
                         '.$thematicScore.'
                         </div>
                     </div>';
-        
-        
-        $thematicItemOne = '<div class="col-md-6 items-progress">
-                                    <div class="thematic-cont '.$class1.'">
-                                    <div class="topics">' . $subTitle1 . '</div>
-                                    <h4 class="title-topics">' . Display::returnFontAswesomeIcon('book') . $thematic_info['title'] . '</h4>
-                                    <p class="date">' .  Display::returnFontAswesomeIcon('calendar-o') . $thematic_advance_info['start_date'] . '</p>
-                                    <div class="views">' . Display::returnFontAswesomeIcon('file-text-o')  . strip_tags($thematic_advance_info['content']). '</div>
-                                    <p class="time">'. Display::returnFontAswesomeIcon('clock-o') . get_lang('DurationInHours') . ' : ' . $thematic_advance_info['duration'] . ' - <a href="' . $thematicUrl . '">' . get_lang('SeeDetail') . '</a></p>
-                                    </div>
-                                </div>';
+
+
+        $thematicItemOne = '
+        <div class="col-md-6 items-progress">
+            <div class="thematic-cont '.$class1.'">
+            <div class="topics">' . $subTitle1 . '</div>
+            <h4 class="title-topics">' . Display::returnFontAwesomeIcon('book') . $thematic_info['title'] . '</h4>
+            <p class="date">' .  Display::returnFontAwesomeIcon('calendar-o') . $thematic_advance_info['start_date'] . '</p>
+            <div class="views">' . Display::returnFontAwesomeIcon('file-text-o')  . strip_tags($thematic_advance_info['content']). '</div>
+            <p class="time">'. Display::returnFontAwesomeIcon('clock-o') . get_lang('DurationInHours') . ' : ' . $thematic_advance_info['duration'] . ' - <a href="' . $thematicUrl . '">' . get_lang('SeeDetail') . '</a></p>
+            </div>
+        </div>';
 
         if (!empty($thematic_advance_info2)) {
             $thematic_info2 = $thematic->get_thematic_list($thematic_advance_info2['thematic_id']);
@@ -280,15 +281,15 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                 <div class="col-md-6 items-progress">
                     <div class="thematic-cont">
                     <div class="topics">'.$subTitle2.'</div>
-                    <h4 class="title-topics">'. Display::returnFontAswesomeIcon('book')  . $thematic_info2['title'].'</h4>
-                    <p class="date">' . Display::returnFontAswesomeIcon('calendar-o') .$thematic_advance_info2['start_date'].'</p>
-                    <div class="views">' . Display::returnFontAswesomeIcon('file-text-o')  . strip_tags($thematic_advance_info2['content']).'</div>
-                    <p class="time">'. Display::returnFontAswesomeIcon('clock-o') .get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
+                    <h4 class="title-topics">'. Display::returnFontAwesomeIcon('book')  . $thematic_info2['title'].'</h4>
+                    <p class="date">' . Display::returnFontAwesomeIcon('calendar-o') .$thematic_advance_info2['start_date'].'</p>
+                    <div class="views">' . Display::returnFontAwesomeIcon('file-text-o')  . strip_tags($thematic_advance_info2['content']).'</div>
+                    <p class="time">'. Display::returnFontAwesomeIcon('clock-o') .get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
                     </div>
                 </div>';
         }
-       
-        
+
+
         $thematicPanel = '<div class="row">';
         $thematicPanel .= '<div class="col-md-2">' . $infoUser . '</div>';
         $thematicPanel .= '<div class="col-md-10"><div class="row">' . $thematicItemOne . $thematicItemTwo . '</div></div>';

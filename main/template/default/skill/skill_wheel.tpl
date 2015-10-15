@@ -47,12 +47,14 @@
     }
 
     function fill_skill_search_li(skill_id, skill_name, checked) {
-        var checked_condition = '';
-        var activeCondition = '';
+        var checked_condition = '',
+            activeCondition = '',
+            iconClassCondition = 'fa fa-square-o fa-fw';
 
         if (checked) {
             checked_condition = 'checked=checked';
             activeCondition = 'active';
+            iconClassCondition = 'fa fa-check-square-o fa-fw';
         }
 
         return '\
@@ -62,7 +64,7 @@
                     <div class="btn-group btn-group-sm" data-toggle="buttons">\n\
                         <label class="btn btn-default ' + activeCondition + '" aria-label="{{ 'Select'|get_lang }}" title="{{ 'SelectToSearch'|get_lang }}">\n\
                             <input id="skill_to_select_id_' + skill_id + '" data-id="' + skill_id + '" name="' + skill_name + '" class="skill_to_select" type="checkbox" autocomplete="off" ' + checked_condition + '>\n\
-                            <span class="fa fa-check-square-o" aria-hidden="true"></span>\n\
+                            <span class="' + iconClassCondition + '" aria-hidden="true"></span>\n\
                         </label>\n\
                         <button class="btn btn-default load_wheel" aria-label="{{ 'Search'|get_lang }}" title="{{ 'PlaceOnTheWheel'|get_lang }}" data-id="' + skill_id + '">\n\
                             <span class="fa fa-crosshairs fa-fw" aria-hidden="true"></span>\n\
@@ -241,9 +243,17 @@
 
         /* Skill item list onclick  */
         $("#skill_holder").on("change", "input.skill_to_select", function () {
-            skill_id = $(this).data('id');
-            skill_name = $(this).attr('name');
+            var self = $(this);
+
+            skill_id = self.data('id') || 0;
+            skill_name = self.attr('name');
             add_skill_in_profile_list(skill_id, skill_name);
+
+            if (this.checked) {
+                self.next('.fa').replaceWith('<span class="fa fa-check-square-o fa-fw" aria-hidden="true"></span>');
+            } else {
+                self.next('.fa').replaceWith('<span class="fa fa-square-o fa-fw" aria-hidden="true"></span>');
+            }
         });
 
         /* URL link when searching skills */

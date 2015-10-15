@@ -228,7 +228,7 @@ switch ($action) {
                 SocialManager::readContentWithOpenGraph($url)
             );
         }
-        echo $html;
+        echo utf8_decode($html);
         break;
     default:
         echo '';

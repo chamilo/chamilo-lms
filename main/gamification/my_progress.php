@@ -34,7 +34,7 @@ if (empty($sessionId)) {
 
     $lastCourseAccess = $trackCourseAccessRepository->getLastAccessByUser($user);
 
-    if (!empty($lastCourseAccess)) {
+    if (!empty($lastCourseAccess->getSessionId())) {
         $urlWithSession = api_get_self() . '?' . http_build_query([
             'session_id' => $lastCourseAccess->getSessionId()
         ]);

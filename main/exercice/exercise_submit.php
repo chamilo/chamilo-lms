@@ -50,6 +50,7 @@ if ($showGlossary) {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 
+$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 

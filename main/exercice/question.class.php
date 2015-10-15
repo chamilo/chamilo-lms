@@ -1374,7 +1374,7 @@ abstract class Question
             unset(self::$questionTypes[ORAL_EXPRESSION]);
         }
         if (api_get_setting('enable_quiz_scenario') !== 'true') {
-            self::$questionTypes[HOT_SPOT_DELINEATION];
+            self::$questionTypes[HOT_SPOT_DELINEATION] = null;
             unset(self::$questionTypes[HOT_SPOT_DELINEATION]);
         }
         return self::$questionTypes;

@@ -542,6 +542,7 @@ function store_forumcategory($values, $courseInfo = array(), $showMessage = true
     $new_max = $row['sort_max'] + 1;
     $session_id = api_get_session_id();
     $clean_cat_title = $values['forum_category_title'];
+    $last_id = null;
 
     if (isset($values['forum_category_id'])) {
         // Storing after edition.

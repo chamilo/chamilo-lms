@@ -3974,7 +3974,7 @@ class UserManager
         $drhConditions = null;
         $teacherSelect = null;
 
-        switch($status) {
+        switch ($status) {
             case DRH:
                 $drhConditions .= " AND
                     friend_user_id = '$userId' AND
@@ -4057,7 +4057,6 @@ class UserManager
         if ($getSql) {
             return $sql;
         }
-
         if ($getCount) {
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -4079,7 +4078,6 @@ class UserManager
 
         $sql .= $orderBy;
         $sql .= $limitCondition;
-
         $result = Database::query($sql);
         $users = array();
         if (Database::num_rows($result) > 0) {
@@ -4130,7 +4128,6 @@ class UserManager
                 . "WHERE friend_user_id = $userId "
                 . "AND relation_type = $relationType";
         }
-
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {

@@ -280,7 +280,7 @@ class MySpace
         $t_head .= '        <th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
         $t_head .= '    </tr></table>';
 
-        $addparams = array('view' => 'admin', 'display' => 'useroverview');
+        $addparams = array('view' => 'admin', 'display' => 'user');
 
         $table = new SortableTable('tracking_user_overview', array('MySpace','get_number_of_users_tracking_overview'), array('MySpace','get_user_data_tracking_overview'), 0);
         $table->additional_parameters = $addparams;
@@ -301,6 +301,8 @@ class MySpace
 
     public static function display_tracking_coach_overview($export_csv)
     {
+        global $charset;
+
         if ($export_csv) {
             $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
         } else {

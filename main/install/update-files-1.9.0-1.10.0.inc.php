@@ -182,11 +182,11 @@ if (defined('SYSTEM_INSTALLATION')) {
 
 
     // Delete all "courses/ABC/index.php" files.
-    $courseDir = api_get_path(SYS_APP_PATH).'courses';
     $finder = new Finder();
 
+    $courseDir = api_get_path(SYS_APP_PATH).'courses';
     if (is_dir($courseDir)) {
-        $dirs = $finder->directories()->in(api_get_path(SYS_APP_PATH).'courses');
+        $dirs = $finder->directories()->in($courseDir);
         $fs = new Filesystem();
         /** @var Symfony\Component\Finder\SplFileInfo $dir */
         foreach ($dirs as $dir) {
@@ -197,17 +197,22 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
     }
 
+    // Remove old "courses" folder if empty
+    $originalCourseDir = api_get_path(SYS_PATH).'courses';
+
+    if (is_dir($originalCourseDir)) {
+        $dirs = $finder->directories()->in($originalCourseDir);
+        $files = $finder->directories()->in($originalCourseDir);
+        $dirCount = $dirs->count();
+        $fileCount = $dirs->count();
+        if ($fileCount == 0 && $dirCount == 0) {
+            @rrmdir(api_get_path(SYS_PATH).'courses');
+        }
+    }
+
+
     // Remove archive
     @rrmdir(api_get_path(SYS_PATH).'archive');
-
-    // Remove old "courses" folder if empty
-    $dirs = $finder->directories()->in(api_get_path(SYS_PATH).'courses');
-    $files = $finder->directories()->in(api_get_path(SYS_PATH).'courses');
-    $dirCount = $dirs->count();
-    $fileCount = $dirs->count();
-    if ($fileCount == 0 && $dirCount == 0) {
-        @rrmdir(api_get_path(SYS_PATH).'courses');
-    }
 
 } else {
     echo 'You are not allowed here !'. __FILE__;

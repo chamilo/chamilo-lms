@@ -84,14 +84,25 @@ if (api_get_setting('allow_message_tool')=='true') {
     $config = ['ToolbarSet' => 'Messages'];
     $form->addHtmlEditor('content', get_lang('Message'), true, false, $config);
 
-    $form->addElement('label', null, get_lang('AttachmentFiles'));
-    $form->addElement('label', null, '<div id="link-more-attach">
-        <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>'
+    $form->addElement(
+        'label',
+        get_lang('AttachmentFiles'),
+        '
+            <div id="link-more-attach">
+                <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">
+                    ' . get_lang('AddOneMoreFile') . '
+                </a>
+            </div>
+        '
     );
 
-    $form->addElement('html', '<span id="filepaths"></span>');
-    $form->addElement('file', 'attach_1', sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))));
-    $form->addElement('html', '</div>');
+    $form->addElement('label', null, '<div id="filepaths"></div>');
+    $form->addElement(
+        'file',
+        'attach_1',
+        sprintf(get_lang('MaximunFileSizeX'),
+        format_file_size(api_get_setting('message_max_upload_filesize')))
+    );
     $form->addButtonSend(get_lang('SendMessage'));
 
     $form->setDefaults(['content' => $message, 'title' => $subject]);

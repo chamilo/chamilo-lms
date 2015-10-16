@@ -44,7 +44,7 @@ function remove_image_form(id_elem1) {
 	if (filepaths.childNodes.length < 3) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
-			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>\';
+			link_attach.innerHTML=\'<a href="javascript://" class="btn btn-default" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>\';
 		}
 	}
 }
@@ -62,7 +62,12 @@ function add_image_form() {
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_IMG_PATH).'delete.gif\"></a>";
+	document.getElementById("filepath_"+counter_image).innerHTML = "\n\
+        <input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />\n\
+        <a href=\"javascript:remove_image_form("+id_elem1+")\">\n\
+            <img src=\"' . api_get_path(WEB_IMG_PATH) . 'delete.gif\">\n\
+        </a>\n\
+    ";
 
 	if (filepaths.childNodes.length == 3) {
 		var link_attach = document.getElementById("link-more-attach");
@@ -199,7 +204,8 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                 [
                     'class' => 'ajax btn btn-default',
                     'title' => get_lang('ComposeMessage'),
-                    'data-title' => get_lang('ComposeMessage')
+                    'data-title' => get_lang('ComposeMessage'),
+                    'data-size' => 'lg'
                 ]
             );
         } else {
@@ -217,7 +223,8 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                 [
                     'class' => 'ajax btn btn-default',
                     'title' => get_lang('ComposeMessage'),
-                    'data-title' => get_lang('ComposeMessage')
+                    'data-title' => get_lang('ComposeMessage'),
+                    'data-size' => 'lg'
                 ]
             );
         }

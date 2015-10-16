@@ -2440,8 +2440,8 @@ class Exercise
                         while ($row = Database::fetch_array($result)) {
                             $ind = $row['answer'];
                             $values = explode(':', $ind);
-                            $my_answer_id = $values[0];
-                            $option = $values[1];
+                            $my_answer_id = isset($values[0]) ? $values[0] : '';
+                            $option = isset($values[1]) ? $values[1] : '';
                             $choice[$my_answer_id] = $option;
                         }
                     }
@@ -2530,12 +2530,12 @@ class Exercise
                             $ind = $row['answer'];
                             $result = explode(':',$ind);
                             if (isset($result[0])) {
-                                $my_answer_id = $result[0];
-                                $option = $result[1];
+                                $my_answer_id = isset($result[0]) ? $result[0] : '';
+                                $option = isset($result[1]) ? $result[1] : '';
                                 $choice[$my_answer_id] = $option;
                             }
                         }
-                        $studentChoice = $choice[$answerAutoId];
+                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : '';
 
                         if ($answerCorrect == $studentChoice) {
                             //$answerCorrect = 1;

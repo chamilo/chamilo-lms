@@ -4086,37 +4086,37 @@ i.size-32.icon-new-work{
 #skillList .dropdown-menu{
   top: 30px;
 }
-.social-group .list-group-newest .items{
+#sm-groups .list-group-newest .items{
   display: block;
 }
-.social-group .list-group-newest .items .group-image{
+#sm-groups .list-group-newest .items .group-image{
   vertical-align: top;
   padding-left: 10px;
   padding-right: 10px;
 }
-.social-group .list-group-newest .items .group-image,
-.social-group .list-group-newest .items .group-info
+#sm-groups .list-group-newest .items .group-image,
+#sm-groups .list-group-newest .items .group-info
 {
   display: inline-block;
 }
-.social-group .list-group-newest .items .group-info{
+#sm-groups .list-group-newest .items .group-info{
   width: auto;
 }
-.social-group .items{
+#sm-groups .items{
   border-bottom: 1px dotted #B1DDE0;
   padding-bottom: 5px;
   margin-bottom: 5px;
 }
-.social-group .group-name a{
+#sm-groups .group-name a{
   font-size: 14px;
   font-weight: bold;
   color: #4D4D4D;
 }
-.social-group .count-username{
+#sm-groups .count-username{
   font-size: 12px;
   color: #4D4D4D;
 }
-.social-group .description p{
+#sm-groups .description p{
   color: #4D4D4D;
   padding-top: 10px;
   padding-bottom: 0px;

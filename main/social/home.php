@@ -103,7 +103,7 @@ if (!empty($results)) {
         $result['name'] = '<div class="group-name">'.Display::url(
                           api_ucwords(cut($result['name'], 40, true)), $group_url)
                           .'</div><div class="count-username">'.
-                            Display::return_icon('user.png','','',ICON_SIZE_TINY).$result['count'].'</div>';
+                            Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
 
         $picture = $userGroup->get_picture_group(
             $id,
@@ -146,7 +146,7 @@ foreach ($results as $result) {
     }
     $result['name'] = '<div class="group-name">'.Display::url(
             api_ucwords(cut($result['name'], 40, true)),$group_url)
-        .'</div><div class="count-username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$result['count'].'</div>';
+        .'</div><div class="count-username">'.Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
 
     $picture = $userGroup->get_picture_group(
         $id,
@@ -170,7 +170,7 @@ if ($list > 0) {
     for($i = 0;$i < $list; $i++){
         $social_group_block.='<div class="row">';
         $social_group_block.='<div class="col-md-2">' . $groups_newest[$i][0] . '</div>';
-        $social_group_block.='<div class="col-md-4">' . $groups_newest[$i][1];
+        $social_group_block.='<div class="col-md-10">' . $groups_newest[$i][1];
         $social_group_block.= $groups_newest[$i][2] . '</div>';
         $social_group_block.="</div>";
     }
@@ -184,7 +184,7 @@ if ($list > 0) {
     for($i = 0;$i < $list; $i++){
         $social_group_block.='<div class="row">';
         $social_group_block.='<div class="col-md-2">' . $groups_pop[$i][0] . '</div>';
-        $social_group_block.='<div class="col-md-4">' . $groups_pop[$i][1];
+        $social_group_block.='<div class="col-md-10">' . $groups_pop[$i][1];
         $social_group_block.= $groups_pop[$i][2] . '</div>';
         $social_group_block.="</div>";
     }
@@ -205,7 +205,7 @@ if (count($sessionList) > 0) {
     $social_session_block = $sessionList;
 }
 
-$social_group_block = Display::panel($social_group_block, get_lang('Group'));
+$social_group_block = Display::panelCollapse(get_lang('Group'), $social_group_block, 'sm-groups', null, 'grups-acordion', 'groups-collapse');
 
 $tpl = new Template(get_lang('SocialNetwork'));
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');

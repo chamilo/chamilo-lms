@@ -148,12 +148,26 @@ $cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
 
 // $cidReset can be set in URL-parameter
 $cidReset = (
-        isset($_GET['cidReq']) && ((isset($_SESSION['_cid'])
-        && $_GET['cidReq']!=$_SESSION['_cid']) || (!isset($_SESSION['_cid'])))
-    ) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
+    isset($_GET['cidReq']) &&
+    ((isset($_SESSION['_cid']) && $_GET['cidReq'] != $_SESSION['_cid']) || (!isset($_SESSION['_cid'])))
+) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
 
-// $cDir is a special url param sent by courses/.htaccess
+// $cDir is a special url param sent from a redirection from /courses/[DIR]/index.php...
+// It replaces cidReq in some opportunities
 $cDir = (!empty($_GET['cDir']) ? $_GET['cDir'] : null);
+
+// if there is a cDir parameter in the URL and $cidReq could not be determined
+if (isset($cDir) && empty($cidReq)) {
+    $c = CourseManager::get_course_id_from_path($cDir);
+    if ($c) {
+        $cidReq = $c;
+    }
+    if (empty($cidReset)) {
+        if (!isset($_SESSION['_cid']) OR (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid'])) {
+            $cidReset = $cidReq;
+        }
+    }
+}
 
 $gidReset = isset($gidReset) ? $gidReset : '';
 // $gidReset can be set in URL-parameter
@@ -755,14 +769,6 @@ if (isset($use_anonymous) && $use_anonymous) {
     api_clear_anonymous();
 }
 
-// if there is a cDir parameter in the URL (coming from courses/.htaccess redirection)
-if (!empty($cDir)) {
-    $c = CourseManager::get_course_id_from_path($cDir);
-    if ($c) {
-        $cidReq = $c;
-    }
-}
-
 // if the requested course is different from the course in session
 
 if (!empty($cidReq) && (!isset($_SESSION['_cid']) ||
@@ -1310,12 +1316,14 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     // save the states
     if (isset($is_courseAdmin)) {
         Session::write('is_courseAdmin', $is_courseAdmin);
+        $is_allowed_in_course = true;
     }
     if (isset($is_courseMember)) {
         Session::write('is_courseMember', $is_courseMember);
     }
     if (isset($is_courseTutor)) {
         Session::write('is_courseTutor', $is_courseTutor);
+        $is_allowed_in_course = true;
     }
     Session::write('is_courseCoach', $is_courseCoach);
     Session::write('is_allowed_in_course', $is_allowed_in_course);

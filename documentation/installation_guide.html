@@ -36,7 +36,7 @@
 </nav>
 
 <div class="container">
-<h1>Chamilo - Installation Guide</h1>
+<h1>Chamilo 1.10 - Installation Guide</h1>
 
 <p>Thank you for downloading Chamilo</p>
 <ul>
@@ -164,8 +164,8 @@ The following directories need to be <b>readable, writeable and executable</b> b
     <li>[chamilo]/web/</li>
     <li>[chamilo]/main/default_course_document/images/</li>
 </ul>
-Optionally, you can do the same to the following directories if you want to
-enable CSS styles package upload and sub-language definition:
+Optionally, you can do the same to the following directory if you want to
+enable sub-languages definition:
 <ul>
   <li>[chamilo]/main/lang/</li>
 </ul>
@@ -218,7 +218,7 @@ To get the best out of Chamilo, you need to finetune your PHP settings. Consider
 <div class="code">
       max_execution_time = 300 ;Maximum execution time of each script, in seconds<br />
       max_input_time = 600 ;Maximum amount of time each script may spend parsing request data<br />
-      memory_limit = 128M ;Maximum amount of memory a script may consume (128MB)<br />
+      memory_limit = 256M ;Maximum amount of memory a script may consume (128MB)<br />
       post_max_size = 100M<br />
       upload_max_filesize = 100M;<br />
       short_open_tag       = Off<br />
@@ -310,8 +310,8 @@ As this is only a minor version change from previous 1.10.* versions of Chamilo,
     older version's directory). Note that you should remove the "home" and
     "searchdb" directories from the package before you overwrite the previous
     files.</li>
-  <li> edit the main/inc/conf/configuration.php file: at the en of the file, locate the previous version number (e.g. '1.10.4') and change it to this new version (e.g. '1.10.8')</li>
-  <li> clean your archive/ directory: take a temporary copy of index.html, delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!). It will all be re-generated. You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
+  <li> edit the app/config/configuration.php file: at the en of the file, locate the previous version number (e.g. '1.10.4') and change it to this new version (e.g. '1.10.8')</li>
+  <li> clean your app/cache/twig directory: delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!). It will all be re-generated. You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
   <li> you're done! No other upgrade procedure is required</li>
 </ul>
 
@@ -324,7 +324,7 @@ As this is only a minor version change from previous 1.10.* versions of Chamilo,
   <li> download the Chamilo 1.10 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
   <li> unzip the new files of Chamilo 1.10 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
   <li> make *absolutely sure* that the .htaccess file of version 1.10 is copied as well</li>
-  <li> make sure "AllowOverride All" is present in your Apache configuration, as interpreting the .htaccess files is very important for Chamilo to work (note that Order-Allow directives have been replaced by "Require all granted" in Apache 2.4)</li>
+  <li> make sure "AllowOverride All" is present in your Apache configuration, as interpreting the .htaccess files is very important for Chamilo to work (note that the Order-Allow directive has been replaced by "Require all granted" in Apache 2.4)</li>
   <li> point your browser on your portal URL + main/install/</li>
   <li> click&nbsp;<span style="font-style: italic;">Install</span>, then choose <span style="font-style: italic;">Upgrade from 1.9.*</span></li>
 </ul>

@@ -742,22 +742,26 @@ function date_to_str_ago($date)
         $time %= $seconds;
     }
 
-    if ($key_result[0] == $min_day && $key_result[1]== $min_minute) {
-        $key_result[1] = ' 0 '.$min_hours;
-        $str_result[0] = $time_result[0].' '.$key_result[0];
-        $str_result[1] = $key_result[1];
+    if (!empty($key_result)) {
+        if ($key_result[0] == $min_day && $key_result[1]== $min_minute) {
+            $key_result[1] = ' 0 '.$min_hours;
+            $str_result[0] = $time_result[0].' '.$key_result[0];
+            $str_result[1] = $key_result[1];
+        }
+
+        if ($key_result[0] == $min_year && ($key_result[1] == $min_day || $key_result[1] == $min_week)) {
+            $key_result[1] = ' 0 '.$min_months;
+            $str_result[0] = $time_result[0].' '.$key_result[0];
+            $str_result[1] = $key_result[1];
+        }
     }
 
-    if ($key_result[0] == $min_year && ($key_result[1] == $min_day || $key_result[1] == $min_week)) {
-        $key_result[1] = ' 0 '.$min_months;
-        $str_result[0] = $time_result[0].' '.$key_result[0];
-        $str_result[1] = $key_result[1];
-    }
-
-    if (!empty($str_result[1])) {
-        $str = $str_result[0].', '.$str_result[1];
-    } else {
-        $str = $str_result[0];
+    if (!empty($str_result)) {
+        if (!empty($str_result[1])) {
+            $str = $str_result[0].', '.$str_result[1];
+        } else {
+            $str = $str_result[0];
+        }
     }
 
     date_default_timezone_set($system_timezone);

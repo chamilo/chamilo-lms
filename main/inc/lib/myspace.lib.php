@@ -467,8 +467,8 @@ class MySpace
 
             if ($is_western_name_order) {
                 $csv_content[] = array(
-                    api_html_entity_decode($coaches['firstname'], ENT_QUOTES, $charset),
-                    api_html_entity_decode($coaches['lastname'], ENT_QUOTES, $charset),
+                    api_html_entity_decode($coaches['firstname'], ENT_QUOTES),
+                    api_html_entity_decode($coaches['lastname'], ENT_QUOTES),
                     $time_on_platform,
                     $last_connection,
                     $nb_students,
@@ -477,8 +477,8 @@ class MySpace
                 );
             } else {
                 $csv_content[] = array(
-                    api_html_entity_decode($coaches['lastname'], ENT_QUOTES, $charset),
-                    api_html_entity_decode($coaches['firstname'], ENT_QUOTES, $charset),
+                    api_html_entity_decode($coaches['lastname'], ENT_QUOTES),
+                    api_html_entity_decode($coaches['firstname'], ENT_QUOTES),
                     $time_on_platform,
                     $last_connection,
                     $nb_students,

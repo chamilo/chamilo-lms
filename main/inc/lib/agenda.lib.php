@@ -1433,12 +1433,30 @@ class Agenda
 
         if (!empty($groupId)) {
             if (!api_is_allowed_to_edit()) {
+                $user_id = api_get_user_id();
                 $group_memberships = GroupManager::get_group_ids(
                     $course_id,
-                    api_get_user_id()
+                    $user_id
                 );
-                $user_id = api_get_user_id();
             } else {
+                $group_memberships = GroupManager::get_group_ids(
+                    $course_id,
+                    $user_id
+                );
+            }
+        } else {
+            // if no group was defined but I am a student reviewing his agenda,
+            // group events should show, so we should fetch those groups to which
+            // I belong
+            if (!api_is_allowed_to_edit()) {
+                $user_id = api_get_user_id();
+                $group_memberships = GroupManager::get_group_ids(
+                    $course_id,
+                    $user_id
+                );
+            } else {
+                // If no group was defined and I am a teacher/admin reviewing
+                // someone else's agenda, we should fetch this person's groups
                 $group_memberships = GroupManager::get_group_ids(
                     $course_id,
                     $user_id
@@ -1459,15 +1477,16 @@ class Agenda
                     $where_condition = "( ip.to_group_id IN (".implode(", ", $group_memberships).") ) ";
                 } else {
                     if (!empty($user_id)) {
-                        $where_condition = "( ip.to_user_id = $user_id OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
+                        $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
                     } else {
-                        $where_condition = "( ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                        $where_condition = "( ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
                     }
                 }
             } else {
-                $where_condition = "( ip.to_user_id = $user_id OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
+                $where_condition = "( ip.to_user_id = $user_id OR ip.to_user_id IS NULL OR (ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
             }
-            
+
+            $sessionCondition = '';
             if (empty($session_id)) {
                 $sessionCondition =  "
                 (
@@ -1481,8 +1500,6 @@ class Agenda
                     ip.session_id = $session_id
                 ) ";                
             }
-            
-            
 
             $sql = "SELECT DISTINCT
                         agenda.*,
@@ -1499,16 +1516,18 @@ class Agenda
                         $where_condition AND
                         ip.visibility = '1' AND
                         agenda.c_id = $course_id AND
-                        ip.c_id = agenda.c_id $sessionCondition
+                        ip.c_id = agenda.c_id AND
+                        $sessionCondition
                     ";
         } else {
             $visibilityCondition = " ip.visibility='1' AND ";
+            $sessionCondition = '';
 
             if (api_is_allowed_to_edit()) {
                 if ($user_id == 0) {
                     $where_condition = "";
                 } else {
-                    $where_condition = " (ip.to_user_id = ".$user_id.") OR ";
+                    $where_condition = " (ip.to_user_id = ".$user_id." OR ip.to_user_id IS NULL) AND ip.to_group_id IS NULL AND ";
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {

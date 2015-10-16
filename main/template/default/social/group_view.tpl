@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row" xmlns="http://www.w3.org/1999/html">
     <div class="col-md-3">
-        <div class="social-groups">
+        <div class="sm-groups">
             {{ social_avatar_block }}
             {{ social_menu_block }}
         </div>

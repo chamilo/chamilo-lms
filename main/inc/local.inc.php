@@ -1316,14 +1316,18 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     // save the states
     if (isset($is_courseAdmin)) {
         Session::write('is_courseAdmin', $is_courseAdmin);
-        $is_allowed_in_course = true;
+        if ($is_courseAdmin) {
+            $is_allowed_in_course = true;
+        }
     }
     if (isset($is_courseMember)) {
         Session::write('is_courseMember', $is_courseMember);
     }
     if (isset($is_courseTutor)) {
         Session::write('is_courseTutor', $is_courseTutor);
-        $is_allowed_in_course = true;
+        if ($is_courseTutor) {
+            $is_allowed_in_course = true;
+        }
     }
     Session::write('is_courseCoach', $is_courseCoach);
     Session::write('is_allowed_in_course', $is_allowed_in_course);

@@ -23,11 +23,16 @@ class ExerciseShowFunctions
 	 * @param int       Exercise ID
 	 * @param int       Question ID
      * @param int $resultsDisabled
+     * @param string $originalStudentAnswer
 	 * @return void
 	 */
-	public static function display_fill_in_blanks_answer($feedbackType, $answer, $id, $questionId, $resultsDisabled)
+	public static function display_fill_in_blanks_answer($feedbackType, $answer, $id, $questionId, $resultsDisabled, $originalStudentAnswer = '')
     {
         $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $resultsDisabled);
+        if (strpos($originalStudentAnswer, 'font color') !== false) {
+            $answerHTML = $originalStudentAnswer;
+        }
+
         if (empty($id)) {
             echo '<tr><td>';
             echo Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY);

@@ -48,7 +48,7 @@
 
 <a  name="1.10.0"></a>
 
-<h1>Chamilo 1.10.0 - San Juan, 15th of October 2015</h1>
+<h1>Chamilo 1.10.0 - San Juan, 16th of October 2015</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.10.0 is a major version of the 1.10.x branch, with new features and bugfixes on top of 1.9.10. As a major version, it requires the use of the upgrade script in order to upgrade an existing Chamilo portal. See install instructions</p>
 <h3>Release name</h3>
@@ -66,6 +66,7 @@
     <li>A few languages now get a "parent" language which is not English. In this case, we have based the update query on an ID that we "assume" to be the right one for Spanish, Italian, French, Chinese and Portuguese. If the ID is not correct, you might, in the worst case scenario, get Chinese or Arabic terms appear in a language that is not the primary one, like Galician (normally taking Spanish as parent language). This can be fixed very easily by an "UPDATE language SET parent_id = NULL"; for all your languages, and then re-apply the parent manually to your sub-language if it needs one.</li>
     <li>"Character set" platform setting can't be modified. It is now fixed to UTF-8 (see #7652). This comes as a decision given the fact that other character encoding types were only there for backwards compatibility reasons, and that the last version with something else than UTF-8 was released more than 5 years ago.</li>
     <li>Starting from 1.10.0, courses directories will really be deleted when the course is deleted. No more logical-delete-but-no-physical-delete policy where the folder used to remain available for last-minute recovery of resources. You are trusted to take backups when necessary to avoid inconvenient situations. This comes as a decision considering the increasing number of huge installations where ghost course directories become a considerable space issue very quickly, and as an observation that, in fact, this feature is very little known and very few people use it to actually recover deleted course material.</li>
+    <li>The hotspot question type is broken due to changes in the underlying Chamilo code. Given the fact this question type is developed in Flash and none of the developers at the time of release had Adobe CS available (proprietary technology that requires compilation) we have been unable to update the corresponding Flash code. Work is under way to provide the same feature using only HTML5, but it is likely to appear in a corrective version for 1.10.0. If you have an urgent need for this feature, please contact an official provider to get this sorted: providers@chamilo.org</li>
   </ul>
 <h3>Notable new Features</h3>
   Only showing some of the more than 3000 commits since 1.9.10 (https://github.com/chamilo/chamilo-lms/compare/v1.9.10...1.10.x). This section is divided into two for practical purposes: one fo normal users, one for developers and sysadmins.
@@ -406,12 +407,19 @@
     <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4c0780aa76778c390ace24f6cf85a100fc6459ba">4c0780aa</a> - <a href="https://task.beeznest.com/issues/9897">BT#9897</a>) Add new reset password option</li>
     <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/67b0693c31b338c18ee0a8aa5868c411c81a5c66">67b0693c</a> - <a href="https://task.beeznest.com/issues/10092">BT#10092</a>) Create TrackECourseAccessRepository entity</li>
     <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/fcc9030fafb047c4a62eb671a6213671797edabd">fcc9030f</a> - <a href="https://task.beeznest.com/issues/9881">BT#9881</a>) Add fields to associate forum to lp</li>
+    <li>The hotspot question type is broken due to changes in the underlying Chamilo code. Given the fact this question type is developed in Flash and none of the developers at the time of release had Adobe CS available (proprietary technology that requires compilation) we have been unable to update the corresponding Flash code. Work is under way to provide the same feature using only HTML5, but it is likely to appear in a corrective version for 1.10.0. If you have an urgent need for this feature, please contact an official provider to get this sorted: providers@chamilo.org</li>
   </ul>
 
   <h3>Improvements (minor features) and debug</h3>
   <ul>
-
-
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/382bb40e70502a270e3fdbc158c1b23da37d8340">382bb40e</a> - <a href="https://support.chamilo.org/issues/7905">#7905</a>) Fix personal, course, group and session events visibilities for all user roles</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/441d7828be2ef9409a7d7302a12b7cac2c1788bb">441d7828</a>) Fix permissions and cidReset detector to avoid preventing a course tutor to enter his own session-course</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d3a910d40c5de4adbfdabdaa07a2c137e865a5cd">d3a910d4</a> - <a href="https://support.chamilo.org/issues/7883">#7883</a>) Improve check to select on skill wheel</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a4e168bb0919beaaffd64c464186c597cead0ed2">a4e168bb</a>) Fix issue with date type selector not being set to the correct default in thematic advance</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b18014ff31305072e5a5e25843f77ec6bb21318f">b18014ff</a>) Fix missing cid in gradebook links</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/200ba3d30f9120e978479c8b3e48e6d4b27f7a42">200ba3d3</a>) Fixing show the Save icon on exercise submit</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/b9ebb0af6d79bd3882df0a7513844f5d27939e56">b9ebb0af</a>) Fix missing links tool action icons titles</li>
+<li>(<a href="https://github.com/chamilo/chamilo-lms/commit/d55a9e278203d6306deae108755a6a0825fc6f80">d55a9e27</a>) Don't show Hot Spot Delineation question type when Scenario is disabled</li>
 <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/483f502ebee755dc5ed15e4ec144cc5725036b7b">483f502e</a> - <a href="https://support.chamilo.org/issues/7898">#7898</a>) WCAG AAA improvement onChange JS</li>
 <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/3cb74208b95031de454ee074cc5f70303c87b303">3cb74208</a> - <a href="https://support.chamilo.org/issues/7883">#7883</a>) Slightly change skills list style on skill wheel's left panel</li>
 <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/0182e1f28b3919de100423bf08bff5477f9277b9">0182e1f2</a> - <a href="https://support.chamilo.org/issues/7883">#7883</a>) Add badges to skills list + remove text from action buttons to increase space for description</li>

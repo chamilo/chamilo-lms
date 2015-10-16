@@ -108,7 +108,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
         }
     }
 
-    $actionsLeft = '';
+    $actionsLeft = $actionsRight = '';
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {

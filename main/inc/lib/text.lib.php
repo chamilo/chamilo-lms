@@ -633,7 +633,7 @@ function _split_str_by_whitespace( $string, $goal ) {
 function cut($text, $maxchar, $embed = false) {
     if (api_strlen($text) > $maxchar) {
         if ($embed) {
-            return '<span title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</span>';
+            return '<p title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</p>';
         }
         return api_substr($text, 0, $maxchar).' ...';
     }

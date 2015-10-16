@@ -2440,8 +2440,8 @@ class Exercise
                         while ($row = Database::fetch_array($result)) {
                             $ind = $row['answer'];
                             $values = explode(':', $ind);
-                            $my_answer_id = $values[0];
-                            $option = $values[1];
+                            $my_answer_id = isset($values[0]) ? $values[0] : '';
+                            $option = isset($values[1]) ? $values[1] : '';
                             $choice[$my_answer_id] = $option;
                         }
                     }
@@ -2530,12 +2530,12 @@ class Exercise
                             $ind = $row['answer'];
                             $result = explode(':',$ind);
                             if (isset($result[0])) {
-                                $my_answer_id = $result[0];
-                                $option = $result[1];
+                                $my_answer_id = isset($result[0]) ? $result[0] : '';
+                                $option = isset($result[1]) ? $result[1] : '';
                                 $choice[$my_answer_id] = $option;
                             }
                         }
-                        $studentChoice = $choice[$answerAutoId];
+                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : '';
 
                         if ($answerCorrect == $studentChoice) {
                             //$answerCorrect = 1;
@@ -2599,85 +2599,253 @@ class Exercise
                     }
                     break;
                 case FILL_IN_BLANKS:
-
-                    // insert the student result in the track_e_attempt table, field answer
-                    // $answer is the answer like in the c_quiz_answer table for the question
-                    // student data are choice[]
-
-                    $listCorrectAnswers = FillBlanks::getAnswerInfo($answer);
-                    $switchableAnswerSet = $listCorrectAnswers["switchable"];
-                    $answerWeighting = $listCorrectAnswers["tabweighting"];
-                    // user choices is an array $choice
-
-                    // get existing user data in n the BDD
+                    $str = '';
                     if ($from_database) {
                         $sql = "SELECT answer
-                                FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                    exe_id = $exeId AND
-                                    question_id= ".intval($questionId);
+                                    FROM $TBL_TRACK_ATTEMPT
+                                    WHERE
+                                        exe_id = $exeId AND
+                                        question_id= ".intval($questionId);
                         $result = Database::query($sql);
                         $str = Database::result($result, 0, 'answer');
-
-                        $listStudentResults = FillBlanks::getAnswerInfo($str, true);
-                        $choice = $listStudentResults['studentanswer'];
                     }
 
-                    // loop other all blanks words
-                    if (!$switchableAnswerSet) {
-                        // not switchable answer, must be in the same place than teacher order
-                        for ($i=0; $i < count($listCorrectAnswers['tabwords']); $i++) {
-                            $studentAnswer = isset($choice[$i]) ? trim($choice[$i]) : '';
+                    if ($saved_results == false && strpos($str, 'font color') !== false) {
+                        // the question is encoded like this
+                        // [A] B [C] D [E] F::10,10,10@1
+                        // number 1 before the "@" means that is a switchable fill in blank question
+                        // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
+                        // means that is a normal fill blank question
+                        // first we explode the "::"
+                        $pre_array = explode('::', $answer);
 
-                            // This value is the user input, not escaped while correct answer is escaped by fckeditor
-                            // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
-                            if (!$from_database) {
-                                $studentAnswer = htmlentities(
-                                    api_utf8_encode($studentAnswer)
-                                );
-                            }
-
-                            $correctAnswer = $listCorrectAnswers['tabwords'][$i];
-                            $isAnswerCorrect = 0;
-                            if (FillBlanks::isGoodStudentAnswer($studentAnswer, $correctAnswer)) {
-                                // gives the related weighting to the student
-                                $questionScore += $answerWeighting[$i];
-                                // increments total score
-                                $totalScore += $answerWeighting[$i];
-                                $isAnswerCorrect = 1;
-                            }
-                            $listCorrectAnswers['studentanswer'][$i] = $studentAnswer;
-                            $listCorrectAnswers['studentscore'][$i] = $isAnswerCorrect;
+                        // is switchable fill blank or not
+                        $last = count($pre_array) - 1;
+                        $is_set_switchable = explode('@', $pre_array[$last]);
+                        $switchable_answer_set = false;
+                        if (isset ($is_set_switchable[1]) && $is_set_switchable[1] == 1) {
+                            $switchable_answer_set = true;
                         }
-                    } else {
-                        // switchable answer
-                        $listStudentAnswerTemp = $choice;
-                        $listTeacherAnswerTemp = $listCorrectAnswers['tabwords'];
-                        // for every teacher answer, check if there is a student answer
-                        for ($i=0; $i < count($listStudentAnswerTemp); $i++) {
-                            $studentAnswer = trim($listStudentAnswerTemp[$i]);
-                            $found = false;
-                            for ($j=0; $j < count($listTeacherAnswerTemp); $j++) {
-                                $correctAnswer = $listTeacherAnswerTemp[$j];
-                                if (!$found) {
-                                    if (FillBlanks::isGoodStudentAnswer($studentAnswer, $correctAnswer)) {
-                                        $questionScore += $answerWeighting[$i];
-                                        $totalScore += $answerWeighting[$i];
-                                        $listTeacherAnswerTemp[$j] = "";
-                                        $found = true;
-                                    }
+                        $answer = '';
+                        for ($k = 0; $k < $last; $k++) {
+                            $answer .= $pre_array[$k];
+                        }
+                        // splits weightings that are joined with a comma
+                        $answerWeighting = explode(',', $is_set_switchable[0]);
+                        // we save the answer because it will be modified
+                        $temp = $answer;
+                        $answer = '';
+                        $j = 0;
+                        //initialise answer tags
+                        $user_tags = $correct_tags = $real_text = array();
+                        // the loop will stop at the end of the text
+                        while (1) {
+                            // quits the loop if there are no more blanks (detect '[')
+                            if (($pos = api_strpos($temp, '[')) === false) {
+                                // adds the end of the text
+                                $answer = $temp;
+                                $real_text[] = $answer;
+                                break; //no more "blanks", quit the loop
+                            }
+                            // adds the piece of text that is before the blank
+                            //and ends with '[' into a general storage array
+                            $real_text[] = api_substr($temp, 0, $pos +1);
+                            $answer .= api_substr($temp, 0, $pos +1);
+                            //take the string remaining (after the last "[" we found)
+                            $temp = api_substr($temp, $pos +1);
+                            // quit the loop if there are no more blanks, and update $pos to the position of next ']'
+                            if (($pos = api_strpos($temp, ']')) === false) {
+                                // adds the end of the text
+                                $answer .= $temp;
+                                break;
+                            }
+                            if ($from_database) {
+                                $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                                          WHERE
+                                            exe_id = '".$exeId."' AND
+                                            question_id= ".intval($questionId)."";
+                                $resfill = Database::query($queryfill);
+                                $str = Database::result($resfill, 0, 'answer');
+                                api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
+                                $str = str_replace('\r\n', '', $str);
+
+                                $choice = $arr[1];
+                                if (isset($choice[$j])) {
+                                    $tmp = api_strrpos($choice[$j], ' / ');
+                                    $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                    $choice[$j] = trim($choice[$j]);
+                                    // Needed to let characters ' and " to work as part of an answer
+                                    $choice[$j] = stripslashes($choice[$j]);
+                                } else {
+                                    $choice[$j] = null;
+                                }
+                            } else {
+                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                                $choice[$j] = api_htmlentities(trim($choice[$j]));
+                            }
+
+                            $user_tags[] = $choice[$j];
+                            //put the contents of the [] answer tag into correct_tags[]
+                            $correct_tags[] = api_substr($temp, 0, $pos);
+                            $j++;
+                            $temp = api_substr($temp, $pos +1);
+                        }
+                        $answer = '';
+                        $real_correct_tags = $correct_tags;
+                        $chosen_list = array();
+
+                        for ($i = 0; $i < count($real_correct_tags); $i++) {
+                            if ($i == 0) {
+                                $answer .= $real_text[0];
+                            }
+                            if (!$switchable_answer_set) {
+                                // Needed to parse ' and " characters
+                                $user_tags[$i] = stripslashes($user_tags[$i]);
+                                if ($correct_tags[$i] == $user_tags[$i]) {
+                                    // gives the related weighting to the student
+                                    $questionScore += $answerWeighting[$i];
+                                    // increments total score
+                                    $totalScore += $answerWeighting[$i];
+                                    // adds the word in green at the end of the string
+                                    $answer .= $correct_tags[$i];
+                                } elseif (!empty($user_tags[$i])) {
+                                    // else if the word entered by the student IS NOT the same as the one defined by the professor
+                                    // adds the word in red at the end of the string, and strikes it
+                                    $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
+                                } else {
+                                    // adds a tabulation if no word has been typed by the student
+                                    $answer .= ''; // remove &nbsp; that causes issue
+                                }
+                            } else {
+                                // switchable fill in the blanks
+                                if (in_array($user_tags[$i], $correct_tags)) {
+                                    $chosen_list[] = $user_tags[$i];
+                                    $correct_tags = array_diff($correct_tags, $chosen_list);
+                                    // gives the related weighting to the student
+                                    $questionScore += $answerWeighting[$i];
+                                    // increments total score
+                                    $totalScore += $answerWeighting[$i];
+                                    // adds the word in green at the end of the string
+                                    $answer .= $user_tags[$i];
+                                } elseif (!empty ($user_tags[$i])) {
+                                    // else if the word entered by the student IS NOT the same as the one defined by the professor
+                                    // adds the word in red at the end of the string, and strikes it
+                                    $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
+                                } else {
+                                    // adds a tabulation if no word has been typed by the student
+                                    $answer .= '';  // remove &nbsp; that causes issue
                                 }
                             }
-                            $listCorrectAnswers['studentanswer'][$i] = $studentAnswer;
-                            if (!$found) {
-                                $listCorrectAnswers['studentscore'][$i] = 0;
-                            } else {
-                                $listCorrectAnswers['studentscore'][$i] = 1;
+
+                            // adds the correct word, followed by ] to close the blank
+                            $answer .= ' / <font color="green"><b>' . $real_correct_tags[$i] . '</b></font>]';
+                            if (isset($real_text[$i +1])) {
+                                $answer .= $real_text[$i +1];
                             }
                         }
+                    } else {
+                        // insert the student result in the track_e_attempt table, field answer
+                        // $answer is the answer like in the c_quiz_answer table for the question
+                        // student data are choice[]
+                        $listCorrectAnswers = FillBlanks::getAnswerInfo(
+                            $answer
+                        );
+                        $switchableAnswerSet = $listCorrectAnswers["switchable"];
+                        $answerWeighting = $listCorrectAnswers["tabweighting"];
+                        // user choices is an array $choice
+
+                        // get existing user data in n the BDD
+                        if ($from_database) {
+                            $sql = "SELECT answer
+                                    FROM $TBL_TRACK_ATTEMPT
+                                    WHERE
+                                        exe_id = $exeId AND
+                                        question_id= ".intval($questionId);
+                            $result = Database::query($sql);
+                            $str = Database::result($result, 0, 'answer');
+                            $listStudentResults = FillBlanks::getAnswerInfo(
+                                $str,
+                                true
+                            );
+                            $choice = $listStudentResults['studentanswer'];
+                        }
+
+                        // loop other all blanks words
+                        if (!$switchableAnswerSet) {
+                            // not switchable answer, must be in the same place than teacher order
+                            for ($i = 0; $i < count(
+                                $listCorrectAnswers['tabwords']
+                            ); $i++) {
+                                $studentAnswer = isset($choice[$i]) ? trim(
+                                    $choice[$i]
+                                ) : '';
+
+                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                                // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
+                                if (!$from_database) {
+                                    $studentAnswer = htmlentities(
+                                        api_utf8_encode($studentAnswer)
+                                    );
+                                }
+
+                                $correctAnswer = $listCorrectAnswers['tabwords'][$i];
+                                $isAnswerCorrect = 0;
+                                if (FillBlanks::isGoodStudentAnswer(
+                                    $studentAnswer,
+                                    $correctAnswer
+                                )
+                                ) {
+                                    // gives the related weighting to the student
+                                    $questionScore += $answerWeighting[$i];
+                                    // increments total score
+                                    $totalScore += $answerWeighting[$i];
+                                    $isAnswerCorrect = 1;
+                                }
+                                $listCorrectAnswers['studentanswer'][$i] = $studentAnswer;
+                                $listCorrectAnswers['studentscore'][$i] = $isAnswerCorrect;
+                            }
+                        } else {
+                            // switchable answer
+                            $listStudentAnswerTemp = $choice;
+                            $listTeacherAnswerTemp = $listCorrectAnswers['tabwords'];
+                            // for every teacher answer, check if there is a student answer
+                            for ($i = 0; $i < count(
+                                $listStudentAnswerTemp
+                            ); $i++) {
+                                $studentAnswer = trim(
+                                    $listStudentAnswerTemp[$i]
+                                );
+                                $found = false;
+                                for ($j = 0; $j < count(
+                                    $listTeacherAnswerTemp
+                                ); $j++) {
+                                    $correctAnswer = $listTeacherAnswerTemp[$j];
+                                    if (!$found) {
+                                        if (FillBlanks::isGoodStudentAnswer(
+                                            $studentAnswer,
+                                            $correctAnswer
+                                        )
+                                        ) {
+                                            $questionScore += $answerWeighting[$i];
+                                            $totalScore += $answerWeighting[$i];
+                                            $listTeacherAnswerTemp[$j] = "";
+                                            $found = true;
+                                        }
+                                    }
+                                }
+                                $listCorrectAnswers['studentanswer'][$i] = $studentAnswer;
+                                if (!$found) {
+                                    $listCorrectAnswers['studentscore'][$i] = 0;
+                                } else {
+                                    $listCorrectAnswers['studentscore'][$i] = 1;
+                                }
+                            }
+                        }
+                        $answer = FillBlanks::getAnswerInStudentAttempt(
+                            $listCorrectAnswers
+                        );
                     }
 
-                    $answer = FillBlanks::getAnswerInStudentAttempt($listCorrectAnswers);
                     break;
                 // for calculated answer
                 case CALCULATED_ANSWER:
@@ -3426,7 +3594,8 @@ class Exercise
                                 $answer,
                                 $exeId,
                                 $questionId,
-                                $results_disabled
+                                $results_disabled,
+                                $str
                             );
                             break;
                         case CALCULATED_ANSWER:

@@ -3579,6 +3579,12 @@ HTML;
                 $category_was_added_for_this_test = false;
 
                 if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+                    if (!isset($category_list[$objQuestionTmp->category]['score'])) {
+                        $category_list[$objQuestionTmp->category]['score'] = 0;
+                    }
+                    if (!isset($category_list[$objQuestionTmp->category]['total'])) {
+                        $category_list[$objQuestionTmp->category]['total'] = 0;
+                    }
                     $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
                     $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
                     $category_was_added_for_this_test = true;

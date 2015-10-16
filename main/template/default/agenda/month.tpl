@@ -11,8 +11,8 @@ function checkLength( o, n, min, max ) {
 }
 function clean_user_select() {
     //Cleans the selected attr
-    $("#users_to_send_id").val('').trigger("chosen:updated");
-    /*$('#users_to_send_id')
+    $("#users_to_send").val('').trigger("chosen:updated");
+    /*$('#users_to_send')
         .find('option')
         .removeAttr('selected')
         .end();*/
@@ -115,10 +115,10 @@ $(document).ready(function() {
 		    clean_user_select();
 
             // Sets the 1st item selected by default
-            $('#users_to_send_id option').eq(0).attr('selected', 'selected');
+            $('#users_to_send option').eq(0).attr('selected', 'selected');
 
 			// Update chz-select
-			//$("#users_to_send_id").trigger("chosen:updated");
+			//$("#users_to_send").trigger("chosen:updated");
 
 			if ({{ can_add_events }} == 1) {
 				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.format('YYYY-MM-DD 00:00:00')+'&end='+end.format('YYYY-MM-DD 00:00:00')+'&all_day='+allDay+'&view='+view.name;
@@ -164,7 +164,7 @@ $(document).ready(function() {
 							$.ajax({
 								url: url+'&'+params,
 								success:function(data) {
-									var user = $('#users_to_send_id').val();
+									var user = $('#users_to_send').val();
                                     if (user) {
                                         if (user.length > 1) {
                                             user = 0;

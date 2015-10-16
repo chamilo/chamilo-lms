@@ -35,7 +35,7 @@ if (!empty($extra_fields)) {
 
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('search');
-$social_right_content = '';
+$block_search = '';
 $searchForm = UserManager::get_search_form($query);
 
 $groups = array();
@@ -47,7 +47,7 @@ $usergroup = new UserGroup();
 
 // I'm searching something
 if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) {
-    $itemPerPage = 9;
+    $itemPerPage = 8;
 
     if ($_GET['search_type']=='0' || $_GET['search_type']=='1') {
         $page = isset($_GET['users_page_nr']) ? intval($_GET['users_page_nr']) : 1;
@@ -71,9 +71,9 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         Display::addFlash(Display::return_message(get_lang('SorryNoResults')));
     }
 
-    $results = '<div id="online_grid_container">';
+    $results = '<div id="whoisonline">';
     if (is_array($users) && count($users) > 0) {
-        $results .= Display::page_subheader(get_lang('Users'));
+        
         $results .= '<div class="row">';
         $buttonClass = 'btn btn-default btn-sm';
         foreach ($users as $user) {
@@ -105,29 +105,35 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                 ]
             );
 
-            $img = '<img src="'.$user_info['avatar'].'" width="100" height="100">';
+            $img = '<img src="'.$user_info['avatar'].'" class="img-responsive img-circle" width="100" height="100">';
 
             if ($user_info['user_is_online']) {
-                $status_icon = Display::span('', array('class' => 'online_user_in_text'));
+                $status_icon = Display::return_icon('online.png', get_lang('OnLine'), null, ICON_SIZE_TINY);
             } else {
-                $status_icon = Display::span('', array('class' => 'offline_user_in_text'));
+                $status_icon = Display::return_icon('offline.png', get_lang('Disconnected'), null, ICON_SIZE_TINY);
+            }
+            
+            if ($user_info['status'] == 5) {
+                $user_icon = Display::return_icon('user.png', get_lang('Student'), null, ICON_SIZE_TINY);
+            } else {
+                $user_icon = Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY);
             }
 
             $tag = isset($user['tag']) ? ' <br /><br />'.$user['tag'] : null;
-            $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url);
+            $user_info['complete_name'] = Display::url($user_info['complete_name'], $url);
             $invitations = $user['tag'].$send_inv.$send_msg;
 
-            $results .= '<div class="col-md-4">
-                            <div class="card">
-                                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
-                                <div class="avatar">
+            $results .= '<div class="col-md-3">
+                            <div class="items-user">
+                                <div class="items-user-avatar">
                                 '.$img.'
                                 </div>
-                                <div class="content">
-                                    '.$user_info['complete_name'].'
-                                    <div class="btn-group">
+                                <div class="user-info">
+                                   <p>'.$user_info['complete_name'].'</p>
+                                   <div class="items-user-status">' . $status_icon . $user_icon . '</div>    
+                                   <div class="toolbar">
                                     '.$invitations.'
-                                    </div>
+                                   </div>
                                 </div>
                             </div>
                       </div>';
@@ -135,11 +141,12 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
 
         }
         $results .= '</div></div>';
-        $social_right_content .= $results;
+        
+        
     }
 
     $visibility = array(true, true, true, true, true);
-    $social_right_content .= Display::return_sortable_grid(
+    $results .= Display::return_sortable_grid(
         'users',
         null,
         null,
@@ -152,53 +159,56 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $totalUsers
     );
 
+    $block_search .= Display::panelCollapse(get_lang('Users'), $results, 'search-friends', null, 'friends-acorderon', 'friends-collapse');
+    
     $grid_groups = array();
+    $block_groups = '<div id="whoisonline">';
     if (is_array($groups) && count($groups) > 0) {
-        $social_right_content .= '<div class="row">';
-        $social_right_content .= Display::page_subheader(get_lang('Groups'));
-
+        $block_groups .= '<div class="row">';
         foreach ($groups as $group) {
             $group['name'] = Security::remove_XSS($group['name'], STUDENT, true);
             $group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
             $id = $group['id'];
-            $url_open = '<a class="btn btn-default" href="group_view.php?id='.$id.'">';
+            $url_open = '<a href="group_view.php?id='.$id.'">';
             $url_close = '</a>';
             $name = cut($group['name'], 60, true);
             $count_users_group = count($usergroup->get_all_users_by_group($id));
             if ($count_users_group == 1) {
-                $count_users_group = $count_users_group.' '.get_lang('Member');
+                $count_users_group = $count_users_group;
             } else {
-                $count_users_group = $count_users_group.' '.get_lang('Members');
+                $count_users_group = $count_users_group;
             }
             $picture = $usergroup->get_picture_group($group['id'], $group['picture'], GROUP_IMAGE_SIZE_ORIGINAL);
             //$tags = $usergroup->get_group_tags($group['id']);
             $tags = null;
-            $group['picture'] = '<img src="'.$picture['file'].'" />';
+            $group['picture'] = '<img class="img-responsive img-circle" src="'.$picture['file'].'" />';
 
-            $members = Display::span($count_users_group);
-            $item_1  = Display::tag('h3', $url_open.$name.$url_close).$members;
+            $members = Display::returnFontAwesomeIcon('user') . '( ' .$count_users_group . ' )';
+            $item_1  = Display::tag('p', $url_open.$name.$url_close);
 
-            $social_right_content .= '
+            $block_groups .= '
                 <div class="col-md-4">
-                    <div class="card">
-                        <div class="avatar">
+                    <div class="items-user">
+                        <div class="items-user-avatar">
                             '.$group['picture'].'
                         </div>
-                        <div class="content">
+                        <div class="user-info">
                             '.$item_1.'
-                            <p>'.$group['description'].'</p>
-                            <p>'.$tags.'</p>
-                            <p>'.$url_open.get_lang('SeeMore').$url_close.'</p>
+                            <p>' . $members . '</p>    
+                            <p>' . $group['description'] . '</p>
+                            <p>' . $tags . '</p>
+                            <p>' . $url_open.get_lang('SeeMore') . $url_close . '</p>
                         </div>
                     </div>
                 </div>';
 
         }
-        $social_right_content .= '</ul></div></div>';
+        $block_groups .= '</div></div></div>';
+        
     }
 
     $visibility = array(true, true, true, true, true);
-    $social_right_content .= Display::return_sortable_grid(
+    $block_groups .= Display::return_sortable_grid(
         'groups',
         null,
         $grid_groups,
@@ -210,13 +220,15 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         array(),
         $totalGroups
     );
+    
+    $block_search .= Display:: panelCollapse(get_lang('Groups'), $block_groups, 'search-groups', null, 'groups-acorderon', 'groups-collapse');
 }
 
 $tpl = new Template($tool_name);
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, $user_id, 'search');
 $tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('social_right_content', $social_right_content);
+$tpl->assign('social_search', $block_search);
 $tpl->assign('search_form', $searchForm);
 
 $formModalTpl =  new Template();

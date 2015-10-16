@@ -1,4 +1,4 @@
-<div class="social-profile thumbnail text-center">
+<div class="social-profile text-center">
     {% if show_group %}
         <img src="{{ user_group_image.file }}" class="img-profile img-responsive img-circle">
         <div class="caption">

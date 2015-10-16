@@ -76,7 +76,7 @@ switch ($action) {
     case 'document_destination':
         //obtained the bootstrap-select selected value via ajax
         $dirValue = isset($_POST['dirValue']) ? $_POST['dirValue'] : null;
-        echo $dirValue;
+        echo Security::remove_XSS($dirValue);
         break;
 }
 exit;

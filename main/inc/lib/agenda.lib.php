@@ -975,7 +975,7 @@ class Agenda
                     );
                     $my_course_list = CourseManager::get_courses_list_by_user_id(
                         api_get_user_id(),
-                        true
+                        false
                     );
                 }
 
@@ -1035,7 +1035,7 @@ class Agenda
                             $start,
                             $end,
                             $my_session_id,
-                            api_get_user_id(),
+                            $user_id,
                             $this->eventOtherSessionColor
                         );
                     }
@@ -1467,6 +1467,22 @@ class Agenda
             } else {
                 $where_condition = "( ip.to_user_id = $user_id OR (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ) ";
             }
+            
+            if (empty($session_id)) {
+                $sessionCondition =  "
+                (
+                    agenda.session_id = 0 AND
+                    ip.session_id IS NULL
+                ) ";
+            } else {
+                $sessionCondition =  "
+                (
+                    agenda.session_id = $session_id AND
+                    ip.session_id = $session_id
+                ) ";                
+            }
+            
+            
 
             $sql = "SELECT DISTINCT
                         agenda.*,
@@ -1483,10 +1499,10 @@ class Agenda
                         $where_condition AND
                         ip.visibility = '1' AND
                         agenda.c_id = $course_id AND
-                        ip.c_id = $course_id
+                        ip.c_id = agenda.c_id $sessionCondition
                     ";
         } else {
-            $visibilityCondition = " ip.visibility='1' AND";
+            $visibilityCondition = " ip.visibility='1' AND ";
 
             if (api_is_allowed_to_edit()) {
                 if ($user_id == 0) {
@@ -1496,18 +1512,21 @@ class Agenda
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {
-                $where_condition = " ( ip.to_user_id = ".api_get_user_id()." AND (ip.to_group_id='0' OR ip.to_group_id IS NULL)) OR ";
+                $where_condition = " ( (ip.to_user_id = ".api_get_user_id()." OR ip.to_user_id IS NULL) AND ip.to_group_id IS NULL) AND ";
             }
-
-            $sessionCondition =  " agenda.session_id = $session_id AND
-                                   ip.session_id = $session_id ";
 
             if (empty($session_id)) {
                 $sessionCondition =  "
                 (
-                    (agenda.session_id = 0 OR agenda.session_id IS NULL) AND
-                    (ip.session_id = 0 OR ip.session_id IS NULL)
+                    agenda.session_id = 0 AND
+                    ip.session_id IS NULL
                 ) ";
+            } else {
+                $sessionCondition =  "
+                (
+                    agenda.session_id = $session_id AND
+                    ip.session_id = $session_id
+                ) ";                
             }
 
             $sql = "SELECT DISTINCT
@@ -1525,7 +1544,6 @@ class Agenda
                         $where_condition
                         $visibilityCondition
                         agenda.c_id = $course_id AND
-                        ip.c_id = $course_id AND
                         $sessionCondition
                     ";
         }
@@ -1545,7 +1563,6 @@ class Agenda
         }
 
         $sql .= $dateCondition;
-
         $result = Database::query($sql);
 
         $coachCanEdit = false;

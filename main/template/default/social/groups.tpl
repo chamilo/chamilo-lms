@@ -8,18 +8,8 @@
             {{ social_menu_block }}
         </div>
     </div>
-    <div class="col-md-9" style="min-height:1px">
-        <div class="row">
-            <div class="col-md-12">
-                <div id="message_ajax_reponse" class=""></div>
-            </div>
-        </div>
-        <div class="row">
-            {{ social_right_content }}
-        </div>
-        <div id="display_response_id" class="col-md-5"></div>
-        {{ social_auto_extend_link }}
+    <div class="col-md-9">
+        {{ social_right_content }}
     </div>
-
 </div>
 {% endblock %}

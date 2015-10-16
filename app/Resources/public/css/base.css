@@ -3305,27 +3305,6 @@ a.forum_group_link {
     margin-bottom:5px;
 }
 
-/* User list */
-
-.blackboard_show {
-    float:left;
-    position:absolute;
-    border:1px solid black;
-    width: 200px;
-    background-color:white;
-    z-index:99; padding: 3px;
-    display: inline;
-}
-.blackboard_hide {
-    display: none;
-}
-
-#online_grid_container {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
 #hide_bar_template {
     vertical-align: middle;
     width: 10px;
@@ -4107,37 +4086,37 @@ i.size-32.icon-new-work{
 #skillList .dropdown-menu{
   top: 30px;
 }
-.social-group .list-group-newest .items{
+#sm-groups .list-group-newest .items{
   display: block;
 }
-.social-group .list-group-newest .items .group-image{
+#sm-groups .list-group-newest .items .group-image{
   vertical-align: top;
   padding-left: 10px;
   padding-right: 10px;
 }
-.social-group .list-group-newest .items .group-image,
-.social-group .list-group-newest .items .group-info
+#sm-groups .list-group-newest .items .group-image,
+#sm-groups .list-group-newest .items .group-info
 {
   display: inline-block;
 }
-.social-group .list-group-newest .items .group-info{
+#sm-groups .list-group-newest .items .group-info{
   width: auto;
 }
-.social-group .items{
+#sm-groups .items{
   border-bottom: 1px dotted #B1DDE0;
   padding-bottom: 5px;
   margin-bottom: 5px;
 }
-.social-group .group-name a{
+#sm-groups .group-name a{
   font-size: 14px;
   font-weight: bold;
   color: #4D4D4D;
 }
-.social-group .count-username{
+#sm-groups .count-username{
   font-size: 12px;
   color: #4D4D4D;
 }
-.social-group .description p{
+#sm-groups .description p{
   color: #4D4D4D;
   padding-top: 10px;
   padding-bottom: 0px;
@@ -5484,12 +5463,18 @@ div#chat-remote-video video {
   box-shadow: 0 2px 3px #C8C8C8;
   border: 1px solid #e6e6e6;
   margin-bottom: 20px;
-  min-height: 240px;
+  min-height: 230px;
+}
+#whoisonline .items-user-avatar .img-responsive{
+    display: inline-block;
 }
 #whoisonline .items-user-name{
   font-size: 12px;
   padding-top: 10px;
   line-height: 15px;
+}
+#whoisonline .items-user .toolbar .btn, #whoisonline .items-user .items-user-status{
+  margin-bottom: 5px;
 }
 .search-user label{
   font-weight: normal;

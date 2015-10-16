@@ -21,8 +21,9 @@ class Version20150803171220 extends AbstractMigrationChamilo
         $this->addSql('UPDATE user SET username_canonical = username');
         $this->addSql('ALTER TABLE user ADD confirmation_token VARCHAR(255) NULL');
         $this->addSql('ALTER TABLE user ADD password_requested_at DATETIME DEFAULT NULL');
-
-        $schema->renameTable('track_e_exercices', 'track_e_exercises');
+        $this->addSql('RENAME TABLE track_e_exercices TO track_e_exercises');
+        // This drops the old table
+        // $schema->renameTable('track_e_exercices', 'track_e_exercises');
     }
 
     /**

@@ -488,7 +488,7 @@ if ($_REQUEST['tab'] == 'unset_variables') {
 }
 
 if ($_REQUEST['tab'] == 'clear_order') {
-    $id = substr(intval($_REQUEST['id']), 6);
+    $id = intval(substr($_REQUEST['id'], 5));
     $sql = "DELETE FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
 
     $res = Database::query($sql);
@@ -502,7 +502,7 @@ if ($_REQUEST['tab'] == 'clear_order') {
 }
 
 if ($_REQUEST['tab'] == 'confirm_order') {
-    $id = substr(intval($_REQUEST['id']), 6);
+    $id = intval(substr($_REQUEST['id'], 5));
     $sql = "SELECT * FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);

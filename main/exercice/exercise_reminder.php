@@ -35,15 +35,20 @@ api_protect_course_script(true);
 if($debug>0){error_log('Entered exercise_result.php: '.print_r($_POST,1));}
 
 // general parameters passed via POST/GET
-if ( empty ( $origin ) ) {                  $origin                 = Security::remove_XSS($_REQUEST['origin']);}
-if ( empty ( $learnpath_id ) ) {            $learnpath_id           = intval($_REQUEST['learnpath_id']);}
-if ( empty ( $learnpath_item_id ) ) {       $learnpath_item_id      = intval($_REQUEST['learnpath_item_id']);}
-if ( empty ( $learnpath_item_view_id ) ) {  $learnpath_item_view_id = intval($_REQUEST['learnpath_item_view_id']);}
+if (empty($origin)) {
 
-if ( empty ($exerciseId)) {  $exerciseId = intval($_REQUEST['exerciseId']);}
+}
+$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
+$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : 0;
 
-if ( empty ($objExercise)) { $objExercise = $_SESSION['objExercise'];}
-
+if (empty ($exerciseId)) {
+    $exerciseId = intval($_REQUEST['exerciseId']);
+}
+if (empty ($objExercise)) {
+    $objExercise = $_SESSION['objExercise'];
+}
 if (!$objExercise) {
 	//Redirect to the exercise overview
 	//Check if the exe_id exists

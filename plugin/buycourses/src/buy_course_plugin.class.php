@@ -1164,13 +1164,17 @@ class BuyCoursesPlugin extends Plugin
             'price' => 0.00
         ];
 
-        if (!empty($session->getDisplayStartDate())) {
+        $displayStartDate = $session->getDisplayStartDate();
+
+        if (!empty($displayStartDate)) {
             $sessionItem['session_display_start_date'] = api_format_date(
                 $session->getDisplayStartDate()->format('Y-m-d h:i:s')
             );
         }
 
-        if (!empty($session->getDisplayEndDate())) {
+        $displayEndDate = $session->getDisplayEndDate();
+
+        if (!empty($displayEndDate)) {
             $sessionItem['session_display_end_date'] = api_format_date(
                 $session->getDisplayEndDate()->format('Y-m-d h:i:s'),
                 DATE_TIME_FORMAT_LONG_24H

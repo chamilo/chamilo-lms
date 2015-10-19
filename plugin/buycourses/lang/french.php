@@ -41,7 +41,7 @@ $strings['ConfigurationOfPayments'] = "Configuration des paiements";
 $strings['OrdersPendingOfPayment'] = "Commandes en attente de paiement";
 $strings['AvailableCoursesConfiguration'] = "Configuration des cours disponibles";
 $strings['PaymentsConfiguration'] = "Configuration des paiements";
-$strings['bc_message'] = "Cher/Chère {{name}}. <br />À la réception de la confirmation de paiement, nous terminerons le processus d'inscrtipion au cours <strong>{{curso}}</strong>.<br><br><strong>N'oubliez pas d'indiquer le numéro de référence de la commande lors de votre transfert: <div style='display:inline;text-align:center; font-weight:bold; font-size:20px; color:#333'>{{reference}}</div></strong>";
+$strings['bc_message'] = "Cher/Chère {{name}}. <br />À la réception de la confirmation de paiement, nous terminerons le processus d'inscrtipion au cours <strong>{{course}}</strong>.<br><br><strong>N'oubliez pas d'indiquer le numéro de référence de la commande lors de votre transfert: <div style='display:inline;text-align:center; font-weight:bold; font-size:20px; color:#333'>{{reference}}</div></strong>";
 $strings['Categories'] = "Catégories";
 $strings['BankTransfer'] = 'Transfert bancaire';
 $strings['EnrollToCourseXSuccessful'] = "Votre inscription au cours %s est terminée.";

@@ -2286,7 +2286,7 @@ class Exercise
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         // Creates a temporary Question object
-        $course_id = api_get_course_int_id();
+        $course_id = $this->course_id;
         $objQuestionTmp = Question::read($questionId, $course_id);
 
         if ($objQuestionTmp === false) {
@@ -2342,7 +2342,7 @@ class Exercise
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 
             $params = array();
-            $params['course_id'] = api_get_course_int_id();
+            $params['course_id'] = $course_id;
             $params['session_id'] = api_get_session_id();
             $params['user_id'] = isset($exe_info['exe_user_id'])? $exe_info['exe_user_id'] : api_get_user_id();
             $params['exercise_id'] = isset($exe_info['exe_exo_id'])? $exe_info['exe_exo_id'] : $this->id;

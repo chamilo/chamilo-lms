@@ -1840,7 +1840,7 @@ class SocialManager extends UserManager
             ]
         );
         $form->addHidden('url_content', '');
-        $form->addButtonSend(get_lang('Post'), null, false, ['cols-size' => [1, 10, 1]]);
+        $form->addButtonSend(get_lang('Post'), 'wall_post_button', false, ['cols-size' => [1, 10, 1]]);
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 
         return $html;

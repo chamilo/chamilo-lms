@@ -299,6 +299,7 @@ $(document).ready(function() {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function() {
+                $("[name=\'wall_post_button\']").prop( "disabled", true );
                 $(".panel-preview").hide();
                 $(".spinner").html("'.
                     '<div class=\'text-center\'>'.
@@ -311,6 +312,7 @@ $(document).ready(function() {
             url: "'. api_get_path(WEB_AJAX_PATH) .'social.ajax.php?a=readUrlWithOpenGraph",
             data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
             success: function(response) {
+                $("[name=\'wall_post_button\']").prop( "disabled", false );
                 if (!response == false) {
                     $(".spinner").html("");
                     $(".panel-preview").show();

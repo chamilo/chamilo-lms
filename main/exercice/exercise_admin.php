@@ -7,14 +7,10 @@
 * @package chamilo.exercise
 * @author Olivier Brouckaert, Julio Montoya
 */
-/**
- * Code
- */
-// name of the language file that needs to be included
 
 use \ChamiloSession as Session;
 
-$language_file='exercice';
+$language_file = 'exercice';
 
 require_once 'exercise.class.php';
 require_once 'question.class.php';
@@ -26,8 +22,71 @@ $this_section = SECTION_COURSES;
 if (!api_is_allowed_to_edit(null,true)) {
     api_not_allowed(true);
 }
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $htmlHeadXtra[] = '<script>
+
+    function check() {
+        $("#category_id option:selected").each(function() {
+            var id = $(this).val();
+            var name = $(this).text();
+            if (id != "" ) {
+                $.ajax({
+                    async: false,
+                    url: "\'.$url.\'&a=exercise_category_exists",
+                    data: "id="+id,
+                    success: function(return_value) {
+                        if (return_value == 0 ) {
+                            alert("\'.get_lang(\'CategoryDoesNotExists\').\'");
+
+                            // Deleting select option tag
+                            $("#category_id").find("option").remove();
+
+                            $(".holder li").each(function () {
+                                if ($(this).attr("rel") == id) {
+                                    $(this).remove();
+                                }
+                            });
+                        } else {
+                            option_text = $("#category_id").find("option").text();
+                            $("#category_inputs").append( option_text + "<input type=text>");
+                        }
+                    },
+                });
+            }
+        });
+    }
+
+    $(function() {
+        $("#category_id").fcbkcomplete({
+            json_url: "\'.$url.\'&a=search_category",
+            maxitems: 20,
+            addontab: false,
+            input_min_size: 1,
+            cache: false,
+            complete_text: "\'.get_lang(\'StartToType\').\'",
+            firstselected: false,
+            onselect: check,
+            // oncreate: add_item,
+            filter_selected: true,
+            newel: true
+        });
+
+        $("input[name=\'model_type\']").each(function(index, value) {
+            $(this).click(function() {
+                var value = $(this).attr("value");
+                // Committee‎
+                if (value == 2) {
+                    $("#score_type").show();
+                } else {
+                    $("#score_type").hide();
+                }
+            });
+        });
+    });
+
+
     function advanced_parameters() {
         if(document.getElementById(\'options\').style.display == \'none\') {
             document.getElementById(\'options\').style.display = \'block\';
@@ -121,6 +180,41 @@ $htmlHeadXtra[] = '<script>
     function check_results_disabled() {
         document.getElementById(\'exerciseType_2\').checked = true;
     }
+
+    function disabledHideRandom() {
+        $("#hidden_random option:eq(0)").prop("selected", true);
+        $("#hidden_random").hide();
+    }
+
+    function checkQuestionSelection() {
+        var selection = $("#questionSelection option:selected").val()
+        switch (selection) {
+            case "\'.EX_Q_SELECTION_ORDERED.\'":
+                disabledHideRandom();
+                $("#hidden_matrix").hide();
+                break;
+            case "\'.EX_Q_SELECTION_RANDOM.\'":
+                $("#hidden_random").show();
+                $("#hidden_matrix").hide();
+                break;
+            case "\'.EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED.\'":
+                disabledHideRandom();
+                $("#hidden_matrix").show();
+                break;
+            case "per_categories":
+                $("#questionSelection option:eq(\'.EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED.\')").prop("selected", true);
+                disabledHideRandom();
+                $("#hidden_matrix").show();
+                break;
+            default:
+                disabledHideRandom();
+                $("#hidden_matrix").show();
+                break;
+
+        }
+    }
+
+
 </script>';
 
 // to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
@@ -137,6 +231,7 @@ window.onload=advanced_parameters;
 // INIT EXERCISE
 
 $objExercise = new Exercise();
+$objExercise->setCategoriesGrouping(false);
 $course_id = api_get_course_int_id();
 
 //INIT FORM
@@ -161,7 +256,7 @@ if ($form->validate()) {
     }
     $exercise_id = $objExercise->id;
     Session::erase('objExercise');
-    header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id);
+    header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id.'&'.api_get_cidreq());
     exit;
 } else {
     // DISPLAY FORM

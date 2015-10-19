@@ -326,4 +326,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['force_update_incomplete_profile'] = false;
 // Manage deleted files marked with "DELETED" (by course and only by allowed by admin)
 //$_configuration['document_manage_deleted_files'] = false;
-
+// Enable new category filters in the Exercise tool, require DB changes
+//$_configuration['exercise_enable_category_order'] = false;

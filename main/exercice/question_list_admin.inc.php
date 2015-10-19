@@ -99,38 +99,43 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
             });
 
             $( "#question_list" ).accordion({
-                icons: icons,
-                autoHeight: false,
-                active: false, // all items closed by default
-                collapsible: true,
-                header: ".header_operations"
-            })
-            .sortable({
-                cursor: "move", // works?
-                update: function(event, ui) {
-                    var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']);?>";
-                    $.post("<?php echo $ajax_url ?>", order, function(reponse){
-                        $("#message").html(reponse);
-                    });
-                },
-                axis: "y",
-                placeholder: "ui-state-highlight", //defines the yellow highlight
-                handle: ".moved", //only the class "moved"
-                stop: function() {
-                    stop = true;
-                }
-            });
+                    icons: icons,
+                    autoHeight: false,
+                    active: false, // all items closed by default
+                    collapsible: true,
+                    header: ".header_operations"
+                })
+                .sortable({
+                    cursor: "move", // works?
+                    update: function(event, ui) {
+                        var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']);?>";
+                        $.post("<?php echo $ajax_url ?>", order, function(reponse){
+                            $("#message").html(reponse);
+                        });
+                    },
+                    axis: "y",
+                    placeholder: "ui-state-highlight", //defines the yellow highlight
+                    handle: ".moved", //only the class "moved"
+                    stop: function() {
+                        stop = true;
+                    }
+                });
         });
     </script>
 <?php
 
 //we filter the type of questions we can add
 Question :: display_type_menu($objExercise);
+// Re sets the question list
+$objExercise->setQuestionList();
+
 echo '<div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)
 unset($_SESSION['less_answer']);
+
+//echo Question::getMediaLabels();
 
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
@@ -150,7 +155,10 @@ if (!$inATest) {
     echo '<div id="question_list">';
     if ($nbrQuestions) {
         //Always getting list from DB
-        $questionList = $objExercise->selectQuestionList(true);
+        //$questionList = $objExercise->selectQuestionList(true);
+
+        $objExercise->setCategoriesGrouping(false);
+        $questionList = $objExercise->getQuestionListWithMediasUncompressed();
 
         // Style for columns
         $styleQuestion = "width:50%; float:left;";
@@ -159,12 +167,15 @@ if (!$inATest) {
         $styleLevel = "width:6%; float:left; padding-top:8px; text-align:center;";
         $styleScore = "width:4%; float:left; padding-top:8px; text-align:center;";
 
+        $category_list = Testcategory::getListOfCategoriesNameForTest($objExercise->id, false);
+
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
                 //To avoid warning messages
                 if (!is_numeric($id)) {
                     continue;
                 }
+                /** @var Question $objQuestionTmp */
                 $objQuestionTmp = Question::read($id);
                 $question_class = get_class($objQuestionTmp);
 

@@ -151,14 +151,15 @@ class FillBlanks extends Question
                 if (firstTime) {
                     firstTime = false;
             ';
-
-            if (count($listAnswersInfo["tabweighting"]) > 0) {
-                foreach ($listAnswersInfo["tabweighting"] as $i => $weighting) {
-                    echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
-                }
-                foreach ($listAnswersInfo["tabinputsize"] as $i => $sizeOfInput) {
-                    echo 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
-                    echo '$("#samplesize\\\['.$i.'\\\]").width('.$sizeOfInput.');';
+            if (isset($listAnswersInfo)) {
+                if (count($listAnswersInfo["tabweighting"]) > 0) {
+                    foreach ($listAnswersInfo["tabweighting"] as $i => $weighting) {
+                        echo 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
+                    }
+                    foreach ($listAnswersInfo["tabinputsize"] as $i => $sizeOfInput) {
+                        echo 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
+                        echo '$("#samplesize\\\['.$i.'\\\]").width('.$sizeOfInput.');';
+                    }
                 }
             }
             echo '}
@@ -390,6 +391,7 @@ class FillBlanks extends Question
 
         $this -> save();
         $objAnswer = new answer($this->id);
+
         $objAnswer->createAnswer($answer, 0, '', 0, 1);
         $objAnswer->save();
     }
@@ -464,7 +466,7 @@ class FillBlanks extends Question
         }
         return $result;
     }
-    
+
 
     /**
      * Return an array with the different choices available when the answers between bracket show as a menu
@@ -620,7 +622,11 @@ class FillBlanks extends Question
         $blankCharEndForRegexp = self::escapeForRegexp($blankCharEnd);
 
         // get all blanks words
-        $listAnswerResults['wordsCount'] = preg_match_all('/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/', $listDoubleColon[0], $listWords);
+        $listAnswerResults['wordsCount'] = preg_match_all(
+            '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
+            $listDoubleColon[0],
+            $listWords
+        );
         if ($listAnswerResults['wordsCount'] > 0) {
             $listAnswerResults['tabwordsbracket'] = $listWords[0];
             // remove [ and ] in string
@@ -784,7 +790,7 @@ class FillBlanks extends Question
      * @param $endSeparator
      * @return int
      */
-    public function getDefaultSeparatorNumber($startSeparator, $endSeparator) 
+    public function getDefaultSeparatorNumber($startSeparator, $endSeparator)
     {
         $listSeparators = self::getAllowedSeparator();
         $result = 0;
@@ -816,18 +822,17 @@ class FillBlanks extends Question
             }
         }
 
-
         // rebuild the sentence with student answer inserted
         for ($i=0; $i < count($listStudentAnswerInfo['commonwords']); $i++) {
-            $result .= $listStudentAnswerInfo['commonwords'][$i];
-            $result .= $listStudentAnswerInfo['studentanswer'][$i];
+            $result .= isset($listStudentAnswerInfo['commonwords'][$i]) ? $listStudentAnswerInfo['commonwords'][$i] : '';
+            $result .= isset($listStudentAnswerInfo['studentanswer'][$i]) ? $listStudentAnswerInfo['studentanswer'][$i] : '';
         }
 
         // the last common word (should be </p>)
-        $result .= $listStudentAnswerInfo['commonwords'][$i];
+        $result .= isset($listStudentAnswerInfo['commonwords'][$i]) ? $listStudentAnswerInfo['commonwords'][$i] : '';
+
         return $result;
     }
-
 
     /**
      * return the HTML code of answer for correct and wrong answer

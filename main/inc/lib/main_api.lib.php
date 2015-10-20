@@ -3097,7 +3097,11 @@ function api_not_allowed($print_headers = false, $message = null)
             exit;
         }
         if (!is_null(api_get_course_id())) {
-            api_set_firstpage_parameter(api_get_course_id());
+            $firstpage = api_get_course_id();
+            if (!empty($_REQUEST['id_session'])) {
+                $firstpage .= '/'.intval($_REQUEST['id_session']);
+            }
+            api_set_firstpage_parameter($firstpage);
         }
 
         // If the user has no user ID, then his session has expired
@@ -3141,7 +3145,11 @@ function api_not_allowed($print_headers = false, $message = null)
     // The session is over and we were not in a course,
     // or we try to get directly to a private course without being logged
     if (!is_null(api_get_course_int_id())) {
-        api_set_firstpage_parameter(api_get_course_id());
+        $firstpage = api_get_course_id();
+        if (!is_null(api_get_session_id())) {
+            $firstpage .= '/' . api_get_session_id();
+        }
+        api_set_firstpage_parameter($firstpage);
         $tpl->setLoginBodyClass();
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
         $action = str_replace('&amp;', '&', $action);

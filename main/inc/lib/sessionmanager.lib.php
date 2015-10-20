@@ -2068,7 +2068,7 @@ class SessionManager
                 FROM $tbl_session_rel_user
                 WHERE
                     id_session = $sessionId AND
-                    relation_type<>" . SESSION_RELATION_TYPE_RRHH . "";
+                    relation_type<>" . SESSION_RELATION_TYPE_RRHH;
         $result = Database::query($sql);
         $user_list = Database::store_result($result);
 
@@ -3763,6 +3763,9 @@ class SessionManager
      * @param bool $updateCourseCoaches
      * @param bool $sessionWithCoursesModifier
      * @param int $showDescription
+     * @param array $teacherBackupList
+     * @param array $groupBackup
+     *
      * @return array
      */
     static function importCSV(
@@ -3781,7 +3784,9 @@ class SessionManager
         $sessionWithCoursesModifier = false,
         $addOriginalCourseTeachersAsCourseSessionCoaches = true,
         $removeAllTeachersFromCourse = true,
-        $showDescription = null
+        $showDescription = null,
+        &$teacherBackupList = array(),
+        &$groupBackup = array()
     ) {
         $content = file($file);
 
@@ -4179,8 +4184,7 @@ class SessionManager
                                 SET course_code = '$course_code', id_session='$session_id'";
                         Database::query($sql);
 
-                        $course_info = api_get_course_info($course_code);
-                        SessionManager::installCourse($session_id, $course_info['real_id']);
+                        SessionManager::installCourse($session_id, $courseInfo['real_id']);
 
                         if ($debug) {
                             $logger->addInfo("Sessions - Adding course '$course_code' to session #$session_id");
@@ -4259,7 +4263,6 @@ class SessionManager
                             $teacherToAdd = null;
                             // Only one coach is added.
                             if ($onlyAddFirstCoachOrTeacher == true) {
-
                                 foreach ($course_coaches as $course_coach) {
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {
@@ -4273,6 +4276,39 @@ class SessionManager
                                 if (!empty($teacherList)) {
                                     foreach ($teacherList as $teacher) {
                                         if ($teacherToAdd != $teacher['user_id']) {
+
+                                            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                                                    WHERE
+                                                        user_id = ".$teacher['user_id']." AND
+                                                        course_code = '".$course_code."'
+                                                    ";
+
+                                            $result = Database::query($sql);
+                                            $userCourseData = Database::fetch_array($result, 'ASSOC');
+                                            $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+
+                                            $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
+                                                    WHERE
+                                                        user_id = ".$teacher['user_id']." AND
+                                                        c_id = '".$courseInfo['real_id']."'
+                                                    ";
+
+                                            $result = Database::query($sql);
+                                            while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                $groupBackup['user'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
+                                            }
+
+                                            $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
+                                                    WHERE
+                                                        user_id = ".$teacher['user_id']." AND
+                                                        c_id = '".$courseInfo['real_id']."'
+                                                    ";
+
+                                            $result = Database::query($sql);
+                                            while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                $groupBackup['tutor'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
+                                            }
+
                                             CourseManager::unsubscribe_user(
                                                 $teacher['user_id'],
                                                 $course_code
@@ -4283,11 +4319,48 @@ class SessionManager
 
                                 if (!empty($teacherToAdd)) {
                                     SessionManager::updateCoaches($session_id, $course_code, array($teacherToAdd), true);
+
+                                    $userCourseCategory = '';
+                                    if (isset($teacherBackupList[$teacherToAdd]) &&
+                                        isset($teacherBackupList[$teacherToAdd][$course_code])
+                                    ) {
+                                        $courseUserData = $teacherBackupList[$teacherToAdd][$course_code];
+                                        $userCourseCategory = $courseUserData['user_course_cat'];
+                                    }
+
                                     CourseManager::subscribe_user(
                                         $teacherToAdd,
                                         $course_code,
-                                        COURSEMANAGER
+                                        COURSEMANAGER,
+                                        0,
+                                        $userCourseCategory
                                     );
+
+                                    if (isset($groupBackup['user'][$teacherToAdd]) &&
+                                        isset($groupBackup['user'][$teacherToAdd][$course_code]) &&
+                                        !empty($groupBackup['user'][$teacherToAdd][$course_code])
+                                    ) {
+                                        foreach ($groupBackup['user'][$teacherToAdd][$course_code] as $data) {
+                                            GroupManager::subscribe_users(
+                                                $teacherToAdd,
+                                                $data['group_id'],
+                                                $data['c_id']
+                                            );
+                                        }
+                                    }
+
+                                    if (isset($groupBackup['tutor'][$teacherToAdd]) &&
+                                        isset($groupBackup['tutor'][$teacherToAdd][$course_code]) &&
+                                        !empty($groupBackup['tutor'][$teacherToAdd][$course_code])
+                                    ) {
+                                        foreach ($groupBackup['tutor'][$teacherToAdd][$course_code] as $data) {
+                                            GroupManager::subscribe_tutors(
+                                                $teacherToAdd,
+                                                $data['group_id'],
+                                                $data['c_id']
+                                            );
+                                        }
+                                    }
                                 }
                             }
 
@@ -4307,10 +4380,41 @@ class SessionManager
                                 if (!empty($teacherToAdd)) {
                                     // Deleting all course teachers and adding the only coach as teacher.
                                     $teacherList = CourseManager::get_teacher_list_from_course_code($course_code);
-
                                     if (!empty($teacherList)) {
                                         foreach ($teacherList as $teacher) {
                                             if (!in_array($teacher['user_id'], $teacherToAdd)) {
+                                                $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                                                        WHERE
+                                                            user_id = ".$teacher['user_id']." AND
+                                                            course_code = '".$course_code."'
+                                                        ";
+
+                                                $result = Database::query($sql);
+                                                $userCourseData = Database::fetch_array($result, 'ASSOC');
+                                                $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
+
+                                                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
+                                                    WHERE
+                                                        user_id = ".$teacher['user_id']." AND
+                                                        c_id = '".$courseInfo['real_id']."'
+                                                    ";
+
+                                                $result = Database::query($sql);
+                                                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                    $groupBackup['user'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
+                                                }
+
+                                                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
+                                                        WHERE
+                                                            user_id = ".$teacher['user_id']." AND
+                                                            c_id = '".$courseInfo['real_id']."'
+                                                        ";
+
+                                                $result = Database::query($sql);
+                                                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                    $groupBackup['tutor'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
+                                                }
+
                                                 CourseManager::unsubscribe_user(
                                                     $teacher['user_id'],
                                                     $course_code
@@ -4320,11 +4424,46 @@ class SessionManager
                                     }
 
                                     foreach ($teacherToAdd as $teacherId) {
+                                        $userCourseCategory = '';
+                                        if (isset($teacherBackupList[$teacherId]) &&
+                                            isset($teacherBackupList[$teacherId][$course_code])
+                                        ) {
+                                            $courseUserData = $teacherBackupList[$teacherId][$course_code];
+                                            $userCourseCategory = $courseUserData['user_course_cat'];
+                                        }
                                         CourseManager::subscribe_user(
                                             $teacherId,
                                             $course_code,
-                                            COURSEMANAGER
+                                            COURSEMANAGER,
+                                            0,
+                                            $userCourseCategory
                                         );
+
+                                        if (isset($groupBackup['user'][$teacherId]) &&
+                                            isset($groupBackup['user'][$teacherId][$course_code]) &&
+                                            !empty($groupBackup['user'][$teacherId][$course_code])
+                                        ) {
+                                            foreach ($groupBackup['user'][$teacherId][$course_code] as $data) {
+                                                GroupManager::subscribe_users(
+                                                    $teacherId,
+                                                    $data['group_id'],
+                                                    $data['c_id']
+                                                );
+                                            }
+                                        }
+
+                                        if (isset($groupBackup['tutor'][$teacherId]) &&
+                                            isset($groupBackup['tutor'][$teacherId][$course_code]) &&
+                                            !empty($groupBackup['tutor'][$teacherId][$course_code])
+                                        ) {
+                                            foreach ($groupBackup['tutor'][$teacherId][$course_code] as $data) {
+                                                GroupManager::subscribe_tutors(
+                                                    $teacherId,
+                                                    $data['group_id'],
+                                                    $data['c_id']
+                                                );
+                                            }
+                                        }
                                     }
                                 }
                             }

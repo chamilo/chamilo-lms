@@ -64,13 +64,13 @@ if (is_object($objQuestion)) {
 		// redirect
 		if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {
 			if(isset($_GET['editQuestion'])) {
-				echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&message=ItemUpdated"</script>';
+				echo '<script type="text/javascript">window.location.href="admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&message=ItemUpdated"</script>';
 			} else {
 				//New question
-				echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&message=ItemAdded"</script>';
+				echo '<script type="text/javascript">window.location.href="admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&message=ItemAdded"</script>';
 			}
 		} else {
-			echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'"</script>';
+			echo '<script type="text/javascript">window.location.href="admin.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'"</script>';
 		}
 	} else {
 		if (isset($questionName)) {

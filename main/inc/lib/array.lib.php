@@ -141,3 +141,37 @@ function array_to_string($array, $separator = ',')
 
     return implode($separator.' ', $array);
 }
+
+/**
+ * @param array $array
+ * @return array
+ */
+function array_flatten(array $array)
+{
+    $flatten = array();
+    array_walk_recursive(
+        $array,
+        function ($value) use (&$flatten) {
+            $flatten[] = $value;
+        }
+    );
+
+    return $flatten;
+}
+
+/**
+ * Shuffles an array keeping the associations
+ * @param $array
+ * @return bool
+ */
+function shuffle_assoc(&$array)
+{
+    $keys = array_keys($array);
+    shuffle($keys);
+    $new = array();
+    foreach ($keys as $key) {
+        $new[$key] = $array[$key];
+    }
+    $array = $new;
+    return true;
+}

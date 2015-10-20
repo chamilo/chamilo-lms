@@ -1717,3 +1717,27 @@ function portal_homepage_edited_event_send_mail_filter_func(&$values) {
 }
 
 /*  End of filters   */
+
+
+
+/**
+ * Gets the last attempt of an exercise based in the exe_id
+ * @param int $exe_id
+ * @return mixed
+ */
+function getLatestQuestionIdFromAttempt($exe_id)
+{
+    $exe_id = intval($exe_id);
+    $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $sql = 'SELECT question_id FROM '.$track_attempts.'
+            WHERE exe_id='.$exe_id.'
+            ORDER BY tms DESC
+            LIMIT 1';
+    $result = Database::query($sql);
+    if (Database::num_rows($result)) {
+        $row = Database::fetch_array($result);
+        return $row['question_id'];
+    } else {
+        return false;
+    }
+}

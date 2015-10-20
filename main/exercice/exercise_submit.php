@@ -89,6 +89,7 @@ $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : 
 //From submit modal
 $current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 $currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
+$endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
 
 //Error message
 $error = '';
@@ -105,12 +106,15 @@ if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['previ
 
 // 1. Loading the $objExercise variable
 
-if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
+/** @var \Exercise $exerciseInSession */
+$exerciseInSession = Session::read('objExercise');
+
+if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
     // Construction of Exercise
     $objExercise = new Exercise();
     Session::write('firstTime', true);
     if ($debug) {error_log('1. Setting the $objExercise variable'); };
-    unset($_SESSION['questionList']);
+    Session::erase('questionList');
 
     // if the specified exercise doesn't exist or is disabled
     if (!$objExercise->read($exerciseId) ||
@@ -122,16 +126,16 @@ if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUES
     } else {
         // Saves the object into the session
         Session::write('objExercise', $objExercise);
-        if ($debug) {error_log('1.1. $_SESSION[objExercise] was unset - set now - end'); };
+        if ($debug) {error_log('1.1. $exerciseInSession was unset - set now - end'); };
     }
 } else {
     Session::write('firstTime', false);
 }
 
 //2. Checking if $objExercise is set
-if (!isset($objExercise) && isset($_SESSION['objExercise'])) {
+if (!isset($objExercise) && isset($exerciseInSession)) {
 	if ($debug) { error_log('2. Loading $objExercise from session'); };
-    $objExercise = $_SESSION['objExercise'];
+    $objExercise = $exerciseInSession;
 }
 
 //3. $objExercise is not set, then return to the exercise list
@@ -144,7 +148,7 @@ if (!is_object($objExercise)) {
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if ($remind_question_id == -1) {
-        header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId);
+        header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId.'&'.api_get_cidreq());
         exit;
     }
 }
@@ -246,14 +250,45 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
     $learnpath_item_view_id
 );
 
-$clock_expired_time = null;
+//if (1) {
+$questionListInSession = Session::read('questionList');
+if (!isset($questionListInSession)) {
+    // Selects the list of question ID
+    $questionList = $objExercise->getQuestionList();
 
+    // Media questions.
+    $media_is_activated = $objExercise->mediaIsActivated();
+
+    //Getting order from random
+    if ($media_is_activated == false &&
+        $objExercise->isRandom() &&
+        isset($exercise_stat_info) &&
+        !empty($exercise_stat_info['data_tracking'])
+    ) {
+        $questionList = explode(',', $exercise_stat_info['data_tracking']);
+    }
+    Session::write('questionList', $questionList);
+    if ($debug > 0) {
+        error_log('$_SESSION[questionList] was set');
+    }
+} else {
+    if (isset($objExercise) && isset($exerciseInSession)) {
+        $questionList = Session::read('questionList');
+    }
+}
+
+// Fix in order to get the correct question list.
+$questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed();
+
+Session::write('question_list_uncompressed', $questionListUncompressed);
+
+$clock_expired_time = null;
 
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
 	$questionList = $objExercise->get_validated_question_list();
-	foreach ($questionList as $question_id) {
+	foreach ($questionListUncompressed as $question_id) {
 		$objQuestionTmp = Question::read($question_id);
 		$total_weight += floatval($objQuestionTmp->weighting);
 	}
@@ -553,13 +588,16 @@ if ($formSent && isset($_POST)) {
     if ($debug) { error_log('9. $formSent was NOT sent'); }
 }
 
-// If questionNum comes from POST and not from GET
-if (!$current_question || isset($_REQUEST['num']) && $_REQUEST['num']) {
-    if (!$current_question) {
-        $current_question = 1;
-    } else {
-        $current_question++;
+// Getting the latest questionId
+$latestQuestionId = getLatestQuestionIdFromAttempt($exe_id);
+
+if (is_null($current_question)) {
+    $current_question = 1;
+    if ($latestQuestionId) {
+        $current_question = $objExercise->getPositionInCompressedQuestionList($latestQuestionId);
     }
+} else {
+    $current_question++;
 }
 
 if ($question_count != 0) {
@@ -638,6 +676,11 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
         Display :: display_warning_message(get_lang('SessionIsReadOnly'));
     }
 } else {
+    $htmlHeadXtra[] = "
+    <style>
+    body { background: none;}
+    </style>
+    ";
     Display::display_reduced_header();
     echo '<div style="height:10px">&nbsp;</div>';
 }

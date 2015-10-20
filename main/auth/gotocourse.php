@@ -15,10 +15,18 @@ $msg = null;
 if (isset($_GET['firstpage'])) {
     $firstpage = $_GET['firstpage'];
 
+    $course = '';
+    $session = '0';
+    if (preg_match('#/#', $firstpage)) {
+        list($course, $session) = preg_split('#/#', $firstpage);
+        $session = intval($session);
+    } else {
+        $course = $firstpage;
+    }
     // if course is public, go to course without auth
-    $tab_course_info = api_get_course_info($firstpage);
+    $tab_course_info = api_get_course_info($course);
 
-    api_set_firstpage_parameter($firstpage);
+    api_set_firstpage_parameter($course . '/' . $session);
 
     $tpl = new Template(null, 1, 1);
 

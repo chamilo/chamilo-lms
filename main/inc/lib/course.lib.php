@@ -5124,6 +5124,8 @@ class CourseManager
      * @param bool $deleteTeachersNotInList
      * @param bool $editTeacherInSessions
      * @param bool $deleteSessionTeacherNotInList
+     * @param array $teacherBackup
+     *
      * @return bool
      */
     public static function updateTeachers(
@@ -5131,7 +5133,8 @@ class CourseManager
         $teachers,
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
-        $deleteSessionTeacherNotInList = false
+        $deleteSessionTeacherNotInList = false,
+        $teacherBackup = array()
     ) {
         if (empty($teachers)) {
             return false;
@@ -5147,7 +5150,7 @@ class CourseManager
 
             // Delete only teacher relations that doesn't match the selected teachers
             $cond = null;
-            if (count($teachers)>0) {
+            if (count($teachers) > 0) {
                 foreach ($teachers as $key) {
                     $key = Database::escape_string($key);
                     $cond.= " AND user_id <> '".$key."'";
@@ -5155,7 +5158,11 @@ class CourseManager
             }
 
             $sql = 'DELETE FROM '.$course_user_table.'
-                    WHERE course_code="'.Database::escape_string($course_code).'" AND relation_type = 0  AND status="1"'.$cond;
+                    WHERE
+                        course_code = "'.Database::escape_string($course_code).'" AND
+                        relation_type = 0  AND
+                        status = "1"
+                    '.$cond;
             Database::query($sql);
         }
 
@@ -5164,12 +5171,23 @@ class CourseManager
                 $userId = intval($userId);
                 // We check if the teacher is already subscribed in this course
                 $sql = 'SELECT 1 FROM '.$course_user_table.'
-                        HERE user_id = "'.$userId.'" AND course_code = "'.$course_code.'" ';
+                        WHERE
+                            user_id = "'.$userId.'" AND
+                            course_code = "'.$course_code.'" ';
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
-                    $sql = 'UPDATE '.$course_user_table.' SET status = "1"
+                    $sql = 'UPDATE '.$course_user_table.'
+                            SET status = "1"
                             WHERE course_code = "'.$course_code.'" AND user_id = "'.$userId.'"  ';
                 } else {
+                    $userCourseCategory = '0';
+                    if (isset($teacherBackup[$userId]) &&
+                        isset($teacherBackup[$userId][$course_code])
+                    ) {
+                        $courseUserData = $teacherBackup[$userId][$course_code];
+                        $userCourseCategory = $courseUserData['user_course_cat'];
+                    }
+
                     $sql = "INSERT INTO ".$course_user_table . " SET
                         course_code = '".Database::escape_string($course_code). "',
                         user_id = '".$userId."',
@@ -5178,7 +5196,8 @@ class CourseManager
                         tutor_id = '0',
                         sort = '0',
                         relation_type = '0',
-                        user_course_cat='0'";
+                        user_course_cat = '$userCourseCategory'
+                    ";
                 }
                 Database::query($sql);
             }

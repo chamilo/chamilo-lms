@@ -371,7 +371,6 @@ if ($isAdmin) {
     }
 }
 
-
 if ($isAdmin) {
     $table->set_header(0, $plugin->get_lang('TicketNum'), true);
     $table->set_header(1, $plugin->get_lang('Date'), true);

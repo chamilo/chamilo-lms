@@ -278,7 +278,7 @@ if ($session['nbr_courses'] == 0) {
         $orderBy = "ORDER BY position";
     }
 
-	$sql = "SELECT code,title,visual_code, nbr_users
+	$sql = "SELECT code,title,visual_code, nbr_users, directory
 			FROM $tbl_course, $tbl_session_rel_course
 			WHERE
 			    course_code = code AND
@@ -364,11 +364,11 @@ if ($session['nbr_courses'] == 0) {
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 		echo '
 		<tr>
-			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$sessionId),'</td>
+			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session='.$sessionId),'</td>
 			<td>'.$coach.'</td>
 			<td>'.$course['nbr_users'].'</td>
 			<td>
-                <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$sessionId.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>
+                <a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session='.$sessionId.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>
                 '.$orderButtons.'
                 <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course['code'].'">'.Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
                 <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course['code'].'&id_session='.$sessionId.'">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>

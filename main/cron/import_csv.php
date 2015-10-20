@@ -79,6 +79,10 @@ class ImportCsv
      */
     public function run()
     {
+        /*
+        global $_configuration;
+        $_configuration['access_url'] = 2;
+        */
         $path = api_get_path(SYS_CODE_PATH).'cron/incoming/';
         if (!is_dir($path)) {
             echo "The folder! $path does not exits";
@@ -95,6 +99,8 @@ class ImportCsv
         $files = scandir($path);
         $fileToProcess = array();
         $fileToProcessStatic = array();
+        $teacherBackup = array();
+        $groupBackup = array();
 
         if (!empty($files)) {
             foreach ($files as $file) {
@@ -105,8 +111,11 @@ class ImportCsv
                     $preMethod = ucwords($parts[1]);
                     $preMethod = str_replace('-static', 'Static', $preMethod);
                     $method = 'import'.$preMethod;
-
                     $isStatic = strpos($method, 'Static');
+
+                    if ($method == 'importSessionsextidStatic') {
+                        $method = 'importSessionsExtIdStatic';
+                    }
 
                     if (method_exists($this, $method)) {
                         if (($method == 'importUnsubscribeStatic' ||
@@ -162,7 +171,11 @@ class ImportCsv
 
                         echo 'File: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
-                        $this->$method($file, true);
+                        if ($method == 'importSessions') {
+                            $this->$method($file, true, $teacherBackup, $groupBackup);
+                        } else {
+                            $this->$method($file, true);
+                        }
                     }
                 }
             }
@@ -172,6 +185,7 @@ class ImportCsv
                 'teachers-static',
                 'courses-static',
                 'sessions-static',
+                'sessionsextid-static',
                 'calendar-static',
             );
 
@@ -187,7 +201,7 @@ class ImportCsv
                         $file = $fileInfo['file'];
                         echo 'Static file: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading static file: $file");
-                        $this->$method($file, true);
+                        $this->$method($file, true, $teacherBackup, $groupBackup);
                     }
                 }
             }
@@ -447,7 +461,6 @@ class ImportCsv
         }
     }
 
-
     /**
      * @param string $file
      */
@@ -468,10 +481,13 @@ class ImportCsv
          * Another users import.
         Unique identifier: official code and username . ok
         Password should never get updated. ok
-        If an update should need to occur (because it changed in the .csv), we’ll want that logged. We will handle this manually in that case.
+        If an update should need to occur (because it changed in the .csv),
+        we’ll want that logged. We will handle this manually in that case.
         All other fields should be updateable, though passwords should of course not get updated. ok
         If a user gets deleted (not there anymore),
-        He should be set inactive one year after the current date. So I presume you’ll just update the expiration date. We want to grant access to courses up to a year after deletion.
+        He should be set inactive one year after the current date.
+        So I presume you’ll just update the expiration date.
+        We want to grant access to courses up to a year after deletion.
          */
 
         if (!empty($data)) {
@@ -636,9 +652,9 @@ class ImportCsv
     /**
      * @param string $file
      */
-    private function importCoursesStatic($file)
+    private function importCoursesStatic($file, $moveFile, &$teacherBackup = array(), &$groupBackup = array())
     {
-        $this->importCourses($file, false);
+        $this->importCourses($file, false, $teacherBackup, $groupBackup);
     }
 
     /**
@@ -930,8 +946,10 @@ class ImportCsv
     /**
      * @param string $file
      * @param bool $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
      */
-    private function importCourses($file, $moveFile = true)
+    private function importCourses($file, $moveFile = true, &$teacherBackup = array(), &$groupBackup = array())
     {
         $data = Import::csv_to_array($file);
 
@@ -985,10 +1003,56 @@ class ImportCsv
 
                     $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
 
+                    $teachers = $row['teachers'];
+                    if (!is_array($teachers)) {
+                        $teachers = array($teachers);
+                    }
+
                     if ($addTeacherToSession) {
-                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false);
+                        CourseManager::updateTeachers(
+                            $courseInfo['id'],
+                            $row['teachers'],
+                            false,
+                            true,
+                            false,
+                            $teacherBackup
+                        );
                     } else {
-                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, false);
+                        CourseManager::updateTeachers(
+                            $courseInfo['id'],
+                            $row['teachers'],
+                            false,
+                            false,
+                            false,
+                            $teacherBackup
+                        );
+                    }
+
+                    foreach ($teachers as $teacherId) {
+                        if (isset($groupBackup['tutor'][$teacherId]) &&
+                            isset($groupBackup['tutor'][$teacherId][$courseInfo['code']])
+                        ) {
+                            foreach ($groupBackup['tutor'][$teacherId][$courseInfo['code']] as $data) {
+                                GroupManager::subscribe_tutors(
+                                    array($teacherId),
+                                    $data['group_id'],
+                                    $data['c_id']
+                                );
+                            }
+                        }
+
+                        if (isset($groupBackup['user'][$teacherId]) &&
+                            isset($groupBackup['user'][$teacherId][$courseInfo['code']]) &&
+                            !empty($groupBackup['user'][$teacherId][$courseInfo['code']])
+                        ) {
+                            foreach ($groupBackup['user'][$teacherId][$courseInfo['code']] as $data) {
+                                GroupManager::subscribe_users(
+                                    array($teacherId),
+                                    $data['group_id'],
+                                    $data['c_id']
+                                );
+                            }
+                        }
                     }
 
                     if ($result) {
@@ -1002,6 +1066,76 @@ class ImportCsv
 
         if ($moveFile) {
             $this->moveFile($file);
+        }
+    }
+
+    /**
+     *
+     * @param string $file
+     */
+    private function importSessionsExtIdStatic($file)
+    {
+        $data = Import::csv_reader($file);
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data) . " records found.");
+            foreach ($data as $row) {
+                $chamiloUserName = $row['UserName'];
+                $chamiloCourseCode = $row['CourseCode'];
+                $externalSessionId = $row['ExtSessionID'];
+                $type = $row['Type'];
+
+                $chamiloSessionId = null;
+                if (!empty($externalSessionId)) {
+                    $chamiloSessionId = SessionManager::get_session_id_from_original_id(
+                        $externalSessionId,
+                        $this->extraFieldIdNameList['session']
+                    );
+                }
+
+                $sessionInfo = api_get_session_info($chamiloSessionId);
+
+                if (empty($sessionInfo)) {
+                    $this->logger->addError('Session does not exists: '.$chamiloSessionId);
+                    continue;
+                }
+
+                $courseInfo = api_get_course_info($chamiloCourseCode);
+                if (empty($courseInfo)) {
+                    $this->logger->addError('Course does not exists: '.$courseInfo);
+                    continue;
+                }
+
+                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+
+                if (empty($userId)) {
+                    $this->logger->addError('User does not exists: '.$chamiloUserName);
+                    continue;
+                }
+                $status = null;
+                switch ($type) {
+                    case 'student':
+                        SessionManager::subscribe_users_to_session_course(
+                            array($userId),
+                            $chamiloSessionId,
+                            $courseInfo['code'],
+                            null,
+                            false
+                        );
+                        break;
+                    case 'teacher':
+                        SessionManager::set_coach_to_course_session(
+                            $userId,
+                            $chamiloSessionId,
+                            $courseInfo['code']
+                        );
+                        break;
+                }
+
+                $this->logger->addError(
+                    "User '$chamiloUserName' with status $type was added to session: #$chamiloSessionId - Course: " . $courseInfo['code']
+                );
+            }
         }
     }
 
@@ -1152,7 +1286,6 @@ class ImportCsv
                     }
 
                     // Courses
-
                     $courses = explode('|', $session['Courses']);
                     $courseList = array();
                     foreach ($courses as $course) {
@@ -1237,8 +1370,10 @@ class ImportCsv
     /**
      * @param string $file
      * @param bool   $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
      */
-    private function importSessions($file, $moveFile = true)
+    private function importSessions($file, $moveFile = true, &$teacherBackup = array(), &$groupBackup = array())
     {
         $avoid =  null;
         if (isset($this->conditions['importSessions']) &&
@@ -1262,7 +1397,9 @@ class ImportCsv
             true, // sessionWithCoursesModifier
             true, //$addOriginalCourseTeachersAsCourseSessionCoaches
             true, //$removeAllTeachersFromCourse
-            1 // $showDescription
+            1, // $showDescription,
+            $teacherBackup,
+            $groupBackup
         );
 
         if (!empty($result['error_message'])) {
@@ -1339,7 +1476,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    private function importUnsubscribeStatic($file)
+    private function importUnsubscribeStatic($file, $moveFile = false, &$teacherBackup = array(), &$groupBackup = array())
     {
         $data = Import::csv_reader($file);
 
@@ -1370,7 +1507,43 @@ class ImportCsv
                     continue;
                 }
 
-                CourseManager::unsubscribe_user($userId, $courseInfo['code'], $chamiloSessionId);
+                $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                        WHERE
+                            user_id = ".$userId." AND
+                            course_code = '".$courseInfo['code']."'
+                        ";
+
+                $result = Database::query($sql);
+                $userCourseData = Database::fetch_array($result, 'ASSOC');
+                $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
+
+                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
+                        WHERE
+                            user_id = ".$userId." AND
+                            c_id = '".$courseInfo['real_id']."'
+                        ";
+
+                $result = Database::query($sql);
+                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                    $groupBackup['user'][$userId][$courseInfo['code']][$groupData['group_id']] = $groupData;
+                }
+
+                $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
+                        WHERE
+                            user_id = ".$userId." AND
+                            c_id = '".$courseInfo['real_id']."'
+                        ";
+
+                $result = Database::query($sql);
+                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                    $groupBackup['tutor'][$userId][$courseInfo['code']][$groupData['group_id']] = $groupData;
+                }
+
+                CourseManager::unsubscribe_user(
+                    $userId,
+                    $courseInfo['code'],
+                    $chamiloSessionId
+                );
                 $this->logger->addError(
                     "User '$chamiloUserName' was removed from session: #$chamiloSessionId, Course: ".$courseInfo['code']
                 );
@@ -1393,76 +1566,29 @@ class ImportCsv
         Database::query($sql);
         echo $sql.PHP_EOL;
 
-        // Course
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        // Sessions
-        $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        // Extra fields
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        // Remove all calendar items
+        // Truncate tables
         $truncateTables = array(
+            Database::get_main_table(TABLE_MAIN_COURSE),
+            Database::get_main_table(TABLE_MAIN_COURSE_USER),
+            Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE),
+            Database::get_main_table(TABLE_MAIN_CATEGORY),
+            Database::get_main_table(TABLE_MAIN_COURSE_MODULE),
+            Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER),
+            Database::get_main_table(TABLE_MAIN_SESSION),
+            Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY),
+            Database::get_main_table(TABLE_MAIN_SESSION_COURSE),
+            Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER),
+            Database::get_main_table(TABLE_MAIN_SESSION_USER),
+            Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION),
+            Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES),
+            Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES),
+            Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES),
+            Database::get_main_table(TABLE_MAIN_USER_FIELD),
+            Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS),
+            Database::get_main_table(TABLE_MAIN_COURSE_FIELD),
+            Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES),
+            Database::get_main_table(TABLE_MAIN_SESSION_FIELD),
+            Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES),
             Database::get_course_table(TABLE_AGENDA),
             Database::get_course_table(TABLE_AGENDA_ATTACHMENT),
             Database::get_course_table(TABLE_AGENDA_REPEAT),
@@ -1471,8 +1597,62 @@ class ImportCsv
             Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT_NOT),
             Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT),
             Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_VALUES),
-            Database::get_main_table(TABLE_TOOL_LIST),
-            Database::get_main_table(TABLE_TOOL_INTRO),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_UPLOADS),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY),
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE),
+            Database::get_course_table(TABLE_STUDENT_PUBLICATION),
+            Database::get_course_table(TABLE_QUIZ_QUESTION),
+            Database::get_course_table(TABLE_QUIZ_TEST),
+            Database::get_course_table(TABLE_QUIZ_ORDER),
+            Database::get_course_table(TABLE_QUIZ_ANSWER),
+            Database::get_course_table(TABLE_QUIZ_TEST_QUESTION),
+            Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION),
+            Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY),
+            Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY),
+            Database::get_course_table(TABLE_LP_MAIN),
+            Database::get_course_table(TABLE_LP_ITEM),
+            Database::get_course_table(TABLE_LP_VIEW),
+            Database::get_course_table(TABLE_LP_ITEM_VIEW),
+            Database::get_course_table(TABLE_DOCUMENT),
+            Database::get_course_table(TABLE_ITEM_PROPERTY),
+            Database::get_course_table(TABLE_TOOL_LIST),
+            Database::get_course_table(TABLE_TOOL_INTRO),
+            Database::get_course_table(TABLE_COURSE_SETTING),
+            Database::get_course_table(TABLE_SURVEY),
+            Database::get_course_table(TABLE_SURVEY_QUESTION),
+            Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION),
+            Database::get_course_table(TABLE_SURVEY_INVITATION),
+            Database::get_course_table(TABLE_SURVEY_ANSWER),
+            Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP),
+            Database::get_course_table(TABLE_SURVEY_REPORT),
+            Database::get_course_table(TABLE_GLOSSARY),
+            Database::get_course_table(TABLE_LINK),
+            Database::get_course_table(TABLE_LINK_CATEGORY),
+            Database::get_course_table(TABLE_GROUP),
+            Database::get_course_table(TABLE_GROUP_USER),
+            Database::get_course_table(TABLE_GROUP_TUTOR),
+            Database::get_course_table(TABLE_GROUP_CATEGORY),
+            Database::get_course_table(TABLE_DROPBOX_CATEGORY),
+            Database::get_course_table(TABLE_DROPBOX_FEEDBACK),
+            Database::get_course_table(TABLE_DROPBOX_POST),
+            Database::get_course_table(TABLE_DROPBOX_FILE),
+            Database::get_course_table(TABLE_DROPBOX_PERSON)
         );
 
         foreach ($truncateTables as $table) {
@@ -1480,11 +1660,6 @@ class ImportCsv
             Database::query($sql);
             echo $sql.PHP_EOL;
         }
-
-        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $sql = "DELETE FROM $table WHERE tool = 'calendar_event'";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
     }
 }
 

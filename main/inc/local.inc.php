@@ -940,6 +940,10 @@ if (isset($cidReset) && $cidReset) {
         // Moreover, if we want to track a course with another session it can be usefull
         if (!empty($_GET['id_session']) && is_numeric($_GET['id_session'])) {
             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+            $session = 0;
+            if (!empty($_SESSION['id_session'])) {
+                $session = intval($_SESSION['id_session']);
+            }
             $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
             $rs = Database::query($sql);
             list($_SESSION['session_name']) = Database::fetch_array($rs);
@@ -1356,21 +1360,39 @@ if (isset($_cid)) {
 if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
     ($logging_in && exist_firstpage_parameter())
 ) {
+    $course = '';
+    $session = '0';
     $redirectCourseDir = api_get_firstpage_parameter();
+    if (preg_match('#/#',$redirectCourseDir)) {
+        list($course, $session) = preg_split('#/#', $redirectCourseDir);
+        $session = intval($session);
+    } else {
+        $course = $redirectCourseDir;
+    }
     api_delete_firstpage_parameter();    // delete the cookie
 
     if (!isset($_SESSION['request_uri'])) {
-        if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
+        $courseInfo = api_get_course_info($course);
+        if ($courseInfo) {
             $_SESSION['noredirection'] = false;
-            $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $redirectCourseDir;
+            $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $courseInfo['directory'] . '?id_session=' . $session;
         }
     }
 } elseif (api_user_is_login() && exist_firstpage_parameter()) {
+    $course = '';
+    $session = '0';
     $redirectCourseDir = api_get_firstpage_parameter();
+    if (preg_match('#/#',$redirectCourseDir)) {
+        list($course, $session) = preg_split('#/#', $redirectCourseDir);
+        $session = intval($session);
+    } else {
+        $course = $redirectCourseDir;
+    }
     api_delete_firstpage_parameter(); // delete the cookie
-    if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
+    $courseInfo = api_get_course_info($course);
+    if (is_array($courseInfo)) {
         $_SESSION['noredirection'] = false;
-        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $redirectCourseDir;
+        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $courseInfo['directory'] . '?id_session=' . $session;
     }
 }
 

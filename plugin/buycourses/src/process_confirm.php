@@ -130,6 +130,7 @@ if ($_POST['payment_type'] == "PayPal") {
 
 if ($_POST['payment_type'] == "Transfer") {
     $_cid = 0;
+    $plugin = BuyCoursesPlugin::create();
     $templateName = $plugin->get_lang('PaymentMethods');
     $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 

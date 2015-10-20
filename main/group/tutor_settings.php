@@ -176,14 +176,16 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     // Storing the tutors (we first remove all the tutors and then add only those who were selected)
-    GroupManager :: unsubscribe_all_tutors($current_group['id']);
+    GroupManager::unsubscribe_all_tutors($current_group['id']);
     if (isset ($_POST['group_tutors']) && count($_POST['group_tutors']) > 0) {
-        GroupManager :: subscribe_tutors($values['group_tutors'], $current_group['id']);
+        GroupManager::subscribe_tutors($values['group_tutors'], $current_group['id']);
     }
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
     $cat = GroupManager::get_category_from_group($current_group['id']);
-    if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+    if (isset($_POST['group_members']) &&
+        count($_POST['group_members']) > $max_member && $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT
+    ) {
         header('Location: group.php?'.api_get_cidreq(true, false).'&action=warning_message&msg='.get_lang('GroupTooMuchMembers'));
     } else {
         header('Location: group.php?'.api_get_cidreq(true, false).'&action=success_message&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);

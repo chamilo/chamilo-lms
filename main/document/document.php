@@ -1840,6 +1840,16 @@ if (api_is_allowed_to_edit(null, true)) {
         api_get_path(WEB_CODE_PATH).'document/document_quota.php?'.api_get_cidreq()
     );
 }
+
+if (api_is_platform_admin()) {
+    if (api_get_configuration_value('document_manage_deleted_files')) {
+        $actions .= Display::url(
+            get_lang('Recycle'),
+            api_get_path(WEB_CODE_PATH).'document/recycle.php?'.api_get_cidreq(),
+            array('class' => 'btn btn-default')
+        );
+    }
+}
 $actions .= '</div>';
 
 if (!empty($moveTo)) {

@@ -37,7 +37,18 @@ if (isset($_SESSION['objExercise'])) {
     Session::erase('objExercise');
 }
 
+$sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
+
 $session_info = SessionManager::fetch($session_id);
+
+if ($sessionTitleLink == 2 && $session_info['nbr_courses'] == 1) {
+    $courses = SessionManager::get_course_list_by_session_id($session_id);
+    $aloneCourse = array_shift($courses);
+
+    header('Location: ' . api_get_path(WEB_COURSE_PATH) . $aloneCourse['directory'] . '/?id_session=' . $session_id);
+    exit;
+}
+
 $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 

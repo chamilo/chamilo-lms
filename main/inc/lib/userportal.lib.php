@@ -384,6 +384,9 @@ class IndexManager
                 case 'unrecognize_sso_origin':
                     //$message = get_lang('SSOError');
                     break;
+                case 'user_doesnt_exist':
+                    $message = get_lang("UserDoesntExist");
+                    break;
             }
         }
         return Display::return_message($message, 'error');
@@ -1120,7 +1123,10 @@ class IndexManager
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
                             $extra_info .= isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
 
-                            if (api_is_drh()) {
+                            $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
+                            $sessionTitleLink = $sessionTitleLink === false ? 1 : $sessionTitleLink;
+
+                            if (api_is_drh() || !$sessionTitleLink) {
                                 $session_link = $session_box['title'];
                                 $params['link'] = null;
                             } else {

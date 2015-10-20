@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* This file displays the user's profile,
-* optionally it allows users to modify their profile as well.
-*
-* See inc/conf/profile.conf.php to modify settings
-*
-* @package chamilo.auth
-*/
+ * This file displays the user's profile,
+ * optionally it allows users to modify their profile as well.
+ *
+ * See inc/conf/profile.conf.php to modify settings
+ *
+ * @package chamilo.auth
+ */
 
 // Language files that should be included.
 $language_file = array('registration', 'messages', 'userInfo');
@@ -93,7 +93,7 @@ if (api_get_setting('allow_message_tool') == 'true') {
 EOF;
 }
 
-//    Configuration file
+// Configuration file
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
 // Libraries
@@ -103,7 +103,7 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 $tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
-/*    Form    */
+/* Form */
 
 /*
  * Get initial values for all fields.
@@ -129,7 +129,7 @@ if ($user_data !== false) {
 $form = new FormValidator('profile', 'post', api_get_self()."?".str_replace('&fe=1', '', $_SERVER['QUERY_STRING']), null, array('style' => 'width: 70%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
 
 if (api_is_western_name_order()) {
-    //    FIRST NAME and LAST NAME
+    // FIRST NAME and LAST NAME
     $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
     $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
 } else {
@@ -137,7 +137,8 @@ if (api_is_western_name_order()) {
     $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
     $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
 }
-if (api_get_setting('profile', 'name') !== 'true') {
+
+if (api_get_setting('profile', 'name') !== 'true' && (!isset($_SESSION['forceUpdateProfile']) || $_SESSION['forceUpdateProfile'] != 1)) {
     $form->freeze(array('lastname', 'firstname'));
 }
 $form->applyFilter(array('lastname', 'firstname'), 'stripslashes');
@@ -146,7 +147,7 @@ $form->applyFilter(array('lastname', 'firstname'), 'html_filter');
 $form->addRule('lastname' , get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
-//    USERNAME
+// USERNAME
 $form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'size' => USERNAME_MAX_LENGTH));
 if (api_get_setting('profile', 'login') !== 'true' || api_get_setting('login_is_email') == 'true') {
     $form->freeze('username');
@@ -157,7 +158,7 @@ $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('username', get_lang('UsernameWrong'), 'username');
 $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 
-//    OFFICIAL CODE
+// OFFICIAL CODE
 if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
     $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
     if (api_get_setting('profile', 'officialcode') !== 'true') {
@@ -171,9 +172,9 @@ if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
     }
 }
 
-//    EMAIL
+// EMAIL
 $form->addElement('email', 'email', get_lang('Email'), array('size' => 40));
-if (api_get_setting('profile', 'email') !== 'true') {
+if (api_get_setting('profile', 'email') !== 'true'  && (!isset($_SESSION['forceUpdateProfile']) || $_SESSION['forceUpdateProfile'] != 1)) {
     $form->freeze('email');
 }
 
@@ -191,12 +192,12 @@ if (is_profile_editable() && api_get_setting('openid_authentication') == 'true')
         $form->freeze('openid');
     }
     $form->applyFilter('openid', 'trim');
-    //if (api_get_setting('registration', 'openid') == 'true') {
+    // if (api_get_setting('registration', 'openid') == 'true') {
     //    $form->addRule('openid', get_lang('ThisFieldIsRequired'), 'required');
-    //}
+    // }
 }
 
-//    PHONE
+// PHONE
 $form->addElement('text', 'phone', get_lang('phone'), array('size' => 20));
 if (api_get_setting('profile', 'phone') !== 'true') {
     $form->freeze('phone');
@@ -204,12 +205,12 @@ if (api_get_setting('profile', 'phone') !== 'true') {
 $form->applyFilter('phone', 'stripslashes');
 $form->applyFilter('phone', 'trim');
 $form->applyFilter('phone', 'html_filter');
-/*if (api_get_setting('registration', 'phone') == 'true') {
+/* if (api_get_setting('registration', 'phone') == 'true') {
     $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
 }
-$form->addRule('phone', get_lang('EmailWrong'), 'email');*/
+$form->addRule('phone', get_lang('EmailWrong'), 'email'); */
 
-//    PICTURE
+// PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
     $form->addElement('file', 'picture', ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')), array('class' => 'picture-form'));
     $form->add_progress_bar();
@@ -220,13 +221,13 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
     $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 }
 
-//    LANGUAGE
+// LANGUAGE
 $form->addElement('select_language', 'language', get_lang('Language'));
 if (api_get_setting('profile', 'language') !== 'true') {
     $form->freeze('language');
 }
 
-//THEME
+// THEME
 if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
     $form->addElement('select_theme', 'theme', get_lang('Theme'));
     if (api_get_setting('profile', 'theme') !== 'true') {
@@ -235,32 +236,31 @@ if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
     $form->applyFilter('theme', 'trim');
 }
 
-
-//    EXTENDED PROFILE  this make the page very slow!
+// EXTENDED PROFILE  this make the page very slow!
 if (api_get_setting('extended_profile') == 'true') {
     $width_extended_profile = 500;
-    //$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
-    //$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
-    //    MY COMPETENCES
+    // $form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
+    // $form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
+    // MY COMPETENCES
     $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
-    //    MY DIPLOMAS
+    // MY DIPLOMAS
     $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
     //    WHAT I AM ABLE TO TEACH
     $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
 
-    //    MY PRODUCTIONS
+    // MY PRODUCTIONS
     $form->addElement('file', 'production', get_lang('MyProductions'));
     if ($production_list = UserManager::build_production_list(api_get_user_id(), '', true)) {
         $form->addElement('static', 'productions_list', null, $production_list);
     }
-    //    MY PERSONAL OPEN AREA
+    // MY PERSONAL OPEN AREA
     $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '350'));
     $form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
     $form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
 
 }
 
-//    PASSWORD, if auth_source is platform
+// PASSWORD, if auth_source is platform
 if (is_platform_authentication() && is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
     $form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));
     $form->addElement('password', 'password1', get_lang('NewPass'), array('id'=> 'password1', 'size' => 40));
@@ -294,7 +294,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
     $form->addElement('html', '</div>');
     $form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'), array('id' => 'id_generate_api_key', 'onclick' => 'generate_open_id_form(); return false;')); //generate_open_id_form()
 }
-//    SUBMIT
+// SUBMIT
 if (is_profile_editable()) {
     $form->addElement('style_submit_button', 'apply_change', get_lang('SaveSettings'), 'class="save"');
 } else {
@@ -303,8 +303,7 @@ if (is_profile_editable()) {
 $user_data = array_merge($user_data, $extra_data);
 $form->setDefaults($user_data);
 
-/*        FUNCTIONS   */
-
+/* FUNCTIONS */
 
 /**
  * Is user auth_source is platform ?
@@ -325,9 +324,7 @@ function is_profile_editable() {
     return $GLOBALS['profileIsEditable'];
 }
 
-/*
-    PRODUCTIONS FUNCTIONS
-*/
+/* PRODUCTIONS FUNCTIONS */
 
 /**
  * Upload a submitted user production.
@@ -386,7 +383,7 @@ function check_user_email($email) {
     return Database::num_rows($result) != 0;
 }
 
-/*        MAIN CODE */
+/* MAIN CODE */
 $filtered_extension         = false;
 $update_success             = false;
 $upload_picture_success     = false;
@@ -440,29 +437,25 @@ if ($form->validate()) {
         $allow_users_to_change_email_with_no_password = false;
     }
 
-
-
+    $formPostEmail = $user_data['email'];
 
     //If user sending the email to be changed (input available and not frozen )
     if (api_get_setting('profile', 'email') == 'true') {
         if ($allow_users_to_change_email_with_no_password) {
             if (!check_user_email($user_data['email'])) {
                 $changeemail = $user_data['email'];
-                //$_SESSION['change_email'] = 'success';
+                // $_SESSION['change_email'] = 'success';
             }
-
         } else {
-            //Normal behaviour
+            // Normal behaviour
             if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && !$wrong_current_password) {
                 $changeemail = $user_data['email'];
             }
-
             if (!check_user_email($user_data['email']) && empty($user_data['password0'])){
                 $_SESSION['change_email'] = 'success';
             }
         }
     }
-
 
     // Upload picture if a new one is provided
     if ($_FILES['picture']['size']) {
@@ -503,7 +496,7 @@ if ($form->validate()) {
 
     // remove values that shouldn't go in the database
     unset($user_data['password0'],$user_data['password1'], $user_data['password2'], $user_data['MAX_FILE_SIZE'],
-    $user_data['remove_picture'], $user_data['apply_change'],$user_data['email'] );
+        $user_data['remove_picture'], $user_data['apply_change'],$user_data['email'] );
 
     // Following RFC2396 (http://www.faqs.org/rfcs/rfc2396.html), a URI uses ':' as a reserved character
     // we can thus ensure the URL doesn't contain any scheme name by searching for ':' in the string
@@ -545,6 +538,22 @@ if ($form->validate()) {
         }
     }
 
+    // if user has to update is profile firstname, lastname, email (if first SSO login, for example)
+    if (isset($_SESSION['forceUpdateProfile']) && $_SESSION['forceUpdateProfile'] == 1) {
+        // if user came with no firstname, lastname, email
+        if (!in_array('firstname', $available_values_to_modify)) {
+            $available_values_to_modify[] = 'firstname';
+        }
+        if (!in_array('lastname', $available_values_to_modify)) {
+            $available_values_to_modify[] = 'lastname';
+        }
+        if (!in_array('email', $available_values_to_modify)) {
+            $available_values_to_modify[] = 'email';
+        }
+        $allow_users_to_change_email_with_no_password = true;
+        $changeemail = $formPostEmail;
+    }
+
     //Fixing missing variables
     $available_values_to_modify = array_merge($available_values_to_modify, array('competences', 'diplomas', 'openarea', 'teach', 'openid'));
 
@@ -571,9 +580,10 @@ if ($form->validate()) {
         } elseif (strpos($key, 'remove_extra_') !== false) {
             $extra_value = Security::filter_filename(urldecode(key($value)));
             // To remove from user_field_value and folder
-            UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);
+            UserManager::update_extra_field_value(api_get_user_id(), substr($key,13), $extra_value);
         } else {
             if (in_array($key, $available_values_to_modify)) {
+
                 $sql .= " $key = '".Database::escape_string($value)."',";
             }
         }
@@ -612,8 +622,8 @@ if ($form->validate()) {
     }
 
     $sql .= " WHERE user_id  = '".api_get_user_id()."'";
-    Database::query($sql);
 
+    Database::query($sql);
 
     // User tag process
     //1. Deleting all user tags
@@ -654,7 +664,14 @@ if ($form->validate()) {
     $_SESSION['_user']['uidReset'] = true;
     $_SESSION['noredirection'] = true;
     $_SESSION['profile_update'] = 'success';
-    $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');
+
+    if ($_SESSION['forceUpdateProfile'] == 1) {
+        $url = api_get_path(WEB_PATH)."user_portal.php";
+        $_SESSION['forceUpdateProfile'] = 0;
+    } else {
+        $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');
+    }
+
     header("Location: ".$url);
     exit;
 }
@@ -734,11 +751,11 @@ $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') ==
 
 if (api_get_setting('allow_social_tool') == 'true') {
     echo '<div class="row-fluid">';
-        echo '<div class="span3">';
-        echo SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button);
-        echo '</div>';
-        echo '<div class="span9">';
-        $form->display();
+    echo '<div class="span3">';
+    echo SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button);
+    echo '</div>';
+    echo '<div class="span9">';
+    $form->display();
     echo '</div>';
 } else {
     // Style position:absolute has been removed for Opera-compatibility.

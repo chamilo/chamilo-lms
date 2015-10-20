@@ -11,6 +11,8 @@ session_cache_limiter('none');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
+$_course = api_get_course_info();
+
 // Protection
 api_protect_course_script();
 

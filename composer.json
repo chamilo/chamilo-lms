@@ -32,6 +32,7 @@
     },
     "require": {
         "php": ">=5.4",
+        "ext-curl": "*",
         "sabre/vobject": "~3.1",
         "toin0u/digitalocean": "~1.4",
         "twig/twig": "1.*",

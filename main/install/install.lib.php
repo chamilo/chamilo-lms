@@ -2350,6 +2350,8 @@ function fixIds(EntityManager $em)
 
     if (!empty($groups )) {
         foreach ($groups as $group) {
+            $group['description'] = Database::escape_string($group['description']);
+            $group['name'] = Database::escape_string($group['name']);
             $sql = "INSERT INTO usergroup (name, group_type, description, picture, url, visibility, updated_at, created_at)
                     VALUES ('{$group['name']}', '1', '{$group['description']}', '{$group['picture_uri']}', '{$group['url']}', '{$group['visibility']}', '{$group['updated_on']}', '{$group['created_on']}')";
 

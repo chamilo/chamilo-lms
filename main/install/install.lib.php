@@ -2067,6 +2067,19 @@ function fixIds(EntityManager $em)
         error_log('Update tools');
     }
 
+    // Create temporary indexes to increase speed of the following operations
+    // Adding and removing indexes will usually take much less time than
+    // the execution without indexes of the queries in this function, particularly
+    // for large tables
+    $sql = "ALTER TABLE c_document ADD INDEX tmpidx_doc(c_id, id)";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_student_publication ADD INDEX tmpidx_stud (c_id, id)";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_quiz ADD INDEX tmpidx_quiz (c_id, id)";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_item_property ADD INDEX tmpidx_ip (to_group_id)";
+    $connection->executeQuery($sql);
+
     $sql = "SELECT * FROM c_lp_item";
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
@@ -2534,6 +2547,15 @@ function fixIds(EntityManager $em)
             }
         }
     }
+    // Drop temporary indexes added to increase speed of this function's queries
+    $sql = "ALTER TABLE c_document DROP INDEX tmpidx_doc";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_student_publication DROP INDEX tmpidx_stud";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_quiz DROP INDEX tmpidx_quiz";
+    $connection->executeQuery($sql);
+    $sql = "ALTER TABLE c_item_property DROP INDEX tmpidx_ip";
+    $connection->executeQuery($sql);
 }
 
 /**

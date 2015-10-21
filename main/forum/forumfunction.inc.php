@@ -2577,7 +2577,7 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     $form = new FormValidator(
         'thread',
         'post',
-        api_get_self().'?forum='.Security::remove_XSS($my_forum).'&'.api_get_cidreq().'&thread='.Security::remove_XSS($myThread).'&post='.Security::remove_XSS($my_post).'&action='.$action
+        api_get_self().'?forum='.intval($my_forum).'&gradebook='.$my_gradebook.'&thread='.intval($myThread).'&post='.intval($my_post).'&action='.$action.'&'.api_get_cidreq()
     );
     $form->setConstants(array('forum' => '5'));
 
@@ -2873,7 +2873,6 @@ function saveThreadScore(
                         ";
                 Database::query($sql);
 
-
                 return 'update';
             }
 
@@ -3072,7 +3071,9 @@ function store_reply($current_forum, $values)
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $post_date = api_get_utc_datetime();
 
-    if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
+    if ($current_forum['approval_direct_post'] == '1' &&
+        !api_is_allowed_to_edit(null, true)
+    ) {
         $visible = 0;
     } else {
         $visible = 1;
@@ -3130,10 +3131,8 @@ function store_reply($current_forum, $values)
                 api_get_user_id()
             );
 
-            if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(
-                    null,
-                    true
-                )
+            if ($current_forum['approval_direct_post'] == '1' &&
+                !api_is_allowed_to_edit(null, true)
             ) {
                 $message .= '<br />'.get_lang(
                         'MessageHasToBeApproved'
@@ -3178,8 +3177,14 @@ function store_reply($current_forum, $values)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function show_edit_post_form($forum_setting, $current_post, $current_thread, $current_forum, $form_values = '', $id_attach = 0)
-{
+function show_edit_post_form(
+    $forum_setting,
+    $current_post,
+    $current_thread,
+    $current_forum,
+    $form_values = '',
+    $id_attach = 0
+) {
     // Initialize the object.
     $form = new FormValidator(
         'edit_post',

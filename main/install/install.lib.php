@@ -2310,7 +2310,7 @@ function fixIds(EntityManager $em)
                 //$sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $ref";
                 break;
             case LINK_FORUM_THREAD:
-                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND thread_id = $ref";
                 break;
         }
 

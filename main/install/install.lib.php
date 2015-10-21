@@ -2285,7 +2285,10 @@ function fixIds(EntityManager $em)
                 error_log($sql);
                 $connection->executeQuery($sql);
             }
-            error_log("Process item #$counter");
+            if ($counter % 100 == 0) {
+                // Print a status in the log once in a while
+                error_log("Process item #$counter");
+            }
             $counter++;
         }
     }

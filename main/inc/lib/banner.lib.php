@@ -151,16 +151,30 @@ function return_logo($theme)
 {
     $_course = api_get_course_info();
     $html = '';
-    $logo = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
+    $logoBase = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/header-logo.';
 
     $site_name = api_get_setting('siteName');
+    $attributes = array(
+        'title' => $site_name,
+        'class' => 'img-responsive',
+    );
+    $testServer = api_get_setting('server_type');
+    if ($testServer == 'test' && is_file($logoBase . 'svg')) {
+        $logo = $logoBase . 'svg';
+        $attributes['width'] = '245';
+        $attributes['height'] = '68';
+        $image_url = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.svg';
+    } else {
+        $logo = $logoBase . 'png';
+        $image_url = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
+    }
+
     if (file_exists($logo)) {
         $site_name = api_get_setting('Institution').' - '.$site_name;
-        $image_url = api_get_path(WEB_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
         $logo = Display::img(
             $image_url,
             $site_name,
-            array('title' => $site_name, 'class' => 'img-responsive')
+            $attributes
         );
         $html .= Display::url($logo, api_get_path(WEB_PATH).'index.php');
     } else {

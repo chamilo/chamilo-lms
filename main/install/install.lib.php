@@ -2351,14 +2351,29 @@ function fixIds(EntityManager $em)
 
     $oldGroups = array();
 
-    if (!empty($groups )) {
+    if (!empty($groups)) {
         foreach ($groups as $group) {
-            $group['description'] = Database::escape_string($group['description']);
+            if (empty($group['name'])) {
+                continue;
+            }
+
+            /*$group['description'] = Database::escape_string($group['description']);
             $group['name'] = Database::escape_string($group['name']);
             $sql = "INSERT INTO usergroup (name, group_type, description, picture, url, visibility, updated_at, created_at)
                     VALUES ('{$group['name']}', '1', '{$group['description']}', '{$group['picture_uri']}', '{$group['url']}', '{$group['visibility']}', '{$group['updated_on']}', '{$group['created_on']}')";
-
-            $connection->executeQuery($sql);
+            */
+            $params = [
+                'name' => $group['name'],
+                'description' => $group['description'],
+                'group_type' => 1,
+                'picture' => $group['picture_uri'],
+                'url' => $group['url'],
+                'visibility' => $group['visibility'],
+                'updated_at' => $group['updated_on'],
+                'created_at' => $group['created_on']
+            ];
+            $connection->insert('usergroup', $params);
+            //$connection->executeQuery($sql);
             $id = $connection->lastInsertId('id');
             $oldGroups[$group['id']] = $id;
         }
@@ -2421,7 +2436,7 @@ function fixIds(EntityManager $em)
             foreach ($dataList as $data) {
                 if (isset($oldGroups[$data['group_id']])) {
                     // Deleting relation
-                    $sql = "DELETE FROM announcement_rel_group WHERE id = {$data['id']}";
+                    $sql = "DELETE FROM announcement_rel_group WHERE group_id = {$data['group_id']}";
                     $connection->executeQuery($sql);
 
                     // Add new relation

@@ -2218,7 +2218,10 @@ function fixIds(EntityManager $em)
         error_log('Getting course list');
     }
 
-    foreach ($courseList  as $courseData) {
+    $totalCourse = count($courseList);
+    $counter = 0;
+
+    foreach ($courseList as $courseData) {
         $courseId = $courseData['id'];
         if ($debug) {
             error_log('Updating course: '.$courseData['code']);
@@ -2226,8 +2229,6 @@ function fixIds(EntityManager $em)
 
         $sql = "SELECT * FROM c_item_property WHERE c_id = $courseId";
         $result = $connection->fetchAll($sql);
-        $counter = 0;
-        error_log("Items to process: ".count($result));
 
         foreach ($result as $item) {
             //$courseId = $item['c_id'];
@@ -2285,9 +2286,10 @@ function fixIds(EntityManager $em)
                 error_log($sql);
                 $connection->executeQuery($sql);
             }
-            if ($counter % 100 == 0) {
+
+            if ($debug) {
                 // Print a status in the log once in a while
-                error_log("Process item #$counter");
+                error_log("Process item #$counter/$totalCourse");
             }
             $counter++;
         }
@@ -2385,8 +2387,8 @@ function fixIds(EntityManager $em)
                 $oldId,
                 'system'
             );
-            if (!empty($path)) {
 
+            if (!empty($path)) {
                 $newPath = str_replace(
                     "groups/$oldId/",
                     "groups/$newId/",
@@ -2481,10 +2483,16 @@ function fixIds(EntityManager $em)
     foreach ($extraFieldTables as $type => $table) {
         //continue;
         $sql = "SELECT * FROM $table ";
+        if ($debug) {
+            error_log($sql);
+        }
         $result = $connection->query($sql);
         $fields = $result->fetchAll();
 
         foreach ($fields as $field) {
+            if ($debug) {
+                error_log("Loading field $field");
+            }
             $originalId = $field['id'];
             $extraField = new ExtraField();
             $extraField
@@ -2502,6 +2510,7 @@ function fixIds(EntityManager $em)
             $em->flush();
 
             $values = array();
+            $handlerId = null;
             switch ($type) {
                 case ExtraField::USER_FIELD_TYPE:
                     $optionTable = Database::get_main_table(
@@ -2556,17 +2565,24 @@ function fixIds(EntityManager $em)
 
             if (!empty($values)) {
                 foreach ($values as $value) {
-                    $extraFieldValue = new ExtraFieldValues();
-                    $extraFieldValue
-                        ->setValue($value['field_value'])
-                        ->setField($extraField)
-                        ->setItemId($value[$handlerId]);
-                    $em->persist($extraFieldValue);
-                    $em->flush();
+                    if (isset($value[$handlerId])) {
+                        $extraFieldValue = new ExtraFieldValues();
+                        $extraFieldValue
+                            ->setValue($value['field_value'])
+                            ->setField($extraField)
+                            ->setItemId($value[$handlerId]);
+                        $em->persist($extraFieldValue);
+                        $em->flush();
+                    }
                 }
             }
         }
     }
+
+    if ($debug) {
+        error_log('Remove index');
+    }
+
     // Drop temporary indexes added to increase speed of this function's queries
     $sql = "ALTER TABLE c_document DROP INDEX tmpidx_doc";
     $connection->executeQuery($sql);
@@ -2576,6 +2592,10 @@ function fixIds(EntityManager $em)
     $connection->executeQuery($sql);
     $sql = "ALTER TABLE c_item_property DROP INDEX tmpidx_ip";
     $connection->executeQuery($sql);
+
+    if ($debug) {
+        error_log('Finish fixId function');
+    }
 }
 
 /**

@@ -110,11 +110,10 @@ class ExerciseLib
                         <div class="clearfix">
                         <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix">';
                 } else {
-                    $s .= <<<HTML
-                        <div id="drag{$questionId}_question" class="drag_question">
-                            <table class="data_table">
-HTML;
+                    $s .= '<div id="drag{'.$questionId.'}_question" class="drag_question">
+                           <table class="data_table">';
                 }
+
                 // Iterate through answers
                 $x = 1;
                 //mark letters for each answer
@@ -155,7 +154,6 @@ HTML;
                     }
                 }
                 $num_suggestions = ($nbrAnswers - $x) + 1;
-
             } elseif ($answerType == FREE_ANSWER) {
                 $fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
 
@@ -165,7 +163,7 @@ HTML;
                 );
                 $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
                 $form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
-                $s .=  $form->returnForm();
+                $s .= $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanog
                 if (api_get_setting('enable_nanogong') == 'true') {
@@ -195,7 +193,7 @@ HTML;
                 );
                 $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
                 //$form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
-                $s .=  $form->return_form();
+                $s .= $form->returnForm();
             }
 
             // Now navigate through the possible answers, using the max number of
@@ -545,7 +543,6 @@ HTML;
                         $s .= '</td>';
                     }
                     $s .= '</tr>';
-
                 } elseif ($answerType == FILL_IN_BLANKS) {
                     // display the question, with field empty, for student to fill it,
                     // or filled to display the answer in the Question preview of the exercice/admin.php page
@@ -629,9 +626,9 @@ HTML;
                         $trackAttempts = Database::get_main_table(
                             TABLE_STATISTIC_TRACK_E_ATTEMPT
                         );
-                        $sqlTrackAttempt = 'SELECT answer FROM ' . $trackAttempts . '
-                                            WHERE exe_id=' . $exe_id . ' AND question_id=' . $questionId;
-                        $rsLastAttempt = Database::query($sqlTrackAttempt);
+                        $sql = 'SELECT answer FROM ' . $trackAttempts . '
+                                WHERE exe_id=' . $exe_id . ' AND question_id=' . $questionId;
+                        $rsLastAttempt = Database::query($sql);
                         $rowLastAttempt = Database::fetch_array($rsLastAttempt);
                         $answer = $rowLastAttempt['answer'];
                         if (empty($answer)) {
@@ -1016,7 +1013,6 @@ HTML;
                                 $lines_count++;
                             }
                         }
-
                         $matching_correct_answer++;
                     }
                 }
@@ -1036,11 +1032,12 @@ HTML;
                     ]
                 )
             ) {
-                    $s .= '</table>';
+                $s .= '</table>';
             }
 
             if ($answerType == DRAGGABLE) {
-                $s .= "</ul></div>";
+                $s .= "</ul>";
+                $s .= "</div>"; //clearfix
 
                 $counterAnswer = 1;
 
@@ -1063,14 +1060,16 @@ HTML;
                     }
                 }
 
-                $s .= '</div></div>';
+                $s .= '</div>'; // row
+                $s .= '</div>'; // col-md-12
+                $s .= '</div>'; // col-md-12 ui-widget ui-helper-clearfix
             }
 
             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
-                $s .= '</div>';
+                $s .= '</div>'; //drag_question
             }
 
-            $s .= '</div>';
+            $s .= '</div>'; //question_options row
 
             // destruction of the Answer object
             unset($objAnswerTmp);

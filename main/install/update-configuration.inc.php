@@ -71,6 +71,8 @@ if (defined('SYSTEM_INSTALLATION')) {
     }
     fwrite($fh, '?>');
     fclose($fh);
+
+    error_log("configuration.php file updated.");
 } else {
     echo 'You are not allowed here !'. __FILE__;
 }

@@ -36,6 +36,7 @@ ob_implicit_flush(true);
 session_start();
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once 'install.lib.php';
 
 // The function api_get_setting() might be called within the installation scripts.
@@ -696,7 +697,7 @@ if (@$_POST['step2']) {
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
 
-        error_log('Starting migration process from '.$my_old_version.' ('.time().')');
+        error_log('Starting migration process from '.$my_old_version.' ('.date('Y-m-d H:i:s').')');
 
         switch ($my_old_version) {
             case '1.9.0':
@@ -751,6 +752,8 @@ if (@$_POST['step2']) {
                         'portfolio.conf.php'
                     );
 
+                    error_log('Copy conf files');
+
                     foreach ($configurationFiles as $file) {
                         if (file_exists(api_get_path(SYS_CODE_PATH) . 'inc/conf/'.$file)) {
                             copy(
@@ -759,6 +762,8 @@ if (@$_POST['step2']) {
                             );
                         }
                     }
+
+                    error_log('Finish upgrade process! ('.date('Y-m-d H:i:s').')');
                 } else {
                     error_log('There was an error during running migrations. Check error.log');
                 }
@@ -820,6 +825,7 @@ if (@$_POST['step2']) {
 
         include 'install_files.inc.php';
     }
+
     display_after_install_message($installType);
 
     // Hide the "please wait" message sent previously

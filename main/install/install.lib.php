@@ -2064,7 +2064,6 @@ function fixIds(EntityManager $em)
 
     if ($debug) {
         error_log('fixIds');
-        error_log('Update tools');
     }
 
     // Create temporary indexes to increase speed of the following operations
@@ -2491,7 +2490,7 @@ function fixIds(EntityManager $em)
 
         foreach ($fields as $field) {
             if ($debug) {
-                error_log("Loading field $field");
+                error_log("Loading field: ".$field['field_variable']);
             }
             $originalId = $field['id'];
             $extraField = new ExtraField();
@@ -2542,7 +2541,6 @@ function fixIds(EntityManager $em)
             }
 
             if (!empty($optionTable)) {
-
                 $sql = "SELECT * FROM $optionTable WHERE field_id = $originalId ";
                 $result = $connection->query($sql);
                 $options = $result->fetchAll();
@@ -2561,9 +2559,15 @@ function fixIds(EntityManager $em)
                 $sql = "SELECT * FROM $valueTable WHERE field_id = $originalId ";
                 $result = $connection->query($sql);
                 $values = $result->fetchAll();
+                if ($debug) {
+                    error_log("Fetch all values for field");
+                }
             }
 
             if (!empty($values)) {
+                if ($debug) {
+                    error_log("Saving field value in new table");
+                }
                 foreach ($values as $value) {
                     if (isset($value[$handlerId])) {
                         $extraFieldValue = new ExtraFieldValues();

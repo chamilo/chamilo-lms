@@ -7568,4 +7568,10 @@ $ExportBadge = "Export badge";
 $SelectToSearch = "Select to search";
 $PlaceOnTheWheel = "Place on the wheel";
 $Skill = "Skill";
+$Argumentation = "Argumentation";
+$TheUserXHasAlreadyAchievedTheSkillY = "The user %s has already achieved the skill %s";
+$SkillXAssignedToUserY = "The skill %s has been assigned to user %s";
+$AssignSkill = "Assign skill";
+$AddressField = "Address";
+$Geolocalization = "Geolocalization";
 ?>

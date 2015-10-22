@@ -7555,4 +7555,10 @@ $ExportBadge = "Exporter ce badge";
 $SelectToSearch = "Inclure dans la recherche";
 $PlaceOnTheWheel = "Localiser sur la roue";
 $Skill = "Compétence";
+$Argumentation = "Justificatif";
+$TheUserXHasAlreadyAchievedTheSkillY = "L'utilisateur %s a déjà acquis la compétence %s";
+$SkillXAssignedToUserY = "La compétence %s a bien été assignée à l'utilisateur %s";
+$AssignSkill = "Assigner la compétence";
+$AddressField = "Adresse";
+$Geolocalization = "Géolocalisation";
 ?>

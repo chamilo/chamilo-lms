@@ -7593,4 +7593,10 @@ $ExportBadge = "Exportar la insignia";
 $SelectToSearch = "Seleccionar para buscar";
 $PlaceOnTheWheel = "Ubicar en la rueda";
 $Skill = "Competencia";
+$Argumentation = "Argumentación";
+$TheUserXHasAlreadyAchievedTheSkillY = "El usuario %s ya ha logrado la competencia %s";
+$SkillXAssignedToUserY = "La competencia %s ha sido asignada al usuario %s";
+$AssignSkill = "Asignar competencia";
+$AddressField = "Dirección";
+$Geolocalization = "Geolocalización";
 ?>

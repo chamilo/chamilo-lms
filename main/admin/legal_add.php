@@ -16,82 +16,101 @@ api_protect_admin_script();
 // Create the form
 $form = new FormValidator('addlegal');
 
-$defaults=array();
-if( $form->validate()) {
+$defaults = array();
+$term_preview = array(
+	'type' => 0,
+	'content' => '',
+	'changes' => '',
+);
+if ($form->validate()) {
 	$check = Security::check_token('post');
-		if ($check) {
-			$values  = $form->getSubmitValues();
-			$lang 	 = $values['language'];
-			//language id
-			$lang = api_get_language_id($lang);
+	if ($check) {
+		$values  = $form->getSubmitValues();
+		$lang 	 = $values['language'];
+		//language id
+		$lang = api_get_language_id($lang);
 
+		if (isset($values['type'])) {
 			$type 	 = $values['type'];
+		} else {
+			$type = 0;
+		}
+		if (isset($values['content'])) {
 			$content = $values['content'];
+		} else {
+			$content = '';
+		}
+		if (isset($values['changes'])) {
 			$changes = $values['changes'];
-			$navigator_info = api_get_navigator();
+		} else {
+			$changes = '';
+		}
+		$navigator_info = api_get_navigator();
 
-			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-				if (isset($values['preview'])) {
-					$submit	='preview';
-				} elseif (isset($values['save'])) {
-					$submit	='save';
-				} elseif (isset($values['back'])) {
-					$submit	='back';
-				}
-			} else {
-				$submit  = $values['send'];
+		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+			if (isset($values['preview'])) {
+				$submit	='preview';
+			} elseif (isset($values['save'])) {
+				$submit	='save';
+			} elseif (isset($values['back'])) {
+				$submit	='back';
 			}
+		} else {
+			$submit  = $values['send'];
+		}
 
-			$default['content']=$content;
-			if (isset($values['language'])) {
-				if($submit=='back') {
-					header('Location: legal_add.php');
-					exit;
-				} elseif($submit=='save') {
-					$insert_result = LegalManager::add($lang,$content,$type,$changes);
-					if ($insert_result )
-						$message = get_lang('TermAndConditionSaved');
-					else
-						$message = get_lang('TermAndConditionNotSaved');
-					Security::clear_token();
-					$tok = Security::get_token();
-					header('Location: legal_list.php?action=show_message&message='.urlencode($message).'&sec_token='.$tok);
-					exit();
-				} elseif($submit=='preview') {
-					$defaults['type']=$type;
-					$defaults['content']=$content;
-					$defaults['changes']=$changes;
-					$term_preview = $defaults;
-					$term_preview['type'] = intval($_POST['type']);
+		$default['content'] = $content;
+		if (isset($values['language'])) {
+			if ($submit == 'back') {
+				header('Location: legal_add.php');
+				exit;
+			} elseif ($submit == 'save') {
+				$insert_result = LegalManager::add($lang, $content, $type, $changes);
+				if ($insert_result ) {
+					$message = get_lang('TermAndConditionSaved');
 				} else {
-					$my_lang = $_POST['language'];
-					if (isset($_POST['language'])){
-						$all_langs = api_get_languages();
-						if (in_array($my_lang, $all_langs['folder'])){
-							$language = api_get_language_id($my_lang);
-							$term_preview = LegalManager::get_last_condition($language);
-							$defaults = $term_preview;
-							if (!$term_preview) {
-								// there are not terms and conditions
-								$term_preview['type']=-1;
-								$defaults['type']=0;
-							}
+					$message = get_lang('TermAndConditionNotSaved');
+				}
+				Security::clear_token();
+				$tok = Security::get_token();
+				header('Location: legal_list.php?action=show_message&message='.urlencode($message).'&sec_token='.$tok);
+				exit();
+			} elseif ($submit=='preview') {
+				$defaults['type'] = $type;
+				$defaults['content'] = $content;
+				$defaults['changes'] = $changes;
+				$term_preview = $defaults;
+				$term_preview['type'] = intval($_POST['type']);
+			} else {
+				$my_lang = $_POST['language'];
+				if (isset($_POST['language'])){
+					$all_langs = api_get_languages();
+					if (in_array($my_lang, $all_langs['folder'])){
+						$language = api_get_language_id($my_lang);
+						$term_preview = LegalManager::get_last_condition($language);
+						$defaults = $term_preview;
+						if (!$term_preview) {
+							// there are not terms and conditions
+							$term_preview['type']=-1;
+							$defaults['type']=0;
 						}
 					}
 				}
 			}
 		}
+	}
 }
 
-$form->setDefaults($default);
+$form->setDefaults($defaults);
 
-if(isset($_POST['send'])) {
+if (isset($_POST['send'])) {
 	Security::clear_token();
 }
 $token = Security::get_token();
 
 $form->addElement('hidden','sec_token');
-$form->setConstants(array('sec_token' => $token));
+//$form->setConstants(array('sec_token' => $token));
+$defaults['sec_token'] = $token;
 $form->addElement('header', get_lang('DisplayTermsConditions'));
 
 if (isset($_POST['language'])) {

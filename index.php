@@ -69,7 +69,7 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     die();
 }
 
-// Delete session neccesary for legal terms
+// Delete session item necessary to check for legal terms
 if (api_get_setting('allow_terms_conditions') == 'true') {
     Session::erase('term_and_condition');
 }

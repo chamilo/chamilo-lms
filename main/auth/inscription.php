@@ -309,7 +309,7 @@ if (!CustomPages::enabled()) {
     if (api_get_setting('allow_terms_conditions') == 'true') {
         $get = array_keys($_GET);
         if (isset($get)) {
-            if ($get[0] == 'legal') {
+            if (isset($get[0]) && $get[0] == 'legal') {
                 $language = api_get_interface_language();
                 $language = api_get_language_id($language);
                 $term_preview = LegalManager::get_last_condition($language);
@@ -421,13 +421,15 @@ $course_code_redirect = Session::read('course_redirect');
 if ($form->validate()) {
     $values = $form->getSubmitValues(1);
     // Make *sure* the login isn't too long
-    $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH);
+    if (isset($values['username'])) {
+        $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH);
+    }
 
     if (api_get_setting('allow_registration_as_teacher') == 'false') {
         $values['status'] = STUDENT;
     }
 
-    if (empty($values['official_code'])) {
+    if (empty($values['official_code']) && !empty($values['username'])) {
         $values['official_code'] = api_strtoupper($values['username']);
     }
 

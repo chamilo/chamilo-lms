@@ -67,11 +67,7 @@ class AttendanceController
                     $last_id = $attendance->attendance_add($link_to_gradebook);
                     Security::clear_token();
                 }
-                $param_gradebook = '';
-                if (isset($_SESSION['gradebook'])) {
-                    $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
-                }
-                header('location:index.php?action=calendar_add&attendance_id='.$last_id.'&'.api_get_cidreq().$param_gradebook);
+                header('location:index.php?action=calendar_add&attendance_id='.$last_id.'&'.api_get_cidreq());
                 exit;
             } else {
                 $data['error'] = true;

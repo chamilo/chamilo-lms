@@ -136,11 +136,6 @@ class Attendance
 
 		$res = Database::query($sql);
 		$attendances = array ();
-
-		$param_gradebook = '';
-		if (isset($_SESSION['gradebook'])) {
-			$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
-		}
 		$user_info = api_get_user_info();
 		$allowDelete = api_get_setting('allow_delete_attendance');
 
@@ -165,14 +160,14 @@ class Attendance
 
 				if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
 					// Link to edit
-					$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
+					$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
 				} else {
 					// Link to view
-					$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
+					$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
 				}
 
 			} else {
-				$attendance[1] = '<a class="muted" href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
+				$attendance[1] = '<a class="muted" href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
 			}
 
 			if ($attendance[5] == 1) {
@@ -187,19 +182,19 @@ class Attendance
 				$actions .= '<center>';
 
 				if (api_is_platform_admin()) {
-					$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.
+					$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].'">'.
 						Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 					// Visible
 					if ($attendance[5] == 1) {
-						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$attendance[0].$param_gradebook.'">'.
+						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$attendance[0].'">'.
 							Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
 					} else {
-						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$attendance[0].$param_gradebook.'">'.
+						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$attendance[0].'">'.
 							Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
 						$attendance[2] = '<span class="muted">'.$attendance[2].'</span>';
 					}
 					if ($allowDelete === 'true') {
-						$actions .= '<a href="index.php?' . api_get_cidreq() . '&action=attendance_delete&attendance_id=' . $attendance[0] . $param_gradebook . '">' .
+						$actions .= '<a href="index.php?' . api_get_cidreq() . '&action=attendance_delete&attendance_id=' . $attendance[0]. '">' .
 							Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
 					}
 				} else {
@@ -208,19 +203,19 @@ class Attendance
 						$actions .= Display::return_icon('edit_na.png', get_lang('Edit')).'&nbsp;';
 						$actions .= Display::return_icon('visible.png', get_lang('Hide'));
 					} else {
-						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.
+						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].'">'.
 							Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 
 						if ($attendance[5] == 1) {
-							$actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$attendance[0].$param_gradebook.'">'.
+							$actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$attendance[0].'">'.
 								Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
 						} else {
-							$actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$attendance[0].$param_gradebook.'">'.
+							$actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$attendance[0].'">'.
 								Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
 							$attendance[2] = '<span class="muted">'.$attendance[2].'</span>';
 						}
 						if ($allowDelete === 'true') {
-							$actions .= ' <a href="index.php?' . api_get_cidreq() . '&action=attendance_delete&attendance_id=' . $attendance[0] . $param_gradebook . '">' .
+							$actions .= ' <a href="index.php?' . api_get_cidreq() . '&action=attendance_delete&attendance_id=' . $attendance[0].'">' .
 								Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
 						}
 					}
@@ -237,10 +232,12 @@ class Attendance
 						} else {
 							$message_alert = get_lang('UnlockMessageInformation');
 						}
-						$actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('unlock.png', get_lang('LockAttendance')).'</a>';
+						$actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].'">'.
+                            Display::return_icon('unlock.png', get_lang('LockAttendance')).'</a>';
 					} else {
 						if (api_is_platform_admin()) {
-							$actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('locked.png', get_lang('UnlockAttendance')).'</a>';
+							$actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
+									Display::return_icon('locked.png', get_lang('UnlockAttendance')).'</a>';
 						} else {
 							$actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('LockedAttendance'));
 						}

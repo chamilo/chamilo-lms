@@ -30,8 +30,6 @@ class AnnouncementRelGroup
      */
     private $announcementId;
 
-
-
     /**
      * Set groupId
      *

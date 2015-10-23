@@ -87,62 +87,60 @@ class Thematic
 				LIMIT $from,$number_of_items ";
         $res = Database::query($sql);
 
-        $thematics = array ();
-
-        $param_gradebook = '';
-        if (isset($_SESSION['gradebook'])) {
-            $param_gradebook = '&gradebook='.$_SESSION['gradebook'];
-        }
+        $thematics = array();
         $user_info = api_get_user_info(api_get_user_id());
-
         while ($thematic = Database::fetch_row($res)) {
             $session_star = '';
             if (api_get_session_id() == $thematic[3]) {
                 $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
             }
-            $thematic[1] = '<a href="index.php?'.api_get_cidreq().'&action=thematic_details&thematic_id='.$thematic[0].$param_gradebook.'">'.Security::remove_XSS($thematic[1], STUDENT).$session_star.'</a>';
+            $thematic[1] = '<a href="index.php?'.api_get_cidreq().'&action=thematic_details&thematic_id='.$thematic[0].'">'.
+                Security::remove_XSS($thematic[1], STUDENT).$session_star.'</a>';
             if (api_is_allowed_to_edit(null, true)) {
                 $actions  = '';
 
                 if (api_get_session_id()) {
                     if (api_get_session_id() == $thematic[3]) {
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].'">'.
                             Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].'">'.
                             Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].'">'.
                             Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].'">'.
                             Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
                         $actions .= Display::return_icon('lesson_plan_na.png',get_lang('ThematicPlan'),'',ICON_SIZE_SMALL).'&nbsp;';
                         $actions .= Display::return_icon('lesson_plan_calendar_na.png',get_lang('ThematicAdvance'),'',ICON_SIZE_SMALL).'&nbsp;';
                         $actions .= Display::return_icon('edit_na.png',get_lang('Edit'),'',ICON_SIZE_SMALL);
                         $actions .= Display::return_icon('delete_na.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'&nbsp;';
-                        $actions .= Display::url(Display::return_icon('cd.gif', get_lang('Copy')), 'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$thematic[0].$param_gradebook);
+                        $actions .= Display::url(
+                            Display::return_icon('cd.gif', get_lang('Copy')),
+                            'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$thematic[0]
+                        );
                     }
                 } else {
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].'">'.
                         Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].'">'.
                         Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 
                     if ($thematic[2] > 1) {
-                        $actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        $actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].'">'.
                             Display::return_icon('up.png', get_lang('Up'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
                         $actions .= Display::return_icon('up_na.png','&nbsp;','',ICON_SIZE_SMALL);
                     }
                     if ($thematic[2] < self::get_max_thematic_item()) {
-                        $actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                        $actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].'">'.
                             Display::return_icon('down.png',get_lang('Down'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
                         $actions .= Display::return_icon('down_na.png','&nbsp;','',ICON_SIZE_SMALL);
                     }
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].'">'.
                         Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
-                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.
+                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].'">'.
                         Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                 }
                 $thematics[] = array($thematic[0], $thematic[1], $actions);

@@ -32,12 +32,12 @@ echo $thematic_data['content'];
 if (isset($message) && $message == 'ok') {
     Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));
 }
-$param_gradebook = null;
+
 if ($action == 'thematic_plan_list') {
         $form = new FormValidator(
             'thematic_plan_add',
             'POST',
-            'index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook
+            'index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq()
         );
         $form->addElement('hidden', 'action', 'thematic_plan_add');
         //$form->addElement('hidden', 'thematic_plan_token', $token);
@@ -88,8 +88,7 @@ if ($action == 'thematic_plan_list') {
     $form = new FormValidator(
         'thematic_plan_add',
         'POST',
-        'index.php?action=thematic_plan_edit&thematic_id='.$thematic_id.'&'.api_get_cidreq(
-        ).$param_gradebook,
+        'index.php?action=thematic_plan_edit&thematic_id='.$thematic_id.'&'.api_get_cidreq(),
         '',
         'style="width: 100%;"'
     );

@@ -21,8 +21,7 @@ use ChamiloSession as Session;
 $cidReset = true;
 
 // For HTML editor repository.
-if (isset($_SESSION['this_section']))
-	unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 /* Included libraries */
 require_once './main/inc/global.inc.php';

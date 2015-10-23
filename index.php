@@ -71,7 +71,7 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
 
 // Delete session neccesary for legal terms
 if (api_get_setting('allow_terms_conditions') == 'true') {
-    unset($_SESSION['term_and_condition']);
+    Session::erase('term_and_condition');
 }
 //If we are not logged in and customapages activated
 if (!api_get_user_id() && CustomPages::enabled()) {

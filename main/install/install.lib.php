@@ -2568,8 +2568,10 @@ function fixIds(EntityManager $em)
                 if ($debug) {
                     error_log("Saving field value in new table");
                 }
+                $k = 0;
                 foreach ($values as $value) {
                     if (isset($value[$handlerId])) {
+                        /*
                         $extraFieldValue = new ExtraFieldValues();
                         $extraFieldValue
                             ->setValue($value['field_value'])
@@ -2577,6 +2579,19 @@ function fixIds(EntityManager $em)
                             ->setItemId($value[$handlerId]);
                         $em->persist($extraFieldValue);
                         $em->flush();
+                        */
+                        // Insert without the use of the entity as it reduces
+                        // speed to 2 records per second (much too slow)
+                        $params = [
+                            'field_id' => $extraField->getId(),
+                            'value' => $value['field_value'],
+                            'item_id' => $value[$handlerId]
+                        ];
+                        $connection->insert('extra_field_values', $params);
+                        if ($debug && ($k % 10000 == 0)) {
+                            error_log("Saving field $k");
+                        }
+                        $k++;
                     }
                 }
             }

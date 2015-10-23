@@ -569,12 +569,12 @@ class GroupPortalManager
 
         $sql = "SELECT
                     picture_uri as image,
-                    u.user_id,
+                    u.id,
                     u.firstname,
                     u.lastname,
                     relation_type
     		    FROM $tbl_user u INNER JOIN $table_group_rel_user gu
-    			ON (gu.user_id = u.user_id)
+    			ON (gu.user_id = u.id)
     			WHERE
     			    gu.group_id= $group_id
     			    $where_relation_condition
@@ -584,10 +584,10 @@ class GroupPortalManager
         $array = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if ($with_image) {
-                $picture = UserManager::getUserPicture($row['user_id']);
+                $picture = UserManager::getUserPicture($row['id']);
                 $row['image'] = '<img src="'.$picture.'" />';
             }
-            $array[$row['user_id']] = $row;
+            $array[$row['id']] = $row;
         }
 
         return $array;
@@ -607,17 +607,17 @@ class GroupPortalManager
         if (empty($group_id)) {
             return array();
         }
-        $sql = "SELECT u.user_id, u.firstname, u.lastname, relation_type
+        $sql = "SELECT u.id, u.firstname, u.lastname, relation_type
                 FROM $tbl_user u
                 INNER JOIN $table_group_rel_user gu
-                ON (gu.user_id = u.user_id)
+                ON (gu.user_id = u.id)
                 WHERE gu.group_id= $group_id
                 ORDER BY relation_type, firstname";
 
         $result = Database::query($sql);
         $array = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $array[$row['user_id']] = $row;
+            $array[$row['id']] = $row;
         }
         return $array;
     }

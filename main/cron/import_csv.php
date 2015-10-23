@@ -1544,6 +1544,7 @@ class ImportCsv
                     $courseInfo['code'],
                     $chamiloSessionId
                 );
+
                 $this->logger->addError(
                     "User '$chamiloUserName' was removed from session: #$chamiloSessionId, Course: ".$courseInfo['code']
                 );

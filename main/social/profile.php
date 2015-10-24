@@ -416,8 +416,10 @@ if ($show_full_profile) {
                             $extra_field_title = ucfirst($extraFieldInfo['display_text']);
                             if ($extra_field_title == 'Skype') {
                                 $data = '<a href="skype:' . $data . '?chat">' . get_lang('Chat') . '</a>';
+                                $extra_information_value .= '<li class="list-group-item">'.Display::return_icon('skype.png', $extraFieldInfo['display_text'], null, ICON_SIZE_TINY, false) . ' ' . $data.'</li>';
+                            } else {
+                                $extra_information_value .= '<dt>'.ucfirst($extraFieldInfo['display_text']).':</dt><dd>'.$data.'</dd>';
                             }
-                            $extra_information_value .= '<li class="list-group-item">'.Display::return_icon('skype.png', $extraFieldInfo['display_text'], null, ICON_SIZE_TINY, false) . ' ' . $data.'</li>';
                         }
                     break;
                 }

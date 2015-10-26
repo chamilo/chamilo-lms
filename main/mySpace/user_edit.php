@@ -152,7 +152,7 @@ if ($form->validate()) {
             null, //$extra =
             $userInfo['language'],
             null, //$encrypt_method
-            $send_mail,
+            false,
             $resetPassword
         );
 

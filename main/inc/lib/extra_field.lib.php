@@ -1286,9 +1286,11 @@ EOF;
                         break;
                     case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
                         // get the social network's favicon
+                        $extra_data_variable = isset($extraData['extra_'.$field_details['variable']]) ? $extraData['extra_'.$field_details['variable']] : null;
+                        $field_default_value = isset($field_details['field_default_value']) ? $field_details['field_default_value'] : null;
                         $icon_path = UserManager::get_favicon_from_url(
-                            $extraData['extra_'.$field_details['variable']],
-                            $field_details['field_default_value']
+                            $extra_data_variable,
+                            $field_default_value
                         );
                         // special hack for hi5
                         $leftpad = '1.7';

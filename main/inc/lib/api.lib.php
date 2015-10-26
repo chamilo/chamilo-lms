@@ -1427,7 +1427,9 @@ function _api_format_user($user, $add_password = false)
         'theme',
         'language',
         'creator_id',
-        'registration_date'
+        'registration_date',
+        'hr_dept_id',
+        'expiration_date'
     );
 
     foreach ($attributes as $attribute) {
@@ -4237,7 +4239,7 @@ function api_display_language_form($hide_if_no_choice = false)
             jumpMenu("parent",this,0);
         });
     });
-    
+
     function jumpMenu(targ,selObj,restore){ // v3.0
         eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
         if (restore) selObj.selectedIndex=0;
@@ -4357,7 +4359,7 @@ function api_get_language_from_type($lang_type)
                     if ($c) {
                         $cidReq = $c;
                     }
-                } 
+                }
             }
             $_course = api_get_course_info($cidReq);
             if (isset($_course['language']) && !empty($_course['language']))

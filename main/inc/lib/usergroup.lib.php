@@ -1269,7 +1269,7 @@ class UserGroup extends Model
         $id = intval($id);
         $sql = "SELECT u.* FROM ".$this->table_user." u
                 INNER JOIN ".$this->usergroup_rel_user_table." c
-                ON c.user_id = u.user_id
+                ON c.user_id = u.id
                 WHERE c.usergroup_id = $id"
                 ;
         $result = Database::query($sql);
@@ -1905,10 +1905,10 @@ class UserGroup extends Model
                 $where_relation_condition = "AND gu.relation_type IN ($relation_type) ";
         }
 
-        $sql = "SELECT picture_uri as image, u.user_id, u.firstname, u.lastname, relation_type
+        $sql = "SELECT picture_uri as image, u.id, u.firstname, u.lastname, relation_type
     		    FROM $tbl_user u
     		    INNER JOIN $table_group_rel_user gu
-    			ON (gu.user_id = u.user_id)
+    			ON (gu.user_id = u.id)
     			WHERE
     			    gu.usergroup_id= $group_id
     			    $where_relation_condition
@@ -1919,13 +1919,13 @@ class UserGroup extends Model
         $array  = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if ($with_image) {
-                $userInfo = api_get_user_info($row['user_id']);
-                $userPicture = UserManager::getUserPicture($row['user_id']);
+                $userInfo = api_get_user_info($row['id']);
+                $userPicture = UserManager::getUserPicture($row['id']);
 
                 $row['image'] = '<img src="'.$userPicture.'"  />';
                 $row['user_info'] = $userInfo;
             }
-            $array[$row['user_id']] = $row;
+            $array[$row['id']] = $row;
         }
         return $array;
     }
@@ -1946,17 +1946,17 @@ class UserGroup extends Model
             return array();
         }
 
-        $sql = "SELECT u.user_id, u.firstname, u.lastname, relation_type
+        $sql = "SELECT u.id, u.firstname, u.lastname, relation_type
                 FROM $tbl_user u
 			    INNER JOIN $table_group_rel_user gu
-			    ON (gu.user_id = u.user_id)
+			    ON (gu.user_id = u.id)
 			    WHERE gu.usergroup_id= $group_id
 			    ORDER BY relation_type, firstname";
 
         $result=Database::query($sql);
         $array = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $array[$row['user_id']] = $row;
+            $array[$row['id']] = $row;
         }
         return $array;
     }

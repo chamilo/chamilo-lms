@@ -487,6 +487,11 @@ class Version110 extends AbstractMigrationChamilo
 
         $this->addSql("UPDATE settings_current SET selected_value = 'UTF-8' WHERE variable = 'platform_charset'");
 
+        $this->addSql("ALTER TABLE course_rel_user DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE course_rel_user ADD COLUMN id INT NOT NULL PRIMARY KEY AUTO_INCREMENT");
+        $this->addSql("ALTER TABLE course_rel_user MODIFY COLUMN user_id INT NULL");
+
+        $this->addSql("ALTER TABLE user MODIFY COLUMN user_id INT NULL");
     }
 
     /**

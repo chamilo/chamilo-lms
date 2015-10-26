@@ -77,14 +77,14 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $results .= '<div class="row">';
         $buttonClass = 'btn btn-default btn-sm';
         foreach ($users as $user) {
+            $user_info = api_get_user_info($user['id'], true);
             $send_inv = '<button class="'.$buttonClass.' disabled "><em class="fa fa-user"></em> '.get_lang('SendInvitation').'</button>';
-            $relation_type = intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user['user_id']));
-            $user_info = api_get_user_info($user['user_id'], true);
-            $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
+            $relation_type = intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user_info['user_id']));
+            $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_info['user_id'];
 
             // Show send invitation icon if they are not friends yet
-            if ($relation_type != 3 && $relation_type != 4 && $user['user_id'] != api_get_user_id()) {
-                $send_inv = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="' . $user['user_id'] . '">
+            if ($relation_type != 3 && $relation_type != 4 && $user_info['user_id'] != api_get_user_id()) {
+                $send_inv = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="' . $user_info['user_id'] . '">
                              <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</a>';
             }
 
@@ -92,7 +92,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                 . 'user_manager.ajax.php?'
                 . http_build_query([
                     'a' => 'get_user_popup',
-                    'user_id' => $user['user_id']
+                    'user_id' => $user_info['user_id']
                 ]);
             $send_msg = Display::toolbarButton(
                 get_lang('SendMessage'),

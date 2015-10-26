@@ -209,23 +209,32 @@ function my_rename($file_path, $new_file_name) {
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - $source (String) - the path of file or directory to move
  * @param  - $target (String) - the path of the new area
+ * @param  bool $forceMove Whether to force a move or to make a copy (safer but slower) and then delete the original
  * @return - bolean - true if the move succeed
  *           bolean - false otherwise.
  * @see    - move() uses check_name_exist() and copyDirTo() functions
  */
-function move($source, $target)
+function move($source, $target, $forceMove = false)
 {
 	if (check_name_exist($source)) {
 		$file_name = basename($source);
 
 		/* File case */
 		if (is_file($source)) {
-			copy($source , $target.'/'.$file_name);
-			unlink($source);
+			if ($forceMove) {
+				rename($source, $target . '/' . $file_name);
+			} else {
+				copy($source, $target . '/' . $file_name);
+				unlink($source);
+			}
 			return true;
 		} elseif (is_dir($source)) {
 			/* Directory */
-			copyDirTo($source, $target);
+			if ($forceMove) {
+				rename($source, $target);
+			} else {
+				copyDirTo($source, $target);
+			}
 			return true;
 		}
 	} else {

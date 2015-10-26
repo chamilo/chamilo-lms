@@ -186,7 +186,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     foreach ($movePathList as $origin => $destination) {
         if (is_dir($origin)) {
-            move($origin, $destination);
+            move($origin, $destination, true);
             error_log("$origin to $destination");
         }
     }

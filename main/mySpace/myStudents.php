@@ -631,12 +631,12 @@ if (!empty($student_id)) {
             if (empty($sessionId)) {
                 $title = Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_SMALL).' '.get_lang('Courses');
             } else {
-                //$title = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.($date_session?' ('.$date_session.')':'');
+                $title = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.($date_session?' ('.$date_session.')':'');
             }
 
             // Courses
             echo '<h3>'.$title.'</h3>';
-            echo '<table class="data_table">';
+            echo '<table class="data_table courses-tracking">';
             echo '<tr>
 				<th>'.get_lang('Course').'</th>
 				<th>'.get_lang('Time').'</th>
@@ -703,7 +703,7 @@ if (!empty($student_id)) {
                         );
 
                         echo '<tr>
-                        <td >'.$course_info['title'].'</td>
+                        <td ><a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['directory'] .'/?id_session=' . $sessionId . '">'.$course_info['title'].'</a></td>
                         <td >'.$time_spent_on_course .'</td>
                         <td >'.$progress.'</td>
                         <td >'.$score.'</td>

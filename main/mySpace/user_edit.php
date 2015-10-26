@@ -117,6 +117,7 @@ if ($form->validate()) {
 	if ($check) {
 		$user = $form->exportValues();
 		$email = $userInfo['email'];
+        $username = $userInfo['username'];
 		$send_mail = intval($user['mail']['send_mail']);
         $auth_source = PLATFORM_AUTH_SOURCE;
 
@@ -167,7 +168,18 @@ if ($form->validate()) {
 				}
 			}
 
-			$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($userInfo['firstname'], $userInfo['lastname'])).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('SignatureFormula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+			$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($userInfo['firstname'], $userInfo['lastname'])).",\n\n".
+                get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".
+                get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .
+                get_lang('Address') ." ". api_get_setting('siteName') ." ".
+                get_lang('Is') ." : ".$portal_url."\n\n".
+                get_lang('Problem'). "\n\n".
+                get_lang('SignatureFormula').",\n\n".
+                api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
+                get_lang('Manager'). " ".
+                api_get_setting('siteName')."\nT. ".
+                api_get_setting('administratorTelephone')."\n" .
+                get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 
 			api_mail_html(
                 api_get_person_name($userInfo['firstname'], $userInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS),

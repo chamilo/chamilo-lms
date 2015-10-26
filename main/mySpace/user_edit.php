@@ -157,6 +157,8 @@ if ($form->validate()) {
             $resetPassword
         );
 
+        $drhInfo = api_get_user_info();
+
 		if (!empty($email) && $send_mail) {
 			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
 			$portal_url = api_get_path(WEB_PATH);
@@ -175,17 +177,18 @@ if ($form->validate()) {
                 get_lang('Is') ." : ".$portal_url."\n\n".
                 get_lang('Problem'). "\n\n".
                 get_lang('SignatureFormula').",\n\n".
-                api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
-                get_lang('Manager'). " ".
-                api_get_setting('siteName')."\nT. ".
-                api_get_setting('administratorTelephone')."\n" .
-                get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+                $drhInfo['complete_name']."\n".
+                get_lang('DRH'). " ".api_get_setting('siteName')."\n".
+                empty($drhInfo['phone']) ? '' : "T. ".$drhInfo['phone']."\n" .
+                get_lang('Email') ." : ".$drhInfo['email'];
 
 			api_mail_html(
                 api_get_person_name($userInfo['firstname'], $userInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS),
                 $email,
                 $emailsubject,
-                $emailbody
+                $emailbody,
+                api_get_person_name($drhInfo['firstname'], $drhInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS),
+                $drhInfo['email']
             );
 		}
 

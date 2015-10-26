@@ -164,7 +164,16 @@ function get_users($from, $limit, $column, $direction)
             $detailsLink =  '<a href="myStudents.php?student='.$student_id.'">
 				             <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
         }
-        $row[] = $detailsLink;
+
+        $lostPasswordLink = '';
+        if (api_is_drh() || api_is_platform_admin()) {
+            $lostPasswordLink = '&nbsp;'.Display::url(
+                    Display::return_icon('edit.png', get_lang('Edit')),
+                    api_get_path(WEB_CODE_PATH).'mySpace/user_edit.php?user_id='.$student_id
+                );
+        }
+
+        $row[] = $lostPasswordLink.$detailsLink;
         $all_datas[] = $row;
     }
     return $all_datas;

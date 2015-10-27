@@ -139,10 +139,10 @@
         var innerHeight = $(window).height();
 
         if (innerHeight <= 640) {
-            $('.scrollbar-light').css('height', innerHeight - heightTop + "px");
+            $('.scrollbar-light').css('height', innerHeight - heightTop - 5 + "px");
             $('#content_id').css('height', innerHeight - heightControl + "px");
         } else {
-            $('.scrollbar-light').css('height', innerHeight - heightBreadcrumb - heightTop + "px");
+            $('.scrollbar-light').css('height', innerHeight - heightBreadcrumb - heightTop - 5 + "px");
             $('#content_id').css('height', innerHeight - heightControl + "px");
         }
         

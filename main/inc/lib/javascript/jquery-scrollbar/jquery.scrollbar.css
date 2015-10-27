@@ -14,7 +14,7 @@
     margin: 0;
     max-height: none;
     max-width: none !important;
-    overflow: scroll !important;
+    /* overflow: scroll !important; */
     padding: 0;
     position: relative !important;
     top: 0;

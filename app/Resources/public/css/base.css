@@ -95,6 +95,18 @@ a.thumbnail:hover{
   padding-top: 10px;
   margin-top: 5px;
 }
+.blackboard_show {
+    float:left;
+    position:absolute;
+    border:1px solid black;
+    width: 200px;
+    background-color:white;
+    z-index:99; padding: 3px;
+    display: inline;
+}
+.blackboard_hide {
+   display: none;
+}
 .section-page .page-header h3{
     font-size:22px;
     margin-top:5px;
@@ -998,7 +1010,9 @@ button.next.disabled {
     cursor:default;
 
 }
-
+.content-chat{
+    height: 200px;
+}
 /* Note */
 .note {
     margin: 6px;

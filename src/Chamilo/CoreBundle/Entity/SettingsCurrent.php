@@ -102,10 +102,9 @@ class SettingsCurrent
     /**
      * @var integer
      *
-     * @ORM\Column(name="access_url_locked", type="integer", nullable=false)
+     * @ORM\Column(name="access_url_locked", type="integer", nullable=false, options={"default": 0 } )
      */
     private $accessUrlLocked;
-
 
     /**
      * Set variable
@@ -380,7 +379,7 @@ class SettingsCurrent
      */
     public function setAccessUrlLocked($accessUrlLocked)
     {
-        $this->accessUrlLocked = $accessUrlLocked;
+        $this->accessUrlLocked = intval($accessUrlLocked);
 
         return $this;
     }

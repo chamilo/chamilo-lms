@@ -100,7 +100,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             ->setAccessUrlLocked($accessUrlLocked);
 
         $this->getEntityManager()->persist($setting);
-        //$this->getEntityManager()->flush();
 
         if (count($options) > 0) {
             foreach ($options as $option) {

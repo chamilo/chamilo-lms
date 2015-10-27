@@ -492,6 +492,16 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE course_rel_user MODIFY COLUMN user_id INT NULL");
 
         $this->addSql("ALTER TABLE user MODIFY COLUMN user_id INT NULL");
+
+        $this->addSql("ALTER TABLE access_url_rel_course DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE access_url_rel_course ADD COLUMN id INT NOT NULL PRIMARY KEY AUTO_INCREMENT");
+        $this->addSql("ALTER TABLE access_url_rel_course DROP COLUMN course_code");
+        $this->addSql("ALTER TABLE access_url_rel_course ADD INDEX idx_select_c (c_id)");
+        $this->addSql("ALTER TABLE access_url_rel_course ADD INDEX idx_select_u (access_url_id)");
+
+        $this->addSql("ALTER TABLE access_url ADD COLUMN url_type TINYINT(1) NULL");
+
+        $this->addSql("ALTER TABLE course_rel_user ADD INDEX idx_select_c (c_id)");
     }
 
     /**

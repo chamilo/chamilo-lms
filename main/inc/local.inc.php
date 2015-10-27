@@ -518,11 +518,11 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     // see configuration.php to define these
                     include_once($extAuthSource[$key]['login']);
                 }
+            } else {
+                // change after the external authentication
+                // login failed, Database::num_rows($result) <= 0
+                $loginFailed = true;  // Default initialisation. It could
             }
-
-            // login failed, Database::num_rows($result) <= 0
-            $loginFailed = true;  // Default initialisation. It could
-            // change after the external authentication
 
             /*
              * In this section:

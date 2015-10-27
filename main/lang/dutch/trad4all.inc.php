@@ -859,4 +859,5 @@ $SeeInvitation = "Bekijk de uitnodiging";
 $YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "Je kreeg deze melding omdat je in je profiel aangaf dat je meldingen via e-mail wenst te ontvangen. Deze instelling kan je op volgende link aanpassen: %s";
 $UserList = "Gebruikerslijst";
 $CourseCatalog = "Cursuscatalogus";
+$EditProfile = "Mijn profiel aanpassen";
 ?>

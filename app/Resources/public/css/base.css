@@ -98,11 +98,14 @@ a.thumbnail:hover{
 .blackboard_show {
     float:left;
     position:absolute;
-    border:1px solid black;
+    border:1px solid #000;
     width: 200px;
-    background-color:white;
+    padding: 5px;
+    border-radius: 5px;
+    background-color:#000;
     z-index:99; padding: 3px;
     display: inline;
+    color: #fff;
 }
 .blackboard_hide {
    display: none;

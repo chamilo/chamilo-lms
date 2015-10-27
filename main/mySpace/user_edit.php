@@ -8,7 +8,6 @@ require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
-require_once $libpath.'mail.lib.inc.php';
 
 // user permissions
 api_block_anonymous_users();
@@ -109,7 +108,7 @@ $defaults['password']['password_auto'] = 1;
 $form->setDefaults($defaults);
 // Submit button
 $select_level = array ();
-$html_results_enabled[] = $form->createElement('style_submit_button', 'submit', get_lang('Update'));
+$html_results_enabled[] = $form->addButtonUpdate(get_lang('Update'), 'submit', true);
 $form->addGroup($html_results_enabled);
 // Validate form
 if ($form->validate()) {

@@ -41,6 +41,17 @@ class Image
     ) {
         $this->image_wrapper->resize($thumbw, $thumbh, $border, $specific_size);
     }
+    
+    public function crop(
+        $x,
+        $y,
+        $width,
+        $height,
+        $src_width,
+        $src_height
+    ) {
+        $this->image_wrapper->crop($x, $y, $width, $height, $src_width, $src_height);
+    }
 
     public function send_image(
         $file = '',
@@ -98,6 +109,7 @@ abstract class ImageWrapper
     abstract function fill_image_info();
     abstract function get_image_size();
     abstract function resize($thumbw, $thumbh, $border, $specific_size = false);
+    abstract function crop($x, $y, $width, $height, $src_width, $src_height);
     abstract function send_image($file = '', $compress = -1, $convert_file_to = null);
 
     public function get_image_info()
@@ -185,6 +197,23 @@ class ImagickWrapper extends ImageWrapper
 		$this->width  = $thumbw;
 		$this->height = $thumbh;
 	}
+    
+    /**
+     * @author José Loguercio <jose.loguercio@beeznest.com>
+     * @param int $x coordinate of the cropped region top left corner
+     * @param int $y coordinate of the cropped region top left corner
+     * @param int $width the width of the crop
+     * @param int $height the height of the crop
+     * @param int $src_width the source width of the original image
+     * @param int $src_height the source height of the original image
+     */
+    
+    public function crop($x, $y, $width, $height, $src_width, $src_height) {
+        if (!$this->image_validated) return false;
+        $this->image->cropimage($width, $height, $x, $y);
+		$this->width  = $width;
+		$this->height = $height;
+    }
 
     public function send_image($file = '', $compress = -1, $convert_file_to = null)
     {
@@ -334,6 +363,45 @@ class GDWrapper extends ImageWrapper
 		$this->bg = $dst_img;
 		@imagedestroy($src_img);
 	}
+    
+    /**
+     * @author José Loguercio <jose.loguercio@beeznest.com>
+     * @param int $x coordinate of the cropped region top left corner
+     * @param int $y coordinate of the cropped region top left corner
+     * @param int $width the width of the crop
+     * @param int $height the height of the crop
+     * @param int $src_width the source width of the original image
+     * @param int $src_height the source height of the original image
+     */
+    public function crop($x, $y, $width, $height, $src_width, $src_height) {
+        if (!$this->image_validated) return false;
+        $this->width = $width;
+		$this->height = $height;
+        $src = null;
+        $dest = @imagecreatetruecolor($width, $height);
+        $type = $this->type;
+        switch ($type) {
+            case 'jpeg' :
+            case 'jpg' :
+                $src = @imagecreatefromjpeg($this->path);
+                @imagecopy($dest, $src, 0, 0, $x, $y, $src_width, $src_height);
+                @imagejpeg($dest, $this->path);
+                break;
+		    case 'png' :
+                $src = @imagecreatefrompng($this->path);
+                @imagecopy($dest, $src, 0, 0, $x, $y, $src_width, $src_height);
+                @imagepng($dest, $this->path);
+                break;
+		    case 'gif' :
+		        $src = @imagecreatefromgif($this->path);
+                @imagecopy($dest, $src, 0, 0, $x, $y, $src_width, $src_height);
+                @imagegif($dest, $this->path);
+		        break;
+            default: return 0;
+        }
+        @imagedestroy($dest);
+        @imagedestroy($src);
+    }
 
 	public function send_image($file = '', $compress = -1, $convert_file_to = null)
     {

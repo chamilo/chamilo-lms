@@ -193,8 +193,8 @@ if (!empty($course)) {
 		        WHERE (user_id = ".$userId.")";
 		$result = Database::query($sql);
 	}
-
-	echo '<div id="content-chat markdown-body">';
+        
+	echo '<div id="content-chat"';
 	foreach ($content as & $this_line) {
         echo $this_line;
 	}

@@ -123,7 +123,7 @@ if (!empty($course)) {
 	<div id="user-online-scroll" class="user-online">
 		<div class="title"><?php echo get_lang('Users'); ?> <?php echo get_lang('Connected'); ?></div>
 		<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
-		<div class="viewport"><div id="hidden" class="overview">
+		<div class="scrollbar-inner viewport"><div id="hidden" class="overview">
 		<ul class="profile list-group">
 			<?php
             foreach ($users as & $user) {

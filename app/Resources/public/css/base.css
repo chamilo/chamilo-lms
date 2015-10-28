@@ -95,6 +95,21 @@ a.thumbnail:hover{
   padding-top: 10px;
   margin-top: 5px;
 }
+.blackboard_show {
+    float:left;
+    position:absolute;
+    border:1px solid #000;
+    width: 200px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color:#000;
+    z-index:99; padding: 3px;
+    display: inline;
+    color: #fff;
+}
+.blackboard_hide {
+   display: none;
+}
 .section-page .page-header h3{
     font-size:22px;
     margin-top:5px;
@@ -998,7 +1013,9 @@ button.next.disabled {
     cursor:default;
 
 }
-
+.content-chat{
+    height: 200px;
+}
 /* Note */
 .note {
     margin: 6px;

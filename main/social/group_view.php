@@ -255,11 +255,11 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                     $icon= '';
                 }
 
-                $userPicture = UserManager::getUserPicture($member['user_id']);
+                $userPicture = UserManager::getUserPicture($member['id']);
 
                 $member_content .= '<div class="">';
                 $member_name = Display::url(api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon, $member['user_info']['profile_url']);
-                $member_content .= Display::div('<img class="social-groups-image" src="'.$userPicture.'"/>&nbsp'.$member_name);
+                $member_content .= Display::div('<img class="social-groups-image img-circle" src="'.$userPicture.'"/>&nbsp'.$member_name);
                 $member_content .= '</div>';
             }
         }

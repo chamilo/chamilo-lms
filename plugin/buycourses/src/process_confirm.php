@@ -22,6 +22,7 @@ if (isset($_POST['Confirm'])) {
     // Save the user, course and reference in a tmp table
     $user_id = $_SESSION['bc_user_id'];
     $reference = calculateReference($_SESSION['bc_codetext']);
+    $plugin = BuyCoursesPlugin::create();
 
     reset($_POST);
     while (list ($param, $val) = each($_POST)) {
@@ -39,7 +40,11 @@ if (isset($_POST['Confirm'])) {
     // Notify the user and send the bank info
 
     $accountsList = listAccounts();
-    $text = '<div align="center"><table style="width:70%"><tr><th style="text-align:center"><h3>Datos Bancarios</h3></th></tr>';
+    $text = '';
+    if ( !empty($accountsList) ) {        
+        $text = '<div align="center"><table style="width:70%"><tr><th style="text-align:center"><h3>'.$plugin->get_lang('BankAccountInformation').'</h3></th></tr>';
+    }
+    
     foreach ($accountsList as $account) {
         $text .= '<tr>';
         $text .= '<td>';
@@ -47,12 +52,12 @@ if (isset($_POST['Confirm'])) {
         if ($account['swift'] != '') {
             $text .= 'SWIFT: <strong>' . htmlspecialchars($account['swift']) . '</strong><br />';
         }
-        $text .= 'Cuenta Bancaria: <strong>' . htmlspecialchars($account['account']) . '</strong><br />';
+        $text .= $plugin->get_lang('BankAccount').': <strong>' . htmlspecialchars($account['account']) . '</strong><br />';
         $text .= '</td></tr>';
     }
     $text .= '</table></div>';
 
-    $plugin = BuyCoursesPlugin::create();
+   
     $asunto = utf8_encode($plugin->get_lang('bc_subject'));
 
 

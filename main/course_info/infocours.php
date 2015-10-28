@@ -46,6 +46,35 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
+$htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
+$htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
+$htmlHeadXtra[] = '<script>
+$(document).ready(function() {
+    $("input:file").change(function() {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("picture").files[0]);
+
+        oFReader.onload = function (oFREvent) {
+            document.getElementById("previewImage").src = oFREvent.target.result;
+            $("#labelCroppImage").html("'.get_lang('Preview').'");
+            var $image = $("#previewImage");
+            
+            $image.cropper({
+                aspectRatio: 4 / 3,
+                movable: false,
+                zoomable: false,
+                rotatable: false,
+                scalable: false,
+                crop: function(e) {
+                    // Output the result data for cropping image.
+                    $("[name=\'croppResult\']").val(e.x+","+e.y+","+e.width+","+e.height);
+                }
+            });
+        };
+    });
+});
+</script>';
+
 $show_delete_watermark_text_message = false;
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     if (isset($_GET['delete_watermark'])) {
@@ -103,18 +132,6 @@ $form->addElement('html', '<div><h3>'.Display::return_icon('settings.png', Secur
 
 $image_html = '';
 
-// Sending image
-if ($form->validate() && is_settings_editable()) {
-    // update course picture
-    $picture = $_FILES['picture'];
-    if (!empty($picture['name'])) {
-        $picture_uri = CourseManager::update_course_picture(
-            $course_code,
-            $picture['name'],
-            $picture['tmp_name']
-        );
-    }
-}
 
 // Display course picture
 $course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
@@ -147,10 +164,21 @@ $form->addText('department_url', get_lang('DepartmentUrl'), false);
 $form->applyFilter('department_url', 'html_filter');
 
 // Picture
-$form->addElement('file', 'picture', get_lang('AddPicture'));
+$form->addElement('file', 'picture', get_lang('AddPicture'), array('id' => 'picture', 'class' => 'picture-form'));
+$form->addHtml(''
+            . '<div class="form-group">'
+                . '<label for="croppImage" id="labelCroppImage" class="col-sm-2 control-label"></label>'
+                    . '<div class="col-sm-8">'
+                        . '<div id="croppImage" class="croppCanvas">'
+                            . '<img id="previewImage" >'
+                        . '</div>'
+                    . '</div>'
+            . '</div>'
+. '');
+$form->addHidden('croppResult', '');
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-$form->addElement('html', '<div class="form-group "><div class="col-md-2"></div> <div class="col-md-8 help-image">'.get_lang('UniqueAnswerImagePreferredSize200x150').'</div></div>');
+//$form->addElement('html', '<div class="form-group "><div class="col-md-2"></div> <div class="col-md-8 help-image">'.get_lang('UniqueAnswerImagePreferredSize200x150').'</div></div>');
 $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
 
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
@@ -427,7 +455,20 @@ $form->setDefaults($values);
 // Validate form
 if ($form->validate() && is_settings_editable()) {
     $updateValues = $form->exportValues();
-
+    
+        // Sending image
+    if ($form->validate() && is_settings_editable()) {
+        // update course picture
+        $picture = $_FILES['picture'];
+        if (!empty($picture['name'])) {
+            $picture_uri = CourseManager::update_course_picture(
+                $course_code,
+                $picture['name'],
+                $picture['tmp_name'],
+                $updateValues['croppResult']
+            );
+        }
+    }
     $visibility = $updateValues['visibility'];
     $deletePicture = isset($updateValues['delete_picture']) ? $updateValues['delete_picture'] : '';
 

@@ -1345,7 +1345,7 @@ $DeleteSelectedClasses = "Delete selected classes";
 $DeleteSelectedGroups = "Delete selected groups";
 $Administrator = "Administrator";
 $ChangePicture = "Change picture";
-$myCoursesSessionView = "Session view";
+$XComments = "%s comments";
 $AddUsers = "Add a user";
 $AddGroups = "Add groups";
 $AddClasses = "Add classes";
@@ -7574,4 +7574,7 @@ $SkillXAssignedToUserY = "The skill %s has been assigned to user %s";
 $AssignSkill = "Assign skill";
 $AddressField = "Address";
 $Geolocalization = "Geolocalization";
+$RateTheSkillInPractice = "On a grade of 1 to 10, how well did you observe that this person could put this skill in practice?";
+$AverageRatingX = "Average rating %s";
+$AverageRating = "Average rating";
 ?>

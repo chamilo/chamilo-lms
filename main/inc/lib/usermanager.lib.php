@@ -1620,22 +1620,27 @@ class UserManager
         }
 
         //Crop the image to adjust 1:1 ratio
-        $croppedImage = self::crop_image($source_file, $cropParameters);
-        $croppedPath = $croppedImage->image_wrapper->path;
+        $image = new Image($source_file);
+        $image->crop($cropParameters);
         
         // Storing the new photos in 4 versions with various sizes.
+        
+        $small = new Image($source_file);
+        $small->resize(22);
+        $small->send_image($path.'small_'.$filename);
+        $medium = new Image($source_file);
+        $medium->resize(85);
+        $medium->send_image($path.'medium_'.$filename);
+        $normal = new Image($source_file);
+        $normal->resize(200);
+        $normal->send_image($path.$filename);
 
-        $small = self::resize_picture($croppedPath, 22);
-        $medium = self::resize_picture($croppedPath, 85);
-        $normal = self::resize_picture($croppedPath, 200);
-
-        $big = new Image($croppedPath); // This is the original picture.
-
-        $ok = $small && $small->send_image($path.'small_'.$filename) &&
-            $medium && $medium->send_image($path.'medium_'.$filename) &&
-            $normal && $normal->send_image($path.$filename) &&
-            $big && $big->send_image($path.'big_'.$filename);
-        return $ok ? $filename : false;
+        $big = new Image($source_file); // This is the original picture.
+        $big->send_image($path.'big_'.$filename);
+        
+        $result = $small && $medium && $normal && $big;
+        
+        return $result ? $filename : false;
     }
 
     /**
@@ -3028,67 +3033,6 @@ class UserManager
             return (int) Database::result($res, 0, 0);
         }
         return false;
-    }
-
-    /**
-     * Resize a picture
-     *
-     * @param  string file picture
-     * @param  int size in pixels
-     * @todo move this function somewhere else image.lib?
-     * @return obj image object
-     */
-    public static function resize_picture($file, $max_size_for_picture)
-    {
-        $temp = false;
-        if (file_exists($file)) {
-            $temp = new Image($file);
-            $image_size = $temp->get_image_size($file);
-            $width = $image_size['width'];
-            $height = $image_size['height'];
-            if ($width >= $height) {
-                if ($width >= $max_size_for_picture) {
-                    // scale height
-                    $new_height = round($height * ($max_size_for_picture / $width));
-                    $temp->resize($max_size_for_picture, $new_height, 0);
-                }
-            } else { // height > $width
-                if ($height >= $max_size_for_picture) {
-                    // scale width
-                    $new_width = round($width * ($max_size_for_picture / $height));
-                    $temp->resize($new_width, $max_size_for_picture, 0);
-                }
-            }
-        }
-        return $temp;
-    }
-    
-    /**
-     * Crop a Image
-     * 
-     * @author José Loguercio <jose.loguercio@beeznest.com>
-     * @param string file picture
-     * @param string crop Parameters (x, y, width, height)
-     * @return obj image object
-     */
-    public static function crop_image($file, $cropParameters)
-    {
-        $image = false;
-        if (file_exists($file)) {
-            $image = new Image($file);
-            $image_size = $image->get_image_size($file);
-            $src_width = $image_size['width'];
-            $src_height = $image_size['height'];
-            $cropParameters = explode(",", $cropParameters);
-            $x = intval($cropParameters[0]);
-            $y = intval($cropParameters[1]);
-            $width = intval($cropParameters[2]);
-            $height = intval($cropParameters[3]);
-            
-            $image->crop($x, $y, $width, $height, $src_width, $src_height);
-        }
-        
-        return $image;
     }
 
     /**

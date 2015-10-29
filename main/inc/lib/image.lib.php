@@ -33,24 +33,37 @@ class Image
         }
     }
 
-    public function resize(
-        $thumbw,
-        $thumbh,
-        $border = 0,
-        $specific_size = false
-    ) {
-        $this->image_wrapper->resize($thumbw, $thumbh, $border, $specific_size);
+    public function resize($max_size_for_picture) {
+        $image_size = $this->get_image_size($this->path);
+        $width = $image_size['width'];
+        $height = $image_size['height'];
+        if ($width >= $height) {
+            if ($width >= $max_size_for_picture) {
+                // scale height
+                $new_height = round($height * ($max_size_for_picture / $width));
+                $this->image_wrapper->resize($max_size_for_picture, $new_height, 0);
+            }
+        } else { // height > $width
+            if ($height >= $max_size_for_picture) {
+                // scale width
+                $new_width = round($width * ($max_size_for_picture / $height));
+                 $this->image_wrapper->resize($new_width, $max_size_for_picture, 0);
+            }
+        }
     }
     
-    public function crop(
-        $x,
-        $y,
-        $width,
-        $height,
-        $src_width,
-        $src_height
-    ) {
-        $this->image_wrapper->crop($x, $y, $width, $height, $src_width, $src_height);
+    public function crop($cropParameters) {
+        $image_size = $this->get_image_size($this->path);
+        $src_width = $image_size['width'];
+        $src_height = $image_size['height'];
+        $cropParameters = explode(",", $cropParameters);
+        $x = intval($cropParameters[0]);
+        $y = intval($cropParameters[1]);
+        $width = intval($cropParameters[2]);
+        $height = intval($cropParameters[3]);
+
+        $image = $this->image_wrapper->crop($x, $y, $width, $height, $src_width, $src_height);
+        return $image;
     }
 
     public function send_image(

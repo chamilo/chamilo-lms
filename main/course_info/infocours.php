@@ -50,24 +50,33 @@ $htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/d
 $htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
+    var $image = $("#previewImage");
+    var $input = $("[name=\'cropResult\']");
+    
     $("input:file").change(function() {
         var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("picture").files[0]);
+        oFReader.readAsDataURL(document.getElementById("picture_form").files[0]);
 
         oFReader.onload = function (oFREvent) {
             document.getElementById("previewImage").src = oFREvent.target.result;
-            $("#labelCroppImage").html("'.get_lang('Preview').'");
-            var $image = $("#previewImage");
+            $("#labelCropImage").html("'.get_lang('Preview').'");
+            $("#cropImage").addClass("thumbnail");
+            
+            // Destroy cropper
+            $image.cropper("destroy");
+
+            // Replace url
+            $image.attr("src", this.result);
             
             $image.cropper({
-                aspectRatio: 4 / 3,
+                aspectRatio: 1 / 1,
                 movable: false,
                 zoomable: false,
                 rotatable: false,
                 scalable: false,
                 crop: function(e) {
                     // Output the result data for cropping image.
-                    $("[name=\'croppResult\']").val(e.x+","+e.y+","+e.width+","+e.height);
+                    $input.val(e.x+","+e.y+","+e.width+","+e.height);
                 }
             });
         };
@@ -167,15 +176,15 @@ $form->applyFilter('department_url', 'html_filter');
 $form->addElement('file', 'picture', get_lang('AddPicture'), array('id' => 'picture', 'class' => 'picture-form'));
 $form->addHtml(''
             . '<div class="form-group">'
-                . '<label for="croppImage" id="labelCroppImage" class="col-sm-2 control-label"></label>'
+                . '<label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>'
                     . '<div class="col-sm-8">'
-                        . '<div id="croppImage" class="croppCanvas">'
+                        . '<div id="cropImage" class="cropCanvas">'
                             . '<img id="previewImage" >'
                         . '</div>'
                     . '</div>'
             . '</div>'
 . '');
-$form->addHidden('croppResult', '');
+$form->addHidden('cropResult', '');
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 //$form->addElement('html', '<div class="form-group "><div class="col-md-2"></div> <div class="col-md-8 help-image">'.get_lang('UniqueAnswerImagePreferredSize200x150').'</div></div>');
@@ -456,19 +465,17 @@ $form->setDefaults($values);
 if ($form->validate() && is_settings_editable()) {
     $updateValues = $form->exportValues();
     
-        // Sending image
-    if ($form->validate() && is_settings_editable()) {
-        // update course picture
-        $picture = $_FILES['picture'];
-        if (!empty($picture['name'])) {
-            $picture_uri = CourseManager::update_course_picture(
-                $course_code,
-                $picture['name'],
-                $picture['tmp_name'],
-                $updateValues['croppResult']
-            );
-        }
+    // update course picture
+    $picture = $_FILES['picture'];
+    if (!empty($picture['name'])) {
+        $picture_uri = CourseManager::update_course_picture(
+            $course_code,
+            $picture['name'],
+            $picture['tmp_name'],
+            $updateValues['croppResult']
+        );
     }
+    
     $visibility = $updateValues['visibility'];
     $deletePicture = isset($updateValues['delete_picture']) ? $updateValues['delete_picture'] : '';
 

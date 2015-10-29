@@ -55,7 +55,7 @@ $(document).ready(function() {
     
     $("input:file").change(function() {
         var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("picture_form").files[0]);
+        oFReader.readAsDataURL(document.getElementById("picture").files[0]);
 
         oFReader.onload = function (oFREvent) {
             document.getElementById("previewImage").src = oFREvent.target.result;

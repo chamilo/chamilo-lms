@@ -69,7 +69,7 @@ $(document).ready(function() {
             $image.attr("src", this.result);
             
             $image.cropper({
-                aspectRatio: 1 / 1,
+                aspectRatio: 4 / 3,
                 movable: false,
                 zoomable: false,
                 rotatable: false,

@@ -83,3 +83,4 @@ $strings['InfoApiCredentials'] = 'Pour générer vos données API pour intégrer
 $strings['InfoApiStepOne'] = 'Aller dans l\'option <strong>profil</strong> de PayPal, et ensuite dans <strong>Outils de vente</strong>';
 $strings['InfoApiStepTwo'] = 'Dans la section <strong>API d\'accès</strong>, cloquer sur l\'option <strong>Mettre à jour</strong>';
 $strings['InfoApiStepThree'] = 'Dans l\'option 2 de Configuration des données et permissions API, cliquer sur <strong>Voir signature API</strong>. Copier ces donées dans le formulaire de configuration de ce plugin';
+$strings['bc_tmp_registered'] = 'Vous avez déjà une commande en attente de validation';

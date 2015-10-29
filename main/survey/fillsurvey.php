@@ -139,8 +139,13 @@ if (Database::num_rows($result) < 1) {
 $survey_invitation = Database::fetch_array($result, 'ASSOC');
 
 // Now we check if the user already filled the survey
-if ( !isset($_POST['finish_survey']) &&
-    ($isAnonymous && isset($_SESSION['surveyuser'])) ||
+if (
+    !isset($_POST['finish_survey']) &&
+    (
+        $isAnonymous &&
+        isset($_SESSION['surveyuser']) &&
+        SurveyUtil::isSurveyAnsweredFlagged($survey_invitation['survey_code'], $survey_invitation['c_id'])
+    ) ||
     ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))
 ) {
     api_not_allowed(true, get_lang('YouAlreadyFilledThisSurvey'));
@@ -576,6 +581,9 @@ if (isset($_POST['finish_survey'])) {
         $survey_invitation['user'],
         $survey_invitation['survey_code']
     );
+
+    SurveyUtil::flagSurveyAsAnswered($survey_invitation['survey_code'], $survey_invitation['c_id']);
+
     unset($_SESSION['paged_questions']);
     unset($_SESSION['page_questions_sec']);
     Display :: display_footer();

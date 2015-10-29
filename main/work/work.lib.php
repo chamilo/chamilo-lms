@@ -1591,20 +1591,24 @@ function getWorkListTeacher(
                     '#'
                 );
             }
-            $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
-            $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \'' . $deleteUrl . '\' ) " >' .
-                Display::return_icon(
-                    'delete.png',
-                    get_lang('Delete'),
-                    array(),
-                    ICON_SIZE_SMALL
-                ) . '</a>';
+            // Remove Delete Work Button from action List
+            // Because removeXSS "removes" the onClick JS Event to do the action (See model.ajax.php - Line 1639)
+            // But still can use the another jqgrid button to remove works (trash icon) 
+            //
+            // $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
+            // $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \'' . $deleteUrl . '\' ) " >' .
+            //     Display::return_icon(
+            //         'delete.png',
+            //         get_lang('Delete'),
+            //         array(),
+            //         ICON_SIZE_SMALL
+            //     ) . '</a>';
 
             if (!api_is_allowed_to_edit()) {
-                $deleteLink = null;
+                // $deleteLink = null;
                 $editLink = null;
             }
-            $work['actions'] = $visibilityLink.$correctionLink.$downloadLink.$editLink.$deleteLink;
+            $work['actions'] = $visibilityLink.$correctionLink.$downloadLink.$editLink;
             $works[] = $work;
         }
     }

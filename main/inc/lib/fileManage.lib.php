@@ -218,11 +218,13 @@ function move($source, $target, $forceMove = false)
 {
 	if (check_name_exist($source)) {
 		$file_name = basename($source);
+        $isWindowsOS = api_is_windows_os();
+        $canExec = function_exists('exec');
 
 		/* File case */
 		if (is_file($source)) {
-			if ($forceMove) {
-				rename($source, $target . '/' . $file_name);
+			if ($forceMove && !$isWindowsOS && $canExec) {
+				exec('mv ' . $source . ' ' . $target . '/' . $file_name);
 			} else {
 				copy($source, $target . '/' . $file_name);
 				unlink($source);
@@ -230,8 +232,8 @@ function move($source, $target, $forceMove = false)
 			return true;
 		} elseif (is_dir($source)) {
 			/* Directory */
-			if ($forceMove) {
-				rename($source, $target);
+			if ($forceMove && !$isWindowsOS && $canExec) {
+				exec('mv $source $target');
 			} else {
 				copyDirTo($source, $target);
 			}

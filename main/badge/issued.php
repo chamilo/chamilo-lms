@@ -63,7 +63,7 @@ $badgeAssertions = [];
 foreach ($userSkills as $userSkill) {
     $sessionId = 0;
     $course = $entityManager->find('ChamiloCoreBundle:Course', $userSkill->getCourseId());
-    $courseName = $course->getTitle();
+    $courseName = $course ? $course->getTitle() : '';
 
     if ($userSkill->getSessionId()) {
         $session = $entityManager->find('ChamiloCoreBundle:Session', $userSkill->getSessionId());

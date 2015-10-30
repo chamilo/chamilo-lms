@@ -11,7 +11,11 @@
                 <div class="panel-body">
                     {% for course in skill_info.courses %}
                     <p>
-                        <em class="fa fa-clock-o fa-fw"></em> {{ 'TimeXThroughCourseY'|get_lang|format(course.date_issued, course.name) }}
+                        {% if course.name %}
+                            <em class="fa fa-clock-o fa-fw"></em> {{ 'TimeXThroughCourseY'|get_lang|format(course.date_issued, course.name) }}
+                        {% else %}
+                            <em class="fa fa-clock-o fa-fw"></em> {{ course.date_issued }}
+                        {% endif %}
                     </p>
                     {% endfor %}
                 </div>

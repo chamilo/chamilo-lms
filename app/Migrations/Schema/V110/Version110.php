@@ -5,6 +5,7 @@ namespace Application\Migrations\Schema\V110;
 
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use \Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version110
@@ -477,9 +478,13 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('Føroyskt', 'faroese', 'fo', 'faroese', 0), ('Tagalog', 'tagalog', 'tl', 'tagalog',1), ('Tibetan', 'tibetan', 'bo', 'tibetan', 0), ('isiXhosa', 'xhosa', 'xh', 'xhosa', 0)");
         $this->addSql("DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools'");
 
+        $this->addSql("ALTER TABLE c_student_publication MODIFY COLUMN date_of_qualification DATETIME NULL DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_student_publication MODIFY COLUMN sent_date DATETIME NULL DEFAULT NULL");
         $this->addSql("UPDATE c_student_publication SET date_of_qualification = NULL WHERE date_of_qualification = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE c_student_publication SET sent_date = NULL WHERE sent_date = '0000-00-00 00:00:00'");
 
+        $this->addSql("ALTER TABLE c_student_publication_assignment MODIFY COLUMN expires_on DATETIME NULL DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_student_publication_assignment MODIFY COLUMN ends_on DATETIME NULL DEFAULT NULL");
         $this->addSql("UPDATE c_student_publication_assignment SET expires_on = NULL WHERE expires_on = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE c_student_publication_assignment SET ends_on = NULL WHERE ends_on = '0000-00-00 00:00:00'");
 
@@ -502,6 +507,9 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE access_url ADD COLUMN url_type TINYINT(1) NULL");
 
         $this->addSql("ALTER TABLE course_rel_user ADD INDEX idx_select_c (c_id)");
+
+        $this->addSql("ALTER TABLE track_e_uploads ADD COLUMN c_id INT NOT NULL");
+        $this->addSql("UPDATE track_e_uploads SET c_id = (SELECT id FROM course WHERE code = upload_cours_id)");
     }
 
     /**
@@ -512,7 +520,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_access DROP COLUMN access_cours_code");
         $this->addSql("ALTER TABLE track_e_default DROP COLUMN default_cours_code");
         $this->addSql("ALTER TABLE track_e_lastaccess DROP COLUMN access_cours_code");
-        $this->addSql("ALTER TABLE track_e_exercises DROP COLUMN exe_cours_id");
+        $this->addSql("ALTER TABLE track_e_exercices DROP COLUMN exe_cours_id");
         $this->addSql("ALTER TABLE track_e_downloads DROP COLUMN down_cours_id");
         $this->addSql("ALTER TABLE track_e_hotpotatoes DROP COLUMN exe_cours_id");
         $this->addSql("ALTER TABLE track_e_links DROP COLUMN links_cours_id");

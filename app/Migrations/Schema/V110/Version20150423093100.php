@@ -37,7 +37,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             act_true int unsigned,
             act_false int unsigned,
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence_rule_condition (
@@ -45,7 +45,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             sequence_rule_id int unsigned not null,
             sequence_condition_id int unsigned not null,
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence_method (
@@ -55,7 +55,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             assign int unsigned not null,
             met_type varchar(50) default '',
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence_rule_method (
@@ -64,7 +64,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             sequence_method_id int unsigned not null,
             method_order int unsigned not null,
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence_variable (
@@ -73,7 +73,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             name varchar(50),
             default_val varchar(50) default '',
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence_formula (
@@ -81,7 +81,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             sequence_method_id int unsigned not null,
             sequence_variable_id int unsigned not null,
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence_valid (
@@ -89,7 +89,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             sequence_variable_id int unsigned not null,
             sequence_condition_id int unsigned not null,
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence_type_entity (
@@ -98,7 +98,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             description TEXT default '',
             ent_table varchar(50) not null,
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence_row_entity (
@@ -109,7 +109,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             row_id int unsigned not null,
             name varchar(200) not null default '',
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence (
@@ -118,7 +118,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             sequence_row_entity_id_next int unsigned not null,
             is_part tinyint unsigned not null default 0,
             PRIMARY KEY (id)
-        );");
+        )");
 
         $this->addSql("
         CREATE TABLE IF NOT EXISTS sequence_value (
@@ -134,7 +134,7 @@ class Version20150423093100 extends AbstractMigrationChamilo
             available_start_date datetime not null,
             available_end_date datetime not null,
             PRIMARY KEY (id)
-        );");
+        )");
     }
 
     /**

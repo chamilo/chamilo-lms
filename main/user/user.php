@@ -255,7 +255,7 @@ if (api_is_allowed_to_edit(null, true)) {
                         if ($_GET['type'] == 'pdf') {
                             $user_info = api_get_user_info($user['user_id']);
                             $user_image = Display::img(
-                                $user_info['avatar'],
+                                $user_info['avatar_no_query'],
                                 null,
                                 array('width' => $user_image_pdf_size.'px')
                             );
@@ -310,9 +310,8 @@ if (api_is_allowed_to_edit(null, true)) {
                         $sql .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
                     }
 
-                    //only users no teachers/coaches
+                    // only users no teachers/coaches
                     $sql .= " AND course_user.status = 5 ";
-
                     $sql .= ($sort_by_first_name ? " ORDER BY user.firstname, user.lastname" : " ORDER BY user.lastname, user.firstname");
 
                     $rs = Database::query($sql);
@@ -341,7 +340,7 @@ if (api_is_allowed_to_edit(null, true)) {
                         if ($_GET['type'] == 'pdf') {
                             $user_info = api_get_user_info($user['user_id']);
                             $user_image = Display::img(
-                                $user_info['avatar'],
+                                $user_info['avatar_no_query'],
                                 null,
                                 array('width' => $user_image_pdf_size.'px')
                             );

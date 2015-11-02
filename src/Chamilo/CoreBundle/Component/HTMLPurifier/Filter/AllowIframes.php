@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Component\HTMLPurifier\Filter;
+
+use HTMLPurifier_Filter;
+use HTMLPurifier_Config;
+use HTMLPurifier_Context;
+
 /**
  * Class definition for HTMLPurifier that allows (but controls) iframes
  * @package chamilo.lib
@@ -7,7 +15,7 @@
  * Based on: http://stackoverflow.com/questions/4739284/htmlpurifier-iframe-vimeo-and-youtube-video
  * Iframe filter that does some primitive whitelisting in a somewhat recognizable and tweakable way
  */
-class HTMLPurifier_Filter_AllowIframes extends HTMLPurifier_Filter
+class AllowIframes extends HTMLPurifier_Filter
 {
     public $name = 'AllowIframes';
 
@@ -18,7 +26,7 @@ class HTMLPurifier_Filter_AllowIframes extends HTMLPurifier_Filter
      * @param HTMLPurifier_Context $context
      * @return string
      */
-    public function preFilter($html, HTMLPurifier_Config $config, HTMLPurifier_Context $context)
+    public function preFilter($html, $config, $context)
     {
         $html = preg_replace('#<iframe#i', '<img class="MyIframe"', $html);
         $html = preg_replace('#</iframe>#i', '</img>', $html);
@@ -32,7 +40,7 @@ class HTMLPurifier_Filter_AllowIframes extends HTMLPurifier_Filter
      * @param HTMLPurifier_Context $context
      * @return string
      */
-    public function postFilter($html, HTMLPurifier_Config $config, HTMLPurifier_Context $context)
+    public function postFilter($html, $config, $context)
     {
         $post_regex = '#<img class="MyIframe"([^>]+?)>#';
         return preg_replace_callback($post_regex, array($this, 'postFilterCallback'), $html);

@@ -23,6 +23,8 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
+use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
+
 /**
  * Security class
  *
@@ -338,7 +340,7 @@ class Security
             $config->set('Core.RemoveProcessingInstructions', true);
 
             if (api_get_setting('enable_iframe_inclusion') == 'true') {
-                $config->set('Filter.Custom', array(new HTMLPurifier_Filter_AllowIframes()));
+                $config->set('Filter.Custom', array(new AllowIframes()));
             }
 
             // Shows _target attribute in anchors

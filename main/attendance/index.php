@@ -150,9 +150,11 @@ $(function() {
 		var calendar_id = col_split[2];
 
 		if (this.checked) {
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",true);
+			$(".checkboxes_col_"+calendar_id+" input:checkbox").prop("checked",true);
+            $(".checkboxes_col_"+calendar_id+"").addClass("row_selected");
 		} else {
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",false);
+			$(".checkboxes_col_"+calendar_id+" input:checkbox").prop("checked",false);
+            $(".checkboxes_col_"+calendar_id+"").removeClass("row_selected");
 		}
 	});
 

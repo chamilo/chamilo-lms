@@ -352,7 +352,7 @@ class GradebookDataGenerator
                 case 'L' :
                     //if ($parentId == 0) {
                         $scoreWeight = [
-                            $score[0] / $score[1] * $item->get_weight(),
+                            ($score[1] > 0) ? $score[0] / $score[1] * $item->get_weight() : 0,
                             $item->get_weight()
                         ];
                     //}

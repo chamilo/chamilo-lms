@@ -2018,36 +2018,36 @@ function migrate($chamiloVersion, EntityManager $manager)
         $version->getMigration()->setEntityManager($manager);
     }
 
-    $to = null;
-    // Retrieve SQL queries that should be run to migrate you schema to $to version,
-    // if $to == null - schema will be migrated to latest version
-    $versions = $migration->getSql($to);
+    $to = null; // if $to == null then schema will be migrated to latest version
 
-    if ($debug) {
-        $nl = '<br>';
-        foreach ($versions as $version => $queries) {
-            echo 'VERSION: '.$version.$nl;
-            echo '----------------------------------------------'.$nl.$nl;
-            foreach ($queries as $query) {
-                echo $query.$nl;
-            }
-            echo $nl.$nl;
-        }
-    }
+    echo "<pre>";
 
     try {
         // Execute migration!
-        $migration->migrate($to);
+        $migratedSQL = $migration->migrate($to);
+
         if ($debug) {
-            echo 'DONE'.$nl;
+            foreach ($migratedSQL as $version => $sqlList) {
+                echo "VERSION: $version<br>";
+                echo "----------------------------------------------<br>";
+
+                foreach ($sqlList as $sql) {
+                    echo "<code>$sql</code><br>";
+                }
+            }
+
+            echo "<br>DONE!<br>";
         }
+
         return true;
     } catch (Exception $ex) {
         if ($debug) {
-            echo 'ERROR: '.$ex->getMessage().$nl;
+            echo "ERROR: {$ex->getMessage()}<br>";
             return false;
         }
     }
+
+    echo "</pre>";
 
     return false;
 }

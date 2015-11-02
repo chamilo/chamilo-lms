@@ -60,7 +60,7 @@ if (isset($_REQUEST['register'])) {
             $result_simple_sub = SessionManager::set_coach_to_course_session(
                 $_REQUEST['user_id'],
                 $current_session_id,
-                $courseInfo['code']
+                $courseInfo['real_id']
             );
         } else {
             $result_simple_sub = CourseManager:: subscribe_user(

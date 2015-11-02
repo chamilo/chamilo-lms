@@ -81,6 +81,32 @@ $s->register(
 );
 
 $s->register(
+	'WSSession.SubscribeTeacherToSession',
+	array(
+		'secret_key' => 'xsd:string',
+		'user_id_field_name' => 'xsd:string',
+		'user_id_value' => 'xsd:string',
+		'session_id_field_name' => 'xsd:string',
+		'session_id_value' => 'xsd:string',
+        'course_id_field_name' => 'xsd:string',
+		'course_id_value' => 'xsd:string'
+	)
+);
+
+$s->register(
+	'WSSession.UnsubscribeTeacherFromSession',
+	array(
+		'secret_key' => 'xsd:string',
+		'user_id_field_name' => 'xsd:string',
+		'user_id_value' => 'xsd:string',
+		'session_id_field_name' => 'xsd:string',
+		'session_id_value' => 'xsd:string',
+        'course_id_field_name' => 'xsd:string',
+		'course_id_value' => 'xsd:string'
+	)
+);
+
+$s->register(
 	'WSSession.SubscribeCourseToSession',
 	array(
 		'secret_key' => 'xsd:string',

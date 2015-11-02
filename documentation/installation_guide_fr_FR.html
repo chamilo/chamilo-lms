@@ -738,7 +738,7 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
 	RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/courses/$1/course-pic85x85.png [QSA,L]
 	RewriteRule ^courses/([^/]+)/course-pic.png$ app/courses/$1/course-pic.png [QSA,L]
 	RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
-    RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued.php?skill=$1&user=$2 [L]
+    RewriteRule "^badge/(\d{1,})/user/(\d{1,})$" main/badge/issued.php?skill=$1&user=$2 [L]
   &lt;/Directory&gt;
 </pre>
 <h3>Nginx</h3>

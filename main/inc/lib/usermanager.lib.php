@@ -1495,21 +1495,21 @@ class UserManager
         $anonymousPath = api_get_path(WEB_CODE_PATH).'img/'.$pictureAnonymous;
 
         if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {
-            
+
             if ($gravatarEnabled === 'true') {
                 $file = self::getGravatar(
                     $imageWebPath['email'],
                     $gravatarSize,
                     api_get_setting('gravatar_type')
                 );
-                
+
                 if ($addRandomId) {
                     $file .= '&rand='.uniqid();
                 }
-                
+
                 return $file;
             }
-            
+
             return $anonymousPath;
         }
 
@@ -3939,7 +3939,7 @@ class UserManager
         $masterSelect = "SELECT DISTINCT * FROM ";
 
         if ($getCount) {
-            $masterSelect = "SELECT COUNT(DISTINCT(u.id)) as count FROM ";
+            $masterSelect = "SELECT COUNT(DISTINCT(user_id)) as count FROM ";
             $select = " SELECT DISTINCT(u.id) user_id";
         }
 

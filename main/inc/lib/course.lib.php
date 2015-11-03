@@ -3114,9 +3114,10 @@ class CourseManager
      * @param   string  Course code
      * @param   string  File name
      * @param   string  The full system name of the image from which course picture will be created.
+     * @param   string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
      * @return  bool    Returns the resulting. In case of internal error or negative validation returns FALSE.
      */
-    public static function update_course_picture($course_code, $filename, $source_file = null)
+    public static function update_course_picture($course_code, $filename, $source_file = null, $cropParameters = null)
     {
         $course_info = api_get_course_info($course_code);
         // course path
@@ -3132,18 +3133,21 @@ class CourseManager
             unlink($course_medium_image);
         }
 
-        $my_course_image = new Image($source_file);
-        $result = $my_course_image->send_image($course_image, -1, 'png');
-        // Resize image to 100x85 (should be 85x85 but 100x85 visually gives
-        // better results for most images people put as course icon)
-        if ($result) {
-            $medium = new Image($course_image);
-            //$picture_infos = $medium->get_image_size();
-            $medium->resize(100, 85, 0, false);
-            $medium->send_image($store_path . '/course-pic85x85.png', -1, 'png');
-        }
+        //Crop the image to adjust 4:3 ratio
+        $image = new Image($source_file);
+        $image->crop($cropParameters);
+        
+        //Resize the images in two formats
+        $medium = new Image($source_file);
+        $medium->resize(85);
+        $medium->send_image($course_medium_image, -1, 'png');
+        $normal = new Image($source_file);
+        $normal->resize(300);
+        $normal->send_image($course_image, -1, 'png');
+        
+        $result = $medium && $normal;
 
-        return $result;
+        return $result ? $result : false;
     }
 
     /**

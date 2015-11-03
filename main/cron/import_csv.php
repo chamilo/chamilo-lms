@@ -1385,7 +1385,7 @@ class ImportCsv
                         SessionManager::set_coach_to_course_session(
                             $userId,
                             $chamiloSessionId,
-                            $courseInfo['code']
+                            $courseInfo['real_id']
                         );
                         break;
                 }

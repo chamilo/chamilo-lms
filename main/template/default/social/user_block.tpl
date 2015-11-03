@@ -17,18 +17,20 @@
                             <li class="item">
                                 {{ user.complete_name }}
                             </li>
-                            <li class="item">
-                                <a href="{{ _p.web }}main/messages/new_message.php">
-                                <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
-                                {{ user.email}}
-                                </a>
-                            </li>
-                            <li class="item">
-                                <a href="{{ vcard_user_link }}">
-                                <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "BusinessCard" | get_lang }}" width="16" height="16">
-                                {{ "BusinessCard" | get_lang }}
-                                </a>
-                            </li>
+                            {% if vcard_user_link  %}
+                                <li class="item">
+                                    <a href="{{ _p.web }}main/messages/new_message.php">
+                                    <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
+                                    {{ user.email}}
+                                    </a>
+                                </li>
+                                <li class="item">
+                                    <a href="{{ vcard_user_link }}">
+                                    <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "BusinessCard" | get_lang }}" width="16" height="16">
+                                    {{ "BusinessCard" | get_lang }}
+                                    </a>
+                                </li>
+                            {% endif %}
                         {% if chat_enabled == 1 %}
                             <li class="item">
                                 {% if user.id == _u.id %}

@@ -2785,9 +2785,9 @@ class SessionManager
                     // and then exit
                     $sql = "DELETE FROM $tbl_session_rel_course_rel_user
                             WHERE
-                                session_id = '$session_id' AND
-                                c_id = '$courseId' AND
-                                user_id = '$user_id' ";
+                                session_id = $session_id AND
+                                c_id = $courseId AND
+                                user_id = $user_id ";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result) > 0)
                         return true;
@@ -2799,18 +2799,18 @@ class SessionManager
                 // First check if the user is registered to the course
                 $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
                         WHERE
-                            session_id = '$session_id' AND
-                            c_id = '$courseId' AND
-                            user_id = '$user_id'";
+                            session_id = $session_id AND
+                            c_id = $courseId AND
+                            user_id = $user_id";
                 $rs_check = Database::query($sql);
 
                 // Then update or insert.
                 if (Database::num_rows($rs_check) > 0) {
                     $sql = "UPDATE $tbl_session_rel_course_rel_user SET status = 2
 					        WHERE
-					            session_id = '$session_id' AND
-					            c_id = '$courseId' AND
-					            user_id = '$user_id' ";
+					            session_id = $session_id AND
+					            c_id = $courseId AND
+					            user_id = $user_id ";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result) > 0) {
                         return true;
@@ -2819,7 +2819,7 @@ class SessionManager
                     }
                 } else {
                     $sql = "INSERT INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id, status)
-                            VALUES('$session_id', '$courseId', '$user_id', 2)";
+                            VALUES($session_id, $courseId, $user_id, 2)";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result) > 0) {
                         return true;

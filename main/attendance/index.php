@@ -93,79 +93,79 @@ if (!empty($attendance_id)) {
 $htmlHeadXtra[] = '<script>
 
 $(function() {
-	$("table th img").click(function() {
-		var col_id = this.id;
-		var col_split = col_id.split("_");
-		var calendar_id = col_split[2];
-		var class_img = $(this).attr("class");
+    $("table th img").click(function() {
+        var col_id = this.id;
+        var col_split = col_id.split("_");
+        var calendar_id = col_split[2];
+        var class_img = $(this).attr("class");
 
-		if (class_img == "img_unlock") {
-			//lock
-			$(".checkbox_head_"+calendar_id).attr("disabled", true);
+        if (class_img == "img_unlock") {
+            //lock
+            $(".checkbox_head_"+calendar_id).attr("disabled", true);
 
-			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9",   "border-left":"none","border-right":"none"});
-			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	 "border-left":"none","border-right":"none"});
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);
-			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/icons/22/lock-closed.png");
-			$(this).attr("title","'.get_lang('DateUnLock').'");
-			$(this).attr("alt","'.get_lang('DateUnLock').'");
-			$(this).attr("class","img_lock");
-			$("#hidden_input_"+calendar_id).attr("value","");
-			$("#hidden_input_"+calendar_id).attr("disabled",true);
-			return false;
+            $(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9",   "border-left":"none","border-right":"none"});
+            $(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF",      "border-left":"none","border-right":"none"});
+            $(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);
+            $(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/icons/22/lock-closed.png");
+            $(this).attr("title","'.get_lang('DateUnLock').'");
+            $(this).attr("alt","'.get_lang('DateUnLock').'");
+            $(this).attr("class","img_lock");
+            $("#hidden_input_"+calendar_id).attr("value","");
+            $("#hidden_input_"+calendar_id).attr("disabled",true);
+            return false;
 
-		} else {
-			//Unlock
-			$(".checkbox_head_"+calendar_id).attr("disabled", false);
-			$(".checkbox_head_"+calendar_id).removeAttr("disabled");
+        } else {
+            //Unlock
+            $(".checkbox_head_"+calendar_id).attr("disabled", false);
+            $(".checkbox_head_"+calendar_id).removeAttr("disabled");
 
-			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#dcdcdc", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
-			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#eee", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
+            $(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#dcdcdc", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
+            $(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#eee", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
 
-			$(".checkboxes_col_"+calendar_id).mouseover(function() {
-				//$(".checkbox_head_"+calendar_id).removeAttr("opacity");
-				//$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"red", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
-				//$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
-			});
+            $(".checkboxes_col_"+calendar_id).mouseover(function() {
+                //$(".checkbox_head_"+calendar_id).removeAttr("opacity");
+                //$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"red", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
+                //$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF",       "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
+            });
 
-			$(".checkboxes_col_"+calendar_id).mouseout(function() {
-                //	$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
-                //	$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
-			});
+            $(".checkboxes_col_"+calendar_id).mouseout(function() {
+                //    $("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
+                //    $("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF",       "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
+            });
 
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);
-			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/icons/22/lock-open.png");
-			$(this).attr("title","'.get_lang('DateLock').'");
-			$(this).attr("alt","'.get_lang('DateLock').'");
-			$(this).attr("class","img_unlock");
-			$("#hidden_input_"+calendar_id).attr("disabled",false);
-			$("#hidden_input_"+calendar_id).attr("value",calendar_id);
-			return false;
-		}
-	});
+            $(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);
+            $(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/icons/22/lock-open.png");
+            $(this).attr("title","'.get_lang('DateLock').'");
+            $(this).attr("alt","'.get_lang('DateLock').'");
+            $(this).attr("class","img_unlock");
+            $("#hidden_input_"+calendar_id).attr("disabled",false);
+            $("#hidden_input_"+calendar_id).attr("value",calendar_id);
+            return false;
+        }
+    });
 
-	$("table th input:checkbox").click(function() {
-		var col_id = this.id;
-		var col_split = col_id.split("_");
-		var calendar_id = col_split[2];
+    $("table th input:checkbox").click(function() {
+        var col_id = this.id;
+        var col_split = col_id.split("_");
+        var calendar_id = col_split[2];
 
-		if (this.checked) {
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").prop("checked",true);
+        if (this.checked) {
+            $(".checkboxes_col_"+calendar_id+" input:checkbox").prop("checked",true);
             $(".checkboxes_col_"+calendar_id+"").addClass("row_selected");
-		} else {
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").prop("checked",false);
+        } else {
+            $(".checkboxes_col_"+calendar_id+" input:checkbox").prop("checked",false);
             $(".checkboxes_col_"+calendar_id+"").removeClass("row_selected");
-		}
-	});
+        }
+    });
 
-	$(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseover(function() {
-		$(".row_odd").css({"background-color":"#F9F9F9"});
-		$(".row_even").css({"background-color":"#FFF"});
-	});
-	$(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseout(function() {
-		$(".row_odd").css({"background-color":"#F9F9F9"});
-		$(".row_even").css({"background-color":"#FFF"});
-	});
+    $(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseover(function() {
+        $(".row_odd").css({"background-color":"#F9F9F9"});
+        $(".row_even").css({"background-color":"#FFF"});
+    });
+    $(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseout(function() {
+        $(".row_odd").css({"background-color":"#F9F9F9"});
+        $(".row_even").css({"background-color":"#FFF"});
+    });
 });
 
 </script>';

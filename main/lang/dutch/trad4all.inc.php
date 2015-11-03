@@ -1097,6 +1097,7 @@ $Exercises = "Oefeningen";
 $AllowPersonalAgendaTitle = "Persoonlijke agenda";
 $AllowPersonalAgendaComment = "Mag de gebruiker persoonlijke agenda-items toevoegen aan de Mijn Agendapagina?";
 $CurrentValue = "huidige waarde";
+$MyCoursesDefaultView = "Per klas";
 $UserPassword = "Wachtwoord";
 $SubscriptionAllowed = "Inschrijven toegelaten";
 $UnsubscriptionAllowed = "Uitschrijven toegelaten";
@@ -5499,4 +5500,5 @@ $List = "Lijst";
 $CourseDescriptions = "Cursus beschrijvingen";
 $GlossaryTermUpdated = "Termen aangepast";
 $DeleteAllGlossaryTerms = "Verwijder alle termen";
+$MyCoursesSessionView = "Per module";
 ?>

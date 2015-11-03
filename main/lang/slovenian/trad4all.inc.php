@@ -1306,7 +1306,6 @@ $DeleteSelectedClasses = "Odstrani izbrane razrede";
 $DeleteSelectedGroups = "Odstrani izbrane skupine";
 $Administrator = "Upravitelj";
 $ChangePicture = "Spremeni sliko";
-$myCoursesSessionView = "Pogled seje";
 $AddUsers = "Dodaj uporabnike";
 $AddGroups = "Dodaj skupine";
 $AddClasses = "Dodaj razrede";

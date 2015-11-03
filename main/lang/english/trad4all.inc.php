@@ -7577,4 +7577,6 @@ $Geolocalization = "Geolocalization";
 $RateTheSkillInPractice = "On a grade of 1 to 10, how well did you observe that this person could put this skill in practice?";
 $AverageRatingX = "Average rating %s";
 $AverageRating = "Average rating";
+$GradebookTeacherResultsNotShown = "Teachers results are not shown nor taken into account in the gradebook.";
+$SocialWallWriteNewPostToFriend = "Write something on your friend's wall";
 ?>

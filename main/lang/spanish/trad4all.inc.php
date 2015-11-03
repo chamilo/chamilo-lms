@@ -3022,7 +3022,7 @@ $OfficialCode = "Código oficial";
 $FirstName = "Nombre";
 $LastName = "Apellidos";
 $Status = "Estado";
-$Email = "e-mail";
+$Email = "Correo electrónico";
 $SlideshowConversion = "Conversión de la presentación";
 $UploadFile = "Enviar archivo";
 $AvailableFrom = "Disponible desde";
@@ -7602,4 +7602,6 @@ $Geolocalization = "Geolocalización";
 $RateTheSkillInPractice = "En una valoración de 1 a 10 ¿Qué tan bien se observa que esta persona podría poner esta competencia en práctica?";
 $AverageRatingX = "Promedio de la valoración %s";
 $AverageRating = "Promedio de la valoración";
+$GradebookTeacherResultsNotShown = "Los resultados de los profesores no se muestran ni están tomados en cuenta en los cálculos de la herramienta de evaluaciones.";
+$SocialWallWriteNewPostToFriend = "Escribe algo interesante en el muro de tu amigo...";
 ?>

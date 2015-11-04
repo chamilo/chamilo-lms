@@ -10178,7 +10178,7 @@ EOD;
 
         $progress = self::getProgress($this->lp_id, $this->user_id, $this->course_int_id, $sessionId);
 
-        if ($progress > 50) {
+        if ($progress >= 50) {
             $stars++;
         }
 

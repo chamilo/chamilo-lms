@@ -11,6 +11,7 @@ $action = $_REQUEST['a'];
 
 $course_id = api_get_course_int_id();
 $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+$sessionId = api_get_session_id();
 
 switch ($action) {
     case 'get_documents';
@@ -170,6 +171,23 @@ switch ($action) {
             }
         }
 
+        break;
+    case 'update_gamification':
+        $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
+
+        $jsonGamification = [
+            'stars' => 0,
+            'score' => 0
+        ];
+
+        if ($lp) {
+            $score = $lp->getCalculateScore($sessionId);
+
+            $jsonGamification['stars'] = $lp->getCalculateStars($sessionId);
+            $jsonGamification['score'] = sprintf(get_lang('XPoints'), $score);
+        }
+
+        echo json_encode($jsonGamification);
         break;
     default:
         echo '';

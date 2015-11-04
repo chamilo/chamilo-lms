@@ -214,6 +214,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "update_toc('highlight','".$new_item_id."');".
         "update_toc('$mylesson_status','".$new_item_id."');".
         "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
+    $return .= 'updateGamificationValues(); ';
 
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.

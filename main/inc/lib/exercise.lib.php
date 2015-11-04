@@ -110,7 +110,7 @@ class ExerciseLib
                         <div class="clearfix">
                         <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix">';
                 } else {
-                    $s .= '<div id="drag{'.$questionId.'}_question" class="drag_question">
+                    $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
                            <table class="data_table">';
                 }
 

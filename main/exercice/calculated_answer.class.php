@@ -234,7 +234,7 @@ class CalculatedAnswer extends Question
                 }
                 $this->save();
                 $objAnswer = new Answer($this->id);
-                $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, null);
+                $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, '');
                 $objAnswer->position = array();
                 $objAnswer->save();
             }

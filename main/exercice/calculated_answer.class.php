@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Webit\Util\EvalMath\EvalMath;
+
 /**
  *  Class CalculatedAnswer
  *  This class contains calculated answer form and answer processing functions

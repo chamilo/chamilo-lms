@@ -1361,6 +1361,26 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
 }
 
 /**
+ * Update the gamification values (number of stars and score)
+ */
+function updateGamificationValues() {
+    var fetchValues = $.ajax('<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php', {
+        dataType: 'json',
+        data: {
+            a: 'update_gamification'
+        }
+    });
+
+    $.when(fetchValues).done(function (values) {
+        if (values.stars > 0) {
+            $('#scorm-gamification .fa-star:nth-child(' + values.stars + ')').addClass('level');
+        }
+
+        $('#scorm-gamification .col-xs-4').text(values.score);
+    });
+}
+
+/**
  * Analyses the variables that have been modified through this SCO's life and
  * put them into an array for later shipping to lp_ajax_save_item.php
  * @return  array   Array of SCO variables

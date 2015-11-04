@@ -52,24 +52,28 @@ $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     var $image = $("#previewImage");
     var $input = $("[name=\'cropResult\']");
+    var $cropButton = $("#cropButton");
+    var canvas = "";
+    var imageWidth = "";
+    var imageHeight = "";
     
     $("input:file").change(function() {
         var oFReader = new FileReader();
         oFReader.readAsDataURL(document.getElementById("picture").files[0]);
 
         oFReader.onload = function (oFREvent) {
-            document.getElementById("previewImage").src = oFREvent.target.result;
+            $image.attr("src", this.result);
             $("#labelCropImage").html("'.get_lang('Preview').'");
             $("#cropImage").addClass("thumbnail");
-            
+            $cropButton.removeClass("hidden");
             // Destroy cropper
             $image.cropper("destroy");
 
-            // Replace url
-            $image.attr("src", this.result);
-            
             $image.cropper({
                 aspectRatio: 4 / 3,
+                responsive : true,
+                center : false,
+                guides : false,
                 movable: false,
                 zoomable: false,
                 rotatable: false,
@@ -80,6 +84,15 @@ $(document).ready(function() {
                 }
             });
         };
+    });
+    
+    $("#cropButton").on("click", function() {
+        var canvas = $image.cropper("getCroppedCanvas");
+        var dataUrl = canvas.toDataURL();
+        $image.attr("src", dataUrl);
+        $image.cropper("destroy");
+        $cropButton.addClass("hidden");
+        return false;
     });
 });
 </script>';
@@ -180,6 +193,9 @@ $form->addHtml(''
                     . '<div class="col-sm-8">'
                         . '<div id="cropImage" class="cropCanvas">'
                             . '<img id="previewImage" >'
+                        . '</div>'
+                        . '<div>'
+                            . '<button class="btn btn-primary hidden" name="cropButton" id="cropButton"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>'
                         . '</div>'
                     . '</div>'
             . '</div>'

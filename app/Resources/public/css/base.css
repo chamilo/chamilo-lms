@@ -1374,7 +1374,10 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 a.unread {
     font-weight:bold;
 }
-
+.cropCanvas > img {
+    max-width: 300px;
+    max-height: 200px;
+}
 
 /*SOCIAL TOOL*/
 

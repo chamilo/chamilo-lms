@@ -2408,6 +2408,10 @@ form .formw .freeze {
 .label_tag.course {
     background-color: #62cffc;
 }
+.label{
+    font-weight: normal;
+    font-size: 90%;
+}
 .invisible {
     color: #999;
 }
@@ -5103,11 +5107,11 @@ div#chat-remote-video video {
 .ui-accordion .ui-accordion-content-active{
 
 }
-.ui-jqgrid-view .label-success{
-  font-size: 14px;
-}
 .ui-jqgrid-view .ui-widget-content a{
   color:#666666;
+}
+.ui-jqgrid-view .ui-widget-content a.btn{
+    color: #fff;
 }
 .ui-jqgrid-view .ui-state-default,
 .ui-jqgrid-view .ui-widget-content .ui-state-default,

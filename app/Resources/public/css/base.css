@@ -4420,6 +4420,7 @@ ul.exercise-draggable-answer .touch-items{
   padding: 10px 20px 10px 20px;
   border: solid #b0b0b0 1px;
   text-decoration: none;
+  z-index: 100;
 }
 ul.exercise-draggable-answer .touch-items:hover{
   background: #ffffff;

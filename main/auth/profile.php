@@ -31,7 +31,56 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
+$htmlHeadXtra[] = '<link  href="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
+$htmlHeadXtra[] = '<script src="'. api_get_path(WEB_PATH) .'web/assets/cropper/dist/cropper.min.js"></script>';
 $htmlHeadXtra[] = '<script>
+$(document).ready(function() {
+    var $image = $("#previewImage");
+    var $input = $("[name=\'cropResult\']");
+    var $cropButton = $("#cropButton");
+    var canvas = "";
+    var imageWidth = "";
+    var imageHeight = "";
+    
+    $("input:file").change(function() {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("picture_form").files[0]);
+
+        oFReader.onload = function (oFREvent) {
+            $image.attr("src", this.result);
+            $("#labelCropImage").html("'.get_lang('Preview').'");
+            $("#cropImage").addClass("thumbnail");
+            $cropButton.removeClass("hidden");
+            // Destroy cropper
+            $image.cropper("destroy");
+
+            $image.cropper({
+                aspectRatio: 1 / 1,
+                responsive : true,
+                center : false,
+                guides : false,
+                movable: false,
+                zoomable: false,
+                rotatable: false,
+                scalable: false,
+                crop: function(e) {
+                    // Output the result data for cropping image.
+                    $input.val(e.x+","+e.y+","+e.width+","+e.height);
+                }
+            });
+        };
+    });
+    
+    $("#cropButton").on("click", function() {
+        var canvas = $image.cropper("getCroppedCanvas");
+        var dataUrl = canvas.toDataURL();
+        $image.attr("src", dataUrl);
+        $image.cropper("destroy");
+        $cropButton.addClass("hidden");
+        return false;
+    });
+});
+
 function confirmation(name) {
     if (confirm("'.get_lang('AreYouSureToDeleteJS', '').' " + name + " ?")) {
             document.forms["profile"].submit();
@@ -207,8 +256,22 @@ if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
         ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang(
             'AddImage'
         )),
-        array('class' => 'picture-form')
+        array('id' => 'picture_form', 'class' => 'picture-form')
     );
+    $form->addHtml(''
+                . '<div class="form-group">'
+                    . '<label for="cropImage" id="labelCropImage" class="col-sm-2 control-label"></label>'
+                        . '<div class="col-sm-8">'
+                            . '<div id="cropImage" class="cropCanvas">'
+                                . '<img id="previewImage" >'
+                            . '</div>'
+                            . '<div>'
+                                . '<button class="btn btn-primary hidden" name="cropButton" id="cropButton"><em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'</button>'
+                            . '</div>'
+                        . '</div>'
+                . '</div>'
+    . '');
+    $form->addHidden('cropResult', '');
     $form->add_progress_bar();
     if (!empty($user_data['picture_uri'])) {
         $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
@@ -497,7 +560,8 @@ if ($form->validate()) {
         $new_picture = UserManager::update_user_picture(
             api_get_user_id(),
             $_FILES['picture']['name'],
-            $_FILES['picture']['tmp_name']
+            $_FILES['picture']['tmp_name'],
+            $user_data['cropResult']
         );
 
         if ($new_picture) {

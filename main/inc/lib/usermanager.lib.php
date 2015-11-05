@@ -1547,10 +1547,11 @@ class UserManager
      *                       If an empty name is provided, then old user photos are deleted only,
      * @see     UserManager::delete_user_picture() as the prefered way for deletion.
      * @param   string $source_file The full system name of the image from which user photos will be created.
+     * @param   string $cropParameters Optional string that contents "x,y,width,height" of a cropped image format
      * @return  string/bool Returns the resulting common file name of created images which usually should be stored in database.
      * When deletion is requested returns empty string. In case of internal error or negative validation returns FALSE.
      */
-    public static function update_user_picture($user_id, $file = null, $source_file = null)
+    public static function update_user_picture($user_id, $file = null, $source_file = null, $cropParameters)
     {
         if (empty($user_id)) {
             return false;
@@ -1618,19 +1619,28 @@ class UserManager
             $filename = $user_id.'_'.$filename;
         }
 
+        //Crop the image to adjust 1:1 ratio
+        $image = new Image($source_file);
+        $image->crop($cropParameters);
+        
         // Storing the new photos in 4 versions with various sizes.
-
-        $small = self::resize_picture($source_file, 22);
-        $medium = self::resize_picture($source_file, 85);
-        $normal = self::resize_picture($source_file, 200);
+        
+        $small = new Image($source_file);
+        $small->resize(22);
+        $small->send_image($path.'small_'.$filename);
+        $medium = new Image($source_file);
+        $medium->resize(85);
+        $medium->send_image($path.'medium_'.$filename);
+        $normal = new Image($source_file);
+        $normal->resize(200);
+        $normal->send_image($path.$filename);
 
         $big = new Image($source_file); // This is the original picture.
-
-        $ok = $small && $small->send_image($path.'small_'.$filename) &&
-            $medium && $medium->send_image($path.'medium_'.$filename) &&
-            $normal && $normal->send_image($path.$filename) &&
-            $big && $big->send_image($path.'big_'.$filename);
-        return $ok ? $filename : false;
+        $big->send_image($path.'big_'.$filename);
+        
+        $result = $small && $medium && $normal && $big;
+        
+        return $result ? $filename : false;
     }
 
     /**
@@ -3023,39 +3033,6 @@ class UserManager
             return (int) Database::result($res, 0, 0);
         }
         return false;
-    }
-
-    /**
-     * Resize a picture
-     *
-     * @param  string file picture
-     * @param  int size in pixels
-     * @todo move this function somewhere else image.lib?
-     * @return obj image object
-     */
-    public static function resize_picture($file, $max_size_for_picture)
-    {
-        $temp = false;
-        if (file_exists($file)) {
-            $temp = new Image($file);
-            $image_size = $temp->get_image_size($file);
-            $width = $image_size['width'];
-            $height = $image_size['height'];
-            if ($width >= $height) {
-                if ($width >= $max_size_for_picture) {
-                    // scale height
-                    $new_height = round($height * ($max_size_for_picture / $width));
-                    $temp->resize($max_size_for_picture, $new_height, 0);
-                }
-            } else { // height > $width
-                if ($height >= $max_size_for_picture) {
-                    // scale width
-                    $new_width = round($width * ($max_size_for_picture / $height));
-                    $temp->resize($new_width, $max_size_for_picture, 0);
-                }
-            }
-        }
-        return $temp;
     }
 
     /**

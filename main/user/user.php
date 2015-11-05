@@ -957,19 +957,24 @@ if (api_is_allowed_to_edit(null, true)) {
         case STUDENT:
             $selectedTab = 1;
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.STUDENT;
+            $icon = Display::url(
+                    Display::return_icon('add-user.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
+                    $url
+                    );
             break;
         case COURSEMANAGER:
             $selectedTab = 2;
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
+            $icon = Display::url(
+                    Display::return_icon('add-teacher.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
+                    $url
+                    );
             break;
     }
 
     echo '<div class="row">';
     echo '<div class="col-md-6">';
-    echo Display::url(
-        Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM),
-        $url
-    );
+    echo $icon;
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.

@@ -81,7 +81,7 @@ $s->register(
 );
 
 $s->register(
-	'WSSession.SubscribeTeacherToSession',
+	'WSSession.SubscribeTeacherToSessionCourse',
 	array(
 		'secret_key' => 'xsd:string',
 		'user_id_field_name' => 'xsd:string',
@@ -94,7 +94,7 @@ $s->register(
 );
 
 $s->register(
-	'WSSession.UnsubscribeTeacherFromSession',
+	'WSSession.UnsubscribeTeacherFromSessionCourse',
 	array(
 		'secret_key' => 'xsd:string',
 		'user_id_field_name' => 'xsd:string',

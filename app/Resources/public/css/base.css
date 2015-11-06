@@ -5318,6 +5318,7 @@ div#chat-remote-video video {
 .items-course .items-course-info .title{
   font-size: 14px;
   min-height: 32px;
+  line-height: 1.3;
 }
 .items-course .items-course-info .teachers{
   font-size: 12px;

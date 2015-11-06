@@ -14,7 +14,7 @@
     margin: 0;
     max-height: none;
     max-width: none !important;
-    /* overflow: scroll !important; */
+    overflow: scroll !important;
     padding: 0;
     position: relative !important;
     top: 0;
@@ -68,14 +68,6 @@
     height: 0;
     width: 0;
 }
-
-
-
-
-
-
-
-
 
 /*************** SIMPLE INNER SCROLLBAR ***************/
 
@@ -144,15 +136,6 @@
 
 .scrollbar-inner > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size { left: -12px; }
 .scrollbar-inner > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size { top: -12px; }
-
-
-
-
-
-
-
-
-
 
 /*************** SIMPLE OUTER SCROLLBAR ***************/
 
@@ -229,14 +212,6 @@
 .scrollbar-outer > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size { top: -14px; }
 
 
-
-
-
-
-
-
-
-
 /*************** SCROLLBAR MAC OS X ***************/
 
 .scrollbar-macosx > .scroll-element,
@@ -284,7 +259,6 @@
     opacity: 0.7;
 }
 
-
 .scrollbar-macosx > .scroll-element.scroll-x {
     bottom: 0px;
     height: 0px;
@@ -315,15 +289,6 @@
 /* update scrollbar offset if both scrolls are visible */
 .scrollbar-macosx > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_size { left: -11px; }
 .scrollbar-macosx > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_size { top: -11px; }
-
-
-
-
-
-
-
-
-
 
 /*************** SCROLLBAR LIGHT ***************/
 
@@ -424,15 +389,6 @@
 .scrollbar-light > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track { left: -19px; }
 .scrollbar-light > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track { top: -19px; }
 
-
-
-
-
-
-
-
-
-
 /*************** SCROLLBAR RAIL ***************/
 
 .scrollbar-rail > .scroll-element,
@@ -521,15 +477,6 @@
 
 .scrollbar-rail > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track { left: -25px; }
 .scrollbar-rail > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track { top: -25px; }
-
-
-
-
-
-
-
-
-
 
 /*************** SCROLLBAR DYNAMIC ***************/
 
@@ -682,15 +629,6 @@
     width: 20px;
 }
 
-
-
-
-
-
-
-
-
-
 /*************** SCROLLBAR GOOGLE CHROME ***************/
 
 .scrollbar-chrome > .scroll-element,
@@ -782,10 +720,3 @@
 
 .scrollbar-chrome > .scroll-element.scroll-x.scroll-scrolly_visible .scroll-element_track { left: -19px; }
 .scrollbar-chrome > .scroll-element.scroll-y.scroll-scrollx_visible .scroll-element_track { top: -19px; }
-
-
-
-
-
-
-

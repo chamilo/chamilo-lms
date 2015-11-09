@@ -285,7 +285,7 @@ if(!empty($msg)) {
             if (is_array($assigned_courses_to_hrm)) {
                     foreach($assigned_courses_to_hrm as $enreg) {
             ?>
-                <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
+                <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="' . htmlspecialchars($enreg['title'], ENT_QUOTES) . '"'; ?>><?php echo $enreg['title'] . ' (' . $enreg['code'] . ')'; ?></option>
             <?php
                     }
                 }

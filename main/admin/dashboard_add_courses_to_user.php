@@ -218,7 +218,7 @@ $result	= Database::query($sql);
 
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;">
-<input type="hidden" name="formSe" value="1" />
+<input type="hidden" name="formSent" value="1" />
 <?php
 if(!empty($msg)) {
 	Display::display_normal_message($msg); //main API
@@ -276,16 +276,20 @@ if(!empty($msg)) {
 		} else {
 			echo get_lang('AssignedCoursesListToHumanResourcesManager');
 		}
-            ?>:</h5>
+            ?>
+            :
+        </h5>
         
         <select id='destination' name="CoursesList[]" multiple="multiple" size="20" style="width:320px;">
             <?php
             if (is_array($assigned_courses_to_hrm)) {
                     foreach($assigned_courses_to_hrm as $enreg) {
             ?>
-                    <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
-            <?php }
-            }?>
+                <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
+            <?php
+                    }
+                }
+            ?>
         </select>
     </div>
 </div>

@@ -283,7 +283,7 @@ if(!empty($msg)) {
         <select id='destination' name="CoursesList[]" multiple="multiple" size="20" style="width:320px;">
             <?php
             if (is_array($assigned_courses_to_hrm)) {
-                    foreach($assigned_courses_to_hrm as $enreg) {
+                foreach ($assigned_courses_to_hrm as $enreg) {
             ?>
                 <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="' . htmlspecialchars($enreg['title'], ENT_QUOTES) . '"'; ?>><?php echo $enreg['title'] . ' (' . $enreg['code'] . ')'; ?></option>
             <?php

@@ -14,10 +14,34 @@ class Version20150603181728 extends AbstractMigrationChamilo
     /**
      * @param Schema $schema
      */
+    public function preUp(Schema $schema)
+    {
+        $this->addSql("ALTER TABLE course ENGINE=InnoDB");
+        $this->addSql("ALTER TABLE c_group_info ENGINE=InnoDB");
+        $this->addSql("ALTER TABLE session ENGINE=InnoDB");
+        $this->addSql("ALTER TABLE user ENGINE=InnoDB");
+        $this->addSql("ALTER TABLE c_item_property ENGINE=InnoDB");
+    }
+
+    /**
+     * @param Schema $schema
+     */
     public function up(Schema $schema)
     {
         $this->addSql('ALTER TABLE c_lp ADD max_attempts INT NOT NULL, ADD subscribe_users INT NOT NULL DEFAULT 0');
-        $this->addSql('ALTER TABLE c_item_property CHANGE c_id c_id INT DEFAULT NULL, CHANGE insert_user_id insert_user_id INT DEFAULT NULL, CHANGE start_visible start_visible DATETIME DEFAULT NULL, CHANGE end_visible end_visible DATETIME DEFAULT NULL, CHANGE session_id session_id INT DEFAULT NULL');
+        $this->addSql('
+            ALTER TABLE c_item_property
+            MODIFY c_id INT DEFAULT NULL,
+            MODIFY lastedit_user_id INT NOT NULL,
+            MODIFY to_group_id INT NULL,
+            MODIFY insert_user_id INT DEFAULT NULL,
+            MODIFY start_visible DATETIME DEFAULT NULL,
+            MODIFY end_visible DATETIME DEFAULT NULL,
+            MODIFY session_id INT DEFAULT NULL,
+            MODIFY to_user_id INT NULL
+        ');
+        $this->addSql("UPDATE c_item_property SET session_id = NULL WHERE session_id = 0");
+        $this->addSql("UPDATE c_item_property SET to_group_id = NULL WHERE to_group_id = 0");
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18191D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C181330D47E9 FOREIGN KEY (to_group_id) REFERENCES c_group_info (iid)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18129F6EE60 FOREIGN KEY (to_user_id) REFERENCES user (id)');

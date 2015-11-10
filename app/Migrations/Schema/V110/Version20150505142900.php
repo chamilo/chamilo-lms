@@ -27,17 +27,17 @@ class Version20150505142900 extends AbstractMigrationChamilo
             $chatVideoTable->addColumn(
                 'id',
                 Type::INTEGER,
-                ['unsigned' => true, 'autoincrement' => true, 'notnull' => true]
+                ['autoincrement' => true, 'notnull' => true]
             );
             $chatVideoTable->addColumn(
                 'from_user',
                 Type::INTEGER,
-                ['unsigned' => true, 'notnull' => true]
+                ['notnull' => true]
             );
             $chatVideoTable->addColumn(
                 'to_user',
                 Type::INTEGER,
-                ['unsigned' => true, 'notnull' => true]
+                ['notnull' => true]
             );
             $chatVideoTable->addColumn(
                 'room_name',

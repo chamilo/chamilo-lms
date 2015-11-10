@@ -8,7 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CBlogTaskRelUser
  *
- * @ORM\Table(name="c_blog_task_rel_user")
+ * @ORM\Table(
+ *  name="c_blog_task_rel_user",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="user", columns={"user_id"}),
+ *      @ORM\Index(name="task", columns={"task_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CBlogTaskRelUser

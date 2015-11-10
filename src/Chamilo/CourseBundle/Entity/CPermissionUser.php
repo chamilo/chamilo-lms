@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CPermissionUser
  *
- * @ORM\Table(name="c_permission_user")
+ * @ORM\Table(
+ *  name="c_permission_user",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CPermissionUser

@@ -7,7 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CBlogPost
  *
- * @ORM\Table(name="c_blog_post")
+ * @ORM\Table(
+ *  name="c_blog_post",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CBlogPost

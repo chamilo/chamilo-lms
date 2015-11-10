@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CBlogAttachment
  *
- * @ORM\Table(name="c_blog_attachment")
+ * @ORM\Table(
+ *  name="c_blog_attachment",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CBlogAttachment

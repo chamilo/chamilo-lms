@@ -7,7 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * FieldRelTag
  *
- * @ORM\Table(name="extra_field_rel_tag")
+ * @ORM\Table(
+ *  name="extra_field_rel_tag",
+ *  indexes={
+ *      @ORM\Index(name="field", columns={"field_id"}),
+ *      @ORM\Index(name="item", columns={"item_id"}),
+ *      @ORM\Index(name="tag", columns={"tag_id"}),
+ *      @ORM\Index(name="field_item_tag", columns={"field_id", "item_id", "tag_id"})
+ *  }
+ * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ExtraFieldRelTagRepository")
  */
 class ExtraFieldRelTag

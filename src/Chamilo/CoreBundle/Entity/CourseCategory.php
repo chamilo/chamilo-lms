@@ -7,7 +7,16 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CourseCategory
  *
- * @ORM\Table(name="course_category", uniqueConstraints={@ORM\UniqueConstraint(name="code", columns={"code"})}, indexes={@ORM\Index(name="parent_id", columns={"parent_id"}), @ORM\Index(name="tree_pos", columns={"tree_pos"})})
+ * @ORM\Table(
+ *  name="course_category",
+ *  uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="code", columns={"code"})
+ *  },
+ *  indexes={
+ *      @ORM\Index(name="parent_id", columns={"parent_id"}),
+ *      @ORM\Index(name="tree_pos", columns={"tree_pos"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CourseCategory

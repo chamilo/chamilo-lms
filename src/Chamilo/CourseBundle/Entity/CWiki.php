@@ -8,7 +8,16 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CWiki
  *
- * @ORM\Table(name="c_wiki", indexes={@ORM\Index(name="reflink", columns={"reflink"}), @ORM\Index(name="group_id", columns={"group_id"}), @ORM\Index(name="page_id", columns={"page_id"}), @ORM\Index(name="session_id", columns={"session_id"})})
+ * @ORM\Table(
+ *  name="c_wiki",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="reflink", columns={"reflink"}),
+ *      @ORM\Index(name="group_id", columns={"group_id"}),
+ *      @ORM\Index(name="page_id", columns={"page_id"}),
+ *      @ORM\Index(name="session_id", columns={"session_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CWiki

@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * COnlineConnected
  *
- * @ORM\Table(name="c_online_connected")
+ * @ORM\Table(
+ *  name="c_online_connected",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class COnlineConnected

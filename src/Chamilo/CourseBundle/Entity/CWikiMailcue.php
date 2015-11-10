@@ -8,7 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CWikiMailcue
  *
- * @ORM\Table(name="c_wiki_mailcue", indexes={@ORM\Index(name="c_id", columns={"c_id", "id"})})
+ * @ORM\Table(
+ *  name="c_wiki_mailcue",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="user", columns={"user_id"}),
+ *      @ORM\Index(name="c_id", columns={"c_id", "id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CWikiMailcue

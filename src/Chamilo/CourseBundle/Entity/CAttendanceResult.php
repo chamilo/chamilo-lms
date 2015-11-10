@@ -8,7 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CAttendanceResult
  *
- * @ORM\Table(name="c_attendance_result", indexes={@ORM\Index(name="attendance_id", columns={"attendance_id"}), @ORM\Index(name="user_id", columns={"user_id"})})
+ * @ORM\Table(
+ *  name="c_attendance_result",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="attendance_id", columns={"attendance_id"}),
+ *      @ORM\Index(name="user_id", columns={"user_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CAttendanceResult

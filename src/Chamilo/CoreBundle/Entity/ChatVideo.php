@@ -22,14 +22,14 @@ class ChatVideo
     /**
      * @var integer
      *
-     * @ORM\Column(name="from_user", type="integer", nullable=true)
+     * @ORM\Column(name="from_user", type="integer", nullable=false)
      */
     private $fromUser;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="to_user", type="integer", nullable=true)
+     * @ORM\Column(name="to_user", type="integer", nullable=false)
      */
     private $toUser;
 

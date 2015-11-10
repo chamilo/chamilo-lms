@@ -29,7 +29,12 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="user")
+ * @ORM\Table(
+ *  name="user",
+ *  indexes={
+ *      @ORM\Index(name="status", columns={"status"})
+ *  }
+ * )
  * //Vich\Uploadable
  * @UniqueEntity("username")
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")

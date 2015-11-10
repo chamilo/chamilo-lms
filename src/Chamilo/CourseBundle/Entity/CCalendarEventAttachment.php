@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CCalendarEventAttachment
  *
- * @ORM\Table(name="c_calendar_event_attachment")
+ * @ORM\Table(
+ *  name="c_calendar_event_attachment",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CCalendarEventAttachment

@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CCalendarEventRepeat
  *
- * @ORM\Table(name="c_calendar_event_repeat")
+ * @ORM\Table(
+ *  name="c_calendar_event_repeat",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CCalendarEventRepeat

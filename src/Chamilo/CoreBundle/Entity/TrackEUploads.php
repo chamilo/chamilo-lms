@@ -7,7 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TrackEUploads
  *
- * @ORM\Table(name="track_e_uploads", indexes={@ORM\Index(name="upload_user_id", columns={"upload_user_id"}), @ORM\Index(name="upload_cours_id", columns={"upload_cours_id"}), @ORM\Index(name="upload_session_id", columns={"upload_session_id"})})
+ * @ORM\Table(
+ *  name="track_e_uploads",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="upload_user_id", columns={"upload_user_id"}),
+ *      @ORM\Index(name="upload_cours_id", columns={"upload_cours_id"}),
+ *      @ORM\Index(name="upload_session_id", columns={"upload_session_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class TrackEUploads

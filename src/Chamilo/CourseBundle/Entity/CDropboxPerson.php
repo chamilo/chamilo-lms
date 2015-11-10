@@ -8,7 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CDropboxPerson
  *
- * @ORM\Table(name="c_dropbox_person")
+ * @ORM\Table(
+ *  name="c_dropbox_person",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="user", columns={"user_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CDropboxPerson

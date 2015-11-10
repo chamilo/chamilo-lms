@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CCalendarEventRepeatNot
  *
- * @ORM\Table(name="c_calendar_event_repeat_not")
+ * @ORM\Table(
+ *  name="c_calendar_event_repeat_not",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CCalendarEventRepeatNot
@@ -40,8 +45,6 @@ class CCalendarEventRepeatNot
      * @var integer
      *
      * @ORM\Column(name="cal_date", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $calDate;
 

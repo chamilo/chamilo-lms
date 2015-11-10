@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CQuizAnswer
  *
- * @ORM\Table(name="c_quiz_answer")
+ * @ORM\Table(
+ *  name="c_quiz_answer",
+ *  indexes={
+ *      @ORM\Index(name="c_id", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CQuizAnswer

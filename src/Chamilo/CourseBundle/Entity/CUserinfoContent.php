@@ -8,7 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CUserinfoContent
  *
- * @ORM\Table(name="c_userinfo_content", indexes={@ORM\Index(name="user_id", columns={"user_id"})})
+ * @ORM\Table(
+ *  name="c_userinfo_content",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="user_id", columns={"user_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CUserinfoContent

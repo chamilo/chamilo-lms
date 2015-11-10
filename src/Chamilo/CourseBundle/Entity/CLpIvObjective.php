@@ -8,7 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CLpIvObjective
  *
- * @ORM\Table(name="c_lp_iv_objective", indexes={@ORM\Index(name="lp_iv_id", columns={"lp_iv_id"})})
+ * @ORM\Table(
+ *  name="c_lp_iv_objective",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="lp_iv_id", columns={"lp_iv_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CLpIvObjective

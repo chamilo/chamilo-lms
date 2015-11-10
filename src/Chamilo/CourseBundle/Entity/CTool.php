@@ -8,7 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CTool
  *
- * @ORM\Table(name="c_tool", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
+ * @ORM\Table(
+ *  name="c_tool",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="session_id", columns={"session_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CTool

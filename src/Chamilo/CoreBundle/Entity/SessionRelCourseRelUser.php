@@ -61,21 +61,21 @@ class SessionRelCourseRelUser
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sessionCourseSubscriptions", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user;
 
     /**
      * @var Session
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="userCourseSubscriptions", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
     protected $session;
 
     /**
      * @var Course
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     protected $course;
 

@@ -7,7 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TrackStoredValues
  *
- * @ORM\Table(name="track_stored_values", uniqueConstraints={@ORM\UniqueConstraint(name="user_id_2", columns={"user_id", "sco_id", "course_id", "sv_key"})})
+ * @ORM\Table(
+ *  name="track_stored_values",
+ *  uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="user_id_2", columns={"user_id", "sco_id", "course_id", "sv_key"})
+ *  },
+ *  indexes={
+ *      @ORM\Index(name="user_sco_course_sv", columns={"user_id", "sco_id", "course_id", "sv_key"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class TrackStoredValues

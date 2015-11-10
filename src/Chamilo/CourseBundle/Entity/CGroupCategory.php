@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CGroupCategory
  *
- * @ORM\Table(name="c_group_category")
+ * @ORM\Table(
+ *  name="c_group_category",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CGroupCategory

@@ -9,7 +9,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * CLpCategory
  *
- * @ORM\Table(name="c_lp_category")
+ * @ORM\Table(
+ *  name="c_lp_category",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"})
+ *  }
+ * )
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
 class CLpCategory

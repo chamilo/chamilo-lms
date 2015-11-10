@@ -8,7 +8,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CLpItemView
  *
- * @ORM\Table(name="c_lp_item_view", indexes={@ORM\Index(name="lp_item_id", columns={"lp_item_id"}), @ORM\Index(name="lp_view_id", columns={"lp_view_id"}), @ORM\Index(name="idx_c_lp_item_view_cid_lp_view_id_lp_item_id", columns={"c_id", "lp_view_id", "lp_item_id"})})
+ * @ORM\Table(
+ *  name="c_lp_item_view",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="lp_item_id", columns={"lp_item_id"}),
+ *      @ORM\Index(name="lp_view_id", columns={"lp_view_id"}),
+ *      @ORM\Index(name="idx_c_lp_item_view_cid_lp_view_id_lp_item_id", columns={"c_id", "lp_view_id", "lp_item_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CLpItemView

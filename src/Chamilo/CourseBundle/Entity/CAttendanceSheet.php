@@ -8,7 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CAttendanceSheet
  *
- * @ORM\Table(name="c_attendance_sheet", indexes={@ORM\Index(name="presence", columns={"presence"})})
+ * @ORM\Table(
+ *  name="c_attendance_sheet",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="user", columns={"user_id"}),
+ *      @ORM\Index(name="presence", columns={"presence"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CAttendanceSheet
@@ -40,8 +47,6 @@ class CAttendanceSheet
      * @var integer
      *
      * @ORM\Column(name="user_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $userId;
 
@@ -49,8 +54,6 @@ class CAttendanceSheet
      * @var integer
      *
      * @ORM\Column(name="attendance_calendar_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $attendanceCalendarId;
 

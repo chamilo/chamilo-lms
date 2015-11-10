@@ -7,7 +7,16 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TrackEAttempt
  *
- * @ORM\Table(name="track_e_attempt", indexes={@ORM\Index(name="exe_id", columns={"exe_id"}), @ORM\Index(name="user_id", columns={"user_id"}), @ORM\Index(name="question_id", columns={"question_id"}), @ORM\Index(name="session_id", columns={"session_id"})})
+ * @ORM\Table(
+ *  name="track_e_attempt",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="exe_id", columns={"exe_id"}),
+ *      @ORM\Index(name="user_id", columns={"user_id"}),
+ *      @ORM\Index(name="question_id", columns={"question_id"}),
+ *      @ORM\Index(name="session_id", columns={"session_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class TrackEAttempt

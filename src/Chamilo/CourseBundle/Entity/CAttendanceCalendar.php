@@ -8,7 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CAttendanceCalendar
  *
- * @ORM\Table(name="c_attendance_calendar", indexes={@ORM\Index(name="attendance_id", columns={"attendance_id"}), @ORM\Index(name="done_attendance", columns={"done_attendance"})})
+ * @ORM\Table(
+ *  name="c_attendance_calendar",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="attendance_id", columns={"attendance_id"}),
+ *      @ORM\Index(name="done_attendance", columns={"done_attendance"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CAttendanceCalendar

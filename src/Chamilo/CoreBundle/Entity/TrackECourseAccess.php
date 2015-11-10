@@ -7,7 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TrackECourseAccess
  *
- * @ORM\Table(name="track_e_course_access", indexes={@ORM\Index(name="user_id", columns={"user_id"}), @ORM\Index(name="login_course_date", columns={"login_course_date"}), @ORM\Index(name="session_id", columns={"session_id"})})
+ * @ORM\Table(
+ *  name="track_e_course_access",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="user_id", columns={"user_id"}),
+ *      @ORM\Index(name="login_course_date", columns={"login_course_date"}),
+ *      @ORM\Index(name="session_id", columns={"session_id"})
+ *  }
+ * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\TrackECourseAccessRepository")
  */
 class TrackECourseAccess

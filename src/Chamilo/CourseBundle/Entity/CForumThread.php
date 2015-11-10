@@ -8,7 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CForumThread
  *
- * @ORM\Table(name="c_forum_thread", indexes={@ORM\Index(name="idx_forum_thread_forum_id", columns={"forum_id"})})
+ * @ORM\Table(
+ *  name="c_forum_thread",
+ *  indexes={
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="idx_forum_thread_forum_id", columns={"forum_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class CForumThread

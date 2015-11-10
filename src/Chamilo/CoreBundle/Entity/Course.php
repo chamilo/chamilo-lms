@@ -16,7 +16,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class Course
  *
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="course")
+ * @ORM\Table(
+ *  name="course",
+ *  indexes={
+ *      @ORM\Index(name="category_code", columns={"category_code"}),
+ *      @ORM\Index(name="directory", columns={"directory"}),
+ *  }
+ * )
  * @UniqueEntity("code")
  * @UniqueEntity("visualCode")
  * @UniqueEntity("directory")

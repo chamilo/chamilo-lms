@@ -31,13 +31,13 @@ class SessionRelCourse
 
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
     protected $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */
     protected $course;
 

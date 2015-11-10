@@ -1831,8 +1831,8 @@ class Display
             case 'info':
                 $class = 'label-info';
                 break;
-            case 'inverse':
-                $class = 'label-inverse';
+            case 'primary':
+                $class = 'label-primary';
                 break;
             default:
                 $class = 'label-default';

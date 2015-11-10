@@ -218,11 +218,11 @@ if ($my_message != 'PostDeletedSpecial') {
             . '&search=' . Security::remove_XSS(urlencode($my_search));
         echo $my_url . '&view=flat">'
             . Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
-            . get_lang('FlatView') . '</a>';
+            . '</a>';
         //echo $my_url.'&view=threaded">'.Display::return_icon('forum_threadedview.gif', get_lang('ThreadedView')).get_lang('ThreadedView').'</a>';
         echo $my_url . '&view=nested">'
             . Display::return_icon('forum_nestedview.png', get_lang('NestedView'), null, ICON_SIZE_MEDIUM)
-            . get_lang('NestedView') . '</a>';
+            . '</a>';
     }
     $my_url = null;
 

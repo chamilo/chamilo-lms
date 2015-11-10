@@ -519,13 +519,13 @@ class Template
             'mediaelement/build/mediaelementplayer.min.css',
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css',
             'bootstrap/dist/css/bootstrap.min.css',
+            'jquery.scrollbar/jquery.scrollbar.css',
         ];
 
         foreach ($bowerCSSFiles as $file) {
             $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
         }
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/bootstrap-select/css/bootstrap-select.min.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/jquery-scrollbar/jquery.scrollbar.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css';
 
@@ -626,7 +626,6 @@ class Template
         // JS files
         $js_files = array(
             'chosen/chosen.jquery.min.js',
-            'jquery-scrollbar/jquery.scrollbar.min.js',
             'bootstrap-select/js/bootstrap-select.min.js',
             $selectLink
         );
@@ -663,7 +662,8 @@ class Template
             'jquery-timeago/jquery.timeago.js',
             'mediaelement/build/mediaelement-and-player.min.js',
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
-            'imagemap-resizer/js/imageMapResizer.min.js'
+            'imagemap-resizer/js/imageMapResizer.min.js',
+            'jquery.scrollbar/jquery.scrollbar.min.js'
         ];
 
         if (api_get_setting('include_asciimathml_script') == 'true') {

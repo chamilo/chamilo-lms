@@ -1545,10 +1545,10 @@ class Link extends Model
         $count = count($categories);
         if (!empty($count)) {
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
-            echo Display::return_icon('forum_listview.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM). get_lang('FlatView') . ' </a>';
+            echo Display::return_icon('forum_listview.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM) . ' </a>';
 
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=all">';
-            echo Display::return_icon('forum_nestedview.png', get_lang('NestedView'), '', ICON_SIZE_MEDIUM) . get_lang('NestedView') . '</a>';
+            echo Display::return_icon('forum_nestedview.png', get_lang('NestedView'), '', ICON_SIZE_MEDIUM) . '</a>';
         }
         echo '</div>';
 

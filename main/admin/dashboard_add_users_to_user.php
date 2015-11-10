@@ -408,23 +408,7 @@ if(!empty($msg)) {
 <div class="row">
     <div class="col-md-4">
         <?php echo get_lang('UserListInPlatform') ?>
-        <?php if($add_type == 'multiple') { ?>
-            <div class="form-group">
-                <label class="col-sm-7 control-label"><?php echo get_lang('FirstLetterUser');?></label>
-                <div class="col-sm-5">
-                <select class="selectpicker show-tick form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
-                    <option value="%">--</option>
-                    <?php echo Display::get_alphabet_options($firstLetterUser); ?>
-                </select>
-                </div>
-            </div>
-
-        <!-- <div class="form-group">
-            <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" onclick="moveItem(document.getElementById('user_to_add'), document.getElementById('destination'))" />
-            <div id="ajax_list_users_single"></div>
-        </div> -->
-
-        <?php } ?>
+       
         <div class="form-group">
             <div class="col-sm-12">
                 <div id="ajax_list_users_multiple">
@@ -443,22 +427,41 @@ if(!empty($msg)) {
 
     </div>
     <div class="col-md-4">
+        <div class="code-course">
+            <?php if($add_type == 'multiple') { ?>
+                <p><?php echo get_lang('FirstLetterUser');?></p>
+                <select class="selectpicker show-tick form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
+                    <option value="%">--</option>
+                    <?php echo Display::get_alphabet_options($firstLetterUser); ?>
+                </select>
+            <?php } ?>
+        </div>
+        <div class="control-course">
         <?php if ($ajax_search) { ?>
-            <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
+            <div class="separate-action">
+                <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
+            </div>
           <?php } else { ?>
-            <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+            <div class="separate-action">
+                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                 <em class="fa fa-chevron-right"></em>
             </button>
-            <br /><br />
-            <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+            </div>
+            <div class="separate-action">
+                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                 <em class="fa fa-chevron-left"></em>
-            </button>
+                </button>
+            </div>
+            
           <?php
           }
           ?>
-            <?php
+            <div class="separate-action">
+                <?php
 		echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
             ?>
+            </div>
+        </div>
     </div>
     <div class="col-md-4">
         <?php

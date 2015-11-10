@@ -2408,6 +2408,10 @@ form .formw .freeze {
 .label_tag.course {
     background-color: #62cffc;
 }
+.label{
+    font-weight: normal;
+    font-size: 90%;
+}
 .invisible {
     color: #999;
 }
@@ -4274,7 +4278,11 @@ ul.holder li.bit-box{
   padding-top: 2em;
   padding-bottom: 2em;
 }
-#multiple-add-session .control-course{
+.code-course{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.control-course{
   text-align: center;
 }
 .data_table tr td .form-control{
@@ -4416,6 +4424,7 @@ ul.exercise-draggable-answer .touch-items{
   padding: 10px 20px 10px 20px;
   border: solid #b0b0b0 1px;
   text-decoration: none;
+  z-index: 100;
 }
 ul.exercise-draggable-answer .touch-items:hover{
   background: #ffffff;
@@ -5103,11 +5112,11 @@ div#chat-remote-video video {
 .ui-accordion .ui-accordion-content-active{
 
 }
-.ui-jqgrid-view .label-success{
-  font-size: 14px;
-}
 .ui-jqgrid-view .ui-widget-content a{
   color:#666666;
+}
+.ui-jqgrid-view .ui-widget-content a.btn{
+    color: #fff;
 }
 .ui-jqgrid-view .ui-state-default,
 .ui-jqgrid-view .ui-widget-content .ui-state-default,
@@ -5313,6 +5322,7 @@ div#chat-remote-video video {
 .items-course .items-course-info .title{
   font-size: 14px;
   min-height: 32px;
+  line-height: 1.3;
 }
 .items-course .items-course-info .teachers{
   font-size: 12px;

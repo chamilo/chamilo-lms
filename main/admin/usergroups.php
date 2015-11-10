@@ -60,8 +60,8 @@ $column_model   = array(
     array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
     array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
     array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
-    array('name'=>'group_type',    	'index'=>'group_type', 	'width'=>'15',  'align'=>'left'),
-    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left', 'sortable'=>'false','formatter'=>'action_formatter'),
+    array('name'=>'group_type',    	'index'=>'group_type', 	'width'=>'15',  'align'=>'center'),
+    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'center', 'sortable'=>'false','formatter'=>'action_formatter'),
 );
 
 //Autowidth
@@ -73,11 +73,11 @@ $extra_params['sortorder'] = 'desc';
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     return \''
-    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
-    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/course_to_class.png" title="'.get_lang('SubscribeClassToCourses').'"></a>'
-    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/sessions_to_class.png" title="'.get_lang('SubscribeClassToSessions').'"></a>'
-    .' <a href="?action=edit&id=\'+options.rowId+\'"><img width="22px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'
-    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
+    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">' . Display::return_icon('user_to_class.png', get_lang('SubscribeUsersToClass'), null, ICON_SIZE_SMALL) . '</a>'
+    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'">' . Display::return_icon('course_to_class.png', get_lang('SubscribeClassToCourses'), null, ICON_SIZE_SMALL) . '</a>'
+    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'">' . Display::return_icon('sessions_to_class.png', get_lang('SubscribeClassToSessions'), null, ICON_SIZE_SMALL) . '</a>'
+    .' <a href="?action=edit&id=\'+options.rowId+\'">' . Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_TINY) . '</a>'
+    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">' . Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_TINY) . '</a>\';
 }';
 
 ?>

@@ -170,13 +170,13 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 Display::display_header($tool_name);
 
 // actions
-echo '<div class="actions">
-<span style="float: right;margin:0px;padding:0px;">
-<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
-<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
-</div>';
 
-echo Display::page_header(sprintf(get_lang('AssignCoursesToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])));
+$actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM).'</a>';
+$actionsLeft .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM).'</a>';
+
+echo $html = Display::toolbarAction('toolbar-dashboard', array($actionsLeft));
+
+echo Display::page_header(sprintf(get_lang('AssignCoursesToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])), null, 'h3');
 
 $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
 $assigned_courses_code = array_keys($assigned_courses_to_hrm);
@@ -224,17 +224,51 @@ if(!empty($msg)) {
 	Display::display_normal_message($msg); //main API
 }
 ?>
-<table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
-<tr>
-	<td align="left"></td>
-	<td align="left"></td>
-	<td width="" align="center"> &nbsp;	</td>
-</tr>
-<tr>
-  <td width="45%" align="center"><b><?php echo get_lang('CoursesListInPlatform') ?> :</b></td>
-  <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b>
-  	<?php
+
+<div class="row">
+    <div class="col-md-4">
+        <h5><?php echo get_lang('CoursesListInPlatform') ?> :</h5>
+        
+        <div id="ajax_list_courses_multiple">
+	<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
+	<?php while ($enreg = Database::fetch_array($result)) { ?>
+            <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"';?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
+	<?php } ?>
+	</select>
+        </div>
+        
+    </div>
+    <div class="col-md-4">
+        <div class="code-course">
+        <?php if($add_type == 'multiple') { ?>
+        <p><?php echo get_lang('FirstLetterCourse');?> :</p>
+        <select name="firstLetterCourse" class="selectpicker form-control" onchange = "xajax_search_courses(this.value,'multiple')">
+            <option value="%">--</option>
+            <?php  echo Display :: get_alphabet_options($firstLetter); ?>
+        </select>
+        <?php } ?>
+        </div>
+        <div class="control-course">
+            <div class="separate-action">
+                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                    <em class="fa fa-arrow-right"></em>
+                </button>
+            </div>
+            <div class="separate-action">
+                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                    <em class="fa fa-arrow-left"></em>
+                </button>
+            </div>
+            <div class="separate-action">
+                <?php echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>'; ?>
+            </div>
+        </div>    
+        
+        
+        
+    </div>
+    <div class="col-md-4">
+        <h5><?php
 	  	if (UserManager::is_admin($user_id)) {
 			echo get_lang('AssignedCoursesListToPlatformAdministrator');
 		} else if ($user_info['status'] == SESSIONADMIN) {
@@ -242,59 +276,21 @@ if(!empty($msg)) {
 		} else {
 			echo get_lang('AssignedCoursesListToHumanResourcesManager');
 		}
-  	?>
-  	:</b></td>
-</tr>
-
-<?php if($add_type == 'multiple') { ?>
-<tr><td width="45%" align="center">
- <?php echo get_lang('FirstLetterCourse');?> :
-     <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
-      <option value="%">--</option>
-      <?php
-      echo Display :: get_alphabet_options($firstLetter);
-      ?>
-     </select>
-</td>
-<td>&nbsp;</td></tr>
-<?php } ?>
-<tr>
-  <td width="45%" align="center">
-	<div id="ajax_list_courses_multiple">
-	<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
-	<?php
-	while ($enreg = Database::fetch_array($result)) {
-	?>
-		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"';?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
-	<?php } ?>
-	</select></div>
-  </td>
-
-  <td width="10%" valign="middle" align="center">
-  	<button class="btn-default" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
-        <em class="fa fa-arrow-right"></em>
-  	</button>
-	<br /><br />
-	<button class="btn-default" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-        <em class="fa fa-arrow-left"></em>
-	</button>
-	<br /><br /><br /><br /><br /><br />
-	<?php
-		echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
-	?>
-  </td>
-  <td width="45%" align="center">
-  <select id='destination' name="CoursesList[]" multiple="multiple" size="20" style="width:320px;">
-	<?php
-	if (is_array($assigned_courses_to_hrm)) {
-		foreach($assigned_courses_to_hrm as $enreg) {
-	?>
-		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
-	<?php }
-	}?>
-  </select></td>
-</tr>
-</table>
+            ?>: </h5>
+        
+        <select id='destination' name="CoursesList[]" multiple="multiple" size="20" style="width:320px;">
+            <?php
+            if (is_array($assigned_courses_to_hrm)) {
+                foreach ($assigned_courses_to_hrm as $enreg) {
+            ?>
+                <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="' . htmlspecialchars($enreg['title'], ENT_QUOTES) . '"'; ?>><?php echo $enreg['title'] . ' (' . $enreg['code'] . ')'; ?></option>
+            <?php
+                    }
+                }
+            ?>
+        </select>
+    </div>
+</div>
 
 </form>
 <?php

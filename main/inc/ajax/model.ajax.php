@@ -1505,19 +1505,19 @@ switch ($action) {
                 $group['users'] = count($obj->get_users_by_usergroup($group['id']));
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
                     $url  = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq();
-                    //$icon = Display::return_icon('delete.png', get_lang('Remove'));
-                    $class = 'btn btn-danger';
-                    $text = get_lang('Remove');
+                    $icon = Display::return_icon('delete.png', get_lang('Remove'));
+                    //$class = 'btn btn-danger';
+                    //$text = get_lang('Remove');
                 } else {
                     $url  = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered';
-                    $class = 'btn btn-primary';
-                    //$icon = Display::return_icon('add.png', get_lang('Add'));
-                    $text = get_lang('Add');
+                    //$class = 'btn btn-primary';
+                    $icon = Display::return_icon('add.png', get_lang('Add'));
+                    //$text = get_lang('Add');
                 }
 
                 switch ($group['group_type']) {
                     case 0:
-                        $group['group_type'] = Display::label(get_lang('Class'), 'info');
+                        $group['group_type'] = Display::label(get_lang('Class'), 'primary');
                         break;
                     case 1:
                         $group['group_type'] = Display::label(get_lang('Social'), 'success');
@@ -1528,7 +1528,7 @@ switch ($action) {
 
                 $group['status'] = $role;
 
-                $group['actions'] = Display::url($text, $url, ['class' => $class]);
+                $group['actions'] = Display::url($icon, $url);
                 $new_result[] = $group;
             }
             $result = $new_result;

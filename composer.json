@@ -79,6 +79,7 @@
         "bower-asset/MathJax": "2.5.*",
         "bower-asset/webcamjs": "1.0.*",
         "bower-asset/cropper": "1.0.*",
+        "bower-asset/jquery.scrollbar": "0.2.*",
         "clue/graph": "~0.9.0",
         "graphp/graphviz": "~0.2.0",
         "graphp/algorithms": "~0.8.0",

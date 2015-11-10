@@ -651,18 +651,29 @@ $lpTab = Display::tabs(
 );*/
 
 $coursesTab = Display::grid_html('courses');
-
 $starTab = Display::grid_html('list_default');
+
+$tabs = array(
+    $starTab,
+    $coursesTab,
+    Display::grid_html('list_course'),
+    Display::grid_html('exercises'),
+    $reportingTab
+);
+
+$tabToHide = api_get_configuration_value('session_hide_tab_list');
+
+if (!empty($tabToHide)) {
+    foreach ($tabToHide as $columnId) {
+        unset($headers[$columnId]);
+        unset($tabs[$columnId]);
+    }
+}
+
 // Main headers data
 echo Display::tabs(
     $headers,
-    array(
-        $starTab,
-        $coursesTab,
-        Display::grid_html('list_course'),
-        Display::grid_html('exercises'),
-        $reportingTab
-    )
+    $tabs
 );
 
 Display::display_footer();

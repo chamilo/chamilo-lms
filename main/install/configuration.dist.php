@@ -228,3 +228,5 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['lp_fix_embed_content'] = false;
 // Manage deleted files marked with "DELETED" (by course and only by allowed by admin)
 //$_configuration['document_manage_deleted_files'] = false;
+// Hide tabs in the main/session/index.php page
+//$_configuration['session_hide_tab_list'] = array();

@@ -276,9 +276,7 @@ if(!empty($msg)) {
 		} else {
 			echo get_lang('AssignedCoursesListToHumanResourcesManager');
 		}
-            ?>
-            :
-        </h5>
+            ?>: </h5>
         
         <select id='destination' name="CoursesList[]" multiple="multiple" size="20" style="width:320px;">
             <?php

@@ -7309,7 +7309,7 @@ class learnpath
         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
 
         $no_display_edit_textarea = false;
-
+        $item_description = '';
         //If action==edit document
         //We don't display the document form if it's not an editable document (html or txt file)
         if ($action == "edit") {
@@ -7462,7 +7462,7 @@ class learnpath
         if (!empty($id)) {
             $parent_select->setSelected($parent);
         } else {
-            $parent_item_id = $_SESSION['parent_item_id'];
+            $parent_item_id = isset($_SESSION['parent_item_id']) ? $_SESSION['parent_item_id'] : 0 ;
             $parent_select->setSelected($parent_item_id);
         }
 
@@ -7521,7 +7521,9 @@ class learnpath
             }
 
             if (!$no_display_add) {
-                if (($extra_info == 'new' || $extra_info['item_type'] == TOOL_DOCUMENT || $_GET['edit'] == 'true')) {
+                $item_type = isset($extra_info['item_type']) ? $extra_info['item_type'] : null;
+                $edit = isset($_GET['edit']) ? $_GET['edit'] : null;
+                if (($extra_info == 'new' || $item_type == TOOL_DOCUMENT || $edit == 'true')) {
                     if (isset ($_POST['content']))
                         $content = stripslashes($_POST['content']);
                     elseif (is_array($extra_info)) {

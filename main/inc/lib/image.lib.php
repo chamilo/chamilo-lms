@@ -34,7 +34,7 @@ class Image
     }
 
     public function resize($max_size_for_picture) {
-        $image_size = $this->get_image_size($this->path);
+        $image_size = $this->get_image_size($this->image_wrapper->path);
         $width = $image_size['width'];
         $height = $image_size['height'];
         if ($width >= $height) {
@@ -53,7 +53,7 @@ class Image
     }
     
     public function crop($cropParameters) {
-        $image_size = $this->get_image_size($this->path);
+        $image_size = $this->get_image_size($this->image_wrapper->path);
         $src_width = $image_size['width'];
         $src_height = $image_size['height'];
         $cropParameters = explode(",", $cropParameters);

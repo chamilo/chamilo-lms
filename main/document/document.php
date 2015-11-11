@@ -1430,7 +1430,7 @@ if ($is_allowed_to_edit ||
 
         DocumentManager::set_document_as_template(
             $title,
-            $description,
+            '',
             $document_id_for_template,
             $course_code,
             $user_id,

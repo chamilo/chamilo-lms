@@ -786,7 +786,7 @@ class CourseHome
                     $tool['link'] = $web_code_path.$tool['link'];
                 }
 
-                if ($tool['visibility'] == '0' && $toolAdmin != '1' && !isset($tool['original_link'])) {
+                if ($tool['visibility'] == '0' && $toolAdmin != '1') {
                     $class = 'invisible';
                     $info = pathinfo($tool['image']);
                     $basename = basename($tool['image'], '.'.$info['extension']); // $file is set to "index"

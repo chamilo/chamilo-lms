@@ -163,7 +163,7 @@ $table_content = '';
 $browser = new Browser();
 $current_browser = $browser->getBrowser();
 $url_suffix = '';
-$btn_class = 'ajax ';
+$btn_class = ' ';
 if ($current_browser == 'Internet Explorer') {
     $url_suffix = '&show_headers=1';
     $btn_class = '';
@@ -178,7 +178,7 @@ if (!empty($attempts)) {
             $attempt_result['exe_weighting']
         );
         $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?';
-        $attempt_url .= api_get_cidreq() . '&';
+        $attempt_url .= api_get_cidreq() . '&show_headers=1&';
         $attempt_url .= http_build_query([
             'id' => $attempt_result['exe_id']
         ]);

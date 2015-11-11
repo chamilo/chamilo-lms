@@ -132,15 +132,16 @@ if (($search || $forceSearch) && ($search !== 'false')) {
     }*/
 
     // for now
-    if (!empty($filters)) {
-        switch ($action) {
-            case 'get_questions':
-                $type = 'question';
-                break;
-            case 'get_sessions':
-                $type = 'session';
-                break;
-        }
+    switch ($action) {
+        case 'get_questions':
+            $type = 'question';
+            break;
+        case 'get_sessions':
+            $type = 'session';
+            break;
+    }
+
+    if (!empty($type) && !empty($filters)) {
 
         // Extra field.
 
@@ -403,6 +404,11 @@ switch ($action) {
             $filter_user = intval($_GET['filter_by_user']);
             $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
         }
+
+        if (!empty($whereCondition)) {
+            $whereCondition = " AND $whereCondition";
+        }
+
         $count = ExerciseLib::get_count_exam_results($exercise_id, $whereCondition);
         break;
     case 'get_hotpotatoes_exercise_results':

@@ -1356,18 +1356,32 @@ if ($is_allowed_to_edit ||
         $document_id_for_template = intval($_GET['add_as_template']);
 
         // Create the form that asks for the directory name
-        $templateForm .= '<form name="set_document_as_new_template" enctype="multipart/form-data" action="'.api_get_self().'?add_as_template='.$document_id_for_template.'" method="post">';
-        $templateForm .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
-        $templateForm .= '<table><tr><td>';
-        $templateForm .= get_lang('TemplateName').' : </td>';
-        $templateForm .= '<td><input type="text" name="template_title" /></td></tr>';
-        //$templateForm .= '<tr><td>'.get_lang('TemplateDescription').' : </td>';
-        //$templateForm .= '<td><textarea name="template_description"></textarea></td></tr>';
-        $templateForm .= '<tr><td>'.get_lang('TemplateImage').' : </td>';
-        $templateForm .= '<td><input type="file" name="template_image" id="template_image" /></td></tr>';
-        $templateForm .= '</table>';
-        $templateForm .= '<button type="submit" class="btn-default" name="create_template">'.get_lang('CreateTemplate').'</button>';
-        $templateForm .= '</form>';
+        $templateForm .= '
+            <form name="set_document_as_new_template" class="form-horizontal" enctype="multipart/form-data" action="' . api_get_self() . '?add_as_template=' . $document_id_for_template . '" method="post">
+                <fieldset>
+                    <legend>' . get_lang('AddAsTemplate') . '</legend>
+                    <div class="form-group">
+                        <label for="template_title" class="col-sm-2 control-label">' . get_lang('TemplateName') . '</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="template_title" name="template_title">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="template_image" class="col-sm-2 control-label">' . get_lang('TemplateImage') . '</label>
+                        <div class="col-sm-10">
+                            <input type="file" name="template_image" id="template_image">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" name="create_template" class="btn btn-primary">' . get_lang('CreateTemplate') . '</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="curdirpath" value="' . $curdirpath . '" />
+                </fieldset>
+            </form>
+            <hr>
+        ';
     } elseif (isset($_GET['add_as_template']) && isset($_POST['create_template'])) {
 
         $document_id_for_template = intval($_GET['add_as_template']);

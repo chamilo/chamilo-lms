@@ -160,7 +160,7 @@ require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
 $browser = new Browser();
 $current_browser = $browser->getBrowser();
 $url_suffix = '';
-$btn_class = 'ajax ';
+$btn_class = ' ';
 if ($current_browser == 'Internet Explorer') {
     $url_suffix = '&amp;show_headers=1';
     $btn_class = '';
@@ -174,7 +174,7 @@ if (!empty($attempts)) {
             $attempt_result['exe_result'],
             $attempt_result['exe_weighting']
         );
-        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?' . api_get_cidreq() . '&amp;id=' . $attempt_result['exe_id'] . '&amp;id_session=' . api_get_session_id() . '&amp;height=500&amp;width=950' . $url_suffix;
+        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?show_headers=1&' . api_get_cidreq() . '&amp;id=' . $attempt_result['exe_id'] . '&amp;id_session=' . api_get_session_id() . '&amp;height=500&amp;width=950' . $url_suffix;
         $attempt_link = Display::url(
             get_lang('Show'),
             $attempt_url,

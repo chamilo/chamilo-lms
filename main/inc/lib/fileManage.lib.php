@@ -210,11 +210,12 @@ function my_rename($file_path, $new_file_name) {
  * @param  - $source (String) - the path of file or directory to move
  * @param  - $target (String) - the path of the new area
  * @param  bool $forceMove Whether to force a move or to make a copy (safer but slower) and then delete the original
+ * @param	bool $moveContent In some cases (including migrations), we need to move the *content* and not the folder itself
  * @return - bolean - true if the move succeed
  *           bolean - false otherwise.
  * @see    - move() uses check_name_exist() and copyDirTo() functions
  */
-function move($source, $target, $forceMove = false)
+function move($source, $target, $forceMove = false, $moveContent = false)
 {
 	if (check_name_exist($source)) {
 		$file_name = basename($source);
@@ -233,7 +234,13 @@ function move($source, $target, $forceMove = false)
 		} elseif (is_dir($source)) {
 			/* Directory */
 			if ($forceMove && !$isWindowsOS && $canExec) {
-				exec('mv $source $target');
+				if ($moveContent) {
+					$base = basename($source);
+					exec('mv '.$source.'/* '.$target.$base.'/');
+					exec('rm -rf '.$source);
+				} else {
+					exec('mv $source $target');
+				}
 			} else {
 				copyDirTo($source, $target);
 			}

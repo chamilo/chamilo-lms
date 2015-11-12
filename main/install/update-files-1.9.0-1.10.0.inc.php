@@ -176,7 +176,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         api_get_path(SYS_CODE_PATH).'upload/users' => api_get_path(SYS_UPLOAD_PATH),
         api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH),
         api_get_path(SYS_PATH).'courses' => api_get_path(SYS_APP_PATH),
-        api_get_path(SYS_PATH).'searchdb' => api_get_path(SYS_UPLOAD_PATH).'plugins/xapian',
+        api_get_path(SYS_PATH).'searchdb' => api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/',
         api_get_path(SYS_PATH).'home' => api_get_path(SYS_APP_PATH)
     ];
 
@@ -186,8 +186,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     foreach ($movePathList as $origin => $destination) {
         if (is_dir($origin)) {
-            move($origin, $destination, true);
-            error_log("$origin to $destination");
+            move($origin, $destination, true, true);
         }
     }
 
@@ -205,6 +204,9 @@ if (defined('SYSTEM_INSTALLATION')) {
         /** @var Symfony\Component\Finder\SplFileInfo $dir */
         foreach ($dirs as $dir) {
             $indexFile = $dir->getPath().'/index.php';
+            if ($debug) {
+                error_log('Deleting '.$indexFile);
+            }
             if ($fs->exists($indexFile)) {
                 $fs->remove($indexFile);
             }

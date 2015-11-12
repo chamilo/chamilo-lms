@@ -42,6 +42,10 @@ class Version20150603181728 extends AbstractMigrationChamilo
         ');
         $this->addSql("UPDATE c_item_property SET session_id = NULL WHERE session_id = 0");
         $this->addSql("UPDATE c_item_property SET to_group_id = NULL WHERE to_group_id = 0");
+        // Remove inconsistencies about non-existing courses
+        $this->addSql("DELETE FROM c_item_property WHERE c_id = 0");
+        // Remove inconsistencies about non-existing users
+        $this->addSql("DELETE FROM course_rel_user WHERE user_id = 0");
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18191D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C181330D47E9 FOREIGN KEY (to_group_id) REFERENCES c_group_info (iid)');
         $this->addSql('ALTER TABLE c_item_property ADD CONSTRAINT FK_1D84C18129F6EE60 FOREIGN KEY (to_user_id) REFERENCES user (id)');

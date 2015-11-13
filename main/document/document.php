@@ -1417,12 +1417,7 @@ if ($is_allowed_to_edit ||
                 $max_width_for_picture = 100;
 
                 if ($picture_info['width'] > $max_width_for_picture) {
-                    $thumbwidth = $max_width_for_picture;
-                    if (empty($thumbwidth) || $thumbwidth == 0) {
-                        $thumbwidth = $max_width_for_picture;
-                    }
-                    $new_height = round(($thumbwidth / $picture_info['width']) * $picture_info['height']);
-                    $temp->resize($thumbwidth, $new_height, 0);
+                    $temp->resize($max_width_for_picture);
                 }
                 $temp->send_image($upload_dir.$new_file_name);
             }

@@ -848,7 +848,7 @@ function api_get_path($path_type, $path = null)
                 WEB_COURSE_PATH         => '',
                 WEB_CODE_PATH           => '',
                 WEB_IMG_PATH            => 'img/',
-                WEB_CSS_PATH            => 'css/',
+                WEB_CSS_PATH            => 'web/css/',
                 WEB_PLUGIN_PATH         => 'plugin/',
                 WEB_ARCHIVE_PATH        => 'archive/',
                 WEB_LIBRARY_PATH        => 'inc/lib/',
@@ -866,7 +866,7 @@ function api_get_path($path_type, $path = null)
             $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
             $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_IMG_PATH];
 
-            $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_CSS_PATH];
+            $paths[WEB_CSS_PATH]            = $paths[WEB_PATH].$web_paths[WEB_CSS_PATH];
             $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$web_paths[WEB_PLUGIN_PATH];
             $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
             $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];

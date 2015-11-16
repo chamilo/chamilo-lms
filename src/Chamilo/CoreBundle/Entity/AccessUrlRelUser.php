@@ -14,23 +14,31 @@ class AccessUrlRelUser
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="access_url_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="access_url_id", type="integer")
      */
     private $accessUrlId;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="user_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
+     */
+    protected $portal;
 
     /**
      * Set accessUrlId

@@ -137,19 +137,45 @@ class CkEditor extends Editor
     }
 
     /**
-     * @param array $templates
-     * @return null|string
+     * Get the empty template
+     * @return array
      */
-    public function simpleFormatTemplates($templates)
+    private function getEmptyTemplate()
     {
-        if (empty($templates)) {
-            return null;
-        }
+        return [[
+            'title' => get_lang('EmptyTemplate'),
+            'description' => null,
+            'image' => api_get_path(WEB_APP_PATH) . 'home/default_platform_document/template_thumb/empty.gif',
+            'html' => '
+                <!DOCYTPE html>
+                <html>
+                    <head>
+                        <meta charset="' . api_get_system_encoding() . '" />
+                    </head>
+                    <body  dir="' . api_get_text_direction() . '">
+                        <p>
+                            <br/>
+                        </p>
+                    </body>
+                    </html>
+                </html>
+            '
+        ]];
+    }
+
+    /**
+     * Get the platform templates
+     * @return array
+     */
+    private function getPlatformTemplates()
+    {
+        $entityManager = \Database::getManager();
+        $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
 
         $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
         $replace = array(
             '',
-            api_get_path(REL_CODE_PATH).'img/',
+            api_get_path(REL_CODE_PATH) . 'img/',
             api_get_path(REL_PATH),
             api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
             api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH)
@@ -157,10 +183,10 @@ class CkEditor extends Editor
 
         $templateList = array();
 
-        foreach ($templates as $template) {
-            $image = $template['image'];
+        foreach ($systemTemplates as $template) {
+            $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
-            $image = api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image;
+            $image = api_get_path(WEB_APP_PATH) . 'home/default_platform_document/template_thumb/' . $image;
 
             /*$image = $this->urlGenerator->generate(
                 'get_document_template_action',
@@ -168,17 +194,79 @@ class CkEditor extends Editor
                 UrlGenerator::ABSOLUTE_URL
             );*/
 
-            $content = str_replace($search, $replace, $template['content']);
+            $templateContent = $template->getContent();
+            $content = str_replace($search, $replace, $templateContent);
 
             $templateList[] = array(
-                'title' => get_lang($template['title']),
-                'description' => get_lang($template['comment']),
+                'title' => get_lang($template->getTitle()),
+                'description' => get_lang($template->getComment()),
                 'image' => $image,
                 'html' => $content
             );
         }
 
+        return $templateList;
+    }
 
-        return json_encode($templateList);
+    private function getPersonalTemplates($userId = 0)
+    {
+        if (empty($userId)) {
+            $userId = api_get_user_id();
+        }
+
+        $entityManager = \Database::getManager();
+        $templatesRepo = $entityManager->getRepository('ChamiloCoreBundle:Templates');
+
+        $user = $entityManager->find('ChamiloUserBundle:User', $userId);
+        $course = $entityManager->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+
+        if (!$user || !$course) {
+            return [];
+        }
+
+        $courseTemplates = $templatesRepo->getCourseTemplates($course, $user);
+
+        $templateList = [];
+
+        foreach ($courseTemplates as $templateData) {
+            $template = $templateData[0];
+            $courseDirectory = $course->getDirectory();
+
+            $templateItem = [];
+            $templateItem['title'] = $template->getTitle();
+            $templateItem['description'] = $template->getDescription();
+            $templateItem['image'] = api_get_path(WEB_APP_PATH)
+                . 'home/default_platform_document/template_thumb/noimage.gif';
+            $templateItem['html'] = file_get_contents(api_get_path(SYS_COURSE_PATH)
+                . $courseDirectory . '/document' . $templateData['path']);
+
+            if (!empty($template->getImage())) {
+                $templateItem['image'] = api_get_path(WEB_COURSE_PATH)
+                    . $courseDirectory . '/upload/template_thumbnails/' . $template->getImage();
+            }
+
+            $templateList[] = $templateItem;
+        }
+
+        return $templateList;
+    }
+
+    /**
+     * Get the templates in JSON format
+     * @return string|
+     */
+    public function simpleFormatTemplates()
+    {
+        $templates = $this->getEmptyTemplate();
+
+        if (api_is_allowed_to_edit(false, true)) {
+            $platformTemplates = $this->getPlatformTemplates();
+            $templates = array_merge($templates, $platformTemplates);
+        }
+
+        $personalTemplates = $this->getPersonalTemplates();
+        $templates = array_merge($templates, $personalTemplates);
+
+        return json_encode($templates);
     }
 }

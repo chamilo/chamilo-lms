@@ -33,11 +33,15 @@ if (empty($sessionId)) {
     );
 
     $lastCourseAccess = $trackCourseAccessRepository->getLastAccessByUser($user);
+    $lastSessionId = 0;
+
     if ($lastCourseAccess) {
         $lastSessionId = $lastCourseAccess->getSessionId();
     }
 
-    if (!empty($lastSessionId)) {
+    $UserIsSubscribedToSession = SessionManager::isUserSubscribedAsStudent($lastSessionId, $user->getId());
+
+    if (!empty($lastSessionId) && $UserIsSubscribedToSession) {
         $urlWithSession = api_get_self() . '?' . http_build_query([
             'session_id' => $lastCourseAccess->getSessionId()
         ]);

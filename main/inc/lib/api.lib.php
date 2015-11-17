@@ -1444,6 +1444,7 @@ function _api_format_user($user, $add_password = false)
         $result['email'] = isset($user['mail'])? $user['mail'] : null;
     }
     $user_id = intval($user['user_id']);
+    // Maintain the user_id index for backwards compatibility
     $result['user_id'] = $result['id'] = $user_id;
     $saveUserLastLogin = api_get_configuration_value('save_user_last_login');
 

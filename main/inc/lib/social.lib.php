@@ -1649,6 +1649,10 @@ class SocialManager extends UserManager
             return '';
         }
 
+        $currentUserId = api_get_user_id();
+        $userId = intval($userId);
+        $userRelationType = 0;
+
         $socialAvatarBlock = SocialManager::show_social_avatar_block(
             $groupBlock,
             $groupId,
@@ -1656,8 +1660,14 @@ class SocialManager extends UserManager
         );
 
         $profileEditionLink = null;
-        if (api_get_user_id() == $userId) {
+
+        if ($currentUserId === $userId) {
             $profileEditionLink = Display::getProfileEditionLink($userId);
+        } else {
+            $userRelationType = SocialManager::get_relation_between_contacts(
+                $currentUserId,
+                $userId
+            );
         }
 
         $vCardUserLink = Display::getVCardUserLink($userId);
@@ -1684,6 +1694,8 @@ class SocialManager extends UserManager
         }
         $chatEnabled = api_is_global_chat_enabled();
         $template->assign('chat_enabled', $chatEnabled);
+        $template->assign('user_relation', $userRelationType);
+        $template->assign('user_relation_type_friend', USER_RELATION_TYPE_FRIEND);
         $templateName = $template->get_template('social/user_block.tpl');
 
         if (in_array($groupBlock, ['groups', 'group_edit', 'member_list'])) {

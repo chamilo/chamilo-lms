@@ -33,6 +33,7 @@ $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 $columns = array(
     get_lang('Course'),
     get_lang('User'),
+    get_lang('Email'),
     get_lang('ManHours'),
     get_lang('CertificateGenerated'),
     get_lang('Approved'),
@@ -43,6 +44,7 @@ $columns = array(
 $column_model = array(
     array('name'=>'course',         'index'=>'title',       'width'=>'180', 'align'=>'left', 'wrap_cell' => 'true'),
     array('name'=>'user',           'index'=>'user',        'width'=>'100', 'align'=>'left','sortable'=>'false', 'wrap_cell' => 'true'),
+    array('name'=>'email',          'index'=>'email',       'width'=>'100', 'align'=>'left','sortable'=>'false', 'wrap_cell' => 'true'),
     array('name'=>'time',           'index'=>'time',        'width'=>'50',  'align'=>'left','sortable'=>'false'),
     array('name'=>'certificate',    'index'=>'certificate', 'width'=>'50',  'align'=>'left','sortable'=>'false'),
     array('name'=>'progress_100',   'index'=>'progress_100',       'width'=>'50',  'align'=>'left','sortable'=>'false'),

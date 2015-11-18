@@ -2151,8 +2151,8 @@ class Tracking
         $lPConditions = [];
         $lPConditions['c_id = ? '] = $courseInfo['real_id'];
 
-        if ($onlySeriousGame) {
-            $lPConditions['AND (session_id = ? OR session_id = 0)'] = $sessionId;
+        if ($sessionId > 0) {
+            $lPConditions['AND (session_id = ? OR session_id = 0 OR session_id IS NULL)'] = $sessionId;
         } else {
             $lPConditions['AND session_id = ?'] = $sessionId;
         }

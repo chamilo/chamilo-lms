@@ -665,10 +665,19 @@ switch ($action) {
         }
         break;
     case 'get_user_course_report':
-        $columns = array('course', 'user', 'time', 'certificate', 'progress_100', 'progress');
+        $columns = array(
+            'course',
+            'user',
+            'email',
+            'time',
+            'certificate',
+            'progress_100',
+            'progress',
+        );
         $column_names = array(
             get_lang('Course'),
             get_lang('User'),
+            get_lang('Email'),
             get_lang('ManHours'),
             get_lang('CertificateGenerated'),
             get_lang('Approved'),

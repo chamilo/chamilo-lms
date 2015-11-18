@@ -775,11 +775,9 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, option_or
 INSERT INTO access_url(url, description, active, created_by) VALUES ('http://localhost/',' ',1,1);
 
 -- Adding admin to the first portal
-INSERT INTO access_url_rel_user VALUES(1, 1);
+-- INSERT INTO access_url_rel_user VALUES(1, 1);
 
 -- Adding the platform templates
--- Adding the platform templates
-
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleCourseTitle', 'TemplateTitleCourseTitleDescription', 'coursetitle.gif', '
 <head>

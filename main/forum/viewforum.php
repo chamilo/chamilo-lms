@@ -583,12 +583,15 @@ if (is_array($threads)) {
             }
             $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
 
-            $sql_post_id = "SELECT post_id
-                FROM $table_posts
-                WHERE
-                    c_id = $course_id AND
-                    post_title='" . Database::escape_string($row['thread_title']) . "'";
-            $result_post_id = Database::query($sql_post_id);
+            $sql = "SELECT post_id
+                    FROM $table_posts
+                    WHERE
+                        c_id = $course_id AND
+                        post_title='" . Database::escape_string($row['thread_title']) . "' AND
+                        thread_id = ".$row['thread_id']."
+            ";
+
+            $result_post_id = Database::query($sql);
             $row_post_id = Database::fetch_array($result_post_id);
             $iconsEdit = '';
             if ($origin != 'learnpath') {

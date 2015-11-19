@@ -5600,6 +5600,7 @@ class learnpath
             $delete_icon = '';
             $audio_icon = '';
             $prerequisities_icon = '';
+            $forumIcon = '';
 
             if ($is_allowed_to_edit) {
                 if (!$update_audio || $update_audio <> 'true') {
@@ -5611,30 +5612,62 @@ class learnpath
                 // No edit for this item types
                 if (!in_array($arrLP[$i]['item_type'], array('sco', 'asset'))) {
                     if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module'))) {
-                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&view=build&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '">';
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&view=build&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '" class="btn btn-default">';
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
+
+                        if ($arrLP[$i]['item_type'] != 'forum') {
+                            if (
+                                $this->items[$arrLP[$i]['id']]->getForumThread(
+                                    $this->course_int_id,
+                                    $this->lp_session_id
+                                )
+                            ) {
+                                $forumIcon = Display::url(
+                                    Display::return_icon('forum.png', get_lang('CreateForum'), [], ICON_SIZE_TINY),
+                                    '#',
+                                    ['class' => 'btn btn-default disabled']
+                                );
+                            } else {
+                                $forumIconUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                                    'action' => 'create_forum',
+                                    'id' => $arrLP[$i]['id'],
+                                    'lp_id' => $this->lp_id
+                                ]);
+                                $forumIcon = Display::url(
+                                    Display::return_icon('forum.png', get_lang('CreateForum'), [], ICON_SIZE_TINY),
+                                    $forumIconUrl,
+                                    ['class' => "btn btn-default"]
+                                );
+                            }
+                        }
                     } else {
-                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '">';
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '" class="btn btn-default">';
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
                     }
                 }
 
-                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
+                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');" class="btn btn-default">';
                 $delete_icon .= Display::return_icon('delete.png', get_lang('LearnpathDeleteModule'), array(), ICON_SIZE_TINY);
                 $delete_icon .= '</a>';
 
                 $url = api_get_self() . '?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
 
                 if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module', 'dir'))) {
-                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq');
-                    $move_item_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item');
-                    $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio');
+                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq', ['class' => 'btn btn-default']);
+                    $move_item_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item', ['class' => 'btn btn-default']);
+                    $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio', ['class' => 'btn btn-default']);
                 }
             }
             if ($update_audio != 'true') {
-                $row = $move_icon.' '.$icon.Display::span($title_cut).Display::span($audio.$edit_icon.$prerequisities_icon.$move_item_icon.$audio_icon.$delete_icon, array('class'=>'button_actions'));
+                $row = $move_icon . ' ' . $icon .
+                    Display::span($title_cut) . 
+                    Display::tag(
+                        'div',
+                        "<div class=\"btn-group btn-group-xs\">$audio $edit_icon $forumIcon $prerequisities_icon $move_item_icon $audio_icon $delete_icon</div>",
+                        array('class'=>'btn-toolbar button_actions')
+                    );
             } else {
                 $row = Display::span($title.$icon).Display::span($audio, array('class'=>'button_actions'));
             }
@@ -10440,6 +10473,85 @@ EOD;
 
         return $src;
     }
+
+    /**
+     * Get the forum for this learning path
+     * @return boolean
+     */
+    public function getForum($sessionId = 0)
+    {
+        $forumTable = Database::get_course_table(TABLE_FORUM);
+        $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+        $fakeFrom = "$forumTable f
+            INNER JOIN $itemProperty ip ";
+
+        if ($this->lp_session_id == 0) {
+            $fakeFrom .= "
+                ON (
+                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND (
+                        f.session_id = ip.session_id OR ip.session_id IS NULL
+                    )
+                )
+            ";
+        } else {
+            $fakeFrom .= "
+                ON (
+                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND f.session_id = ip.session_id
+                )
+            ";
+        }
+
+        $resultData = Database::select(
+            'f.*',
+            $fakeFrom,
+            [
+                'where' => [
+                    'ip.visibility != ? AND ' => 2,
+                    'ip.tool = ? AND ' => TOOL_FORUM,
+                    'f.session_id = ? AND ' => $sessionId,
+                    'f.c_id = ? AND ' => intval($this->course_int_id),
+                    'f.lp_id = ?' => intval($this->lp_id)
+                ]
+            ],
+            'first'
+        );
+
+        if (empty($resultData)) {
+            return false;
+        }
+
+        return $resultData;
+    }
+
+    /**
+     * Create a forum for this learning path
+     * @param type $forumCategoryId
+     * @return int The forum ID if was created. Otherwise return false
+     */
+    public function createForum($forumCategoryId)
+    {
+        require_once api_get_path(SYS_CODE_PATH) . '/forum/forumfunction.inc.php';
+
+        $forumId = store_forum(
+            [
+                'lp_id' => $this->lp_id,
+                'forum_title' => $this->name,
+                'forum_comment' => null,
+                'forum_category' => intval($forumCategoryId),
+                'students_can_edit_group' => ['students_can_edit' => 0],
+                'allow_new_threads_group' => ['allow_new_threads' => 0],
+                'default_view_type_group' => ['default_view_type' => 'flat'],
+                'group_forum' => 0,
+                'public_private_group_forum_group' => ['public_private_group_forum' => 'public']
+            ],
+            [],
+            true
+        );
+
+        return $forumId;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

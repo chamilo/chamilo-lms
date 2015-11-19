@@ -1742,6 +1742,14 @@ div.admin_section h4 {
     /* float:left;*/
 }
 
+.item_data .button_actions {
+    display: none;
+    margin: 5px 0px;
+}
+.item_data:hover .button_actions {
+    display: block;
+}
+
 #lp_item_list .item {
     border:none;
 }

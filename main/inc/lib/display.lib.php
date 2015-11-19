@@ -2135,11 +2135,16 @@ class Display
         $url,
         $icon = 'check',
         $type = 'default',
-        array $attributes = []
+        array $attributes = [],
+        $includeText = true
     ) {
         $buttonClass = "btn btn-$type";
-        $icon = self::tag('i', null, ['class' => "fa fa-$icon"]);
+        $icon = self::tag('i', null, ['class' => "fa fa-$icon fa-fw", 'aria-hidden' => 'true']);
         $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
+
+        if (!$includeText) {
+            $text = '<span class="sr-only">' . $text . '</span>';
+        }
 
         return self::url("$icon $text", $url, $attributes);
     }

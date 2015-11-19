@@ -4412,4 +4412,90 @@ class learnpathItem
     {
         $this->prerequisiteMinScore = $prerequisiteMinScore;
     }
+
+    /**
+     * Get the forum thread info
+     * @param int $lpCourseId The course ID from the learning path
+     * @param int $lpSessionId Optional. The session ID from the learning path
+     * @return boolean
+     */
+    public function getForumThread($lpCourseId, $lpSessionId = 0)
+    {
+        $lpSessionId = intval($lpSessionId);
+        $forumThreadTable = Database::get_course_table(TABLE_FORUM_THREAD);
+        $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+        $fakeFrom = "$forumThreadTable ft
+            INNER JOIN $itemProperty ip ";
+
+        if ($lpSessionId == 0) {
+            $fakeFrom .= "
+                ON (
+                    ft.thread_id = ip.ref AND ft.c_id = ip.c_id AND (
+                        ft.session_id = ip.session_id OR ip.session_id IS NULL
+                    )
+                )
+            ";
+        } else {
+            $fakeFrom .= "
+                ON (
+                    ft.thread_id = ip.ref AND ft.c_id = ip.c_id AND ft.session_id = ip.session_id
+                )
+            ";
+        }
+
+        $resultData = Database::select(
+            'ft.*',
+            $fakeFrom,
+            [
+                'where' => [
+                    'ip.visibility != ? AND ' => 2,
+                    'ip.tool = ? AND ' => TOOL_FORUM_THREAD,
+                    'ft.session_id = ? AND ' => $lpSessionId,
+                    'ft.c_id = ? AND ' => intval($lpCourseId),
+                    'ft.lp_item_id = ?' => intval($this->db_id)
+                ]
+            ],
+            'first'
+        );
+
+        if (empty($resultData)) {
+            return false;
+        }
+
+        return $resultData;
+    }
+
+    /**
+     * Create a forum thread for this learning path item
+     * @param int $currentForumId The forum ID to add the new thread
+     * @return int The forum thread if was created. Otherwise return false
+     */
+    public function createForumTthread($currentForumId)
+    {
+        require_once api_get_path(SYS_CODE_PATH) . '/forum/forumfunction.inc.php';
+
+        $forumInfo = get_forum_information($currentForumId);
+
+        $threadId = store_thread(
+            $forumInfo,
+            [
+                'forum_id' => intval($currentForumId),
+                'thread_id' => 0,
+                'gradebook' => 0,
+                'post_title' => $this->name,
+                'post_text' => $this->description,
+                'category_id' => 1,
+                'numeric_calification' => 0,
+                'calification_notebook_title' => 0,
+                'weight_calification' => 0.00,
+                'thread_peer_qualify' => 0,
+                'lp_item_id' => $this->db_id
+            ],
+            [],
+            false
+        );
+
+        return $threadId;
+    }
 }

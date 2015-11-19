@@ -6079,7 +6079,7 @@ $SSOServerProtocolTitle = "Protokol SSO strežnika";
 $SSOServerProtocolComment = "Niz znakov, ki označuje protokol domene SSO strežnika (priporočamo rabo https:// , če vaš strežnik to omogoča).";
 $EnabledWirisTitle = "WIRIS matematični urejevalnik";
 $EnabledWirisComment = "Omogoči WIRIS urejevalnik matematičnih izrazov. Z namestitvijo teha vtičnika, dobite Wiris urejevalnik in Wiris CAS.<br />
-Ta aktivacija ni polno realizirana razen v primeru, da predhodno prenesete <a target=\"_blank\" href=\"http://www.wiris.com/plugins/editors/download?filter=fckeditor\">PHP vtičnik za FCKeditro WIRIS in ga razširite v mapo main/inc/lib/fckeditor/editor/plugins/fck_editor_wiris/</a>.<br />
+Ta aktivacija ni polno realizirana razen v primeru, da predhodno prenesete <a target=\"_blank\" href=\"http://www.wiris.com/es/plugins3/ckeditor/download\">PHP vtičnik za FCKeditro WIRIS in ga razširite v mapo main/inc/lib/fckeditor/editor/plugins/fck_editor_wiris/</a>.<br />
 Tak način je potreben, ker je Wiris lastniška programska oprema in njegova storitev je <a target=\"_blank\" href=\"http://www.wiris.com/store/who-pays\">komercialna</a>. <br />Za prilagoditev vtičnika, uredite datoteko configuration.ini ali pa jo nadomestite z privzeto datoteko, ki je nameščena s Chamilo.";
 $FileSavedAs = "Datoteka je bila shranjena kot";
 $FileExportAs = "Datoeka je bila izvožena kot";

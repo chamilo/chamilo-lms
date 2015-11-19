@@ -4,7 +4,7 @@ var plugins = [
     'asciimath',
     'asciisvg',
     'audio',
-    //'ckeditor_wiris',
+    'ckeditor_wiris',
     'dialogui',
     'glossary',
     'leaflet',

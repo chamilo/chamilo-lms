@@ -205,15 +205,6 @@ ul#navigation li a {
   -moz-border-radius-bottomright: 5px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  background-image: url('../../main/img/touch-left.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  border: 1px solid #DDD;
-  width: 40px;
-  height: 40px;
-}
-#touch-button.show-touch{
-  background-image: url('../../main/img/touch-right.png');
 }
 
 ul#navigation .help a {

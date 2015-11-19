@@ -7846,8 +7846,6 @@ class learnpath
             $item_title = get_lang('Student_publication');
         }
 
-        $legend = '<legend>';
-
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
         } else {
@@ -7881,73 +7879,102 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
+        $form = new FormValidator('frm_student_publication', 'post', '#');
+
         if ($action == 'add') {
-            $legend .= get_lang('Student_publication') . '&nbsp;:' . "\n";
+            $form->addHeader(get_lang('Student_publication'));
         } elseif ($action == 'move') {
-            $legend .= get_lang('MoveCurrentStudentPublication') . '&nbsp;:' . "\n";
+            $form->addHeader(get_lang('MoveCurrentStudentPublication'));
         } else {
-            $legend .= get_lang('EditCurrentStudentPublication') . '&nbsp;:' . "\n";
+            $form->addHeader(get_lang('EditCurrentStudentPublication'));
         }
-        $legend .= '</legend>';
 
-        $return = '<div class="sectioncomment">';
-        $return .= '<form method="POST">';
-        $return .= $legend;
-        $return .= '<table class="lp_form">';
         if ($action != 'move') {
-            $return .= '<tr>';
-            $return .= '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>';
-            $return .= '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>';
-            $return .= '</tr>';
+            $form->addText('title', get_lang('Title'), true, ['class' => 'learnpath_item_form', 'id' => 'idTitle']);
         }
-        $return .= '<tr>';
-        $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
-        $return .= '<td class="input">';
-        $return .= '<select id="idParent" name="parent" style="width:100%;" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
 
-        $return .= '<option class="top" value="0">' . $this->name . '</option>';
+        $parentSelect = $form->addSelect(
+            'parent',
+            get_lang('Parent'),
+            ['0' => $this->name],
+            [
+                'onchange' => 'javascript: load_cbo(this.value);',
+                'class' => 'learnpath_item_form',
+                'id' => 'idParent'
+            ]
+        );
+
         $arrHide = array (
             $id
         );
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
-                if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                if (
+                    (
+                        $arrLP[$i]['item_type'] == 'dokeos_module' ||
+                        $arrLP[$i]['item_type'] == 'dokeos_chapter' ||
+                        $arrLP[$i]['item_type'] == 'dir'
+                    ) &&
+                    !in_array($arrLP[$i]['id'], $arrHide) &&
+                    !in_array($arrLP[$i]['parent_item_id'], $arrHide)
+                ) {
+                    $parentSelect->addOption(
+                        $arrLP[$i]['title'],
+                        $arrLP[$i]['id'],
+                        ['style' => 'padding-left: ' . (($arrLP[$i]['depth'] * 10) + 20) . 'px;']
+                    );
+
+                    if ($parent == $arrLP[$i]['id']) {
+                        $parentSelect->setSelected($arrLP[$i]['id']);
+                    }
                 } else {
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
-                if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                if (
+                    $arrLP[$i]['item_type'] == 'dokeos_module' ||
+                    $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir'
+                ) {
+                    $parentSelect->addOption(
+                        $arrLP[$i]['title'],
+                        $arrLP[$i]['id'],
+                        ['style' => 'padding-left: ' . (($arrLP[$i]['depth'] * 10) + 20) . 'px;']
+                    );
+
+                    if ($parent == $arrLP[$i]['id']) {
+                        $parentSelect->setSelected($arrLP[$i]['id']);
+                    }
+                }
             }
         }
 
         if (is_array($arrLP)) {
             reset($arrLP);
         }
-        $return .= '</select>';
-        $return .= '</td>';
-        $return .= '</tr>';
-        $return .= '<tr>';
-        $return .= '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
-        $return .= '<td class="input">';
-        $return .= '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
-        $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
+
+        $previousSelect = $form->addSelect(
+            'previous',
+            get_lang('Position'),
+            ['0' => get_lang('FirstPosition')],
+            ['id' => 'previous', 'class' => 'learnpath_item_form']
+        );
+
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
-                if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
-                    $selected = 'selected="selected" ';
-                elseif ($action == 'add') $selected = 'selected="selected" ';
-                else
-                    $selected = '';
+                $previousSelect->addOption(
+                    get_lang('After') . ' "' . $arrLP[$i]['title'] . '"',
+                    $arrLP[$i]['id']
+                );
 
-                $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
+                if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
+                    $previousSelect->setSelected($arrLP[$i]['id']);
+                } elseif ($action == 'add') {
+                    $previousSelect->setSelected($arrLP[$i]['id']);
+                }
             }
         }
-        $return .= '</select>';
-        $return .= '</td>';
-        $return .= '</tr>';
+
         if ($action != 'move') {
             $id_prerequisite = 0;
             if (is_array($arrLP)) {
@@ -7968,31 +7995,31 @@ class learnpath
 
                 }
             }
-            $return .= '</tr>';
         }
 
-        $return .= '<tr>';
         if ($action == 'add') {
-            $return .= '<td>&nbsp</td><td><button class="btn btn-primary" name="submit_button" type="submit">' . get_lang('AddAssignmentToCourse') . '</button></td>';
+            $form->addButtonCreate(get_lang('AddAssignmentToCourse'), 'submit_button');
         } else {
-            $return .= '<td>&nbsp</td><td><button class="btn btn-primary" name="submit_button" type="submit">' . get_lang('EditCurrentStudentPublication') . '</button></td>';
+            $form->addButtonCreate(get_lang('EditCurrentStudentPublication'), 'submit_button');
         }
-        $return .= '</tr>';
-        $return .= '</table>';
 
         if ($action == 'move') {
-            $return .= '<input name="title" type="hidden" value="' . $item_title . '" />';
-            $return .= '<input name="description" type="hidden" value="' . $item_description . '" />';
+            $form->addHidden('title', $item_title);
+            $form->addHidden('description', $item_description);
         }
 
         if (is_numeric($extra_info)) {
-            $return .= '<input name="path" type="hidden" value="' . $extra_info . '" />';
+            $form->addHidden('path', $extra_info);
         } elseif (is_array($extra_info)) {
-            $return .= '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
+            $form->addHidden('path', $extra_info['path']);
         }
-        $return .= '<input name="type" type="hidden" value="' . TOOL_STUDENTPUBLICATION . '" />';
-        $return .= '<input name="post_time" type="hidden" value="' . time() . '" />';
-        $return .= '</form>';
+
+        $form->addHidden('type', TOOL_STUDENTPUBLICATION);
+        $form->addHidden('post_time', time());
+        $form->setDefaults(['title' => $item_title]);
+
+        $return = '<div class="sectioncomment">';
+        $return .= $form->returnForm();
         $return .= '</div>';
 
         return $return;

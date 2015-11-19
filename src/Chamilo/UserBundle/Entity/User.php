@@ -32,6 +32,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @ORM\Table(
  *  name="user",
  *  indexes={
+ *      @ORM\Index(name="idx_user_uid", columns={"user_id"}),
  *      @ORM\Index(name="status", columns={"status"})
  *  }
  * )

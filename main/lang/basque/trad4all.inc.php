@@ -6286,7 +6286,7 @@ $SSOServerProtocolTitle = "Single Sign On (Erregistro bakarra) zerbitzariaren pr
 $SSOServerProtocolComment = "Single Sign On (Erregistro bakarra) zerbitzariaren domeinuari aurrezenbakia jartzeko protokolo katea (https:// erabiltzea gomendatzen dizugu, zure zerbitzariak gaitasun hau baliatu ahal badu, zeren eta segurtasunik gabeko protokoloak autentifikazio gaietarako arriskutsuak baitira)";
 $EnabledWirisTitle = "WIRIS editatzaile matematikoa";
 $EnabledWirisComment = "Aktibatu WIRIS editatzaile matematikoa. Plugin hau instalatuz gero, WIRIS editatzailea eta WIRIS CAS lortuko dituzu. 
-Aktibazioa ez da erabat gauzatuko, aldez aurretik WIRISen PHP plugin for FCKeditor deskargatu ez bada eta beraren edukiak konprimatu ez badira Chamiloren direktorioan: main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/ 
+Aktibazioa ez da erabat gauzatuko, aldez aurretik WIRISen PHP plugin for CKeditor deskargatu ez bada eta beraren edukiak konprimatu ez badira Chamiloren direktorioan: main/inc/lib/javascript/ckeditor/plugins/ 
 Hau beharrezkoa da Wiris jabetzako softwarea delako eta Wirisen zerbitzuak komertzialak direlako. Pluginean doitzeak egiteko, editatu configuration.ini fitxategia edo ordezkatu bere edukia Chamilorekin batera datorren configuration.ini.default fitxategiaz.";
 $FileSavedAs = "Fitxategia gorde da honela";
 $FileExportAs = "Fitxategia esportatu da honela";

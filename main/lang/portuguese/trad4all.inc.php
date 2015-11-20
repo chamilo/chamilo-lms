@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$TotalX = "Total: %s";
+$SkillsReport = "Relatório de Competências";
+$TemplateCertificateTitle = "Certificado";
+$DownloadCertificate = "Baixar Certificado";
 $CatchScreenCasts = "Capturas de ecrãn";
 $View = "Ver";
 $AmountSubmitted = "Número submetido";

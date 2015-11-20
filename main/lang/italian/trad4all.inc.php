@@ -7015,7 +7015,7 @@ $LdapDescriptionComment = "<h4>I. Configirazione LDAP</h4>
 
 <h5>Modifica del file main/inc/conf/auth.conf.php</h5>
 
--&gt; Modifica valori array <code>$extldap_config</code><br /><br />
+-&gt; Modifica valori array <code>&#36;extldap_config</code><br /><br />
 
 I parametri sono <br />
 <ul>

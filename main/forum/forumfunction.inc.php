@@ -1464,6 +1464,8 @@ function get_forums(
     } else {
         $session_id = $sessionId;
     }
+    
+    $sessionIdLink = ($session_id === 0) ? '' : 'AND threads.session_id = item_properties.session_id';
 
     $condition_session = api_get_session_condition(
         $session_id,
@@ -1503,8 +1505,8 @@ function get_forums(
                 INNER JOIN ".$table_item_property." item_properties
                 ON (
                     threads.thread_id=item_properties.ref AND
-                    threads.c_id = item_properties.c_id AND
-                    threads.session_id = item_properties.session_id
+                    threads.c_id = item_properties.c_id 
+                    $sessionIdLink
                 )
                 WHERE
                     item_properties.visibility=1 AND
@@ -1552,8 +1554,8 @@ function get_forums(
                     INNER JOIN ".$table_item_property." item_properties
                     ON (
                         threads.thread_id=item_properties.ref AND
-                        threads.c_id = item_properties.c_id AND
-                        threads.session_id = item_properties.session_id
+                        threads.c_id = item_properties.c_id 
+                        $sessionIdLink
                     )
                     WHERE
                         item_properties.visibility<>2 AND

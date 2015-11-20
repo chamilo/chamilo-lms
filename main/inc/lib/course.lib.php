@@ -3274,7 +3274,6 @@ class CourseManager
             $html .= $params['icon'];
             $html .= '</div>';
         }
-
         $html .= '</div>';
         $notifications = isset($params['notifications']) ? $params['notifications'] : '';
         $param_class = isset($params['class']) ? $params['class'] : '';

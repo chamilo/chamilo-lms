@@ -5616,7 +5616,9 @@ class learnpath
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
 
-                        if ($arrLP[$i]['item_type'] != 'forum') {
+                        if (
+                            !in_array($arrLP[$i]['item_type'], ['forum', 'thread'])
+                        ) {
                             if (
                                 $this->items[$arrLP[$i]['id']]->getForumThread(
                                     $this->course_int_id,

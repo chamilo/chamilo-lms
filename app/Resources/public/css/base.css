@@ -5206,6 +5206,9 @@ div#chat-remote-video video {
 .ui-jqgrid .ui-jqgrid-htable th div{
   height: 25px;
 }
+.ui-jqgrid .ui-jqgrid-htable th {
+    height: 35px;
+}
 .ui-jqgrid .ui-state-highlight, .ui-jqgrid .ui-widget-content .ui-state-highlight,.ui-jqgrid .ui-widget-header .ui-state-highlight{
   background: #F7F7F7;
 }

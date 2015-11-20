@@ -7566,4 +7566,5 @@ $AverageRatingX = "Score moyen: %s";
 $AverageRating = "Score moyen";
 $GradebookTeacherResultsNotShown = "Les résultats des enseignants ne sont pas affichés ni pris en compte dans l'outil d'évaluations.";
 $SocialWallWriteNewPostToFriend = "Écris quelque chose d'intéressant sur le mur de ton ami...";
+$EmptyTemplate = "Modèle blanc";
 ?>

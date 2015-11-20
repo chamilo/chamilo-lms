@@ -1391,7 +1391,6 @@ function display_database_settings_form(
             //Database Name fix replace weird chars
             if ($installType != INSTALL_TYPE_UPDATE) {
                 $dbNameForm = str_replace(array('-','*', '$', ' ', '.'), '', $dbNameForm);
-                $dbNameForm = api_replace_dangerous_char($dbNameForm);
             }
 
             displayDatabaseParameter(

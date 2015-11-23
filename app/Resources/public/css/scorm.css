@@ -440,6 +440,15 @@ See https://support.chamilo.org/issues/6976
     width: 100%;
 }
 
+#learning_path_main.lp-view-collapsed #learning_path_left_zone {
+    left: -100%;
+}
+
+#learning_path_main.lp-view-collapsed #learning_path_right_zone {
+    left: 0;
+    width: 100%;
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     #learning_path_main {

@@ -156,6 +156,22 @@
         };
 
         $(document).on('ready', function () {
+            $('#touch-button').click(function() {
+                $('#learning_path_main').toggleClass('lp-view-collapsed');
+
+                var self = $(this);
+                self.toggleClass('show-touch');
+
+                var icon = self.children('span.fa');
+
+                if (icon.is('.fa-chevron-left')) {
+                    icon.removeClass('fa-chevron-left').addClass('fa-chevron-right');
+
+                    return;
+                }
+
+                icon.removeClass('fa-chevron-right').addClass('fa-chevron-left');
+            });
             
             $('.lp-view-tabs').on('click', '.disabled', function (e) {
                 e.preventDefault();

@@ -267,17 +267,10 @@ See https://support.chamilo.org/issues/6976
 }
 
 #touch-button{
-  text-decoration: none;
   position: fixed;
   top: 40px;
   left: -5px;
-  overflow: hidden;
-  width: 51px;
-  height: 51px;
-  border: none;
-  opacity: 50;
-  z-index: 2;
-  font-size: 26px;
+  z-index: 2
 }
 
 .inner_lp_toc{

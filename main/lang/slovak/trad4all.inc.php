@@ -6246,7 +6246,7 @@ $SSOServerProtocolTitle = "Single Sign On protokol servera je";
 $SSOServerProtocolComment = "Reťazec protokolu predpony Single Sign On doména servera (odporúčame použiť https:// ak váš server je schopný poskytnúť túto funkciu, ako všetky nezabezpečené protokoly sú nebezpečné pre záležitosti overovania )";
 $EnabledWirisTitle = "WIRIS matematický editor";
 $EnabledWirisComment = "Povoliť WIRIS matematický editor. Inštalácia tohto zásuvného modulu dostanete WIRIS editor and WIRIS CAS.<br>
-Táto aktivácia nie je plne realizovaná, ak bol predtým stiahnutý <a href=\"http://www.wiris.com/plugins/editors/download?filter=fckeditor\" target=\"_blank\">PHP zásuvný modul pre FCKeditor WIRIS</a> a rozbalený obsah v Chamilo adresári main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/ <br>
+Táto aktivácia nie je plne realizovaná, ak bol predtým stiahnutý <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP zásuvný modul pre CKeditor WIRIS</a> a rozbalený obsah v Chamilo adresári main/inc/lib/javascript/ckeditor/plugins/ <br>
 To je nutné, pretože Wiris je proprietárny softvér a jeho služby sú <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">komerčné</a>. Ak chcete vykonať úpravy zásuvného modulu, upravte súbor configuration.ini alebo nahraďte jeho obsah Chamilo súborom configuration.ini.default.";
 $FileSavedAs = "Súbor uložený ako";
 $FileExportAs = "Súbor exportovaný ako";

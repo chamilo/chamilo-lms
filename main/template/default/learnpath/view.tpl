@@ -6,7 +6,9 @@
             </div>
         </div>
     {% endif %}
-    <button id="touch-button" class="btn-touch"></button>
+    <button id="touch-button" class="btn btn-default btn-lg btn-touch">
+        <span class="fa fa-chevron-left fa-2x" aria-hidden="true"></span><span class="sr-only">{{ 'Hide'|get_lang }}</span>
+    </button>
     <div class="container-fluid">
         <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">

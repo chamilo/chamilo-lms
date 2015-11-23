@@ -969,6 +969,109 @@ function WSCreateUsersPasswordCrypted($params)
 
     return $output;
 }
+// Subscribe / Unsubscribe Teacher to Session Course
+// 
+// Prepare Input params for Subscribe Teacher to SC
+$server->wsdl->addComplexType(
+    'SubscribeTeacherToSessionCourse',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'userId'       => array('name' => 'course',     'type' => 'xsd:string'), // Chamilo user Id
+        'sessionId'      => array('name' => 'user_id',    'type' => 'xsd:string'), // Current Session course ID
+        'courseId'      =>array('name' => 'courseId',      'type' => 'xsd:string'), // Course Real Id
+        'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+$server->register(
+	'WSSubscribeTeacherToSessionCourse',
+	array('SubscribeTeacherToSessionCourse' => 'tns:SubscribeTeacherToSessionCourse'),
+    array('return' => 'xsd:string'),
+    'urn:WSRegistration',
+    'urn:WSRegistration#WSSubscribeTeacherToSessionCourse',
+    'rpc',
+    'encoded',
+    'This webservice subscribe a teacher to a session course'
+);
+
+// Prepare Input params for Unsubscribe Teacher from SC
+$server->wsdl->addComplexType(
+    'UnsubscribeTeacherFromSessionCourse',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'userId'       => array('name' => 'course',     'type' => 'xsd:string'), // Chamilo user Id
+        'sessionId'      => array('name' => 'user_id',    'type' => 'xsd:string'), // Current Session course ID
+        'courseId'      =>array('name' => 'courseId',      'type' => 'xsd:string'), // Course Real Id
+        'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+$server->register(
+	'WSUnsubscribeTeacherFromSessionCourse',
+	array('UnsubscribeTeacherFromSessionCourse' => 'tns:UnsubscribeTeacherFromSessionCourse'),
+    array('return' => 'xsd:string'),
+    'urn:WSRegistration',
+    'urn:WSRegistration#WSUnsubscribeTeacherFromSessionCourse',
+    'rpc',
+    'encoded',
+    'This webservice unsubscribe a teacher from a session course'
+);
+
+    /**
+     * Subscribe teacher to a session course
+     *
+     * @param array $params - WSFunction parameters (include VerifyKey)
+     * @return bool|null|soap_fault A simple boolean (true if teacher successful subscribed, false otherwise)
+     */
+    function WSSubscribeTeacherToSessionCourse($params)
+    {
+        global $debug;
+        
+        if ($debug) error_log('WSSubscribeTeacherToSessionCourse');
+        if ($debug) error_log('Params '. print_r($params, 1));
+        
+        if (!WSHelperVerifyKey($params)) {
+            return return_error(WS_ERROR_SECRET_KEY);
+        }
+        
+        $userId = $params['userId']; // Chamilo user Id
+        $sessionId = $params['sessionId']; // Current Session course ID
+        $courseId = $params['courseId']; // Course Real Id
+        
+        return (SessionManager::set_coach_to_course_session($userId, $sessionId, $courseId));
+    }
+
+    /**
+     * Subscribe teacher to a session course
+     *
+     *  @param array $params - WSFunction parameters (include VerifyKey)
+     *  @return bool|null|soap_fault A simple boolean (true if teacher successful unsubscribed, false otherwise)
+     */
+    function WSUnsubscribeTeacherFromSessionCourse($params)
+    {
+        global $debug;
+        
+        if ($debug) error_log('WSSubscribeTeacherToSessionCourse');
+        if ($debug) error_log('Params '. print_r($params, 1));
+        
+        if (!WSHelperVerifyKey($params)) {
+            return return_error(WS_ERROR_SECRET_KEY);
+        }
+        
+        $userId = $params['userId']; // Chamilo user Id
+        $sessionId = $params['sessionId']; // Current Session course ID
+        $courseId = $params['courseId']; // Course Real Id
+        
+        return (SessionManager::removeUsersFromCourseSession($userId, $sessionId, $courseId));
+        
+    }
+
 
 /* Register WSCreateUserPasswordCrypted function */
 // Register the data structures used by the service

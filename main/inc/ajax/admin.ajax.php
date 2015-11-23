@@ -131,18 +131,19 @@ function check_system_version()
         $data = array(
             'url' => api_get_path(WEB_PATH),
             'campus' => api_get_setting('siteName'),
-            'contact' => api_get_setting('emailAdministrator'),
+            'contact' => api_get_setting('emailAdministrator'), // the admin's e-mail, with the only purpose of being able to contact admins to inform about critical security issues
             'version' => $system_version,
-            'numberofcourses' => $number_of_courses,
-            'numberofusers' => $number_of_users,
-            'numberofactiveusers' => $number_of_active_users,
+            'numberofcourses' => $number_of_courses, // to sum up into non-personal statistics - see https://version.chamilo.org/stats/
+            'numberofusers' => $number_of_users, // to sum up into non-personal statistics
+            'numberofactiveusers' => $number_of_active_users, // to sum up into non-personal statistics
             'numberofsessions' => $number_of_sessions,
             //The donotlistcampus setting recovery should be improved to make
             // it true by default - this does not affect numbers counting
             'donotlistcampus' => api_get_setting('donotlistcampus'),
             'organisation' => api_get_setting('Institution'),
-            'language' => api_get_setting('platformLanguage'),
-            'adminname' => api_get_setting('administratorName').' '.api_get_setting('administratorSurname'),
+            'language' => api_get_setting('platformLanguage'), //helps us know the spread of language usage for campuses, by main language
+            'adminname' => api_get_setting('administratorName').' '.api_get_setting('administratorSurname'), //not sure this is necessary...
+            'ip' => $_SERVER['REMOTE_ADDR'], //the admin's IP address, with the only purpose of trying to geolocate portals around the globe to draw a map
         );
         $version = null;
         // version.php has been updated to include the version in an HTTP header

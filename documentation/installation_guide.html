@@ -723,6 +723,19 @@ If you have issues with files taking a long time to download, make sure you reco
     deny all;
   }
     </pre>
+    <h3>Apple on OS X servers</h3>
+    <p>
+        Scott Steven reports that Apache on OS X requires specific actions<br />
+        <ul>
+            <li>First, make sure you have the .htaccess file present at the root of your Chamilo folder</li>
+            <li>Get to your Apache"s HTTPd.conf file and configure your domain and the fact that mod_rewrite is loaded</li>
+            <li>In your Apple Server app, Advanced Settings, check the box to allow .htaccess</li>
+        </ul>
+        Alternatively, you can find the settings file for your domain in Apple's settings folder under
+        /Library/Server/Web/Settings to update it manually.<br />
+        You cannot, however, only allow .htaccess files in the main httpd.conf file, as OS X will override it with the
+        domain-specific configuration file.
+    </p>
 <hr style="width: 100%; height: 2px;" />
 <p>
   <br />

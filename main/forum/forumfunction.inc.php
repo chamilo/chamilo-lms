@@ -714,6 +714,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
+            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : null
         ];
 
         Database::update(
@@ -753,6 +754,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
+            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : null
         ];
         $last_id = Database::insert($table_forums, $params);
         if ($last_id > 0) {
@@ -1462,6 +1464,8 @@ function get_forums(
     } else {
         $session_id = $sessionId;
     }
+    
+    $sessionIdLink = ($session_id === 0) ? '' : 'AND threads.session_id = item_properties.session_id';
 
     $condition_session = api_get_session_condition(
         $session_id,
@@ -1501,8 +1505,8 @@ function get_forums(
                 INNER JOIN ".$table_item_property." item_properties
                 ON (
                     threads.thread_id=item_properties.ref AND
-                    threads.c_id = item_properties.c_id AND
-                    threads.session_id = item_properties.session_id
+                    threads.c_id = item_properties.c_id 
+                    $sessionIdLink
                 )
                 WHERE
                     item_properties.visibility=1 AND
@@ -1550,8 +1554,8 @@ function get_forums(
                     INNER JOIN ".$table_item_property." item_properties
                     ON (
                         threads.thread_id=item_properties.ref AND
-                        threads.c_id = item_properties.c_id AND
-                        threads.session_id = item_properties.session_id
+                        threads.c_id = item_properties.c_id 
+                        $sessionIdLink
                     )
                     WHERE
                         item_properties.visibility<>2 AND
@@ -2372,6 +2376,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 'thread_weight' => isset($values['weight_calification']) ? $values['weight_calification'] : '',
                 'thread_peer_qualify' => isset($values['thread_peer_qualify']) ? $values['thread_peer_qualify'] : '',
                 'session_id' => api_get_session_id(),
+                'lp_item_id' => isset($values['lp_item_id']) ? intval($values['lp_item_id']) : null
             ]
         );
 
@@ -5668,4 +5673,57 @@ function getAttachmentIdsByPostId($postId, $courseId = null)
         }
     }
     return $array;
+}
+
+/**
+ * Check if the forum category exists looking for its title
+ * @param string $title The forum category title
+ * @param int $courseId The course ID
+ * @param int $sessionId Optional. The session ID
+ * @return boolean
+ */
+function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
+{
+    $sessionId = intval($sessionId);
+
+    $forumCategoryTable = Database::get_course_table(TABLE_FORUM_CATEGORY);
+    $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+    $fakeFrom = "$forumCategoryTable fc
+        INNER JOIN $itemProperty ip ";
+
+    if ($sessionId === 0) {
+        $fakeFrom .= "
+            ON (
+                fc.cat_id = ip.ref AND fc.c_id = ip.c_id AND (fc.session_id = ip.session_id OR ip.session_id IS NULL)
+            )
+        ";
+    } else {
+        $fakeFrom .= "
+            ON (
+                fc.cat_id = ip.ref AND fc.c_id = ip.c_id AND fc.session_id = ip.session_id
+            )
+        ";
+    }
+
+    $resultData = Database::select(
+        'fc.*',
+        $fakeFrom,
+        [
+            'where' => [
+                'ip.visibility != ? AND ' => 2,
+                'ip.tool = ? AND ' => TOOL_FORUM_CATEGORY,
+                'fc.session_id = ? AND ' => $sessionId,
+                'fc.cat_title = ? AND ' => $title,
+                'fc.c_id = ?' => intval($courseId)
+            ]
+        ],
+        'first'
+    );
+
+    if (empty($resultData)) {
+        return false;
+    }
+
+    return $resultData;
 }

@@ -134,17 +134,6 @@ $htmlHeadXtra[] = '
     }
 
     $(function() {
-
-        $(".item_data").on("mouseover", function(event) {
-            $(".button_actions", this).show();
-        });
-
-        $(".item_data").on("mouseout", function() {
-            $(".button_actions",this).hide();
-        });
-
-        $(".button_actions").hide();
-
         $(".lp_resource").sortable({
             items: ".lp_resource_element ",
             handle: ".moved", //only the class "moved"
@@ -1280,6 +1269,73 @@ switch ($action) {
         $_SESSION['refresh'] = 1;
         $_SESSION['oLP']->set_seriousgame_mode();
         require 'lp_list.php';
+        break;
+    case 'create_forum':
+        if (!isset($_GET['id'])) {
+            break;
+        }
+
+        $selectedItem = null;
+
+        foreach ($_SESSION['oLP']->items as $item) {
+            if ($item->db_id == $_GET['id']) {
+                $selectedItem = $item;
+            }
+        }
+
+        if (!empty($selectedItem)) {
+            $forumThread = $selectedItem->getForumThread(
+                $_SESSION['oLP']->course_int_id,
+                $_SESSION['oLP']->lp_session_id
+            );
+
+            if (empty($forumThread)) {
+                require '../forum/forumfunction.inc.php';
+
+                $forumCategory = getForumCategoryByTitle(
+                    get_lang('LearningPaths'),
+                    $_SESSION['oLP']->course_int_id,
+                    $_SESSION['oLP']->lp_session_id
+                );
+
+                $forumCategoryId = !empty($forumCategory) ? $forumCategory['cat_id']: 0;
+
+                if (empty($forumCategoryId)) {
+                    $forumCategoryId = store_forumcategory(
+                        [
+                            'lp_id' => 0,
+                            'forum_category_title' => get_lang('LearningPaths'),
+                            'forum_category_comment' => null
+                        ],
+                        [],
+                        false
+                    );
+                }
+
+                if (!empty($forumCategoryId)) {
+                    $forum = $_SESSION['oLP']->getForum(
+                        $_SESSION['oLP']->lp_session_id
+                    );
+
+                    $forumId = !empty($forum) ? $forum['forum_id'] : 0;
+
+                    if (empty($forumId)) {
+                        $forumId = $_SESSION['oLP']->createForum($forumCategoryId);
+                    }
+
+                    if (!empty($forumId)) {
+                        $selectedItem->createForumTthread($forumId);
+                    }
+                }
+            }
+        }
+
+        header('Location:' . api_get_path(WEB_PATH) . api_get_self() . '?' . http_build_query([
+            'action' => 'add_item',
+            'type' => 'step',
+            'lp_id' => $_SESSION['oLP']->lp_id
+        ]));
+
         break;
     case 'report':
         require 'lp_report.php';

@@ -500,8 +500,10 @@ if ($form->validate()) {
     $validPassword = false;
     $passwordWasChecked = false;
     if ($user &&
-        !empty($user_data['password0']) &&
-        !empty($user_data['password1'])
+        (!empty($user_data['password0']) &&
+        !empty($user_data['password1'])) ||
+        (!empty($user_data['password0']) && 
+        api_get_setting('profile', 'email') == 'true')
     ) {
         $passwordWasChecked = true;
         $validPassword = UserManager::isPasswordValid(

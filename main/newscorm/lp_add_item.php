@@ -40,6 +40,8 @@ $learnPath->get_js_dropdown_array() .
   //'if( typeof cbo != "undefined" ) {'."\n" .
   'cbo.options[k].selected = true;'."\n" .
    //'}'."\n" .
+
+   '$(\'#previous\').selectpicker(\'refresh\');' .
 '}
 
 $(function() {
@@ -274,7 +276,8 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
             echo $learnPath->display_link_form('add', 0, $_GET['file']);
             break;
         case 'student_publication':
-            echo $learnPath->display_student_publication_form('add', 0, $_GET['file']);
+            $extra = isset($_GET['file']) ? $_GET['file'] : null;
+            echo $learnPath->display_student_publication_form('add', 0, $extra);
             break;
         case 'step':
             $learnPath->display_resources();

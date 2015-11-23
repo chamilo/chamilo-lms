@@ -21,9 +21,19 @@ $(document).ready(function() {
 
             });
         });
-        $(this).toggleClass('show-touch');
+
         $('#learning_path_right_zone').slideToggle(300);
 
+        var self = $(this);
+        self.toggleClass('show-touch');
+
+        var icon = self.children('span.fa');
+
+        if (icon.is('.fa-chevron-left')) {
+            icon.removeClass('fa-chevron-left').addClass('fa-chevron-right');
+        } else {
+            icon.removeClass('fa-chevron-right').addClass('fa-chevron-left');
+        }
     });
 
     // effects items scorm content

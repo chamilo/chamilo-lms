@@ -126,7 +126,7 @@ $OnlyBestAttempts = "Solo le prove migliori";
 $IncludeAllUsers = "Includi tutti gli utenti";
 $HostingWarningReached = "Avviso hosting raggiunto";
 $SessionName = "Nome sessione";
-$MobilePhoneNumberWrong = "Il numero di telofono moblie è incompleto o contiene caratteri non consentiti";
+$MobilePhoneNumberWrong = "Il numero di telefono mobile è incompleto o contiene caratteri non consentiti";
 $CountryDialCode = "Includi il codice selezione paese";
 $FieldTypeMobilePhoneNumber = "Numero telefono mobile";
 $CheckUniqueEmail = "Controlla email unica";
@@ -271,9 +271,9 @@ $HGlossary = "Aiuto del glossario";
 $GlossaryContent = "Questo tool permette di creare un glossario dei termini usati in questo corso che possono essere usati dal tool Documenti.";
 $ForumContent = "Il forum è uno strumento di discussione \"asincrono\". A differenza delle email, un forum è un gruppo di discussione pubblico (o parzialmente pubblico.)
 
-Per usare il forum, glu utenti devono usare il loro browser - non c'è bisogno di nessun altro programma.
+Per usare il forum, gli utenti devono usare il loro browser - non c'è bisogno di nessun altro programma.
 
-Per organizzare il forum, clicca sul tool Forum. Le discussioni sono organizzate gerarchicamente secondo questo schema: Categorie>Forum>Argomenti>Articoli. Per favorire una partecipazione ordinata ed efficiente, è essenziale creare subito categorie e forum; saranno poi gli utenti a creare argomenti e articoli. Di fabbrica, il forum contiene una singola categoria (pubblica), un argomento di esempio e un articolo di esempio. Puoi aggiungere più forum a una categoria, cambiare il titolo o creare altre categorie, all'interno delle quali creare nuovi forum. (Non confondere categorie e forum e rammenta che una categoria che non contiene forum è inutile non sarà visibile).
+Per organizzare il forum, clicca sul tool Forum. Le discussioni sono organizzate gerarchicamente secondo questo schema: Categorie>Forum>Argomenti>Articoli. Per favorire una partecipazione ordinata ed efficiente, è essenziale creare subito categorie e forum; saranno poi gli utenti a creare argomenti e articoli. Di fabbrica, il forum contiene una singola categoria (pubblica), un argomento di esempio e un articolo di esempio. Puoi aggiungere più forum a una categoria, cambiare il titolo o creare altre categorie, all'interno delle quali creare nuovi forum. (Non confondere categorie e forum e rammenta che una categoria che non contiene forum è inutile e non sarà visibile).
 
 \n
 
@@ -281,8 +281,8 @@ La descrizione del forum può includere una lista dei suoi membri, lo scopo del 
 
 I gruppi di forum non dovrebbero essere creati col tool Forum ma col tool Gruppi nel quale si può stabilire se il forum debba essere pubblico o privato e, contemporaneamente, stabilire uno spazio dei documenti per i gruppi di condivisione.
 
-Suggerimento didattico: un forum di apprendimento ha alcune differenze rispetto a un normale forum nella rete internet. Per una cosa: gli studenti non possono modificare i loro articoli dopo averli pubblicati in quanto devono essere archiviati per consentire il monitoraggio di quanto hanno detto/scritto in passato. Inoltre, il forum in Chamilo è particolarmente adatto all'insegnamento. Ad es., Docento/istruttori possono pubblicare le correzioni delle esercitazioni/revisioni, direttamente nel forum con la seguente modalità:
-viene chiesto allo studente di pubblicare un report direttamente nel forum; il docente lo corregge cliccando su \"Modifica\" (l'iconcina della matita gialla) usando l'editor grafico (colorando, sottolineando, ecc.). Infine, gli altri studenti possono trarre beneficio dalle correzioni effettuate. Nota che lo stesso meccanismo può essere applicato anche fra studenti, ma richiederà che il messaggio del suo compagmo di studi sia copiato/incollato poiché studenti e istruttori non possono modificare le pubblicazioni di un altro utente.";
+Suggerimento didattico: un forum di apprendimento ha alcune differenze rispetto a un normale forum nella rete internet. Per una cosa: gli studenti non possono modificare i loro articoli dopo averli pubblicati in quanto devono essere archiviati per consentire il monitoraggio di quanto hanno detto/scritto in passato. Inoltre, il forum in Chamilo è particolarmente adatto all'insegnamento. Ad es., Docenti/istruttori possono pubblicare le correzioni delle esercitazioni/revisioni, direttamente nel forum con la seguente modalità:
+viene chiesto allo studente di pubblicare un report direttamente nel forum; il docente lo corregge cliccando su \"Modifica\" (l'iconcina della matita gialla) usando l'editor grafico (colorando, sottolineando, ecc.). Infine, gli altri studenti possono trarre beneficio dalle correzioni effettuate. Nota che lo stesso meccanismo può essere applicato anche fra studenti, ma richiederà che il messaggio del suo compagno di studi sia copiato/incollato poiché studenti e istruttori non possono modificare le pubblicazioni di un altro utente.";
 $HForum = "Forum di aiuto";
 $LoginToGoToThisCourse = "Esegui il Login per accedere al corso";
 $AreYouSureToEmptyAllTestResults = "Vuoi azzerare tutti i risultati, di tutti gli studenti, per ogni esercitazione?";
@@ -7015,7 +7015,7 @@ $LdapDescriptionComment = "<h4>I. Configirazione LDAP</h4>
 
 <h5>Modifica del file main/inc/conf/auth.conf.php</h5>
 
--&gt; Modifica valori array <code>$extldap_config</code><br /><br />
+-&gt; Modifica valori array <code>&#36;extldap_config</code><br /><br />
 
 I parametri sono <br />
 <ul>
@@ -7630,4 +7630,5 @@ $RateTheSkillInPractice = "In una scala da 1 a 10, in base a quello che hai potu
 $AverageRatingX = "Voto medio %s";
 $AverageRating = "Voto medio";
 $GradebookTeacherResultsNotShown = "i risultati degli insegnanti non sono riportati e nemmeno presi in considerazione nel registro di classe.";
+$SocialWallWriteNewPostToFriend = "Scrivi qualcosa sulla bacheca dei tuoi amici";
 ?>

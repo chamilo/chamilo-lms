@@ -5600,6 +5600,7 @@ class learnpath
             $delete_icon = '';
             $audio_icon = '';
             $prerequisities_icon = '';
+            $forumIcon = '';
 
             if ($is_allowed_to_edit) {
                 if (!$update_audio || $update_audio <> 'true') {
@@ -5611,30 +5612,64 @@ class learnpath
                 // No edit for this item types
                 if (!in_array($arrLP[$i]['item_type'], array('sco', 'asset'))) {
                     if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module'))) {
-                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&view=build&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '">';
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&view=build&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '" class="btn btn-default">';
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
+
+                        if (
+                            !in_array($arrLP[$i]['item_type'], ['forum', 'thread'])
+                        ) {
+                            if (
+                                $this->items[$arrLP[$i]['id']]->getForumThread(
+                                    $this->course_int_id,
+                                    $this->lp_session_id
+                                )
+                            ) {
+                                $forumIcon = Display::url(
+                                    Display::return_icon('forum.png', get_lang('CreateForum'), [], ICON_SIZE_TINY),
+                                    '#',
+                                    ['class' => 'btn btn-default disabled']
+                                );
+                            } else {
+                                $forumIconUrl = api_get_self() . '?' . api_get_cidreq() . '&' . http_build_query([
+                                    'action' => 'create_forum',
+                                    'id' => $arrLP[$i]['id'],
+                                    'lp_id' => $this->lp_id
+                                ]);
+                                $forumIcon = Display::url(
+                                    Display::return_icon('forum.png', get_lang('CreateForum'), [], ICON_SIZE_TINY),
+                                    $forumIconUrl,
+                                    ['class' => "btn btn-default"]
+                                );
+                            }
+                        }
                     } else {
-                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '">';
+                        $edit_icon .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '&path_item=' . $arrLP[$i]['path'] . '" class="btn btn-default">';
                         $edit_icon .= Display::return_icon('edit.png', get_lang('LearnpathEditModule'), array(), ICON_SIZE_TINY);
                         $edit_icon .= '</a>';
                     }
                 }
 
-                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
+                $delete_icon .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_item&id=' . $arrLP[$i]['id'] . '&lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');" class="btn btn-default">';
                 $delete_icon .= Display::return_icon('delete.png', get_lang('LearnpathDeleteModule'), array(), ICON_SIZE_TINY);
                 $delete_icon .= '</a>';
 
                 $url = api_get_self() . '?'.api_get_cidreq().'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
 
                 if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module', 'dir'))) {
-                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq');
-                    $move_item_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item');
-                    $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio');
+                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq', ['class' => 'btn btn-default']);
+                    $move_item_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item', ['class' => 'btn btn-default']);
+                    $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio', ['class' => 'btn btn-default']);
                 }
             }
             if ($update_audio != 'true') {
-                $row = $move_icon.' '.$icon.Display::span($title_cut).Display::span($audio.$edit_icon.$prerequisities_icon.$move_item_icon.$audio_icon.$delete_icon, array('class'=>'button_actions'));
+                $row = $move_icon . ' ' . $icon .
+                    Display::span($title_cut) . 
+                    Display::tag(
+                        'div',
+                        "<div class=\"btn-group btn-group-xs\">$audio $edit_icon $forumIcon $prerequisities_icon $move_item_icon $audio_icon $delete_icon</div>",
+                        array('class'=>'btn-toolbar button_actions')
+                    );
             } else {
                 $row = Display::span($title.$icon).Display::span($audio, array('class'=>'button_actions'));
             }
@@ -7846,8 +7881,6 @@ class learnpath
             $item_title = get_lang('Student_publication');
         }
 
-        $legend = '<legend>';
-
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
         } else {
@@ -7881,73 +7914,102 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
         unset ($this->arrMenu);
 
+        $form = new FormValidator('frm_student_publication', 'post', '#');
+
         if ($action == 'add') {
-            $legend .= get_lang('Student_publication') . '&nbsp;:' . "\n";
+            $form->addHeader(get_lang('Student_publication'));
         } elseif ($action == 'move') {
-            $legend .= get_lang('MoveCurrentStudentPublication') . '&nbsp;:' . "\n";
+            $form->addHeader(get_lang('MoveCurrentStudentPublication'));
         } else {
-            $legend .= get_lang('EditCurrentStudentPublication') . '&nbsp;:' . "\n";
+            $form->addHeader(get_lang('EditCurrentStudentPublication'));
         }
-        $legend .= '</legend>';
 
-        $return = '<div class="sectioncomment">';
-        $return .= '<form method="POST">';
-        $return .= $legend;
-        $return .= '<table class="lp_form">';
         if ($action != 'move') {
-            $return .= '<tr>';
-            $return .= '<td class="label"><label for="idTitle">' . get_lang('Title') . '</label></td>';
-            $return .= '<td class="input"><input id="idTitle" name="title" size="44" type="text" value="' . $item_title . '" class="learnpath_item_form" /></td>';
-            $return .= '</tr>';
+            $form->addText('title', get_lang('Title'), true, ['class' => 'learnpath_item_form', 'id' => 'idTitle']);
         }
-        $return .= '<tr>';
-        $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
-        $return .= '<td class="input">';
-        $return .= '<select id="idParent" name="parent" style="width:100%;" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
 
-        $return .= '<option class="top" value="0">' . $this->name . '</option>';
+        $parentSelect = $form->addSelect(
+            'parent',
+            get_lang('Parent'),
+            ['0' => $this->name],
+            [
+                'onchange' => 'javascript: load_cbo(this.value);',
+                'class' => 'learnpath_item_form',
+                'id' => 'idParent'
+            ]
+        );
+
         $arrHide = array (
             $id
         );
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
-                if (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir') && !in_array($arrLP[$i]['id'], $arrHide) && !in_array($arrLP[$i]['parent_item_id'], $arrHide)) {
-                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                if (
+                    (
+                        $arrLP[$i]['item_type'] == 'dokeos_module' ||
+                        $arrLP[$i]['item_type'] == 'dokeos_chapter' ||
+                        $arrLP[$i]['item_type'] == 'dir'
+                    ) &&
+                    !in_array($arrLP[$i]['id'], $arrHide) &&
+                    !in_array($arrLP[$i]['parent_item_id'], $arrHide)
+                ) {
+                    $parentSelect->addOption(
+                        $arrLP[$i]['title'],
+                        $arrLP[$i]['id'],
+                        ['style' => 'padding-left: ' . (($arrLP[$i]['depth'] * 10) + 20) . 'px;']
+                    );
+
+                    if ($parent == $arrLP[$i]['id']) {
+                        $parentSelect->setSelected($arrLP[$i]['id']);
+                    }
                 } else {
                     $arrHide[] = $arrLP[$i]['id'];
                 }
             } else {
-                if ($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir')
-                    $return .= '<option ' . (($parent == $arrLP[$i]['id']) ? 'selected="selected" ' : '') . 'style="padding-left:' . ($arrLP[$i]['depth'] * 10) . 'px;" value="' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</option>';
+                if (
+                    $arrLP[$i]['item_type'] == 'dokeos_module' ||
+                    $arrLP[$i]['item_type'] == 'dokeos_chapter' || $arrLP[$i]['item_type'] == 'dir'
+                ) {
+                    $parentSelect->addOption(
+                        $arrLP[$i]['title'],
+                        $arrLP[$i]['id'],
+                        ['style' => 'padding-left: ' . (($arrLP[$i]['depth'] * 10) + 20) . 'px;']
+                    );
+
+                    if ($parent == $arrLP[$i]['id']) {
+                        $parentSelect->setSelected($arrLP[$i]['id']);
+                    }
+                }
             }
         }
 
         if (is_array($arrLP)) {
             reset($arrLP);
         }
-        $return .= '</select>';
-        $return .= '</td>';
-        $return .= '</tr>';
-        $return .= '<tr>';
-        $return .= '<td class="label"><label for="previous">' . get_lang('Position') . '</label></td>';
-        $return .= '<td class="input">';
-        $return .= '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
-        $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
+
+        $previousSelect = $form->addSelect(
+            'previous',
+            get_lang('Position'),
+            ['0' => get_lang('FirstPosition')],
+            ['id' => 'previous', 'class' => 'learnpath_item_form']
+        );
+
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
-                if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
-                    $selected = 'selected="selected" ';
-                elseif ($action == 'add') $selected = 'selected="selected" ';
-                else
-                    $selected = '';
+                $previousSelect->addOption(
+                    get_lang('After') . ' "' . $arrLP[$i]['title'] . '"',
+                    $arrLP[$i]['id']
+                );
 
-                $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
+                if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
+                    $previousSelect->setSelected($arrLP[$i]['id']);
+                } elseif ($action == 'add') {
+                    $previousSelect->setSelected($arrLP[$i]['id']);
+                }
             }
         }
-        $return .= '</select>';
-        $return .= '</td>';
-        $return .= '</tr>';
+
         if ($action != 'move') {
             $id_prerequisite = 0;
             if (is_array($arrLP)) {
@@ -7968,31 +8030,31 @@ class learnpath
 
                 }
             }
-            $return .= '</tr>';
         }
 
-        $return .= '<tr>';
         if ($action == 'add') {
-            $return .= '<td>&nbsp</td><td><button class="btn btn-primary" name="submit_button" type="submit">' . get_lang('AddAssignmentToCourse') . '</button></td>';
+            $form->addButtonCreate(get_lang('AddAssignmentToCourse'), 'submit_button');
         } else {
-            $return .= '<td>&nbsp</td><td><button class="btn btn-primary" name="submit_button" type="submit">' . get_lang('EditCurrentStudentPublication') . '</button></td>';
+            $form->addButtonCreate(get_lang('EditCurrentStudentPublication'), 'submit_button');
         }
-        $return .= '</tr>';
-        $return .= '</table>';
 
         if ($action == 'move') {
-            $return .= '<input name="title" type="hidden" value="' . $item_title . '" />';
-            $return .= '<input name="description" type="hidden" value="' . $item_description . '" />';
+            $form->addHidden('title', $item_title);
+            $form->addHidden('description', $item_description);
         }
 
         if (is_numeric($extra_info)) {
-            $return .= '<input name="path" type="hidden" value="' . $extra_info . '" />';
+            $form->addHidden('path', $extra_info);
         } elseif (is_array($extra_info)) {
-            $return .= '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
+            $form->addHidden('path', $extra_info['path']);
         }
-        $return .= '<input name="type" type="hidden" value="' . TOOL_STUDENTPUBLICATION . '" />';
-        $return .= '<input name="post_time" type="hidden" value="' . time() . '" />';
-        $return .= '</form>';
+
+        $form->addHidden('type', TOOL_STUDENTPUBLICATION);
+        $form->addHidden('post_time', time());
+        $form->setDefaults(['title' => $item_title]);
+
+        $return = '<div class="sectioncomment">';
+        $return .= $form->returnForm();
         $return .= '</div>';
 
         return $return;
@@ -9685,19 +9747,7 @@ EOD;
 
                     // Resize the image.
                     $temp = new Image($image_array['tmp_name']);
-                    $picture_infos = $temp->get_image_info();
-                    if ($picture_infos['width'] > 104) {
-                        $thumbwidth = 104;
-                    } else {
-                        $thumbwidth = $picture_infos['width'];
-                    }
-                    if ($picture_infos['height'] > 96) {
-                        $new_height = 96;
-                    } else {
-                        $new_height = $picture_infos['height'];
-                    }
-
-                    $temp->resize($thumbwidth, $new_height, 0);
+                    $temp->resize(104);
                     $result = $temp->send_image($new_path);
 
                     // Storing the image filename.
@@ -9706,7 +9756,7 @@ EOD;
                         $this->set_preview_image($new_file_name);
 
                         //Resize to 64px to use on course homepage
-                        $temp->resize(64, 64, 0);
+                        $temp->resize(64);
                         $temp->send_image($updir.'/'.$filename.'.64.'.$file_extension);
                         return true;
                     }
@@ -10413,6 +10463,85 @@ EOD;
 
         return $src;
     }
+
+    /**
+     * Get the forum for this learning path
+     * @return boolean
+     */
+    public function getForum($sessionId = 0)
+    {
+        $forumTable = Database::get_course_table(TABLE_FORUM);
+        $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+        $fakeFrom = "$forumTable f
+            INNER JOIN $itemProperty ip ";
+
+        if ($this->lp_session_id == 0) {
+            $fakeFrom .= "
+                ON (
+                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND (
+                        f.session_id = ip.session_id OR ip.session_id IS NULL
+                    )
+                )
+            ";
+        } else {
+            $fakeFrom .= "
+                ON (
+                    f.forum_id = ip.ref AND f.c_id = ip.c_id AND f.session_id = ip.session_id
+                )
+            ";
+        }
+
+        $resultData = Database::select(
+            'f.*',
+            $fakeFrom,
+            [
+                'where' => [
+                    'ip.visibility != ? AND ' => 2,
+                    'ip.tool = ? AND ' => TOOL_FORUM,
+                    'f.session_id = ? AND ' => $sessionId,
+                    'f.c_id = ? AND ' => intval($this->course_int_id),
+                    'f.lp_id = ?' => intval($this->lp_id)
+                ]
+            ],
+            'first'
+        );
+
+        if (empty($resultData)) {
+            return false;
+        }
+
+        return $resultData;
+    }
+
+    /**
+     * Create a forum for this learning path
+     * @param type $forumCategoryId
+     * @return int The forum ID if was created. Otherwise return false
+     */
+    public function createForum($forumCategoryId)
+    {
+        require_once api_get_path(SYS_CODE_PATH) . '/forum/forumfunction.inc.php';
+
+        $forumId = store_forum(
+            [
+                'lp_id' => $this->lp_id,
+                'forum_title' => $this->name,
+                'forum_comment' => null,
+                'forum_category' => intval($forumCategoryId),
+                'students_can_edit_group' => ['students_can_edit' => 0],
+                'allow_new_threads_group' => ['allow_new_threads' => 0],
+                'default_view_type_group' => ['default_view_type' => 'flat'],
+                'group_forum' => 0,
+                'public_private_group_forum_group' => ['public_private_group_forum' => 'public']
+            ],
+            [],
+            true
+        );
+
+        return $forumId;
+    }
+
 }
 
 if (!function_exists('trim_value')) {

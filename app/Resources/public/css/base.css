@@ -205,15 +205,6 @@ ul#navigation li a {
   -moz-border-radius-bottomright: 5px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  background-image: url('../../main/img/touch-left.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  border: 1px solid #DDD;
-  width: 40px;
-  height: 40px;
-}
-#touch-button.show-touch{
-  background-image: url('../../main/img/touch-right.png');
 }
 
 ul#navigation .help a {
@@ -1740,6 +1731,14 @@ div.admin_section h4 {
 #lp_item_list .item_data {
     padding:5px 0px 5px 0px;
     /* float:left;*/
+}
+
+.item_data .button_actions {
+    display: none;
+    margin: 5px 0px;
+}
+.item_data:hover .button_actions {
+    display: block;
 }
 
 #lp_item_list .item {
@@ -5206,6 +5205,9 @@ div#chat-remote-video video {
 }
 .ui-jqgrid .ui-jqgrid-htable th div{
   height: 25px;
+}
+.ui-jqgrid .ui-jqgrid-htable th {
+    height: 35px;
 }
 .ui-jqgrid .ui-state-highlight, .ui-jqgrid .ui-widget-content .ui-state-highlight,.ui-jqgrid .ui-widget-header .ui-state-highlight{
   background: #F7F7F7;

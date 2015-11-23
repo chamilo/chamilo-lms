@@ -355,8 +355,97 @@ class WSSession extends WS
 			}
 		}
 	}
+    
+    /**
+     * Change Teacher subscription (helper method)
+     *
+     * @param string User id field name
+     * @param string User id value
+     * @param string Session id field name
+     * @param string Session id value
+     * @param string Course id field name
+     * @param string Course id value
+     * @param int State (1 to subscribe, 0 to unsubscribe)
+     * @return mixed True on success, WSError otherwise
+     */
+    protected function changeTeacherSubscription($user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $course_id_field_name, $course_id_value, $state)
+    {
+        $session_id = $this->getSessionId($session_id_field_name, $session_id_value);
+        if ($session_id instanceof WSError) {
+            return $session_id;
+        } else {
+            $user_id = $this->getUserId($user_id_field_name, $user_id_value);
+            if ($user_id instanceof WSError) {
+                return $user_id;
+            } else {
+                $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
+                if ($course_id instanceof WSError) {
+                    return $course_id;
+                } else {
+                    if ($state == 1) {
+                        SessionManager::set_coach_to_course_session($user_id, $session_id, $course_id);
+                    } else {
+                        $user_id = array (0 => $user_id);
+                        $result = SessionManager::removeUsersFromCourseSession($user_id, $session_id, $course_id);
+                        if (!$result) {
+                            return new WSError(303, 'There was an error unsubscribing this Teacher from the session');
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+    }
 
-	/**
+    /**
+     * Subscribe teacher to a session course
+     *
+     * @param string API secret key
+     * @param string User id field name
+     * @param string User id value
+     * @param string Session id field name
+     * @param string Session id value
+     * @param string Course id field name
+     * @param string Course id value
+     */
+    public function SubscribeTeacherToSessionCourse($secret_key, $user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $course_id_field_name, $course_id_value)
+    {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->changeUserSubscription($user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $course_id_field_name, $course_id_value, 1);
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
+     * Subscribe teacher to a session course
+     *
+     * @param string API secret key
+     * @param string User id field name
+     * @param string User id value
+     * @param string Session id field name
+     * @param string Session id value
+     * @param string Course id field name
+     * @param string Course id value
+     */
+    public function UnsubscribeTeacherFromSessionCourse($secret_key, $user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $course_id_field_name, $course_id_value)
+    {
+        $verifKey = $this->verifyKey($secret_key);
+        if ($verifKey instanceof WSError) {
+            $this->handleError($verifKey);
+        } else {
+            $result = $this->changeUserSubscription($user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $course_id_field_name, $course_id_value, 0);
+            if ($result instanceof WSError) {
+                $this->handleError($result);
+            }
+        }
+    }
+
+    /**
 	 * Change course subscription
 	 *
 	 * @param string Course id field name

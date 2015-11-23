@@ -6,18 +6,9 @@
     {% endif %}
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 <div class="lp-view-zone-container">
-                <div class="panel-group" id="scorm-info-accordion" role="tablist" aria-multiselectable="true">
-                    <div id="scorm-info" class="panel panel-default">
-                        <div class="panel-heading text-center" role="tab" id="scorm-info-panel-title">
-                            <a id="ui-option" role="button" data-toggle="collapse" data-parent="#scorm-info-accordion" href="#scorm-info-panel-content" aria-expanded="true" aria-controls="scorm-info-panel-content">
-                                <span class="fa fa-chevron-up fa-fw" aria-hidden="true"></span>
-                                <span class="sr-only">{{ 'Hide'|get_lang }}</span>
-                            </a>
-                        </div>
-                        <div id="scorm-info-panel-content" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="scorm-info-panel-title">
-                            {# Author image preview #}
-                            <div id="panel-scorm" class="panel-body">
-                                <div class="image-avatar">
+                    <div id="scorm-info" class="jumbotron">
+                        <div id="panel-scorm" class="panel-bsody">
+                            <div class="image-avatar">
                                     {% if lp_author == '' %}
                                        <div class="text-center">
                                             {{ lp_preview_image }}
@@ -78,19 +69,17 @@
                                 {% endif %}
 
                                 {{ teacher_toc_buttons }}
-                            </div>
+
+                            <hr class="visible-xs-block">
+                            <button type="button" id="lp-view-expand-button" class="btn btn-link btn-block visible-xs-block">
+                                <span class="fa fa-expand" aria-hidden="true"></span> {{ 'SeeContent'|get_lang }}
+                            </button>
                         </div>
                     </div>
-                </div>
 
                 {# TOC layout #}
                 <div id="toc_id" class="scorm-body" name="toc_name">
                     <div id="learning_path_toc" class="scorm-list">
-                        <div class="clearfix">
-                            <button type="button" id="lp-view-expand-button" class="btn btn-default pull-right visible-xs-block">
-                                <span class="fa fa-expand" aria-hidden="true"></span> {{ 'Expand'|get_lang }}
-                            </button>
-                        </div>
                         {{ lp_html_toc }}
                     </div>
                 </div>
@@ -153,7 +142,7 @@
     (function () {
         var LPViewUtils = {
             setHeightLPToc: function () {
-                var scormInfoHeight = $('#scorm-info-accordion').outerHeight(true);
+                var scormInfoHeight = $('#scorm-info').outerHeight(true);
 
                 $('#learning_path_toc').css({
                     top: scormInfoHeight
@@ -187,14 +176,6 @@
                 }
 
                 icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-            });
-
-            $('#scorm-info-panel-content').on('shown.bs.collapse', function () {
-                LPViewUtils.setHeightLPToc();
-            });
-
-            $('#scorm-info-panel-content').on('hidden.bs.collapse', function () {
-                LPViewUtils.setHeightLPToc();
             });
 
             LPViewUtils.setHeightLPToc();

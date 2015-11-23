@@ -316,21 +316,13 @@ See https://support.chamilo.org/issues/6976
 /* END SCORM CSS BASE*/
 
 
-#scorm-info .panel-heading{
-    padding: 2px;
-}
-#scorm-info .panel-body {
-    padding: 10px;
-}
-#scorm-info .image-avatar {
-    padding: 5px 0;
-}
-#scorm-info .image-avatar .description-autor {
-    font-size: 13px;
-    line-height: 1.2em;
-}
-#scorm-info .image-avatar .description-autor p {
+#scorm-info{
+    padding: 5px;
     margin-bottom: 5px;
+}
+#scorm-info .description-autor p {
+    font-size: 14px;
+    line-height: 1.2em;
 }
 #scorm-info hr {
     background-color: #DDD;
@@ -444,6 +436,11 @@ See https://support.chamilo.org/issues/6976
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
+    #scorm-info{
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
     #learning_path_main {
         
     }

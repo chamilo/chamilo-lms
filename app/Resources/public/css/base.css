@@ -5758,9 +5758,6 @@ a.sessionView {
 .sidebar-scorm{
   width: 16.66666667%;
 }
-.content-scorm{
-  width: 83.33333333%;
-}
 #learning_path_right_zone{
     width: 68%;
 }
@@ -5768,9 +5765,6 @@ a.sessionView {
 @media (min-width: 1024px) {
   .sidebar-scorm{
     width: 25.66666667%;
-  }
-.content-scorm{
-    width: 76.33333333%;
   }
   .total{
   width: 100%;
@@ -5806,8 +5800,6 @@ a.sessionView {
 /* Landscape phones and down */
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
   #learning_path_breadcrumb_zone {
-    display: none;
-    visibility: hidden;
   }
   #learning_path_main{
     margin-top: 5px;
@@ -5817,9 +5809,6 @@ a.sessionView {
   }
   .sidebar-scorm{
     width: 100%;
-  }
-  .content-scorm{
-    visibility: hidden;
   }
   .total{
     width: 100%;
@@ -5886,18 +5875,11 @@ a.sessionView {
   }
 }
 @media (min-width : 480px) and (max-width: 767px) {
-  #learning_path_breadcrumb_zone {
-    display: none;
-    visibility: hidden;
-  }
   #touch-button{
     top: 5px;
   }
   .sidebar-scorm{
     width: 100%;
-  }
-  .content-scorm{
-    visibility: hidden;
   }
   #control-bottom.well{
     padding: 10px;

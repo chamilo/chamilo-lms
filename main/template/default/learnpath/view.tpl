@@ -1,6 +1,6 @@
 <div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }}">
     {% if is_allowed_to_edit %}
-        <div id="learning_path_breadcrumb_zone">
+        <div id="learning_path_breadcrumb_zone" class="hidden-xs">
             {{ breadcrumb }}
         </div>
     {% endif %}
@@ -48,7 +48,7 @@
                                     <!--- gamification -->    
                                     <div id="scorm-gamification">
                                         <div class="row">
-                                            <div class="col-xs-8">
+                                            <div class="col-xs-6">
                                                 {% if gamification_stars > 0 %}
                                                     {% for i in 1..gamification_stars %}
                                                         <em class="fa fa-star level"></em>
@@ -61,7 +61,7 @@
                                                     {% endfor %}
                                                 {% endif %}
                                             </div>
-                                            <div class="col-xs-4 text-right">
+                                            <div class="col-xs-6 text-right">
                                                 {{ "XPoints"|get_lang|format(gamification_points) }}
                                             </div>
                                         </div>
@@ -104,7 +104,7 @@
                 <div class="lp-view-zone-container">
                     <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
                         <a href="{{ button_home_url }}" class="btn btn-link" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                            <em class="fa fa-home fa-2x"></em> {{ button_home_text }}
+                            <em class="fa fa-home fa-2x"></em> <span class="hidden-xs hidden-sm">{{ button_home_text }}</span>
                         </a>
                         {{ navigation_bar }}
                     </div>

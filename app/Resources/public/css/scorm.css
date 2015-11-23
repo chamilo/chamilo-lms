@@ -369,58 +369,99 @@ See https://support.chamilo.org/issues/6976
 
 
 /* Extra small devices (mobiles, 767px and down) */
+#learning_path_main {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+}
 
+#learning_path_left_zone,
+#learning_path_right_zone {
+    bottom: 0;
+    box-sizing: content-box;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition-property: left width;
+    transition-duration: 0.5s;
+}
+
+#learning_path_left_zone .lp-view-zone-container,
+#learning_path_right_zone .lp-view-zone-container {
+    bottom: 0;
+    left: 0;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#learning_path_toc {
+    bottom: 5px;
+    left: 5px;
+    overflow: auto;
+    position: absolute;
+    right: 5px;
+    top: 100%;
+    transition-property: top;
+    transition-duration: 0.1s;
+}
+
+#learning_path_right_zone {
+    left: 100%;
+    width: 100%;
+}
+
+#lp_navigation_elem {
+    position: absolute;
+    right: 5px;
+    top: 40px;
+    width: 70%;
+}
+
+#learning_path_right_zone .lp-view-tabs .tab-content {
+    bottom: 5px;
+    left: 5px;
+    position: absolute;
+    right: 5px;
+    top: 95px;
+}
+#learning_path_right_zone .tab-pane{
+    height: 100%;
+    position: relative;
+}
+#learning_path_right_zone .tab-pane iframe {
+    border: 0 none;
+    height: 100%;
+    width: 100%;
+}
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
-    
-}
-
-/* Medium devices (desktops, 992px and up) */
-@media (min-width: 992px) {
     #learning_path_main {
-        height: 100%;
-        margin: 0;
-        position: relative;
+        
     }
 
     #learning_path_left_zone {
-        bottom: 0;
-        box-sizing: content-box;
-        left: 0;
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 350px;
+        width: 250px;
     }
 
     #learning_path_right_zone {
-        bottom: 0;
-        box-sizing: content-box;
-        left: 350px;
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: calc(100% - 350px);
+        left: 250px;
+        width: calc(100% - 250px);
     }
 
     #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
     #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
         top: 40px;
     }
-
     #learning_path_left_zone .lp-view-zone-container,
     #learning_path_right_zone .lp-view-zone-container {
-        bottom: 0;
-        left: 0;
         padding: 10px;
-        position: absolute;
-        right: 0;
-        top: 0;
     }
     #learning_path_left_zone .lp-view-zone-container {
         padding-right: 5px;
@@ -432,39 +473,46 @@ See https://support.chamilo.org/issues/6976
     #learning_path_toc {
         bottom: 10px;
         left: 10px;
-        overflow: auto;
-        position: absolute;
         right: 5px;
-        top: 100%;
-        transition-property: top;
-        transition-duration: 0.1s;
     }
 
     #lp_navigation_elem {
-        position: absolute;
         right: 10px;
         top: 45px;
         width: 75%;
     }
+
     #learning_path_right_zone .lp-view-tabs .tab-content {
         bottom: 10px;
-        left: 5px;
-        position: absolute;
         right: 10px;
         top: 100px;
     }
     #learning_path_right_zone .tab-pane{
-        height: 100%;
-        position: relative;
     }
     #learning_path_right_zone .tab-pane iframe {
-        border: 0 none;
-        height: 100%;
-        width: 100%;
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    #learning_path_left_zone {
+        width: 300px;
+    }
+
+    #learning_path_right_zone {
+        left: 300px;
+        width: calc(100% - 300px);
     }
 }
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    
+    #learning_path_left_zone {
+        width: 350px;
+    }
+
+    #learning_path_right_zone {
+        left: 350px;
+        width: calc(100% - 350px);
+    }
 }

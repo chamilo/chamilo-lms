@@ -201,6 +201,16 @@
 
             LPViewUtils.setHeightLPToc();
 
+            $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
+                $('.lp-view-tabs').fadeOut();
+            });
+
+            $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
+                $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
+
+                $('.lp-view-tabs').fadeIn();
+            });
+
             loadForumThead({{ lp_id }}, {{ lp_current_item_id }});
 
             {% if glossary_extra_tools in glossary_tool_availables %}
@@ -256,6 +266,10 @@
                     {% endif %}
                 })();
             {% endif %}
+        });
+
+        $(window).on('resize', function () {
+            LPViewUtils.setHeightLPToc();
         });
     })();
 </script>

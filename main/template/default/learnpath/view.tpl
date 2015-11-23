@@ -4,9 +4,6 @@
             {{ breadcrumb }}
         </div>
     {% endif %}
-    <button id="touch-button" class="btn btn-default btn-lg btn-touch">
-        <span class="fa fa-chevron-left fa-2x" aria-hidden="true"></span><span class="sr-only">{{ 'Hide'|get_lang }}</span>
-    </button>
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 <div class="lp-view-zone-container">
                 <div class="panel-group" id="scorm-info-accordion" role="tablist" aria-multiselectable="true">
@@ -89,6 +86,11 @@
                 {# TOC layout #}
                 <div id="toc_id" class="scorm-body" name="toc_name">
                     <div id="learning_path_toc" class="scorm-list">
+                        <div class="clearfix">
+                            <button type="button" id="lp-view-expand-button" class="btn btn-default pull-right visible-xs-block">
+                                <span class="fa fa-expand" aria-hidden="true"></span> {{ 'Expand'|get_lang }}
+                            </button>
+                        </div>
                         {{ lp_html_toc }}
                     </div>
                 </div>
@@ -105,6 +107,10 @@
                     <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
                         <a href="{{ button_home_url }}" class="btn btn-link" target="_self" onclick="javascript: window.parent.API.save_asset();">
                             <em class="fa fa-home fa-2x"></em> <span class="hidden-xs hidden-sm">{{ button_home_text }}</span>
+                        </a>
+                        <a href="#" id="lp-view-expand-toggle" class="btn btn-link" role="button">
+                            <span class="fa fa-expand" aria-hidden="true"></span>
+                            <span class="sr-only">{{ 'Expand'|get_lang }}</span>
                         </a>
                         {{ navigation_bar }}
                     </div>
@@ -156,23 +162,15 @@
         };
 
         $(document).on('ready', function () {
-            $('#touch-button').click(function() {
+            $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                e.preventDefault();
+
                 $('#learning_path_main').toggleClass('lp-view-collapsed');
 
-                var self = $(this);
-                self.toggleClass('show-touch');
-
-                var icon = self.children('span.fa');
-
-                if (icon.is('.fa-chevron-left')) {
-                    icon.removeClass('fa-chevron-left').addClass('fa-chevron-right');
-
-                    return;
-                }
-
-                icon.removeClass('fa-chevron-right').addClass('fa-chevron-left');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
             });
-            
+
             $('.lp-view-tabs').on('click', '.disabled', function (e) {
                 e.preventDefault();
             });

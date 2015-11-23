@@ -203,13 +203,6 @@ See https://support.chamilo.org/issues/6976
   top: 30%;
 }
 
-#touch-button{
-  position: fixed;
-  top: 40px;
-  left: -5px;
-  z-index: 2
-}
-
 .scorm-heading{
   font-size: 14px;
   padding-top: 5px;

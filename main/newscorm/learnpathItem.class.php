@@ -4414,6 +4414,43 @@ class learnpathItem
     }
 
     /**
+     * Check if this LP item has a created thread in the basis course from the forum of its LP
+     * @param int $lpCourseId The course ID
+     * @return boolean
+     */
+    public function lpItemHasThread($lpCourseId)
+    {
+        $forumThreadTable = Database::get_course_table(TABLE_FORUM_THREAD);
+        $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+        $fakeFrom = "
+            $forumThreadTable ft
+            INNER JOIN $itemProperty ip
+            ON (ft.thread_id = ip.ref AND ft.c_id = ip.c_id)
+        ";
+
+        $resultData = Database::select(
+            'COUNT(ft.iid) AS qty',
+            $fakeFrom,
+            [
+                'where' => [
+                    'ip.visibility != ? AND ' => 2,
+                    'ip.tool = ? AND ' => TOOL_FORUM_THREAD,
+                    'ft.c_id = ? AND ' => intval($lpCourseId),
+                    'ft.lp_item_id = ?' => intval($this->db_id)
+                ]
+            ],
+            'first'
+        );
+
+        if ($resultData['qty'] > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get the forum thread info
      * @param int $lpCourseId The course ID from the learning path
      * @param int $lpSessionId Optional. The session ID from the learning path

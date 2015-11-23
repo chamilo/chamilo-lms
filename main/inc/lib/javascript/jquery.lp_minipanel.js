@@ -17,8 +17,6 @@ $(document).ready(function() {
             $('#learning_path_right_zone').toggleClass('total');
             $(function(){
                 $('#learning_path_right_zone').slideToggle(300);
-                $('#control-bottom').toggle("slow");
-
             });
         });
 

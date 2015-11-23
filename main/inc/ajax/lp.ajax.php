@@ -172,6 +172,96 @@ switch ($action) {
         }
 
         break;
+    case 'get_forum_thread':
+        $lpId = isset($_GET['lp']) ? intval($_GET['lp']) : 0;
+        $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
+        $sessionId = api_get_session_id();
+
+        if (empty($lpId) || empty($lpItemId)) {
+            echo json_encode([
+                'error' => true,
+            ]);
+
+            break;
+        }
+
+        $learningPath = new learnpath(
+            api_get_course_id(),
+            $lpId,
+            api_get_user_id()
+        );
+
+        $lpItem = $learningPath->getItem($lpItemId);
+
+        if (empty($lpItem)) {
+            echo json_encode([
+                'error' => true,
+            ]);
+            break;
+        }
+
+        $lpHasForum = $learningPath->lpHasForum();
+
+        if (!$lpHasForum) {
+            echo json_encode([
+                'error' => true
+            ]);
+            break;
+        }
+
+        $forum = $learningPath->getForum($sessionId);
+
+        if (empty($forum)) {
+            require_once '../../forum/forumfunction.inc.php';
+            $forumCategory = getForumCategoryByTitle(
+                get_lang('LearningPaths'),
+                $course_id,
+                $sessionId
+            );
+
+            if (empty($forumCategory)) {
+                $forumCategoryId = store_forumcategory(
+                    [
+                        'lp_id' => 0,
+                        'forum_category_title' => get_lang('LearningPaths'),
+                        'forum_category_comment' => null
+                    ],
+                    [],
+                    false
+                );
+            } else {
+                $forumCategoryId = $forumCategory['cat_id'];
+            }
+
+            $forumId = $learningPath->createForum($forumCategoryId);
+        } else {
+            $forumId = $forum['forum_id'];
+        }
+
+        $lpItemHasThread = $lpItem->lpItemHasThread($course_id);
+
+        if (!$lpItemHasThread) {
+            echo json_encode([
+                'error' => true
+            ]);
+            break;
+        }
+
+        $forumThread = $lpItem->getForumThread($course_id, $sessionId);
+
+        if (empty($forumThread)) {
+            $lpItem->createForumTthread($forumId);
+            $forumThread = $lpItem->getForumThread($course_id, $sessionId);
+        }
+
+        $forumThreadId = $forumThread['thread_id'];
+
+        echo json_encode([
+            'error' => false,
+            'forumId' => intval($forum['forum_id']),
+            'threadId' => intval($forumThreadId)
+        ]);
+        break;
     case 'update_gamification':
         $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
 

@@ -80,7 +80,7 @@ $my_style = $platform_theme;
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 <!--
-var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
+var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 -->
 </script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
@@ -513,7 +513,7 @@ $template->assign(
     Display::img(
         $lpPreviewImagePath,
         $_SESSION['oLP']->name,
-        array('class' => 'img-circle'),
+        [],
         ICON_SIZE_BIG
     )
 );

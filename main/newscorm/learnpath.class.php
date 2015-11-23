@@ -9753,19 +9753,7 @@ EOD;
 
                     // Resize the image.
                     $temp = new Image($image_array['tmp_name']);
-                    $picture_infos = $temp->get_image_info();
-                    if ($picture_infos['width'] > 104) {
-                        $thumbwidth = 104;
-                    } else {
-                        $thumbwidth = $picture_infos['width'];
-                    }
-                    if ($picture_infos['height'] > 96) {
-                        $new_height = 96;
-                    } else {
-                        $new_height = $picture_infos['height'];
-                    }
-
-                    $temp->resize($thumbwidth, $new_height, 0);
+                    $temp->resize(104);
                     $result = $temp->send_image($new_path);
 
                     // Storing the image filename.
@@ -9774,7 +9762,7 @@ EOD;
                         $this->set_preview_image($new_file_name);
 
                         //Resize to 64px to use on course homepage
-                        $temp->resize(64, 64, 0);
+                        $temp->resize(64);
                         $temp->send_image($updir.'/'.$filename.'.64.'.$file_extension);
                         return true;
                     }

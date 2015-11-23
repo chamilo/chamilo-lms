@@ -134,7 +134,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $params = [
         'name' => $name,
         'code' => $code,
-        'parent_id' => empty($parent_id) ? '' : $parent_id,
+        'parent_id' => empty($parent_id) ? null : $parent_id,
         'tree_pos' => $tree_pos,
         'children_count' => 0,
         'auth_course_child' => $canHaveCourses,
@@ -595,7 +595,7 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
 
     $without_special_courses = '';
     if (!empty($specialCourseList)) {
-        $without_special_courses = ' AND course.code NOT IN (' . implode(',', $specialCourseList) . ')';
+        $without_special_courses = ' AND course.code NOT IN ("' . implode('","', $special_course_list) . '")';
     }
 
     $visibilityCondition = null;
@@ -668,7 +668,7 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
 
     $without_special_courses = '';
     if (!empty($specialCourseList)) {
-        $without_special_courses = ' AND course.code NOT IN (' . implode(',', $specialCourseList) . ')';
+        $without_special_courses = ' AND course.code NOT IN ("' . implode('","', $special_course_list) . '")';
     }
     $visibilityCondition = null;
     $hidePrivate = api_get_setting('course_catalog_hide_private');

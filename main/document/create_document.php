@@ -21,11 +21,9 @@ var hide_bar = function() {
     $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
-jQuery(document).ready(function(){
-    jQuery(".scrollbar-macosx").scrollbar();
-});
-
 $(document).ready(function() {
+    $(".scrollbar-macosx").scrollbar();
+
     if ($(window).width() <= 785 ) {
         hide_bar();
     }
@@ -635,7 +633,7 @@ if ($form->validate()) {
 	}
     // HTML-editor
     echo '<div class="row" style="overflow:hidden">
-            <div id="template_col" class="col-md-3">
+            <div id="template_col" class="col-md-2">
                 <div class="panel panel-default">
                 <div class="panel-body">
                     <div id="frmModel" class="items-templates scrollbar-macosx"></div>
@@ -645,7 +643,7 @@ if ($form->validate()) {
             <div class="col-md-1">
                 <div id="hide_bar_template"></div>
             </div>
-            <div id="doc_form" class="col-md-8">
+            <div id="doc_form" class="col-md-9">
                 '.$form->returnForm().'
             </div>
           </div>';

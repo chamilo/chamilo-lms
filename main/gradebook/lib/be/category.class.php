@@ -150,8 +150,14 @@ class Category implements GradebookItem
         $this->locked = $locked;
     }
 
+    /**
+     * @return null
+     */
     public function get_grade_model_id()
     {
+        if ($this->grade_model_id < 0) {
+            return null;
+        }
         return $this->grade_model_id;
     }
 

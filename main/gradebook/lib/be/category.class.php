@@ -1357,6 +1357,8 @@ class Category implements GradebookItem
             $course_code = api_get_course_id();
         }
 
+        $sessionId = api_get_session_id();
+
         // 1 student
         if (isset($stud_id) && !empty($stud_id)) {
             // special case: this is the root
@@ -1386,7 +1388,7 @@ class Category implements GradebookItem
         }
 
         if ($recursive) {
-            $subcats = $this->get_subcategories($stud_id, $course_code);
+            $subcats = $this->get_subcategories($stud_id, $course_code, $sessionId);
             if (!empty($subcats)) {
                 foreach ($subcats as $subcat) {
                     $subevals = $subcat->get_evaluations($stud_id, true, $course_code);

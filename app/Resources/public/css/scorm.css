@@ -7,17 +7,14 @@ See https://support.chamilo.org/issues/6976
 /* Default LP left column values */
 
 #learning_path_left_zone {
-  float:left;
-  height:100%;
-  padding-left: 8px;
-  padding-right: 4px;
+
 }
 
 #learning_path_left_zone #header {
-  font-size:14px;
+
 }
 #scorm-info.panel-default{
-  margin: 0px;
+
 }
 
 #author_image {
@@ -38,31 +35,11 @@ See https://support.chamilo.org/issues/6976
   margin-top: 2px;
 }
 
-#lp_media_file {
-  float: left;
-  text-align:center;
-  width: 94%;
-}
-
 #learning_path_toc {
   font-size:9pt;
   margin:0;
 }
-#learning_path_left_zone .image-avatar{
-  text-align: center;
-  padding: 10px;
-  border:1px solid #dddddd;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
 #learning_path_left_zone #scorm-gamification{
-    padding: 10px;
-    border: 1px solid #DDD;
-    border-radius: 5px;
-    margin-bottom: 5px;
 }
 #scorm-gamification .fa-star{
     font-size: 20px;
@@ -72,20 +49,11 @@ See https://support.chamilo.org/issues/6976
     color: #D9534F;
 }
 #learning_path_left_zone .navegation-bar .buttons{
-  text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;
-  margin-bottom: 5px;
 }
 #learning_path_left_zone .description-autor{
-  color: #666666;
-  font-size: 12px;
-  text-align: left;
-  line-height: 20px;
-}
 
-.inner_lp_toc {
-    overflow: auto;
 }
 
 .inner_lp_toc .scorm_item a {
@@ -197,19 +165,10 @@ See https://support.chamilo.org/issues/6976
 }
 
 #learning_path_right_zone{
-  border-left: 1px solid #CCCCCC;
-  padding-left: 10px;
-  box-sizing: border-box;
+
 }
 #learning_path_breadcrumb_zone .breadcrumb{
-  background: #2b3d53; /* Old browsers */
-  background: -moz-linear-gradient(top, #2b3d53 0%, #2c3d4d 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b3d53), color-stop(100%,#2c3d4d)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #2b3d53 0%,#2c3d4d 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #2b3d53 0%,#2c3d4d 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #2b3d53 0%,#2c3d4d 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #2b3d53 0%,#2c3d4d 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b3d53', endColorstr='#2c3d4d',GradientType=0 ); /* IE6-9 */
+  background-color: #2b3d53;
   border-radius: 0;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
@@ -227,34 +186,12 @@ See https://support.chamilo.org/issues/6976
   margin-top: 5px;
   margin-right: 10px;
 }
-#learning_path_left_zone #accordion .panel-heading{
-  text-align: center;
-}
 #learning_path_left_zone #ui-option{
-  width: 100%;
-  display: block;
-  text-align: center;
-  cursor: pointer;
-}
-#learning_path_left_zone #ui-option #icon-up,
-#learning_path_left_zone #ui-option #icon-down{
-  width: 100%;
-  display: block;
-}
-.hidden{
-  visibility: hidden;
-  display: none;
+
 }
 .sidebar-scorm,
 .content-scorm{
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-.sidebar-scorm,
-.content-scorm{
-  float: left;
+
 }
 .total{
   width: 100%;
@@ -266,16 +203,6 @@ See https://support.chamilo.org/issues/6976
   top: 30%;
 }
 
-#touch-button{
-  position: fixed;
-  top: 40px;
-  left: -5px;
-  z-index: 2
-}
-
-.inner_lp_toc{
-  overflow-y:scroll;
-}
 .scorm-heading{
   font-size: 14px;
   padding-top: 5px;
@@ -300,8 +227,7 @@ See https://support.chamilo.org/issues/6976
   font-size: 12px;
 }
 #lp_navigation_elem .buttons {
-  margin-bottom: .5em;
-  text-align: center;
+
 }
 
 #learning_path_left_zone .scorm_title{
@@ -362,21 +288,6 @@ See https://support.chamilo.org/issues/6976
 .scorm_item_normal a:hover{
    text-decoration: none;
 }
-#scorm-info .panel-heading{
-  padding: 5px;
-}
-#scorm-info #progress_bar .progress{
-  margin-bottom: 5px;  
-}
-.scorm-body .scorm-title{
-    font-size: 18px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    color: #666;
-}
-.scorm-body .scorm-title .fa-book{
-    color: #00829C;
-}
 .scorm_item_normal.scorm_completed {
   background:url("../../main/img/scorm/scorm_completed.png") no-repeat left center;
 }
@@ -403,3 +314,204 @@ See https://support.chamilo.org/issues/6976
 }
 
 /* END SCORM CSS BASE*/
+
+
+#scorm-info{
+    padding: 5px;
+    margin-bottom: 5px;
+}
+#scorm-info .description-autor p {
+    font-size: 14px;
+    line-height: 1.2em;
+}
+#scorm-info hr {
+    background-color: #DDD;
+    width: 100%;
+}
+#scorm-info #progress_bar .progress{
+    margin-bottom: 5px;
+}
+
+.scorm-title{
+    color: #666;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin: 0 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#lp_navigation_elem a {
+    color: black;
+}
+
+#learning_path_right_zone .lp-view-tabs li a {
+    padding: 5px 10px;
+}
+
+
+
+/* Extra small devices (mobiles, 767px and down) */
+#learning_path_main {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+#learning_path_left_zone,
+#learning_path_right_zone {
+    bottom: 0;
+    box-sizing: content-box;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition-property: left width;
+    transition-duration: 0.5s;
+}
+
+#learning_path_left_zone .lp-view-zone-container,
+#learning_path_right_zone .lp-view-zone-container {
+    bottom: 0;
+    left: 0;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#learning_path_toc {
+    bottom: 5px;
+    left: 5px;
+    overflow: auto;
+    position: absolute;
+    right: 5px;
+    top: 100%;
+    transition-property: top;
+    transition-duration: 0.1s;
+}
+
+#learning_path_right_zone {
+    left: 100%;
+    width: 100%;
+}
+
+#lp_navigation_elem {
+    position: absolute;
+    right: 5px;
+    top: 40px;
+    width: 70%;
+}
+
+#learning_path_right_zone .lp-view-tabs .tab-content {
+    bottom: 5px;
+    left: 5px;
+    position: absolute;
+    right: 5px;
+    top: 95px;
+}
+#learning_path_right_zone .tab-pane{
+    height: 100%;
+    position: relative;
+}
+#learning_path_right_zone .tab-pane iframe {
+    border: 0 none;
+    height: 100%;
+    width: 100%;
+}
+
+#learning_path_main.lp-view-collapsed #learning_path_left_zone {
+    left: -100%;
+}
+
+#learning_path_main.lp-view-collapsed #learning_path_right_zone {
+    left: 0;
+    width: 100%;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    #scorm-info{
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    #learning_path_main {
+        
+    }
+
+    #learning_path_left_zone {
+        width: 250px;
+    }
+
+    #learning_path_right_zone {
+        left: 250px;
+        width: calc(100% - 250px);
+    }
+
+    #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
+    #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
+        top: 40px;
+    }
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container {
+        padding: 10px;
+    }
+    #learning_path_left_zone .lp-view-zone-container {
+        padding-right: 5px;
+    }
+    #learning_path_right_zone .lp-view-zone-container {
+        padding-left: 5px;
+    }
+
+    #learning_path_toc {
+        bottom: 10px;
+        left: 10px;
+        right: 5px;
+    }
+
+    #lp_navigation_elem {
+        right: 10px;
+        top: 45px;
+        width: 75%;
+    }
+
+    #learning_path_right_zone .lp-view-tabs .tab-content {
+        bottom: 10px;
+        right: 10px;
+        top: 100px;
+    }
+    #learning_path_right_zone .tab-pane{
+    }
+    #learning_path_right_zone .tab-pane iframe {
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    #learning_path_left_zone {
+        width: 300px;
+    }
+
+    #learning_path_right_zone {
+        left: 300px;
+        width: calc(100% - 300px);
+    }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    #learning_path_left_zone {
+        width: 350px;
+    }
+
+    #learning_path_right_zone {
+        left: 350px;
+        width: calc(100% - 350px);
+    }
+}

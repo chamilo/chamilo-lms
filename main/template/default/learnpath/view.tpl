@@ -1,239 +1,255 @@
-<div id="learning_path_main" style="width:100%; height: 100%;">
+<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }}">
     {% if is_allowed_to_edit %}
-        <div class="row">
-            <div id="learning_path_breadcrumb_zone" class="col-md-12">
-                {{ breadcrumb }}
-            </div>
+        <div id="learning_path_breadcrumb_zone" class="hidden-xs">
+            {{ breadcrumb }}
         </div>
     {% endif %}
-    <button id="touch-button" class="btn btn-default btn-lg btn-touch">
-        <span class="fa fa-chevron-left fa-2x" aria-hidden="true"></span><span class="sr-only">{{ 'Hide'|get_lang }}</span>
-    </button>
-    <div class="container-fluid">
-        <div class="row">
             <div id="learning_path_left_zone" class="sidebar-scorm">
-                    <div id="scorm-info" class="panel panel-default">
-                        <div class="panel-heading">
-                            <a id="ui-option">
-                                <em id="icon-down" class="fa fa-chevron-down hidden"></em>
-                                <em id="icon-up" class="fa fa-chevron-up"></em>
-                            </a>
-                        </div>
-                        {# Author image preview #}
-                        <div id="panel-scorm" class="panel-body">
-                            <a href="{{ button_home_url }}" class="btn btn-primary btn-block" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                                <em class="fa fa-home"></em> {{ button_home_text }}
-                            </a>
+                <div class="lp-view-zone-container">
+                    <div id="scorm-info" class="jumbotron">
+                        <div id="panel-scorm" class="panel-bsody">
                             <div class="image-avatar">
-                                <div class="row">
                                     {% if lp_author == '' %}
-                                       <div class="col-md-12">
+                                       <div class="text-center">
                                             {{ lp_preview_image }}
                                         </div>
                                     {% else %}
-                                        <div class="col-md-4">
-                                            {{ lp_preview_image }}
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="description-autor"> {{ lp_author }} </div>
+                                        <div class="media">
+                                            <div class="media-left">
+                                                {{ lp_preview_image }}
+                                            </div>
+                                            <div class="media-body">
+                                                <div class="description-autor"> {{ lp_author }} </div>
+                                            </div>
                                         </div>
                                     {% endif %}
-
                                 </div>
-                            </div>
-                            <div id="lp_navigation_elem" class="navegation-bar">
-                                {{ navigation_bar }}
-                            </div>        
-                             {% if gamification_mode == 1 %}
-                            <!--- gamification -->    
-                            <div id="scorm-gamification">
-                                    <div class="row">
-                                        <div class="col-xs-8">
-                                            {% if gamification_stars > 0 %}
-                                                {% for i in 1..gamification_stars %}
-                                                    <em class="fa fa-star level"></em>
-                                                {% endfor %}
-                                            {% endif %}
 
-                                            {% if gamification_stars < 4 %}
-                                                {% for i in 1..4 - gamification_stars %}
-                                                    <em class="fa fa-star"></em>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-xs-4 text-right">
-                                            {{ "XPoints"|get_lang|format(gamification_points) }}
-                                        </div>
+                                {% if show_audio_player %}
+                                    <div id="lp_media_file">
+                                        {{ media_player }}
                                     </div>
-                                    <div class="row">
-                                        <div class="col-xs-12 navegation-bar" id="lp_navigation_elem">
-                                            <div id="progress_bar">
-                                                {{ progress_bar }}
+                                {% endif %}
+
+                                {% if gamification_mode == 1 %}
+                                    <hr>
+                                    <!--- gamification -->    
+                                    <div id="scorm-gamification">
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                {% if gamification_stars > 0 %}
+                                                    {% for i in 1..gamification_stars %}
+                                                        <em class="fa fa-star level"></em>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                {% if gamification_stars < 4 %}
+                                                    {% for i in 1..4 - gamification_stars %}
+                                                        <em class="fa fa-star"></em>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-xs-6 text-right">
+                                                {{ "XPoints"|get_lang|format(gamification_points) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 navegation-bar">
+                                                <div id="progress_bar">
+                                                    {{ progress_bar }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                            </div>
-                           <!--- end gamification -->          
-                             {% else %}         
-                            <div id="progress_bar">
-                                {{ progress_bar }}
-                            </div>
-                             {% endif %}
-                            
-                            {% if show_audio_player %}
-                                <div id="lp_media_file">
-                                    {{ media_player }}
-                                </div>
-                            {% endif %}
-                            {{ teacher_toc_buttons }}
-                       </div>
+                                   <!--- end gamification -->          
+                                {% else %}         
+                                    <div id="progress_bar">
+                                        {{ progress_bar }}
+                                    </div>
+                                {% endif %}
+
+                                {{ teacher_toc_buttons }}
+
+                            <hr class="visible-xs-block">
+                            <button type="button" id="lp-view-expand-button" class="btn btn-link btn-block visible-xs-block">
+                                <span class="fa fa-expand" aria-hidden="true"></span> {{ 'SeeContent'|get_lang }}
+                            </button>
+                        </div>
                     </div>
-               
 
                 {# TOC layout #}
                 <div id="toc_id" class="scorm-body" name="toc_name">
-                    <div class="scorm-title"> <em class="fa fa-book"></em> {{ lp_title_scorm }}</div>
                     <div id="learning_path_toc" class="scorm-list">
+                        <h1 class="scorm-title">{{ lp_title_scorm }}</h1>
                         {{ lp_html_toc }}
                     </div>
                 </div>
                 {# end TOC layout #}
-
+                </div>
             </div>
             {# end left zone #}
 
             {# <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div> #}
 
             {# right zone #}
-            <div id="learning_path_right_zone" style="height:100%" class="content-scorm">
-                {% if lp_mode == 'fullscreen' %}
-                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width: 100%; height: 100%" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
-                {% else %}
-                <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" style="display: block; width: 100%; height: 100%" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
-                {% endif %}
+            <div id="learning_path_right_zone" class="content-scorm">
+                <div class="lp-view-zone-container">
+                    <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
+                        <a href="{{ button_home_url }}" class="btn btn-link" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                            <em class="fa fa-home fa-2x"></em> <span class="hidden-xs hidden-sm">{{ button_home_text }}</span>
+                        </a>
+                        <a href="#" id="lp-view-expand-toggle" class="btn btn-link" role="button">
+                            <span class="fa fa-expand" aria-hidden="true"></span>
+                            <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                        </a>
+                        {{ navigation_bar }}
+                    </div>
+
+                    <h1 class="scorm-title">{{ lp_title_scorm }}</h1>
+
+                    <div class="lp-view-tabs">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active">
+                                <a href="#lp-view-content" aria-controls="lp-view-content" role="tab" data-toggle="tab">
+                                    <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Lesson'|get_lang }}</span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#lp-view-forum" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
+                                    <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Forum'|get_lang }}</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="lp-view-content">
+                                {% if lp_mode == 'fullscreen' %}
+                                    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                {% else %}
+                                    <iframe id="content_id" name="content_name" src="{{ iframe_src }}" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                {% endif %}
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="lp-view-forum">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             {# end right Zone #}
-
-            {{ navigation_bar_bottom }}
-        </div>
-    </div>
 </div>
 
 <script>
-    // Resize right and left pane to full height (HUB 20-05-2010).
-    
-    var updateContentHeight = function () {
-        document.body.style.overflow = 'hidden';
-        var IE = window.navigator.appName.match(/microsoft/i);
+    (function () {
+        var LPViewUtils = {
+            setHeightLPToc: function () {
+                var scormInfoHeight = $('#scorm-info').outerHeight(true);
 
-        /* Identified new height */
-        var heightControl = $('#control-bottom').height();
-        var heightBreadcrumb = ($('#learning_path_breadcrumb_zone').height()) ? $('#learning_path_breadcrumb_zone').height() : 0;
+                $('#learning_path_toc').css({
+                    top: scormInfoHeight
+                });
+            }
+        };
 
-        var heightScormInfo = $('#scorm-info').height();
+        $(document).on('ready', function () {
+            $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                e.preventDefault();
 
-        var heightTop = heightScormInfo + 100;
-        
-        jQuery('.scrollbar-light').scrollbar();
-        
-        //heightTop = (heightTop > 300)? heightTop : 300;
+                $('#learning_path_main').toggleClass('lp-view-collapsed');
 
-        var innerHeight = $(window).height();
-
-        if (innerHeight <= 640) {
-            $('.scrollbar-light').css('height', innerHeight - heightTop - 5 + "px");
-            $('#content_id').css('height', innerHeight - heightControl + "px");
-        } else {
-            $('.scrollbar-light').css('height', innerHeight - heightBreadcrumb - heightTop - 5 + "px");
-            $('#content_id').css('height', innerHeight - heightControl + "px");
-        }
-        
-              //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
-
-        // Loads the glossary library.
-        {% if glossary_extra_tools in glossary_tool_availables %}
-                {% if show_glossary_in_documents == 'ismanual' %}
-                    $.frameReady(
-                        function(){
-                            //  $("<div>I am a div courses</div>").prependTo("body");
-                        },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
-                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
-                                {{ fix_link }}
-                            ]
-                        }
-                    );
-                {% elseif show_glossary_in_documents == 'isautomatic' %}
-                    $.frameReady(
-                        function(){
-                            //  $("<div>I am a div courses</div>").prependTo("body");
-                        },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
-                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
-                                {{ fix_link }}
-                            ]
-                        }
-                    );
-                {% elseif fix_link != '' %}
-                    $.frameReady(
-                        function(){
-                            //  $("<div>I am a div courses</div>").prependTo("body");
-                        },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
-                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
-                                {{ fix_link }}
-                            ]
-                        }
-                    );
-                {% endif %}
-        {% endif %}
-    };
-
-    $(document).ready(function() {
-        updateContentHeight();
-
-        $('#touch-button').children().click(function(){
-            updateContentHeight();
-        });
-
-        $(window).resize(function() {
-            updateContentHeight();
-        });
-    });
-
-    window.onload = updateContentHeight();
-    window.onresize = updateContentHeight();
-
-    $(document).ready(function(){
-        $("#icon-down").click(function(){
-            $("#icon-up").removeClass("hidden");
-            $(this).addClass("hidden");
-
-            $('#panel-scorm').slideDown("slow",function(){
-                updateContentHeight();
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
             });
+
+            $('.lp-view-tabs').on('click', '.disabled', function (e) {
+                e.preventDefault();
+            });
+
+            $('a#ui-option').on('click', function (e) {
+                e.preventDefault();
+
+                var icon = $(this).children('.fa');
+
+                if (icon.is('.fa-chevron-up')) {
+                    icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+
+                    return;
+                }
+
+                icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            });
+
+            LPViewUtils.setHeightLPToc();
+
+            $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
+                $('.lp-view-tabs').fadeOut();
+            });
+
+            $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
+                $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
+
+                $('.lp-view-tabs').fadeIn();
+            });
+
+            loadForumThead({{ lp_id }}, {{ lp_current_item_id }});
+
+            {% if glossary_extra_tools in glossary_tool_availables %}
+                // Loads the glossary library.
+                (function () {
+                    {% if show_glossary_in_documents == 'ismanual' %}
+                        $.frameReady(
+                            function(){
+                                //  $("<div>I am a div courses</div>").prependTo("body");
+                            },
+                            "top.content_name",
+                            {
+                                load: [
+                                    { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                                    { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
+                                    { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                                    { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                    {{ fix_link }}
+                                ]
+                            }
+                        );
+                    {% elseif show_glossary_in_documents == 'isautomatic' %}
+                        $.frameReady(
+                            function(){
+                                //  $("<div>I am a div courses</div>").prependTo("body");
+                            },
+                            "top.content_name",
+                            {
+                                load: [
+                                    { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                                    { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
+                                    { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                                    { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                    {{ fix_link }}
+                                ]
+                            }
+                        );
+                    {% elseif fix_link != '' %}
+                        $.frameReady(
+                            function(){
+                                //  $("<div>I am a div courses</div>").prependTo("body");
+                            },
+                            "top.content_name",
+                            {
+                                load: [
+                                    { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                                    { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
+                                    { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                                    {{ fix_link }}
+                                ]
+                            }
+                        );
+                    {% endif %}
+                })();
+            {% endif %}
         });
 
-        $("#icon-up").click(function(){
-            $("#icon-down").removeClass("hidden");
-            $(this).addClass("hidden");
-            $('#panel-scorm').slideUp("slow",function(){
-                updateContentHeight();
-            });
+        $(window).on('resize', function () {
+            LPViewUtils.setHeightLPToc();
         });
-    });
+    })();
 </script>

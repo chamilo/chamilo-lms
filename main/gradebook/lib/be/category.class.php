@@ -244,13 +244,19 @@ class Category implements GradebookItem
     }
 
     /**
-     * @return int
+     * @return null
      */
     public function get_grade_model_id()
     {
+        if ($this->grade_model_id < 0) {
+            return null;
+        }
         return $this->grade_model_id;
     }
 
+    /**
+     * @return string
+     */
     public function get_type()
     {
         return 'category';

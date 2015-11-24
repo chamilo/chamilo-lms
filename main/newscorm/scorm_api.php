@@ -1663,8 +1663,57 @@ function switch_item(current_item, next_item){
     });
     olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
+    loadForumThead(olms.lms_lp_id, next_item);
+
     return true;
 }
+
+/**
+ * Get a forum info when the learning path item has a associated forum
+ */
+var loadForumThead = function(lpId, lpItemId) {
+    var loadForum = $.getJSON('<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php', {
+            a: 'get_forum_thread',
+            lp: lpId,
+            lp_item: lpItemId
+        }
+    );
+
+    $.when(loadForum).done(function(forumThreadData) {
+        var tabForumLink = $('.lp-view-tabs a[href="#lp-view-forum"]'),
+            tabForum = tabForumLink.parent();
+
+        if (forumThreadData.error) {
+            tabForumLink.removeAttr('data-toggle');
+            tabForum.addClass('disabled');
+
+            $('#lp-view-forum').html('');
+
+            return;
+        }
+
+        tabForumLink.attr('data-toggle', 'tab');
+        tabForum.removeClass('disabled');
+
+        var forumIframe = $('<iframe>').attr({
+            width:'100%',
+            frameborder:'0',
+            scrolling:'no',
+            tabindex:'0',
+            id:'chamilo-disqus',
+            src: '<?php echo api_get_path(WEB_CODE_PATH) ?>forum/viewthread.php?<?php echo api_get_cidreq() ?>&' + $.param({
+                gradebook: 0,
+                origin: 'learnpath',
+                forum: forumThreadData.forumId,
+                thread: forumThreadData.threadId,
+                posts_order: 'desc'
+            })
+        });
+
+        $('#lp-view-forum').html(forumIframe);
+    });
+
+};
 
 /**
  * Save a specific item (with its interactions, if any) into the LMS through

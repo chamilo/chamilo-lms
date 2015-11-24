@@ -714,7 +714,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
-            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : null
+            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
         ];
 
         Database::update(
@@ -754,7 +754,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             'forum_group_public_private'=> isset($values['public_private_group_forum_group']['public_private_group_forum']) ? $values['public_private_group_forum_group']['public_private_group_forum'] : null,
             'forum_order'=> isset($new_max) ? $new_max : null,
             'session_id'=> $session_id,
-            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : null
+            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0
         ];
         $last_id = Database::insert($table_forums, $params);
         if ($last_id > 0) {
@@ -2376,7 +2376,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 'thread_weight' => isset($values['weight_calification']) ? $values['weight_calification'] : '',
                 'thread_peer_qualify' => isset($values['thread_peer_qualify']) ? $values['thread_peer_qualify'] : '',
                 'session_id' => api_get_session_id(),
-                'lp_item_id' => isset($values['lp_item_id']) ? intval($values['lp_item_id']) : null
+                'lp_item_id' => isset($values['lp_item_id']) ? intval($values['lp_item_id']) : 0
             ]
         );
 

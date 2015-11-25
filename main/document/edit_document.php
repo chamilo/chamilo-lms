@@ -38,6 +38,8 @@ var hide_bar = function() {
 }
 
 $(document).ready(function() {
+    $(".scrollbar-macosx").scrollbar();
+
     if ($(window).width() <= 785 ) {
         hide_bar();
     }
@@ -124,7 +126,8 @@ for ($i = 0; $i < ($count_dir); $i++) {
 $editorConfig = array(
     'ToolbarSet' => (api_is_allowed_to_edit(null, true) ? 'Documents' :'DocumentsStudent'),
     'Width' => '100%',
-    'Height' => '600',
+    'Height' => '400',
+    'cols-size' => [2, 10, 0],
     'FullPage' => true,
     'InDocument' => true,
     'CreateDocumentDir' => $relative_url,
@@ -440,7 +443,7 @@ if ($owner_id == api_get_user_id() ||
 	$form->addElement('hidden', 'showedit');
 	$form->addElement('hidden', 'origin');
 	$form->addElement('hidden', 'origin_opt');
-    $form->addText('title', get_lang('Title'));
+    $form->addText('title', get_lang('Title'), true, array('cols-size' => [2, 10, 0], 'autofocus'));
 
 	$defaults['title'] = $document_data['title'];
 
@@ -474,7 +477,7 @@ if ($owner_id == api_get_user_id() ||
 		$form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
 	}
 
-	$form->addElement('textarea', 'comment', get_lang('Comment'));
+	$form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
 
 	if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
 		$checked =& $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
@@ -527,14 +530,18 @@ if ($owner_id == api_get_user_id() ||
 	if ($extension=='svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
-	echo '<div class="row-fluid" style="overflow:hidden">
+    echo '<div class="row" style="overflow:hidden">
             <div id="template_col" class="col-md-2">
-                <div id="frmModel"></div>
+                <div class="panel panel-default">
+                <div class="panel-body">
+                    <div id="frmModel" class="items-templates scrollbar-macosx"></div>
+                </div>
+                </div>
             </div>
             <div class="col-md-1">
                 <div id="hide_bar_template"></div>
             </div>
-            <div id="doc_form" class="col-md-8">
+            <div id="doc_form" class="col-md-9">
 				'.$form->returnForm().'
             </div>
           </div>';

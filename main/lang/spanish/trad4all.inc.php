@@ -7605,4 +7605,6 @@ $AverageRating = "Promedio de la valoración";
 $GradebookTeacherResultsNotShown = "Los resultados de los profesores no se muestran ni están tomados en cuenta en los cálculos de la herramienta de evaluaciones.";
 $SocialWallWriteNewPostToFriend = "Escribe algo interesante en el muro de tu amigo...";
 $EmptyTemplate = "Plantilla vacía";
+$BaseCourse = "Curso base";
+$BaseCourses = "Cursos base";
 ?>

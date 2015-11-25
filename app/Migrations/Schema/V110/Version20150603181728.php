@@ -42,6 +42,19 @@ class Version20150603181728 extends AbstractMigrationChamilo
         ');
         $this->addSql("UPDATE c_item_property SET session_id = NULL WHERE session_id = 0");
         $this->addSql("UPDATE c_item_property SET to_group_id = NULL WHERE to_group_id = 0");
+        $this->addSql("UPDATE c_item_property SET to_user_id = NULL WHERE to_user_id = 0");
+        $this->addSql("UPDATE c_item_property SET start_visible = NULL WHERE start_visible = '0000-00-00 00:00:00'");
+        $this->addSql("UPDATE c_item_property SET end_visible = NULL WHERE end_visible = '0000-00-00 00:00:00'");
+        $this->addSql("
+            UPDATE c_item_property SET to_user_id = NULL WHERE to_user_id NOT IN (
+                SELECT id FROM user
+            )
+        ");
+        $this->addSql("
+            UPDATE c_item_property SET insert_user_id = NULL WHERE insert_user_id NOT IN (
+                SELECT id FROM user
+            )
+        ");
         // Remove inconsistencies about non-existing courses
         $this->addSql("DELETE FROM c_item_property WHERE c_id = 0");
         // Remove inconsistencies about non-existing users

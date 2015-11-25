@@ -6,7 +6,7 @@
     {% endif %}
             <div id="learning_path_left_zone" class="sidebar-scorm">
                 <div class="lp-view-zone-container">
-                    <div id="scorm-info" class="jumbotron">
+                    <div id="scorm-info">
                         <div id="panel-scorm" class="panel-bsody">
                             <div class="image-avatar">
                                     {% if lp_author == '' %}
@@ -71,9 +71,15 @@
                                 {{ teacher_toc_buttons }}
 
                             <hr class="visible-xs-block">
-                            <button type="button" id="lp-view-expand-button" class="btn btn-link btn-block visible-xs-block">
-                                <span class="fa fa-expand" aria-hidden="true"></span> {{ 'SeeContent'|get_lang }}
-                            </button>
+                            <div class="visible-xs-block movil-toolbar">
+                                <button type="button" id="lp-view-expand-button" class="icon-toolbar expand visible-xs-block">
+                                <span class="fa fa-expand" aria-hidden="true"></span>
+                                </button>
+                                <a href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                                    <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
+                                </a>
+                            </div>
+                            
                         </div>
                     </div>
 
@@ -95,17 +101,15 @@
             <div id="learning_path_right_zone" class="content-scorm">
                 <div class="lp-view-zone-container">
                     <div id="lp_navigation_elem" class="navegation-bar pull-right text-right">
-                        <a href="{{ button_home_url }}" class="btn btn-link" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                            <em class="fa fa-home fa-2x"></em> <span class="hidden-xs hidden-sm">{{ button_home_text }}</span>
-                        </a>
-                        <a href="#" id="lp-view-expand-toggle" class="btn btn-link" role="button">
+                        <a href="#" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
                             <span class="fa fa-expand" aria-hidden="true"></span>
                             <span class="sr-only">{{ 'Expand'|get_lang }}</span>
                         </a>
+                        <a id="home-course" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                            <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
+                        </a>
                         {{ navigation_bar }}
                     </div>
-
-                    <h1 class="scorm-title">{{ lp_title_scorm }}</h1>
 
                     <div class="lp-view-tabs">
                         <ul class="nav nav-tabs" role="tablist">

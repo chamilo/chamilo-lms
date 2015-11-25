@@ -1933,14 +1933,14 @@ class learnpath
         } else {
             $navbar = '
                 <span id="'.$idBar.'" class="buttons text-right">
-                    <a class="btn btn-xs btn-link" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link">
-                        <span class="fa fa-info-circle fa-3x"></span><span class="sr-only">' . get_lang('Reporting') . '</span>
+                    <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link">
+                        <span class="fa fa-info"></span><span class="sr-only">' . get_lang('Reporting') . '</span>
                     </a>
-                    <a class="btn btn-xs btn-link" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous">
-                        <span class="fa fa-chevron-circle-left fa-3x"></span><span class="sr-only">' . get_lang('ScormPrevious') . '</span>
+                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous">
+                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . get_lang('ScormPrevious') . '</span>
                     </a>
-                    <a class="btn btn-xs btn-link" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next">
-                        <span class="fa fa-chevron-circle-right fa-3x"></span><span class="sr-only">' . get_lang('ScormNext') . '</span>
+                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next">
+                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . get_lang('ScormNext') . '</span>
                     </a>
                 </span>';
         }

@@ -1009,37 +1009,26 @@ if ($modifyAnswers) {
                     </table>
         </div>
         <div class="row">
-            <div class="col-md-offset-3 col-md-6">
-                <div class="embed-responsive embed-responsive-4by3">
-                    <div class="embed-responsive-item">
-                    <script>
-                        <!--
-                        // Version check based upon the values entered above in "Globals"
-                        var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+            <div class="col-xs-12" id="hotspot-selectors"></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
     <?php
     $swf_loaded = $answerType == HOT_SPOT_DELINEATION ? 'hotspot_delineation_admin' : 'hotspot_admin';
     $height = 450;
     ?>
-                        // Check to see if the version meets the requirements for playback
-                        if (hasReqestedVersion) {  // if we've detected an acceptable version
-                            var oeTags = '<object type="application/x-shockwave-flash" data="../plugin/hotspot/<?php echo $swf_loaded ?>.swf?modifyAnswers=<?php echo $modifyAnswers ?>" width="600" height="<?php echo $height ?>">'
-                                    + '<param name="movie" value="../plugin/hotspot/<?php echo $swf_loaded ?>.swf?modifyAnswers=<?php echo $modifyAnswers ?>" />'
-                                    + '<param name="test" value="OOoowww fo shooww" />'
-                                    + '</object>';
-                            document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
-                        } else {  // flash is too old or we can't detect the plugin
-                            var alternateContent = 'Error<br \/>'
-                                    + 'This content requires the Macromedia Flash Player.<br \/>'
-                                    + '<a href=http://www.macromedia.com/go/getflash/>Get Flash<\/a>';
-                            document.write(alternateContent);  // insert non-flash content
-                        }
-                        // -->
-                    </script>
-                    </div>
+                <div id="hotspot-container" class="center-block">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 0 0">
+                    </svg>
                 </div>
             </div>
         </div>
     </form>
+    <script>
+        $(document).on('ready', function () {
+            HotSpotAdmin.init(<?php echo $modifyAnswers ?>, '<?php echo $objQuestion->selectPicturePath(); ?>');
+        });
+    </script>
     <?php
     if ($debug > 0) {
         echo str_repeat('&nbsp;', 0) . '$modifyAnswers was set - end' . "<br />\n";

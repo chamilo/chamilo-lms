@@ -21,12 +21,15 @@ $pictureSize = getimagesize($picturePath.'/'.$objQuestion->selectPicture());
 $pictureWidth = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 
-$courseLang = $_course['language'];
-$courseCode = $_course['code'];
-$coursePath = $_course['path'];
+$data = [];
+$data['hotspot_lang'] = $_course['language'];
+$data['hotspot_image'] = $pictureName;
+$data['hotspot_image_width'] = $pictureWidth;
+$data['hotspot_image_height'] = $pictureHeight;
+$data['courseCode'] = $_course['path'];
+$data['hotspots'] = [];
 
 // Init
-$output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
 $i = 0;
 $nmbrTries = 0;
 $answer_type = $objQuestion->type;
@@ -35,28 +38,29 @@ $answers = $_SESSION['tmp_answers'];
 $nbrAnswers = count($answers['answer']);
 
 for ($i=1;$i <= $nbrAnswers; $i++) {
-    $output .= "&hotspot_".$i."=true";
-    $output .= "&hotspot_".$i."_answer=".$answers['answer'][$i];
+    $hotSpot = [];
+    $hotSpot['answer']= $answers['answer'][$i];
 
     if ($answer_type == HOT_SPOT_DELINEATION) {
         if ($i==1) {
-            $output .= "&hotspot_".$i."_type=delineation";
-        } else
-            {$output .= "&hotspot_".$i."_type=oar";}
+            $hotSpot['type'] = 'delineation';
+        } else {
+            $hotSpot['type'] = 'oar';
+        }
     } else {
         // Square or rectancle
         if ($answers['hotspot_type'][$i] == 'square') {
-            $output .= "&hotspot_".$i."_type=square";
+            $hotSpot['type'] = 'square';
         }
 
         // Circle or ovale
         if ($answers['hotspot_type'][$i] == 'circle') {
-            $output .= "&hotspot_".$i."_type=circle";
+            $hotSpot['type'] = 'circle';
         }
 
         // Polygon
         if ($answers['hotspot_type'][$i] == 'poly') {
-            $output .= "&hotspot_".$i."_type=poly";
+            $hotSpot['type'] = 'poly';
         }
         /*// Delineation
         if ($answers['hotspot_type'][$i] == 'delineation')
@@ -70,14 +74,14 @@ for ($i=1;$i <= $nbrAnswers; $i++) {
 		$nmbrTries++;
 	}
 
-	$output .= "&hotspot_".$i."_coord=".$answers['hotspot_coordinates'][$i]."";
-}
-
-// Generate empty
-$i++;
-for ($i; $i <= 12; $i++) {
-	$output .= "&hotspot_".$i."=false";
+    $hotSpot['coord'] = $answers['hotspot_coordinates'][$i];
+    $data['hotspots'][] = $hotSpot;
 }
 
 // Output
-echo $output."&nmbrTries=".$nmbrTries."&done=done";
+$data['nmbrTries'] = $nmbrTries;
+$data['done'] = 'done';
+
+header('Content-Type: application/json');
+
+echo json_encode($data);

@@ -24,11 +24,6 @@ $pictureSize   = getimagesize($picturePath.'/'.$objQuestion->selectPicture());
 $pictureWidth  = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 
-$courseLang = $_course['language'];
-$courseCode = $_course['sysCode'];
-$coursePath = $_course['path'];
-
-
 $course_id = api_get_course_int_id();
 
 // Query db for answers
@@ -40,39 +35,64 @@ if ($answer_type==HOT_SPOT_DELINEATION) {
 	        WHERE c_id = $course_id AND question_id = ".intval($questionId)." ORDER BY id";
 }
 $result = Database::query($sql);
-// Init
-$output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
+
+$data = [];
+$data['lang'] = [
+    'Square' => get_lang('square'),
+    'Circle' => get_lang('circle'),
+    'Poly' => get_lang('poly'),
+    'Status1' => get_lang('status1'),
+    'Status2_poly' => get_lang('status2_poly'),
+    'Status2_other' => get_lang('status2_other'),
+    'Status3' => get_lang('status3'),
+    'ShowUserPoints' => get_lang('showUserPoints'),
+    'LabelPolyMenu' => get_lang('labelPolyMenu'),
+    'Triesleft' => get_lang('triesleft'),
+    'ExeFinished' => get_lang('exeFinished'),
+    'NextAnswer' => get_lang('nextAnswer'),
+    'Delineation' => get_lang('delineation'),
+    'LabelDelineationMenu' => get_lang('labelDelineationMenu'),
+    'Oar' => get_lang('oar')
+];
+$data['image'] = $objQuestion->selectPicturePath();
+$data['image_width'] = $pictureWidth;
+$data['image_height'] = $pictureHeight;
+$data['courseCode'] = $_course['path'];
+$data['hotspots'] = [];
+
 $i = 0;
 $nmbrTries = 0;
 
 while ($hotspot = Database::fetch_assoc($result))
 {
-   	$output .= "&hotspot_".$hotspot['id']."=true";
-	$output .= "&hotspot_".$hotspot['id']."_answer=".str_replace('&','{amp}',$hotspot['answer']);
+    $hotSpot = [];
+    $hotSpot['id'] = $hotspot['id'];
+    $hotSpot['answer'] = $hotspot['answer'];
+
 	// Square or rectancle
 	if ($hotspot['hotspot_type'] == 'square' )
 	{
-		$output .= "&hotspot_".$hotspot['id']."_type=square";
+        $hotSpot['type'] = 'square';
 	}
 	// Circle or ovale
 	if ($hotspot['hotspot_type'] == 'circle')
 	{
-		$output .= "&hotspot_".$hotspot['id']."_type=circle";
+        $hotSpot['type'] = 'circle';
 	}
 	// Polygon
 	if ($hotspot['hotspot_type'] == 'poly')
 	{
-		$output .= "&hotspot_".$hotspot['id']."_type=poly";
+        $hotSpot['type'] = 'poly';
 	}
 	// Delineation
 	if ($hotspot['hotspot_type'] == 'delineation')
 	{
-		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
+        $hotSpot['type'] = 'delineation';
 	}
 	// No error
 	if ($hotspot['hotspot_type'] == 'noerror')
 	{
-		$output .= "&hotspot_".$hotspot['id']."_type=noerror";
+        $hotSpot['type'] = 'noerror';
 	}
 
 	// This is a good answer, count + 1 for nmbr of clicks
@@ -80,14 +100,19 @@ while ($hotspot = Database::fetch_assoc($result))
 	{
 		$nmbrTries++;
 	}
-	$output .= "&hotspot_".$hotspot['id']."_coord=".$hotspot['hotspot_coordinates']."";
+    unset($hotSpot['type']);
+    //$hotSpot['coord'] = $hotspot['hotspot_coordinates'];
 	$i++;
+
+    $data['hotspots'][] = $hotSpot;
 }
 
 // Generate empty
 $i++;
-for ($i; $i <= 12; $i++) {
-	$output .= "&hotspot_".$i."=false";
-}
-// Output
-echo $output."&nmbrTries=".$nmbrTries."&done=done";
+
+$data['nmbrTries'] = $nmbrTries;
+$data['done'] = 'done';
+
+header('Content-Type: application/json');
+
+echo json_encode($data);

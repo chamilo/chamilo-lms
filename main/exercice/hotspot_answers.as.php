@@ -38,20 +38,20 @@ if ($answer_type == HOT_SPOT_DELINEATION) {
 $result = Database::query($sql);
 // Init
 $data['lang'] = [
-    'Square' => get_lang('square'),
-    'Circle' => get_lang('circle'),
-    'Poly' => get_lang('poly'),
-    'Status1' => get_lang('status1'),
-    'Status2_poly' => get_lang('status2_poly'),
-    'Status2_other' => get_lang('status2_other'),
-    'Status3' => get_lang('status3'),
-    'ShowUserPoints' => get_lang('showUserPoints'),
-    'LabelPolyMenu' => get_lang('labelPolyMenu'),
-    'Triesleft' => get_lang('triesleft'),
-    'ExeFinished' => get_lang('exeFinished'),
-    'NextAnswer' => get_lang('nextAnswer'),
-    'Delineation' => get_lang('delineation'),
-    'LabelDelineationMenu' => get_lang('labelDelineationMenu'),
+    'Square' => get_lang('Square'),
+    'Circle' => get_lang('Circle'),
+    'Poly' => get_lang('Poly'),
+    'Status1' => get_lang('Status1'),
+    'Status2_poly' => get_lang('Status2_poly'),
+    'Status2_other' => get_lang('Status2_other'),
+    'Status3' => get_lang('Status3'),
+    'ShowUserPoints' => get_lang('ShowUserPoints'),
+    'LabelPolyMenu' => get_lang('LabelPolyMenu'),
+    'Triesleft' => get_lang('Triesleft'),
+    'ExeFinished' => get_lang('ExeFinished'),
+    'NextAnswer' => get_lang('NextAnswer'),
+    'Delineation' => get_lang('Delineation'),
+    'LabelDelineationMenu' => get_lang('LabelDelineationMenu'),
     'Oar' => get_lang('oar')
 ];
 $data['image'] = $objQuestion->selectPicturePath();

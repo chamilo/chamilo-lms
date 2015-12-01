@@ -120,6 +120,8 @@ $interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
 
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/js/hotspot_solution.js"></script>';
+
 if ($origin != 'learnpath') {
 	Display::display_header('');
 } else {
@@ -367,14 +369,25 @@ foreach ($questionList as $questionId) {
 
         if ($show_results) {
 			echo '</table></td></tr>';
-		 	echo '<tr>
-				<td colspan="2">'.
-					'<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
-						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" />
-					</object>
-				</td>
-			</tr>
-			</table><br/>';
+
+            echo "
+                    <tr>
+                        <td colspan=\"2\">
+                            <div id=\"hotspot-solution\"></div>
+                            <script>
+                                $(document).on('ready', function () {
+                                    HotSpotSolution.init({
+                                        questionId: $questionId,
+                                        exerciseId: $id,
+                                        selector: '#hotspot-solution'
+                                    });
+                                });
+                            </script>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+            ";
         }
 	} else if($answerType == HOT_SPOT_DELINEATION) {
 
@@ -497,14 +510,24 @@ foreach ($questionList as $questionId) {
             $questionScore= Database::result($resfree,0,"marks");
             $totalScore+=$questionScore;
             echo '</table></td></tr>';
-            echo '<tr>
-                    <td colspan="2">
-                        <object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="350">
-                            <param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
-                        </object>
-                    </td>
-                </tr>
-                </table>';
+
+            echo "
+                    <tr>
+                        <td colspan=\"2\">
+                            <div id=\"hotspot-solution\"></div>
+                            <script>
+                                $(document).on('ready', function () {
+                                    HotSpotSolution.init({
+                                        questionId: $questionId,
+                                        exerciseId: $id,
+                                        selector: '#hotspot-solution'
+                                    });
+                                });
+                            </script>
+                        </td>
+                    </tr>
+                </table>
+            ";
         }
 	}
 

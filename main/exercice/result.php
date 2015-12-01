@@ -53,6 +53,8 @@ if (!$is_allowedToEdit) {
     }
 }
 
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/js/hotspot_solution.js"></script>';
+
 if ($show_headers) {
     $interbreadcrumb[] = array(
         "url" => "exercise.php?".api_get_cidreq(),

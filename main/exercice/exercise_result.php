@@ -75,7 +75,7 @@ $interbreadcrumb[] = array(
     "name" => get_lang('Exercises'),
 );
 
-$htmlHeadXtra[] = '<script src="../plugin/hotspot2/js/hotspot_solution.js"></script>';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/js/hotspot_solution.js"></script>';
 
 if ($origin != 'learnpath') {
 	// So we are not in learnpath tool

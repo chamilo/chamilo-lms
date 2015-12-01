@@ -3128,7 +3128,7 @@ class Exercise
                                 WHERE
                                     hotspot_exe_id = '".$exeId."' AND
                                     hotspot_question_id= '".$questionId."' AND
-                                    hotspot_answer_id = ".intval($answerId)."";
+                                    hotspot_answer_id = ".intval($answerAutoId)."";
                         $result = Database::query($sql);
                         $studentChoice = Database::result($result, 0, "hotspot_correct");
 

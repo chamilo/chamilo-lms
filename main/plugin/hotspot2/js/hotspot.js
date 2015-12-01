@@ -221,6 +221,7 @@ var HotSpotAdmin = (function () {
                     <span class="fa fa-square fa-fw" data-hidden="true" style="color: ' + this.elStroke + '"></span>\n\
                 </span>\n\
                 <select class="form-control" aria-describedby="hotspot-' + this.hotSpotIndex + '">\n\
+                    <option value="">Select</option>\n\
                     <option value="square">Square</option>\n\
                     <option value="ellipse">Ellipse</option>\n\
                     <option value="polygon">Polygon</option>\n\
@@ -366,11 +367,14 @@ var HotSpotAdmin = (function () {
                 break;
 
             case 'polygon':
+                $(container).find('#hotspot-alert').text('Keed pressed the SHIFT key and click the image to close the polygon');
+
                 hotSpotEl.hotspot.addPoint(pointerPosition.x, pointerPosition.y);
                 hotSpotEl.render();
 
                 if (isPressingShift) {
                     hotSpotEl = null;
+                    $(container).find('#hotspot-alert').text('');
                 }
                 break;
         }

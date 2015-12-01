@@ -1018,6 +1018,7 @@ if ($modifyAnswers) {
     $height = 450;
     ?>
                 <div id="hotspot-container" class="center-block">
+                    <div id="hotspot-alert"></div>
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 0 0">
                     </svg>
                 </div>

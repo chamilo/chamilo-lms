@@ -75,6 +75,8 @@ $interbreadcrumb[] = array(
     "name" => get_lang('Exercises'),
 );
 
+$htmlHeadXtra[] = '<script src="../plugin/hotspot2/js/hotspot_solution.js"></script>';
+
 if ($origin != 'learnpath') {
 	// So we are not in learnpath tool
 	Display::display_header($nameTools, get_lang('Exercise'));

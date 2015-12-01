@@ -72,7 +72,7 @@ var HotSpotSolution = (function () {
 
         hotSpotSVG.setAttribute('stroke-width', 2);
         hotSpotSVG.setAttribute('stroke', 'rgb(' + color + ')');
-        hotSpotSVG.setAttribute('fill', 'rgba(' + color + ', 0.5)');
+        hotSpotSVG.setAttribute('fill', 'rgba(' + color + ', 0.75)');
 
         this.el.appendChild(hotSpotSVG);
     };
@@ -90,7 +90,7 @@ var HotSpotSolution = (function () {
         textSVG.setAttribute('font-family', 'sans-serif');
         textSVG.setAttribute('text-anchor', 'middle');
         textSVG.setAttribute('fill', 'white');
-        textSVG.textContent = hotSpots.length;
+        textSVG.textContent = answers.length;
 
         this.el.appendChild(pointSVG);
         this.el.appendChild(textSVG);

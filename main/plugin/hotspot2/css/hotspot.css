@@ -1,0 +1,15 @@
+#hotspot-container {
+    line-height: 0;
+    /*position: relative;
+    width: 100%;
+    vertical-align: middle;
+    padding-bottom: 408px;
+    margin: 0;
+    overflow: hidden;*/
+}
+#hotspot-container svg {
+    /*display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;*/
+}

@@ -613,17 +613,19 @@ class Event
                 )));
 
         } else {
-            $sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_course_code, hotspot_user_id, c_id, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)
-                VALUES (
-                '".api_get_course_id()."',
-                ".api_get_user_id()."',".
-                " ".api_get_course_int_id().", ".
-                " '".Database :: escape_string($exe_id)."', ".
-                " '".Database :: escape_string($question_id)."',".
-                " '".Database :: escape_string($answer_id)."',".
-                " '".Database :: escape_string($correct)."',".
-                " '".Database :: escape_string($coords)."')";
-            return $result = Database::query($sql);
+            return Database::insert(
+                $tbl_track_e_hotspot,
+                [
+                    'hotspot_course_code' => api_get_course_id(),
+                    'hotspot_user_id' => api_get_user_id(),
+                    'c_id' => api_get_course_int_id(),
+                    'hotspot_exe_id' => $exe_id,
+                    'hotspot_question_id' => $question_id,
+                    'hotspot_answer_id' => $answer_id,
+                    'hotspot_correct' => $correct,
+                    'hotspot_coordinate' => $coords
+                ]
+            );
         }
     }
 

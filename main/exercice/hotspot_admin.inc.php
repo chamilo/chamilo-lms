@@ -585,12 +585,11 @@ if ($modifyAnswers) {
                 </button>
             </div>
         </div>
-        <table border="0" cellpadding="0" cellspacing="2" width="100%">
-            <tr>
-                <td>
-                    <input type="hidden" name="formSent" value="1" />
-                    <input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
+        <input type="hidden" name="formSent" value="1" />
+        <input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
+        <div class="table-responsive">
                     <table class="table table-striped table-hover">
+                        <thead>
                         <tr>
                             <th width="5">&nbsp;</th>
                             <th> <?php echo get_lang('HotspotDescription'); ?> *</th>
@@ -614,6 +613,8 @@ if ($modifyAnswers) {
                             <?php } ?>
                             <th><?php echo get_lang('QuestionWeighting'); ?> *</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <?php
                         $list = new LearnpathList(api_get_user_id());
                         // Loading list of LPs
@@ -818,7 +819,7 @@ if ($modifyAnswers) {
                                             <div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div>
                                         </td>
                                         <td>
-                                            <input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($reponse[$i]); ?>" size="20" />
+                                            <input class="form-control" type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($reponse[$i]); ?>" />
                                         </td>
 
                                         <td colspan="2"  align="left">
@@ -864,15 +865,16 @@ if ($modifyAnswers) {
                                     ?>
                                 <tr>
                                     <td>
-                                        <div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div>
+                                        <span class="fa fa-square fa-2x" style="color: <?php echo $hotspot_colors[$i]; ?>" aria-hidden="true"></span>
                                     </td>
                                     <td>
-                                        <input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($responseValue); ?>" size="45" />
+                                        <input class="form-control" type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($responseValue); ?>" />
                                     </td>
                                     <?php
                                     $form = new FormValidator('form_' . $i);
                                     $config = array(
-                                        'ToolbarSet' => 'TestProposedAnswer'
+                                        'ToolbarSet' => 'TestProposedAnswer',
+                                        'cols-size' => [0, 12, 0]
                                     );
                                     $form->addHtmlEditor('comment[' . $i . ']', null, false, false, $config);
                                     $renderer = $form->defaultRenderer();
@@ -886,8 +888,7 @@ if ($modifyAnswers) {
                                     $form->setDefaults(array('comment[' . $i . ']' => $commentValue));
                                     $return = $form->return_form();
                                     ?>
-                                    <td>&nbsp;</td>
-                                    <td align="left" ><?php echo $return; ?></td>
+                                    <td colspan="2" align="left" ><?php echo $return; ?></td>
                                 <?php } ?>
                                 <td>
                                     <?php
@@ -896,13 +897,13 @@ if ($modifyAnswers) {
                                             ?>
                                             <input type="hidden" name="weighting[<?php echo $i; ?>]" class="span3" value="0" />
                                         <?php } else { ?>
-                                            <input type="text" name="weighting[<?php echo $i; ?>]" class="span3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
+                                            <input class="form-control" type="text" name="weighting[<?php echo $i; ?>]" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
                                                    <?php
                                                }
                                            }
                                            if ($answerType == HOT_SPOT) {
                                                ?>
-                                        <input type="text" name="weighting[<?php echo $i; ?>]" class="span3" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
+                                        <input class="form-control" type="text" name="weighting[<?php echo $i; ?>]" value="<?php echo (isset($weighting[$i]) ? $weighting[$i] : 10); ?>" />
                                         <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
                                         <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" />
                                         <?php } ?>
@@ -1004,38 +1005,31 @@ if ($modifyAnswers) {
                                 <?php } ?>
                             </tr>
                         <?php } ?>
+                        </tbody>
                     </table>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <script>
-                        <!--
-                        // Version check based upon the values entered above in "Globals"
-                        var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+        </div>
+        <div class="row">
+            <div class="col-xs-12" id="hotspot-selectors"></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
     <?php
     $swf_loaded = $answerType == HOT_SPOT_DELINEATION ? 'hotspot_delineation_admin' : 'hotspot_admin';
     $height = 450;
     ?>
-                        // Check to see if the version meets the requirements for playback
-                        if (hasReqestedVersion) {  // if we've detected an acceptable version
-                            var oeTags = '<object type="application/x-shockwave-flash" data="../plugin/hotspot/<?php echo $swf_loaded ?>.swf?modifyAnswers=<?php echo $modifyAnswers ?>" width="600" height="<?php echo $height ?>">'
-                                    + '<param name="movie" value="../plugin/hotspot/<?php echo $swf_loaded ?>.swf?modifyAnswers=<?php echo $modifyAnswers ?>" />'
-                                    + '<param name="test" value="OOoowww fo shooww" />'
-                                    + '</object>';
-                            document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
-                        } else {  // flash is too old or we can't detect the plugin
-                            var alternateContent = 'Error<br \/>'
-                                    + 'This content requires the Macromedia Flash Player.<br \/>'
-                                    + '<a href=http://www.macromedia.com/go/getflash/>Get Flash<\/a>';
-                            document.write(alternateContent);  // insert non-flash content
-                        }
-                        // -->
-                    </script>
-                </td>
-            </tr>
-        </table>
+                <div id="hotspot-container" class="center-block">
+                    <div id="hotspot-alert"></div>
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 0 0">
+                    </svg>
+                </div>
+            </div>
+        </div>
     </form>
+    <script>
+        $(document).on('ready', function () {
+            HotSpotAdmin.init(<?php echo $modifyAnswers ?>, '<?php echo $objQuestion->selectPicturePath(); ?>');
+        });
+    </script>
     <?php
     if ($debug > 0) {
         echo str_repeat('&nbsp;', 0) . '$modifyAnswers was set - end' . "<br />\n";

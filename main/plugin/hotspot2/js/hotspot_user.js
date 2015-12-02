@@ -126,7 +126,8 @@ var HotSpotUser = (function () {
             self.addAnswer(answer);
 
             if (answers.length === hotSpots.length) {
-                self.messagesEl.textContent = lang.ExeFinished;
+                console.log(lang);
+                self.messagesEl.textContent = lang.HotspotExerciseFinished;
 
                 return;
             }

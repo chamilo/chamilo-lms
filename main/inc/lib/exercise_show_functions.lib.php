@@ -184,16 +184,13 @@ class ExerciseShowFunctions
 		?>
 		<table class="data_table">
 		<tr>
-			<td width="100px" valign="top" align="left">
-				<div style="width:100%;">
-					<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; display:inline; float:left; margin-top:3px;"></div>
-					<div style="float:left; padding-left:5px;">
-					<?php echo $answerId; ?>
-					</div>
-					<div><?php echo '&nbsp;'.$answer ?></div>
-				</div>
+            <td class="text-center" width="5%">
+                <span class="fa fa-square fa-fw fa-2x" aria-hidden="true" style="color: <?php echo $hotspot_colors[$answerId]; ?>"></span>
+            </td>
+			<td class="text-left" width="25%">
+                <?php echo "$answerId - $answer"; ?>
 			</td>
-			<td width="50px" style="padding-right:15px" valign="top" align="left">
+			<td class="text-left" width="10%">
 				<?php
                 if (!$hide_expected_answer) {
     				$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault');
@@ -202,7 +199,7 @@ class ExerciseShowFunctions
 				?>
 			</td>
 			<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-			<td valign="top" align="left" >
+			<td class="text-left" width="60%">
 				<?php
                 if ($studentChoice) {
                     echo '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
@@ -210,7 +207,7 @@ class ExerciseShowFunctions
 				?>
 			</td>
 			<?php } else { ?>
-				<td>&nbsp;</td>
+				<td class="text-left" width="60%">&nbsp;</td>
 			<?php } ?>
 		</tr>
 		<?php

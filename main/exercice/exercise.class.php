@@ -4040,14 +4040,14 @@ class Exercise
                         <tr>
                             <td colspan=\"2\">
                                 <p><em>" . get_lang('HotSpot') . "</em></p>
-                                <div id=\"hotspot-solution\"></div>
+                                <div id=\"hotspot-solution-$questionId\"></div>
 
                                 <script>
                                     $(document).on('ready', function () {
                                         HotSpotSolution.init({
                                             questionId: $questionId,
                                             exerciseId: $exeId,
-                                            selector: '#hotspot-solution'
+                                            selector: '#hotspot-solution-$questionId'
                                         });
                                     });
                                 </script>

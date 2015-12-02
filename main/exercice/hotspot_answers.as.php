@@ -13,7 +13,6 @@ include('../inc/global.inc.php');
 // Set vars
 $questionId    = intval($_GET['modifyAnswers']);
 $exe_id        = intval($_GET['exe_id']);
-$from_db 	   = isset($_GET['from_db']) ? $_GET['from_db'] : 0;
 $objQuestion   = Question :: read($questionId);
 $TBL_ANSWERS   = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -24,10 +23,6 @@ $pictureSize   = getimagesize($picturePath.'/'.$objQuestion->selectPicture());
 $pictureWidth  = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 
-$courseLang    = $_course['language'];
-$course_code   = Database::escape_string($_course['id']);
-
-$coursePath    = $_course['path'];
 $answer_type   = $objQuestion->selectType();
 
 $course_id     = api_get_course_int_id();
@@ -42,64 +37,79 @@ if ($answer_type == HOT_SPOT_DELINEATION) {
 }
 $result = Database::query($sql);
 // Init
-$output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
-$i = 0;
+$data['lang'] = [
+    'Square' => get_lang('Square'),
+    'Circle' => get_lang('Circle'),
+    'Poly' => get_lang('Poly'),
+    'HotspotStatus1' => get_lang('HotspotStatus1'),
+    'HotspotStatus2Polygon' => get_lang('HotspotStatus2Polygon'),
+    'HotspotStatus2Other' => get_lang('HotspotStatus2Other'),
+    'HotspotStatus3' => get_lang('HotspotStatus3'),
+    'HotspotShowUserPoints' => get_lang('HotspotShowUserPoints'),
+    'ShowHotspots' => get_lang('ShowHotspots'),
+    'Triesleft' => get_lang('Triesleft'),
+    'HotspotExerciseFinished' => get_lang('HotspotExerciseFinished'),
+    'NextAnswer' => get_lang('NextAnswer'),
+    'Delineation' => get_lang('Delineation'),
+    'CloseDelineation' => get_lang('CloseDelineation'),
+    'Oar' => get_lang('oar')
+];
+$data['image'] = $objQuestion->selectPicturePath();
+$data['image_width'] = $pictureWidth;
+$data['image_height'] = $pictureHeight;
+$data['courseCode'] = $_course['path'];
+$data['hotspots'] = [];
 
 while ($hotspot = Database::fetch_array($result)) {
-	$output .= "&hotspot_".$hotspot['id']."=true";
+    $hotSpot = [];
+    $hotSpot['id'] = $hotspot['id'];
+
 	// Square or rectancle
 	if ($hotspot['hotspot_type'] == 'square' ) {
-		$output .= "&hotspot_".$hotspot['id']."_type=square";
+        $hotSpot['type'] = 'square';
 	}
 
 	// Circle or ovale
 	if ($hotspot['hotspot_type'] == 'circle') {
-		$output .= "&hotspot_".$hotspot['id']."_type=circle";
+        $hotSpot['type'] = 'circle';
 	}
 
 	// Polygon
 	if ($hotspot['hotspot_type'] == 'poly') {
-		$output .= "&hotspot_".$hotspot['id']."_type=poly";
+        $hotSpot['type'] = 'poly';
 	}
 
 	// Delineation
 	if ($hotspot['hotspot_type'] == 'delineation') {
-		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
+        $hotSpot['type'] = 'delineation';
 	}
 	// oar
 	if ($hotspot['hotspot_type'] == 'oar') {
-		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
+        $hotSpot['type'] = 'delineation';
 	}
-	$output .= "&hotspot_".$hotspot['id']."_coord=".$hotspot['hotspot_coordinates']."";
-	$i++;
+
+    $hotSpot['coord'] = $hotspot['hotspot_coordinates'];
+
+    $data['hotspots'][] = $hotSpot;
 }
 
-// Generate empty (the maximum number of points is 12 - it is said so in the user interface)
-$i++;
-for ($i; $i <= 12; $i++) {
-	$output .= "&hotspot_".$i."=false";
+$data['answers'] = [];
+
+$tbl_track_e_hotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+$sql = "SELECT hotspot_coordinate
+        FROM $tbl_track_e_hotspot
+        WHERE   hotspot_question_id = $questionId AND
+                c_id = $course_id AND
+                hotspot_exe_id = $exe_id
+        ORDER by hotspot_id";
+$rs = Database::query($sql); // don't output error because we are in Flash execution.
+
+while($row = Database :: fetch_array($rs, 'ASSOC')) {
+    $data['answers'][] = $row['hotspot_coordinate'];
 }
 
+$data['done'] = 'done';
 
-// Get clicks
-if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
-	foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate) {
-		$output2 .= $coordinate."|";
-	}
-} else {
-	// get it from db
-	$tbl_track_e_hotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-	$sql = "SELECT hotspot_coordinate
-            FROM $tbl_track_e_hotspot
-            WHERE   hotspot_question_id = $questionId AND
-                    c_id = $course_id AND
-                    hotspot_exe_id = $exe_id
-            ORDER by hotspot_id";
-	$rs = @Database::query($sql); // don't output error because we are in Flash execution.
-	while($row = Database :: fetch_array($rs)) {
-		$output2 .= $row['hotspot_coordinate']."|";
-	}
-}
-$output .= "&p_hotspot_answers=".api_substr($output2,0,-1)."&done=done";
-$explode = explode('&', $output);
-echo $output;
+header('Content-Type: application/json');
+
+echo json_encode($data);

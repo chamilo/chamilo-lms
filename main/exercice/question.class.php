@@ -908,7 +908,7 @@ abstract class Question
                     ];
                     $id = Database::insert($TBL_ANSWERS, $params);
                     if ($id) {
-                        $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE id_auto = $id";
+                        $sql = "UPDATE $TBL_ANSWERS SET id = iid, id_auto = iid WHERE iid = $id";
                         Database::query($sql);
                     }
                 }
@@ -931,7 +931,7 @@ abstract class Question
                     $id = Database::insert($TBL_ANSWERS, $params);
 
                     if ($id) {
-                        $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE id_auto = $id";
+                        $sql = "UPDATE $TBL_ANSWERS SET id = iid, id_auto = iid WHERE iid = $id";
                         Database::query($sql);
                     }
                 }

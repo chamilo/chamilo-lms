@@ -1129,25 +1129,31 @@ HTML;
                 );
             }
 
-            // display answers of hotpost order by id
-            $answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>' . get_lang(
-                    'HotspotZones'
-                ) . '</b><dl>';
-            if (!empty($answers_hotspot)) {
-                ksort($answers_hotspot);
-                foreach ($answers_hotspot as $key => $value) {
-                    $answer_list .= '<dt>' . $key . '.- ' . $value . '</dt><br />';
-                }
-            }
-            $answer_list .= '</dl></div>';
+            $answerList = '';
 
-            if ($answerType == HOT_SPOT_DELINEATION) {
-                $answer_list = '';
-                $swf_file = 'hotspot_delineation_user';
-                $swf_height = 405;
-            } else {
-                $swf_file = 'hotspot_user';
-                $swf_height = 436;
+            if ($answerType != HOT_SPOT_DELINEATION) {
+                $answerList = '
+                    <div class="well well-sm">
+                        <h5 class="page-header">' . get_lang('HotspotZones') . '</h5>
+                        <ol>
+                ';
+
+                if (!empty($answers_hotspot)) {
+                    ksort($answers_hotspot);
+
+                    $countAnswers = 1;
+
+                    foreach ($answers_hotspot as $value) {
+                        $answerList .= "<li><p>{$countAnswers} - {$value}</p></li>";
+
+                        $countAnswers++;
+                    }
+                }
+
+                $answerList .= '
+                        </ol>
+                    </div>
+                ';
             }
 
             if (!$only_questions) {
@@ -1156,153 +1162,37 @@ HTML;
                     echo '<div class="question_title">' . $current_item . '. ' . $questionName . '</div>';
                 }
                 //@todo I need to the get the feedback type
-                echo '<input type="hidden" name="hidden_hotspot_id" value="' . $questionId . '" />';
-                echo '<table class="exercise_questions" >
-                      <tr>
-                        <td valign="top" colspan="2">';
-                echo $questionDescription;
-                echo '</td></tr>';
+                echo <<<HOTSPOT
+                    <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
+                    <div class="exercise_questions">
+                        $questionDescription
+                        <div class="row">
+HOTSPOT;
             }
 
             $canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 
-            $s .= '<script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
-                            <script src="../plugin/hotspot/hotspot.js" type="text/javascript" ></script>
-                            <script type="text/javascript">
-                            <!--
-                            // Globals
-                            // Major version of Flash required
-                            var requiredMajorVersion = 7;
-                            // Minor version of Flash required
-                            var requiredMinorVersion = 0;
-                            // Minor version of Flash required
-                            var requiredRevision = 0;
-                            // the version of javascript supported
-                            var jsVersion = 1.0;
-                            // -->
-                            </script>
-                            <script language="VBScript" type="text/vbscript">
-                            <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
-                            Function VBGetSwfVer(i)
-                              on error resume next
-                              Dim swControl, swVersion
-                              swVersion = 0
-
-                              set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))
-                              if (IsObject(swControl)) then
-                                swVersion = swControl.GetVariable("$version")
-                              end if
-                              VBGetSwfVer = swVersion
-                            End Function
-                            // -->
-                            </script>
-
-                            <script language="JavaScript1.1" type="text/javascript">
-                            <!-- // Detect Client Browser type
-                            var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
-                            var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
-                            var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
-                            jsVersion = 1.1;
-                            // JavaScript helper required to detect Flash Player PlugIn version information
-                            function JSGetSwfVer(i) {
-                                // NS/Opera version >= 3 check for Flash plugin in plugin array
-                                if (navigator.plugins != null && navigator.plugins.length > 0) {
-                                    if (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]) {
-                                        var swVer2 = navigator.plugins["Shockwave Flash 2.0"] ? " 2.0" : "";
-                                        var flashDescription = navigator.plugins["Shockwave Flash" + swVer2].description;
-                                        descArray = flashDescription.split(" ");
-                                        tempArrayMajor = descArray[2].split(".");
-                                        versionMajor = tempArrayMajor[0];
-                                        versionMinor = tempArrayMajor[1];
-                                        if ( descArray[3] != "" ) {
-                                            tempArrayMinor = descArray[3].split("r");
-                                        } else {
-                                            tempArrayMinor = descArray[4].split("r");
-                                        }
-                                        versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
-                                        flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
-                                    } else {
-                                        flashVer = -1;
-                                    }
-                                }
-                                // MSN/WebTV 2.6 supports Flash 4
-                                else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.6") != -1) flashVer = 4;
-                                // WebTV 2.5 supports Flash 3
-                                else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.5") != -1) flashVer = 3;
-                                // older WebTV supports Flash 2
-                                else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
-                                // Can\'t detect in all other cases
-                                else
-                                {
-                                    flashVer = -1;
-                                }
-                                return flashVer;
-                            }
-                            // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
-
-                            function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) {
-                                reqVer = parseFloat(reqMajorVer + "." + reqRevision);
-                                // loop backwards through the versions until we find the newest version
-                                for (i=25;i>0;i--) {
-                                    if (isIE && isWin && !isOpera) {
-                                        versionStr = VBGetSwfVer(i);
-                                    } else {
-                                        versionStr = JSGetSwfVer(i);
-                                    }
-                                    if (versionStr == -1 ) {
-                                        return false;
-                                    } else if (versionStr != 0) {
-                                        if(isIE && isWin && !isOpera) {
-                                            tempArray         = versionStr.split(" ");
-                                            tempString        = tempArray[1];
-                                            versionArray      = tempString .split(",");
-                                        } else {
-                                            versionArray      = versionStr.split(".");
-                                        }
-                                        versionMajor      = versionArray[0];
-                                        versionMinor      = versionArray[1];
-                                        versionRevision   = versionArray[2];
-
-                                        versionString     = versionMajor + "." + versionRevision;   // 7.0r24 == 7.24
-                                        versionNum        = parseFloat(versionString);
-                                        // is the major.revision >= requested major.revision AND the minor version >= requested minor
-                                        if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
-                                            return true;
-                                        } else {
-                                            return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
-                                        }
-                                    }
-                                }
-                            }
-                            // -->
-                            </script>';
-            $s .= '<tr><td valign="top" colspan="2" width="520"><table><tr><td width="520">
-                        <script>
-                            <!--
-                            // Version check based upon the values entered above in "Globals"
-                            var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
-
-                            // Check to see if the version meets the requirements for playback
-                            if (hasReqestedVersion) {  // if we\'ve detected an acceptable version
-                                var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/' . $swf_file . '.swf?modifyAnswers=' . $questionId . '&canClick:' . $canClick . '" width="600" height="' . $swf_height . '">\'
-                                            + \'<param name="wmode" value="transparent">\'
-                                            + \'<param name="movie" value="../plugin/hotspot/' . $swf_file . '.swf?modifyAnswers=' . $questionId . '&canClick:' . $canClick . '" />\'
-                                            + \'<\/object>\';
-                                document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
-                            } else {  // flash is too old or we can\'t detect the plugin
-                                var alternateContent = "Error<br \/>"
-                                    + "Hotspots requires Macromedia Flash 7.<br \/>"
-                                    + "<a href=\"http://www.macromedia.com/go/getflash/\">Get Flash<\/a>";
-                                document.write(alternateContent);  // insert non-flash content
-                            }
-                            // -->
-                        </script>
-                        </td>
-                        <td valign="top" align="left">' . $answer_list . '</td></tr>
-                        </table>
-            </td></tr>';
-            echo $s;
-            echo '</table>';
+            $s .= <<<HOTSPOT
+                            <div class="col-sm-8 col-md-9">
+                                <div class="hotspot-image"></div>
+                                <script>
+                                    $(document).on('ready', function () {
+                                        HotSpotUser.init({
+                                            questionId: $questionId,
+                                            selector: '#question_div_' + $questionId + ' .hotspot-image'
+                                        });
+                                    });
+                                </script>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                $answerList
+                            </div>
+HOTSPOT;
+            echo <<<HOTSPOT
+                            $s
+                        </div>
+                    </div>
+HOTSPOT;
         }
         return $nbrAnswers;
     }

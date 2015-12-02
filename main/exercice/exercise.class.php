@@ -3128,7 +3128,7 @@ class Exercise
                                 WHERE
                                     hotspot_exe_id = '".$exeId."' AND
                                     hotspot_question_id= '".$questionId."' AND
-                                    hotspot_answer_id = ".intval($answerId)."";
+                                    hotspot_answer_id = ".intval($answerAutoId)."";
                         $result = Database::query($sql);
                         $studentChoice = Database::result($result, 0, "hotspot_correct");
 
@@ -3137,7 +3137,7 @@ class Exercise
                             $totalScore     += $answerWeighting;
                         }
                     } else {
-                        $studentChoice = $choice[$answerId];
+                        $studentChoice = $choice[$answerAutoId];
                         if ($studentChoice) {
                             $questionScore  += $answerWeighting;
                             $totalScore     += $answerWeighting;
@@ -4036,25 +4036,24 @@ class Exercise
                 if ($show_result) {
                     //	if ($origin != 'learnpath') {
                     echo '</table></td></tr>';
-                    echo '<tr>
-                            <td colspan="2">';
-                    echo '<i>'.get_lang('HotSpot').'</i><br /><br />';
+                    echo "
+                        <tr>
+                            <td colspan=\"2\">
+                                <p><em>" . get_lang('HotSpot') . "</em></p>
+                                <div id=\"hotspot-solution-$questionId\"></div>
 
-                    echo '<object type="application/x-shockwave-flash" data="'
-                        . api_get_path(WEB_CODE_PATH)
-                        . 'plugin/hotspot/hotspot_solution.swf?modifyAnswers='
-                        . Security::remove_XSS($questionId)
-                        . '&exe_id='
-                        . $exeId
-                        . '&from_db=1" width="552" height="352">
-                                <param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='
-                            . Security::remove_XSS($questionId)
-                            . '&exe_id='
-                            . $exeId
-                            . '&from_db=1" />
-                        </object>';
-                    echo '</td>
-                        </tr>';
+                                <script>
+                                    $(document).on('ready', function () {
+                                        HotSpotSolution.init({
+                                            questionId: $questionId,
+                                            exerciseId: $exeId,
+                                            selector: '#hotspot-solution-$questionId'
+                                        });
+                                    });
+                                </script>
+                            </td>
+                        </tr>
+                    ";
                     //	}
                 }
             }
@@ -4143,7 +4142,7 @@ class Exercise
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
-                        Event::saveExerciseAttemptHotspot($exeId, $quesId, $idx, $choice[$idx], $val, $this->id);
+                        Event::saveExerciseAttemptHotspot($exeId, $quesId, $idx, $choice[$idx], $val, false, $this->id);
                     }
                 }
             } else {

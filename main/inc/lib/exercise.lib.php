@@ -1129,25 +1129,31 @@ HTML;
                 );
             }
 
-            // display answers of hotpost order by id
-            $answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>' . get_lang(
-                    'HotspotZones'
-                ) . '</b><dl>';
-            if (!empty($answers_hotspot)) {
-                ksort($answers_hotspot);
-                foreach ($answers_hotspot as $key => $value) {
-                    $answer_list .= '<dt>' . $key . '.- ' . $value . '</dt><br />';
-                }
-            }
-            $answer_list .= '</dl></div>';
+            $answerList = '';
 
-            if ($answerType == HOT_SPOT_DELINEATION) {
-                $answer_list = '';
-                $swf_file = 'hotspot_delineation_user';
-                $swf_height = 405;
-            } else {
-                $swf_file = 'hotspot_user';
-                $swf_height = 436;
+            if ($answerType != HOT_SPOT_DELINEATION) {
+                $answerList = '
+                    <div class="well well-sm">
+                        <h5 class="page-header">' . get_lang('HotspotZones') . '</h5>
+                        <ol>
+                ';
+
+                if (!empty($answers_hotspot)) {
+                    ksort($answers_hotspot);
+
+                    $countAnswers = 1;
+
+                    foreach ($answers_hotspot as $value) {
+                        $answerList .= "<li><p>{$countAnswers} - {$value}</p></li>";
+
+                        $countAnswers++;
+                    }
+                }
+
+                $answerList .= '
+                        </ol>
+                    </div>
+                ';
             }
 
             if (!$only_questions) {
@@ -1179,7 +1185,7 @@ HOTSPOT;
                                 </script>
                             </div>
                             <div class="col-sm-4 col-md-3">
-                                $answer_list
+                                $answerList
                             </div>
 HOTSPOT;
             echo <<<HOTSPOT

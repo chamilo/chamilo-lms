@@ -4,23 +4,37 @@ var HotSpotSolution = (function () {
         this.y = 0;
     };
 
+    var HotSpot = function () {
+        this.id = 0;
+        this.name = '';
+    };
+
     var Square = function () {
+        HotSpot.call(this);
+
         this.x = 0,
         this.y = 0,
         this.width = 0,
-        this.height = 0
+        this.height = 0;
     };
+    Square.prototype = Object.create(HotSpot.prototype);
 
     var Ellipse = function () {
+        HotSpot.call(this);
+
         this.centerX = 0;
         this.centerY = 0;
         this.radiusX = 0;
         this.radiusY = 0;
     };
+    Ellipse.prototype = Object.create(HotSpot.prototype);
 
     var Polygon = function () {
+        HotSpot.call(this);
+
         this.points = [];
     };
+    Polygon.prototype = Object.create(HotSpot.prototype);
 
     var config, lang, hotSpots = [], answers = [];
 
@@ -105,30 +119,46 @@ var HotSpotSolution = (function () {
                 var position = coords[0].split(';');
 
                 hotSpot = new Square();
-                hotSpot.x = position[0];
-                hotSpot.y = position[1];
-                hotSpot.width = coords[1];
-                hotSpot.height = coords[2];
+                hotSpot.x = parseInt(position[0]);
+                hotSpot.y = parseInt(position[1]);
+                hotSpot.width = parseInt(coords[1]);
+                hotSpot.height = parseInt(coords[2]);
                 break;
             case 'circle':
                 var center = coords[0].split(';');
 
                 hotSpot = new Ellipse();
-                hotSpot.centerX = center[0];
-                hotSpot.centerY = center[1];
-                hotSpot.radiusX = coords[1];
-                hotSpot.radiusY = coords[2];
+                hotSpot.centerX = parseInt(center[0]);
+                hotSpot.centerY = parseInt(center[1]);
+                hotSpot.radiusX = parseInt(coords[1]);
+                hotSpot.radiusY = parseInt(coords[2]);
                 break;
             case 'poly':
                 hotSpot = new Polygon();
 
-                coords.forEach(function (coord) {
-                    hotSpot.points.push(coord.split(';'));
+                coords.forEach(function (pairedCoord) {
+                    var coord = pairedCoord.split(';');
+
+                    hotSpot.points.push([
+                        parseInt(coord[0]),
+                        parseInt(coord[1])
+                    ]);
                 });
                 break;
         }
 
         return hotSpot;
+    };
+
+    var decodeAnswer = function (answerInfo) {
+        var answer = null,
+            coords = answerInfo.split(';');
+
+        answer = new Answer();
+        answer.x = coords[0];
+        answer.y = coords[1];
+
+        return answer;
     };
 
     var colors = [
@@ -146,19 +176,8 @@ var HotSpotSolution = (function () {
         '59, 59, 59'
     ];
 
-    var decodeAnswer = function (answerInfo) {
-        var answer = null,
-            coords = answerInfo.split(';');
-
-        answer = new Answer();
-        answer.x = coords[0];
-        answer.y = coords[1];
-
-        return answer;
-    };
-
     var startAnswer = function (hotSpotAnswerInfo) {
-        image = new Image();
+        var image = new Image();
         image.onload = function () {
             var canvasSVG = new CanvasSVG(this);
 

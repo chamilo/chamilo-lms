@@ -1,118 +1,251 @@
 var HotSpotUser = (function () {
-    var config, lang, canvas, image, hotspots;
+    var Answer = function () {
+        this.x = 0;
+        this.y = 0;
+    };
 
-    config = {questionId: 0, selector: ''};
+    var HotSpot = function () {
+        this.id = 0;
+        this.name = '';
+    };
+    HotSpot.prototype.checkPoint = function (x, y) {
+        return false;
+    };
 
-    var canvas = (function () {
-        var points = [],
-            messageText = document.createElement('div');
+    var Square = function () {
+        HotSpot.call(this);
 
-        return {
-            el: document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
-            render: function () {
-                var self = this;
+        this.x = 0,
+        this.y = 0,
+        this.width = 0,
+        this.height = 0;
+    };
+    Square.prototype = Object.create(HotSpot.prototype);
+    Square.prototype.checkPoint = function (x, y) {
+        var left = this.x,
+            right = this.x + this.width,
+            top = this.y,
+            bottom = this.y + this.height;
 
-                var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-                imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', image.src);
-                imageSvg.setAttribute('width', image.width);
-                imageSvg.setAttribute('height', image.height);
+        var xIsValid = x >= left && x <= right,
+            yIsValid = y >= top && y <= bottom;
 
-                canvas.el.setAttribute('version', '1.1');
-                canvas.el.setAttribute('viewBox', '0 0 ' + image.width + ' ' + image.height);
-                canvas.el.appendChild(imageSvg);
-                canvas.el.addEventListener('dragstart', function (e) {
-                    e.preventDefault();
-                }, false);
-                canvas.el.addEventListener('click', function (e) {
-                    e.preventDefault();
+        return xIsValid && yIsValid;
+    };
 
-                    if (points.length >= hotspots.length) {
-                        return;
-                    }
+    var Ellipse = function () {
+        HotSpot.call(this);
 
-                    var point = getPointOnImage(e.clientX, e.clientY);
+        this.centerX = 0;
+        this.centerY = 0;
+        this.radiusX = 0;
+        this.radiusY = 0;
+    };
+    Ellipse.prototype = Object.create(HotSpot.prototype);
+    Ellipse.prototype.checkPoint = function (x, y) {
+        var dX = x - this.centerX,
+            dY = y - this.centerY;
 
-                    self.addPoint(point.x, point.y);
-                }, false);
+        return Math.pow(dX, 2) / Math.pow(this.radiusX, 2) + Math.pow(dY, 2) / Math.pow(this.radiusY, 2) <= 1;
+    };
 
-                $(messageText).text(lang.NextAnswer + ' ' + hotspots[0].answer);
+    var Polygon = function () {
+        HotSpot.call(this);
 
-                $(config.selector).prepend(messageText);
+        this.points = [];
+    };
+    Polygon.prototype = Object.create(HotSpot.prototype);
+    Polygon.prototype.checkPoint = function (x, y) {
+        var isInside = false;
 
-                return this;
-            },
-            addPoint: function (x, y) {
-                points.push([x, y]);
+        for (var i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
+            var xi = this.points[i][0],
+                yi = this.points[i][1],
+                xj = this.points[j][0],
+                yj = this.points[j][1];
 
-                var pointSVG = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                pointSVG.setAttribute('cx', x);
-                pointSVG.setAttribute('cy', y);
-                pointSVG.setAttribute('r', 15);
-                pointSVG.setAttribute('fill', '#00677C');
+            var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
 
-                var textSVG = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                textSVG.setAttribute('x', x);
-                textSVG.setAttribute('y', y);
-                textSVG.setAttribute('dy', 5);
-                textSVG.setAttribute('font-family', 'sans-serif');
-                textSVG.setAttribute('text-anchor', 'middle');
-                textSVG.setAttribute('fill', 'white');
-                textSVG.textContent = points.length;
+            if (intersect) {
+                isInside = !isInside;
+            }
+        }
 
-                var txtHotSpot = $('<input>').attr({
-                    type: 'hidden',
-                    name: 'hotspot[' + config.questionId + '][' + hotspots[points.length - 1].id + ']'
-                }).val([x, y].join(';'));
+        return isInside;
+    };
 
-                var txtChoice = $('<input>').attr({
-                    type: 'hidden',
-                    name: 'choice[' + config.questionId + '][' + hotspots[points.length - 1].id + ']'
-                }).val(1);
+    var CanvasSVG = function (image) {
+        var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', image.src);
+        imageSvg.setAttribute('width', image.width);
+        imageSvg.setAttribute('height', image.height);
 
-                $(canvas.el).append(pointSVG);
-                $(canvas.el).append(textSVG);
-                $(config.selector).append(txtHotSpot);
-                $(config.selector).append(txtChoice);
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.el.setAttribute('version', '1.1');
+        this.el.setAttribute('viewBox', '0 0 ' + image.width + ' ' + image.height);
+        this.el.appendChild(imageSvg);
 
-                if (points.length === hotspots.length) {
-                    $(messageText).text(lang.ExeFinished);
+        this.messagesEl = document.createElement('div');
+    };
+    CanvasSVG.prototype.setEvents = function () {
+        var self = this;
 
+        var getPointOnImage = function (x, y) {
+            var pointerPosition = {
+                    left: x + window.scrollX,
+                    top: y + window.scrollY
+                },
+                canvasOffset = {
+                    x: self.el.getBoundingClientRect().x + window.scrollX,
+                    y: self.el.getBoundingClientRect().y + window.scrollY
+                };
+
+            return {
+                x: Math.round(pointerPosition.left - canvasOffset.x),
+                y: Math.round(pointerPosition.top - canvasOffset.y)
+            };
+        };
+
+        this.el.addEventListener('dragstart', function (e) {
+            e.preventDefault();
+        }, false);
+        this.el.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            if (answers.length >= hotSpots.length) {
+                return;
+            }
+
+            var point = getPointOnImage(e.clientX, e.clientY);
+
+            var answer = new Answer();
+            answer.x = point.x;
+            answer.y = point.y;
+
+            answers.push(answer);
+            self.addAnswer(answer);
+
+            if (answers.length === hotSpots.length) {
+                self.messagesEl.textContent = lang.ExeFinished;
+
+                return;
+            }
+
+            self.messagesEl.textContent = lang.NextAnswer + ' ' + hotSpots[answers.length].name;
+        });
+    };
+    CanvasSVG.prototype.addAnswer = function (answer) {
+        var pointSVG = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pointSVG.setAttribute('cx', answer.x);
+        pointSVG.setAttribute('cy', answer.y);
+        pointSVG.setAttribute('r', 15);
+        pointSVG.setAttribute('fill', '#00677C');
+
+        var textSVG = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textSVG.setAttribute('x', answer.x);
+        textSVG.setAttribute('y', answer.y);
+        textSVG.setAttribute('dy', 5);
+        textSVG.setAttribute('font-family', 'sans-serif');
+        textSVG.setAttribute('text-anchor', 'middle');
+        textSVG.setAttribute('fill', 'white');
+        textSVG.textContent = answers.length;
+
+        this.el.appendChild(pointSVG);
+        this.el.appendChild(textSVG);
+
+        var hotSpot = hotSpots[answers.length - 1];
+
+        var hotspotTxt = document.createElement('input');
+        hotspotTxt.type = 'hidden';
+        hotspotTxt.name = 'hotspot[' + config.questionId + '][' + hotSpot.id + ']';
+        hotspotTxt.value = [answer.x, answer.y].join(';');
+
+        var choiceTxt = document.createElement('input');
+        choiceTxt.type = 'hidden';
+        choiceTxt.name = 'choice[' + config.questionId + '][' + hotSpot.id + ']';
+        choiceTxt.value = hotSpot.checkPoint(answer.x, answer.y) ? 1 : 0;
+
+        this.el.parentNode.appendChild(hotspotTxt);
+        this.el.parentNode.appendChild(choiceTxt);
+    };
+    CanvasSVG.prototype.startMessagesPanel = function () {
+        this.messagesEl.textContent = lang.NextAnswer + ' ' + hotSpots[0].name;
+
+        this.el.parentNode.parentNode.appendChild(this.messagesEl);
+    };
+
+    var decodeHotSpot = function (hotSpotInfo) {
+        var hotSpot = null,
+            coords = hotSpotInfo.coord.split('|');
+
+        switch (hotSpotInfo.type) {
+            case 'square':
+                var position = coords[0].split(';');
+
+                hotSpot = new Square();
+                hotSpot.x = parseInt(position[0]);
+                hotSpot.y = parseInt(position[1]);
+                hotSpot.width = parseInt(coords[1]);
+                hotSpot.height = parseInt(coords[2]);
+                break;
+            case 'circle':
+                var center = coords[0].split(';');
+
+                hotSpot = new Ellipse();
+                hotSpot.centerX = parseInt(center[0]);
+                hotSpot.centerY = parseInt(center[1]);
+                hotSpot.radiusX = parseInt(coords[1]);
+                hotSpot.radiusY = parseInt(coords[2]);
+                break;
+            case 'poly':
+                hotSpot = new Polygon();
+
+                coords.forEach(function (pairedCoord) {
+                    var coord = pairedCoord.split(';');
+
+                    hotSpot.points.push([
+                        parseInt(coord[0]),
+                        parseInt(coord[1])
+                    ]);
+                });
+                break;
+        }
+
+        if (hotSpot) {
+            hotSpot.id = parseInt(hotSpotInfo.id);
+            hotSpot.name = hotSpotInfo.answer;
+        }
+
+        return hotSpot;
+    };
+
+    var config, lang, hotSpots = [], answers = [];
+
+    var startQuestion = function (hotSpotQuestionInfo) {
+        var image = new Image();
+        image.onload = function () {
+            var canvasSVG = new CanvasSVG(this);
+
+            hotSpotQuestionInfo.hotspots.forEach(function (hotSpotInfo) {
+                var hotSpot = decodeHotSpot(hotSpotInfo);
+
+                if (!hotSpot) {
                     return;
                 }
 
-                $(messageText).text(lang.NextAnswer + ' ' + hotspots[points.length].answer);
-            }
-        };
-    })();
+                hotSpots.push(hotSpot);
+            });
 
-    var startQuestion = function (hotSpotQuestionInfo) {
-        image = new Image();
-        image.onload = function () {
             $(config.selector)
-                .css('width', this.width + 'px')
-                .append(canvas.render().el);
+                .css('width', this.width)
+                .append(canvasSVG.el);
+
+            canvasSVG.setEvents();
+            canvasSVG.startMessagesPanel();
         };
         image.src = hotSpotQuestionInfo.image;
 
-        hotspots = hotSpotQuestionInfo.hotspots;
-
         lang = hotSpotQuestionInfo.lang;
-    };
-
-    var getPointOnImage = function (x, y) {
-        var pointerPosition = {
-            left: x + window.scrollX,
-            top: y + window.scrollY
-        },
-            canvasOffset = {
-                x: canvas.el.getBoundingClientRect().x + window.scrollX,
-                y: canvas.el.getBoundingClientRect().y + window.scrollY
-            };
-
-        return {
-            x: Math.round(pointerPosition.left - canvasOffset.x),
-            y: Math.round(pointerPosition.top - canvasOffset.y)
-        };
     };
 
     return {

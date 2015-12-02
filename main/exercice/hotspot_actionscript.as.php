@@ -60,7 +60,6 @@ $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
-$i = 0;
 $nmbrTries = 0;
 
 while ($hotspot = Database::fetch_assoc($result))
@@ -100,15 +99,11 @@ while ($hotspot = Database::fetch_assoc($result))
 	{
 		$nmbrTries++;
 	}
-    unset($hotSpot['type']);
-    //$hotSpot['coord'] = $hotspot['hotspot_coordinates'];
-	$i++;
+
+    $hotSpot['coord'] = $hotspot['hotspot_coordinates'];
 
     $data['hotspots'][] = $hotSpot;
 }
-
-// Generate empty
-$i++;
 
 $data['nmbrTries'] = $nmbrTries;
 $data['done'] = 'done';

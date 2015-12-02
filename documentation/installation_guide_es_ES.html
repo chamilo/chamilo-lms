@@ -688,6 +688,12 @@ por ejemplo. El efecto debería ser inmediato.
     break;
   }
 
+  location / {
+    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 last;
+    try_files $uri @rewrite;
+  }
+
   location ~ \.php$ {
     client_max_body_size 20M;
     try_files $uri /index.php$is_args$args;

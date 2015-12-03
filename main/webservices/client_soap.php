@@ -12,7 +12,7 @@
  *
  */
 
-exit; //Uncomment this in order to execute the page
+//exit; //Uncomment this in order to execute the page
 
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -20,14 +20,15 @@ require_once $libpath.'nusoap/nusoap.php';
 
 // Create the client instance
 $url = api_get_path(WEB_CODE_PATH)."webservices/registration.soap.php?wsdl";
+$url = api_get_path(WEB_CODE_PATH)."webservices/lp.php?wsdl";
 global $_configuration;
 // see the main/inc/configuration.php file to get this value
 $security_key = $_configuration['security_key'];
 
 $client = new nusoap_client($url, true);
-/*$client->xml_encoding = 'UTF-8';
+$client->xml_encoding = 'UTF-8';
 $client->http_encoding = 'UTF-8';
-$client->charencoding = 'UTF-8';*/
+$client->charencoding = 'UTF-8';
 
 $soap_error = $client->getError();
 
@@ -39,7 +40,7 @@ if (!empty($soap_error)) {
 $client->debug_flag = true;
 // This should be the IP address of the client
 $ip_address = $_SERVER['SERVER_ADDR'];
-$ip_address = "192.168.1.54";
+//$ip_address = "192.168.1.13";
 
 //Secret key
 $secret_key = sha1($ip_address.$security_key);// Hash of the combination of IP Address + Chamilo security key
@@ -51,6 +52,36 @@ $generate_user_name = 'jbrion'.$random_user_id;
 //Creating a password (the username)
 $generate_password = sha1($generate_user_name);
 $user_field = 'uid';
+
+$file = file_get_contents('/home/jmontoya/Downloads/test.zip');
+
+$params = [
+    'secret_key' => $secret_key,
+    'file' => $file,
+    'filename' => 'test.zip',
+    'course_id_name' => 'external_course_id',
+    'course_id_value' => '2'
+];
+
+//1. Create user webservice
+$result = $client->call(
+    'WSImportLP',
+    array('params' => $params)
+);
+
+
+if ($result) {
+    print_r($params);
+    echo '<br /><br />';
+} else {
+    $err = $client->getError();
+    var_dump($result);
+    var_dump($err);
+}
+
+
+var_dump($result);exit;
+
 
 $params = array(
     'firstname'                 => 'Jon',

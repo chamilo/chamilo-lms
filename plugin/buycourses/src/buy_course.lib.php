@@ -289,8 +289,8 @@ function userCourseList()
             }
         }
         //check images
-        if (file_exists("../../courses/" . $row['code'] . "/course-pic85x85.png")) {
-            $row['course_img'] = "courses/" . $row['code'] . "/course-pic85x85.png";
+        if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['directory']  . "/course-pic85x85.png")) {
+            $row['course_img'] = "courses/" . $row['directory'] . "/course-pic85x85.png";
         } else {
             $row['course_img'] = "main/img/without_picture.png";
         }

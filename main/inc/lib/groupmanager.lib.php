@@ -160,8 +160,6 @@ class GroupManager
         $_course = api_get_course_info();
         $session_id = api_get_session_id();
         $course_id  = api_get_course_int_id();
-
-
         $currentCourseRepository = $_course['path'];
         $category = self :: get_category($category_id);
 
@@ -643,6 +641,7 @@ class GroupManager
                 WHERE c_id = $course_id ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->number_of_groups;
     }
 
@@ -1283,14 +1282,17 @@ class GroupManager
     /**
      * Maximum number of students in a group
      * @param int $group_id
+     * @param int $courseId
+     *
      * @return int Maximum number of students in the given group.
      */
-    public static function maximum_number_of_students($group_id)
+    public static function maximum_number_of_students($group_id, $courseId = null)
     {
         $table_group = Database :: get_course_table(TABLE_GROUP);
         $group_id = intval($group_id);
-        $course_id = api_get_course_int_id();
-        $db_result = Database::query("SELECT max_student FROM $table_group WHERE c_id = $course_id AND id = $group_id");
+        $courseId = isset($courseId) && !empty($courseId) ? intval($courseId) : api_get_course_int_id();
+
+        $db_result = Database::query("SELECT max_student FROM $table_group WHERE c_id = $courseId AND id = $group_id");
         $db_object = Database::fetch_object($db_result);
         if ($db_object->max_student == 0) {
             return self::INFINITE;
@@ -1301,16 +1303,17 @@ class GroupManager
     /**
      * Number of groups of a user
      * @param int $user_id
+     * @param int $courseId
      * @return int The number of groups the user is subscribed in.
      */
-    public static function user_in_number_of_groups($user_id, $cat_id = null)
+    public static function user_in_number_of_groups($user_id, $cat_id = null, $courseId = null)
     {
-        $table_group_user     = Database :: get_course_table(TABLE_GROUP_USER);
-        $table_group         = Database :: get_course_table(TABLE_GROUP);
-        $user_id             = intval($user_id);
-        $cat_id             = intval($cat_id);
+        $table_group_user = Database:: get_course_table(TABLE_GROUP_USER);
+        $table_group = Database:: get_course_table(TABLE_GROUP);
+        $user_id = intval($user_id);
+        $cat_id = intval($cat_id);
 
-        $course_id = api_get_course_int_id();
+        $courseId = isset($courseId) && !empty($courseId) ? intval($courseId) : api_get_course_int_id();
         $cat_condition = '';
         if (!empty($cat_id)) {
             $cat_condition = " AND g.category_id =  $cat_id ";
@@ -1319,12 +1322,15 @@ class GroupManager
         $sql = "SELECT  COUNT(*) AS number_of_groups
                 FROM $table_group_user gu, $table_group g
                 WHERE
-                    gu.c_id     = $course_id AND
-                    g.c_id         = $course_id AND
-                    gu.user_id     = $user_id AND
-                    g.id         = gu.group_id  $cat_condition";
+                    gu.c_id = $courseId AND
+                    g.c_id = $courseId AND
+                    gu.user_id = $user_id AND
+                    g.id = gu.group_id
+                    $cat_condition
+                ";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
+
         return $db_object->number_of_groups;
     }
 
@@ -1382,9 +1388,10 @@ class GroupManager
      * Is user subscribed in group?
      * @param int $user_id
      * @param int $group_id
+     * @param int $courseId
      * @return bool TRUE if given user is subscribed in given group
      */
-    public static function is_subscribed($user_id, $group_id)
+    public static function is_subscribed($user_id, $group_id, $courseId = null)
     {
         if (empty($user_id) or empty($group_id)) {
             return false;
@@ -1392,10 +1399,10 @@ class GroupManager
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         $group_id = intval($group_id);
         $user_id = intval($user_id);
-        $course_id = api_get_course_int_id();
+        $courseId = isset($courseId) && !empty($courseId) ? intval($courseId) : api_get_course_int_id();
         $sql = 'SELECT 1 FROM '.$table_group_user.'
                 WHERE
-                    c_id = '.$course_id.' AND
+                    c_id = '.$courseId.' AND
                     group_id = '.$group_id.' AND
                     user_id = '.$user_id;
         $result = Database::query($sql);
@@ -1407,36 +1414,39 @@ class GroupManager
      * Can a user subscribe to a specified group in a course
      * @param int $user_id
      * @param int $group_id
+     * @param int $courseId
      * @param bool $checkMaxNumberStudents
      * @return bool TRUE if given user  can be subscribed in given group
      */
-    public static function can_user_subscribe($user_id, $group_id, $checkMaxNumberStudents = true)
+    public static function can_user_subscribe($user_id, $group_id, $checkMaxNumberStudents = true, $courseId = null)
     {
+        $courseId = isset($courseId) && !empty($courseId) ? intval($courseId) : api_get_course_int_id();
         if ($checkMaxNumberStudents) {
-            $category = self:: get_category_from_group($group_id);
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $category = self:: get_category_from_group($group_id, $courseInfo['code']);
             if ($category) {
                 if ($category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT) {
                     $category['groups_per_user'] = self::INFINITE;
                 }
-                $result = self:: user_in_number_of_groups($user_id, $category['id'] ) < $category['groups_per_user'];
+                $result = self:: user_in_number_of_groups($user_id, $category['id'], $courseId) < $category['groups_per_user'];
                 if ($result == false) {
                     return false;
                 }
             }
 
-            $result = self:: number_of_students($group_id) < self:: maximum_number_of_students($group_id);
+            $result = self:: number_of_students($group_id, $courseId) < self:: maximum_number_of_students($group_id, $courseId);
 
             if ($result == false) {
                 return false;
             }
         }
 
-        $result = self :: is_tutor_of_group($user_id, $group_id);
+        $result = self::is_tutor_of_group($user_id, $group_id, $courseId);
         if ($result) {
             return false;
         }
 
-        $result = self :: is_subscribed($user_id, $group_id);
+        $result = self::is_subscribed($user_id, $group_id, $courseId);
         if ($result) {
             return false;
         }
@@ -1549,6 +1559,7 @@ class GroupManager
      * Subscribe user(s) to a specified group in current course (as a student)
      * @param mixed $user_ids Can be an array with user-id's or a single user-id
      * @param int $group_id
+     * @param int $course_id
      * @return bool TRUE if successful
      */
     public static function subscribe_users($user_ids, $group_id, $course_id = null)
@@ -1559,7 +1570,7 @@ class GroupManager
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
             foreach ($user_ids as $user_id) {
-                if (self::can_user_subscribe($user_id, $group_id)) {
+                if (self::can_user_subscribe($user_id, $group_id, true, $course_id)) {
                     $user_id = intval($user_id);
                     $group_id = intval($group_id);
                     $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id)
@@ -1590,9 +1601,9 @@ class GroupManager
         foreach ($user_ids as $user_id) {
             $user_id = intval($user_id);
             $group_id = intval($group_id);
-            if (self::can_user_subscribe($user_id, $group_id, false)) {
+            if (self::can_user_subscribe($user_id, $group_id, false, $course_id)) {
                 $sql = "INSERT INTO " . $table_group_tutor . " (c_id, user_id, group_id)
-                    VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
+                        VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
                 $result &= Database::query($sql);
             }
         }
@@ -1670,21 +1681,22 @@ class GroupManager
 
     /**
      * Is the user a tutor of this group?
-     * @param $user_id the id of the user
-     * @param $group_id the id of the group
+     * @param int $user_id the id of the user
+     * @param int $group_id the id of the group
+     * @param int $courseId
      * @return boolean true/false
      * @todo use the function user_has_access that includes this function
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
-    public static function is_tutor_of_group($user_id, $group_id)
+    public static function is_tutor_of_group($user_id, $group_id, $courseId = null)
     {
         $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
         $user_id = intval($user_id);
         $group_id = intval($group_id);
-        $course_id = api_get_course_int_id();
+        $courseId = isset($courseId) && !empty($courseId) ? intval($courseId) : api_get_course_int_id();
 
         $sql = "SELECT * FROM ".$table_group_tutor."
-                WHERE c_id = $course_id AND user_id='".$user_id."' AND group_id='".$group_id."'";
+                WHERE c_id = $courseId AND user_id='".$user_id."' AND group_id='".$group_id."'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;

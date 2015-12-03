@@ -103,7 +103,26 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password = 
         error_log('EXTLDAP ERROR : cannot connect with admin login/password');
         return false;
     }
-    $user_search = extldap_get_user_search_string($username);
+
+    $useExtraField = api_get_configuration_value('ldap_use_extra_field');
+    if (!empty($useExtraField)) {
+        $criteria = $username;
+        if (preg_match('/@/', $username)) {
+            // nothing
+        } else {
+            $user = api_get_user_info_from_username($username);
+            $extra = UserManager::get_extra_user_data_by_field($user['user_id'], $useExtraField, true);
+
+            if (!empty($extra['extra_'.$useExtraField])) {
+                $criteria = $extra['extra_'.$useExtraField];
+            } else {
+                $criteria = $user['email'];
+            }
+        }
+        $user_search = extldap_get_user_search_string($criteria);
+    } else {
+        $user_search = extldap_get_user_search_string($username);
+    }
     //Search distinguish name of user
     $sr = ldap_search($ds, $extldap_config['base_dn'], $user_search);
     if (!$sr) {

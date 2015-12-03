@@ -328,3 +328,7 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['document_manage_deleted_files'] = false;
 // Enable new category filters in the Exercise tool, require DB changes
 //$_configuration['exercise_enable_category_order'] = false;
+// Use alternative extra field when loading users using LDAP
+//$_configuration['ldap_use_extra_field'] = '';
+// Hide tabs in the main/session/index.php page
+//$_configuration['session_hide_tab_list'] = array();

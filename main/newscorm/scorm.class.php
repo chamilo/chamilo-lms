@@ -284,7 +284,7 @@ class scorm extends learnpath
      * @param int $use_max_score
      * @return bool	Returns -1 on error
      */
-    public function import_manifest($course_code, $use_max_score = 1)
+    public function import_manifest($course_code, $use_max_score = 1, $sessionId = null)
     {
         if ($this->debug > 0) {
             error_log('New LP - Entered import_manifest('.$course_code.')', 0);
@@ -297,8 +297,10 @@ class scorm extends learnpath
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $use_max_score = intval($use_max_score);
 
+        $is_session = empty($sessionId) ? api_get_session_id() : $sessionId;
+
         foreach ($this->organizations as $id => $dummy) {
-            $is_session = api_get_session_id();
+
             $is_session != 0 ? $session_id = $is_session : $session_id = 0;
 
             $oOrganization = & $this->organizations[$id];
@@ -487,15 +489,22 @@ class scorm extends learnpath
     /**
      * Imports a zip file into the Chamilo structure
      * @param	string	$zip_file_info Zip file info as given by $_FILES['userFile']
+     * @param string
+     * @param array
+     *
      * @return	string	$current_dir Absolute path to the imsmanifest.xml file or empty string on error
+     *
      */
-    public function import_package($zip_file_info, $current_dir = '')
+    public function import_package($zip_file_info, $current_dir = '', $courseInfo = array())
     {
+        $this->debug = 1000;
         if ($this->debug > 0) {
             error_log('In scorm::import_package('.print_r($zip_file_info,true).',"'.$current_dir.'") method', 0);
         }
 
-        $maxFilledSpace = DocumentManager :: get_course_quota();
+        $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
+
+        $maxFilledSpace = DocumentManager :: get_course_quota($courseInfo['code']);
 
         $zip_file_path = $zip_file_info['tmp_name'];
         $zip_file_name = $zip_file_info['name'];
@@ -503,7 +512,8 @@ class scorm extends learnpath
         if ($this->debug > 1) {
             error_log('New LP - import_package() - zip file path = ' . $zip_file_path . ', zip file name = ' . $zip_file_name, 0);
         }
-        $course_rel_dir     = api_get_course_path().'/scorm'; // scorm dir web path starting from /courses
+
+        $course_rel_dir     = api_get_course_path($courseInfo['code']).'/scorm'; // scorm dir web path starting from /courses
         $course_sys_dir     = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Absolute system path for this course.
         $current_dir        = replace_dangerous_char(trim($current_dir),'strict'); // Current dir we are in, inside scorm/
 
@@ -679,15 +689,16 @@ class scorm extends learnpath
     /**
      * Sets the proximity setting in the database
      * @param	string	Proximity setting
+     * @param int $courseId
      */
-    public function set_proximity($proxy = '')
+    public function set_proximity($proxy = '', $courseId = null)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = empty($courseId) ? api_get_course_int_id() : intval($courseId);
         if ($this->debug > 0) { error_log('In scorm::set_proximity('.$proxy.') method', 0); }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE c_id = ".$course_id." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -756,14 +767,14 @@ class scorm extends learnpath
      * Sets the content maker setting in the database
      * @param	string	Proximity setting
      */
-    public function set_maker($maker = '')
+    public function set_maker($maker = '', $courseId = null)
     {
-        $course_id = api_get_course_int_id();
+        $courseId = empty($courseId) ? api_get_course_int_id() : intval($courseId);
         if ($this->debug > 0) { error_log('In scorm::set_maker method('.$maker.')', 0); }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE c_id = ".$course_id." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {

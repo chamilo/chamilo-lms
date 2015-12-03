@@ -5,7 +5,6 @@
 *	@author Julio Montoya <gugli100@gmail.com>
 */
 
-
 // name of the language file that needs to be included
 $language_file = 'admin';
 
@@ -279,7 +278,6 @@ unset($course_list);
 </form>
 
 <script type="text/javascript">
-<!--
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -305,10 +303,10 @@ function sortOptions(options) {
 }
 
 function mysort(a, b) {
-	if(a.text.toLowerCase() > b.text.toLowerCase()){
+	if (a.text.toLowerCase() > b.text.toLowerCase()) {
 		return 1;
 	}
-	if(a.text.toLowerCase() < b.text.toLowerCase()){
+	if (a.text.toLowerCase() < b.text.toLowerCase()) {
 		return -1;
 	}
 	return 0;
@@ -321,11 +319,8 @@ function valide(){
 	document.forms.formulaire.submit();
 }
 
-
-function loadUsersInSelect(select){
-
+function loadUsersInSelect(select) {
 	var xhr_object = null;
-
 	if(window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
 	else if(window.ActiveXObject) // Internet Explorer

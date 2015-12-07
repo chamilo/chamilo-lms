@@ -53,14 +53,16 @@ $generate_user_name = 'jbrion'.$random_user_id;
 $generate_password = sha1($generate_user_name);
 $user_field = 'uid';
 
-$file = file_get_contents('/home/jmontoya/Downloads/test.zip');
+$file = base64_encode(file_get_contents('/home/jmontoya/Downloads/Oefeningen_Gezondheid_deel_1.zip'));
 
 $params = [
     'secret_key' => $secret_key,
-    'file' => $file,
-    'filename' => 'test.zip',
+    'file_data' => $file,
+    'filename' => 'Oefeningen_Gezondheid_deel_1.zip',
     'course_id_name' => 'external_course_id',
-    'course_id_value' => '2'
+    'course_id_value' => '2',
+    'session_id_name' => 'external_session_id',
+    'session_id_value' => '1',
 ];
 
 //1. Create user webservice
@@ -71,11 +73,11 @@ $result = $client->call(
 
 
 if ($result) {
-    print_r($params);
+   // print_r($params);
     echo '<br /><br />';
 } else {
     $err = $client->getError();
-    var_dump($result);
+   // var_dump($result);
     var_dump($err);
 }
 

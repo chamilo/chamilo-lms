@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.webservices
  */
@@ -85,9 +86,6 @@ $server = new soap_server();
 // Initialize WSDL support
 $server->configureWSDL('WSLP', 'urn:WSLP');
 
-
-
-
 // Input params for editing users
 $server->wsdl->addComplexType(
     'params',
@@ -112,7 +110,7 @@ $server->wsdl->addComplexType(
             'name' => 'session_id_value',
             'type' => 'xsd:string',
         ),
-        'file' => array('name' => 'file', 'type' => 'xsd:string'),
+        'file_data' => array('name' => 'file', 'type' => 'xsd:string'),
         'filename' => array('name' => 'filename', 'type' => 'xsd:string'),
         'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
     )
@@ -129,6 +127,10 @@ $server->register('WSImportLP',                            // method name
     'This service adds users'                                               // documentation
 );
 
+/**
+ * @param array $params
+ * @return int|string
+ */
 function WSImportLP($params)
 {
     if (!WSHelperVerifyKey($params)) {
@@ -145,6 +147,12 @@ function WSImportLP($params)
         $courseIdName
     );
 
+    $courseInfo = api_get_course_info($courseCode);
+    $courseId = $courseInfo['real_id'];
+
+    if (empty($courseInfo)) {
+        return 'Course not found';
+    }
 
     $sessionId = 0;
     if (!empty($sessionIdName) && !empty($sessionIdValue)) {
@@ -152,53 +160,54 @@ function WSImportLP($params)
             $sessionIdValue,
             $sessionIdName
         );
+
+        if (empty($sessionId)) {
+            return 'Session not found';
+        }
     }
 
-    $courseInfo = api_get_course_info($courseCode);
-
-    if (empty($courseInfo)) {
-        return 'no course found';
-    }
 
     $proximity = 'local';
     $maker = 'Scorm';
     $maxScore = ''; //$_REQUEST['use_max_score']
 
     $oScorm = new scorm();
-    $file = $params['file'];
-    error_log(print_r($params, 1));
-    exit;
+    $fileData = base64_decode($params['file_data']);
+
     $uniqueFile = uniqid();
-    file_put_contents($uniqueFile, api_get_path(SYS_ARCHIVE_PATH).$uniqueFile);
+    $filePath = api_get_path(SYS_ARCHIVE_PATH) . $uniqueFile;
+    file_put_contents($filePath, $fileData);
+
     $fileName = $params['filename'];
 
     $fileInfo = array(
-        'tmp_name' => $file,
+        'tmp_name' => $filePath,
         'name' => $fileName
     );
 
     $manifest = $oScorm->import_package($fileInfo, '', $courseInfo);
-    error_log($manifest);
 
     if (!$manifest) {
         //if api_set_failure
-        return 0;
+        return 'manifest.xml file not found';
     }
 
-    if (!empty($manifest)) {
-        $oScorm->parse_manifest($manifest);
+    $manifestData = $oScorm->parse_manifest($manifest);
+    if (!empty($manifestData)) {
         $oScorm->import_manifest(
             $courseInfo['code'],
             $maxScore,
             $sessionId
         );
+
+        $oScorm->set_proximity($proximity, $courseId);
+        $oScorm->set_maker($maker, $courseId);
+        //$oScorm->set_jslib('scorm_api.php');
+        return 1;
+    } else {
+        return 'manifest data empty';
     }
-
-    $oScorm->set_proximity($proximity, $courseId);
-    $oScorm->set_maker($maker, $courseId);
-    //$oScorm->set_jslib('scorm_api.php');
 }
-
 
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';

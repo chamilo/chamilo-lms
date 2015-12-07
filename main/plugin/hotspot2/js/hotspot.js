@@ -266,6 +266,9 @@ var HotspotQuestion = (function () {
             this.addEvent(answerModel);
         }
     };
+    AnswersCollection.prototype.get = function (index) {
+        return this.models[index];
+    };
     AnswersCollection.prototype.onAdd = function (callback) {
         this.addEvent = callback; 
     };
@@ -342,6 +345,36 @@ var HotspotQuestion = (function () {
         }
 
         this.el = newEl;
+
+        return this;
+    };
+
+    var AnswerSVG = function (answerModel, index) {
+        var self = this;
+
+        this.model = answerModel;
+        this.answerIndex = index;
+
+        this.circleEl = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        this.textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+
+        this.model.onChange(function (answerModel) {
+            self.render();
+        });
+    };
+    AnswerSVG.prototype.render = function () {
+        this.circleEl.setAttribute('cx', this.model.get('x'));
+        this.circleEl.setAttribute('cy', this.model.get('y'));
+        this.circleEl.setAttribute('r', 15);
+        this.circleEl.setAttribute('fill', '#00677C');
+
+        this.textEl.setAttribute('x', this.model.get('x'));
+        this.textEl.setAttribute('y', this.model.get('y'));
+        this.textEl.setAttribute('dy', 5);
+        this.textEl.setAttribute('font-family', 'sans-serif');
+        this.textEl.setAttribute('text-anchor', 'middle');
+        this.textEl.setAttribute('fill', 'white');
+        this.textEl.textContent = this.answerIndex + 1;
 
         return this;
     };
@@ -790,23 +823,11 @@ var HotspotQuestion = (function () {
         return this;
     };
     UserHotspotsSVG.prototype.renderAnswer = function (answerModel) {
-        var pointSVG = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        pointSVG.setAttribute('cx', answerModel.get('x'));
-        pointSVG.setAttribute('cy', answerModel.get('y'));
-        pointSVG.setAttribute('r', 15);
-        pointSVG.setAttribute('fill', '#00677C');
+        var answerSVG = new AnswerSVG(answerModel, this.answersCollection.length - 1);
+        answerSVG.render();
 
-        var textSVG = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        textSVG.setAttribute('x', answerModel.get('x'));
-        textSVG.setAttribute('y', answerModel.get('y'));
-        textSVG.setAttribute('dy', 5);
-        textSVG.setAttribute('font-family', 'sans-serif');
-        textSVG.setAttribute('text-anchor', 'middle');
-        textSVG.setAttribute('fill', 'white');
-        textSVG.textContent = this.answersCollection.length;
-
-        this.el.appendChild(pointSVG);
-        this.el.appendChild(textSVG);
+        this.el.appendChild(answerSVG.circleEl);
+        this.el.appendChild(answerSVG.textEl);
 
         var hotspot = this.hotspotsCollection.get(this.answersCollection.length - 1),
             x = answerModel.get('x'),
@@ -834,12 +855,21 @@ var HotspotQuestion = (function () {
         var self = this,
             $el = $(this.el);
 
+        var isMoving = false,
+            answerIndex = null,
+            hotspot = null,
+            point = {};
+
         $el
             .on('dragstart', function (e) {
                 e.preventDefault();
             })
             .on('click', function (e) {
                 e.preventDefault();
+
+                if (isMoving) {
+                    return;
+                }
 
                 if (self.answersCollection.length >= self.hotspotsCollection.length) {
                     return;
@@ -869,6 +899,53 @@ var HotspotQuestion = (function () {
                             self.answersCollection.length
                         ).name
                     );
+
+                isMoving = false;
+            })
+            .on('mousedown', 'circle, text', function (e) {
+                e.preventDefault();
+
+                isMoving = true;
+
+                if (e.target.tagName === 'circle') {
+                    answerIndex = $(e.target).index('circle');
+                } else if (e.target.tagName === 'text') {
+                    answerIndex = $(e.target).index('text')
+                }
+
+                hotspot = self.hotspotsCollection.get(answerIndex);
+            })
+            .on('mousemove', function (e) {
+                if (!isMoving) {
+                    return;
+                }
+
+                e.preventDefault();
+
+                point = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                self.answersCollection.get(answerIndex).set('x', point.x);
+                self.answersCollection.get(answerIndex).set('y', point.y);
+            })
+            .on('mouseup', function (e) {
+                if (!isMoving) {
+                    return;
+                }
+
+                e.preventDefault();
+
+                $('[name="hotspot[' + config.questionId + '][' + hotspot.id + ']"]').val(function () {
+                    return [point.x, point.y].join(';');
+                });
+                $('[name="choice[' + config.questionId + '][' + hotspot.id + ']"]').val(function () {
+                    if (hotspot.checkPoint(point.x, point.y)) {
+                        return 1;
+                    }
+
+                    return 0;
+                });
+
+                isMoving = false;
             });
     };
 

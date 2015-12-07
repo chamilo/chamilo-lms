@@ -1021,9 +1021,10 @@ if ($modifyAnswers) {
     </form>
     <script>
         $(document).on('ready', function () {
-            HotSpotAdmin.init({
+            HotspotQuestion.init({
                 questionId: <?php echo $modifyAnswers ?>,
-                selector: '#hotspot-container'
+                selector: '#hotspot-container',
+                for: 'admin'
             });
         });
     </script>

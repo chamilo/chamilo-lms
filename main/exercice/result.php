@@ -53,7 +53,8 @@ if (!$is_allowedToEdit) {
     }
 }
 
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/js/hotspot_solution.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/css/hotspot.css">';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/js/hotspot.js"></script>';
 
 if ($show_headers) {
     $interbreadcrumb[] = array(

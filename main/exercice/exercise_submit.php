@@ -60,7 +60,8 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epicloc
 $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-$htmlHeadXtra[] = '<script src="../plugin/hotspot2/js/hotspot_user.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="../plugin/hotspot2/css/hotspot.css">';
+$htmlHeadXtra[] = '<script src="../plugin/hotspot2/js/hotspot.js"></script>';
 
 $template = new Template();
 

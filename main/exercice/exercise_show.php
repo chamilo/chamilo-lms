@@ -120,7 +120,8 @@ $interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/js/hotspot_solution.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/css/hotspot.css">';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/js/hotspot.js"></script>';
 
 if ($origin != 'learnpath') {
 	Display::display_header('');
@@ -376,10 +377,11 @@ foreach ($questionList as $questionId) {
                             <div id=\"hotspot-solution\"></div>
                             <script>
                                 $(document).on('ready', function () {
-                                    HotSpotSolution.init({
+                                    HotspotQuestion.init({
                                         questionId: $questionId,
                                         exerciseId: $id,
-                                        selector: '#hotspot-solution'
+                                        selector: '#hotspot-solution',
+                                        for: 'solution'
                                     });
                                 });
                             </script>
@@ -517,10 +519,11 @@ foreach ($questionList as $questionId) {
                             <div id=\"hotspot-solution\"></div>
                             <script>
                                 $(document).on('ready', function () {
-                                    HotSpotSolution.init({
+                                    HotspotQuestion.init({
                                         questionId: $questionId,
                                         exerciseId: $id,
-                                        selector: '#hotspot-solution'
+                                        selector: '#hotspot-solution',
+                                        for: 'solution'
                                     });
                                 });
                             </script>

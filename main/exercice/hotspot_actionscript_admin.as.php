@@ -22,6 +22,7 @@ $pictureWidth = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 
 $data = [];
+$data['type'] = 'admin';
 $data['lang'] = [
     'Square' => get_lang('Square'),
     'Circle' => get_lang('Circle'),

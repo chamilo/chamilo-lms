@@ -1177,9 +1177,10 @@ HOTSPOT;
                                 <div class="hotspot-image"></div>
                                 <script>
                                     $(document).on('ready', function () {
-                                        HotSpotUser.init({
+                                        HotspotQuestion.init({
                                             questionId: $questionId,
-                                            selector: '#question_div_' + $questionId + ' .hotspot-image'
+                                            selector: '#question_div_' + $questionId + ' .hotspot-image',
+                                            for: 'user'
                                         });
                                     });
                                 </script>

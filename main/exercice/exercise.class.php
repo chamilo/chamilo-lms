@@ -4044,10 +4044,11 @@ class Exercise
 
                                 <script>
                                     $(document).on('ready', function () {
-                                        HotSpotSolution.init({
+                                        HotspotQuestion.init({
                                             questionId: $questionId,
                                             exerciseId: $exeId,
-                                            selector: '#hotspot-solution-$questionId'
+                                            selector: '#hotspot-solution-$questionId',
+                                            for: 'solution'
                                         });
                                     });
                                 </script>

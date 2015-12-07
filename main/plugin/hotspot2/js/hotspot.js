@@ -1,4 +1,4 @@
-var HotSpotAdmin = (function () {
+var HotspotQuestion = (function () {
     var HotspotModel = function (attributes) {
         this.attributes = attributes;
         this.id = 0;
@@ -196,21 +196,22 @@ var HotSpotAdmin = (function () {
     };
     PolygonModel.decode = function (hotspotInfo) {
         var pairedPoints = hotspotInfo.coord.split('|'),
-            points = [],
-            hotspot = new PolygonModel({
-                points: []
-            });
+            points = [];
 
         $.each(pairedPoints, function (index, pair) {
             var point = pair.split(';');
 
             points.push([
-                point[0],
-                point[1]
+                parseInt(point[0]),
+                parseInt(point[1])
             ]);
         });
 
-        hotspot.set('points', points);
+        var hotspot = new PolygonModel({
+            points: points
+        });
+        hotspot.id = hotspotInfo.id;
+        hotspot.name = hotspotInfo.answer;
 
         return hotspot;
     };
@@ -224,6 +225,49 @@ var HotSpotAdmin = (function () {
         });
 
         return pairedPoints.join('|');
+    };
+
+    var AnswerModel = function (attributes) {
+        this.attributes = attributes;
+        this.changeEvent = null;
+    };
+    AnswerModel.prototype.set = function (key, value) {
+        this.attributes[key] = value;
+
+        if (this.changeEvent) {
+            this.changeEvent(this);
+        }
+    };
+    AnswerModel.prototype.get = function (key) {
+        return this.attributes[key];
+    };
+    AnswerModel.prototype.onChange = function (callback) {
+        this.changeEvent = callback;
+    };
+    AnswerModel.decode = function (answerInfo) {
+        var coords = answerInfo.split(';');
+
+        return new AnswerModel({
+            x: coords[0],
+            y: coords[1]
+        });
+    };
+
+    var AnswersCollection = function () {
+        this.models = [];
+        this.length = 0;
+        this.addEvent = null;
+    };
+    AnswersCollection.prototype.add = function (answerModel) {
+        this.models.push(answerModel);
+        this.length++;
+
+        if (this.addEvent) {
+            this.addEvent(answerModel);
+        }
+    };
+    AnswersCollection.prototype.onAdd = function (callback) {
+        this.addEvent = callback; 
     };
 
     var HotspotsCollection = function () {
@@ -431,7 +475,7 @@ var HotSpotAdmin = (function () {
         $(this.el).css({left: x, top: y}).show();
     };
 
-    var HotspotsSVG = function (hotspotsCollection, image) {
+    var AdminHotspotsSVG = function (hotspotsCollection, image) {
         var self = this;
 
         this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -442,7 +486,7 @@ var HotSpotAdmin = (function () {
             self.renderHotspot(hotspotModel);
         });
     };
-    HotspotsSVG.prototype.render = function () {
+    AdminHotspotsSVG.prototype.render = function () {
         this.el.setAttribute('version', '1.1');
         this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
 
@@ -457,7 +501,7 @@ var HotSpotAdmin = (function () {
 
         return this;
     };
-    HotspotsSVG.prototype.renderHotspot = function (hotspot) {
+    AdminHotspotsSVG.prototype.renderHotspot = function (hotspot) {
         var hotspotIndex = this.collection.length - 1,
             hotspotSVG = new HotspotSVG(hotspot, hotspotIndex);
 
@@ -471,27 +515,12 @@ var HotSpotAdmin = (function () {
             hotspotSelect.render().el
         );
     };
-    HotspotsSVG.prototype.setEvents = function () {
+    AdminHotspotsSVG.prototype.setEvents = function () {
         var self = this,
             $el = $(this.el);
             isDrawing = false;
 
-        var getPointOnImage = function (x, y) {
-                var pointerPosition = {
-                        left: x + window.scrollX,
-                        top: y + window.scrollY
-                    },
-                    canvasOffset = {
-                        x: self.el.getBoundingClientRect().left + window.scrollX,
-                        y: self.el.getBoundingClientRect().top + window.scrollY
-                    };
-
-                return {
-                    x: Math.round(pointerPosition.left - canvasOffset.x),
-                    y: Math.round(pointerPosition.top - canvasOffset.y)
-                };
-            },
-            startPoint = {
+        var startPoint = {
                 x: 0,
                 y: 0
             };
@@ -516,7 +545,7 @@ var HotSpotAdmin = (function () {
                     return;
                 }
 
-                startPoint = getPointOnImage(e.clientX, e.clientY);
+                startPoint = getPointOnImage(self.el, e.clientX, e.clientY);
 
                 if (currentHotspot instanceof SquareModel) {
                     isDrawing = true;
@@ -551,7 +580,7 @@ var HotSpotAdmin = (function () {
                 }
 
                 var currentHotspot = self.collection.get(selectedHotspotIndex),
-                    currentPoint = getPointOnImage(e.clientX, e.clientY);
+                    currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
 
                 if (!currentHotspot) {
                     return;
@@ -645,7 +674,7 @@ var HotSpotAdmin = (function () {
                 e.preventDefault();
 
                 var currentHotspot = self.collection.get(selectedHotspotIndex),
-                    currentPoint = getPointOnImage(e.clientX, e.clientY);
+                    currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
 
                 if (!currentHotspot) {
                     return;
@@ -670,7 +699,7 @@ var HotSpotAdmin = (function () {
             .on('contextmenu', function (e) {
                 e.preventDefault();
 
-                var currentPoint = getPointOnImage(e.clientX, e.clientY),
+                var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY),
                     currentHotspot = self.collection.get(selectedHotspotIndex),
                     hotspotTypeSelector = '[name="hotspot_type[' + (selectedHotspotIndex + 1) + ']"]',
                     hotspotCoordSelector = '[name="hotspot_coordinates[' + (selectedHotspotIndex + 1) + ']"]';
@@ -694,15 +723,12 @@ var HotSpotAdmin = (function () {
     var startHotspotsAdmin = function (questionInfo) {
         var image = new Image();
         image.onload = function () {
-            var hotspotsCollection = new HotspotsCollection();
+            var hotspotsCollection = new HotspotsCollection(),
+                hotspotsSVG = new AdminHotspotsSVG(hotspotsCollection, this);
 
-            var hotspotsSVG = new HotspotsSVG(hotspotsCollection, this);
+            $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
 
-            $(config.selector)
-                .css('width', image.width)
-                .append(hotspotsSVG.render().el);
-
-            $(config.selector).parent().append('<div class="row"></div>');
+            $(config.selector).parent().prepend('<div class="row"></div>');
 
             contextMenu = new ContextMenu();
 
@@ -736,6 +762,275 @@ var HotSpotAdmin = (function () {
         lang = questionInfo.lang;
     };
 
+    var UserHotspotsSVG = function (hotspotsCollection, image) {
+        var self = this;
+
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.hotspotsCollection = hotspotsCollection;
+        this.answersCollection = new AnswersCollection();
+        this.image = image;
+
+        this.answersCollection.onAdd(function (answerModel) {
+            self.renderAnswer(answerModel);
+        });
+    };
+    UserHotspotsSVG.prototype.render = function () {
+        this.el.setAttribute('version', '1.1');
+        this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+
+        var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
+        imageSvg.setAttribute('width', this.image.width);
+        imageSvg.setAttribute('height', this.image.height);
+
+        this.el.appendChild(imageSvg);
+
+        this.setEvents();
+
+        return this;
+    };
+    UserHotspotsSVG.prototype.renderAnswer = function (answerModel) {
+        var pointSVG = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pointSVG.setAttribute('cx', answerModel.get('x'));
+        pointSVG.setAttribute('cy', answerModel.get('y'));
+        pointSVG.setAttribute('r', 15);
+        pointSVG.setAttribute('fill', '#00677C');
+
+        var textSVG = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textSVG.setAttribute('x', answerModel.get('x'));
+        textSVG.setAttribute('y', answerModel.get('y'));
+        textSVG.setAttribute('dy', 5);
+        textSVG.setAttribute('font-family', 'sans-serif');
+        textSVG.setAttribute('text-anchor', 'middle');
+        textSVG.setAttribute('fill', 'white');
+        textSVG.textContent = this.answersCollection.length;
+
+        this.el.appendChild(pointSVG);
+        this.el.appendChild(textSVG);
+
+        var hotspot = this.hotspotsCollection.get(this.answersCollection.length - 1),
+            x = answerModel.get('x'),
+            y = answerModel.get('y');
+
+        $('<input>', {
+            type: 'hidden',
+            name: 'hotspot[' + config.questionId + '][' + hotspot.id + ']'
+        }).val(function () {
+            return [x, y].join(';');
+        }).appendTo(this.el.parentNode);
+
+        $('<input>', {
+            type: 'hidden',
+            name: 'choice[' + config.questionId + '][' + hotspot.id + ']'
+        }).val(function () {
+            if (hotspot.checkPoint(x, y)) {
+                return 1;
+            }
+
+            return 0;
+        }).appendTo(this.el.parentNode);
+    };
+    UserHotspotsSVG.prototype.setEvents = function () {
+        var self = this,
+            $el = $(this.el);
+
+        $el
+            .on('dragstart', function (e) {
+                e.preventDefault();
+            })
+            .on('click', function (e) {
+                e.preventDefault();
+
+                if (self.answersCollection.length >= self.hotspotsCollection.length) {
+                    return;
+                }
+
+                var point = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                var answerModel = new AnswerModel({
+                    x: point.x,
+                    y: point.y
+                });
+
+                self.answersCollection.add(answerModel);
+
+                if (self.answersCollection.length === self.hotspotsCollection.length) {
+                    $(config.selector).parent()
+                        .find('#hotspot-messages-' + config.questionId).text(
+                            lang.HotspotExerciseFinished
+                        );
+
+                    return;
+               }
+
+               $(config.selector).parent()
+                    .find('#hotspot-messages-' + config.questionId).text(
+                        lang.NextAnswer + ' ' + self.hotspotsCollection.get(
+                            self.answersCollection.length
+                        ).name
+                    );
+            });
+    };
+
+    var startHotspotsUser = function (questionInfo) {
+        var image = new Image();
+        image.onload = function () {
+            var hotspotsCollection = new HotspotsCollection(),
+                hotspotsSVG = new UserHotspotsSVG(hotspotsCollection, this);
+
+            $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
+
+            $(config.selector).parent().prepend('<div id="hotspot-messages-' + config.questionId + '"></div>');
+
+            $.each(questionInfo.hotspots, function (index, hotspotInfo) {
+                var hotspot = null;
+
+                switch (hotspotInfo.type) {
+                    case 'square':
+                    default:
+                        hotspot = SquareModel.decode(hotspotInfo);
+                        break;
+
+                    case 'circle':
+                        hotspot = EllipseModel.decode(hotspotInfo);
+                        break;
+
+                    case 'poly':
+                        hotspot = PolygonModel.decode(hotspotInfo);
+                        break;
+                }
+
+                hotspotsCollection.add(hotspot);
+            });
+
+            $(config.selector).parent().find('#hotspot-messages-' + config.questionId)
+                .text(
+                    lang.NextAnswer + ' ' + hotspotsCollection.get(0).name
+                );
+        };
+        image.src = questionInfo.image;
+
+        lang = questionInfo.lang;
+    };
+
+    var SolutionHotspotsSVG = function (hotspotsCollection, answersCollection, image) {
+        this.hotspotsCollection = hotspotsCollection;
+        this.answersCollection = answersCollection;
+        this.image = image;
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+        var self = this;
+
+        this.hotspotsCollection.onAdd(function (hotspotModel) {
+            self.renderHotspot(hotspotModel);
+        });
+
+        this.answersCollection.onAdd(function (answerModel) {
+            self.renderAnswer(answerModel);
+        });
+    };
+    SolutionHotspotsSVG.prototype.render = function () {
+        this.el.setAttribute('version', '1.1');
+        this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+
+        var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
+        imageSvg.setAttribute('width', this.image.width);
+        imageSvg.setAttribute('height', this.image.height);
+
+        this.el.appendChild(imageSvg);
+
+        return this;
+    };
+    SolutionHotspotsSVG.prototype.renderHotspot = function (hotspotModel) {
+        var hotspotIndex = this.hotspotsCollection.length,
+            hotspotSVG = new HotspotSVG(hotspotModel, hotspotIndex);
+
+        this.el.appendChild(
+            hotspotSVG.render().el
+        );
+
+        return this;
+    };
+    SolutionHotspotsSVG.prototype.renderAnswer = function (answerModel) {
+        var pointSVG = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pointSVG.setAttribute('cx', answerModel.get('x'));
+        pointSVG.setAttribute('cy', answerModel.get('y'));
+        pointSVG.setAttribute('r', 15);
+        pointSVG.setAttribute('fill', '#00677C');
+
+        var textSVG = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textSVG.setAttribute('x', answerModel.get('x'));
+        textSVG.setAttribute('y', answerModel.get('y'));
+        textSVG.setAttribute('dy', 5);
+        textSVG.setAttribute('font-family', 'sans-serif');
+        textSVG.setAttribute('text-anchor', 'middle');
+        textSVG.setAttribute('fill', 'white');
+        textSVG.textContent = this.answersCollection.length;
+
+        this.el.appendChild(pointSVG);
+        this.el.appendChild(textSVG);
+
+        return this;
+    };
+
+    var startHotspotsSolution = function (questionInfo) {
+        var image = new Image();
+        image.onload = function () {
+            var hotspotsCollection = new HotspotsCollection(),
+                answersCollection = new AnswersCollection(),
+                hotspotsSVG = new SolutionHotspotsSVG(hotspotsCollection, answersCollection, this);
+
+            $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
+
+            $.each(questionInfo.hotspots, function (index, hotspotInfo) {
+                var hotspot = null;
+
+                switch (hotspotInfo.type) {
+                    case 'square':
+                    default:
+                        hotspot = SquareModel.decode(hotspotInfo);
+                        break;
+
+                    case 'circle':
+                        hotspot = EllipseModel.decode(hotspotInfo);
+                        break;
+
+                    case 'poly':
+                        hotspot = PolygonModel.decode(hotspotInfo);
+                        break;
+                }
+
+                hotspotsCollection.add(hotspot);
+            });
+
+            $.each(questionInfo.answers, function (index, answerInfo) {
+                var answer = AnswerModel.decode(answerInfo);
+
+                answersCollection.add(answer);
+            });
+        };
+        image.src = questionInfo.image;
+
+        lang = questionInfo.lang;
+    };
+
+    var getPointOnImage = function (referenceElement, x, y) {
+        var pointerPosition = {
+                left: x + window.scrollX,
+                top: y + window.scrollY
+            },
+            canvasOffset = {
+                x: referenceElement.getBoundingClientRect().left + window.scrollX,
+                y: referenceElement.getBoundingClientRect().top + window.scrollY
+            };
+
+        return {
+            x: Math.round(pointerPosition.left - canvasOffset.x),
+            y: Math.round(pointerPosition.top - canvasOffset.y)
+        };
+    };
+
     var config, lang, selectedHotspotIndex = 0, contextMenu;
 
     return {
@@ -749,12 +1044,41 @@ var HotSpotAdmin = (function () {
                 return;
             }
 
-            var xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript_admin.as.php', {
-                modifyAnswers: parseInt(config.questionId)
-            });
+            var xhrQuestion = null;
+
+            switch (config.for) {
+                case 'admin':
+                    xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript_admin.as.php', {
+                        modifyAnswers: parseInt(config.questionId)
+                    });
+                    break;
+
+                case 'user':
+                    xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript.as.php', {
+                        modifyAnswers: parseInt(config.questionId)
+                    });
+                    break;
+
+                case 'solution':
+                    xhrQuestion = $.getJSON('/main/exercice/hotspot_answers.as.php', {
+                        modifyAnswers: parseInt(config.questionId),
+                        exe_id: parseInt(config.exerciseId)
+                    });
+            }
 
             $.when(xhrQuestion).done(function (questionInfo) {
-                startHotspotsAdmin(questionInfo);
+                switch (questionInfo.type) {
+                    case 'admin':
+                        startHotspotsAdmin(questionInfo);
+                        break;
+
+                    case 'user':
+                        startHotspotsUser(questionInfo);
+                        break;
+
+                    case 'solution':
+                        startHotspotsSolution(questionInfo);
+                }
             });
         }
     };

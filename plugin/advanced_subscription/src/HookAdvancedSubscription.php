@@ -489,6 +489,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 $status = $plugin->getQueueStatus($userId, $sessionId);
                 $vacancy = $plugin->getVacancy($sessionId);
                 $data = $plugin->getSessionDetails($sessionId);
+                $isUserInTargetGroup = $plugin->isUserInTargetGroup($userId, $sessionId);
                 if (!empty($data) && is_array($data)) {
                     $data['status'] = $status;
                     // Vacancy and queue status cases:
@@ -499,37 +500,41 @@ class HookAdvancedSubscription extends HookObserver implements
                             $data['status'] = 10;
                         }
                     } else {
-                        try {
-                            $isAllowed = self::$plugin->isAllowedToDoRequest($userId, $params);
-                            $data['message'] = self::$plugin->getStatusMessage($status, $isAllowed);
-                        } catch (\Exception $e) {
-                            $data['message'] = $e->getMessage();
-                        }
-                        $params['action'] = 'subscribe';
-                        $params['sessionId'] = intval($sessionId);
-                        $params['currentUserId'] = 0; // No needed
-                        $params['studentUserId'] = intval($userId);
-                        $params['queueId'] = 0; // No needed
-                        $params['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START;
-                        if ($vacancy > 0) {
-                            // Check conditions
-                            if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
-                                // No in Queue, require queue subscription url action
-                                $data['action_url'] = self::$plugin->getTermsUrl($params);
-                            } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
-                                // send url action
-                                $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
-                            } else {
-                                // In queue, output status message, no more info.
-                            }
+                        if (!$isUserInTargetGroup) {
+                            $data['status'] = -2;
                         } else {
-                            if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
-                                $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
-                            } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
-                                // in Queue or not, cannot be subscribed to session
-                                $data['action_url'] = self::$plugin->getTermsUrl($params);
+                            try {
+                                $isAllowed = self::$plugin->isAllowedToDoRequest($userId, $params);
+                                $data['message'] = self::$plugin->getStatusMessage($status, $isAllowed);
+                            } catch (\Exception $e) {
+                                $data['message'] = $e->getMessage();
+                            }
+                            $params['action'] = 'subscribe';
+                            $params['sessionId'] = intval($sessionId);
+                            $params['currentUserId'] = 0; // No needed
+                            $params['studentUserId'] = intval($userId);
+                            $params['queueId'] = 0; // No needed
+                            $params['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START;
+                            if ($vacancy > 0) {
+                                // Check conditions
+                                if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
+                                    // No in Queue, require queue subscription url action
+                                    $data['action_url'] = self::$plugin->getTermsUrl($params);
+                                } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                                    // send url action
+                                    $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
+                                } else {
+                                    // In queue, output status message, no more info.
+                                }
                             } else {
-                                // In queue, output status message, no more info.
+                                if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                                    $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
+                                } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
+                                    // in Queue or not, cannot be subscribed to session
+                                    $data['action_url'] = self::$plugin->getTermsUrl($params);
+                                } else {
+                                    // In queue, output status message, no more info.
+                                }
                             }
                         }
                     }

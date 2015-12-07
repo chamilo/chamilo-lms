@@ -530,6 +530,40 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * Check if user is in the session's target group based on its area
+     * @param $userId
+     * @param $sessionId
+     * @param string $userFieldVariable
+     * @param string $sessionFieldVariable
+     * @return bool
+     */
+    public function isUserInTargetGroup($userId, $sessionId, $userFieldVariable = 'area', $sessionFieldVariable = 'target')
+    {
+        $extraSessionFieldValue = new ExtraFieldValue('session');
+        $sessionTarget = $extraSessionFieldValue->get_values_by_handler_and_field_variable(
+            $sessionId,
+            $sessionFieldVariable
+        );
+        $extraUserFieldValue = new ExtraFieldValue('user');
+        $userArea = $extraUserFieldValue->get_values_by_handler_and_field_variable(
+            $userId,
+            $userFieldVariable
+        );
+        $isInTargetGroup = false;
+        if (isset($sessionTarget) && (!empty($sessionTarget)) && $sessionTarget['value'] == 'minedu') {
+            if (substr($userArea['value'], 0, 6) == 'MINEDU') {
+                $isInTargetGroup = true;
+            }
+        }
+        if (isset($sessionTarget) && (!empty($sessionTarget)) && $sessionTarget['value'] == 'regiones') {
+            if ((substr($userArea['value'], 0, 4) == 'UGEL') || (substr($userArea['value'], 0, 3) == 'DRE')) {
+                $isInTargetGroup = true;
+            }
+        }
+        return $isInTargetGroup;
+    }
+
+    /**
      * Update the queue status for subscription approval rejected or accepted
      * @param $params
      * @param $newStatus

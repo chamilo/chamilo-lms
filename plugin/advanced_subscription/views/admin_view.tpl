@@ -43,6 +43,7 @@
                         <th>{{ "Postulant" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "InscriptionDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "Area" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
+                        <th>{{ "Institution" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "BossValidation" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th class="advanced-subscription-decision-column">{{ "Decision" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                     </tr>
@@ -56,6 +57,7 @@
                         </td>
                         <td>{{ student.created_at }}</td>
                         <td>{{ student.area }}</td>
+                        <td>{{ student.institution }}</td>
                         {% set cellClass = 'danger'%}
                         {% if student.validation == 'Yes' %}
                             {% set cellClass = 'success'%}

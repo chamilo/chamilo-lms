@@ -96,8 +96,8 @@ var HotSpotUser = (function () {
                     top: y + window.scrollY
                 },
                 canvasOffset = {
-                    x: self.el.getBoundingClientRect().x + window.scrollX,
-                    y: self.el.getBoundingClientRect().y + window.scrollY
+                    x: self.el.getBoundingClientRect().left + window.scrollX,
+                    y: self.el.getBoundingClientRect().top + window.scrollY
                 };
 
             return {
@@ -126,7 +126,6 @@ var HotSpotUser = (function () {
             self.addAnswer(answer);
 
             if (answers.length === hotSpots.length) {
-                console.log(lang);
                 self.messagesEl.textContent = lang.HotspotExerciseFinished;
 
                 return;

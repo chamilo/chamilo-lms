@@ -1009,25 +1009,22 @@ if ($modifyAnswers) {
                     </table>
         </div>
         <div class="row">
-            <div class="col-xs-12" id="hotspot-selectors"></div>
-        </div>
-        <div class="row">
             <div class="col-xs-12">
     <?php
     $swf_loaded = $answerType == HOT_SPOT_DELINEATION ? 'hotspot_delineation_admin' : 'hotspot_admin';
     $height = 450;
     ?>
                 <div id="hotspot-container" class="center-block">
-                    <div id="hotspot-alert"></div>
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 0 0">
-                    </svg>
                 </div>
             </div>
         </div>
     </form>
     <script>
         $(document).on('ready', function () {
-            HotSpotAdmin.init(<?php echo $modifyAnswers ?>, '<?php echo $objQuestion->selectPicturePath(); ?>');
+            HotSpotAdmin.init({
+                questionId: <?php echo $modifyAnswers ?>,
+                selector: '#hotspot-container'
+            });
         });
     </script>
     <?php

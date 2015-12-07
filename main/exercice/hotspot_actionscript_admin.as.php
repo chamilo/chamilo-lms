@@ -22,10 +22,27 @@ $pictureWidth = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 
 $data = [];
-$data['hotspot_lang'] = $_course['language'];
-$data['hotspot_image'] = $pictureName;
-$data['hotspot_image_width'] = $pictureWidth;
-$data['hotspot_image_height'] = $pictureHeight;
+$data['type'] = 'admin';
+$data['lang'] = [
+    'Square' => get_lang('Square'),
+    'Circle' => get_lang('Circle'),
+    'Polygon' => get_lang('Polygon'),
+    'HotspotStatus1' => get_lang('HotspotStatus1'),
+    'HotspotStatus2Polygon' => get_lang('HotspotStatus2Polygon'),
+    'HotspotStatus2Other' => get_lang('HotspotStatus2Other'),
+    'HotspotStatus3' => get_lang('HotspotStatus3'),
+    'HotspotShowUserPoints' => get_lang('HotspotShowUserPoints'),
+    'ShowHotspots' => get_lang('ShowHotspots'),
+    'Triesleft' => get_lang('Triesleft'),
+    'HotspotExerciseFinished' => get_lang('HotspotExerciseFinished'),
+    'NextAnswer' => get_lang('NextAnswer'),
+    'Delineation' => get_lang('Delineation'),
+    'CloseDelineation' => get_lang('CloseDelineation'),
+    'Oar' => get_lang('oar')
+];
+$data['image'] = $objQuestion->selectPicturePath();
+$data['image_width'] = $pictureWidth;
+$data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
@@ -39,6 +56,7 @@ $nbrAnswers = count($answers['answer']);
 
 for ($i=1;$i <= $nbrAnswers; $i++) {
     $hotSpot = [];
+    $hotSpot['id'] = null;
     $hotSpot['answer']= $answers['answer'][$i];
 
     if ($answer_type == HOT_SPOT_DELINEATION) {

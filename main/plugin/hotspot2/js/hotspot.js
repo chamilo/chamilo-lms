@@ -1,282 +1,1028 @@
-var HotSpotAdmin = (function () {
-    var HotSpotSquare = function () {
-        this.x = 0;
-        this.y = 0;
-        this.width = 0;
-        this.height = 0;
+var HotspotQuestion = (function () {
+    var HotspotModel = function (attributes) {
+        this.attributes = attributes;
+        this.id = 0;
+        this.name = '';
+
+        this.changeEvent = null;
     };
-    HotSpotSquare.prototype.setStartPoint = function (x, y) {
-        this.x = parseInt(x);
-        this.y = parseInt(y);
+    HotspotModel.prototype.set = function (key, value) {
+        this.attributes[key] = value;
+
+        if (this.changeEvent) {
+            this.changeEvent(this);
+        }
     };
-    HotSpotSquare.prototype.setEndPoint = function (x, y) {
-        var x2, y2;
+    HotspotModel.prototype.get = function (key) {
+        return this.attributes[key];
+    };
+    HotspotModel.prototype.onChange = function (callback) {
+        this.changeEvent = callback;
+    };
+    HotspotModel.prototype.checkPoint = function (x, y) {
+        return false;
+    };
+    HotspotModel.decode = function () {
+        return new this;
+    };
+    HotspotModel.prototype.encode = function () {
+        return '';
+    };
+
+    var SquareModel = function (attributes) {
+        HotspotModel.call(this, attributes);
+    };
+    SquareModel.prototype = Object.create(HotspotModel.prototype);
+    SquareModel.prototype.setStartPoint = function (x, y) {
+        x = parseInt(x);
+        y = parseInt(y);
+
+        this.set('x', x);
+        this.set('y', y);
+    };
+    SquareModel.prototype.setEndPoint = function (x, y) {
+        var startX = this.get('x'),
+            startY = this.get('y');
 
         x = parseInt(x);
         y = parseInt(y);
 
-        if (x < this.x) {
-            x2 = this.x;
-            this.x = x;
-        } else {
-            x2 = x;
+        if (x >= startX) {
+            this.set('width', x - startX);
         }
 
-        if (y < this.y) {
-            y2 = this.y;
-            this.y = y;
-        } else {
-            y2 = y;
+        if (y >= startY) {
+            this.set('height', y - startY);
         }
-
-        this.width = Math.round(x2 - this.x);
-        this.height = Math.round(y2 - this.y);
     };
-    HotSpotSquare.prototype.encode = function () {
-        var encodedPosition = [this.x, this.y].join(';');
+    SquareModel.prototype.checkPoint = function (x, y) {
+        var left = this.get('x'),
+            right = this.get('x') + this.get('width'),
+            top = this.get('y'),
+            bottom = this.get('y') + this.get('height');
 
+        var xIsValid = x >= left && x <= right,
+            yIsValid = y >= top && y <= bottom;
+
+        return xIsValid && yIsValid;
+    };
+    SquareModel.decode = function (hotspotInfo) {
+        var coords = hotspotInfo.coord.split('|'),
+            position = coords[0].split(';'),
+            hotspot = new SquareModel({
+                x: parseInt(position[0]),
+                y: parseInt(position[1]),
+                width: parseInt(coords[1]),
+                height: parseInt(coords[2])
+            });
+
+        hotspot.id = hotspotInfo.id;
+        hotspot.name = hotspotInfo.answer;
+
+        return hotspot;
+    };
+    SquareModel.prototype.encode = function () {
         return [
-            encodedPosition,
-            this.width,
-            this.height
+            [
+                this.get('x'),
+                this.get('y')
+            ].join(';'),
+            this.get('width'),
+            this.get('height')
         ].join('|');
-    }
+    };
 
-    var HotSpotEllipse = function () {
-        this.centerX = 0;
-        this.centerY = 0;
-        this.radiusX = 0;
-        this.radiusY = 0;
+    var EllipseModel = function (attributes) {
+        HotspotModel.call(this, attributes);
     };
-    HotSpotEllipse.prototype.setStartPoint = function (x, y) {
-        this.centerX = parseInt(x);
-        this.centerY = parseInt(y);
+    EllipseModel.prototype = Object.create(HotspotModel.prototype);
+    EllipseModel.prototype.setStartPoint = function (x, y) {
+        x = parseInt(x);
+        y = parseInt(y);
+
+        this.set('centerX', x);
+        this.set('centerY', y);
     };
-    HotSpotEllipse.prototype.setEndPoint = function (x, y) {
-        var startX = this.centerX,
-            startY = this.centerY,
-            endX = 0,
-            endY = 0;
+    EllipseModel.prototype.setEndPoint = function (x, y) {
+        var startX = this.get('centerX'),
+            startY = this.get('centerY'),
+            width = 0,
+            height = 0;
 
         x = parseInt(x);
         y = parseInt(y);
 
-        if (x < startX) {
-            endX = startX;
-            startX = x;
-        } else {
-            endX = x;
+        if (x >= startX) {
+            width = x - startX;
+
+            this.set('radiusX', Math.round(width / 2));
+            this.set('centerX', startX + this.get('radiusX'));
         }
 
-        if (y < startY) {
-            endY = startY;
-            startY = y;
-        } else {
-            endY = y;
+        if (y >= startY) {
+            height = y - startY;
+
+            this.set('radiusY', Math.round(height / 2));
+            this.set('centerY', startY + this.get('radiusY'));
         }
-
-        var width = Math.round(endX - startX);
-        var height = Math.round(endY - startY);
-
-        this.radiusX = Math.round(width / 2);
-        this.radiusY = Math.round(height / 2);
-        this.centerX = startX + this.radiusX;
-        this.centerY = startY + this.radiusY;
     };
-    HotSpotEllipse.prototype.encode = function () {
-        var encodedCenter = [this.centerX, this.centerY].join(';');
+    EllipseModel.prototype.checkPoint = function (x, y) {
+        var dX = x - this.get('centerX'),
+            dY = y - this.get('centerY');
 
+        var dividend = Math.pow(dX, 2) / Math.pow(this.get('radiusX'), 2),
+            divider = Math.pow(dY, 2) / Math.pow(this.get('radiusY'), 2);
+
+        return dividend + divider <= 1;
+    };
+    EllipseModel.decode = function (hotspotInfo) {
+        var coords = hotspotInfo.coord.split('|'),
+            center = coords[0].split(';'),
+            hotspot = new EllipseModel({
+                centerX: parseInt(center[0]),
+                centerY: parseInt(center[1]),
+                radiusX: parseInt(coords[1]),
+                radiusY: parseInt(coords[2])
+            });
+
+        hotspot.id = hotspotInfo.id;
+        hotspot.name = hotspotInfo.answer;
+
+        return hotspot;
+    };
+    EllipseModel.prototype.encode = function () {
         return [
-            encodedCenter,
-            this.radiusX,
-            this.radiusY
+            [
+                this.get('centerX'),
+                this.get('centerY')
+            ].join(';'),
+            this.get('radiusX'),
+            this.get('radiusY')
         ].join('|');
     };
 
-    var HotSpotPolygon = function () {
-        this.points = [];
+    var PolygonModel = function (attributes) {
+        HotspotModel.call(this, attributes);
     };
-    HotSpotPolygon.prototype.addPoint = function (x, y) {
-        this.points.push([
-            parseInt(x),
-            parseInt(y)
-        ]);
-    };
-    HotSpotPolygon.prototype.encode = function () {
-        var encodedPoints = [];
+    PolygonModel.prototype = Object.create(HotspotModel.prototype);
+    PolygonModel.prototype.addPoint = function (x, y) {
+        var points = this.get('points');
 
-        this.points.forEach(function (point) {
-            encodedPoints.push(point.join(';'));
-        });
+        x = parseInt(x);
+        y = parseInt(y);
 
-        return encodedPoints.join('|');
-    };
+        points.push([x, y]);
 
-    var HotSpotEl = function (hotspot, color) {
-        this.hotspot = hotspot;
-        this.element = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        this.elStroke = 'rgb(' + color + ')';
-        this.elFill = 'rgba(' + color + ', 0.5)';
+        this.set('points', points);
     };
-    HotSpotEl.prototype.render = function () {
-        return this;
-    };
-    HotSpotEl.prototype.remove = function () {
-        if (!this.element) {
-            return;
+    PolygonModel.prototype.checkPoint = function (x, y) {
+        var points = this.get('points'),
+            isInside = false;
+
+        for (var i = 0, j = points.length - 1; i < points.length; j = i++) {
+            var xi = points[i][0],
+                yi = points[i][1],
+                xj = points[j][0],
+                yj = points[j][1];
+
+            var intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+
+            if (intersect) {
+                isInside = !isInside;
+            }
         }
 
-        this.element.parentNode.removeChild(this.element);
-        this.hotspot = null;
+        return isInside;
     };
+    PolygonModel.decode = function (hotspotInfo) {
+        var pairedPoints = hotspotInfo.coord.split('|'),
+            points = [];
 
-    var SquareEl = function (hotspot, color) {
-        HotSpotEl.call(this, hotspot, color);
+        $.each(pairedPoints, function (index, pair) {
+            var point = pair.split(';');
 
-        this.element = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        this.element.setAttribute('stroke-width', 2);
-        this.element.setAttribute('stroke', this.elStroke);
-        this.element.setAttribute('fill', this.elFill);
-    };
-    SquareEl.prototype = Object.create(HotSpotEl.prototype);
-    SquareEl.prototype.render = function () {
-        this.element.setAttribute('x', this.hotspot.x);
-        this.element.setAttribute('y', this.hotspot.y);
-        this.element.setAttribute('width', this.hotspot.width);
-        this.element.setAttribute('height', this.hotspot.height);
-
-        return this.element;
-    };
-
-    var EllipseEl = function (hotspot, color) {
-        HotSpotEl.call(this, hotspot, color);
-
-        this.element = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-        this.element.setAttribute('stroke-width', 2);
-        this.element.setAttribute('stroke', this.elStroke);
-        this.element.setAttribute('fill', this.elFill);
-    };
-    EllipseEl.prototype = Object.create(HotSpotEl.prototype);
-    EllipseEl.prototype.render = function () {
-        this.element.setAttribute('cx', this.hotspot.centerX);
-        this.element.setAttribute('cy', this.hotspot.centerY);
-        this.element.setAttribute('rx', this.hotspot.radiusX);
-        this.element.setAttribute('ry', this.hotspot.radiusY);
-
-        return this.element;
-    };
-
-    var PolygonEl = function (hotspot, color) {
-        HotSpotEl.call(this, hotspot, color);
-
-        this.element = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-        this.element.setAttribute('stroke-width', 2);
-        this.element.setAttribute('stroke', this.elStroke);
-        this.element.setAttribute('fill', this.elFill);
-    };
-    PolygonEl.prototype = Object.create(HotSpotEl.prototype);
-    PolygonEl.prototype.render = function () {
-        var pointsPaired = [];
-
-        this.hotspot.points.forEach(function (point) {
-            pointsPaired.push(point.join(','));
+            points.push([
+                parseInt(point[0]),
+                parseInt(point[1])
+            ]);
         });
 
-        this.element.setAttribute(
-            'points',
-            pointsPaired.join(' ')
-        );
+        var hotspot = new PolygonModel({
+            points: points
+        });
+        hotspot.id = hotspotInfo.id;
+        hotspot.name = hotspotInfo.answer;
 
-        return this.element;
+        return hotspot;
+    };
+    PolygonModel.prototype.encode = function () {
+        var pairedPoints = [];
+
+        this.get('points').forEach(function (point) {
+            pairedPoints.push(
+                point.join(';')
+            );
+        });
+
+        return pairedPoints.join('|');
     };
 
-    var HotSpotSelectorEl = function (color, index, selectedValue) {
-        this.hotSpotIndex = parseInt(index);
-        this.elStroke = 'rgb(' + color + ')';
-        this.elFill = 'rgba(' + color + ', 0.5)';
+    var AnswerModel = function (attributes) {
+        this.attributes = attributes;
+        this.changeEvent = null;
+    };
+    AnswerModel.prototype.set = function (key, value) {
+        this.attributes[key] = value;
 
-        switch (selectedValue) {
-            case 'square':
-            default:
-                this.selectedValue = 'square';
-                break;
-
-            case 'circle':
-                this.selectedValue = 'ellipse';
-                break;
-
-            case 'poly':
-                this.selectedValue = 'polygon';
-                break;
+        if (this.changeEvent) {
+            this.changeEvent(this);
         }
     };
-    HotSpotSelectorEl.prototype.render = function () {
+    AnswerModel.prototype.get = function (key) {
+        return this.attributes[key];
+    };
+    AnswerModel.prototype.onChange = function (callback) {
+        this.changeEvent = callback;
+    };
+    AnswerModel.decode = function (answerInfo) {
+        var coords = answerInfo.split(';');
+
+        return new AnswerModel({
+            x: coords[0],
+            y: coords[1]
+        });
+    };
+
+    var AnswersCollection = function () {
+        this.models = [];
+        this.length = 0;
+        this.addEvent = null;
+    };
+    AnswersCollection.prototype.add = function (answerModel) {
+        this.models.push(answerModel);
+        this.length++;
+
+        if (this.addEvent) {
+            this.addEvent(answerModel);
+        }
+    };
+    AnswersCollection.prototype.onAdd = function (callback) {
+        this.addEvent = callback; 
+    };
+
+    var HotspotsCollection = function () {
+        this.hotspots = [];
+        this.length = 0;
+
+        this.addEvent = null;
+    };
+    HotspotsCollection.prototype.add = function (hotspot) {
+        this.hotspots.push(hotspot);
+        this.length++;
+
+        if (this.addEvent) {
+            this.addEvent(hotspot);
+        }
+    };
+    HotspotsCollection.prototype.get = function (index) {
+        return this.hotspots[index];
+    };
+    HotspotsCollection.prototype.set = function (index, newHotspot) {
+        this.hotspots[index] = newHotspot;
+    };
+    HotspotsCollection.prototype.onAdd = function (callback) {
+        this.addEvent = callback;
+    };
+
+    var HotspotSVG = function (modelModel, index) {
         var self = this;
 
+        this.model = modelModel;
+        this.hotspotIndex = index;
+
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
+        this.model.onChange(function (hotspotModel) {
+            self.render();
+        });
+    };
+    HotspotSVG.prototype.render = function () {
+        var newEl = null;
+
+        if (this.model instanceof SquareModel) {
+            newEl = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            newEl.setAttribute('x', this.model.get('x'));
+            newEl.setAttribute('y', this.model.get('y'));
+            newEl.setAttribute('width', this.model.get('width'));
+            newEl.setAttribute('height', this.model.get('height'));
+        } else if (this.model instanceof EllipseModel) {
+            newEl = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+            newEl.setAttribute('cx', this.model.get('centerX'));
+            newEl.setAttribute('cy', this.model.get('centerY'));
+            newEl.setAttribute('rx', this.model.get('radiusX'));
+            newEl.setAttribute('ry', this.model.get('radiusY'));
+        } else if (this.model instanceof PolygonModel) {
+            var pointsPaired = [];
+
+            this.model.get('points').forEach(function (point) {
+                pointsPaired.push(point.join(','));
+            });
+
+            newEl = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            newEl.setAttribute(
+                'points',
+                pointsPaired.join(' ')
+            );
+        }
+
+        newEl.setAttribute('class', 'hotspot-' + this.hotspotIndex);
+
+        if (this.el.parentNode) {
+            this.el.parentNode.replaceChild(newEl, this.el);
+        }
+
+        this.el = newEl;
+
+        return this;
+    };
+
+    var HotspotSelect = function (index, hotspotsCollection, hotspotSVG) {
+        this.hotspotIndex = index;
+        this.hotspotsCollection = hotspotsCollection;
+        this.hotspotSVG = hotspotSVG;
+
         this.el = document.createElement('div');
-        this.el.className = 'col-xs-6 col-sm-3 col-md-2';
-        this.el.innerHTML = '\n\
-            <div class="input-group">\n\
-                <span class="input-group-addon" id="hotspot-' + this.hotSpotIndex + '">\n\
-                    <span class="fa fa-square fa-fw" data-hidden="true" style="color: ' + this.elStroke + '"></span>\n\
+        this.el.className = 'col-xs-6 col-sm-4 col-md-3 col-lg-2';
+
+        selectedHotspotIndex = this.hotspotIndex;
+
+        $('.input-group').removeClass('active');
+    };
+    HotspotSelect.prototype.render = function () {
+        var self = this,
+            $el = $(this.el);
+
+        var template = '\n\
+            <div class="input-group hotspot-'  + this.hotspotIndex + ' active">\n\
+                <span class="input-group-addon" id="hotspot-' + this.hotspotIndex + '">\n\
+                    <span class="fa fa-square fa-fw" data-hidden="true"></span>\n\
+                    <span class="sr-only">' + (this.hotspotSVG.model.get('name') ? this.hotspotSVG.model.get('name') : 'hotspot ' + this.hotspotIndex) + '</span>\n\
                 </span>\n\
-                <select class="form-control" aria-describedby="hotspot-' + this.hotSpotIndex + '">\n\
-                    <option value="">Select</option>\n\
-                    <option value="square">Square</option>\n\
-                    <option value="ellipse">Ellipse</option>\n\
-                    <option value="polygon">Polygon</option>\n\
+                <select class="form-control" aria-describedby="hotspot-' + this.hotspotIndex + '">\n\
+                    <option value="square">' + lang.Square + '</option>\n\
+                    <option value="ellipse">' + lang.Circle + '</option>\n\
+                    <option value="polygon">' + lang.Polygon + '</option>\n\
                 </select>\n\
             </div>\n\
         ';
+        $el.html(template);
 
-        $(this.el).find('select').val(this.selectedValue);
+        $el.find('select')
+            .on('change', function () {
+                selectedHotspotIndex = self.hotspotIndex;
 
-        var selectShapeEvent = function (e) {
-            switch (this.value) {
-                case 'square':
-                    //no break
-                case 'ellipse':
-                    //no break
-                case 'polygon':
-                    currentShapeType = this.value;
-                    currentHotSpotIndex = self.hotSpotIndex;
-                    break;
+                var newHotspot = null,
+                    changeEvent = self.hotspotSVG.model.changeEvent;
 
-                default:
-                    break;
-            }
-        };
+                switch (this.value) {
+                    case 'square':
+                        newHotspot = new SquareModel({
+                            x: 0,
+                            y: 0,
+                            width: 0,
+                            height: 0
+                        });
+                        break;
 
-        $(this.el).on('click', selectShapeEvent);
-        $(this.el).find('select').on('change', selectShapeEvent);
+                    case 'ellipse':
+                        newHotspot = new EllipseModel({
+                            centerX: 0,
+                            centerY: 0,
+                            radiusX: 0,
+                            radiusY: 0
+                        });
+                        break;
 
-        return this.el;
+                    case 'polygon':
+                        newHotspot = new PolygonModel({
+                            points: []
+                        });
+                        break;
+                }
+
+                newHotspot.onChange(changeEvent);
+
+                self.hotspotsCollection.set(self.hotspotIndex, newHotspot);
+                self.hotspotSVG.model = newHotspot;
+            })
+            .on('focus', function () {
+                $('.input-group').removeClass('active');
+
+                $el.find('.input-group').addClass('active');
+
+                selectedHotspotIndex = self.hotspotIndex;
+            })
+            .val(function () {
+                if (self.hotspotSVG.model instanceof SquareModel) {
+                    return 'square';
+                }
+
+                if (self.hotspotSVG.model instanceof EllipseModel) {
+                    return 'ellipse';
+                }
+
+                if (self.hotspotSVG.model instanceof PolygonModel) {
+                    return 'polygon';
+                }
+            });
+
+        return this;
     };
 
-    var colors = [
-        '66, 113, 181',
-        '254, 142, 22',
-        '69, 199, 240',
-        '188, 214, 49',
-        '214, 49, 115',
-        '215, 215, 215',
-        '144, 175, 221',
-        '174, 134, 64',
-        '79, 146, 66',
-        '244, 235, 36',
-        '237, 32, 36',
-        '59, 59, 59',
-        '247, 189, 226'
-    ];
+    var ContextMenu = function () {
+        this.el = document.createElement('ul');
 
-    var getPointOnImage = function (x, y) {
+        $(this.el).addClass('dropdown-menu').attr('id', "hotspot-context-menu");
+
+        this.hideEvent = null;
+    };
+    ContextMenu.prototype.onHide = function (callback) {
+        this.hideEvent = callback;
+    };
+    ContextMenu.prototype.render = function () {
+        var self = this,
+            template = '\n\
+                <li>\n\
+                    <a href="#">' + 'ClosePolygon' + '</a>\n\
+                </li>\n\
+            ';
+
+        $(this.el).html(template);
+        
+        $(this.el).find('a').on('click', function (e) {
+            e.preventDefault();
+
+            if (self.hideEvent) {
+                self.hideEvent(e);
+            }
+
+            $(self.el).hide();
+        });
+
+        return this;
+    };
+    ContextMenu.prototype.show = function (x, y) {
+        $(this.el).css({left: x, top: y}).show();
+    };
+
+    var AdminHotspotsSVG = function (hotspotsCollection, image) {
+        var self = this;
+
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.collection = hotspotsCollection;
+        this.image = image;
+
+        this.collection.onAdd(function (hotspotModel) {
+            self.renderHotspot(hotspotModel);
+        });
+    };
+    AdminHotspotsSVG.prototype.render = function () {
+        this.el.setAttribute('version', '1.1');
+        this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+
+        var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
+        imageSvg.setAttribute('width', this.image.width);
+        imageSvg.setAttribute('height', this.image.height);
+
+        this.el.appendChild(imageSvg);
+
+        this.setEvents();
+
+        return this;
+    };
+    AdminHotspotsSVG.prototype.renderHotspot = function (hotspot) {
+        var hotspotIndex = this.collection.length - 1,
+            hotspotSVG = new HotspotSVG(hotspot, hotspotIndex);
+
+        this.el.appendChild(
+            hotspotSVG.render().el
+        );
+
+        var hotspotSelect = new HotspotSelect(hotspotIndex, this.collection, hotspotSVG);
+
+        $(config.selector).parent().find('.row').append(
+            hotspotSelect.render().el
+        );
+    };
+    AdminHotspotsSVG.prototype.setEvents = function () {
+        var self = this,
+            $el = $(this.el);
+            isDrawing = false;
+
+        var startPoint = {
+                x: 0,
+                y: 0
+            };
+
+        $el.on('dragstart', function (e) {
+                e.preventDefault();
+            })
+            .on('mousedown', function (e) {
+                e.preventDefault();
+
+                if (e.button > 0) {
+                    return;
+                }
+
+                if (self.collection.length <= 0) {
+                    return;
+                }
+
+                var currentHotspot = self.collection.get(selectedHotspotIndex);
+
+                if (!currentHotspot) {
+                    return;
+                }
+
+                startPoint = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                if (currentHotspot instanceof SquareModel) {
+                    isDrawing = true;
+
+                    currentHotspot.set('x', startPoint.x);
+                    currentHotspot.set('y', startPoint.y);
+                    currentHotspot.set('width', 0);
+                    currentHotspot.set('height', 0);
+
+                    return;
+                }
+
+                if (currentHotspot instanceof EllipseModel) {
+                    isDrawing = true;
+
+                    currentHotspot.set('centerX', 0);
+                    currentHotspot.set('centerY', 0);
+                    currentHotspot.set('radiusX', 0);
+                    currentHotspot.set('radiusY', 0);
+                    return;
+                }
+            })
+            .on('mousemove', function (e) {
+                e.preventDefault();
+
+                if (self.collection.length <= 0) {
+                    return;
+                }
+
+                if (!isDrawing) {
+                    return;
+                }
+
+                var currentHotspot = self.collection.get(selectedHotspotIndex),
+                    currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                if (!currentHotspot) {
+                    return;
+                }
+
+                if (currentHotspot instanceof SquareModel) {
+                    if (startPoint.x < currentPoint.x) {
+                        currentHotspot.set('width', currentPoint.x - startPoint.x);
+                    } else {
+                        currentHotspot.set('x', currentPoint.x);
+                        currentHotspot.set('width', startPoint.x - currentPoint.x);
+                    }
+
+                    if (startPoint.y < currentPoint.y) {
+                        currentHotspot.set('height', currentPoint.y - startPoint.y);
+                    } else {
+                        currentHotspot.set('y', currentPoint.y);
+                        currentHotspot.set('height', startPoint.y - currentPoint.y);
+                    }
+
+                    return;
+                }
+
+                if (currentHotspot instanceof EllipseModel) {
+                    var width = 0,
+                        height = 0;
+
+                    if (startPoint.x < currentPoint.x) {
+                        width = currentPoint.x - startPoint.x;
+
+                        currentHotspot.set('radiusX', Math.round(width / 2));
+                        currentHotspot.set('centerX', startPoint.x + currentHotspot.get('radiusX'));
+                    } else {
+                        width = startPoint.x - currentPoint.x;
+
+                        currentHotspot.set('radiusX', Math.round(width / 2));
+                        currentHotspot.set('centerX', currentPoint.x + currentHotspot.get('radiusX'))
+                    }
+
+                    if (startPoint.y < currentPoint.y) {
+                        height = currentPoint.y - startPoint.y;
+
+                        currentHotspot.set('radiusY', Math.round(height / 2));
+                        currentHotspot.set('centerY', startPoint.y + currentHotspot.get('radiusY'));
+                    } else {
+                        height = startPoint.y - currentPoint.y;
+
+                        currentHotspot.set('radiusY', Math.round(height / 2));
+                        currentHotspot.set('centerY', currentPoint.y + currentHotspot.get('radiusY'));
+                    }
+
+                    return;
+                }
+            })
+            .on('mouseup', function (e) {
+                e.preventDefault();
+
+                if (e.button > 0) {
+                    return;
+                }
+
+                if (self.collection.length <= 0) {
+                    return;
+                }
+
+                if (!isDrawing) {
+                    return;
+                }
+
+                var currentHotspot = self.collection.get(selectedHotspotIndex),
+                    hotspotTypeSelector = '[name="hotspot_type[' + (selectedHotspotIndex + 1) + ']"]',
+                    hotspotCoordSelector = '[name="hotspot_coordinates[' + (selectedHotspotIndex + 1) + ']"]';
+
+                if (!currentHotspot) {
+                    return;
+                }
+
+                if (currentHotspot instanceof SquareModel) {
+                    $(hotspotTypeSelector).val('square');
+                    $(hotspotCoordSelector).val(currentHotspot.encode());
+
+                    isDrawing = false;
+                } else if (currentHotspot instanceof EllipseModel) {
+                    $(hotspotTypeSelector).val('circle');
+                    $(hotspotCoordSelector).val(currentHotspot.encode());
+
+                    isDrawing = false;
+                }
+            })
+            .on('click', function (e) {
+                e.preventDefault();
+
+                var currentHotspot = self.collection.get(selectedHotspotIndex),
+                    currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                if (!currentHotspot) {
+                    return;
+                }
+
+                if (currentHotspot instanceof PolygonModel) {
+                    var points = [];
+
+                    if (!isDrawing) {
+                        isDrawing = true;
+                    } else {
+                        points = currentHotspot.get('points');
+                    }
+
+                    points.push([currentPoint.x, currentPoint.y]);
+
+                    currentHotspot.set('points', points);
+
+                    return;
+                }
+            })
+            .on('contextmenu', function (e) {
+                e.preventDefault();
+
+                var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY),
+                    currentHotspot = self.collection.get(selectedHotspotIndex),
+                    hotspotTypeSelector = '[name="hotspot_type[' + (selectedHotspotIndex + 1) + ']"]',
+                    hotspotCoordSelector = '[name="hotspot_coordinates[' + (selectedHotspotIndex + 1) + ']"]';
+
+                if (!currentHotspot) {
+                    return;
+                }
+
+                if (currentHotspot instanceof PolygonModel) {
+                    contextMenu.show(currentPoint.x, currentPoint.y);
+                    contextMenu.onHide(function () {
+                        $(hotspotTypeSelector).val('poly');
+                        $(hotspotCoordSelector).val(currentHotspot.encode());
+
+                        isDrawing = false;
+                    });
+                }
+            });
+    };
+
+    var startHotspotsAdmin = function (questionInfo) {
+        var image = new Image();
+        image.onload = function () {
+            var hotspotsCollection = new HotspotsCollection(),
+                hotspotsSVG = new AdminHotspotsSVG(hotspotsCollection, this);
+
+            $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
+
+            $(config.selector).parent().prepend('<div class="row"></div>');
+
+            contextMenu = new ContextMenu();
+
+            $(config.selector).append(
+                contextMenu.render().el
+            );
+
+            $.each(questionInfo.hotspots, function (index, hotspotInfo) {
+                var hotspot = null;
+
+                switch (hotspotInfo.type) {
+                    case 'square':
+                    default:
+                        hotspot = SquareModel.decode(hotspotInfo);
+                        break;
+
+                    case 'circle':
+                        hotspot = EllipseModel.decode(hotspotInfo);
+                        break;
+
+                    case 'poly':
+                        hotspot = PolygonModel.decode(hotspotInfo);
+                        break;
+                }
+
+                hotspotsCollection.add(hotspot);
+            });
+        };
+        image.src = questionInfo.image;
+
+        lang = questionInfo.lang;
+    };
+
+    var UserHotspotsSVG = function (hotspotsCollection, image) {
+        var self = this;
+
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.hotspotsCollection = hotspotsCollection;
+        this.answersCollection = new AnswersCollection();
+        this.image = image;
+
+        this.answersCollection.onAdd(function (answerModel) {
+            self.renderAnswer(answerModel);
+        });
+    };
+    UserHotspotsSVG.prototype.render = function () {
+        this.el.setAttribute('version', '1.1');
+        this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+
+        var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
+        imageSvg.setAttribute('width', this.image.width);
+        imageSvg.setAttribute('height', this.image.height);
+
+        this.el.appendChild(imageSvg);
+
+        this.setEvents();
+
+        return this;
+    };
+    UserHotspotsSVG.prototype.renderAnswer = function (answerModel) {
+        var pointSVG = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pointSVG.setAttribute('cx', answerModel.get('x'));
+        pointSVG.setAttribute('cy', answerModel.get('y'));
+        pointSVG.setAttribute('r', 15);
+        pointSVG.setAttribute('fill', '#00677C');
+
+        var textSVG = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textSVG.setAttribute('x', answerModel.get('x'));
+        textSVG.setAttribute('y', answerModel.get('y'));
+        textSVG.setAttribute('dy', 5);
+        textSVG.setAttribute('font-family', 'sans-serif');
+        textSVG.setAttribute('text-anchor', 'middle');
+        textSVG.setAttribute('fill', 'white');
+        textSVG.textContent = this.answersCollection.length;
+
+        this.el.appendChild(pointSVG);
+        this.el.appendChild(textSVG);
+
+        var hotspot = this.hotspotsCollection.get(this.answersCollection.length - 1),
+            x = answerModel.get('x'),
+            y = answerModel.get('y');
+
+        $('<input>', {
+            type: 'hidden',
+            name: 'hotspot[' + config.questionId + '][' + hotspot.id + ']'
+        }).val(function () {
+            return [x, y].join(';');
+        }).appendTo(this.el.parentNode);
+
+        $('<input>', {
+            type: 'hidden',
+            name: 'choice[' + config.questionId + '][' + hotspot.id + ']'
+        }).val(function () {
+            if (hotspot.checkPoint(x, y)) {
+                return 1;
+            }
+
+            return 0;
+        }).appendTo(this.el.parentNode);
+    };
+    UserHotspotsSVG.prototype.setEvents = function () {
+        var self = this,
+            $el = $(this.el);
+
+        $el
+            .on('dragstart', function (e) {
+                e.preventDefault();
+            })
+            .on('click', function (e) {
+                e.preventDefault();
+
+                if (self.answersCollection.length >= self.hotspotsCollection.length) {
+                    return;
+                }
+
+                var point = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                var answerModel = new AnswerModel({
+                    x: point.x,
+                    y: point.y
+                });
+
+                self.answersCollection.add(answerModel);
+
+                if (self.answersCollection.length === self.hotspotsCollection.length) {
+                    $(config.selector).parent()
+                        .find('#hotspot-messages-' + config.questionId).text(
+                            lang.HotspotExerciseFinished
+                        );
+
+                    return;
+               }
+
+               $(config.selector).parent()
+                    .find('#hotspot-messages-' + config.questionId).text(
+                        lang.NextAnswer + ' ' + self.hotspotsCollection.get(
+                            self.answersCollection.length
+                        ).name
+                    );
+            });
+    };
+
+    var startHotspotsUser = function (questionInfo) {
+        var image = new Image();
+        image.onload = function () {
+            var hotspotsCollection = new HotspotsCollection(),
+                hotspotsSVG = new UserHotspotsSVG(hotspotsCollection, this);
+
+            $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
+
+            $(config.selector).parent().prepend('<div id="hotspot-messages-' + config.questionId + '"></div>');
+
+            $.each(questionInfo.hotspots, function (index, hotspotInfo) {
+                var hotspot = null;
+
+                switch (hotspotInfo.type) {
+                    case 'square':
+                    default:
+                        hotspot = SquareModel.decode(hotspotInfo);
+                        break;
+
+                    case 'circle':
+                        hotspot = EllipseModel.decode(hotspotInfo);
+                        break;
+
+                    case 'poly':
+                        hotspot = PolygonModel.decode(hotspotInfo);
+                        break;
+                }
+
+                hotspotsCollection.add(hotspot);
+            });
+
+            $(config.selector).parent().find('#hotspot-messages-' + config.questionId)
+                .text(
+                    lang.NextAnswer + ' ' + hotspotsCollection.get(0).name
+                );
+        };
+        image.src = questionInfo.image;
+
+        lang = questionInfo.lang;
+    };
+
+    var SolutionHotspotsSVG = function (hotspotsCollection, answersCollection, image) {
+        this.hotspotsCollection = hotspotsCollection;
+        this.answersCollection = answersCollection;
+        this.image = image;
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+        var self = this;
+
+        this.hotspotsCollection.onAdd(function (hotspotModel) {
+            self.renderHotspot(hotspotModel);
+        });
+
+        this.answersCollection.onAdd(function (answerModel) {
+            self.renderAnswer(answerModel);
+        });
+    };
+    SolutionHotspotsSVG.prototype.render = function () {
+        this.el.setAttribute('version', '1.1');
+        this.el.setAttribute('viewBox', '0 0 ' + this.image.width + ' ' + this.image.height);
+
+        var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image.src);
+        imageSvg.setAttribute('width', this.image.width);
+        imageSvg.setAttribute('height', this.image.height);
+
+        this.el.appendChild(imageSvg);
+
+        return this;
+    };
+    SolutionHotspotsSVG.prototype.renderHotspot = function (hotspotModel) {
+        var hotspotIndex = this.hotspotsCollection.length,
+            hotspotSVG = new HotspotSVG(hotspotModel, hotspotIndex);
+
+        this.el.appendChild(
+            hotspotSVG.render().el
+        );
+
+        return this;
+    };
+    SolutionHotspotsSVG.prototype.renderAnswer = function (answerModel) {
+        var pointSVG = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pointSVG.setAttribute('cx', answerModel.get('x'));
+        pointSVG.setAttribute('cy', answerModel.get('y'));
+        pointSVG.setAttribute('r', 15);
+        pointSVG.setAttribute('fill', '#00677C');
+
+        var textSVG = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textSVG.setAttribute('x', answerModel.get('x'));
+        textSVG.setAttribute('y', answerModel.get('y'));
+        textSVG.setAttribute('dy', 5);
+        textSVG.setAttribute('font-family', 'sans-serif');
+        textSVG.setAttribute('text-anchor', 'middle');
+        textSVG.setAttribute('fill', 'white');
+        textSVG.textContent = this.answersCollection.length;
+
+        this.el.appendChild(pointSVG);
+        this.el.appendChild(textSVG);
+
+        return this;
+    };
+
+    var startHotspotsSolution = function (questionInfo) {
+        var image = new Image();
+        image.onload = function () {
+            var hotspotsCollection = new HotspotsCollection(),
+                answersCollection = new AnswersCollection(),
+                hotspotsSVG = new SolutionHotspotsSVG(hotspotsCollection, answersCollection, this);
+
+            $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
+
+            $.each(questionInfo.hotspots, function (index, hotspotInfo) {
+                var hotspot = null;
+
+                switch (hotspotInfo.type) {
+                    case 'square':
+                    default:
+                        hotspot = SquareModel.decode(hotspotInfo);
+                        break;
+
+                    case 'circle':
+                        hotspot = EllipseModel.decode(hotspotInfo);
+                        break;
+
+                    case 'poly':
+                        hotspot = PolygonModel.decode(hotspotInfo);
+                        break;
+                }
+
+                hotspotsCollection.add(hotspot);
+            });
+
+            $.each(questionInfo.answers, function (index, answerInfo) {
+                var answer = AnswerModel.decode(answerInfo);
+
+                answersCollection.add(answer);
+            });
+        };
+        image.src = questionInfo.image;
+
+        lang = questionInfo.lang;
+    };
+
+    var getPointOnImage = function (referenceElement, x, y) {
         var pointerPosition = {
-            left: x + window.scrollX,
-            top: y + window.scrollY
-        },
+                left: x + window.scrollX,
+                top: y + window.scrollY
+            },
             canvasOffset = {
-                x: canvas.getBoundingClientRect().x + window.scrollX,
-                y: canvas.getBoundingClientRect().y + window.scrollY
+                x: referenceElement.getBoundingClientRect().left + window.scrollX,
+                y: referenceElement.getBoundingClientRect().top + window.scrollY
             };
 
         return {
@@ -285,221 +1031,54 @@ var HotSpotAdmin = (function () {
         };
     };
 
-    var startCanvas = function () {
-        var newHotSpotEl = null,
-            pressingShift = false;
-
-        document.addEventListener('keydown', function (e) {
-            if (e.keyCode === 16) {
-                pressingShift = true;
-            }
-        }, false);
-        document.addEventListener('keyup', function (e) {
-            if (e.keyCode === 16) {
-                pressingShift = false;
-            }
-        }, false);
-
-        canvas.addEventListener('click', function (e) {
-            e.preventDefault();
-        }, false);
-
-        container.addEventListener('dragstart', function (e) {
-            e.preventDefault();
-        }, false);
-        container.addEventListener('click', function (e) {
-            if (shapes.length >= colors.length) {
-                return;
-            }
-
-            newHotSpotEl = draw(newHotSpotEl, e.clientX, e.clientY, pressingShift);
-
-            if (!newHotSpotEl) {
-                updateValues();
-            }
-        }, false);
-    };
-
-    var draw = function (hotSpotEl, x, y, isPressingShift) {
-        var pointerPosition = getPointOnImage(x, y),
-            hotSpot = null;
-
-        if (!hotSpotEl) {
-            switch (currentShapeType) {
-                case 'square':
-                    //no break
-                case 'ellipse':
-                    if (currentShapeType === 'ellipse') {
-                        hotSpot = new HotSpotEllipse();
-                        hotSpotEl = new EllipseEl(hotSpot, colors[currentHotSpotIndex]);
-                    } else {
-                        hotSpot = new HotSpotSquare();
-                        hotSpotEl = new SquareEl(hotSpot, colors[currentHotSpotIndex]);
-                    }
-
-                    hotSpot.setStartPoint(pointerPosition.x, pointerPosition.y);
-                    break;
-
-                case 'polygon':
-                    hotSpot = new HotSpotPolygon();
-                    hotSpotEl = new PolygonEl(hotSpot, colors[currentHotSpotIndex]);
-
-                    hotSpot.addPoint(pointerPosition.x, pointerPosition.y);
-                    break;
-            }
-
-            shapes[currentHotSpotIndex].remove();
-            shapes.splice(currentHotSpotIndex, 1, hotSpotEl);
-
-            canvas.appendChild(hotSpotEl.render());
-
-            return hotSpotEl;
-        }
-
-        switch (currentShapeType) {
-            case 'square':
-                //no break
-            case 'ellipse':
-                hotSpotEl.hotspot.setEndPoint(pointerPosition.x, pointerPosition.y);
-                hotSpotEl.render();
-
-                hotSpotEl = null;
-                break;
-
-            case 'polygon':
-                $(container).find('#hotspot-alert').text('Keed pressed the SHIFT key and click the image to close the polygon');
-
-                hotSpotEl.hotspot.addPoint(pointerPosition.x, pointerPosition.y);
-                hotSpotEl.render();
-
-                if (isPressingShift) {
-                    hotSpotEl = null;
-                    $(container).find('#hotspot-alert').text('');
-                }
-                break;
-        }
-
-        return hotSpotEl;
-    };
-
-    var updateValues = function () {
-        var currentHotSpotEl = shapes[currentHotSpotIndex];
-
-        if (currentHotSpotIndex === undefined) {
-            return;
-        }
-
-        if (currentHotSpotEl.hotspot instanceof HotSpotSquare) {
-            $('[name="hotspot_type[' + (currentHotSpotIndex + 1) + ']"]').val('square');
-        } else if (currentHotSpotEl.hotspot instanceof HotSpotEllipse) {
-            $('[name="hotspot_type[' + (currentHotSpotIndex + 1) + ']"]').val('circle');
-        } else if (currentHotSpotEl.hotspot instanceof HotSpotPolygon) {
-            $('[name="hotspot_type[' + (currentHotSpotIndex + 1) + ']"]').val('poly');
-        }
-
-        $('[name="hotspot_coordinates[' + (currentHotSpotIndex + 1) + ']"]').val(
-            currentHotSpotEl.hotspot.encode()
-        );
-    };
-
-    var loadHotSpots = function (hotSpotList) {
-        hotSpotList.forEach(function (hotSpotData, index) {
-            var hotSpot = null,
-                hotSpotEl = null,
-                color = colors[shapes.length];
-
-            switch (hotSpotData.type) {
-                case 'square':
-                    hotSpot = new HotSpotSquare();
-                    hotSpotEl = new SquareEl(hotSpot, color);
-
-                    var coords = hotSpotData.coord.split('|'),
-                        position = coords[0].split(';'),
-                        x = parseInt(position[0]),
-                        y = parseInt(position[1]),
-                        width = parseInt(coords[1]),
-                        height = parseInt(coords[2]);
-
-                    hotSpot.setStartPoint(x, y);
-                    hotSpot.setEndPoint(x + width, y + height);
-                    break;
-                case 'circle':
-                    hotSpot = new HotSpotEllipse();
-                    hotSpotEl = new EllipseEl(hotSpot, color);
-
-                    var coords = hotSpotData.coord.split('|'),
-                        position = coords[0].split(';'),
-                        x = parseInt(position[0] - coords[1]),
-                        y = parseInt(position[1] - coords[2]),
-                        width = parseInt(coords[1]) * 2,
-                        height = parseInt(coords[2]) * 2;
-
-                    hotSpot.setStartPoint(x, y);
-                    hotSpot.setEndPoint(x + width, y + height);
-                    break;
-
-                case 'poly':
-                    hotSpot = new HotSpotPolygon();
-                    hotSpotEl = new PolygonEl(hotSpot, color);
-
-                    hotSpotData.coord.split('|').forEach(function (point) {
-                        var exis = point.split(';');
-
-                        hotSpot.addPoint(exis[0], exis[1]);
-                    });
-                    break;
-            }
-
-            if (hotSpotEl) {
-                var hotSpotSelector = new HotSpotSelectorEl(color, index, hotSpotData.type);
-
-                selectors.appendChild(hotSpotSelector.render());
-                canvas.appendChild(hotSpotEl.render());
-                shapes.push(hotSpotEl);
-            }
-        });
-    };
-
-    var container, canvas, selectors, currentShapeType, currentHotSpotIndex, shapes = [];
+    var config, lang, selectedHotspotIndex = 0, contextMenu;
 
     return {
-        init: function (questionId, imageSrc) {
-            if (!questionId || !imageSrc) {
+        init: function (settings) {
+            config = $.extend({
+                questionId: 0,
+                selector: ''
+            }, settings);
+
+            if (!config.questionId || !config.selector) {
                 return;
             }
 
-            selectors = document.querySelector('#hotspot-selectors');
-            container = document.querySelector('#hotspot-container');
-            canvas = document.querySelector('#hotspot-container svg');
-            currentShapeType = 'square';
+            var xhrQuestion = null;
 
-            var xhrImage = new $.Deferred();
+            switch (config.for) {
+                case 'admin':
+                    xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript_admin.as.php', {
+                        modifyAnswers: parseInt(config.questionId)
+                    });
+                    break;
 
-            var image = new Image();
-            image.onload = function () {
-                xhrImage.resolve(this);
-            };
-            image.onerror = function () {
-                xhrImage.reject();
-            };
-            image.src = imageSrc;
+                case 'user':
+                    xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript.as.php', {
+                        modifyAnswers: parseInt(config.questionId)
+                    });
+                    break;
 
-            var xhrHotSpots = $.get('/main/exercice/hotspot_actionscript_admin.as.php', {
-                modifyAnswers: parseInt(questionId)
-            });
+                case 'solution':
+                    xhrQuestion = $.getJSON('/main/exercice/hotspot_answers.as.php', {
+                        modifyAnswers: parseInt(config.questionId),
+                        exe_id: parseInt(config.exerciseId)
+                    });
+            }
 
-            $.when.apply($, [xhrImage, xhrHotSpots]).done(function (imageRequest, hotSpotsRequest) {
-                var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-                imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', imageRequest.src);
-                imageSvg.setAttribute('width', imageRequest.width);
-                imageSvg.setAttribute('height', imageRequest.height);
+            $.when(xhrQuestion).done(function (questionInfo) {
+                switch (questionInfo.type) {
+                    case 'admin':
+                        startHotspotsAdmin(questionInfo);
+                        break;
 
-                container.style.width = imageRequest.width + 'px';
-                canvas.setAttribute('viewBox', '0 0 ' + imageRequest.width + ' ' + imageRequest.height);
-                canvas.appendChild(imageSvg);
+                    case 'user':
+                        startHotspotsUser(questionInfo);
+                        break;
 
-                loadHotSpots(hotSpotsRequest[0].hotspots);
-                startCanvas();
+                    case 'solution':
+                        startHotspotsSolution(questionInfo);
+                }
             });
         }
     };

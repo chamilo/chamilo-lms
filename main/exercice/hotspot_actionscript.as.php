@@ -37,6 +37,7 @@ if ($answer_type==HOT_SPOT_DELINEATION) {
 $result = Database::query($sql);
 
 $data = [];
+$data['type'] = 'user';
 $data['lang'] = [
     'Square' => get_lang('Square'),
     'Circle' => get_lang('Circle'),

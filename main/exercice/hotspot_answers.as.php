@@ -37,6 +37,8 @@ if ($answer_type == HOT_SPOT_DELINEATION) {
 }
 $result = Database::query($sql);
 // Init
+$data = [];
+$data['type'] = 'solution';
 $data['lang'] = [
     'Square' => get_lang('Square'),
     'Circle' => get_lang('Circle'),
@@ -63,6 +65,7 @@ $data['hotspots'] = [];
 while ($hotspot = Database::fetch_array($result)) {
     $hotSpot = [];
     $hotSpot['id'] = $hotspot['id'];
+    $hotSpot['answer'] = $hotspot['answer'];
 
 	// Square or rectancle
 	if ($hotspot['hotspot_type'] == 'square' ) {

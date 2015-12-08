@@ -109,6 +109,10 @@ if ($user_already_registered_show_terms == false) {
     if (api_get_setting('registration', 'language') == 'true') {
         $form->addElement('select_language', 'language', get_lang('Language'));
     }
+    
+    // EXTRA FIELDS
+    $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
+    UserManager::set_extra_fields_in_form($form, $extra_data, 'registration');
 
 }
 
@@ -197,7 +201,10 @@ if (file_exists($home . 'register_top_' . $user_selected_language . '.html')) {
     }
 }
 
-$content .= Display::return_message(get_lang('YourAccountHasToBeApproved'));
+if (api_get_setting('allow_registration') == 'approval') {
+    $content .= Display::return_message(get_lang('YourAccountHasToBeApproved'));
+}
+
 
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
@@ -243,8 +250,14 @@ if ($form->validate()) {
         $values['username'] = $values['email'];
     }
 
+    $approval = 1;
+    if ( api_get_setting('allow_registration') == 'approval') {
+        $approval = null;
+    }
     // Creates a new user
-    $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri, PLATFORM_AUTH_SOURCE, null, 1, 0, null, null, true);
+    $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'],
+            $values['email'], $values['username'], $values['pass1'], $values['official_code'], 
+            $values['language'], $values['phone'], $picture_uri, PLATFORM_AUTH_SOURCE, null , $approval, 0, null, null, true);
 
     // Register extra fields
     $extras = array();
@@ -293,13 +306,6 @@ if ($form->validate()) {
             $sql = "UPDATE " . Database::get_main_table(TABLE_MAIN_USER) . " SET expiration_date='registration_date+1' WHERE user_id='" . $user_id . "'";
             Database::query($sql);
         }
-
-        // if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
-
-        $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
-        // 1. set account inactive
-        $sql = "UPDATE " . $TABLE_USER . "	SET active='0' WHERE user_id='" . $user_id . "'";
-        Database::query($sql);
     }
 
 

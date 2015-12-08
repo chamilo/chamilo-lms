@@ -77,8 +77,10 @@ if (isset($_POST['Confirm'])) {
     $message = str_replace("{{".$parameterName."}}", $title, $message);
     $message = str_replace("{{reference}}", $reference, $message);
     $message .= $text;
-
-    api_mail($name, $email, $asunto, $message);
+    
+    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+    $email_admin = api_get_setting('emailAdministrator');
+    @api_mail_html($name, $email, $asunto, $message, $sender_name, $email_admin);
     // Return to course list
     header('Location:list.php');
 }

@@ -317,12 +317,15 @@ See https://support.chamilo.org/issues/6976
 
 
 #scorm-info{
-    padding: 5px;
+    padding: 10px;
     margin-bottom: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 #scorm-info .description-autor p {
-    font-size: 14px;
-    line-height: 1.2em;
+    font-size: 12px;
+    line-height: 20px;
+    color: #666666;
 }
 #scorm-info hr {
     background-color: #DDD;
@@ -331,20 +334,24 @@ See https://support.chamilo.org/issues/6976
 #scorm-info #progress_bar .progress{
     margin-bottom: 5px;
 }
-
+.image-avatar .media-left img,
+.image-avatar img{
+    border: 1px solid #DDD;
+    border-radius: 5px;
+}
+.image-avatar{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 .scorm-title{
     color: #666;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 700;
     line-height: 1.5em;
     margin: 0 0 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-#lp_navigation_elem a {
-    color: black;
 }
 
 #learning_path_right_zone .lp-view-tabs li a {
@@ -401,19 +408,12 @@ See https://support.chamilo.org/issues/6976
     width: 100%;
 }
 
-#lp_navigation_elem {
-    position: absolute;
-    right: 5px;
-    top: 40px;
-    width: 70%;
-}
-
 #learning_path_right_zone .lp-view-tabs .tab-content {
     bottom: 5px;
     left: 5px;
     position: absolute;
     right: 5px;
-    top: 95px;
+    top: 65px;
 }
 #learning_path_right_zone .tab-pane{
     height: 100%;
@@ -433,27 +433,67 @@ See https://support.chamilo.org/issues/6976
     left: 0;
     width: 100%;
 }
-
+.nav-tabs li.active a{
+    color: #006A84;
+}
+.nav-tabs li a{
+    color: #666666;
+}
+#lp-view-expand-button{
+    border: none;
+}
+.icon-toolbar{
+    border-radius: 100%;
+    width: 35px;
+    display: inline-block !important;
+    margin: 0px 5px 5px 0px;
+    color: #fff;
+    
+}
+.icon-toolbar .fa{
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 100%;
+    background-color: #34495E;
+    font-size: 20px;
+}
+.icon-toolbar .fa:hover{
+    background-color: #000;
+}
+.expand .fa{
+    background-color: #00829C;
+}
+.expand .fa:hover{
+    background-color: #006A84;
+    color: #ffffff;
+}
+.expand .fa:active, .expand .fa:focus{
+    color: #ffffff;
+}
+#learning_path_toc {
+        bottom: 10px;
+        left: 10px;
+        right: 5px;
+        margin-top:20px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+}
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     #scorm-info{
         padding: 10px;
         margin-bottom: 10px;
     }
-
-    #learning_path_main {
-        
-    }
-
     #learning_path_left_zone {
         width: 250px;
     }
-
     #learning_path_right_zone {
         left: 250px;
         width: calc(100% - 250px);
     }
-
     #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
     #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
         top: 40px;
@@ -468,23 +508,11 @@ See https://support.chamilo.org/issues/6976
     #learning_path_right_zone .lp-view-zone-container {
         padding-left: 5px;
     }
-
-    #learning_path_toc {
-        bottom: 10px;
-        left: 10px;
-        right: 5px;
-    }
-
-    #lp_navigation_elem {
-        right: 10px;
-        top: 45px;
-        width: 75%;
-    }
-
+    
     #learning_path_right_zone .lp-view-tabs .tab-content {
         bottom: 10px;
         right: 10px;
-        top: 100px;
+        top: 75px;
     }
     #learning_path_right_zone .tab-pane{
     }
@@ -513,5 +541,17 @@ See https://support.chamilo.org/issues/6976
     #learning_path_right_zone {
         left: 350px;
         width: calc(100% - 350px);
+    }
+}
+/* Landscape phones and down */
+@media (max-width: 480px) {
+    #home-course{
+        display: none !important;
+    }
+    .movil-toolbar{
+        text-align: center;
+    }
+    .scorm-title{
+        font-size: 14px;
     }
 }

@@ -757,6 +757,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
   location / {
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/main/admin/$ /main/admin/index.php last;
     try_files $uri @rewrite;
   }
 

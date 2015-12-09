@@ -126,7 +126,6 @@ header('Content-Type: text/html; charset=UTF-8');
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_PATH); ?>web/assets/bootstrap/dist/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-emojiarea/jquery.emojiarea.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>/javascript/jquery-scrollbar/jquery.scrollbar.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>markdown.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-textcomplete/jquery.textcomplete.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/emojione/css/emojione.min.css">
@@ -138,7 +137,6 @@ header('Content-Type: text/html; charset=UTF-8');
 <?php echo api_get_js('jquery-textcomplete/jquery.textcomplete.js'); ?>
 <?php echo api_get_js('emojione/js/emojione.min.js'); ?>
 <?php echo api_get_js('jquery-emojiarea/jquery.emojiarea.js'); ?>
-<?php echo api_get_js('jquery-scrollbar/jquery.scrollbar.min.js'); ?>
 <?php // echo api_get_js('jquery.tinyscrollbar.js'); ?>
 <script type="text/javascript">
     hljs.initHighlightingOnLoad();

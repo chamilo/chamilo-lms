@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   id="svg25238"
+   version="1.1"
+   inkscape:version="0.91 r"
+   sodipodi:docname="view_detailed.svg">
+  <defs
+     id="defs25240">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient14830">
+      <stop
+         style="stop-color:#e6e6e6;stop-opacity:1"
+         offset="0"
+         id="stop14832" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="1"
+         id="stop14834" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient14830"
+       id="linearGradient15204"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.7145926,0,0,3.7955555,-685.76331,-1935.2752)"
+       x1="201.74556"
+       y1="785.15424"
+       x2="200.38338"
+       y2="751.77924" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.2617188"
+     inkscape:cx="33.837827"
+     inkscape:cy="89.55089"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     inkscape:window-x="1366"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata25243">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.3622)">
+    <rect
+       style="opacity:0.49060005;fill:#cccccc;fill-opacity:0;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect15415"
+       width="128"
+       height="128"
+       x="4.6471425e-05"
+       y="924.36224"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/forum_listview.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#cccccc;fill-opacity:1;stroke:none"
+       id="rect15182"
+       width="105.45156"
+       height="122"
+       x="11.274266"
+       y="927.36224"
+       ry="6.5209813"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/forum_listview.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       ry="6.0862494"
+       y="931.42889"
+       x="14.885378"
+       height="113.86666"
+       width="98.948647"
+       id="rect15184"
+       style="fill:url(#linearGradient15204);fill-opacity:1;stroke:none"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/forum_listview.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:1;fill:#008080;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect15221"
+       width="16.64496"
+       height="16.64496"
+       x="22.649149"
+       y="944.12653"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/forum_listview.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       ry="1.7030067"
+       y="944.05243"
+       x="43.73027"
+       height="16.330244"
+       width="60.78701"
+       id="rect15238"
+       style="fill:#cccccc;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/forum_listview.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       y="979.61755"
+       x="22.649149"
+       height="16.64496"
+       width="16.64496"
+       id="rect15242"
+       style="opacity:1;fill:#ff6600;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/forum_listview.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       y="1017.3266"
+       x="22.649149"
+       height="16.64496"
+       width="16.64496"
+       id="rect15262"
+       style="opacity:1;fill:#2c89a0;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/forum_listview.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="fill:#cccccc;fill-opacity:1;stroke:none"
+       id="rect15532"
+       width="60.78701"
+       height="16.330244"
+       x="44.095139"
+       y="979.87854"
+       ry="1.7030067"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/forum_listview.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       ry="1.7030067"
+       y="1017.1902"
+       x="44.095139"
+       height="16.330244"
+       width="60.78701"
+       id="rect15534"
+       style="fill:#cccccc;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/forum_listview.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+  </g>
+</svg>

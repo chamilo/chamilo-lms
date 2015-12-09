@@ -38,14 +38,12 @@ class HTML_QuickForm_password extends HTML_QuickForm_text
 
     /**
      * Class constructor
-     *
      * @param     string    $elementName    (optional)Input field name attribute
      * @param     string    $elementLabel   (optional)Input field label
      * @param     mixed     $attributes     (optional)Either a typical HTML attribute string
      *                                      or an associative array
      * @since     1.0
      * @access    public
-     * @return    void
      * @throws
      */
     public function __construct($elementName=null, $elementLabel=null, $attributes=null)

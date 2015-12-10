@@ -43,7 +43,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(
-        array('ref'=>'SOAP:ENC:arrayType',
+        array('ref'=>'SOAP-ENC:arrayType',
         'wsdl:arrayType'=>'tns:courseDetails[]')
     ),
     'tns:courseDetails'
@@ -121,7 +121,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(
-        array('ref'=>'SOAP:ENC:arrayType',
+        array('ref'=>'SOAP-ENC:arrayType',
         'wsdl:arrayType'=>'tns:eventDetails[]')
     ),
     'tns:eventDetails'

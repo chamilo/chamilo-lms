@@ -5428,7 +5428,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(
-        array('ref'=>'SOAP:ENC:arrayType',
+        array('ref'=>'SOAP-ENC:arrayType',
             'wsdl:arrayType'=>'tns:session[]')
     ),
     'tns:session'
@@ -5560,7 +5560,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(
-        array('ref'=>'SOAP:ENC:arrayType',
+        array('ref'=>'SOAP-ENC:arrayType',
             'wsdl:arrayType'=>'tns:certificateDetails[]')
     ),
     'tns:certificateDetails'

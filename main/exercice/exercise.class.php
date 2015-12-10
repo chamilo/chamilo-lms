@@ -2102,7 +2102,6 @@ class Exercise
     public function show_lp_javascript()
     {
         return "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
-                <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
                 <script language=\"JavaScript\" type=\"text/javascript\">
                 <!--
                 // -----------------------------------------------------------------------------

@@ -348,7 +348,6 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="../plugin/hotspot2/css/hotspot.c
 $htmlHeadXtra[] = '<script src="../plugin/hotspot2/js/hotspot.js"></script>';
 
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
-<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
 <script language=\"JavaScript\" type=\"text/javascript\">
 <!--
 // -----------------------------------------------------------------------------

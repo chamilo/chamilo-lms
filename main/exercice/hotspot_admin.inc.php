@@ -1032,11 +1032,19 @@ if ($modifyAnswers) {
     </form>
     <script>
         $(document).on('ready', function () {
-            HotspotQuestion.init({
-                questionId: <?php echo $modifyAnswers ?>,
-                selector: '#hotspot-container',
-                for: 'admin'
-            });
+            <?php if ($answerType == HOT_SPOT_DELINEATION) { ?>
+                DelineationQuestion.init({
+                    questionId: <?php echo $modifyAnswers ?>,
+                    selector: '#hotspot-container',
+                    for: 'admin'
+                });
+            <?php } else { ?>
+                HotspotQuestion.init({
+                    questionId: <?php echo $modifyAnswers ?>,
+                    selector: '#hotspot-container',
+                    for: 'admin'
+                });
+            <?php } ?>
         });
     </script>
     <?php

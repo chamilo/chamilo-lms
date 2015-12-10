@@ -1172,12 +1172,12 @@ HOTSPOT;
 
             $canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 
-            $s .= <<<HOTSPOT
-                            <div class="col-sm-8 col-md-9">
-                                <div class="hotspot-image"></div>
+            $s .= "
+                            <div class=\"col-sm-8 col-md-9\">
+                                <div class=\"hotspot-image\"></div>
                                 <script>
                                     $(document).on('ready', function () {
-                                        HotspotQuestion.init({
+                                        " . ($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion') . ".init({
                                             questionId: $questionId,
                                             selector: '#question_div_' + $questionId + ' .hotspot-image',
                                             for: 'user'
@@ -1185,10 +1185,11 @@ HOTSPOT;
                                     });
                                 </script>
                             </div>
-                            <div class="col-sm-4 col-md-3">
+                            <div class=\"col-sm-4 col-md-3\">
                                 $answerList
                             </div>
-HOTSPOT;
+            ";
+
             echo <<<HOTSPOT
                             $s
                         </div>

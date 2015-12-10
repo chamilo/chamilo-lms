@@ -486,7 +486,7 @@ var HotspotQuestion = (function () {
         var self = this,
             template = '\n\
                 <li>\n\
-                    <a href="#">' + 'ClosePolygon' + '</a>\n\
+                    <a href="#">' + lang.ClosePolygon + '</a>\n\
                 </li>\n\
             ';
 
@@ -1373,7 +1373,7 @@ var DelineationQuestion = (function () {
         this.render = function () {
             var template = '\n\
                 <li>\n\
-                    <a href="#">' + 'ClosePolygon' + '</a>\n\
+                    <a href="#">' + lang.CloseDelineation + '</a>\n\
                 </li>\n\
             ';
 

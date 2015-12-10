@@ -344,8 +344,8 @@ $template = new Template();
 $htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
-$htmlHeadXtra[] = '<link rel="stylesheet" href="../plugin/hotspot2/css/hotspot.css">';
-$htmlHeadXtra[] = '<script src="../plugin/hotspot2/js/hotspot.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/css/hotspot.css">';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/js/hotspot.js"></script>';
 
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
 <script language=\"JavaScript\" type=\"text/javascript\">

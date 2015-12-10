@@ -569,7 +569,7 @@ class ScormAnswerHotspot extends Answer
 			$header .= file_get_contents('../plugin/hotspot/JavaScriptFlashGateway.js');
 			$header .= '</script>';
 			$header .= '<script type="text/javascript" language="javascript">';
-			$header .= file_get_contents('../plugin/hotspot2/hotspot.js');
+			$header .= file_get_contents('../inc/lib/javascript/hotspot/js/hotspot.js');
 			$header .= '</script>';
 			//because this header closes so many times the <script> tag, we have to reopen our own
 			$header .= '<script type="text/javascript" language="javascript">'."\n";
@@ -1001,7 +1001,7 @@ class ScormSection
      */
     function common_js() {
         $js = "\n";
-        $js .= file_get_contents('../plugin/hotspot2/hotspot.js');
+        $js .= file_get_contents('../inc/lib/javascript/hotspot/js/hotspot.js');
         $js .= file_get_contents('../newscorm/js/api_wrapper.js');
         $js .= 'var questions = new Array();' . "\n";
         $js .= 'var questions_answers = new Array();' . "\n";

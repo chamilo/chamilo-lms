@@ -120,8 +120,8 @@ $interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/css/hotspot.css">';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_CODE_PATH) . 'plugin/hotspot2/js/hotspot.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/css/hotspot.css">';
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_JS_PATH) . 'hotspot/js/hotspot.js"></script>';
 
 if ($origin != 'learnpath') {
 	Display::display_header('');

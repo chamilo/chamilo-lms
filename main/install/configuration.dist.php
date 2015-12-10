@@ -332,3 +332,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['ldap_use_extra_field'] = '';
 // Hide tabs in the main/session/index.php page
 //$_configuration['session_hide_tab_list'] = array();
+//$_configuration['learnpath_fix_xerte_template'] = false;
+//$_configuration['learnpath_proxy_url'] = '';

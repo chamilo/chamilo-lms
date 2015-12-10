@@ -71,6 +71,7 @@ $strings['PublicationEndDate'] = 'Fecha fin de publicación';
 $strings['Mode'] = 'Modalidad';
 $strings['Postulant'] = 'Postulante';
 $strings['Area'] = 'Área';
+$strings['Institution'] = 'Institución';
 $strings['InscriptionDate'] = 'Fecha de inscripción';
 $strings['BossValidation'] = 'Validación del superior';
 $strings['Decision'] = 'Decisión';

@@ -72,6 +72,11 @@ if (!empty($sessionId)) {
         $areaField = $fieldValue->get_values_by_handler_and_field_variable($studentId, 'area', true);
 
         $student['area'] = $areaField['value'];
+        if (substr($student['area'], 0, 6) == 'MINEDU') {
+            $student['institution'] = 'Minedu';
+        } else {
+            $student['institution'] = 'Regiones';
+        }
         $student['userLink'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$studentId;
         $data['queueId'] = intval($student['queue_id']);
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED;

@@ -249,7 +249,7 @@ if ($form->validate()) {
                 if (isset($_POST['send_email'])) {
                     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$item_to_edit_id;
                     $subject = sprintf(get_lang('ThereIsANewWorkFeedback'), $work_item['title']);
-                    $message = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $url);
+                    $message = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $work_item['title'], $url);
 
                     MessageManager::send_message_simple(
                         $work_item['user_id'],

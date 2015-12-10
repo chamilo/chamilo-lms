@@ -82,20 +82,20 @@ if (Request::is_post() && $is_error) {
                                         'href="www.',
                                         'href="http://',
                                         'href="https://',
-                                        'url="www.'
+                                        'url="www.',
                                     );
                                     $replace = array(
                                         'href="http://www.',
                                         'href="'.$proxyPath.'?type=link&src=http://',
                                         'href="'.$proxyPath.'?type=link&src=https://',
                                         'url="http://www.',
+
                                     );
                                     $templateContent = str_replace($find, $replace, $templateContent);
                                     file_put_contents($templatePath, $templateContent);
                                 }
 
                                 // Fix link generation:
-
                                 $linkPath = str_replace('imsmanifest.xml', 'models_html5/links.html', $manifest);
 
                                 if (file_exists($linkPath) && is_file($linkPath)) {
@@ -108,6 +108,21 @@ if (Request::is_post() && $is_error) {
                                     );
                                     $linkContent = str_replace($find, $replace, $linkContent);
                                     file_put_contents($linkPath, $linkContent);
+                                }
+                                // Fix iframe generation
+                                $framePath = str_replace('imsmanifest.xml', 'models_html5/embedDiv.html', $manifest);
+
+                                if (file_exists($framePath) && is_file($framePath)) {
+                                    $content = file_get_contents($framePath);
+                                    $find = array(
+                                        '"iFrame" src="\' + pageSrc + \'"'
+                                    );
+                                    $replace = array(
+                                        '"iFrame" src="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'"'
+                                    );
+                                    $content = str_replace($find, $replace, $content);
+                                    file_put_contents($framePath, $content);
+
                                 }
                             }
                         }

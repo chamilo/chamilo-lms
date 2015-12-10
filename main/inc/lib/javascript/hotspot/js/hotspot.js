@@ -1020,7 +1020,7 @@ var HotspotQuestion = (function () {
         return this;
     };
     SolutionHotspotsSVG.prototype.renderHotspot = function (hotspotModel) {
-        var hotspotIndex = this.hotspotsCollection.length,
+        var hotspotIndex = this.hotspotsCollection.length - 1,
             hotspotSVG = new HotspotSVG(hotspotModel, hotspotIndex);
 
         this.el.appendChild(

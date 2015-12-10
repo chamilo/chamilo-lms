@@ -566,9 +566,6 @@ class ScormAnswerHotspot extends Answer
 	{
 		if ($this->standalone) {
 			$header = '<script type="text/javascript" language="javascript">';
-			$header .= file_get_contents('../plugin/hotspot/JavaScriptFlashGateway.js');
-			$header .= '</script>';
-			$header .= '<script type="text/javascript" language="javascript">';
 			$header .= file_get_contents('../inc/lib/javascript/hotspot/js/hotspot.js');
 			$header .= '</script>';
 			//because this header closes so many times the <script> tag, we have to reopen our own

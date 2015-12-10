@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   id="svg10658"
+   version="1.1"
+   inkscape:version="0.91 r"
+   sodipodi:docname="visible.svg">
+  <defs
+     id="defs10660">
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7610"
+       id="linearGradient7618"
+       x1="199.92903"
+       y1="85.563477"
+       x2="211.45731"
+       y2="85.563477"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.86698477,0,0,0.86698477,23.39458,15.899244)" />
+    <linearGradient
+       id="linearGradient7610"
+       inkscape:collect="always">
+      <stop
+         id="stop13016"
+         offset="0"
+         style="stop-color:#0088aa;stop-opacity:1;" />
+      <stop
+         id="stop13018"
+         offset="1"
+         style="stop-color:#006680;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="99.203334"
+     inkscape:cy="59.574132"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     inkscape:window-x="1366"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata10663">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.36216)">
+    <g
+       id="g7343"
+       transform="matrix(5.3333333,0,0,5.3333333,-1015.2146,511.94192)"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/eyes.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         ry="0"
+         y="77.328796"
+         x="190.35274"
+         height="24"
+         width="24"
+         id="rect6795"
+         style="opacity:0;fill:#ececec;fill-opacity:1;stroke:none;stroke-opacity:1" />
+      <g
+         transform="translate(1.1929383e-6,1.270475e-6)"
+         id="g7329">
+        <path
+           style="fill:#ffffff;stroke:none"
+           d="m 192.14335,91.247329 c 5.98435,5.011055 14.20046,4.730023 18.77758,-0.506146 -4.3124,-7.39171 -12.87365,-6.685246 -18.86099,-1.02757 -0.7021,0.541768 -0.43847,1.196626 0.0834,1.533716 z"
+           id="path6799"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cccc" />
+        <path
+           id="svg_117"
+           d="m 190.85418,90.198509 c 0,0 9.31585,-13.273622 22.65029,-1.857142 0,0 0.60882,0.548175 0.21318,1.248325 -0.49868,0.882631 -1.70499,-0.578496 -1.70499,-0.578496 0,0 -9.25484,-10.959822 -21.15848,1.187313 z"
+           inkscape:connector-curvature="0" />
+        <path
+           id="svg_119"
+           d="m 205.22627,86.03806 c 0.92486,0.906913 1.49857,2.170679 1.49857,3.568316 0,2.760015 -2.23741,4.997418 -4.99741,4.997418 -2.76003,0 -4.99743,-2.237403 -4.99743,-4.997418 0,-1.344005 0.53064,-2.564272 1.39383,-3.462105 0,0 1.38645,-0.585112 3.6036,-0.585112 2.21712,0 3.49884,0.478901 3.49884,0.478901 z m -5.88174,3.362228 -1.96163,-0.181594 c -0.0113,0.12796 -0.0196,0.256977 -0.0196,0.387894 0,0.686677 0.16301,1.333658 0.44554,1.911591 l 1.77181,-0.858348 c -0.15647,-0.318212 -0.24663,-0.674642 -0.24663,-1.053033 2e-4,-0.0701 0.005,-0.138517 0.0106,-0.20651 z m 2.34762,-1.588944 c -1.01079,0 -1.83008,0.819284 -1.83008,1.830084 0,1.010801 0.81929,1.830085 1.83008,1.830085 1.0108,0 1.83009,-0.819283 1.83009,-1.830085 0,-1.010801 -0.81929,-1.830084 -1.83009,-1.830084 z"
+           inkscape:connector-curvature="0"
+           style="fill:url(#linearGradient7618);fill-opacity:1" />
+        <path
+           id="svg_118"
+           d="m 191.58483,90.168006 c 0,0 10.22917,-11.294645 19.87984,-0.426155 0,0 1.43098,1.765627 0.48716,2.526786 -0.94382,0.761159 -1.43098,-0.213168 -1.67447,-0.365326 -0.2435,-0.15216 -0.39584,0.09133 -0.5785,0.395831 -0.18266,0.3045 -8.92002,6.606397 -17.99237,-1.369977 0,0 9.83333,7.915547 17.74888,0.517668 0,0 0.88299,-0.974145 -0.0303,-2.100632 -0.91332,-1.126486 -6.39341,-8.189727 -17.84022,0.821805 z"
+           inkscape:connector-curvature="0"
+           style="fill:#000000" />
+        <circle
+           r="2.0291471"
+           cy="89.728737"
+           cx="201.61891"
+           style="fill:#000000;fill-opacity:1;stroke:none"
+           id="path7627"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/32/visible.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+      </g>
+    </g>
+  </g>
+</svg>

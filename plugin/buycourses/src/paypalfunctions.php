@@ -309,7 +309,6 @@ function MassPayment(array $beneficiaries, $currencyCode) {
     foreach($beneficiaries as $beneficiarie) {
         $nvpstr .= "&L_EMAIL".$index."=".$beneficiarie['paypal_account'];
         $nvpstr .= "&L_AMT".$index."=".$beneficiarie['comission'];
-        $nvpstr .= "&L_NOTE".$index."= Thanks baby";
         $index++;
     }
     

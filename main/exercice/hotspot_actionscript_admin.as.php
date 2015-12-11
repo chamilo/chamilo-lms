@@ -38,7 +38,8 @@ $data['lang'] = [
     'NextAnswer' => get_lang('NextAnswer'),
     'Delineation' => get_lang('Delineation'),
     'CloseDelineation' => get_lang('CloseDelineation'),
-    'Oar' => get_lang('oar')
+    'Oar' => get_lang('Oar'),
+    'ClosePolygon' => get_lang('ClosePolygon')
 ];
 $data['image'] = $objQuestion->selectPicturePath();
 $data['image_width'] = $pictureWidth;

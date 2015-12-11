@@ -12,6 +12,9 @@ api_protect_course_script(false);
 require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
 Display::display_reduced_header();
+
+echo '<div id="delineation-container">';
+
 $message = null;
 $dbg_local = 0;
 $gradebook = null;
@@ -29,13 +32,19 @@ if (empty ($exerciseResult)) {
 
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 
+$origin = '';
+
 if (empty($origin)) {
     $origin = Security::remove_XSS($_REQUEST['origin']);
 }
 // if origin is learnpath
+$learnpath_id = 0;
+
 if (empty($learnpath_id)) {
 	$learnpath_id = Security::remove_XSS($_REQUEST['learnpath_id']);
 }
+
+$learnpath_item_id = 0;
 
 if (empty($learnpath_item_id)) {
 	$learnpath_item_id = Security::remove_XSS($_REQUEST['learnpath_item_id']);
@@ -66,6 +75,8 @@ if (is_array($coords) && count($coords) > 0) {
         }
 	}
 }
+
+$choice_value = '';
 
 $user_array = substr($user_array,0,-1);
 
@@ -109,8 +120,10 @@ if (empty($choice_value)) {
 	//this is the real redirect function
 	//echo 'window.location.href = "exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'&gradebook='.$gradebook.'";';
     echo ' url = "exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'&gradebook='.$gradebook.'";';
-    echo "$('#dialog').load(url);	";
+    echo "$('#global-modal .modal-body').load(url);";
 	echo '</script>';
+
+    exit;
 }
 
 $choice = array();
@@ -574,3 +587,7 @@ if ($links!='') {
    			//self.parent.tb_remove();
  	 	</script>';
 }
+
+echo '</div>';
+
+Display::display_footer();

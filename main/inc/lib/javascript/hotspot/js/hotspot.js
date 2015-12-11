@@ -399,7 +399,7 @@ var HotspotQuestion = (function () {
             <div class="input-group hotspot-'  + this.hotspotIndex + ' active">\n\
                 <span class="input-group-addon" id="hotspot-' + this.hotspotIndex + '">\n\
                     <span class="fa fa-square fa-fw" data-hidden="true"></span>\n\
-                    <span class="sr-only">' + (this.hotspotSVG.model.get('name') ? this.hotspotSVG.model.get('name') : 'hotspot ' + this.hotspotIndex) + '</span>\n\
+                    <span class="sr-only">' + (this.hotspotSVG.model.name ? this.hotspotSVG.model.name : 'hotspot ' + this.hotspotIndex) + '</span>\n\
                 </span>\n\
                 <select class="form-control" aria-describedby="hotspot-' + this.hotspotIndex + '">\n\
                     <option value="square">' + lang.Square + '</option>\n\
@@ -486,7 +486,7 @@ var HotspotQuestion = (function () {
         var self = this,
             template = '\n\
                 <li>\n\
-                    <a href="#">' + 'ClosePolygon' + '</a>\n\
+                    <a href="#">' + lang.ClosePolygon + '</a>\n\
                 </li>\n\
             ';
 
@@ -1020,7 +1020,7 @@ var HotspotQuestion = (function () {
         return this;
     };
     SolutionHotspotsSVG.prototype.renderHotspot = function (hotspotModel) {
-        var hotspotIndex = this.hotspotsCollection.length,
+        var hotspotIndex = this.hotspotsCollection.length - 1,
             hotspotSVG = new HotspotSVG(hotspotModel, hotspotIndex);
 
         this.el.appendChild(
@@ -1155,6 +1155,543 @@ var HotspotQuestion = (function () {
 
                     case 'solution':
                         startHotspotsSolution(questionInfo);
+                }
+            });
+        }
+    };
+})();
+
+var DelineationQuestion = (function () {
+    'use strict';
+
+    var PolygonModel = function (attributes) {
+        this.id = 0;
+        this.name = '';
+        this.attributes = attributes;
+
+        this.event = null;
+    };
+    PolygonModel.prototype.set = function (key, value) {
+        this.attributes[key] = value;
+
+        if (this.event) {
+            this.event(this);
+        }
+    };
+    PolygonModel.prototype.get = function (key) {
+        if (!this.attributes[key]) {
+            return;
+        }
+
+        return this.attributes[key];
+    };
+    PolygonModel.prototype.onChange = function (callback) {
+        this.event = callback;
+    };
+    PolygonModel.prototype.encode = function () {
+        var pairedPoints = [];
+
+        $.each(this.get('points'), function (index, point) {
+            pairedPoints.push(
+                point.join(';')
+            );
+        });
+
+        return pairedPoints.join('|');
+    };
+    PolygonModel.decode = function (hotspotInfo) {
+        var pairedPoints = hotspotInfo.coord.split('|'),
+            points = [];
+
+        $.each(pairedPoints, function (index, pair) {
+            var point = pair.split(';');
+
+            points.push([
+                parseInt(point[0]),
+                point[1] ? parseInt(point[1]) : 0
+            ]);
+        });
+
+        var hotspot = null;
+
+        if (hotspotInfo.type === 'delineation') {
+            hotspot = new DelineationModel({
+                points: points
+            });
+        } else if (hotspotInfo.type === 'oar') {
+            hotspot = new OarModel({
+                points: points
+            });
+        }
+
+        if (!hotspot) {
+            return;
+        }
+
+        hotspot.id = hotspotInfo.id;
+        hotspot.name = hotspotInfo.answer;
+
+        return hotspot;
+    };
+
+    var DelineationModel = function (attributes) {
+        PolygonModel.call(this, attributes);
+    };
+    DelineationModel.prototype = Object.create(PolygonModel.prototype);
+
+    var OarModel = function (attributes) {
+        PolygonModel.call(this, attributes);
+    };
+    OarModel.prototype = Object.create(PolygonModel.prototype);
+
+    var AnswerModel = function (attributes) {
+        PolygonModel.call(this, attributes);
+    };
+    AnswerModel.prototype = Object.create(PolygonModel.prototype);
+    AnswerModel.prototype.encode = function () {
+        var pairedPoints = [];
+
+        $.each(this.get('points'), function (index, point) {
+            pairedPoints.push(point.join(';'));
+        });
+
+        return pairedPoints.join('/');
+    };
+
+    var PolygonCollection = function () {
+        this.models = [];
+        this.length = 0;
+
+        this.event = null;
+    };
+    PolygonCollection.prototype.add = function (model) {
+        this.models.push(model);
+        this.length++;
+
+        if (this.event) {
+            this.event(model);
+        }
+    };
+    PolygonCollection.prototype.get = function (index) {
+        return this.models[index];
+    };
+    PolygonCollection.prototype.set = function (index, model) {
+        this.models[index] = model;
+    };
+    PolygonCollection.prototype.onAdd = function (callback) {
+        this.event = callback;
+    };
+
+    var PolygonSvg = function (polygonModel) {
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        this.model = polygonModel;
+        this.model.onChange(function () {
+            self.render();
+        });
+
+        var self = this,
+            $el = $(this.el);
+
+        this.render = function () {
+            var newEl = document.createElementNS('http://www.w3.org/2000/svg', 'polygon'),
+                pointsPaired = [];
+
+            $.each(this.model.get('points'), function (index, point) {
+                pointsPaired.push(point.join(','));
+            });
+
+            newEl.setAttributeNS(null, 'points', pointsPaired.join(' '));
+            newEl.setAttributeNS(null, 'class', 'hotspot-' + this.model.id);
+
+            if ($el.parent().length > 0) {
+                $el.replaceWith(newEl);
+            }
+
+            if (this.el.parentNode) {
+                this.el.parentNode.replaceChild(newEl, this.el);
+            }
+
+            this.el = newEl;
+
+            return this;
+        };
+    };
+
+    var HotspotSelect = function (polygonModel) {
+        this.el = $('<div>').addClass('col-xs-6 col-sm-4 col-md-3 col-lg-2').get(0);
+        this.model = polygonModel;
+
+        selectedPolygonIndex = this.model.id;
+
+        var self = this,
+            $el = $(this.el);
+
+        this.render = function () {
+            var type = this.model instanceof OarModel ? 'oar' : 'delineation';
+
+            var template = '\n\
+                <div class="input-group hotspot-'  + this.model.id + ' active">\n\
+                    <span class="input-group-addon" id="hotspot-' + this.model.id + '">\n\
+                        <span class="fa fa-square fa-fw" data-hidden="true"></span>\n\
+                        <span class="sr-only">' + (type === 'delineation' ? lang.Delineation : lang.Oar) + '</span>\n\
+                    </span>\n\
+                    <select class="form-control" aria-describedby="hotspot-' + this.hotspotIndex + '">\n\
+                        <option selected>' + (type === 'delineation' ? lang.Delineation : lang.Oar) + '</option>\n\
+                    </select>\n\
+                </div>\n\
+            ';
+
+            $el.html(template);
+
+            $el.find('select')
+                .on('focus', function () {
+                    $('.input-group').removeClass('active');
+
+                    $el.find('.input-group').addClass('active');
+
+                    selectedPolygonIndex = self.model.id;
+                });
+
+            return this;
+        };
+    };
+
+    var ContextMenu = function () {
+        this.el = $('<ul>', {
+            id: 'hotspot-context-menu'
+        }).addClass('dropdown-menu').get(0);
+
+        var self = this,
+            $el = $(this.el);
+
+        this.onHide = function (callback) {
+            $(this).on('hide', function () {
+                callback();
+            });
+        };
+
+        this.render = function () {
+            var template = '\n\
+                <li>\n\
+                    <a href="#">' + lang.CloseDelineation + '</a>\n\
+                </li>\n\
+            ';
+
+            $el.html(template);
+
+            $el.find('a')
+                .on('click', function (e) {
+                    e.preventDefault();
+
+                    $(self).trigger('hide');
+
+                    $el.hide();
+                });
+
+            return this;
+        };
+
+        this.show = function (x, y) {
+            $el.css({
+                left: x,
+                top: y
+            }).show();
+        };
+    };
+
+    var AdminSvg = function (polygonCollection, image) {
+        this.collection = polygonCollection;
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+        var self = this,
+            $el = $(this.el);
+
+        this.collection.onAdd(function (polygonModel) {
+            self.renderPolygon(polygonModel);
+        });
+
+        this.render = function () {
+            var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+            imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', image.src);
+            imageSvg.setAttributeNS(null, 'width', image.width);
+            imageSvg.setAttributeNS(null, 'height', image.height);
+
+            this.el.setAttributeNS(null, 'version', '1.1');
+            this.el.setAttributeNS(null, 'viewBox', '0 0 ' + image.width + ' ' + image.height);
+            this.el.appendChild(imageSvg);
+
+            var isDrawing = false;
+
+            var contextMenu = new ContextMenu();
+            contextMenu.onHide(function () {
+                var currentHotspot = self.collection.get(selectedPolygonIndex);
+
+                $('[name="hotspot_coordinates[' + (currentHotspot.id + 1) + ']"]').val(
+                    currentHotspot.encode()
+                );
+
+                isDrawing = false;
+            });
+
+            $el.on({
+                    'dragstart': function (e) {
+                        e.preventDefault();
+                    },
+                    'click': function (e) {
+                        e.preventDefault();
+
+                        var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY),
+                            points = [];
+
+                        if (!isDrawing) {
+                            isDrawing = true;
+                        } else {
+                            points = self.collection.get(selectedPolygonIndex).get('points');
+                        }
+
+                        points.push([currentPoint.x, currentPoint.y]);
+
+                        self.collection.get(selectedPolygonIndex).set('points', points);
+                    },
+                    'contextmenu': function (e) {
+                        e.preventDefault();
+
+                        if (!contextMenu.el.parentNode) {
+                            $el.parent().append(contextMenu.render().el);
+                        }
+
+                        var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                        contextMenu.show(currentPoint.x, currentPoint.y);
+                    }
+                });
+
+            return this;
+        };
+
+        this.renderPolygon = function (oarModel) {
+            var oarSVG = new PolygonSvg(oarModel);
+
+            $el.append(oarSVG.render().el);
+
+            var oarSelect = new HotspotSelect(oarModel);
+
+            $el.parent().parent().find('.row').append(
+                oarSelect.render().el
+            );
+
+            return this;
+        };
+    };
+
+    var startAdminSvg = function (questionInfo) {
+        var image = new Image();
+        image.onload = function () {
+            var polygonCollection = new PolygonCollection(),
+                adminSvg = new AdminSvg(polygonCollection, image);
+
+            $(config.selector)
+                .css('width', this.width)
+                .append(
+                    adminSvg.render().el
+                );
+
+            $(config.selector).parent().prepend('<div class="row"></div>');
+
+            $.each(questionInfo.hotspots, function (index, hotspotInfo) {
+                $('.input-group').removeClass('active');
+
+                var polygonModel = PolygonModel.decode(hotspotInfo);
+                polygonModel.id = index;
+
+                polygonCollection.add(polygonModel);
+            });
+        };
+        image.src = questionInfo.image;
+
+        lang = questionInfo.lang;
+    };
+
+    var UserSvg = function (answerModel, image) {
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.model = answerModel;
+
+        var self = this,
+            $el = $(this.el);
+
+        this.render = function () {
+            var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+            imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', image.src);
+            imageSvg.setAttributeNS(null, 'width', image.width);
+            imageSvg.setAttributeNS(null, 'height', image.height);
+
+            this.el.setAttributeNS(null, 'version', '1.1');
+            this.el.setAttributeNS(null, 'viewBox', '0 0 ' + image.width + ' ' + image.height);
+            this.el.appendChild(imageSvg);
+
+            this.renderDelineation();
+
+            var isDrawing = false;
+
+            var contextMenu = new ContextMenu();
+            contextMenu.onHide(function () {
+                var answerInput = $('hotspot[' + config.questionId + '][1]'),
+                    choiceInput = $('choice[' + config.questionId + '][1]');
+
+                if (!answerInput.length) {
+                    answerInput = $('<input>', {
+                        type: 'hidden',
+                        name: 'hotspot[' + config.questionId + '][1]'
+                    }).insertAfter($el);
+                }
+
+                if (!choiceInput.length) {
+                    choiceInput = $('<input>', {
+                        type: 'hidden',
+                        name: 'choice[' + config.questionId + '][1]'
+                    }).insertAfter($el);
+                }
+
+                answerInput.val(self.model.encode());
+                choiceInput.val(1);
+
+                isDrawing = false;
+            });
+
+            $el.on({
+                    'dragstart': function (e) {
+                        e.preventDefault();
+                    },
+                    'click': function (e) {
+                        e.preventDefault();
+
+                        var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY),
+                            points = [];
+
+                        if (!isDrawing) {
+                            isDrawing = true;
+                        } else {
+                            points = self.model.get('points');
+                        }
+
+                        points.push([currentPoint.x, currentPoint.y]);
+
+                        self.model.set('points', points);
+                    },
+                    'contextmenu': function (e) {
+                        e.preventDefault();
+
+                        if (!contextMenu.el.parentNode) {
+                            $el.parent().append(contextMenu.render().el);
+                        }
+
+                        var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY);
+
+                        contextMenu.show(currentPoint.x, currentPoint.y);
+                    }
+                });
+
+            return this;
+        };
+
+        this.renderDelineation = function () {
+            var delineationSvg = new PolygonSvg(this.model);
+
+            $el.append(
+                delineationSvg.render().el
+            );
+        };
+    };
+
+    var startUserSvg = function (questionInfo) {
+        var image = new Image();
+        image.onload = function () {
+            var answerModel = new AnswerModel({
+                    points: []
+                }),
+                userSvg = new UserSvg(answerModel, image);
+
+            $(config.selector)
+                .css('width', this.width)
+                .append(
+                    userSvg.render().el
+                );
+        };
+        image.src = questionInfo.image;
+
+        lang = questionInfo.lang;
+    };
+
+    var config = {
+            questionId: 0,
+            exerciseId: 0,
+            selector: null,
+            for: ''
+        },
+        lang = {},
+        selectedPolygonIndex = -1;
+
+    var getPointOnImage = function (referenceElement, x, y) {
+        var pointerPosition = {
+                left: x + window.scrollX,
+                top: y + window.scrollY
+            },
+            canvasOffset = {
+                x: referenceElement.getBoundingClientRect().left + window.scrollX,
+                y: referenceElement.getBoundingClientRect().top + window.scrollY
+            };
+
+        return {
+            x: Math.round(pointerPosition.left - canvasOffset.x),
+            y: Math.round(pointerPosition.top - canvasOffset.y)
+        };
+    };
+
+    return {
+        init: function (settings) {
+            config = $.extend({
+                questionId: 0,
+                selector: ''
+            }, settings);
+
+            if (!config.questionId || !config.selector) {
+                return;
+            }
+
+            var xhrQuestion = null;
+
+            switch (config.for) {
+                case 'admin':
+                    xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript_admin.as.php', {
+                        modifyAnswers: parseInt(config.questionId)
+                    });
+                    break;
+
+                case 'user':
+                    xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript.as.php', {
+                        modifyAnswers: parseInt(config.questionId)
+                    });
+                    break;
+
+                case 'solution':
+                    xhrQuestion = $.getJSON('/main/exercice/hotspot_answers.as.php', {
+                        modifyAnswers: parseInt(config.questionId),
+                        exe_id: parseInt(config.exerciseId)
+                    });
+            }
+
+            $.when(xhrQuestion).done(function (questionInfo) {
+                switch (questionInfo.type) {
+                    case 'admin':
+                        startAdminSvg(questionInfo);
+                        break;
+
+                    case 'user':
+                        startUserSvg(questionInfo);
+                        break;
+
+                    case 'solution':
+                        break;
                 }
             });
         }

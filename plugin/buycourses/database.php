@@ -146,6 +146,7 @@ $saleComissions->addColumn(
     ['autoincrement' => true, 'unsigned' => true]
 );
 $saleComissions->addColumn('date', \Doctrine\DBAL\Types\Type::DATETIME);
+$saleComissions->addColumn('payout_date', \Doctrine\DBAL\Types\Type::DATETIME);
 $saleComissions->addColumn(
     'sale_id',
     \Doctrine\DBAL\Types\Type::INTEGER,

@@ -7,6 +7,7 @@
  * @author Imanol Losada <imanol.losada@beeznest.com>
  * @author Alex Aragón <alex.aragon@beeznest.com>
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ * @author José Loguercio Silva  <jose.loguercio@beeznest.com>
  */
 class BuyCoursesPlugin extends Plugin
 {
@@ -16,10 +17,15 @@ class BuyCoursesPlugin extends Plugin
     const TABLE_ITEM_BENEFICIARY = 'plugin_buycourses_item_rel_beneficiary';
     const TABLE_SALE = 'plugin_buycourses_sale';
     const TABLE_TRANSFER = 'plugin_buycourses_transfer';
+    const TABLE_COMISSION = 'plugin_buycourses_comission';
+    const TABLE_PAYPAL_PAYOUTS = 'plugin_buycourses_paypal_payouts';
     const PRODUCT_TYPE_COURSE = 1;
     const PRODUCT_TYPE_SESSION = 2;
     const PAYMENT_TYPE_PAYPAL = 1;
     const PAYMENT_TYPE_TRANSFER = 2;
+    const PAYOUT_STATUS_CANCELED = 2;
+    const PAYOUT_STATUS_PENDING = 0;
+    const PAYOUT_STATUS_COMPLETED = 1;
     const SALE_STATUS_CANCELED = -1;
     const SALE_STATUS_PENDING = 0;
     const SALE_STATUS_COMPLETED = 1;
@@ -39,17 +45,19 @@ class BuyCoursesPlugin extends Plugin
         parent::__construct(
             '1.0',
             "
-                Jose Angel Ruiz - NoSoloRed (original author),
-                Francis Gonzales and Yannick Warnier - BeezNest (integration),
-                Alex Aragón - BeezNest (Design icons and css styles),
-                Imanol Losada - BeezNest (introduction of sessions purchase),
-                Angel Fernando Quiroz Campos - BeezNest (cleanup and new reports)
+                Jose Angel Ruiz - NoSoloRed (original author) <br/>
+                Francis Gonzales and Yannick Warnier - BeezNest (integration) <br/>
+                Alex Aragón - BeezNest (Design icons and css styles) <br/>
+                Imanol Losada - BeezNest (introduction of sessions purchase) <br/>
+                Angel Fernando Quiroz Campos - BeezNest (cleanup and new reports) <br/>
+                José Loguercio Silva - BeezNest (pay teachers and comissions)
             ",
             array(
                 'show_main_menu_tab' => 'boolean',
                 'include_sessions' => 'boolean',
                 'paypal_enable' => 'boolean',
                 'transfer_enable' => 'boolean',
+                'comissions_enable' => 'boolean',
                 'unregistered_users_enable' => 'boolean'
             )
         );
@@ -66,7 +74,9 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_ITEM_BENEFICIARY,
             self::TABLE_ITEM,
             self::TABLE_SALE,
-            self::TABLE_CURRENCY
+            self::TABLE_CURRENCY,
+            self::TABLE_COMISSION,
+            self::TABLE_PAYPAL_PAYOUTS
         );
         $em = Database::getManager();
         $cn = $em->getConnection();
@@ -91,7 +101,9 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_ITEM_BENEFICIARY,
             self::TABLE_ITEM,
             self::TABLE_SALE,
-            self::TABLE_CURRENCY
+            self::TABLE_CURRENCY,
+            self::TABLE_COMISSION,
+            self::TABLE_PAYPAL_PAYOUTS
         );
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
@@ -760,6 +772,32 @@ class BuyCoursesPlugin extends Plugin
             'first'
         );
     }
+    
+    /**
+     * Get a list of sales by the payment type
+     * @param int $paymentType The payment type to filter (default : Paypal)
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSaleListByPaymentType($paymentType = self::PAYMENT_TYPE_PAYPAL)
+    {
+        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
+        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => ['s.payment_type = ? AND s.status = ?' => [intval($paymentType), self::SALE_STATUS_COMPLETED]],
+                'order' => 'id DESC'
+            ]
+        );
+    }
 
     /**
      * Get currency data by ID
@@ -892,6 +930,19 @@ class BuyCoursesPlugin extends Plugin
             self::SALE_STATUS_CANCELED => $this->get_lang('SaleStatusCanceled'),
             self::SALE_STATUS_PENDING => $this->get_lang('SaleStatusPending'),
             self::SALE_STATUS_COMPLETED => $this->get_lang('SaleStatusCompleted')
+        ];
+    }
+    
+    /**
+     * Get the statuses for Payouts
+     * @return array
+     */
+    public function getPayoutStatuses()
+    {
+        return [
+            self::PAYOUT_STATUS_CANCELED => $this->get_lang('PayoutStatusCanceled'),
+            self::PAYOUT_STATUS_PENDING => $this->get_lang('PayoutStatusPending'),
+            self::PAYOUT_STATUS_COMPLETED => $this->get_lang('PayoutStatusCompleted')
         ];
     }
 
@@ -1293,7 +1344,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register the beneficiaries users with the sale of item
      * @param int $itemId The item ID
-     * @param array $userIds The beneficiary user ID
+     * @param array $userIds The beneficiary user ID and Teachers comissions if enabled
      */
     public function registerItemBeneficiaries($itemId, array $userIds)
     {
@@ -1301,12 +1352,13 @@ class BuyCoursesPlugin extends Plugin
 
         $this->deleteItemBeneficiaries($itemId);
 
-        foreach ($userIds as $userId) {
+        foreach ($userIds as $userId => $comissions) {
             Database::insert(
                 $beneficiaryTable,
                 [
                     'item_id' => intval($itemId),
-                    'user_id' => intval($userId)
+                    'user_id' => intval($userId),
+                    'comissions' => intval($comissions)
                 ]
             );
         }
@@ -1328,6 +1380,186 @@ class BuyCoursesPlugin extends Plugin
         }
 
         return false;
+    }
+    
+    /**
+     * Gets the beneficiaries with comissions and current paypal accounts by sale 
+     * @param int $saleId The sale ID
+     * @return array
+     */
+    public function getBeneficiariesBySale($saleId)
+    {
+        
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $itemTable = Database::get_main_table(self::TABLE_ITEM);
+        $itemBeneficiariesTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
+
+        $paypalExtraField = Database::select(
+            "*",
+            $extraFieldTable,
+            [
+                'where' => ['variable = ?' => 'paypal']
+            ],
+            'first'
+        );
+        
+        if (!$paypalExtraField) {
+            return false;
+        }
+        
+        $beneficiaries = [];
+        $sale = $this->getSale($saleId);
+        $item = $this->getItemByProduct($sale['product_id'], $sale['product_type']);
+        $itemBeneficiaries = $this->getItemBeneficiaries($item['id']);
+        
+        $innerJoins = "
+            INNER JOIN $userTable u ON e.item_id = u.id
+            INNER JOIN $itemBeneficiariesTable ib ON e.item_id = ib.user_id
+            INNER JOIN $itemTable i ON ib.item_id = " . $item['id'] . "
+        ";
+        
+        foreach($itemBeneficiaries as $itemBeneficiarie) {
+            $beneficiaries[] = Database::select(
+                "ib.item_id, e.item_id as user_id, u.firstname, u.lastname, e.value as paypal_account, ib.comissions as comission",
+                "$extraFieldValues e $innerJoins",
+                [
+                    'where' => ['e.field_id = ? AND e.item_id = ? AND ib.item_id = ?' => [intval($paypalExtraField['id']), $itemBeneficiarie['user_id'], intval($item['id'])]]
+                ],
+                'first'
+            ); 
+        }
+
+        return $beneficiaries;
+        
+    }
+    
+    /**
+     * gets all payouts
+     * @param int $status - default 0 - pending
+     * @param int $payoutId - for get an individual payout if want all then false
+     * @return array
+     */
+    public function getPayouts($status = self::PAYOUT_STATUS_PENDING, $payoutId = false)
+    {
+        $condition = ($payoutId) ? 'AND p.id = '. intval($payoutId) : '';
+        $typeResult = ($condition) ? 'first' : 'all';
+        $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
+        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
+        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        
+        $paypalExtraField = Database::select(
+            "*",
+            $extraFieldTable,
+            [
+                'where' => ['variable = ?' => 'paypal']
+            ],
+            'first'
+        );
+        
+        if (!$paypalExtraField) {
+            return false;
+        }
+        
+        $innerJoins = "
+            INNER JOIN $userTable u ON p.user_id = u.id
+            INNER JOIN $saleTable s ON s.id = p.sale_id
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            LEFT JOIN  $extraFieldValues efv ON p.user_id = efv.item_id 
+            AND field_id = " . intval($paypalExtraField['id']) . "
+        ";
+        
+        $payouts = Database::select(
+            "p.* , u.firstname, u.lastname, efv.value as paypal_account, s.reference as sale_reference, s.price as item_price, c.iso_code",
+            "$payoutsTable p $innerJoins",
+            [
+                'where' => ['p.status = ? '.$condition => $status]
+            ],
+            $typeResult
+        );
+        
+        return $payouts;
+    }
+    
+    /**
+     * Register the users payouts
+     * @param int $saleId The sale ID
+     * @return array
+     */
+    public function storePayouts($saleId)
+    {
+        $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
+        $platformComission = $this->getPlatformComission();
+
+        $sale = $this->getSale($saleId);
+        $teachersComission = number_format((floatval($sale['price']) * intval($platformComission['comission']))/100, 2);
+        
+        
+        $beneficiaries = $this->getBeneficiariesBySale($saleId);
+        foreach ($beneficiaries as $beneficiarie) {
+            Database::insert(
+                $payoutsTable,
+                [
+                    'date' => $sale['date'],
+                    'payout_date' => getdate(),
+                    'sale_id' => intval($saleId),
+                    'user_id' => $beneficiarie['user_id'],
+                    'comission' => number_format((floatval($teachersComission) * intval($beneficiarie['comission']))/100, 2),
+                    'status' => self::PAYOUT_STATUS_PENDING
+                ]
+            );
+        }
+    }
+    
+    /**
+     * Register the users payouts
+     * @param int $payoutId The payout ID
+     * @param int $status The status to set (-1 to cancel, 0 to pending, 1 to completed)
+     * @return array
+     */
+    public function setStatusPayouts($payoutId, $status)
+    {
+        $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
+        
+        Database::update(
+            $payoutsTable,
+            ['status' => $status],
+            ['id = ?' => intval($payoutId)]
+        );
+          
+    }
+    
+    /**
+     * Gets the stored platform comission params
+     * @return array
+     */
+    public function getPlatformComission()
+    {
+        return Database::select(
+            '*',
+            Database::get_main_table(BuyCoursesPlugin::TABLE_COMISSION),
+            ['id = ?' => 1],
+            'first'
+        );
+    }
+    
+    /**
+     * Update the platform comission
+     * @param int $params platform comission
+     * @return int The number of affected rows. Otherwise return false
+     */
+    public function updateComission($params)
+    {
+        $comissionTable = Database::get_main_table(BuyCoursesPlugin::TABLE_COMISSION);
+
+        return Database::update(
+            $comissionTable,
+            ['comission' => intval($params['comission'])]
+        );
     }
 
 }

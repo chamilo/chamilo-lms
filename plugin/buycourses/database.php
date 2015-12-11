@@ -233,7 +233,7 @@ $paypalExtraField = Database::select(
         
 if (!$paypalExtraField) {
     Database::insert(
-        $paypalTable,
+        $extraFieldTable,
         [
             'extra_field_type' => 1,
             'field_type' => 1,

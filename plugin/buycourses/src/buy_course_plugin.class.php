@@ -1391,47 +1391,12 @@ class BuyCoursesPlugin extends Plugin
     {
         
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $itemTable = Database::get_main_table(self::TABLE_ITEM);
-        $itemBeneficiariesTable = Database::get_main_table(self::TABLE_ITEM_BENEFICIARY);
-
-        $paypalExtraField = Database::select(
-            "*",
-            $extraFieldTable,
-            [
-                'where' => ['variable = ?' => 'paypal']
-            ],
-            'first'
-        );
-        
-        if (!$paypalExtraField) {
-            return false;
-        }
         
         $beneficiaries = [];
         $sale = $this->getSale($saleId);
         $item = $this->getItemByProduct($sale['product_id'], $sale['product_type']);
         $itemBeneficiaries = $this->getItemBeneficiaries($item['id']);
-        
-        $innerJoins = "
-            INNER JOIN $userTable u ON e.item_id = u.id
-            INNER JOIN $itemBeneficiariesTable ib ON e.item_id = ib.user_id
-            INNER JOIN $itemTable i ON ib.item_id = " . $item['id'] . "
-        ";
-        
-        foreach($itemBeneficiaries as $itemBeneficiarie) {
-            $beneficiaries[] = Database::select(
-                "ib.item_id, e.item_id as user_id, u.firstname, u.lastname, e.value as paypal_account, ib.comissions as comission",
-                "$extraFieldValues e $innerJoins",
-                [
-                    'where' => ['e.field_id = ? AND e.item_id = ? AND ib.item_id = ?' => [intval($paypalExtraField['id']), $itemBeneficiarie['user_id'], intval($item['id'])]]
-                ],
-                'first'
-            ); 
-        }
-
-        return $beneficiaries;
+        return $itemBeneficiaries;
         
     }
     
@@ -1508,7 +1473,7 @@ class BuyCoursesPlugin extends Plugin
                     'payout_date' => getdate(),
                     'sale_id' => intval($saleId),
                     'user_id' => $beneficiarie['user_id'],
-                    'comission' => number_format((floatval($teachersComission) * intval($beneficiarie['comission']))/100, 2),
+                    'comission' => number_format((floatval($teachersComission) * intval($beneficiarie['comissions']))/100, 2),
                     'status' => self::PAYOUT_STATUS_PENDING
                 ]
             );

@@ -1563,7 +1563,6 @@ var DelineationQuestion = (function () {
                         e.preventDefault();
                     },
                     'click': function (e) {
-                        console.log(isDrawing);
                         e.preventDefault();
 
                         var currentPoint = getPointOnImage(self.el, e.clientX, e.clientY),
@@ -1619,6 +1618,8 @@ var DelineationQuestion = (function () {
                 );
         };
         image.src = questionInfo.image;
+
+        lang = questionInfo.lang;
     };
 
     var config = {

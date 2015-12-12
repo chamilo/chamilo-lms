@@ -10,6 +10,7 @@ $strings['transfer_enable'] = "Habilitar transferencia";
 $strings['unregistered_users_enable'] = "Permitir usuarios sin registro en la plataforma";
 
 $strings['PaypalPayoutComissions'] = "Pagar comisiones por Paypal";
+$strings['MyPayouts'] = "Mis Pagos";
 $strings['Comission'] = "Comisión";
 $strings['Comissions'] = "Comisiones";
 $strings['SetComissions'] = "Aplicar comisiones";

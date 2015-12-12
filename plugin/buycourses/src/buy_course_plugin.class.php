@@ -1154,6 +1154,39 @@ class BuyCoursesPlugin extends Plugin
             ]
         );
     }
+    
+    /**
+     * Get a list of sales by the user id
+     * @param int $id The user id
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSaleListByUserId($id)
+    {
+
+        if (empty($id)) {
+            return [];
+        }
+
+        $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
+        $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => [
+                    'u.id = ?' => $id
+                ],
+                'order' => 'id DESC'
+            ]
+        );
+    }
 
     /**
      * Convert the course info to array with necessary course data for save item
@@ -1406,9 +1439,10 @@ class BuyCoursesPlugin extends Plugin
      * @param int $payoutId - for get an individual payout if want all then false
      * @return array
      */
-    public function getPayouts($status = self::PAYOUT_STATUS_PENDING, $payoutId = false)
+    public function getPayouts($status = self::PAYOUT_STATUS_PENDING, $payoutId = false, $userId = false)
     {
         $condition = ($payoutId) ? 'AND p.id = '. intval($payoutId) : '';
+        $condition2 = ($userId) ? ' AND p.user_id = ' . intval($userId) : '';
         $typeResult = ($condition) ? 'first' : 'all';
         $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
         $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
@@ -1442,7 +1476,7 @@ class BuyCoursesPlugin extends Plugin
             "p.* , u.firstname, u.lastname, efv.value as paypal_account, s.reference as sale_reference, s.price as item_price, c.iso_code",
             "$payoutsTable p $innerJoins",
             [
-                'where' => ['p.status = ? '.$condition => $status]
+                'where' => ['p.status = ? '.$condition . ' ' .$condition2 => $status]
             ],
             $typeResult
         );

@@ -21,9 +21,6 @@ $action = isset($_GET['a']) ? $_GET['a'] : null;
 
 switch ($action) {
     case 'saleInfo':
-        if (api_is_anonymous()) {
-            break;
-        }
         
         $saleId = isset($_POST['id']) ? $_POST['id'] : '';
         $sale = $plugin->getSale($saleId);
@@ -61,9 +58,6 @@ switch ($action) {
         break;
     
     case 'stats':
-        if (api_is_anonymous()) {
-            break;
-        }
         
         $stats = [];
         $stats['completed_count'] = 0;

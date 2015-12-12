@@ -16,7 +16,7 @@ RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
 RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 
 # Course redirection
-RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cDir=$1 [QSA,L]
+RewriteRule ^courses/([^/]+)/?$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
 
 # Rewrite everything in the scorm folder of a course to the download script

@@ -990,8 +990,10 @@ window.HotspotQuestion = (function () {
 
                 $(config.selector).parent().prepend('\n\
                     <div id="hotspot-messages-' + config.questionId + '" class="alert alert-info">\n\
-                        <span class="fa fa-info-circle" aria-hidden="true"></span>\n\
-                        <span></span>\n\
+                        <h4>\n\
+                            <span class="fa fa-info-circle" aria-hidden="true"></span>\n\
+                            <span></span>\n\
+                        </h4>\n\
                     </div>\n\
                 ');
 
@@ -1193,7 +1195,7 @@ window.HotspotQuestion = (function () {
     };
 })();
 
-var DelineationQuestion = (function () {
+window.DelineationQuestion = (function () {
     'use strict';
 
     var PolygonModel = function (attributes) {
@@ -1530,7 +1532,10 @@ var DelineationQuestion = (function () {
 
             $(config.selector).parent().prepend('\n\
                 <div id="delineation-messages" class="alert alert-info">\n\
-                    <span class="fa fa-info-circle" aria-hidden="true"> <span></span>' + lang.DelineationStatus1 + '</span>\n\
+                    <h4>\n\
+                        <span class="fa fa-info-circle" aria-hidden="true"></span>\n\
+                        <span>' + lang.DelineationStatus1 + '</span>\n\
+                    </h4>\n\
                 </div>\n\
             ');
 
@@ -1651,7 +1656,10 @@ var DelineationQuestion = (function () {
 
             $(config.selector).parent().prepend('\n\
                 <div id="delineation-messages" class="alert alert-info">\n\
-                    <span class="fa fa-info-circle" aria-hidden="true"> <span></span>' + lang.DelineationStatus1 + '</span>\n\
+                    <h4>\n\
+                        <span class="fa fa-info-circle" aria-hidden="true"></span>\n\
+                        <span>' + lang.DelineationStatus1 + '</span>\n\
+                    </h4>\n\
                 </div>\n\
             ');
 

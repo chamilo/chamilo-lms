@@ -55,6 +55,11 @@ class Version20150603181728 extends AbstractMigrationChamilo
                 SELECT id FROM user
             )
         ");
+        $this->addSql("
+            UPDATE c_item_property SET session_id = NULL WHERE session_id NOT IN (
+                SELECT id FROM session
+            )
+        ");
         // Remove inconsistencies about non-existing courses
         $this->addSql("DELETE FROM c_item_property WHERE c_id = 0");
         // Remove inconsistencies about non-existing users

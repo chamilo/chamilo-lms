@@ -917,17 +917,17 @@ window.HotspotQuestion = (function () {
 
                     if (self.answersCollection.length === self.hotspotsCollection.length) {
                         $(config.selector).parent()
-                            .find('#hotspot-messages span:not(.fa)-' + config.questionId).text(
-                            lang.HotspotExerciseFinished
+                            .find('#hotspot-messages-' + config.questionId + ' span:not(.fa)').text(
+                                lang.HotspotExerciseFinished
                             );
 
                         return;
                     }
 
                     $(config.selector).parent()
-                        .find('#hotspot-messages span:not(.fa)-' + config.questionId).text(
-                        lang.NextAnswer + ' ' + self.hotspotsCollection.get(
-                            self.answersCollection.length
+                        .find('#hotspot-messages-' + config.questionId + ' span:not(.fa)').text(
+                            lang.NextAnswer + ' ' + self.hotspotsCollection.get(
+                                self.answersCollection.length
                             ).name
                         );
 
@@ -988,7 +988,12 @@ window.HotspotQuestion = (function () {
 
                 $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
 
-                $(config.selector).parent().prepend('<div id="hotspot-messages-' + config.questionId + '"></div>');
+                $(config.selector).parent().prepend('\n\
+                    <div id="hotspot-messages-' + config.questionId + '" class="alert alert-info">\n\
+                        <span class="fa fa-info-circle" aria-hidden="true"></span>\n\
+                        <span></span>\n\
+                    </div>\n\
+                ');
 
                 $.each(questionInfo.hotspots, function (index, hotspotInfo) {
                     var hotspot = null;
@@ -1011,10 +1016,10 @@ window.HotspotQuestion = (function () {
                     hotspotsCollection.add(hotspot);
                 });
 
-                $(config.selector).parent().find('#hotspot-messages span:not(.fa)-' + config.questionId)
+                $(config.selector).parent().find('#hotspot-messages-' + config.questionId + ' span:not(.fa)')
                     .text(
                         lang.NextAnswer + ' ' + hotspotsCollection.get(0).name
-                        );
+                    );
             };
             image.src = questionInfo.image;
 

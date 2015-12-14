@@ -643,7 +643,7 @@ class ScormAnswerHotspot extends Answer
                     <div id="hotspot-{$this->questionJSId}"></div>
                     <script>
                         document.addEventListener('DOMContentListener', function () {
-                            HotspotQuestion.init({
+                            new HotspotQuestion({
                                 questionId: {$this->questionJSId},
                                 selector: '#hotspot-{$this->questionJSId}',
                                 for: 'user'

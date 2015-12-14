@@ -377,7 +377,7 @@ foreach ($questionList as $questionId) {
                             <div id=\"hotspot-solution\"></div>
                             <script>
                                 $(document).on('ready', function () {
-                                    HotspotQuestion.init({
+                                    new HotspotQuestion({
                                         questionId: $questionId,
                                         exerciseId: $id,
                                         selector: '#hotspot-solution',
@@ -519,7 +519,7 @@ foreach ($questionList as $questionId) {
                             <div id=\"hotspot-solution\"></div>
                             <script>
                                 $(document).on('ready', function () {
-                                    HotspotQuestion.init({
+                                    new HotspotQuestion({
                                         questionId: $questionId,
                                         exerciseId: $id,
                                         selector: '#hotspot-solution',

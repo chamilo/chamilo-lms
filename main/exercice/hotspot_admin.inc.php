@@ -1033,13 +1033,13 @@ if ($modifyAnswers) {
     <script>
         $(document).on('ready', function () {
             <?php if ($answerType == HOT_SPOT_DELINEATION) { ?>
-                DelineationQuestion.init({
+                new DelineationQuestion({
                     questionId: <?php echo $modifyAnswers ?>,
                     selector: '#hotspot-container',
                     for: 'admin'
                 });
             <?php } else { ?>
-                HotspotQuestion.init({
+                new HotspotQuestion({
                     questionId: <?php echo $modifyAnswers ?>,
                     selector: '#hotspot-container',
                     for: 'admin'

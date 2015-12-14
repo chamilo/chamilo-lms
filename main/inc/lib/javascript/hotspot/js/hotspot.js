@@ -1,4 +1,5 @@
-var HotspotQuestion = (function () {
+window.HotspotQuestion = (function () {
+    return function (settings) {
     var HotspotModel = function (attributes) {
         this.attributes = attributes;
         this.id = 0;
@@ -1139,9 +1140,6 @@ var HotspotQuestion = (function () {
     };
 
     var config, lang, selectedHotspotIndex = 0, contextMenu;
-
-    return {
-        init: function (settings) {
             config = $.extend({
                 questionId: 0,
                 selector: ''
@@ -1187,7 +1185,6 @@ var HotspotQuestion = (function () {
                         startHotspotsSolution(questionInfo);
                 }
             });
-        }
     };
 })();
 
@@ -1677,8 +1674,7 @@ var DelineationQuestion = (function () {
         };
     };
 
-    return {
-        init: function (settings) {
+    return function (settings) {
             config = $.extend({
                 questionId: 0,
                 selector: ''
@@ -1724,6 +1720,5 @@ var DelineationQuestion = (function () {
                         break;
                 }
             });
-        }
     };
 })();

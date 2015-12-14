@@ -1177,7 +1177,7 @@ HOTSPOT;
                                 <div class=\"hotspot-image\"></div>
                                 <script>
                                     $(document).on('ready', function () {
-                                        " . ($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion') . ".init({
+                                        new " . ($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion') . "({
                                             questionId: $questionId,
                                             selector: '#question_div_' + $questionId + ' .hotspot-image',
                                             for: 'user'

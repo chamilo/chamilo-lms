@@ -89,6 +89,7 @@ if ($form->validate()) {
                         'success'
                     )
                 );
+                $plugin->storePayouts($sale['id']);
                 break;
             }
 
@@ -99,6 +100,7 @@ if ($form->validate()) {
                         'success'
                     )
                 );
+                $plugin->storePayouts($sale['id']);
                 break;
             }
 

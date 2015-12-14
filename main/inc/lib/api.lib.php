@@ -8050,6 +8050,26 @@ function api_protect_course_group($tool, $showHeader = true)
 }
 
 /**
+ * @param array $array multidimensional array
+ * @param int $key key to find to compare
+ *
+ */
+function api_unique_multidim_array($array, $key){
+    $temp_array = array();
+    $i = 0;
+    $key_array = array();
+   
+    foreach($array as $val){
+        if(!in_array($val[$key],$key_array)){
+            $key_array[$i] = $val[$key];
+            $temp_array[$i] = $val;
+        }
+        $i++;
+    }
+    return $temp_array;
+}
+
+/**
  * Limit the access to Session Admins wheen the limit_session_admin_role
  * configuration variable is set to true
  */

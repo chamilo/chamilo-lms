@@ -1,3 +1,275 @@
 .buy-courses-tabs {
     margin-bottom: 15px;
 }
+
+// spinner wobblebar
+
+@-moz-keyframes wobblebar-loader {
+  0% {
+    left: 4px;
+  }
+  3% {
+    left: 204px;
+  }
+  6% {
+    left: 4px;
+  }
+  9% {
+    left: 204px;
+  }
+  12% {
+    left: 4px;
+  }
+  15% {
+    left: 204px;
+  }
+  18% {
+    left: 32px;
+  }
+  27% {
+    left: 32px;
+  }
+  30% {
+    left: 204px;
+  }
+  33% {
+    left: 4px;
+  }
+  36% {
+    left: 204px;
+  }
+  39% {
+    left: 4px;
+  }
+  42% {
+    left: 204px;
+  }
+  45% {
+    left: 4px;
+  }
+  48% {
+    left: 204px;
+  }
+  51% {
+    left: 152px;
+  }
+  63% {
+    left: 152px;
+  }
+  66% {
+    left: 4px;
+  }
+  69% {
+    left: 204px;
+  }
+  72% {
+    left: 4px;
+  }
+  75% {
+    left: 204px;
+  }
+  78% {
+    left: 4px;
+  }
+  81% {
+    left: 204px;
+  }
+  84% {
+    left: 72px;
+  }
+  94% {
+    left: 72px;
+  }
+  97% {
+    left: 204px;
+  }
+}
+@-webkit-keyframes wobblebar-loader {
+  0% {
+    left: 4px;
+  }
+  3% {
+    left: 204px;
+  }
+  6% {
+    left: 4px;
+  }
+  9% {
+    left: 204px;
+  }
+  12% {
+    left: 4px;
+  }
+  15% {
+    left: 204px;
+  }
+  18% {
+    left: 32px;
+  }
+  27% {
+    left: 32px;
+  }
+  30% {
+    left: 204px;
+  }
+  33% {
+    left: 4px;
+  }
+  36% {
+    left: 204px;
+  }
+  39% {
+    left: 4px;
+  }
+  42% {
+    left: 204px;
+  }
+  45% {
+    left: 4px;
+  }
+  48% {
+    left: 204px;
+  }
+  51% {
+    left: 152px;
+  }
+  63% {
+    left: 152px;
+  }
+  66% {
+    left: 4px;
+  }
+  69% {
+    left: 204px;
+  }
+  72% {
+    left: 4px;
+  }
+  75% {
+    left: 204px;
+  }
+  78% {
+    left: 4px;
+  }
+  81% {
+    left: 204px;
+  }
+  84% {
+    left: 72px;
+  }
+  94% {
+    left: 72px;
+  }
+  97% {
+    left: 204px;
+  }
+}
+@keyframes wobblebar-loader {
+  0% {
+    left: 4px;
+  }
+  3% {
+    left: 204px;
+  }
+  6% {
+    left: 4px;
+  }
+  9% {
+    left: 204px;
+  }
+  12% {
+    left: 4px;
+  }
+  15% {
+    left: 204px;
+  }
+  18% {
+    left: 32px;
+  }
+  27% {
+    left: 32px;
+  }
+  30% {
+    left: 204px;
+  }
+  33% {
+    left: 4px;
+  }
+  36% {
+    left: 204px;
+  }
+  39% {
+    left: 4px;
+  }
+  42% {
+    left: 204px;
+  }
+  45% {
+    left: 4px;
+  }
+  48% {
+    left: 204px;
+  }
+  51% {
+    left: 152px;
+  }
+  63% {
+    left: 152px;
+  }
+  66% {
+    left: 4px;
+  }
+  69% {
+    left: 204px;
+  }
+  72% {
+    left: 4px;
+  }
+  75% {
+    left: 204px;
+  }
+  78% {
+    left: 4px;
+  }
+  81% {
+    left: 204px;
+  }
+  84% {
+    left: 72px;
+  }
+  94% {
+    left: 72px;
+  }
+  97% {
+    left: 204px;
+  }
+}
+/* :not(:required) hides this rule from IE9 and below */
+.wobblebar-loader:not(:required) {
+  background: #2E6DA4;
+  -moz-border-radius: 10.66667px;
+  -webkit-border-radius: 10.66667px;
+  border-radius: 10.66667px;
+  display: inline-block;
+  overflow: hidden;
+  text-indent: -9999px;
+  width: 228px;
+  height: 21.33333px;
+  position: relative;
+}
+.wobblebar-loader:not(:required)::after {
+  -moz-animation: wobblebar-loader 15000ms infinite ease;
+  -webkit-animation: wobblebar-loader 15000ms infinite ease;
+  animation: wobblebar-loader 15000ms infinite ease;
+  background: white;
+  display: block;
+  -moz-border-radius: 7.11111px;
+  -webkit-border-radius: 7.11111px;
+  border-radius: 7.11111px;
+  content: '';
+  position: absolute;
+  top: 3.55556px;
+  left: 4px;
+  width: 21.33333px;
+  height: 14.22222px;
+}

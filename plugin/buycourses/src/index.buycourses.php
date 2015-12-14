@@ -13,7 +13,7 @@ $guess_enable = $plugin->get('unregistered_users_enable');
 if ($guess_enable == "true" || isset($_SESSION['_user'])) {
     // If the user is NOT an administrator, redirect it to course/session buy list
     if (!api_is_platform_admin()) {
-        header('Location: src/course_catalog.php');
+        header('Location: src/course_panel.php');
         exit;
     }
 

@@ -113,6 +113,11 @@ $itemBeneficiary->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     ['unsigned' => true]
 );
+$itemBeneficiary->addColumn(
+    'comissions',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true]
+);
 $itemBeneficiary->setPrimaryKey(['id']);
 $itemBeneficiary->addForeignKeyConstraint(
     $itemTable,
@@ -121,6 +126,49 @@ $itemBeneficiary->addForeignKeyConstraint(
     ['onDelete' => 'CASCADE']
 );
 
+$comissions = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COMISSION);
+$comissions->addColumn(
+    'id',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['autoincrement' => true, 'unsigned' => true]
+);
+$comissions->addColumn(
+    'comission',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true]
+);
+$comissions->setPrimaryKey(['id']);
+
+$saleComissions = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
+$saleComissions->addColumn(
+    'id',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['autoincrement' => true, 'unsigned' => true]
+);
+$saleComissions->addColumn('date', \Doctrine\DBAL\Types\Type::DATETIME);
+$saleComissions->addColumn('payout_date', \Doctrine\DBAL\Types\Type::DATETIME);
+$saleComissions->addColumn(
+    'sale_id',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true]
+);
+$saleComissions->addColumn(
+    'user_id',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true]
+);
+$saleComissions->addColumn(
+    'comission',
+    \Doctrine\DBAL\Types\Type::DECIMAL,
+    ['scale' => 2]
+);
+$saleComissions->addColumn(
+    'status',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true]
+);
+$saleComissions->setPrimaryKey(['id']);
+        
 $saleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SALE);
 $saleTable->addColumn(
     'id',
@@ -172,6 +220,35 @@ $paypalTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL);
 $currencyTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CURRENCY);
 $itemTable = Database::get_main_table(BuyCoursesPlugin::TABLE_ITEM);
 $saleTable = Database::get_main_table(BuyCoursesPlugin::TABLE_SALE);
+$comissionTable = Database::get_main_table(BuyCoursesPlugin::TABLE_COMISSION);
+$extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+
+$paypalExtraField = Database::select(
+    "*",
+    $extraFieldTable,
+    [
+        'where' => ['variable = ?' => 'paypal']
+    ],
+    'first'
+);
+        
+if (!$paypalExtraField) {
+    Database::insert(
+        $extraFieldTable,
+        [
+            'extra_field_type' => 1,
+            'field_type' => 1,
+            'variable' => 'paypal',
+            'display_text' => 'Paypal',
+            'default_value' => '',
+            'field_order' => 0,
+            'visible' => 1,
+            'changeable' => 1,
+            'filter' => 0,
+            'created_at' => getdate()
+        ]
+    );
+}
 
 Database::insert(
     $paypalTable,
@@ -180,6 +257,13 @@ Database::insert(
         'password' => '',
         'signature' => '',
         'sandbox' => true
+    ]
+);
+
+Database::insert(
+    $comissionTable,
+    [
+        'comission' => 0
     ]
 );
 

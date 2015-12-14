@@ -8,6 +8,15 @@
 */
 require_once '../inc/global.inc.php';
 
+api_protect_course_script(false);
+
+$isAllowedToEdit = api_is_allowed_to_edit(null,true);
+
+if (!$isAllowedToEdit) {
+    api_not_allowed(true);
+    exit;
+}
+
 // set vars
 $questionId = intval($_GET['modifyAnswers']);
 $objQuestion = Question::read($questionId);

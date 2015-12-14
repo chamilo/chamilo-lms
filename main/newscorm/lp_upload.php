@@ -86,8 +86,8 @@ if (Request::is_post() && $is_error) {
                                     );
                                     $replace = array(
                                         'href="http://www.',
-                                        'href="'.$proxyPath.'?type=link&src=https://',
-                                        'href="'.$proxyPath.'?type=link&src=http://',
+                                        'target = "_blank" href="'.$proxyPath.'?type=link&src=https://',
+                                        'target = "_blank" href="'.$proxyPath.'?type=link&src=http://',
                                         'url="http://www.'
                                     );
                                     $templateContent = str_replace($find, $replace, $templateContent);
@@ -115,10 +115,10 @@ if (Request::is_post() && $is_error) {
                                 if (file_exists($framePath) && is_file($framePath)) {
                                     $content = file_get_contents($framePath);
                                     $find = array(
-                                        '"iFrame" src="\' + pageSrc + \'"'
+                                        '$iFrameHolder.html(iFrameTag);'
                                     );
                                     $replace = array(
-                                        '"iFrame" src="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'"'
+                                        'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); '
                                     );
                                     $content = str_replace($find, $replace, $content);
                                     file_put_contents($framePath, $content);

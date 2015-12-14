@@ -17,11 +17,11 @@ api_protect_admin_script(true);
 
 $plugin = BuyCoursesPlugin::create();
 
-$comissionsEnable = $plugin->get('comissions_enable');
+$commissionsEnable = $plugin->get('commissions_enable');
 $payoutStatuses = $plugin->getPayoutStatuses();
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_COMPLETED;
 
-if ($comissionsEnable !== "true") {
+if ($commissionsEnable !== "true") {
     api_not_allowed(true);
 }
 
@@ -69,7 +69,7 @@ foreach ($payouts as $payout) {
         'payout_date' => ($payout['payout_date'] === '0000-00-00 00:00:00') ? '-' : api_format_date($payout['payout_date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $payout['iso_code'],
         'price' => $payout['item_price'],
-        'comission' => $payout['comission'],
+        'commission' => $payout['commission'],
         'paypal_account' => $payout['paypal_account'],
         'status' => $payout['status']
     ];

@@ -5,7 +5,7 @@
             <tr>
                 <th class="text-center">{{ 'OrderReference'| get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-center">{{ 'PayoutDate'| get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th class="text-right">{{ 'Comission'| get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th class="text-right">{{ 'Commission'| get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-right">{{ 'PayPalAccount'| get_plugin_lang('BuyCoursesPlugin') }}</th>
             </tr>
         </thead>
@@ -14,7 +14,7 @@
                 <tr>
                     <td class="text-center" style="vertical-align:middle"><a id="{{ payout.sale_id }}" class="saleInfo" data-toggle="modal" data-target="#saleInfo" href="#">{{ payout.reference }}</a></td>
                     <td class="text-center" style="vertical-align:middle">{{ payout.payout_date }}</td>
-                    <td class="text-right" style="vertical-align:middle">{{  payout.currency ~ ' ' ~ payout.comission }}</td>
+                    <td class="text-right" style="vertical-align:middle">{{  payout.currency ~ ' ' ~ payout.commission }}</td>
                     <td class="text-right" style="vertical-align:middle">{{ payout.paypal_account }}</td>
                 </tr>
             {% endfor %}

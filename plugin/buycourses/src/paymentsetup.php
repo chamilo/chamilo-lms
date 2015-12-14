@@ -17,7 +17,7 @@ $plugin = BuyCoursesPlugin::create();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $transferEnable = $plugin->get('transfer_enable');
-$comissionsEnable = $plugin->get('comissions_enable');
+$commissionsEnable = $plugin->get('commissions_enable');
 
 if (isset($_GET['action'], $_GET['id'])) {
     if ($_GET['action'] == 'delete_taccount') {
@@ -114,14 +114,14 @@ $paypalForm->addCheckBox('sandbox', null, $plugin->get_lang('Sandbox'));
 $paypalForm->addButtonSave(get_lang('Save'));
 $paypalForm->setDefaults($plugin->getPaypalParams());
 
-// Platform Comissions
+// Platform Commissions
 
-$comissionForm = new FormValidator('comissions');
+$commissionForm = new FormValidator('commissions');
 
-if ($comissionForm->validate()) {
-    $comissionFormValues = $comissionForm->getSubmitValues();
+if ($commissionForm->validate()) {
+    $commissionFormValues = $commissionForm->getSubmitValues();
 
-    $plugin->updateComission($comissionFormValues);
+    $plugin->updateCommission($commissionFormValues);
 
     Display::addFlash(
         Display::return_message(get_lang('Saved'), 'success')
@@ -131,16 +131,16 @@ if ($comissionForm->validate()) {
     exit;
 }
 
-$comissionForm->addElement(
+$commissionForm->addElement(
     'number',
-    'comission',
-    [$plugin->get_lang('Comission'), null, '%'],
+    'commission',
+    [$plugin->get_lang('Commission'), null, '%'],
     ['step' => 1, 'cols-size' => [3, 7, 1], 'min' => 0, 'max' => 100]
 );
 
 
-$comissionForm->addButtonSave(get_lang('Save'));
-$comissionForm->setDefaults($plugin->getPlatformComission());
+$commissionForm->addButtonSave(get_lang('Save'));
+$commissionForm->setDefaults($plugin->getPlatformCommission());
 
 $transferForm = new FormValidator('transfer_account');
 
@@ -194,11 +194,11 @@ $tpl = new Template($templateName);
 $tpl->assign('header', $templateName);
 $tpl->assign('curency_form', $currencyForm->returnForm());
 $tpl->assign('paypal_form', $paypalForm->returnForm());
-$tpl->assign('comission_form', $comissionForm->returnForm());
+$tpl->assign('commission_form', $commissionForm->returnForm());
 $tpl->assign('transfer_form', $transferForm->returnForm());
 $tpl->assign('transfer_accounts', $transferAccounts);
 $tpl->assign('paypal_enable', $paypalEnable);
-$tpl->assign('comissions_enable', $comissionsEnable);
+$tpl->assign('commissions_enable', $commissionsEnable);
 $tpl->assign('transfer_enable', $transferEnable);
 
 $content = $tpl->fetch('buycourses/view/paymentsetup.tpl');

@@ -15,7 +15,7 @@ api_protect_admin_script(true);
 $plugin = BuyCoursesPlugin::create();
 
 $paypalEnable = $plugin->get('paypal_enable');
-$comissionsEnable = $plugin->get('comissions_enable');
+$commissionsEnable = $plugin->get('commissions_enable');
 
 $action = isset($_GET['a']) ? $_GET['a'] : null;
 
@@ -25,7 +25,7 @@ switch ($action) {
             break;
         }
         
-        $saleId = isset($_POST['id']) ? $_POST['id'] : '';
+        $saleId = isset($_POST['id']) ? intval($_POST['id']) : '';
         $sale = $plugin->getSale($saleId);
         $productType = ($sale['product_type'] == 1) ? get_lang('Course') : get_lang('Session');
         $paymentType = ($sale['payment_type'] == 1) ? 'Paypal' : $plugin->get_lang('BankTransfer');
@@ -80,19 +80,19 @@ switch ($action) {
         
         foreach ($completedPayouts as $completed) {
             $stats['completed_count'] = count($completedPayouts);
-            $stats['completed_total_amount'] += $completed['comission'];
+            $stats['completed_total_amount'] += $completed['commission'];
             $stats['completed_total_amount'] = number_format($stats['completed_total_amount'], 2);
         }
         
         foreach ($pendingPayouts as $pending) {
             $stats['pending_count'] = count($pendingPayouts);
-            $stats['pending_total_amount'] += $pending['comission'];
+            $stats['pending_total_amount'] += $pending['commission'];
             $stats['pending_total_amount'] = number_format($stats['pending_total_amount'], 2);
         }
         
         foreach ($canceledPayouts as $canceled) {
             $stats['canceled_count'] = count($canceledPayouts);
-            $stats['canceled_total_amount'] += $canceled['comission'];
+            $stats['canceled_total_amount'] += $canceled['commission'];
             $stats['canceled_total_amount'] = number_format($stats['canceled_total_amount'], 2);
         }
         
@@ -129,12 +129,12 @@ switch ($action) {
             break;
         }
         
-        foreach($payouts as $index => $id) {
+        foreach ($payouts as $index => $id) {
             $allPays[] = $plugin->getPayouts(BuyCoursesPlugin::PAYOUT_STATUS_PENDING, $id);
         }
         
-        foreach($allPays as $payout) {
-            $totalPayout += number_format($payout['comission'], 2);
+        foreach ($allPays as $payout) {
+            $totalPayout += number_format($payout['commission'], 2);
             $totalAccounts++;
         }
         
@@ -184,7 +184,7 @@ switch ($action) {
             break;
         }
         
-        foreach($payouts as $index => $id) {
+        foreach ($payouts as $index => $id) {
             $allPayouts[] = $plugin->getPayouts(BuyCoursesPlugin::PAYOUT_STATUS_PENDING, $id);
         }
         
@@ -195,8 +195,8 @@ switch ($action) {
         
         $result = MassPayment($allPayouts, $isoCode);
         
-        if($result['ACK'] === 'Success') {
-            foreach($allPayouts as $payout) {
+        if ($result['ACK'] === 'Success') {
+            foreach ($allPayouts as $payout) {
                 $plugin->setStatusPayouts($payout['id'], BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED);
             }
             
@@ -214,9 +214,9 @@ switch ($action) {
         if (api_is_anonymous()) {
             break;
         }
-        
+
+        // $payoutId only gets used in setStatusPayout(), where it is filtered
         $payoutId = isset($_POST['id']) ? $_POST['id'] : '';
-        
         $plugin->setStatusPayouts($payoutId, BuyCoursesPlugin::PAYOUT_STATUS_CANCELED);
         
         echo '';

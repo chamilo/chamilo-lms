@@ -20,9 +20,9 @@ api_protect_admin_script(true);
 $plugin = BuyCoursesPlugin::create();
 
 $paypalEnable = $plugin->get('paypal_enable');
-$comissionsEnable = $plugin->get('comissions_enable');
+$commissionsEnable = $plugin->get('commissions_enable');
 
-if ($paypalEnable !== "true" && $comissionsEnable !== "true") {
+if ($paypalEnable !== "true" && $commissionsEnable !== "true") {
     api_not_allowed(true);
 }
 
@@ -37,12 +37,12 @@ foreach ($payouts as $payout) {
         'date' => api_format_date($payout['date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $payout['iso_code'],
         'price' => $payout['item_price'],
-        'comission' => $payout['comission'],
+        'commission' => $payout['commission'],
         'paypal_account' => $payout['paypal_account']
     ];
 }
 
-$templateName = $plugin->get_lang('PaypalPayoutComissions');
+$templateName = $plugin->get_lang('PaypalPayoutCommissions');
 
 $template = new Template($templateName);
 

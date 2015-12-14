@@ -17,7 +17,7 @@ class BuyCoursesPlugin extends Plugin
     const TABLE_ITEM_BENEFICIARY = 'plugin_buycourses_item_rel_beneficiary';
     const TABLE_SALE = 'plugin_buycourses_sale';
     const TABLE_TRANSFER = 'plugin_buycourses_transfer';
-    const TABLE_COMISSION = 'plugin_buycourses_comission';
+    const TABLE_COMMISSION = 'plugin_buycourses_commission';
     const TABLE_PAYPAL_PAYOUTS = 'plugin_buycourses_paypal_payouts';
     const PRODUCT_TYPE_COURSE = 1;
     const PRODUCT_TYPE_SESSION = 2;
@@ -50,14 +50,14 @@ class BuyCoursesPlugin extends Plugin
                 Alex Aragón - BeezNest (Design icons and css styles) <br/>
                 Imanol Losada - BeezNest (introduction of sessions purchase) <br/>
                 Angel Fernando Quiroz Campos - BeezNest (cleanup and new reports) <br/>
-                José Loguercio Silva - BeezNest (pay teachers and comissions)
+                José Loguercio Silva - BeezNest (pay teachers and commissions)
             ",
             array(
                 'show_main_menu_tab' => 'boolean',
                 'include_sessions' => 'boolean',
                 'paypal_enable' => 'boolean',
                 'transfer_enable' => 'boolean',
-                'comissions_enable' => 'boolean',
+                'commissions_enable' => 'boolean',
                 'unregistered_users_enable' => 'boolean'
             )
         );
@@ -75,7 +75,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_ITEM,
             self::TABLE_SALE,
             self::TABLE_CURRENCY,
-            self::TABLE_COMISSION,
+            self::TABLE_COMMISSION,
             self::TABLE_PAYPAL_PAYOUTS
         );
         $em = Database::getManager();
@@ -102,7 +102,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_ITEM,
             self::TABLE_SALE,
             self::TABLE_CURRENCY,
-            self::TABLE_COMISSION,
+            self::TABLE_COMMISSION,
             self::TABLE_PAYPAL_PAYOUTS
         );
 
@@ -1181,7 +1181,7 @@ class BuyCoursesPlugin extends Plugin
             "$saleTable s $innerJoins",
             [
                 'where' => [
-                    'u.id = ?' => $id
+                    'u.id = ?' => intval($id)
                 ],
                 'order' => 'id DESC'
             ]
@@ -1377,7 +1377,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register the beneficiaries users with the sale of item
      * @param int $itemId The item ID
-     * @param array $userIds The beneficiary user ID and Teachers comissions if enabled
+     * @param array $userIds The beneficiary user ID and Teachers commissions if enabled
      */
     public function registerItemBeneficiaries($itemId, array $userIds)
     {
@@ -1385,13 +1385,13 @@ class BuyCoursesPlugin extends Plugin
 
         $this->deleteItemBeneficiaries($itemId);
 
-        foreach ($userIds as $userId => $comissions) {
+        foreach ($userIds as $userId => $commissions) {
             Database::insert(
                 $beneficiaryTable,
                 [
                     'item_id' => intval($itemId),
                     'user_id' => intval($userId),
-                    'comissions' => intval($comissions)
+                    'commissions' => intval($commissions)
                 ]
             );
         }
@@ -1416,7 +1416,7 @@ class BuyCoursesPlugin extends Plugin
     }
     
     /**
-     * Gets the beneficiaries with comissions and current paypal accounts by sale 
+     * Gets the beneficiaries with commissions and current paypal accounts by sale
      * @param int $saleId The sale ID
      * @return array
      */
@@ -1492,22 +1492,22 @@ class BuyCoursesPlugin extends Plugin
     public function storePayouts($saleId)
     {
         $payoutsTable = Database::get_main_table(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
-        $platformComission = $this->getPlatformComission();
+        $platformCommission = $this->getPlatformCommission();
 
         $sale = $this->getSale($saleId);
-        $teachersComission = number_format((floatval($sale['price']) * intval($platformComission['comission']))/100, 2);
+        $teachersCommission = number_format((floatval($sale['price']) * intval($platformCommission['commission']))/100, 2);
         
         
         $beneficiaries = $this->getBeneficiariesBySale($saleId);
-        foreach ($beneficiaries as $beneficiarie) {
+        foreach ($beneficiaries as $beneficiary) {
             Database::insert(
                 $payoutsTable,
                 [
                     'date' => $sale['date'],
                     'payout_date' => getdate(),
                     'sale_id' => intval($saleId),
-                    'user_id' => $beneficiarie['user_id'],
-                    'comission' => number_format((floatval($teachersComission) * intval($beneficiarie['comissions']))/100, 2),
+                    'user_id' => $beneficiary['user_id'],
+                    'commission' => number_format((floatval($teachersCommission) * intval($beneficiary['commissions']))/100, 2),
                     'status' => self::PAYOUT_STATUS_PENDING
                 ]
             );
@@ -1526,38 +1526,38 @@ class BuyCoursesPlugin extends Plugin
         
         Database::update(
             $payoutsTable,
-            ['status' => $status],
+            ['status' => intval($status)],
             ['id = ?' => intval($payoutId)]
         );
           
     }
     
     /**
-     * Gets the stored platform comission params
+     * Gets the stored platform commission params
      * @return array
      */
-    public function getPlatformComission()
+    public function getPlatformCommission()
     {
         return Database::select(
             '*',
-            Database::get_main_table(BuyCoursesPlugin::TABLE_COMISSION),
+            Database::get_main_table(BuyCoursesPlugin::TABLE_COMMISSION),
             ['id = ?' => 1],
             'first'
         );
     }
     
     /**
-     * Update the platform comission
-     * @param int $params platform comission
+     * Update the platform commission
+     * @param int $params platform commission
      * @return int The number of affected rows. Otherwise return false
      */
-    public function updateComission($params)
+    public function updateCommission($params)
     {
-        $comissionTable = Database::get_main_table(BuyCoursesPlugin::TABLE_COMISSION);
+        $commissionTable = Database::get_main_table(BuyCoursesPlugin::TABLE_COMMISSION);
 
         return Database::update(
-            $comissionTable,
-            ['comission' => intval($params['comission'])]
+            $commissionTable,
+            ['commission' => intval($params['commission'])]
         );
     }
 

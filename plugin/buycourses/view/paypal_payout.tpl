@@ -5,7 +5,7 @@
                 <th class="text-center"><input type="checkbox" id="checkAll"></th>
                 <th class="text-center">{{ 'OrderReference'| get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-center">{{ 'OrderDate'| get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th class="text-right">{{ 'Comission'| get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th class="text-right">{{ 'Commission'| get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-right">{{ 'PayPalAccount'| get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="text-right">{{ 'Options'| get_lang }}</th>
             </tr>
@@ -13,10 +13,10 @@
         <tbody>
             {% for payout in payout_list %}
                 <tr style="{{ payout.paypal_account ? '' : 'color: red;' }}">
-                    <td class="text-center" style="vertical-align:middle">{% if payout.paypal_account %} <input id="{{ payout.id }}" type="checkbox" name="data[]" value="{{ payout.comission }}"> {% endif %}</td>
+                    <td class="text-center" style="vertical-align:middle">{% if payout.paypal_account %} <input id="{{ payout.id }}" type="checkbox" name="data[]" value="{{ payout.commission }}"> {% endif %}</td>
                     <td class="text-center" style="vertical-align:middle">{{ payout.reference }}</td>
                     <td class="text-center" style="vertical-align:middle">{{ payout.date }}</td>
-                    <td class="text-right" style="vertical-align:middle">{{  payout.currency ~ ' ' ~ payout.comission }}</td>
+                    <td class="text-right" style="vertical-align:middle">{{  payout.currency ~ ' ' ~ payout.commission }}</td>
                     {% if payout.paypal_account %}
                         <td class="text-right" style="vertical-align:middle">{{ payout.paypal_account }}</td>
                     {% else %}
@@ -32,7 +32,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ 'PaypalPayoutComissions'|get_plugin_lang('BuyCoursesPlugin') }}</h4>
+                    <h4 class="modal-title">{{ 'PaypalPayoutCommissions'|get_plugin_lang('BuyCoursesPlugin') }}</h4>
                 </div>
                 <div class="modal-body" id="content">
                     

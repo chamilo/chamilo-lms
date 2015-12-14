@@ -19,13 +19,13 @@ if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
 
 $plugin = BuyCoursesPlugin::create();
 
-$comissionsEnable = $plugin->get('comissions_enable');
+$commissionsEnable = $plugin->get('commissions_enable');
 
-if ($comissionsEnable == "true") {
+if ($commissionsEnable == "true") {
     
-    $htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/js/comissions.js"></script>';
-    $defaultComissions = [];
-    $comissions = "";
+    $htmlHeadXtra[] = '<script type="text/javascript" src="' . api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/js/commissions.js"></script>';
+    $defaultCommissions = [];
+    $commissions = "";
     
 }
 
@@ -72,14 +72,14 @@ if ($editingCourse) {
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
         
-        if ($comissionsEnable == "true") {
-            $defaultComissions = array_column($currentBeneficiaries, 'comissions');
+        if ($commissionsEnable === 'true') {
+            $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
         
-            foreach ($defaultComissions as $defaultComission) {
-                $comissions .= $defaultComission.',';
+            foreach ($defaultCommissions as $defaultCommission) {
+                $commissions .= $defaultCommission.',';
             }
 
-            $comissions = substr($comissions, 0, -1);
+            $commissions = substr($commissions, 0, -1);
         }
     }
 
@@ -92,7 +92,7 @@ if ($editingCourse) {
         'visible' => $courseItem['visible'],
         'price' => $courseItem['price'],
         'beneficiaries' => $defaultBeneficiaries,
-        ($comissionsEnable == "true") ? 'comissions' : '' => ($comissionsEnable == "true") ? $comissions : ''
+        ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : ''
     ];
 } elseif ($editingSession) {
     if (!$includeSession) {
@@ -138,14 +138,14 @@ if ($editingCourse) {
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
         
-        if ($comissionsEnable == "true") {
-            $defaultComissions = array_column($currentBeneficiaries, 'comissions');
+        if ($commissionsEnable == "true") {
+            $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
         
-            foreach ($defaultComissions as $defaultComission) {
-                $comissions .= $defaultComission.',';
+            foreach ($defaultCommissions as $defaultCommission) {
+                $commissions .= $defaultCommission.',';
             }
 
-            $comissions = substr($comissions, 0, -1);
+            $commissions = substr($commissions, 0, -1);
         }
     }
 
@@ -158,21 +158,21 @@ if ($editingCourse) {
         'visible' => $sessionItem['visible'],
         'price' => $sessionItem['price'],
         'beneficiaries' => $defaultBeneficiaries,
-        ($comissionsEnable == "true") ? 'comissions' : '' => ($comissionsEnable == "true") ? $comissions : ''
+        ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : ''
     ];
 } else {
     api_not_allowed(true);
 }
 
-if ($comissionsEnable == "true") {
+if ($commissionsEnable === 'true') {
 
     $htmlHeadXtra[] = ''
     . '<script>'
         . '$(function(){'
-            . 'if ($("[name=\'comissions\']").val() === "") {'
-                . '$("#panelSliders").html("<button id=\"setComissionsButton\" class=\"btn btn-warning\">' . get_plugin_lang("SetComissions", "BuyCoursesPlugin") . '</button>");'
+            . 'if ($("[name=\'commissions\']").val() === "") {'
+                . '$("#panelSliders").html("<button id=\"setCommissionsButton\" class=\"btn btn-warning\">' . get_plugin_lang("SetCommissions", "BuyCoursesPlugin") . '</button>");'
             . '} else {'
-                . 'showSliders(100, "default", "' . $comissions . '");'
+                . 'showSliders(100, "default", "' . $commissions . '");'
             . '}'
         . '});'
 
@@ -183,7 +183,7 @@ if ($comissionsEnable == "true") {
                 . 'showSliders(maxPercentage, "renew");'
             . '});'
 
-            . '$("#setComissionsButton").on("click", function() {'
+            . '$("#setCommissionsButton").on("click", function() {'
                 . ' $("#panelSliders").html("");'
                 . 'showSliders(maxPercentage, "renew");'
             . '});'
@@ -222,12 +222,12 @@ if ($editingCourse) {
     $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('SessionCourseCoach'));
 }
 
-if ($comissionsEnable == "true") {
+if ($commissionsEnable === 'true') {
 
     $form->addHtml( ''
             . '<div class="form-group">'
                 . '<label for="sliders" class="col-sm-2 control-label">'
-                    . get_plugin_lang('Comissions', 'BuyCoursesPlugin')
+                    . get_plugin_lang('Commissions', 'BuyCoursesPlugin')
                 . '</label>'
                 . '<div class="col-sm-8">'
                     . '<div class="" id="panelSliders"></div>'
@@ -235,7 +235,7 @@ if ($comissionsEnable == "true") {
             . '</div>'
     );
     
-    $form->addHidden('comissions', '');
+    $form->addHidden('commissions', '');
     
 }
 
@@ -268,15 +268,15 @@ if ($form->validate()) {
         $plugin->deleteItemBeneficiaries($productItem['id']);
 
         if (isset($formValues['beneficiaries'])) {
-            if ($comissionsEnable == "true") {
+            if ($commissionsEnable === 'true') {
                 $usersId = $formValues['beneficiaries'];
-                $comissions = explode(",", $formValues['comissions']);
-                $comissions = (count($usersId) != count($comissions)) ? array_fill(0, count($usersId), 0) : $comissions;
-                $beneficiaries = array_combine($usersId, $comissions);
+                $commissions = explode(",", $formValues['commissions']);
+                $commissions = (count($usersId) != count($commissions)) ? array_fill(0, count($usersId), 0) : $commissions;
+                $beneficiaries = array_combine($usersId, $commissions);
             } else {
                 $usersId = $formValues['beneficiaries'];
-                $comissions = array_fill(0, count($usersId), 0);
-                $beneficiaries = array_combine($usersId, $comissions);
+                $commissions = array_fill(0, count($usersId), 0);
+                $beneficiaries = array_combine($usersId, $commissions);
             }
             
             $plugin->registerItemBeneficiaries($productItem['id'], $beneficiaries);

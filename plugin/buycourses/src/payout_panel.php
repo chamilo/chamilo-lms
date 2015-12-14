@@ -29,7 +29,7 @@ foreach ($payouts as $payout) {
         'payout_date' => ($payout['payout_date'] === '0000-00-00 00:00:00') ? '-' : api_format_date($payout['payout_date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $payout['iso_code'],
         'price' => $payout['item_price'],
-        'comission' => $payout['comission'],
+        'commission' => $payout['commission'],
         'paypal_account' => $payout['paypal_account'],
         'status' => $payout['status']
     ];

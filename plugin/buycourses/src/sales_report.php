@@ -15,7 +15,7 @@ api_protect_admin_script();
 $plugin = BuyCoursesPlugin::create();
 
 $paypalEnable = $plugin->get('paypal_enable');
-$comissionsEnable = $plugin->get('comissions_enable');
+$commissionsEnable = $plugin->get('commissions_enable');
 
 if (isset($_GET['order'])) {
     $sale = $plugin->getSale($_GET['order']);
@@ -140,21 +140,21 @@ $template = new Template($templateName);
 
 $toolbar = '';
 
-if ($paypalEnable == "true" && $comissionsEnable == "true") {
+if ($paypalEnable == "true" && $commissionsEnable == "true") {
 
     $toolbar .= Display::toolbarButton(
-        $plugin->get_lang('PaypalPayoutComissions'),
+        $plugin->get_lang('PaypalPayoutCommissions'),
         api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/paypal_payout.php',
         'paypal',
         'primary',
-        ['title' => $plugin->get_lang('PaypalPayoutComissions')]
+        ['title' => $plugin->get_lang('PaypalPayoutCommissions')]
     );
     
     $template->assign('actions', $toolbar);
     
 }
 
-if ($comissionsEnable == "true") {
+if ($commissionsEnable == "true") {
 
     $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PayoutReport'),

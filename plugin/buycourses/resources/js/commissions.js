@@ -89,25 +89,25 @@ function showSliders(maxPercentage, type, defaultValues) {
                     
                 });
                 
-                $("[name=\'comissions\']").val(getSlidersValues());
+                $("[name=\'commissions\']").val(getSlidersValues());
             }
         });
     });
     
-    $("[name=\'comissions\']").val(getSlidersValues());
+    $("[name=\'commissions\']").val(getSlidersValues());
     showCorrectSliderHandler();
 };
 
 function getSlidersValues() {
-    var comissions = "";
+    var commissions = "";
     
     $( "#panelSliders .panelSliders" ).each(function() {
-        comissions += $(this).prev(".value").text() + ',';
+        commissions += $(this).prev(".value").text() + ',';
     });
     
-    comissions = comissions.substring(0, comissions.length-1);
+    commissions = commissions.substring(0, commissions.length-1);
     
-    return comissions;
+    return commissions;
 }
 
 function showCorrectSliderHandler() {

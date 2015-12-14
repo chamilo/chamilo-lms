@@ -1172,10 +1172,13 @@ window.HotspotQuestion = (function () {
                 break;
 
             case 'solution':
+                //no break
+            case 'preview':
                 xhrQuestion = $.getJSON('/main/exercice/hotspot_answers.as.php', {
                     modifyAnswers: parseInt(config.questionId),
                     exe_id: parseInt(config.exerciseId)
                 });
+                break;
         }
 
         $.when(xhrQuestion).done(function (questionInfo) {
@@ -1189,15 +1192,16 @@ window.HotspotQuestion = (function () {
                     break;
 
                 case 'solution':
+                    //no break
+                case 'preview':
                     startHotspotsSolution(questionInfo);
+                    break;
             }
         });
     };
 })();
 
 window.DelineationQuestion = (function () {
-    'use strict';
-
     var PolygonModel = function (attributes) {
         this.id = 0;
         this.name = '';
@@ -1674,6 +1678,61 @@ window.DelineationQuestion = (function () {
         lang = questionInfo.lang;
     };
 
+    var PreviewSVG = function (polygonCollection, image) {
+        this.collection = polygonCollection;
+        this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+        var self = this,
+            $el = $(this.el);
+
+        this.collection.onAdd(function (polygonModel) {
+            self.renderPolygon(polygonModel);
+        });
+
+        this.render = function () {
+            var imageSvg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+            imageSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', image.src);
+            imageSvg.setAttributeNS(null, 'width', image.width);
+            imageSvg.setAttributeNS(null, 'height', image.height);
+
+            this.el.setAttributeNS(null, 'version', '1.1');
+            this.el.setAttributeNS(null, 'viewBox', '0 0 ' + image.width + ' ' + image.height);
+            this.el.appendChild(imageSvg);
+        };
+
+        this.renderPolygon = function (oarModel) {
+            var oarSVG = new PolygonSvg(oarModel);
+
+            $el.append(oarSVG.render().el);
+
+            return this;
+        };
+    };
+
+    var startPreviewSvg = function (questionInfo) {
+        var image = new Image();
+        image.onload = function () {
+            var polygonCollection = new PolygonCollection(),
+                previewSvg = new AdminSvg(polygonCollection, image);
+
+            $(config.selector)
+                .css('width', this.width)
+                .append(
+                    previewSvg.render().el
+                );
+
+            $.each(questionInfo.hotspots, function (index, hotspotInfo) {
+                var polygonModel = PolygonModel.decode(hotspotInfo);
+                polygonModel.id = index;
+
+                polygonCollection.add(polygonModel);
+            });
+        };
+        image.src = questionInfo.image;
+
+        lang = questionInfo.lang;
+    };
+
     var config = {
             questionId: 0,
             exerciseId: 0,
@@ -1725,10 +1784,13 @@ window.DelineationQuestion = (function () {
                     break;
 
                 case 'solution':
+                    //no break
+                case 'preview':
                     xhrQuestion = $.getJSON('/main/exercice/hotspot_answers.as.php', {
                         modifyAnswers: parseInt(config.questionId),
                         exe_id: parseInt(config.exerciseId)
                     });
+                    break;
             }
 
             $.when(xhrQuestion).done(function (questionInfo) {
@@ -1742,6 +1804,9 @@ window.DelineationQuestion = (function () {
                         break;
 
                     case 'solution':
+                    //no break
+                    case 'preview':
+                        startPreviewSvg(questionInfo);
                         break;
                 }
             });

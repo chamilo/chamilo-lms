@@ -154,6 +154,16 @@ a.thumbnail:hover{
   background: #C52D2F;
 }
 
+.panelSliders {
+  margin: 20px 0;
+}
+
+#panelSliders {
+  width: 75%;
+  margin: 25px auto; 
+  text-align: center;
+}
+
 #notice_block p, #notice-block p{
     color: #666;
     font-size: 12px;

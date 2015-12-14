@@ -14,6 +14,9 @@ api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
 
+$paypalEnable = $plugin->get('paypal_enable');
+$commissionsEnable = $plugin->get('commissions_enable');
+
 if (isset($_GET['order'])) {
     $sale = $plugin->getSale($_GET['order']);
 
@@ -26,7 +29,7 @@ if (isset($_GET['order'])) {
     switch ($_GET['action']) {
         case 'confirm':
             $plugin->completeSale($sale['id']);
-
+            $plugin->storePayouts($sale['id']);
             Display::addFlash(
                 Display::return_message(
                     sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $sale['product_name']),
@@ -134,6 +137,36 @@ $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plug
 $templateName = $plugin->get_lang('SalesReport');
 
 $template = new Template($templateName);
+
+$toolbar = '';
+
+if ($paypalEnable == "true" && $commissionsEnable == "true") {
+
+    $toolbar .= Display::toolbarButton(
+        $plugin->get_lang('PaypalPayoutCommissions'),
+        api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/paypal_payout.php',
+        'paypal',
+        'primary',
+        ['title' => $plugin->get_lang('PaypalPayoutCommissions')]
+    );
+    
+    $template->assign('actions', $toolbar);
+    
+}
+
+if ($commissionsEnable == "true") {
+
+    $toolbar .= Display::toolbarButton(
+        $plugin->get_lang('PayoutReport'),
+        api_get_path(WEB_PLUGIN_PATH) . 'buycourses/src/payout_report.php',
+        'money',
+        'info',
+        ['title' => $plugin->get_lang('PayoutReport')]
+    );
+    
+    $template->assign('actions', $toolbar);
+    
+}
 $template->assign('form', $form->returnForm());
 $template->assign('selected_sale', $selectedSale);
 $template->assign('selected_status', $selectedStatus);

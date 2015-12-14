@@ -17,6 +17,7 @@ $plugin = BuyCoursesPlugin::create();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $transferEnable = $plugin->get('transfer_enable');
+$commissionsEnable = $plugin->get('commissions_enable');
 
 if (isset($_GET['action'], $_GET['id'])) {
     if ($_GET['action'] == 'delete_taccount') {
@@ -113,6 +114,34 @@ $paypalForm->addCheckBox('sandbox', null, $plugin->get_lang('Sandbox'));
 $paypalForm->addButtonSave(get_lang('Save'));
 $paypalForm->setDefaults($plugin->getPaypalParams());
 
+// Platform Commissions
+
+$commissionForm = new FormValidator('commissions');
+
+if ($commissionForm->validate()) {
+    $commissionFormValues = $commissionForm->getSubmitValues();
+
+    $plugin->updateCommission($commissionFormValues);
+
+    Display::addFlash(
+        Display::return_message(get_lang('Saved'), 'success')
+    );
+
+    header('Location:' . api_get_self());
+    exit;
+}
+
+$commissionForm->addElement(
+    'number',
+    'commission',
+    [$plugin->get_lang('Commission'), null, '%'],
+    ['step' => 1, 'cols-size' => [3, 7, 1], 'min' => 0, 'max' => 100]
+);
+
+
+$commissionForm->addButtonSave(get_lang('Save'));
+$commissionForm->setDefaults($plugin->getPlatformCommission());
+
 $transferForm = new FormValidator('transfer_account');
 
 if ($transferForm->validate()) {
@@ -165,9 +194,11 @@ $tpl = new Template($templateName);
 $tpl->assign('header', $templateName);
 $tpl->assign('curency_form', $currencyForm->returnForm());
 $tpl->assign('paypal_form', $paypalForm->returnForm());
+$tpl->assign('commission_form', $commissionForm->returnForm());
 $tpl->assign('transfer_form', $transferForm->returnForm());
 $tpl->assign('transfer_accounts', $transferAccounts);
 $tpl->assign('paypal_enable', $paypalEnable);
+$tpl->assign('commissions_enable', $commissionsEnable);
 $tpl->assign('transfer_enable', $transferEnable);
 
 $content = $tpl->fetch('buycourses/view/paymentsetup.tpl');

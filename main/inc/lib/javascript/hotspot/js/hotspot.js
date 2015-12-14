@@ -1528,6 +1528,12 @@ var DelineationQuestion = (function () {
                     adminSvg.render().el
                 );
 
+            $(config.selector).parent().prepend('\n\
+                <div id="delineation-messages" class="alert alert-info">\n\
+                    <span class="fa fa-info-circle" aria-hidden="true"> <span></span>' + lang.DelineationStatus1 + '</span>\n\
+                </div>\n\
+            ');
+
             $(config.selector).parent().prepend('<div class="row"></div>');
 
             $.each(questionInfo.hotspots, function (index, hotspotInfo) {
@@ -1642,6 +1648,12 @@ var DelineationQuestion = (function () {
                     points: []
                 }),
                 userSvg = new UserSvg(answerModel, image);
+
+            $(config.selector).parent().prepend('\n\
+                <div id="delineation-messages" class="alert alert-info">\n\
+                    <span class="fa fa-info-circle" aria-hidden="true"> <span></span>' + lang.DelineationStatus1 + '</span>\n\
+                </div>\n\
+            ');
 
             $(config.selector)
                 .css('width', this.width)

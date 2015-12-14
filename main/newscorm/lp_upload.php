@@ -80,16 +80,15 @@ if (Request::is_post() && $is_error) {
                                     $templateContent = file_get_contents($templatePath);
                                     $find = array(
                                         'href="www.',
-                                        'href="http://',
                                         'href="https://',
+                                        'href="http://',
                                         'url="www.',
                                     );
                                     $replace = array(
                                         'href="http://www.',
-                                        'href="'.$proxyPath.'?type=link&src=http://',
                                         'href="'.$proxyPath.'?type=link&src=https://',
-                                        'url="http://www.',
-
+                                        'href="'.$proxyPath.'?type=link&src=http://',
+                                        'url="http://www.'
                                     );
                                     $templateContent = str_replace($find, $replace, $templateContent);
                                     file_put_contents($templatePath, $templateContent);
@@ -109,6 +108,7 @@ if (Request::is_post() && $is_error) {
                                     $linkContent = str_replace($find, $replace, $linkContent);
                                     file_put_contents($linkPath, $linkContent);
                                 }
+
                                 // Fix iframe generation
                                 $framePath = str_replace('imsmanifest.xml', 'models_html5/embedDiv.html', $manifest);
 
@@ -122,7 +122,21 @@ if (Request::is_post() && $is_error) {
                                     );
                                     $content = str_replace($find, $replace, $content);
                                     file_put_contents($framePath, $content);
+                                }
 
+                                // Fix new window generation
+                                $newWindowPath = str_replace('imsmanifest.xml', 'models_html5/newWindow.html', $manifest);
+
+                                if (file_exists($newWindowPath) && is_file($newWindowPath)) {
+                                    $content = file_get_contents($newWindowPath);
+                                    $find = array(
+                                        'var src = x_currentPageXML'
+                                    );
+                                    $replace = array(
+                                        'var src = "'.$proxyPath.'?type=link&src=" + x_currentPageXML'
+                                    );
+                                    $content = str_replace($find, $replace, $content);
+                                    file_put_contents($newWindowPath, $content);
                                 }
                             }
                         }

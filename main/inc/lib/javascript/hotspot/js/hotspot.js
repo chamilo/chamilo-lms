@@ -366,7 +366,7 @@ var HotspotQuestion = (function () {
         this.circleEl.setAttribute('cx', this.model.get('x'));
         this.circleEl.setAttribute('cy', this.model.get('y'));
         this.circleEl.setAttribute('r', 15);
-        this.circleEl.setAttribute('fill', '#00677C');
+        this.circleEl.setAttribute('class', 'hotspot-answer-point');
 
         this.textEl.setAttribute('x', this.model.get('x'));
         this.textEl.setAttribute('y', this.model.get('y'));
@@ -403,7 +403,7 @@ var HotspotQuestion = (function () {
                 </span>\n\
                 <select class="form-control" aria-describedby="hotspot-' + this.hotspotIndex + '">\n\
                     <option value="square">' + lang.Square + '</option>\n\
-                    <option value="ellipse">' + lang.Circle + '</option>\n\
+                    <option value="ellipse">' + lang.Ellipse + '</option>\n\
                     <option value="polygon">' + lang.Polygon + '</option>\n\
                 </select>\n\
             </div>\n\
@@ -425,6 +425,7 @@ var HotspotQuestion = (function () {
                             width: 0,
                             height: 0
                         });
+                        $('#hotspot-messages span:not(.fa)').text(lang.HotspotStatus2Other);
                         break;
 
                     case 'ellipse':
@@ -434,12 +435,14 @@ var HotspotQuestion = (function () {
                             radiusX: 0,
                             radiusY: 0
                         });
+                        $('#hotspot-messages span:not(.fa)').text(lang.HotspotStatus2Other);
                         break;
 
                     case 'polygon':
                         newHotspot = new PolygonModel({
                             points: []
                         });
+                        $('#hotspot-messages span:not(.fa)').text(lang.HotspotStatus2Polygon);
                         break;
                 }
 
@@ -454,17 +457,37 @@ var HotspotQuestion = (function () {
                 $el.find('.input-group').addClass('active');
 
                 selectedHotspotIndex = self.hotspotIndex;
+
+                switch (this.value) {
+                    case 'square':
+                        $('#hotspot-messages span:not(.fa)').text(lang.HotspotStatus2Other);
+                        break;
+
+                    case 'ellipse':
+                        $('#hotspot-messages span:not(.fa)').text(lang.HotspotStatus2Other);
+                        break;
+
+                    case 'polygon':
+                        $('#hotspot-messages span:not(.fa)').text(lang.HotspotStatus2Polygon);
+                        break;
+                }
             })
             .val(function () {
                 if (self.hotspotSVG.model instanceof SquareModel) {
+                    $('#hotspot-messages span:not(.fa)').text(lang.HotspotStatus2Other);
+
                     return 'square';
                 }
 
                 if (self.hotspotSVG.model instanceof EllipseModel) {
+                    $('#hotspot-messages span:not(.fa)').text(lang.HotspotStatus2Other);
+
                     return 'ellipse';
                 }
 
                 if (self.hotspotSVG.model instanceof PolygonModel) {
+                    $('#hotspot-messages span:not(.fa)').text(lang.HotspotStatus2Polygon);
+
                     return 'polygon';
                 }
             });
@@ -761,6 +784,13 @@ var HotspotQuestion = (function () {
 
             $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
 
+            $(config.selector).parent().prepend('\n\
+                <div id="hotspot-messages" class="alert alert-info">\n\
+                    <h4><span class="fa fa-info-circle" aria-hidden="true"></span> ' + lang.HotspotStatus1 + '</h4>\n\
+                    <span></span>\n\
+                </div>\n\
+            ');
+
             $(config.selector).parent().prepend('<div class="row"></div>');
 
             contextMenu = new ContextMenu();
@@ -886,7 +916,7 @@ var HotspotQuestion = (function () {
 
                 if (self.answersCollection.length === self.hotspotsCollection.length) {
                     $(config.selector).parent()
-                        .find('#hotspot-messages-' + config.questionId).text(
+                        .find('#hotspot-messages span:not(.fa)-' + config.questionId).text(
                             lang.HotspotExerciseFinished
                         );
 
@@ -894,7 +924,7 @@ var HotspotQuestion = (function () {
                }
 
                $(config.selector).parent()
-                    .find('#hotspot-messages-' + config.questionId).text(
+                    .find('#hotspot-messages span:not(.fa)-' + config.questionId).text(
                         lang.NextAnswer + ' ' + self.hotspotsCollection.get(
                             self.answersCollection.length
                         ).name
@@ -910,7 +940,7 @@ var HotspotQuestion = (function () {
                 if (e.target.tagName === 'circle') {
                     answerIndex = $(e.target).index('circle');
                 } else if (e.target.tagName === 'text') {
-                    answerIndex = $(e.target).index('text')
+                    answerIndex = $(e.target).index('text');
                 }
 
                 hotspot = self.hotspotsCollection.get(answerIndex);
@@ -980,7 +1010,7 @@ var HotspotQuestion = (function () {
                 hotspotsCollection.add(hotspot);
             });
 
-            $(config.selector).parent().find('#hotspot-messages-' + config.questionId)
+            $(config.selector).parent().find('#hotspot-messages span:not(.fa)-' + config.questionId)
                 .text(
                     lang.NextAnswer + ' ' + hotspotsCollection.get(0).name
                 );
@@ -1034,7 +1064,7 @@ var HotspotQuestion = (function () {
         pointSVG.setAttribute('cx', answerModel.get('x'));
         pointSVG.setAttribute('cy', answerModel.get('y'));
         pointSVG.setAttribute('r', 15);
-        pointSVG.setAttribute('fill', '#00677C');
+        pointSVG.setAttribute('class', 'hotspot-answer-point');
 
         var textSVG = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         textSVG.setAttribute('x', answerModel.get('x'));

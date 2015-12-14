@@ -283,3 +283,9 @@ svg .hotspot-11 {
     stroke: rgb(59, 59, 59);
     fill: rgba(59, 59, 59, 0.75);
 }
+
+svg .hotspot-answer-point {
+    fill: rgba(0, 103, 124, 0.75);
+    stroke: rgb(0, 103, 124);
+    stroke-width: 1;
+}

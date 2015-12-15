@@ -8,6 +8,15 @@
 */
 require_once '../inc/global.inc.php';
 
+api_protect_course_script(false);
+
+$isAllowedToEdit = api_is_allowed_to_edit(null,true);
+
+if (!$isAllowedToEdit) {
+    api_not_allowed(true);
+    exit;
+}
+
 // set vars
 $questionId = intval($_GET['modifyAnswers']);
 $objQuestion = Question::read($questionId);
@@ -25,7 +34,7 @@ $data = [];
 $data['type'] = 'admin';
 $data['lang'] = [
     'Square' => get_lang('Square'),
-    'Circle' => get_lang('Circle'),
+    'Ellipse' => get_lang('Ellipse'),
     'Polygon' => get_lang('Polygon'),
     'HotspotStatus1' => get_lang('HotspotStatus1'),
     'HotspotStatus2Polygon' => get_lang('HotspotStatus2Polygon'),
@@ -39,7 +48,8 @@ $data['lang'] = [
     'Delineation' => get_lang('Delineation'),
     'CloseDelineation' => get_lang('CloseDelineation'),
     'Oar' => get_lang('Oar'),
-    'ClosePolygon' => get_lang('ClosePolygon')
+    'ClosePolygon' => get_lang('ClosePolygon'),
+    'DelineationStatus1' => get_lang('DelineationStatus1')
 ];
 $data['image'] = $objQuestion->selectPicturePath();
 $data['image_width'] = $pictureWidth;

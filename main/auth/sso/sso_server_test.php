@@ -5,12 +5,18 @@
   This is the "server" of my institution/university authentification "code"
 
   1. Active all the SSO option in your Chamilo installation: main/admin/settings.php?category=Security
-  2. Make sure this script is located in the index page of the server you fill in the "Domain of the Single Sign On server" Chamilo setting
+  2. Copy the main/auth/sso/sso.class.php file to something else representing your remote system, like
+     sso.Remote.class.php and modify the class name in soo.Remote.class.php to "ssoRemote"
+  3. Insert the following setting manually in your database (change the selected_value from 'Remote'
+     to the name of your system (used in the filename and classname above).
+     INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext)
+     VALUES ('sso_authentication_subclass',NULL,'textfield','Security','Remote','SSOAuthSubClassTitle','SSOAuthSubClassComment',NULL,NULL);
+  4. Make sure this script is located in the index page of the server you fill in the "Domain of the Single Sign On server" Chamilo setting
      For example this script must be located in example.com/index.php if you set the "Domain of the Single Sign On server" = example.com
-  3. Create a user in chamilo and in your external system with login = "joe" and password = "doe"
-  4. Remember this is just a sample! Check the chamilo drupal extension for more information:
+  5. Create a user in chamilo and in your external system with login = "joe" and password = "doe"
+  6. Remember this is just a sample! Check the chamilo drupal extension for more information:
      http://drupal.org/node/817682
-  5. When activating the settings in step 1, the principal Chamilo file main/inc/local.inc.php will load the class main/auth/sso.class.php library
+  7. When activating the settings in step 1, the principal Chamilo file main/inc/local.inc.php will load the class main/auth/sso.[class.php library
  *   that will redirect to this field with some parameters.
  *
 */

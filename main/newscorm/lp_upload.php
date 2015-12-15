@@ -66,6 +66,86 @@ if (isset($_POST) && $is_error) {
             }
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
+                $fixTemplate = api_get_configuration_value('learnpath_fix_xerte_template');
+                $proxyPath = api_get_configuration_value('learnpath_proxy_url');
+                if ($fixTemplate && !empty($proxyPath)) {
+                    // Check organisations:
+                    if (isset($oScorm->manifest['organizations'])) {
+                        foreach ($oScorm->manifest['organizations'] as $data) {
+                            if (strpos(strtolower($data), 'xerte') !== false) {
+                                // Check if template.xml exists:
+                                $templatePath = str_replace('imsmanifest.xml', 'template.xml', $manifest);
+                                if (file_exists($templatePath) && is_file($templatePath)) {
+                                    $templateContent = file_get_contents($templatePath);
+
+                                    $find = array(
+                                        'href="www.',
+                                        'href="https://',
+                                        'href="http://',
+                                        'url="www.',
+                                        'pdfs/download.php?'
+                                    );
+
+                                    $replace = array(
+                                        'href="http://www.',
+                                        'target = "_blank" href="'.$proxyPath.'?type=link&src=https://',
+                                        'target = "_blank" href="'.$proxyPath.'?type=link&src=http://',
+                                        'url="http://www.',
+                                        'pdfs/download.php&'
+                                    );
+                                    $templateContent = str_replace($find, $replace, $templateContent);
+                                    file_put_contents($templatePath, $templateContent);
+                                }
+
+                                // Fix link generation:
+                                $linkPath = str_replace('imsmanifest.xml', 'models_html5/links.html', $manifest);
+
+                                if (file_exists($linkPath) && is_file($linkPath)) {
+                                    $linkContent = file_get_contents($linkPath);
+                                    $find = array(
+                                        ':this.getAttribute("url")'
+                                    );
+                                    $replace = array(
+                                        ':"'.$proxyPath.'?type=link&src=" + this.getAttribute("url")'
+                                    );
+                                    $linkContent = str_replace($find, $replace, $linkContent);
+                                    file_put_contents($linkPath, $linkContent);
+                                }
+
+                                // Fix iframe generation
+                                $framePath = str_replace('imsmanifest.xml', 'models_html5/embedDiv.html', $manifest);
+
+                                if (file_exists($framePath) && is_file($framePath)) {
+                                    $content = file_get_contents($framePath);
+                                    $find = array(
+                                        '$iFrameHolder.html(iFrameTag);'
+                                    );
+                                    $replace = array(
+                                        'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); '
+                                    );
+                                    $content = str_replace($find, $replace, $content);
+                                    file_put_contents($framePath, $content);
+                                }
+
+                                // Fix new window generation
+                                $newWindowPath = str_replace('imsmanifest.xml', 'models_html5/newWindow.html', $manifest);
+
+                                if (file_exists($newWindowPath) && is_file($newWindowPath)) {
+                                    $content = file_get_contents($newWindowPath);
+                                    $find = array(
+                                        'var src = x_currentPageXML'
+                                    );
+                                    $replace = array(
+                                        'var src = "'.$proxyPath.'?type=link&src=" + x_currentPageXML'
+                                    );
+                                    $content = str_replace($find, $replace, $content);
+                                    file_put_contents($newWindowPath, $content);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
             } else {
                 // Show error message stored in $oScrom->error_msg.

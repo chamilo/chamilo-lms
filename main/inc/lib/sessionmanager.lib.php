@@ -1340,7 +1340,7 @@ class SessionManager
      * @param int       $duration
      * @param array     $extraFields
      * @param int       $sessionAdminId
-     * @param boolean $sendSubscritionNotification Optional.
+     * @param boolean $sendSubscriptionNotification Optional.
      *          Whether send a mail notification to users being subscribed
      * @return mixed
      */
@@ -1361,7 +1361,7 @@ class SessionManager
         $duration = null,
         $extraFields = array(),
         $sessionAdminId = 0,
-        $sendSubscritionNotification = false
+        $sendSubscriptionNotification = false
     ) {
         $name = trim(stripslashes($name));
         $coachId = intval($coachId);
@@ -1370,20 +1370,25 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         if (empty($name)) {
-            $msg = get_lang('SessionNameIsRequired');
-            return $msg;
+            Display::return_message(get_lang('SessionNameIsRequired'), 'warning');
+
+            return false;
         } elseif (empty($coachId)) {
-            $msg = get_lang('CoachIsRequired');
-            return $msg;
+            Display::return_message(get_lang('CoachIsRequired'), 'warning');
+
+            return false;
         } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i')) {
-            $msg = get_lang('InvalidStartDate');
-            return $msg;
+            Display::return_message(get_lang('InvalidStartDate'), 'warning');
+
+            return false;
         } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i')) {
-            $msg = get_lang('InvalidEndDate');
-            return $msg;
+            Display::return_message(get_lang('InvalidEndDate'), 'warning');
+
+            return false;
         } elseif (!empty($startDate) && !empty($endDate) && $startDate >= $endDate) {
-            $msg = get_lang('StartDateShouldBeBeforeEndDate');
-            return $msg;
+            Display::return_message(get_lang('StartDateShouldBeBeforeEndDate'), 'warning');
+
+            return false;
         } else {
             $sql = "SELECT id FROM $tbl_session WHERE name='" . Database::escape_string($name) . "'";
             $rs = Database::query($sql);
@@ -1395,8 +1400,9 @@ class SessionManager
             }
 
             if ($exists) {
-                $msg = get_lang('SessionNameAlreadyExists');
-                return $msg;
+                Display::return_message(get_lang('SessionNameAlreadyExists'), 'warning');
+
+                return false;
             } else {
                 $values = [
                     'name' => $name,
@@ -1405,7 +1411,7 @@ class SessionManager
                     'description'=> $description,
                     'show_description' => intval($showDescription),
                     'visibility' => $visibility,
-                    'send_subscription_notification' => $sendSubscritionNotification
+                    'send_subscription_notification' => $sendSubscriptionNotification
                 ];
 
                 if (!empty($sessionAdminId)) {
@@ -3953,16 +3959,18 @@ class SessionManager
     /**
      * @param int $user_id
      * @param bool $ignore_visibility_for_admins
+     * @param bool $ignoreTimeLimit
+     *
      * @return array
      */
-    public static function get_sessions_by_user($user_id, $ignore_visibility_for_admins = false)
+    public static function get_sessions_by_user($user_id, $ignore_visibility_for_admins = false, $ignoreTimeLimit = false)
     {
         $sessionCategories = UserManager::get_sessions_by_category(
             $user_id,
             false,
-            $ignore_visibility_for_admins
+            $ignore_visibility_for_admins,
+            $ignoreTimeLimit
         );
-
         $sessionArray = array();
         if (!empty($sessionCategories)) {
             foreach ($sessionCategories as $category) {

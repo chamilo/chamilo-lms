@@ -3933,7 +3933,7 @@ class Exercise
 
                                 <script>
                                     $(document).on('ready', function () {
-                                        HotspotQuestion.init({
+                                        new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: $exeId,
                                             selector: '#hotspot-solution-$questionId',

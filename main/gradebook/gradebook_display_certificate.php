@@ -61,7 +61,6 @@ switch ($action) {
                 if ($user_info['status'] == INVITEE) {
                     continue;
                 }
-
                 Category::register_user_certificate($cat_id, $user_info['user_id']);
             }
         }

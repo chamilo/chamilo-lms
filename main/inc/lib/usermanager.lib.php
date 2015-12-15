@@ -1622,9 +1622,9 @@ class UserManager
         //Crop the image to adjust 1:1 ratio
         $image = new Image($source_file);
         $image->crop($cropParameters);
-        
+
         // Storing the new photos in 4 versions with various sizes.
-        
+
         $small = new Image($source_file);
         $small->resize(22);
         $small->send_image($path.'small_'.$filename);
@@ -1637,9 +1637,9 @@ class UserManager
 
         $big = new Image($source_file); // This is the original picture.
         $big->send_image($path.'big_'.$filename);
-        
+
         $result = $small && $medium && $normal && $big;
-        
+
         return $result ? $filename : false;
     }
 
@@ -2294,13 +2294,16 @@ class UserManager
      * @param integer $user_id
      * @param boolean whether to fill the first element or not (to give space for courses out of categories)
      * @param boolean  optional true if limit time from session is over, false otherwise
+     * @param boolean $ignoreTimeLimit ignore time start/end
      * @return array  list of statuses [session_category][session_id]
+     *
      * @todo ensure multiple access urls are managed correctly
      */
     public static function get_sessions_by_category(
         $user_id,
         $is_time_over = true,
-        $ignore_visibility_for_admins = false
+        $ignore_visibility_for_admins = false,
+        $ignoreTimeLimit = false
     ) {
         // Database Table Definitions
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -2343,26 +2346,28 @@ class UserManager
             while ($row = Database::fetch_array($result, 'ASSOC')) {
 
                 // User portal filters:
-                if ($is_time_over) {
-                    // History
-                    if (empty($row['access_end_date']) || $row['access_end_date'] == '0000-00-00 00:00:00') {
-                        continue;
-                    }
-
-                    if (isset($row['access_end_date'])) {
-                        if ($row['access_end_date'] > $now) {
+                if ($ignoreTimeLimit == false) {
+                    if ($is_time_over) {
+                        // History
+                        if (empty($row['access_end_date']) || $row['access_end_date'] == '0000-00-00 00:00:00') {
                             continue;
                         }
 
-                    }
-                } else {
-                    // Current user portal
-                    if (api_is_allowed_to_create_course()) {
-                        // Teachers can access the session depending in the access_coach date
-                    } else {
-                        if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {
-                            if ($row['access_end_date'] <= $now) {
+                        if (isset($row['access_end_date'])) {
+                            if ($row['access_end_date'] > $now) {
                                 continue;
+                            }
+
+                        }
+                    } else {
+                        // Current user portal
+                        if (api_is_allowed_to_create_course()) {
+                            // Teachers can access the session depending in the access_coach date
+                        } else {
+                            if (isset($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {
+                                if ($row['access_end_date'] <= $now) {
+                                    continue;
+                                }
                             }
                         }
                     }
@@ -2422,7 +2427,9 @@ class UserManager
                     case SESSION_AVAILABLE:
                         break;
                     case SESSION_INVISIBLE:
-                        continue(2);
+                        if ($ignore_visibility_for_admins == false) {
+                            continue(2);
+                        }
                 }
 
                 $categories[$row['session_category_id']]['sessions'][$row['id']] = array(

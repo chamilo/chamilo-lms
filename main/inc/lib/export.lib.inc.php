@@ -264,6 +264,7 @@ class Export
         foreach ($data as &$printable_data_row) {
             $column = 0;
             foreach ($printable_data_row as &$printable_data_cell) {
+
                 $table->setCellContents($row, $column, $printable_data_cell);
                 //$table->updateCellAttributes($row, $column, $atributes);
                 $column++;

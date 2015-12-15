@@ -248,14 +248,9 @@ if (!$inATest) {
                 echo $actions;
                 echo '</div>';
                 echo '<div class="question-list-description-block">';
-                echo '<p>';
-                //echo get_lang($question_class.$label);
-                echo get_lang($question_class);
-                echo '<br />';
+                echo '<p class="lead">' . get_lang($question_class) . '</p>';
                 //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
-                echo '<br />';
                 ExerciseLib::showQuestion($id, false, null, null, false, true, false, true, $objExercise->feedback_type, true);
-                echo '</p>';
                 echo '</div>';
                 echo '</div>';
                 unset($objQuestionTmp);

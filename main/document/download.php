@@ -72,7 +72,10 @@ if (isset($path_info['extension']) && $path_info['extension'] == 'swf') {
     $fixed_url = str_replace('-', '_', $doc_url);
     $doc_id = DocumentManager::get_document_id(api_get_course_info(), $doc_url);
     if (!$doc_id) {
-        $fix_file_name = true;
+        $doc_id = DocumentManager::get_document_id(api_get_course_info(), $doc_url, '0');
+        if (!$doc_id) {
+            $fix_file_name = true;
+        }
     }
 }
 

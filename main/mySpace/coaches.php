@@ -173,12 +173,12 @@ if (Database::num_rows($result_coachs) > 0) {
 			        <td>'.$firstname.'</td><td>'.$lastname.'</td><td>'.$s_connection_time.'</td>
 			        <td>
 			            <a href="course.php?type=coach&user_id='.$id_coach.'">
-			            <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />
+                                    '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
 			            </a>
                     </td>
 			        <td>
 			            <a href="student.php?type=coach&user_id='.$id_coach.'">
-			                <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />
+			                '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
 			            </a>
 			            </td>
                     </tr>';
@@ -188,10 +188,10 @@ if (Database::num_rows($result_coachs) > 0) {
 			        <td>'.$s_connection_time.'</td>
 			        <td>
 			            <a href="course.php?type=coach&user_id='.$id_coach.'">
-			            <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>
+			            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>
                     <td>
                         <a href="student.php?type=coach&user_id='.$id_coach.'">
-                        <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+                        '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>
                     </td>
                     </tr>';
 		}

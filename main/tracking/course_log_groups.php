@@ -98,7 +98,7 @@ $extra_params['height'] = 'auto';
 
 $action_links = '
 function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="course_log_tools.php?id_session=0&cidReq='.$course_code.'&gidReq=\'+options.rowId+\'">'.Display::return_icon('2rightarrow.gif',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
+    return \'<a href="course_log_tools.php?id_session=0&cidReq='.$course_code.'&gidReq=\'+options.rowId+\'">'.Display::return_icon('2rightarrow.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
     '\';
 }';
 

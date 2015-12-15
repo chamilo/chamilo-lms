@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="24"
+   version="1.1"
+   width="24"
+   id="svg2"
+   inkscape:version="0.91 r"
+   sodipodi:docname="webcam.svg">
+  <metadata
+     id="metadata44">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs42" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="712"
+     id="namedview40"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="12"
+     inkscape:cy="11.79661"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <g
+     transform="translate(0 -1028.4)"
+     id="g4">
+    <path
+       d="m24 12a12 12 0 1 1 -24 0 12 12 0 1 1 24 0z"
+       fill="#bdc3c7"
+       transform="matrix(.91667 0 0 .91667 1 1029.4)"
+       id="path6" />
+    <g
+       fill="#95a5a6"
+       id="g8">
+      <path
+         d="m6 1048.4c1.6702 1.2 3.7518 2 6 2 2.248 0 4.33-0.8 6-2h-12z"
+         id="path10" />
+      <path
+         d="m12 1c-6.0751 0-11 4.9249-11 11 0 6.075 4.9249 11 11 11v-22z"
+         transform="translate(0 1028.4)"
+         id="path12" />
+      <path
+         d="m17 13a6 6 0 1 1 -12 0 6 6 0 1 1 12 0z"
+         transform="translate(1 1028.4)"
+         id="path14" />
+    </g>
+    <path
+       d="m12 1035.4c-3.3137 0-6 2.6-6 6 0 3.3 2.6863 6 6 6v-12z"
+       fill="#7f8c8d"
+       id="path16" />
+    <path
+       d="m17 13a6 6 0 1 1 -12 0 6 6 0 1 1 12 0z"
+       fill="#ecf0f1"
+       transform="translate(1 1027.4)"
+       id="path18" />
+    <path
+       d="m15 12.5a3 3.5 0 1 1 -6 0 3 3.5 0 1 1 6 0z"
+       fill="#34495e"
+       transform="matrix(1.3333 0 0 1.1429 -4 1026.1)"
+       id="path20" />
+    <path
+       d="m15 12.5a3 3.5 0 1 1 -6 0 3 3.5 0 1 1 6 0z"
+       fill="#2c3e50"
+       transform="matrix(1 0 0 .85714 0 1029.6)"
+       id="path22" />
+    <path
+       d="m14 13a2 2 0 1 1 -4 0 2 2 0 1 1 4 0z"
+       fill="#34495e"
+       transform="translate(0 1027.4)"
+       id="path24" />
+    <path
+       d="m13 13a1 1 0 1 1 -2 0 1 1 0 1 1 2 0z"
+       fill="#3498db"
+       transform="translate(0 1027.4)"
+       id="path26" />
+    <path
+       d="m25 12.5a1.5 1.5 0 1 1 -3 0 1.5 1.5 0 1 1 3 0z"
+       fill="#ecf0f1"
+       transform="matrix(.66667 0 0 .66666 -4.6667 1030)"
+       id="path28" />
+    <rect
+       fill="#7f8c8d"
+       height="1"
+       width="3"
+       x="9"
+       y="1030.4"
+       id="rect30" />
+    <rect
+       fill="#7f8c8d"
+       height="1"
+       width="3"
+       x="9"
+       y="1032.4"
+       id="rect32" />
+    <rect
+       fill="#95a5a6"
+       height="1"
+       width="3"
+       x="12"
+       y="1030.4"
+       id="rect34" />
+    <rect
+       fill="#95a5a6"
+       height="1"
+       width="3"
+       x="12"
+       y="1032.4"
+       id="rect36" />
+    <path
+       d="m6 20c1.6702 1.252 3.7518 2 6 2v-2h-6z"
+       fill="#7f8c8d"
+       transform="translate(0 1028.4)"
+       id="path38" />
+  </g>
+</svg>

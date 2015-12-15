@@ -38,6 +38,7 @@ $courseInfo = api_get_course_info();
 $courseId = $courseInfo['real_id'];
 $userInfo = api_get_user_info();
 $userId = $userInfo['id'];
+$sessionId = api_get_session_id();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $userId,
     $courseInfo
@@ -182,7 +183,7 @@ if ($is_allowedToEdit) {
                 // we got variable $courseId $courseInfo session api_get_session_id()
                 $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
                     $courseInfo,
-                    api_get_session_id(),
+                    $sessionId,
                     $courseId,
                     false
                 );
@@ -231,17 +232,33 @@ if ($is_allowedToEdit) {
                         break;
                     case 'enable':
                         // enables an exercise
-                        $objExerciseTmp->enable();
-                        $objExerciseTmp->save();
-                        api_item_property_update($courseInfo, TOOL_QUIZ, $objExerciseTmp->id, 'visible', $userId);
+                        if (empty($sessionId)) {
+                            $objExerciseTmp->enable();
+                            $objExerciseTmp->save();
+                        }
+                        api_item_property_update(
+                            $courseInfo,
+                            TOOL_QUIZ,
+                            $objExerciseTmp->id,
+                            'visible',
+                            $userId
+                        );
                         // "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
                     case 'disable':
                         // disables an exercise
-                        $objExerciseTmp->disable();
-                        $objExerciseTmp->save();
-                        api_item_property_update($courseInfo, TOOL_QUIZ, $objExerciseTmp->id, 'invisible', $userId);
+                        if (empty($sessionId)) {
+                            $objExerciseTmp->disable();
+                            $objExerciseTmp->save();
+                        }
+                        api_item_property_update(
+                            $courseInfo,
+                            TOOL_QUIZ,
+                            $objExerciseTmp->id,
+                            'invisible',
+                            $userId
+                        );
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
                     case 'disable_results':
@@ -586,7 +603,24 @@ if (!empty($exercise_list)) {
                     );
                 }
 
-                $visibility = api_get_item_visibility($courseInfo, TOOL_QUIZ, $my_exercise_id);
+                $visibility = api_get_item_visibility(
+                    $courseInfo,
+                    TOOL_QUIZ,
+                    $my_exercise_id,
+                    0
+                );
+
+                if (!empty($sessionId)) {
+                    if ($visibility == 0) {
+                        continue;
+                    }
+                    $visibility = api_get_item_visibility(
+                        $courseInfo,
+                        TOOL_QUIZ,
+                        $my_exercise_id,
+                        $sessionId
+                    );
+                }
 
                 if ($row['active'] == 0 || $visibility == 0) {
                     $title = Display::tag('font', $cut_title, array('style' => 'color:grey'));
@@ -685,6 +719,26 @@ if (!empty($exercise_list)) {
                 } else {
                     // not session
                     $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));
+
+                    // Check if this exercise was added in a LP
+                    if ($exercise_obj->exercise_was_added_in_lp == true) {
+                        $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
+                    } else {
+
+                        if ($row['active'] == 0 || $visibility == 0) {
+                            $actions .= Display::url(
+                                Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL),
+                                'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                            );
+                        } else {
+                            // else if not active
+                            $actions .= Display::url(
+                                Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL),
+                                'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                            );
+                        }
+                    }
+
                     $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
@@ -743,7 +797,12 @@ if (!empty($exercise_list)) {
                 $item .= Display::tag('td', $number_of_questions);
             } else {
                 // Student only.
-                $visibility = api_get_item_visibility($courseInfo, TOOL_QUIZ, $my_exercise_id);
+                $visibility = api_get_item_visibility(
+                    $courseInfo,
+                    TOOL_QUIZ,
+                    $my_exercise_id,
+                    $sessionId
+                );
 
                 if ($visibility == 0) {
                     continue;

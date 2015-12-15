@@ -873,7 +873,7 @@ class SocialManager extends UserManager
             if ($user_id != api_get_user_id()) {
                 $sendMessageText = get_lang('SendMessage');
                 $sendMessageIcon = Display::return_icon(
-                    'compose_message.png',
+                    'new-message.png',
                     $sendMessageText
                 );
                 $sendMesssageUrl = api_get_path(WEB_AJAX_PATH)

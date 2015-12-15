@@ -1248,7 +1248,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 $courseCode = $_course['code'];
                 $isUserSubscribedInCourse = CourseManager::is_user_subscribed_in_course(
                     $user_id,
-                    $courseCode
+                    $courseCode,
+                    $session_id
                 );
                 if (isset($user_id) && $isUserSubscribedInCourse === true && !api_is_anonymous($user_id)) {
                     $is_allowed_in_course = true;

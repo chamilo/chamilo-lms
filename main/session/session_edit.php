@@ -126,9 +126,12 @@ if ($form->validate()) {
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
+    if ($params['access'] == 1) {
+        $duration = null;
+    }
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;
-    $sendSubscritionNotification = isset($params['send_subscription_notification']);
+    $sendSubscriptionNotification = isset($params['send_subscription_notification']);
 
     $extraFields = array();
     foreach ($params as $key => $value) {
@@ -154,7 +157,7 @@ if ($form->validate()) {
         $duration,
         $extraFields,
         null,
-        $sendSubscritionNotification
+        $sendSubscriptionNotification
     );
 
     if ($return == strval(intval($return))) {
@@ -165,7 +168,6 @@ if ($form->validate()) {
 
 // display the header
 Display::display_header($tool_name);
-
 $form->display();
 ?>
 

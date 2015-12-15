@@ -15,27 +15,34 @@
             <a href="payout_panel.php" aria-controls="buy-courses" role="tab">{{ 'MyPayouts'| get_plugin_lang('BuyCoursesPlugin') }}</a>
         </li>
     </ul>
-        
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th class="text-center">{{ 'OrderReference'| get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th class="text-center">{{ 'PayoutDate'| get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th class="text-right">{{ 'Commission'| get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th class="text-right">{{ 'PayPalAccount'| get_plugin_lang('BuyCoursesPlugin') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for payout in payout_list %}
+    {% if not payout_list %}
+        <p class="alert alert-info">
+            {{ 'WantToSellCourses'|get_plugin_lang('BuyCoursesPlugin') }}
+            <a href="#">{{ 'ClickHere'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+        </p>
+    {% endif %}
+    
+    {% if payout_list %}
+        <table class="table table-striped table-hover">
+            <thead>
                 <tr>
-                    <td class="text-center" style="vertical-align:middle"><a id="{{ payout.sale_id }}" class="saleInfo" data-toggle="modal" data-target="#saleInfo" href="#">{{ payout.reference }}</a></td>
-                    <td class="text-center" style="vertical-align:middle">{{ payout.payout_date }}</td>
-                    <td class="text-right" style="vertical-align:middle">{{  payout.currency ~ ' ' ~ payout.commission }}</td>
-                    <td class="text-right" style="vertical-align:middle">{{ payout.paypal_account }}</td>
+                    <th class="text-center">{{ 'OrderReference'| get_plugin_lang('BuyCoursesPlugin') }}</th>
+                    <th class="text-center">{{ 'PayoutDate'| get_plugin_lang('BuyCoursesPlugin') }}</th>
+                    <th class="text-right">{{ 'Commission'| get_plugin_lang('BuyCoursesPlugin') }}</th>
+                    <th class="text-right">{{ 'PayPalAccount'| get_plugin_lang('BuyCoursesPlugin') }}</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
+            </thead>
+            <tbody>
+                {% for payout in payout_list %}
+                    <tr>
+                        <td class="text-center" style="vertical-align:middle"><a id="{{ payout.sale_id }}" class="saleInfo" data-toggle="modal" data-target="#saleInfo" href="#">{{ payout.reference }}</a></td>
+                        <td class="text-center" style="vertical-align:middle">{{ payout.payout_date }}</td>
+                        <td class="text-right" style="vertical-align:middle">{{  payout.currency ~ ' ' ~ payout.commission }}</td>
+                        <td class="text-right" style="vertical-align:middle">{{ payout.paypal_account }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
   
 </div>

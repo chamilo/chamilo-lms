@@ -158,6 +158,10 @@ a.thumbnail:hover{
   margin: 20px 0;
 }
 
+.panelSliders .ui-slider-handle {
+  border-color: #000;
+}
+
 #panelSliders {
   width: 75%;
   margin: 25px auto; 

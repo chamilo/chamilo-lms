@@ -20,6 +20,22 @@ $commissionsEnable = $plugin->get('commissions_enable');
 $action = isset($_GET['a']) ? $_GET['a'] : null;
 
 switch ($action) {
+    case 'verifyPaypal':
+        if (api_is_anonymous()) {
+            break;
+        }
+        
+        $userId = isset($_POST['id']) ? intval($_POST['id']) : '';
+        $isUserHavePaypalAccount = $plugin->verifyPaypalAccountByBeneficiary($userId);
+        
+        if ($isUserHavePaypalAccount) {
+            echo '';
+        } else {
+            echo '<b style="color: red; font-size: 70%;">* '.$plugin->get_lang('NoPayPalAccountDetected').'</b>';
+        }
+        
+        break;
+        
     case 'saleInfo':
         if (api_is_anonymous()) {
             break;

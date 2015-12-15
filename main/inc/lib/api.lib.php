@@ -8050,6 +8050,7 @@ function api_protect_course_group($tool, $showHeader = true)
 }
 
 /**
+ * Eliminate the duplicates of a multidimensional array by sending the key
  * @param array $array multidimensional array
  * @param int $key key to find to compare
  *

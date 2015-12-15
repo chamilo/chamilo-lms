@@ -223,13 +223,19 @@ if ($editingCourse) {
 }
 
 if ($commissionsEnable === 'true') {
-
+    
+    $platformCommission = $plugin->getPlatformCommission();
+    
     $form->addHtml( ''
             . '<div class="form-group">'
                 . '<label for="sliders" class="col-sm-2 control-label">'
                     . get_plugin_lang('Commissions', 'BuyCoursesPlugin')
                 . '</label>'
                 . '<div class="col-sm-8">'
+                    . Display::return_message(
+                        sprintf($plugin->get_lang('TheActualPlatformCommissionIs'), $platformCommission['commission']. '%'),
+                        'info'
+                    )
                     . '<div class="" id="panelSliders"></div>'
                 . '</div>'
             . '</div>'

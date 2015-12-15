@@ -78,17 +78,21 @@ if (Request::is_post() && $is_error) {
                                 $templatePath = str_replace('imsmanifest.xml', 'template.xml', $manifest);
                                 if (file_exists($templatePath) && is_file($templatePath)) {
                                     $templateContent = file_get_contents($templatePath);
+
                                     $find = array(
                                         'href="www.',
                                         'href="https://',
                                         'href="http://',
                                         'url="www.',
+                                        'pdfs/download.php?'
                                     );
+
                                     $replace = array(
                                         'href="http://www.',
                                         'target = "_blank" href="'.$proxyPath.'?type=link&src=https://',
                                         'target = "_blank" href="'.$proxyPath.'?type=link&src=http://',
-                                        'url="http://www.'
+                                        'url="http://www.',
+                                        'pdfs/download.php&'
                                     );
                                     $templateContent = str_replace($find, $replace, $templateContent);
                                     file_put_contents($templatePath, $templateContent);

@@ -141,7 +141,7 @@ class CourseSelectForm
 
             $course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
-			echo get_lang('DestinationCourse').' : '.$course_infos['title'] .  $sessionTitle;
+			echo get_lang('DestinationCourse').' : '.$course_infos['title'] . ' ('.$course_infos['code'].') '.$sessionTitle;
 			echo '</h3>';
 		}
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';

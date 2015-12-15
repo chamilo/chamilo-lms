@@ -104,7 +104,7 @@ if (Security::check_token('post') && (
     } else {
         $options = array();
         while ($obj = Database::fetch_object($res)) {
-            $options[$obj->code] = $obj->title;
+            $options[$obj->code] = $obj->title.' ('.$obj->code.')';
         }
 
         $form = new FormValidator('copy_course', 'post', 'copy_course.php?'.api_get_cidreq());

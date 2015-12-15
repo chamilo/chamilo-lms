@@ -1529,6 +1529,7 @@ a.unread {
   margin:5px;
   padding:5px;
   list-style: none outside none;
+  border-radius: 5px;
 }
 .lp_resource_element_new a {
   font-size: 14px;

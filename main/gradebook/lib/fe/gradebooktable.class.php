@@ -716,7 +716,8 @@ class GradebookTable extends SortableTable
 
                 $content_html = DocumentManager::replace_user_info_into_html(
                     api_get_user_id(),
-                    $course_code
+                    $course_code,
+                    api_get_session_id()
                 );
 
                 if (!empty($content_html)) {
@@ -962,7 +963,7 @@ class GradebookTable extends SortableTable
             case 'E' :
                 $cat = new Category();
                 $course_id = CourseManager::get_course_by_category($categoryId);
-                $show_message = $cat->show_message_resource_delete($course_id);                
+                $show_message = $cat->show_message_resource_delete($course_id);
 
                 // course/platform admin can go to the view_results page
                 if (api_is_allowed_to_edit() && $show_message===false) {

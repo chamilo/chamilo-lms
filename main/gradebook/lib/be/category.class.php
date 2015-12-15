@@ -1900,6 +1900,7 @@ class Category implements GradebookItem
     public static function register_user_certificate($category_id, $user_id)
     {
         $courseId = api_get_course_int_id();
+        $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
         // Generating the total score for a course
         $cats_course = Category::load(
@@ -1941,7 +1942,7 @@ class Category implements GradebookItem
         // A student always sees only the teacher's repartition
         $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
 
-        if (!self::userFinishedCourse($user_id, $cats_course[0])) {
+        if (!self::userFinishedCourse($user_id, $cats_course[0], 0, $courseCode, $sessionId)) {
             return false;
         }
 
@@ -2150,8 +2151,7 @@ class Category implements GradebookItem
         $categoryId = 0,
         $courseCode = null,
         $sessionId = 0
-    )
-    {
+    ) {
         if (is_null($category) && empty($categoryId)) {
             return false;
         }
@@ -2177,7 +2177,12 @@ class Category implements GradebookItem
             $category = $cats_course[0];
         }
 
-        $currentScore = self::getCurrentScore($userId, $category->get_id(), $courseCode, $sessionId);
+        $currentScore = self::getCurrentScore(
+            $userId,
+            $category->get_id(),
+            $courseCode,
+            $sessionId
+        );
 
         $minCertificateScore = $category->get_certificate_min_score();
 
@@ -2190,6 +2195,8 @@ class Category implements GradebookItem
      * @param int $categoryId The gradebook category
      * @param int $courseCode The course code
      * @param int $sessionId Optional. The session id
+     * @param bool $recalculate
+     *
      * @return float The score
      */
     public static function getCurrentScore($userId, $categoryId, $courseCode, $sessionId = 0, $recalculate = false)
@@ -2208,7 +2215,7 @@ class Category implements GradebookItem
                 'order' => 'registered_at DESC',
                 'limit' => '1'
             ],
-            'fisrt'
+            'first'
         );
 
         if (empty($resultData)) {

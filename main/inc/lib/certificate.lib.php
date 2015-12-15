@@ -200,6 +200,7 @@ class Certificate extends Model
                     $new_content_html = GradebookUtils::get_user_certificate_content(
                         $this->user_id,
                         $my_category[0]->get_course_code(),
+                        $my_category[0]->get_session_id(),
                         false,
                         $params['hide_print_button']
                     );
@@ -328,7 +329,7 @@ class Certificate extends Model
         $final_content = array();
 
         if (!empty($content)) {
-            foreach($content as $key => $value) {
+            foreach ($content as $key => $value) {
                 $my_header = str_replace(array('((', '))') , '', $headers[$key]);
                 $final_content[$my_header] = $value;
             }
@@ -353,13 +354,15 @@ class Certificate extends Model
          */
 
         $break_space = " \n\r ";
-
-        $text = $final_content['gradebook_institution'].' - '.$final_content['gradebook_sitename'].' - '.get_lang('Certification').$break_space.
-                get_lang('Student'). ': '.$final_content['user_firstname'].' '.$final_content['user_lastname'].$break_space.
-                get_lang('Teacher'). ': '.$final_content['teacher_firstname'].' '.$final_content['teacher_lastname'].$break_space.
-                get_lang('Date'). ': '.$final_content['date_certificate'].$break_space.
-                get_lang('Score'). ': '.$final_content['gradebook_grade'].$break_space.
-                'URL'. ': '.$final_content['certificate_link'];
+        $text =
+            $final_content['gradebook_institution'].' - '.
+            $final_content['gradebook_sitename'].' - '.
+            get_lang('Certification').$break_space.
+            get_lang('Student'). ': '.$final_content['user_firstname'].' '.$final_content['user_lastname'].$break_space.
+            get_lang('Teacher'). ': '.$final_content['teacher_firstname'].' '.$final_content['teacher_lastname'].$break_space.
+            get_lang('Date'). ': '.$final_content['date_certificate'].$break_space.
+            get_lang('Score'). ': '.$final_content['gradebook_grade'].$break_space.
+            'URL'. ': '.$final_content['certificate_link'];
 
         return $text;
     }
@@ -383,7 +386,9 @@ class Certificate extends Model
             } else {
                 // Check the course-level setting to make sure the certificate
                 //  can be printed publicly
-                if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
+                if (isset($this->certificate_data) &&
+                    isset($this->certificate_data['cat_id'])
+                ) {
                     $gradebook = new Gradebook();
                     $gradebook_info = $gradebook->get($this->certificate_data['cat_id']);
                     if (!empty($gradebook_info['course_code'])) {

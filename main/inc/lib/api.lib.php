@@ -1162,7 +1162,6 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (api_is_platform_admin($allow_session_admins)) {
         return true;
     }
-
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:
@@ -1902,7 +1901,7 @@ function api_format_course_array($course_data)
     if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
         $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
     }
-    
+
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
     } else {
@@ -8058,7 +8057,7 @@ function api_unique_multidim_array($array, $key){
     $temp_array = array();
     $i = 0;
     $key_array = array();
-   
+
     foreach($array as $val){
         if(!in_array($val[$key],$key_array)){
             $key_array[$i] = $val[$key];

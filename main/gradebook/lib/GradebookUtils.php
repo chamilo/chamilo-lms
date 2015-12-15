@@ -611,8 +611,10 @@ class GradebookUtils
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $sql = 'SELECT * FROM ' . $table_certificate . '
                 WHERE cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '"';
+
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
+
         return $row;
     }
 
@@ -674,16 +676,18 @@ class GradebookUtils
     }
 
     /**
-     * @param $user_id
-     * @param $course_code
+     * @param int $user_id
+     * @param string $course_code
+     * @param int $sessionId
      * @param bool $is_preview
      * @param bool $hide_print_button
+     *
      * @return array
      */
-    public static function get_user_certificate_content($user_id, $course_code, $is_preview = false, $hide_print_button = false)
+    public static function get_user_certificate_content($user_id, $course_code, $sessionId, $is_preview = false, $hide_print_button = false)
     {
         // Generate document HTML
-        $content_html = DocumentManager::replace_user_info_into_html($user_id, $course_code, $is_preview);
+        $content_html = DocumentManager::replace_user_info_into_html($user_id, $course_code, $sessionId, $is_preview);
         $new_content_html = null;
         $variables = null;
         $contentHead = null;
@@ -1201,7 +1205,7 @@ class GradebookUtils
      *
      * Get the achieved certificates for a user in courses
      * @param int $userId The user id
-     * @param type $includeNonPublicCertificates Whether include the non-plublic certificates
+     * @param bool $includeNonPublicCertificates Whether include the non-plublic certificates
      * @return array
      */
     public static function getUserCertificatesInCourses($userId, $includeNonPublicCertificates = true)
@@ -1250,7 +1254,7 @@ class GradebookUtils
     /**
      * Get the achieved certificates for a user in course sessions
      * @param int $userId The user id
-     * @param type $includeNonPublicCertificates Whether include the non-plublic certificates
+     * @param bool $includeNonPublicCertificates Whether include the non-plublic certificates
      * @return array
      */
     public static function getUserCertificatesInSessions($userId, $includeNonPublicCertificates = true)
@@ -1258,13 +1262,12 @@ class GradebookUtils
         $userId = intval($userId);
         $sessionList = [];
 
-        $sessions = SessionManager::get_sessions_by_user($userId);
+        $sessions = SessionManager::get_sessions_by_user($userId, true, true);
 
         foreach ($sessions as $session) {
             if (empty($session['courses'])) {
                 continue;
             }
-
             $sessionCourses = SessionManager::get_course_list_by_session_id($session['session_id']);
 
             foreach ($sessionCourses as $course) {
@@ -1291,7 +1294,10 @@ class GradebookUtils
 
                 $courseGradebookId = $courseGradebookCategory[0]->get_id();
 
-                $certificateInfo = GradebookUtils::get_certificate_by_user_id($courseGradebookId, $userId);
+                $certificateInfo = GradebookUtils::get_certificate_by_user_id(
+                    $courseGradebookId,
+                    $userId
+                );
 
                 if (empty($certificateInfo)) {
                     continue;

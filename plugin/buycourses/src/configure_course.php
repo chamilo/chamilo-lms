@@ -233,8 +233,9 @@ if ($commissionsEnable === 'true') {
                 . '</label>'
                 . '<div class="col-sm-8">'
                     . Display::return_message(
-                        sprintf($plugin->get_lang('TheActualPlatformCommissionIs'), $platformCommission['commission']. '%'),
-                        'info'
+                        sprintf($plugin->get_lang('TheActualPlatformCommissionIsX'), $platformCommission['commission']. '%'),
+                        'info',
+                        false
                     )
                     . '<div class="" id="panelSliders"></div>'
                 . '</div>'

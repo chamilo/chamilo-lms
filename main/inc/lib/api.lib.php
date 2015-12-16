@@ -7955,6 +7955,7 @@ function api_mail_html(
     $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
 
     $mailView = new Template(null, false, false, false, false, false, false);
+    $mailView->assign('link', ($additionalParameters['link']) ? $additionalParameters['link'] : '');
     $mailView->assign('content', $message);
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);

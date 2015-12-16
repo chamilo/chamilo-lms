@@ -20,9 +20,3 @@ a{
 a:hover{
     text-decoration: underline;
 }
-img{
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px;
-    background: #fff;
-}

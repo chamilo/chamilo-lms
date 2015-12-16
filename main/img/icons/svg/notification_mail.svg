@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   id="svg23438"
+   version="1.1"
+   inkscape:version="0.91 r"
+   sodipodi:docname="notification_mail.svg">
+  <defs
+     id="defs23440">
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15614"
+       id="linearGradient15620"
+       x1="0"
+       y1="10"
+       x2="20"
+       y2="10"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient15614">
+      <stop
+         style="stop-color:#00d400;stop-opacity:1;"
+         offset="0"
+         id="stop15616" />
+      <stop
+         style="stop-color:#008000;stop-opacity:1"
+         offset="1"
+         id="stop15618" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15614"
+       id="linearGradient24050"
+       gradientUnits="userSpaceOnUse"
+       x1="0"
+       y1="10"
+       x2="20"
+       y2="10" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15614"
+       id="linearGradient24052"
+       gradientUnits="userSpaceOnUse"
+       x1="0"
+       y1="10"
+       x2="20"
+       y2="10" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient15614"
+       id="linearGradient24054"
+       gradientUnits="userSpaceOnUse"
+       x1="0"
+       y1="10"
+       x2="20"
+       y2="10" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="145.3894"
+     inkscape:cy="60.8348"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     inkscape:window-x="1366"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata23443">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.36216)">
+    <g
+       id="g15726"
+       inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       transform="matrix(5.8181818,0,0,5.8181818,-8602.9339,-1498.9844)">
+      <rect
+         ry="0"
+         y="416.5127"
+         x="1478.6293"
+         height="22"
+         width="22"
+         id="rect15378"
+         style="opacity:1;fill:#666666;fill-opacity:0;stroke:none;stroke-width:0.75097322;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <g
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+         transform="translate(0.10852246,-0.19365135)"
+         id="g15427">
+        <path
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           inkscape:connector-curvature="0"
+           d="m 1499.107,422.51952 -9.5858,7.46887 9.5858,7.46861 c 0.4449,0 0.8102,-0.37079 0.8102,-0.82332 l 0,-13.29067 c 0,-0.45287 -0.3653,-0.82349 -0.8102,-0.82349 z"
+           style="fill:#939dac;fill-opacity:1"
+           id="path15380" />
+        <path
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           inkscape:connector-curvature="0"
+           d="m 1479.9346,422.51952 c -0.4453,0 -0.8103,0.37062 -0.8103,0.82358 l 0,13.29067 c 0,0.45253 0.365,0.82332 0.8103,0.82332 l 9.5866,-7.46861 -9.5866,-7.46896 z"
+           style="fill:#939dac;fill-opacity:1"
+           id="path15382" />
+        <polygon
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           transform="matrix(0.08539308,0,0,0.08677467,1469.4408,406.77417)"
+           points="120.521,353.592 349.779,353.592 235.153,251.338 "
+           style="fill:#939dac;fill-opacity:1"
+           id="polygon15384" />
+        <polygon
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           transform="matrix(0.08539308,0,0,0.08677467,1469.4408,406.77417)"
+           points="122.888,353.592 347.407,353.592 235.153,256.085 "
+           style="fill:#939dac;fill-opacity:1"
+           id="polygon15386" />
+        <polygon
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           transform="matrix(0.08539308,0,0,0.08677467,1469.4408,406.77417)"
+           points="347.407,183.832 122.888,183.832 237.515,300.308 "
+           style="fill:#939dac;fill-opacity:1"
+           id="polygon15388" />
+        <polygon
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           transform="matrix(0.08539308,0,0,0.08677467,1469.4408,406.77417)"
+           points="347.407,181.451 122.888,181.451 235.143,278.959 "
+           style="fill:#939dac;fill-opacity:1"
+           id="polygon15390" />
+        <path
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           id="path15392"
+           style="fill:#e6e6e6"
+           d="m 1498.8915,422.83085 -9.359,7.17601 9.359,7.17575 c 0.4343,0 0.791,-0.35624 0.791,-0.79103 l 0,-12.76952 c 0,-0.43512 -0.3567,-0.79121 -0.791,-0.79121 z"
+           inkscape:connector-curvature="0" />
+        <path
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           id="path15394"
+           style="fill:#fcfcfc"
+           d="m 1480.1728,422.83085 c -0.4348,0 -0.7911,0.35609 -0.7911,0.79129 l 0,12.76952 c 0,0.43479 0.3563,0.79104 0.7911,0.79104 l 9.3598,-7.17576 -9.3598,-7.17609 z"
+           inkscape:connector-curvature="0" />
+        <polygon
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           transform="matrix(0.08337212,0,0,0.08337212,1469.9274,407.7029)"
+           id="polygon15396"
+           style="fill:#939dac;fill-opacity:1"
+           points="349.779,353.592 235.153,251.338 120.521,353.592 " />
+        <polygon
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           transform="matrix(0.08337212,0,0,0.08337212,1469.9274,407.7029)"
+           id="polygon15398"
+           style="fill:#f0f0f0"
+           points="347.407,353.592 235.153,256.085 122.888,353.592 " />
+        <polygon
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           transform="matrix(0.08337212,0,0,0.08337212,1469.9274,407.7029)"
+           id="polygon15400"
+           style="fill:#939dac"
+           points="122.888,183.832 237.515,300.308 347.407,183.832 " />
+        <polygon
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+           transform="matrix(0.08337212,0,0,0.08337212,1469.9274,407.7029)"
+           id="polygon15402"
+           style="fill:#ffffff"
+           points="122.888,181.451 235.143,278.959 347.407,181.451 " />
+      </g>
+      <circle
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+         r="4.9997463"
+         cy="422.06308"
+         cx="1494.7849"
+         id="path15612"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <g
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/var/www/chamilo/main/img/icons/22/notification_mail.png"
+         style="fill:url(#linearGradient15620);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1"
+         transform="matrix(0.5431534,0,0,0.5431534,1489.456,416.76196)"
+         id="Page-1">
+        <g
+           style="fill:url(#linearGradient24054);fill-opacity:1"
+           id="Core"
+           transform="translate(-44,-86)">
+          <g
+             style="fill:url(#linearGradient24052);fill-opacity:1"
+             id="check-circle"
+             transform="translate(44,86)">
+            <path
+               style="fill:url(#linearGradient24050);fill-opacity:1"
+               inkscape:connector-curvature="0"
+               d="M 10,0 C 4.5,0 0,4.5 0,10 0,15.5 4.5,20 10,20 15.5,20 20,15.5 20,10 20,4.5 15.5,0 10,0 l 0,0 z M 8,15 3,10 4.4,8.6 8,12.2 15.6,4.6 17,6 8,15 8,15 Z"
+               id="Shape" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

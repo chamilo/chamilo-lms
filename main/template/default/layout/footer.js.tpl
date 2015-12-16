@@ -79,7 +79,9 @@
         $(".jp-jplayer audio").addClass('skip');
 
         // Mediaelement
-        jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
+        if ( {{ show_media_element }} == 1) {
+            jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
+        }
 
         // Table highlight.
         $("form .data_table input:checkbox").click(function () {

@@ -70,6 +70,7 @@ foreach ($payouts as $payout) {
         'currency' => $payout['iso_code'],
         'price' => $payout['item_price'],
         'commission' => $payout['commission'],
+        'beneficiary' => api_get_person_name($payout['firstname'], $payout['lastname']),
         'paypal_account' => $payout['paypal_account'],
         'status' => $payout['status']
     ];

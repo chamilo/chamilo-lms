@@ -26,21 +26,24 @@ function showSliders(maxPercentage, type, defaultValues) {
 
         beneficiaryId = $(this).val();
         beneficiaryName = $(this).text();
-
         
+        var verify;
+      
         var slidersValue = defaultValues.toString().split(',');
 
         if (type === 'default') {
             
             percentage = slidersValue[sliderCounter - 1];
             percentage = parseInt(percentage);
-            $("#panelSliders").append("<span>" + beneficiaryName + "</span> - [ <span class='value' >" + percentage + "</span> % ]<div id=" + beneficiaryId + " class='panelSliders'></div>");
+            $("#panelSliders").append("<span id=" + beneficiaryId + ">" + beneficiaryName + "</span> - [ <span class='value' >" + percentage + "</span> % ] <div class='panelSliders'></div>");
 
         } else if (type === 'renew') {
 
-            $("#panelSliders").append("<span>" + beneficiaryName + "</span> - [ <span class='value' >" + percentage + "</span> % ]<div id=" + beneficiaryId + " class='panelSliders'></div>");
+            $("#panelSliders").append("<span id=" + beneficiaryId + " >" + beneficiaryName + "</span> - [ <span class='value' >" + percentage + "</span> % ] <div class='panelSliders'></div>");
             
         }
+        
+        verifyPaypalAccountByBeneficiary(beneficiaryId);
 
         sliderCounter++;
         stepSlide = count - 1;
@@ -127,5 +130,16 @@ function showCorrectSliderHandler() {
             counter++;
         }
     });
+}
+
+function verifyPaypalAccountByBeneficiary(userId) {
     
+    return $.ajax({
+        data: 'id='+userId,
+        url: 'buycourses.ajax.php?a=verifyPaypal',
+        type: 'POST',
+        success: function(response) {
+            $("#"+userId).append(' '+response);
+        }
+    });
 }

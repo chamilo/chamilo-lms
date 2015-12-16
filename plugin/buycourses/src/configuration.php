@@ -16,6 +16,8 @@ $includeSession = $plugin->get('include_sessions') === 'true';
 
 api_protect_admin_script(true);
 
+Display::addFlash(Display::return_message(get_lang('Info').' - '.$plugin->get_lang('CoursesInSessionsDoesntDisplayHere'), 'info'));
+
 $courses = $plugin->getCoursesForConfiguration();
 
 //view

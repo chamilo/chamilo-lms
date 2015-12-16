@@ -4245,10 +4245,10 @@ class Tracking
                         empty($_GET['session_id'])
                     ) {
                         $html .= '<a href="#">';
-                        $html .= Display::return_icon('2rightarrow_na.gif', get_lang('Details'));
+                        $html .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
                     } else {
                         $html .= '<a href="'.api_get_self().'?course='.$course_code.$extra_params.'">';
-                        $html .= Display::return_icon('2rightarrow.gif', get_lang('Details'));
+                        $html .= Display::return_icon('2rightarrow.png', get_lang('Details'));
                     }
                     $html .= '</a>';
                     $html .= '</td></tr>';
@@ -4582,10 +4582,10 @@ class Tracking
 
                     if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
                         $details = '<a href="#">';
-                        $details .=Display::return_icon('2rightarrow_na.gif', get_lang('Details'));
+                        $details .=Display::return_icon('2rightarrow_na.png', get_lang('Details'));
                     } else {
                         $details = '<a href="'.api_get_self().'?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'">';
-                        $details .= Display::return_icon('2rightarrow.gif', get_lang('Details'));
+                        $details .= Display::return_icon('2rightarrow.png', get_lang('Details'));
                     }
                     $details .= '</a>';
                     $html .= Display::tag('td', $details, array('align'=>'center'));

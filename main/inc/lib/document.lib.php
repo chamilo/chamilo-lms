@@ -1858,7 +1858,7 @@ class DocumentManager
         $organization_name = api_get_setting('Institution');
         $portal_name = api_get_setting('siteName');
 
-        //Extra user data information
+        // Extra user data information
         $extra_user_info_data = UserManager::get_extra_user_data(
             $user_id,
             false,
@@ -1866,6 +1866,10 @@ class DocumentManager
             false,
             true
         );
+
+        // get extra fields
+        $extraField = new ExtraField('user');
+        $extraFields = $extraField->get_all(['filter = ? AND visible = ?' => [1, 1]]);
 
         //Student information
         $user_info = api_get_user_info($user_id);
@@ -1934,10 +1938,11 @@ class DocumentManager
             '((certificate_barcode))',
         );
 
-        if (!empty($extra_user_info_data)) {
-            foreach ($extra_user_info_data as $key_extra => $value_extra) {
-                $info_to_be_replaced_in_content_html[] = '((' . strtolower($key_extra) . '))';
-                $info_to_replace_in_content_html[] = $value_extra;
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $extraField) {
+                $valueExtra = isset($extra_user_info_data[$extraField['variable']]) ? $extra_user_info_data[$extraField['variable']] : '';
+                $info_to_be_replaced_in_content_html[] = '((' . strtolower($extraField['variable']) . '))';
+                $info_to_replace_in_content_html[] = $valueExtra;
             }
         }
 

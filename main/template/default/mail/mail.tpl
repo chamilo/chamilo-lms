@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <title>{{ _s.institution }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="application/ld+json">
+        {
+          "@context":       "http://schema.org",
+          "@type":          "EmailMessage",
+          "description":    "Chamilo Mail Notification",
+          "potentialAction": {
+            "@type": "ViewAction",
+            "target":   "{{ link }}"
+          }
+        }
+    </script>
 </head>
 <body style="margin: 0; padding: 0;">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">

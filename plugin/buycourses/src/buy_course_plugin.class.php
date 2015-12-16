@@ -1181,7 +1181,7 @@ class BuyCoursesPlugin extends Plugin
             "$saleTable s $innerJoins",
             [
                 'where' => [
-                    'u.id = ?' => intval($id)
+                    'u.id = ? AND s.status = ?' => [intval($id), BuyCoursesPlugin::SALE_STATUS_COMPLETED]
                 ],
                 'order' => 'id DESC'
             ]
@@ -1482,6 +1482,51 @@ class BuyCoursesPlugin extends Plugin
         );
         
         return $payouts;
+    }
+    
+    /**
+     * Verify if the beneficiary have a paypal account
+     * @param int $userId
+     * @return true if the user have a paypal account, false if not
+     */
+    public function verifyPaypalAccountByBeneficiary($userId)
+    {
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        
+        $paypalExtraField = Database::select(
+            "*",
+            $extraFieldTable,
+            [
+                'where' => ['variable = ?' => 'paypal']
+            ],
+            'first'
+        );
+        
+        if (!$paypalExtraField) {
+            return false;
+        }
+        
+        $paypalFieldId = $paypalExtraField['id'];
+        
+        $paypalAccount = Database::select(
+            "value",
+            $extraFieldValues,
+            [
+                'where' => ['field_id = ? AND item_id = ?' => [intval($paypalFieldId), intval($userId)]]
+            ],
+            'first'
+        );
+        
+        if (!$paypalAccount) {
+            return false;
+        }
+        
+        if ($paypalAccount['value'] === '') {
+            return false;
+        }
+        
+        return true;
     }
     
     /**

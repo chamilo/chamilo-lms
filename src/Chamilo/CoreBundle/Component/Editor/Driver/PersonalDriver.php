@@ -52,7 +52,21 @@ class PersonalDriver extends Driver implements DriverInterface
                     'alias' => get_lang('MyFiles'),
                     'path' => $dir.'my_files',
                     'URL' => $dirWeb.'my_files',
-                    'accessControl' => array($this, 'access')
+                    'accessControl' => array($this, 'access'),
+                    'disabled' => array(
+                        'duplicate',
+                        //'rename',
+                        //'mkdir',
+                        'mkfile',
+                        'copy',
+                        'cut',
+                        'paste',
+                        'edit',
+                        'extract',
+                        'archive',
+                        'help',
+                        'resize'
+                    ),
                 );
 
                 return $driver;

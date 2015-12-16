@@ -7955,6 +7955,7 @@ function api_mail_html(
     $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
 
     $mailView = new Template(null, false, false, false, false, false, false);
+    $mailView->assign('link', ($additionalParameters['link']) ? $additionalParameters['link'] : '');
     $mailView->assign('content', $message);
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
@@ -8049,6 +8050,7 @@ function api_protect_course_group($tool, $showHeader = true)
 }
 
 /**
+ * Eliminate the duplicates of a multidimensional array by sending the key
  * @param array $array multidimensional array
  * @param int $key key to find to compare
  *

@@ -1000,6 +1000,7 @@ function add_edit_template() {
     $form->addButtonSave(get_lang('Ok'), 'submit');
 
     // Setting the rules: the required fields.
+    $form->addRule('template_image', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('template_text', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -1042,7 +1043,7 @@ function add_edit_template() {
             // Store the information in the database (as insert or as update).
             $table_system_template = Database :: get_main_table('system_template');
             if ($_GET['action'] == 'add') {
-                $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
+                $content_template =  Security::remove_XSS($values['template_text'], COURSEMANAGERLOWSECURITY);
                 $params = [
                     'title' =>  $values['title'],
                     'content' => $content_template,

@@ -100,6 +100,7 @@ class Basic extends Toolbar
 
         if (api_get_setting('enabled_mathjax') == 'true') {
             $plugins[] = 'mathjax';
+            $config['mathJaxLib'] = api_get_path(WEB_PATH).'web/assets/MathJax/MathJax.js?config=AM_HTMLorMML';
         }
 
         if (api_get_setting('enabled_asciisvg') == 'true') {

@@ -606,6 +606,8 @@ class Template
         // Logo
         $logo = return_logo($this->theme);
         $this->assign('logo', $logo);
+
+        $this->assign('show_media_element', 1);
     }
 
     /**
@@ -857,7 +859,7 @@ class Template
 
         $notification = return_notification_menu();
         $this->assign('notification_menu', $notification);
-        
+
         $resize = '';
         if (api_get_setting('accessibility_font_resize') == 'true') {
             $resize .= '<div class="resize_font">';
@@ -869,7 +871,7 @@ class Template
             $resize .= '</div>';
         }
         $this->assign('accessibility', $resize);
-        
+
         // Preparing values for the menu
 
         // Logout link

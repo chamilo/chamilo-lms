@@ -106,6 +106,7 @@ $editor = $tpl->fetch('default/'.$editor->getEditorStandAloneTemplate());
 $tpl->assign('social_right_content', $editor);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('actions', $actions);
+$tpl->assign('show_media_element', 0);
 
 $social_layout = $tpl->get_template('social/myfiles.tpl');
 $tpl->display($social_layout);

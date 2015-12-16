@@ -11,7 +11,7 @@ require_once $libpath.'fileUpload.lib.php';
 require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
 require_once $libpath.'add_course.lib.inc.php';
 
-$debug = false;
+$debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);
 
@@ -33,7 +33,10 @@ function WSHelperVerifyKey($params)
     } else {
         $secret_key = $params;
     }
-    //error_log(print_r($params,1));
+    if ($debug) {
+        error_log('-->>>>>>>>>>>>>>>>');
+        error_log(print_r($params, 1));
+    }
     $check_ip = false;
     $ip_matches = false;
     $ip = trim($_SERVER['REMOTE_ADDR']);
@@ -4217,8 +4220,6 @@ function WSUnsubscribeUserFromCourse($params) {
     }
 
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
-    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
     $table_course     = Database :: get_main_table(TABLE_MAIN_COURSE);
     $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -4228,7 +4229,7 @@ function WSUnsubscribeUserFromCourse($params) {
     $results = array();
     $orig_user_id_value = array();
     $orig_course_id_value = array();
-    foreach($userscourses_params as $usercourse_param) {
+    foreach ($userscourses_params as $usercourse_param) {
 
         $original_user_id_values     = $usercourse_param['original_user_id_values'];
         $original_user_id_name         = $usercourse_param['original_user_id_name'];
@@ -4257,7 +4258,8 @@ function WSUnsubscribeUserFromCourse($params) {
 
         // Get course code from original course id
 
-        $sql_course     = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $sql_course = "SELECT course_code    FROM $table_field cf,$t_cfv cfv
+                       WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
         $res_course     = Database::query($sql_course);
         $row_course     = Database::fetch_row($res_course);
 
@@ -4298,6 +4300,88 @@ function WSUnsubscribeUserFromCourse($params) {
     }
 
     return $output;
+}
+
+
+$server->wsdl->addComplexType(
+    'unSubscribeUserFromCourseSimple',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+        'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+
+// Register the method to expose
+$server->register('WSUnSubscribeUserFromCourseSimple',                         // method name
+    array('unSubscribeUserFromCourseSimple' => 'tns:unSubscribeUserFromCourseSimple'), // input parameters
+    array('return' => 'tns:result_createUsersPassEncrypt'),           // output parameters
+    'urn:WSRegistration',                                                // namespace
+    'urn:WSRegistration#WSUnSubscribeUserFromCourseSimple',                    // soapaction
+    'rpc',                                                               // style
+    'encoded',                                                           // use
+    'This service unsubscribe a user from a course'                     // documentation
+);
+/**
+ * @param array $params
+ * @return array|null|soap_fault
+ */
+function WSUnSubscribeUserFromCourseSimple($params)
+{
+    global $debug;
+    error_log('WSUnSubscribeUserFromCourseSimple');
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $original_user_id_value = $params['original_user_id_value'];
+    $original_user_id_name = $params['original_user_id_name'];
+    $original_course_id_value = $params['original_course_id_value'];
+    $original_course_id_name = $params['original_course_id_name'];
+
+    $result = array();
+    $result['original_user_id_value'] = $original_user_id_value;
+    $result['result'] = 0;
+
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
+
+    if ($user_id) {
+        if ($debug) {
+            error_log("User $original_user_id_value, $original_user_id_name found");
+        }
+        $courseCode = CourseManager::get_course_id_from_original_id(
+            $original_course_id_value,
+            $original_course_id_name
+        );
+        if ($courseCode == 0) {
+            // Course was not found
+            if ($debug) {
+                error_log("course not found");
+            }
+        } else {
+            if ($debug) {
+                error_log("Course $courseCode found");
+            }
+            CourseManager::unsubscribe_user($user_id, $courseCode, 0);
+            $result['result'] = 1;
+        }
+    } else {
+        if ($debug) {
+            error_log("User not found");
+        }
+    }
+
+    return $result;
 }
 
 /* Register WSSuscribeUsersToSession function */
@@ -5517,7 +5601,7 @@ $server->register('WSUserSubscribedInCourse',                            // meth
  * @param array $params Array of parameters (course and user_id)
  * @return bool|null|soap_fault A simple boolean (true if user is subscribed, false otherwise)
  */
-function WSUserSubscribedInCourse ($params)
+function WSUserSubscribedInCourse($params)
 {
     global $debug;
 

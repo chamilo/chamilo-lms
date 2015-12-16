@@ -2270,7 +2270,8 @@ function send_email_on_homework_creation($courseId, $sessionId = 0, $workId)
                 $additionalParameters = array(
                     'smsType' => SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
                     'userId' => $student["user_id"],
-                    'courseTitle' => $courseCode
+                    'courseTitle' => $courseCode,
+                    'link' => $link
                 );
 
                 api_mail_html(

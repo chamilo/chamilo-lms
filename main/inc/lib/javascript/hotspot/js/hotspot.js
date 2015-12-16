@@ -372,9 +372,8 @@ window.HotspotQuestion = (function () {
             this.textEl.setAttribute('x', this.model.get('x'));
             this.textEl.setAttribute('y', this.model.get('y'));
             this.textEl.setAttribute('dy', 5);
-            this.textEl.setAttribute('font-family', 'sans-serif');
             this.textEl.setAttribute('text-anchor', 'middle');
-            this.textEl.setAttribute('fill', 'white');
+            this.textEl.setAttribute('class', 'hotspot-answer-text');
             this.textEl.textContent = this.answerIndex + 1;
 
             return this;

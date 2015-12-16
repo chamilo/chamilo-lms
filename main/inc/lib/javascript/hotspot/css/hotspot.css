@@ -288,4 +288,11 @@ svg .hotspot-answer-point {
     fill: rgba(0, 103, 124, 0.75);
     stroke: rgb(0, 103, 124);
     stroke-width: 1;
+    cursor: move;
+}
+
+svg .hotspot-answer-text {
+    cursor: move;
+    fill: #FFF;
+    font-family: sans-serif;
 }

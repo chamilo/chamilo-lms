@@ -434,12 +434,12 @@ class Exercise
                     FROM $TBL_EXERCISE_QUESTION e
                     INNER JOIN $TBL_QUESTIONS  q
                     ON (e.question_id = q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
-					WHERE e.exercice_id	= ".intval($this->id)."";
+					WHERE e.exercice_id	= ".intval($this->id);
             $result = Database::query($sql);
 
             $count_question_orders = Database::num_rows($result);
 
-            $sql = "SELECT e.question_id, e.question_order
+            $sql = "SELECT DISTINCT e.question_id, e.question_order
                     FROM $TBL_EXERCISE_QUESTION e
                     INNER JOIN $TBL_QUESTIONS  q
                     ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")

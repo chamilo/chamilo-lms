@@ -141,7 +141,7 @@ foreach($career_array as $career_id => $data) {
         foreach ($sessions as $session) {
             $course_list = $session['courses'];
 
-            $url = Display::url($session['data']['name'], 'resume_session.php?id_session='.$session['data']['id']);
+            $url = Display::url($session['data']['name'], '../session/resume_session.php?id_session='.$session['data']['id']);
             echo '<tr>';
                 //Session name
                 echo Display::tag('td', $url);

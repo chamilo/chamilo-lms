@@ -112,7 +112,7 @@
                     </div>
 
                     <div class="lp-view-tabs">
-                        <ul class="nav nav-tabs" role="tablist">
+                        <ul id="navTabs" class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active">
                                 <a href="#lp-view-content" aria-controls="lp-view-content" role="tab" data-toggle="tab">
                                     <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Lesson'|get_lang }}</span>

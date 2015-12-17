@@ -115,6 +115,7 @@ class Event
         }
         $sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (access_user_id, c_id, access_date, access_session_id) VALUES
                 (".$user_id.", '".$courseId."', '".$now."','".$id_session."')";
+
         Database::query($sql);
 
         // added for "what's new" notification
@@ -1739,7 +1740,7 @@ class Event
     public static function event_course_login($courseId, $user_id, $session_id)
     {
         $course_tracking_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $time = api_get_datetime();
+        $time = api_get_utc_datetime();
 
         $courseId = intval($courseId);
         $user_id = intval($user_id);
@@ -1749,7 +1750,7 @@ class Event
                 VALUES('".$courseId."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
         Database::query($sql);
 
-        //Course catalog stats modifications see #4191
+        // Course catalog stats modifications see #4191
         CourseManager::update_course_ranking(null, null, null, null, true, false);
     }
 

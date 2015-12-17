@@ -111,14 +111,6 @@ while ($hotspot = Database::fetch_assoc($result))
 $data['nmbrTries'] = $nmbrTries;
 $data['done'] = 'done';
 
-$objAnswerTmp = new Answer($questionId);
-
-$attempList = Event::getAllExerciseEventByExeId(40);
-$userChoice = $attempList[$questionId][0];
-//var_dump($answer->selectHotspotCoordinates($questionId), $userChoice);
-
 header('Content-Type: application/json');
 
-//echo '<pre>';
 echo json_encode($data, JSON_PRETTY_PRINT);
-//echo '</pre>';

@@ -3937,9 +3937,8 @@ function WSSubscribeUserToCourse($params) {
                 $resultValue = 0;
             } else {
                 if ($debug) error_log('WSSubscribeUserToCourse courseCode: '.$courseCode);
-                if (!CourseManager::add_user_to_course($user_id, $courseCode, $status)) {
-                    $resultValue = 0;
-                }
+                CourseManager::add_user_to_course($user_id, $courseCode, $status);
+                $resultValue = 1;
             }
         }
 

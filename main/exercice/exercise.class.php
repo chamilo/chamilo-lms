@@ -3026,39 +3026,43 @@ class Exercise
                             $totalScore     += $answerWeighting;
                         }
                     } else {
-                        $studentChoice = $choice[$answerAutoId];
+                        if (!isset($choice[$answerAutoId])) {
+                            $choice[$answerAutoId] = 0;
+                        } else {
+                            $studentChoice = $choice[$answerAutoId];
 
-                        $choiceIsValid = false;
+                            $choiceIsValid = false;
 
-                        if (!empty($studentChoice)) {
-                            $hotspotType = $objAnswerTmp->selectHotspotType($answerId);
-                            $hotspotCoordinates = $objAnswerTmp->selectHotspotCoordinates($answerId);
-                            $choicePoint = Geometry::decodePoint($studentChoice);
+                            if (!empty($studentChoice)) {
+                                $hotspotType = $objAnswerTmp->selectHotspotType($answerId);
+                                $hotspotCoordinates = $objAnswerTmp->selectHotspotCoordinates($answerId);
+                                $choicePoint = Geometry::decodePoint($studentChoice);
 
-                            switch ($hotspotType) {
-                                case 'square':
-                                    $hotspotProperties = Geometry::decodeSquare($hotspotCoordinates);
-                                    $choiceIsValid = Geometry::pointIsInSquare($hotspotProperties, $choicePoint);
-                                    break;
+                                switch ($hotspotType) {
+                                    case 'square':
+                                        $hotspotProperties = Geometry::decodeSquare($hotspotCoordinates);
+                                        $choiceIsValid = Geometry::pointIsInSquare($hotspotProperties, $choicePoint);
+                                        break;
 
-                                case 'circle':
-                                    $hotspotProperties = Geometry::decodeEllipse($hotspotCoordinates);
-                                    $choiceIsValid = Geometry::pointIsInEllipse($hotspotProperties, $choicePoint);
-                                    break;
+                                    case 'circle':
+                                        $hotspotProperties = Geometry::decodeEllipse($hotspotCoordinates);
+                                        $choiceIsValid = Geometry::pointIsInEllipse($hotspotProperties, $choicePoint);
+                                        break;
 
-                                case 'poly':
-                                    $hotspotProperties = Geometry::decodePolygon($hotspotCoordinates);
-                                    $choiceIsValid = Geometry::pointIsInPolygon($hotspotProperties, $choicePoint);
-                                    break;
+                                    case 'poly':
+                                        $hotspotProperties = Geometry::decodePolygon($hotspotCoordinates);
+                                        $choiceIsValid = Geometry::pointIsInPolygon($hotspotProperties, $choicePoint);
+                                        break;
+                                }
                             }
-                        }
 
-                        $choice[$answerAutoId] = 0;
+                            $choice[$answerAutoId] = 0;
 
-                        if ($choiceIsValid) {
-                            $questionScore  += $answerWeighting;
-                            $totalScore     += $answerWeighting;
-                            $choice[$answerAutoId] = 1;
+                            if ($choiceIsValid) {
+                                $questionScore  += $answerWeighting;
+                                $totalScore     += $answerWeighting;
+                                $choice[$answerAutoId] = 1;
+                            }
                         }
                     }
                     break;
@@ -4058,12 +4062,28 @@ class Exercise
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT) {
-                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                $answer = [];
+
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
+                    Database::delete(
+                        Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT),
+                        [
+                            'hotspot_exe_id = ? AND hotspot_question_id = ? AND c_id = ?' => [
+                                $exeId,
+                                $questionId,
+                                api_get_course_int_id()
+                            ]
+                        ]
+                    );
+
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
+                        $answer[] = $val;
+
                         Event::saveExerciseAttemptHotspot($exeId, $quesId, $idx, $choice[$idx], $val, false, $this->id);
                     }
                 }
+
+                Event::saveQuestionAttempt($questionScore, implode('|', $answer), $quesId, $exeId, 0, $this->id);
             } else {
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0,$this->id);
             }

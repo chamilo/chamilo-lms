@@ -10,10 +10,12 @@
 
 session_cache_limiter("none");
 
-include('../inc/global.inc.php');
+require '../inc/global.inc.php';
+require api_get_path(LIBRARY_PATH) . 'geometry.lib.php';
 
 // set vars
 $questionId    = intval($_GET['modifyAnswers']);
+$exerciseId = isset($_GET['exe_id']) ? intval($_GET['exe_id']) : 0;
 $objQuestion   = Question::read($questionId);
 $answer_type   = $objQuestion->selectType(); //very important
 $TBL_ANSWERS   = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -62,6 +64,7 @@ $data['image_width'] = $pictureWidth;
 $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
+$data['answers'] = [];
 
 $nmbrTries = 0;
 
@@ -108,9 +111,23 @@ while ($hotspot = Database::fetch_assoc($result))
     $data['hotspots'][] = $hotSpot;
 }
 
+$attemptList = Event::getAllExerciseEventByExeId($exerciseId);
+
+if (!empty($attemptList)) {
+    $questionAttempt = $attemptList[$questionId][0];
+
+    if (!empty($questionAttempt['answer'])) {
+        $coordinates = explode('|', $questionAttempt['answer']);
+
+        foreach ($coordinates as $coordinate) {
+            $data['answers'][] = Geometry::decodePoint($coordinate);
+        }
+    }
+}
+
 $data['nmbrTries'] = $nmbrTries;
 $data['done'] = 'done';
 
 header('Content-Type: application/json');
 
-echo json_encode($data, JSON_PRETTY_PRINT);
+echo json_encode($data);

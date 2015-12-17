@@ -783,12 +783,12 @@ window.HotspotQuestion = (function () {
             lang = questionInfo.lang;
         };
 
-        var UserHotspotsSVG = function (hotspotsCollection, image) {
+        var UserHotspotsSVG = function (hotspotsCollection, answersCollection, image) {
             var self = this;
 
             this.el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             this.hotspotsCollection = hotspotsCollection;
-            this.answersCollection = new AnswersCollection();
+            this.answersCollection = answersCollection;
             this.image = image;
 
             this.answersCollection.onAdd(function (answerModel) {
@@ -933,7 +933,8 @@ window.HotspotQuestion = (function () {
             var image = new Image();
             image.onload = function () {
                 var hotspotsCollection = new HotspotsCollection(),
-                    hotspotsSVG = new UserHotspotsSVG(hotspotsCollection, this);
+                    answersCollection = new AnswersCollection(),
+                    hotspotsSVG = new UserHotspotsSVG(hotspotsCollection, answersCollection, this);
 
                 $(config.selector).css('width', this.width).append(hotspotsSVG.render().el);
 
@@ -965,6 +966,15 @@ window.HotspotQuestion = (function () {
                     }
 
                     hotspotsCollection.add(hotspot);
+                });
+
+                $.each(questionInfo.answers, function (index, answerInfo) {
+                    var answerModel = new AnswerModel({
+                        x: answerInfo.x,
+                        y: answerInfo.y
+                    });
+
+                    answersCollection.add(answerModel);
                 });
 
                 $(config.selector).parent().find('#hotspot-messages-' + config.questionId + ' span:not(.fa)')
@@ -1116,7 +1126,8 @@ window.HotspotQuestion = (function () {
 
             case 'user':
                 xhrQuestion = $.getJSON('/main/exercice/hotspot_actionscript.as.php', {
-                    modifyAnswers: parseInt(config.questionId)
+                    modifyAnswers: parseInt(config.questionId),
+                    exe_id: parseInt(config.exerciseId)
                 });
                 break;
 

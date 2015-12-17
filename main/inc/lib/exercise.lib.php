@@ -1083,7 +1083,7 @@ HTML;
                 return $s;
             }
         } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
-            global $exerciseId;
+            global $exerciseId, $exe_id;
             // Question is a HOT_SPOT
             //checking document/images visibility
             if (api_is_platform_admin() || api_is_course_admin()) {
@@ -1192,6 +1192,7 @@ HOTSPOT;
                                     $(document).on('ready', function () {
                                         new " . ($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion') . "({
                                             questionId: $questionId,
+                                            exerciseId: $exe_id,
                                             selector: '#question_div_' + $questionId + ' .hotspot-image',
                                             for: 'user'
                                         });

@@ -20,9 +20,6 @@ window.HotspotQuestion = (function () {
         HotspotModel.prototype.onChange = function (callback) {
             this.changeEvent = callback;
         };
-        HotspotModel.prototype.checkPoint = function (x, y) {
-            return false;
-        };
         HotspotModel.decode = function () {
             return new this;
         };
@@ -55,17 +52,6 @@ window.HotspotQuestion = (function () {
             if (y >= startY) {
                 this.set('height', y - startY);
             }
-        };
-        SquareModel.prototype.checkPoint = function (x, y) {
-            var left = this.get('x'),
-                right = this.get('x') + this.get('width'),
-                top = this.get('y'),
-                bottom = this.get('y') + this.get('height');
-
-            var xIsValid = x >= left && x <= right,
-                yIsValid = y >= top && y <= bottom;
-
-            return xIsValid && yIsValid;
         };
         SquareModel.decode = function (hotspotInfo) {
             var coords = hotspotInfo.coord.split('|'),
@@ -127,15 +113,6 @@ window.HotspotQuestion = (function () {
                 this.set('centerY', startY + this.get('radiusY'));
             }
         };
-        EllipseModel.prototype.checkPoint = function (x, y) {
-            var dX = x - this.get('centerX'),
-                dY = y - this.get('centerY');
-
-            var dividend = Math.pow(dX, 2) / Math.pow(this.get('radiusX'), 2),
-                divider = Math.pow(dY, 2) / Math.pow(this.get('radiusY'), 2);
-
-            return dividend + divider <= 1;
-        };
         EllipseModel.decode = function (hotspotInfo) {
             var coords = hotspotInfo.coord.split('|'),
                 center = coords[0].split(';'),
@@ -175,25 +152,6 @@ window.HotspotQuestion = (function () {
             points.push([x, y]);
 
             this.set('points', points);
-        };
-        PolygonModel.prototype.checkPoint = function (x, y) {
-            var points = this.get('points'),
-                isInside = false;
-
-            for (var i = 0, j = points.length - 1; i < points.length; j = i++) {
-                var xi = points[i][0],
-                    yi = points[i][1],
-                    xj = points[j][0],
-                    yj = points[j][1];
-
-                var intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-
-                if (intersect) {
-                    isInside = !isInside;
-                }
-            }
-
-            return isInside;
         };
         PolygonModel.decode = function (hotspotInfo) {
             var pairedPoints = hotspotInfo.coord.split('|'),
@@ -874,11 +832,7 @@ window.HotspotQuestion = (function () {
                 type: 'hidden',
                 name: 'choice[' + config.questionId + '][' + hotspot.id + ']'
             }).val(function () {
-                if (hotspot.checkPoint(x, y)) {
-                    return 1;
-                }
-
-                return 0;
+                return [x, y].join(';');
             }).appendTo(this.el.parentNode);
         };
         UserHotspotsSVG.prototype.setEvents = function () {
@@ -968,11 +922,7 @@ window.HotspotQuestion = (function () {
                         return [point.x, point.y].join(';');
                     });
                     $('[name="choice[' + config.questionId + '][' + hotspot.id + ']"]').val(function () {
-                        if (hotspot.checkPoint(point.x, point.y)) {
-                            return 1;
-                        }
-
-                        return 0;
+                        return [point.x, point.y].join(';');
                     });
 
                     isMoving = false;

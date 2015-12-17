@@ -333,3 +333,147 @@ function poly_get_max(&$coords1, &$coords2) {
     }
     return array('x'=>$mx,'y'=>$my);
 }
+
+/**
+ * Class Geometry
+ * Utils for decode hotspots and check if the user choices are correct
+ */
+class Geometry
+{
+    /**
+     * Decode a user choice as a point
+     * @param string $coordinates
+     * @return array The x and y properties for a point
+     */
+    public static function decodePoint($coordinates)
+    {
+        $coordinates = explode(';', $coordinates);
+
+        return [
+            'x' => intval($coordinates[0]),
+            'y' => intval($coordinates[1])
+        ];
+    }
+
+    /**
+     * Decode a square info as properties
+     * @param string $coordinates
+     * @return array The x, y, width, and height properties for a square
+     */
+    public static function decodeSquare($coordinates)
+    {
+        $coordinates = explode('|', $coordinates);
+        $originString = explode(';', $coordinates[0]);
+
+        return [
+            'x' => intval($originString[0]),
+            'y' => intval($originString[1]),
+            'width' => intval($coordinates[1]),
+            'height' => intval($coordinates[2])
+        ];
+    }
+
+    /**
+     * Decode an ellipse info as properties
+     * @param string $coordinates
+     * @return array The center_x, center_y, radius_x, radius_x properties for an ellipse
+     */
+    public static function decodeEllipse($coordinates)
+    {
+        $coordinates = explode('|', $coordinates);
+        $originString = explode(';', $coordinates[0]);
+
+        return [
+            'center_x' => intval($originString[0]),
+            'center_y' => intval($originString[1]),
+            'radius_x' => intval($coordinates[1]),
+            'radius_y' => intval($coordinates[2])
+        ];
+    }
+
+    /**
+     * Decode a polygon info as properties
+     * @param string $coordinates
+     * @return array The array of points for a polygon
+     */
+    public static function decodePolygon($coordinates)
+    {
+        $coordinates = explode('|', $coordinates);
+
+        $points = [];
+
+        foreach ($coordinates as $coordinate) {
+            $point = explode(';', $coordinate);
+
+            $points[] = [
+                intval($point[0]),
+                intval($point[1])
+            ];
+        }
+
+        return $points;
+    }
+
+    /**
+     * Check if the point is inside of a square
+     * @param array $properties The hotspot properties
+     * @param array $point The point properties
+     * @return boolean
+     */
+    public static function pointIsInSquare($properties, $point)
+    {
+        $left = $properties['x'];
+        $right = $properties['x'] + $properties['width'];
+        $top = $properties['y'];
+        $bottom = $properties['y'] + $properties['height'];
+
+        $xIsValid = $point['x'] >= $left && $point['x'] <= $right;
+        $yIsValid = $point['y'] >= $top && $point['y'] <= $bottom;
+
+        return $xIsValid && $yIsValid;
+    }
+
+    /**
+     * Check if the point is inside of an ellipse
+     * @param array $properties The hotspot properties
+     * @param array $point The point properties
+     * @return boolean
+     */
+    public static function pointIsInEllipse($properties, $point)
+    {
+        $dX = $point['x'] - $properties['center_x'];
+        $dY = $point['y'] - $properties['center_y'];
+
+        $dividend = pow($dX, 2) / pow($properties['radius_x'], 2);
+        $divider = pow($dY, 2) / pow($properties['radius_y'], 2);
+
+        return $dividend + $divider <= 1;
+    }
+
+    /**
+     * Check if the point is inside of a polygon
+     * @param array $properties The hotspot properties
+     * @param array $point The point properties
+     * @return boolean
+     */
+    public static function pointIsInPolygon($properties, $point) {
+        $points = $properties;
+        $isInside = false;
+
+        for ($i = 0, $j = count($points) - 1; $i < count($points); $j = $i++) {
+            $xi = $points[$i][0];
+            $yi = $points[$i][1];
+            $xj = $points[$j][0];
+            $yj = $points[$j][1];
+
+            $intersect = (($yi > $point['y']) !== ($yj > $point['y'])) &&
+                ($point['x'] < ($xj - $xi) * ($point['y'] - $yi) / ($yj - $yi) + $xi);
+
+            if ($intersect) {
+                $isInside = !$isInside;
+            }
+        }
+
+        return $isInside;
+    }
+}

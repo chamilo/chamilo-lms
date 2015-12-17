@@ -3027,7 +3027,33 @@ class Exercise
                         }
                     } else {
                         $studentChoice = $choice[$answerAutoId];
-                        if ($studentChoice) {
+
+                        $choiceIsValid = false;
+
+                        if (!empty($studentChoice)) {
+                            $hotspotType = $objAnswerTmp->selectHotspotType($answerId);
+                            $hotspotCoordinates = $objAnswerTmp->selectHotspotCoordinates($answerId);
+                            $choicePoint = Geometry::decodePoint($studentChoice);
+
+                            switch ($hotspotType) {
+                                case 'square':
+                                    $hotspotProperties = Geometry::decodeSquare($hotspotCoordinates);
+                                    $choiceIsValid = Geometry::pointIsInSquare($hotspotProperties, $choicePoint);
+                                    break;
+
+                                case 'circle':
+                                    $hotspotProperties = Geometry::decodeEllipse($hotspotCoordinates);
+                                    $choiceIsValid = Geometry::pointIsInEllipse($hotspotProperties, $choicePoint);
+                                    break;
+
+                                case 'poly':
+                                    $hotspotProperties = Geometry::decodePolygon($hotspotCoordinates);
+                                    $choiceIsValid = Geometry::pointIsInPolygon($hotspotProperties, $choicePoint);
+                                    break;
+                            }
+                        }
+
+                        if ($choiceIsValid) {
                             $questionScore  += $answerWeighting;
                             $totalScore     += $answerWeighting;
                         }

@@ -103,7 +103,7 @@ class Link extends Model
 
         return false;
     }
-    
+
     /**
     *
     * Get link info
@@ -122,7 +122,7 @@ class Link extends Model
         if (Database::num_rows($result)) {
             $data = Database::fetch_array($result);
         }
-        
+
         return $data;
     }
 }
@@ -927,22 +927,36 @@ function showlinksofcategory($catid)
 
     // Condition for the session.
     $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id, true, true);
     $catid = intval($catid);
-
     $course_id = api_get_course_int_id();
 
-    $sqlLinks = "SELECT *, link.id FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties
-                 WHERE
-                    itemproperties.tool='" . TOOL_LINK . "' AND
-                    link.id=itemproperties.ref AND
-                    link.category_id='" . $catid . "' AND
-                    (itemproperties.visibility='0' OR itemproperties.visibility='1')
-                    $condition_session AND
-                    link.c_id = " . $course_id . " AND
-                    itemproperties.c_id = " . $course_id . "
-                    ORDER BY link.display_order DESC";
-    $result = Database :: query($sqlLinks);
+    if (empty($session_id)) {
+        $visibleCondition = " ( (id_session = 0 OR id_session IS NULL) AND (itemproperties.visibility = '0' OR itemproperties.visibility = '1') )  ";
+    } else {
+        $visibleCondition = " ( (id_session = 0 OR id_session is NULL) AND itemproperties.visibility = '1') OR ";
+        $visibleCondition .= " ( id_session = $session_id  AND (itemproperties.visibility = '0' OR itemproperties.visibility = '1'))  ";
+    }
+
+    $sql = "SELECT DISTINCT
+              link.id,
+              session_id,
+              url,
+              visibility,
+              title,
+              target,
+              description
+            FROM $tbl_link link
+            INNER JOIN $TABLE_ITEM_PROPERTY itemproperties
+            ON (link.id = itemproperties.ref AND link.c_id = itemproperties.c_id)
+            WHERE
+                itemproperties.tool = '" . TOOL_LINK . "' AND
+                link.category_id = '" . $catid . "' AND
+                link.c_id = $course_id AND
+                itemproperties.c_id = $course_id AND
+                $visibleCondition
+            ORDER BY link.display_order DESC";
+
+    $result = Database :: query($sql);
     $numberoflinks = Database :: num_rows($result);
     if ($numberoflinks > 0) {
         echo '<table class="data_table" width="100%">';
@@ -1084,12 +1098,46 @@ function showlinksofcategory($catid)
                         ) . '</a>';
 
                 } else {
+
                     echo Display :: return_icon(
                         'edit_na.png',
                         get_lang('EditionNotAvailableFromSession'),
                         array(),
                         ICON_SIZE_SMALL
-                    ); //get_lang('EditionNotAvailableFromSession');
+                    );
+
+                    if (!empty($myrow['id_session'])) {
+
+                        if ($myrow['visibility'] == '1') {
+                            echo '<a href="link.php?'.api_get_cidreq().
+                                '&amp;sec_token='.$token.
+                                '&amp;action=invisible&amp;id='.$myrow['id'].
+                                '&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang(
+                                    'Hide'
+                                ).'">'.
+                                Display:: return_icon(
+                                    'visible.png',
+                                    get_lang('Hide'),
+                                    array(),
+                                    ICON_SIZE_SMALL
+                                ).'</a>';
+                        }
+
+                        if ($myrow['visibility'] == '0') {
+                            echo ' <a href="link.php?'.api_get_cidreq().
+                                '&amp;sec_token='.$token.
+                                '&amp;action=visible&amp;id='.$myrow['id'].
+                                '&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang(
+                                    'Show'
+                                ).'">'.
+                                Display:: return_icon(
+                                    'invisible.png',
+                                    get_lang('Show'),
+                                    array(),
+                                    ICON_SIZE_SMALL
+                                ).'</a>';
+                        }
+                    }
                 }
                 echo '</td>';
             }

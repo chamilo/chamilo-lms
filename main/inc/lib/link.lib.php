@@ -929,6 +929,7 @@ function showlinksofcategory($catid)
     $session_id = api_get_session_id();
     $catid = intval($catid);
     $course_id = api_get_course_int_id();
+    $courseInfo = api_get_course_info();
 
     if (empty($session_id)) {
         $visibleCondition = " ( (id_session = 0 OR id_session IS NULL) AND (itemproperties.visibility = '0' OR itemproperties.visibility = '1') )  ";
@@ -939,9 +940,7 @@ function showlinksofcategory($catid)
 
     $sql = "SELECT DISTINCT
               link.id,
-              session_id,
               url,
-              visibility,
               title,
               target,
               description
@@ -954,7 +953,7 @@ function showlinksofcategory($catid)
                 link.c_id = $course_id AND
                 itemproperties.c_id = $course_id AND
                 $visibleCondition
-            ORDER BY link.display_order DESC";
+            ORDER BY link.display_order";
 
     $result = Database :: query($sql);
     $numberoflinks = Database :: num_rows($result);
@@ -963,12 +962,48 @@ function showlinksofcategory($catid)
         $i = 1;
         while ($myrow = Database :: fetch_array($result)) {
             // Validation when belongs to a session.
-            $session_img = api_get_session_image(
-                $myrow['session_id'],
-                $_user['status']
-            );
+            $session_img = null;
 
             $css_class = $i % 2 == 0 ? $css_class = 'row_odd' : $css_class = 'row_even';
+
+            $visibility = api_get_item_visibility(
+                $courseInfo,
+                TOOL_LINK,
+                $myrow['id'],
+                0
+            );
+
+            if ($visibility == -1) {
+                if (!empty($session_id)) {
+                    $visibility = api_get_item_visibility(
+                        $courseInfo,
+                        TOOL_LINK,
+                        $myrow['id'],
+                        $session_id
+                    );
+
+                    if ($visibility != -1) {
+                        $session_img = api_get_session_image(
+                            $session_id,
+                            $_user['status']
+                        );
+                    }
+                }
+            } else {
+
+                if (!empty($session_id)) {
+                    if ($visibility == 0) {
+                        continue;
+                    }
+
+                    $visibility = api_get_item_visibility(
+                        $courseInfo,
+                        TOOL_LINK,
+                        $myrow['id'],
+                        $session_id
+                    );
+                }
+            }
 
             $link_validator = '';
             if (api_is_allowed_to_edit(null, true)) {
@@ -992,7 +1027,7 @@ function showlinksofcategory($catid)
                 );
             }
 
-            if ($myrow['visibility'] == '1') {
+            if ($visibility == '1') {
                 echo '<tr class="' . $css_class . '">';
                 echo '<td align="center" valign="middle" width="5%">';
                 echo '<a href="link_goto.php?' . api_get_cidreq() .
@@ -1060,7 +1095,7 @@ function showlinksofcategory($catid)
                         echo Display :: return_icon('down_na.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
                     }*/
 
-                    if ($myrow['visibility'] == '1') {
+                    if ($visibility == '1') {
                         echo '<a href="link.php?' . api_get_cidreq() .
                             '&amp;sec_token=' . $token .
                             '&amp;action=invisible&amp;id=' . $myrow['id'] .
@@ -1072,7 +1107,7 @@ function showlinksofcategory($catid)
                                 ICON_SIZE_SMALL
                             ) . '</a>';
                     }
-                    if ($myrow['visibility'] == '0') {
+                    if ($visibility == '0') {
                         echo ' <a href="link.php?' . api_get_cidreq() .
                             '&amp;sec_token=' . $token .
                             '&amp;action=visible&amp;id=' . $myrow['id'] .
@@ -1106,37 +1141,36 @@ function showlinksofcategory($catid)
                         ICON_SIZE_SMALL
                     );
 
-                    if (!empty($myrow['id_session'])) {
 
-                        if ($myrow['visibility'] == '1') {
-                            echo '<a href="link.php?'.api_get_cidreq().
-                                '&amp;sec_token='.$token.
-                                '&amp;action=invisible&amp;id='.$myrow['id'].
-                                '&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang(
-                                    'Hide'
-                                ).'">'.
-                                Display:: return_icon(
-                                    'visible.png',
-                                    get_lang('Hide'),
-                                    array(),
-                                    ICON_SIZE_SMALL
-                                ).'</a>';
-                        }
 
-                        if ($myrow['visibility'] == '0') {
-                            echo ' <a href="link.php?'.api_get_cidreq().
-                                '&amp;sec_token='.$token.
-                                '&amp;action=visible&amp;id='.$myrow['id'].
-                                '&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang(
-                                    'Show'
-                                ).'">'.
-                                Display:: return_icon(
-                                    'invisible.png',
-                                    get_lang('Show'),
-                                    array(),
-                                    ICON_SIZE_SMALL
-                                ).'</a>';
-                        }
+                    if ($visibility == '1') {
+                        echo '<a href="link.php?'.api_get_cidreq().
+                            '&amp;sec_token='.$token.
+                            '&amp;action=invisible&amp;id='.$myrow['id'].
+                            '&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang(
+                                'Hide'
+                            ).'">'.
+                            Display:: return_icon(
+                                'visible.png',
+                                get_lang('Hide'),
+                                array(),
+                                ICON_SIZE_SMALL
+                            ).'</a>';
+                    }
+
+                    if ($visibility== '0') {
+                        echo ' <a href="link.php?'.api_get_cidreq().
+                            '&amp;sec_token='.$token.
+                            '&amp;action=visible&amp;id='.$myrow['id'].
+                            '&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang(
+                                'Show'
+                            ).'">'.
+                            Display:: return_icon(
+                                'invisible.png',
+                                get_lang('Show'),
+                                array(),
+                                ICON_SIZE_SMALL
+                            ).'</a>';
                     }
                 }
                 echo '</td>';

@@ -9,6 +9,12 @@ use Doctrine\DBAL\Types\Type;
 
 /**
  * Fix track_e_hotspot table and migrate hotspot/values
+ * In the wake of an issue with the hotspot code not being possible to update without moving from AS2 to AS3 (Flash), we
+ * have decided to rewrite the hotspot tool in JS.
+ * Little did we know that we would find out that the coordinates system in use by the Flash version of hotspot was in
+ * fact a projection into a square form of 360x360, not depending on the original size of the image, and that a square
+ * was defined by its center's coordinates and its width, with an initial not-null margin on the left and top borders.
+ * The migration below fixes those parallax issues.
  */
 class Version20151214170800 extends AbstractMigrationChamilo
 {
@@ -32,6 +38,7 @@ class Version20151214170800 extends AbstractMigrationChamilo
         ");
 
         foreach ($answers as $answer) {
+            // Recover the real image size to recalculate coordinates
             $imagePath = api_get_path(SYS_PATH) . "courses/{$answer['directory']}/document/images/{$answer['picture']}";
             $imageSize = getimagesize($imagePath);
             $widthRatio = $imageSize[0] / 360;

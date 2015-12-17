@@ -142,7 +142,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .= '<div class="col-md-12">';
     $social_right_content .= '<div class="actions">';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.
-        Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
+        Display::return_icon('new-message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.
         Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';
     $social_right_content .= '</div>';

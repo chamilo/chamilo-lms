@@ -59,7 +59,7 @@ if ($global) {
     $sql = "SELECT quiz.title, id FROM $quizTable AS quiz
             WHERE
                 c_id = $courseId AND
-                active='1'
+                active = 1
                 $sessionCondition
             ORDER BY quiz.title ASC";
     $result = Database::query($sql);
@@ -195,14 +195,14 @@ if (!empty($courseList) && is_array($courseList)) {
         if ($global) {
             $sql = "SELECT count(id) as count
                     FROM $quizTable AS quiz
-                    WHERE active='1' AND c_id = $courseId AND (session_id = 0 OR session_id IS NULL)";
+                    WHERE c_id = $courseId AND  active = 1 AND (session_id = 0 OR session_id IS NULL)";
             $result = Database::query($sql);
             $countExercises = Database::store_result($result);
             $exerciseCount = $countExercises[0]['count'];
 
             $sql = "SELECT count(id) as count
                     FROM $quizTable AS quiz
-                    WHERE active='1' AND c_id = $courseId AND session_id <> 0";
+                    WHERE c_id = $courseId AND active = 1 AND session_id <> 0";
             $result = Database::query($sql);
             $countExercises = Database::store_result($result);
             $exerciseSessionCount = $countExercises[0]['count'];
@@ -229,7 +229,7 @@ if (!empty($courseList) && is_array($courseList)) {
             if ($global) {
                 $sql = "SELECT quiz.title, id, session_id
                     FROM $quizTable AS quiz
-                    WHERE c_id = $courseId AND active='1'
+                    WHERE c_id = $courseId AND active = 1
                     ORDER BY session_id, quiz.title ASC";
             } else {
                 //$sessionCondition = api_get_session_condition($sessionId, true, false);
@@ -238,7 +238,7 @@ if (!empty($courseList) && is_array($courseList)) {
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND
-                                active = '1' AND
+                                active = 1 AND
                                 id = $exerciseId
                                 $sessionCondition
 
@@ -248,7 +248,7 @@ if (!empty($courseList) && is_array($courseList)) {
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND
-                                active='1'
+                                active = 1
                                 $sessionCondition
                             ORDER BY session_id, quiz.title ASC";
                 }

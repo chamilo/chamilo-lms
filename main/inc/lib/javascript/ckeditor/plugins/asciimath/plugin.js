@@ -11,7 +11,7 @@
 
 ( function() {
 
-	var cdn = 'http:\/\/cdn.mathjax.org\/mathjax\/2.4-latest\/MathJax.js?config=TeX-MML-AM_HTMLorMML-full';
+	var cdn = '\/\/cdn.mathjax.org\/mathjax\/2.4-latest\/MathJax.js?config=TeX-MML-AM_HTMLorMML-full';
 
 	CKEDITOR.plugins.add( 'asciimath', {
 		lang: 'ar,ca,cs,cy,de,el,en,en-gb,eo,es,fa,fi,fr,gl,he,hr,hu,it,ja,km,nb,nl,no,pl,pt,pt-br,ro,ru,sk,sl,sv,tr,tt,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%

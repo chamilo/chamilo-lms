@@ -129,12 +129,14 @@ define('TABLE_MAIN_BLOCK', 'block');
 
 // Statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');
+// Access to specific tools inside a course
 define('TABLE_STATISTIC_TRACK_E_ACCESS', 'track_e_access');
 define('TABLE_STATISTIC_TRACK_E_LOGIN', 'track_e_login');
 define('TABLE_STATISTIC_TRACK_E_DOWNLOADS', 'track_e_downloads');
 define('TABLE_STATISTIC_TRACK_E_LINKS', 'track_e_links');
 define('TABLE_STATISTIC_TRACK_E_ONLINE', 'track_e_online');
 define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES', 'track_e_hotpotatoes');
+// Access date data (in and out dates in course)
 define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS', 'track_e_course_access');
 define('TABLE_STATISTIC_TRACK_E_EXERCISES', 'track_e_exercises');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT', 'track_e_attempt');

@@ -3053,9 +3053,12 @@ class Exercise
                             }
                         }
 
+                        $choice[$answerAutoId] = 0;
+
                         if ($choiceIsValid) {
                             $questionScore  += $answerWeighting;
                             $totalScore     += $answerWeighting;
+                            $choice[$answerAutoId] = 1;
                         }
                     }
                     break;

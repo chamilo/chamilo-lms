@@ -798,7 +798,7 @@ class Exercise
         $count_question_orders = Database::num_rows($result);
 
         // Getting question list from the order (question list drag n drop interface ).
-        $sql = "SELECT e.question_id, e.question_order
+        $sql = "SELECT DISTINCT e.question_id, e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
                     ON (e.question_id= q.id)

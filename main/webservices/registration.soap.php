@@ -2296,6 +2296,7 @@ $server->register('WSCreateCourse',                // method name
 // Define the method WSCreateCourse
 function WSCreateCourse($params)
 {
+    global $debug;
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
@@ -2382,6 +2383,7 @@ function WSCreateCourse($params)
 
         if (!empty($course_info)) {
             $course_code = $course_info['code'];
+            if ($debug) error_log("Course created: $course_code");
 
             // Save new fieldlabel into course_field table
             $field_id = CourseManager::create_course_extra_field($original_course_id_name, 1, $original_course_id_name);
@@ -2401,6 +2403,7 @@ function WSCreateCourse($params)
             }
             $results[] = $course_code;
         } else {
+            if ($debug) error_log("Course NOT created");
             $results[] = 0;
         }
     } // end principal foreach

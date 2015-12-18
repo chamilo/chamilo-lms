@@ -135,6 +135,7 @@ function WSImportLP($params)
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
+    if ($debug) error_log('WSImportLP');
 
     $courseIdName = $params['course_id_name'];
     $courseIdValue = $params['course_id_value'];

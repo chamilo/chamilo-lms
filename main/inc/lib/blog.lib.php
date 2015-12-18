@@ -2526,7 +2526,7 @@ class Blog
 
 				$url_start_blog = 'blog.php' ."?". "blog_id=".$info_log[3]. "&".api_get_cidreq();
 				$title = $info_log[0];
-    			$image = '<img src="../img/blog.gif" border="0" align="absmiddle" alt="' . $title . '">';
+                        $image = Display::return_icon('blog.png', $title);
     			$list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">' . $image . '</a></div><a href="'.$url_start_blog.'">' .$title. '</a>' . $session_img;
 
 				$list_body_blog[] = $list_name;
@@ -2535,14 +2535,17 @@ class Blog
 				$visibility_icon=($info_log[2]==0) ? 'invisible' : 'visible';
 				$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
 			 	$my_image = '<a href="' .api_get_self(). '?action=edit&blog_id=' . $info_log[3] . '">';
-				$my_image.= '<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />';
+                                $my_image.= Display::return_icon('edit.png', get_lang('EditBlog'));
+				
 				$my_image.= "</a>\n";
 				$my_image.= '<a href="' .api_get_self(). '?action=delete&blog_id=' . $info_log[3] . '" ';
 				$my_image.= 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
-				$my_image.= '<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />';
+                                $my_image.= Display::return_icon('delete.png', get_lang('DeleteBlog'));
+				
 				$my_image.= "</a>\n";
 				$my_image.= '<a href="' .api_get_self(). '?action=visibility&blog_id=' . $info_log[3] . '">';
-				$my_image.= '<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
+                                $my_image.= Display::return_icon($visibility_icon . '.gif', get_lang($visibility_info));
+				
 				$my_image.= "</a>\n";
 
 				$list_body_blog[]=$my_image;

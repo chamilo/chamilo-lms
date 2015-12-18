@@ -70,7 +70,7 @@ $i = 0;
 $grid_js = '';
 $career_array = array();
 if (!empty($careers)) {
-    foreach($careers as $career_item) {
+    foreach ($careers as $career_item) {
         $promotion = new Promotion();
         // Getting all promotions
         $promotions = $promotion->get_all_promotions_by_career_id(
@@ -80,7 +80,7 @@ if (!empty($careers)) {
         $career_content = '';
         $promotion_array = array();
         if (!empty($promotions)) {
-            foreach($promotions as $promotion_item) {
+            foreach ($promotions as $promotion_item) {
                 if (!$promotion_item['status']) {
                     continue; //avoid status = 0
                 }
@@ -91,7 +91,7 @@ if (!empty($careers)) {
                 );
 
                 $session_list = array();
-                foreach($sessions as $session_item) {
+                foreach ($sessions as $session_item) {
                     $course_list = SessionManager::get_course_list_by_session_id(
                         $session_item['id']
                     );
@@ -115,52 +115,60 @@ if (!empty($careers)) {
 
 echo '<table class="data_table">';
 
-foreach($career_array as $career_id => $data) {
-    $career     = $data['name'];
-    $promotions = $data['promotions'];
-    $career = Display::url($career,'careers.php?action=edit&id='.$career_id);
-    $career = Display::tag('h4',$career);
-    echo '<tr><td style="background-color:#ECF0F1" colspan="3">'.$career.'</td></tr>';
-    foreach($promotions as $promotion_id => $promotion) {
-    	$promotion_name = $promotion['name'];
-        $promotion_url  = Display::url($promotion_name,'promotions.php?action=edit&id='.$promotion_id);
-        $sessions = $promotion['sessions'];
-        echo '<tr>';
-        $count = count($sessions);
-        $rowspan = '';
-        if (!empty($count)) {
-            $count++;
-        	$rowspan = 'rowspan="'.$count.'"';
-        }
-        echo '<td '.$rowspan.'>';
-        echo Display::tag('h5',$promotion_url);
-        echo '</td>';
-        echo '</tr>';
-
-        if (!empty($sessions))
-        foreach ($sessions as $session) {
-            $course_list = $session['courses'];
-
-            $url = Display::url($session['data']['name'], '../session/resume_session.php?id_session='.$session['data']['id']);
-            echo '<tr>';
-                //Session name
-                echo Display::tag('td', $url);
-                echo '<td>';
-                    //Courses
-                    echo '<table>';
-                    foreach ($course_list as $course) {
-                       echo '<tr>';
-
-                       $url = Display::url(
-                           $course['title'],
-                           api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$session['data']['id']
-                       );
-                       echo Display::tag('td', $url);
-                       echo '</tr>';
-                    }
-                    echo '</table>';
+if (!empty($career_arrayer)) {
+    foreach ($career_array as $career_id => $data) {
+        $career = $data['name'];
+        $promotions = $data['promotions'];
+        $career = Display::url($career, 'careers.php?action=edit&id=' . $career_id);
+        $career = Display::tag('h4', $career);
+        echo '<tr><td style="background-color:#ECF0F1" colspan="3">' . $career . '</td></tr>';
+        if (!empty($promotions)) {
+            foreach ($promotions as $promotion_id => $promotion) {
+                $promotion_name = $promotion['name'];
+                $promotion_url = Display::url($promotion_name, 'promotions.php?action=edit&id=' . $promotion_id);
+                $sessions = $promotion['sessions'];
+                echo '<tr>';
+                $count = count($sessions);
+                $rowspan = '';
+                if (!empty($count)) {
+                    $count++;
+                    $rowspan = 'rowspan="' . $count . '"';
+                }
+                echo '<td ' . $rowspan . '>';
+                echo Display::tag('h5', $promotion_url);
                 echo '</td>';
-            echo '</tr>';
+                echo '</tr>';
+
+                if (!empty($sessions)) {
+                    foreach ($sessions as $session) {
+                        $course_list = $session['courses'];
+
+                        $url = Display::url($session['data']['name'],
+                            '../session/resume_session.php?id_session=' . $session['data']['id']);
+                        echo '<tr>';
+                        //Session name
+                        echo Display::tag('td', $url);
+                        echo '<td>';
+                        //Courses
+                        echo '<table>';
+                        if (!empty($course_list)) {
+                            foreach ($course_list as $course) {
+                                echo '<tr>';
+
+                                $url = Display::url(
+                                    $course['title'],
+                                    api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . $session['data']['id']
+                                );
+                                echo Display::tag('td', $url);
+                                echo '</tr>';
+                            }
+                            echo '</table>';
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                    }
+                }
+            }
         }
     }
 }

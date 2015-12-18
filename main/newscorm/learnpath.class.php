@@ -967,14 +967,17 @@ class learnpath
 
     /**
      * Static admin function allowing removal of a learnpath
-     * @param	string	Course code
+     * @param	array $courseInfo
      * @param	integer	Learnpath ID
      * @param	string	Whether to delete data or keep it (default: 'keep', others: 'remove')
      * @return	boolean	True on success, false on failure (might change that to return number of elements deleted)
      */
-    public function delete($course = null, $id = null, $delete = 'keep')
+    public function delete($courseInfo = null, $id = null, $delete = 'keep')
     {
         $course_id = api_get_course_int_id();
+        if (!empty($courseInfo)) {
+            $course_id = isset($courseInfo['real_id']) ? $courseInfo['real_id'] : $course_id;
+        }
 
         // TODO: Implement a way of getting this to work when the current object is not set.
         // In clear: implement this in the item class as well (abstract class) and use the given ID in queries.
@@ -996,6 +999,7 @@ class learnpath
 
         // Proposed by Christophe (nickname: clefevre)
         $sql = "DELETE FROM $lp_item WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        error_log($sql);
         Database::query($sql);
 
         $sql = "DELETE FROM $lp_view WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;

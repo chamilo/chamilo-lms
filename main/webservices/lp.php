@@ -12,7 +12,7 @@ require_once $libpath.'fileUpload.lib.php';
 require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
 require_once $libpath.'add_course.lib.inc.php';
 
-$debug = false;
+$debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);
 
@@ -70,7 +70,6 @@ function WSHelperVerifyKey($params)
         $security_key = $ip.$_configuration['security_key'];
         //error_log($secret_key.'-'.$security_key);
     }
-
     $result = api_is_valid_secret_key($secret_key, $security_key);
     //error_log($secret_key.'-'.$security_key);
     if ($debug)
@@ -86,7 +85,6 @@ $server = new soap_server();
 // Initialize WSDL support
 $server->configureWSDL('WSLP', 'urn:WSLP');
 
-// Input params for editing users
 $server->wsdl->addComplexType(
     'params',
     'complexType',
@@ -133,6 +131,7 @@ $server->register('WSImportLP',                            // method name
  */
 function WSImportLP($params)
 {
+    global $debug;
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
@@ -151,6 +150,7 @@ function WSImportLP($params)
     $courseId = $courseInfo['real_id'];
 
     if (empty($courseInfo)) {
+        if ($debug) error_log('Course not found');
         return 'Course not found';
     }
 
@@ -162,10 +162,11 @@ function WSImportLP($params)
         );
 
         if (empty($sessionId)) {
+
+            if ($debug) error_log('Session not found');
             return 'Session not found';
         }
     }
-
 
     $proximity = 'local';
     $maker = 'Scorm';
@@ -188,11 +189,13 @@ function WSImportLP($params)
     $manifest = $oScorm->import_package($fileInfo, '', $courseInfo);
 
     if (!$manifest) {
+        if ($debug) error_log('manifest.xml file not found');
         //if api_set_failure
         return 'manifest.xml file not found';
     }
 
     $manifestData = $oScorm->parse_manifest($manifest);
+
     if (!empty($manifestData)) {
         $oScorm->import_manifest(
             $courseInfo['code'],
@@ -205,8 +208,227 @@ function WSImportLP($params)
         //$oScorm->set_jslib('scorm_api.php');
         return 1;
     } else {
+        if ($debug) error_log('manifest data empty');
         return 'manifest data empty';
     }
+}
+
+
+
+$server->wsdl->addComplexType(
+    'paramsGetLpList',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'course_id_name' => array(
+            'name' => 'course_id_name',
+            'type' => 'xsd:string',
+        ),
+        'course_id_value' => array(
+            'name' => 'course_id_name',
+            'type' => 'xsd:string',
+        ),
+        'session_id_name' => array(
+            'name' => 'session_id_name',
+            'type' => 'xsd:string',
+        ),
+        'session_id_value' => array(
+            'name' => 'session_id_value',
+            'type' => 'xsd:string',
+        ),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
+    )
+);
+
+$server->wsdl->addComplexType(
+    'lpListItem',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'id'    => array('name' => 'id',    'type' => 'xsd:string'),
+        'name'  => array('name' => 'name',  'type' => 'xsd:string'),
+    )
+);
+
+$server->wsdl->addComplexType(
+    'lpList',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:lpListItem[]')),
+    'tns:lpListItem'
+);
+
+// Register the method to expose
+$server->register('WSGetLpList',                            // method name
+    array('params' => 'tns:paramsGetLpList'),  // input parameters
+    array('return' => 'tns:lpList'),                                        // output parameters
+    'urn:WSLP',                                                   // namespace
+    'urn:WSLP#WSGetLpList',                       // soapaction
+    'rpc',                                                                  // style
+    'encoded',                                                              // use
+    'This service adds users'                                               // documentation
+);
+
+/**
+ * @param array $params
+ * @return int|string
+ */
+function WSGetLpList($params)
+{
+    global $debug;
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
+
+    $courseIdName = $params['course_id_name'];
+    $courseIdValue = $params['course_id_value'];
+
+    $sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
+    $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;
+
+    $courseCode = CourseManager::get_course_id_from_original_id(
+        $courseIdValue,
+        $courseIdName
+    );
+
+    $courseInfo = api_get_course_info($courseCode);
+    //$courseId = $courseInfo['real_id'];
+
+    if (empty($courseInfo)) {
+        if ($debug) error_log("Course not found: $courseIdName : $courseIdValue");
+        return 'Course not found';
+    }
+
+    $sessionId = 0;
+    if (!empty($sessionIdName) && !empty($sessionIdValue)) {
+        $sessionId = SessionManager::get_session_id_from_original_id(
+            $sessionIdValue,
+            $sessionIdName
+        );
+
+        if (empty($sessionId)) {
+
+            if ($debug) error_log('Session not found');
+            return 'Session not found';
+        }
+    }
+
+    $list = new LearnpathList(null, $courseInfo['code'], $sessionId);
+    $flatList = $list->get_flat_list();
+    $result = array();
+    foreach ($flatList as $id => $lp) {
+        $result[] = array(
+            'id' => $id,
+            'name' => $lp['lp_name']
+        );
+    }
+
+    return $result;
+}
+
+$server->wsdl->addComplexType(
+    'paramsDeleteLp',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'course_id_name' => array(
+            'name' => 'course_id_name',
+            'type' => 'xsd:string',
+        ),
+        'course_id_value' => array(
+            'name' => 'course_id_name',
+            'type' => 'xsd:string',
+        ),
+        'lp_id' => array(
+            'name' => 'lp_id',
+            'type' => 'xsd:string',
+        ),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
+    )
+);
+
+// Register the method to expose
+$server->register('WSDeleteLp',                            // method name
+    array('params' => 'tns:paramsDeleteLp'),  // input parameters
+    array('return' => 'xsd:string'),                                        // output parameters
+    'urn:WSLP',                                                   // namespace
+    'urn:WSLP#WSDeleteLp',                       // soapaction
+    'rpc',                                                                  // style
+    'encoded',                                                              // use
+    'This service deletes a LP'                                               // documentation
+);
+
+/**
+ * @param array $params
+ * @return int|string
+ */
+function WSDeleteLp($params)
+{
+    global $debug;
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
+
+    $courseIdName = $params['course_id_name'];
+    $courseIdValue = $params['course_id_value'];
+    $lpId = $params['lp_id'];
+
+    $sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
+    $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;
+
+    $courseCode = CourseManager::get_course_id_from_original_id(
+        $courseIdValue,
+        $courseIdName
+    );
+
+    $courseInfo = api_get_course_info($courseCode);
+    //$courseId = $courseInfo['real_id'];
+
+    if (empty($courseInfo)) {
+        if ($debug) error_log("Course not found: $courseIdName : $courseIdValue");
+        return 'Course not found';
+    }
+
+    /*$sessionId = 0;
+    if (!empty($sessionIdName) && !empty($sessionIdValue)) {
+        $sessionId = SessionManager::get_session_id_from_original_id(
+            $sessionIdValue,
+            $sessionIdName
+        );
+
+        if (empty($sessionId)) {
+
+            if ($debug) error_log('Session not found');
+            return 'Session not found';
+        }
+    }
+    */
+
+    $lp = new learnpath($courseInfo['code'], $lpId, null);
+    if ($lp) {
+        if ($debug) error_log("LP deleted $lpId");
+        $lp->delete($courseInfo, $lpId, 'remove');
+        return 1;
+    }
+
+    return 0;
 }
 
 // Use the request to (try to) invoke the service

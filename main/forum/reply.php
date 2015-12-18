@@ -177,8 +177,6 @@ if ($origin != 'learnpath') {
     echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($_GET['thread']).'&origin='.$origin.'">'.
         Display::return_icon('back.png', get_lang('BackToThread'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
-} else {
-    echo '<div style="height:15px">&nbsp;</div>';
 }
 /*New display forum div*/
 echo '<div class="forum_title">';
@@ -199,11 +197,20 @@ $values = show_add_post_form(
     $my_post,
     $my_elements
 );
-if (!empty($values) AND isset($_POST['SubmitPost'])) {
+if (!empty($values) && isset($_POST['SubmitPost'])) {
     $result = store_reply($current_forum, $values);
     //@todo split the show_add_post_form function
+    $origin = isset($_GET['origin']) && $_GET['origin'] === 'learnpath' ? 'learnpath' : null;
 
-    $url = 'viewthread.php?forum='.$current_thread['forum_id'].'&gradebook='.$gradebook.'&thread='.intval($_GET['thread']).'&gidReq='.api_get_group_id().'&origin='.(isset($origin)?$origin:'').'&msg='.$result['msg'].'&type='.$result['type'];
+    $url = 'viewthread.php?' . http_build_query([
+        'forum' => $current_thread['forum_id'],
+        'gradebook' => $gradebook,
+        'thread' => intval($_GET['thread']),
+        'gidReq' => api_get_group_id(),
+        'origin' => $origin,
+        'msg' => $result['msg'],
+        'type' => $result['type']
+    ]);
     echo '
     <script>
     window.location = "'.$url.'";

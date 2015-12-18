@@ -133,7 +133,7 @@ if (count($friends) == 0) {
                 $friend_html .= '
                     <div class="col-md-3">
                         <div class="thumbnail text-center" id="div_' . $friends[$j]['friend_user_id'] . '">
-                            <img src="' . $userPicture . '" class="img-responsive" id="imgfriend_' . $friend['friend_user_id'] . '" title="$user_name">
+                            <img src="' . $userPicture . '" class="img-responsive" id="imgfriend_' . $friend['friend_user_id'] . '" title="'.$user_name.'">
                             <div class="caption">
                                 <h3>
                                     <a href="profile.php?u=' . $friend['friend_user_id'] . '">' . $user_name . '</a>

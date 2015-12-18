@@ -20,7 +20,8 @@ $_user = api_get_user_info();
 $userId = api_get_user_id();
 $groupId = api_get_group_id();
 
-$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
+// Decide whether we show the latest post first
+$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
 
 if (isset($current_thread['thread_id'])) {
     $rows = getPosts($current_thread['thread_id'], $sortDirection);
@@ -37,6 +38,7 @@ if (isset($current_thread['thread_id'])) {
 
     if (!empty($rows)) {
         $postCount = count($rows);
+        //$postCount = 1;
 
         foreach ($rows as $row) {
             if ($row['user_id'] == '0') {

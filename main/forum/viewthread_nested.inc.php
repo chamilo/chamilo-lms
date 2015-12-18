@@ -22,7 +22,8 @@ if (isset($_GET['action']) &&
     delete_attachment(0, $_GET['id_attach']);
 }
 
-$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
+// Decide whether we show the latest post first
+$sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : ($origin != 'learnpath' ? 'ASC' : 'DESC');
 
 $rows = getPosts($_GET['thread'], $sortDirection, true);
 $count = 0;
@@ -34,7 +35,7 @@ $sessionId = api_get_session_id();
 $currentThread = get_thread_information($_GET['thread']);
 $userId = api_get_user_id();
 
-$postCount = count($rows);
+$postCount = 1;
 
 foreach ($rows as $post) {
     // The style depends on the status of the message: approved or not.

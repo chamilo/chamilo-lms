@@ -34,9 +34,11 @@ if (!empty($currentCourseId) && $currentCourseId != -1) {
 } else {
     // Agenda is out of the course tool (e.g personal agenda)
     $url = false;
-    foreach ($events as &$event) {
-        $courseId = isset($event['course_id']) ? $event['course_id'] : '';
-        $event['url'] = api_get_self().'?cid='.$courseId.'&type='.$event['type'];
+    if (!empty($events)) {
+        foreach ($events as &$event) {
+            $courseId = isset($event['course_id']) ? $event['course_id'] : '';
+            $event['url'] = api_get_self() . '?cid=' . $courseId . '&type=' . $event['type'];
+        }
     }
 }
 

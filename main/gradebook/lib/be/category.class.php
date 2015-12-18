@@ -1942,7 +1942,7 @@ class Category implements GradebookItem
         // A student always sees only the teacher's repartition
         $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
 
-        if (!self::userFinishedCourse($user_id, $cats_course[0], 0, $courseCode, $sessionId)) {
+        if (!self::userFinishedCourse($user_id, $cats_course[0], 0, $courseCode, $sessionId, true)) {
             return false;
         }
 
@@ -2143,6 +2143,7 @@ class Category implements GradebookItem
      *         To check by the category ID
      * @param string $courseCode Optional. The course code
      * @param int $sessionId Optional. The session ID
+     * @param boolean $recalcutateScore Whether recalculate the score
      * @return boolean
      */
     public static function userFinishedCourse(
@@ -2150,7 +2151,8 @@ class Category implements GradebookItem
         \Category $category = null,
         $categoryId = 0,
         $courseCode = null,
-        $sessionId = 0
+        $sessionId = 0,
+        $recalcutateScore = false
     ) {
         if (is_null($category) && empty($categoryId)) {
             return false;
@@ -2181,7 +2183,8 @@ class Category implements GradebookItem
             $userId,
             $category->get_id(),
             $courseCode,
-            $sessionId
+            $sessionId,
+            $recalcutateScore
         );
 
         $minCertificateScore = $category->get_certificate_min_score();

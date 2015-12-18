@@ -1682,11 +1682,12 @@ var loadForumThead = function(lpId, lpItemId) {
     $.when(loadForum).done(function(forumThreadData) {
         var tabForumLink = $('.lp-view-tabs a[href="#lp-view-forum"]'),
             tabForum = tabForumLink.parent();
+            $("#navTabs").show();
 
         if (forumThreadData.error) {
             tabForumLink.removeAttr('data-toggle');
             tabForum.addClass('disabled');
-
+            $("#navTabs").hide();
             $('#lp-view-forum').html('');
 
             return;

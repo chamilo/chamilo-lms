@@ -6397,7 +6397,8 @@ function api_browser_support($format = "")
             ($current_browser == 'Chrome' && $current_majorver >= 6) ||
             ($current_browser == 'Internet Explorer' && $current_majorver >= 9) ||
             $current_browser == 'Android' ||
-            $current_browser == 'iPhone'
+            $current_browser == 'iPhone' ||
+            $current_browser == 'Firefox'
         ) {
             return true;
         } else {

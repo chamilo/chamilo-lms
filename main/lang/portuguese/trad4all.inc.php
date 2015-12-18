@@ -5114,6 +5114,14 @@ $InvitationDenied = "Convite negado";
 $UserAdded = "O utilizador foi adicionado";
 $UpdatedIn = "Atualizado em";
 $Metadata = "Metadados";
+$SendMessage = "Enviar Mensagem";
+$SeeForum = "Ver Fórum";
+$SeeMore = "Ver Mais";
+$Created = "Criado";
+$EditMyProfile = "Editar o meu perfil";
+$Password = "Senha";
+$SeeBlog = "Ver Blog";
+$Blog = "Blog";
 $YouDoNotHaveAnySessionInItsHistory = "Não possui qualquer sessão do curso no seu histórico";
 $PortalHomepageDefaultIntroduction = "Parabéns! Você instalou com sucesso seu portal de e-learning!
 

@@ -7597,4 +7597,6 @@ $CloseDelineation = "Close delineation";
 $Oar = "Area at risk";
 $HotspotExerciseFinished = "Now click on the button below to validate your answers";
 $ClosePolygon = "Close polygon";
+$DelineationStatus1 = "Use right-click to close the delineation";
+$Beta = "Beta";
 ?>

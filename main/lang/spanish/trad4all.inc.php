@@ -7622,4 +7622,6 @@ $CloseDelineation = "Cerrar delimitación";
 $Oar = "Zona de riesgo";
 $HotspotExerciseFinished = "Todas las zonas han sido seleccionadas. Ahora puede reasignar sus respuestas o pulsar el botón inferior y dar por finalizada la pregunta.";
 $ClosePolygon = "Cerrar polígono";
+$DelineationStatus1 = "Use el botón derecho del ratón para cerrar la delimitación";
+$Beta = "Beta";
 ?>

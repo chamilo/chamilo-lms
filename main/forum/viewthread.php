@@ -262,16 +262,14 @@ if ($my_message != 'PostDeletedSpecial') {
 
     switch ($viewMode) {
         case 'flat':
+            //no break
+        default:
             include_once 'viewthread_flat.inc.php';
             break;
         case 'threaded':
-            //include_once 'viewthread_threaded.inc.php';
-            //break;
+            //no break;
         case 'nested':
             include_once 'viewthread_nested.inc.php';
-            break;
-        default:
-            include_once 'viewthread_flat.inc.php';
             break;
     }
 }

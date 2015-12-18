@@ -66,6 +66,14 @@ class SelectAjax extends HTML_QuickForm_select
             $this->setAttribute('id', $id);
         }
 
+        $url = $this->getAttribute('url');
+
+        if (!$url) {
+            $url = $this->getAttribute('url_function');
+        } else {
+            $url = "'$url'";
+        }
+
         $html .= <<<JS
             <script>
                 $(function(){
@@ -76,7 +84,7 @@ class SelectAjax extends HTML_QuickForm_select
                         width: '$width',
                         minimumInputLength: '$minimumInputLength',
                         ajax: {
-                            url: '{$this->getAttribute('url')}',
+                            url: $url,
                             dataType: 'json',
                             data: function(params) {
                                 return {
@@ -102,6 +110,7 @@ JS;
         $this->removeAttribute('placeholder');
         $this->removeAttribute('class');
         $this->removeAttribute('url');
+        $this->removeAttribute('url_function');
         $this->setAttribute('style', 'width: 100%;');
 
         return parent::toHtml() . $html;

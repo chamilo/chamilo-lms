@@ -756,10 +756,12 @@ class Display
         }
 
         $icon = api_get_cdn_path($icon);
+        
         if ($return_only_path) {
             return $icon;
+            
         }
-
+        
         $img = self::img($icon, $alt_text, $additional_attributes);
         if (SHOW_TEXT_NEAR_ICONS == true and !empty($alt_text)) {
             if ($show_text) {

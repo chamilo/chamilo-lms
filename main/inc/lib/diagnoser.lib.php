@@ -324,24 +324,24 @@ class Diagnoser
     function build_setting($status, $section, $title, $url, $current_value, $expected_value, $formatter, $comment, $img_path = null) {
         switch ($status) {
             case self :: STATUS_OK :
-                $img = 'bullet_green.gif';
+                $img = 'bullet_green.png';
                 break;
             case self :: STATUS_WARNING :
-                $img = 'bullet_orange.gif';
+                $img = 'bullet_orange.png';
                 break;
             case self :: STATUS_ERROR :
-                $img = 'bullet_red.gif';
+                $img = 'bullet_red.png';
                 break;
             case self :: STATUS_INFORMATION :
-                $img = 'bullet_blue.gif';
+                $img = 'bullet_blue.png';
                 break;
         }
 
         if (! $img_path) {
             $img_path = api_get_path(WEB_IMG_PATH);
         }
-
-        $image = '<img src="' . $img_path . $img . '" alt="' . $status . '" />';
+        $image = Display::return_icon($img, $status);
+        //$image = '<img src="' . $img_path . $img . '" alt="' . $status . '" />';
         $url = $this->get_link($title, $url);
 
         $formatted_current_value = $current_value;

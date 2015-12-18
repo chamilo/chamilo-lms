@@ -356,7 +356,7 @@ if (!empty($student_id)) {
     $course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : null;
 
     if (CourseManager :: is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
-        
+
         $avg_student_progress = Tracking::get_avg_student_progress(
             $user_info['user_id'],
             $course_code,
@@ -656,7 +656,9 @@ if (!empty($student_id)) {
                     if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
                         $course_info = CourseManager :: get_course_information($course_code);
 
-                        $time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($user_info['user_id'], $courseId, $sessionId));
+                        $time_spent_on_course = api_time_to_hms(
+                            Tracking :: get_time_spent_on_the_course($user_info['user_id'], $courseId, $sessionId)
+                        );
 
                         // get average of faults in attendances by student
                         $results_faults_avg = $attendance->get_faults_average_by_course($student_id, $course_code, $sessionId);

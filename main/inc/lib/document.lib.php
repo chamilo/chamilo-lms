@@ -3144,7 +3144,7 @@ class DocumentManager
                     },
                     //errorAlerts: true,
                     //warningAlerts: true,
-                    swfPath: "' . $js_path . 'jquery-jplayer",
+                    swfPath: "' . $js_path . 'jquery-jplayer/jplayer/",
                     //supplied: "m4a, oga, mp3, ogg, wav",
                     supplied: "' . $params['extension'] . '",
                     wmode: "window",
@@ -5104,12 +5104,11 @@ class DocumentManager
     /**
      * Create a html hyperlink depending on if it's a folder or a file
      *
-     * @param string $www
-     * @param string $title
-     * @param string $path
-     * @param string $filetype (file/folder)
-     * @param int $visibility (1/0)
+     * @param array $document_data
      * @param int $show_as_icon - if it is true, only a clickable icon will be shown
+     * @param int $visibility (1/0)
+     * @param int $counter
+     *
      * @return string url
      */
     public static function create_document_link(
@@ -5212,6 +5211,9 @@ class DocumentManager
 
         $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
         $send_to = null;
+
+        $checkExtension = $path;
+
         if (!$show_as_icon) {
             if ($filetype == 'folder') {
                 if (api_is_allowed_to_edit() ||
@@ -5275,25 +5277,26 @@ class DocumentManager
 
             if ($filetype == 'file') {
                 // Sound preview with jplayer
-                if (preg_match('/mp3$/i', urldecode($url)) ||
-                    (preg_match('/wav$/i', urldecode($url)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
-                    preg_match('/ogg$/i', urldecode($url))
+                if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
+                    (preg_match('/wav$/i', urldecode($checkExtension)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
+                    preg_match('/ogg$/i', urldecode($checkExtension))
                 ) {
                     return '<span style="float:left" ' . $visibility_class . '>' .
                     $title .
                     '</span>' . $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
                 } elseif (
+
                     // Show preview
-                    preg_match('/swf$/i', urldecode($url)) ||
-                    preg_match('/png$/i', urldecode($url)) ||
-                    preg_match('/gif$/i', urldecode($url)) ||
-                    preg_match('/jpg$/i', urldecode($url)) ||
-                    preg_match('/jpeg$/i', urldecode($url)) ||
-                    preg_match('/bmp$/i', urldecode($url)) ||
-                    preg_match('/svg$/i', urldecode($url)) ||
+                    preg_match('/swf$/i', urldecode($checkExtension)) ||
+                    preg_match('/png$/i', urldecode($checkExtension)) ||
+                    preg_match('/gif$/i', urldecode($checkExtension)) ||
+                    preg_match('/jpg$/i', urldecode($checkExtension)) ||
+                    preg_match('/jpeg$/i', urldecode($checkExtension)) ||
+                    preg_match('/bmp$/i', urldecode($checkExtension)) ||
+                    preg_match('/svg$/i', urldecode($checkExtension)) ||
                     (
-                        preg_match('/wav$/i', urldecode($url)) &&
-                        preg_match('/_chnano_.wav$/i', urldecode($url)) &&
+                        preg_match('/wav$/i', urldecode($checkExtension)) &&
+                        preg_match('/_chnano_.wav$/i', urldecode($checkExtension)) &&
                         api_get_setting('enable_nanogong') == 'true'
                     )
                 ) {
@@ -5338,30 +5341,30 @@ class DocumentManager
             // end copy files to users myfiles
         } else {
             // Icon column
-            if (preg_match('/shared_folder/', urldecode($url)) &&
-                preg_match('/shared_folder$/', urldecode($url)) == false &&
+            if (preg_match('/shared_folder/', urldecode($checkExtension)) &&
+                preg_match('/shared_folder$/', urldecode($checkExtension)) == false &&
                 preg_match('/shared_folder_session_' . $current_session_id . '$/', urldecode($url)) == false
             ) {
                 if ($filetype == 'file') {
                     //Sound preview with jplayer
-                    if (preg_match('/mp3$/i', urldecode($url)) ||
-                        (preg_match('/wav$/i', urldecode($url)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
-                        preg_match('/ogg$/i', urldecode($url))) {
+                    if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
+                        (preg_match('/wav$/i', urldecode($checkExtension)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
+                        preg_match('/ogg$/i', urldecode($checkExtension))) {
                         $sound_preview = DocumentManager::generate_media_preview($counter);
 
                         return $sound_preview;
                     } elseif (
                         // Show preview
-                        preg_match('/swf$/i', urldecode($url)) ||
-                        preg_match('/png$/i', urldecode($url)) ||
-                        preg_match('/gif$/i', urldecode($url)) ||
-                        preg_match('/jpg$/i', urldecode($url)) ||
-                        preg_match('/jpeg$/i', urldecode($url)) ||
-                        preg_match('/bmp$/i', urldecode($url)) ||
-                        preg_match('/svg$/i', urldecode($url)) ||
+                        preg_match('/swf$/i', urldecode($checkExtension)) ||
+                        preg_match('/png$/i', urldecode($checkExtension)) ||
+                        preg_match('/gif$/i', urldecode($checkExtension)) ||
+                        preg_match('/jpg$/i', urldecode($checkExtension)) ||
+                        preg_match('/jpeg$/i', urldecode($checkExtension)) ||
+                        preg_match('/bmp$/i', urldecode($checkExtension)) ||
+                        preg_match('/svg$/i', urldecode($checkExtension)) ||
                         (
-                            preg_match('/wav$/i', urldecode($url)) &&
-                            preg_match('/_chnano_.wav$/i', urldecode($url)) &&
+                            preg_match('/wav$/i', urldecode($checkExtension)) &&
+                            preg_match('/_chnano_.wav$/i', urldecode($checkExtension)) &&
                             api_get_setting('enable_nanogong') == 'true'
                         )
                     ) {
@@ -5382,26 +5385,26 @@ class DocumentManager
             } else {
                 if ($filetype == 'file') {
                     // Sound preview with jplayer
-                    if (preg_match('/mp3$/i', urldecode($url)) ||
-                        (preg_match('/wav$/i', urldecode($url)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
-                        preg_match('/ogg$/i', urldecode($url))) {
+                    if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
+                        (preg_match('/wav$/i', urldecode($checkExtension)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
+                        preg_match('/ogg$/i', urldecode($checkExtension))) {
                         $sound_preview = DocumentManager::generate_media_preview($counter);
 
                         return $sound_preview;
                     } elseif (
                         //Show preview
-                        preg_match('/html$/i', urldecode($url)) ||
-                        preg_match('/htm$/i', urldecode($url)) ||
-                        preg_match('/swf$/i', urldecode($url)) ||
-                        preg_match('/png$/i', urldecode($url)) ||
-                        preg_match('/gif$/i', urldecode($url)) ||
-                        preg_match('/jpg$/i', urldecode($url)) ||
-                        preg_match('/jpeg$/i', urldecode($url)) ||
-                        preg_match('/bmp$/i', urldecode($url)) ||
-                        preg_match('/svg$/i', urldecode($url)) ||
+                        preg_match('/html$/i', urldecode($checkExtension)) ||
+                        preg_match('/htm$/i', urldecode($checkExtension)) ||
+                        preg_match('/swf$/i', urldecode($checkExtension)) ||
+                        preg_match('/png$/i', urldecode($checkExtension)) ||
+                        preg_match('/gif$/i', urldecode($checkExtension)) ||
+                        preg_match('/jpg$/i', urldecode($checkExtension)) ||
+                        preg_match('/jpeg$/i', urldecode($checkExtension)) ||
+                        preg_match('/bmp$/i', urldecode($checkExtension)) ||
+                        preg_match('/svg$/i', urldecode($checkExtension)) ||
                         (
-                            preg_match('/wav$/i', urldecode($url)) &&
-                            preg_match('/_chnano_.wav$/i', urldecode($url)) &&
+                            preg_match('/wav$/i', urldecode($checkExtension)) &&
+                            preg_match('/_chnano_.wav$/i', urldecode($checkExtension)) &&
                             api_get_setting('enable_nanogong') == 'true'
                         )
                     ) {

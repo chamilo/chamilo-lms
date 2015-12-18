@@ -382,9 +382,8 @@ class Nanogong
 
 			} elseif(in_array($path_info['extension'],array('mp3', 'ogg','wav'))) {
 				$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
-				$html .= '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/blue/jplayer.blue.monday.css" type="text/css">';
-                //$html .= '<link rel="stylesheet" href="' . $js_path . 'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
-				$html .= '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
+				$html .= '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skin/blue.monday/css/jplayer.blue.monday.css" type="text/css">';
+				$html .= '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jplayer/jquery.jplayer.min.js"></script>';
 
 				$html .= '<div class="nanogong_player"></div>';
 				$html .= '<br /><div class="action_player">'.$actions.'</div><br /><br /><br />';

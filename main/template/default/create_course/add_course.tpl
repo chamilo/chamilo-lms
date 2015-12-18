@@ -10,7 +10,7 @@
 <div id="course_thing_to_do" class="row">
     <div class="col-md-3">
         <div class="thumbnail">
-            <img src="{{ _p.web_img }}icons/64/info.png"/>
+            {{ 'info.png' | img(64, 'AddCourseDescription'|get_lang ) }}
             <div class="caption">
                 <a href="{{ _p.web_main }}course_description/?cidReq={{ course_id }}" class="btn btn-default">
                     <em class="fa fa-info-circle"></em> {{'AddCourseDescription'|get_lang}}
@@ -20,7 +20,7 @@
     </div>
     <div class="col-md-3">
         <div class="thumbnail">
-            <img src="{{ _p.web_img }}icons/64/folder_document.png"/>
+            {{ 'folder_document.png' | img(64, 'UploadADocument'|get_lang ) }}
             <div class="caption">
                 <a href="{{ _p.web_main }}document/document.php?cidReq={{ course_id }}" class="btn btn-default">
                     <em class="fa fa-paper-plane"></em> {{'UploadADocument'|get_lang}}
@@ -30,7 +30,8 @@
     </div>
     <div class="col-md-3">
         <div class="thumbnail">
-            <img src="{{ _p.web_img }}icons/64/forum.png"/>
+            {{ 'forum.png' | img(64, 'AddForum'|get_lang ) }}
+            
             <div class="caption">
                 <a href="{{ _p.web_main }}forum/index.php?cidReq={{ course_id }}" class="btn btn-default">
                     <em class="fa fa-users"></em> {{ 'AddForum'|get_lang }}
@@ -41,7 +42,8 @@
     {% if ("allow_user_course_subscription_by_course_admin" | get_setting) == 'true' or _u.is_admin == 1 %}
     <div class="col-md-3">
         <div class="thumbnail">
-        <img src="{{ _p.web_img }}icons/64/user.png"/>
+        
+        {{ 'user.png' | img(64, 'SubscribeUserToCourse'|get_lang ) }}
             <div class="caption">
             <a href="{{ _p.web_main }}user/subscribe_user.php?cidReq={{ course_id }}" class="btn btn-default">
                 <em class="fa fa-user-plus"></em> {{ 'SubscribeUserToCourse'|get_lang }}

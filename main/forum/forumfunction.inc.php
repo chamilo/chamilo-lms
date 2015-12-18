@@ -2582,7 +2582,13 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     $form = new FormValidator(
         'thread',
         'post',
-        api_get_self().'?forum='.intval($my_forum).'&gradebook='.$my_gradebook.'&thread='.intval($myThread).'&post='.intval($my_post).'&action='.$action.'&'.api_get_cidreq()
+        api_get_self() . '?' . http_build_query([
+            'forum' => intval($my_forum),
+            'gradebook' => $my_gradebook,
+            'thread' => intval($myThread),
+            'post' => intval($my_post),
+            'action' => $action,
+        ]) . '&' . api_get_cidreq()
     );
     $form->setConstants(array('forum' => '5'));
 

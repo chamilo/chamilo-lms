@@ -903,7 +903,9 @@ class HTML_QuickForm extends HTML_Common
             $element = $this->getElement($elementName);
             $parsedDates = $element->parseDateRange($value);
 
-            if (!$element->validateDates($parsedDates)) {
+            $validateFormat = $element->getAttribute('validate_format');
+
+            if (!$element->validateDates($parsedDates, $validateFormat)) {
                 $this->_errors[$elementName] = get_lang('CheckDates');
             }
 

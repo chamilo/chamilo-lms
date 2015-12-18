@@ -27,6 +27,10 @@ class DateRangePicker extends HTML_QuickForm_text
     {
         $js = $this->getElementJS();
 
+        $this->removeAttribute('format');
+        $this->removeAttribute('timepicker');
+        $this->removeAttribute('validate_format');
+
         return $js.parent::toHtml();
     }
 
@@ -144,13 +148,13 @@ class DateRangePicker extends HTML_QuickForm_text
     *
     * @return bool
     */
-    public function validateDates($dates)
+    public function validateDates($dates, $format = null)
     {
         if (empty($dates['start']) || empty($dates['end'])) {
             return false;
         }
 
-        $format = 'Y-m-d H:i';
+        $format = $format ? $format : 'Y-m-d H:i';
         $d = DateTime::createFromFormat($format, $dates['start']);
         $resultStart = $d && $d->format($format) == $dates['start'];
 

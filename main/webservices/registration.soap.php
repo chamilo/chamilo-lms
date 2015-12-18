@@ -3913,7 +3913,7 @@ function WSSubscribeUserToCourse($params) {
             $status = $usercourse['status'];
         }
 
-        $resultValue = 1;
+        $resultValue = 0;
 
         // Get user id
         $user_id = UserManager::get_user_id_from_original_id(
@@ -3937,8 +3937,13 @@ function WSSubscribeUserToCourse($params) {
                 $resultValue = 0;
             } else {
                 if ($debug) error_log('WSSubscribeUserToCourse courseCode: '.$courseCode);
-                CourseManager::add_user_to_course($user_id, $courseCode, $status);
-                $resultValue = 1;
+                $result = CourseManager::add_user_to_course($user_id, $courseCode, $status, false);
+                if ($result) {
+                    $resultValue = 1;
+                    if ($debug) error_log('WSSubscribeUserToCourse subscribed');
+                } else {
+                    if ($debug) error_log('WSSubscribeUserToCourse NOT subscribed: ');
+                }
             }
         }
 

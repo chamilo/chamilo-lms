@@ -665,11 +665,12 @@ class CourseManager
      * @param  int $user_id the id of the user
      * @param  string $course_code the course code
      * @param string $status (optional) The user's status in the course
+     * @param bool $checkSubscriptionSetting
      *
      * @return boolean true if subscription succeeds, boolean false otherwise.
      * @assert ('', '') === false
      */
-    public static function add_user_to_course($user_id, $course_code, $status = STUDENT)
+    public static function add_user_to_course($user_id, $course_code, $status = STUDENT, $checkSubscriptionSetting = true)
     {
         $debug = false;
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -701,11 +702,16 @@ class CourseManager
         }
 
         // Check in advance whether subscription is allowed or not for this course.
-        $sql = "SELECT code, visibility FROM $course_table
-                WHERE code = '$course_code' AND subscribe = '".SUBSCRIBE_NOT_ALLOWED."'";
-        if (Database::num_rows(Database::query($sql)) > 0) {
-            if ($debug) error_log('Subscription is not allowed for this course');
-            return false; // Subscription is not allowed for this course.
+        if ($checkSubscriptionSetting) {
+            $sql = "SELECT code, visibility FROM $course_table
+                    WHERE code = '$course_code' AND subscribe = '".SUBSCRIBE_NOT_ALLOWED."'";
+            if (Database::num_rows(Database::query($sql)) > 0) {
+                if ($debug) {
+                    error_log('Subscription is not allowed for this course');
+                }
+
+                return false; // Subscription is not allowed for this course.
+            }
         }
 
         // Ok, subscribe the user.

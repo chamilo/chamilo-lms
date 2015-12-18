@@ -137,7 +137,7 @@ switch ($action) {
                 $_GET['session_id'],
                 $_GET['q']
             );
-            $results2 = array();
+            $results2 = ['items' => []];
             if (!empty($results)) {
                 foreach ($results as $item) {
                     $item2 = array();
@@ -149,12 +149,11 @@ switch ($action) {
                             $item2['text'] = $internal;
                         }
                     }
-                    $results2[] = $item2;
+                    $results2['items'][] = $item2;
                 }
-                echo json_encode($results2);
-            } else {
-                echo json_encode(array());
             }
+
+            echo json_encode($results2);
         }
         break;
     case 'search_user_by_course':
@@ -163,6 +162,10 @@ switch ($action) {
             $session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
             $course = api_get_course_info_by_id($_GET['course_id']);
+
+            $json = [
+                'items' => []
+            ];
 
             $sql = "SELECT u.user_id as id, u.username, u.lastname, u.firstname
                     FROM $user u
@@ -174,14 +177,15 @@ switch ($action) {
 
             $result = Database::query($sql_query);
             while ($user = Database::fetch_assoc($result)) {
-                $data[] = array('id' => $user['id'], 'text' => $user['username'] . ' (' . $user['firstname'] . ' ' . $user['lastname'] . ')');
+                $userCompleteName = api_get_person_name($user['firstname'], $user['lastname']);
 
+                $json['items'][] = [
+                    'id' => $user['id'],
+                    'text' => "{$user['username']} ($userCompleteName)"
+                ];
             }
-            if (!empty($data)) {
-                echo json_encode($data);
-            } else {
-                echo json_encode(array());
-            }
+
+            echo json_encode($json);
         }
         break;
     case 'search_exercise_by_course':

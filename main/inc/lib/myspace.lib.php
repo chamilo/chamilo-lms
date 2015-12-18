@@ -25,6 +25,7 @@ class MySpace
             array('url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=course', 'content' => get_lang('DisplayCourseOverview')),
             array('url' => api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin', 'content' => get_lang('LPQuestionListResults')),
             array('url' => api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin', 'content' => get_lang('LPExerciseResultsBySession')),
+            ['url' => api_get_path(WEB_CODE_PATH) . 'mySpace/admin_view.php?display=accessoverview', 'content' => get_lang('DisplayAccessOverview') . ' (' . get_lang('Beta') . ')']
         );
 
         return Display :: actions($actions, null);
@@ -2725,6 +2726,243 @@ class MySpace
         xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
         xml_parser_free($parser);
         return $users;
+    }
+
+    public static function displayTrackingAccessOverView($courseId, $sessionId, $studentId)
+    {
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+        $studentId = intval($studentId);
+
+        $em = Database::getManager();
+        $sessionRepo = $em->getRepository('ChamiloCoreBundle:Session');
+
+        $courseList = [];
+        $sessionList = [];
+        $studentList = [];
+
+        if (!empty($courseId)) {
+            $course = $em->find('ChamiloCoreBundle:Course', $courseId);
+
+            $courseList[$course->getId()] = $course->getTitle();
+        }
+
+        if (!empty($sessionId)) {
+            $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+
+            $sessionList[$session->getId()] = $session->getName();
+        }
+
+        if (!empty($studentId)) {
+            $student = $em->find('ChamiloUserBundle:User', $studentId);
+
+            $studentList[$student->getId()] = $student->getCompleteName();
+        }
+
+        $form = new FormValidator('access_overview', 'GET');
+        $form->addElement(
+            'select_ajax',
+            'course_id',
+            get_lang('SearchCourse'),
+            $courseList,
+            [
+                'url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?' . http_build_query([
+                    'a' => 'search_course_by_session_all',
+                    'session_id' => $sessionId
+                ])
+            ]
+        );
+        $form->addElement(
+            'select_ajax',
+            'session_id',
+            get_lang('SearchSession'),
+            $sessionList,
+            [
+                'url_function' => "
+                    function () {
+                        var params = $.param({
+                            a: 'search_session_by_course',
+                            course_id: $('#course_id').val() || 0
+                        });
+
+                        return '" . api_get_path(WEB_AJAX_PATH) . "session.ajax.php?' + params;
+                    }
+                "
+            ]
+        );
+        $form->addSelect(
+            'profile',
+            get_lang('Profile'),
+            [
+                '' => get_lang('Select'),
+                STUDENT => get_lang('Student'),
+                COURSEMANAGER => get_lang('CourseManager'),
+                DRH => get_lang('Drh')
+            ],
+            ['id' => 'profile']
+        );
+        $form->addElement(
+            'select_ajax',
+            'student_id',
+            get_lang('SearchUsers'),
+            $studentList,
+            [
+                'placeholder' => get_lang('All'),
+                'url_function' => "
+                    function () {
+                        var params = $.param({
+                            a: 'search_user_by_course',
+                            session_id: $('#session_id').val(),
+                            course_id: $('#course_id').val()
+                        });
+
+                        return '" . api_get_path(WEB_AJAX_PATH) . "course.ajax.php?' + params;
+                    }
+                "
+            ]
+        );
+        $form->addDateRangePicker(
+            'date',
+            get_lang('DateRange'),
+            true,
+            [
+                'id' => 'date_range',
+                'format' => 'YYYY-MM-DD',
+                'timePicker' => 'false',
+                'validate_format' => 'Y-m-d'
+            ]
+        );
+        $form->addHidden('display', 'accessoverview');
+        $form->addRule('course_id', get_lang('Required'), 'required');
+        $form->addRule('profile', get_lang('Required'), 'required');
+        $form->addButton('submit', get_lang('Generate'), 'gear', 'primary');
+
+        $table = null;
+
+        if ($form->validate()) {
+            $table = new SortableTable(
+                'tracking_access_overview',
+                ['MySpace','getNumberOfRrackingAccessOverview'],
+                ['MySpace','getUserDataAccessTrackingOverview'],
+                0
+            );
+            $table->additional_parameters = $form->exportValues();
+
+            $table->set_header(0, get_lang('LoginDate'), true);
+            $table->set_header(1, get_lang('Username'), true);
+            if (api_is_western_name_order()) {
+                $table->set_header(2, get_lang('FirstName'), true);
+                $table->set_header(3, get_lang('LastName'), true);
+            } else {
+                $table->set_header(2, get_lang('LastName'), true);
+                $table->set_header(3, get_lang('FirstName'), true);
+            }
+            $table->set_header(4, get_lang('Clicks'), false);
+            $table->set_header(5, get_lang('IP'), false);
+            $table->set_header(6, get_lang('TimeLoggedIn'), false);
+        }
+
+        $template = new Template(null, false, false, false, false, false, false);
+        $template->assign('form', $form->returnForm());
+        $template->assign('table', $table ? $table->return_table() : null);
+
+        echo $template->fetch(
+            $template->get_template('my_space/accessoverview.tpl')
+        );
+    }
+
+    public static function getNumberOfRrackingAccessOverview()
+    {
+        $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        return Database::count_rows($track_e_course_access);
+    }
+
+    public static function getUserDataAccessTrackingOverview($from, $numberItems, $column, $orderDirection)
+    {
+        $user = Database::get_main_table(TABLE_MAIN_USER);
+        $course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        global $export_csv;
+
+        if ($export_csv) {
+            $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
+        } else {
+            $is_western_name_order = api_is_western_name_order();
+        }
+
+        //TODO add course name
+        $sql = "SELECT 
+                a.login_course_date as col0,
+                u.username as col1, 
+                " . (
+                    $is_western_name_order ? "
+                        u.firstname AS col2,
+                        u.lastname AS col3,
+                    " : "
+                        u.lastname AS col2,
+                        u.firstname AS col3,
+                " ) . "
+                a.logout_course_date,
+                c.title, 
+                c.code, 
+                u.user_id
+            FROM $track_e_course_access a
+            INNER JOIN $user u ON a.user_id = u.user_id
+            INNER JOIN $course c ON a.c_id = c.id";
+
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+            $sessionId = intval($_GET['session_id']);
+            $sql .= " WHERE a.session_id = " . $sessionId;
+        }
+
+        $sql .= " ORDER BY col$column $orderDirection ";
+        $sql .= " LIMIT $from,$numberItems";
+        $result = Database::query($sql);
+
+        //$clicks = Tracking::get_total_clicks_by_session();  
+        $data = array();
+
+        while ($user = Database::fetch_assoc($result)) {
+            $data[] = $user;
+        }
+
+        $return = [];
+
+        //TODO: Dont use numeric index
+        foreach ($data as $key => $info) {
+            $start_date = $info['col0'];
+
+            $end_date = $info['logout_course_date'];
+
+            $return[$info['user_id']] = array(
+                $start_date,
+                $info['col1'],
+                $info['col2'],
+                $info['col3'],
+                $info['user_id'],
+                'ip',
+                //TODO is not correct/precise, it counts the time not logged between two loggins
+                gmdate("H:i:s", strtotime($end_date) - strtotime($start_date))
+            );
+        }
+
+        foreach ($return as $key => $info) {
+            $ipResult = Database::select(
+                'user_ip',
+                $track_e_login,
+                ['where' => [
+                    '? BETWEEN login_date AND logout_date' => $info[0]
+                ]],
+                'first'
+            );
+
+            $return[$key][5] = $ipResult['user_ip'];
+        }
+
+        return $return;
     }
 }
 

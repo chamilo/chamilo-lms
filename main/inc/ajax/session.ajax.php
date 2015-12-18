@@ -90,7 +90,11 @@ switch ($action) {
                     'c.id' => array('operator' => '=', 'value' => $_REQUEST['course_id'])
                 )
             );
-            $results2 = array();
+            $json = [
+                'items' => [
+                    ['id' => 'T', 'text' => get_lang('All')]
+                ]
+            ];
             if (!empty($results)) {
                 foreach ($results as $item) {
                     $item2 = array();
@@ -102,13 +106,11 @@ switch ($action) {
                             $item2['text'] = $internal;
                         }
                     }
-                    $results2[] = $item2;
+                    $json['items'][] = $item2;
                 }
-                $results2[] = array('T', 'text' => 'TODOS', 'id' => 'T');
-                echo json_encode($results2);
-            } else {
-                echo json_encode(array(array('T', 'text' => 'TODOS', 'id' => 'T')));
             }
+
+            echo json_encode($json);
         }
         break;
     case 'get_description':

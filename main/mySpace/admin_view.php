@@ -51,6 +51,13 @@ switch ($display) {
     case 'course':
         MySpace::display_tracking_course_overview();
         break;
+    case 'accessoverview':
+        $courseId = isset($_GET['course_id']) ? intval($_GET['course_id']) : 0;
+        $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+        $studentId = isset($_GET['student_id']) ? intval($_GET['student_id']) : 0;
+
+        MySpace::displayTrackingAccessOverView($courseId, $sessionId, $studentId);
+        break;
 }
 
 Display::display_footer();

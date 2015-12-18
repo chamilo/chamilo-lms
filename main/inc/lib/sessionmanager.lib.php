@@ -2631,6 +2631,7 @@ class SessionManager
         $availableFields = array(
             's.id',
             's.name',
+            'c.id'
         );
 
         $availableOperator = array(
@@ -3340,12 +3341,17 @@ class SessionManager
         $course_name = Database::escape_string($course_name);
 
         // select the courses
-        $sql = "SELECT * FROM $tbl_course c
+        $sql = "SELECT c.id, c.title FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.id = src.c_id
-		        WHERE src.session_id LIKE '$session_id'";
+		        WHERE ";
+
+        if (!empty($session_id)) {
+            $sql .= "src.session_id LIKE '$session_id' AND ";
+        }
+
         if (!empty($course_name)) {
-            $sql .= " AND UPPER(c.title) LIKE UPPER('%$course_name%') ";
+            $sql .= "UPPER(c.title) LIKE UPPER('%$course_name%') ";
         }
 
         $sql .= "ORDER BY title;";

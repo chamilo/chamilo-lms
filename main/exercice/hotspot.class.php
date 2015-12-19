@@ -91,7 +91,7 @@ class HotSpot extends Question
  */
 class HotSpotDelineation extends HotSpot
 {
-	static $typePicture = 'hotspot_delineation.gif';
+	static $typePicture = 'hotspot-delineation.png';
 	static $explanationLangVar = 'HotspotDelineation';
 
 	function __construct()

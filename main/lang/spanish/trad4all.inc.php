@@ -7624,4 +7624,8 @@ $HotspotExerciseFinished = "Todas las zonas han sido seleccionadas. Ahora puede 
 $ClosePolygon = "Cerrar polígono";
 $DelineationStatus1 = "Use el botón derecho del ratón para cerrar la delimitación";
 $Beta = "Beta";
+$CropYourPicture = "Recorta tu foto";
+$DownloadBadge = "Descargar la insignia";
+$NoXMLFileFoundInTheZip = "No se encontró ningún archivo XML en el zip. Se requiere uno para este tipo de importación.";
+$BakedBadgeProblem = "Ha ocurrido un problema al insertar la información de la insignia dentro de la imagen de la insignia, pero puede usar esta página como prueba de su logro.";
 ?>

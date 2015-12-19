@@ -7586,4 +7586,8 @@ $HotspotExerciseFinished = "Toutes les zones ont été sélectionnées. Vous pou
 $ClosePolygon = "Fermer polygone";
 $DelineationStatus1 = "Utilisez le clic-droit pour fermer la délinéation";
 $Beta = "Beta";
+$CropYourPicture = "Découpez votre photo";
+$DownloadBadge = "Télécharger ce badge";
+$NoXMLFileFoundInTheZip = "Aucun fichier XML trouvé dans le fichier zip. C'est malheureusement nécessaire pour ce type d'import.";
+$BakedBadgeProblem = "Un problème s'est produit lors de l'insertion de l'information d'assertion du badge dans l'image du badge, mais vous pouvez de toute façon utiliser cette page comme assertion valide.";
 ?>

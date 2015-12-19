@@ -7599,4 +7599,8 @@ $HotspotExerciseFinished = "Now click on the button below to validate your answe
 $ClosePolygon = "Close polygon";
 $DelineationStatus1 = "Use right-click to close the delineation";
 $Beta = "Beta";
+$CropYourPicture = "Crop your picture";
+$DownloadBadge = "Download badge";
+$NoXMLFileFoundInTheZip = "No XML file found in the zip archive. This is a requirement for this type of import.";
+$BakedBadgeProblem = "There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.";
 ?>

@@ -140,7 +140,7 @@ function import_exercise($file)
 
     if (!$file_found) {
 
-        return 'No XML file found in the zip';
+        return 'NoXMLFileFoundInTheZip';
     }
 
     if ($result == false) {

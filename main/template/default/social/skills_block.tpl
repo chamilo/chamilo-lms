@@ -26,9 +26,16 @@
                 </div>
             </h4>
         </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function(){
+            jQuery('.scrollbar-inner').scrollbar();
+        });
+                        </script>                
         <div id="skillList" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
                 {% if skills %}
+               
+                <div class="scrollbar-inner badges-sidebar">
                     <ul class="list-unstyled list-badges">
                         {% for skill in skills %}
                             <li class="thumbnail">
@@ -41,6 +48,8 @@
                             </li>
                         {% endfor %}
                     </ul>
+                </div>
+                    
                 {% else %}
                     <p>{{ 'WithoutAchievedSkills'|get_lang }}</p>
                     <p>

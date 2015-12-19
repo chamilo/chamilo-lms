@@ -2643,7 +2643,9 @@ form .formw .freeze {
 table#skill_holder {
   margin-top: 15px;
 }
-
+.badges-sidebar{
+    height: 250px;
+}
 /* ****************************************************
                      END SKILL
  **************************************************** */
@@ -4008,7 +4010,7 @@ i.size-32.icon-new-work{
   margin-right: 15px;
   padding: 0;
   vertical-align: top;
-  width: 120px;
+  width: 95px;
 }
 #skillList .list-badges .thumbnail img{
   margin-bottom: 4px;
@@ -4016,6 +4018,7 @@ i.size-32.icon-new-work{
 }
 #skillList .list-badges .thumbnail .caption{
   background: #D9EDF7;
+  font-size: 12px;
 }
 #skillList .list-badges .thumbnail .caption p{
   margin-bottom: 0;

@@ -35,7 +35,7 @@
             <div class="panel-body">
                 {% if skills %}
                
-                <div class="scrollbar-inner badges-siderbar">
+                <div class="scrollbar-inner badges-sidebar">
                     <ul class="list-unstyled list-badges">
                         {% for skill in skills %}
                             <li class="thumbnail">

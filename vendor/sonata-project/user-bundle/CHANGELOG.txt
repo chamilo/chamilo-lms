@@ -1,0 +1,52 @@
+CHANGELOG
+=========
+
+### [BC BREAK] 2014-01-21
+
+* Refactored ``SonataUserBundle:Security:login.html.twig`` & ``SonataUserBundle:Block:account.html.twig`` templates to replace {% render controller(...) %} calls by {% render url(...) %} calls.
+* Added routing files to fully override FOSUser routing & controllers.
+* Added controllers to fullyu override FOSUser controllers.
+* Those overrides are optionnal, see documentation to see which routing files use depending on your usage.
+
+### [BC BREAK] 2014-01-06
+
+* Refactored ``SonataUserBundle:Security:login.html.twig`` & ``SonataUserBundle:Block:account.html.twig`` templates to add Bootstrap3 classes support.
+
+### [BC BREAK] 2013-10-16
+
+* Refactored SonataUserBundle:Profile:edit_authentication.html.twig & SonataUserBundle:Profile:edit_profile.html.twig templates
+    Those templates are now embedding the profile menu block and extending base action.html.twig template.
+
+    You'll need to add the following to the sonata_block configuration:
+
+    sonata_block:
+        blocks:
+            sonata.user.block.menu:
+
+
+### [BC BREAK] 2013-05-06
+
+* User's groups roles are not merged anymore when editing `User` entity. A `getRealRoles()` method has been
+  added in `Sonata\UserBundle\Model\User` and is now used in `Sonata\UserBundle\Admin\UserAdmin`.
+
+  If you still want to merge user's groups roles, you can:
+
+     * add a `getRealRoles()` in your entity by overriding `Sonata\UserBundle\Model\User` method and
+       referencing `getRoles()` parent method
+
+### 2012-09-24
+
+* changed service parameters into options that come through the configuration with the old values as the new defaults.
+
+### [BC BREAK] 2012-07-21
+
+* change impersonating definition, now the url is defined as a configuration, you don't need to create
+  a custom route anymore.
+
+     * remove ``sonata_user_impersonating`` from the routing file
+     * add ``impersonating_route`` into the ``sonata_user`` configuration section
+
+### 2012-06-08
+
+* Introduce new field for user: firstname, lastname, gender, etc ...
+* add frontend edition of profile information

@@ -1,0 +1,14 @@
+# silverlight stuff
+src/silverlight/obj/*
+src/silverlight/Bin/*
+build/AppManifest.xaml
+build/SilverlightMediaElementTestPage.html
+build/SilverlightMediaElement.pdb
+build/SilverlightMediaElement.dll
+tests/*
+newfeatures/*
+/mejs3/
+node_modules
+local-build
+# PhpStorm/WebStorm configuration
+.idea

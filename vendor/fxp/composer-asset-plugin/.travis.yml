@@ -1,0 +1,39 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+matrix:
+    include:
+        - php: hhvm
+        - php: 5.3
+        - php: 5.4
+        - php: 5.5
+        - php: 5.6
+        - php: nightly
+
+    allow_failures:
+        - php: nightly
+        - php: hhvm
+
+    fast_finish: true
+
+before_script:
+    - composer self-update
+    - composer install --prefer-source
+    - composer require --dev --no-update phpunit/phpunit:@stable phpunit/php-code-coverage:@stable satooshi/php-coveralls:@dev
+    - composer update --prefer-source phpunit/php-code-coverage satooshi/php-coveralls composer/composer
+    - mkdir -p ./build/logs
+
+script:
+    - ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
+
+after_script:
+    - 'echo ''src_dir: .'' >> ./.coveralls.yml'
+    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "nightly" ]; then php ./vendor/bin/coveralls -v; fi;'
+
+notifications:
+    email: false

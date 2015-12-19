@@ -1,0 +1,22 @@
+language: php
+
+php: [5.3, 5.4, 5.5]
+
+env:
+  - SYMFONY_VERSION='2.1.*'
+  - SYMFONY_VERSION='2.2.*'
+
+before_script:
+  - export WEB_FIXTURES_HOST=http://localhost
+  - export WEB_FIXTURES_BROWSER=firefox
+
+  - curl http://getcomposer.org/installer | php
+  - php composer.phar require --no-update symfony/symfony=$SYMFONY_VERSION
+  - php composer.phar install --dev --prefer-source
+
+  - sudo apt-get update
+  - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5
+  - sudo sed -i -e "s,/var/www,$(pwd)/vendor/behat/mink/tests/Behat/Mink/Driver/web-fixtures,g" /etc/apache2/sites-available/default
+  - sudo /etc/init.d/apache2 restart
+
+script: phpunit -v

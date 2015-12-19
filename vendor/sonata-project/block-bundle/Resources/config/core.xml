@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sonata.block.manager" class="Sonata\BlockBundle\Block\BlockServiceManager" public="false">
+            <argument type="service" id="service_container" />
+            <argument>%kernel.debug%</argument>
+            <argument type="service" id="logger" on-invalid="ignore" />
+        </service>
+
+        <service id="sonata.block.context_manager.default" class="Sonata\BlockBundle\Block\BlockContextManager">
+            <argument type="service" id="sonata.block.loader.chain" />
+            <argument type="service" id="sonata.block.manager" />
+            <argument>%sonata_block.cache_blocks%</argument>
+            <argument type="service" id="logger" on-invalid="ignore" />
+        </service>
+
+        <service id="sonata.block.renderer.default" class="Sonata\BlockBundle\Block\BlockRenderer">
+            <argument type="service" id="sonata.block.manager" />
+            <argument type="service" id="sonata.block.exception.strategy.manager" />
+            <argument type="service" id="logger" on-invalid="ignore" />
+            <argument>%kernel.debug%</argument>
+        </service>
+
+        <service id="sonata.block.twig.extension" class="Sonata\BlockBundle\Twig\Extension\BlockExtension" public="false">
+            <tag name="twig.extension" />
+
+            <argument type="service" id="sonata.block.templating.helper" />
+        </service>
+
+        <service id="sonata.block.templating.helper" class="Sonata\BlockBundle\Templating\Helper\BlockHelper">
+            <tag name="templating.helper" alias="sonata_block" />
+
+            <argument type="service" id="sonata.block.manager" />
+            <argument>%sonata_block.cache_blocks%</argument>
+            <argument type="service" id="sonata.block.renderer" />
+            <argument type="service" id="sonata.block.context_manager" />
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="sonata.cache.manager" on-invalid="ignore" />
+            <argument type="service" id="sonata.block.cache.handler.default" on-invalid="ignore" />
+            <argument type="service" id="debug.stopwatch" on-invalid="ignore" />
+        </service>
+
+        <service id="sonata.block.loader.chain" class="Sonata\BlockBundle\Block\BlockLoaderChain">
+            <argument />
+        </service>
+
+        <service id="sonata.block.loader.service" class="Sonata\BlockBundle\Block\Loader\ServiceLoader">
+            <tag name="sonata.block.loader" />
+
+            <argument />
+        </service>
+
+        <service id="sonata.block.twig.global" class="Sonata\BlockBundle\Twig\GlobalVariables" >
+            <argument />
+        </service>
+
+        <service id="sonata.block.cache.handler.default" class="Sonata\BlockBundle\Cache\HttpCacheHandler" />
+        <service id="sonata.block.cache.handler.noop" class="Sonata\BlockBundle\Cache\NoopHttpCacheHandler" />
+    </services>
+</container>

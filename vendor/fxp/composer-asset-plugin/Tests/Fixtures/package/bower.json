@@ -1,0 +1,45 @@
+{
+    "name": "test",
+    "description": "Test bower",
+    "version": "1.0.0-pre",
+    "keywords": [
+        "foo",
+        "bar"
+    ],
+    "license": "MIT",
+    "bin": "bin/foo",
+    "main": [
+        "dist/js/foo.js"
+    ],
+    "ignore": [
+        ".*"
+    ],
+    "dependencies": {
+        "library1": ">= 1.0.0",
+        "library2": ">= 1.0.0",
+        "library2-0.9.0": "library2#0.9.0",
+        "library3": "git@foobar.tld:user/repository3.git",
+        "library4": "git@foobar.tld:user/repository4.git#1.2.3",
+        "library5": "git@foobar.tld:user/repository5.git#0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b",
+        "library6": "git@foobar.tld:user/repository6.git#branch",
+        "library7": "git@foobar.tld:user/repository7.git#1.2.*",
+        "library8": "git@foobar.tld:user/repository8.git#1.2.x",
+        "library9": "git@foobar.tld:user/repository9.git#master",
+        "library10": "user/repository10#1.0.0",
+        "library11": "user/repository11",
+        "library12": "user/repository11#>=1 <2",
+        "library13": ">=1 <2",
+        "library14": "*",
+        "library15": "library15#*",
+        "library16": "library16#>=1 <2",
+        "library17": "http://foobar.tld/library17-1.2.3.js",
+        "library18": "http://foobar.tld/library18.js#1.2.3",
+        "library19": "http://foobar.tld/library19.js"
+    },
+    "devDependencies": {
+        "dev-library1": ">= 1.0.0",
+        "dev-library2": ">= 1.0.0",
+        "dev-library2-0.9.0": "dev-library2#0.9.0"
+    },
+    "private": false
+}

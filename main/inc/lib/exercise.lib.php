@@ -141,7 +141,7 @@ class ExerciseLib
                 $select_items[0]['letter'] = '--';
                 $select_items[0]['answer'] = '';
                 foreach ($answer_matching as $id => $value) {
-                    $select_items[$i]['id'] = $value['id'];
+                    $select_items[$i]['id'] = $value['id_auto'];
                     $select_items[$i]['letter'] = $cpt1[$id];
                     $select_items[$i]['answer'] = $value['answer'];
                     $i++;

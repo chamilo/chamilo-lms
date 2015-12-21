@@ -693,7 +693,7 @@ class Attendance
 				$value['result_color_bar'] 	= $user_faults['color_bar'];
 			}
 
-			$photo = '<img src ="'.$userInfo['avatar_small'].'" />';
+            $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
 
 			$value['photo'] = $photo;
 			$value['firstname'] = $user_data['firstname'];

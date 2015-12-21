@@ -647,7 +647,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             if (api_is_allowed_to_edit(null, true)) {
 
                 $userInfo = api_get_user_info($user_id);
-                $photo = '<img src="'.$userInfo['avatar_small'].'" alt="'.$userInfo['complete_name'].'" title="'.$userInfo['complete_name'].'" />';
+                $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
 
                 $temp[] = $user_id;
                 $temp[] = $photo;

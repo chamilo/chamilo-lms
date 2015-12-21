@@ -110,6 +110,7 @@ $server->wsdl->addComplexType(
         ),
         'file_data' => array('name' => 'file', 'type' => 'xsd:string'),
         'filename' => array('name' => 'filename', 'type' => 'xsd:string'),
+        'lp_name' => array('name' => 'lp_name', 'type' => 'xsd:string'),
         'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
     )
 );
@@ -142,6 +143,8 @@ function WSImportLP($params)
     $sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;
 
+    $lpName = $params['lp_name'];
+
     $courseCode = CourseManager::get_course_id_from_original_id(
         $courseIdValue,
         $courseIdName
@@ -173,7 +176,7 @@ function WSImportLP($params)
     $maker = 'Scorm';
     $maxScore = ''; //$_REQUEST['use_max_score']
 
-    $oScorm = new scorm();
+    $oScorm = new scorm($courseCode);
     $fileData = base64_decode($params['file_data']);
 
     $uniqueFile = uniqid();
@@ -203,7 +206,7 @@ function WSImportLP($params)
             $maxScore,
             $sessionId
         );
-
+        $oScorm->set_name($lpName);
         $oScorm->set_proximity($proximity, $courseId);
         $oScorm->set_maker($maker, $courseId);
         //$oScorm->set_jslib('scorm_api.php');

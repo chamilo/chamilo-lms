@@ -54,9 +54,8 @@ class scorm extends learnpath
         if ($this->debug > 0) {
             error_log('New LP - scorm::scorm('.$course_code.','.$resource_id.','.$user_id.') - In scorm constructor', 0);
         }
-        if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
-            parent::__construct($course_code, $resource_id, $user_id);
-        }
+
+        parent::__construct($course_code, $resource_id, $user_id);
     }
 
     /**
@@ -282,6 +281,8 @@ class scorm extends learnpath
      * Import the scorm object (as a result from the parse_manifest function) into the database structure
      * @param string $course_code
      * @param int $use_max_score
+     * @param int $sessionId
+     *
      * @return bool	Returns -1 on error
      */
     public function import_manifest($course_code, $use_max_score = 1, $sessionId = null)

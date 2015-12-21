@@ -2266,9 +2266,9 @@ $server->wsdl->addComplexType(
 'all',
 '',
 array(
-        'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-        'result' => array('name' => 'result', 'type' => 'xsd:string')
-     )
+    'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+    'result' => array('name' => 'result', 'type' => 'xsd:string')
+ )
 );
 
 $server->wsdl->addComplexType(
@@ -2279,7 +2279,7 @@ $server->wsdl->addComplexType(
 'SOAP-ENC:Array',
 array(),
 array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createCourse[]')),
-'tns:result_createCourse'
+'tns:results_createCourse'
 );
 
 // Register the method to expose
@@ -2307,35 +2307,39 @@ function WSCreateCourse($params)
     $orig_course_id_value = array();
 
     foreach ($courses_params as $course_param) {
+        $title = $course_param['title'];
+        $category_code = $course_param['category_code'];
+        $wanted_code = $course_param['wanted_code'];
+        $tutor_name = isset($course_param['tutor_name']) ? $course_param['tutor_name'] : '';
+        $course_language = 'english'; // TODO: A hard-coded value.
+        $original_course_id_name = $course_param['original_course_id_name'];
+        $original_course_id_value = $course_param['original_course_id_value'];
+        $orig_course_id_value[] = $course_param['original_course_id_value'];
+        $visibility = null;
 
-        $title                      = $course_param['title'];
-        $category_code              = $course_param['category_code'];
-        $wanted_code                = $course_param['wanted_code'];
-        $tutor_name                 = $course_param['tutor_name'];
-        $course_language            = 'english'; // TODO: A hard-coded value.
-        $original_course_id_name    = $course_param['original_course_id_name'];
-        $original_course_id_value   = $course_param['original_course_id_value'];
-        $orig_course_id_value[]     = $course_param['original_course_id_value'];
-        $visibility                 = null;
-
-        if ($course_param['visibility'] && $course_param['visibility'] >= 0 && $course_param['visibility'] <= 3) {
-            $visibility = $course_param['visibility'];
+        if (isset($course_param['visibility'])) {
+            if ($course_param['visibility'] && $course_param['visibility'] >= 0 && $course_param['visibility'] <= 3) {
+                $visibility = $course_param['visibility'];
+            }
         }
-        $extra_list = $course_param['extra'];
+        $extra_list = isset($course_param['extra']) ? $course_param['extra'] : '';
 
         // Check whether exits $x_course_code into user_field_values table.
-        $course_id = CourseManager::get_course_id_from_original_id($course_param['original_course_id_value'], $course_param['original_course_id_name']);
-        if($course_id > 0) {
+        $course_id = CourseManager::get_course_id_from_original_id(
+            $course_param['original_course_id_value'],
+            $course_param['original_course_id_name']
+        );
+        if ($course_id > 0) {
             // Check whether course is not active.
             $sql = "SELECT code FROM $table_course WHERE id ='$course_id' AND visibility= '0'";
             $resu = Database::query($sql);
             $r_check_course = Database::fetch_row($resu);
             if (!empty($r_check_course[0])) {
                 $sql = "UPDATE $table_course SET course_language='".Database::escape_string($course_language)."',
-                                    title='".Database::escape_string($title)."',
-                                    category_code='".Database::escape_string($category_code)."',
-                                    tutor_name='".Database::escape_string($tutor_name)."',
-                                    visual_code='".Database::escape_string($wanted_code)."'";
+                        title='".Database::escape_string($title)."',
+                        category_code='".Database::escape_string($category_code)."',
+                        tutor_name='".Database::escape_string($tutor_name)."',
+                        visual_code='".Database::escape_string($wanted_code)."'";
                 if($visibility !== null) {
                     $sql .= ", visibility = '$visibility' ";
                 }
@@ -2367,13 +2371,20 @@ function WSCreateCourse($params)
         } else {
             $values['course_language'] = api_get_setting('platformLanguage');
         }
-
-        $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
-
+        if (isset($_user['firstName'])) {
+            $values['tutor_name'] = api_get_person_name(
+                $_user['firstName'],
+                $_user['lastName'],
+                null,
+                null,
+                $values['course_language']
+            );
+        }
         $params = array();
         $params['title']            = $title;
         $params['wanted_code']      = $wanted_code;
         $params['category_code']    = $category_code;
+        $params['course_category']    = $category_code;
         $params['tutor_name']       = $tutor_name;
         $params['course_language']  = $course_language;
         $params['user_id']          = api_get_user_id();
@@ -2396,9 +2407,9 @@ function WSCreateCourse($params)
                     $extra_field_name  = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save new fieldlabel into course_field table.
-                    $field_id = CourseManager::create_course_extra_field($extra_field_name, 1, $extra_field_name);
+                    CourseManager::create_course_extra_field($extra_field_name, 1, $extra_field_name);
                     // Save the external system's id into course_field_value table.
-                    $res = CourseManager::update_course_extra_field_value($course_code, $extra_field_name, $extra_field_value);
+                    CourseManager::update_course_extra_field_value($course_code, $extra_field_name, $extra_field_value);
                 }
             }
             $results[] = $course_code;
@@ -2410,7 +2421,7 @@ function WSCreateCourse($params)
 
     $count_results = count($results);
     $output = array();
-    for($i = 0; $i < $count_results; $i++) {
+    for ($i = 0; $i < $count_results; $i++) {
         $output[] = array('original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
     }
 

@@ -1231,7 +1231,7 @@ function add_document(
         $documentId = Database::insert_id();
         if ($documentId) {
             if ($save_visibility) {
-                api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id);
+                api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id, $_course);
             }
         }
         return $documentId;

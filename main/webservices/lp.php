@@ -214,8 +214,6 @@ function WSImportLP($params)
     }
 }
 
-
-
 $server->wsdl->addComplexType(
     'paramsGetLpList',
     'complexType',
@@ -338,6 +336,7 @@ function WSGetLpList($params)
     return $result;
 }
 
+
 $server->wsdl->addComplexType(
     'paramsDeleteLp',
     'complexType',
@@ -432,6 +431,191 @@ function WSDeleteLp($params)
     return 0;
 }
 
+
+$server->wsdl->addComplexType(
+    'lpItem',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'data'  => array('name' => 'data',  'type' => 'xsd:string'),
+        'title'  => array('name' => 'title',  'type' => 'xsd:string'),
+        'filename'  => array('name' => 'filename',  'type' => 'xsd:string'),
+    )
+);
+
+$server->wsdl->addComplexType(
+    'lpItemList',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:lpItem[]')),
+    'tns:lpItemList'
+);
+
+$server->wsdl->addComplexType(
+    'paramsCreateLp',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'course_id_name' => array(
+            'name' => 'course_id_name',
+            'type' => 'xsd:string',
+        ),
+        'course_id_value' => array(
+            'name' => 'course_id_name',
+            'type' => 'xsd:string',
+        ),
+        /*'session_id_name' => array(
+            'name' => 'session_id_name',
+            'type' => 'xsd:string',
+        ),
+        'session_id_value' => array(
+            'name' => 'session_id_value',
+            'type' => 'xsd:string',
+        ),*/
+        'lp_name' => array(
+            'name' => 'lp_name',
+            'type' => 'xsd:string',
+        ),
+        'lp_item_list' => array(
+            'name' => 'lp_item_list',
+            'type' => 'tns:lpItemList',
+        ),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
+    )
+);
+
+// Register the method to expose
+$server->register('WSCreateLp',                            // method name
+    array('params' => 'tns:paramsCreateLp'),  // input parameters
+    array('return' => 'xsd:string'),                                        // output parameters
+    'urn:WSLP',                                                   // namespace
+    'urn:WSLP#WSCreateLp',                       // soapaction
+    'rpc',                                                                  // style
+    'encoded',                                                              // use
+    'This service creates a LP'                                               // documentation
+);
+
+/**
+ * @param array $params
+ * @return null|soap_fault
+ */
+function WSCreateLp($params)
+{
+    global $debug;
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    if ($debug) {
+        error_log('WSCreateLp');
+    }
+
+    $courseIdName = $params['course_id_name'];
+    $courseIdValue = $params['course_id_value'];
+    $lpName = $params['lp_name'];
+    $lpItemList = $params['lp_item_list'];
+
+    /*$sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
+    $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;*/
+
+    $courseCode = CourseManager::get_course_id_from_original_id(
+        $courseIdValue,
+        $courseIdName
+    );
+
+    $courseInfo = api_get_course_info($courseCode);
+    $courseId = $courseInfo['real_id'];
+
+    if (empty($courseInfo)) {
+        if ($debug) {
+            error_log('Course not found');
+        }
+    }
+
+    /*$sessionId = 0;
+    if (!empty($sessionIdName) && !empty($sessionIdValue)) {
+        $sessionId = SessionManager::get_session_id_from_original_id(
+            $sessionIdValue,
+            $sessionIdName
+        );
+
+        if (empty($sessionId)) {
+
+            if ($debug) {
+                error_log('Session not found');
+            }
+
+            return 'Session not found';
+        }
+    }*/
+
+    $lpId = learnpath::add_lp($courseCode, $lpName, '', 'chamilo', 'manual');
+    if ($lpId) {
+        if ($debug) {
+            error_log('LP created');
+        }
+
+        $lp = new learnpath($courseCode, $lpId, null);
+
+        $previousId = 0;
+        foreach ($lpItemList as $lpItem) {
+            $info = pathinfo($lpItem['filename']);
+            $extension = $info['extension'];
+            $data = base64_decode($lpItem['data']);
+
+            $documentId = $lp->create_document(
+                $courseInfo,
+                $data,
+                $info['filename'],
+                $extension
+            );
+
+            if ($documentId) {
+                if ($debug) {
+                    error_log("Document created $documentId");
+
+                    $itemId = $lp->add_item(
+                        null,
+                        $previousId,
+                        'document',
+                        $documentId,
+                        $lpItem['title'],
+                        '',
+                        ''
+                    );
+
+                    $previousId = $itemId;
+
+                    if ($itemId) {
+                        if ($debug) {
+                            error_log("Item added");
+                        }
+                    } else {
+                        if ($debug) {
+                            error_log("Item not added");
+                        }
+                    }
+                }
+            } else {
+                if ($debug) {
+                    error_log("Document NOT created");
+                }
+            }
+        }
+    } else {
+        if ($debug) {
+            error_log('LP not created');
+        }
+    }
+}
+
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 // If you send your data in utf8 then this value must be false.
@@ -443,6 +627,3 @@ if (isset($_configuration['registration.soap.php.decode_utf8'])) {
     }
 }
 $server->service($HTTP_RAW_POST_DATA);
-
-
-

@@ -451,11 +451,14 @@ class learnpath
         $prerequisites = 0,
         $max_time_allowed = 0
     ) {
-        $course_id = api_get_course_int_id();
+        $course_id = $this->course_info['real_id'];
+
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::add_item(' . $parent . ',' . $previous . ',' . $type . ',' . $id . ',' . $title . ')', 0);
         }
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $_course = $this->course_info;
+
         $parent = intval($parent);
         $previous = intval($previous);
         $id = intval($id);
@@ -526,7 +529,7 @@ class learnpath
             $max_score = Database :: result($rsQuiz, 0, 0);
 
             //Disabling the exercise if we add it inside a LP
-            $exercise = new Exercise();
+            $exercise = new Exercise($course_id);
             $exercise->read($id);
             $exercise->disable();
             $exercise->save();
@@ -601,19 +604,19 @@ class learnpath
             // Upload audio.
             if (!empty($_FILES['mp3']['name'])) {
                 // Create the audio folder if it does not exist yet.
-                global $_course;
-                $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
+
+                $filepath = api_get_path(SYS_COURSE_PATH) . $this->course_info['path'] . '/document/';
                 if (!is_dir($filepath . 'audio')) {
                     mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
                     $audio_id = add_document(
-                        $_course,
+                        $this->course_info,
                         '/audio',
                         'folder',
                         0,
                         'audio'
                     );
                     api_item_property_update(
-                        $_course,
+                        $this->course_info,
                         TOOL_DOCUMENT,
                         $audio_id,
                         'FolderCreated',
@@ -625,7 +628,7 @@ class learnpath
                         api_get_session_id()
                     );
                     api_item_property_update(
-                        $_course,
+                        $this->course_info,
                         TOOL_DOCUMENT,
                         $audio_id,
                         'invisible',
@@ -679,7 +682,7 @@ class learnpath
      * @return	integer	The new learnpath ID on success, 0 on failure
      */
     public static function add_lp(
-        $course,
+        $courseCode,
         $name,
         $description = '',
         $learnpath = 'guess',
@@ -689,7 +692,15 @@ class learnpath
         $expired_on = ''
     ) {
         global $charset;
-        $course_id = api_get_course_int_id();
+
+        if (!empty($courseCode)) {
+            $courseInfo = api_get_course_info($courseCode);
+            $course_id = $courseInfo['real_id'];
+        } else {
+            $course_id = api_get_course_int_id();
+            $courseInfo = api_get_course_info();
+        }
+
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
         // Check course code exists.
         // Check lp_name doesn't exist, otherwise append something.
@@ -762,15 +773,21 @@ class learnpath
                 }
 
                 $sql = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on) " .
-                    "VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
+                        "VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
 
                 Database::query($sql);
                 $id = Database :: insert_id();
                 if ($id > 0) {
-                    $course_info = api_get_course_info();
                     // Insert into item_property.
-                    api_item_property_update($course_info, TOOL_LEARNPATH, $id, 'LearnpathAdded', api_get_user_id());
-                    api_set_default_visibility($id, TOOL_LEARNPATH);
+                    api_item_property_update(
+                        $courseInfo,
+                        TOOL_LEARNPATH,
+                        $id,
+                        'LearnpathAdded',
+                        api_get_user_id()
+                    );
+                    api_set_default_visibility($id, TOOL_LEARNPATH, 0, $courseInfo);
+
                     return $id;
                 }
                 break;
@@ -5881,13 +5898,24 @@ class learnpath
 
     /**
      * Create a new document //still needs some finetuning
-     * @param array $_course
+     * @param array $courseInfo
+     * @param string $content
+     * @param string $title
+     * @param string $extension
+     *
      * @return string
      */
-    public function create_document($_course) {
-        $course_id = api_get_course_int_id();
+    public function create_document($courseInfo, $content = '', $title = '', $extension = 'html')
+    {
+        if (!empty($courseInfo)) {
+            $course_id = $courseInfo['real_id'];
+        } else {
+            $course_id = api_get_course_int_id();
+        }
+
         global $charset;
-        $dir = isset ($_GET['dir']) ? $_GET['dir'] : $_POST['dir']; // Please, do not modify this dirname formatting.
+        $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
+        $dir = isset ($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
         if (strstr($dir, '..'))
             $dir = '/';
         if ($dir[0] == '.')
@@ -5897,35 +5925,42 @@ class learnpath
         if ($dir[strlen($dir) - 1] != '/')
             $dir .= '/';
 
-        $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $dir;
+        $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document' . $dir;
 
         if (empty($_POST['dir']) && empty($_GET['dir'])) {
             //Generates folder
-            $result     = $this->generate_lp_folder($_course);
-            $dir 		= $result['dir'];
-            $filepath 	= $result['filepath'];
+            $result = $this->generate_lp_folder($courseInfo);
+            $dir = $result['dir'];
+            $filepath = $result['filepath'];
         }
 
         if (!is_dir($filepath)) {
-            $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
+            $filepath = api_get_path(SYS_COURSE_PATH) . $courseInfo['path'] . '/document/';
             $dir = '/';
         }
 
         // stripslashes() before calling replace_dangerous_char() because $_POST['title']
         // is already escaped twice when it gets here.
-        $title = replace_dangerous_char(stripslashes($_POST['title']));
+
+        $originalTitle = !empty($title) ? $title : $_POST['title'];
+        if (!empty($title)) {
+            $title = replace_dangerous_char(stripslashes($title));
+        } else {
+            $title = replace_dangerous_char(stripslashes($_POST['title']));
+        }
+
         $title = disable_dangerous_file($title);
 
         $filename = $title;
-        $content = $_POST['content_lp'];
+
+        $content = isset($content) ? $content : $_POST['content_lp'];
 
         $tmp_filename = $filename;
-
         $i = 0;
-        while (file_exists($filepath . $tmp_filename . '.html'))
+        while (file_exists($filepath . $tmp_filename . '.'.$extension))
             $tmp_filename = $filename . '_' . ++ $i;
 
-        $filename = $tmp_filename . '.html';
+        $filename = $tmp_filename . '.'.$extension;
         $content = stripslashes($content);
 
         $content = str_replace(api_get_path(WEB_COURSE_PATH), api_get_path(REL_PATH).'courses/', $content);
@@ -5933,9 +5968,9 @@ class learnpath
         // Change the path of mp3 to absolute.
 
         // The first regexp deals with :// urls.
-        $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/', $content);
+        $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $courseInfo['path'] . '/document/', $content);
         // The second regexp deals with audio/ urls.
-        $content = preg_replace("|(flashvars=\"file=)([^/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/$2/', $content);
+        $content = preg_replace("|(flashvars=\"file=)([^/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $courseInfo['path'] . '/document/$2/', $content);
         // For flv player: To prevent edition problem with firefox, we have to use a strange tip (don't blame me please).
         $content = str_replace('</body>', '<style type="text/css">body{}</style></body>', $content);
 
@@ -5948,7 +5983,7 @@ class learnpath
                 $save_file_path = $dir.$filename;
 
                 $document_id = add_document(
-                    $_course,
+                    $courseInfo,
                     $save_file_path,
                     'file',
                     $file_size,
@@ -5957,7 +5992,7 @@ class learnpath
 
                 if ($document_id) {
                     api_item_property_update(
-                        $_course,
+                        $courseInfo,
                         TOOL_DOCUMENT,
                         $document_id,
                         'DocumentAdded',
@@ -5970,7 +6005,7 @@ class learnpath
                     );
 
                     $new_comment = (isset($_POST['comment'])) ? trim($_POST['comment']) : '';
-                    $new_title = (isset($_POST['title'])) ? trim($_POST['title']) : '';
+                    $new_title = $originalTitle;
 
                     if ($new_comment || $new_title) {
                         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
@@ -5980,8 +6015,9 @@ class learnpath
                         if ($new_title)
                             $ct .= ", title='" . Database::escape_string(htmlspecialchars($new_title, ENT_QUOTES, $charset))."' ";
 
-                        $sql_update = "UPDATE " . $tbl_doc ." SET " . substr($ct, 1)." WHERE c_id = ".$course_id." AND id = " . $document_id;
-                        Database::query($sql_update);
+                        $sql = "UPDATE " . $tbl_doc ." SET " . substr($ct, 1)."
+                                WHERE c_id = ".$course_id." AND id = " . $document_id;
+                        Database::query($sql);
                     }
                 }
                 return $document_id;

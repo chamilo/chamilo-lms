@@ -315,6 +315,13 @@ As this is only a minor version change from previous 1.10.* versions of Chamilo,
   <li> you're done! No other upgrade procedure is required</li>
 </ul>
 
+Please note that if you (unluckily) upgraded from any of the 1.9 versions to 1.10.0 against our recommendations, we
+    provide a patch script that should get most of it in order. The script is available here:<br />
+    <a href="https://raw.githubusercontent.com/chamilo/chamilo-lms/1.10.x/tests/scripts/fix_migrations_1.9.x_1.10.0.php">https://raw.githubusercontent.com/chamilo/chamilo-lms/1.10.x/tests/scripts/fix_migrations_1.9.x_1.10.0.php</a> or, if
+    you are using a development version of Chamilo, directly into you tests/scripts/ folder. You should place the file
+    in the /tests/scripts/ folder, then edit it to remove the "die();" line, then launch it from your browser (after
+    connecting to your Chamilo site as admin). You should also remove the scripts afterwards.<br />
+    This script is provided without warranty. Please *always* take a backup before you use it.
 <br />
 
 

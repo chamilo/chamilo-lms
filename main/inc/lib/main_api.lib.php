@@ -3254,7 +3254,6 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0)
                 (id_session = $session OR id_session = 0)
             ORDER BY id_session DESC, lastedit_date DESC
             LIMIT 1";
-
     $res = Database::query($sql);
     if ($res === false || Database::num_rows($res) == 0) {
         return -1;
@@ -6685,7 +6684,12 @@ function api_is_global_chat_enabled(){
  * @todo Fix tool_visible_by_default_at_creation labels
  * @todo Add sessionId parameter to avoid using context
  */
-function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
+function api_set_default_visibility($item_id, $tool_id, $group_id = 0, $courseInfo = array())
+{
+    $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
+    $courseId = $courseInfo['real_id'];
+    $courseCode = $courseInfo['code'];
+
     $original_tool_id = $tool_id;
 
     switch ($tool_id) {
@@ -6725,11 +6729,11 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
 
         // Read the portal and course default visibility
         if ($tool_id == 'documents') {
-            $visibility = DocumentManager::getDocumentDefaultVisibility(api_get_course_id());
+            $visibility = DocumentManager::getDocumentDefaultVisibility($courseCode);
         }
 
         api_item_property_update(
-            api_get_course_info(),
+            $courseInfo,
             $original_tool_id,
             $item_id,
             $visibility,
@@ -6745,7 +6749,7 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
 
         switch ($original_tool_id) {
             case TOOL_QUIZ:
-                $objExerciseTmp = new Exercise();
+                $objExerciseTmp = new Exercise($courseId);
                 $objExerciseTmp->read($item_id);
                 if ($visibility == 'visible') {
                     $objExerciseTmp->enable();

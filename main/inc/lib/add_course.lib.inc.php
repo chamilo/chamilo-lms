@@ -2884,8 +2884,7 @@ function register_course($params)
             }
 
             // Adding the course to an URL.
-            global $_configuration;
-            if ($_configuration['multiple_access_urls']) {
+            if (api_get_multiple_access_url()) {
                 $url_id = 1;
                 if (api_get_current_access_url_id() != -1) {
                     $url_id = api_get_current_access_url_id();

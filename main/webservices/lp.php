@@ -609,11 +609,15 @@ function WSCreateLp($params)
                 }
             }
         }
+
+        return 1;
     } else {
         if ($debug) {
             error_log('LP not created');
         }
     }
+
+    return 0;
 }
 
 // Use the request to (try to) invoke the service

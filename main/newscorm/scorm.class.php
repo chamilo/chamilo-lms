@@ -297,11 +297,9 @@ class scorm extends learnpath
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $use_max_score = intval($use_max_score);
 
-        $is_session = empty($sessionId) ? api_get_session_id() : $sessionId;
+        $sessionId = empty($sessionId) ? api_get_session_id() : intval($sessionId);
 
         foreach ($this->organizations as $id => $dummy) {
-
-            $is_session != 0 ? $session_id = $is_session : $session_id = 0;
 
             $oOrganization = & $this->organizations[$id];
             // Prepare and execute insert queries:
@@ -319,7 +317,7 @@ class scorm extends learnpath
             $myname = api_utf8_decode($myname);
 
             $sql = "INSERT INTO $new_lp (c_id, lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id, use_max_score)" .
-                    "VALUES ($course_id , 2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id, $use_max_score)";
+                    "VALUES ($course_id , 2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $sessionId, $use_max_score)";
             if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting path: '. $sql, 0); }
 
             $res = Database::query($sql);

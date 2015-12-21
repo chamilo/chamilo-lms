@@ -1141,7 +1141,7 @@ function WSCreateUserPasswordCrypted($params)
     $loginName = $params['loginname'];
     $official_code = isset($params['official_code']) ? $params['official_code'] : '';
     $language = '';
-    $phone = $params['phone'];
+    $phone = isset($params['phone']) ? $params['phone'] : '';
     $picture_uri = '';
     $auth_source = PLATFORM_AUTH_SOURCE;
     $expiration_date = '';
@@ -2680,7 +2680,7 @@ function WSCreateCourse($params)
 
     foreach ($courses_params as $course_param) {
         $title = $course_param['title'];
-        $category_code = $course_param['category_code'];
+        $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
         $wanted_code = $course_param['wanted_code'];
         $tutor_name = $course_param['tutor_name'];
         $course_language = 'english'; // TODO: A hard-coded value.

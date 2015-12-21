@@ -87,7 +87,7 @@ abstract class AbstractProxyFactory
     /**
      * @var \Doctrine\Common\Proxy\ProxyDefinition[]
      */
-    private $definitions = [];
+    private $definitions = array();
 
     /**
      * @param \Doctrine\Common\Proxy\ProxyGenerator                     $proxyGenerator

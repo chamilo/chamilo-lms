@@ -20,6 +20,8 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Types\StringType;
+use Doctrine\DBAL\Types\TextType;
 
 /**
  * Sqlite SchemaManager.
@@ -164,10 +166,17 @@ class SqliteSchemaManager extends AbstractSchemaManager
         $indexBuffer = array();
 
         // fetch primary
-        $stmt = $this->_conn->executeQuery( "PRAGMA TABLE_INFO ('$tableName')" );
+        $stmt = $this->_conn->executeQuery("PRAGMA TABLE_INFO ('$tableName')");
         $indexArray = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        foreach($indexArray as $indexColumnRow) {
-            if($indexColumnRow['pk'] !== "0") {
+        usort($indexArray, function($a, $b) {
+            if ($a['pk'] == $b['pk']) {
+                return $a['cid'] - $b['cid'];
+            }
+
+            return $a['pk'] - $b['pk'];
+        });
+        foreach ($indexArray as $indexColumnRow) {
+            if ($indexColumnRow['pk'] != "0") {
                 $indexBuffer[] = array(
                     'key_name' => 'primary',
                     'primary' => true,
@@ -178,7 +187,7 @@ class SqliteSchemaManager extends AbstractSchemaManager
         }
 
         // fetch regular indexes
-        foreach($tableIndexes as $tableIndex) {
+        foreach ($tableIndexes as $tableIndex) {
             // Ignore indexes with reserved names, e.g. autoindexes
             if (strpos($tableIndex['name'], 'sqlite_') !== 0) {
                 $keyName = $tableIndex['name'];
@@ -187,10 +196,10 @@ class SqliteSchemaManager extends AbstractSchemaManager
                 $idx['primary'] = false;
                 $idx['non_unique'] = $tableIndex['unique']?false:true;
 
-                $stmt = $this->_conn->executeQuery( "PRAGMA INDEX_INFO ( '{$keyName}' )" );
+                $stmt = $this->_conn->executeQuery("PRAGMA INDEX_INFO ('{$keyName}')");
                 $indexArray = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-                foreach ( $indexArray as $indexColumnRow ) {
+                foreach ($indexArray as $indexColumnRow) {
                     $idx['column_name'] = $indexColumnRow['name'];
                     $indexBuffer[] = $idx;
                 }
@@ -217,8 +226,11 @@ class SqliteSchemaManager extends AbstractSchemaManager
     protected function _getPortableTableColumnList($table, $database, $tableColumns)
     {
         $list = parent::_getPortableTableColumnList($table, $database, $tableColumns);
+
+        // find column with autoincrement
         $autoincrementColumn = null;
         $autoincrementCount = 0;
+
         foreach ($tableColumns as $tableColumn) {
             if ('0' != $tableColumn['pk']) {
                 $autoincrementCount++;
@@ -233,6 +245,18 @@ class SqliteSchemaManager extends AbstractSchemaManager
                 if ($autoincrementColumn == $column->getName()) {
                     $column->setAutoincrement(true);
                 }
+            }
+        }
+
+        // inspect column collation
+        $createSql = $this->_conn->fetchAll("SELECT sql FROM (SELECT * FROM sqlite_master UNION ALL SELECT * FROM sqlite_temp_master) WHERE type = 'table' AND name = '$table'");
+        $createSql = isset($createSql[0]['sql']) ? $createSql[0]['sql'] : '';
+
+        foreach ($list as $columnName => $column) {
+            $type = $column->getType();
+
+            if ($type instanceof StringType || $type instanceof TextType) {
+                $column->setPlatformOption('collation', $this->parseColumnCollationFromSQL($columnName, $createSql) ?: 'BINARY');
             }
         }
 
@@ -263,7 +287,7 @@ class SqliteSchemaManager extends AbstractSchemaManager
         $fixed = false;
         $type = $this->_platform->getDoctrineTypeMapping($dbType);
         $default = $tableColumn['dflt_value'];
-        if  ($default == 'NULL') {
+        if ($default == 'NULL') {
             $default = null;
         }
         if ($default !== null) {
@@ -291,7 +315,7 @@ class SqliteSchemaManager extends AbstractSchemaManager
                 if (isset($tableColumn['length'])) {
                     if (strpos($tableColumn['length'], ',') === false) {
                         $tableColumn['length'] .= ",0";
-                    }                    
+                    }
                     list($precision, $scale) = array_map('trim', explode(',', $tableColumn['length']));
                 }
                 $length = null;
@@ -353,7 +377,7 @@ class SqliteSchemaManager extends AbstractSchemaManager
         }
 
         $result = array();
-        foreach($list as $constraint) {
+        foreach ($list as $constraint) {
             $result[] = new ForeignKeyConstraint(
                 array_values($constraint['local']), $constraint['foreignTable'],
                 array_values($constraint['foreign']), $constraint['name'],
@@ -392,5 +416,18 @@ class SqliteSchemaManager extends AbstractSchemaManager
         $tableDiff->fromTable = $table;
 
         return $tableDiff;
+    }
+
+    private function parseColumnCollationFromSQL($column, $sql)
+    {
+        if (preg_match(
+            '{(?:'.preg_quote($column).'|'.preg_quote($this->_platform->quoteSingleIdentifier($column)).')
+                [^,(]+(?:\([^()]+\)[^,]*)?
+                (?:(?:DEFAULT|CHECK)\s*(?:\(.*?\))?[^,]*)*
+                COLLATE\s+["\']?([^\s,"\')]+)}isx', $sql, $match)) {
+            return $match[1];
+        }
+
+        return false;
     }
 }

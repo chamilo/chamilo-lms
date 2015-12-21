@@ -19,26 +19,52 @@
 
 namespace Doctrine\DBAL\Driver\PDOPgSql;
 
-use Doctrine\DBAL\Platforms;
+use Doctrine\DBAL\Driver\AbstractPostgreSQLDriver;
+use Doctrine\DBAL\Driver\PDOConnection;
+use Doctrine\DBAL\DBALException;
+use PDOException;
+use PDO;
 
 /**
  * Driver that connects through pdo_pgsql.
  *
  * @since 2.0
  */
-class Driver implements \Doctrine\DBAL\Driver
+class Driver extends AbstractPostgreSQLDriver
 {
     /**
      * {@inheritdoc}
      */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
     {
-        return new \Doctrine\DBAL\Driver\PDOConnection(
-            $this->_constructPdoDsn($params),
-            $username,
-            $password,
-            $driverOptions
-        );
+        try {
+            $pdo = new PDOConnection(
+                $this->_constructPdoDsn($params),
+                $username,
+                $password,
+                $driverOptions
+            );
+
+            if (PHP_VERSION_ID >= 50600
+                && (! isset($driverOptions[PDO::PGSQL_ATTR_DISABLE_PREPARES])
+                    || true === $driverOptions[PDO::PGSQL_ATTR_DISABLE_PREPARES]
+                )
+            ) {
+                $pdo->setAttribute(PDO::PGSQL_ATTR_DISABLE_PREPARES, true);
+            }
+
+            /* defining client_encoding via SET NAMES to avoid inconsistent DSN support
+             * - the 'client_encoding' connection param only works with postgres >= 9.1
+             * - passing client_encoding via the 'options' param breaks pgbouncer support
+             */
+            if (isset($params['charset'])) {
+              $pdo->query('SET NAMES \''.$params['charset'].'\'');
+            }
+
+            return $pdo;
+        } catch (PDOException $e) {
+            throw DBALException::driverException($this, $e);
+        }
     }
 
     /**
@@ -51,33 +77,29 @@ class Driver implements \Doctrine\DBAL\Driver
     private function _constructPdoDsn(array $params)
     {
         $dsn = 'pgsql:';
+
         if (isset($params['host']) && $params['host'] != '') {
             $dsn .= 'host=' . $params['host'] . ' ';
         }
+
         if (isset($params['port']) && $params['port'] != '') {
             $dsn .= 'port=' . $params['port'] . ' ';
         }
+
         if (isset($params['dbname'])) {
             $dsn .= 'dbname=' . $params['dbname'] . ' ';
+        } else {
+            // Used for temporary connections to allow operations like dropping the database currently connected to.
+            // Connecting without an explicit database does not work, therefore "template1" database is used
+            // as it is certainly present in every server setup.
+            $dsn .= 'dbname=template1' . ' ';
+        }
+
+        if (isset($params['sslmode'])) {
+            $dsn .= 'sslmode=' . $params['sslmode'] . ' ';
         }
 
         return $dsn;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDatabasePlatform()
-    {
-        return new \Doctrine\DBAL\Platforms\PostgreSqlPlatform();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
-    {
-        return new \Doctrine\DBAL\Schema\PostgreSqlSchemaManager($conn);
     }
 
     /**
@@ -87,17 +109,4 @@ class Driver implements \Doctrine\DBAL\Driver
     {
         return 'pdo_pgsql';
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDatabase(\Doctrine\DBAL\Connection $conn)
-    {
-        $params = $conn->getParams();
-
-        return (isset($params['dbname']))
-            ? $params['dbname']
-            : $conn->query('SELECT CURRENT_DATABASE()')->fetchColumn();
-    }
 }
-

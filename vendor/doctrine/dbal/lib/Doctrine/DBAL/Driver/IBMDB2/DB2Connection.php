@@ -19,7 +19,10 @@
 
 namespace Doctrine\DBAL\Driver\IBMDB2;
 
-class DB2Connection implements \Doctrine\DBAL\Driver\Connection
+use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
+
+class DB2Connection implements Connection, ServerInfoAwareConnection
 {
     /**
      * @var resource
@@ -51,12 +54,31 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
     /**
      * {@inheritdoc}
      */
+    public function getServerVersion()
+    {
+        $serverInfo = db2_server_info($this->_conn);
+
+        return $serverInfo->DBMS_VER;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function requiresQueryForServerVersion()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function prepare($sql)
     {
         $stmt = @db2_prepare($this->_conn, $sql);
         if ( ! $stmt) {
             throw new DB2Exception(db2_stmt_errormsg());
         }
+
         return new DB2Statement($stmt);
     }
 
@@ -69,6 +91,7 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
         $sql = $args[0];
         $stmt = $this->prepare($sql);
         $stmt->execute();
+
         return $stmt;
     }
 
@@ -78,7 +101,7 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
     public function quote($input, $type=\PDO::PARAM_STR)
     {
         $input = db2_escape_string($input);
-        if ($type == \PDO::PARAM_INT ) {
+        if ($type == \PDO::PARAM_INT) {
             return $input;
         } else {
             return "'".$input."'";
@@ -92,6 +115,7 @@ class DB2Connection implements \Doctrine\DBAL\Driver\Connection
     {
         $stmt = $this->prepare($statement);
         $stmt->execute();
+
         return $stmt->rowCount();
     }
 

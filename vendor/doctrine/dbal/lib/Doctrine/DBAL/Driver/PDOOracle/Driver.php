@@ -19,7 +19,9 @@
 
 namespace Doctrine\DBAL\Driver\PDOOracle;
 
-use Doctrine\DBAL\Platforms;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\AbstractOracleDriver;
+use Doctrine\DBAL\Driver\PDOConnection;
 
 /**
  * PDO Oracle driver.
@@ -29,19 +31,23 @@ use Doctrine\DBAL\Platforms;
  * which leads us to the recommendation to use the "oci8" driver to connect
  * to Oracle instead.
  */
-class Driver implements \Doctrine\DBAL\Driver
+class Driver extends AbstractOracleDriver
 {
     /**
      * {@inheritdoc}
      */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
     {
-        return new \Doctrine\DBAL\Driver\PDOConnection(
-            $this->_constructPdoDsn($params),
-            $username,
-            $password,
-            $driverOptions
-        );
+        try {
+            return new PDOConnection(
+                $this->constructPdoDsn($params),
+                $username,
+                $password,
+                $driverOptions
+            );
+        } catch (\PDOException $e) {
+            throw DBALException::driverException($this, $e);
+        }
     }
 
     /**
@@ -51,35 +57,9 @@ class Driver implements \Doctrine\DBAL\Driver
      *
      * @return string The DSN.
      */
-    private function _constructPdoDsn(array $params)
+    private function constructPdoDsn(array $params)
     {
-        $dsn = 'oci:dbname=';
-
-        if (isset($params['host']) && $params['host'] != '') {
-            $dsn .= '(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)' .
-                '(HOST=' . $params['host'] . ')';
-
-            if (isset($params['port'])) {
-                $dsn .= '(PORT=' . $params['port'] . ')';
-            } else {
-                $dsn .= '(PORT=1521)';
-            }
-
-            $database = 'SID=' . $params['dbname'];
-            $pooled   = '';
-
-            if (isset($params['service']) && $params['service'] == true) {
-                $database = 'SERVICE_NAME=' . $params['dbname'];
-            }
-
-            if (isset($params['pooled']) && $params['pooled'] == true) {
-                $pooled = '(SERVER=POOLED)';
-            }
-
-            $dsn .= '))(CONNECT_DATA=(' . $database . ')' . $pooled . '))';
-        } else {
-            $dsn .= $params['dbname'];
-        }
+        $dsn = 'oci:dbname=' . $this->getEasyConnectString($params);
 
         if (isset($params['charset'])) {
             $dsn .= ';charset=' . $params['charset'];
@@ -91,34 +71,8 @@ class Driver implements \Doctrine\DBAL\Driver
     /**
      * {@inheritdoc}
      */
-    public function getDatabasePlatform()
-    {
-        return new \Doctrine\DBAL\Platforms\OraclePlatform();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
-    {
-        return new \Doctrine\DBAL\Schema\OracleSchemaManager($conn);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'pdo_oracle';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDatabase(\Doctrine\DBAL\Connection $conn)
-    {
-        $params = $conn->getParams();
-
-        return $params['user'];
     }
 }

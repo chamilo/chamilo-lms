@@ -44,7 +44,8 @@ class PHPDriver extends FileDriver
      */
     public function __construct($locator, $fileExtension = null)
     {
-        parent::__construct($locator, '.php');
+        $fileExtension = ".php";
+        parent::__construct($locator, $fileExtension);
     }
 
     /**
@@ -53,7 +54,6 @@ class PHPDriver extends FileDriver
     public function loadMetadataForClass($className, ClassMetadata $metadata)
     {
         $this->metadata = $metadata;
-
         $this->loadMappingFile($this->locator->findMappingFile($className));
     }
 
@@ -65,6 +65,6 @@ class PHPDriver extends FileDriver
         $metadata = $this->metadata;
         include $file;
 
-        return [$metadata->getName() => $metadata];
+        return array($metadata->getName() => $metadata);
     }
 }

@@ -38,7 +38,7 @@ class EventManager
      *
      * @var array
      */
-    private $_listeners = [];
+    private $_listeners = array();
 
     /**
      * Dispatches an event to all registered listeners.

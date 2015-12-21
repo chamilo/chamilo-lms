@@ -19,26 +19,33 @@
 
 namespace Doctrine\DBAL\Driver\PDOMySql;
 
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\AbstractMySQLDriver;
+use Doctrine\DBAL\Driver\PDOConnection;
+use PDOException;
 
 /**
  * PDO MySql driver.
  *
  * @since 2.0
  */
-class Driver implements \Doctrine\DBAL\Driver
+class Driver extends AbstractMySQLDriver
 {
     /**
      * {@inheritdoc}
      */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
     {
-        $conn = new \Doctrine\DBAL\Driver\PDOConnection(
-            $this->_constructPdoDsn($params),
-            $username,
-            $password,
-            $driverOptions
-        );
+        try {
+            $conn = new PDOConnection(
+                $this->constructPdoDsn($params),
+                $username,
+                $password,
+                $driverOptions
+            );
+        } catch (PDOException $e) {
+            throw DBALException::driverException($this, $e);
+        }
 
         return $conn;
     }
@@ -50,7 +57,7 @@ class Driver implements \Doctrine\DBAL\Driver
      *
      * @return string The DSN.
      */
-    private function _constructPdoDsn(array $params)
+    protected function constructPdoDsn(array $params)
     {
         $dsn = 'mysql:';
         if (isset($params['host']) && $params['host'] != '') {
@@ -75,37 +82,8 @@ class Driver implements \Doctrine\DBAL\Driver
     /**
      * {@inheritdoc}
      */
-    public function getDatabasePlatform()
-    {
-        return new \Doctrine\DBAL\Platforms\MySqlPlatform();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
-    {
-        return new \Doctrine\DBAL\Schema\MySqlSchemaManager($conn);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'pdo_mysql';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDatabase(\Doctrine\DBAL\Connection $conn)
-    {
-        $params = $conn->getParams();
-
-        if (isset($params['dbname'])) {
-            return $params['dbname'];
-        }
-        return $conn->query('SELECT DATABASE()')->fetchColumn();
     }
 }

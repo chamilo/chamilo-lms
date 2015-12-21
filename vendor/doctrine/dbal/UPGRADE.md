@@ -1,3 +1,89 @@
+# Upgrade to 2.5.1
+
+## MINOR BC BREAK: Doctrine\DBAL\Schema\Table
+
+When adding indexes to ``Doctrine\DBAL\Schema\Table`` via ``addIndex()`` or ``addUniqueIndex()``,
+duplicate indexes are not silently ignored/dropped anymore (based on semantics, not naming!).
+Duplicate indexes are considered indexes that pass ``isFullfilledBy()`` or ``overrules()``
+in ``Doctrine\DBAL\Schema\Index``.
+This is required to make the index renaming feature introduced in 2.5.0 work properly and avoid
+issues in the ORM schema tool / DBAL schema manager which pretends users from updating
+their schemas and migrate to DBAL 2.5.*.
+Additionally it offers more flexibility in declaring indexes for the user and potentially fixes
+related issues in the ORM.
+With this change, the responsibility to decide which index is a "duplicate" is completely deferred
+to the user.
+Please also note that adding foreign key constraints to a table via ``addForeignKeyConstraint()``,
+``addUnnamedForeignKeyConstraint()`` or ``addNamedForeignKeyConstraint()`` now first checks if an
+appropriate index is already present and avoids adding an additional auto-generated one eventually.
+
+# Upgrade to 2.5
+
+## BC BREAK: time type resets date fields to UNIX epoch
+
+When mapping `time` type field to PHP's `DateTime` instance all unused date fields are
+reset to UNIX epoch (i.e. 1970-01-01). This might break any logic which relies on comparing
+`DateTime` instances with date fields set to the current date.
+
+Use `!` format prefix (see http://php.net/manual/en/datetime.createfromformat.php) for parsing
+time strings to prevent having different date fields when comparing user input and `DateTime`
+instances as mapped by Doctrine.
+
+## BC BREAK: Doctrine\DBAL\Schema\Table
+
+The methods ``addIndex()`` and ``addUniqueIndex()`` in ``Doctrine\DBAL\Schema\Table``
+have an additional, optional parameter. If you override these methods, you should
+add this new parameter to the declaration of your overridden methods.
+
+## BC BREAK: Doctrine\DBAL\Connection
+
+The visibility of the property ``$_platform`` in ``Doctrine\DBAL\Connection``
+was changed from protected to private. If you have subclassed ``Doctrine\DBAL\Connection``
+in your application and accessed ``$_platform`` directly, you have to change the code
+portions to use ``getDatabasePlatform()`` instead to retrieve the underlying database
+platform.
+The reason for this change is the new automatic platform version detection feature,
+which lazily evaluates the appropriate platform class to use for the underlying database
+server version at runtime.
+Please also note, that calling ``getDatabasePlatform()`` now needs to establish a connection
+in order to evaluate the appropriate platform class if ``Doctrine\DBAL\Connection`` is not
+already connected. Under the following circumstances, it is not possible anymore to retrieve
+the platform instance from the connection object without having to do a real connect:
+
+1. ``Doctrine\DBAL\Connection`` was instantiated without the ``platform`` connection parameter.
+2. ``Doctrine\DBAL\Connection`` was instantiated without the ``serverVersion`` connection parameter.
+3. The underlying driver is "version aware" and can provide different platform instances
+   for different versions.
+4. The underlying driver connection is "version aware" and can provide the database server
+   version without having to query for it.
+
+If one of the above conditions is NOT met, there is no need for ``Doctrine\DBAL\Connection``
+to do a connect when calling ``getDatabasePlatform()``.
+
+## datetime Type uses date_create() as fallback
+
+Before 2.5 the DateTime type always required a specific format, defined in
+`$platform->getDateTimeFormatString()`, which could cause quite some troubles
+on platforms that had various microtime precision formats. Starting with 2.5
+whenever the parsing of a date fails with the predefined platform format,
+the `date_create()` function will be used to parse the date.
+
+This could cause some troubles when your date format is weird and not parsed
+correctly by `date_create`, however since databases are rather strict on dates
+there should be no problem.
+
+## Support for pdo_ibm driver removed
+
+The ``pdo_ibm`` driver is buggy and does not work well with Doctrine. Therefore it will no
+longer be supported and has been removed from the ``Doctrine\DBAL\DriverManager`` drivers
+map. It is highly encouraged to to use `ibm_db2` driver instead if you want to connect
+to an IBM DB2 database as it is much more stable and secure.
+
+If for some reason you have to utilize the ``pdo_ibm`` driver you can still use the `driverClass`
+connection parameter to explicitly specify the ``Doctrine\DBAL\Driver\PDOIbm\Driver`` class.
+However be aware that you are doing this at your own risk and it will not be guaranteed that
+Doctrine will work as expected.
+
 # Upgrade to 2.4
 
 ## Doctrine\DBAL\Schema\Constraint

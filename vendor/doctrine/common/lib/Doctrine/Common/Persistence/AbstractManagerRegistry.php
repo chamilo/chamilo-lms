@@ -141,7 +141,7 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
      */
     public function getConnections()
     {
-        $connections = [];
+        $connections = array();
         foreach ($this->connections as $name => $id) {
             $connections[$name] = $this->getService($id);
         }
@@ -226,7 +226,7 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
      */
     public function getManagers()
     {
-        $dms = [];
+        $dms = array();
         foreach ($this->managers as $name => $id) {
             $dms[$name] = $this->getService($id);
         }

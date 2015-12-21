@@ -63,22 +63,27 @@ EOT
     {
         $conn = $this->getHelper('db')->getConnection();
 
-        if (($fileNames = $input->getArgument('file')) !== null)  {
+        if (($fileNames = $input->getArgument('file')) !== null) {
             foreach ((array) $fileNames as $fileName) {
-                $fileName = realpath($fileName);
+                $filePath = realpath($fileName);
 
-                if ( ! file_exists($fileName)) {
+                // Phar compatibility.
+                if (false === $filePath) {
+                    $filePath = $fileName;
+                }
+
+                if ( ! file_exists($filePath)) {
                     throw new \InvalidArgumentException(
-                        sprintf("SQL file '<info>%s</info>' does not exist.", $fileName)
+                        sprintf("SQL file '<info>%s</info>' does not exist.", $filePath)
                     );
-                } else if ( ! is_readable($fileName)) {
+                } elseif ( ! is_readable($filePath)) {
                     throw new \InvalidArgumentException(
-                        sprintf("SQL file '<info>%s</info>' does not have read permissions.", $fileName)
+                        sprintf("SQL file '<info>%s</info>' does not have read permissions.", $filePath)
                     );
                 }
 
-                $output->write(sprintf("Processing file '<info>%s</info>'... ", $fileName));
-                $sql = file_get_contents($fileName);
+                $output->write(sprintf("Processing file '<info>%s</info>'... ", $filePath));
+                $sql = file_get_contents($filePath);
 
                 if ($conn instanceof \Doctrine\DBAL\Driver\PDOConnection) {
                     // PDO Drivers

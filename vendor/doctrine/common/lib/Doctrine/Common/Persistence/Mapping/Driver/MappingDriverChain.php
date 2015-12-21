@@ -39,12 +39,12 @@ class MappingDriverChain implements MappingDriver
      *
      * @var MappingDriver|null
      */
-    private $defaultDriver;
+    private $defaultDriver = null;
 
     /**
      * @var array
      */
-    private $drivers = [];
+    private $drivers = array();
 
     /**
      * Gets the default driver.
@@ -117,8 +117,8 @@ class MappingDriverChain implements MappingDriver
      */
     public function getAllClassNames()
     {
-        $classNames = [];
-        $driverClasses = [];
+        $classNames = array();
+        $driverClasses = array();
 
         /* @var $driver MappingDriver */
         foreach ($this->drivers AS $namespace => $driver) {

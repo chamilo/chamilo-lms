@@ -19,6 +19,9 @@
 
 namespace Doctrine\DBAL;
 
+use Doctrine\DBAL\Driver\DriverException;
+use Doctrine\DBAL\Driver\ExceptionConverterDriver;
+
 class DBALException extends \Exception
 {
     /**
@@ -39,6 +42,26 @@ class DBALException extends \Exception
         return new self(
             "Invalid 'platform' option specified, need to give an instance of ".
             "\Doctrine\DBAL\Platforms\AbstractPlatform.");
+    }
+
+    /**
+     * Returns a new instance for an invalid specified platform version.
+     *
+     * @param string $version        The invalid platform version given.
+     * @param string $expectedFormat The expected platform version format.
+     *
+     * @return DBALException
+     */
+    public static function invalidPlatformVersionSpecified($version, $expectedFormat)
+    {
+        return new self(
+            sprintf(
+                'Invalid platform version "%s" specified. ' .
+                'The platform version has to be specified in the format: "%s".',
+                $version,
+                $expectedFormat
+            )
+        );
     }
 
     /**
@@ -74,19 +97,41 @@ class DBALException extends \Exception
     }
 
     /**
+     * @param \Doctrine\DBAL\Driver     $driver
      * @param \Exception $driverEx
      * @param string     $sql
      * @param array      $params
      *
      * @return \Doctrine\DBAL\DBALException
      */
-    public static function driverExceptionDuringQuery(\Exception $driverEx, $sql, array $params = array())
+    public static function driverExceptionDuringQuery(Driver $driver, \Exception $driverEx, $sql, array $params = array())
     {
         $msg = "An exception occurred while executing '".$sql."'";
         if ($params) {
             $msg .= " with params " . self::formatParameters($params);
         }
         $msg .= ":\n\n".$driverEx->getMessage();
+
+        if ($driver instanceof ExceptionConverterDriver && $driverEx instanceof DriverException) {
+            return $driver->convertException($msg, $driverEx);
+        }
+
+        return new self($msg, 0, $driverEx);
+    }
+
+    /**
+     * @param \Doctrine\DBAL\Driver     $driver
+     * @param \Exception $driverEx
+     *
+     * @return \Doctrine\DBAL\DBALException
+     */
+    public static function driverException(Driver $driver, \Exception $driverEx)
+    {
+        $msg = "An exception occured in driver: " . $driverEx->getMessage();
+
+        if ($driver instanceof ExceptionConverterDriver && $driverEx instanceof DriverException) {
+            return $driver->convertException($msg, $driverEx);
+        }
 
         return new self($msg, 0, $driverEx);
     }
@@ -101,7 +146,7 @@ class DBALException extends \Exception
      */
     private static function formatParameters(array $params)
     {
-        return '[' . implode(', ', array_map(function($param) {
+        return '[' . implode(', ', array_map(function ($param) {
             $json = @json_encode($param);
 
             if (! is_string($json) || $json == 'null' && is_string($param)) {

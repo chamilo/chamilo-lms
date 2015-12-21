@@ -69,18 +69,18 @@ class StaticReflectionParser implements ReflectionProviderInterface
      *
      * @var array
      */
-    protected $useStatements = [];
+    protected $useStatements = array();
 
     /**
      * The docComment of the class.
      *
      * @var string
      */
-    protected $docComment = [
+    protected $docComment = array(
         'class' => '',
-        'property' => [],
-        'method' => []
-    ];
+        'property' => array(),
+        'method' => array()
+    );
 
     /**
      * The name of the class this class extends, if any.

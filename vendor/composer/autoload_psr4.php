@@ -71,7 +71,6 @@ return array(
     'Fhaculty\\Graph\\' => array($vendorDir . '/clue/graph/src'),
     'Emojione\\' => array($vendorDir . '/emojione/emojione/lib/php/src'),
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
-    'Doctrine\\Common\\' => array($vendorDir . '/doctrine/common/lib/Doctrine/Common'),
     'CpChart\\' => array($vendorDir . '/szymach/c-pchart/src'),
     'Cocur\\Slugify\\' => array($vendorDir . '/cocur/slugify/src'),
     'Chamilo\\' => array($baseDir . '/src/Chamilo'),

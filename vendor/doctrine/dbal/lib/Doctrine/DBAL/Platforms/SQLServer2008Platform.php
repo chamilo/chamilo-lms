@@ -56,6 +56,14 @@ class SQLServer2008Platform extends SQLServer2005Platform
     /**
      * {@inheritDoc}
      */
+    public function getDateTimeTzTypeDeclarationSQL(array $fieldDeclaration)
+    {
+        return 'DATETIMEOFFSET(6)';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getDateTimeFormatString()
     {
         return 'Y-m-d H:i:s.u';
@@ -96,6 +104,7 @@ class SQLServer2008Platform extends SQLServer2005Platform
         $this->doctrineTypeMapping['datetime2'] = 'datetime';
         $this->doctrineTypeMapping['date'] = 'date';
         $this->doctrineTypeMapping['time'] = 'time';
+        $this->doctrineTypeMapping['datetimeoffset'] = 'datetimetz';
     }
 
     /**

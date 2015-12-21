@@ -66,9 +66,9 @@ class Statement implements \IteratorAggregate, \Doctrine\DBAL\Driver\Statement
     /**
      * {@inheritdoc}
      */
-    public function bindParam($column, &$variable, $type = null,$length = null)
+    public function bindParam($column, &$variable, $type = null, $length = null)
     {
-        return $this->stmt->bindParam($column, $variable, $type);
+        return $this->stmt->bindParam($column, $variable, $type, $length);
     }
     /**
      * {@inheritdoc}
@@ -203,7 +203,7 @@ class Statement implements \IteratorAggregate, \Doctrine\DBAL\Driver\Statement
             foreach ($row as $k => $v) {
                 if (($this->portability & Connection::PORTABILITY_EMPTY_TO_NULL) && $v === '') {
                     $row[$k] = null;
-                } else if (($this->portability & Connection::PORTABILITY_RTRIM) && is_string($v)) {
+                } elseif (($this->portability & Connection::PORTABILITY_RTRIM) && is_string($v)) {
                     $row[$k] = rtrim($v);
                 }
             }
@@ -222,7 +222,7 @@ class Statement implements \IteratorAggregate, \Doctrine\DBAL\Driver\Statement
         if ($this->portability & (Connection::PORTABILITY_EMPTY_TO_NULL|Connection::PORTABILITY_RTRIM)) {
             if (($this->portability & Connection::PORTABILITY_EMPTY_TO_NULL) && $value === '') {
                 $value = null;
-            } else if (($this->portability & Connection::PORTABILITY_RTRIM) && is_string($value)) {
+            } elseif (($this->portability & Connection::PORTABILITY_RTRIM) && is_string($value)) {
                 $value = rtrim($value);
             }
         }

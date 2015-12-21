@@ -19,12 +19,14 @@
 
 namespace Doctrine\DBAL\Driver\PDOSqlsrv;
 
+use Doctrine\DBAL\Driver\AbstractSQLServerDriver;
+
 /**
  * The PDO-based Sqlsrv driver.
  *
  * @since 2.0
  */
-class Driver implements \Doctrine\DBAL\Driver
+class Driver extends AbstractSQLServerDriver
 {
     /**
      * {@inheritdoc}
@@ -58,7 +60,7 @@ class Driver implements \Doctrine\DBAL\Driver
             $dsn .= ',' . $params['port'];
         }
 
-        if (isset($params['dbname'])) {;
+        if (isset($params['dbname'])) {
             $dsn .= ';Database=' .  $params['dbname'];
         }
 
@@ -72,34 +74,8 @@ class Driver implements \Doctrine\DBAL\Driver
     /**
      * {@inheritdoc}
      */
-    public function getDatabasePlatform()
-    {
-        return new \Doctrine\DBAL\Platforms\SQLServer2008Platform();
-    }
-    /**
-     * {@inheritdoc}
-     */
-
-    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
-    {
-        return new \Doctrine\DBAL\Schema\SQLServerSchemaManager($conn);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'pdo_sqlsrv';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDatabase(\Doctrine\DBAL\Connection $conn)
-    {
-        $params = $conn->getParams();
-
-        return $params['dbname'];
     }
 }

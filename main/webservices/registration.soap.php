@@ -4393,12 +4393,15 @@ function WSUnSubscribeUserFromCourseSimple($params)
     if ($user_id) {
         if ($debug) {
             error_log("User $original_user_id_value, $original_user_id_name found");
+            error_log("Course $original_course_id_value, $original_course_id_name found");
         }
+
         $courseCode = CourseManager::get_course_id_from_original_id(
             $original_course_id_value,
             $original_course_id_name
         );
-        if ($courseCode == 0) {
+
+        if (empty($courseCode)) {
             // Course was not found
             if ($debug) {
                 error_log("course not found");

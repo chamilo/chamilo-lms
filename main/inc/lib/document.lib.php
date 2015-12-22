@@ -5505,7 +5505,7 @@ class DocumentManager
                         $basename = get_lang('Gallery');
                     }
                 } elseif ($path == '/chat_files') {
-                    $icon = 'folder_chat.gif';
+                    $icon = 'folder_chat.png';
                     if (api_is_allowed_to_edit()) {
                         $basename = get_lang('HelpFolderChat');
                     } else {

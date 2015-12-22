@@ -882,8 +882,8 @@ class SurveyManager
 
         // the images array
         $icon_question = array(
-            'yesno' => 'yesno.gif',
-            'personality' => 'yesno.gif',
+            'yesno' => 'yesno.png',
+            'personality' => 'yesno.png',
             'multiplechoice' => 'mcua.png',
             'multipleresponse' => 'mcma.png',
             'open' => 'open_answer.png',

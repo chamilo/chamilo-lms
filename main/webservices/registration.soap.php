@@ -6717,6 +6717,82 @@ function WSDeleteUserFromGroup($params)
     );
 }
 
+
+$server->wsdl->addComplexType(
+    'unSubscribeUserFromCourseSimple',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+        'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+        'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+
+
+/**
+ * @param array $params
+ * @return array|null|soap_fault
+ */
+function WSUnSubscribeUserFromCourseSimple($params)
+{
+    global $debug;
+    error_log('WSUnSubscribeUserFromCourseSimple');
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $original_user_id_value = $params['original_user_id_value'];
+    $original_user_id_name = $params['original_user_id_name'];
+    $original_course_id_value = $params['original_course_id_value'];
+    $original_course_id_name = $params['original_course_id_name'];
+
+    $result = array();
+    $result['original_user_id_value'] = $original_user_id_value;
+    $result['result'] = 0;
+
+    $user_id = UserManager::get_user_id_from_original_id(
+        $original_user_id_value,
+        $original_user_id_name
+    );
+
+    if ($user_id) {
+        if ($debug) {
+            error_log(
+                "User $original_user_id_value, $original_user_id_name found"
+            );
+        }
+        $courseCode = CourseManager::get_course_id_from_original_id(
+            $original_course_id_value,
+            $original_course_id_name
+        );
+
+        if (empty($courseCode)) {
+            // Course was not found
+            if ($debug) {
+                error_log("course not found");
+            }
+        } else {
+            if ($debug) {
+                error_log("Course $courseCode found");
+            }
+            CourseManager::unsubscribe_user($user_id, $courseCode, 0);
+            $result['result'] = 1;
+        }
+    } else {
+        if ($debug) {
+            error_log("User not found");
+        }
+    }
+}
+
+
+
 /* Delete user from group Web Service end */
 
 // Add more webservices through hooks from plugins

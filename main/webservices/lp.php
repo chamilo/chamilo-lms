@@ -505,7 +505,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:lpItem[]')),
-    'tns:lpItemList'
+    'tns:lpItem'
 );
 
 $server->wsdl->addComplexType(

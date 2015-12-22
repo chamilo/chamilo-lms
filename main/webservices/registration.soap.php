@@ -2682,20 +2682,23 @@ function WSCreateCourse($params)
         $title = $course_param['title'];
         $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
         $wanted_code = $course_param['wanted_code'];
-        $tutor_name = $course_param['tutor_name'];
+        $tutor_name = isset($course_param['tutor_name']) ? $course_param['tutor_name'] : '';
         $course_language = 'english'; // TODO: A hard-coded value.
         $original_course_id_name = $course_param['original_course_id_name'];
         $original_course_id_value = $course_param['original_course_id_value'];
         $orig_course_id_value[] = $course_param['original_course_id_value'];
         $visibility = null;
 
-        if ($course_param['visibility'] &&
-            $course_param['visibility'] >= 0 &&
-            $course_param['visibility'] <= 3
-        ) {
-            $visibility = $course_param['visibility'];
+        if (isset($course_param['visibility'])) {
+            if ($course_param['visibility'] &&
+                $course_param['visibility'] >= 0 &&
+                $course_param['visibility'] <= 3
+            ) {
+                $visibility = $course_param['visibility'];
+            }
         }
-        $extra_list = $course_param['extra'];
+        $extra_list = isset($course_param['extra']) ? $course_param['extra'] : '';
+
 
         // Check whether exits $x_course_code into user_field_values table.
         $courseInfo = CourseManager::getCourseInfoFromOriginalId(
@@ -2747,12 +2750,21 @@ function WSCreateCourse($params)
             $values['course_language'] = api_get_setting('platformLanguage');
         }
 
-        $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
+        if (isset($_user['firstName'])) {
+            $values['tutor_name'] = api_get_person_name(
+                $_user['firstName'],
+                $_user['lastName'],
+                null,
+                null,
+                $values['course_language']
+            );
+        }
 
         $params = array();
         $params['title'] = $title;
         $params['wanted_code'] = $wanted_code;
         $params['category_code'] = $category_code;
+        $params['course_category']    = $category_code;
         $params['tutor_name'] = $tutor_name;
         $params['course_language'] = $course_language;
         $params['user_id'] = api_get_user_id();

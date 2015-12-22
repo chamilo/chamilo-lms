@@ -271,10 +271,12 @@ if ($jplayer_supported) {
             supplied: "'.$extension.'",
             useStateClassSkin: true,
             autoBlur: false,
-            smoothPlayBar: true,
             keyEnabled: false,
             remainingDuration: true,
-            toggleDuration: true
+            toggleDuration: true,
+            solution: "html, flash",
+            errorAlerts: false,
+            warningAlerts: false
         });
     ';
 
@@ -361,9 +363,11 @@ if ($show_web_odf) {
 echo '</div>';
 
 if ($jplayer_supported) {
-    echo '<br /><div align="center">';
+    echo '<br />';
+    echo '<div class="col-md-3 col-md-offset-3">';
     echo DocumentManager::generate_video_preview($document_data);
     echo '</div>';
+
     // media_element blocks jplayer disable it
     Display::$global_template->assign('show_media_element', 0);
 }

@@ -3208,7 +3208,6 @@ class DocumentManager
                 <div id="jquery_jplayer_1" class="jp-jplayer"></div>
                 <div class="jp-gui">
                     <div class="jp-video-play">
-
                     </div>
                     <div class="jp-interface">
                         <div class="jp-progress">
@@ -3226,9 +3225,9 @@ class DocumentManager
                           <div class="jp-volume-controls">
                             <button class="jp-mute" role="button" tabindex="0">mute</button>
                             <button class="jp-volume-max" role="button" tabindex="0">max volume</button>
-                                            <div class="jp-volume-bar">
-                                                <div class="jp-volume-bar-value"></div>
-                                            </div>
+                            <div class="jp-volume-bar">
+                                <div class="jp-volume-bar-value"></div>
+                            </div>
                           </div>
                           <div class="jp-toggles">
                             <button class="jp-repeat" role="button" tabindex="0">repeat</button>

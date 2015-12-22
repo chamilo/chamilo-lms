@@ -219,7 +219,6 @@ if ($my_message != 'PostDeletedSpecial') {
         echo $my_url . '&view=flat">'
             . Display::return_icon('forum_listview.png', get_lang('FlatView'), null, ICON_SIZE_MEDIUM)
             . '</a>';
-        //echo $my_url.'&view=threaded">'.Display::return_icon('forum_threadedview.gif', get_lang('ThreadedView')).get_lang('ThreadedView').'</a>';
         echo $my_url . '&view=nested">'
             . Display::return_icon('forum_nestedview.png', get_lang('NestedView'), null, ICON_SIZE_MEDIUM)
             . '</a>';

@@ -887,11 +887,11 @@ class SurveyManager
             'multiplechoice' => 'mcua.png',
             'multipleresponse' => 'mcma.png',
             'open' => 'open_answer.png',
-            'dropdown' => 'dropdown.gif',
-            'percentage' => 'percentagequestion.gif',
-            'score' => 'scorequestion.gif',
-            'comment' => 'commentquestion.gif',
-            'pagebreak' => 'page_end.gif',
+            'dropdown' => 'dropdown.png',
+            'percentage' => 'percentagequestion.png',
+            'score' => 'scorequestion.png',
+            'comment' => 'commentquestion.png',
+            'pagebreak' => 'page_end.png',
         );
 
         if (in_array($type, $possible_types)) {

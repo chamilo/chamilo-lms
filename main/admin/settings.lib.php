@@ -719,26 +719,26 @@ function handle_search()
         }
         */
 
-        $xapian_loaded = Display::return_icon('bullet_green.gif', get_lang('Ok'));
-        $dir_exists = Display::return_icon('bullet_green.gif', get_lang('Ok'));
-        $dir_is_writable = Display::return_icon('bullet_green.gif', get_lang('Ok'));
-        $specific_fields_exists = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        $xapian_loaded = Display::return_icon('bullet_green.png', get_lang('Ok'));
+        $dir_exists = Display::return_icon('bullet_green.png', get_lang('Ok'));
+        $dir_is_writable = Display::return_icon('bullet_green.png', get_lang('Ok'));
+        $specific_fields_exists = Display::return_icon('bullet_green.png', get_lang('Ok'));
 
         //Testing specific fields
         if (empty($specific_fields)) {
-            $specific_fields_exists = Display::return_icon('bullet_red.gif', get_lang('AddSpecificSearchField'));
+            $specific_fields_exists = Display::return_icon('bullet_red.png', get_lang('AddSpecificSearchField'));
         }
         //Testing xapian extension
         if (!extension_loaded('xapian')) {
-            $xapian_loaded = Display::return_icon('bullet_red.gif', get_lang('Error'));
+            $xapian_loaded = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
         //Testing xapian searchdb path
         if (!is_dir($xapian_path)) {
-            $dir_exists = Display::return_icon('bullet_red.gif', get_lang('Error'));
+            $dir_exists = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
         //Testing xapian searchdb path is writable
         if (!is_writable($xapian_path)) {
-            $dir_is_writable = Display::return_icon('bullet_red.gif', get_lang('Error'));
+            $dir_is_writable = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
 
         $data[] = array(get_lang('XapianModuleInstalled'),$xapian_loaded);
@@ -759,9 +759,9 @@ function handle_search()
             foreach($list_of_programs as $program) {
                 $output = $ret_val = null;
                 exec("which $program", $output, $ret_val);
-                $icon = Display::return_icon('bullet_red.gif', get_lang('NotInstalled'));
+                $icon = Display::return_icon('bullet_red.png', get_lang('NotInstalled'));
                 if (!empty($output[0])) {
-                    $icon = Display::return_icon('bullet_green.gif', get_lang('Installed'));
+                    $icon = Display::return_icon('bullet_green.png', get_lang('Installed'));
                 }
                 $data2[]= array($program, $output[0], $icon);
             }

@@ -960,7 +960,7 @@ switch ($action) {
                     'date' => $session_date_string,
                     'course_per_session' => $count_courses_in_session,
                     'student_per_session' => $count_users_in_session,
-                    'details' => Display::url(Display::return_icon('2rightarrow.gif'), $sessionUrl)
+                    'details' => Display::url(Display::return_icon('2rightarrow.png'), $sessionUrl)
                 );
             }
         }

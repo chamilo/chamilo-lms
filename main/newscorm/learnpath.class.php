@@ -1016,7 +1016,6 @@ class learnpath
 
         // Proposed by Christophe (nickname: clefevre)
         $sql = "DELETE FROM $lp_item WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
-        error_log($sql);
         Database::query($sql);
 
         $sql = "DELETE FROM $lp_view WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
@@ -4508,7 +4507,7 @@ class learnpath
         $this->name = $name;
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $course_id = api_get_course_int_id();
+        $course_id = $this->course_info['real_id'];
         $sql = "UPDATE $lp_table SET name = '" . Database::escape_string($this->name). "'
                 WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) {

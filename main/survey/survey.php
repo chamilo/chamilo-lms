@@ -155,7 +155,7 @@ if ($survey_data['survey_type'] == 0) {
 } else {
 	echo '<div class="panel panel-default">';
         echo '<div class="panel-body">';
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$survey_id.'"><img src="../img/yesno.gif" /></a></div>';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$survey_id.'"><img src="../img/icons/22/yesno.png" /></a></div>';
 	echo '</div>';
         echo '</div>';
 }
